@@ -2,56 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FAAF53B8F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640AE53B8F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiFBMY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 08:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S234985AbiFBM0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 08:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiFBMYY (ORCPT
+        with ESMTP id S235017AbiFBM0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 08:24:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE795C35F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654172663; x=1685708663;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RPaYs2e4VEQbh64WV+PrgBDqdrljlSQLbrEW9Z5ialk=;
-  b=jWtafRd6PXKwMgMxj2HuC4Ypin3Oy0ZuKLniecakGK84oTD/9YV7h3ND
-   tpsIWDUrtVIxo3WIu9mcB0ZmZxWY29mdXipNK6kLNNOFi1jETnAA7FSn7
-   bJlp+EOpC0CBKzQOefkVBuvKYB8bHc/mPhjN0PiSap8jf9yAUrtssqCa2
-   MXkQAs/f8s+Ikae3ij7/gNIlJZSmT+WB2TyfO04H3JZwIb48otkMPjxuv
-   EAYliLkfNdx1vYrII8tIQhLmJU5sU01ppMh2Skq12x2IKTohpZfE9/5Cf
-   qaYrS+M36mFYsj/BFXWahjTPgMKPC6b7eQBBMUoX1YGV54LFbwxyCf7qN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="301296203"
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="301296203"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 05:24:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="530554494"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 05:24:01 -0700
-From:   kah.jing.lee@intel.com
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, dinguyen@kernel.org,
-        tien.sung.ang@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>,
-        Ley Foon Tan <lftan@altera.com>
-Subject: [PATCH 2/2] dt-bindings: misc: Add the system id binding for Altera(Intel) FPGA platform
-Date:   Thu,  2 Jun 2022 20:22:47 +0800
-Message-Id: <20220602122246.3021328-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 08:26:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F72F298585
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:26:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED4561751
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:26:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E44DC34119;
+        Thu,  2 Jun 2022 12:26:03 +0000 (UTC)
+Date:   Thu, 2 Jun 2022 08:25:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+        kelulanainsley@gmail.com
+Subject: Re: [PATCH] tracing: Simplify conditional compilation code in
+ tracing_set_tracer()
+Message-ID: <20220602082559.795189e1@rorschach.local.home>
+In-Reply-To: <20220602022404.508144-1-sunliming@kylinos.cn>
+References: <20220602022404.508144-1-sunliming@kylinos.cn>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,64 +45,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+On Thu,  2 Jun 2022 10:24:04 +0800
+sunliming <sunliming@kylinos.cn> wrote:
 
-This binding is created for Altera(Intel) FPGA platform System ID soft IP.
-The Altera(Intel) Sysid component is generally part of an FPGA design.
-The component can be hotplugged when the FPGA is reconfigured.
+> Two conditional compilation directives "#ifdef CONFIG_TRACER_SNAPSHOT"
+> are used consecutively, and no other code in between. Simplify conditional
+> the compilation code and only use one "#ifdef CONFIG_TRACER_SNAPSHOT".
 
-Signed-off-by: Ley Foon Tan <lftan@altera.com>
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
----
- .../bindings/misc/intel,socfpga-sysid.yaml    | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/misc/intel,socfpga-sysid.yaml
+I think you mean CONFIG_TRACER_MAX_TRACE here.
 
-diff --git a/Documentation/devicetree/bindings/misc/intel,socfpga-sysid.yaml b/Documentation/devicetree/bindings/misc/intel,socfpga-sysid.yaml
-new file mode 100644
-index 000000000000..470444248365
---- /dev/null
-+++ b/Documentation/devicetree/bindings/misc/intel,socfpga-sysid.yaml
-@@ -0,0 +1,39 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/misc/intel,socfpga-sysid.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Intel Sysid IP core driver
-+
-+maintainers:
-+  - Arnd Bergmann <arnd@arndb.de>
-+  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-+
-+description: |
-+  The Altera Sysid component is generally part of an FPGA design. The
-+  component can be hotplugged when the FPGA is reconfigured.  This patch
-+  fixes the driver to support the component being hotplugged.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: intel,socfpga-sysid-1.0
-+
-+  reg:
-+    items:
-+      - description: physical address and length of the registers which
-+          contain revision and debug features
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+examples:
-+  - |
-+    sysid_qsys: sysid@10000 {
-+        compatible = "intel,socfpga-sysid-1.0";
-+        reg = < 0x10000 0x00000008 >;
-+    };
--- 
-2.25.1
+-- Steve
+
+> 
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  kernel/trace/trace.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index f400800bc910..dc959e339512 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -6430,9 +6430,7 @@ int tracing_set_tracer(struct trace_array *tr, const char *buf)
+>  		synchronize_rcu();
+>  		free_snapshot(tr);
+>  	}
+> -#endif
+>  
+> -#ifdef CONFIG_TRACER_MAX_TRACE
+>  	if (t->use_max_tr && !had_max_tr) {
+>  		ret = tracing_alloc_snapshot_instance(tr);
+>  		if (ret < 0)
 

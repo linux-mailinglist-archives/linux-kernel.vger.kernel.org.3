@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0C653BCB6
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737AE53BCC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237190AbiFBQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S237248AbiFBQr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237183AbiFBQqE (ORCPT
+        with ESMTP id S237256AbiFBQrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:46:04 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DCC2B12FC;
-        Thu,  2 Jun 2022 09:46:02 -0700 (PDT)
+        Thu, 2 Jun 2022 12:47:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8354A183A4;
+        Thu,  2 Jun 2022 09:47:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=yHMITh+N130iuSnYvU2I4WotSms4ADBqIIhjmWEL4ZQ=; b=O6Xl4kM8MUO00BCgiQ9hWPp+gB
-        2m7ZVz8sHNAOQKpiy5iEU/brZWoHl9L3YI08j4vZrZwZONQy6WWyOSXW66i+Zcv9QKlOeesm8TgjQ
-        pABnUdHP29eKXg17nEZ/MnWYIcmY/29mOmJme4RbBeYYarSUthGM7iOo3qpUFKlkgq37Ue76GJEjA
-        MfSw6YBYC+/0IQghP6E8FIRiZlTGbFFCXvUfzWrCRinU718CfdX6Eh08/4ZrDvJWXnPQwmRp+4WdA
-        1qxJEJvrytnpdt9tHqZk0bsYRw6b+C0O39SAOTytYjPcg2eYDgsp57ejuIJbnxeryaQkNoi8uOxrW
-        ueUPAsxQ==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1nwnxQ-00EOAT-Fz; Thu, 02 Jun 2022 10:46:01 -0600
-Message-ID: <28824558-4fd5-e054-6c8d-5e045d52f795@deltatee.com>
-Date:   Thu, 2 Jun 2022 10:45:55 -0600
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uif769frfrYihV6YiWxMGs5eBDpigCO/7kp1qxb3WTw=; b=X1J8cjMICzgCsxkFRDuSKDibuq
+        +hwtjZyiS864Fr7r7uq4aQq4PFJK8VVPtTvA3dgtknuPKyw4EBX1JB9s+nB3KGFIgggx0e3+GLv3u
+        vbMu5+YaAl+ytycERctp3YK+2C3G7+LSwiYpjGTDu3vDFtLiYXFNWI6jC5/2Q830MFIX++tvDHvXZ
+        YvlqbcBvFT8uBesnZGkUqv2HHz+vBTH52qY0pR6Zv4ulCVylu2shMJjutQoPXpL42ScCwY04aQYHA
+        3aDk5gG94UFrHq7cR6qV4Oihdo5S6BMUAH89Wa7kSar0mhBXuMzt/ZEiI+pTDTLkoWTa+hq31TEtr
+        btMsSDLw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nwnyC-007HMt-Qg; Thu, 02 Jun 2022 16:46:48 +0000
+Date:   Thu, 2 Jun 2022 17:46:48 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     David Sterba <dsterba@suse.cz>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] btrfs: Replace kmap() with kmap_local_page()
+Message-ID: <YpjpeMsFsVUxuh3W@casper.infradead.org>
+References: <20220531145335.13954-1-fmdefrancesco@gmail.com>
+ <20220601132545.GM20633@twin.jikos.cz>
+ <Ypjjt87qL+ROFBtM@iweiny-desk3>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-CA
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220407154717.7695-1-logang@deltatee.com>
- <20220407154717.7695-21-logang@deltatee.com>
- <20220527125501.GD2960187@ziepe.ca>
- <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
- <20220527190307.GG2960187@ziepe.ca>
- <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
- <20220602000038.GK2960187@ziepe.ca>
- <400baba7-1cd6-09d4-4de9-2a73f08afc79@deltatee.com>
- <20220602163059.GL2960187@ziepe.ca>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <20220602163059.GL2960187@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, hch@lst.de, dan.j.williams@intel.com, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, andrzej.jakowski@intel.com, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, bhelgaas@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ypjjt87qL+ROFBtM@iweiny-desk3>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-
-On 2022-06-02 10:30, Jason Gunthorpe wrote:
-> On Thu, Jun 02, 2022 at 10:16:10AM -0600, Logan Gunthorpe wrote:
+On Thu, Jun 02, 2022 at 09:22:15AM -0700, Ira Weiny wrote:
+> On Wed, Jun 01, 2022 at 03:25:45PM +0200, David Sterba wrote:
+> > On Tue, May 31, 2022 at 04:53:32PM +0200, Fabio M. De Francesco wrote:
+> > > This is the first series of patches aimed towards the conversion of Btrfs
+> > > filesystem from the use of kmap() to kmap_local_page().
+> > 
+> > We've already had patches converting kmaps and you're changing the last
+> > ones, so this is could be the last series, with two exceptions.
+> > 
+> > 1) You've changed lzo.c and zlib. but the same kmap/kunmap pattern is
+> >    used in zstd.c.
 > 
->>> Just stuff the pages into the mmap, and your driver unprobe will
->>> automatically block until all the mmaps are closed - no different than
->>> having an open file descriptor or something.
->>
->> Oh is that what we want?
+> I checked out zstd.c and one of the issues there is the way that the input
+> workspace is mapped page by page while iterating those pages.
 > 
-> Yes, it is the typical case - eg if you have a sysfs file open unbind
-> hangs indefinitely. Many drivers can't unbind while they have open file
-> descriptors/etc.
+> This got me thinking about what Willy said at LSFmm concerning something like
+> kmap_local_range().  Mapping more than 1 page at a time could save some
+> unmap/remap of output pages required for kmap_local_page() ordering.
+
+Umm ... Not entirely sure what I said, but it'd be really hard to kmap
+multiple pages with the current PAE implementation.  I've steered away
+from doing that for now, and kmap_local_folio() just guarantees the
+page that the offset lands in is mapped.
+
+I don't think the right answer is having a kmap_folio() that will map
+the entire folio.  I'd be more tempted to add vmap_folio() for that.
+My understanding is that PAE systems have more address space available
+for vmap than they do for kmap.
+
+> Unfortunately, I think the length of the input is probably to long in many
+> cases.  And some remapping may still be required.
 > 
-> A couple drivers go out of their way to allow unbinding while a live
-> userspace exists but this can get complicated. Usually there should be
-> a good reason.
+> Cc: Willy
+> 
+> As an aside, Willy, I'm thinking that a kmap_local_range() should return a
+> folio in some way.  Would you agree?
 
-This is not my experience. All the drivers I've worked with do not block
-unbind with open file descriptors (at least for char devices). I know,
-for example, that having a file descriptor open of /dev/nvmeX does not
-cause unbinding to block. I figured this was the expectation as the
-userspace process doing the unbind won't be able to be interrupted
-seeing there's no way to fail on that path. Though, it certainly would
-make things a lot easier if the unbind can block indefinitely as it
-usually requires some complicated locking.
-
-Do you have an example of this? What mechanisms are developers using to
-block unbind with open file descriptors?
-
-Logan
+I imagine it taking a folio to describe the range that's being accessed.
+But maybe it should be a phys_addr_t?  I tend to prefer phys_addr_t over
+pfn + offset as it's more compact on 64-bit systems and the same on
+32-bit systems.

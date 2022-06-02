@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6364953BC0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CEF53BC10
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbiFBQBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S236735AbiFBQDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiFBQBb (ORCPT
+        with ESMTP id S230011AbiFBQDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:01:31 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7BB2A892A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:01:30 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j7so5296949pjn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 09:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FBRJMzvAGkJGILGKDbXoB8GLtDkkWNL+J8Ai62jsA+Q=;
-        b=LhSseVAFwzWc/U+GtdQ+rNb9khcuSQv817u+uRBRcRw+c1lr5UkuGwWphoEVkRJju0
-         +tIhZb39WMVHD5ZhtSUIP3kWxE3u/c4nvYQPz/w0QN0n5qE0gf7m/8QnnpvljBxz5IW1
-         Il34Ze/l9MNa848R8LhloC0klP5/0Qig5LjbH0Z2ODIZ66c/VZ7q7vs70cVICYLuHxEM
-         +mxI7MDFfUnr6SfELj/1bIqipbprfpYCdDEZkAYcZg7zDuBEcsQfwWPZGQ48yJrj4Wgl
-         OQ18YYCroOU+oBwthmEboLwX4a7y49QuaO/M4Gd2XtIGmHc5lGxqoi1mDzgdtP8R5Sar
-         xK9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FBRJMzvAGkJGILGKDbXoB8GLtDkkWNL+J8Ai62jsA+Q=;
-        b=CuTweF9z9JvwZAPoivoDDTADzU9iDRpHcCIxhwmUTFNKNcnuoEd0c7VmRK7xZpcanP
-         AsGsfbBHG5gAcOSkCLenaiWxqJkQR/DdukX1MC24eTxIRPVLOQwU1/pgdlCaZixf5TYS
-         SgEUAyqGtf8UESfclPmiP6X41/fY8/m6/+CtpIb6S7KWcOtL/C0aWOeoufxliB1lHayQ
-         9vQTAKE5Cbha1dMA/sF4hMpJ12GB8/vnlcdv0iYWDyownM7UJNOksMpoVeRTH32qP7YD
-         mN4ju5H0Ij5rg6EgGWIHQ1qWTZWA8UYWM5zrDDMyTHszMwUwHPhFulnFmk20zNSLjFpB
-         xz9A==
-X-Gm-Message-State: AOAM532b423Bq8hmQFHbAAKFUGAeQi5dyeGANOkcwmLfK5VwiksDLhYN
-        0QZWt0y9vSVj4FEwcygXrftZSA==
-X-Google-Smtp-Source: ABdhPJz2IAfCKOE9RlomIcAKq3CSGTE1uFkWqYXOJ7w0xR/St7BpuaqLXukIggRC2picMNq2mluBgA==
-X-Received: by 2002:a17:90a:aa8a:b0:1c9:bfd8:9a90 with SMTP id l10-20020a17090aaa8a00b001c9bfd89a90mr6083378pjq.118.1654185690041;
-        Thu, 02 Jun 2022 09:01:30 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id iz3-20020a170902ef8300b0015edc07dcf3sm3741600plb.21.2022.06.02.09.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 09:01:29 -0700 (PDT)
-Date:   Thu, 2 Jun 2022 16:01:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Robert Dinse <nanook@eskimo.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 6/8] KVM: x86: Bug the VM if the emulator accesses a
- non-existent GPR
-Message-ID: <Ypje1evt/iNB2+MH@google.com>
-References: <20220526210817.3428868-1-seanjc@google.com>
- <20220526210817.3428868-7-seanjc@google.com>
- <87o7zcokgl.fsf@redhat.com>
+        Thu, 2 Jun 2022 12:03:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6225212CBE;
+        Thu,  2 Jun 2022 09:03:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 618E3614BA;
+        Thu,  2 Jun 2022 16:03:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C3BC385A5;
+        Thu,  2 Jun 2022 16:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654185807;
+        bh=Vc3eAUMjMU8tORu4+YbRV1KqF0w9KECltFREEa/MG7Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SOUJ9Sa4h8L9vwt8poGEI/YG0hUBQYbHQH2BFCt3a9mlgtpGlou3/7BPBbi09EDqT
+         vIYjtoyqtH7ByGmYUCrMNvVooTmBpfHIM83teW0F91R8GDRf2CvJa89VO2WOPSSd+f
+         bHsvEzkx1/v4Dlwbm+rSVHnE+FNZw8bnGE4lw8E5mY2p/Ep9d4nULcyLlP2JAVuvBi
+         9u8gFJNfA2pToiDTkw4/Z/WMRTvkcgiarq5+k53xMnBj1s1WqUsoJAIQlfw8b/yD4E
+         y2ASSS90imr5/ca0qsIq0nS5Rm8GZMojxvpj9o9SnSptqpfHyz+k/++HZryuEii+tL
+         qr1PhPsy4tRPw==
+Date:   Thu, 2 Jun 2022 11:03:25 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Conor.Dooley@microchip.com, Greg KH <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        linux-pci@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Daire.McNamara@microchip.com,
+        Lewis.Hanly@microchip.com, Cyril.Jean@microchip.com
+Subject: Re: [PATCH v4 1/1] MAINTAINERS: add polarfire rng, pci and clock
+ drivers
+Message-ID: <20220602160325.GA20054@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87o7zcokgl.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <mhng-5c57560e-a00b-4fd8-95ee-5e2fc0dcd34c@palmer-ri-x1c9>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022, Vitaly Kuznetsov wrote:
-> >  static const struct x86_emulate_ops emulate_ops = {
-> > +	.vm_bugged           = emulator_vm_bugged,
-> >  	.read_gpr            = emulator_read_gpr,
-> >  	.write_gpr           = emulator_write_gpr,
-> >  	.read_std            = emulator_read_std,
+On Wed, Jun 01, 2022 at 06:55:40PM -0700, Palmer Dabbelt wrote:
+> On Mon, 23 May 2022 13:00:01 PDT (-0700), Conor.Dooley@microchip.com wrote:
+> > On 23/05/2022 20:52, Palmer Dabbelt wrote:
+> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >> 
+> >> On Mon, 23 May 2022 04:42:53 PDT (-0700), Conor.Dooley@microchip.com wrote:
+> >>> On 05/05/2022 11:55, Conor Dooley wrote:
+> >>>> Hardware random, PCI and clock drivers for the PolarFire SoC have been
+> >>>> upstreamed but are not covered by the MAINTAINERS entry, so add them.
+> >>>> Daire is the author of the clock & PCI drivers, so add him as a
+> >>>> maintainer in place of Lewis.
+> >>>>
+> >>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >>>
+> >>> Hey Palmer,
+> >>> I know youre busy etc but just a reminder :)
+> >> 
+> >> Sorry, I didn't realize this was aimed at the RISC-V tree.  I'm fine
+> >> taking it, but it seems like these should have gone in along with the
+> >> drivers.
+> > 
+> > Yeah, sorry. In hindsight it should've but that ship has sailed. I sent
+> > the rng bundled this way b/c I didn't want to end up a conflict.
+> > Obv. there's not a rush so I can always split it back out if needs be.
 > 
-> Is it actually "vm_bugged" or "kvm_bugged"? :-)
+> I'm adding a bunch of subsystem maintainers just to check again.  I 
+> don't have any problem with it, just not really a RISC-V thing and don't 
+> wan to make a mess.  I've stashed it over at palmer/pcsoc-maintainers 
+> for now.
 
-vm_bugged.  KVM_BUG_ON() because it's a KVM bug on the condition, but the invididual
-VM is what's bugged/dead, i.e. other VMs and thus KVM itself get to live on. :-)
+Fine with me, if you want it:
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+> >> Arnd: maybe this is really an SOC tree sort of thing?  No big deal
+> >> either way on my end, just let me know.
+> >> 
+> >>> Thanks,
+> >>> Conor.
+> >>>
+> >>>> ---
+> >>>>   MAINTAINERS | 5 ++++-
+> >>>>   1 file changed, 4 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/MAINTAINERS b/MAINTAINERS
+> >>>> index fd768d43e048..d7602658b0a5 100644
+> >>>> --- a/MAINTAINERS
+> >>>> +++ b/MAINTAINERS
+> >>>> @@ -16939,12 +16939,15 @@ N: riscv
+> >>>>   K: riscv
+> >>>>
+> >>>>   RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
+> >>>> -M:  Lewis Hanly <lewis.hanly@microchip.com>
+> >>>>   M: Conor Dooley <conor.dooley@microchip.com>
+> >>>> +M:  Daire McNamara <daire.mcnamara@microchip.com>
+> >>>>   L: linux-riscv@lists.infradead.org
+> >>>>   S: Supported
+> >>>>   F: arch/riscv/boot/dts/microchip/
+> >>>> +F:  drivers/char/hw_random/mpfs-rng.c
+> >>>> +F:  drivers/clk/microchip/clk-mpfs.c
+> >>>>   F: drivers/mailbox/mailbox-mpfs.c
+> >>>> +F:  drivers/pci/controller/pcie-microchip-host.c
+> >>>>   F: drivers/soc/microchip/
+> >>>>   F: include/soc/microchip/mpfs.h
+> >>>>
+> >>>
+> > 

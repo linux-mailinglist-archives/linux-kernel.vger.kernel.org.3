@@ -2,59 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE2553BB1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353AB53BB1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235508AbiFBOlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S235070AbiFBOnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236235AbiFBOkv (ORCPT
+        with ESMTP id S232686AbiFBOnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:40:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A70289A04;
-        Thu,  2 Jun 2022 07:40:34 -0700 (PDT)
+        Thu, 2 Jun 2022 10:43:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6AD1D314
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:43:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4F6BB81F75;
-        Thu,  2 Jun 2022 14:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43372C385A5;
-        Thu,  2 Jun 2022 14:40:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C28A6187A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 14:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA50C385A5;
+        Thu,  2 Jun 2022 14:43:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654180831;
-        bh=iBt0yGuyvumHUwyuQr18kXniXAo9MJXH2585H5hKla8=;
+        s=k20201202; t=1654180983;
+        bh=4kWjTMseHRZBI+DoHWf0Iz0RsrVG0ExhwVphkECDeXw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KnA3YFQ7j8yovXKqZZHf98aMqPQXaKbrNvbDtD3Hh4yQcCCWr8B+DPoIiBBRvY4Xx
-         QoXt4d5YFEu9rjuO7QTIhIl5mFCEg8DOn5a7RVbzn9+pmE7yzQ6EayZMg0FkLr8BtF
-         vU65OU1eBFDiG6rWtaoAz+m61R2r2ciCb1o+ZUSBLZ0wtY2iwdvX2h5h8q6trmxmFf
-         EDtMTstKRcHBR3wdbP6CD39z4Jbq4hwrO+64Dcdb48XGkBrCTgdSSWmuSizUhKV7uz
-         boNKhT0KgtI8V1SLapZX7sXJSWX77PbYJtAIIIy45LAJPMgLhrfbwhuZVUkywmo7kE
-         dFu0Y9Zo0WkAQ==
-Date:   Thu, 2 Jun 2022 16:40:29 +0200
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        quic_plai@quicinc.com, bgoswami@quicinc.com, perex@perex.cz,
-        tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        quic_rohkumar@quicinc.com, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] ASoC: dt-bindings: lpass-cpu: Update external mclck0
- name
-Message-ID: <YpjL3X73LyefYjI7@sirena.org.uk>
-References: <1654169206-12255-1-git-send-email-quic_srivasam@quicinc.com>
- <1654169206-12255-2-git-send-email-quic_srivasam@quicinc.com>
- <20220602143245.GA2256965-robh@kernel.org>
+        b=QkYqJ9SfCLMOEcWgp/w59i9xvAktYsHjQg+lErZVTJ2szgYWIO1xjDikg8088WxZF
+         dckdZBFejMjwPzVBMV+Ky0T/shh5Iy0duUpeEcIznP4GT3jnIT+LzymPfm6yCg1uua
+         j2AublGX7CZa4LcjsysfXXNLHaFYFuBsW1yT4NaMy+01pGgh1enqqW1tGY7TctmKFd
+         JdC0wWoqVFhJDl3ipjGcr0Z/zJ3/9O03UjQZgWoJin0SWX3CM/Lh7VxYMRXTEKgUBg
+         svDa5XvlG3ir7+wuVJC7bl1T0XOFzZJrcsAHL3D4R8DRgzeVqeMNDXW9K9k959FOrz
+         xldkhSt08Rt0w==
+Date:   Thu, 2 Jun 2022 07:43:01 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Changbin Du <changbin.du@huawei.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, changbin.du@gmail.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Hui Wang <hw.huiwang@huawei.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: riscv: alternatives: move length validation inside the subsection
+Message-ID: <YpjMdVjLzoIoSGz9@dev-arch.thelio-3990X>
+References: <20220602112734.it2bzlqaismotjof@M910t>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0ZilQwiK5vRHCj/y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602143245.GA2256965-robh@kernel.org>
-X-Cookie: May your camel be as swift as the wind.
+In-Reply-To: <20220602112734.it2bzlqaismotjof@M910t>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,40 +59,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 02, 2022 at 07:27:34PM +0800, Changbin Du wrote:
+> Apply the same fix from commit 966a0acce2fc ("arm64/alternatives: move
+> length validation inside the subsection") to riscv.  Due to the one-pass
+> design of LLVM's integrated assembler, it can not compute the length of
+> instructions if the .org directive is outside of the subsection that these
+> instructions are in.
+> 
+> Here is the build error reported by llvm:
+> 
+> In file included from ./arch/riscv/include/asm/pgtable.h:108:
+> ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+>         ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+>         ^
+> ./arch/riscv/include/asm/errata_list.h:41:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+> asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+>     ^
+> ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+>         _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+>         ^
+> ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+>         __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+>         ^
+> ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+>         ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+>         ^
+> ./arch/riscv/include/asm/alternative-macros.h:98:3: note: expanded from macro 'ALT_NEW_CONTENT'
+>         ".org   . - (887b - 886b) + (889b - 888b)\n"                    \
+>          ^
+> <inline asm>:25:6: note: instantiated into assembly here
+> .org    . - (887b - 886b) + (889b - 888b)
+>         ^
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
 
---0ZilQwiK5vRHCj/y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the patch! I already sent an equivalent change two weeks ago
+as https://lore.kernel.org/20220516214520.3252074-1-nathan@kernel.org/,
+which I think is slightly better because it handles the __ASSEMBLY__
+version of the macro as well.
 
-On Thu, Jun 02, 2022 at 09:32:45AM -0500, Rob Herring wrote:
-> On Thu, Jun 02, 2022 at 04:56:45PM +0530, Srinivasa Rao Mandadapu wrote:
-> > Update "audio_cc_ext_mclk0" name to "core_cc_ext_mclk0",
-> > as MI2S mclk is being used is from lpass core cc.
+Cheers,
+Nathan
 
-> This is safe to change breaking the ABI because ...
-
-The driver was only just merged so didn't make it into a full
-release.
-
-> Names are supposed to be local to the module, not based on their source.=
-=20
-
-Indeed.
-
---0ZilQwiK5vRHCj/y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKYy9wACgkQJNaLcl1U
-h9Dudwf/ZQG4R79+Icg0Uh1Cmk3yjzWw6xvBIZLjQDaXBBCdISJ8tvELqQM8GFVj
-IpFpKAnDC6ATOXTY+M8YK3D9Mf76ehf74T2VZt3ePnDjtmSHGWoZkvpKg1SkDtxe
-8Oo7jo4nhx4Rb1ObaORZECl5InigJp29ywUhEQ9O1l4RKWYMyuW+LTsTB7ODxw9n
-kI9tZkFFZNk8ZRgVqXoN/wYirD2NFkOYmt6vv8hP+tN2e1pLm2Du2yO+Tzzlw3Z1
-6PJqCjVbDhxj4XtK5zDbk85DS3+6JMKKGwf+vUhkgN6JGsPR9OGT6F1UJ7zNjDYy
-+Nsj7dBqnpYjZOUkWCbTW8wSbWFknQ==
-=/oaJ
------END PGP SIGNATURE-----
-
---0ZilQwiK5vRHCj/y--
+> ---
+>  arch/riscv/include/asm/alternative-macros.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
+> index e13b1f6bb400..c7d7f1945768 100644
+> --- a/arch/riscv/include/asm/alternative-macros.h
+> +++ b/arch/riscv/include/asm/alternative-macros.h
+> @@ -94,9 +94,9 @@
+>  	new_c "\n"							\
+>  	".option pop\n"							\
+>  	"889 :\n"							\
+> -	".previous\n"							\
+>  	".org	. - (887b - 886b) + (889b - 888b)\n"			\
+>  	".org	. - (889b - 888b) + (887b - 886b)\n"			\
+> +	".previous\n"							\
+>  	".endif\n"
+>  
+>  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
+> -- 
+> 2.26.2
+> 

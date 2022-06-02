@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDFE53B436
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16CB53B438
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbiFBHSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S231676AbiFBHSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiFBHSO (ORCPT
+        with ESMTP id S231330AbiFBHSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:18:14 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C077F30C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:18:13 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id c2so3826876plh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:18:13 -0700 (PDT)
+        Thu, 2 Jun 2022 03:18:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D10C30C;
+        Thu,  2 Jun 2022 00:18:46 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id n8so3830231plh.1;
+        Thu, 02 Jun 2022 00:18:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=R8Jzvn4KoI6zyaEC1swBdZnPsmFAJHlige3FcDhZ5Gc=;
-        b=Pa6M1iUSEgtHJ+P+TN+zX25lnv33UQYDykQS3F4wk/IJGJiTEko4StIiyBUDfX6R9h
-         0HQ59fKfvhydM/hJNnbaDRhY0ixmiF5JhHncDLI+ULMSAdzx/p8ABC1ljPS3Pg1z6ozq
-         LhVo9hfZpmU7ELx+hRRzC1s7vs+mahvAJ+bQP06on8d9T94WFtW2CQLqBNA5seEasxPo
-         YcT2U36KTqMtQzlZYzLh4/dYrXGMap+jYzbIfeed8TC6+MG7zpEsfxq6RE6T1UR9vhjR
-         pyQHjiGHMgbfnTajE1Ae4ztnJyZUj9w3wwNk2X2fH1jfA6GV0NlnGKXluRkLluyDUo+P
-         o1RQ==
+        bh=Fg+YJdKSIUZuBoNCQW7zpcvmuvQppBd7jxUfv/9/4Rg=;
+        b=iHWIW77EkqbOtQ32Uz1DYaHC7kq6l1hccXzCOqC0Tbxhoveun+hvDM8GSWlYFpigbo
+         6XwAS8hPqqTSwdIoxoslTM9SFMnO/fCdVgt1cLbExGlxf+0TBjJtFZexiJzbPF+qg1Mt
+         FHvnX655CpVIDNHoIw1U54EvpihfhGQqFdjnyv+QKyg+PRg5QiNVmwT5HKAmv/HBr4eG
+         6hfOn5TrUSYrPVwSx+6RwM/41bLlJXUHpA4+HZJDpxFTN750U0BY408F9JbQ1UIyIglq
+         +48aQ1HphvvKTe4NYvqvqAXsNQ0KuGaOjAWov3m9NSj/RNqrUj61sbsqZLciCbREFCBe
+         CGNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=R8Jzvn4KoI6zyaEC1swBdZnPsmFAJHlige3FcDhZ5Gc=;
-        b=hDRWj32wdqtd4bLAp9zufYeedTumQdkA8jTKZLCrW38JjNMJjmUU+jgLdZgohxGxds
-         ngG1Y2liosFCeQxcjxFt7MakcNUODDLPFVM2ZOY28EpIVnj3wjxAOnKED/Lzsb2qPSV/
-         m8pDIvWLeB9MIYCrBACh0oBefOSe9nPfocTeJPc/PEtFNjJLQhxoLnNUv03t5y6zpEg6
-         6sW+7lGRLK2JRaQpazSix/AsTSPnJFLRaJHTaXlV7ZbZXQoeVd4fAEgV4UwiHX1yCG4U
-         AO8gHaDMrm6H/l2tKnIEgJunOWh6EmZy1qcrexO3VlcQxEj6qgUytTyCjk5SCiGhn0AA
-         L1sg==
-X-Gm-Message-State: AOAM533r5hI238pJ29/+D+H/l78UMQUT4KknLzkRlGcmfn0enoiueibY
-        Mq+EMj9hmkpEXZGdSy6+Bv0=
-X-Google-Smtp-Source: ABdhPJwCF9zgTxD8Jpl1zz1KmAQnvxwxZhmFVGBpKn7FmZfjlKFdV7MDWp00dul1ao9oGPCp7+0XJQ==
-X-Received: by 2002:a17:902:c952:b0:162:14b6:3179 with SMTP id i18-20020a170902c95200b0016214b63179mr3390242pla.7.1654154293331;
-        Thu, 02 Jun 2022 00:18:13 -0700 (PDT)
+        bh=Fg+YJdKSIUZuBoNCQW7zpcvmuvQppBd7jxUfv/9/4Rg=;
+        b=XglPT2e2AsqT7Eh+RSPshrhYgKvu8Vo3CVZSLPJ7eSWPiJkaWO6tkigOk9d830OXvt
+         ak95WHigBFYcjeYYk2xu0fD3ZJ7l5mgAwAVRtBonjvbYZNvUFo5dwYtVZSkLIeZqHK64
+         SFg4rTpZH3DPGHNt+bf7/Dw+Cra1tpCpdjDH4MdWd58iuBIctxr8cm8mFqa3M3CnAbip
+         ATD3bl7ogiaCk6TH5mpNNPXMXSN7XmQRhPrLFfCZGiPG8RwA7c3jsqHffaSU7iijlLdv
+         VrD6BqxAt1lDpwZkouYL7FBmV0BkR50hJIURqIolZVEJbCUbCvOa52V1Gf7HPysrWkkg
+         VG6g==
+X-Gm-Message-State: AOAM5318kksD2D5ay/ecnnbp7cCIhsn37v5S0XNAcjqd8HtvDSHsV6Wh
+        jfImSericc/ojwmExqcu4Jk=
+X-Google-Smtp-Source: ABdhPJyGX+6GvYUtyPYtoGRKRU/u9lUyv7+RLdY59q27u/vHFaUSbDx1I07YUKw2QLbIiElRuUDc9A==
+X-Received: by 2002:a17:902:7b8f:b0:162:467:db7c with SMTP id w15-20020a1709027b8f00b001620467db7cmr3390055pll.140.1654154325648;
+        Thu, 02 Jun 2022 00:18:45 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b5-20020a1709027e0500b0016353696f46sm2741624plm.269.2022.06.02.00.18.11
+        by smtp.gmail.com with ESMTPSA id o21-20020a170903211500b0015e8d4eb26esm2677593ple.184.2022.06.02.00.18.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 00:18:12 -0700 (PDT)
+        Thu, 02 Jun 2022 00:18:45 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     lgirdwood@gmail.com
-Cc:     broonie@kernel.org, perex@perex.cz, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
+To:     axboe@kernel.dk
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ASoC: mediatek: remove unnecessary check of clk_disable_unprepare
-Date:   Thu,  2 Jun 2022 07:18:09 +0000
-Message-Id: <20220602071809.278134-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] io_uring: Remove redundant NULL check before kfree
+Date:   Thu,  2 Jun 2022 07:18:41 +0000
+Message-Id: <20220602071841.278214-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,32 +72,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Because clk_disable_unprepare already checked NULL clock
-parameter, so the additional checks are unnecessary, just remove them.
+kfree on NULL pointer is a no-op.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- sound/soc/mediatek/mt8173/mt8173-afe-pcm.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ fs/io_uring.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-index 31494930433f..dcaeeeb8aac7 100644
---- a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-@@ -286,10 +286,8 @@ static int mt8173_afe_dais_set_clks(struct mtk_base_afe *afe,
- static void mt8173_afe_dais_disable_clks(struct mtk_base_afe *afe,
- 					 struct clk *m_ck, struct clk *b_ck)
- {
--	if (m_ck)
--		clk_disable_unprepare(m_ck);
--	if (b_ck)
--		clk_disable_unprepare(b_ck);
-+	clk_disable_unprepare(m_ck);
-+	clk_disable_unprepare(b_ck);
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 1fc0166d9133..d1fe967f2343 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4445,8 +4445,7 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+ 	kiocb_done(req, ret, issue_flags);
+ out_free:
+ 	/* it's faster to check here then delegate to kfree */
+-	if (iovec)
+-		kfree(iovec);
++	kfree(iovec);
+ 	return 0;
  }
  
- static int mt8173_afe_i2s_startup(struct snd_pcm_substream *substream,
 -- 
 2.25.1
 

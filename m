@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD1953BBCF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6180153BBD8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbiFBPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S236595AbiFBPuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 11:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236561AbiFBPr4 (ORCPT
+        with ESMTP id S231797AbiFBPuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:47:56 -0400
-Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9E41A04E;
-        Thu,  2 Jun 2022 08:47:51 -0700 (PDT)
-Received: from [192.168.43.127] (unknown [89.24.43.208])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 0C4AF2007F;
-        Thu,  2 Jun 2022 17:47:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1654184868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cFipLSaSNt6AVZj+ipJuiWLqxOfkAwoPaoKp6HET13A=;
-        b=Px/3AEjj0ms3qrktWNl/+/H/NLVeovGt6F4eeiEjwwtQcKAJTH+lymb0lVYTNIiH99/Cko
-        zTHPO5GcDkbMou8ZNea8hjm4k+lRoHY5jz/lNOPbF+HTMHTEenckKoJjG+81ah0hs1PHQO
-        sS+EjBpCDaEoaWjA+oqggXoDirxalwk=
-Message-ID: <9a7b3be5-f75d-d269-1113-f2865e9c4919@ixit.cz>
-Date:   Thu, 2 Jun 2022 17:47:43 +0200
+        Thu, 2 Jun 2022 11:50:14 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65D62E09B;
+        Thu,  2 Jun 2022 08:50:12 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id k11so6966781oia.12;
+        Thu, 02 Jun 2022 08:50:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4M65yO1MSPMaaEDxpgxAeSakHO4GbEVK8l/HDI7ey7E=;
+        b=iGmzDqhtpsxMzxm22qQgnkRIBwk6TSQ+as4aB4Fnqk3F9hlmPE3g1BI7PGi4QpiIKP
+         PBZ73wi9zmxkjL7w+q6r+HeSOrxTig2Ex5qTsNk+yFY2nhlCGlC0eFApAMnzyU4TkuNx
+         C+ZIyqmUcfpxjogeNEjE2FP808P2WFkNltT9Ecnqh0JpAn/j5tyRWmzKRouGaELG1hbj
+         0JtOBEP3hhsBKwhXw3qgNrQg6rcfO0T8lA2aR7nA/SkA1C9LuKmLaeRjgSdC+85M4K9/
+         agGVdiblLongl+GofVWfGAhQyCieMh3FJcsUOTX0mNTLMBZaeiLuPPBcY5zU+NQjUJ1i
+         JmKw==
+X-Gm-Message-State: AOAM532zbcAqTILS8HI4m6C8e5wE5xCvZNTMl4WEhTjehrDmXjLxY6Aj
+        DLeczHowGONZD4R+hEMYUA==
+X-Google-Smtp-Source: ABdhPJweeB9Qgg0inliBye4ZwpAwslfzL2dtqBXMZ5lTOF4/7QDMtbhTUga29CdeEcyJUYzgbdCydQ==
+X-Received: by 2002:a05:6808:1646:b0:328:ffdf:6821 with SMTP id az6-20020a056808164600b00328ffdf6821mr3065177oib.115.1654185011996;
+        Thu, 02 Jun 2022 08:50:11 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id lq10-20020a0568708dca00b000e90544b79fsm2100598oab.41.2022.06.02.08.50.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 08:50:11 -0700 (PDT)
+Received: (nullmailer pid 2398310 invoked by uid 1000);
+        Thu, 02 Jun 2022 15:50:10 -0000
+Date:   Thu, 2 Jun 2022 10:50:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: add MEMSensing
+ Microsystems Co., Ltd.
+Message-ID: <20220602155010.GA2349024-robh@kernel.org>
+References: <20220525181532.6805-1-ddrokosov@sberdevices.ru>
+ <20220525181532.6805-2-ddrokosov@sberdevices.ru>
+ <20220602135015.GA2186715-robh@kernel.org>
+ <20220602135934.f4exakny4rbrdboy@CAB-WSD-L081021.sigma.sbrf.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 4/4] dt-bindings: power: supply: summit,smb347: use
- absolute path to schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
- <20220601071911.6435-4-krzysztof.kozlowski@linaro.org>
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <20220601071911.6435-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602135934.f4exakny4rbrdboy@CAB-WSD-L081021.sigma.sbrf.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,34 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: David Heidelberg <david@ixit.cz>
+On Thu, Jun 02, 2022 at 01:59:18PM +0000, Dmitry Rokosov wrote:
+> Rob,
+> 
+> Thank you for the Ack. I'm going to send v3 patch series and don't
+> understand, should I append Acked-by line to v3 version of vendor-prefix
+> patch... Please suggest me if possible.
 
-On 01/06/2022 09:19, Krzysztof Kozlowski wrote:
-> Reference regulator schema by absolute path, as expected by DT schema
-> coding style.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   .../devicetree/bindings/power/supply/summit,smb347-charger.yaml | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-> index 20862cdfc116..ce0bca4689f6 100644
-> --- a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-> @@ -82,7 +82,7 @@ properties:
->         - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
->   
->     usb-vbus:
-> -    $ref: "../../regulator/regulator.yaml#"
-> +    $ref: /schemas/regulator/regulator.yaml#
->       type: object
->   
->       properties:
+Yes. When you send another version, add any acks unless there are 
+significant changes that warrant not adding them. You don't need to send 
+another version just to add acks. The maintainer will add any given on 
+the current version.
 
--- 
-David Heidelberg
-Consultant Software Engineer
+Rob
 
-Matrix: @okias:matrix.org
-
+> 
+> On Thu, Jun 02, 2022 at 08:50:15AM -0500, Rob Herring wrote:
+> > On Wed, 25 May 2022 18:15:30 +0000, Dmitry Rokosov wrote:
+> > > MEMSensing Microsystems (Suzhou, China) Co., Ltd. operates as a micro
+> > > electromechanical system technology company which produces micro
+> > > electromechanical system microphones and sensors.
+> > > MEMSensing Microsystems (Suzhou, China) Co., Ltd. applies its products
+> > > in consumer electronics, industrial control, medical electronics
+> > > and automotive, and other fields.
+> > > 
+> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > > ---
+> > >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > 
+> > Acked-by: Rob Herring <robh@kernel.org>
+> 
+> -- 
+> Thank you,
+> Dmitry

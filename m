@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B57F53BE70
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0462453BE74
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238435AbiFBTKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 15:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
+        id S238376AbiFBTNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 15:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238422AbiFBTKm (ORCPT
+        with ESMTP id S238348AbiFBTM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:10:42 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F4FD48
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:10:40 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id k6so1322800qkf.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:10:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XtWDo4MTVxUub0OsqsFcXGlMn8SJu8w5e+LETPN1X5w=;
-        b=WEGpwTsANrZu0zwHT9Z/JjwZVI7FeF9I+mzBEM6dtsQkXlz5I3EOJF2rTNFvV+qWoE
-         y5xN57IqcaBdzns75EC+w0RZp84MunipC8Vs4EDB+zxrxpyibPT/PRh8MTmZ5akaD0bf
-         G9TQg4FQB1NM8FlO+NN2CYoQu0zKRFRdqz33JA5eZa+szwzOrQ+Ro4CRVt5QWPHGbk2y
-         5Bmoq9lIJX84ARnLPJdtBrC6flwCgoLfqY1prE46OmJm7qhTsWCKFDvOS1nJldd6Fh3e
-         +c0L9dYdE6hIKsuM/aoZ6VKZysLV2+g16haY95Ps5RUl23/DrddDLnjjBBWmkWKlEe6G
-         5tVg==
-X-Gm-Message-State: AOAM530pMy3pL7iVQhNt1ajtRb6ZJBMDJt8ZdsoIWpsMR8iqFXm22COc
-        VwJ/AHoAK+UGryiDcZKKN7acVBYjgcYysg==
-X-Google-Smtp-Source: ABdhPJyATvjF0lAoDsmzwI6ZS2N0KqnSa2ZnKqX/JCboyNsONXydVHm4EdCHkRIO4/vF4iEeSBNKww==
-X-Received: by 2002:a05:620a:4415:b0:6a5:895d:f254 with SMTP id v21-20020a05620a441500b006a5895df254mr4003264qkp.517.1654197039775;
-        Thu, 02 Jun 2022 12:10:39 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id bw16-20020a05622a099000b002f9114d2ebcsm3628327qtb.17.2022.06.02.12.10.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 12:10:39 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-300628e76f3so61061897b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:10:39 -0700 (PDT)
-X-Received: by 2002:a0d:f801:0:b0:30f:f716:2950 with SMTP id
- i1-20020a0df801000000b0030ff7162950mr3084004ywf.358.1654197038940; Thu, 02
- Jun 2022 12:10:38 -0700 (PDT)
+        Thu, 2 Jun 2022 15:12:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E85DDF6A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654197175;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ura6WzJRfDCe639hKtMahR5YURQ9sPrCG1JQZM8gR34=;
+        b=Q+Q6P/xPmVk+qY9WuQa7fDKdwQUILE2oh7lLGnr9Z4zj0dShFlY7oS6XFjwO3o0aoljqcG
+        4ediMa7yznwqLkFOT7u2/8gITBgFinlbwGKC37mTwxwp1Uc44vFMsN8O/b2sAds8Lk1k6R
+        K/H7os2TvTRAvsmR3G10yudz2z8XKwU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-l6nvbvmKOSeZhTBelqCCeQ-1; Thu, 02 Jun 2022 15:12:54 -0400
+X-MC-Unique: l6nvbvmKOSeZhTBelqCCeQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 993753C10142;
+        Thu,  2 Jun 2022 19:12:53 +0000 (UTC)
+Received: from [10.22.32.147] (unknown [10.22.32.147])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5CD8F403371;
+        Thu,  2 Jun 2022 19:12:53 +0000 (UTC)
+Message-ID: <3ba0799f-c008-bbdf-bbc1-626d8bb4b821@redhat.com>
+Date:   Thu, 2 Jun 2022 15:12:53 -0400
 MIME-Version: 1.0
-References: <20220602180919.4856-1-wangxiang@cdjrlc.com>
-In-Reply-To: <20220602180919.4856-1-wangxiang@cdjrlc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Jun 2022 21:10:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWroxsXvgon34voezjW5HE8mcqB_FEZY5DXi0z_CBpfWg@mail.gmail.com>
-Message-ID: <CAMuHMdWroxsXvgon34voezjW5HE8mcqB_FEZY5DXi0z_CBpfWg@mail.gmail.com>
-Subject: Re: [PATCH] m68k: Fix syntax errors in comments
-To:     Xiang wangx <wangxiang@cdjrlc.com>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v5 4/4] blk-cgroup: Document the design of new lockless
+ iostat_cpu list
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ming Lei <ming.lei@redhat.com>
+References: <20220602133543.128088-2-longman@redhat.com>
+ <20220602185401.162937-1-longman@redhat.com>
+ <YpkJ6rDTR24ScuEq@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YpkJ6rDTR24ScuEq@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiang,
-
-On Thu, Jun 2, 2022 at 8:09 PM Xiang wangx <wangxiang@cdjrlc.com> wrote:
-> Delete the redundant word 'the'.
+On 6/2/22 15:05, Tejun Heo wrote:
+> On Thu, Jun 02, 2022 at 02:54:01PM -0400, Waiman Long wrote:
+>> A set of percpu lockless lists per block cgroup (blkcg) is added to
+>> track the set of recently updated iostat_cpu structures. Add comment
+>> in the code to document the design of this new set of lockless lists.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
 >
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+> Thanks.
 
-Thanks for your patch!
+I have just realized that I forgot to free the percpu blkcg->lhead in 
+blkcg_css_free(). I will send out v6 with this change as well as 
+integrating this documentation patch back. Sorry for the omission.
 
-> --- a/arch/m68k/coldfire/intc-2.c
-> +++ b/arch/m68k/coldfire/intc-2.c
-> @@ -7,7 +7,7 @@
->   * family, the 5270, 5271, 5274, 5275, and the 528x family which have two such
->   * controllers, and the 547x and 548x families which have only one of them.
->   *
-> - * The external 7 fixed interrupts are part the the Edge Port unit of these
-> + * The external 7 fixed interrupts are part the Edge Port unit of these
+Thanks,
+Longman
 
-I think "the the" should be replaced by "of the" instead.
-
->   * ColdFire parts. They can be configured as level or edge triggered.
->   *
->   * (C) Copyright 2009-2011, Greg Ungerer <gerg@snapgear.com>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

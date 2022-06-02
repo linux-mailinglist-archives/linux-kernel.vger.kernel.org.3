@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F95253B19A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 04:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C908553B177
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 04:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbiFBB2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
+        id S233155AbiFBBbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbiFBB23 (ORCPT
+        with ESMTP id S232837AbiFBBbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:28:29 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC74127183
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 18:28:27 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id gd1so3592804pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 18:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to;
-        bh=Pq/vYHE3cXk7rG+RVhj4D3DwFPV+hL1T6Kovr4vupaE=;
-        b=ExwHaaZeB+DCLCHQ7ox2PTU2gawCae8ez1r5t/wmDxOouP4pn1j6KX4m0O7p2Mq8nU
-         tvC1nNEPciqGWO7AFOpdWyvsmLWTttUY3SXHuVk/AFRzlTaKEUd9AfQ2XjrJGaGI+ZJX
-         KAU04uZaMiZnIr031lApCZ1Z/NtVYHRzn337m3PsLylZUp2mHWrvlqnoGBkW85ppvK4F
-         X689/svTbF/Gd+sZdLgWI3LtRp5Dw2zFDto4XXBfADfijXMFxGhFWsUzUNlC+CjJZNqZ
-         F9mujWAvV21R9XpP7Bp3Y8WtPaygvSAIQUijzLgkH/Tupl5BmN7TT2gxXxAZ1CprXvd0
-         xEGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=Pq/vYHE3cXk7rG+RVhj4D3DwFPV+hL1T6Kovr4vupaE=;
-        b=tlLeE5wRtPXOXVlUajwuTPfT3h2XPfnwSp/Va8YLg7sN6eSzg0j0oJ9b4ll3gh/skY
-         27dkuxoSppI1ZoElayosCFWWzTjSqG9m7CWRyLiMcD6J2b82pZQD9PFmE69dJM6cNl41
-         cBS3dpaOc4x1ZYv+n0aaVl/O5fr1j+/Dk/nj68HHRBkMphFTxw/kGH0/CMduFnHRotUb
-         WuDr5dkcAamsfDqjTXcf/p/UAiLqmVHcAqS5mWpHQohLTkuLHsFS8Ntg61Y6IVJFQkI6
-         SDO2ERrnJBbGs0jEVkS8w+pyCRX1PzpGxv3CU8MPKZ4fN07OLEGLeN322YuyYOHb+3VU
-         tzFQ==
-X-Gm-Message-State: AOAM532DKbWvAI5DDy6zpAXrhlUz9Nq3exlgX7GGl+TOqsje9vS+MG6e
-        1FE5RFhtF+LQNBBSgPAFgb/e5Q==
-X-Google-Smtp-Source: ABdhPJzlndyk5hGK0dkUOhK/W+1F1+MjrAE3nvOnwhuedR0Fnyzgx/OORkHADuo5qaR+X3lJbjvtyA==
-X-Received: by 2002:a17:902:e808:b0:161:946c:d2a5 with SMTP id u8-20020a170902e80800b00161946cd2a5mr2244981plg.93.1654133307089;
-        Wed, 01 Jun 2022 18:28:27 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id bf7-20020a170902b90700b00163c6ac211fsm2148116plb.111.2022.06.01.18.28.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 18:28:26 -0700 (PDT)
-Subject: [PATCH] dt-bindings: net: adin: Escape a trailing ":"
-Date:   Wed,  1 Jun 2022 18:28:09 -0700
-Message-Id: <20220602012809.8384-1-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 1 Jun 2022 21:31:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93FE131F00;
+        Wed,  1 Jun 2022 18:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654133496; x=1685669496;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EICTw4lRgz1GEwBE23gGkyRblMBsQMnEDRc0oqq4R58=;
+  b=oIfVNUz+mlSurw/cgDrF0zzFCzBrNmgL83MCxU/0BlXaO7diLorH/yM9
+   jBBjP7272xbd6pwve/A+d3UkwQn4Tkt0IF8CmVI5NIuQAwHZNFiCGIHyr
+   Hb3qgg2rZS1IQcfWcazlAVJ7CugvqJ4A2Gav7JfBMtTcLFr/hbuvXrvDt
+   lAd9jNuaOrxw/BMijhhlWwtBPP1qu0m1JdL4Zo33K3v4DVQRKMKZqyXP/
+   UKO8GVJ2PB5mGutstOcKTezJWCNsndusdX8IZaxt+pPxOHEzSFilCwtMY
+   IPMYaaF5H1Fvyt/TEZLb6h5e+ga6hX8X7flY5zhUuKkowzyKswlzreQ3p
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257853196"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="257853196"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 18:31:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="577237992"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 01 Jun 2022 18:31:32 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwZgR-0004cS-TC;
+        Thu, 02 Jun 2022 01:31:31 +0000
+Date:   Thu, 2 Jun 2022 09:30:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Liu <song@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, rostedt@goodmis.org,
+        jolsa@kernel.org, Song Liu <song@kernel.org>
+Subject: Re: [PATCH bpf-next 5/5] bpf: trampoline: support
+ FTRACE_OPS_FL_SHARE_IPMODIFY
+Message-ID: <202206020957.KETjl2xP-lkp@intel.com>
+References: <20220601175749.3071572-6-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     michael.hennerich@analog.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alexandru.ardelean@analog.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     kuba@kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601175749.3071572-6-song@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+Hi Song,
 
-1f77204e11f8 ("dt-bindings: net: adin: document phy clock output
-properties") added a line with a ":" at the end, which is tripping up my
-attempts to run the DT schema checks due to this being invalid YAML
-syntax.  I get a schema check failure with the following error
+I love your patch! Yet something to improve:
 
-    ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+[auto build test ERROR on bpf-next/master]
 
-This just escapes the line in question, so it can parse.
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20220602/202206020957.KETjl2xP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/7edcf1c49617641579f2bc36b86c7d59bea20aef
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Liu/ftrace-host-klp-and-bpf-trampoline-together/20220602-020112
+        git checkout 7edcf1c49617641579f2bc36b86c7d59bea20aef
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Fixes: 1f77204e11f8 ("dt-bindings: net: adin: document phy clock output properties")
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/devicetree/bindings/net/adi,adin.yaml b/Documentation/devicetree/bindings/net/adi,adin.yaml
-index 77750df0c2c4..88611720545d 100644
---- a/Documentation/devicetree/bindings/net/adi,adin.yaml
-+++ b/Documentation/devicetree/bindings/net/adi,adin.yaml
-@@ -37,7 +37,8 @@ properties:
-     default: 8
- 
-   adi,phy-output-clock:
--    description: Select clock output on GP_CLK pin. Two clocks are available:
-+    description: |
-+      Select clock output on GP_CLK pin. Two clocks are available:
-       A 25MHz reference and a free-running 125MHz.
-       The phy can alternatively automatically switch between the reference and
-       the 125MHz clocks based on its internal state.
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/trampoline.c: In function 'bpf_trampoline_lookup':
+>> kernel/bpf/trampoline.c:101:17: error: 'struct ftrace_ops' has no member named 'ops_func'
+     101 |         tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
+         |                 ^~
+   kernel/bpf/trampoline.c: In function 'bpf_trampoline_update':
+>> kernel/bpf/trampoline.c:416:25: error: 'struct ftrace_ops' has no member named 'trampoline'
+     416 |                 tr->fops->trampoline = 0;
+         |                         ^~
+
+
+vim +101 kernel/bpf/trampoline.c
+
+    74	
+    75	static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
+    76	{
+    77		struct bpf_trampoline *tr;
+    78		struct hlist_head *head;
+    79		int i;
+    80	
+    81		mutex_lock(&trampoline_mutex);
+    82		head = &trampoline_table[hash_64(key, TRAMPOLINE_HASH_BITS)];
+    83		hlist_for_each_entry(tr, head, hlist) {
+    84			if (tr->key == key) {
+    85				refcount_inc(&tr->refcnt);
+    86				goto out;
+    87			}
+    88		}
+    89		tr = kzalloc(sizeof(*tr), GFP_KERNEL);
+    90		if (!tr)
+    91			goto out;
+    92		tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
+    93		if (!tr->fops) {
+    94			kfree(tr);
+    95			tr = NULL;
+    96			goto out;
+    97		}
+    98	
+    99		tr->key = key;
+   100		tr->fops->private = tr;
+ > 101		tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
+   102		INIT_HLIST_NODE(&tr->hlist);
+   103		hlist_add_head(&tr->hlist, head);
+   104		refcount_set(&tr->refcnt, 1);
+   105		mutex_init(&tr->mutex);
+   106		for (i = 0; i < BPF_TRAMP_MAX; i++)
+   107			INIT_HLIST_HEAD(&tr->progs_hlist[i]);
+   108	out:
+   109		mutex_unlock(&trampoline_mutex);
+   110		return tr;
+   111	}
+   112	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,214 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E2C53B559
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4A653B564
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiFBIrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S232553AbiFBItv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 04:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbiFBIrf (ORCPT
+        with ESMTP id S232539AbiFBItu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:47:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A10AB45042
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654159653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7IZUWU1vP6nW4XZ/4rbj0jRx4Rk3cf8SZYUco2pQRSA=;
-        b=JBXfPRtWPdPR8AftcYM789SxyGQPYTRNyqMmN+ZGgg/HeLBwMW6D6FugNGPfvSTvQydT3Z
-        +ZdvQSSZNWoSUiGkIRQgIw8SIP8qFBktYkrhM9gjAjnUtHmY3dzGAcBQ8uHDMbrowkLXMZ
-        DgfIfbHGE+fYVGPDi1BLXyiXwyG6ANY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-9nj3c9lNNnW9k30mI5IP5w-1; Thu, 02 Jun 2022 04:47:32 -0400
-X-MC-Unique: 9nj3c9lNNnW9k30mI5IP5w-1
-Received: by mail-wm1-f70.google.com with SMTP id j14-20020a05600c1c0e00b003973bf0d146so2505068wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 01:47:32 -0700 (PDT)
+        Thu, 2 Jun 2022 04:49:50 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6EBE3B
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:49:47 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-30c1c9b9b6cso44183657b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 01:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=vocCGT9kds5q7nitmSFrod4j/y/b1j5SshMSPK8ytC0=;
+        b=FzdXhHqRAmqBt/EQcpVF1ROhqonhiObhGZAnrEyxuZljsqc7FOCu0lOGCJ7Kc7GG1X
+         5yc/lYNftMlMNnWfcbNouOeA7rxRXo2ihP4vVciFTnGgTJXyixCGpLTb7Ywx4N8ejMVQ
+         9GFHdq6DSZf4/Vu6Ni8xFb7a1l9/FM/Oe6IM36wzbqiunR95OFQIekeGmYtV3CF0OzaD
+         MfzlfTFgloT1sx4oPGaziR87vKiSntZFTJHb28d3UdqF6gv6Hx6665k5ozYHoDmjKiaF
+         /vnSLkw23uo/om3ck+s0sOkKvz2ZhofpMXwacjGfRf+Uv1YRgyVpDxb8Xj+AzjqIJoUJ
+         9hwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=7IZUWU1vP6nW4XZ/4rbj0jRx4Rk3cf8SZYUco2pQRSA=;
-        b=rNlrCB4FdCigCNNfKdD58BUCbXZEjtbEl/SR8P4Ew6p55593LEDypmyA4P4m+cPdMJ
-         FjBi8gFqHakEOpmCmqLX73caXXKQGJTMUyI6jkvfpRuPJHvTWg1zlhORe6vz4yrESIVQ
-         nOw80J70W1HFf4oMuQ4zeItQgwX1/iRMVjgQ0jkm5adsAvueufxgOoE2HOsLDdv5hcHp
-         l6Uy+qvAW3tO9LvVLlE8hXN0lnD6Vrziwr2L2av9rdEYw6tLJn7GiZGLq/RxcxxnhtLp
-         oNeUBroN2UKy2jV+42CQpaO+jf11gp0aifHvZBTZPk9qxJ94G42FAVMj1hFmHi69PvBd
-         tGzg==
-X-Gm-Message-State: AOAM5310tGNOD1zLg4wXpg/ZFOW5oExV+TlvRPGknekyPjMj3ZHNZwje
-        zbuCfQExREB0EopX8aKjxa0GM9uqN3xKEUmugzhKtS5ZYy4y1Om3v3O0er0rXeKHM78OphGQ5z5
-        QsVycpVMSjwTdAaDF4Okck9gy
-X-Received: by 2002:a05:600c:600a:b0:397:4d8f:2655 with SMTP id az10-20020a05600c600a00b003974d8f2655mr32617280wmb.92.1654159651340;
-        Thu, 02 Jun 2022 01:47:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJykHk5uzhbNbWMoc/2QZ9JYsRzhbaJMAjTvM/RKb+aM2/6jO99wIzwEHlE9zN89olaRhptulw==
-X-Received: by 2002:a05:600c:600a:b0:397:4d8f:2655 with SMTP id az10-20020a05600c600a00b003974d8f2655mr32617257wmb.92.1654159651028;
-        Thu, 02 Jun 2022 01:47:31 -0700 (PDT)
-Received: from [192.168.178.20] (p57a1a7d6.dip0.t-ipconnect.de. [87.161.167.214])
-        by smtp.gmail.com with ESMTPSA id p9-20020adf9d89000000b0020d10a249eesm4326132wre.13.2022.06.02.01.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 01:47:30 -0700 (PDT)
-Message-ID: <059fe8fe-bd89-477f-2430-277bb738525b@redhat.com>
-Date:   Thu, 2 Jun 2022 10:47:29 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=vocCGT9kds5q7nitmSFrod4j/y/b1j5SshMSPK8ytC0=;
+        b=dR3guqnDkAn5nPPJNaZW3OElRQMoRlt9EgLCeNcD9T4NPn26ubY/4gCGfftIaktQcX
+         /qMv032w6ahQezfpQCzouM56k+IHOv+N2u6M0Ke2mTmbmgccALUgeBzPEuyuQHpyeEfL
+         3Oz03plec0MoAmTzp+jiWdSOd+9g5IICzdJoq9rsckO3qV7olkzzMVWFQlFv2K8yWMkO
+         d136Nu3ZR7UdrPjpz9eblOgCmfnpVazmI2pmsWEkUOTRD/3RRK3c6t4L0xs+Ih0PelYj
+         hP1AYZmWY2GgvJU6LktV6Y7TiPdCC0T6bjDvCkJKVC1Xb+w+e97ScyX5+dN70UFOR/zL
+         MvpA==
+X-Gm-Message-State: AOAM5312xU8WvTxK9g6mBvuTK5HFfgV7ND6EAEBq0fvf7FDKYJtYGA8v
+        iNSthHqYUeVex5HnAiVDB7JRLXB3Av6BEEHq8RpIH0Pr1IRiFg==
+X-Google-Smtp-Source: ABdhPJyYF/0zYOjwVtvRBJBlReJuarshLaVo0jHOjcV96WF5qYCigwTsrqyQsU+Q+WnWFnBN8AppM83GtgW/Jw0quwU=
+X-Received: by 2002:a0d:e542:0:b0:301:b69d:a59b with SMTP id
+ o63-20020a0de542000000b00301b69da59bmr4270560ywe.129.1654159786014; Thu, 02
+ Jun 2022 01:49:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     ying.huang@intel.com, hch@lst.de, dhowells@redhat.com,
-        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        naoya.horiguchi@nec.com, Minchan Kim <minchan@kernel.org>
-References: <20220425132723.34824-1-linmiaohe@huawei.com>
- <20220425132723.34824-3-linmiaohe@huawei.com>
- <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
- <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
- <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
- <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
- <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
- <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
- <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
- <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
- <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
- <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
- <f6eb98ae-965b-d705-6f7d-c2ee69ce5141@redhat.com>
- <a96fab6c-f986-797f-aeb1-5fb8a1b5a4b8@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
- PageMovable check
-In-Reply-To: <a96fab6c-f986-797f-aeb1-5fb8a1b5a4b8@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 2 Jun 2022 14:19:34 +0530
+Message-ID: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
+Subject: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000140
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        regressions@lists.linux.dev
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Minchan Kim <minchan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.06.22 09:40, Miaohe Lin wrote:
-> On 2022/6/1 18:31, David Hildenbrand wrote:
->> On 31.05.22 14:37, Miaohe Lin wrote:
->>> On 2022/5/31 19:59, David Hildenbrand wrote:
->>>> Sorry for the late reply, was on vacation.
->>>
->>> That's all right. Hope you have a great time. ;)
->>>
->>>>
->>>>>>>
->>>>>>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
->>>>>>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
->>>>>>> this code block works. Or am I miss something again?
->>>>>>
->>>>>> Let's assume the following: page as freed by the owner and we enter
->>>>>> unmap_and_move().
->>>>>>
->>>>>>
->>>>>> #1: enter unmap_and_move() // page_count is 1
->>>>>> #2: enter isolate_movable_page() // page_count is 1
->>>>>> #2: get_page_unless_zero() // page_count is now 2
->>>>>> #1: if (page_count(page) == 1) { // does not trigger
->>>>>> #2: put_page(page); // page_count is now 1
->>>>>> #1: put_page(page); // page_count is now 0 -> freed
->>>>>>
->>>>>>
->>>>>> #1 will trigger __put_page() -> __put_single_page() ->
->>>>>> __page_cache_release() will not clear the flags because it's not an LRU
->>>>>> page at that point in time, right (-> isolated)?
->>>>>
->>>>> Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
->>>>> set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
->>>>> PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
->>>>> about it. But it seems this is never witnessed?
->>>>
->>>> Maybe
->>>>
->>>> a) we were lucky so far and didn't trigger it
->>>> b) the whole code block is dead code because we are missing something
->>>> c) we are missing something else :)
->>>
->>> I think I found the things we missed in another email [1].
->>> [1]: https://lore.kernel.org/all/948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com/
->>>
->>> Paste the main content of [1] here:
->>>
->>> "
->>> There are 3 cases in unmap_and_move:
->>>
->>> 1.page is freed through "if (page_count(page) == 1)" code block. This works
->>> as PG_active and PG_unevictable are cleared here.
->>>
->>> 2. Failed to migrate the page. The page won't be release so we don't care about it.
->>
->> Right, page is un-isolated.
->>
->>>
->>> 3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
->>> via folio_migrate_flags():
->>>
->>> 	if (folio_test_clear_active(folio)) {
->>> 		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
->>> 		folio_set_active(newfolio);
->>> 	} else if (folio_test_clear_unevictable(folio))
->>> 		folio_set_unevictable(newfolio);
->>
->> Right.
->>
->>>
->>> For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
->>> It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
->>> and PG_unevictable.
->>> "
->>> Or Am I miss something again? :)
->>
->> For #1, I'm still not sure what would happen on a speculative reference.
->>
->> It's worth summarizing that
->>
->> a) free_pages_prepare() will clear both flags via page->flags &=
->> ~PAGE_FLAGS_CHECK_AT_PREP;
->>
->> b) free_pages_prepare() will bail out if any flag is set in
->> check_free_page().
->>
->> As we've never seen b) in the wild, this certainly has low priority, and
->> maybe it really cannot happen right now.
->>
->> However, maybe really allowing these flags to be set when freeing the
->> page and removing the "page_count(page) == 1" case from migration code
->> would be the clean thing to do.
-> 
-> IMHO, check_free_page is used to catch possible problem. There's the comment of PAGE_FLAGS_CHECK_AT_FREE:
-> 
-> /*
->  * Flags checked when a page is freed.  Pages being freed should not have
->  * these flags set.  If they are, there is a problem.
->  */
-> #define PAGE_FLAGS_CHECK_AT_FREE
-> 
-> There might be an assumption: when page is freed, it shouldn't be an active or unevictable page. It should be
-> inactive and evictable. So allowing these flags to be set when freeing the page might not be a good idea?
+The following kernel crash reported while running selftests: zram: zram.sh
+test case on qemu-arm with Linux mainline v5.18.0 kernel version.
 
-Yeah, and we'd be lifting that restriction because there is good reason
-to do so.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Maybe we *could* special case for isolated pages; however, that adds
-runtime overhead. Of course, we could perform different checks for e.g.,
-DEBUG_VM vs !DEBUG_VM.
+Started noticing from kernel crash from
+BAD: git_sha: cdeffe87f790dfd1baa193020411ce9a538446d7
+GOOD:   git_sha: babf0bb978e3c9fce6c4eba6b744c8754fd43d8e
 
--- 
-Thanks,
+# git log  --oneline
+babf0bb978e3c9fce6c4eba6b744c8754fd43d8e..cdeffe87f790dfd1baa193020411ce9a538446d7
+  -- drivers/block/
+98931dd95fd4 Merge tag 'mm-stable-2022-05-25' of
+git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+6140ae41effe zram: fix Kconfig dependency warning
+b3fbd58fcbb1 mm: Kconfig: simplify zswap configuration
+e7be8d1dd983 zram: remove double compression logic
+a2ad63daa88b VFS: add FMODE_CAN_ODIRECT file flag
+30226b69f876 zram: add a huge_idle writeback mode
 
-David / dhildenb
 
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
+  git_describe: v5.18-11934-g54eb8462f21f
+  kernel_version: 5.18.0
+  kernel-config: https://builds.tuxbuild.com/29zhqJJizU2Y7Ka7ArhryUOrNDC/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/553652229
+  artifact-location: https://builds.tuxbuild.com/29zhqJJizU2Y7Ka7ArhryUOrNDC
+  toolchain: gcc-10
+
+
+# selftests: zram: zram.sh
+# --------------------
+# running zram tests
+# --------------------
+# create '1' zram device(s)
+[  637.356319] zram: Added device: zram0
+# all zram devices (/dev/zram0~0) successfully created
+# set max_comp_streams to zram device(s)
+# The device attribute max_comp_streams was deprecated in 4.7
+# test that we can set compression algorithm
+[  637.494965] zram0: detected capacity change from 0 to 4096
+# supported algs: lzo [lzo-rle] lz4 lz4hc 842 zstd
+# /sys/block/zram0/comp_algorithm = 'lzo'
+# zram set compression algorithm: OK
+# set disk size to zram device(s)
+# /sys/block/zram0/disksize = '2097152'
+# zram set disksizes: OK
+# set memory limit to zram device(s)
+# /sys/block/zram0/mem_limit = '2M'
+# zram set memory limit: OK
+# make ext4 filesystem on /dev/zram0
+[  637.601876] 8<--- cut here ---
+[  637.603507] Unable to handle kernel NULL pointer dereference at
+virtual address 00000140
+[  637.607417] [00000140] *pgd=fb433835
+[  637.609482] Internal error: Oops: 17 [#1] SMP ARM
+[  637.612210] Modules linked in: zram zsmalloc crc32_arm_ce
+sha2_arm_ce sha256_arm sha1_arm_ce sha1_arm aes_arm_ce crypto_simd
+fuse [last unloaded: test_user_copy]
+[  637.620508] CPU: 0 PID: 1841 Comm: mkfs.ext4 Not tainted 5.18.0 #1
+[  637.624068] Hardware name: Generic DT based system
+[  637.626863] PC is at strcmp+0x4/0x34
+[  637.628970] LR is at register_lock_class+0x420/0x990
+[  637.631865] pc : [<c09a55b0>]    lr : [<c03d2750>]    psr: a00d0093
+[  637.635534] sp : f8ddda08  ip : 00000001  fp : c223c860
+[  637.638621] r10: 00000000  r9 : ee4d62b4  r8 : c4bfd8c0
+[  637.641668] r7 : ee4d62b4  r6 : c2b1b468  r5 : 00000140  r4 : c296e298
+[  637.645436] r3 : 00000028  r2 : c223cd14  r1 : 00000140  r0 : c1ce4c99
+[  637.649203] Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM
+Segment none
+[  637.653360] Control: 10c5383d  Table: 44ba406a  DAC: 00000051
+[  637.656672] Register r0 information: non-slab/vmalloc memory
+[  637.659948] Register r1 information: non-paged memory
+[  637.662879] Register r2 information: non-slab/vmalloc memory
+[  637.666158] Register r3 information: non-paged memory
+[  637.669080] Register r4 information: non-slab/vmalloc memory
+[  637.672359] Register r5 information: non-paged memory
+[  637.675297] Register r6 information: non-slab/vmalloc memory
+[  637.678576] Register r7 information: non-slab/vmalloc memory
+[  637.681866] Register r8 information: slab task_struct start
+c4bfd8c0 pointer offset 0
+[  637.686367] Register r9 information: non-slab/vmalloc memory
+[  637.689643] Register r10 information: NULL pointer
+[  637.692425] Register r11 information: non-slab/vmalloc memory
+[  637.695753] Register r12 information: non-paged memory
+[  637.698763] Process mkfs.ext4 (pid: 1841, stack limit = 0xf5a44654)
+[  637.702444] Stack: (0xf8ddda08 to 0xf8dde000)
+[  637.704993] da00:                   c4bfe180 c03cb19c c223c80c
+c250fde0 00000e9c c2966278
+[  637.709779] da20: c21955d0 c2212b38 c298c1e4 c2969ce8 c223c80c
+000004cb c223c860 c298c1ec
+[  637.714547] da40: 00000000 00000000 ee4d62b4 44aaea53 c4bfe1a0
+00000000 ee4d62b4 00000000
+[  637.719313] da60: 00000000 00000000 c4bfd8c0 c21955d0 600d0013
+c03ce488 c4bfd8c0 c2212b3c
+[  637.724079] da80: 00000000 c2b1b468 00000001 c2212b38 c21955d0
+00000001 00000001 00000000
+[  637.728872] daa0: fc90bff3 695acb4d c1cd9994 c2212b38 c03c9c78
+00000081 c278cf1c 00000000
+[  637.733663] dac0: c4bfd8c0 c4bfd8c0 00000000 c03f543c c24c8120
+c298c054 00cd9994 00000000
+[  637.738484] dae0: 00000000 00000000 000325c8 efe7b070 c2211fd0
+00000000 c4bfe180 00000001
+[  637.742919] db00: c4bfe1a0 44aaea53 c4bfd8c0 c4bfe1c0 c298c180
+00000002 00000003 00000001
+[  637.747712] db20: c4bfe1a0 44aaea53 c4bfd8c0 c4bfd8c0 c21955d0
+f8dddb50 2c337000 00000000
+[  637.752446] db40: 00000000 c21955d0 600d0013 c03d1f0c 00000001
+00000000 00000000 bf03b20c
+[  637.757225] db60: 00000000 00000000 600d0013 00000000 c4bfe1a0
+00000003 c4bfe8c0 c03d1bf8
+[  637.761947] db80: bf03b214 00000000 efe7b070 00000001 00000001
+44aaea53 c5a2a45c c4bfd8c0
+[  637.766631] dba0: c219f2b4 00000000 efe7b070 c4f67500 00000000
+c5dc4480 ee4d62b4 bf03b284
+[  637.771341] dbc0: 00000001 00000000 bf03b20c efe7b070 00000001
+00000002 c4d6c000 44aaea53
+[  637.776474] dbe0: 00000041 c4b87400 c4bfd8c0 00000008 00000001
+00000000 c5ffd000 c25096d8
+[  637.781409] dc00: c4bfe8c0 bf05db68 00000001 ee5d05bc ff7e1b00
+c08d4100 00000041 44aaea53
+[  637.786573] dc20: 000083db 00001000 c4b7ab40 c4b87400 00001000
+00001000 00000000 00000001
+[  637.791837] dc40: 00000000 bf05e694 00000001 c4b7ab40 00000000
+00000000 c4bfd8c0 000083db
+[  637.796665] dc60: ee5d05bc 00001000 00000000 44aaea53 f8dddef0
+c4b7ab40 c5b6a200 c488ca50
+[  637.801628] dc80: 00000000 c488ca50 c0637bf4 f8dddef0 ee5d05bc
+c08d3434 c4bfd8c0 f8dddcac
+[  637.806855] dca0: f8dddcb4 c08d384c f8dddef0 00000000 00000000
+00000000 00000000 44aaea53
+[  637.811925] dcc0: c57e1900 c4b7ab40 f8dddef0 00000001 c15a0678
+c063690c c2b805e4 00000000
+[  637.816901] dce0: c57e1900 c57e1900 c57e1900 00000001 00000800
+c063ae74 00000001 00000000
+[  637.821961] dd00: c063b460 c21955d0 c388b60c ee5d05bc c08ca7b4
+00000800 00001000 c03d1b80
+[  637.827194] dd20: f8dddef0 c1d0be34 00000000 c388b568 ee5d05bc
+c054b91c 200d0013 c08ca7b4
+[  637.832004] dd40: f8dddef0 00000001 c388b60c c063b460 c0637bf4
+00000000 c054b91c 00000000
+[  637.837231] dd60: c054d370 00000000 000003bf ee5d05bc c388b6e0
+00000000 f8dddef0 c388b6e0
+[  637.842190] dd80: 00000001 c1cec1c8 c4bfd8c0 c054b91c ee5d05bc
+00000002 00000000 c054c3bc
+[  637.846933] dda0: 00000002 c2b1b468 c295c3a8 0000000f c24c87a0
+c054b900 c388b6e0 ffffffff
+[  637.852066] ddc0: 00000002 00000000 c24c4d16 00000001 c1cc76d0
+c056c994 000001f4 c054000f
+[  637.856917] dde0: ee5d02ec ee5d05bc ee5d0f70 ee5d0574 ee5d0550
+ee5d0604 ee5d0628 ee5d064c
+[  637.861861] de00: ee5d0670 ee5d05e0 ee5d0598 ee5d0310 ee5d0334
+ee5d0358 ee5d037c 44aaea53
+[  637.867225] de20: f8dddf10 c388b6e0 f8dddef0 c4bfd8c0 c24bec40
+c5a29040 c2205d40 c054b900
+[  637.872597] de40: c4bfd8c0 c054c754 600d0013 00000000 00000000
+00000001 00000000 f8ddde5c
+[  637.877550] de60: f8ddde5c 44aaea53 000083db f8dddef0 c388b6e0
+c054f870 00000000 c03c94bc
+[  637.882533] de80: c4bfd8c0 c21955d0 c388b5e8 600d0013 c053df8c
+c03d1b80 f8dddf10 c388b5d8
+[  637.887577] dea0: c388b6e0 00000001 00000000 44aaea53 c388b5d8
+c388b568 c388b6e0 f8dddef0
+[  637.892439] dec0: c4bfd8c0 ffffffff 7fffffff c388b6e0 bee70850
+c053df98 c4d8d140 00000000
+[  637.897445] dee0: 00000000 c053f8e8 c05e6a9c 00002000 7ffffffe
+00000000 00000000 00000000
+[  637.902564] df00: ffffffff 7fffffff 00000001 00000000 00000000
+00000000 00000000 00000000
+[  637.907597] df20: 00000000 00000000 00000000 00000000 00000000
+00000000 00000000 44aaea53
+[  637.912524] df40: 00000000 c4d8d140 c388b200 ffffffff 7fffffff
+c03002f0 c4bfd8c0 00000076
+[  637.917404] df60: bee70850 c08caa6c ffffffff 7fffffff c4bfd8c0
+c4d8d140 00000000 c4d8d140
+[  637.922414] df80: 00000076 c062dea8 ffffffff 7fffffff 00000000
+c0484968 0003b930 0003b828
+[  637.927508] dfa0: 00000000 c03000c0 0003b930 0003b828 00000005
+00046ac0 00000064 00000000
+[  637.932747] dfc0: 0003b930 0003b828 00000000 00000076 00000000
+bee70858 bee70848 bee70850
+[  637.937624] dfe0: b6dcc5ec bee707f8 b6f0e0d0 b6dcc614 600d0010
+00000005 00000000 00000000
+[  637.942533]  strcmp from register_lock_class+0x420/0x990
+[  637.945907]  register_lock_class from __lock_acquire+0x6c/0x3160
+[  637.949593]  __lock_acquire from lock_acquire+0x110/0x368
+[  637.953086]  lock_acquire from zs_map_object+0x114/0x338 [zsmalloc]
+[  637.957120]  zs_map_object [zsmalloc] from zram_bvec_rw+0x254/0xa58 [zram]
+[  637.961317]  zram_bvec_rw [zram] from zram_submit_bio+0x1a0/0x3fc [zram]
+[  637.965458]  zram_submit_bio [zram] from __submit_bio+0x50/0x80
+[  637.969232]  __submit_bio from submit_bio_noacct_nocheck+0xb8/0x218
+[  637.973158]  submit_bio_noacct_nocheck from submit_bh_wbc+0x150/0x184
+[  637.977451]  submit_bh_wbc from __block_write_full_page+0x3d0/0x6d0
+[  637.981234]  __block_write_full_page from block_write_full_page+0x148/0x18c
+[  637.985521]  block_write_full_page from __writepage+0x1c/0x74
+[  637.989230]  __writepage from write_cache_pages+0x1b4/0x4f4
+[  637.992870]  write_cache_pages from generic_writepages+0x58/0x84
+[  637.996662]  generic_writepages from do_writepages+0x7c/0x1b8
+[  638.000211]  do_writepages from filemap_fdatawrite_wbc+0x6c/0x8c
+[  638.003882]  filemap_fdatawrite_wbc from file_write_and_wait_range+0x90/0xec
+[  638.008430]  file_write_and_wait_range from blkdev_fsync+0x20/0x44
+[  638.012599]  blkdev_fsync from do_fsync+0x44/0x78
+[  638.015687]  do_fsync from ret_fast_syscall+0x0/0x1c
+[  638.018753] Exception stack(0xf8dddfa8 to 0xf8dddff0)
+[  638.021970] dfa0:                   0003b930 0003b828 00000005
+00046ac0 00000064 00000000
+[  638.027005] dfc0: 0003b930 0003b828 00000000 00000076 00000000
+bee70858 bee70848 bee70850
+[  638.032283] dfe0: b6dcc5ec bee707f8 b6f0e0d0 b6dcc614
+[  638.035336] Code: e3520000 1afffffb e12fff1e e4d03001 (e4d12001)
+[  638.038967] ---[ end trace 0000000000000000 ]---
+[  638.042059] note: mkfs.ext4[1841] exited with preempt_count 3
+[  638.045764] ------------[ cut here ]------------
+[  638.048739] WARNING: CPU: 0 PID: 1841 at kernel/exit.c:741
+do_exit+0x89c/0xabc
+[  638.053078] Modules linked in: zram zsmalloc crc32_arm_ce
+sha2_arm_ce sha256_arm sha1_arm_ce sha1_arm aes_arm_ce crypto_simd
+fuse [last unloaded: test_user_copy]
+[  638.062016] CPU: 0 PID: 1841 Comm: mkfs.ext4 Tainted: G      D
+     5.18.0 #1
+[  638.066616] Hardware name: Generic DT based system
+[  638.069774]  unwind_backtrace from show_stack+0x18/0x1c
+[  638.073014]  show_stack from dump_stack_lvl+0x58/0x70
+[  638.076068]  dump_stack_lvl from __warn+0xd4/0x1f8
+[  638.079207]  __warn from warn_slowpath_fmt+0x64/0xc8
+[  638.082237]  warn_slowpath_fmt from do_exit+0x89c/0xabc
+[  638.085673]  do_exit from make_task_dead+0x64/0x108
+[  638.088805]  make_task_dead from die+0x4c8/0x4e8
+[  638.091686]  die from die_kernel_fault+0x6c/0x7c
+[  638.094593]  die_kernel_fault from do_page_fault+0x260/0x4d0
+[  638.098154]  do_page_fault from do_DataAbort+0x44/0xb8
+[  638.101252]  do_DataAbort from __dabt_svc+0x50/0x80
+[  638.104195] Exception stack(0xf8ddd9b8 to 0xf8ddda00)
+[  638.107270] d9a0:
+    c1ce4c99 00000140
+[  638.112202] d9c0: c223cd14 00000028 c296e298 00000140 c2b1b468
+ee4d62b4 c4bfd8c0 ee4d62b4
+[  638.117497] d9e0: 00000000 c223c860 00000001 f8ddda08 c03d2750
+c09a55b0 a00d0093 ffffffff
+[  638.122444]  __dabt_svc from strcmp+0x4/0x34
+[  638.125046]  strcmp from register_lock_class+0x420/0x990
+[  638.128479]  register_lock_class from __lock_acquire+0x6c/0x3160
+[  638.132377]  __lock_acquire from lock_acquire+0x110/0x368
+[  638.135805]  lock_acquire from zs_map_object+0x114/0x338 [zsmalloc]
+[  638.139633]  zs_map_object [zsmalloc] from zram_bvec_rw+0x254/0xa58 [zram]
+[  638.143938]  zram_bvec_rw [zram] from zram_submit_bio+0x1a0/0x3fc [zram]
+[  638.148313]  zram_submit_bio [zram] from __submit_bio+0x50/0x80
+[  638.152092]  __submit_bio from submit_bio_noacct_nocheck+0xb8/0x218
+[  638.155933]  submit_bio_noacct_nocheck from submit_bh_wbc+0x150/0x184
+[  638.159978]  submit_bh_wbc from __block_write_full_page+0x3d0/0x6d0
+[  638.164067]  __block_write_full_page from block_write_full_page+0x148/0x18c
+[  638.168468]  block_write_full_page from __writepage+0x1c/0x74
+[  638.171927]  __writepage from write_cache_pages+0x1b4/0x4f4
+[  638.175439]  write_cache_pages from generic_writepages+0x58/0x84
+[  638.179326]  generic_writepages from do_writepages+0x7c/0x1b8
+[  638.183127]  do_writepages from filemap_fdatawrite_wbc+0x6c/0x8c
+[  638.186969]  filemap_fdatawrite_wbc from file_write_and_wait_range+0x90/0xec
+[  638.191265]  file_write_and_wait_range from blkdev_fsync+0x20/0x44
+[  638.195170]  blkdev_fsync from do_fsync+0x44/0x78
+[  638.198082]  do_fsync from ret_fast_syscall+0x0/0x1c
+[  638.201275] Exception stack(0xf8dddfa8 to 0xf8dddff0)
+[  638.204268] dfa0:                   0003b930 0003b828 00000005
+00046ac0 00000064 00000000
+[  638.209369] dfc0: 0003b930 0003b828 00000000 00000076 00000000
+bee70858 bee70848 bee70850
+[  638.214332] dfe0: b6dcc5ec bee707f8 b6f0e0d0 b6dcc614
+[  638.217355] irq event stamp: 8301
+[  638.219375] hardirqs last  enabled at (8301): [<c056b870>]
+inc_zone_page_state+0x5c/0x64
+[  638.224163] hardirqs last disabled at (8300): [<c056b860>]
+inc_zone_page_state+0x4c/0x64
+[  638.228961] softirqs last  enabled at (8066): [<c0301f40>]
+__do_softirq+0x300/0x538
+[  638.233533] softirqs last disabled at (8057): [<c035a19c>]
+__irq_exit_rcu+0x14c/0x170
+[  638.238189] ---[ end trace 0000000000000000 ]---
+
+
+Full test log link:
+https://lkft.validation.linaro.org/scheduler/job/5121436#L1583
+https://lkft.validation.linaro.org/scheduler/job/5123008
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.18-11934-g54eb8462f21f/testrun/9879010/suite/log-parser-test/test/check-kernel-oops-5121436/details/
+
+--
+Linaro LKFT
+https://lkft.linaro.org

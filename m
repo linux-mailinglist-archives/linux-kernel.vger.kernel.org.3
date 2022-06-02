@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E8853B2F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1435D53B2EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiFBFXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 01:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S230030AbiFBFV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 01:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiFBFXf (ORCPT
+        with ESMTP id S229750AbiFBFVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 01:23:35 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554DD1E227F
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654147414; x=1685683414;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=R7muiVv/9fpCE6xhaxI4/K+31SjhHgOvwPjMsc4fiJo=;
-  b=PBNo5bXI79I7cnhmvm86vceBgdptqLtPEaDXkOl68bpsArkeBeBvdpuk
-   zOFScWCciZBkS0nB0fFQc2ua6IgTmEWiB4NGvW0fWqBEfmdSiOE7KMIFM
-   YqzmvKDvB/LuqP0yetZH0ZyexFIS4pyw5+rWZDBZLZUGkKCTRaiLpb94e
-   kF0VrHjGN/eHd/DRjbk8yfl74vfugEI5iN9xLhjw01bS6y25ivgRy86iL
-   IArDE6FR2C7tBLBJr4O+3aEmZTTi4hvwJ7f48ajpM66mfoAkdU7BXsSFN
-   PkfcIyd5xBV1nolKwrted5j9Gu0TNQvVRxQT72Ffqoulb0Z1LNE5Rx01a
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="256306021"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="256306021"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 22:23:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="563136430"
-Received: from brentlu-brix.itwn.intel.com ([10.5.253.25])
-  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 22:23:31 -0700
-From:   Brent Lu <brent.lu@intel.com>
-To:     alsa-devel@alsa-project.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        xliu <xiang.liu@cirrus.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: Intel: cirrus-common: fix incorrect channel mapping
-Date:   Thu,  2 Jun 2022 13:19:22 +0800
-Message-Id: <20220602051922.1232457-1-brent.lu@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 01:21:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C85A21789D;
+        Wed,  1 Jun 2022 22:21:19 -0700 (PDT)
+X-UUID: 45217320bfc549768738f244ebdcbd4a-20220602
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:4c6e7e22-4ee9-40c7-a15b-1eb1ca0b54e5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:1f170415-b515-4766-a72d-4514488fe823,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 45217320bfc549768738f244ebdcbd4a-20220602
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1495350360; Thu, 02 Jun 2022 13:21:14 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 2 Jun 2022 13:21:13 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 2 Jun 2022 13:21:12 +0800
+Message-ID: <3c837acfbefa5b7e23e1121678b5b878f08e4ef2.camel@mediatek.com>
+Subject: Re: [PATCH v1 01/15] dt-binding: remoteproc: mediatek: Support
+ dual-core SCP
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Brian Norris <briannorris@chromium.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <weishunc@google.com>
+Date:   Thu, 2 Jun 2022 13:21:12 +0800
+In-Reply-To: <dd3ea397-fa21-abe5-85ad-b8a4818dc011@linaro.org>
+References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
+         <20220601112201.15510-2-tinghan.shen@mediatek.com>
+         <dd3ea397-fa21-abe5-85ad-b8a4818dc011@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,96 +81,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xliu <xiang.liu@cirrus.com>
+Hi Krzysztof,
 
-The default mapping of ASPRX1 (DAC source) is slot 0. Change the slot
-mapping of right amplifiers (WR and TR) to slot 1 to receive right
-channel data. Also update the ACPI instance ID mapping according to HW
-configuration.
+On Wed, 2022-06-01 at 13:50 +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2022 13:21, Tinghan Shen wrote:
+> > The SCP co-processor is a dual-core RISC-V MCU on MT8195.
+> > 
+> > Add a new property to identify each core and helps to find drivers
+> > through device tree API to cooperate with each other, e.g. boot flow and
+> > watchdog timeout flow.
+> > 
+> > Add a new compatile for the driver of SCP 2nd core.
+> > 
+> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > ---
+> >  .../devicetree/bindings/remoteproc/mtk,scp.yaml      | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > index eec3b9c4c713..b181786d9575 100644
+> > --- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > @@ -20,6 +20,7 @@ properties:
+> >        - mediatek,mt8186-scp
+> >        - mediatek,mt8192-scp
+> >        - mediatek,mt8195-scp
+> > +      - mediatek,mt8195-scp-dual
+> >  
+> >    reg:
+> >      description:
+> > @@ -57,6 +58,16 @@ properties:
+> >    memory-region:
+> >      maxItems: 1
+> >  
+> > +  mediatek,scp-core:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    description:
+> > +      The property value is a list with 2 items, a core id and a phandle
+> 
+> uint32, not phandle.
+> 
+> > +      to the sibling SCP node. 
+> 
+> Skip this. First part is obvious from the schema, second part should be
+> described via items.
+> 
+> The core id represents the id of the dts node contains
+> > +      this property. The valid values of core id are 0 and 1 for dual-core SCP.
+> > +      The phandle of sibling SCP node is used to find the register settings,
+> > +      trigger core dependent callback, and invoke rproc API.
+> 
+> Entire description did not help me to understand what's this. So far it
+> looks like it is not a hardware property but some programming help, so
+> it does not look like properly described in bindings.
+> 
+> > +    maxItems: 1
+> 
+> In description you said - two items.
+> 
+> You need allOf:if:then disallowing this property for other variants.
+> 
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -115,6 +126,7 @@ examples:
+> >          reg-names = "sram", "cfg", "l1tcm";
+> >          clocks = <&infracfg CLK_INFRA_SCPSYS>;
+> >          clock-names = "main";
+> > +        mediatek,scp-core = <0 &scp_dual>;
+> 
+> This looks like phandle, so wrong type.
+> >  
+> >          cros_ec {
+> >              mediatek,rpmsg-name = "cros-ec-rpmsg";
+> 
 
-Signed-off-by: xliu <xiang.liu@cirrus.com>
-Signed-off-by: Brent Lu <brent.lu@intel.com>
----
- sound/soc/intel/boards/sof_cirrus_common.c | 40 +++++++++++++++++++---
- 1 file changed, 36 insertions(+), 4 deletions(-)
+Thanks for your feedback.
+After looking for a comparable uses case, I find out a different approach.
 
-diff --git a/sound/soc/intel/boards/sof_cirrus_common.c b/sound/soc/intel/boards/sof_cirrus_common.c
-index e71d74ec1b0b..f4192df962d6 100644
---- a/sound/soc/intel/boards/sof_cirrus_common.c
-+++ b/sound/soc/intel/boards/sof_cirrus_common.c
-@@ -54,22 +54,29 @@ static struct snd_soc_dai_link_component cs35l41_components[] = {
- 	},
- };
- 
-+/*
-+ * Mapping between ACPI instance id and speaker position.
-+ *
-+ * Four speakers:
-+ *         0: Tweeter left, 1: Woofer left
-+ *         2: Tweeter right, 3: Woofer right
-+ */
- static struct snd_soc_codec_conf cs35l41_codec_conf[] = {
- 	{
- 		.dlc = COMP_CODEC_CONF(CS35L41_DEV0_NAME),
--		.name_prefix = "WL",
-+		.name_prefix = "TL",
- 	},
- 	{
- 		.dlc = COMP_CODEC_CONF(CS35L41_DEV1_NAME),
--		.name_prefix = "WR",
-+		.name_prefix = "WL",
- 	},
- 	{
- 		.dlc = COMP_CODEC_CONF(CS35L41_DEV2_NAME),
--		.name_prefix = "TL",
-+		.name_prefix = "TR",
- 	},
- 	{
- 		.dlc = COMP_CODEC_CONF(CS35L41_DEV3_NAME),
--		.name_prefix = "TR",
-+		.name_prefix = "WR",
- 	},
- };
- 
-@@ -101,6 +108,21 @@ static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
- 	return ret;
- }
- 
-+/*
-+ * Channel map:
-+ *
-+ * TL/WL: ASPRX1 on slot 0, ASPRX2 on slot 1 (default)
-+ * TR/WR: ASPRX1 on slot 1, ASPRX2 on slot 0
-+ */
-+static const struct {
-+	unsigned int rx[2];
-+} cs35l41_channel_map[] = {
-+	{.rx = {0, 1}}, /* TL */
-+	{.rx = {0, 1}}, /* WL */
-+	{.rx = {1, 0}}, /* TR */
-+	{.rx = {1, 0}}, /* WR */
-+};
-+
- static int cs35l41_hw_params(struct snd_pcm_substream *substream,
- 			     struct snd_pcm_hw_params *params)
- {
-@@ -134,6 +156,16 @@ static int cs35l41_hw_params(struct snd_pcm_substream *substream,
- 				ret);
- 			return ret;
- 		}
-+
-+		/* setup channel map */
-+		ret = snd_soc_dai_set_channel_map(codec_dai, 0, NULL,
-+						  ARRAY_SIZE(cs35l41_channel_map[i].rx),
-+						  (unsigned int *)cs35l41_channel_map[i].rx);
-+		if (ret < 0) {
-+			dev_err(codec_dai->dev, "fail to set channel map, ret %d\n",
-+				ret);
-+			return ret;
-+		}
- 	}
- 
- 	return 0;
--- 
-2.25.1
+  mediatek,scp-core:
+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+    description:
+      Enable the dual-core support in scp driver.
+    items:
+      - items:
+          - description: Assign a core id for current scp node.
+            enum: [0, 1]
+          - description:
+              Phandle of another SCP node. This helps to find
+              the scp driver of another core to trigger core
+              dependent callback, invoke rproc subdevice API, etc.
+
+> 
+> Best regards,
+> Krzysztof
 

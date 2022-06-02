@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE8E53B8E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BF153B8EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 14:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234918AbiFBMUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 08:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S234930AbiFBMUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 08:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbiFBMUo (ORCPT
+        with ESMTP id S234920AbiFBMUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 08:20:44 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B583FE0D0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:20:42 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id f9so9720779ejc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 05:20:42 -0700 (PDT)
+        Thu, 2 Jun 2022 08:20:50 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DB4FD13
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 05:20:49 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x62so6026741ede.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 05:20:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=w3NU5Pd6RdYjWBDHbyo9ZXR/sDqD7HVPsWUeAk61S/E=;
-        b=LdiGj4MEYQyU5F+TIewCPHHuLUyUl2bLsqrCCSyBPVE4EOVfgtgZ79OzaiHVKidJiG
-         /RZLQP7l033/vrqYbv9WFHj57x9Z7x/MU66hCf+yoqYKOQADFxvth17LXDNhlr+fBZu6
-         lmXgfOG6Q+vp8QEDgWyYdOgZhuDkglvHpKPwKsQvRqjBwrAUkgIBXqVwSIhvzhJk4Nny
-         ft5eDNs6nRaqYUiM7UaK/4pNO3Ty5U9kLdLShFM20rw3Q9TmZPoyjBwnyTdNrqll5tPh
-         CkHW+HAvuWApxihuH7sA2EdYnWdiyNz2OQjyDixRF6uLuz9UAVqzcOHGbzh5CF3k/Usx
-         jwzg==
+        bh=FtOiIkV4ug7vKNy9XOE34Pci3xBG3uAAi0c6Gr7aiC4=;
+        b=CkOaDxIoAlZOkpylrHDPhpkBKUbqAy4R65Mlsp7VpFhLqe5PM4xJVQPAwG5UrV8XH8
+         vU1mjuKZZ+letq1VvxeF7YdDO9ISLQJtCZwp/A8opjh0n//AZKnVAzze0C3Vf2TvgziI
+         7lHotX0lW708CXxXvuLhaNeabPppTXcXIDJbxSC/S38+SQiiH14cmhOYOYGW2uq2WoKT
+         DNFkgZFJ6YKfRa4KfBOSw55gdFUJ0yH20sUCExBVLFn/olFDldQoi3X4598x/1FPtYk5
+         a8m7KqURE7PhGjeaEoH+agsnFXdKCb+jsHkNipy5VjeiZliamX/sV1XHQOEA5AbLOvIB
+         /j1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=w3NU5Pd6RdYjWBDHbyo9ZXR/sDqD7HVPsWUeAk61S/E=;
-        b=65A3b96hDbRJ6p5fmLo/4AxFRqGDuwpMQirT8CvzGoPsF3aLAR6d2Hl4sVPmScHIRH
-         Ds8GMaMNRO9OaxvRH0WZIjQh0ou6I+6qOU3B/YCi2FL5qDrqWhAcddoocp0fPSgsIdzM
-         suhOWdmp9ALSeODifHieWzBt3520pnDM0fdX7mgdMjrZquzGZXwRYtOYR9noE9HMwCZ/
-         TK6g9RloMMqn/8OKpLTg9xM81BTUHXOQes+Exdx9Gci9jpIsSFrCMfn5X2PLpv67TXmI
-         kYh1fmC6dZtgH6enUIrLAHW13Ivylqwe9rItVHCzRbspxyLe/DIVTVRpoDVVbZzKX61u
-         kbXw==
-X-Gm-Message-State: AOAM531zrw/nyRctfUDxzlXDS88GckpSq//ybrcjQGMvddeHxrf2POGd
-        7z8UK1JnQXYTJjFH0odFFagftA==
-X-Google-Smtp-Source: ABdhPJzqHGlDHD4WYxGAe/oW+BJi9G97Ku+puxcqkm6xUmICZTlEK4Dg6DMTJvIrdr6f3f4LkNAIwg==
-X-Received: by 2002:a17:906:9753:b0:6fe:dece:982a with SMTP id o19-20020a170906975300b006fedece982amr4124274ejy.560.1654172441357;
-        Thu, 02 Jun 2022 05:20:41 -0700 (PDT)
+        bh=FtOiIkV4ug7vKNy9XOE34Pci3xBG3uAAi0c6Gr7aiC4=;
+        b=TpKZb//TQEQgbb+3xjHGyZNtUfo8ARSGAAh5tiohDFWCfKIdx4POODqSZdYewRu2/7
+         qUiqhIf5J+eRz8qHFnZaLNYq3D1h0lWMZrjNSpVusudxTDHAIlqWKQry7ypv/Fknlzzj
+         i5TenburkPYHCp2TKmgQigHaIahsCvZimgUBPXLUumQefTM0MEhKLVQ4kXa9jPdPaovI
+         I4NfQyK1G3sevfaUTnx3esifxWGXQd47gAc+Kz5fl0WzBN3Oe9gJ4Aaifw1VFdNZmcxM
+         NQoJd/AO4LEUXGIPkakGIbD5pA6jAeVEcNI2Bp48e7Qx+UKQPVew2Ho1VliqZFZ9t0PC
+         Zyaw==
+X-Gm-Message-State: AOAM5300R4za6HWGeRgbONiU2YRCJwBI0k4/Hgr/vzKdzYVMHLITyYBY
+        ctYPUwGyr+TctVh4U9dwfqC9hJHc7b06Kafa
+X-Google-Smtp-Source: ABdhPJyUxSuNQJGlhNRIME/yhmzD8Iv88CDO5k/3PT93otIJAaLpe2nfe2tUn55lCuMSellx5ETl1A==
+X-Received: by 2002:aa7:dbc1:0:b0:42b:77a2:4f81 with SMTP id v1-20020aa7dbc1000000b0042b77a24f81mr5084597edt.287.1654172448433;
+        Thu, 02 Jun 2022 05:20:48 -0700 (PDT)
 Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kz10-20020a17090777ca00b0070beb9401d9sm315486ejc.171.2022.06.02.05.20.40
+        by smtp.gmail.com with ESMTPSA id w7-20020a056402070700b0042aa153e73esm2382597edx.12.2022.06.02.05.20.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 05:20:40 -0700 (PDT)
-Message-ID: <c25d90a6-7f6b-8c0c-a227-94fc4f53e4a2@linaro.org>
-Date:   Thu, 2 Jun 2022 14:20:40 +0200
+        Thu, 02 Jun 2022 05:20:48 -0700 (PDT)
+Message-ID: <1cb6d111-25d2-a608-21b6-899ef20d735c@linaro.org>
+Date:   Thu, 2 Jun 2022 14:20:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: soc: ti: pruss: Re-arrange
- "compatible" in alphabetic order
+Subject: Re: [PATCH v2 2/3] dt-bindings: soc: ti: pruss: Update bindings for
+ K3 AM62x SoCs
 Content-Language: en-US
 To:     Kishon Vijay Abraham I <kishon@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -65,14 +65,14 @@ To:     Kishon Vijay Abraham I <kishon@ti.com>,
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220602120613.2175-1-kishon@ti.com>
- <20220602120613.2175-2-kishon@ti.com>
+ <20220602120613.2175-3-kishon@ti.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220602120613.2175-2-kishon@ti.com>
+In-Reply-To: <20220602120613.2175-3-kishon@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,8 +81,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 02/06/2022 14:06, Kishon Vijay Abraham I wrote:
-> Re-arrange "compatible" string in alphabetic order to decrease the
-> chance of conflicts.
+> Update the PRUSS bindings for the PRUSSM instance present in
+> AM625 SoC.
 > 
 > Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
 

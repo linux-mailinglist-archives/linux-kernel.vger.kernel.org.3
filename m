@@ -2,49 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137EB53BF78
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBDA53BF8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 22:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbiFBUPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 16:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S237886AbiFBUSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 16:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbiFBUPN (ORCPT
+        with ESMTP id S238051AbiFBUST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 16:15:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986C21C2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:15:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 2 Jun 2022 16:18:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21E18EB1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654201097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AeiolL2bTO529ilMOcovMOAtIExzOmMLAEaBQmNVSso=;
+        b=buILzPW4tuECVMzuhoxvx2ARTLHt7/r/Rur4oZuBz1LWPoJIBjoWXzhb8lAdFco5I41vFe
+        jiHkWNpWaD5iabbo4dQsHKMKhzs+4wcPB1XfrbnaDQfIsee1xEVnzmGMIisPByKJugybtD
+        Uz4WZEVj8NNejBRrh23L5Df2iIsOGHY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-278-c_gSzuF1NuGdLjrjELcKoQ-1; Thu, 02 Jun 2022 16:18:14 -0400
+X-MC-Unique: c_gSzuF1NuGdLjrjELcKoQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6DBF6182B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 20:15:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28473C385A5;
-        Thu,  2 Jun 2022 20:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654200910;
-        bh=YIVH0p4aoWGInQd4o2kXLa6claUxTJLCw6KPavoyCgg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJCsC3Sl0IOdbG2mO+DY8PDGREWgoogPPc4rqryG+7F2xlGbAoV1yxz1zV1kmM6vy
-         8todTYSmTAPBr1H7gZL9fzrmN+GiMWsJPYsumRiwOf3iqEpInT9aha1fID0Q7EM+7j
-         oE5V5OOBBfOeaMpcZP9GoPL9fCbkU2hkVgNcw7GY=
-Date:   Thu, 2 Jun 2022 22:15:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     kah.jing.lee@intel.com
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org, dinguyen@kernel.org,
-        tien.sung.ang@intel.com, Ley Foon Tan <lftan@altera.com>
-Subject: Re: [PATCH 1/2] drivers: misc: intel_sysid: Add sysid from arch to
- drivers
-Message-ID: <YpkaTFywg+GkPElr@kroah.com>
-References: <20220602122212.3021232-1-kah.jing.lee@intel.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1E6610726B8;
+        Thu,  2 Jun 2022 20:18:09 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.34.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BD6BC414A7E7;
+        Thu,  2 Jun 2022 20:18:08 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Wayne Lin <Wayne.Lin@amd.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
+        Rajkumar Subbiah <rsubbia@codeaurora.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/3] drm/display/dp_mst: Don't validate port refs in drm_dp_check_and_send_link_address()
+Date:   Thu,  2 Jun 2022 16:17:55 -0400
+Message-Id: <20220602201757.30431-2-lyude@redhat.com>
+In-Reply-To: <20220602201757.30431-1-lyude@redhat.com>
+References: <20220602201757.30431-1-lyude@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602122212.3021232-1-kah.jing.lee@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,28 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 08:22:13PM +0800, kah.jing.lee@intel.com wrote:
-> From: Kah Jing Lee <kah.jing.lee@intel.com>
-> 
-> Add sysid driver. The Altera(Intel) Sysid component is generally part of an
-> FPGA design. The component can be hotplugged when the FPGA is reconfigured.
-> This patch fixes the driver to support the component being hotplugged.
-> 
-> Usage:
->   cat /sys/bus/platform/devices/soc:base_fpga_region/
-> 		soc:base_fpga_region:fpga_pr_region0/[addr.sysid]/sysid/id
->   cat /sys/bus/platform/devices/soc:base_fpga_region/
-> 		soc:base_fpga_region:fpga_pr_region0/[addr.sysid]/sysid/timestamp
-> 
-> Signed-off-by: Ley Foon Tan <lftan@altera.com>
-> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
+Drive-by cleanup, we don't need to validate the port references here as we
+already previously went through the effort of refactoring things such that
+we're guaranteed to be able to access ->mstb and ->port safely from
+drm_dp_check_and_send_link_address(), since the only two places in the
+codebase that drop an MST reference in such a way that it would remove it
+from the topology are both protected under probe_lock.
 
-Please work with the Intel open source group as there are some internal
-Intel requirements that you have not met here in order to be able to
-submit a patch for external people to review.  I'll refrain from
-reviewing or even considering this to be able to be accepted this until
-that happens.
+Thanks for that, past Lyude!
 
-good luck!
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+---
+ drivers/gpu/drm/display/drm_dp_mst_topology.c | 22 +++++--------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
-greg k-h
+diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+index 67b3b9697da7..d84673b3294b 100644
+--- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+@@ -2666,24 +2666,14 @@ static int drm_dp_check_and_send_link_address(struct drm_dp_mst_topology_mgr *mg
+ 	}
+ 
+ 	list_for_each_entry(port, &mstb->ports, next) {
+-		struct drm_dp_mst_branch *mstb_child = NULL;
+-
+-		if (port->input || !port->ddps)
++		if (port->input || !port->ddps || !port->mstb)
+ 			continue;
+ 
+-		if (port->mstb)
+-			mstb_child = drm_dp_mst_topology_get_mstb_validated(
+-			    mgr, port->mstb);
+-
+-		if (mstb_child) {
+-			ret = drm_dp_check_and_send_link_address(mgr,
+-								 mstb_child);
+-			drm_dp_mst_topology_put_mstb(mstb_child);
+-			if (ret == 1)
+-				changed = true;
+-			else if (ret < 0)
+-				return ret;
+-		}
++		ret = drm_dp_check_and_send_link_address(mgr, port->mstb);
++		if (ret == 1)
++			changed = true;
++		else if (ret < 0)
++			return ret;
+ 	}
+ 
+ 	return changed;
+-- 
+2.35.3
+

@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8594853BB08
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F0853BAF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236013AbiFBOiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S236123AbiFBOii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236002AbiFBOh5 (ORCPT
+        with ESMTP id S236039AbiFBOiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:37:57 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0AC30F77
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:37:56 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id u4so1950834pgk.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:37:56 -0700 (PDT)
+        Thu, 2 Jun 2022 10:38:15 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9952823D0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:38:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so9561946pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Sk/LpREl6lCpYUK3sh4dhIYv+NwXzY+EQFNtou9uNgg=;
-        b=WU//QHTddMEmbobKV3WmcaFVCVlqESjL4yadeBcxJG2Ehcb0sSYTsZ2ImwxNeLk/vm
-         MlQdDacFExr4Y4YHDdLlFOOS1UjdqOIrJFDkP/uhF4qxxtDHANzfd/1htrEsoDczNBt9
-         pbsUknttci1Qm1XuPwq7iten0RYvQ3EgZAPklHaWN5NWPnYBt1zpZrUUMCnLDduM4fQZ
-         Jf+eiPYLSvXYm/5oFexTJemCClME2J4GAt69BjH4gRvnso9TSvpmG5pJdtSKY1ajWgPO
-         24aLoQGMyZ221R2i8b0wtiAv/IeG1ozi7UfMDcsGOIeD7POBBFykhNSQ7/+AHwBJdikp
-         NLMw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z/YG4PipnTkB7kFCLB9Ko0aJKnsghVne2YT8UWY752k=;
+        b=bud6KC+IEJkA6UiWdb0XWgCPZFOyuGnbI0JcrvTAcs7MVHNMHwAeHO4gVI6VuyOJOA
+         jBeWE0tjfbvr1sWtTHrQ5Pc/lY32vpbdscy1jntHUk8iRt9GspfMxKUwjBVts+q6X7aR
+         v87q9vJUEsBtElB+uDT2VH6ujaeGT+QRyw29VwBL/yfKHcfAaZaG7WjA31P3HQTQA04U
+         uqcJ8VFRO4e2Axal/SPHOuqcsS6JCaxkY9jKoXVpqccy3piFY7XCtu8jcom17rxRANck
+         0Ul7hwSuXbslkUtrhF+CWWY7IXgcKjYGHlhLeLxKHYV/IUqSL47F4p/1egWE/ObhS+kG
+         pW9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Sk/LpREl6lCpYUK3sh4dhIYv+NwXzY+EQFNtou9uNgg=;
-        b=jVV0mxBf7jPFdk1DcptK7KGo6jh7lH+vrcZaxmrdybSLE1DzmkyCjaUlZ6p49HnlKy
-         9ew1rO5Mdy1j5mSZvaGkBJUic9DtJ/PcaONf2cPdLGsgLr7lBeqUyruiiegZquz9QEzA
-         +p8JAnig9MC/xCPFBUUfFTAgCzrJhcoOqCZbihlcQsJmFDm5YdM65gcXjnhiWYSZeLe4
-         6fv97wVGSFRUP2GinnikJy85Nk8mMG5T0h3lD851JaX7RYQVyXMsnbKWl6JawjEpmygJ
-         1KlxYXFxY3dXPxu9YT5utqOO9nwpEgiyir0fSv3iBWV5vKd8HQWWyVQU8e0hoUZ3d10q
-         JVig==
-X-Gm-Message-State: AOAM532R77pngTaguTt2fvK0PxXp1HO54V7sMu+Cfw0iAD6/OIO0yI1G
-        mc6wfHqZqO9ZB5YLHSAdTDg/nQ==
-X-Google-Smtp-Source: ABdhPJylye22XZAN19kga/OK9TT4aEC7VNrMVwD8tJrhsly5C9WmEfLmW7j0si2yIeXqk24ffGKw0Q==
-X-Received: by 2002:a63:f955:0:b0:3fc:cf92:cd26 with SMTP id q21-20020a63f955000000b003fccf92cd26mr4494997pgk.137.1654180675640;
-        Thu, 02 Jun 2022 07:37:55 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001df239bab14sm3440275pjd.46.2022.06.02.07.37.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 07:37:54 -0700 (PDT)
-Message-ID: <41265f4d-45b4-a3a6-e0c0-5460d2a06377@linaro.org>
-Date:   Thu, 2 Jun 2022 07:37:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] bpf: Fix KASAN use-after-free Read in
- compute_effective_progs
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
-References: <CAEf4BzY-p13huoqo6N7LJRVVj8rcjPeP3Cp=KDX4N2x9BkC9Zw@mail.gmail.com>
- <20220517180420.87954-1-tadeusz.struk@linaro.org>
- <7949d722-86e8-8122-e607-4b09944b76ae@linaro.org>
- <CAEf4BzaD1Z6uOZwbquPYWB0_Z0+CkEKiXQ6zS2imiSHpTgX3pg@mail.gmail.com>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <CAEf4BzaD1Z6uOZwbquPYWB0_Z0+CkEKiXQ6zS2imiSHpTgX3pg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Z/YG4PipnTkB7kFCLB9Ko0aJKnsghVne2YT8UWY752k=;
+        b=zklje4oAVbiAGF2Vu6WRUiJdmupzTKfhN+5+HFr2DsbUWkvCcu9N4PEi4VzB1szD3C
+         XZKZ5SG5gQTMzVBe0s/LolWASCUj34bjWOIuNA4lfjFSZ4y/lPqktM85CqkdAer3bn4r
+         gBr04uCM5jq2zA8rROa70cVznSVck7z79UBUKgN8WwzuX0gJ475gZWTe+vekuEQ0JJP6
+         +7xrX4PLF4b/ltP3ThxHMratrvNJQSYCRFwJ32EJOA41Q8JIxSQ/njeFbuvQYzRavzhl
+         OQWXp+0qtWdVbuOC2m3WgYhZTPUGHpPnS0qfNf3jdhFjGP8pm27OpugYqphOeDckmw+Y
+         HnOQ==
+X-Gm-Message-State: AOAM531ykuhpaRyyy6kiR2nBlW74bw4wD+c1qY5Ga6CYcT/VBlBS6Lk9
+        IVSy1mDWZXPidBFMfpcfDnvRlg==
+X-Google-Smtp-Source: ABdhPJxcsCyYB+lxTTfZ4DtkTxkL02+rhEC1XISCYE5I4g2r9qLwMTwqvhSmR6VRmrWdwKMzixf47w==
+X-Received: by 2002:a17:902:9f96:b0:163:dc33:6b72 with SMTP id g22-20020a1709029f9600b00163dc336b72mr5360865plq.34.1654180690018;
+        Thu, 02 Jun 2022 07:38:10 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903004c00b00161929fb1adsm3569827pla.54.2022.06.02.07.38.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 07:38:09 -0700 (PDT)
+Date:   Thu, 02 Jun 2022 07:38:09 -0700 (PDT)
+X-Google-Original-Date: Thu, 02 Jun 2022 07:38:02 PDT (-0700)
+Subject:     Re: [PATCH] dt-bindings: net: adin: Escape a trailing ":"
+In-Reply-To: <20220602142917.GA2254348-robh@kernel.org>
+CC:     kuba@kernel.org, michael.hennerich@analog.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com,
+        krzysztof.kozlowski+dt@linaro.org, alexandru.ardelean@analog.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Rob Herring <robh@kernel.org>
+Message-ID: <mhng-d5bd6ca0-1237-49bd-b55c-18fb483bfa98@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrii,
-On 5/23/22 15:47, Andrii Nakryiko wrote:
->> Hi Andrii,
->> Do you have any more feedback? Does it look better to you now?
-> Hi, this is on my TODO list, but I need a bit more focused time to
-> think all this through and I haven't managed to get it in last week.
-> I'm worried about the percpu_ref_is_zero(&desc->bpf.refcnt) portion
-> and whether it can cause some skew in the calculated array index, I
-> need to look at this a bit more in depth. Sorry for the delay.
+On Thu, 02 Jun 2022 07:29:17 PDT (-0700), Rob Herring wrote:
+> On Wed, Jun 01, 2022 at 06:28:09PM -0700, Palmer Dabbelt wrote:
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> 1f77204e11f8 ("dt-bindings: net: adin: document phy clock output
+>> properties") added a line with a ":" at the end, which is tripping up my
+>> attempts to run the DT schema checks due to this being invalid YAML
+>> syntax.  I get a schema check failure with the following error
+>>
+>>     ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+>>
+>> This just escapes the line in question, so it can parse.
+>>
+>> Fixes: 1f77204e11f8 ("dt-bindings: net: adin: document phy clock output properties")
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> ---
+>>  Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> Already have a fix queued in netdev.
 
-Did you get a chance to look at this yet?
-
--- 
-Thanks,
-Tadeusz
+OK, thanks!

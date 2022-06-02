@@ -2,61 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C55B53B492
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA6753B48B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiFBHtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S231852AbiFBHrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiFBHtD (ORCPT
+        with ESMTP id S230448AbiFBHrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:49:03 -0400
-X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Jun 2022 00:49:01 PDT
-Received: from nzprivatebroker.com (unknown [103.153.182.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF881F58BD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:49:01 -0700 (PDT)
-Received: from nzprivatebroker.com (unknown [84.38.130.211])
-        by nzprivatebroker.com (Postfix) with ESMTPSA id C63C667A2A2
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nzprivatebroker.com;
-        s=default; t=1654155675;
-        bh=V+WJa7FqUhmSi9HEWeivHQW0m61lw/9Lr1NsWXLZSjs=; h=From:To:Subject;
-        b=Cdr0vXGzEzbOR03xmGxaL1qYIQuPiZ0UCX9TqyiaqlFXxvZ2YGtttEdrBs7lyTdz6
-         RLnRNQjzz2fujXMC/zMwYQ5pgedt+4Vuhnk+qQ1o4V3/LkJ+Tyw+a2Tq2G/TkmU52+
-         HCjOt4/9dC3qgDtULHZjoxrBSCmgka9rfVMF7WiQ=
-Authentication-Results: nzprivatebroker.com;
-        spf=pass (sender IP is 84.38.130.211) smtp.mailfrom=notification@nzprivatebroker.com smtp.helo=nzprivatebroker.com
-Received-SPF: pass (nzprivatebroker.com: connection is authenticated)
-Reply-To: admin@alqaboscapital.com
-From:   "Mr. N Zaid" <notification@nzprivatebroker.com>
-To:     linux-kernel@vger.kernel.org
-Subject: Attention Please! (Investor's passage)
-Date:   02 Jun 2022 10:41:14 +0300
-Message-ID: <20220602104114.92C34A5F3B86B205@nzprivatebroker.com>
+        Thu, 2 Jun 2022 03:47:42 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07C21C2047
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:47:40 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id s24so5317370wrb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9kdMgzSp/zK4XvFrabmbmRZg12uCf3858qxXGwAU0cU=;
+        b=PFNJNTA87IOCDhrW3/l/NwQNA6jwdVkbiAXLWvLuNEY60NW8N0PZkJCexuXZVNw0q8
+         +3mivkQPgmEh/KWakNv2h2WvK+XnOYVeB1WNERgA5D1mfStggP4jQ1Anc4+DVBA9b9TO
+         0HdTEDFsDRrkkpbv6n9Vf80AgTP2eMSp0fI+BAr4hicZXn3iI7tR55sfNEEfCXy/svs7
+         7uhBnU94JvVzua11hxDZvfbLnKPqCh95jR0dB5ngPafxtF8pvNYitqWbaatbX10wIy2U
+         aWHhEA4T5Fbum1ST3sb9RfdXRQHEahzWd3+josZpnpvBkCXTRsTRCT9vJY7ALO7A4pIr
+         Psww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9kdMgzSp/zK4XvFrabmbmRZg12uCf3858qxXGwAU0cU=;
+        b=3bJxd54d2kX2Luj/YaMMF1SA9pI4zpotqNqblk7P3K9F1aZKvJfxCQ68wjgtiT9N/7
+         GiCaCi26L/JB5Y2wrMAFS97L80qAFd1PtTcLrScSWA7FJYGMQD6LWMqcbbqbXp4mI9yg
+         susw/qps9Zvw1rLEqd5SCMqhAcBXQHI9JP+rSrp9MO9H1znrhblIHLjrEDTYIDPDSvR7
+         KniqXrlAV19AxmL7DRmDdoeHDRv0n/HSV+UNRQ0tlsujWXuGyobMRoBtt2zj/+MCq/TR
+         BFP9zd1eS6ZARI0cnGfmPAuKMhPpTLhLuytrJ1+YBJyvkQGll+fH6J9kjS4YKr/4zusA
+         4dFw==
+X-Gm-Message-State: AOAM533g3MA5x2Ne7QYhI2kAdNzrxMFEYG0cfzUozSsoxjWKZIMpkO2P
+        IzVYAyfID55WDNqKvUMBizv6cA==
+X-Google-Smtp-Source: ABdhPJwZ2W6qYjAzEYw/UNnt2Cpq7X1kA43QSCreWUXMta5Zt9NBJrgMDyBFeBFYCx4T7SWbzQh3Mg==
+X-Received: by 2002:a05:6000:34f:b0:210:346c:1df3 with SMTP id e15-20020a056000034f00b00210346c1df3mr2578894wre.292.1654156059446;
+        Thu, 02 Jun 2022 00:47:39 -0700 (PDT)
+Received: from [10.40.36.78] ([193.52.24.5])
+        by smtp.gmail.com with ESMTPSA id v5-20020a5d4b05000000b0020d0c37b350sm4309277wrq.27.2022.06.02.00.47.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 00:47:38 -0700 (PDT)
+Message-ID: <1647636f-007e-2912-c2d9-7fed172ca352@kernel.dk>
+Date:   Thu, 2 Jun 2022 01:47:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: <165415567560.1402451.1445107578609574215@nzprivatebroker.com>
-X-PPP-Vhost: nzprivatebroker.com
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_NAME_MR_MRS,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] io_uring: Remove redundant NULL check before kfree
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220602071841.278214-1-chi.minghao@zte.com.cn>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220602071841.278214-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greeting,
+On 6/2/22 1:18 AM, cgel.zte@gmail.com wrote:
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 1fc0166d9133..d1fe967f2343 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -4445,8 +4445,7 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+>  	kiocb_done(req, ret, issue_flags);
+>  out_free:
+>  	/* it's faster to check here then delegate to kfree */
+> -	if (iovec)
+> -		kfree(iovec);
+> +	kfree(iovec);
+>  	return 0;
+>  }
 
-My name is Mr. N. Zaid, I am interested in having a business=20
-discussion with you, Please let me know if you are open for=20
-discussion. 
+There is _literally_ a comment right above your change that explains why
+this is there. Please read surrounding code, at least.
 
-Regards, 
+-- 
+Jens Axboe
 
-Mr. N Zaid

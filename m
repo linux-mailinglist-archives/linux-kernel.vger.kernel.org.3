@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE27253B432
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDFE53B436
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiFBHPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S231667AbiFBHSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiFBHOy (ORCPT
+        with ESMTP id S231330AbiFBHSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:14:54 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7CBDC83F
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:14:54 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id o17so3809615pla.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:14:54 -0700 (PDT)
+        Thu, 2 Jun 2022 03:18:14 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C077F30C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:18:13 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c2so3826876plh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 00:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=T86Xkl4zAQRDqlX+Sbg7KzV+2Znm3kmGhJEJ2gH5oPs=;
-        b=kjIm42IQKm9p8crvtuLlXRMrgIPGHqf/cbX5Jp1nkyGBMxpECnqZ5tNw4G30RPSxSl
-         ihT2VakbiG/ZXL6SWwJp0zuQ7kQ8ePWf8/YKs4gc0Fj5aAxPTjQzdgDFlI52vn/qTfxY
-         cjAU9JiqpoH+7H2BLO9XA48OAW57jwI7UKzmewXbkmcjWWnVmYin3Mh8utHbnOGfqaBo
-         cD1jkJAmTugEOEEctTHVa+GoP0iAFf3DXCI9k5QRDWt42VAAe/Gcz7HYnjFTIvdHH2NQ
-         D8R/hTPIsSDjcxWOgyKWl6jTZpX27yZUh6IbNcbzODpP3uB4O/YQ/UO2LD9O63doGyfL
-         vvaQ==
+        bh=R8Jzvn4KoI6zyaEC1swBdZnPsmFAJHlige3FcDhZ5Gc=;
+        b=Pa6M1iUSEgtHJ+P+TN+zX25lnv33UQYDykQS3F4wk/IJGJiTEko4StIiyBUDfX6R9h
+         0HQ59fKfvhydM/hJNnbaDRhY0ixmiF5JhHncDLI+ULMSAdzx/p8ABC1ljPS3Pg1z6ozq
+         LhVo9hfZpmU7ELx+hRRzC1s7vs+mahvAJ+bQP06on8d9T94WFtW2CQLqBNA5seEasxPo
+         YcT2U36KTqMtQzlZYzLh4/dYrXGMap+jYzbIfeed8TC6+MG7zpEsfxq6RE6T1UR9vhjR
+         pyQHjiGHMgbfnTajE1Ae4ztnJyZUj9w3wwNk2X2fH1jfA6GV0NlnGKXluRkLluyDUo+P
+         o1RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=T86Xkl4zAQRDqlX+Sbg7KzV+2Znm3kmGhJEJ2gH5oPs=;
-        b=tGv+fhPPhLlvnYNd1XXguWyPuKgoC3GzgTOUm7foJcQ7o7vKJgGN5/Qh5gZ2/I1bSb
-         bRCTiHz8asLPPkaK+vzX8CegqiUAojTZB4FWrrs7IvUOPG8+7pAiindoYQmMphqtYL1p
-         dVdz3Qa9w9IByJNsDKe3jiGp+dGsmOtqwEupsRWeSf2vMCwSnE7bCcCe3xznxlgK+jPt
-         1HP9r2qCUjFuy7W15kt/PB8WY5S5l/+qiomEL3vM02mDNohiwlqEqp9JGKywpEImm6pK
-         izUO6diGqeWUNumldwUuMoOSwfZQlXg3XA73dRs9G8Gt19/mqHyom/Y6cjFk7LcWBvyD
-         vkXA==
-X-Gm-Message-State: AOAM533b71TXzQl8iQ9HtTDt7BgS/3JB7KO17J4OGELRZao977BsjFds
-        JGSHik/eWMcnlSaVdY9s2m4=
-X-Google-Smtp-Source: ABdhPJwZZAKpu/HC9yA8XNgWRXb+XzH/3iyXB2zHZjMV/93ih8NOdK4sZduf3oXx1JZX6HglGbpQ6A==
-X-Received: by 2002:a17:902:f60c:b0:156:82c9:e44b with SMTP id n12-20020a170902f60c00b0015682c9e44bmr3519920plg.106.1654154093526;
-        Thu, 02 Jun 2022 00:14:53 -0700 (PDT)
+        bh=R8Jzvn4KoI6zyaEC1swBdZnPsmFAJHlige3FcDhZ5Gc=;
+        b=hDRWj32wdqtd4bLAp9zufYeedTumQdkA8jTKZLCrW38JjNMJjmUU+jgLdZgohxGxds
+         ngG1Y2liosFCeQxcjxFt7MakcNUODDLPFVM2ZOY28EpIVnj3wjxAOnKED/Lzsb2qPSV/
+         m8pDIvWLeB9MIYCrBACh0oBefOSe9nPfocTeJPc/PEtFNjJLQhxoLnNUv03t5y6zpEg6
+         6sW+7lGRLK2JRaQpazSix/AsTSPnJFLRaJHTaXlV7ZbZXQoeVd4fAEgV4UwiHX1yCG4U
+         AO8gHaDMrm6H/l2tKnIEgJunOWh6EmZy1qcrexO3VlcQxEj6qgUytTyCjk5SCiGhn0AA
+         L1sg==
+X-Gm-Message-State: AOAM533r5hI238pJ29/+D+H/l78UMQUT4KknLzkRlGcmfn0enoiueibY
+        Mq+EMj9hmkpEXZGdSy6+Bv0=
+X-Google-Smtp-Source: ABdhPJwCF9zgTxD8Jpl1zz1KmAQnvxwxZhmFVGBpKn7FmZfjlKFdV7MDWp00dul1ao9oGPCp7+0XJQ==
+X-Received: by 2002:a17:902:c952:b0:162:14b6:3179 with SMTP id i18-20020a170902c95200b0016214b63179mr3390242pla.7.1654154293331;
+        Thu, 02 Jun 2022 00:18:13 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b00163cb0a8392sm2674737plb.168.2022.06.02.00.14.50
+        by smtp.gmail.com with ESMTPSA id b5-20020a1709027e0500b0016353696f46sm2741624plm.269.2022.06.02.00.18.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 00:14:52 -0700 (PDT)
+        Thu, 02 Jun 2022 00:18:12 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     shengjiu.wang@gmail.com
-Cc:     Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, perex@perex.cz, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] ASoC: imx-audmux: remove unnecessary check of clk_disable_unprepare
-Date:   Thu,  2 Jun 2022 07:14:48 +0000
-Message-Id: <20220602071448.277968-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] ASoC: mediatek: remove unnecessary check of clk_disable_unprepare
+Date:   Thu,  2 Jun 2022 07:18:09 +0000
+Message-Id: <20220602071809.278134-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,33 +80,26 @@ parameter, so the additional checks are unnecessary, just remove them.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- sound/soc/fsl/imx-audmux.c | 6 ++----
+ sound/soc/mediatek/mt8173/mt8173-afe-pcm.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/fsl/imx-audmux.c b/sound/soc/fsl/imx-audmux.c
-index dfa05d40b276..f434fa7decc1 100644
---- a/sound/soc/fsl/imx-audmux.c
-+++ b/sound/soc/fsl/imx-audmux.c
-@@ -71,8 +71,7 @@ static ssize_t audmux_read_file(struct file *file, char __user *user_buf,
- 	ptcr = readl(audmux_base + IMX_AUDMUX_V2_PTCR(port));
- 	pdcr = readl(audmux_base + IMX_AUDMUX_V2_PDCR(port));
- 
--	if (audmux_clk)
--		clk_disable_unprepare(audmux_clk);
-+	clk_disable_unprepare(audmux_clk);
- 
- 	buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
- 	if (!buf)
-@@ -218,8 +217,7 @@ int imx_audmux_v2_configure_port(unsigned int port, unsigned int ptcr,
- 	writel(ptcr, audmux_base + IMX_AUDMUX_V2_PTCR(port));
- 	writel(pdcr, audmux_base + IMX_AUDMUX_V2_PDCR(port));
- 
--	if (audmux_clk)
--		clk_disable_unprepare(audmux_clk);
-+	clk_disable_unprepare(audmux_clk);
- 
- 	return 0;
+diff --git a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
+index 31494930433f..dcaeeeb8aac7 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
++++ b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
+@@ -286,10 +286,8 @@ static int mt8173_afe_dais_set_clks(struct mtk_base_afe *afe,
+ static void mt8173_afe_dais_disable_clks(struct mtk_base_afe *afe,
+ 					 struct clk *m_ck, struct clk *b_ck)
+ {
+-	if (m_ck)
+-		clk_disable_unprepare(m_ck);
+-	if (b_ck)
+-		clk_disable_unprepare(b_ck);
++	clk_disable_unprepare(m_ck);
++	clk_disable_unprepare(b_ck);
  }
+ 
+ static int mt8173_afe_i2s_startup(struct snd_pcm_substream *substream,
 -- 
 2.25.1
 

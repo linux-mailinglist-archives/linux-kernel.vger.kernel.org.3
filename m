@@ -2,134 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF7F53BABF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D037353BAB8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235857AbiFBO2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S235950AbiFBO3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235905AbiFBO2T (ORCPT
+        with ESMTP id S235859AbiFBO3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:28:19 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E488140846
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:28:18 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso5017015pjg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=L4Gxk4Bv5TfkgMZFmRZVdKI/nfnxSbVJuJD+KEhCTwA=;
-        b=vznR9E/huPyrIZXpXnkqdLBfuApJkQscKlKcZknXDqfZ/UzpBujU19WWiJ4F6oTRe2
-         lR7uP5EHAzxXwKjHa6B5RqiR9qnOaBkPs/hQSA9fnvdrxoQ3mFlfPq0VrvKG3gS6OE8R
-         plY2qTLcDyWkxvE1BNieB15nFdOsnxMIE+Z3bRp/rMWZr/XzOq6qPJcP4JcL5r7v8+Rb
-         AuEZVAjpLmZiBKWgqlash0NfkGGjUBMR+u0O48hccdnAFA9NmfkAD3b9WxtR17/cgOAz
-         DCZGvSeh7xnKG8Wnji3N5tPQM53K3hXQH89J3bXgB0U78Q5roB6xZZQCZ+Ql/XFJLHXu
-         pSWw==
+        Thu, 2 Jun 2022 10:29:20 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21541EB41A;
+        Thu,  2 Jun 2022 07:29:18 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id w19-20020a9d6393000000b0060aeb359ca8so3519967otk.6;
+        Thu, 02 Jun 2022 07:29:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=L4Gxk4Bv5TfkgMZFmRZVdKI/nfnxSbVJuJD+KEhCTwA=;
-        b=KKy6MFM2qiuEONNwMe9pSyihl+YN7/+s9zE4Zg73LLH+/PbqIXHjfk7zpBitqdZ7g7
-         GR5CxF1wfPzhoIBUWnBOse5Gb+dVFkbW2FDU3OMeqWsTdLz72uAPqWewLKy3evWlJrTZ
-         LcZgALUJyN3w9xQdhInhQlzftFsHm2VSXa9l+1/0UnxNGXeG4udkvPWWIwdIzoxMZ8kk
-         +qi8uHDjyZY/dH3WQUYB/YsplU1e5nU2RLxhH/CODJ3Hqrxss0wEg5o9VbTRhHrsBXAF
-         WSrDLJyUbvZG+HNURqkYJjQxzf9dojEqW541vm0d4kat/fXWF003cCMZfsPYHExxHfrX
-         tSdQ==
-X-Gm-Message-State: AOAM532YBD9Fn3Id5JigZxFuA4oa5raBDxjuXX5K0MWfKH3hlGqKW2Z2
-        NuTNzcPxJ9ACPXnb2zNu5pChLg==
-X-Google-Smtp-Source: ABdhPJznhWKPETXcZJrKMM+bn5m7VYTIN0w3D9vJ7qTBPI6tQ12pVtLVSqQrS4E7he1I2F8wZslmWQ==
-X-Received: by 2002:a17:902:8f81:b0:161:f4a7:f2fc with SMTP id z1-20020a1709028f8100b00161f4a7f2fcmr5196569plo.117.1654180097855;
-        Thu, 02 Jun 2022 07:28:17 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170903230d00b0015ed003552fsm3564512plh.293.2022.06.02.07.28.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 07:28:17 -0700 (PDT)
-Message-ID: <1e4fe5c8-4bac-087b-ae32-6fa2fa5b44f6@linaro.org>
-Date:   Thu, 2 Jun 2022 07:28:11 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3LdxAC+hjoGbT8X2doYYpQEStBAtaF+fLV0X0u4yir4=;
+        b=KHDFjHHCpgdiUo9QqYaa0gIenz6tSgZ51roA5gizgVG8qKpQL0DkodlB8U6W5JBCVa
+         0MrKD4T4xxaW/7ZFvxk+5TuhUtIggR2cSDrtP0AA5VCUiz0xOdWRYWAxxU1UXnRYb/uC
+         3bbpHn6zHYcnZOzvZMLn4P82dQb1MXCotUh7yk4nbJriJky2O0VXAnya8MbyCod04+jh
+         mwFbXr+lkFDwW/C0uiwJUntzK5qewUEpHKiGQ0bN9jZ+qnH5X6eBpT3HPqp4bFRJrN7Z
+         GeKsW7yMSRxcL7qK1ut1NQ9NZSNR1LiO+b0zD4VbAUDZjOR5j+yKMWEQs578zCNk1OIu
+         oa2w==
+X-Gm-Message-State: AOAM531u1Wk385aFvjPa/pIAsa7t8LNEqCsZq+o4Rsp+R0X6FZv8HC+V
+        2NyfHphFx+ZANqaU8hNS3A==
+X-Google-Smtp-Source: ABdhPJxpzv7HpzITyd+wSw147FKRkc3JqW2DfLG9yre4EqpNix4xcaTZaxmSlhKlegS5iTyFsoVN3A==
+X-Received: by 2002:a05:6830:2b07:b0:60b:b38:fcc0 with SMTP id l7-20020a0568302b0700b0060b0b38fcc0mr2109243otv.353.1654180158189;
+        Thu, 02 Jun 2022 07:29:18 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s42-20020a05683043aa00b0060613c844adsm2183325otv.10.2022.06.02.07.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 07:29:17 -0700 (PDT)
+Received: (nullmailer pid 2255406 invoked by uid 1000);
+        Thu, 02 Jun 2022 14:29:17 -0000
+Date:   Thu, 2 Jun 2022 09:29:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     kuba@kernel.org, michael.hennerich@analog.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com,
+        krzysztof.kozlowski+dt@linaro.org, alexandru.ardelean@analog.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com
+Subject: Re: [PATCH] dt-bindings: net: adin: Escape a trailing ":"
+Message-ID: <20220602142917.GA2254348-robh@kernel.org>
+References: <20220602012809.8384-1-palmer@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>
-References: <Yo/DtjEU/kYr190u@slm.duckdns.org>
- <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
- <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
- <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
- <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
- <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
- <Ypf/MpwzByOrSp6A@slm.duckdns.org>
- <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
- <YpgEY/lJbLidLOhc@slm.duckdns.org>
- <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
- <20220602114705.GB21320@blackbody.suse.cz>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-In-Reply-To: <20220602114705.GB21320@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602012809.8384-1-palmer@rivosinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 04:47, Michal Koutný wrote:
-> On Wed, Jun 01, 2022 at 05:40:51PM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
->> css_killed_ref_fn() will be called regardless of the value of refcnt (via percpu_ref_kill_and_confirm())
->> and it will only enqueue the css_killed_work_fn() to be called later.
->> Then css_put()->css_release() will be called before the css_killed_work_fn() will even
->> get a chance to run, and it will also*only*  enqueue css_release_work_fn() to be called later.
->> The problem happens on the second enqueue. So there need to be something in place that
->> will make sure that css_killed_work_fn() is done before css_release() can enqueue
->> the second job.
-> IIUC, here you describe the same scenario I broke down at [1].
-
-Right, except the last css_put(), which I think is called from cgroup_kn_unlock()
-See below.
-
->> Does it sound right?
-> I added a parameter A there (that is sum of base and percpu references
-> before kill_css()).
-> I thought it fails because A == 1 (i.e. killing the base reference),
-> however, that seems an unlikely situation (because cgroup code uses a
-> "fuse" reference to pin css for offline_css()).
+On Wed, Jun 01, 2022 at 06:28:09PM -0700, Palmer Dabbelt wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
 > 
-> So the remaining option (at least I find it more likely now) is that
-> A == 0 (A < 0 would trigger the warning in
-> percpu_ref_switch_to_atomic_rcu()), aka the ref imbalance. I hope we can
-> get to the bottom of this with detailed enough tracing of gets/puts.
+> 1f77204e11f8 ("dt-bindings: net: adin: document phy clock output
+> properties") added a line with a ":" at the end, which is tripping up my
+> attempts to run the DT schema checks due to this being invalid YAML
+> syntax.  I get a schema check failure with the following error
 > 
-> Splitting the work struct is condradictive to the existing approach with
-> the "fuse" reference.
+>     ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
 > 
-> (BTW you also wrote On Wed, Jun 01, 2022 at 05:00:44PM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
->> The fact the css_release() is called (via cgroup_kn_unlock()) just after
->> kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
->> (cgroup_destroy_wq), just with different function. This results in the
->> BUG: corrupted list in insert_work issue.
-> Where do you see a critical css_release called from cgroup_kn_unlock()?
-> I always observed the css_release() being called via
-> percpu_ref_call_confirm_rcu() (in the original and subsequent syzbot
+> This just escapes the line in question, so it can parse.
+> 
+> Fixes: 1f77204e11f8 ("dt-bindings: net: adin: document phy clock output properties")
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-it goes like this:
-cgroup_kn_unlock(kn)->cgroup_put(cgrp)->css_put(&cgrp->self), which
-brings the refcnt to zero and triggers css_release().
-I think what's missing is something that will serialize the kill
-and release paths. I will try to put something together today.
+Already have a fix queued in netdev.
 
--- 
-Thanks,
-Tadeusz
+Rob

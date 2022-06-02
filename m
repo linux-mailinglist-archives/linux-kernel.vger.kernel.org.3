@@ -2,108 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2A453BECB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C235853BEDA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238418AbiFBTbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 15:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S238641AbiFBTfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 15:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238647AbiFBTbD (ORCPT
+        with ESMTP id S237287AbiFBTfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:31:03 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258ED7679;
-        Thu,  2 Jun 2022 12:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gzVpT7tOB20um8Lkk3V4vLLMTLk2RQ4leayk+zil6B0=; b=VmtYS/+PA6EtkXyQ9KDc3JlqVz
-        XJS73NSZvA1NejDs0tTStnuzCXtiR3jsHGfvfsNzhn5jIpiNZD7wQHgGrlAyHFgm2jJAhBGUuDSfy
-        0Bp+iNEZNatkR+sck4YbaQeDaC6tvyk96V9ixKZ7sdPRFg/d56c8BFUVvBTUgkVq6jLP9aDxfJsKT
-        yBEXSgn6eTUQxiFKVqqBXPifFQYQZPsr3WVPIixI70wvxIn0HAA55YxBdCvU7chuQdcrDJRCcwH6t
-        XupPMYjGPe8Jwc/0ZRDy5l3fgYkcYENyC6wi82we+9arz8wh9gv8RbxmZQBgtHfpyBwPDedxNURFY
-        rpEgSWbQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwqWw-0046MO-7D; Thu, 02 Jun 2022 19:30:50 +0000
-Date:   Thu, 2 Jun 2022 12:30:50 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        "copyleft-next@lists.fedorahosted.org" 
-        <copyleft-next@lists.fedorahosted.org>,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-Message-ID: <YpkP6kExQcQZd2/O@bombadil.infradead.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-2-mcgrof@kernel.org>
- <87bkvo0wjd.ffs@tglx>
- <Yo5cxWghV/v2Fnzf@bombadil.infradead.org>
- <BN7PR13MB24998CAFCFB973C80549F308FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
- <Yo5xTwGLmbsgJhfM@bombadil.infradead.org>
- <BN7PR13MB2499BA2AFAC1C79197734D81FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
- <871qwhz2aa.ffs@tglx>
- <BYAPR13MB2503DAC31B8B5CC69F8FECD3FDDE9@BYAPR13MB2503.namprd13.prod.outlook.com>
+        Thu, 2 Jun 2022 15:35:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5AE01B790
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654198517;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O9PSBzdnKMT+FM2cj/OdoR4tUXJ2CeB5NwQy7//IHvk=;
+        b=LNxaXs3/8d1BJJx082tten2usrtkAjd7E8INUbVBNTDq64yZhA9RqgBY2wHp3aFv3Hi/3i
+        YnJEFbCpm2LdigjRFVjtcUmbu6X3PhVfix2+DluYG+mKmc6JssKG9x+elhsVcxMasfSQy/
+        vDXvvPmSeM5fQ4IDXppPuvhs3F4CU7o=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-286-OhKZ6_sNMy-Q9kagKlakmg-1; Thu, 02 Jun 2022 15:35:16 -0400
+X-MC-Unique: OhKZ6_sNMy-Q9kagKlakmg-1
+Received: by mail-wm1-f72.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso5633059wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:35:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O9PSBzdnKMT+FM2cj/OdoR4tUXJ2CeB5NwQy7//IHvk=;
+        b=UYmfAJoL4/kcim8YxCsORF4XaI0GRFHCdMiTeVMQSs17V9N9DjwxPh+qaw2MQMPuIj
+         kwIl+pEJ03jlqmuoCM536p/cDhEaK+Y0gIdfu8romZtjkw7RZtcrstPiBShIg3zcJK9H
+         Csx4FnOo6uY9+o4j97SsvwEHIypAynjJqtGbelL6wz1kGU4w7L7NsJBsFWzcapMJRDUJ
+         bMvgDeMptDSlcX2E3P1kZaF0j6JinopflPko2w5Hm49l/T/dKkDNinlK0ullDs+WCboG
+         KFk5YU/YK1mk6GovXSGArOF5WzT6L942jUO/z9Lhig9lN2mBbwXW8ZEqMSGbfFdaXaVp
+         9HYA==
+X-Gm-Message-State: AOAM531PIXgj1t/zkFPc0mhVOxvVK4XNFVHLXS/eXky0oH1kMIYsXymV
+        sjeQaq236+EbITnjeL+szFFxttR9HOw0nr6+uIhrsYB/b4DeIw4NRm11cgK83KqmQskge1HNKUE
+        G1jQcYPmZa1E3eoyNnWpscG4=
+X-Received: by 2002:adf:d1c4:0:b0:210:18e6:7eb8 with SMTP id b4-20020adfd1c4000000b0021018e67eb8mr4929389wrd.462.1654198515598;
+        Thu, 02 Jun 2022 12:35:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzMQXyJVqb+ZOZGnAocek9RLiVloAhoCka71UNYL3cPwFxy1S54RUOGmwqRt/EazubZXzOnCg==
+X-Received: by 2002:adf:d1c4:0:b0:210:18e6:7eb8 with SMTP id b4-20020adfd1c4000000b0021018e67eb8mr4929380wrd.462.1654198515378;
+        Thu, 02 Jun 2022 12:35:15 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id f12-20020a5d4dcc000000b002100316b126sm5378540wru.6.2022.06.02.12.35.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 12:35:14 -0700 (PDT)
+Date:   Thu, 2 Jun 2022 20:35:13 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>, cl@linux.com,
+        mbenes@suse.cz, akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
+        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name,
+        jason.wessel@windriver.com, pmladek@suse.com,
+        daniel.thompson@linaro.org, hch@infradead.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v1] module: Fix prefix for module.sig_enforce module param
+Message-ID: <20220602193513.ppya4als32dkvv4l@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220322140344.556474-2-atomlin@redhat.com>
+ <20220602035653.4167316-1-saravanak@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BYAPR13MB2503DAC31B8B5CC69F8FECD3FDDE9@BYAPR13MB2503.namprd13.prod.outlook.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220602035653.4167316-1-saravanak@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 04:11:16AM +0000, Bird, Tim wrote:
-> I don't think that the Linux kernel should be used for license promotion, but if it is,
-> then it should be used to promote GPL-v2-only.
+On Wed 2022-06-01 20:56 -0700, Saravana Kannan wrote:
+> Commit cfc1d277891e ("module: Move all into module/") changed the prefix
+> of the module param by moving/renaming files. A later commit also moves
+> the module_param() into a different file, thereby changing the prefix
+> yet again.
+> 
+> This would break kernel cmdline compatibility and also userspace
+> compatibility at /sys/module/module/parameters/sig_enforce.
+> 
+> So, set the prefix back to "module.".
+> 
+> Cc: Aaron Tomlin <atomlin@redhat.com>
+> Cc: mcgrof@kernel.org
+> Cc: christophe.leroy@csgroup.eu
+> Cc: cl@linux.com
+> Cc: mbenes@suse.cz
+> Cc: akpm@linux-foundation.org
+> Cc: jeyu@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-modules@vger.kernel.org
+> Cc: void@manifault.com
+> Cc: atomlin@atomlin.com
+> Cc: allen.lkml@gmail.com
+> Cc: joe@perches.com
+> Cc: msuchanek@suse.de
+> Cc: oleksandr@natalenko.name
+> Cc: jason.wessel@windriver.com
+> Cc: pmladek@suse.com
+> Cc: daniel.thompson@linaro.org
+> Cc: hch@infradead.org
+> Fixes: cfc1d277891e ("module: Move all into module/")
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+> Sending this patch in case my analysis in [1] was right.
+> 
+> [1] - https://lore.kernel.org/lkml/20220602034111.4163292-1-saravanak@google.com/
+> 
+> -Saravana
+> 
+>  kernel/module/signing.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index 85c8999dfecf..6b0672e4417b 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+> @@ -16,6 +16,11 @@
+>  #include <uapi/linux/module.h>
+>  #include "internal.h"
+>  
+> +#ifdef MODULE_PARAM_PREFIX
+> +#undef MODULE_PARAM_PREFIX
+> +#endif
+> +#define MODULE_PARAM_PREFIX "module."
+> +
+>  static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+>  module_param(sig_enforce, bool_enable_only, 0644);
+>  
+> -- 
+> 2.36.1.255.ge46751e96f-goog
+> 
 
-I already *used* copyleft-next on Linux on a dual licensed manner, the
-patches in question are about using SPDX to simpllify things and adaopt
-the SPDX annotations.
+Oops! Thanks Saravana.
 
-And, to re-iterate once more, I'm using copyeft-next as that is *my*
-license of choice for *any* new software projects I use and I want to enable
-cross prolination between them. I have been doing this since I wrote
-CRDA many years ago. I have many reasons for using copyleft-next and I've
-listed many of the reasons why a free software developer would care to enable
-this cross polination but yet again you seem to be disregarding all that.
+Reviewed-by: Aaron Tomlin <atomlin@redhat.com>
 
-This is similar to how 2-cluase BSD is compatible with the GPL
-and is used for cross polination to BSDs even though in practice
-a lot of that cross polination may not happen.
+-- 
+Aaron Tomlin
 
-There are practical uses here and I've been using this license for years now
-and I have no intention on stopping.
-
-  Luis

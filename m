@@ -2,70 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F51453B236
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAA353B239
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiFBDoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 23:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S229551AbiFBDoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFBDoD (ORCPT
+        with ESMTP id S229495AbiFBDoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Jun 2022 23:44:03 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4561140844
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:44:00 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id z17so3666270pff.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 20:44:00 -0700 (PDT)
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E8114084A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 20:44:02 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso3812258pjg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 20:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=41Cix8/wz/98CXmQSSNUVoc/eGMSQu30WNS71XR8dIw=;
-        b=xlIUxlaBeKYzS7iUqyyVg/FYULyNn8vEmUTA5PcIHuIOtLrrU7nbkXrOKP9Lg6mqiK
-         W5/9UgFSa3Alf1969E1hbz1M5DB1P5ur5GONVnGfG//sbT+TiORVPZiRTZi5KK4w7bJ+
-         pZtm0lUbV42MuWDuh+RlzKGoAVZ8GKtMcfkihTJrye/Nj4Z5HAWOnfKNs7IVmk3cCWey
-         ROVwkByRLmZjiOLtcjmmWDuU+1lSkucqYjL6LEafERcG9yUMdkV00JL4uO8flM/XkiLQ
-         ya2K1hW0u7leuQU71+7MsxCIP2xAbwHayNxOkSNT9fSUqUwPxMYp3R0LzC5Od+CIBSzI
-         ZF6Q==
+        bh=gVoZS2vzK4dR4Y6/3npxg/APivJZF2gUX/to47n1YCM=;
+        b=Q44pl4PZC8gOSRYB6J0wGoC2a9zoIQKt3GhYfvNGdyNqMi1D28LpJHDXUCib4gwEjc
+         uHYPnsmGF4OQWkOriCKFRuh+wwpork/HmVYvSZFObqIVYFcNme6V2lbNnDyY1RV19Q9a
+         XcEsWsXVq7t4LcaDTbJ4gFcJYA6BWSvcldHcjhYeUtGk+/ANknZ4Ah+EDgmfsttlBZ+w
+         ewej66JKui+QNQ5xzzWescXdSGIy0d3NgUYmn6eAKA35WkWT4yYojaX6eNAl9XHV5FYQ
+         1lNWlrC9Cz8NOlXMlCYO4/t581jvyztxvBvvS61gxRNNdkWeHPCckqsN66LLP4Rxj0fK
+         9FIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=41Cix8/wz/98CXmQSSNUVoc/eGMSQu30WNS71XR8dIw=;
-        b=Y33baVCorV9+q45aC6Jote+DhNwL75HiGsYa9yyM2xf7Sv4p0Gpw+30ZUKIhchGGjk
-         /cNxSVcWbQbjB5tRxH1Yt6kVGoo450uadS4EDyMRpMTjB/4X7c7dgNCd4mFaku7tj5gS
-         JQHWf7t7Ax1DcPwkKw/HmqAI8icPvo2pI6DXuLqyYgcYV4m9RhUpEpfyWd93Fi2eUVoW
-         RqermylR4JzEi2CalH+KjOZOgnrqB90p2eD5CignSxJsHX74g7g4Bh6lTHGx8nAMcEH/
-         Q9spFLVxlfFVsH8eF3R3cgoPbXNJ79g7Lu6FGhepu0e8+1Qmod4NjhVQRj6Zhsx/N3cX
-         D/sA==
-X-Gm-Message-State: AOAM533e9mCnmBeI5P+krca9cfufJx22N/s1sf9xqnFIPUKnbOcJLc17
-        2y3E23hrvkWVZSQowAeEcXV0fw==
-X-Google-Smtp-Source: ABdhPJwj8pNW5zGNYm4XHNrU/V+RpEOW+y5QQGSkxJYkaR5O97+HdBnk7f1z0+QUbeTv16fOV5xp7A==
-X-Received: by 2002:a63:6b02:0:b0:3fb:da5e:42a1 with SMTP id g2-20020a636b02000000b003fbda5e42a1mr2388919pgc.273.1654141439808;
-        Wed, 01 Jun 2022 20:43:59 -0700 (PDT)
+        bh=gVoZS2vzK4dR4Y6/3npxg/APivJZF2gUX/to47n1YCM=;
+        b=WFDKGVT+3zLPESKSY1GU9B+nv2UwVZGk+6b15DLMDnGNzKPG63Tg6qM8aD4mbdOmfZ
+         Vu3r0sddhxQleYkTaf97wqhU9zpbrksWDn2BVhGw1b+LGqZ93kVikDZKa9Gpqi/SY1V0
+         CE+HhhkQWY4cs6EBeVVglZcd6uhVGudjBxSXjRYO74a44NIVTvwSTx/F/RbWZ1BW5C6K
+         xR2qZWaXdNSGitPRd9Y3ADFpdLoaZ4NgmGKOXPcSF7dzyEgQ0MX8ctdgxJIfK2QHXnqc
+         zf4TY/MXxl7bO4E7TGsPXLQhGPLYwYe5wryn9fUcGAuUNCKllvoRyVY16M26Yud74TQO
+         qgNQ==
+X-Gm-Message-State: AOAM5302UNcEcNsYK4JFltTOXQxX1k/JYIU75QSLBVOArNTfM7w+5wRz
+        ChOm7L6W9VDdIxBbyEkjZuVQTdZdso0Gag==
+X-Google-Smtp-Source: ABdhPJyEM2/VwvlC2CQzIqSXaE9/L6LNxoxkGMuwk5y4slDj7Ce2IqnUVMNuNFwIjbCt4hFIkjlXTw==
+X-Received: by 2002:a17:902:8203:b0:15f:4423:6e9c with SMTP id x3-20020a170902820300b0015f44236e9cmr2747281pln.25.1654141441419;
+        Wed, 01 Jun 2022 20:44:01 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id g2-20020aa79f02000000b005185407eda5sm2254092pfr.44.2022.06.01.20.43.59
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902820100b001618383483fsm2268587pln.224.2022.06.01.20.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 20:43:59 -0700 (PDT)
-Date:   Wed, 01 Jun 2022 20:43:59 -0700 (PDT)
-X-Google-Original-Date: Wed, 01 Jun 2022 20:40:23 PDT (-0700)
-Subject:     Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
-In-Reply-To: <mhng-f386a42e-77d9-4644-914f-552a8e721f5c@palmer-ri-x1c9>
-CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
-        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        keescook@chromium.org, guoren@linux.alibaba.com,
-        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
+        Wed, 01 Jun 2022 20:44:00 -0700 (PDT)
+Date:   Wed, 01 Jun 2022 20:44:00 -0700 (PDT)
+X-Google-Original-Date: Wed, 01 Jun 2022 20:43:21 PDT (-0700)
+Subject:     Re: arch/riscv: SV48 patch series questions
+In-Reply-To: <83813d991f96428c95c6d681c16ae852@EXMBX161.cuchost.com>
+CC:     alexandre.ghiti@canonical.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alexandre.ghiti@canonical.com
-Message-ID: <mhng-2ff855c7-1f97-46c9-b692-84ea3735eb05@palmer-ri-x1c9>
+To:     leyfoon.tan@starfivetech.com
+Message-ID: <mhng-055df44c-3feb-41ae-b8c0-ae3a6489dee1@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -78,190 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 18:50:47 PDT (-0700), Palmer Dabbelt wrote:
-> On Fri, 01 Apr 2022 05:56:30 PDT (-0700), alexandre.ghiti@canonical.com wrote:
->> On Fri, Feb 18, 2022 at 11:45 AM Alexandre Ghiti
->> <alexandre.ghiti@canonical.com> wrote:
->>>
->>> Hi Palmer,
->>>
->>> On Thu, Jan 20, 2022 at 11:05 AM Alexandre Ghiti
->>> <alexandre.ghiti@canonical.com> wrote:
->>> >
->>> > On Thu, Jan 20, 2022 at 8:30 AM Alexandre Ghiti
->>> > <alexandre.ghiti@canonical.com> wrote:
->>> > >
->>> > > On Thu, Jan 20, 2022 at 5:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>> > > >
->>> > > > On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
->>> > > > > * Please note notable changes in memory layouts and kasan population *
->>> > > > >
->>> > > > > This patchset allows to have a single kernel for sv39 and sv48 without
->>> > > > > being relocatable.
->>> > > > >
->>> > > > > The idea comes from Arnd Bergmann who suggested to do the same as x86,
->>> > > > > that is mapping the kernel to the end of the address space, which allows
->>> > > > > the kernel to be linked at the same address for both sv39 and sv48 and
->>> > > > > then does not require to be relocated at runtime.
->>> > > > >
->>> > > > > This implements sv48 support at runtime. The kernel will try to
->>> > > > > boot with 4-level page table and will fallback to 3-level if the HW does not
->>> > > > > support it. Folding the 4th level into a 3-level page table has almost no
->>> > > > > cost at runtime.
->>> > > > >
->>> > > > > Note that kasan region had to be moved to the end of the address space
->>> > > > > since its location must be known at compile-time and then be valid for
->>> > > > > both sv39 and sv48 (and sv57 that is coming).
->>> > > > >
->>> > > > > Tested on:
->>> > > > >   - qemu rv64 sv39: OK
->>> > > > >   - qemu rv64 sv48: OK
->>> > > > >   - qemu rv64 sv39 + kasan: OK
->>> > > > >   - qemu rv64 sv48 + kasan: OK
->>> > > > >   - qemu rv32: OK
->>> > > > >
->>> > > > > Changes in v3:
->>> > > > >   - Fix SZ_1T, thanks to Atish
->>> > > > >   - Fix warning create_pud_mapping, thanks to Atish
->>> > > > >   - Fix k210 nommu build, thanks to Atish
->>> > > > >   - Fix wrong rebase as noted by Samuel
->>> > > > >   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
->>> > > > >   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
->>> > > > >
->>> > > > > Changes in v2:
->>> > > > >   - Rebase onto for-next
->>> > > > >   - Fix KASAN
->>> > > > >   - Fix stack canary
->>> > > > >   - Get completely rid of MAXPHYSMEM configs
->>> > > > >   - Add documentation
->>> > > > >
->>> > > > > Alexandre Ghiti (13):
->>> > > > >   riscv: Move KASAN mapping next to the kernel mapping
->>> > > > >   riscv: Split early kasan mapping to prepare sv48 introduction
->>> > > > >   riscv: Introduce functions to switch pt_ops
->>> > > > >   riscv: Allow to dynamically define VA_BITS
->>> > > > >   riscv: Get rid of MAXPHYSMEM configs
->>> > > > >   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
->>> > > > >   riscv: Implement sv48 support
->>> > > > >   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
->>> > > > >   riscv: Explicit comment about user virtual address space size
->>> > > > >   riscv: Improve virtual kernel memory layout dump
->>> > > > >   Documentation: riscv: Add sv48 description to VM layout
->>> > > > >   riscv: Initialize thread pointer before calling C functions
->>> > > > >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
->>> > > > >
->>> > > > >  Documentation/riscv/vm-layout.rst             |  48 ++-
->>> > > > >  arch/riscv/Kconfig                            |  37 +-
->>> > > > >  arch/riscv/configs/nommu_k210_defconfig       |   1 -
->>> > > > >  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
->>> > > > >  arch/riscv/configs/nommu_virt_defconfig       |   1 -
->>> > > > >  arch/riscv/include/asm/csr.h                  |   3 +-
->>> > > > >  arch/riscv/include/asm/fixmap.h               |   1
->>> > > > >  arch/riscv/include/asm/kasan.h                |  11 +-
->>> > > > >  arch/riscv/include/asm/page.h                 |  20 +-
->>> > > > >  arch/riscv/include/asm/pgalloc.h              |  40 ++
->>> > > > >  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
->>> > > > >  arch/riscv/include/asm/pgtable.h              |  47 +-
->>> > > > >  arch/riscv/include/asm/sparsemem.h            |   6 +-
->>> > > > >  arch/riscv/kernel/cpu.c                       |  23 +-
->>> > > > >  arch/riscv/kernel/head.S                      |   4 +-
->>> > > > >  arch/riscv/mm/context.c                       |   4 +-
->>> > > > >  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
->>> > > > >  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
->>> > > > >  drivers/firmware/efi/libstub/efi-stub.c       |   2
->>> > > > >  drivers/pci/controller/pci-xgene.c            |   2 +-
->>> > > > >  include/asm-generic/pgalloc.h                 |  24 +-
->>> > > > >  include/linux/sizes.h                         |   1
->>> > > > >  22 files changed, 833 insertions(+), 209 deletions(-)
->>> > > >
->>> > > > Sorry this took a while.  This is on for-next, with a bit of juggling: a
->>> > > > handful of trivial fixes for configs that were failing to build/boot and
->>> > > > some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so
->>> > > > it'd be easier to backport.  This is bigger than something I'd normally like to
->>> > > > take late in the cycle, but given there's a lot of cleanups, likely some fixes,
->>> > > > and it looks like folks have been testing this I'm just going to go with it.
->>> > > >
->>> > >
->>> > > Yes yes yes! That's fantastic news :)
->>> > >
->>> > > > Let me know if there's any issues with the merge, it was a bit hairy.
->>> > > > Probably best to just send along a fixup patch at this point.
->>> > >
->>> > > I'm going to take a look at that now, and I'll fix anything that comes
->>> > > up quickly :)
->>> >
->>> > I see in for-next that you did not take the following patches:
->>> >
->>> >   riscv: Improve virtual kernel memory layout dump
->>> >   Documentation: riscv: Add sv48 description to VM layout
->>> >   riscv: Initialize thread pointer before calling C functions
->>> >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
->>> >
->>> > I'm not sure this was your intention. If it was, I believe that at
->>> > least the first 2 patches are needed in this series, the 3rd one is a
->>> > useful fix and we can discuss the 4th if that's an issue for you.
->>>
->>> Can you confirm that this was intentional and maybe explain the
->>> motivation behind it? Because I see value in those patches.
->>
->> Palmer,
->>
->> I read that you were still taking patches for 5.18, so I confirm again
->> that the patches above are needed IMO.
+On Fri, 27 May 2022 02:37:34 PDT (-0700), leyfoon.tan@starfivetech.com wrote:
+> Hi Palmer
 >
-> It was too late for this when it was sent (I saw it then, but just got
-> around to actually doing the work to sort it out).
+> Alex's "Introduce sv48 support without relocatable kernel" patch series in [1] was partially merged to Linux v5.17. But there are 4 patches are not merged (Patch-10 to 13).
 >
-> It took me a while to figure out exactly what was going on here, but I
-> think I remember now: that downgrade patch (and the follow-on I just
-> sent) is broken for medlow, because mm/init.c must be built medany
-> (which we're using for the mostly-PIC qualities).  I remember being in
-> the middle of rebasing/debugging this a while ago, I must have forgotten
-> I was in the middle of that and accidentally merged the branch as-is.
-> Certainly wasn't trying to silently take half the patch set and leave
-> the rest in limbo, that's the wrong way to do things.
->
-> I'm not sure what the right answer is here, but I just sent a patch to
-> drop support for medlow.  We'll have to talk about that, for now I
-> cleaned up some other minor issues, rearranged that docs and fix to come
-> first, and put this at palmer/riscv-sv48.  I think that fix is
-> reasonable to take the doc and fix into fixes, then the dump improvement
-> on for-next.  We'll have to see what folks think about the medany-only
-> kernels, the other option would be to build FDT as medany which seems a
-> bit awkward.
+> May I know what is the plan for these patches? Will them merged to next v5.19 merging window? Or do you expect any changes for these patches or Alex needs resend with rebase to latest kernel version?
 
-All but the last one are on for-next, there's some discussion on that 
-last one that pointed out some better ways to do it.
+I just saw this as I was digging up Alex's old email to reply to, all 
+but #13 are now on for-next.
 
+> Note, we would like to use the Patch-13 in this series.
+
+Is your use case a CPU errata?  If so I think we should just go ahead 
+and add that errata via the existing errata mechanism.  If you've got 
+some other use case, do you mind elaborating?  From that other thread it 
+sounds like a command-line argument is the way to go for folks who want 
+to turn this off more dynamically, but happy to hear if you've got 
+something different in mind.
+
+> Patches not merged:
+> [v3,10/13] riscv: Improve virtual kernel memory layout dump
+> [v3,11/13] Documentation: riscv: Add sv48 description to VM layout
+> [v3,12/13] riscv: Initialize thread pointer before calling C functions
+> [v3,13/13] riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
 >
->> Maybe even the relocatable series?
+> [1]: https://patchwork.kernel.org/project/linux-riscv/cover/20211206104657.433304-1-alexandre.ghiti@canonical.com/
 >
-> Do you mind giving me a pointer?  I'm not sure why I'm so drop-prone
-> with your patches, I promise I'm not doing it on purpose.
+> Thanks.
 >
->>
->> Thanks,
->>
->> Alex
->>
->>>
->>> Thanks,
->>>
->>> Alex
->>>
->>> >
->>> > I tested for-next on both sv39 and sv48 successfully, I took a glance
->>> > at the code and noticed you fixed the PTRS_PER_PGD error, thanks for
->>> > that. Otherwise nothing obvious has popped.
->>> >
->>> > Thanks again,
->>> >
->>> > Alex
->>> >
->>> > >
->>> > > Thanks!
->>> > >
->>> > > Alex
->>> > >
->>> > > >
->>> > > > Thanks!
+> Regards
+> Ley Foon

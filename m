@@ -2,112 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB8053BD85
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147AC53BD87
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbiFBRqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S237698AbiFBRrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237660AbiFBRqu (ORCPT
+        with ESMTP id S237678AbiFBRrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:46:50 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C71739A;
-        Thu,  2 Jun 2022 10:46:48 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 187so5336022pfu.9;
-        Thu, 02 Jun 2022 10:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=S0kiPQZyWlYVIOJkiV7UkjYaE9b35apJIAe4jrH0pmE=;
-        b=kO2DY3HPvb+3eEPd6LYATCmZzcBFTRNM1TmFlyQ3BCQ39OQfDP/80su+HJub539UCX
-         mAAf/8f5bBYQJFafrQBX7h++LbgnuLdMzl84tr9BbOpVvDrSmosmtasLj+l+LzkUbHe2
-         WugmU0OhU6xm0rEawAcbdFCgSh/LizY4ldHmL0VbAWhHRTJrKQEviTclXHeXRp5GdOa5
-         XyHQpuxVbS51/K59T9mIXRr5jMinKxlt/1bMd7/ZIY/7ayduain8sOvhTGiixu1OnRBF
-         3qgdn49fml1TLsnCDFoipgFQP9QJrxuStRusAYujgTf2nhuOf08B35nG2Bpg1j4HO85p
-         fXuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=S0kiPQZyWlYVIOJkiV7UkjYaE9b35apJIAe4jrH0pmE=;
-        b=hjWUpLFY1p2Bb9uKvgQKUenkU618lGQZCWMRZT7BDIfm2axNWGLup7HwPwnr5myacx
-         OOzcht+22lRPhgAam0ulONOFp+SeoJlJrWfXNDEmkJZn0AgANtFaT5A1Leulpw6+PaIH
-         7duXQBKKjq/lvOsgF9CxpbJG0f1wfvODuMM8vq15mZeAyhrQXPFPv5IFkR4c/XLnH+eb
-         KMv79dywHO36pc/a4j+8ZC3Od8PJyDFq5HIuBa1GZ4PZ3wDz6caZI1XtZKB1vn/jdAAa
-         Ca6Vq6E2CLfAjh3IxBvmw79/gcfWE2xD0z6CDAH47jgLrKQvr+Vjc0dQamgjkZ3EGIIM
-         c86w==
-X-Gm-Message-State: AOAM530WGeNqp6V9+O85TF5fgUBcsg0zrfoEfkWV226yVIHm1cw6b1jd
-        UPiM1yS9MtjEvvgPfyqcFP8=
-X-Google-Smtp-Source: ABdhPJz7y32iYDT2F/DMmapftPbyZXOxJDY02/3F1ptZUEjlRkeChivP9vk2/181q5VWGJeZ8Wd3Yg==
-X-Received: by 2002:a62:7b94:0:b0:51b:c723:5724 with SMTP id w142-20020a627b94000000b0051bc7235724mr4685709pfc.8.1654192007390;
-        Thu, 02 Jun 2022 10:46:47 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:49ff])
-        by smtp.gmail.com with ESMTPSA id y17-20020a170903011100b00163ef7be14csm3744464plc.89.2022.06.02.10.46.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 10:46:46 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Jun 2022 07:46:45 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH v5 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Message-ID: <Ypj3hcodkAU1MUR7@slm.duckdns.org>
-References: <20220601211824.89626-1-longman@redhat.com>
- <20220602133543.128088-4-longman@redhat.com>
- <YpjsTNZx4DG+kot4@slm.duckdns.org>
- <42da456d-8f6a-3af0-4cd3-d33a07e3b81e@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42da456d-8f6a-3af0-4cd3-d33a07e3b81e@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 2 Jun 2022 13:47:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407E612297B;
+        Thu,  2 Jun 2022 10:47:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C29B361684;
+        Thu,  2 Jun 2022 17:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 920A3C385A5;
+        Thu,  2 Jun 2022 17:47:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654192025;
+        bh=wpPoiF86HNO2h+P+3n4vHEbxR9x6vf8QrxKYPYbvJI4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L7ANxpnHs3VjgxuY/O7HheUltNZomp2/6Ye/NLrJO7NKdZ9ZQNS5UBdJDDGt4Ch7k
+         Bku9VAiJBYByf1vyw5Nkpnsg+0Y0Fa06B/1dzfQCIV+VnVuYlSy0lDi+8sHUehJdvI
+         rCaoeXObjbBM4ueQnFkiWjY3by4PhOVljmWKX7Sg=
+Date:   Thu, 2 Jun 2022 10:47:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jane Chu <jane.chu@oracle.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.de>,
+        Al Viro <viro@zeniv.linux.org.uk>, linmiaohe@huawei.com
+Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+Message-Id: <20220602104703.c5af5abde1d9b867d6aed9c7@linux-foundation.org>
+In-Reply-To: <Ypjw0bldEIFp9+YG@magnolia>
+References: <20220511000352.GY27195@magnolia>
+        <20220511014818.GE1098723@dread.disaster.area>
+        <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
+        <20220510192853.410ea7587f04694038cd01de@linux-foundation.org>
+        <20220511024301.GD27195@magnolia>
+        <20220510222428.0cc8a50bd007474c97b050b2@linux-foundation.org>
+        <20220511151955.GC27212@magnolia>
+        <CAPcyv4gwV5ReuCUbJHZPVPUJjnaGFWibCLLsH-XEgyvbn9RkWA@mail.gmail.com>
+        <32f51223-c671-1dc0-e14a-8887863d9071@fujitsu.com>
+        <1007e895-a0e3-9a82-2524-bb7e8a0b6b8c@fujitsu.com>
+        <Ypjw0bldEIFp9+YG@magnolia>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 01:26:10PM -0400, Waiman Long wrote:
-> 
-> On 6/2/22 12:58, Tejun Heo wrote:
-> > Hello,
+On Thu, 2 Jun 2022 10:18:09 -0700 "Darrick J. Wong" <djwong@kernel.org> wrote:
+
+> On Thu, Jun 02, 2022 at 05:42:13PM +0800, Shiyang Ruan wrote:
+> > Hi,
 > > 
-> > On Thu, Jun 02, 2022 at 09:35:43AM -0400, Waiman Long wrote:
-> > > @@ -2011,9 +2076,16 @@ void blk_cgroup_bio_start(struct bio *bio)
-> > >   	}
-> > >   	bis->cur.ios[rwd]++;
-> > > +	if (!READ_ONCE(bis->lnode.next)) {
-> > > +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
-> > > +
-> > > +		llist_add(&bis->lnode, lhead);
-> > > +		percpu_ref_get(&bis->blkg->refcnt);
-> > Hmm... what guarantees that more than one threads race here? llist assumes
-> > that there's a single writer for a given llist_node and the ref count would
-> > be off too, right?
+> > Is there any other work I should do with these two patchsets?  I think they
+> > are good for now.  So... since the 5.19-rc1 is coming, could the
+> > notify_failure() part be merged as your plan?
 > 
-> The llist_add() function is atomic. It calls into llist_add_batch() in
-> lib/llist.c which uses cmpxchg() to make the change. There is a non-atomic
-> version __llist_add() which may be problematic in this case. Note that irq
-> is disabled in the u64_stats_update* critical section, there shouldn't be a
-> racing thread running in the same cpu. Other cpus will modify their own
-> version of lhead. Perhaps the non-atomic version can be used here as well.
+> Hmm.  I don't see any of the patches 1-5,7-13 in current upstream, so
+> I'm guessing this means Andrew isn't taking it for 5.19?
 
-Ah, right, this is per-cpu, so there can be no second writer trying to add
-the same node at the same time. Can you add a comment explaining the overall
-design / behavior? Other than that, please feel free to add
+Sorry, the volume of commentary led me to believe that it wasn't
+considered finalized.  Shall take a look now.
 
- Acked-by: Tejun Heo <tj@kernel.org>
 
-Thanks.
 
--- 
-tejun

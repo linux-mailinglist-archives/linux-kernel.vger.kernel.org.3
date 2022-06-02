@@ -2,118 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EF453C0FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4AF53C0FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 00:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239804AbiFBWrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 18:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S239813AbiFBWsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 18:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbiFBWrk (ORCPT
+        with ESMTP id S232319AbiFBWr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 18:47:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ABBBCAA;
-        Thu,  2 Jun 2022 15:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654210059; x=1685746059;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0scndvUqgpJ+WslX7Mk2ISgiLRNjcAhaYsETtmdMtlM=;
-  b=O2JxNE+c4mFLJdkQ4UKUQ+LLWdZiFaLUyYqEiwKWYvKTZE3BQNmCCTPY
-   1WdDSUwKQvRLp4w8FfEOfgr7TVRJErp9AQrQcmI7AYs8pLpxOYdpTFIKJ
-   xScQngpV4YmfVz2LOFRnU2GDt1FvOSHSYn2tRLgjVITAgkTV9wWqm+RH8
-   nF3csnl8h4HOF/TluPf7jW5HPzd5lUL7Z0Pb5iN9cIH1kiWdX+iw9G9Cv
-   D/OfZlZ3CucC+XvdlEaFK3tttjN+n/wtuXUpkAtJitc4rGhePrsULrEY5
-   qRT5KLiRG2n+ng+8rc4yrO97b754Xk45nvVj6OepWIcFWDu9WUynDf+Hx
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="263746901"
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="263746901"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:47:38 -0700
-X-IronPort-AV: E=Sophos;i="5.91,272,1647327600"; 
-   d="scan'208";a="757218548"
-Received: from liqiong-mobl.amr.corp.intel.com (HELO localhost) ([10.209.7.136])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 15:47:37 -0700
-Date:   Thu, 2 Jun 2022 15:47:37 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <ben@bwidawsk.net>, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH V9 6/9] cxl/port: Read CDAT table
-Message-ID: <Ypk+Cc0fWelIcamX@iweiny-desk3>
-References: <20220531152632.1397976-1-ira.weiny@intel.com>
- <20220531152632.1397976-7-ira.weiny@intel.com>
- <20220601163540.00006978@Huawei.com>
- <20220601173113.000005a6@Huawei.com>
- <YpkCHADvGv6i3jVP@iweiny-desk3>
+        Thu, 2 Jun 2022 18:47:58 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2215BCA5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 15:47:56 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id h1so5598697plf.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 15:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qhaR4e3vQjTLHvjrXQ9re1JFbmDeoxPoZ7W193bvUbU=;
+        b=IA3E5PQIq4uDRkPun/Z2gHm34/GwwSEiI+6cTnHaVjb6Jg02RdGH0gZUqxZPUuY8Eq
+         +IwTCUfLIKeX+QJfuh13pJurnBjkJFDC21FezD/V+f6FmtnesJ5KTFr4CHsJGJSPYTS9
+         MorbPEf8eYpnb6TyefejlvRm+wevB7izJaDF/N7kBAD9xuKBlG0Rc+A0l8EJLeLc0PXd
+         jb0GazTVJTj7BDjzIUFAv5SnZoS5UU/fQNXn28MRmGEG6kqbYpPc+7Wbu+P90lPzF+Le
+         7tKC6cNZnRMbBHLkx6jtRk9kCfziB0f3NWyUKali6387OvpEPt4DsFLzwo7UOHpVwhIb
+         R1cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=qhaR4e3vQjTLHvjrXQ9re1JFbmDeoxPoZ7W193bvUbU=;
+        b=rD9F/HMw6/azSrHrPWkeAOrJDKN7n3PA/7X3olueROEgG76sgYAEBh6qUXItl04+on
+         tOPNohqBAyM2GiOJk9sHB8762AcFWcACaDcXUoptnEF5Xb7xyZPYblNJkMrwzosgGmcQ
+         wnUH7+AlP3947+ougFvgB0uh8r2b8kn26iGCFtjcdAdjlxQE9kOAqUI6BWgxGpd8GAo5
+         +HhvPGVJZ/K8wN0R9HimuF9blpz8ehyBc4cqu+Wuuh/x5iTw2gMyYUjMsPdplFml6P76
+         q+J1FmSqNWS3QL8Rmgl/Rq6ElKS3nsZ+8mvHsObHBtD96IabgtIiy/TVsnd2fQc9RkNL
+         VEDg==
+X-Gm-Message-State: AOAM532oQzvJl4BeUaMyeDfKIdcPQZqfsfvQnsUAQs0h4WymQshwMka+
+        kZqeyatx5kZHqcQ3gQG/nNI=
+X-Google-Smtp-Source: ABdhPJzvamBhV69v7cfaRL7jQWcjsTv95DqdPHYhCvPEBjgRtSKS7SC2UlK6KcDuUXVUBh4JsAe2jw==
+X-Received: by 2002:a17:902:d491:b0:167:49df:6e00 with SMTP id c17-20020a170902d49100b0016749df6e00mr160292plg.148.1654210076137;
+        Thu, 02 Jun 2022 15:47:56 -0700 (PDT)
+Received: from balhae.corp.google.com ([2620:15c:2c1:200:84f2:5eb8:b22d:654d])
+        by smtp.gmail.com with ESMTPSA id e3-20020a170902cf4300b0015e8d4eb29csm3975062plg.230.2022.06.02.15.47.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 15:47:55 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        James Morris <jmorris@namei.org>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: [PATCH] perf/core: Call LSM hook after copying perf_event_attr
+Date:   Thu,  2 Jun 2022 15:47:54 -0700
+Message-Id: <20220602224754.602074-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YpkCHADvGv6i3jVP@iweiny-desk3>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 11:31:56AM -0700, Ira wrote:
-> On Wed, Jun 01, 2022 at 05:31:13PM +0100, Jonathan Cameron wrote:
-> > On Wed, 1 Jun 2022 16:35:40 +0100
-> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> > 
-> > > On Tue, 31 May 2022 08:26:29 -0700
-> > > ira.weiny@intel.com wrote:
-> > > 
-> > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > 
-> > > > The OS will need CDAT data from CXL devices to properly set up
-> > > > interleave sets.  Currently this is supported through a DOE mailbox
-> > > > which supports CDAT.
-> > > > 
-> > > > Cache the CDAT data for later parsing.  Provide a sysfs binary attribute
-> > > > to allow dumping of the CDAT.
-> > > > 
-> > > > Binary dumping is modeled on /sys/firmware/ACPI/tables/
-> > > > 
-> > > > The ability to dump this table will be very useful for emulation of real
-> > > > devices once they become available as QEMU CXL type 3 device emulation will
-> > > > be able to load this file in.
-> > > > 
-> > > > This does not support table updates at runtime. It will always provide
-> > > > whatever was there when first cached. Handling of table updates can be
-> > > > implemented later.
-> > > > 
-> > > > Finally create a complete list of DOE defines within cdat.h for code
-> > > > wishing to decode the CDAT table.
-> > > > 
-> > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > >   
-> > > 
-> > > Fun question of ownership inline...
-> > 
-> > And a follow up due to triggering a bug that predated this series...
-> > 
-> > I'd send a fix, but I'm off on a long weekend shortly :)
-> 
-> NP I discussed with Dan and the use of dev_groups should allow me to move this
-> to port probe where it belongs.  I put it here for the sysfs stuff.
+It passes the attr struct to the security_perf_event_open() but it's
+not initialized yet.
 
-Not to make a habit of replying to my own mails but this works.
+Fixes: da97e18458fb ("perf_event: Add support for LSM and SELinux checks")
+Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ kernel/events/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-So I'm going to go forward with spinning this again.
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 7858bafffa9d..e035545f624f 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12033,12 +12033,12 @@ SYSCALL_DEFINE5(perf_event_open,
+ 	if (flags & ~PERF_FLAG_ALL)
+ 		return -EINVAL;
+ 
+-	/* Do we allow access to perf_event_open(2) ? */
+-	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
++	err = perf_copy_attr(attr_uptr, &attr);
+ 	if (err)
+ 		return err;
+ 
+-	err = perf_copy_attr(attr_uptr, &attr);
++	/* Do we allow access to perf_event_open(2) ? */
++	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
+ 	if (err)
+ 		return err;
+ 
+-- 
+2.36.1.255.ge46751e96f-goog
 
-Ira

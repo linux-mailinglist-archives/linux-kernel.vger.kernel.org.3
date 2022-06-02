@@ -2,218 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B0A53BB31
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C798653BB3A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 16:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236236AbiFBOtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 10:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S236235AbiFBOvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 10:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236222AbiFBOtd (ORCPT
+        with ESMTP id S235013AbiFBOvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:49:33 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5758F17CE4C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 07:49:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a23so5495249ljd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 07:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZaPpgfqig6aJt/76Qvkh8gpn5J3aYUO2TBWS+LCVcNw=;
-        b=xAcxwRdCAT2Ihy85KZYPLWUGzOhRKeYUehrzVv/X14hZzJlHka5bNQC5UUmh5gq6Vj
-         hg+i+DuOkXq1VrAFws/tCb6aQ8FlTaqFbFJot04Cb9Uedm8FurUWAyQOyCUWGJJk6e2V
-         srDWmpSLcCRvUingZXHEocdrEoShSUbYZv5PEWz1X6niyD+/0rbJQUS+1tVGNnXtf4CK
-         fJdiW/qOp3V4hwJ6vy3fQPY5ikQ9DzJndDWDy2kixTNNLhAYtsGCJtCcGzd7IulE0lBK
-         UNV1P19+/LtnanzgBDMffJ/AulOguG82pVBZ2rjiyLFKjbxzYXGPzjNsEWAppxm+ob4m
-         sdaw==
+        Thu, 2 Jun 2022 10:51:09 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211DF2ACB52;
+        Thu,  2 Jun 2022 07:51:08 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id s4-20020a4ac804000000b0040e93a35508so943839ooq.8;
+        Thu, 02 Jun 2022 07:51:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZaPpgfqig6aJt/76Qvkh8gpn5J3aYUO2TBWS+LCVcNw=;
-        b=bmbGK24OmrTy6l75aqLDITJ0+04znQyn3ujpZo7wV1Vu0Oi9EtrbrzzF9PzxZGNCSM
-         tCbNh1zuGsc98Ug5iwX0uFatmqQqS4ADEQzd1qyD2DSLRi2zfKHNGtWyli9oiS+MlLhA
-         yruOGGW0mb68FJTIVmVdTnxGfAFylAGmTx2FPoYUwHXdnxu5ZTPWOETSIMOLXg/e485n
-         gP4i/gQ65xouRApdGg/ZHJhrQ+myihQ7zrstvqVkb0tOTAWTj5rt0ZfTNVp840jEdjnf
-         9dUFDOSiyLubmeWJQYmR9rSNkv9P/bvoqb5RcQSajyfIPsLHLZOfDygXgKc+4eKwGr0i
-         iSbA==
-X-Gm-Message-State: AOAM533PMfPeGcxKmJZupTW22NaxrDLP/yY4YtZuZ7Rg7lOxfykAKPlz
-        ICYCJHaqbjMdZxZDgl8epD1Xhg==
-X-Google-Smtp-Source: ABdhPJxa6bzjIbiUOXzR2Vxnn9DSaTHbIZqB8ySqfk0u9alnBGU14jD8FiQdKMKCPAQDttMidXJtgA==
-X-Received: by 2002:a2e:5c7:0:b0:255:61b2:6ca with SMTP id 190-20020a2e05c7000000b0025561b206camr7651856ljf.313.1654181369614;
-        Thu, 02 Jun 2022 07:49:29 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id p17-20020a2ea4d1000000b0025530fa4edesm885074ljm.49.2022.06.02.07.49.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 07:49:29 -0700 (PDT)
-Message-ID: <5f3cf3a6-1cc2-63e4-f76b-4ee686764705@linaro.org>
-Date:   Thu, 2 Jun 2022 17:49:28 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1E/3KWBubmd3TEa7PIO3GoA5fzjc3dGvE7ZiPQxDE7c=;
+        b=vOL+7uqhWMR0krL/ctUnR2jXSDCWmY1sie+ZyI8dvKCVDE2/NXkeGxRWRRgcsQ52Vi
+         GVz3Eml3La6DqIjXKaXpylQC+Ag19iuiBR1C7LES+eG1Hr92gnZo5yFNH+XhdsjVi64t
+         m3+oQeCaFqvVvBHicT2qsBeiSDDGBWgwwexVOoluQpXzQfmifpTkTwu4fdExoagkc/jH
+         IQIRM31CFBqIbwgHI86WdCKp5ZItk9MSRikPjnxMjxkIrGG09PdLo4mKYzzSOLgj6lhz
+         V/0OiJj+WUNbk+mkbwzMS67gwqwOmXR41cAi4JkAhQIww72XJSdeSWF62tHCOQqh9NSl
+         QTgA==
+X-Gm-Message-State: AOAM5316Yn84lqPNQZVCIk1Fmo2nEF8ilka1D4EWwiVU8hsCbfBwjQL0
+        ojGukbb/Llq8pWfN0mj4Xg==
+X-Google-Smtp-Source: ABdhPJx/W2nQKKhkMKZ/abujq/Z3ImQBTqczfZI8YQDqn9Fpzc1f8SxvzBCup7RNWtudJZXcjiRXyg==
+X-Received: by 2002:a4a:97c3:0:b0:35b:29f9:a212 with SMTP id x3-20020a4a97c3000000b0035b29f9a212mr2200527ooi.50.1654181467373;
+        Thu, 02 Jun 2022 07:51:07 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l3-20020a4a94c3000000b0040e5ff4a737sm2325045ooi.26.2022.06.02.07.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 07:51:06 -0700 (PDT)
+Received: (nullmailer pid 2299234 invoked by uid 1000);
+        Thu, 02 Jun 2022 14:51:05 -0000
+Date:   Thu, 2 Jun 2022 09:51:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 1/6] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <20220602145105.GA2298322-robh@kernel.org>
+References: <20220525191026.696636-1-paul.kocialkowski@bootlin.com>
+ <20220525191026.696636-2-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 3/4] drm/panel: atna33xc20: Take advantage of
- wait_hpd_asserted() in struct drm_dp_aux
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220418171757.2282651-1-dianders@chromium.org>
- <20220418101725.v3.3.I9ee239f6b95b944c8fa030f300ad222a7af9899d@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220418101725.v3.3.I9ee239f6b95b944c8fa030f300ad222a7af9899d@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525191026.696636-2-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 20:17, Douglas Anderson wrote:
-> Let's add support for being able to read the HPD pin even if it's
-> hooked directly to the controller. This will let us take away the
-> waiting in the AUX transfer functions of the eDP controller drivers.
+On Wed, May 25, 2022 at 09:10:21PM +0200, Paul Kocialkowski wrote:
+> This introduces YAML bindings documentation for the Allwinner A31 Image
+> Signal Processor (ISP).
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 > ---
-> 
-> Changes in v3:
-> - Don't check "hpd_asserted" boolean when unset.
-> - Handle errors from gpiod_get_value_cansleep() properly.
-> 
-> Changes in v2:
-> - Change is_hpd_asserted() to wait_hpd_asserted()
-> 
->   .../gpu/drm/panel/panel-samsung-atna33xc20.c  | 41 +++++++++++++------
->   1 file changed, 28 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c b/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c
-> index 20666b6217e7..5ef1b4032c56 100644
-> --- a/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c
-> +++ b/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c
-> @@ -19,6 +19,10 @@
->   #include <drm/drm_edid.h>
->   #include <drm/drm_panel.h>
->   
-> +/* T3 VCC to HPD high is max 200 ms */
-> +#define HPD_MAX_MS	200
-> +#define HPD_MAX_US	(HPD_MAX_MS * 1000)
-> +
->   struct atana33xc20_panel {
->   	struct drm_panel base;
->   	bool prepared;
-> @@ -30,6 +34,7 @@ struct atana33xc20_panel {
->   
->   	struct regulator *supply;
->   	struct gpio_desc *el_on3_gpio;
-> +	struct drm_dp_aux *aux;
->   
->   	struct edid *edid;
->   
-> @@ -79,7 +84,7 @@ static int atana33xc20_suspend(struct device *dev)
->   static int atana33xc20_resume(struct device *dev)
->   {
->   	struct atana33xc20_panel *p = dev_get_drvdata(dev);
-> -	bool hpd_asserted = false;
-> +	int hpd_asserted;
->   	int ret;
->   
->   	/* T12 (Power off time) is min 500 ms */
-> @@ -91,20 +96,28 @@ static int atana33xc20_resume(struct device *dev)
->   	p->powered_on_time = ktime_get();
->   
->   	/*
-> -	 * Handle HPD. Note: if HPD is hooked up to a dedicated pin on the
-> -	 * eDP controller then "no_hpd" will be false _and_ "hpd_gpio" will be
-> -	 * NULL. It's up to the controller driver to wait for HPD after
-> -	 * preparing the panel in that case.
-> +	 * Note that it's possible that no_hpd is false, hpd_gpio is
-> +	 * NULL, and wait_hpd_asserted is NULL. This is because
-> +	 * wait_hpd_asserted() is optional even if HPD is hooked up to
-> +	 * a dedicated pin on the eDP controller. In this case we just
-> +	 * assume that the controller driver will wait for HPD at the
-> +	 * right times.
->   	 */
->   	if (p->no_hpd) {
-> -		/* T3 VCC to HPD high is max 200 ms */
-> -		msleep(200);
-> -	} else if (p->hpd_gpio) {
-> -		ret = readx_poll_timeout(gpiod_get_value_cansleep, p->hpd_gpio,
-> -					 hpd_asserted, hpd_asserted,
-> -					 1000, 200000);
-> -		if (!hpd_asserted)
-> -			dev_warn(dev, "Timeout waiting for HPD\n");
-> +		msleep(HPD_MAX_MS);
-> +	} else {
-> +		if (p->hpd_gpio) {
-> +			ret = readx_poll_timeout(gpiod_get_value_cansleep,
-> +						 p->hpd_gpio, hpd_asserted,
-> +						 hpd_asserted, 1000, HPD_MAX_US);
-> +			if (hpd_asserted < 0)
-> +				ret = hpd_asserted;
-> +		} else if (p->aux->wait_hpd_asserted) {
-> +			ret = p->aux->wait_hpd_asserted(p->aux, HPD_MAX_US);
-> +		}
-> +
-> +		if (ret)
-> +			dev_warn(dev, "Error waiting for HPD: %d\n", ret);
+>  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
 
-I'd suggest reworking this to:
+With the indentation fixed,
 
-if (p->no_hpd) {
-   msleep();
-   return 0;
-}
-
-if (p->hpd_gpio) {
-  ret = readx_poll_timeout(...)
-
-  if (ret)
-    dev_warn()
-  return ret;
-}
-
-if (p->aux->wait_hpd_asserted) {
-   ret = p->aux->wait....
-   if (ret)
-     dev_warn(...)
-   return ret;
-}
-
-return 0;
-
-
->   	}
->   
->   	return 0;
-> @@ -263,6 +276,8 @@ static int atana33xc20_probe(struct dp_aux_ep_device *aux_ep)
->   		return -ENOMEM;
->   	dev_set_drvdata(dev, panel);
->   
-> +	panel->aux = aux_ep->aux;
-> +
->   	panel->supply = devm_regulator_get(dev, "power");
->   	if (IS_ERR(panel->supply))
->   		return dev_err_probe(dev, PTR_ERR(panel->supply),
-
-
--- 
-With best wishes
-Dmitry
+Reviewed-by: Rob Herring <robh@kernel.org>

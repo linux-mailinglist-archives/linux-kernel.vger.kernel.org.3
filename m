@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B273553B53E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F45153B542
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiFBIkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S232441AbiFBIku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 04:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiFBIkM (ORCPT
+        with ESMTP id S230003AbiFBIkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:40:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B68129A631
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654159210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J9X9eKlzEclLa6MvLNYAdFd2zQQAwQquxfSZzdJAnY0=;
-        b=RUmaX5lD5WwiRr3nbzne5QfAPJMv35kZH49maozEvIUk8IAQaISjvteKVHd4mfLBs4yHH2
-        sNu+Zz99KkXkv4BcPJvcFtj30JScw4a0VuX9OIU7YCnfmO9DAgQVlVyDZLzqLNqfPjAqM7
-        Vahw4cWjeV1uaxVtKrmCsW3VdHCMDk8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-5-iWA2hJLzNumbCbJDaXikfg-1; Thu, 02 Jun 2022 04:40:04 -0400
-X-MC-Unique: iWA2hJLzNumbCbJDaXikfg-1
-Received: by mail-wm1-f69.google.com with SMTP id c125-20020a1c3583000000b003978decffedso4804997wma.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 01:40:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=J9X9eKlzEclLa6MvLNYAdFd2zQQAwQquxfSZzdJAnY0=;
-        b=q9RMa9NPyAQH+S/Gl2sv8rP193YNUOjf/1LXim70nEsZFpkN6FnFB9XDuQ/XMtDMle
-         U2RdxPm2QefVHUUbtR3DpNgkcvE06wJ+RYYoj9twWwGyNBH6+UmwXHVaPWJZe2G6vjp5
-         LZZaPdfLCAwl5xbTce+OgqW8uVrWG5fqIiL3yCgI6k89cG2XfNqfv6RaLs8GF93WCdwe
-         qCHMLfBpfB+RhBIwuqbcYtBo6hwUl45sPf7BDKBQzdZ9Mo4gvRLfN9JjBNQYVv+HRCQJ
-         0HfQrNI98d5eTTzdQ8wQKpn4M1AfwpbIwU+P2xU2cpXiD7oyiLhPMpC3ZqdDOknwrmX8
-         LyRQ==
-X-Gm-Message-State: AOAM530Pz+dtCnguyYC4R2wLNUoggc39fQimc2U+khVYJj6WKTo+JGUx
-        KMCS/gosptGIwYBa8GvDLk//ZeCSORJ+VZOmLQg/gY5sYbHtwEm7gTCQ1Wu0SKO4/Gi+3vr0ynE
-        Zq/szpdfxZSQbZMBTILg/FVvF
-X-Received: by 2002:adf:f6d2:0:b0:211:f0bf:3d14 with SMTP id y18-20020adff6d2000000b00211f0bf3d14mr2763527wrp.264.1654159203387;
-        Thu, 02 Jun 2022 01:40:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzfIfFeYpd+hweqJ+/V1YU5ayupuojpWaT3H2UqQkV92iVE0trL+kBR715ZoiwRRgjTHCszLw==
-X-Received: by 2002:adf:f6d2:0:b0:211:f0bf:3d14 with SMTP id y18-20020adff6d2000000b00211f0bf3d14mr2763500wrp.264.1654159203090;
-        Thu, 02 Jun 2022 01:40:03 -0700 (PDT)
-Received: from [192.168.178.20] (p57a1a7d6.dip0.t-ipconnect.de. [87.161.167.214])
-        by smtp.gmail.com with ESMTPSA id h5-20020a5d5045000000b0020d07d90b71sm3675589wrt.66.2022.06.02.01.40.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 01:40:02 -0700 (PDT)
-Message-ID: <a678504c-3468-12e5-b51d-5670bdf165e5@redhat.com>
-Date:   Thu, 2 Jun 2022 10:39:59 +0200
+        Thu, 2 Jun 2022 04:40:49 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0251A29DC2F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:40:46 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 804A73200995;
+        Thu,  2 Jun 2022 04:40:42 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 02 Jun 2022 04:40:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1654159242; x=1654245642; bh=5Iah++U4Rg
+        kaeCKrTIS0QOwPoyesmmVEuWNhFXScqIY=; b=uwLqkt2TixP4D3iAWvYAJAeOLd
+        Bj+G72iLXKBX3XcqjgYJ3ayVxj83q9c0yIR5QCyNpzA+fvmh247Q1xVI/KBjX+f7
+        Pq87+kfAmBxGfqvNUd8+RfjyjgF6kD2z+eb/HhbufCvb00kPZSGVgZe/Ar++P5J8
+        BMpKz0UDqEhaB9CNhVowhEDr50s6vh+OrDnvgvzCTchctPOZDnlOoWsiz2Fp0a3W
+        alUCWWvheiHSzkDKFhMmkM3dgCek9/TXjA1w7OKAKjEM246JO/nZPd9gpg3fbj6D
+        T9gG2D2Ex44FJVypMFGAUy/xOvqsuUymeGWPiWzZAO3h98Ez7F2UIfKYuBmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1654159242; x=1654245642; bh=5Iah++U4RgkaeCKrTIS0QOwPoyes
+        mmVEuWNhFXScqIY=; b=BoTe/q8q5MVKensZ7my1hpU9kFFaFlH6JMm2WLtqJPrV
+        Vy8a/1bLYD/krp60noqYB/YoctS+i5asWUPYUddyAHR/s15qWEuVVWeOKMUJJSyp
+        i8PoTVoGENI9TA3dDs5zOpd+5bVIsZFrSe3rbueyefCDSrSm+DD9iy/LwaxNA7h/
+        B0rYd7DgP13kspZpxDGIPyeegMbNfJDSuS7exucBpgDuleZsJfqGHpzgtDZ832Jy
+        m5jObHtb1wIt7XE1TKlB77SYxHYNFIDC1YPHVN/gCu0Napa+sfAOMonWcqnHRvqZ
+        IrC2Shcg9pyqmR22Pgwj5MqLD43qhiimDLNdud5Ipg==
+X-ME-Sender: <xms:iHeYYsQzEK9U1qYiYt0aawOSI2ZPpTE_gdfrJwNQMRGknntQ2Olotw>
+    <xme:iHeYYpw-DhHZXAQUhhOGS8fwlozZnhfw8gtrZaH8XrcNgthLbGIXGSmh7Ud7DllH4
+    p9qfCvDU7v3r-tMjLc>
+X-ME-Received: <xmr:iHeYYp0ogQbjJ8iFAUhwDnuK4fSbmvm4dNkEZJQd7AnKQRMdqtMuWBNyyes>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledvgddtgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepfedtueevteeggfeivdffjeejledvveduudetteekvdeiueehvdegkedvleet
+    ffeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:iHeYYgDFGqt0QLLlkWuLKogFZCCUmUbHQOcTnvh4_3dxFqZjRL0EMQ>
+    <xmx:iHeYYlilp7_Ycpqxr0t5_QCE4RrvBZLPf6h2t4CbRvUtHiHQyrm_yQ>
+    <xmx:iHeYYsoS9XZF2K42UxD7qWJl3DIYLhoG8_f5YXBBbBaGuJGcsI4wFA>
+    <xmx:ineYYl5V4RiP5tN5p55k37oSTh7HSxf4PEpcwKmEDDWlDB8WcVQGwg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Jun 2022 04:40:39 -0400 (EDT)
+Date:   Thu, 2 Jun 2022 10:40:37 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     laurent.pinchart@ideasonboard.com, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, robert.foss@linaro.org, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        sam@ravnborg.org, alsi@bang-olufsen.dk, jagan@amarulasolutions.com,
+        biju.das.jz@bp.renesas.com, l.stach@pengutronix.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm: bridge: adv7511: Add check for
+ mipi_dsi_driver_register
+Message-ID: <20220602084037.c2pslwra4dyhnh3d@penduick>
+References: <20220601111255.2911012-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCHv6 10/15] x86/mm: Report unaccepted memory in /proc/meminfo
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
- <20220517153444.11195-11-kirill.shutemov@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220517153444.11195-11-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601111255.2911012-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.05.22 17:34, Kirill A. Shutemov wrote:
-> Track amount of unaccepted memory and report it in /proc/meminfo.
+On Wed, Jun 01, 2022 at 07:12:55PM +0800, Jiasheng Jiang wrote:
+> On Wed, Jun 01, 2022 at 05:15:37PM +0800, Laurent Pinchart wrote:
+> >> Well, as far as I am concerned, the adv7511_exit() in the same file has already dealt with the issue.
+> >> Therefore, it might not be necessary to add another mipi_dsi_driver_unregister().
+> > 
+> > The issue is that adv7511_exit() is not called if adv7511_init() fails.
+> 
+> Sorry, I can not find the caller of adv7511_init().
+> Please give me more detail.
 
-I feel like instead of doing this arch specific tracking here, we should
-simply report the total number of unaccepted (base) pages in the buddy.
+It's called by the kernel when the module is unloaded (module_exit).
+It's not what Laurent is saying though.
 
-When the system boots up, the number will rise as unaccepted memory gets
-exposed to the buddy. But especially once user space is up and running,
-that number should only go down.
+His point is that in adv7511, if i2c_add_driver fails, you'll still need
+to call mipi_dsi_driver_unregister to clean things up.
 
-Once it hits zero, there is no unaccepted memory left in the buddy and
-there won't be any performance surprises anymote -- and AFAIKT, that's
-what we really care about.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Maxime

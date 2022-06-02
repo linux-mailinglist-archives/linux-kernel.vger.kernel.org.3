@@ -2,408 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D664E53B302
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD09153B2FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 07:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiFBF2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 01:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S230072AbiFBF2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 01:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiFBF2Z (ORCPT
+        with ESMTP id S230058AbiFBF2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 01:28:25 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ABA11E1D6
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 22:28:20 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id b12-20020a6b7c4c000000b0066570f0b704so2162569ioq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 22:28:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oBwwLmIWelfGfUj4Er9QHKF4pnoyhNYH+2/2k171TC4=;
-        b=XoB37QzKZ72YeTvJliizCdxUxiMWs9+qRneadKGwUV2Ny9i+TahivU7HUL3ekh6Sq6
-         Fw67ushwBf8iH6DOZ3sznQuAiNzJOXJICuhtzYcCAsKiAeYMCbDUMXkdXNJsLU4eQ/Iu
-         O+fYhKGZxixX1wvJRY+tQy3FgWKFOGPQ9J69WpzhwYelZNnrh8OMsJVxPydLscxq8BzW
-         bN7ncnp6Jf8d5+wpWdt2xZvnbLR+KS+NAXbBB3NxjBx3eSzB2mrd7IV3O0joa1JCavIC
-         Ypj8wvXXnW3ffbOYJWrA699Q5Phr4CbFutQ7nWtOXjy/4lDHNpyImYC4IpUpZhJZK7ps
-         IVyw==
-X-Gm-Message-State: AOAM530VH8rcu2JtZDzX6YooKieRgewMui5U5XnG0dU8ixNBUCuZfroH
-        q8fZNhrzP2ff0kdu7d2Oxd6g963+6vUHSpYEpXZvcpja8rYm
-X-Google-Smtp-Source: ABdhPJwbRf67+UyF9LzJGuP7RSzqkxCIsEFEV0tgbx5hKvN5+0eue/juVqy3l6Nnvgt+TVX16Pu/XRekpndUbnFGmOtTkyX0/9jN
+        Thu, 2 Jun 2022 01:28:49 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59E02A3BAD;
+        Wed,  1 Jun 2022 22:28:46 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2525SW0v095931;
+        Thu, 2 Jun 2022 00:28:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654147712;
+        bh=226oIf8/+j9H7PTOU0pHIEVBQsUchL13GK034y8fOkA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=GnYlg6xg4YrAL7RwuU0lUn4nc0KMxU3uSvJm9aobSejHebSZk8ch/n8AK1JlKWAQX
+         9GMti4U+6qjPw4K0bg0sJRtffXMtYF2OPRwnBmfqTIKzwvBIdsGkrS3o8b8yUkTYBt
+         0d3tTEyD4g41US69y7qwkUBPwKms1W+y4wrFBiFQ=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2525SWd6055080
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 2 Jun 2022 00:28:32 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 2
+ Jun 2022 00:28:31 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 2 Jun 2022 00:28:31 -0500
+Received: from [172.24.220.119] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2525SP7s017098;
+        Thu, 2 Jun 2022 00:28:26 -0500
+Message-ID: <6c054a1b-2842-a6f0-733a-92cfda76f828@ti.com>
+Date:   Thu, 2 Jun 2022 10:58:24 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a92:de4b:0:b0:2d2:18f1:be45 with SMTP id
- e11-20020a92de4b000000b002d218f1be45mr2166512ilr.308.1654147700044; Wed, 01
- Jun 2022 22:28:20 -0700 (PDT)
-Date:   Wed, 01 Jun 2022 22:28:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000113adf05e0704621@google.com>
-Subject: [syzbot] INFO: task hung in hci_power_on
-From:   syzbot <syzbot+8d7b9ced2a99394b0a50@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>, <rogerq@kernel.org>,
+        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <kishon@ti.com>
+References: <20220418104118.12878-1-p-mohan@ti.com>
+ <20220418104118.12878-2-p-mohan@ti.com> <YnA3dtaqptLgZBrV@robh.at.kernel.org>
+From:   Puranjay Mohan <p-mohan@ti.com>
+In-Reply-To: <YnA3dtaqptLgZBrV@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Rob,
 
-syzbot found the following issue on:
+On 03/05/22 01:26, Rob Herring wrote:
+> On Mon, Apr 18, 2022 at 04:11:14PM +0530, Puranjay Mohan wrote:
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> Add a YAML binding document for PRU consumers. The binding includes
+>> all the common properties that can be used by different PRU consumer
+>> or application nodes and supported by the PRU remoteproc driver.
+>> These are used to configure the PRU hardware for specific user
+>> applications.
+>>
+>> The application nodes themselves should define their own bindings.
+>>
+>> Co-developed-by: Tero Kristo <t-kristo@ti.com>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> ---
+>>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 70 +++++++++++++++++++
+>>  1 file changed, 70 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>> new file mode 100644
+>> index 000000000000..5b1f1cb2f098
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>> @@ -0,0 +1,70 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Common TI PRU Consumer Binding
+>> +
+>> +maintainers:
+>> +  - Suman Anna <s-anna@ti.com>
+>> +
+>> +description: |
+>> +  A PRU application/consumer/user node typically uses one or more PRU device
+>> +  nodes to implement a PRU application/functionality. Each application/client
+>> +  node would need a reference to at least a PRU node, and optionally define
+>> +  some properties needed for hardware/firmware configuration. The below
+>> +  properties are a list of common properties supported by the PRU remoteproc
+>> +  infrastructure.
+>> +
+>> +  The application nodes shall define their own bindings like regular platform
+>> +  devices, so below are in addition to each node's bindings.
+>> +
+>> +properties:
+>> +  ti,prus:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
+>> +    minItems: 1
+>> +    maxItems: 6
+>> +    items:
+>> +      maxItems: 1
+>> +
+>> +  firmware-name:
+>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>> +    description: |
+>> +      firmwares for the PRU cores, the default firmware for the core from
+>> +      the PRU node will be used if not provided. The firmware names should
+>> +      correspond to the PRU cores listed in the 'ti,prus' property
+> 
+> So should be the name number of entries?:
+> 
+> minItems: 1
+> maxItems: 6
 
-HEAD commit:    9d004b2f4fea Merge tag 'cxl-for-5.19' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1644de7bf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3c367f7c347f1679
-dashboard link: https://syzkaller.appspot.com/bug?extid=8d7b9ced2a99394b0a50
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103f3755f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f4cf3df00000
+will add in v4
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8d7b9ced2a99394b0a50@syzkaller.appspotmail.com
+> 
+>> +
+>> +  ti,pruss-gp-mux-sel:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> 
+> minItems: 1
 
-INFO: task kworker/u5:0:47 blocked for more than 143 seconds.
-      Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u5:0    state:D stack:26752 pid:   47 ppid:     2 flags:0x00004000
-Workqueue: hci2 hci_power_on
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5116 [inline]
- __schedule+0x957/0xec0 kernel/sched/core.c:6431
- schedule+0xeb/0x1b0 kernel/sched/core.c:6503
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6562
- __mutex_lock_common+0xecf/0x26c0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
- process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
- </TASK>
-INFO: task kworker/u5:8:3667 blocked for more than 143 seconds.
-      Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u5:8    state:D stack:26752 pid: 3667 ppid:     2 flags:0x00004000
-Workqueue: hci3 hci_power_on
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5116 [inline]
- __schedule+0x957/0xec0 kernel/sched/core.c:6431
- schedule+0xeb/0x1b0 kernel/sched/core.c:6503
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6562
- __mutex_lock_common+0xecf/0x26c0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
- process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
- </TASK>
-INFO: task syz-executor174:3932 blocked for more than 143 seconds.
-      Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor174 state:D stack:26584 pid: 3932 ppid:  3611 flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5116 [inline]
- __schedule+0x957/0xec0 kernel/sched/core.c:6431
- schedule+0xeb/0x1b0 kernel/sched/core.c:6503
- schedule_timeout+0xac/0x300 kernel/time/timer.c:1911
- do_wait_for_common+0x3ea/0x560 kernel/sched/completion.c:85
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x46/0x60 kernel/sched/completion.c:138
- __flush_work kernel/workqueue.c:3075 [inline]
- __cancel_work_timer+0x585/0x740 kernel/workqueue.c:3162
- hci_dev_close_sync+0x31/0xcc0 net/bluetooth/hci_sync.c:4091
- hci_dev_do_close net/bluetooth/hci_core.c:553 [inline]
- hci_unregister_dev+0x1b1/0x460 net/bluetooth/hci_core.c:2685
- hci_uart_tty_close+0x1a7/0x280 drivers/bluetooth/hci_ldisc.c:548
- tty_ldisc_kill drivers/tty/tty_ldisc.c:608 [inline]
- tty_ldisc_release+0x23c/0x510 drivers/tty/tty_ldisc.c:776
- tty_release_struct+0x27/0xd0 drivers/tty/tty_io.c:1694
- tty_release+0xc06/0xe60 drivers/tty/tty_io.c:1865
- __fput+0x3b9/0x820 fs/file_table.c:317
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x547/0x1ed0 kernel/exit.c:795
- do_group_exit+0x23b/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f934cf16ab9
-RSP: 002b:00007fff38b78f88 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f934cf8a330 RCX: 00007f934cf16ab9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 0000000000000001 R11: 0000000000000246 R12: 00007f934cf8a330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
-INFO: task syz-executor174:4073 blocked for more than 144 seconds.
-      Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor174 state:D stack:26584 pid: 4073 ppid:  3615 flags:0x00004002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5116 [inline]
- __schedule+0x957/0xec0 kernel/sched/core.c:6431
- schedule+0xeb/0x1b0 kernel/sched/core.c:6503
- schedule_timeout+0xac/0x300 kernel/time/timer.c:1911
- do_wait_for_common+0x3ea/0x560 kernel/sched/completion.c:85
- __wait_for_common kernel/sched/completion.c:106 [inline]
- wait_for_common kernel/sched/completion.c:117 [inline]
- wait_for_completion+0x46/0x60 kernel/sched/completion.c:138
- __flush_work kernel/workqueue.c:3075 [inline]
- __cancel_work_timer+0x585/0x740 kernel/workqueue.c:3162
- hci_dev_close_sync+0x31/0xcc0 net/bluetooth/hci_sync.c:4091
- hci_dev_do_close net/bluetooth/hci_core.c:553 [inline]
- hci_unregister_dev+0x1b1/0x460 net/bluetooth/hci_core.c:2685
- hci_uart_tty_close+0x1a7/0x280 drivers/bluetooth/hci_ldisc.c:548
- tty_ldisc_kill drivers/tty/tty_ldisc.c:608 [inline]
- tty_ldisc_release+0x23c/0x510 drivers/tty/tty_ldisc.c:776
- tty_release_struct+0x27/0xd0 drivers/tty/tty_io.c:1694
- tty_release+0xc06/0xe60 drivers/tty/tty_io.c:1865
- __fput+0x3b9/0x820 fs/file_table.c:317
- task_work_run+0x146/0x1c0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x547/0x1ed0 kernel/exit.c:795
- do_group_exit+0x23b/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f934cf16ab9
-RSP: 002b:00007fff38b78f88 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f934cf8a330 RCX: 00007f934cf16ab9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 0000000000000001 R11: 0000000000000246 R12: 00007f934cf8a330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
+will add in v4
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/29:
- #0: ffffffff8cb1ebe0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-3 locks held by kworker/u5:0/47:
- #0: ffff88801fdcd938 ((wq_completion)hci2){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc90000b87d00 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
- #2: ffff88801d935048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- #2: ffff88801d935048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
-2 locks held by getty/3280:
- #0: ffff888025914098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
- #1: ffffc90002cd62e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6ad/0x1c90 drivers/tty/n_tty.c:2075
-3 locks held by kworker/u5:5/3630:
- #0: ffff88801a8ed938 ((wq_completion)hci0){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc9000315fd00 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
- #2: ffff88801a7d1048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- #2: ffff88801a7d1048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
-3 locks held by kworker/u5:6/3631:
- #0: ffff8880772d6138 ((wq_completion)hci4){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc9000316fd00 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
- #2: ffff8880778cd048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- #2: ffff8880778cd048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
-2 locks held by kworker/0:4/3634:
- #0: ffff888011466538 ((wq_completion)rcu_gp){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc900031afd00 ((work_completion)(&rew->rew_work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
-3 locks held by kworker/u5:7/3652:
- #0: ffff88801b1bd938 ((wq_completion)hci5){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc900031efd00 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
- #2: ffff888075651048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- #2: ffff888075651048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
-3 locks held by kworker/u5:8/3667:
- #0: ffff88807b17b138 ((wq_completion)hci3){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
- #1: ffffc9000309fd00 ((work_completion)(&hdev->power_on)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
- #2: ffff88807ae29048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_open net/bluetooth/hci_core.c:480 [inline]
- #2: ffff88807ae29048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_power_on+0x178/0x650 net/bluetooth/hci_core.c:963
-3 locks held by syz-executor174/3932:
- #0: ffff88801ec0d098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff88801ec0d098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:336 [inline]
- #0: ffff88801ec0d098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff88801ec0d098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0x5b/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff88801ec0e098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff88801ec0e098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:338 [inline]
- #1: ffff88801ec0e098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff88801ec0e098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0x7f/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff88801d935048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close net/bluetooth/hci_core.c:551 [inline]
- #2: ffff88801d935048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_unregister_dev+0x1a9/0x460 net/bluetooth/hci_core.c:2685
-3 locks held by syz-executor174/4073:
- #0: ffff888073846098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff888073846098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:346 [inline]
- #0: ffff888073846098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff888073846098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0xb3/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff88807d590098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff88807d590098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:348 [inline]
- #1: ffff88807d590098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff88807d590098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0xd7/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff88807ae29048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close net/bluetooth/hci_core.c:551 [inline]
- #2: ffff88807ae29048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_unregister_dev+0x1a9/0x460 net/bluetooth/hci_core.c:2685
-3 locks held by syz-executor174/4621:
- #0: ffff888074f58098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff888074f58098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:336 [inline]
- #0: ffff888074f58098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff888074f58098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0x5b/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff888074f5a098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff888074f5a098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:338 [inline]
- #1: ffff888074f5a098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff888074f5a098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0x7f/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff888075651048
- (&hdev->req_lock){+.+.}-{3:3}, at: __debug_check_no_obj_freed lib/debugobjects.c:977 [inline]
- (&hdev->req_lock){+.+.}-{3:3}, at: debug_check_no_obj_freed+0xc5/0x650 lib/debugobjects.c:1020
-3 locks held by syz-executor174/4623:
- #0: ffff888021031098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff888021031098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:346 [inline]
- #0: ffff888021031098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff888021031098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0xb3/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff888021034098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff888021034098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:348 [inline]
- #1: ffff888021034098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff888021034098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0xd7/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff88801a7d1048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close net/bluetooth/hci_core.c:551 [inline]
- #2: ffff88801a7d1048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_unregister_dev+0x1a9/0x460 net/bluetooth/hci_core.c:2685
-3 locks held by syz-executor174/4624:
- #0: ffff888074f59098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff888074f59098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:346 [inline]
- #0: ffff888074f59098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff888074f59098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0xb3/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff888074f5b098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff888074f5b098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:348 [inline]
- #1: ffff888074f5b098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff888074f5b098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0xd7/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff8880778cd048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close net/bluetooth/hci_core.c:551 [inline]
- #2: ffff8880778cd048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_unregister_dev+0x1a9/0x460 net/bluetooth/hci_core.c:2685
-4 locks held by syz-executor174/4625:
- #0: ffff8880166dc098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff8880166dc098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:346 [inline]
- #0: ffff8880166dc098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff8880166dc098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0xb3/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff88801cfda098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff88801cfda098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:348 [inline]
- #1: ffff88801cfda098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff88801cfda098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0xd7/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff888023a8f990 (&hu->proto_lock){++++}-{0:0}, at: hci_uart_tty_close+0x123/0x280 drivers/bluetooth/hci_ldisc.c:539
- #3: ffffffff8cb23ce0 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:290 [inline]
- #3: ffffffff8cb23ce0 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x266/0x720 kernel/rcu/tree_exp.h:927
-3 locks held by syz-executor174/4626:
- #0: ffff888074220098 (&tty->ldisc_sem){++++}-{0:0}, at: __tty_ldisc_lock drivers/tty/tty_ldisc.c:290 [inline]
- #0: ffff888074220098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:346 [inline]
- #0: ffff888074220098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #0: ffff888074220098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_release+0xb3/0x510 drivers/tty/tty_ldisc.c:775
- #1: ffff888074224098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: __tty_ldisc_lock_nested drivers/tty/tty_ldisc.c:296 [inline]
- #1: ffff888074224098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair_timeout drivers/tty/tty_ldisc.c:348 [inline]
- #1: ffff888074224098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_lock_pair drivers/tty/tty_ldisc.c:367 [inline]
- #1: ffff888074224098 (&tty->ldisc_sem/1){+.+.}-{0:0}, at: tty_ldisc_release+0xd7/0x510 drivers/tty/tty_ldisc.c:775
- #2: ffff88801f204d90 (&hu->proto_lock){++++}-{0:0}, at: hci_uart_tty_close+0x123/0x280 drivers/bluetooth/hci_ldisc.c:539
+> 
+>> +    maxItems: 6
+>> +    items:
+>> +      enum: [0, 1, 2, 3, 4]
+>> +    description: |
+>> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
+>> +      This selects the internal muxing scheme for the PRU instance. Values
+>> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
+>> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
+>> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
+>> +      same slice in the associative array. If the array size is smaller than
+>> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
+>> +      PRU core is used.
+>> +
+>> +required:
+>> +  - ti,prus
+>> +
+>> +dependencies:
+>> +  firmware-name: [ 'ti,prus' ]
+>> +  ti,pruss-gp-mux-sel: [ 'ti,prus' ]
+> 
+> This doesn't make sense because 'ti,prus' is already required. Should 
+> all 3 properties always be required?
 
-=============================================
+All three of these are always required, so, I will remove the
+"dependencies:" tag and add all three of them to "required:" in v4
+Will it be the correct way to do it?
 
-NMI backtrace for cpu 0
-CPU: 0 PID: 29 Comm: khungtaskd Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- nmi_cpu_backtrace+0x473/0x4a0 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x168/0x280 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
- watchdog+0xd18/0xd60 kernel/hung_task.c:378
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 48 Comm: kworker/u4:2 Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_unbound toggle_allocation_gate
-RIP: 0010:get_current arch/x86/include/asm/current.h:15 [inline]
-RIP: 0010:__sanitizer_cov_trace_pc+0x4/0x60 kernel/kcov.c:199
-Code: 00 00 00 00 66 90 53 48 89 fb e8 17 00 00 00 48 8b 3d 18 f1 7b 0c 48 89 de 5b e9 47 ee 51 00 cc cc cc cc cc cc cc 48 8b 04 24 <65> 48 8b 0c 25 00 6f 02 00 65 8b 15 a4 fc 7a 7e f7 c2 00 01 ff 00
-RSP: 0018:ffffc90000b97658 EFLAGS: 00000093
-RAX: ffffffff813cd4d4 RBX: ffff8881c00fb000 RCX: 0000000000000000
-RDX: ffff8880171ad880 RSI: 000000000000002e RDI: 0000000000000040
-RBP: ffffc90000b97790 R08: ffffffff813cd4c5 R09: ffffed1027fc5085
-R10: ffffed1027fc5085 R11: 1ffff11027fc5084 R12: 0000000000000000
-R13: dffffc0000000000 R14: 00000001400fb000 R15: 000000000000002e
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f934cf8b1d0 CR3: 000000000c88e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- phys_addr_valid arch/x86/mm/physaddr.h:7 [inline]
- __phys_addr+0x94/0x160 arch/x86/mm/physaddr.c:28
- build_cr3 arch/x86/mm/tlb.c:163 [inline]
- load_new_mm_cr3 arch/x86/mm/tlb.c:283 [inline]
- switch_mm_irqs_off+0x8f5/0x910 arch/x86/mm/tlb.c:628
- use_temporary_mm arch/x86/kernel/alternative.c:962 [inline]
- __text_poke+0x5c2/0x9d0 arch/x86/kernel/alternative.c:1073
- text_poke arch/x86/kernel/alternative.c:1137 [inline]
- text_poke_bp_batch+0x6bc/0x970 arch/x86/kernel/alternative.c:1483
- text_poke_flush arch/x86/kernel/alternative.c:1589 [inline]
- text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1596
- arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
- static_key_enable_cpuslocked+0x129/0x250 kernel/jump_label.c:177
- static_key_enable+0x16/0x20 kernel/jump_label.c:190
- toggle_allocation_gate+0xbf/0x470 mm/kfence/core.c:808
- process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	00 00                	add    %al,(%rax)
-   2:	00 00                	add    %al,(%rax)
-   4:	66 90                	xchg   %ax,%ax
-   6:	53                   	push   %rbx
-   7:	48 89 fb             	mov    %rdi,%rbx
-   a:	e8 17 00 00 00       	callq  0x26
-   f:	48 8b 3d 18 f1 7b 0c 	mov    0xc7bf118(%rip),%rdi        # 0xc7bf12e
-  16:	48 89 de             	mov    %rbx,%rsi
-  19:	5b                   	pop    %rbx
-  1a:	e9 47 ee 51 00       	jmpq   0x51ee66
-  1f:	cc                   	int3
-  20:	cc                   	int3
-  21:	cc                   	int3
-  22:	cc                   	int3
-  23:	cc                   	int3
-  24:	cc                   	int3
-  25:	cc                   	int3
-  26:	48 8b 04 24          	mov    (%rsp),%rax
-* 2a:	65 48 8b 0c 25 00 6f 	mov    %gs:0x26f00,%rcx <-- trapping instruction
-  31:	02 00
-  33:	65 8b 15 a4 fc 7a 7e 	mov    %gs:0x7e7afca4(%rip),%edx        # 0x7e7afcde
-  3a:	f7 c2 00 01 ff 00    	test   $0xff0100,%edx
+> 
+>> +
+>> +additionalProperties: true
+>> +
+>> +examples:
+>> +  - |
+>> +    /* PRU application node example */
+>> +    pru-app {
+>> +        ti,prus = <&pru0>, <&pru1>;
+>> +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
+>> +        ti,pruss-gp-mux-sel = <2>, <1>;
+> 
+> This example never validates, but okay I guess.
+> 
+>> +    };
+>> -- 
+>> 2.17.1
+>>
+>>
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks,
+Puranjay Mohan

@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F53B53C031
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2E153C038
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 23:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239362AbiFBVFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 17:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S239356AbiFBVGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 17:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239356AbiFBVFt (ORCPT
+        with ESMTP id S239363AbiFBVGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 17:05:49 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E273527C;
-        Thu,  2 Jun 2022 14:05:48 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id l9-20020a056830268900b006054381dd35so4266567otu.4;
-        Thu, 02 Jun 2022 14:05:48 -0700 (PDT)
+        Thu, 2 Jun 2022 17:06:08 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D157C3527B;
+        Thu,  2 Jun 2022 14:06:06 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id n2-20020a9d6f02000000b0060b22af84d4so4267461otq.1;
+        Thu, 02 Jun 2022 14:06:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HGr/+ymyczZCHw1APWris6lQW2YQvCdg22oqh/0jGeA=;
-        b=oAFasd9GCb80UlOnD8ktOGBBXm//vGHyTigWKupoKRuESokdf5g57nMovIVR09q4gj
-         4O2dkfFWSs7ZN99ll4mP3Zj80Oy5/uDK7uodA7GUKsQfI7SVfpkRXHCJ8QuDVildyx/2
-         zcyQCWL06W71MARQtw0dv6T91L2EBBOFmFMM/Qv1iiWDk5g0yoybuSHqHdotlHJ66M45
-         SdvjGLQabE1CPUDTyZIgP81UYI4PtzhOqUsvU/LxE5tRgSmNJBWXvXzda7Bjcdiuf5Ds
-         ZICVKVNm5CL7o0T8RhyWIsMrL7XoJH7doOlgD+LLAM5571coGzHSyEoeagq99guJheBD
-         WarA==
+        bh=X8SOOnM2HiwcDQclkgiwh0GlPivjXgSc5wJTjyo0WJQ=;
+        b=fAnupm8/89fG9/frmmXRsDQzRaSmUaG1oATtsTfjQwy6zvyYeB54OFK7vNCvf4P1lG
+         +D3fYENyh8tmc6uNwsP1UB2zGipZXyeGMholQOoYAB228CVN/+gw9fmbUrdr/WR1+STp
+         7xB9ZxK6jo3oTonV9WDqd2XAtMvUJQLHXXkZR46517NQGC4LXsp1JcRbiOLz6qIA7f6X
+         es33u76jBmM60v8KaVQrRfX/hUs2i8hvdshMBfDG64Ovk2PC1uJ4H7hhoV9VncUTtQTZ
+         qvrj0CqbnLsC+AgjIP20CJKKbYmTntBX/cucGOw2QhCs4Lf9Mkmouh42S9RwlmSVDGQX
+         Px6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
          :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=HGr/+ymyczZCHw1APWris6lQW2YQvCdg22oqh/0jGeA=;
-        b=tEsG/Go7CQuSqPPBUHQN5dU//Cm2B+sLqaRKXBOvyFGIkC/i6hTCoU7YgBinWvqymN
-         CyhJGXRJd5jepWGSmTGFaVeoXWkGdYxN8LniqnK7MbzrgSeNg2ITgVD7uyXm9f/sORfX
-         b2bDHIf6SMOCmz61itmocu+0S1r+UANKWNefQqeJcAyHYnfxtzBFIgJoo+DV5gyjHTIC
-         FG6C+46WXhdDk4Mcpl7JD2b3L2TXcD24tIC80wVHQ7q3blt5km9+66wd+hOzF8MdEi6C
-         5uR/kXXJrN0myNqk7mfUyHZeHdSnUtb1Ay8NSMSWzLZQfwCVqwmrXu3OAPml+B4Vf76Z
-         OR6A==
-X-Gm-Message-State: AOAM531uADMn66PY3N86A/ptchSVxqyxfXLjh0HiTY+7oFlZG8iJKpkK
-        AIplQcP68fj6G1mHSOh4InA=
-X-Google-Smtp-Source: ABdhPJySSK14us5JjYsqa+GuIo/MKS6M/M+wxgYB8/dNy8IQOvxhybAtTW5jPp/i5RnAjtEcw+Sy8w==
-X-Received: by 2002:a05:6830:3107:b0:60b:3c30:865c with SMTP id b7-20020a056830310700b0060b3c30865cmr2827446ots.335.1654203947453;
-        Thu, 02 Jun 2022 14:05:47 -0700 (PDT)
+        bh=X8SOOnM2HiwcDQclkgiwh0GlPivjXgSc5wJTjyo0WJQ=;
+        b=2pHSPp0AwlKAzP5pV7xb+2hVigznYcaOubgsg1/SGzDQmX0aGZBggbceXy85ZsPovA
+         lSlCYJqkD1awFKOfZSM4d1S9Hq5DRKNUqPCK7dqiZYpdZPN6o9KvDkuaESrailOTf3tY
+         Z6tYHhOSEIgu4qI3ECartq8oJeapcVnP09tEaEciOgrPVQlQJJJQi2pTxmHplXHlUuht
+         AfCbwVsB88GCyrahjgu4gs2Eaq0UT8qQ+bfgoRLFPxGuR+glP8FnRPf9q7SkNaZ+xw0A
+         nHtVGoZEr4pITPr3dVbV7rt1LNuMtKHK8dhEffzANoi4/oWsBfBYEQdFaG51L2Zk+S+u
+         COdQ==
+X-Gm-Message-State: AOAM532c25z2hYMd8kX04YXovzxTQq84QelRElEhNsGjVvRxjNmzehrO
+        9PaYm7DOp7TuP2hhQY1lctM=
+X-Google-Smtp-Source: ABdhPJwwitcc/L5IjDguQa+LC4wu4G74GnsESipmtf5QFK4bnNbxlTB3gS2C6A9bHiFgeRKQDScv6Q==
+X-Received: by 2002:a05:6830:124e:b0:60a:fff3:c05b with SMTP id s14-20020a056830124e00b0060afff3c05bmr2887084otp.264.1654203965581;
+        Thu, 02 Jun 2022 14:06:05 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w5-20020a056808140500b00326cb6225f8sm3050312oiv.44.2022.06.02.14.05.45
+        by smtp.gmail.com with ESMTPSA id ej24-20020a056870f71800b000f30837129esm2585189oab.55.2022.06.02.14.06.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 14:05:46 -0700 (PDT)
+        Thu, 02 Jun 2022 14:06:05 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <371592c1-28e6-6c77-f820-9bb6f6236f42@roeck-us.net>
-Date:   Thu, 2 Jun 2022 14:05:44 -0700
+Message-ID: <f59768cf-c512-2eb0-f087-b72e440941ce@roeck-us.net>
+Date:   Thu, 2 Jun 2022 14:06:03 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/6] x86/amd_nb: Add Family 19h model 70h-7Fh IDs
+Subject: Re: [PATCH v2 4/6] hwmon: (k10temp): Add support for family 17h
+ models A0h-AFh
 Content-Language: en-US
 To:     Mario Limonciello <mario.limonciello@amd.com>,
         Clemens Ladisch <clemens@ladisch.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Babu Moger <babu.moger@amd.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
-Cc:     linux-hwmon@vger.kernel.org
+        Jean Delvare <jdelvare@suse.com>,
+        "open list:K10TEMP HARDWARE MONITORING DRIVER" 
+        <linux-hwmon@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     babu.moger@amd.com, yazen.ghannam@amd.com, x86@kernel.org
 References: <20220602201137.1415-1-mario.limonciello@amd.com>
- <20220602201137.1415-3-mario.limonciello@amd.com>
+ <20220602201137.1415-5-mario.limonciello@amd.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220602201137.1415-3-mario.limonciello@amd.com>
+In-Reply-To: <20220602201137.1415-5-mario.limonciello@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,64 +84,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 6/2/22 13:11, Mario Limonciello wrote:
-> Add support for SMN communication on Family 19h Model 70h.
+> Add the support for CCD offsets used on family 17h models A0h-AFh.
 > 
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-I can not apply this series without the context patches (which I wasn't
-copied on), so I assume the idea is to push this through the x86 tree.
-This is ok with me.
-
-I can not apply this patch without the context patch (which I wasn't
-copied on), so I assume the idea is to push this through the x86
-tree. This is ok with me.
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   arch/x86/kernel/amd_nb.c | 4 ++++
->   include/linux/pci_ids.h  | 1 +
->   2 files changed, 5 insertions(+)
+>   drivers/hwmon/k10temp.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-> index 60c7bd525237..15295f5d9aca 100644
-> --- a/arch/x86/kernel/amd_nb.c
-> +++ b/arch/x86/kernel/amd_nb.c
-> @@ -32,6 +32,8 @@
->   #define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
->   #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
->   #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
-> +#define PCI_DEVICE_ID_AMD_19H_M70H_ROOT	0x14e8
-> +#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F4 0x14f4
->   
->   /* Protect the PCI config register pairs used for SMN. */
->   static DEFINE_MUTEX(smn_mutex);
-> @@ -46,6 +48,7 @@ static const struct pci_device_id amd_root_ids[] = {
->   	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_ROOT) },
->   	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_ROOT) },
->   	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_ROOT) },
->   	{}
->   };
->   
-> @@ -71,6 +74,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
->   	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
->   	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
->   	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
->   	{}
->   };
->   
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index ec1c226d13e6..32a1f85ff0de 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -561,6 +561,7 @@
->   #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
->   #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
->   #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
-> +#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F3 0x14f3
->   #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
->   #define PCI_DEVICE_ID_AMD_LANCE		0x2000
->   #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 4e239bd75b1d..5f831e74bc51 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -428,6 +428,10 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>   			data->ccd_offset = 0x154;
+>   			k10temp_get_ccd_support(pdev, data, 8);
+>   			break;
+> +		case 0xa0 ... 0xaf:
+> +			data->ccd_offset = 0x300;
+> +			k10temp_get_ccd_support(pdev, data, 8);
+> +			break;
+>   		}
+>   	} else if (boot_cpu_data.x86 == 0x19) {
+>   		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
+> @@ -489,6 +493,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
 

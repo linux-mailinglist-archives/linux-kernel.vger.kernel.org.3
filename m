@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6FF53B617
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3F253B623
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbiFBJdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S233082AbiFBJfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiFBJdo (ORCPT
+        with ESMTP id S231890AbiFBJff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:33:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93440DEEB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 02:33:38 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id n28so5483238edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 02:33:38 -0700 (PDT)
+        Thu, 2 Jun 2022 05:35:35 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735CF2AA9AA;
+        Thu,  2 Jun 2022 02:35:34 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a2so790190lfg.5;
+        Thu, 02 Jun 2022 02:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jLhgLLgTKtoWPjtFp8qSJCOCQYPPUCR4lznJBFvpJ40=;
-        b=U2/PO1uNjGw4COGMRK/7YnRCnLhzHnfNDU3fAZ5Gx+P/GW9LrdqG3I45ITG643pzdb
-         JG96C8RFIxHaJo6jdq6DH8J0mqrH0Bz1LFAyLJSsLa4UaZpclulO0L4GHi+89g9+1pnR
-         HDM6h3Y5186RpYH4+PvFGvDR2Ik+oyncwi5oGmQCSvo+gPTdzOt12QXk6cniH/TCtech
-         Vq3liKmSG0Xman0T2LN3WT0Wj/eUgaio4p3CEkzLOQrTkoGzCA/fMFr6AeOL1HJpIUZ2
-         C0wbKaR6CbkPBGYPA6Dz6XgoxKgg/nkvNXlWjX0lgXr+zdmUXLKioQVm/Tf/NW942v7j
-         a/3A==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rBGjBOMnZl6to9efJaumbeOWSvKP8/DOct/QBdXnYoE=;
+        b=jvY/M4TcfKUtycVJEjl3vv3zcqK0vVXzP6oHwxbhveiR6Eve6NDt0Von5+VteqUBV0
+         0L333UPalxOSb+vAx5ej9FW4zDL3jiSJBKKI5g/bfbegljG05danKDxYAC1Mawnygsr8
+         NfvqH2NN74NnI5rLy+2zi6GU0sJ4y2QMkIhCQuT0rdAnmGP6i+nYifRZZ1QarEQWaWqU
+         1sFUjgMVvdhRWoctqpRRBSRSxoYCb/XYfFaItHlctIxH4eSOMldKOv1TbUyAo4DKKvuT
+         uI9O7Tb6ZGTcE2JxUT1KvCqoqebUvm2IiT9ek+R0V9Lk4hCNqrOX4e+Amz04wcKyd1yK
+         Jadg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jLhgLLgTKtoWPjtFp8qSJCOCQYPPUCR4lznJBFvpJ40=;
-        b=EixkUcJPFzpMbPe6PclbfMocIbXyrRnCiH+rf5yh2pDvMQKBp5DmqrbP/hyMBDcKj9
-         miqwyrau6Wj/D6vM0GJbHx6XC9FqyZ4BZsIm9v3CnUvB4YLHOFWoTJIWy3GMdqO1UGur
-         xXWYNqqMpXAQaNhf/tKT9fqG2IlblDWu/G08nj34QMDhYAV8io7iY4pkW5/6u+I226x3
-         KKEDo6hIRfryVdFWqA+hSRRuj/AL+U40NLCCncV7p8Lbps3ob57mdakRwoiTegq9A2Sj
-         ddbOjbqzOdIBALEjX+4fdBEJ/+dR8KXV3I3VdqetofWDWhEOGerg7J5o6OGTSOPkyAYf
-         iXXg==
-X-Gm-Message-State: AOAM533aUmoEkWF/r7y5JVzQYJsurMyWrBRZ7zevgTyvcEhWj9GJtPzG
-        8raBdqtSrT22YL7WZOAahIcKyw==
-X-Google-Smtp-Source: ABdhPJywohivzrOJFdGS5Hg985CLuq974adXOQGB2Rff7HbgU7ROkd7WYTRbTxBJZQJ/cUCLzUml2w==
-X-Received: by 2002:aa7:c34d:0:b0:42d:ce57:5df2 with SMTP id j13-20020aa7c34d000000b0042dce575df2mr4213121edr.315.1654162416951;
-        Thu, 02 Jun 2022 02:33:36 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id lk24-20020a170906cb1800b006fa84a0af2asm1596415ejb.16.2022.06.02.02.33.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 02:33:36 -0700 (PDT)
-Message-ID: <d88b6090-2ac8-0664-0e38-bb2860be7f6e@blackwall.org>
-Date:   Thu, 2 Jun 2022 12:33:34 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rBGjBOMnZl6to9efJaumbeOWSvKP8/DOct/QBdXnYoE=;
+        b=7GGdRn5q889TtfbhfSX/2lkVjt+toLLjsBzfXA3SoA7EDJY1295dD/4IQGlyzyT10u
+         ASm5bOoUdzJLO4UbyTpT4GlmvTFJNz6cGqppX9xw1HtNGxQyKgFkgcH7cHWBoiwG6qr4
+         CvNAd4+syu4N3ezpmJtAG6xJNzs98AJfLPNiBPe2FKJCeZVGOIuMR65DkekuAPrJbOXt
+         MLdYCzffOKtxAq5TXYS5yaJexiTOssd4SnWVMvUCwt6ZLQ5OnsP2fORI6vBGQehevDMF
+         EoBnYyu/cFxXWEbb1H83Wxh47i4j4YK/9sIw/DEfSXFEywuef75EIwpMsg2Ao3luMagR
+         Kulg==
+X-Gm-Message-State: AOAM530Yy8JAUoW7NBXInmtDnlEZwxcGtiBEIfWN5+4/RfWX2tYfKczl
+        pueBwvIiHZapcBmyi1Jjzg3gByEqrQYYr/lWohM=
+X-Google-Smtp-Source: ABdhPJwGnEM9jHCmHkWGx92/jl3eJw4zP0SFatjlcRCflAAlB9cVfAhhX5EONP3FSiW4lO0wQLnMioV43pqGQELiTHo=
+X-Received: by 2002:a05:6512:2251:b0:478:fc67:b09f with SMTP id
+ i17-20020a056512225100b00478fc67b09fmr2833144lfu.196.1654162532575; Thu, 02
+ Jun 2022 02:35:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <Yo+LAj1vnjq0p36q@shredder> <86sfov2w8k.fsf@gmail.com>
- <YpCgxtJf9Qe7fTFd@shredder> <86sfoqgi5e.fsf@gmail.com>
- <YpYk4EIeH6sdRl+1@shredder> <86y1yfzap3.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <86y1yfzap3.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-7-peterwu.pub@gmail.com>
+ <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com>
+ <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt> <CAHp75Vd-n=oLnhRCK=pR5ybOZbC6BKXrE2jRdwDbH90E4KYFGA@mail.gmail.com>
+In-Reply-To: <CAHp75Vd-n=oLnhRCK=pR5ybOZbC6BKXrE2jRdwDbH90E4KYFGA@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Thu, 2 Jun 2022 17:35:15 +0800
+Message-ID: <CADiBU3-73ktYfwZD=Dgd+5kWHraOuBkz1=bU_-+NNcxP12gcrQ@mail.gmail.com>
+Subject: Re: [PATCH 06/14] leds: mt6370: Add Mediatek MT6370 Indicator support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, cy_huang <cy_huang@richtek.com>,
+        alice_chen@richtek.com, chiaen_wu@richtek.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,66 +96,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2022 12:17, Hans Schultz wrote:
-> On tis, maj 31, 2022 at 17:23, Ido Schimmel <idosch@nvidia.com> wrote:
->> On Tue, May 31, 2022 at 11:34:21AM +0200, Hans Schultz wrote:
->>>> Just to give you another data point about how this works in other
->>>> devices, I can say that at least in Spectrum this works a bit
->>>> differently. Packets that ingress via a locked port and incur an FDB
->>>> miss are trapped to the CPU where they should be injected into the Rx
->>>> path so that the bridge will create the 'locked' FDB entry and notify it
->>>> to user space. The packets are obviously rated limited as the CPU cannot
->>>> handle billions of packets per second, unlike the ASIC. The limit is not
->>>> per bridge port (or even per bridge), but instead global to the entire
->>>> device.
->>>
->>> Btw, will the bridge not create a SWITCHDEV_FDB_ADD_TO_DEVICE event
->>> towards the switchcore in the scheme you mention and thus add an entry
->>> that opens up for the specified mac address?
->>
->> It will, but the driver needs to ignore FDB entries that are notified
->> with locked flag. I see that you extended 'struct
->> switchdev_notifier_fdb_info' with the locked flag, but it's not
->> initialized in br_switchdev_fdb_populate(). Can you add it in the next
->> version?
-> 
-> An issue with sending the flag to the driver is that port_fdb_add() is
-> suddenly getting more and more arguments and getting messy in my
-> opinion, but maybe that's just how it is...
-> 
-> Another issue is that
-> bridge fdb add MAC dev DEV master static
-> seems to add the entry with the SELF flag set, which I don't think is
-> what we would want it to do or?
-
-I don't see such thing (hacked iproute2 to print the flags before cmd):
-$ bridge fdb add 00:11:22:33:44:55 dev vnet110 master static
-flags 0x4
-
-0x4 = NTF_MASTER only
-
-> Also the replace command is not really supported properly as it is. I
-> have made a fix for that which looks something like this:
-> 
-> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-> index 6cbb27e3b976..f43aa204f375 100644
-> --- a/net/bridge/br_fdb.c
-> +++ b/net/bridge/br_fdb.c
-> @@ -917,6 +917,9 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
->                 if (flags & NLM_F_EXCL)
->                         return -EEXIST;
->  
-> +               if (flags & NLM_F_REPLACE)
-> +                       modified = true;
-> +
->                 if (READ_ONCE(fdb->dst) != source) {
->                         WRITE_ONCE(fdb->dst, source);
->                         modified = true;
-> 
-> The argument for always sending notifications to the driver in the case
-> of replace is that a replace command will refresh the entries timeout if
-> the entry is the same. Any thoughts on this?
-
-I don't think so. It always updates its "used" timer, not its "updated" timer which is the one
-for expire. A replace that doesn't actually change anything on the entry shouldn't generate
-a notification.
+Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=9C=
+=882=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=885:18=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Thu, Jun 2, 2022 at 8:27 AM ChiYuan Huang <u0084500@gmail.com> wrote:
+> > On Wed, Jun 01, 2022 at 11:48:58AM +0200, Andy Shevchenko wrote:
+> > > On Tue, May 31, 2022 at 1:16 PM ChiaEn Wu <peterwu.pub@gmail.com> wro=
+te:
+>
+> ...
+>
+> > > What indicator?
+> > It's RGB curent sink type LED driver (maximum supported current is only=
+ 24mA).
+>
+> Make your commit messages a slightly more verbose.
+>
+OK, will refine the commit message in next.
+> ...
+>
+> > > > +#include <linux/of.h>
+> > >
+> > > Are you sure this is the correct header? Seems you need
+> > > mod_devicetable.h instead.
+> > >
+> > It's the correct header and be used for the struct 'of_device_id'.
+>
+> Nope. Run the following command
+> $ git grep -n 'struct of_device_id {' -- include/linux/
+>
+Got it, thanks.
+> ...
+>
+> > > > +struct mt6370_priv {
+> > > > +       struct mutex lock;
+> > >
+> > > Do you use regmap locking?
+> > >
+> > MFD regmap register already the access lock.
+> >
+> > This lock is just to guarantee only one user can access the RGB registe=
+r
+> > part.
+> >
+> > Sorry, from the comment, do you want us to rename or remove this lock?
+>
+> My point is, since you have two locks, explain why you need each of them.
+>
+OK, will leave a comment line to explain the usage of this lock.
+> > > > +       struct device *dev;
+> > >
+> > > > +       struct regmap *regmap;
+> > >
+> > > > +       struct regmap_field *fields[F_MAX_FIELDS];
+> > > > +       const struct reg_field *reg_fields;
+> > > > +       const struct linear_range *ranges;
+> > > > +       struct reg_cfg *reg_cfgs;
+> > > > +       unsigned int leds_count;
+> > > > +       unsigned int leds_active;
+> > > > +       bool is_mt6372;
+> > > > +       struct mt6370_led leds[];
+> > > > +};
+>
+>
+> --
+> With Best Regards,
+> Andy Shevchenko

@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D2D53B099
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA71353B0A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 02:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbiFBAAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 20:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S232670AbiFBAAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 20:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbiFBAAm (ORCPT
+        with ESMTP id S232619AbiFBAAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 20:00:42 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C6E2941D7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:00:41 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id k6so2386334qtq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:00:41 -0700 (PDT)
+        Wed, 1 Jun 2022 20:00:47 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C2329A637
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:00:45 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id b135so3300234pfb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:00:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XHclFl6TiOnpsdbRTbpf8I5ef93NwLHxOT7ZftAP5OQ=;
-        b=PNI9gR5OxCMLK2wesmPP7beTza1LVUIA9KonYJGbDAFowaWR1+gOMSPFQyILlCbdK9
-         gUfn5ltQQND4Igpr1PcoJgKaxcD5dBAwzrvhneuGmR5cB6Xf3NpyEwE9pIIgcm5WsDfj
-         OMBTPHZn69Csi4sdfYc+o9dQdNtlWVyz5OxRR+X8nyDPYF6K2ahO4BRlxiavJkdgkk5b
-         vBCAgX831wn8MMIkjC+ZBM62WCGcevuCk6vOX7Pr2o1vHeySgvRlg6SFXHlD9BjBBgRR
-         tgzeldcoyTnuS2Xyrkl/LEo9UbgD40oyCdtA/wA5nQPC/hTnaLXrjoV5QjIEjd2lSEr7
-         qhiw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=dj5xSI3x7kYGymfT74GT+D5EgC5KBBiRdOQyucXrgA8=;
+        b=BDEQtl4wDYFppmJ0FteRHhjnSzu730tXU7L8PyUwqpE8VTcccoPSo/aCpk1hfIEZ6M
+         smyPyAncY17SE6CmMtsnP35N6zQBT+MjXGVM/2Y76G4slCjBMeToEr4Y0k3c7p7x/8j2
+         xYziG5CerMPjkj2iVbzsBH183fRWTO1xpz9IrZkE5Rs3BHbxF0Eqe0lPQOo8oV0ondFE
+         NDzi96z7nhvvWfDcr5SW4sBlG5MW8AECa7HoXhQyIkFGtRmE5pp/VnhFOhY6BbE+IB3B
+         oCQI+aMwq4pMGlHxM+ll+YBzQkYStotkwhUhCz4jXo9cowL5ImVsu3FQcixpkAAxkWjL
+         odEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XHclFl6TiOnpsdbRTbpf8I5ef93NwLHxOT7ZftAP5OQ=;
-        b=aov+lckOAeXwUWBad85nMd/33VqHHC9mUccZRmzI5qWEGkSxAPD2wnbyiijUiRylie
-         kDbQC0STF4gYsO5jagLSem2moDWG4abjlrIbI3QqOdBU9Y7pj2awfO5tFlXcnGy+gYTl
-         N0WrTsVsn2qiAEzbMgEV6YWAp8qoLlQTKfpo0iQVcv+RCrJeSD2z2NNVsZsn87+YtOo0
-         LDKJD86jA4wjz2fln/W3g5Fag1pmObrzsjSv+6zMmMpBhK5P/dl5TMXlJuaUXXf2+A93
-         VjaNc/ACy52OYVtw8o+e0CdBHO1LctyLiGYOm1EPJmGZ7+xtqSAAad5CKBos0R4TyXIA
-         KRew==
-X-Gm-Message-State: AOAM5332/e38c/b4bVtESzEKVtqclsyQrSdcLy/ahIAXXDWo5IMEnrZn
-        eTsewgrN+vCWsfke3WzYTdbiuA==
-X-Google-Smtp-Source: ABdhPJyvPa7jsnbpw9EbFCPQVbuxZnWhMX7Sx5D9T0fweaGvqMgcaf7CabbpUfVwopaFMLH+hIknjw==
-X-Received: by 2002:a05:622a:313:b0:2f3:b9a1:dd4a with SMTP id q19-20020a05622a031300b002f3b9a1dd4amr1870963qtw.536.1654128040009;
-        Wed, 01 Jun 2022 17:00:40 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id b16-20020a05620a04f000b006a38debe62csm1867208qkh.89.2022.06.01.17.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 17:00:39 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nwYGU-00GCY4-Af; Wed, 01 Jun 2022 21:00:38 -0300
-Date:   Wed, 1 Jun 2022 21:00:38 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <20220602000038.GK2960187@ziepe.ca>
-References: <20220407154717.7695-1-logang@deltatee.com>
- <20220407154717.7695-21-logang@deltatee.com>
- <20220527125501.GD2960187@ziepe.ca>
- <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
- <20220527190307.GG2960187@ziepe.ca>
- <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=dj5xSI3x7kYGymfT74GT+D5EgC5KBBiRdOQyucXrgA8=;
+        b=ICOvwrq9yZowOoaVKzw3eNC+x2TfrNRMAzB9YWIad8KMoV12Hzt/N0uaLUKVFxWsdM
+         YOrz2a6UeGP0B55K1y601oz2jBhgFdt3YJ2gt+zOEFLO+bQrNdPebuDRkhvmgLJt6ksL
+         PBYXg2rZerJftlv4trZl6dilTx+Z/ymrIAZDXnhZsmCc+UiIssS3p/LUCqwXBTzReh+p
+         9zY5QZ0RgY/Gzr4pSwwMl/DhNFlYuQ04840tbAFWH6ERnrVD9p2B3vBp5JuS9bQm5okF
+         BcB4yUq9FhhGMBlUlVWZ4dBY4re/yPLr/AaaRfCFfuCUCllTCyKUsA19717skl9ZMlyS
+         C+9w==
+X-Gm-Message-State: AOAM533WWYGNyb0p6yYGzxrH6aZ/+20Zyf32AhW6Zypjlv36hQtMXddH
+        n6LN9iaR2t38HVuJHWi3Wg3CgA==
+X-Google-Smtp-Source: ABdhPJyHR3+y0zXa9ywWcpnvwWALrHAEJQ8sj0rBRN8trB0V2gxf/dUBe0Vg8Z/OHWC5FuZ05iQVDA==
+X-Received: by 2002:a63:6b4a:0:b0:3fb:b03e:d10 with SMTP id g71-20020a636b4a000000b003fbb03e0d10mr1635518pgc.310.1654128045457;
+        Wed, 01 Jun 2022 17:00:45 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id b2-20020a17090aa58200b001e0a07497c1sm1882194pjq.53.2022.06.01.17.00.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 17:00:45 -0700 (PDT)
+Message-ID: <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
+Date:   Wed, 1 Jun 2022 17:00:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d336cfe8-2451-04c3-a2ce-0e8e47afd1e3@deltatee.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
+ <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+ <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
+ <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
+ <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+In-Reply-To: <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,45 +84,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 04:41:08PM -0600, Logan Gunthorpe wrote:
-> > 
-> > IIRC this is the last part:
-> > 
-> > https://lore.kernel.org/linux-mm/20220524190632.3304-1-alex.sierra@amd.com/
-> > 
-> > And the earlier bit with Christoph's pieces looks like it might get
-> > merged to v5.19..
-> > 
-> > The general idea is once pte_devmap is not set then all the
-> > refcounting works the way it should. This is what all new ZONE_DEVICE
-> > users should do..
+On 6/1/22 16:43, Tejun Heo wrote:
+> On Wed, Jun 01, 2022 at 04:37:17PM -0700, Tadeusz Struk wrote:
+>> Yes, but as far as I can see the percpu_ref_kill_and_confirm(&css->refcnt, css_killed_ref_fn)
+>> doesn't change the value of the refcnt, it just causes the css_killed_ref_fn() to be called
 > 
-> Ok, I don't actually follow how those patches relate to this.
+> Yeah, the base ref is special for percpu_ref.
 > 
-> Based on your description I guess I don't need to set PFN_DEV and
+>> on it. Only css_get() & css_put() modify the refcnt value.
+>> And for the "free the thing" the css_killed_work_fn() does that.
+>> It calls offline_css(css) and css_put(css) for the whole css hierarchy.
+> 
+> Yeah, the freeing path depends on the css_put(css) invoking css_release()
+> which schedules the work item which actually frees. Am I misunderstanding
+> something here?
 
-Yes
+What I'm trying to say is that it's not really a ref imbalance problem.
+I think once the kill_css() has been called on a css, and it is enqueued to be
+killed, we shouldn't call css_put(css) on it anymore outside of the "killed call
+flow path". It will all be handled by the css_killed_ref_fn() function.
 
-> perhaps not use vmf_insert_mixed()? And then just use vm_normal_page()?
+The fact the css_release() is called (via cgroup_kn_unlock()) just after
+kill_css() causes the css->destroy_work to be enqueued twice on the same WQ
+(cgroup_destroy_wq), just with different function. This results in the
+BUG: corrupted list in insert_work issue.
 
-I'm not sure ATM the best function to use, but yes, a function that
-doesn't set PFN_DEV is needed here.
- 
-> But the refcounting of the pages seemed like it was already sane to me,
-> unless you mean that the code no longer has to synchronize_rcu() before
-> returning the pages... 
-
-Right. It also doesn't need to call unmap range or keep track of the
-inode, or do any of that stuff unless it really needs mmap revokation
-semantics (which I doubt this use case does)
-
-unmap range was only necessary because the refcounting is wrong -
-since the pte's don't hold a ref on the page in PFN_DEV mode it is
-necessary to wipe all the PTE explicitly before going ahead to
-decrement the refcount on this path.
-
-Just stuff the pages into the mmap, and your driver unprobe will
-automatically block until all the mmaps are closed - no different than
-having an open file descriptor or something.
-
-Jason
+-- 
+Thanks,
+Tadeusz

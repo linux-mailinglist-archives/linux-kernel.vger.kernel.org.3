@@ -2,142 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867AD53B97D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA98853B981
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbiFBNLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S235273AbiFBNOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235253AbiFBNLr (ORCPT
+        with ESMTP id S235269AbiFBNOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:11:47 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2491261B;
-        Thu,  2 Jun 2022 06:11:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id q1so9876217ejz.9;
-        Thu, 02 Jun 2022 06:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=brdaE36/5F/x/iFbu9swQ3VSiPLNbwgh4yvLlRE8Z1E=;
-        b=eOCRyscO4MNtj6wvnml7Zc1hrYWUsNZ/DuBeA/QEPeuekHpa/ErxgiRIQ4TmD4aQPE
-         tXVIvAu4Tx8dHZJ8XH24aSNlZAlXTea3aqXDHax+X0XY1f2dgzWUm/J+vkCPHj2YWTZT
-         7pMHJqOE+aPX4T1C1r7JNGdZM86eysEjqv+JfQRRrEY+FWKaSc6csyo66mTVbI6GJ7a4
-         i56hj+8qR0orJAx7Gk/9Bkk4M4+7YnDEcWYclUjVPPMHmwHQdWIZOtrkOep5Dt/cWCcY
-         vnjM8t7Qay5p5CFY3hXvi2cG+upSFedlC8fzAU3NG1xpvrYJgkfzWffbKbIm28cJwNcI
-         xW9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=brdaE36/5F/x/iFbu9swQ3VSiPLNbwgh4yvLlRE8Z1E=;
-        b=5OrXuJrmnX9fO/wpp36ogl6EzB7Xw3n+jSvTXaY6V5jOXyA8Nwr4TAKTwf32cl7Liv
-         lPaOaPZEuVPhJNyM4aMef51chogC9kFZU/Xk5F9hjTvqddYGlsIVgIv4bLRgV3Yt+MVM
-         4sB+wo1MJhCjN2bcGni1Qt97lJEYF4E/gzDoKsUUbc4mtpEW3T44tu7bAUSns18rQI8v
-         fKh/uozoGJyIAZxbMnf19bdadAWw4TkmN3+y9woVJ97JZ/JDDn7rPALttn09eAILq+lo
-         k2rFE3TapTrBrp4csx1OzdG7LAgYFUDz1GoAALhwwVRMOK0UtyGTfkxXowhUs69Wr9QS
-         yHOQ==
-X-Gm-Message-State: AOAM530j59O6b5xfZ9jnTYBG1JN4u9ZbXEXtQT/9ii652wADSdaFepad
-        Yi5tqXzuov9vtvPh3ETFG7DFV+1exq6VpQ==
-X-Google-Smtp-Source: ABdhPJwb1PXK3C05Q+IbSCjlHCNOYKk5ouCm0zAf96gJWoSbkQkjb+jDbt+9XqiaURRGi8j7OouuHw==
-X-Received: by 2002:a17:907:3f91:b0:6fe:8af0:4b2c with SMTP id hr17-20020a1709073f9100b006fe8af04b2cmr4390682ejc.220.1654175502888;
-        Thu, 02 Jun 2022 06:11:42 -0700 (PDT)
-Received: from kwango.redhat.com (ip-89-102-68-162.net.upcbroadband.cz. [89.102.68.162])
-        by smtp.gmail.com with ESMTPSA id j17-20020aa7ca51000000b0042a9fcd7c73sm2390181edt.46.2022.06.02.06.11.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 06:11:42 -0700 (PDT)
-From:   Ilya Dryomov <idryomov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Ceph updates for 5.19-rc1
-Date:   Thu,  2 Jun 2022 15:11:31 +0200
-Message-Id: <20220602131131.22117-1-idryomov@gmail.com>
-X-Mailer: git-send-email 2.19.2
+        Thu, 2 Jun 2022 09:14:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F09FCE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654175674; x=1685711674;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rVJywBaPpNw+rAw7ZxAFgh1cOROwJvdlz4npHNBxst8=;
+  b=FhCtCa6NBZ4tzgWmSqqE30f/51gQcZB0WZ4JSgwHtwEJmcz4gUKvlQaQ
+   7iFpMQRjNbwoQhCrVbjemdfGkUOxgeduF5OeqoF8wDVJ1rw5U0z5rXDp2
+   QnqYHRvYJ9j9+j7spChRG1X5Xbm6/uaN9xLeQuaOkI6dC8WGXE5bvEh5D
+   N3er1J2oR7AB6MLzrlKa2OjR/R4aLJxvtXKGcY4uweo7ZDKaPr1D5gkfV
+   7mhmfSO1AFkg1XD8N7VuwiTi/oeXsHVDqzwhXhMcDG4luL/S0yNfg4tU4
+   xCDROR1GYLwtXJhYveX1rfGPddJApiHT5OfTU8c/FY67/hpKdaw6aEjNf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="301308572"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="301308572"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 06:14:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="563303147"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 Jun 2022 06:14:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwkeh-00056g-EO;
+        Thu, 02 Jun 2022 13:14:27 +0000
+Date:   Thu, 2 Jun 2022 21:13:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     kbuild-all@lists.01.org, Tzung-Bi Shih <tzungbi@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [tzungbi-chrome-platform:dev 35/40] ERROR: modpost:
+ "cros_kunit_ec_cmd_xfer_mock_called"
+ [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+Message-ID: <202206022104.J6wQ08Jb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
+head:   09a34602eeb230a0bbf339457c1b339220f817d3
+commit: 9a1aa601ff843e92990a29ffd8510aa12ccf7cf4 [35/40] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_cmd_xfer()
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220602/202206022104.J6wQ08Jb-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=9a1aa601ff843e92990a29ffd8510aa12ccf7cf4
+        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
+        git fetch --no-tags tzungbi-chrome-platform dev
+        git checkout 9a1aa601ff843e92990a29ffd8510aa12ccf7cf4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-  Linux 5.18 (2022-05-22 09:52:31 -1000)
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-are available in the Git repository at:
+>> ERROR: modpost: "cros_kunit_ec_cmd_xfer_mock_called" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_pkt_xfer_mock_called" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_default_ret" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
 
-  https://github.com/ceph/ceph-client.git tags/ceph-for-5.19-rc1
-
-for you to fetch changes up to af7dc8e5124daf017ebc85c8ea97212e1e2e62fe:
-
-  MAINTAINERS: move myself from ceph "Maintainer" to "Reviewer" (2022-05-25 20:45:14 +0200)
-
-----------------------------------------------------------------
-A big pile of assorted fixes and improvements for the filesystem with
-nothing in particular standing out, except perhaps that the fact that
-the MDS never really maintained atime was made official and thus it's
-no longer updated on the client either.
-
-We also have a MAINTAINERS update: Jeff is transitioning his filesystem
-maintainership duties to Xiubo.
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      ceph: remove redundant variable ino
-
-Guo Zhengkui (1):
-      libceph: use swap() macro instead of taking tmp variable
-
-Jakob Koschel (3):
-      rbd: replace usage of found with dedicated list iterator variable
-      ceph: use dedicated list iterator variable
-      ceph: replace usage of found with dedicated list iterator variable
-
-Jeff Layton (1):
-      MAINTAINERS: move myself from ceph "Maintainer" to "Reviewer"
-
-Luis Henriques (2):
-      ceph: fix statfs for subdir mounts
-      ceph: fix decoding of client session messages flags
-
-Venky Shankar (1):
-      ceph: allow ceph.dir.rctime xattr to be updatable
-
-Xiubo Li (14):
-      ceph: remove unused CEPH_MDS_LEASE_RELEASE related code
-      ceph: stop forwarding the request when exceeding 256 times
-      ceph: stop retrying the request when exceeding 256 times
-      ceph: update the dlease for the hashed dentry when removing
-      ceph: no need to invalidate the fscache twice
-      ceph: fix statx AT_STATX_DONT_SYNC vs AT_STATX_FORCE_SYNC check
-      ceph: rename unsafe_request_wait()
-      ceph: flush the mdlog for filesystem sync
-      ceph: disable updating the atime since cephfs won't maintain it
-      ceph: try to choose the auth MDS if possible for getattr
-      ceph: redirty the page for writepage on failure
-      ceph: fix possible deadlock when holding Fwb to get inline_data
-      ceph: try to queue a writeback if revoking fails
-      ceph: switch TASK_INTERRUPTIBLE to TASK_KILLABLE
-
- MAINTAINERS             |   4 +-
- drivers/block/rbd.c     |  13 +++---
- fs/ceph/addr.c          |  42 ++++++++++-------
- fs/ceph/caps.c          |  75 +++++++++++++++++++-----------
- fs/ceph/inode.c         |  35 ++++++++++++--
- fs/ceph/mds_client.c    | 121 +++++++++++++++++++++++++++++++++++++-----------
- fs/ceph/mds_client.h    |   2 +-
- fs/ceph/quota.c         |  19 ++++----
- fs/ceph/super.c         |   1 +
- fs/ceph/super.h         |  29 ++++++++++--
- fs/ceph/xattr.c         |  10 +++-
- net/ceph/crush/mapper.c |   5 +-
- 12 files changed, 253 insertions(+), 103 deletions(-)
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

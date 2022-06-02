@@ -2,204 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F49B53B972
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867AD53B97D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiFBNJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
+        id S235262AbiFBNLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiFBNJR (ORCPT
+        with ESMTP id S235253AbiFBNLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:09:17 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706D13C4DA;
-        Thu,  2 Jun 2022 06:09:16 -0700 (PDT)
+        Thu, 2 Jun 2022 09:11:47 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2491261B;
+        Thu,  2 Jun 2022 06:11:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id q1so9876217ejz.9;
+        Thu, 02 Jun 2022 06:11:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654175356; x=1685711356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5USZXaGXafMmZRCNGTL/y9r+1CJyT2qx7/K0xHXdLyA=;
-  b=sH3M7xElzEvdFx6VIMC4SIDjdXACVcz0j9VNOu0WAP+QaGpOIhWecA+U
-   c0g/y8XTBq7OlgZijSEbRv4CFd6xnrPTz1vQInQsXnPmBBNY8NG+S4GBO
-   MYFicK2eG0jTkU/Cip+eLKSi6OS2nYPRC4wdzfKFKrWEQ+44/r6OM9IyN
-   0=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Jun 2022 06:09:16 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 06:09:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 06:09:15 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 06:09:09 -0700
-Date:   Thu, 2 Jun 2022 18:39:05 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v20 0/5] USB DWC3 host wake up support from system suspend
-Message-ID: <20220602130905.GC2521@hu-pkondeti-hyd.qualcomm.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=brdaE36/5F/x/iFbu9swQ3VSiPLNbwgh4yvLlRE8Z1E=;
+        b=eOCRyscO4MNtj6wvnml7Zc1hrYWUsNZ/DuBeA/QEPeuekHpa/ErxgiRIQ4TmD4aQPE
+         tXVIvAu4Tx8dHZJ8XH24aSNlZAlXTea3aqXDHax+X0XY1f2dgzWUm/J+vkCPHj2YWTZT
+         7pMHJqOE+aPX4T1C1r7JNGdZM86eysEjqv+JfQRRrEY+FWKaSc6csyo66mTVbI6GJ7a4
+         i56hj+8qR0orJAx7Gk/9Bkk4M4+7YnDEcWYclUjVPPMHmwHQdWIZOtrkOep5Dt/cWCcY
+         vnjM8t7Qay5p5CFY3hXvi2cG+upSFedlC8fzAU3NG1xpvrYJgkfzWffbKbIm28cJwNcI
+         xW9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=brdaE36/5F/x/iFbu9swQ3VSiPLNbwgh4yvLlRE8Z1E=;
+        b=5OrXuJrmnX9fO/wpp36ogl6EzB7Xw3n+jSvTXaY6V5jOXyA8Nwr4TAKTwf32cl7Liv
+         lPaOaPZEuVPhJNyM4aMef51chogC9kFZU/Xk5F9hjTvqddYGlsIVgIv4bLRgV3Yt+MVM
+         4sB+wo1MJhCjN2bcGni1Qt97lJEYF4E/gzDoKsUUbc4mtpEW3T44tu7bAUSns18rQI8v
+         fKh/uozoGJyIAZxbMnf19bdadAWw4TkmN3+y9woVJ97JZ/JDDn7rPALttn09eAILq+lo
+         k2rFE3TapTrBrp4csx1OzdG7LAgYFUDz1GoAALhwwVRMOK0UtyGTfkxXowhUs69Wr9QS
+         yHOQ==
+X-Gm-Message-State: AOAM530j59O6b5xfZ9jnTYBG1JN4u9ZbXEXtQT/9ii652wADSdaFepad
+        Yi5tqXzuov9vtvPh3ETFG7DFV+1exq6VpQ==
+X-Google-Smtp-Source: ABdhPJwb1PXK3C05Q+IbSCjlHCNOYKk5ouCm0zAf96gJWoSbkQkjb+jDbt+9XqiaURRGi8j7OouuHw==
+X-Received: by 2002:a17:907:3f91:b0:6fe:8af0:4b2c with SMTP id hr17-20020a1709073f9100b006fe8af04b2cmr4390682ejc.220.1654175502888;
+        Thu, 02 Jun 2022 06:11:42 -0700 (PDT)
+Received: from kwango.redhat.com (ip-89-102-68-162.net.upcbroadband.cz. [89.102.68.162])
+        by smtp.gmail.com with ESMTPSA id j17-20020aa7ca51000000b0042a9fcd7c73sm2390181edt.46.2022.06.02.06.11.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 06:11:42 -0700 (PDT)
+From:   Ilya Dryomov <idryomov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Ceph updates for 5.19-rc1
+Date:   Thu,  2 Jun 2022 15:11:31 +0200
+Message-Id: <20220602131131.22117-1-idryomov@gmail.com>
+X-Mailer: git-send-email 2.19.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 01:54:32PM +0530, Krishna Kurapati wrote:
-> Avoiding phy powerdown in host mode when dwc3 is wakeup capable, so that
-> it can be wake up by devices. Keep usb30_prim gdsc active to retain
-> controller status during suspend/resume.
-> 
-> Changes in v20:
-> Fixed nitpicks in dwc3 qcom driver.
-> Fixed code changes in dwc3 core driver.
-> 
-> Changes in v19:
-> Fixed dwc3 driver code changes.
-> 
-> Changes in v18:
-> Fixed minor nit picks in v17 reported by Matthias.
-> 
-> Changes in v17:
-> Moved the speed check to glue driver.
-> Powering down phy's solely based on dwc3 wakeup capability.
-> Configuring the interrupt functions appropriately.
-> 
-> Changes in v16:
-> Added changes to power down the phy's during suspend only if dwc3
-> is not wakeup capable.
-> 
-> Changes in v15:
-> Added patch to enable wakeup for xhci-plat based on children wakeup status.
-> Used device_wakeup_path instead of device_children_wakeup_capable
-> 
-> Changes in v14:
-> Added patch for device_children_wakeup_capable.
-> Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
-> Fixed minor nit picks in v13 reported by Matthias.
-> 
-> Changes in v13:
-> Moved the dt bindings patch to start.
-> Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
-> Check wakep-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> Added GENPD_FLAG_RPM_ALWAYS_ON and set GENPD_FLAG_ALWAYS_ON if
-> wakeup is supported.
-> 
-> Changes in v12:
-> Squashed PATCH 1/5 and 2/5 of v11.
-> Added dt bindings and device tree entry for wakeup-source property
-> for dwc3 core node.
-> Dropped redundant phy_set_mode call.
-> 
-> 
-> Changes in v11:
-> Moving back to v8 version
-> https://patchwork.kernel.org/project/linux-arm-msm/cover/1624882097-23265-1-git-send-email-sanm@codeaurora.org
-> as we are getting interrupts during suspend
-> when enabling both DP hs phy irq and DM hs phy irq.
-> Moved the set phy mode function to dwc3/core.c from xhci-plat.c
-> We didn't find any other option other than accessing xhci from dwc.
-> 
-> Changes in v10:
-> PATCH 1/6: Change device_set_wakeup_capable to device_set_wakeup_enable
-> PATCH 2/6: Remove redundant else part in dwc3_resume_common
-> PATCH 4/6: Change the irg flags
-> PATCH 5/6: Set flag GENPD_FLAG_ALWAYS_ON
-> PATCH 6/6: Remove disable interrupts function and enable
-> interrupts in probe.
-> 
-> 
-> Changes in v9:
-> Checking with device_may_makeup property instead of phy_power_off flag.
-> Changed the IRQ flags and removed hs_phy_mode variable.
-> 
-> Changes in v8:
-> Moved the dwc3 suspend quirk code in dwc3/host.c to xhci-plat.c
-> Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
-> to keep gdsc active.
-> 
-> Changes in v7:
-> Change in commit text and message in PATCH 1/5 and PATCH 5/5
-> as per Matthias suggestion.
-> Added curly braces for if and else if sections in PATCH 4/5.
-> 
-> Changes in v6:
-> Addressed comments in host.c and core.c
-> Separated the patches in dwc3-qcom.c to make it simple.
-> Dropped wakeup-source change as it is not related to this series.
-> 
-> Changes in v5:
-> Added phy_power_off flag to check presence of wakeup capable devices.
-> Dropped patch[v4,4/5] as it is present linux-next.
-> Addressed comments in host.c and dwc3-qcom.c.
-> 
-> Changes in v4:
-> Addressed Matthias comments raised in v3.
-> 
-> Changes in v3:
-> Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
-> Addressed Matthias comments and added entry for DEV_SUPERSPEED.
-> Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
-> Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
-> 
-> Changes in v2:
-> Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
-> setting in usb dwc3 driver.
-> Separated the core patch and glue driver patch.
-> Made need_phy_for_wakeup flag part of dwc structure and 
-> hs_phy_flags as unsgined int.
-> Adrressed the comment on device_init_wakeup call.
-> Corrected offset for reading portsc register.
-> Added pacth to support wakeup in xo shutdown case.
-> 
-> Sandeep Maheswaram (5):
->   dt-bindings: usb: dwc3: Add wakeup-source property support
->   usb: dwc3: core: Host wake up support from system suspend
->   usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
->   usb: dwc3: qcom: Configure wakeup interrupts during suspend
->   usb: dwc3: qcom: Keep power domain on to retain controller status
-> 
->  .../devicetree/bindings/usb/snps,dwc3.yaml         |   5 +
->  drivers/usb/dwc3/core.c                            |   9 +-
->  drivers/usb/dwc3/dwc3-qcom.c                       | 140 +++++++++++++++------
->  3 files changed, 108 insertions(+), 46 deletions(-)
-> 
+Hi Linus,
 
-This series looks good to me. I think it is ready for merge unless Felipe has
-any concerns.
+The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
 
-Thanks,
-Pavan
+  Linux 5.18 (2022-05-22 09:52:31 -1000)
+
+are available in the Git repository at:
+
+  https://github.com/ceph/ceph-client.git tags/ceph-for-5.19-rc1
+
+for you to fetch changes up to af7dc8e5124daf017ebc85c8ea97212e1e2e62fe:
+
+  MAINTAINERS: move myself from ceph "Maintainer" to "Reviewer" (2022-05-25 20:45:14 +0200)
+
+----------------------------------------------------------------
+A big pile of assorted fixes and improvements for the filesystem with
+nothing in particular standing out, except perhaps that the fact that
+the MDS never really maintained atime was made official and thus it's
+no longer updated on the client either.
+
+We also have a MAINTAINERS update: Jeff is transitioning his filesystem
+maintainership duties to Xiubo.
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      ceph: remove redundant variable ino
+
+Guo Zhengkui (1):
+      libceph: use swap() macro instead of taking tmp variable
+
+Jakob Koschel (3):
+      rbd: replace usage of found with dedicated list iterator variable
+      ceph: use dedicated list iterator variable
+      ceph: replace usage of found with dedicated list iterator variable
+
+Jeff Layton (1):
+      MAINTAINERS: move myself from ceph "Maintainer" to "Reviewer"
+
+Luis Henriques (2):
+      ceph: fix statfs for subdir mounts
+      ceph: fix decoding of client session messages flags
+
+Venky Shankar (1):
+      ceph: allow ceph.dir.rctime xattr to be updatable
+
+Xiubo Li (14):
+      ceph: remove unused CEPH_MDS_LEASE_RELEASE related code
+      ceph: stop forwarding the request when exceeding 256 times
+      ceph: stop retrying the request when exceeding 256 times
+      ceph: update the dlease for the hashed dentry when removing
+      ceph: no need to invalidate the fscache twice
+      ceph: fix statx AT_STATX_DONT_SYNC vs AT_STATX_FORCE_SYNC check
+      ceph: rename unsafe_request_wait()
+      ceph: flush the mdlog for filesystem sync
+      ceph: disable updating the atime since cephfs won't maintain it
+      ceph: try to choose the auth MDS if possible for getattr
+      ceph: redirty the page for writepage on failure
+      ceph: fix possible deadlock when holding Fwb to get inline_data
+      ceph: try to queue a writeback if revoking fails
+      ceph: switch TASK_INTERRUPTIBLE to TASK_KILLABLE
+
+ MAINTAINERS             |   4 +-
+ drivers/block/rbd.c     |  13 +++---
+ fs/ceph/addr.c          |  42 ++++++++++-------
+ fs/ceph/caps.c          |  75 +++++++++++++++++++-----------
+ fs/ceph/inode.c         |  35 ++++++++++++--
+ fs/ceph/mds_client.c    | 121 +++++++++++++++++++++++++++++++++++++-----------
+ fs/ceph/mds_client.h    |   2 +-
+ fs/ceph/quota.c         |  19 ++++----
+ fs/ceph/super.c         |   1 +
+ fs/ceph/super.h         |  29 ++++++++++--
+ fs/ceph/xattr.c         |  10 +++-
+ net/ceph/crush/mapper.c |   5 +-
+ 12 files changed, 253 insertions(+), 103 deletions(-)

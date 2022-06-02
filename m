@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444B353B12E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76ABA53B0F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbiFBAkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 20:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
+        id S232810AbiFBAk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 20:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbiFBAkB (ORCPT
+        with ESMTP id S232784AbiFBAkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 20:40:01 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276CA21F9A6;
-        Wed,  1 Jun 2022 17:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654130400; x=1685666400;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/NEsbvbuUCxR99tcx+zO5i0VaG0aRU9+4mB4ZBYmo6g=;
-  b=mIXIU3mzEiutZrlKgT5tf4f6OeXOGjB/lCYO7kzfjLDrzQtQd5H8jdu6
-   IkyDAXg9Ezi6OCbYqLzQkgml9TykG328qqg2dgTs/kxEdoCjSPkd341u1
-   3UO1UfOg0V/c3+EoihP6S2XOTRwBuOw5eYNtl6Obo8MKlpGwy4pl5Vt4J
-   XTXUq3rvJ6OYfwwhXJCS+yE/TXzDCYeavR15OcJP7mAGh9aU909nJ8vuL
-   FfhfDjlMNmNqPK9wmcBiDTjDp3h+GMzA3RDS0OfQW4zt7m+6q5NISSQq8
-   KdeqzGYBDLs+FGeD1zf9LgYxJQpMmV+GQLGL+sB4qkMZVNeKyH5jZjJhE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="301137991"
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="301137991"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 17:39:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
-   d="scan'208";a="612575503"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2022 17:39:56 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwYsW-0004aE-05;
-        Thu, 02 Jun 2022 00:39:56 +0000
-Date:   Thu, 2 Jun 2022 08:39:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_manafm@quicinc.com, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH 2/3] thermal/debugfs: Add debugfs information
-Message-ID: <202206020816.0blG5XwC-lkp@intel.com>
-References: <20220601151441.9128-2-daniel.lezcano@linaro.org>
+        Wed, 1 Jun 2022 20:40:53 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9C0234295
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Jun 2022 17:40:53 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o6-20020a17090a0a0600b001e2c6566046so7891293pjo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Jun 2022 17:40:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=bCg75JCW+pfC2cBeuVcFJREBBHmfucnS3ebVUyU/JTo=;
+        b=nvakCz5XU4OHW+crILNG26v7+vQ2IiR6NULuMci2uYtam+NThJ/3HpJrQJFMfg8a14
+         Mqux8+tlKQRiYmlV6wq6o/Bwvjv63JmaCKuMD3fu2InTMyQscdIpanE/tjFmLJSdihfc
+         dDqfD112MsNKtlgnntpgBLaMJHKh/NnByZpxbkseO5IHgidWzXLN1ccFm7YnOHm20b2t
+         hwTzKwFPdaBmu67/KqpRwxh2Mqk4Y2fxy8TM5+nNQPIAPg2Hz1YEZ1OvwuiauFRp3Ysv
+         wI3HHcEptwZcEIO5D6eY3mbSIq99WSH/HnNAlvUFfeRLa9oTmyvDXpWIijtl+2tBRKgy
+         FP/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=bCg75JCW+pfC2cBeuVcFJREBBHmfucnS3ebVUyU/JTo=;
+        b=3rrSPvUzn3p/ybrho2dqhofXUynDErdhuzDr5vPmVsfUNugQFFUmBZC06xFYf6GkNa
+         LDPjuYg+opbq8nmuPJZ8gThb2P8/R40hzcaprTiSfRSBvcdItbaC/aNnfRRU5+/PtJA3
+         O+PZCE4R8V8CZK/yenv8v/I0OgoPJF0LFj4/A3e8s8R2DBly/ziD9uBLgt/M4AHb/M/I
+         e50vjJg5omwGcyBPnF82fjNRiGAho9QH5IkfaZvu2zadqVSQaYArTo6hfRV88apsVr+n
+         pL+ILa1Y8wy970ZNkC+j6QJnrpcYyY6WxHPkUjCnW5w3oj8YXJtenmTz2UYq7I92VXxs
+         DhIQ==
+X-Gm-Message-State: AOAM5316XjAdsrhpc0qgnxn9xet4Hbfx7FihRHC3wb9YhHJskuXrkZqb
+        k201UUoW1MEjzVuzttF7WDX8ycPU7gYEhg==
+X-Google-Smtp-Source: ABdhPJxkd62FRjm9zmFqVgDijdpENsQzD+qSxsY+7ENYNw+nWjcrnF7ib5hts50aNXdDVDhwdVYL3Q==
+X-Received: by 2002:a17:902:9349:b0:158:a6f7:e280 with SMTP id g9-20020a170902934900b00158a6f7e280mr2060476plp.155.1654130452700;
+        Wed, 01 Jun 2022 17:40:52 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902650500b0015e8d4eb23asm2144288plk.132.2022.06.01.17.40.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 17:40:52 -0700 (PDT)
+Message-ID: <0fd1c3fd-fa86-dbed-f3f0-74c91b1efa11@linaro.org>
+Date:   Wed, 1 Jun 2022 17:40:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601151441.9128-2-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+References: <20220525161455.GA16134@blackbody.suse.cz>
+ <Yo7KfEOz92kS2z5Y@blackbook> <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <0babd7df-bdef-9edc-3682-1144bc0c2d2b@linaro.org>
+ <Ypf0VnKUMiuRgZqT@slm.duckdns.org>
+ <1fb4d8d7-ccc0-b020-715e-38c2dfd94c23@linaro.org>
+ <Ypf5jpI7dSmpi4W0@slm.duckdns.org>
+ <c3bd8e63-7204-f86d-8efa-254db71185fc@linaro.org>
+ <Ypf/MpwzByOrSp6A@slm.duckdns.org>
+ <416dc60a-f0e5-7d05-1613-3cd0ca415768@linaro.org>
+ <YpgEY/lJbLidLOhc@slm.duckdns.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+In-Reply-To: <YpgEY/lJbLidLOhc@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 6/1/22 17:29, Tejun Heo wrote:
+> On Wed, Jun 01, 2022 at 05:26:34PM -0700, Tadeusz Struk wrote:
+>> Ok the problem is that
+>>
+>> 1. kill_css() triggers css_killed_ref_fn(), which enqueues &css->destroy_work on cgroup_destroy_wq
+>> 2. Last put_css() calls css_release(), which enqueues &css->destroy_work on cgroup_destroy_wq
+>>
+>> We have two instances of the same work struct enqueued on the same WQ (cgroup_destroy_wq),
+>> which causes "BUG: corrupted list in insert_work"
+> 
+> #2 shouldn't be happening before kill_ref_fn() is done with the css. If what
+> you're saying is happening, what's broken is the fact that the refcnt is
+> reaching 0 prematurely.
 
-I love your patch! Perhaps something to improve:
+css_killed_ref_fn() will be called regardless of the value of refcnt (via percpu_ref_kill_and_confirm())
+and it will only enqueue the css_killed_work_fn() to be called later.
+Then css_put()->css_release() will be called before the css_killed_work_fn() will even
+get a chance to run, and it will also *only* enqueue css_release_work_fn() to be called later.
+The problem happens on the second enqueue. So there need to be something in place that
+will make sure that css_killed_work_fn() is done before css_release() can enqueue
+the second job. Does it sound right?
+  
+>> So I think the easiest way to solve this would be to have two separate work_structs,
+>> one for the killed_ref path and css_release path as in:
+> 
+> If you do that, you'd just be racing the free path against the kill path and
+> the css might get freed while the kill path is still accessing it.
+> 
+> Thanks.
+> 
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on v5.18 next-20220601]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220602/202206020816.0blG5XwC-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/04c295f7e8b49af742179609949736f6f056b49c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
-        git checkout 04c295f7e8b49af742179609949736f6f056b49c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/thermal/thermal_core.c:27:
-   In file included from drivers/thermal/thermal_core.h:16:
->> drivers/thermal/thermal_debugfs.h:11:20: warning: function 'thermal_debugfs_init' has internal linkage but is not defined [-Wundefined-internal]
-   static inline void thermal_debugfs_init(void);
-                      ^
-   drivers/thermal/thermal_core.c:1496:2: note: used here
-           thermal_debugfs_init();
-           ^
-   1 warning generated.
-
-
-vim +/thermal_debugfs_init +11 drivers/thermal/thermal_debugfs.h
-
-     2	
-     3	#ifdef CONFIG_THERMAL_DEBUGFS
-     4	void thermal_debugfs_init(void);
-     5	void thermal_debugfs_cdev_register(struct thermal_cooling_device *cdev);
-     6	void thermal_debugfs_cdev_unregister(struct thermal_cooling_device *cdev);
-     7	void thermal_debugfs_tz_register(struct thermal_zone_device *tz);
-     8	void thermal_debugfs_tz_unregister(struct thermal_zone_device *tz);
-     9	void thermal_debugfs_cdev_transition(struct thermal_cooling_device *cdev, int state);
-    10	#else
-  > 11	static inline void thermal_debugfs_init(void);
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Tadeusz

@@ -2,97 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9303A53B144
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0B053B124
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 03:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbiFBBCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 21:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S232764AbiFBBDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 21:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiFBBCP (ORCPT
+        with ESMTP id S232569AbiFBBDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:02:15 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656B4258DC9;
-        Wed,  1 Jun 2022 18:02:13 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LD74C5FsSzjWwG;
-        Thu,  2 Jun 2022 09:00:59 +0800 (CST)
-Received: from [10.67.111.227] (10.67.111.227) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 2 Jun 2022 09:02:10 +0800
-Subject: Re: [PATCH] RISCV: kexec: Fix build error without CONFIG_MODULES
-To:     Randy Dunlap <rdunlap@infradead.org>, <palmer@rivosinc.com>
-CC:     <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
-        <liaochang1@huawei.com>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>, <linux-next@vger.kernel.org>
-References: <20220601063924.13037-1-lizhengyu3@huawei.com>
- <b9c831a3-44ab-0374-34f8-8bd8bc311e5c@infradead.org>
-From:   "lizhengyu (E)" <lizhengyu3@huawei.com>
-Message-ID: <cf78d358-fb43-8366-c648-ae6c0085b51d@huawei.com>
-Date:   Thu, 2 Jun 2022 09:02:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 1 Jun 2022 21:03:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E525C1E2;
+        Wed,  1 Jun 2022 18:03:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9ACC8B81D9C;
+        Thu,  2 Jun 2022 01:03:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01EEAC385B8;
+        Thu,  2 Jun 2022 01:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654131796;
+        bh=wksuz7vaU/eT//E6IgpXwPJq8QtyuB6m7LjRu8m7SC4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qha8JLVY2iWPYuve2RGON4YDTNKfH+xK8C0vhdhsGZaiuONp0bzbvfBe5GCdbr96F
+         FGuk6sWryGYBGZf99Ktq+s6EtTg03fYEvi/u4jxdRf3VTPaCRmmYjmc1BsH8ZUqwyK
+         Ja45OsmwNnZBNd2JfqE6UXscH0TQMV86b4Q7yYSJAfcxx0bfZuQ+K6vgmaa6c48FCR
+         6X3LTLZUov3OoHFU+IVhOS23wHedUQvSLF0uRaj0CvzY0k4RgZ1yFGG7vryX0h2jtf
+         d3BoKuabKLe67ngushbsRUKP+bQ4p2i5lNabIcWWhkPL1rVKHa6wHKZRkalyh/wDRE
+         VX/sOmR+dtUhg==
+Date:   Wed, 1 Jun 2022 18:03:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] net: stmmac: use dev_err_probe() for reporting mdio bus
+ registration failure
+Message-ID: <20220601180314.02e4d84e@kernel.org>
+In-Reply-To: <20220601142226.1123110-1-linux@rasmusvillemoes.dk>
+References: <20220601142226.1123110-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-In-Reply-To: <b9c831a3-44ab-0374-34f8-8bd8bc311e5c@infradead.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed,  1 Jun 2022 16:22:26 +0200 Rasmus Villemoes wrote:
+>  		if (ret < 0) {
+> -			dev_err(priv->device,
+> +			dev_err_probe(priv->device, ret,
+>  				"%s: MDIO bus (id: %d) registration failed",
+>  				__func__, priv->plat->bus_id);
 
-On Wed, 01 Jun 2022 09:08:16 -0700, Randy Dunlap <rdunlap@infradead.org> 
-wrote:
-> Hi--
->
-> On 5/31/22 23:39, Li Zhengyu wrote:
->> When CONFIG_MODULES is not set/enabled:
->>
->> ../arch/riscv/kernel/elf_kexec.c:353:9: error: unknown type name 'Elf_Rela'; did you mean 'Elf64_Rela'?
->>    353 |         Elf_Rela *relas;
->>        |         ^~~~~~~~
->>        |         Elf64_Rela
->>
->> Replace Elf_Rela by Elf64_Rela to avoid relying on CONFIG_MODULES.
->>
-> BTW, does this mean that RISC-V kexec is only available on 64BIT
-> and not on 32BIT?
+Please adjust the indent of the continuation lines.
 
-Currently, yes, CONFIG_KEXEC_FILE depends on 64BIT.
-
-Palmer is working on it, see 
-https://lore.kernel.org/all/20220520154430.18593-1-palmer@rivosinc.com/ .
-
->
-> thanks.
->
->> Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
->> ---
->>   arch/riscv/kernel/elf_kexec.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
->> index 9cb85095fd45..0cb94992c15b 100644
->> --- a/arch/riscv/kernel/elf_kexec.c
->> +++ b/arch/riscv/kernel/elf_kexec.c
->> @@ -349,7 +349,7 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
->>   {
->>   	const char *strtab, *name, *shstrtab;
->>   	const Elf_Shdr *sechdrs;
->> -	Elf_Rela *relas;
->> +	Elf64_Rela *relas;
->>   	int i, r_type;
->>   
->>   	/* String & section header string table */
+And fix the spelling checkpatch also points out.

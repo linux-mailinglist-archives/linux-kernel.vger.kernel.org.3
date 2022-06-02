@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5A853BDFD
+	by mail.lfdr.de (Postfix) with ESMTP id 7421253BDFC
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 20:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238127AbiFBSWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 14:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S238124AbiFBSWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 14:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237942AbiFBSWJ (ORCPT
+        with ESMTP id S237993AbiFBSWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 14:22:09 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB5CA1BC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 11:22:08 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so5495461pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 11:22:08 -0700 (PDT)
+        Thu, 2 Jun 2022 14:22:11 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3EE6436
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 11:22:09 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id g205so5395588pfb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 11:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TeR+saO9bGVSVDYLkT6whuJkztc98Y7uqJRw9Zwr6CA=;
-        b=lox+mE5DUQIYDSINDMGLvp+f+4p6bG1alTdnY/p5yaPQT5MhcSCKJI+8s/kk/vYrgz
-         FmcQS7G4CMRDlFwl2en89XVTfwF/hAIbYQkKoMHAdDWhFIaHkqtdpSXvA6PBc63CpxCI
-         QdpyQZOXfOltvUHMi4sMlFeaVN4KN8g5IAllCh/D2rckkxATCgwcej4OmeqCVYOwgUG6
-         Hp6eQFXuIu0CX2Z+YMXbCI3f+zfr9qllgXYuEBQxqBuLFGxngc/1cMy4KaQscxiRzwMg
-         gUYcE+aF5Qyi06JBD45s6qomtBFmAr3AdtDn3TQFbQkrcOfkcvp4efLZuD1aC1dcrnxH
-         AqdA==
+        bh=Ij7n7UZO/IK0zKEVoAHKDokBQE/6XWgjwPeS6gPTqcc=;
+        b=IpMzaIeFOsyZY5RirkJatHmncMuZPPqDAIcHJBZPIVp7G09X1sx9pTdtZ7RdyauoYu
+         CXIXH82Up2DBdc5z5bS621MpSvaQAGhEYPODX5fWKNzCB4RQkpwyu2MPYjFnd6ml7115
+         Nwn/88YW4mU+XngygZGDRSvug40didfLWbcdd349F5mSLAuviIyjwBV6PRONP4z47m0x
+         FPA/CgZSc2y/sQh3LXmJ9s9TVq2jz2mvYgIZe77eWdrLNR2mbFcu5BYQ9WCsR1D/zQfL
+         5PPDk7dZs5AT4EQhjDnYpA8iC6vJaBbnXsV2xL/9ZDOr3dh5+4P3HEM8j12kvAV/h3wN
+         5ysA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TeR+saO9bGVSVDYLkT6whuJkztc98Y7uqJRw9Zwr6CA=;
-        b=XXHYxXMNHRpe3TGiAt3gY3tHW+LK195YBJdOMRELtK0oaTOGRKQPq4saUGEso9A4nq
-         EODAo3rBWr39wQ/RiYrjVVhIzRz2qoEwOskeMdArlD/LNcfEa9QoliaHoHeV5hH6VcfA
-         ilq2PdTiKk7eAFxOQc+nf1+VZnsAjiibn0J7Flx15Dtna7M9gQzkyWje+DWK7Ym9zS3G
-         K2li2z/4BeHgdHSPnuz9GCaRtk5QUyMEQ+pTNhzqL2LSlAwmi+oqHTZPcHX+WjnIHFr1
-         m1IM/qDX5pYUbbqlMdg6p+iLj/SN6BEKCN0PBqWpxAtfn5QYf8wM2ua59VPjeUYtgbpX
-         wPSA==
-X-Gm-Message-State: AOAM530oEv6IbcTpJdpVxDM1gDoYefrmC5ZLAIRUvTiWz1esWhui5n6d
-        Q/526T6zxGS9akFUOKflyiMgJiPKrOI=
-X-Google-Smtp-Source: ABdhPJwUloxNPQ1Kt3swhvWRsLalZE4j17qsysUEVMeRb96vd1+i3T7NbIkG0a3KYeFbHoyp7u9MwA==
-X-Received: by 2002:a17:90b:3b4c:b0:1e0:3354:5e5d with SMTP id ot12-20020a17090b3b4c00b001e033545e5dmr41812977pjb.239.1654194127979;
-        Thu, 02 Jun 2022 11:22:07 -0700 (PDT)
+        bh=Ij7n7UZO/IK0zKEVoAHKDokBQE/6XWgjwPeS6gPTqcc=;
+        b=4C08otoAoRJHFNFbjwMiZb44XveSXb2mU6Xosi9V207h0nmcft7yUU+VOfwmFVQlj4
+         x+rE/Jlbamv990zTFPJdm76/YzNujcCsJCYkCukIHDFbzZ9HjPpq1Lopotnh/kVYVzY+
+         TN/ponkHO3t6R5szXibv681fIclX1ekAGTXiUk47jTNOp+v3+uvOUMhE2lCX3iMBQFNI
+         66x54afUFcqxj+yj7qX8wGt8ASb7yctmhJtsYkag8uRYWHqbzFIfaBP0nTvIg2AG8Px0
+         y4I5toYqjVm82Etj9JnZ1vFLwxKJd7lIB21rSI2TNIUystuX5vTfQ5Xn5Q7cEKa+MHYA
+         LRlw==
+X-Gm-Message-State: AOAM533G4/wDNKbonAlrXgS/Md8bPq6wikrpibu4xO1KtQ88iiS9370i
+        +ARlttATF8ZSI5InwyhVFVw=
+X-Google-Smtp-Source: ABdhPJyLtH0blR5AqKJCr/dkM/hu+mh+rj2O4bSVPpE5tGGO/EHu3X2wtkjB9koaOEl7+HMO4L+bWQ==
+X-Received: by 2002:a05:6a00:179e:b0:518:9e1d:1cbd with SMTP id s30-20020a056a00179e00b005189e1d1cbdmr54800149pfg.12.1654194129509;
+        Thu, 02 Jun 2022 11:22:09 -0700 (PDT)
 Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id t10-20020a1709027fca00b0015f2d549b46sm3866779plb.237.2022.06.02.11.22.06
+        by smtp.gmail.com with ESMTPSA id t10-20020a1709027fca00b0015f2d549b46sm3866779plb.237.2022.06.02.11.22.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 11:22:07 -0700 (PDT)
+        Thu, 02 Jun 2022 11:22:08 -0700 (PDT)
 From:   Yang Shi <shy828301@gmail.com>
 To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
         akpm@linux-foundation.org
 Cc:     shy828301@gmail.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [v2 PATCH 3/7] mm: khugepaged: remove the redundant anon vma check
-Date:   Thu,  2 Jun 2022 11:21:55 -0700
-Message-Id: <20220602182159.248387-4-shy828301@gmail.com>
+Subject: [v2 PATCH 4/7] mm: khugepaged: use transhuge_vma_suitable replace open-code
+Date:   Thu,  2 Jun 2022 11:21:56 -0700
+Message-Id: <20220602182159.248387-5-shy828301@gmail.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20220602182159.248387-1-shy828301@gmail.com>
 References: <20220602182159.248387-1-shy828301@gmail.com>
@@ -71,28 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hugepage_vma_check() already checked it, so remove the redundant
-check.
+The hugepage_vma_revalidate() needs to check if the address is still in
+the aligned HPAGE_PMD_SIZE area of the vma when reacquiring mmap_lock,
+but it was open-coded, use transhuge_vma_suitable() to do the job.  And
+add proper comments for transhuge_vma_suitable().
 
 Signed-off-by: Yang Shi <shy828301@gmail.com>
 ---
- mm/khugepaged.c | 3 ---
- 1 file changed, 3 deletions(-)
+ include/linux/huge_mm.h | 6 ++++++
+ mm/khugepaged.c         | 5 +----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index a8f61db47f2a..79d5919beb83 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -128,6 +128,12 @@ static inline bool transhuge_vma_size_ok(struct vm_area_struct *vma)
+ 	return false;
+ }
+ 
++/*
++ * Do the below checks:
++ *   - For non-anon vma, check if the vm_pgoff is HPAGE_PMD_NR aligned.
++ *   - For all vmas, check if the haddr is in an aligned HPAGE_PMD_SIZE
++ *     area.
++ */
+ static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+ 		unsigned long addr)
+ {
 diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index d0f8020164fc..7a5d1c1a1833 100644
+index 7a5d1c1a1833..ca1754d3a827 100644
 --- a/mm/khugepaged.c
 +++ b/mm/khugepaged.c
-@@ -966,9 +966,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+@@ -951,7 +951,6 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+ 		struct vm_area_struct **vmap)
+ {
+ 	struct vm_area_struct *vma;
+-	unsigned long hstart, hend;
+ 
+ 	if (unlikely(khugepaged_test_exit(mm)))
+ 		return SCAN_ANY_PROCESS;
+@@ -960,9 +959,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+ 	if (!vma)
+ 		return SCAN_VMA_NULL;
+ 
+-	hstart = (vma->vm_start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+-	hend = vma->vm_end & HPAGE_PMD_MASK;
+-	if (address < hstart || address + HPAGE_PMD_SIZE > hend)
++	if (!transhuge_vma_suitable(vma, address))
  		return SCAN_ADDRESS_RANGE;
  	if (!hugepage_vma_check(vma, vma->vm_flags))
  		return SCAN_VMA_CHECK;
--	/* Anon VMA expected */
--	if (!vma->anon_vma || !vma_is_anonymous(vma))
--		return SCAN_VMA_CHECK;
- 	return 0;
- }
- 
 -- 
 2.26.3
 

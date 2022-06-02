@@ -2,57 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B1153BBA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D6353BBAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 17:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiFBPfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 11:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S236495AbiFBPhy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Jun 2022 11:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiFBPfh (ORCPT
+        with ESMTP id S233446AbiFBPhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 11:35:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945FC38A1;
-        Thu,  2 Jun 2022 08:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654184135; x=1685720135;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=q72Kp6kH+XrCzkAj5EGf5w7xS0pzITO4JKHcGtdywh8=;
-  b=b+ZPLiNonSVqcKiWDHAKhcMYihEn2f3H3dQNfncbL3wg4TeyacQ63p4k
-   FuMZs8gO1N2jUCZ9QLRGULC8GQ81jHt/VqHwTtBgjHFJVJxsmkDD97ydQ
-   SgKjSNBynyo9yTV9RtmODuYwqw3Jxvyc31Wmm5AXGLRTXWoffIkcp1cLq
-   co215E5K86x/R1BrM8csTHln6hmUsZ31D57YJD8X9BDFdH5S9MdEHOOYr
-   HgoZSTkiqdkgRlp6Gq8NfpaVOfJxfeC7W6wJvYXY/TJ3BE9ZTfXAE+lsT
-   LIXcEE6KvCLzynr5i6GPrRwdGpUrs8beslG9dvIRE/+tsbs2dgTNOHtRO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="274788483"
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="274788483"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 08:35:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
-   d="scan'208";a="563359712"
-Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by orsmga002.jf.intel.com with ESMTP; 02 Jun 2022 08:35:31 -0700
-From:   zhengjun.xing@linux.intel.com
-To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH] perf record: Support sample-read topdown metric group for hybrid platforms
-Date:   Thu,  2 Jun 2022 23:36:03 +0800
-Message-Id: <20220602153603.1884710-1-zhengjun.xing@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Thu, 2 Jun 2022 11:37:53 -0400
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F63C6C0E5;
+        Thu,  2 Jun 2022 08:37:52 -0700 (PDT)
+Received: from smtpclient.apple (p4ff9fc30.dip0.t-ipconnect.de [79.249.252.48])
+        by mail.holtmann.org (Postfix) with ESMTPSA id A443ACED19;
+        Thu,  2 Jun 2022 17:37:51 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] Bluetooth: When HCI work queue is drained, only queue
+ chained work.
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20220531184124.20577-1-schspa@gmail.com>
+Date:   Thu, 2 Jun 2022 17:37:51 +0200
+Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
+Content-Transfer-Encoding: 8BIT
+Message-Id: <4E08D734-E534-4EB7-A12A-7F5D232358ED@holtmann.org>
+References: <20220531184124.20577-1-schspa@gmail.com>
+To:     Schspa Shi <schspa@gmail.com>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,129 +47,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Hi Schspa,
 
-With the hardware TopDown metrics feature, the sample-read feature should
-be supported for a TopDown group, e.g., sample a non-topdown event and read
-a Topdown metric group. But the current perf record code errors are out.
+> The HCI command, event, and data packet processing workqueue is drained
+> to avoid deadlock in commit
+> 76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state").
+> 
+> There is another delayed work, which will queue command to this drained
+> workqueue. Which results in the following error report:
+> 
+> Bluetooth: hci2: command 0x040f tx timeout
+> WARNING: CPU: 1 PID: 18374 at kernel/workqueue.c:1438 __queue_work+0xdad/0x1140
+> Modules linked in:
+> CPU: 1 PID: 18374 Comm: kworker/1:9 Not tainted 5.18.0-rc6-next-20220516-syzkaller #0
+> Workqueue: events hci_cmd_timeout
+> RIP: 0010:__queue_work+0xdad/0x1140
+> RSP: 0000:ffffc90002cffc60 EFLAGS: 00010093
+> RAX: 0000000000000000 RBX: ffff8880b9d3ec00 RCX: 0000000000000000
+> RDX: ffff888024ba0000 RSI: ffffffff814e048d RDI: ffff8880b9d3ec08
+> RBP: 0000000000000008 R08: 0000000000000000 R09: 00000000b9d39700
+> R10: ffffffff814f73c6 R11: 0000000000000000 R12: ffff88807cce4c60
+> R13: 0000000000000000 R14: ffff8880796d8800 R15: ffff8880796d8800
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000000c0174b4000 CR3: 000000007cae9000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+> <TASK>
+> ? queue_work_on+0xcb/0x110
+> ? lockdep_hardirqs_off+0x90/0xd0
+> queue_work_on+0xee/0x110
+> process_one_work+0x996/0x1610
+> ? pwq_dec_nr_in_flight+0x2a0/0x2a0
+> ? rwlock_bug.part.0+0x90/0x90
+> ? _raw_spin_lock_irq+0x41/0x50
+> worker_thread+0x665/0x1080
+> ? process_one_work+0x1610/0x1610
+> kthread+0x2e9/0x3a0
+> ? kthread_complete_and_exit+0x40/0x40
+> ret_from_fork+0x1f/0x30
+> </TASK>
+> 
+> To fix this, we can add a new HCI_DRAIN_WQ flag, and don't queue the
+> timeout workqueue while command workqueue is draining.
+> 
+> Fixes: 76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state")
+> Reported-by: syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
+> include/net/bluetooth/hci.h | 1 +
+> net/bluetooth/hci_core.c    | 8 +++++++-
+> net/bluetooth/hci_event.c   | 5 +++--
+> 3 files changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+> index fe7935be7dc4..c2cba0a621d3 100644
+> --- a/include/net/bluetooth/hci.h
+> +++ b/include/net/bluetooth/hci.h
+> @@ -291,6 +291,7 @@ enum {
+> 	HCI_RAW,
+> 
+> 	HCI_RESET,
+> +	HCI_DRAIN_WQ,
+> };
 
-For a TopDown metric group,the slots event must be the leader of the group,
-but the leader slots event doesn't support sampling. To support sample-read
-the TopDown metric group, uses the 2nd event of the group as the "leader"
-for the purposes of sampling.
+no addition to this enum please. This is ABI. Use the other one and hci_dev_{set,clear}_flag.
 
-Only the platform with the TopDown metric feature supports sample-read the
-topdown group. In commit acb65150a47c ("perf record: Support sample-read
-topdown metric group"), it adds arch_topdown_sample_read() to indicate
-whether the TopDown group supports sample-read, it should only work on the
-non-hybrid systems, this patch extends the support for hybrid platforms.
+> 
+> /* HCI socket flags */
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index 5abb2ca5b129..ef3bd543ce04 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -593,6 +593,10 @@ static int hci_dev_do_reset(struct hci_dev *hdev)
+> 	skb_queue_purge(&hdev->rx_q);
+> 	skb_queue_purge(&hdev->cmd_q);
+> 
+> +	hci_dev_lock(hdev);
+> +	set_bit(HCI_DRAIN_WQ, &hdev->flags);
+> +	hci_dev_unlock(hdev);
+> +	cancel_delayed_work(&hdev->cmd_timer);
 
-Before:
+Do you need to the locking here?
 
- # ./perf record -e "{cpu_core/slots/,cpu_core/cycles/,cpu_core/topdown-retiring/}:S" -a sleep 1
-Error:
-The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (cpu_core/topdown-retiring/).
-/bin/dmesg | grep -i perf may provide additional information.
+> 	/* Avoid potential lockdep warnings from the *_flush() calls by
+> 	 * ensuring the workqueue is empty up front.
+> 	 */
+> @@ -601,6 +605,7 @@ static int hci_dev_do_reset(struct hci_dev *hdev)
+> 	hci_dev_lock(hdev);
+> 	hci_inquiry_cache_flush(hdev);
+> 	hci_conn_hash_flush(hdev);
+> +	clear_bit(HCI_DRAIN_WQ, &hdev->flags);
+> 	hci_dev_unlock(hdev);
+> 
+> 	if (hdev->flush)
+> @@ -3861,7 +3866,8 @@ static void hci_cmd_work(struct work_struct *work)
+> 			if (res < 0)
+> 				__hci_cmd_sync_cancel(hdev, -res);
+> 
+> -			if (test_bit(HCI_RESET, &hdev->flags))
+> +			if (test_bit(HCI_RESET, &hdev->flags) ||
+> +			    test_bit(HCI_DRAIN_WQ, &hdev->flags))
+> 				cancel_delayed_work(&hdev->cmd_timer);
+> 			else
+> 				schedule_delayed_work(&hdev->cmd_timer,
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index af17dfb20e01..700cd01df3a1 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -3768,8 +3768,9 @@ static inline void handle_cmd_cnt_and_timer(struct hci_dev *hdev, u8 ncmd)
+> 			cancel_delayed_work(&hdev->ncmd_timer);
+> 			atomic_set(&hdev->cmd_cnt, 1);
+> 		} else {
+> -			schedule_delayed_work(&hdev->ncmd_timer,
+> -					      HCI_NCMD_TIMEOUT);
+> +			if (!test_bit(HCI_DRAIN_WQ, &hdev->flags))
+> +				schedule_delayed_work(&hdev->ncmd_timer,
+> +						      HCI_NCMD_TIMEOUT);
+> 		}
+> 	}
+> }
 
-After:
+Regards
 
- # ./perf record -e "{cpu_core/slots/,cpu_core/cycles/,cpu_core/topdown-retiring/}:S" -a sleep 1
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.238 MB perf.data (369 samples) ]
-
-Fixes: acb65150a47c ("perf record: Support sample-read topdown metric group")
-Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/arch/x86/util/evsel.c   |  3 ++-
- tools/perf/arch/x86/util/evsel.h   |  7 +++++++
- tools/perf/arch/x86/util/topdown.c | 21 ++++-----------------
- 3 files changed, 13 insertions(+), 18 deletions(-)
- create mode 100644 tools/perf/arch/x86/util/evsel.h
-
-diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/evsel.c
-index ff4561b7b600..3501399cef35 100644
---- a/tools/perf/arch/x86/util/evsel.c
-+++ b/tools/perf/arch/x86/util/evsel.c
-@@ -5,6 +5,7 @@
- #include "util/env.h"
- #include "util/pmu.h"
- #include "linux/string.h"
-+#include "evsel.h"
- 
- void arch_evsel__set_sample_weight(struct evsel *evsel)
- {
-@@ -32,7 +33,7 @@ void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr)
- }
- 
- /* Check whether the evsel's PMU supports the perf metrics */
--static bool evsel__sys_has_perf_metrics(const struct evsel *evsel)
-+bool evsel__sys_has_perf_metrics(const struct evsel *evsel)
- {
- 	const char *pmu_name = evsel->pmu_name ? evsel->pmu_name : "cpu";
- 
-diff --git a/tools/perf/arch/x86/util/evsel.h b/tools/perf/arch/x86/util/evsel.h
-new file mode 100644
-index 000000000000..19ad1691374d
---- /dev/null
-+++ b/tools/perf/arch/x86/util/evsel.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _EVSEL_H
-+#define _EVSEL_H 1
-+
-+bool evsel__sys_has_perf_metrics(const struct evsel *evsel);
-+
-+#endif
-diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
-index f4d5422e9960..f81a7cfe4d63 100644
---- a/tools/perf/arch/x86/util/topdown.c
-+++ b/tools/perf/arch/x86/util/topdown.c
-@@ -4,6 +4,7 @@
- #include "util/pmu.h"
- #include "util/topdown.h"
- #include "topdown.h"
-+#include "evsel.h"
- 
- /* Check whether there is a PMU which supports the perf metrics. */
- bool topdown_sys_has_perf_metrics(void)
-@@ -55,33 +56,19 @@ void arch_topdown_group_warn(void)
- 
- #define TOPDOWN_SLOTS		0x0400
- 
--static bool is_topdown_slots_event(struct evsel *counter)
--{
--	if (!counter->pmu_name)
--		return false;
--
--	if (strcmp(counter->pmu_name, "cpu"))
--		return false;
--
--	if (counter->core.attr.config == TOPDOWN_SLOTS)
--		return true;
--
--	return false;
--}
--
- /*
-  * Check whether a topdown group supports sample-read.
-  *
-- * Only Topdown metic supports sample-read. The slots
-+ * Only Topdown metric supports sample-read. The slots
-  * event must be the leader of the topdown group.
-  */
- 
- bool arch_topdown_sample_read(struct evsel *leader)
- {
--	if (!pmu_have_event("cpu", "slots"))
-+	if (!evsel__sys_has_perf_metrics(leader))
- 		return false;
- 
--	if (is_topdown_slots_event(leader))
-+	if (leader->core.attr.config == TOPDOWN_SLOTS)
- 		return true;
- 
- 	return false;
--- 
-2.25.1
+Marcel
 

@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C51453BA1A
+	by mail.lfdr.de (Postfix) with ESMTP id A3F4053BA1B
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235562AbiFBNuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S235554AbiFBNuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235554AbiFBNuV (ORCPT
+        with ESMTP id S235564AbiFBNub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:50:21 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B611D9EB8;
-        Thu,  2 Jun 2022 06:50:17 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id f5-20020a4aa685000000b0040e7e819183so916124oom.3;
-        Thu, 02 Jun 2022 06:50:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m7Egz3Eq4p4pH7ofqDEwdevk0tSPQ2S3OmzV9Rn7cog=;
-        b=idyLCUZqNwtt41GHHuJA3ehdPbn9+NytnkZgE+mlYnIQvgH0chZOeadDM/9WiShbeU
-         lFSUUwyBHGScRDEjY5N7JU7hDFWKApzERWO1BcwcAxDx9n/Hq2vdRvhuF0W4yvyvhnCx
-         1HINcGhCJf0fKEAJciggjC/tuDxH5g9vhkkl1aBklvl9TUr6vDC0lPkUvFlD6uVPmsSv
-         ltGnfYmDIG4m04eWfL7Qi7AX/LlkXVV06EjhuNpACOEAiHQvCllmiLA7FBfP7qzsz5Wi
-         ciw3myQG6bQyd5UNt11S3i2Q9Abjk/e6Xy9inu5fNwtNSFNWUq2VLhZKYRjoxTm73h+j
-         M58w==
-X-Gm-Message-State: AOAM5312ODdMqUe++aZn5yIlCvlxgeOp+tSojQ6ujkqOAQoftVK9nell
-        cHqF3QYC7R7IUTJYDL7VUg==
-X-Google-Smtp-Source: ABdhPJwJXAd51YLvPJ90VxQRsLC8hBY4/pzwaXaplOTizmH4wxfnS/mGPlNTwMHa0vECJ2olRL5iIQ==
-X-Received: by 2002:a4a:ba81:0:b0:40e:7cd9:afa1 with SMTP id d1-20020a4aba81000000b0040e7cd9afa1mr2078469oop.22.1654177816557;
-        Thu, 02 Jun 2022 06:50:16 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t12-20020a056830082c00b0060b39282e7esm2182511ots.35.2022.06.02.06.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 06:50:16 -0700 (PDT)
-Received: (nullmailer pid 2186777 invoked by uid 1000);
-        Thu, 02 Jun 2022 13:50:15 -0000
-Date:   Thu, 2 Jun 2022 08:50:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: add MEMSensing
- Microsystems Co., Ltd.
-Message-ID: <20220602135015.GA2186715-robh@kernel.org>
-References: <20220525181532.6805-1-ddrokosov@sberdevices.ru>
- <20220525181532.6805-2-ddrokosov@sberdevices.ru>
+        Thu, 2 Jun 2022 09:50:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B39F59E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:50:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E78CB81F5E
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 13:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D5CC385A5;
+        Thu,  2 Jun 2022 13:50:21 +0000 (UTC)
+Message-ID: <25e89d5b-f3b1-1fe1-96d1-745de3c2998a@linux-m68k.org>
+Date:   Thu, 2 Jun 2022 23:50:19 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525181532.6805-2-ddrokosov@sberdevices.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+References: <202205310707.ppwnnzce-lkp@intel.com>
+ <CAMuHMdWvE=TtqHLOgcdpKGzYgg4JeBcB7YGRBq0qubFxYepULg@mail.gmail.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <CAMuHMdWvE=TtqHLOgcdpKGzYgg4JeBcB7YGRBq0qubFxYepULg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 18:15:30 +0000, Dmitry Rokosov wrote:
-> MEMSensing Microsystems (Suzhou, China) Co., Ltd. operates as a micro
-> electromechanical system technology company which produces micro
-> electromechanical system microphones and sensors.
-> MEMSensing Microsystems (Suzhou, China) Co., Ltd. applies its products
-> in consumer electronics, industrial control, medical electronics
-> and automotive, and other fields.
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Hi Geert,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On 2/6/22 17:23, Geert Uytterhoeven wrote:
+> On Tue, May 31, 2022 at 5:44 PM kernel test robot <lkp@intel.com> wrote:
+>> First bad commit (maybe != root cause):
+>>
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>> head:   8ab2afa23bd197df47819a87f0265c0ac95c5b6a
+>> commit: 6b8be804ff376f6657ccdf6b29974e7c793d88c4 m68knommu: fix 68000 CPU link with no platform selected
+>> date:   6 days ago
+>> config: m68k-buildonly-randconfig-r004-20220530 (https://download.01.org/0day-ci/archive/20220531/202205310707.ppwnnzce-lkp@intel.com/config)
+>> compiler: m68k-linux-gcc (GCC) 11.3.0
+>> reproduce (this is a W=1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6b8be804ff376f6657ccdf6b29974e7c793d88c4
+>>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>          git fetch --no-tags linus master
+>>          git checkout 6b8be804ff376f6657ccdf6b29974e7c793d88c4
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/68000/
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>     arch/m68k/68000/ints.c:77:6: warning: no previous prototype for 'process_int' [-Wmissing-prototypes]
+>>        77 | void process_int(int vec, struct pt_regs *fp)
+>>           |      ^~~~~~~~~~~
+>>     arch/m68k/68000/ints.c: In function 'process_int':
+>>>> arch/m68k/68000/ints.c:82:30: error: 'ISR' undeclared (first use in this function)
+>>        82 |         unsigned long pend = ISR;
+>>           |                              ^~~
+>>     arch/m68k/68000/ints.c:82:30: note: each undeclared identifier is reported only once for each function it appears in
+>>     arch/m68k/68000/ints.c: In function 'intc_irq_unmask':
+>>>> arch/m68k/68000/ints.c:135:9: error: 'IMR' undeclared (first use in this function)
+>>       135 |         IMR &= ~(1 << d->irq);
+>>           |         ^~~
+>>     arch/m68k/68000/ints.c: In function 'intc_irq_mask':
+>>     arch/m68k/68000/ints.c:140:9: error: 'IMR' undeclared (first use in this function)
+>>       140 |         IMR |= (1 << d->irq);
+>>           |         ^~~
+>>     arch/m68k/68000/ints.c: At top level:
+>>     arch/m68k/68000/ints.c:153:13: warning: no previous prototype for 'trap_init' [-Wmissing-prototypes]
+>>       153 | void __init trap_init(void)
+>>           |             ^~~~~~~~~
+>>     arch/m68k/68000/ints.c:172:13: warning: no previous prototype for 'init_IRQ' [-Wmissing-prototypes]
+>>       172 | void __init init_IRQ(void)
+>>           |             ^~~~~~~~
+>>     arch/m68k/68000/ints.c: In function 'init_IRQ':
+>>>> arch/m68k/68000/ints.c:176:9: error: 'IVR' undeclared (first use in this function)
+>>       176 |         IVR = 0x40; /* Set DragonBall IVR (interrupt base) to 64 */
+>>           |         ^~~
+>>     arch/m68k/68000/ints.c:179:9: error: 'IMR' undeclared (first use in this function)
+>>       179 |         IMR = ~0;
+>>           |         ^~~
+> 
+> If M68000=y, but none of M68{,EZ,VZ}328 are enabled, ISR and IMR are
+> not defined. Most of the code in arch/m68k/68000/ints.c is specific
+> to the '328 series, and does not apply to plain 68000, but we can't
+> just not compile ints.c, as we do need definitions of trap_init()
+> and init_IRQ().
+> Factor out the '328 parts in dragonball.o, and keep a __weak dummy
+> init_IRQ() in ints.c?
+
+Seems like a reasonable approach. I think the 68000/m68328.c might be
+an appropriate place to put the '328 specific parts.
+
+I will put a patch together.
+
+Regards
+Greg
+
+
+
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds

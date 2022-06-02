@@ -2,98 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A333253B476
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DB2153B477
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 09:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiFBHkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 03:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S231865AbiFBHkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 03:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiFBHkD (ORCPT
+        with ESMTP id S231825AbiFBHkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 03:40:03 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEBBB6A;
-        Thu,  2 Jun 2022 00:40:00 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id v29so2846686qtc.12;
-        Thu, 02 Jun 2022 00:40:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eXA7li8ZK3RigjqNVXUH284U624036W4Ac97gDcHmjQ=;
-        b=2GSBRSn2tu7hqgbrYbVHW5+7PNMzqbzY6xp0xQh+EUUmsAJJ4vjAsyBU1Jbv1yMQ2u
-         KGjQf2sFimhtsTdvoznjpYNEzmHFRYeQ9OmJuiojNUE9tYceStbPNQuPb4yb48bqHBcv
-         lxp72Av1YrfHFpt9J8gCDiDC7fVTGlyHULhY900As5TnmQGDXqraAD3/4U+elR0h8LNh
-         tpY6ev182TjuYYbYHjUXQLI1VxcMzCq1AVtyvN1x03eqCx1uk7K9Ja1ZJ0I3aOOesxx3
-         F5adhl5gzD0O4moinletr3wn/W+Lw+OgIFG7WsHpclxfWMUJiVE/eqRcyrNIiuVUvPzB
-         SU3w==
-X-Gm-Message-State: AOAM532H6UWqAeyklKHjWww8Ypq85YwG2fAe0+rkI9woXTnQGll/E0CO
-        7I/pi8z5OrhHacC/GavxMstGTgtRzVkXoQ==
-X-Google-Smtp-Source: ABdhPJxq8iSVrj3S3wVTInHOlEs8nlld/3iw5UTL1IfU49jn1YPBjNrAguAomVsWxkw13kBJRPvZ3w==
-X-Received: by 2002:a05:622a:1192:b0:304:b4e5:7cba with SMTP id m18-20020a05622a119200b00304b4e57cbamr2627105qtk.305.1654155599297;
-        Thu, 02 Jun 2022 00:39:59 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac81206000000b002f3bbad9e37sm647770qti.91.2022.06.02.00.39.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 00:39:59 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id z186so6933196ybz.3;
-        Thu, 02 Jun 2022 00:39:58 -0700 (PDT)
-X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
- o69-20020a25d748000000b0065c6b0055afmr3639736ybg.365.1654155598697; Thu, 02
- Jun 2022 00:39:58 -0700 (PDT)
+        Thu, 2 Jun 2022 03:40:06 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA731BA0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 00:40:02 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LDHth2JV9z1K9Ft;
+        Thu,  2 Jun 2022 15:38:20 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 2 Jun 2022 15:40:00 +0800
+Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
+ PageMovable check
+To:     David Hildenbrand <david@redhat.com>
+CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>,
+        Minchan Kim <minchan@kernel.org>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-3-linmiaohe@huawei.com>
+ <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
+ <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+ <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
+ <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
+ <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
+ <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
+ <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+ <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
+ <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
+ <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
+ <f6eb98ae-965b-d705-6f7d-c2ee69ce5141@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <a96fab6c-f986-797f-aeb1-5fb8a1b5a4b8@huawei.com>
+Date:   Thu, 2 Jun 2022 15:40:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220528153132.8636-1-ojeda@kernel.org> <20220528153132.8636-2-ojeda@kernel.org>
-In-Reply-To: <20220528153132.8636-2-ojeda@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Jun 2022 09:39:46 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUa+JJ-mwTtveerndzmjVV95tqK1iWDRDPDRf6MPtpvww@mail.gmail.com>
-Message-ID: <CAMuHMdUa+JJ-mwTtveerndzmjVV95tqK1iWDRDPDRf6MPtpvww@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] docs: add SVG version of the Linux logo
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Garrett LeSage <garrett@lesage.us>,
-        IFo Hancroft <contact@ifohancroft.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f6eb98ae-965b-d705-6f7d-c2ee69ce5141@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miguel,
+On 2022/6/1 18:31, David Hildenbrand wrote:
+> On 31.05.22 14:37, Miaohe Lin wrote:
+>> On 2022/5/31 19:59, David Hildenbrand wrote:
+>>> Sorry for the late reply, was on vacation.
+>>
+>> That's all right. Hope you have a great time. ;)
+>>
+>>>
+>>>>>>
+>>>>>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
+>>>>>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
+>>>>>> this code block works. Or am I miss something again?
+>>>>>
+>>>>> Let's assume the following: page as freed by the owner and we enter
+>>>>> unmap_and_move().
+>>>>>
+>>>>>
+>>>>> #1: enter unmap_and_move() // page_count is 1
+>>>>> #2: enter isolate_movable_page() // page_count is 1
+>>>>> #2: get_page_unless_zero() // page_count is now 2
+>>>>> #1: if (page_count(page) == 1) { // does not trigger
+>>>>> #2: put_page(page); // page_count is now 1
+>>>>> #1: put_page(page); // page_count is now 0 -> freed
+>>>>>
+>>>>>
+>>>>> #1 will trigger __put_page() -> __put_single_page() ->
+>>>>> __page_cache_release() will not clear the flags because it's not an LRU
+>>>>> page at that point in time, right (-> isolated)?
+>>>>
+>>>> Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
+>>>> set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
+>>>> PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
+>>>> about it. But it seems this is never witnessed?
+>>>
+>>> Maybe
+>>>
+>>> a) we were lucky so far and didn't trigger it
+>>> b) the whole code block is dead code because we are missing something
+>>> c) we are missing something else :)
+>>
+>> I think I found the things we missed in another email [1].
+>> [1]: https://lore.kernel.org/all/948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com/
+>>
+>> Paste the main content of [1] here:
+>>
+>> "
+>> There are 3 cases in unmap_and_move:
+>>
+>> 1.page is freed through "if (page_count(page) == 1)" code block. This works
+>> as PG_active and PG_unevictable are cleared here.
+>>
+>> 2. Failed to migrate the page. The page won't be release so we don't care about it.
+> 
+> Right, page is un-isolated.
+> 
+>>
+>> 3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
+>> via folio_migrate_flags():
+>>
+>> 	if (folio_test_clear_active(folio)) {
+>> 		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
+>> 		folio_set_active(newfolio);
+>> 	} else if (folio_test_clear_unevictable(folio))
+>> 		folio_set_unevictable(newfolio);
+> 
+> Right.
+> 
+>>
+>> For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
+>> It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
+>> and PG_unevictable.
+>> "
+>> Or Am I miss something again? :)
+> 
+> For #1, I'm still not sure what would happen on a speculative reference.
+> 
+> It's worth summarizing that
+> 
+> a) free_pages_prepare() will clear both flags via page->flags &=
+> ~PAGE_FLAGS_CHECK_AT_PREP;
+> 
+> b) free_pages_prepare() will bail out if any flag is set in
+> check_free_page().
+> 
+> As we've never seen b) in the wild, this certainly has low priority, and
+> maybe it really cannot happen right now.
+> 
+> However, maybe really allowing these flags to be set when freeing the
+> page and removing the "page_count(page) == 1" case from migration code
+> would be the clean thing to do.
 
-On Sat, May 28, 2022 at 10:15 PM Miguel Ojeda <ojeda@kernel.org> wrote:
-> In the Rust for Linux patch series, Jonathan Corbet requested [1] that
-> we avoid binary assets (such as the logo), possibly by recreating
-> them in SVG format.
+IMHO, check_free_page is used to catch possible problem. There's the comment of PAGE_FLAGS_CHECK_AT_FREE:
+
+/*
+ * Flags checked when a page is freed.  Pages being freed should not have
+ * these flags set.  If they are, there is a problem.
+ */
+#define PAGE_FLAGS_CHECK_AT_FREE
+
+There might be an assumption: when page is freed, it shouldn't be an active or unevictable page. It should be
+inactive and evictable. So allowing these flags to be set when freeing the page might not be a good idea?
+
+Thanks!
+
 >
-> However, it turns out there is no SVG version of the Linux logo
-> in the kernel tree yet, only a GIF one from the pre-v2.0.0 days.
->
-> This patch fixes that by adding a SVG version of the Linux logo,
-> which we could then use in the Rust for Linux documentation and
-> other similar places.
-
-Perhaps you want to add a Rust logo to drivers/video/logo/, to be
-shown using fb_append_extra_logo() when Rust technology is included?
-
-;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

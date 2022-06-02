@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F0A53BC13
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D49E53BC17
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 18:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbiFBQHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 12:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S236818AbiFBQHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 12:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236770AbiFBQHm (ORCPT
+        with ESMTP id S236808AbiFBQHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 12:07:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D81C186281
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:07:42 -0700 (PDT)
+        Thu, 2 Jun 2022 12:07:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DDD186281
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 09:07:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF7B9614AB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 16:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 29EC3C385A5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A6CEB81FE4
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 16:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D51DC3411A;
         Thu,  2 Jun 2022 16:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1654186061;
-        bh=XMFFxZYBEUXGll5mLuRWL85TlIfSzcamJ0XcoQepX3o=;
+        bh=De10uTw8QFr//Bab429n4zpC03RE2MEIiqIQ3yw9zYw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CDzJD4YrgAia7b4M0ZhVeI3NOewGNEAhZVEWcao02sltgYNeJwu4kC4PpscEr68hQ
-         U6V2oUm/aDy2/Tpce0xVgVKTee9LlCUgT5FwerRd4H0y6fAy5woqYt18JiwYr1M45b
-         nJlLHJgX4tEWgT4Kf3gh8CO45Hw+q7W0Wsami49n5J1lkoDzXRlG51+zqTQEwEo8sA
-         uS0103YnRu7XY3dX+pi33oMPbn78ocrQ4BVAceJrA1Vya99Hj/aGf3/0WqWzFhiIuP
-         eDgmM+3ev1JxAKXgW+vl2igAqFxj6onnavrIX1gAv0X/L2KHRrt80VUsqXt3Wr/ELf
-         cvJ3YQTRWsXHQ==
+        b=d0z1LWfWza7DTi7tV5M2kynXgTpxTQF6wP3NQ/CKjo9o+O5Gn3vmDQm20sCjvUOBR
+         879N03NN0JymQ7K/J81cWWPeENpjEx2chO0rFhlwX7R/Jhak+UEC2570K/4aDA/rtl
+         35OuKalfGcxAWbsOxKE8L2ezvPYkuJ+GNZ8Ek03zLcAwS6Ohn4pAc4I+gt+JFNb3A6
+         khJ+ApSDVnHjugEHI61OYgKYZ1d3el0e1K7a1VyVSfs9cQaBLkiuP0ep31ECTOP0LM
+         OgSfq1H9L8XBQ8R3qBL9PF3KVUOrKjb2O01bBLP6YueStJZ/hnw+0TaDyuKFw3N7ND
+         zq9bnWR8TwAVg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 167C2EAC09C;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37BFAF0394F;
         Thu,  2 Jun 2022 16:07:41 +0000 (UTC)
-Subject: Re: [GIT PULL] memblock: test suite update
+Subject: Re: [GIT PULL] printk fixup for 5.19
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YphemdvuA/6TYYfz@kernel.org>
-References: <YphemdvuA/6TYYfz@kernel.org>
+In-Reply-To: <YpiUGCdJA2UyRWYE@alley>
+References: <YpiUGCdJA2UyRWYE@alley>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YphemdvuA/6TYYfz@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v5.19-rc1
-X-PR-Tracked-Commit-Id: 000605cd1b14f0970465a44bfe89da93cca66348
+X-PR-Tracked-Message-Id: <YpiUGCdJA2UyRWYE@alley>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.19-fixup
+X-PR-Tracked-Commit-Id: 809631e2bff5aba056df75cc4e43127dbd0278c9
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ca1dcc6d0c569e1e5f5b4a764329d9530760a416
-Message-Id: <165418606108.19639.8516954894168661582.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 12831f6486f9db5a8f2c87129f2b8f33349b1e04
+Message-Id: <165418606122.19639.12382293975586321424.pr-tracker-bot@kernel.org>
 Date:   Thu, 02 Jun 2022 16:07:41 +0000
-To:     Mike Rapoport <rppt@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Rebecca Mckeever <remckee0@gmail.com>, linux-mm@kvack.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,12 +67,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 2 Jun 2022 09:54:17 +0300:
+The pull request you sent on Thu, 2 Jun 2022 12:42:32 +0200:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v5.19-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git tags/printk-for-5.19-fixup
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ca1dcc6d0c569e1e5f5b4a764329d9530760a416
+https://git.kernel.org/torvalds/c/12831f6486f9db5a8f2c87129f2b8f33349b1e04
 
 Thank you!
 

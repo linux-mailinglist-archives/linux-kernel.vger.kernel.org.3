@@ -2,210 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E047753B643
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2804B53B647
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiFBJm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S233205AbiFBJmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiFBJmY (ORCPT
+        with ESMTP id S233195AbiFBJmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:42:24 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4353BF33BB;
-        Thu,  2 Jun 2022 02:42:21 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AXP+JQqsvcKFyK0XUAcscBwnRvOfnVKtfMUV32f8?=
- =?us-ascii?q?akzHdYEJGY0x3y2pMC2+FaKmPNDSmLd91b9i/90MB6MODzYJnHABvrStgHilAw?=
- =?us-ascii?q?SbnLY7Hdx+vZUt+DSFioHpPtpxYMp+ZRCwNZie0SiyFb/6x/RGQ6YnSHuCmULS?=
- =?us-ascii?q?cY3goLeNZYHxJZSxLyrdRbrFA0YDR7zOl4bsekuWHULOX82cc3lE8t8pvnChSU?=
- =?us-ascii?q?MHa41v0iLCRicdj5zcyn1FNZH4WyDrYw3HQGuG4FcbiLwrPIS3Qw4/Xw/stIov?=
- =?us-ascii?q?NfrfTeUtMTKPQPBSVlzxdXK3Kbhpq/3R0i/hkcqFHLxo/ZzahxridzP1XqJW2U?=
- =?us-ascii?q?hZvMKvXhMwTThtZDzpje6ZB/dcrJFDm65DNkRycKSWEL/JGSRte0Zcj0up+H2B?=
- =?us-ascii?q?C3fICLzUKdBqCm6S9x7fTYu1tgMEiJc7rMasfp3h/wDCfBvEjKbjDSKXi5NlWx?=
- =?us-ascii?q?j48i8lCW/HEaKIxdjtraAXoYhtBIF4bBZsy2uCyiRHXfzRe7lDTuqsz52nayRd?=
- =?us-ascii?q?Z0b7xPd6TcduPLe1ZnFmfoG3u/GnjBBwectuFxlKt9nOqm/+KmCbTW5wbH77+8?=
- =?us-ascii?q?eRl6HWaxXQWIBkXU0ar5Pe+l0iyUs5eLEpS/TAhxYA06kCqS9zVWxyjvGXCuh8?=
- =?us-ascii?q?aRsoWH+AkgCmLw63F6kCZAXIFQSNKaN0OssI9Azct0zehndrvCHpksKC9TmiU/?=
- =?us-ascii?q?bOZ6zi1PEA9N2AFYSMbXA0t+MT4rcc/g3rnStdlDb7wgMb5FC/9xxiUoyUkwbY?=
- =?us-ascii?q?el8gG0+O851+vqzatoIXZCw04/APaWkq74Q5jIo2ofYql7R7c9/koBIKYSESR+?=
- =?us-ascii?q?WgKgOCA4+0US5KAjiqARKMKBr7Bz+iEKjr0k1NpHodn8zWr5m7leppfpix9THq?=
- =?us-ascii?q?FmO5slSTBOReV4F0OosQIeibCUEO+WKrpY+xC8EQqPY2NuijoU+dz?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AkyN+ZalgwJcnTNgcMWV+2UpRr4HpDfO+imdD?=
- =?us-ascii?q?5ihNYBxZY6Wkfp+V8cjzhCWftN9OYhodcLC7V5Voj0mskKKdxbNhRYtKOzOWw1?=
- =?us-ascii?q?dATbsSlLcKpgeNJ8SQzI5gPMtbAstD4ZjLfCJHZKXBkXaF+rQbsb66GcmT7I+x?=
- =?us-ascii?q?rkuFDzsaDZ2Ihz0JdjpzeXcGIDWua6BJdqZ1saF81kedkDksH42GL0hAe9KGi8?=
- =?us-ascii?q?zAlZrgbxJDLxk76DOWhTftzLLhCRCX0joXTjsKmN4ZgCP4uj28wp/mn+Cwyxfa?=
- =?us-ascii?q?2WOWx5NKmOH5wt8GIMCXkMAaJhjllw7tToV8XL+puiwzvYiUmR4XueiJhy1lE9?=
- =?us-ascii?q?V46nvXcG3wiRzx2zP42DJr0HPmwU/wuwqWneXJABYBT+ZRj4NQdRXUr2A6ustn?=
- =?us-ascii?q?7a5N12WF87JKEBLphk3Glpf1fiAvsnDxjWspkOYVgXAae5AZcqVtoYsW+14QOI?=
- =?us-ascii?q?scHRj99JssHIBVfY3hDc5tABKnhk3izylSKITGZAVxIv7GeDlOhiWt6UkZoJgj?=
- =?us-ascii?q?pHFohvD2nR87hecAotd/lqH5259T5cBzp/8tHNxA7dg6MLuK40z2MGXx2TGpUC?=
- =?us-ascii?q?La/J9uAQO/l7fHpJMI2cqNRLskiLMPpbWpaiIriYd1QTOlNfGz?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="124669226"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 02 Jun 2022 17:42:20 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id 13CB54D17192;
-        Thu,  2 Jun 2022 17:42:15 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Thu, 2 Jun 2022 17:42:13 +0800
-Received: from [192.168.22.78] (10.167.225.141) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Thu, 2 Jun 2022 17:42:14 +0800
-Message-ID: <1007e895-a0e3-9a82-2524-bb7e8a0b6b8c@fujitsu.com>
-Date:   Thu, 2 Jun 2022 17:42:13 +0800
+        Thu, 2 Jun 2022 05:42:40 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2123.outbound.protection.outlook.com [40.107.255.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82290132770;
+        Thu,  2 Jun 2022 02:42:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ea1VzQnzoZEYR8Xo2bKW95+qPpk37s6jP/Pe9mfPpgxb1Ehyi8Lm9u3gmuahWilRefQzne6NmMn/9kXYu1HsbWSZK8telYm5WkpXsW2qXR0HZZF0n/BSXavUUiLVtUmpqMmMVtQY4RmWC+ZV4eW5x/seZMU84OorXrUxcoRGaHMR1pOdsqv9BbXc1aS2cEevoXZhqvdeHPnRDo3m5jXhbL45WkQo4RPv3OjzqO906pVmBF1/eHeF1bP4R9BbXnRCXIbyaHJU3h/t5A+AX0WFrb4APd+Fo9rmXSp33HvU8Hi2+K47RKUba7rNW7hwsyJRtYoRqh114u/2JL2H9HjkGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gmFQTQ4pQcjHlySgG2/GWhbvEOMT3P7YmUTQJgkB4AI=;
+ b=Gw80xbifDIZxmHZf5mS1wUlVlvy9VSUs+++ycKQU9IjzgOERTzzmaeQisflbk0JeH07Wr9YplqnI/JipOzx7mG+bAkXOD7Gn5FsxfSyAHYhSz4Q3YANgAJmurGqckB8ygYa9wFCC6lIize8dSOlZBAdzAoHGIIptvqlCekxOwhczQ72ie75JD9AXHYRpaENB8p+LOI8j4KSp5PQx/8tzRWINlAH1ghpjA5gerd9Lap7UTghhB9sxnRZ9zr3AhKVIgrIr4Ns9soxAKermNlL2KSA0AgGQlztEfAy8NQqh14P5tHaydUzdEPPRU4M9p0IGyqcvBJ6kQ7wc30vJFmleWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gmFQTQ4pQcjHlySgG2/GWhbvEOMT3P7YmUTQJgkB4AI=;
+ b=qF218vCHyKAZNB7Py1ZAmWKVLH7I28Co8ufUmHz4jt1UdIu0I95wgC/1nEJFCZMT1UFokl4vNAFZKDl8IBcFuPyekY2cpXxRuTxoaTUCkPJXxFcBZf50fkZOEDJG9CrLa9Y68uxp2vQx5QRvfZ+KqCmFO/EeI6ewRHxB80LA21c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by KL1PR0601MB4323.apcprd06.prod.outlook.com (2603:1096:820:75::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Thu, 2 Jun
+ 2022 09:42:33 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::a92b:6d92:5ad9:febb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::a92b:6d92:5ad9:febb%9]) with mapi id 15.20.5314.013; Thu, 2 Jun 2022
+ 09:42:33 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Hans de Goede <hdegoede@redhat.com>, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] fbdev: simplefb: Check before clk_put() not needed
+Date:   Thu,  2 Jun 2022 02:42:18 -0700
+Message-Id: <20220602094219.13024-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0012.apcprd06.prod.outlook.com
+ (2603:1096:4:186::13) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Jane Chu <jane.chu@oracle.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, <linmiaohe@huawei.com>
-References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
- <20220511000352.GY27195@magnolia>
- <20220511014818.GE1098723@dread.disaster.area>
- <CAPcyv4h0a3aT3XH9qCBW3nbT4K3EwQvBSD_oX5W=55_x24-wFA@mail.gmail.com>
- <20220510192853.410ea7587f04694038cd01de@linux-foundation.org>
- <20220511024301.GD27195@magnolia>
- <20220510222428.0cc8a50bd007474c97b050b2@linux-foundation.org>
- <20220511151955.GC27212@magnolia>
- <CAPcyv4gwV5ReuCUbJHZPVPUJjnaGFWibCLLsH-XEgyvbn9RkWA@mail.gmail.com>
- <32f51223-c671-1dc0-e14a-8887863d9071@fujitsu.com>
-In-Reply-To: <32f51223-c671-1dc0-e14a-8887863d9071@fujitsu.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-yoursite-MailScanner-ID: 13CB54D17192.A2D79
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9f8504cf-5519-45b3-9451-08da447c37df
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4323:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB4323DC27EC9420D930F13036A2DE9@KL1PR0601MB4323.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nuCOCUg2L2CnHVkruBPw7sxiZxxTJFZEzfCA1Yq+p4f6HbyRxz7mXgGUu7i0AF4sAn3GWpDOpDkMeM6bhu7IaVjbQp31sRDXMhqxrcHpvDCkpRVozdEJCr8COzcXs69If5ldbhjcnpoy53Z8VbYlNLWuMJ7p6/AMEsM8iPpvArqSzxaN+6LKJnPy20xNdh0O39uS8dnO5LrJKVSU5rjbbSlM/iiYLx3QexPRpMcO5iXBNQzMYMWVFPgNBKgj9AGkQA/Y44T7QfJg/Y17cVPI5aUjj5QT7euYZm9ozheMLk2YEfoDDh52vuLFCEOo24Df3WC91/UEoqqNvHQ7udN2OoELtIjWdShOGJJweCfuehZydt4xhZ0gcv8/ZyGy5W/9G3RRDb3R3GGk0z8OUHo87dwMQqw1SA8Dy6KSsTp4/Vsui8ChU6O81ZPVlQa1bXdCzpGjhLbiiX6+lfJBQDI8KLGAkJWjoHdu/G2im942s8hpNIOBwprpe4hWw3d6vgPvwcGuY1/aBo0EXrcjZmCmbdRm0QjzZlgZYGQCNmUmjVjMyj0zmHLlU6P7nCi5ILungv49Gm2Lg/fLRezfTkK+VBzvvvZRdaz43T/X1a6acLtITLTDiSFlJ2K9LyUR0htlJGvwerrvuCr6F1E9GjarZAWv/GR6QkCHJzIv4viicLPeV9o+t9sCdkEyPeqEWK7gwOHjmS/YPO9syZCidSr6XA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(4326008)(66556008)(508600001)(66946007)(66476007)(8676002)(86362001)(110136005)(316002)(83380400001)(38350700002)(38100700002)(2616005)(186003)(52116002)(107886003)(6506007)(6666004)(26005)(1076003)(6512007)(4744005)(8936002)(2906002)(36756003)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VNr1WvJpETFGkk6/nDe50RELnVifupDVsnjtQ8ut/V5vXVrb1OkYwpYMcUkD?=
+ =?us-ascii?Q?nozalz4Qsv1NwP7opxzTllXjxewlTapTxyjTrGHXmLeju/SvVkwMQ0/oKiTA?=
+ =?us-ascii?Q?YuMAiFcaCqUTlRivqa1bjXdVY1YeweFuiV9Er7LjS+Mo5RmopuNUXfgbt2dS?=
+ =?us-ascii?Q?Zn7A1qilhH9WOlvy5W67/MSsTnqpjnok1TjTukN9Rzkpe9LrUeTiWNcMy3nL?=
+ =?us-ascii?Q?KvIA2n01DcmLuXb+1u0NIDTk61pqXEkmSkyEuQ75QRpIe/XsY8mVvnq2zVDa?=
+ =?us-ascii?Q?JE74tQjGH0rz2enFi8jXyi8zH80J2ynwj1fGegsx3sxun9IloQ4Bj4FB5Vhn?=
+ =?us-ascii?Q?w5+HxAEQ2tS3tO0+RQ65SSG97+GPCaBRkJlNmwiaAjRoaxhmDC+J9FTK2tQZ?=
+ =?us-ascii?Q?alc2YtSqKZ6j8kL95jOwZftkdztxcOMLlPhxVg7UZVChkK/wBm26NuJ0TRLX?=
+ =?us-ascii?Q?aySdufQY6jpLMpZD1zGn0cN3CfRy6FFUB4w+pzfvzXz/vbtpWzfsub3M616a?=
+ =?us-ascii?Q?/+V/554vLUHdRUcPp2HbGpORTt8k+bEhrYZ7bWrKDDOkxB0hoc9RuZxbDoqf?=
+ =?us-ascii?Q?eGOPzPPsjTPe1ZOBE2IAj6aB+l+/27uCVqvEirJH8p7lMUNbnSVhu5TC380z?=
+ =?us-ascii?Q?Wii1wxdin1/jdh/h7OmB6zNHPius4WRrMQ2xJprfKMZdsKCXdX0JpzdBGYxI?=
+ =?us-ascii?Q?b85hmDK3xnLaQCqmGsxqsHWeSZEyMYgtUk993kJVdZdyXY/Z0zj88EAYMHqN?=
+ =?us-ascii?Q?Hgv+6bInYZfBJR5qTWlHTSzcLlmKfNjRG8L5v6xfwb5QpMCkc/iuILU69HkB?=
+ =?us-ascii?Q?GzWsMM0sGgKDG13WD/DsQvCMGccmRiSnji0dIs+oDS90IC5lvhJIw1h/XQbq?=
+ =?us-ascii?Q?Ax/WUn31xtESlmRRVV9wIXnGj1W6RGOyfzlKb2kbdFGB0sE0a1RzlPjPS5y7?=
+ =?us-ascii?Q?4LITGRwbkGUftg5mj7XvqXdR3WKijg0PKOoBT+koLKJ2tENncULnolitnLts?=
+ =?us-ascii?Q?/xkwDPUlEA6/5dVDey0XzxoEHQbN5wxuMDVrMxawmH7293oSJGy2BkgznxNY?=
+ =?us-ascii?Q?xHjpw/nU/ISgQHP1aDqTOGtE6nLdLc4n/GKRI9hmZ+i6s9ps5vfMa3jj2HTB?=
+ =?us-ascii?Q?RZM3QxeEyED6f3KmMBizWX1Jwh5OAkXY4oTyCVC+ViVfwl82MpaHprjH1BA3?=
+ =?us-ascii?Q?KHEYFAk0D14I1rySCO3MxdaYLJF5gCZ6+KtPUPBENfQokjMb9GyQldSBVSLF?=
+ =?us-ascii?Q?bF7JGHSP/G2Ax+kRA2XGIWuJyR2AEHZE2/CYBsQQH72YeeM9H5FXWqGDNFIU?=
+ =?us-ascii?Q?NUNyhnJtR+QX2JaeZzk/yhdzd+PCcoImJLDk0fuCQ0DbCHBaBDob257prsef?=
+ =?us-ascii?Q?t5wQKBz22rHOBHrqjSuecWy0EfnuYSKmRWzqufTuymhG7KRVhWM60eiUuRwm?=
+ =?us-ascii?Q?k6OJd1w3VIbCEUKsCj72NoVQKx7oQ1K9VV91t48c9mEM1yBLKqeWr2sKuqtk?=
+ =?us-ascii?Q?8c9p0I4UePimOQJlBvZ/5oYuHzzRRJcoBNRNcFuZN9IuTkd0dmnp5ceT3st/?=
+ =?us-ascii?Q?MgdlMB01R39Wc4aOgtd0nQaz9fO1OFJbQSSZUSuogzA572MsDPmEeKmzuyYi?=
+ =?us-ascii?Q?eLrLRAJ6UNkGkW/g901ApDMhXVFy7qKTbt2gULZqQHIEXl5yopMxhxrXuXTK?=
+ =?us-ascii?Q?3tUw/NQxLyP6z6ar2Cp1wHkrY4eBB24vw4THsrCj/wQeVZynoNdbzJGGHrnD?=
+ =?us-ascii?Q?fuQZmY86jA=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f8504cf-5519-45b3-9451-08da447c37df
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2022 09:42:33.2254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jJcU3aaSpLxFGoB8LlLNMoM+JkcKIOOVuWkyeUMbeRSRuM79F1ONF50LXJ/CnnTRtPJU89sd/bLTOprEnLyTJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4323
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+clk_put() already checks the clk ptr using !clk and IS_ERR()
+so there is no need to check it again before calling it.
 
-Is there any other work I should do with these two patchsets?  I think 
-they are good for now.  So... since the 5.19-rc1 is coming, could the 
-notify_failure() part be merged as your plan?
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/video/fbdev/simplefb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-
---
-Thanks,
-Ruan.
-
-
-在 2022/5/12 20:27, Shiyang Ruan 写道:
-> 
-> 
-> 在 2022/5/11 23:46, Dan Williams 写道:
->> On Wed, May 11, 2022 at 8:21 AM Darrick J. Wong <djwong@kernel.org> 
->> wrote:
->>>
->>> Oan Tue, May 10, 2022 at 10:24:28PM -0700, Andrew Morton wrote:
->>>> On Tue, 10 May 2022 19:43:01 -0700 "Darrick J. Wong" 
->>>> <djwong@kernel.org> wrote:
->>>>
->>>>> On Tue, May 10, 2022 at 07:28:53PM -0700, Andrew Morton wrote:
->>>>>> On Tue, 10 May 2022 18:55:50 -0700 Dan Williams 
->>>>>> <dan.j.williams@intel.com> wrote:
->>>>>>
->>>>>>>> It'll need to be a stable branch somewhere, but I don't think it
->>>>>>>> really matters where al long as it's merged into the xfs for-next
->>>>>>>> tree so it gets filesystem test coverage...
->>>>>>>
->>>>>>> So how about let the notify_failure() bits go through -mm this 
->>>>>>> cycle,
->>>>>>> if Andrew will have it, and then the reflnk work has a clean 
->>>>>>> v5.19-rc1
->>>>>>> baseline to build from?
->>>>>>
->>>>>> What are we referring to here?  I think a minimal thing would be the
->>>>>> memremap.h and memory-failure.c changes from
->>>>>> https://lkml.kernel.org/r/20220508143620.1775214-4-ruansy.fnst@fujitsu.com 
->>>>>> ?
->>>>>>
->>>>>> Sure, I can scoot that into 5.19-rc1 if you think that's best.  It
->>>>>> would probably be straining things to slip it into 5.19.
->>>>>>
->>>>>> The use of EOPNOTSUPP is a bit suspect, btw.  It *sounds* like the
->>>>>> right thing, but it's a networking errno.  I suppose livable with 
->>>>>> if it
->>>>>> never escapes the kernel, but if it can get back to userspace then a
->>>>>> user would be justified in wondering how the heck a filesystem
->>>>>> operation generated a networking errno?
->>>>>
->>>>> <shrug> most filesystems return EOPNOTSUPP rather enthusiastically 
->>>>> when
->>>>> they don't know how to do something...
->>>>
->>>> Can it propagate back to userspace?
->>>
->>> AFAICT, the new code falls back to the current (mf_generic_kill_procs)
->>> failure code if the filesystem doesn't provide a ->memory_failure
->>> function or if it returns -EOPNOSUPP.  mf_generic_kill_procs can also
->>> return -EOPNOTSUPP, but all the memory_failure() callers (madvise, etc.)
->>> convert that to 0 before returning it to userspace.
->>>
->>> I suppose the weirder question is going to be what happens when madvise
->>> starts returning filesystem errors like EIO or EFSCORRUPTED when pmem
->>> loses half its brains and even the fs can't deal with it.
->>
->> Even then that notification is not in a system call context so it
->> would still result in a SIGBUS notification not a EOPNOTSUPP return
->> code. The only potential gap I see are what are the possible error
->> codes that MADV_SOFT_OFFLINE might see? The man page is silent on soft
->> offline failure codes. Shiyang, that's something to check / update if
->> necessary.
-> 
-> According to the code around MADV_SOFT_OFFLINE, it will return -EIO when 
-> the backend is NVDIMM.
-> 
-> Here is the logic:
->   madvise_inject_error() {
->       ...
->       if (MADV_SOFT_OFFLINE) {
->           ret = soft_offline_page() {
->               ...
->               /* Only online pages can be soft-offlined (esp., not 
-> ZONE_DEVICE). */
->               page = pfn_to_online_page(pfn);
->               if (!page) {
->                   put_ref_page(ref_page);
->                   return -EIO;
->               }
->               ...
->           }
->       } else {
->           ret = memory_failure()
->       }
->       return ret
->   }
-> 
-> 
-> -- 
-> Thanks,
-> Ruan.
-> 
-> 
-
+diff --git a/drivers/video/fbdev/simplefb.c b/drivers/video/fbdev/simplefb.c
+index 2c198561c338..f96ce8801be4 100644
+--- a/drivers/video/fbdev/simplefb.c
++++ b/drivers/video/fbdev/simplefb.c
+@@ -237,8 +237,7 @@ static int simplefb_clocks_get(struct simplefb_par *par,
+ 		if (IS_ERR(clock)) {
+ 			if (PTR_ERR(clock) == -EPROBE_DEFER) {
+ 				while (--i >= 0) {
+-					if (par->clks[i])
+-						clk_put(par->clks[i]);
++					clk_put(par->clks[i]);
+ 				}
+ 				kfree(par->clks);
+ 				return -EPROBE_DEFER;
+-- 
+2.17.1
 

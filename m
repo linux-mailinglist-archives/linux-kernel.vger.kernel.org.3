@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C4E53B5C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4DB53B5CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbiFBJKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S232835AbiFBJNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiFBJKl (ORCPT
+        with ESMTP id S229895AbiFBJNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:10:41 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39E82AA007;
-        Thu,  2 Jun 2022 02:10:36 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2527sS2D005071;
-        Thu, 2 Jun 2022 11:10:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=VWQ7tzWGog3nAEbIjFtGWXl2yPJ82VtZopPyXWeTyP0=;
- b=3/wjKDMJo8/cKibkYsADL2XjFchNSGQabCLOzCCKoPEa3oqxgRXI19Xzs8tyNC8s7YbB
- wyWKAaEoxFsVu2u6/pBTgnSsMynHMFfTxEgsHuiZf3qROUh/IVyiAHZns9AoN+jqJGSV
- GdoTDCVWBDGVou3NfmdkOpg4/SAEm9FnCPhsXe04kp6RUzIPJJJoKO81sBFgFB2JCWwQ
- TK1jJyVEWIYu91PyInAQ1d+fSFx8zytPPqQfJBae3v/wl6XT0n/QASdtX7Gn7RX3cZik
- XMmlTr0THvhMgVo2fqgbrypWYyCjzzQYX+9u31yZxv4uJAwizdhZgWYqbhPBN7TQVzud 0g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc50xgqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jun 2022 11:10:28 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C9B8510002A;
-        Thu,  2 Jun 2022 11:10:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BF8A02171D3;
-        Thu,  2 Jun 2022 11:10:27 +0200 (CEST)
-Received: from localhost (10.75.127.51) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 2 Jun
- 2022 11:10:27 +0200
-From:   <patrice.chotard@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
-        <patrice.chotard@foss.st.com>
-Subject: [PATCH 1/1] spi: spi-mem: Fix spi_mem_poll_status()
-Date:   Thu, 2 Jun 2022 11:10:22 +0200
-Message-ID: <20220602091022.358127-1-patrice.chotard@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 05:13:44 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5237011142;
+        Thu,  2 Jun 2022 02:13:43 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 129so4266511pgc.2;
+        Thu, 02 Jun 2022 02:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BnJoYZjA/4b43P3Pawo+kmZRrFz/s9PrqOsAvadZtNM=;
+        b=YKavzFI7bZlV0cIASU9nzmlObdBqUB8MOir6DIbkiyubVM1gqZg4lEygKki6iUqjk5
+         Cev82mKhSNAr1eZP29RaitupnkM1kyp8p8lIOtUr+MvYPn3Zq8BiNQ4I7fhE02pQ4yYE
+         1rIyrRp1bfx5WYFcipm8KPfkqzlrlCD8VwE1FGvbVm2yLYPyF0DPVGrOM4qaFQEMOKw4
+         69fTu1RZEIv+gC7pvrxro7+tofbPtKngpywa/dkOQqvwQOVVCREAIiLAqIKUhW178zD8
+         ZTowoewYRWQlclwXm7vgGB9AE7i5ysj2JhgOUt6fxRxUAwoLr6AIlfjmmrEW7NEca0GP
+         AYow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BnJoYZjA/4b43P3Pawo+kmZRrFz/s9PrqOsAvadZtNM=;
+        b=WNbKSIpmOCr1GlOUdf4u2ixOKXgWsgcy6wxCfcLm9fOdpAtk4ts0XUis3w9ofbohbq
+         DodV/6xl9mNYzCpiGz66dRQpONh6YqBx4J69Re0EQp3MH9NGX9Ak2PUn37RIWTfmT1ZO
+         mU4fh8vVlqazRvoekkIhCiaM1MZQw/98XhvGT+H0I/Ty71AB2ohHeNYJ2FbMSqX6o8dL
+         qO2tADq0HfwQikOeWS9fKMVxT5C3aaDolzY/BSkYw9inLWRfiVlheoIiYdB9/dain5RV
+         rQawsg4p457jKFpGr6Aw7hRrASGbKirPYsiwr+7g4y6d5MRawnUQHZC2tAKUfM0Nt/tX
+         YTeg==
+X-Gm-Message-State: AOAM530WEgCzOt8gr5hpi0gYMwIvpGoLNTGXrTgvloowbfB+pwjaZqee
+        CGwywEek7EhnxZ1+s+BcHD4=
+X-Google-Smtp-Source: ABdhPJxky6cAMNOEzhcAehlSp4DH4JPBTsmSJrQjyQWPkOf4W7b8tuVS6qW3+f0uHz2DvOIPl3hklA==
+X-Received: by 2002:a65:6c07:0:b0:3f2:5efb:6c7 with SMTP id y7-20020a656c07000000b003f25efb06c7mr3458478pgu.496.1654161222925;
+        Thu, 02 Jun 2022 02:13:42 -0700 (PDT)
+Received: from localhost (subs02-180-214-232-24.three.co.id. [180.214.232.24])
+        by smtp.gmail.com with ESMTPSA id z28-20020aa79e5c000000b005184af1d72fsm3019273pfq.15.2022.06.02.02.13.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 02:13:42 -0700 (PDT)
+Date:   Thu, 2 Jun 2022 16:13:39 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        WANG Xuerui <git@xen0n.name>
+Subject: Re: [PATCH V12 03/24] Documentation: LoongArch: Add basic
+ documentations
+Message-ID: <Yph/Q+szVkhDPg4a@debian.me>
+References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+ <20220601100005.2989022-4-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-02_01,2022-06-01_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220601100005.2989022-4-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Wed, Jun 01, 2022 at 05:59:44PM +0800, Huacai Chen wrote:
 
-In spi_mem_exec_op(), in case cs_gpiod descriptor is set, exec_op()
-callback can't be used.
-The same must be applied in spi_mem_poll_status(), poll_status()
-callback can't be used, we must use the legacy path using
-read_poll_timeout().
+> +Note: The register ``$r21`` is reserved in the ELF psABI, but used by the Linux
+> +kernel for storing the percpu base address. It normally has no ABI name, but is
+> +called ``$u0`` in the kernel. You may also see ``$v0`` or ``$v1`` in some old code,
+> +they are deprecated aliases of ``$a0`` and ``$a1`` respectively.
 
-Tested on STM32mp257c-ev1 specific evaluation board on which a
-spi-nand was mounted instead of a spi-nor.
+A nitpick: instead of just comma (,), also use "however" conjunction, that
+is "You may also see ..., however they ... ."
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Tested-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +Note: You may see ``$fv0`` or ``$fv1`` in some old code, they are deprecated
+> +aliases of ``$fa0`` and ``$fa1`` respectively.
+> +
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index e8de4f5017cd..0c79193d9697 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -808,7 +808,7 @@ int spi_mem_poll_status(struct spi_mem *mem,
- 	    op->data.dir != SPI_MEM_DATA_IN)
- 		return -EINVAL;
- 
--	if (ctlr->mem_ops && ctlr->mem_ops->poll_status) {
-+	if (ctlr->mem_ops && ctlr->mem_ops->poll_status && !mem->spi->cs_gpiod) {
- 		ret = spi_mem_access_start(mem);
- 		if (ret)
- 			return ret;
+The nitpick above also applies here, too.
+
+Otherwise, htmldocs built successfully without any new warnings.
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
 -- 
-2.25.1
-
+An old man doll... just what I always wanted! - Clara

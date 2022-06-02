@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285F553B4E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4CF53B4E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 10:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiFBIXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 04:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S232120AbiFBIXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 04:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbiFBIXX (ORCPT
+        with ESMTP id S229846AbiFBIW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 04:23:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A146C15FED
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:23:22 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nwg6u-0001YT-9J; Thu, 02 Jun 2022 10:23:16 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nwg6u-005zgh-Fz; Thu, 02 Jun 2022 10:23:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nwg6s-00DhT4-Cw; Thu, 02 Jun 2022 10:23:14 +0200
-Date:   Thu, 2 Jun 2022 10:22:50 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        Thu, 2 Jun 2022 04:22:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB8565AE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 01:22:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B42C1B81EE5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 08:22:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CDCC385A5;
+        Thu,  2 Jun 2022 08:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654158175;
+        bh=ZpIOdxZnOly6RZsL7QR5L4vfkBeqynInUaysfvgG8WU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zb12ayniOU+izs1rKvzmzUueVt6ofuHMPWNB5EzzPTF477EQLHuA5hEgLRqzPuWPI
+         jl5CTdq97StJpyjNTiC+Ggudx1AB0MSTqtkMthN8YOw+WEmTCjGiF97X//U7p58kBA
+         rY4ZJlkZYBMea06lmVsnVAmjFunhtcOMhvIsX5p8U8Gev3Gwnt17ub6inHzff+iaGS
+         LLiafqXaRWJc3/L5QOFXA/hrLhH8JbwKZPuC88Y5BazwfIoyAT2cnRtbGvkIYz03Oe
+         Wt8QDi+aadim2fKQN6JYuBZAYvs4SfMWx69YmB97/TDgdwtStbnpO/v7MsM3hRHG/m
+         oJbi6RZRr7Lnw==
+Date:   Thu, 2 Jun 2022 10:22:52 +0200
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: core: Display return code when failing to
- transfer message
-Message-ID: <20220602082250.s4llxsng4fecduhc@pengutronix.de>
-References: <20220525165852.33167-1-eajames@linux.ibm.com>
- <20220525165852.33167-3-eajames@linux.ibm.com>
+Subject: Re: arch/arm64/kernel/fpsimd.c:1944:55: sparse: sparse: dereference
+ of noderef expression
+Message-ID: <YphzXEcBKARluNVM@sirena.org.uk>
+References: <202205280635.XKlMkfKD-lkp@intel.com>
+ <YpZJBoxqvaCLRQfX@arm.com>
+ <YpcaTwI4SvV3IrwF@sirena.org.uk>
+ <YpeZ0M5we/0yzxVC@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b6nldfoupl3pmrdy"
+        protocol="application/pgp-signature"; boundary="PeXLahpez0u4U49V"
 Content-Disposition: inline
-In-Reply-To: <20220525165852.33167-3-eajames@linux.ibm.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <YpeZ0M5we/0yzxVC@arm.com>
+X-Cookie: May your camel be as swift as the wind.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,69 +61,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---b6nldfoupl3pmrdy
-Content-Type: text/plain; charset=iso-8859-1
+--PeXLahpez0u4U49V
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Wed, Jun 01, 2022 at 05:54:40PM +0100, Catalin Marinas wrote:
+> On Wed, Jun 01, 2022 at 09:50:39AM +0200, Mark Brown wrote:
+> > On Tue, May 31, 2022 at 05:57:42PM +0100, Catalin Marinas wrote:
 
-On Wed, May 25, 2022 at 11:58:52AM -0500, Eddie James wrote:
-> All the other calls to the controller driver display the error
-> return code. The return code is helpful to understand what went
-> wrong, so include it when failing to transfer one message.
->=20
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/spi/spi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 481edea77c62..ea09d1b42bf6 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -1654,7 +1654,8 @@ static void __spi_pump_messages(struct spi_controll=
-er *ctlr, bool in_kthread)
->  	ret =3D ctlr->transfer_one_message(ctlr, msg);
->  	if (ret) {
->  		dev_err(&ctlr->dev,
-> -			"failed to transfer one message from queue\n");
-> +			"failed to transfer one message from queue: %d\n",
-> +			ret);
+> > Yes, that looks right - feel free to add my Reviewed-by or I'll
+> > do that when I see the patch sent properly.
 
-(I know it's too late, just stumbled over this commit in mainline by
-chance. So maybe just a suggestion for the next similar change...)
+> I'm no longer convinced that's the right fix. In __efi_fpsimd_begin(),
+> ffr is true if either !system_supports_fa64() or SVCR.SM is set. The FFR
+> state would be saved in this case.
 
-A tad nicer would be to use %pe instead of %d that results in
+That's the wrong way round - we should only save FFR if we have
+FA64 or SVCR.SM is *not* set.  Checking again efi_fpsimd_begin()
+is wrong.
 
-	mydev mybus: failed to transfer one message from queue: -EIO
+> In __efi_fpsimd_end(), shouldn't we just restore the FFR state if
+> efi_sm_state, irrespective of system_supports_fa64() (as it was checked
+> in the beginning). Something like:
 
-instead of
+No, we should restore it only if we saved it.  The below should
+resolve things but it's completely untested:
 
-	mydev mybus: failed to transfer one message from queue: -5
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 819979398127..3c66a061ff6f 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1916,10 +1916,11 @@ void __efi_fpsimd_begin(void)
+ 			if (system_supports_sme()) {
+ 				svcr =3D read_sysreg_s(SYS_SVCR);
+=20
+-				if (!system_supports_fa64())
+-					ffr =3D svcr & SVCR_SM_MASK;
++				__this_cpu_write(efi_sm_state,
++						 svcr & SVCR_SM_MASK);
+=20
+-				__this_cpu_write(efi_sm_state, ffr);
++				if (!system_supports_fa64())
++					ffr =3D !(svcr & SVCR_SM_MASK);
+ 			}
+=20
+ 			sve_save_state(sve_state + sve_ffr_offset(sve_max_vl()),
+@@ -1965,7 +1966,7 @@ void __efi_fpsimd_end(void)
+ 							   0,
+ 							   SVCR_SM_MASK);
+ 					if (!system_supports_fa64())
+-						ffr =3D efi_sm_state;
++						ffr =3D false;
+ 				}
+ 			}
+=20
 
-and so is more descriptive. (Note you need ERR_PTR(ret) for %pe.)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---b6nldfoupl3pmrdy
+--PeXLahpez0u4U49V
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKYc1EACgkQwfwUeK3K
-7AlvuQf/SW2QRJEmHhltTqXdJ0dLZ3pvlWA9CtOkNfO3QuJKbG0TablgBoHJptN4
-hmxrdQeEM3ISXL2OlJ4wMf41i20G6TXVrcNGHduZ3sPP7AiiGIhG1ZbxC1aWJqo+
-H86PLgo8C5MX1WcpayJoJBMnAI5TtkMB3ubeWU4eputBkfCO3udWYZbCGagaxt4K
-4u5MoHo7I9q9TaVkVaKfeGR8k4vh4f9nrh2ZfEuIeb6CV6uBVm1LyAg7NMaWemE4
-LkIDcotB0J60DnwEH8oDnDVdimwO3U3SPEjwbqjge22A2vch5tAi6TtRsG+q5T/V
-sncY0W+KoLI3P7k94X+gGTCG/Y5dIg==
-=xFn8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKYc1wACgkQJNaLcl1U
+h9C2UQf+J0ClE8Vhx0jAbXXsz7P/saaEv/Mcp7gLzO4V4ATcXH8gQox+kztlh7tJ
+pGRdvskRugJ6Tg54xr9tdGKSlwFJW8nH0KLEAIev9Qgj0z1u77otapePtwRdunZZ
+uvFFOjqmHMJMyZnRXbbAqe6+wma3on89TmE7PCTfjBIQqytronG2YOBUI2n4l3Rk
+JJJBqWdoYbU/idvoujgon+AnFxRZDkHmzf+U5FGWW6aSu9WOddSxPCDVttyVOrj9
+hYsmXu60aPEh2gzjg+WJH35nzUyAGPX4VDT3IrHBYAMcpmP4XUJj/2yQP4TpMHOd
+rY9ZwRBwgbiUAD+MaQoLa6L0OfcQ5g==
+=Phwp
 -----END PGP SIGNATURE-----
 
---b6nldfoupl3pmrdy--
+--PeXLahpez0u4U49V--

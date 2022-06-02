@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C492653B246
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B6453B249
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 05:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiFBDwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Jun 2022 23:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S229577AbiFBDwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Jun 2022 23:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiFBDwA (ORCPT
+        with ESMTP id S229455AbiFBDwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Jun 2022 23:52:00 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FBCC13;
-        Wed,  1 Jun 2022 20:51:50 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id D6983320090F;
-        Wed,  1 Jun 2022 23:51:47 -0400 (EDT)
-Received: from imap43 ([10.202.2.93])
-  by compute3.internal (MEProxy); Wed, 01 Jun 2022 23:51:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxfierke.com;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1654141907; x=1654228307; bh=+6
-        v4s6bg78Q7jGgIkXGLe9dp2dwdRCZ7vAwWjbLTElY=; b=odpKzszHpmRqVVkw1L
-        rqUCc1I2lie3iu1ZByYnN291sCB4EWq4hPL/Xyh4dJR7Jq/YGsD7lOVrzYFGbu8k
-        mZB9hpdZvRDtmAxFcNrTmlXHrAg0dOts9TzXc3eaedd5PCnTJiFhDtvaWqihjcym
-        QH1GATdHBn0MI8d622r2GhXgch7NPSh0R2+l4kSATt+2wSR+zzr4+gZb81jAn5XY
-        7krB8dKNhd77cWv/H6ejAachtPj+aknb9cbB89lx40RmwkcJK8qZey0y0gK9ZHqs
-        NtgcIdbl0/sL5UC/mxNg1XM9Rj6pkpqaX741ypLP0R0vKhySSlX5jUAbjoReeJJj
-        c1HA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1654141907; x=1654228307; bh=+6v4s6bg78Q7jGgIkXGLe9dp2dwd
-        RCZ7vAwWjbLTElY=; b=Sx5+DejUbHQMUPIm4dLkf7Wfg4zrUR1VO3RipTmO1Jce
-        xccZ9nJ2siVUHUfaOU1MYMI2iUrKpjwiPLzCtlAXcideof+dp1/sfXMnKDol4GNH
-        EFO1y+pss6l5jlgRfFMwStRDPq/CHX8bFxPURLXUxbkqSB46jGHGzl6DbgT+g5qb
-        iLAs3lGuIUsjb7VKOIWbIklcmfUuPglxGxxi/PWq4g8kjpFjS51wykXezJxmeHje
-        qN6P3bHPCY7/J4qn6CSRIa8GICuiQpqPoQpsgm2IE6wxfSU85IZ+9Aj7UCfHwl8O
-        t5i+Amulj1KEycTIpZI7WD/Rs4z+YUiOkFavHLzklQ==
-X-ME-Sender: <xms:0jOYYlRjZBZt61BV3xNzjF9yB4AVRRPKUmTPD_6BsyyEBNJu06iBvQ>
-    <xme:0jOYYuzeYWumD3xucPPIbfPmh2-TaUfet8bY5wId2j_caiIdOnvfSce5FOlFHkbyW
-    YtCyxrjaDnxHe4FvHw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledugdejvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdforgig
-    ucfhihgvrhhkvgdfuceomhgrgiesmhgrgihfihgvrhhkvgdrtghomheqnecuggftrfgrth
-    htvghrnhepledtffegueehfefftddvudefvdekhfevhfeufeehhfevkedufedtleekgeek
-    feehnecuffhomhgrihhnpeihrghmlhdrihhtnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgiesmhgrgihfihgvrhhkvgdrtghomh
-X-ME-Proxy: <xmx:0jOYYq1K5MdTnZkrjDgaXvnO9zO-geSOYR4E0qTtDgRr4Mj9dwr1tw>
-    <xmx:0jOYYtClqln69qVKQxyBet_Oa5ilgce1w1oyGKHD356_r9LDtiEJAw>
-    <xmx:0jOYYug9pfYoy1hR5fNai9L9KY2nKYtVlOH27vfNoWYT7hz3R7QZrg>
-    <xmx:0zOYYjYa94ePK_1RKNrMmodXE5YnJmtTIBWjNnMc7E3uQfqCv9wr6Q>
-Feedback-ID: idee9475d:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C46942D4006D; Wed,  1 Jun 2022 23:51:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
-Mime-Version: 1.0
-Message-Id: <0d2c60d7-9fe9-4bd5-b8a1-972e50717e08@www.fastmail.com>
-In-Reply-To: <20220601184711.GA201654-robh@kernel.org>
-References: <20220601051748.1305450-1-max@maxfierke.com>
- <20220601051748.1305450-3-max@maxfierke.com>
- <20220601184711.GA201654-robh@kernel.org>
-Date:   Wed, 01 Jun 2022 22:51:26 -0500
-From:   "Max Fierke" <max@maxfierke.com>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
-        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: display: Add bindings for ClockworkPi CWD686
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 1 Jun 2022 23:52:45 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A600A2E9;
+        Wed,  1 Jun 2022 20:52:43 -0700 (PDT)
+X-UUID: 3ff230b8e35743a6a46dcca47ce5415f-20220602
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:bc2b454a-0ba9-445c-bd84-6e5e0628a0e4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:bdb68c0d-3a0d-4bbe-9d72-0e5d26d57423,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 3ff230b8e35743a6a46dcca47ce5415f-20220602
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 811584588; Thu, 02 Jun 2022 11:52:39 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 2 Jun 2022 11:52:38 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 2 Jun 2022 11:52:38 +0800
+Message-ID: <016eb93f0bee329c061725cb5096d49ab4240152.camel@mediatek.com>
+Subject: Re: [PATCH v1 00/15] Add support for MT8195 SCP 2nd core
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
+        Brian Norris <briannorris@chromium.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <weishunc@google.com>
+Date:   Thu, 2 Jun 2022 11:52:38 +0800
+In-Reply-To: <919ca8ee-4b01-e601-714c-26098647d5c7@linaro.org>
+References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
+         <919ca8ee-4b01-e601-714c-26098647d5c7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 1, 2022, at 1:47 PM, Rob Herring wrote:
->
-> You probably can simply add this to panel-simple-dsi.yaml. It mainly 
-> depends on how many power supplies this panel has.
->
+Hi Krzysztof,
+ 
+On Wed, 2022-06-01 at 13:46 +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2022 13:21, Tinghan Shen wrote:
+> > The MT8195 System Companion Processor(SCP) is a dual-core RISC-V MCU.
+> > Current mediatek remoteproc driver only supports bring-up single core 
+> > SCP or the 1st core of a dual-core SCP. This series support to bring-up 
+> 
+>       ^^ this or is confusing a bit.
+> 
+> Does this mean that MT8195 has three RISC-V MCUs?
 
-Unfortunately, it does have two, a 1.8v and a 3.3v, so panel-simple-dsi.yml won't work here. On the devices on which the panel is present, they're both always on so they were left out here, but this is a good reminder that they probably should be added anyway.
+My intention is to express that current SCP driver supports bring-up,
+1. the single core SCP, e.g. MT8183
+2. the 1st core of dual-core SCP, e.g. MT8195
 
-Thanks,
-Max
+
+Perhaps rewriting as follows is preferable?
+
+"The mediatek remoteproc driver currently only allows bringing up a single 
+core SCP. It only supports bringing up the 1st core in SoCs with a dual-core SCP."
+> 
+> > the 2nd core of a dual-core SCP.
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+

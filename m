@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB9C53B79E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE0853B7A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 13:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbiFBLKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 07:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S234066AbiFBLK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 07:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiFBLKO (ORCPT
+        with ESMTP id S230176AbiFBLK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 07:10:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0043B57C;
-        Thu,  2 Jun 2022 04:10:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35E9761640;
-        Thu,  2 Jun 2022 11:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7EC8BC34119;
-        Thu,  2 Jun 2022 11:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654168212;
-        bh=j06rqKLxCiZYtZpREEyAHdj4/fuHN/JgVF0s7TE/l6Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YI4/Ri7Ba7slwR1uW8/viRO3u1row1zIJphRUsZu3LsVs2op4ZPNlk07B4mgkyZV+
-         q5DkeqTKNwicZ+JkSHj7kqFSh+pqTnz9p0VO8P3anailRjVwx63HcWcsh8iPqIgXE/
-         4JT+2M7klhcHQn2QFNE9YDtwvZ2BEE2wfGfSzyP17rrt/rlt/qSGXcbwECu54+t4Fn
-         9wYva8BDgPlAy0YmeRYI5xqFz9CJSeArJqOXLXvYKKYRgOWdOa1c94ERcqRvzDeFVx
-         FZkEOovSOk0jXEd7ma0NjeMoPZkab/zDOnhYYHtnCYID5g1oS+Vl1PIHWKe93dr5Ad
-         oSa2u9N/DFY0A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60E29F03950;
-        Thu,  2 Jun 2022 11:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Jun 2022 07:10:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1499C3BBE3;
+        Thu,  2 Jun 2022 04:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654168255; x=1685704255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=olQ0OA0H1c6Sts3x+w8aOXscdnJ5P5s3LhpfS4yRNpE=;
+  b=Jv7phIW5/ZND3ALAr9M9pf05AeKhWqO5UzRa3L2JaYRHYg12ew0yz85n
+   51dgNNjDjHiHR6b89wBGyJBaNSzZQtMf50BkKJU+fGIMqpOv7bEQe/kVT
+   D0/HTjL/WjhzMVr6/L0a/ViYo07nTIrsXm4VOEy5Uy+L4ZBhe877kK1HT
+   Qq58KuG/WhchDux0S6lSGZLzP2OrERcCVLxxRUhQiVXYi5JCmSAEz7S19
+   b9wPrR0Ys2Qy5j2IEX9ZxxNRe2DYXUKrKDBeTxoK/WN2DemKcK79nQNZT
+   JKGSzMRyilGCLMaaQKMRHAKDsXmhpKM+eDgiueF/sbVKqfF+L4M2O+9Yh
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="336573571"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="336573571"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:10:54 -0700
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="721260311"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 04:10:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nwiiz-000RZf-AX;
+        Thu, 02 Jun 2022 14:10:45 +0300
+Date:   Thu, 2 Jun 2022 14:10:45 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Axe Yang <axe.yang@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [RESEND v12 0/3] mmc: mediatek: add support for SDIO async IRQ
+Message-ID: <YpiatZh+ZMpoAp/K@smile.fi.intel.com>
+References: <20220525015140.384-1-axe.yang@mediatek.com>
+ <1d07579c0a6b8853ab72e345a0bd0be73549de8c.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] ice: fix access-beyond-end in the switch code
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165416821239.26072.8874912583921079305.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Jun 2022 11:10:12 +0000
-References: <20220601105924.2841410-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220601105924.2841410-1-alexandr.lobakin@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, jeffrey.t.kirsher@intel.com,
-        anirudh.venkataramanan@intel.com, bruce.w.allan@intel.com,
-        maciej.fijalkowski@intel.com, michal.swiatkowski@linux.intel.com,
-        wojciech.drewek@intel.com, marcin.szycik@linux.intel.com,
-        martyna.szapar-mudlaw@intel.com, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d07579c0a6b8853ab72e345a0bd0be73549de8c.camel@mediatek.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Wed,  1 Jun 2022 12:59:24 +0200 you wrote:
-> Global `-Warray-bounds` enablement revealed some problems, one of
-> which is the way we define and use AQC rules messages.
-> In fact, they have a shared header, followed by the actual message,
-> which can be of one of several different formats. So it is
-> straightforward enough to define that header as a separate struct
-> and then embed it into message structures as needed, but currently
-> all the formats reside in one union coupled with the header. Then,
-> the code allocates only the memory needed for a particular message
-> format, leaving the union potentially incomplete.
-> There are no actual reads or writes beyond the end of an allocated
-> chunk, but at the same time, the whole implementation is fragile and
-> backed by an equilibrium rather than strong type and memory checks.
+On Thu, Jun 02, 2022 at 02:07:04PM +0800, Axe Yang wrote:
+> Hi,
 > 
-> [...]
+> Gentle ping for this set.
 
-Here is the summary with links:
-  - [net] ice: fix access-beyond-end in the switch code
-    https://git.kernel.org/netdev/net/c/6e1ff618737a
+It's a merge window, so your code perhaps will be considered next week,
+or later.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
 
 

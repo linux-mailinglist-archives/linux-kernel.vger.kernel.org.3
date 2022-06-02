@@ -2,102 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5364853BA10
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064D853BA13
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbiFBNqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S235543AbiFBNsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbiFBNqI (ORCPT
+        with ESMTP id S234816AbiFBNsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:46:08 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97762997BB;
-        Thu,  2 Jun 2022 06:46:04 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id rq11so10099724ejc.4;
-        Thu, 02 Jun 2022 06:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TjLXjWL9wqYYrtKcARcm1yup8NwPPFc5xmJR2d2VRXw=;
-        b=T+ezoU9lVT3i7sGNy4W449w7TEAZt24NYm16K1PLU5pcAYWEW43c36fO4PrbEqDlkl
-         iK42SBU/2IoTfkudAPfvHOpKGAJJgxfd8TvfyDNNKOvc5HO6ekcqLOQ/bPjO2YCkD8tr
-         oTZZtSN8nbdbp/CYpXCrfigymVN+WVrOiVgTyEzpIfxgYpgTo8qt42zDSI0mdfaAVFLQ
-         N7aK0dSl7ahVe/vBbovmDUmWtdbtwC4fBVKRMVdomVzXjHgyg160KCgmBs3mYAt8S/MH
-         JZEhHEOXulHgSgwfq7WPhbgWhPf41o0NRUjmCo/yfZPmtw5VZIIDur12wbOMHEwRB+GN
-         J2dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TjLXjWL9wqYYrtKcARcm1yup8NwPPFc5xmJR2d2VRXw=;
-        b=BR2TfyOXKkfymQbuiNlkcYdve2/0ZzDe8eLMORQkdSVty4p4ZlSUlZTlvZXFiasLot
-         cpS4QsdpE9giBFOPp53290TPqpFsBNzSYhXoySh2ekOdPglFlBZApfn6phAsfkeKB/vx
-         0XiGUHb/8Eh5gs27AFUeiSa/Ui+zqejDtxb4iOFDL7HSOUe6g076onaSOXxJnO8rvheU
-         xjZuvgABkNUaF5/cGBa39rErJlsABaMM0ZvQ0F6ZJ2vhXgSuqSyDDyYH/tb3UxdNS/KT
-         j5F9m5t1QAulHqImZQ7mwejM9YbVGq7P39w3943EyxSFd05NjYal0sOr7k60V7Yt5ozk
-         KMOw==
-X-Gm-Message-State: AOAM5315vLi6FLcucaODHnJgb+W1qwyiQJ2UX/SPE2LUquxPFyst0W9e
-        Ovu8/iJJtx/uTz+oXvpo49/Nerxw8JlGCuyVYBs=
-X-Google-Smtp-Source: ABdhPJwHAbggTcvlbjWNHP4pPg0l413e0ilaz6KDRuL60a/o7cOFJG5BNCUysdDQJLe4TShUAov5x2g/NSwOsZ0m0wg=
-X-Received: by 2002:a17:906:d550:b0:704:7ba6:9854 with SMTP id
- cr16-20020a170906d55000b007047ba69854mr4273032ejc.579.1654177563309; Thu, 02
- Jun 2022 06:46:03 -0700 (PDT)
+        Thu, 2 Jun 2022 09:48:15 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47D665D7;
+        Thu,  2 Jun 2022 06:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654177662;
+        bh=2iYMbjgyUAEmKKRbCPL6Jl2Wqx6/vlykoO1h/cdX9pU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=B2lwuKhhses728holgAZp4oZnvnVyjpESpX5d4Wahe78tNJd3f7G3iHZN30VkwjsH
+         1q3k8Lea6OztCKRlH2bP/S9GAYekJz/0C+n+sKdRpScjskIa9I1rRRD5u26It9R98s
+         VtpCdQQEYQDUF5VyLUAzEr47GXRxAufe1baxqXxE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.145.102] ([217.61.145.102]) by web-mail.gmx.net
+ (3c-app-gmx-bs39.server.lan [172.19.170.91]) (via HTTP); Thu, 2 Jun 2022
+ 15:47:42 +0200
 MIME-Version: 1.0
-References: <20220602114241.12601-1-andriy.shevchenko@linux.intel.com>
- <20220602114241.12601-3-andriy.shevchenko@linux.intel.com> <ad3af033-97f1-3aad-d082-c6ed56185b59@metafoo.de>
-In-Reply-To: <ad3af033-97f1-3aad-d082-c6ed56185b59@metafoo.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 2 Jun 2022 15:45:27 +0200
-Message-ID: <CAHp75VcSFr+E7_woyw6jx7e9wCeFUUouV_7xJXYO26_y6=fwTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] iio: adc: meson_saradc: Use temporary variable for
- struct device
-To:     Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-b1d8205a-3354-42e7-8784-0a0cfd7e8a36-1654177662388@3c-app-gmx-bs39>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Aw: Re: Re: [RFC v3 1/5] dt-bindings: phy: rockchip: add PCIe v3
+ phy
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 2 Jun 2022 15:47:42 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <trinity-940b8fcf-17e7-4445-8aeb-e17f36b41b4b-1653047439840@3c-app-gmx-bap67>
+References: <20220514115946.8858-1-linux@fw-web.de>
+ <20220514115946.8858-2-linux@fw-web.de>
+ <1652570081.002742.3276245.nullmailer@robh.at.kernel.org>
+ <trinity-02ad648c-f6f8-4383-b389-a0578d5a02d2-1652615387162@3c-app-gmx-bap15>
+ <20220516173537.GA2942634-robh@kernel.org>
+ <9496CAFB-6CB6-4BDA-A539-3A6E1B562299@public-files.de>
+ <20220518155551.GB3302100-robh@kernel.org>
+ <trinity-940b8fcf-17e7-4445-8aeb-e17f36b41b4b-1653047439840@3c-app-gmx-bap67>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:Ou72G3HO5kBx6mld4VIc7l+uMCSnBYkop7SJ5NIcA1Q3jsvlKS/T+4A2TSpMYReYX1Th0
+ GAypuTa3Dp5BK76Enhpr3QRdwCqTSZRqGvWRg8QAKYTGYvWejEs9dbpyaEqq1FTO8xZ16d538kB5
+ eY9I2r3Q0tpRm2I9dUl60ZMM4o41OGb7zWBlZPLHfp4gZlwFehrFuARn0k53XVU1e8bI19FDn7pR
+ qURa9QP8VTUcbDNiMTKY7o/g6JQGRjPw2uNLkyeSpz/dp0nuEC+MWu+Iff69VEglUCvsEE4gwi++
+ +E=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AM77h1kBGk8=:BFWCs43+kuOa1+j+QUaBrc
+ xUewSLTR6sWjcX/t/JXh6voUcMsVSiBagkHDIcOTlNTHngfeHJSZy8Qj7NHOeJQYRHMfHHpHi
+ OBI7kmLwzjW23tCFGSYcTTeGYqr2gzMT4Bnzae8XSCvQrD1LwapSpYhvVKv64Qs4wMAkMZSIl
+ M+ydn9ktzWPygx0j0usL15amBFWotiOtewmog1LE7yNkOU0RUIjZgFTP66BCQF7JszrotpQ4J
+ DaqDPvH6nNl5DnOAtVyWx1GhR+E4hKsdmDo31jw0rmPgzhFzc2SyKU1IM4oBuJ1jSHW+F2RVC
+ T2Ag9HLokhVoa0xIWI9gTRE2IojuWWwxplNXf64p7laHinWjbw+7Bjefi9gLm6OK2KiwuH9jl
+ D1PbqX0gA9KwsI6peS5UrWANHghNgDGBLS+8hz6ecsFnVm/FhvWhSY1tAhnxlQSDq9OCVcYkq
+ EEG1LoMz7j3VrpzjjZdh8VzhiBNG8urgDCdnoH0QsbbtIsIPZjmFoLwe/GoUHRCNrsv6G2CBi
+ /khwDm2OWPOJ8Qr3lVaN8Lb8NoroO89YRCX28sgqrBe5ROrHU2AvXtRvbBCBR6B35whGF4Lgf
+ N9RYAy4YdWkc3DYijq2gAUA79W1kl4vFpsD62UNn1p+x7qv9jmVBH5oRbx1X+ZvA8Y9dVftqr
+ XTYPb/N4sU55JUh6+t6k5wOWcRzlOfW3I0uiKjPp2l0wu1Wa92JKn+DS7AIbsXsSMJx2EQFP+
+ q4ydhp2uVyKH89+WcAnpuDKsndqtgejGlenvaSIWRY/adCbtrkjuBFgf4/BEtVcmYb8b+ErdN
+ qXsGcYA
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 2:08 PM Lars-Peter Clausen <lars@metafoo.de> wrote:
-> On 6/2/22 13:42, Andy Shevchenko wrote:
-
-...
-
-> > -     priv->adc_clk = devm_clk_register(&indio_dev->dev, &priv->clk_gate.hw);
-> > +     priv->adc_clk = devm_clk_register(idev, &priv->clk_gate.hw);
+> Gesendet: Freitag, 20. Mai 2022 um 13:50 Uhr
+> Von: "Frank Wunderlich" <frank-w@public-files.de>
+> An: "Rob Herring" <robh@kernel.org>
+> Hi,
 >
-> You are not changing anything here.
+> fixed reg-error by using 32bit-address in example, in my test output is =
+clean.
+>
+> +++ b/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
+> @@ -68,7 +68,7 @@ examples:
+>      #include <dt-bindings/clock/rk3568-cru.h>
+>      pcie30phy: phy@fe8c0000 {
+>        compatible =3D "rockchip,rk3568-pcie3-phy";
+> -      reg =3D <0x0 0xfe8c0000 0x0 0x20000>;
+> +      reg =3D <0xfe8c0000 0x20000>;
+>
+>
+> i hope yours is clean too
 
-The scope of patch is supposed not to change the current behaviour :-)
+have you tried it?
 
-> But we shouldn't be devm'ing on the
-> IIO device. It will get freed eventually, but only when the last
-> reference to the iio device has been dropped, which might be long after
-> the platform device has been removed. devm'ing should happen on the
-> platform_device's device. Might be worth fixing.
+> regarding data-lanes instead of own lane-map, Peter and me only find thi=
+s in special
+> bindings outside the phy-"namespace" like this.
+>
+> https://elixir.bootlin.com/linux/v5.18-rc7/source/Documentation/devicetr=
+ee/bindings/media/video-interfaces.yaml#L157
+>
+> do you mean converting this binding and add it there and base out bindin=
+g on it?
+>
+> https://elixir.bootlin.com/linux/v5.18-rc7/source/Documentation/devicetr=
+ee/bindings/phy/phy-bindings.txt
 
-Thanks for confirming my suspicions (as I mentioned to Martin, using
-an IIO device there feels wrong).
-I will add another patch to v3.
+is this the right binding to add the data-lanes or do you refer another on=
+e (have not found phy-provider)?
 
--- 
-With Best Regards,
-Andy Shevchenko
+regards Frank

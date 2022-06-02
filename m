@@ -2,136 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8641053BD5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C25C53BD5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 19:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbiFBR3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 13:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S237457AbiFBRcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 13:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbiFBR3u (ORCPT
+        with ESMTP id S232432AbiFBRcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:29:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76BED255BD
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654190988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dBTeWiiYW/rW3MZsHyTxu/jl9RRbd9h3yH+yLfy453k=;
-        b=FDJwOtEuouwephBXnUZRVS9dQ6eem8AKvcrZbCNJ87HsjqdqciypVKimtRIxnFzi9umx8q
-        AUwvSSo+/OYQnKOsqcPSJjjSau+jdp8bGgv6V4IyLUUHlxDKZel8mAlGtYI+i+mr++oZx8
-        Gr5RIttOrRr0LE058Ka/s1s58lqAVRs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-krzoMsm-OY2uaDPQZYTgFw-1; Thu, 02 Jun 2022 13:29:47 -0400
-X-MC-Unique: krzoMsm-OY2uaDPQZYTgFw-1
-Received: by mail-wm1-f70.google.com with SMTP id m31-20020a05600c3b1f00b003973a563605so2698504wms.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 10:29:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dBTeWiiYW/rW3MZsHyTxu/jl9RRbd9h3yH+yLfy453k=;
-        b=zEZpbATxP0Ey504CBrahg7WJHDVDK0TzMAcL6mypbmbYtEuI5PfxfxSsmd764atdmF
-         Cwbys2KBuxbUmb9NrB+hVbz6KKfRgm0P65iW6vbV+YNMeP6UONLecufysmouB0Mj4tdU
-         3ADg/4s/6Kc4R8USK51VijaHC9KpomoSd2MY1Ya5shjgWXDpG+k03Hsn5tKtITPcwRI/
-         UIZ1/bkPO2g1rM7uCVIaSuz7WlVNcn6gXSZAcAFs9upfM08HFvHerUpDxAjJyJQJQ1vz
-         qsC5zZdWKCbLvEHywysNRWH7zKGcQnOt93uRKDdtUtOIG8Q1Vjob83ndUg41vsZ/TInt
-         AzMQ==
-X-Gm-Message-State: AOAM533E/vV4VCoMFZV2V8oEB/oUCSYCrnE2Qmr9K9BfbhnelZV/wadX
-        veM78QPpGAE5WFcjsR8ewJNk8BmmgwFQJELeN1ln7X4fDegmMnv6vlNXXA3f5MUBaIXop2I9rnp
-        +ZD278c3aliNTZVFXasKQdiuc
-X-Received: by 2002:a05:6000:1d9e:b0:20f:fb42:4b38 with SMTP id bk30-20020a0560001d9e00b0020ffb424b38mr4547017wrb.268.1654190986236;
-        Thu, 02 Jun 2022 10:29:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz3RaBnbtgePjQfMXYRB7quw1mFYOf0GfERhyY4/DG9GKach7FhKYe8GN4LYEptHWxBQRhgmQ==
-X-Received: by 2002:a05:6000:1d9e:b0:20f:fb42:4b38 with SMTP id bk30-20020a0560001d9e00b0020ffb424b38mr4546999wrb.268.1654190986044;
-        Thu, 02 Jun 2022 10:29:46 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003973c54bd69sm10976449wmq.1.2022.06.02.10.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 10:29:45 -0700 (PDT)
-Message-ID: <fea8f80a-939b-2c73-d94b-5179d1e65be9@redhat.com>
-Date:   Thu, 2 Jun 2022 19:29:44 +0200
+        Thu, 2 Jun 2022 13:32:08 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40563BF4F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 10:32:06 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 6460B32007E8;
+        Thu,  2 Jun 2022 13:32:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 02 Jun 2022 13:32:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1654191122; x=1654277522; bh=iVhHyOHs9s
+        Ft+Gea6I99/NLj9KXC5Ni7NVI+rjhpYr4=; b=ku41WfcJm/1q57au9hfnw1Snjr
+        o2zc2CKSeI8zcCv+MNqROOIebvilz8M6X+PZw3fGHYoA4+KSd+NmE7kEMv7hEF/i
+        YQ7pUE7L7LPyesxe5QrYdP08zI17KW5B9tzYZ5tGcYfBzHJdhJBblvN+SF+MLpuG
+        SwdBMutDMQ3PN5BtdpR2s8pP5oWYa3I++p4dfAfGWd8wIcduel7qTB3aBesr0K1Z
+        ZH0dQkrK8jEJsJJOaWAaP4VXWe8qksnvW2FlhU6RFBw7jV4G4i4fUwgUt5PbI6P2
+        ExXr+sjXx7QyW6JzqoJllfYCiMlmP54XXVDy891RwaeW7SGPTUrtyGsgPJVw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1654191122; x=1654277522; bh=iVhHyOHs9sFt+Gea6I99/NLj9KXC5Ni7NVI
+        +rjhpYr4=; b=Q4tu7g4xCx7TgEV9zy+lfHMQGbqy/uBvNqv7xlA/Y6w8Ui2Ruul
+        m4F3A+aupb7xDXcgPSmH5s9Cq3L1vA+qGvRA1kCgUrQMbPX4f4H5byEMZuNtkbu8
+        Juq2Djk7cPv1zW32gQ6Buhu6bUjewT7nYuvTFU6Qzcp3vVEy3iXZAj9zG8htyspS
+        yTd9dfPcgWJ7J+BYC5y/Nj+yGLQotlasYD6b0lXbTpP7WAxEgYQRf7Wj+fo95zeu
+        /KCBp7F+5iv+kvqZ1d0tALP2R2nGT+qZImwR8EwspKR7FM2z2iHaVduxBN9z7qy/
+        +GcZmtLWjj1XEXnjR6Gtn1bCjRfIal0oSDg==
+X-ME-Sender: <xms:EvSYYkupaShFF-Wl7nEVb8VhhENtvZUWHSH19irPt5nwK9hc7YThsg>
+    <xme:EvSYYheTMIaG_jTHYGZ_P08Mn2IwFFTrZPPWz5ybsWbvEjZ7sxsX5_pqUxnhJVy07
+    7_bgLisPt6Zp60wwPM>
+X-ME-Received: <xmr:EvSYYvyiaUnY52jRB3M9W9twkQ2B2z4UTjNva2g1N-HwJLH0uJJgiAlvtK6f8GLdhbTu1veZZKLBHVl4C2pPh60LZJ8Q5dTW89ZvaT6WrOzHfibXxbrOECgs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleefgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epleelffdtleffgfeigeeuteevjedtjeelgfeiueegledthfdvjeevteehhfetheehnecu
+    ffhomhgrihhnpegrshgrhhhilhhinhhugidrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggv
+    vh
+X-ME-Proxy: <xmx:EvSYYnM5nDexswN_7K5QmjabxvXArotk2UzyLnAV_AFNEWB75-Vhew>
+    <xmx:EvSYYk-MafXAfpYm7nijXVHsfQxSuZ2h-FQDhvQ9aSLpapX3-H7mPA>
+    <xmx:EvSYYvVTuq3Foe-xecjZm5YiJyLD6Fd2W7ujJZBHqME_SowruMrvuA>
+    <xmx:EvSYYoZhx4CnsyoQaBxVHLiFBmGjK0uxNdC6VZKA4DgAEmsoUUnWfA>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Jun 2022 13:32:01 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Cc:     linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: add ARM/APPLE MACHINE mailing list
+Date:   Thu,  2 Jun 2022 19:31:44 +0200
+Message-Id: <20220602173144.2263-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC PATCH 1/1] drm/format-helper: Add KUnit tests for
- drm_fb_xrgb8888_to_rgb332()
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        tzimmermann@suse.de, maarten.lankhorst@linux.intel.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220530102017.471865-1-jose.exposito89@gmail.com>
- <20220530102017.471865-2-jose.exposito89@gmail.com>
- <20220530131158.kqq2mohxoh52xpeg@penduick> <20220530162903.GA6546@elementary>
- <CABVgOSn8i=LO5p7830h2XU1Jgg0KrN0qTnxkOMhf1oTgxjaKKw@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CABVgOSn8i=LO5p7830h2XU1Jgg0KrN0qTnxkOMhf1oTgxjaKKw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 19:12, David Gow wrote:
-> On Mon, May 30, 2022 at 9:29 AM José Expósito <jose.exposito89@gmail.com> wrote:
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-[snip]
-
->>
->> A .kuniconfig example is present in the cover letter. (...)
->
-> FYI: it's also possible to run these tests under UML with the extra options:
-> CONFIG_VIRTIO_UML=y
-> CONFIG_UML_PCI_OVER_VIRTIO=y
->
-
-Oh, very interesting. I didn't notice before that his example had --arch=x86_64
-
-> I suspect it's probably better not to add those to your .kunitconfig,
-> as they're UML-specific and will therefore break other architectures,
-> but it does mean the tests can be run with, for example:
-> 
-> ./tools/testing/kunit/kunit.py run --kunitconfig
-> drivers/gpu/drm/.kunitconfig --kconfig_add CONFIG_VIRTIO_UML=y
-> --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> 
-> Or, without the .kunitconfig:
-> ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_DRM=y
-> --kconfig_add CONFIG_DRM_FORMAR_HELPER_TEST=y --kconfig_add
-> CONFIG_VIRTIO_UML=y  --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> 'drm-*'
->
-
-I wonder if would make sense to have for example an arch/um/.kunitconfig
-with those symbols and maybe others and then the tests could also be run
-with something like:
-
-./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/.kunitconfig \
---kunitconfig=arch/um/.kunitconfig
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 55114e73de26..621eeb037a91 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1826,6 +1826,7 @@ ARM/APPLE MACHINE SUPPORT
+ M:	Hector Martin <marcan@marcan.st>
+ M:	Sven Peter <sven@svenpeter.dev>
+ R:	Alyssa Rosenzweig <alyssa@rosenzweig.io>
++L:	asahi@lists.linux.dev
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ W:	https://asahilinux.org
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.25.1
 

@@ -2,182 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23AC53B985
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B4B53B98F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235282AbiFBNQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S235230AbiFBNUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232790AbiFBNQU (ORCPT
+        with ESMTP id S231612AbiFBNU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:16:20 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D30115A46
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 06:16:19 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id h75so8240067ybg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 06:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7YXu1V3VR8TUftygJEuAqMqJkg+/ZrkiXwmmBce9gb0=;
-        b=HLhIT4g7i0wOca+xJNmnCRxTFKylRfa61zAiBYfvXFACPan6cB5/xMa4N90Bhv18z1
-         kdnt93N6EXKTbZBb8OkApGCtwSWxgSD+0FA9KAUWhX8IcjikVNmAipar+n9u1k0D3w5L
-         ua9+csXtlTufPramXxrpmjQ7KPjSqLoHzt0gKmr1oYK/dvrwUYv9b8ePk/3KBLdpT9EE
-         FlVdONZYK19tNSNGSR3G7qHmrQ6nbcbrvHyfVhMSpMsEScPnfVWHp5qXk1c4HgaTloPX
-         i6GgaICPbLdiMUkER1hDbjKo8FCz1SC9ZHSmfinUE1q6zKi/V0NCsGoguU07lnwUO1hq
-         vaOQ==
+        Thu, 2 Jun 2022 09:20:29 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB86270F3A;
+        Thu,  2 Jun 2022 06:20:27 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e656032735so6764028fac.0;
+        Thu, 02 Jun 2022 06:20:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7YXu1V3VR8TUftygJEuAqMqJkg+/ZrkiXwmmBce9gb0=;
-        b=MUb+XApc7AEQqmuTrV66O4vU0AVB4uBK1WO/AcUBLHOrLONUE8yTFihjaVlAQPbDJA
-         yR6hUGxpZc6VUZTyvuVrPf5AtuxlCHq3/khxQvMwzKpVDKhDPgFA8hjSZiklxaUmMTxm
-         OWkLu++CvyoOeonHC2EDeVtuZQoU7fhAsORI88RHjnCBsL7ZHOliVYGGS4vnnTzjpGYC
-         qJZ/Owkxm8ZDxfCQCk0RIZB3GObCMKDVcaXTUZb05IbVomN6zNv7Og5jJSjdh6VPO3VR
-         SOC1ikr7bEiINgiRlwzq1SaYeCODitOopwYzVEC0M5CTvZFsfMMHBWKQkb22mWUR37ir
-         TnbQ==
-X-Gm-Message-State: AOAM531YoG1WItOJRcHq6iPRd0FC+1NdEiDgX5XCyniSX86MIsa2qSTh
-        iMGkJe6Qm4X2iiKoHEv/Ixs+DHj6fDMZ+Eu4aUIN8Q==
-X-Google-Smtp-Source: ABdhPJyBtOeXWMXMPERgXnl0k+RivXQST/VnOj3vyZIhEN1AJrmvj2/HAiAr3sQKg25G+3bZEOUZqd7s3HYjEAxB8sY=
-X-Received: by 2002:a25:8a0e:0:b0:65c:bdb8:735c with SMTP id
- g14-20020a258a0e000000b0065cbdb8735cmr5093872ybl.211.1654175778366; Thu, 02
- Jun 2022 06:16:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bTbwu+Mz+i2T1fupPqwAFML/HPc02MWUuXZGeQCvXZ8=;
+        b=nHzqP6S6BImCZAfGUibqjr40CAQ+sXQyeKEnE4ZSVo6tfjEF8V+JCzMFo9LX50Gk4a
+         bK4r68EqxvNjHQxrnLodXRIb7Y0InLBMeR9EWSeVJEZETBpzvgshRzzWOzzykmVn96tQ
+         8lj97nXr+GOiG00Hv7nbxw8wENFOWXkGSQ6iomIopzy476Txv8aKW8t7A7cGqRW1X6if
+         MkVWDjJULW/QNpE24aW1xIf3RhXPvP0tekTQLZmmz3N2rIoiKxlCKmpZ3iqa1phMrkri
+         b18ruXDN8N74bvHTjka97QfBEE6dcuHEv4R7XgYk0Uds472CHyERrgY1SQDIBsg1Yz+0
+         qALw==
+X-Gm-Message-State: AOAM531tXe5tfBG+FbSpszKguTz8xUuGliFVwhBoIqdbF6zr520TEbBd
+        mz/IMKz9+5Ms6bRUpVMeSQ==
+X-Google-Smtp-Source: ABdhPJx8+7c641wEUgu8STii4oQje/7ttveo4f3P9XPnuvNlZ3Xg+IQx39aBP3kiPfMlhnetHIGGwg==
+X-Received: by 2002:a05:6870:3456:b0:e9:23d3:e701 with SMTP id i22-20020a056870345600b000e923d3e701mr2756689oah.11.1654176027237;
+        Thu, 02 Jun 2022 06:20:27 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w2-20020a9d5a82000000b0060603221240sm2220019oth.16.2022.06.02.06.20.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 06:20:26 -0700 (PDT)
+Received: (nullmailer pid 2133915 invoked by uid 1000);
+        Thu, 02 Jun 2022 13:20:25 -0000
+Date:   Thu, 2 Jun 2022 08:20:25 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v10 02/21] dt-bindings: mediatek,dp: Add Display Port
+ binding
+Message-ID: <20220602132025.GA2110588-robh@kernel.org>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+ <20220523104758.29531-3-granquet@baylibre.com>
 MIME-Version: 1.0
-References: <20220523155140.2878563-1-vdonnefort@google.com> <20220523155140.2878563-6-vdonnefort@google.com>
-In-Reply-To: <20220523155140.2878563-6-vdonnefort@google.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 2 Jun 2022 15:16:07 +0200
-Message-ID: <CAKfTPtAZOJg-04Zb1MAZueh0jwrokS-eAkMfB+avC5-fcMSkwA@mail.gmail.com>
-Subject: Re: [PATCH v9 5/7] sched/fair: Use the same cpumask per-PD throughout find_energy_efficient_cpu()
-To:     Vincent Donnefort <vdonnefort@google.com>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220523104758.29531-3-granquet@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 at 17:52, Vincent Donnefort <vdonnefort@google.com> wrote:
->
-> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
->
-> The Perf Domain (PD) cpumask (struct em_perf_domain.cpus) stays
-> invariant after Energy Model creation, i.e. it is not updated after
-> CPU hotplug operations.
->
-> That's why the PD mask is used in conjunction with the cpu_online_mask
-> (or Sched Domain cpumask). Thereby the cpu_online_mask is fetched
-> multiple times (in compute_energy()) during a run-queue selection
-> for a task.
->
-> cpu_online_mask may change during this time which can lead to wrong
-> energy calculations.
->
-> To be able to avoid this, use the select_rq_mask per-cpu cpumask to
-> create a cpumask out of PD cpumask and cpu_online_mask and pass it
-> through the function calls of the EAS run-queue selection path.
->
-> The PD cpumask for max_spare_cap_cpu/compute_prev_delta selection
-> (find_energy_efficient_cpu()) is now ANDed not only with the SD mask
-> but also with the cpu_online_mask. This is fine since this cpumask
-> has to be in syc with the one used for energy computation
-> (compute_energy()).
-> An exclusive cpuset setup with at least one asymmetric CPU capacity
-> island (hence the additional AND with the SD cpumask) is the obvious
-> exception here.
->
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+On Mon, May 23, 2022 at 12:47:35PM +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This controller is present on several mediatek hardware. Currently
+> mt8195 and mt8395 have this controller without a functional difference,
+> so only one compatible field is added.
+> 
+> The controller can have two forms, as a normal display port and as an
+> embedded display port.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  .../display/mediatek/mediatek,dp.yaml         | 99 +++++++++++++++++++
+>  1 file changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 2d7bba2f1da2..57074f27c0d2 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6700,14 +6700,14 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
->   * task.
->   */
->  static long
-> -compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
-> +compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
-> +              struct perf_domain *pd)
->  {
-> -       struct cpumask *pd_mask = perf_domain_span(pd);
->         unsigned long max_util = 0, sum_util = 0, cpu_cap;
->         int cpu;
->
-> -       cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
-> -       cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
-> +       cpu_cap = arch_scale_cpu_capacity(cpumask_first(cpus));
-> +       cpu_cap -= arch_scale_thermal_pressure(cpumask_first(cpus));
->
->         /*
->          * The capacity state of CPUs of the current rd can be driven by CPUs
-> @@ -6718,7 +6718,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->          * If an entire pd is outside of the current rd, it will not appear in
->          * its pd list and will not be accounted by compute_energy().
->          */
-> -       for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-> +       for_each_cpu(cpu, cpus) {
->                 unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
->                 unsigned long cpu_util, util_running = util_freq;
->                 struct task_struct *tsk = NULL;
-> @@ -6805,6 +6805,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
->   */
->  static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  {
-> +       struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
->         unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
->         struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
->         int cpu, best_energy_cpu = prev_cpu, target = -1;
-> @@ -6839,7 +6840,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                 unsigned long base_energy_pd;
->                 int max_spare_cap_cpu = -1;
->
-> -               for_each_cpu_and(cpu, perf_domain_span(pd), sched_domain_span(sd)) {
-> +               cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
-> +
-> +               for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
->                         if (!cpumask_test_cpu(cpu, p->cpus_ptr))
->                                 continue;
->
-> @@ -6876,12 +6879,12 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                         continue;
->
->                 /* Compute the 'base' energy of the pd, without @p */
-> -               base_energy_pd = compute_energy(p, -1, pd);
-> +               base_energy_pd = compute_energy(p, -1, cpus, pd);
->                 base_energy += base_energy_pd;
->
->                 /* Evaluate the energy impact of using prev_cpu. */
->                 if (compute_prev_delta) {
-> -                       prev_delta = compute_energy(p, prev_cpu, pd);
-> +                       prev_delta = compute_energy(p, prev_cpu, cpus, pd);
->                         if (prev_delta < base_energy_pd)
->                                 goto unlock;
->                         prev_delta -= base_energy_pd;
-> @@ -6890,7 +6893,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->
->                 /* Evaluate the energy impact of using max_spare_cap_cpu. */
->                 if (max_spare_cap_cpu >= 0) {
-> -                       cur_delta = compute_energy(p, max_spare_cap_cpu, pd);
-> +                       cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
-> +                                                  pd);
->                         if (cur_delta < base_energy_pd)
->                                 goto unlock;
->                         cur_delta -= base_energy_pd;
-> --
-> 2.36.1.124.g0e6072fb45-goog
->
+The example has warnings. Run 'make dt_binding_check' before submitting.

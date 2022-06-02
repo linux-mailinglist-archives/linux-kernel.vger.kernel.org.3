@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5AF53BA46
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EED053BA3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 15:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiFBN6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 09:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S235629AbiFBN5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 09:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiFBN6A (ORCPT
+        with ESMTP id S231286AbiFBN5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 09:58:00 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAD0793B2;
-        Thu,  2 Jun 2022 06:57:58 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id n10so10158719ejk.5;
-        Thu, 02 Jun 2022 06:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lCjXd1DtLAOiKDUVepuP3tVKlqmoM9phz1lypZW4eiM=;
-        b=eKXUR7kiBU80Kt1ivUsBYC1Vp5ABsZgOFlwcUTfYnL3EYaoBLLC4llE6qNCbLYkoPK
-         yV/E9DUt2ifgfA2Nbk6ykWpgQhfm9txSuz+Z9LmYA2e0QtK14BpQdaIg86EMFNfuUWkx
-         hMXNoGeRpp7Hw5ALo7uCiIN/Vg+bFN+64MnxIrSs4784P1udBgejLUQnnHasBXCy/VJv
-         Hraq92Husrz3Xf7aLdubPKJuxySVXpGPA0CZZLKoHOr29+EvAoDaQOSqIfuA/pA2wdFl
-         oxnZHqbsTfLFBaxgW2BGhnhwkC0uMC12x04YUFSe3zvFWWisWKPD/j9A/tTeJZTOCSWO
-         kQFQ==
+        Thu, 2 Jun 2022 09:57:38 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0240378EC8;
+        Thu,  2 Jun 2022 06:57:36 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id w19-20020a9d6393000000b0060aeb359ca8so3454013otk.6;
+        Thu, 02 Jun 2022 06:57:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lCjXd1DtLAOiKDUVepuP3tVKlqmoM9phz1lypZW4eiM=;
-        b=NWuso4ZzJ2XIOREiQvXrUw/xeTo07Z3fHySVFA9TDeKu07xHWPceLUwXEDFYALRl0S
-         uaeG7QzPp1TeVgLicOtPL8nwiXYTN3cgFBJrLk69g/Mx7HPVHkUb7rNoEPXj1qvDL4nv
-         oJaMJPPL/vAxZkKZv3B4ffi8V0TmuCV2SdURfhKLPZ/qGDXIes5HimrFntNNtz13e5zM
-         rkFSzx1v5Og1dZIrjRBTGpLPyUiVgR4nbuJehcnrg/yNqwr2SL18Vmvxwhr4yPzsD0u8
-         Y6QD6XDuj+bMSIQSRzwDVROxrZl4VAPwwt/izuS1JBcd5cAxpsi+DVO7mGdbD+ccmghI
-         yLwg==
-X-Gm-Message-State: AOAM5316Gy/jrnPFisdF0TmIb9D8QZ3WQg76+w3E9C+Cel0YmpXYq7K+
-        tOdhpMRUbSgymgoHxR4FF/WmYF9ZwQ9AeQW+Rb0=
-X-Google-Smtp-Source: ABdhPJw17vPxP2UwrASUkgWE75bkBumiXi0yzz2upgIbMhdhBA7mECqviI1+XnRf2zU0lOm4Q01q8wM9WsX0p02cGPY=
-X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
- sd4-20020a1709076e0400b006f4d6f3c72amr4545345ejc.636.1654178277156; Thu, 02
- Jun 2022 06:57:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DmzaWPni36LTWrL68JDxVCICKAzdgnrKhvK4tMCxkNQ=;
+        b=vf9EoScgVYReHhG/3zdd3PLLsSGg/k5gCYHO0n8TAasx90Q7WpHUxeaEHdZzeKD5rF
+         48VBezWK3HZuXt4ebmOyO4CcQwHIBdnskQ4P4bkDF8xzoEVgnqbm8RKO2txuaFslFqA6
+         apnCVXzR7Iamr93FZIBVTWGpLkYCR2Lah6brnpTx59PWxgTrzMr48r9hnIX7ehdNJldc
+         JmxiMSp6ds9wQXz+fc6EqS2zn158FZoVnBttRSZ/5NLrs59eIrq1lY0lt9sS5kFIzyVh
+         dVno0wtBm8yRAoHN04dEFms0AnfmBbW1aZTtwsn/CE0ThkrVstRqGuw0WJIziyGlrQQl
+         Lg7Q==
+X-Gm-Message-State: AOAM53399417eD4FsRf7T+1id8ZMiL3PNk3X/mTmrqw3E90TQbIgLlKU
+        z3oP/gXVIYd2olKvL8zikQ==
+X-Google-Smtp-Source: ABdhPJzx7xBx/olEPIrFDCkTc/pBdbrFue3iMMVdMAx5aXnHNxj2NxgDJOCNkqa35jOsOnNfktnEcg==
+X-Received: by 2002:a9d:7245:0:b0:60b:8843:3c7f with SMTP id a5-20020a9d7245000000b0060b88433c7fmr1985816otk.363.1654178255246;
+        Thu, 02 Jun 2022 06:57:35 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k13-20020a54470d000000b0032603df9d24sm2192550oik.47.2022.06.02.06.57.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 06:57:34 -0700 (PDT)
+Received: (nullmailer pid 2200075 invoked by uid 1000);
+        Thu, 02 Jun 2022 13:57:34 -0000
+Date:   Thu, 2 Jun 2022 08:57:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Cc:     jic23@kernel.org, lars@metafoo.de, mchehab+huawei@kernel.org,
+        ardeleanalex@gmail.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mike.looijmans@topic.nl,
+        devicetree@vger.kernel.org, thomas.haemmerle@leica-geosystems.com
+Subject: Re: [PATCH V5 6/6] dt-bindings: iio: accel: Add bmi085 and bmi090l
+ bindings
+Message-ID: <20220602135734.GA2198822-robh@kernel.org>
+References: <20220526133359.2261928-1-Qing-wu.Li@leica-geosystems.com.cn>
+ <20220526133359.2261928-7-Qing-wu.Li@leica-geosystems.com.cn>
 MIME-Version: 1.0
-References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-8-peterwu.pub@gmail.com>
- <CAHp75VdUQqihr=AX-wEUD05jY1ReL63hMCL+eaqmjkN8CsS_Vg@mail.gmail.com> <CA+hk2fasiriGHepNjsnPCqTMJOgAEbVHACmWrDRZY7cHPcOQqA@mail.gmail.com>
-In-Reply-To: <CA+hk2fasiriGHepNjsnPCqTMJOgAEbVHACmWrDRZY7cHPcOQqA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 2 Jun 2022 15:57:19 +0200
-Message-ID: <CAHp75Vf=ATRfaaaGFuuPHuQj6wTjnRPBw4W5WYfgYuUP-A-L=g@mail.gmail.com>
-Subject: Re: [PATCH 07/14] leds: flashlight: mt6370: Add Mediatek MT6370
- flashlight support
-To:     szuni chen <szunichen@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
-        alice_chen@richtek.com, chiaen_wu@richtek.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526133359.2261928-7-Qing-wu.Li@leica-geosystems.com.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 2:07 PM szuni chen <szunichen@gmail.com> wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=
-=9C=881=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:57=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > On Tue, May 31, 2022 at 1:32 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote=
-:
+On Thu, May 26, 2022 at 01:33:59PM +0000, LI Qingwu wrote:
+> Adds the device-tree bindings for the Bosch
+> BMI085 and BMI090L IMU, the accelerometer part.
+> 
+> Datasheet: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi085-ds001.pdf
+> Datasheet: https://media.digikey.com/pdf/Data%20Sheets/Bosch/BST-BMI090L-DS000-00.pdf
 
-...
+blank line here. These aren't part of the tags.
 
-> > > +       const char * const states[] =3D { "off", "keep", "on" };
-> > > +       const char *str;
-> > > +       int ret;
-> > > +
-> > > +       if (!fwnode_property_read_string(init_data->fwnode,
-> > > +                                        "default-state", &str)) {
-> > > +               ret =3D match_string(states, ARRAY_SIZE(states), str)=
-;
-> > > +               if (ret < 0)
-> > > +                       ret =3D STATE_OFF;
-> > > +
-> > > +               led->default_state =3D ret;
-> > > +       }
-> >
-> > fwnode_property_match_string()?
-> Sorry, but I think the use of this function is different from my target.
-> I want to read the string of the "default-state" property and figure
-> out if the string is in the states array.
-> But the fwnode_property_match_string aimed to figure out if the state
-> in the property array.
-> One is a property array and another one is a state array.
+With that,
 
-Ah, indeed. Nevertheless you may reduce the code base by doing like
-the following (I wonder what your code do if there is no default-state
-property):
+Acked-by: Rob Herring <robh@kernel.org>
 
-  led->default_state =3D STATE_OFF; // it's by default off since
-kzalloc(), so I don't see why we need this line at all.
-
-  fwnode_property_read_string(init_data->fwnode, "default-state", &str);
-  ret =3D match_string(states, ARRAY_SIZE(states), str);
-  if (ret >=3D 0)
-    led->default_state =3D ret;
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> ---
+>  Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+> index 911a1ae9c83f..272eb48eef5a 100644
+> --- a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+> +++ b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+> @@ -17,7 +17,9 @@ description: |
+>  properties:
+>    compatible:
+>      enum:
+> +      - bosch,bmi085-accel
+>        - bosch,bmi088-accel
+> +      - bosch,bmi090l-accel
+>  
+>    reg:
+>      maxItems: 1
+> -- 
+> 2.25.1
+> 
+> 

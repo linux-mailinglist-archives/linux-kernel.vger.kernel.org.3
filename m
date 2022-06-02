@@ -2,70 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3662353BE67
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B57F53BE70
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 21:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238400AbiFBTKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 15:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S238435AbiFBTKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 15:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238416AbiFBTKc (ORCPT
+        with ESMTP id S238422AbiFBTKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:10:32 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8282660E1
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:10:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id B4C791F454B6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654197026;
-        bh=IlvubttWe0/N+C/kJAK867PWFNBquuDF6pRN/+k26E0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E9K22y9xSbYOgCvppmK7gqcQN0asfUc+h+JV3bqyZQlvr+QjTgRKKhpwZoSrTYvmY
-         DC0NdqdE8hgbcKGo7Klb+PS7q6Bp565R2cf8TQl8X/WrdQ4tn64M3FY2BgAtMopkxj
-         Y9v7X9mAMiAMetm8ChdikjuZEfRs+7Dgq4zbv7gJd+396yP5QRhwGjDb8PYXHNedrY
-         BtLACziZNpGIieoqhLMpKROV8vUyUUg+BRnwitJS5pajpTVTiMGJhF0JEogk+KXf3/
-         d0vYvGX3RgTw7pfpuxsDUTbT1U8JvpOW1KMWZqnF9/8ROASyotxs3IIYvYGO4g3/5O
-         etEUTWm4hZzdw==
-Message-ID: <c8f18b5f-5ecd-e072-03fc-3d4845be1ae2@collabora.com>
-Date:   Thu, 2 Jun 2022 22:10:22 +0300
+        Thu, 2 Jun 2022 15:10:42 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F4FD48
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 12:10:40 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id k6so1322800qkf.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:10:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XtWDo4MTVxUub0OsqsFcXGlMn8SJu8w5e+LETPN1X5w=;
+        b=WEGpwTsANrZu0zwHT9Z/JjwZVI7FeF9I+mzBEM6dtsQkXlz5I3EOJF2rTNFvV+qWoE
+         y5xN57IqcaBdzns75EC+w0RZp84MunipC8Vs4EDB+zxrxpyibPT/PRh8MTmZ5akaD0bf
+         G9TQg4FQB1NM8FlO+NN2CYoQu0zKRFRdqz33JA5eZa+szwzOrQ+Ro4CRVt5QWPHGbk2y
+         5Bmoq9lIJX84ARnLPJdtBrC6flwCgoLfqY1prE46OmJm7qhTsWCKFDvOS1nJldd6Fh3e
+         +c0L9dYdE6hIKsuM/aoZ6VKZysLV2+g16haY95Ps5RUl23/DrddDLnjjBBWmkWKlEe6G
+         5tVg==
+X-Gm-Message-State: AOAM530pMy3pL7iVQhNt1ajtRb6ZJBMDJt8ZdsoIWpsMR8iqFXm22COc
+        VwJ/AHoAK+UGryiDcZKKN7acVBYjgcYysg==
+X-Google-Smtp-Source: ABdhPJyATvjF0lAoDsmzwI6ZS2N0KqnSa2ZnKqX/JCboyNsONXydVHm4EdCHkRIO4/vF4iEeSBNKww==
+X-Received: by 2002:a05:620a:4415:b0:6a5:895d:f254 with SMTP id v21-20020a05620a441500b006a5895df254mr4003264qkp.517.1654197039775;
+        Thu, 02 Jun 2022 12:10:39 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id bw16-20020a05622a099000b002f9114d2ebcsm3628327qtb.17.2022.06.02.12.10.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 12:10:39 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-300628e76f3so61061897b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 12:10:39 -0700 (PDT)
+X-Received: by 2002:a0d:f801:0:b0:30f:f716:2950 with SMTP id
+ i1-20020a0df801000000b0030ff7162950mr3084004ywf.358.1654197038940; Thu, 02
+ Jun 2022 12:10:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v1] kernel/reboot: Use static handler for
- register_platform_power_off()
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+References: <20220602180919.4856-1-wangxiang@cdjrlc.com>
+In-Reply-To: <20220602180919.4856-1-wangxiang@cdjrlc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 2 Jun 2022 21:10:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWroxsXvgon34voezjW5HE8mcqB_FEZY5DXi0z_CBpfWg@mail.gmail.com>
+Message-ID: <CAMuHMdWroxsXvgon34voezjW5HE8mcqB_FEZY5DXi0z_CBpfWg@mail.gmail.com>
+Subject: Re: [PATCH] m68k: Fix syntax errors in comments
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220531221102.1112968-1-dmitry.osipenko@collabora.com>
- <CAJZ5v0ifhxy-b50TyJdmzkJ_rnYyn7euzRc4-2bG_oxu-juCtw@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAJZ5v0ifhxy-b50TyJdmzkJ_rnYyn7euzRc4-2bG_oxu-juCtw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 21:40, Rafael J. Wysocki wrote:
-..
-> Applied now (with the tags from Geert), but if there are any more
-> followup changes in that area, can you please CC them to linux-pm, so
-> people who have seen your original series can see them too?
-> 
-> Thanks!
+Hi Xiang,
 
-Sure, I actually wanted to CC linux-pm, but missed twice to update the
-send-mail command from the bash history. Thank you all!
+On Thu, Jun 2, 2022 at 8:09 PM Xiang wangx <wangxiang@cdjrlc.com> wrote:
+> Delete the redundant word 'the'.
+>
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 
--- 
-Best regards,
-Dmitry
+Thanks for your patch!
+
+> --- a/arch/m68k/coldfire/intc-2.c
+> +++ b/arch/m68k/coldfire/intc-2.c
+> @@ -7,7 +7,7 @@
+>   * family, the 5270, 5271, 5274, 5275, and the 528x family which have two such
+>   * controllers, and the 547x and 548x families which have only one of them.
+>   *
+> - * The external 7 fixed interrupts are part the the Edge Port unit of these
+> + * The external 7 fixed interrupts are part the Edge Port unit of these
+
+I think "the the" should be replaced by "of the" instead.
+
+>   * ColdFire parts. They can be configured as level or edge triggered.
+>   *
+>   * (C) Copyright 2009-2011, Greg Ungerer <gerg@snapgear.com>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,160 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6689F53B78E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7307353B78C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 12:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbiFBK5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 06:57:53 -0400
+        id S233973AbiFBK5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 06:57:44 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbiFBK5o (ORCPT
+        with ESMTP id S231843AbiFBK5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:57:44 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEB020B14C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:57:40 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id l30so7214778lfj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x+CytCKlX79rhtBNDGo+eN/Csfz4tGbSW706glfcV3s=;
-        b=IrBYH2atiRJTij4OLkL2McNzaoMR3RqF5IQNxPWSS4MKmKEZwVfo766LNbSjF5dRWW
-         cXFMBvyydlUCOY5FUNClP3TU0KNiwEN3SZzoW/65g1Pm+DmVX3C8nvtlRiP3KA7teXx6
-         ThGTHny9ze7dy+BMT4LA6doHWH7JqDtK33XtP2NkYcyLx0NC/nEI5L89L4ZSs0/CXrct
-         CcTH8POG8oZpMV8ORMcHbE/H7LriMVrPMKQ4M+UJjJABi9RQ8a3bHWLowlT+KQqHYC4z
-         EyW1W7L5bVRmR5ijb7kU/SlZMCNH572BPtAKMyOEGJd6xN6Wz/gBnbVK5UrRQSwpE1mk
-         KnLQ==
+        Thu, 2 Jun 2022 06:57:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF0F420A73D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 03:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654167458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ILOH+9qB4kdX+wuRsiCR0WoKSLzvv92mSp/II4owxY4=;
+        b=bPvd3gblWo/HdjfKW88Rsu9hCPh6P4pL/q/dfj2G3djSCkPVbU3xE06+3JXqZih9tgzHHR
+        2xpvTr2Re6jHs+3LqbTrSV+rKvzYviWI35BnQcSrMrK2Vpraq5hTf2RMjbVv3i5XtovbeA
+        rUSAbe3+5fns/5o20V8uUL7kLNW2Se8=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-261-oui8lFhWP3qBbRabQIniaw-1; Thu, 02 Jun 2022 06:57:37 -0400
+X-MC-Unique: oui8lFhWP3qBbRabQIniaw-1
+Received: by mail-pg1-f198.google.com with SMTP id q195-20020a632acc000000b003fcb9b2b053so1731683pgq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 03:57:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x+CytCKlX79rhtBNDGo+eN/Csfz4tGbSW706glfcV3s=;
-        b=VgdK/GxZdSo3YVNeKxurFa3fBOzyOwinFSPuo4DOGFMSCfNWxTFPEmQtm1dJFJ+Kmk
-         F0hJghdJ4C4T/64OH6Ng84szt/wlClitLWgXGICCkP0cslc2wKCPvHK7ZuUQmo1XNqto
-         Qt3995JkE8tInlUvzvo/FmjwD9OvyJuDj0I60jdYOriOploanjzR0LQyr7GPho9jZiso
-         YHMQM2xQJ/xwRti6OUn1Gket61Uw4C8tP6IynjeIoHdjMS9tkFbNQVoVoeOqQUAv9TRk
-         cis5PxCvfQw/C4y4FHXge5z4+NoTz7hF6EuAt2m0Z6/7prw+M9/+1y+hkrzTCX9lIztE
-         adbQ==
-X-Gm-Message-State: AOAM532feXVYBtT/0Fy4PkA1I4cAfE73w17ug5H+TlpJCynVsMggigKH
-        DBYLQ1GvnAtDNP0Yz4JK1PmCnpLldsNdYO/JGvBDzw==
-X-Google-Smtp-Source: ABdhPJyRW4SMizmg/2yd0bFF1lI+Tau+09O/qHPkI3ruuPazvFnilXmy/61Dibd6p0qtuaD+W+P4LBZ7Y/pFJQAK4jA=
-X-Received: by 2002:a05:6512:1156:b0:478:79b1:583c with SMTP id
- m22-20020a056512115600b0047879b1583cmr3211435lfg.206.1654167458543; Thu, 02
- Jun 2022 03:57:38 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ILOH+9qB4kdX+wuRsiCR0WoKSLzvv92mSp/II4owxY4=;
+        b=g3MEoabu+0m1ulEdtCm48fQNRi2Q1YDAkhBnQExKsiBH523kAr+OP92ocEY16agzYH
+         zdEIe3X/2yq3YUa9hEX7AFnFK1cXsNsG3sONurUwU7eXxW7j5FLvVQpSnI17DGFrkfiJ
+         7nWcFqDN5UuIXF9jBKveJpbJMyMXYCsAIRCPmYBkOSlOh/8gg2O2hE0AlmYLSOZUdtUx
+         8DGm/9If/ItJlOupdsS+NF1Zbs1BxylThcmuxieoCk7fIZJyPdkG8dJvzu2jrScWL2lo
+         hrl0MucqbNbK5V9Qme2exCzuZ6p4RjiVFS0hEpgzMpzAaoi9G/LbVFG0ZWR2iZerRM4T
+         /VIg==
+X-Gm-Message-State: AOAM530qcDm8GjXjYLR7OGX5/DUDICdpJn+47G4ANRj2dsYfgffUIN5Z
+        mcn0fUQT/+SQRl0UeoXg1OBwkaQ9UTd7eMlLkZ9WTbYWLybJVkWxFFnLUDf5S7zHjoCqOs7kaLB
+        rCNR1mdK4M8P+pLvvJAsqJHkH0vTZEbmJd+u0ucJ9xkhBGVrJHvBum1yGEfD2leD/BgHse+QYAw
+        ==
+X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id b11-20020a056a000a8b00b004e152db9e5cmr71021377pfl.38.1654167455325;
+        Thu, 02 Jun 2022 03:57:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwWjC5hh3/8j1LD0iiMwtyQH0XgoH1waiLuwyJfZVxO3GOio+lEf9rK8zpnGSWpieZ9MmIHwA==
+X-Received: by 2002:a05:6a00:a8b:b0:4e1:52db:9e5c with SMTP id b11-20020a056a000a8b00b004e152db9e5cmr71021348pfl.38.1654167454906;
+        Thu, 02 Jun 2022 03:57:34 -0700 (PDT)
+Received: from [10.72.12.107] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id d20-20020a056a00199400b0051878e8cc13sm3498622pfl.116.2022.06.02.03.57.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 03:57:34 -0700 (PDT)
+Subject: Re: [RFC PATCH v3] ceph: prevent a client from exceeding the MDS
+ maximum xattr size
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Gregory Farnum <gfarnum@redhat.com>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220601162939.12278-1-lhenriques@suse.de>
+ <b788a7f9-9177-0398-7d21-a19ce7e6c957@redhat.com>
+ <87h7534dr9.fsf@brahms.olymp>
+ <289f5136-d2fc-1474-eb0f-521586f241b2@redhat.com>
+ <87a6av4awn.fsf@brahms.olymp>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <d271bdc1-f95a-01e2-7a0f-b6511aee2d58@redhat.com>
+Date:   Thu, 2 Jun 2022 18:57:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <000000000000044cc505e0741a4b@google.com>
-In-Reply-To: <000000000000044cc505e0741a4b@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 2 Jun 2022 12:57:27 +0200
-Message-ID: <CACT4Y+ay0SQiiu2MwanpYEGmybHZc-nuqOxWOz1hC0PgLRRhuQ@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: BUG: soft lockup in corrupted
-To:     syzbot <syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com>
-Cc:     aou@eecs.berkeley.edu, axboe@kernel.dk, justin@coraid.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87a6av4awn.fsf@brahms.olymp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 at 12:02, syzbot
-<syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com> wrote:
+
+On 6/2/22 6:28 PM, Luís Henriques wrote:
+> Xiubo Li <xiubli@redhat.com> writes:
 >
-> Hello,
+>> On 6/2/22 5:26 PM, Luís Henriques wrote:
+>>> Xiubo Li <xiubli@redhat.com> writes:
+>>>
+>>>> On 6/2/22 12:29 AM, Luís Henriques wrote:
+>>>>> The MDS tries to enforce a limit on the total key/values in extended
+>>>>> attributes.  However, this limit is enforced only if doing a synchronous
+>>>>> operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
+>>>>> doesn't have a chance to enforce these limits.
+>>>>>
+>>>>> This patch adds support for decoding the xattrs maximum size setting that is
+>>>>> distributed in the mdsmap.  Then, when setting an xattr, the kernel client
+>>>>> will revert to do a synchronous operation if that maximum size is exceeded.
+>>>>>
+>>>>> While there, fix a dout() that would trigger a printk warning:
+>>>>>
+>>>>> [   98.718078] ------------[ cut here ]------------
+>>>>> [   98.719012] precision 65536 too large
+>>>>> [   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprintf+0x5e3/0x600
+>>>>> ...
+>>>>>
+>>>>> URL: https://tracker.ceph.com/issues/55725
+>>>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+>>>>> ---
+>>>>>     fs/ceph/mdsmap.c            | 27 +++++++++++++++++++++++----
+>>>>>     fs/ceph/xattr.c             | 12 ++++++++----
+>>>>>     include/linux/ceph/mdsmap.h |  1 +
+>>>>>     3 files changed, 32 insertions(+), 8 deletions(-)
+>>>>>
+>>>>> * Changes since v2
+>>>>>
+>>>>> Well, a lot has changed since v2!  Now the xattr max value setting is
+>>>>> obtained through the mdsmap, which needs to be decoded, and the feature
+>>>>> that was used in the previous revision was dropped.  The drawback is that
+>>>>> the MDS isn't unable to know in advance if a client is aware of this xattr
+>>>>> max value.
+>>>>>
+>>>>> * Changes since v1
+>>>>>
+>>>>> Added support for new feature bit to get the MDS max_xattr_pairs_size
+>>>>> setting.
+>>>>>
+>>>>> Also note that this patch relies on a patch that hasn't been merged yet
+>>>>> ("ceph: use correct index when encoding client supported features"),
+>>>>> otherwise the new feature bit won't be correctly encoded.
+>>>>>
+>>>>> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
+>>>>> index 30387733765d..36b2bc18ca2a 100644
+>>>>> --- a/fs/ceph/mdsmap.c
+>>>>> +++ b/fs/ceph/mdsmap.c
+>>>>> @@ -13,6 +13,12 @@
+>>>>>       #include "super.h"
+>>>>>     +/*
+>>>>> + * Maximum size of xattrs the MDS can handle per inode by default.  This
+>>>>> + * includes the attribute name and 4+4 bytes for the key/value sizes.
+>>>>> + */
+>>>>> +#define MDS_MAX_XATTR_SIZE (1<<16) /* 64K */
+>>>>> +
+>>>>>     #define CEPH_MDS_IS_READY(i, ignore_laggy) \
+>>>>>     	(m->m_info[i].state > 0 && ignore_laggy ? true : !m->m_info[i].laggy)
+>>>>>     @@ -352,12 +358,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void
+>>>>> *end, bool msgr2)
+>>>>>     		__decode_and_drop_type(p, end, u8, bad_ext);
+>>>>>     	}
+>>>>>     	if (mdsmap_ev >= 8) {
+>>>>> -		u32 name_len;
+>>>>>     		/* enabled */
+>>>>>     		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
+>>>>> -		ceph_decode_32_safe(p, end, name_len, bad_ext);
+>>>>> -		ceph_decode_need(p, end, name_len, bad_ext);
+>>>>> -		*p += name_len;
+>>>>> +		/* fs_name */
+>>>>> +		ceph_decode_skip_string(p, end, bad_ext);
+>>>>>     	}
+>>>>>     	/* damaged */
+>>>>>     	if (mdsmap_ev >= 9) {
+>>>>> @@ -370,6 +374,21 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
+>>>>>     	} else {
+>>>>>     		m->m_damaged = false;
+>>>>>     	}
+>>>>> +	if (mdsmap_ev >= 17) {
+>>>>> +		/* balancer */
+>>>>> +		ceph_decode_skip_string(p, end, bad_ext);
+>>>>> +		/* standby_count_wanted */
+>>>>> +		ceph_decode_skip_32(p, end, bad_ext);
+>>>>> +		/* old_max_mds */
+>>>>> +		ceph_decode_skip_32(p, end, bad_ext);
+>>>>> +		/* min_compat_client */
+>>>>> +		ceph_decode_skip_8(p, end, bad_ext);
+>>>> This is incorrect.
+>>>>
+>>>> If mdsmap_ev == 15 the min_compat_client will be a feature_bitset_t instead of
+>>>> int8_t.
+>>> Hmm... can you point me at where that's done in the code?  As usual, I'm
+>>> confused with that code and simply can't see that.
+>>>
+>>> Also, if that happens only when mdsmap_ev == 15, then there's no problem
+>>> because that branch is only taken if it's >= 17.
+>> Yeah, so you should skip 32 or 32+64 bits instead here, just likes:
+>>
+>> 3536                 /* version >= 3, feature bits */
+>> 3537                 ceph_decode_32_safe(&p, end, len, bad);
+>> 3538                 if (len) {
+>> 3539                         ceph_decode_64_safe(&p, end, features, bad);
+>> 3540                         p += len - sizeof(features);
+>> 3541                 }
+>>
+>> For the ceph code please see:
+>>
+>> Please see https://github.com/ceph/ceph/blob/main/src/mds/MDSMap.cc#L925.
+> I still don't see what your saying.  From what I understand, with <= 15 we
+> used to have 'min_compat_client', which is of type 'ceph_release_t',
+> defined in src/common/ceph_releases.h:
 >
-> syzbot found the following issue on:
->
-> HEAD commit:    c932edeaf6d6 riscv: dts: microchip: fix gpio1 reg property..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14de11edf00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=aa6b5702bdf14a17
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1d1952c211a38ac43f10
-> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: riscv64
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+1d1952c211a38ac43f10@syzkaller.appspotmail.com
+> enum class ceph_release_t : std::uint8_t {
+> ...
+> }
+
+Okay, you are right.
+
+I miss reading that code.
+
+-- Xiubo
 
 
-This is the issue with riscv command line length we discussed in the
-other thread:
-https://lore.kernel.org/all/CACT4Y+bP+U2Co67SJG4qri=qHqCk38cq_JwGmo7m0s-8hCF8ww@mail.gmail.com/
+> Then, starting with >= 16 the MDS ignores this 'min_compat_client' field
+> (but still encodes/decodes it), and it *adds* 'required_client_features',
+> which is a 'feature_bitset_t' and that is decoded immediately after (see
+> bellow, the ceph_decode_skip_set() call).
+>
+> Cheers,
 
-
-> watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:1]
-> Modules linked in:
-> irq event stamp: 410297
-> hardirqs last  enabled at (410296): [<ffffffff8000ee74>] __trace_hardirqs_on+0x18/0x20 arch/riscv/kernel/trace_irq.c:19
-> hardirqs last disabled at (410297): [<ffffffff8000ee94>] __trace_hardirqs_off+0x18/0x20 arch/riscv/kernel/trace_irq.c:25
-> softirqs last  enabled at (405886): [<ffffffff83207a08>] softirq_handle_end kernel/softirq.c:401 [inline]
-> softirqs last  enabled at (405886): [<ffffffff83207a08>] __do_softirq+0x618/0x8fc kernel/softirq.c:587
-> softirqs last disabled at (405891): [<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-> softirqs last disabled at (405891): [<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
-> softirqs last disabled at (405891): [<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
-> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc1-syzkaller #0
-> Hardware name: riscv-virtio,qemu (DT)
-> epc : arch_static_branch arch/riscv/include/asm/jump_label.h:20 [inline]
-> epc : kfence_alloc include/linux/kfence.h:120 [inline]
-> epc : slab_alloc_node mm/slub.c:3135 [inline]
-> epc : kmem_cache_alloc_node+0xa0/0x3c6 mm/slub.c:3267
->  ra : slab_pre_alloc_hook mm/slab.h:724 [inline]
->  ra : slab_alloc_node mm/slub.c:3131 [inline]
->  ra : kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
-> epc : ffffffff8047df56 ra : ffffffff8047df1c sp : ff200000002273b0
->  gp : ffffffff85a76440 tp : ff60000007430000 t0 : 0000000000046000
->  t1 : ffebffff014d10b7 t2 : ffffffff80668f62 s0 : ff20000000227450
->  s1 : ff600000075a93c0 a0 : 0000000000000000 a1 : 0000000000000007
->  a2 : 1ffffffff09c876c a3 : ffffffff80bec434 a4 : 0000000000000000
->  a5 : 0000000000000000 a6 : 0000000000f00000 a7 : ff6000000a6885bb
->  s2 : 0000000000000a20 s3 : 0000000000000000 s4 : 0000000000000a20
->  s5 : ffffffffffffffff s6 : ffffffff8271f756 s7 : ffffffff85a9c780
->  s8 : 00000000000000e8 s9 : ffffffff85a7c2c0 s10: 00000000000000ff
->  s11: ffffffffffffa288 t3 : fffffffff3f3f300 t4 : ffebffff014d10b7
->  t5 : ffebffff014d10b8 t6 : ff6000001239fc00
-> status: 0000000000000120 badaddr: 0000000000000000 cause: 8000000000000005
-> [<ffffffff8271f756>] __alloc_skb+0x234/0x2e4 net/core/skbuff.c:414
-> [<ffffffff81a42954>] alloc_skb include/linux/skbuff.h:1300 [inline]
-> [<ffffffff81a42954>] new_skb+0x2c/0xcc drivers/block/aoe/aoecmd.c:66
-> [<ffffffff81a48ab2>] aoecmd_cfg_pkts drivers/block/aoe/aoecmd.c:425 [inline]
-> [<ffffffff81a48ab2>] aoecmd_cfg+0x1f6/0x5c6 drivers/block/aoe/aoecmd.c:1362
-> [<ffffffff81a4bdfc>] discover_timer+0x4a/0x54 drivers/block/aoe/aoemain.c:24
-> [<ffffffff8016c084>] call_timer_fn+0x164/0x694 kernel/time/timer.c:1421
-> [<ffffffff8016ca9a>] expire_timers kernel/time/timer.c:1466 [inline]
-> [<ffffffff8016ca9a>] __run_timers.part.0+0x4e6/0x76e kernel/time/timer.c:1734
-> [<ffffffff8016cda8>] __run_timers kernel/time/timer.c:1715 [inline]
-> [<ffffffff8016cda8>] run_timer_softirq+0x86/0x100 kernel/time/timer.c:1747
-> [<ffffffff83207664>] __do_softirq+0x274/0x8fc kernel/softirq.c:558
-> [<ffffffff8006164a>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-> [<ffffffff8006164a>] invoke_softirq kernel/softirq.c:439 [inline]
-> [<ffffffff8006164a>] __irq_exit_rcu+0x142/0x1f8 kernel/softirq.c:637
-> [<ffffffff80061958>] irq_exit+0x10/0x7a kernel/softirq.c:661
-> [<ffffffff831f7c8e>] generic_handle_arch_irq+0x48/0x54 kernel/irq/handle.c:240
-> [<ffffffff800057b2>] ret_from_exception+0x0/0x10
-> [<ffffffff8047df1c>] slab_pre_alloc_hook mm/slab.h:724 [inline]
-> [<ffffffff8047df1c>] slab_alloc_node mm/slub.c:3131 [inline]
-> [<ffffffff8047df1c>] kmem_cache_alloc_node+0x66/0x3c6 mm/slub.c:3267
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000044cc505e0741a4b%40google.com.

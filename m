@@ -2,153 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF9B53B604
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7090053B5FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Jun 2022 11:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbiFBJ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 05:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S233035AbiFBJ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 05:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiFBJ02 (ORCPT
+        with ESMTP id S232986AbiFBJ0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 05:26:28 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6787E29FE77;
-        Thu,  2 Jun 2022 02:26:27 -0700 (PDT)
-X-UUID: a6acc6b7c4cb4109a56c71315cd17c46-20220602
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:1e05d194-4848-463e-84bc-860c4bf27875,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:1e05d194-4848-463e-84bc-860c4bf27875,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:b4b3e337-9855-4915-a138-f5705f1f3d02,C
-        OID:e2b011970263,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: a6acc6b7c4cb4109a56c71315cd17c46-20220602
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 661290087; Thu, 02 Jun 2022 17:26:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 2 Jun 2022 17:26:21 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 2 Jun 2022 17:26:20 +0800
-Message-ID: <cf1fa83c5b6e76fe11768d9efc2374a9c45d4ba5.camel@mediatek.com>
-Subject: Re: [PATCH 1/3] dt-bindings: iommu: mediatek: add binding
- documentation for MT8365 SoC
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>
-CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Bear Wang" <bear.wang@mediatek.com>,
-        Macross Chen <macross.chen@mediatek.com>,
-        Kidd-KW Chen <Kidd-KW.Chen@mediatek.com>,
-        Andy Hsieh <Andy.Hsieh@mediatek.com>,
-        Pablo Sun <pablo.sun@mediatek.com>
-Date:   Thu, 2 Jun 2022 17:26:19 +0800
-In-Reply-To: <6b6c4cfc-6f20-0eda-4a0d-31d993341ae8@mediatek.com>
-References: <20220530180328.845692-1-fparent@baylibre.com>
-         <8ac7a6766c635412b408cb5295ddb3da37541140.camel@mediatek.com>
-         <59cedd50-4141-e589-11ae-b8d1a017eb46@mediatek.com>
-         <6b6c4cfc-6f20-0eda-4a0d-31d993341ae8@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 2 Jun 2022 05:26:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A497729FE62;
+        Thu,  2 Jun 2022 02:26:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0CCE721BE8;
+        Thu,  2 Jun 2022 09:26:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654161971; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G7ZdC+4kovgYT+Z+cbvIHEBS1Zhto9WfgyaFdC7uEAA=;
+        b=nNomXDbOYCw/N+7Bv/wCBUoTAIDOMzeNfmdtzpx2lbgUAcd0L+zkQYQlfIQYEVAiIqWI5D
+        3P0P6lOHc9KlDdUs/q1gzsaSp/o2SPz5ANxN77WfEQG/fRARzJczumn3QGQysS/0hjn+NC
+        LMVMAivbcrXR6YyhkmSeoYZpw86yENo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654161971;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G7ZdC+4kovgYT+Z+cbvIHEBS1Zhto9WfgyaFdC7uEAA=;
+        b=nuGjS6xBT6Y028BuyqaGeukxzQHupTzj3Gj2ihc6G4FPxQynnG27LLf5PqrMio24OqyWUG
+        5HxyjIrijSeGHnCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E036134F3;
+        Thu,  2 Jun 2022 09:26:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id psnUIzKCmGLFQgAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 02 Jun 2022 09:26:10 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 4dd310f1;
+        Thu, 2 Jun 2022 09:26:50 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Gregory Farnum <gfarnum@redhat.com>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3] ceph: prevent a client from exceeding the MDS
+ maximum xattr size
+References: <20220601162939.12278-1-lhenriques@suse.de>
+        <b788a7f9-9177-0398-7d21-a19ce7e6c957@redhat.com>
+Date:   Thu, 02 Jun 2022 10:26:50 +0100
+In-Reply-To: <b788a7f9-9177-0398-7d21-a19ce7e6c957@redhat.com> (Xiubo Li's
+        message of "Thu, 2 Jun 2022 10:33:27 +0800")
+Message-ID: <87h7534dr9.fsf@brahms.olymp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-02 at 16:42 +0800, Macpaul Lin wrote:
-> On 6/2/22 4:27 PM, Macpaul Lin wrote:
-> > On 6/2/22 2:18 PM, Yong Wu wrote:
-> > > On Mon, 2022-05-30 at 20:03 +0200, Fabien Parent wrote:
-> > > > Add IOMMU binding documentation for the MT8365 SoC.
-> > > > 
-> > > > Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> > > > ---
-> > > >   .../bindings/iommu/mediatek,iommu.yaml        |  2 +
-> > > >   include/dt-bindings/memory/mt8365-larb-port.h | 96
-> > > > +++++++++++++++++++
-> > > >   2 files changed, 98 insertions(+)
-> > > >   create mode 100644 include/dt-bindings/memory/mt8365-larb-
-> > > > port.h
-> > > 
-> > > [snip...]
-> > > 
-> > > > +#ifndef _DT_BINDINGS_MEMORY_MT8365_LARB_PORT_H_
-> > > > +#define _DT_BINDINGS_MEMORY_MT8365_LARB_PORT_H_
-> > > > +
-> > > > +#include <dt-bindings/memory/mtk-memory-port.h>
-> > > > +
-> > > > +#define M4U_LARB0_ID            0
-> > > > +#define M4U_LARB1_ID            1
-> > > > +#define M4U_LARB2_ID            2
-> > > > +#define M4U_LARB3_ID            3
-> > > > +#define M4U_LARB4_ID            4
-> > > > +#define M4U_LARB5_ID            5
-> > > > +#define M4U_LARB6_ID            6
-> > > > +#define M4U_LARB7_ID            7
-> > > 
-> > > Remove these. they are no used, right?
-> > 
-> > AIOT and customers are using the modules and their related IOMMU
-> > modules.
-> > DISP0, VENC, VDEC, ISP (CAMSYS), and APU (as far as I know, which
-> > should 
-> > be VP6?) were all supported.
-> 
-> Dear Yong,
-> How about to replace the following definitions?
-> 
-> For example, replace
-> #define M4U_PORT_DISP_OVL0		MTK_M4U_ID(0, 0)
-> to
-> #define M4U_PORT_DISP_OVL0              MTK_M4U_ID(M4U_LARB0_ID , 0)
+Xiubo Li <xiubli@redhat.com> writes:
 
-Yes. It is ok.
+> On 6/2/22 12:29 AM, Lu=C3=ADs Henriques wrote:
+>> The MDS tries to enforce a limit on the total key/values in extended
+>> attributes.  However, this limit is enforced only if doing a synchronous
+>> operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
+>> doesn't have a chance to enforce these limits.
+>>
+>> This patch adds support for decoding the xattrs maximum size setting tha=
+t is
+>> distributed in the mdsmap.  Then, when setting an xattr, the kernel clie=
+nt
+>> will revert to do a synchronous operation if that maximum size is exceed=
+ed.
+>>
+>> While there, fix a dout() that would trigger a printk warning:
+>>
+>> [   98.718078] ------------[ cut here ]------------
+>> [   98.719012] precision 65536 too large
+>> [   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprint=
+f+0x5e3/0x600
+>> ...
+>>
+>> URL: https://tracker.ceph.com/issues/55725
+>> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+>> ---
+>>   fs/ceph/mdsmap.c            | 27 +++++++++++++++++++++++----
+>>   fs/ceph/xattr.c             | 12 ++++++++----
+>>   include/linux/ceph/mdsmap.h |  1 +
+>>   3 files changed, 32 insertions(+), 8 deletions(-)
+>>
+>> * Changes since v2
+>>
+>> Well, a lot has changed since v2!  Now the xattr max value setting is
+>> obtained through the mdsmap, which needs to be decoded, and the feature
+>> that was used in the previous revision was dropped.  The drawback is that
+>> the MDS isn't unable to know in advance if a client is aware of this xat=
+tr
+>> max value.
+>>
+>> * Changes since v1
+>>
+>> Added support for new feature bit to get the MDS max_xattr_pairs_size
+>> setting.
+>>
+>> Also note that this patch relies on a patch that hasn't been merged yet
+>> ("ceph: use correct index when encoding client supported features"),
+>> otherwise the new feature bit won't be correctly encoded.
+>>
+>> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
+>> index 30387733765d..36b2bc18ca2a 100644
+>> --- a/fs/ceph/mdsmap.c
+>> +++ b/fs/ceph/mdsmap.c
+>> @@ -13,6 +13,12 @@
+>>     #include "super.h"
+>>   +/*
+>> + * Maximum size of xattrs the MDS can handle per inode by default.  This
+>> + * includes the attribute name and 4+4 bytes for the key/value sizes.
+>> + */
+>> +#define MDS_MAX_XATTR_SIZE (1<<16) /* 64K */
+>> +
+>>   #define CEPH_MDS_IS_READY(i, ignore_laggy) \
+>>   	(m->m_info[i].state > 0 && ignore_laggy ? true : !m->m_info[i].laggy)
+>>   @@ -352,12 +358,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p,=
+ void
+>> *end, bool msgr2)
+>>   		__decode_and_drop_type(p, end, u8, bad_ext);
+>>   	}
+>>   	if (mdsmap_ev >=3D 8) {
+>> -		u32 name_len;
+>>   		/* enabled */
+>>   		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
+>> -		ceph_decode_32_safe(p, end, name_len, bad_ext);
+>> -		ceph_decode_need(p, end, name_len, bad_ext);
+>> -		*p +=3D name_len;
+>> +		/* fs_name */
+>> +		ceph_decode_skip_string(p, end, bad_ext);
+>>   	}
+>>   	/* damaged */
+>>   	if (mdsmap_ev >=3D 9) {
+>> @@ -370,6 +374,21 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, vo=
+id *end, bool msgr2)
+>>   	} else {
+>>   		m->m_damaged =3D false;
+>>   	}
+>> +	if (mdsmap_ev >=3D 17) {
+>> +		/* balancer */
+>> +		ceph_decode_skip_string(p, end, bad_ext);
+>> +		/* standby_count_wanted */
+>> +		ceph_decode_skip_32(p, end, bad_ext);
+>> +		/* old_max_mds */
+>> +		ceph_decode_skip_32(p, end, bad_ext);
+>> +		/* min_compat_client */
+>> +		ceph_decode_skip_8(p, end, bad_ext);
+>
+> This is incorrect.
+>
+> If mdsmap_ev =3D=3D 15 the min_compat_client will be a feature_bitset_t i=
+nstead of
+> int8_t.
 
-> 
-> > > 
-> > > > +
-> > > > +/* larb0 */
-> > > > +#define M4U_PORT_DISP_OVL0        MTK_M4U_ID(0, 0)
-> > > > +#define M4U_PORT_DISP_OVL0_2L    MTK_M4U_ID(0, 1)
-> > > 
-> > > [...]
-> > > 
-> > > > 
-> > > > +/* larb4 */
-> > > > +#define M4U_PORT_APU_READ        MTK_M4U_ID(0, 0)
-> > > > +#define M4U_PORT_APU_WRITE        MTK_M4U_ID(0, 1)
-> > > 
-> > > Please remove these two APU definitions. currently these are not
-> > > supported.
-> > 
-> > Kidd, please help to check if APU use these definitions with Yong.
-> > However, I think these are all available to the customers.
-> > 
-> > Thanks
-> > Macpaul Lin
-> 
-> Thanks
-> Macpaul Lin
+Hmm... can you point me at where that's done in the code?  As usual, I'm
+confused with that code and simply can't see that.
 
+Also, if that happens only when mdsmap_ev =3D=3D 15, then there's no problem
+because that branch is only taken if it's >=3D 17.
+
+>
+>
+>> +		/* required_client_features */
+>> +		ceph_decode_skip_set(p, end, 64, bad_ext);
+>> +		ceph_decode_64_safe(p, end, m->m_max_xattr_size, bad_ext);
+>> +	} else {
+>> +		m->m_max_xattr_size =3D MDS_MAX_XATTR_SIZE;
+>> +	}
+>>   bad_ext:
+>>   	dout("mdsmap_decode m_enabled: %d, m_damaged: %d, m_num_laggy: %d\n",
+>>   	     !!m->m_enabled, !!m->m_damaged, m->m_num_laggy);
+>> diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
+>> index 8c2dc2c762a4..67f046dac35c 100644
+>> --- a/fs/ceph/xattr.c
+>> +++ b/fs/ceph/xattr.c
+>> @@ -1086,7 +1086,7 @@ static int ceph_sync_setxattr(struct inode *inode,=
+ const char *name,
+>>   			flags |=3D CEPH_XATTR_REMOVE;
+>>   	}
+>>   -	dout("setxattr value=3D%.*s\n", (int)size, value);
+>> +	dout("setxattr value size: %ld\n", size);
+>>     	/* do request */
+>>   	req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
+>> @@ -1184,8 +1184,14 @@ int __ceph_setxattr(struct inode *inode, const ch=
+ar *name,
+>>   	spin_lock(&ci->i_ceph_lock);
+>>   retry:
+>>   	issued =3D __ceph_caps_issued(ci, NULL);
+>> -	if (ci->i_xattrs.version =3D=3D 0 || !(issued & CEPH_CAP_XATTR_EXCL))
+>> +	required_blob_size =3D __get_required_blob_size(ci, name_len, val_len);
+>> +	if ((ci->i_xattrs.version =3D=3D 0) || !(issued & CEPH_CAP_XATTR_EXCL)=
+ ||
+>> +	    (required_blob_size >=3D mdsc->mdsmap->m_max_xattr_size)) {
+>
+> Shouldn't it be '>' instead ?
+
+Ok, I'll fix that.
+
+> We'd better always force to do a sync request with old ceph. Just check i=
+f the
+> mdsmap_ev < 17. It's not safe to buffer it because it maybe discarded as =
+your
+> ceph PR does.
+
+Right, that can be done.  So, I can simply set the m_max_xattr_size to '0'
+if mdsmap_ev < 17.  Then, this 'if' condition will always be evaluated to
+true because required_blob_size will be > 0.  Does that sound OK?
+
+Cheers,
+--=20
+Lu=C3=ADs
+
+
+> -- Xiubo
+>
+>> +		dout("%s do sync setxattr: version: %llu size: %d max: %llu\n",
+>> +		     __func__, ci->i_xattrs.version, required_blob_size,
+>> +		     mdsc->mdsmap->m_max_xattr_size);
+>>   		goto do_sync;
+>> +	}
+>>     	if (!lock_snap_rwsem && !ci->i_head_snapc) {
+>>   		lock_snap_rwsem =3D true;
+>> @@ -1201,8 +1207,6 @@ int __ceph_setxattr(struct inode *inode, const cha=
+r *name,
+>>   	     ceph_cap_string(issued));
+>>   	__build_xattrs(inode);
+>>   -	required_blob_size =3D __get_required_blob_size(ci, name_len, val_le=
+n);
+>> -
+>>   	if (!ci->i_xattrs.prealloc_blob ||
+>>   	    required_blob_size > ci->i_xattrs.prealloc_blob->alloc_len) {
+>>   		struct ceph_buffer *blob;
+>> diff --git a/include/linux/ceph/mdsmap.h b/include/linux/ceph/mdsmap.h
+>> index 523fd0452856..4c3e0648dc27 100644
+>> --- a/include/linux/ceph/mdsmap.h
+>> +++ b/include/linux/ceph/mdsmap.h
+>> @@ -25,6 +25,7 @@ struct ceph_mdsmap {
+>>   	u32 m_session_timeout;          /* seconds */
+>>   	u32 m_session_autoclose;        /* seconds */
+>>   	u64 m_max_file_size;
+>> +	u64 m_max_xattr_size;		/* maximum size for xattrs blob */
+>>   	u32 m_max_mds;			/* expected up:active mds number */
+>>   	u32 m_num_active_mds;		/* actual up:active mds number */
+>>   	u32 possible_max_rank;		/* possible max rank index */
+>>

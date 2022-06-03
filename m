@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD1D53CF76
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE2F53D00D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345689AbiFCRyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S1346396AbiFCSAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345890AbiFCRuc (ORCPT
+        with ESMTP id S1347197AbiFCRwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F15562E4;
-        Fri,  3 Jun 2022 10:46:33 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5E658380;
+        Fri,  3 Jun 2022 10:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A0B660A24;
-        Fri,  3 Jun 2022 17:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F4BAC385A9;
-        Fri,  3 Jun 2022 17:46:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCF3360A0F;
+        Fri,  3 Jun 2022 17:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05CCC385A9;
+        Fri,  3 Jun 2022 17:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278391;
-        bh=dpH0iACmdZliwu7JPRo+bUchXXFIwcB3x+lHvB7xBxI=;
+        s=korg; t=1654278620;
+        bh=rhSReVfYA015Yqcr13AeznBlSDShTNdEP+EIElwOAPE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k3bwi/X9thv2YiLcr7xsmaw7QhIi27EvjXsSBwHXA+iqDom1MfTqHZsa0zKDyyTur
-         Sg3hDS7PlfdB/ZhXrLnIx+wxcHlr77fK22Kz+CmJaYTlJ0lkjGVw1n99qwMIfTohsS
-         w52K+GZRntVL2L4PhIh+0DEFDNCdxi0NqBB78BlA=
+        b=wygI1G6kaSgCTpR/GGrpEznWnAbKY6KXGVwNqETx3kVKuCI4LH/EGZkVXjoJSn8Yb
+         KH2qgaZ1PpztoRsPB3hgKtDVzakkJf6vHttrnEs+2WyZDzsAf4cSt6cgElm3uSxzhL
+         SV9oplhNmgyoMvUT6IId0MlUx4CgPhs/npxlN2jw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        stable@vger.kernel.org, David Wilder <wilder@us.ibm.com>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 02/53] percpu_ref_init(): clean ->percpu_count_ref on failure
+Subject: [PATCH 5.15 07/66] net: ftgmac100: Disable hardware checksum on AST2600
 Date:   Fri,  3 Jun 2022 19:42:47 +0200
-Message-Id: <20220603173818.789968820@linuxfoundation.org>
+Message-Id: <20220603173820.878999533@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +57,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Viro <viro@zeniv.linux.org.uk>
+From: Joel Stanley <joel@jms.id.au>
 
-[ Upstream commit a91714312eb16f9ecd1f7f8b3efe1380075f28d4 ]
+[ Upstream commit 6fd45e79e8b93b8d22fb8fe22c32fbad7e9190bd ]
 
-That way percpu_ref_exit() is safe after failing percpu_ref_init().
-At least one user (cgroup_create()) had a double-free that way;
-there might be other similar bugs.  Easier to fix in percpu_ref_init(),
-rather than playing whack-a-mole in sloppy users...
+The AST2600 when using the i210 NIC over NC-SI has been observed to
+produce incorrect checksum results with specific MTU values. This was
+first observed when sending data across a long distance set of networks.
 
-Usual symptoms look like a messed refcounting in one of subsystems
-that use percpu allocations (might be percpu-refcount, might be
-something else).  Having refcounts for two different objects share
-memory is Not Nice(tm)...
+On a local network, the following test was performed using a 1MB file of
+random data.
 
-Reported-by: syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+On the receiver run this script:
+
+ #!/bin/bash
+ while [ 1 ]; do
+        # Zero the stats
+        nstat -r  > /dev/null
+        nc -l 9899 > test-file
+        # Check for checksum errors
+        TcpInCsumErrors=$(nstat | grep TcpInCsumErrors)
+        if [ -z "$TcpInCsumErrors" ]; then
+                echo No TcpInCsumErrors
+        else
+                echo TcpInCsumErrors = $TcpInCsumErrors
+        fi
+ done
+
+On an AST2600 system:
+
+ # nc <IP of  receiver host> 9899 < test-file
+
+The test was repeated with various MTU values:
+
+ # ip link set mtu 1410 dev eth0
+
+The observed results:
+
+ 1500 - good
+ 1434 - bad
+ 1400 - good
+ 1410 - bad
+ 1420 - good
+
+The test was repeated after disabling tx checksumming:
+
+ # ethtool -K eth0 tx-checksumming off
+
+And all MTU values tested resulted in transfers without error.
+
+An issue with the driver cannot be ruled out, however there has been no
+bug discovered so far.
+
+David has done the work to take the original bug report of slow data
+transfer between long distance connections and triaged it down to this
+test case.
+
+The vendor suspects this this is a hardware issue when using NC-SI. The
+fixes line refers to the patch that introduced AST2600 support.
+
+Reported-by: David Wilder <wilder@us.ibm.com>
+Reviewed-by: Dylan Hung <dylan_hung@aspeedtech.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/percpu-refcount.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/faraday/ftgmac100.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/lib/percpu-refcount.c b/lib/percpu-refcount.c
-index e59eda07305e..493093b97093 100644
---- a/lib/percpu-refcount.c
-+++ b/lib/percpu-refcount.c
-@@ -75,6 +75,7 @@ int percpu_ref_init(struct percpu_ref *ref, percpu_ref_func_t *release,
- 	data = kzalloc(sizeof(*ref->data), gfp);
- 	if (!data) {
- 		free_percpu((void __percpu *)ref->percpu_count_ptr);
-+		ref->percpu_count_ptr = 0;
- 		return -ENOMEM;
- 	}
- 
+diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+index e1df2dc810a2..0b833572205f 100644
+--- a/drivers/net/ethernet/faraday/ftgmac100.c
++++ b/drivers/net/ethernet/faraday/ftgmac100.c
+@@ -1910,6 +1910,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
+ 	/* AST2400  doesn't have working HW checksum generation */
+ 	if (np && (of_device_is_compatible(np, "aspeed,ast2400-mac")))
+ 		netdev->hw_features &= ~NETIF_F_HW_CSUM;
++
++	/* AST2600 tx checksum with NCSI is broken */
++	if (priv->use_ncsi && of_device_is_compatible(np, "aspeed,ast2600-mac"))
++		netdev->hw_features &= ~NETIF_F_HW_CSUM;
++
+ 	if (np && of_get_property(np, "no-hw-checksum", NULL))
+ 		netdev->hw_features &= ~(NETIF_F_HW_CSUM | NETIF_F_RXCSUM);
+ 	netdev->features |= netdev->hw_features;
 -- 
 2.35.1
 

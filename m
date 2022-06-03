@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059A053CB95
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8060A53CB9B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245114AbiFCOeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S245122AbiFCOfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244009AbiFCOeV (ORCPT
+        with ESMTP id S230390AbiFCOft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:34:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C551A5045E;
-        Fri,  3 Jun 2022 07:34:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 3 Jun 2022 10:35:49 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3767D5045E;
+        Fri,  3 Jun 2022 07:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1654266949; x=1685802949;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hKkj64qgHkXAPRzFlIQz7qBHbCyzr6tJpcfe1l/AAoM=;
+  b=RMAoGFNOvYkDUS8ayhtR4BUZWnFrlF16l8dh19v6l1RGj5eZhvTVaejz
+   ixgEkaiqBaYfKlqjo0eD7hzKM3CRTZydRxHsthIBEL2xX6XLjjRTNzRez
+   I9rkOFgdThvD5mLlizplCoD4XY7nYKcDfAe0CuyR1RM+d3T9EK/UwQSVL
+   c=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="125104036"
+X-IronPort-AV: E=Sophos;i="5.91,274,1647298800"; 
+   d="scan'208";a="125104036"
+Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 16:35:47 +0200
+Received: from MUCSE805.infineon.com (MUCSE805.infineon.com [172.23.29.31])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E86616F9;
-        Fri,  3 Jun 2022 14:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BDC3C385A9;
-        Fri,  3 Jun 2022 14:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654266857;
-        bh=3nAELPzfAqOQmMeq44MqN+8FRP1GoZ6OQ7z/q+8F6nE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XH0DMFMPOaK4wqwPXozOLeoRU+BC9lC/4jjMf8Ss8jxwAImkqjIqfZy5jOSObMEw3
-         MktfV//vAQ0NbofATGFbRO5O8D3bJG/J06Ainax6o3NAaAEHHLonj5OCDp7DuODnbs
-         1VKxKZ6rChwetbrDOF80MsnQZsG4gGnYnjBOzPzn8GTeEZVj8iX1sTgZRx61sjsFbU
-         IIGG/yCeqP9fDpRIlgv3PPVT5oT9gPYI/gfSE1Nkac3pTOl74HzozkA3u4dSRyoXsw
-         fi76rV1bOrhDcp1TwwVq62G5W0QVSQA5aCuCW+7nEwufMxI3m3AkvRCIdacVXBk6bf
-         SFGf3+R3I32Pw==
-Date:   Fri, 3 Jun 2022 20:04:10 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] Add support for unprotected spare data page
-Message-ID: <20220603143410.GA26696@thinkpad>
-References: <20220519190112.6344-1-ansuelsmth@gmail.com>
- <20220603154934.521c57ab@xps-13>
+        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
+        Fri,  3 Jun 2022 16:35:46 +0200 (CEST)
+Received: from MUCSE817.infineon.com (172.23.29.43) by MUCSE805.infineon.com
+ (172.23.29.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 3 Jun 2022
+ 16:35:46 +0200
+Received: from ISCNPC0VBFBX.infineon.com (172.23.8.247) by
+ MUCSE817.infineon.com (172.23.29.43) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.26; Fri, 3 Jun 2022 16:35:45 +0200
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+To:     <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>
+CC:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v5 0/3] tpm_tis_i2c
+Date:   Fri, 3 Jun 2022 16:35:29 +0200
+Message-ID: <20220603143532.8202-1-Alexander.Steffen@infineon.com>
+X-Mailer: git-send-email 2.28.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220603154934.521c57ab@xps-13>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE814.infineon.com (172.23.29.40) To
+ MUCSE817.infineon.com (172.23.29.43)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 03:49:34PM +0200, Miquel Raynal wrote:
-> Hi,
-> 
-> ansuelsmth@gmail.com wrote on Thu, 19 May 2022 21:01:10 +0200:
-> 
-> > Some background about this.
-> > On original qsdk ipq8064 based firmware there was a big separation from
-> > boot partition and user partition. With boot partition we refer to
-> > partition used to init the router (bootloader, spm firmware and other
-> > internal stuff) With user partition we refer to linux partition and data
-> > partition not used to init the router.
-> > When someone had to write to these boot partition a special mode was
-> > needed, to switch the nand driver to this special configuration.
-> > 
-> > Upstream version of the nandc driver totally dropped this and the result
-> > is that if someone try to read data from these partition a CRC warning
-> > is printed and if someone try to write that (if for example someone
-> > wants to replace the bootloader) result is a broken system as the data
-> > is badly written.
-> > 
-> > This series comes to fix this.
-> > 
-> > A user can declare offset and size of these special partition using the
-> > qcom,boot-pages binding.
-> > 
-> > An initial implementation of this assumed that the boot-pages started
-> > from the start of the nand but we discover that some device have backup
-> > of these special partition and we can have situation where we have this
-> > partition scheme
-> > - APPSBL (require special mode)
-> > - APPSBLENV (doesn't require special mode)
-> > - ART
-> > - APPSBLBK (back of APPSBL require special mode)
-> > - APPSBLENVBK (back of APPSBLENV doesn't require special mode)
-> > With this configuration we need to declare sparse boot page and we can't
-> > assume boot-pages always starts from the start of the nand.
-> > 
-> > A user can use this form to declare sparse boot pages
-> > qcom,boot-pages = <0x0 0x0c80000 0x0c80000 0x0500000>;
-> > 
-> > The driver internally will parse this array, convert it to nand pages
-> > and check internally on every read/write if this special configuration
-> > should used for that page or the normal one.
-> > 
-> > The reason for all of this is that qcom FOR SOME REASON, disable ECC for
-> > spare data only for these boot partition and we need to reflect this
-> > special configuration to mute these warning and to permit actually
-> > writing to these pages.
-> 
-> Manivannan, any feedback on this?
-> 
+Changelog:
+ * v5:
+   * Rename tpm_tis-i2c to tpm-tis-i2c
+   * Remove unused includes
+ * v4:
+   * Move changelog to cover letter
+   * Add compatibles to trivial-devices.yaml
+   * Split patch for CRC interface and implementation
+   * Add tpm_tis_i2c prefix to all functions
+   * Improve documentation for guard time and sanity check
+   * Use for loop instead of while for retries
+ * v3:
+   * Document address_to_register function
+   * Add tpm_tis_i2c prefix to address_to_register
+   * Add #ifdef CONFIG_OF to of_tis_i2c_match
+   * Fix typos
+ * v2:
+   * move CCs from copyright comment to commit message
+   * fix an unchecked return code
 
-Sorry for the delay. I will check internally on some of the unknown
-implementations mentioned and provide my comments.
+Alexander Steffen (3):
+  dt-bindings: trivial-devices: Add two I2C TPM devices
+  tpm: Add tpm_tis_verify_crc to the tpm_tis_phy_ops protocol layer
+  tpm: Add tpm_tis_i2c backend for tpm_tis_core
 
-Thanks,
-Mani
-
-> > 
-> > v4:
-> > - Fix wrong compatible set for boot-pages (ipq8074 instead of ipq806x)
-> > v3:
-> > - Fix typo in Docmunetation commit desription
-> > - Add items description for uint32-matrix
-> > v2:
-> > - Add fixes from Krzysztof in Documentation
-> > 
-> > Ansuel Smith (2):
-> >   mtd: nand: raw: qcom_nandc: add support for unprotected spare data
-> >     pages
-> >   dt-bindings: mtd: qcom_nandc: document qcom,boot-pages binding
-> > 
-> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   |  26 +++
-> >  drivers/mtd/nand/raw/qcom_nandc.c             | 148 +++++++++++++++++-
-> >  2 files changed, 169 insertions(+), 5 deletions(-)
-> > 
-> 
-> Thanks,
-> Miquèl
+ .../devicetree/bindings/trivial-devices.yaml  |   4 +
+ drivers/char/tpm/Kconfig                      |  12 +
+ drivers/char/tpm/Makefile                     |   1 +
+ drivers/char/tpm/tpm_tis_core.c               |  14 +
+ drivers/char/tpm/tpm_tis_core.h               |  10 +
+ drivers/char/tpm/tpm_tis_i2c.c                | 392 ++++++++++++++++++
+ 6 files changed, 433 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+

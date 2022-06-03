@@ -2,185 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253D453CE01
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5531053CE05
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344380AbiFCRXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
+        id S1344421AbiFCRYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344375AbiFCRXM (ORCPT
+        with ESMTP id S1344415AbiFCRYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:23:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337F8527FE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:23:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id DD22621B35;
-        Fri,  3 Jun 2022 17:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1654276989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UPMomr3jzTc6gcXGmXLj0Br1avJ9TWeGe+quz6nhksE=;
-        b=FBr3uWFAKiPnWWIx3Sz21Y7eogyRuw9PoWzwr8WfvYbPxJow5GJMnecyM/pc0R44W6V6Gz
-        QxKjWjmn6ABSboCJXUfW4iQlX9jFhrr6gOk55o7jWFcuEZ5Yy5xvKoy+W+FFq3AL2YFtlF
-        tHla8nIB5bLCxav9bxojI+Tb5PNOgvM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1654276989;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UPMomr3jzTc6gcXGmXLj0Br1avJ9TWeGe+quz6nhksE=;
-        b=+K8MayvxFlWvSJh6B29VGb2H61gLR5nPEhIBFCa7Jcd/FtkpELUMxeP0PDiCo6WMKU2ZTR
-        NeVpGzIhAktMvHBg==
-Received: from lion.mk-sys.cz (unknown [10.100.200.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C2BB42C141;
-        Fri,  3 Jun 2022 17:23:09 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id 9D17D60426; Fri,  3 Jun 2022 19:23:09 +0200 (CEST)
-Date:   Fri, 3 Jun 2022 19:23:09 +0200
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     "Yang, Philip" <Philip.Yang@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: (REGRESSION bisected) Re: amdgpu errors (VM fault / GPU fault
- detected) with 5.19 merge window snapshots
-Message-ID: <20220603172309.kq47e4kyopz2qqi3@lion.mk-sys.cz>
-References: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz>
- <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
- <CADnq5_Pr-FKfhuXT9DR2rYD=dMfD=+Dfev+CO-xeaPGnhwSQaA@mail.gmail.com>
- <20220602142254.2ck7dw7u3xlzdnt2@lion.mk-sys.cz>
- <CADnq5_MiQKX4JA-3xbxGYXKHpJqD0Px1NYSiL6yPeTwseoNVGg@mail.gmail.com>
+        Fri, 3 Jun 2022 13:24:04 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2094.outbound.protection.outlook.com [40.107.244.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D10527F7;
+        Fri,  3 Jun 2022 10:24:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IOgD1b4OpRvHyupBlUighYln7U/QF0zOKcmn9RKTdJS73125YCvZz/KL+/F6Eo+sO6GnjKg1IDV/O+eOWcDt1VeXeOUPKCDEUIWx0drHJxs1gFfvIcQkaGwXLp9CFIp2ljABlANsozuKudxX06rHB3hBPSt6IaIscWSF9c76MkHlU5Y8SDzUYliNmTfIE0M9MA9n2vdKBKZDLXUiwwJvifwFI4sXWDhtGr8/5jQkk9JvQ0kRQUHW/U1SHgLYMqw++mkLyecu/Ue3emdJnYz4xuSpJq6OXUlesqLmsghtnfzZL0DWgAROYwNMkxQ1Z61rZA2mrhHmgbeb5t6gSXD/HQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LyF9AEl8kSL+04//UdsJ2+/R4/3/+nPXuhApJyB+hro=;
+ b=Qet6QBcgLK0ClLlOBkOh/TbRDwBJi5BC5ur8yXM2EIya8JRfx3iiVdVpuoqXHJspVN+ccVymiXdtqPEYl88YqCEooILk+lOXH6llefXM/r+hJ7/h0zN2Nbi+GRctiNlR0FsDbcRSs8NCrB4NWS2mVwB4SGCBPFRZO0ljkFFDOlcVz7EfvVdZ2szyW6ulVmgwXSqzLU1DvSUfZsiQAxSWHPcKPPDyhguI6ws8pL414F7707VfmG0uKBiqRxEhwtL6KSielXeXhbFCdiv86oUGOi1y11vwwPvRD/QYCfHJ1HwIAbvXPs/EjUOBBBYTio4VE84i4J1RV1Ts6oZU7yFUDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LyF9AEl8kSL+04//UdsJ2+/R4/3/+nPXuhApJyB+hro=;
+ b=kgc3jq6hnkozJUmgTTjWYumHfzMbGKhhO/khFttz+xi0DJT7+Im19bC6qe1z0hj9FVH3wk3AKxKpL3sK56UKxI7gFj36YXQqJFBu5jcm2nIdjHbZHXiZz2EJBWaTzXYie4zsZaaV/6IPlg/uNfTAMEUi6ww7YZgSqbwJBpLrt7g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from MWHPR0101MB2893.prod.exchangelabs.com (2603:10b6:301:33::25) by
+ SJ0PR01MB6335.prod.exchangelabs.com (2603:10b6:a03:29f::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5293.13; Fri, 3 Jun 2022 17:24:01 +0000
+Received: from MWHPR0101MB2893.prod.exchangelabs.com
+ ([fe80::b8d8:b445:2b14:bed3]) by MWHPR0101MB2893.prod.exchangelabs.com
+ ([fe80::b8d8:b445:2b14:bed3%3]) with mapi id 15.20.5293.019; Fri, 3 Jun 2022
+ 17:24:01 +0000
+From:   D Scott Phillips <scott@os.amperecomputing.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
+        Darren Hart <darren@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Subject: Re: [PATCH] hwmon: Remove xgene driver
+In-Reply-To: <20220603165349.3348390-1-scott@os.amperecomputing.com>
+References: <20220603165349.3348390-1-scott@os.amperecomputing.com>
+Date:   Fri, 03 Jun 2022 10:23:58 -0700
+Message-ID: <86ilph8xu9.fsf@scott-ph-mail.amperecomputing.com>
+Content-Type: text/plain
+X-ClientProxiedBy: CH0PR03CA0333.namprd03.prod.outlook.com
+ (2603:10b6:610:11a::7) To MWHPR0101MB2893.prod.exchangelabs.com
+ (2603:10b6:301:33::25)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mcayuoy6vmkfigea"
-Content-Disposition: inline
-In-Reply-To: <CADnq5_MiQKX4JA-3xbxGYXKHpJqD0Px1NYSiL6yPeTwseoNVGg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 101fe19c-b9c4-4b6b-6112-08da4585d981
+X-MS-TrafficTypeDiagnostic: SJ0PR01MB6335:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR01MB6335A4523D587FABD058200B86A19@SJ0PR01MB6335.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4a+Ogia+D1WPv7Nu3RANFFlAwKT4hTkEUqfqo9kDLdu0vKH+rkSVMNzLPQT1iNuvNQF7EEDtdkcK+O9g5os78+LNpkxQcvh8meCfRW40dbervIvSUs7/TXzZMBfVJy9EITr/mtrOAQhH+R+9GzbbYYitxdb1i/Thb9wlCy8iV/cQI1zNxi7S1t5Dm8YCmpX738rYyTEJFClB+0KiUNw9hE1cv5Pm0lcQPWkQZzxZKcx2v2WAqyeko1ihDy4nRaRaT0I/GeDTzkyJnQ/5j943JV/5VMTn/pZwtdXVQuHLyrarWGM5VloIqSRx1WIzntX3S+X8vkR0W7nYygt8wWSguDjViH91zy6p0emfb/NgMdSqTlj23OgwbVsc5yYuKG6c/N3cNKZcLQN3ktj4OjR7eYX+OixHnOMehneeyYOCmua8VXVFcpvk4/5zMPQ4HrzR7AbP4/ZTz3Am4kEUtWJrg95H5AhFVTLDTlOXhq2HXwfKHmbsrXsU0nG06mwPMbV2JXTMpf8mcLHBLDIRv5HwE0tjRN5RP1digFKqOHyj5H5I9WOHidT6Ee+/qFnv3I9x+Kxk73yYpyxlzP3H9pvWxFQuSHOwB5b56FVf2k2y6S2M/hM1rdyXUju//+Z89KNGfH1Rq+wXCyaXU6djMNjxZPHcij4J4twfh0G9vu/kTZCmlLD3CtyUCRWOlur3Gf0Zu+ZpgcApLDCArDEbbGdKxA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR0101MB2893.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(4744005)(6666004)(4326008)(107886003)(186003)(5660300002)(66476007)(38100700002)(6512007)(38350700002)(9686003)(6506007)(26005)(52116002)(83380400001)(8936002)(6486002)(8676002)(6916009)(86362001)(54906003)(316002)(2906002)(66946007)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ztC7k3u3AIz+qYFRcKj6Hv4cq9zDSYFgHixA+EFya2X0M90UZRkOkgo1aiwe?=
+ =?us-ascii?Q?wmW3AlDgF1oaXNqgb/+HpS2cPfWgpwLvJjNGlj5Ryqeh1i6waO2NlWgMY+gf?=
+ =?us-ascii?Q?KlWXUTZBjjnJKnW4B15B/gqsmyRL1C0P6VJ/PqsdtKM/ogyX8i7cRgg7lO+o?=
+ =?us-ascii?Q?XlIVw0kBIx5jX76m2ILQAvfonupGxH2ozkW8AM5dPXjnZdAjsw/21M8iIRfw?=
+ =?us-ascii?Q?LlxZe2Lb3/b76nlX6ixWM36vUUqh0Lv0ApsB0blH8aDabljyU/BJSLA1e8B+?=
+ =?us-ascii?Q?TWrkZE0ppzZoRyjdyYLVUpHyfggpJ/xLWIdIu6z9h9njCv6z/txCpGNqc1a7?=
+ =?us-ascii?Q?txmTn0qm1oHEXYmPUJK1lzlGbBAGvpTBFaSZdctuD16vHwy6rVeIpPZ5smSi?=
+ =?us-ascii?Q?ILqxIPRNKR5ao72/QRjU4tDex5327HAVwDJ+kSjcecw/j1l48n3TJq01jTAv?=
+ =?us-ascii?Q?lsiPXKH+OioG5i1P+xZsMNeoo1u2rxP9fZhKH8XWMRe70kdfxBo53SyoJ7+9?=
+ =?us-ascii?Q?BhVmSS0+FcPTZnBsV+loiR2rH/HI8v+GXqlzCI/nLMXAC8zN6mSBNNqaN9iy?=
+ =?us-ascii?Q?6WuxirrWtikEq8zi6bLzUyFtgK03egwKYaGoUzg7sffaY6iFif+jm6vJQAik?=
+ =?us-ascii?Q?nCcb9uqHslEYDuyr1OdubBJ6ds8paQgcTt11om/zKf7baTuxTlKMDtFEKAHA?=
+ =?us-ascii?Q?qisTj1P01tj6Qa5Qm5YDJe56VdPrzmTl4a4k+t+qyfQy+d9hd0CAln9uAXzG?=
+ =?us-ascii?Q?SkjIJPpXyfX4aiM++cRDkf8X3M6LWNFwi8N50TYg2x9xvDefuWTy4uMOl2wP?=
+ =?us-ascii?Q?lzf2Y5w43hhPvB2zf0oeZjYvsA/Dn1Uso8djlUd10B/Kv2+W8AFT3Px9rprE?=
+ =?us-ascii?Q?lB/qdJ4uDV0zhB0/A3QybdozE23YR0RXB6Uxj5xLFmRV5Pylt0eG9pQicAhD?=
+ =?us-ascii?Q?EhdJ0NafgdgZWmOxTF02lVWpC1ws5tI3mu2ntkTJdZshj6CvZSD4vaoiYfCv?=
+ =?us-ascii?Q?t7fSN1hU8FzcmksWukKsi7tQLBCSn4FcwGCn4Ey9QrFhjag+XuJrt3WOOwy8?=
+ =?us-ascii?Q?aKKTAwAxJhxykVyElF0tERphkObwcZlPfTS7Mrt5SK1n5yN1q7rsouEogOEw?=
+ =?us-ascii?Q?9Z1L/tUwgNtMNnTITUU5BUUwvDFtnabXG5TlTQBnY3vIX+6OSl34WK86uz8P?=
+ =?us-ascii?Q?uiCB8+77AcWxKkdYvAxbm3dTHu/HxtX6r1LYgALKE3N5lNf9gUPqhYT0yGq8?=
+ =?us-ascii?Q?iBYXBhrIA6f8yZJfhB3D+Wsnvp6ILZcSZiYJTmMUdlWSHXtsgGpuNjEM1ntt?=
+ =?us-ascii?Q?YvmipzC2DvOdPb5S3BXCx6Jo7Huf2OgS39osLv5S50yTEtkeW0VN4JyfbaRl?=
+ =?us-ascii?Q?QGvdRxNWw2SYpewHzVIrhF9a8AL7K3sa5pLj67c+ZSWD3zg13GwqjwqKoMH7?=
+ =?us-ascii?Q?r2Js0Z2uDwHQ5TKQvvaNjY82kpPLej0nYPxQFXvro+in/Ynk/aVu2Uqu9Xy+?=
+ =?us-ascii?Q?kbKBElz3iW59FwjHXkCAwH752oaIL6RZgPvbSaEIVuZeWkUhYhwEbFLRAzan?=
+ =?us-ascii?Q?MkKBNobYdTmofLSXjCRoIFR1Ssfwj0Le18FybZEr75W+7Bx7F1VEeMM+ufDd?=
+ =?us-ascii?Q?rXzyJsQbEojCPdbaPzidYTCC949B8XFqq4UJAna1bSoP+C6vdJMmp/xBSSBY?=
+ =?us-ascii?Q?0Y+lc51GF/RmSJp5AP2cjRScpJbeLvCYAiTC0j3fwAFAQanaddcRYgRhNbIT?=
+ =?us-ascii?Q?EaCSVKkQINeim+WvVXHDfLuspl0UtKX4hPEygwGkn+1zvWEGGoi3?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 101fe19c-b9c4-4b6b-6112-08da4585d981
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR0101MB2893.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2022 17:24:01.2041
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zNTRkNcnctuRilFd42lPUwKNRBGzOjh3GnKlCL7DGR+POVXanOMepWOPc7AX/12filyaceixBbug9YVhdiD4M4Y5ghIh+PhnIx5AwUVvRNcDQ+1MR/Oc6rAmt1BsjYmf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6335
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+D Scott Phillips <scott@os.amperecomputing.com> writes:
 
---mcayuoy6vmkfigea
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Similar to the situation in commit 9049572fb145 ("hwmon: Remove amd_energy
+> driver"), access to power information can be used as the basis for a side-
+> channel attack. Removing unprivileged access to monitoring information
+> would effectively make the driver useless, so simply remove the driver.
 
-On Fri, Jun 03, 2022 at 11:49:31AM -0400, Alex Deucher wrote:
-> On Thu, Jun 2, 2022 at 10:22 AM Michal Kubecek <mkubecek@suse.cz> wrote:
-> >
-> > On Thu, Jun 02, 2022 at 09:58:22AM -0400, Alex Deucher wrote:
-> > > On Fri, May 27, 2022 at 8:58 AM Michal Kubecek <mkubecek@suse.cz> wro=
-te:
-> > > > On Fri, May 27, 2022 at 11:00:39AM +0200, Michal Kubecek wrote:
-> > > > > Hello,
-> > > > >
-> > > > > while testing 5.19 merge window snapshots (commits babf0bb978e3 a=
-nd
-> > > > > 7e284070abe5), I keep getting errors like below. I have not seen =
-them
-> > > > > with 5.18 final or older.
-> > > > >
-> > > > > -----------------------------------------------------------------=
--------
-> > > > > [  247.150333] gmc_v8_0_process_interrupt: 46 callbacks suppressed
-> > > > > [  247.150336] amdgpu 0000:0c:00.0: amdgpu: GPU fault detected: 1=
-47 0x00020802 for process firefox pid 6101 thread firefox:cs0 pid 6116
-> > > > > [  247.150339] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECT=
-ION_FAULT_ADDR   0x00107800
-> > > > > [  247.150340] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECT=
-ION_FAULT_STATUS 0x0D008002
-> > > > > [  247.150341] amdgpu 0000:0c:00.0: amdgpu: VM fault (0x02, vmid =
-6, pasid 32780) at page 1079296, write from 'TC2' (0x54433200) (8)
-> > > > [...]
-> > > > > [  249.925909] amdgpu 0000:0c:00.0: amdgpu: IH ring buffer overfl=
-ow (0x000844C0, 0x00004A00, 0x000044D0)
-> > > > > [  250.434986] [drm] Fence fallback timer expired on ring sdma0
-> > > > > [  466.621568] gmc_v8_0_process_interrupt: 122 callbacks suppress=
-ed
-> > > > [...]
-> > > > > -----------------------------------------------------------------=
--------
-> > > > >
-> > > > > There does not seem to be any apparent immediate problem with gra=
-phics
-> > > > > but when running commit babf0bb978e3, there seemed to be a notice=
-able
-> > > > > lag in some operations, e.g. when moving a window or repainting l=
-arge
-> > > > > part of the terminal window in konsole (no idea if it's related).
-> > > > >
-> > > > > My GPU is Radeon Pro WX 2100 (1002:6995). What other information =
-should
-> > > > > I collect to help debugging the issue?
-> > > >
-> > > > Bisected to commit 5255e146c99a ("drm/amdgpu: rework TLB flushing").
-> > > > There seem to be later commits depending on it so I did not test
-> > > > a revert on top of current mainline.
-> > > >
-> > > > I should also mention that most commits tested as "bad" during the
-> > > > bisect did behave much worse than current mainline (errors starting=
- as
-> > > > early as with sddm, visibly damaged screen content, sometimes even
-> > > > crashes). But all of them issued messages similar to those above in=
-to
-> > > > kernel log.
-> > >
-> > > Can you verify that the kernel you tested has this patch:
-> > > https://cgit.freedesktop.org/drm/drm/commit/?id=3D5be323562c6a699d384=
-30bc068a3fd192be8ed0d
-> >
-> > Yes, both of them:
-> >
-> > mike@lion:~/work/git/kernel-upstream> git merge-base --is-ancestor 5be3=
-23562c6a babf0bb978e3 && echo yes
-> > yes
-> >
-> > (7e284070abe5 is a later mainline snapshot so it also contains
-> > 5be323562c6a)
-> >
-> > But it's likely that commit 5be323562c6a fixed most of the problem and
-> > only some corner case was left as most bisect steps had many more error
-> > messages and some even crashed before I was able to even log into KDE.
-> > Compared to that, the mainline snapshots show much fewer errors, no
-> > distorted picture and no crash; on the other hand, applications like
-> > firefox or stellarium seem to trigger the errors quite consistently.
->=20
-> This patch should help:
-> https://patchwork.freedesktop.org/patch/488258/
-
-It seems to help, I'm running a kernel built with this patch on top of
-mainline commit 50fd82b3a9a9 (current head) and I haven't seen any
-errors yet. I'll give it some more time and report back.
-
-Michal
-
---mcayuoy6vmkfigea
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmKaQ3cACgkQ538sG/LR
-dpXmCggAgQk48eQZJOBICUS7Vy2W1l+t7ZkV3KeG6iHfiKv3N6XaxdgeXZPDCHmU
-ER4fq6lc6jqj+kvFqumeyPt3lDjuo60t8GqM/Ba80ZTKLTAj2boaw8j9M0O9gi4m
-mLrzXmYIFpRLBiw0OJt7bNfevxU7eKwLO6SPORKm/L8HTUD+InurJdmVxkiBEHTo
-xkYsFjEoOLPmGyIWOls+hGkzz9/LdwlBWWsgU2vpPs0Fr8xtyu7AaTP0uR5nxi2n
-LZQzGG/FBR3pk4cEkcA0/2mJtJdJl/zDS8aL15z4x9Fv3geug6kAEFwkklW2MVe5
-hB1FjEBmS1dBQvGPlSjgNA4ktoW0wQ==
-=LYI5
------END PGP SIGNATURE-----
-
---mcayuoy6vmkfigea--
+Well not really useless, there's still baby in this bath water.
+Specifically, there's no reason to remove the temperature monitor
+capabilities here. Sorry for the noise, I'll come back with something
+better thought out.

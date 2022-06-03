@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2F853D017
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A6253D0C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346631AbiFCSA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S1346498AbiFCSHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347219AbiFCRwI (ORCPT
+        with ESMTP id S1346033AbiFCRzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA63562DA;
-        Fri,  3 Jun 2022 10:50:33 -0700 (PDT)
+        Fri, 3 Jun 2022 13:55:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989BB55497;
+        Fri,  3 Jun 2022 10:53:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB9FC60EE9;
-        Fri,  3 Jun 2022 17:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75FDC3411C;
-        Fri,  3 Jun 2022 17:50:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BDA4B823B0;
+        Fri,  3 Jun 2022 17:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBCBC385A9;
+        Fri,  3 Jun 2022 17:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278632;
-        bh=sQ0GPSl5NoQwPN9POfGGNsMy+Sxch4CTIxQGvcHIVJU=;
+        s=korg; t=1654278798;
+        bh=lNOmLlFQuyuci5IwSKVo0uhTC3PXQ5cfKd6PwOA3j3o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uNVmtlsI96A2wYZ40DU+Fu95l8C8eENXStboWnRUCz6hUHomfdAO4CncSQ0WEhN7r
-         nxWsKZCsFx+UikUYP4tKKnMB5krM0yM4VE0+qwsVcliIXcXlfLyUylvSBD2K4E0kLM
-         YvLdPUaNX0Z7fGRycTcG8Iuv/wGEFPUgFyy4ky1s=
+        b=CyGjxtbKVM/PjMuPVVMytneSnuQCz7Kif70oBvbqTZHUTBo4dq/WaZD58Ybg2dyBi
+         Peif68umGbveho6ydZJURm3JouDwV7Gf3swF/16bhMs4/yiOA4GxWSa8JBNxL0HFxK
+         CQxDdG1wElUGiWMICc6DBC5eYRj2q+oysz4OMNsw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.15 35/66] crypto: ecrdsa - Fix incorrect use of vli_cmp
+        stable@vger.kernel.org, Tadeusz Struk <tadeusz.struk@linaro.org>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 31/75] KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits
 Date:   Fri,  3 Jun 2022 19:43:15 +0200
-Message-Id: <20220603173821.665178127@linuxfoundation.org>
+Message-Id: <20220603173822.630027131@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +56,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Chikunov <vt@altlinux.org>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 7cc7ab73f83ee6d50dc9536bc3355495d8600fad upstream.
+commit f122dfe4476890d60b8c679128cd2259ec96a24c upstream.
 
-Correctly compare values that shall be greater-or-equal and not just
-greater.
+Use the recently introduced __try_cmpxchg_user() to update guest PTE A/D
+bits instead of mapping the PTE into kernel address space.  The VM_PFNMAP
+path is broken as it assumes that vm_pgoff is the base pfn of the mapped
+VMA range, which is conceptually wrong as vm_pgoff is the offset relative
+to the file and has nothing to do with the pfn.  The horrific hack worked
+for the original use case (backing guest memory with /dev/mem), but leads
+to accessing "random" pfns for pretty much any other VM_PFNMAP case.
 
-Fixes: 0d7a78643f69 ("crypto: ecrdsa - add EC-RDSA (GOST 34.10) algorithm")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
+Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Tested-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220202004945.2540433-4-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/ecrdsa.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/paging_tmpl.h |   38 +-------------------------------------
+ 1 file changed, 1 insertion(+), 37 deletions(-)
 
---- a/crypto/ecrdsa.c
-+++ b/crypto/ecrdsa.c
-@@ -113,15 +113,15 @@ static int ecrdsa_verify(struct akcipher
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -144,42 +144,6 @@ static bool FNAME(is_rsvd_bits_set)(stru
+ 	       FNAME(is_bad_mt_xwr)(&mmu->guest_rsvd_check, gpte);
+ }
  
- 	/* Step 1: verify that 0 < r < q, 0 < s < q */
- 	if (vli_is_zero(r, ndigits) ||
--	    vli_cmp(r, ctx->curve->n, ndigits) == 1 ||
-+	    vli_cmp(r, ctx->curve->n, ndigits) >= 0 ||
- 	    vli_is_zero(s, ndigits) ||
--	    vli_cmp(s, ctx->curve->n, ndigits) == 1)
-+	    vli_cmp(s, ctx->curve->n, ndigits) >= 0)
- 		return -EKEYREJECTED;
+-static int FNAME(cmpxchg_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+-			       pt_element_t __user *ptep_user, unsigned index,
+-			       pt_element_t orig_pte, pt_element_t new_pte)
+-{
+-	signed char r;
+-
+-	if (!user_access_begin(ptep_user, sizeof(pt_element_t)))
+-		return -EFAULT;
+-
+-#ifdef CMPXCHG
+-	asm volatile("1:" LOCK_PREFIX CMPXCHG " %[new], %[ptr]\n"
+-		     "setnz %b[r]\n"
+-		     "2:"
+-		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG, %k[r])
+-		     : [ptr] "+m" (*ptep_user),
+-		       [old] "+a" (orig_pte),
+-		       [r] "=q" (r)
+-		     : [new] "r" (new_pte)
+-		     : "memory");
+-#else
+-	asm volatile("1:" LOCK_PREFIX "cmpxchg8b %[ptr]\n"
+-		     "setnz %b[r]\n"
+-		     "2:"
+-		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG, %k[r])
+-		     : [ptr] "+m" (*ptep_user),
+-		       [old] "+A" (orig_pte),
+-		       [r] "=q" (r)
+-		     : [new_lo] "b" ((u32)new_pte),
+-		       [new_hi] "c" ((u32)(new_pte >> 32))
+-		     : "memory");
+-#endif
+-
+-	user_access_end();
+-	return r;
+-}
+-
+ static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
+ 				  struct kvm_mmu_page *sp, u64 *spte,
+ 				  u64 gpte)
+@@ -278,7 +242,7 @@ static int FNAME(update_accessed_dirty_b
+ 		if (unlikely(!walker->pte_writable[level - 1]))
+ 			continue;
  
- 	/* Step 2: calculate hash (h) of the message (passed as input) */
- 	/* Step 3: calculate e = h \mod q */
- 	vli_from_le64(e, digest, ndigits);
--	if (vli_cmp(e, ctx->curve->n, ndigits) == 1)
-+	if (vli_cmp(e, ctx->curve->n, ndigits) >= 0)
- 		vli_sub(e, e, ctx->curve->n, ndigits);
- 	if (vli_is_zero(e, ndigits))
- 		e[0] = 1;
-@@ -137,7 +137,7 @@ static int ecrdsa_verify(struct akcipher
- 	/* Step 6: calculate point C = z_1P + z_2Q, and R = x_c \mod q */
- 	ecc_point_mult_shamir(&cc, z1, &ctx->curve->g, z2, &ctx->pub_key,
- 			      ctx->curve);
--	if (vli_cmp(cc.x, ctx->curve->n, ndigits) == 1)
-+	if (vli_cmp(cc.x, ctx->curve->n, ndigits) >= 0)
- 		vli_sub(cc.x, cc.x, ctx->curve->n, ndigits);
+-		ret = FNAME(cmpxchg_gpte)(vcpu, mmu, ptep_user, index, orig_pte, pte);
++		ret = __try_cmpxchg_user(ptep_user, &orig_pte, pte, fault);
+ 		if (ret)
+ 			return ret;
  
- 	/* Step 7: if R == r signature is valid */
 
 

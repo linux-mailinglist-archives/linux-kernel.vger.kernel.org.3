@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2372253D101
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBD253D096
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345955AbiFCSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S1348536AbiFCSHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346336AbiFCSAO (ORCPT
+        with ESMTP id S1345993AbiFCRzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:00:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199E95838E;
-        Fri,  3 Jun 2022 10:56:15 -0700 (PDT)
+        Fri, 3 Jun 2022 13:55:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8D654BE2;
+        Fri,  3 Jun 2022 10:53:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8F0EB82433;
-        Fri,  3 Jun 2022 17:56:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1659DC385A9;
-        Fri,  3 Jun 2022 17:56:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44C9C60F3B;
+        Fri,  3 Jun 2022 17:53:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF95C36AF6;
+        Fri,  3 Jun 2022 17:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278972;
-        bh=VPZI7tJahhauuvn30Lcv1xk+LwkmDvyMkCVb3evQetg=;
+        s=korg; t=1654278792;
+        bh=+eAbAqVQE5DVCKFhG3e268Ipd7JndauGDdwdIiUaX2A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XjGD0uD4QIA/ht9jVsuPsW/muVV0pyrufNa2tiH+n/BY2KZpu4CNdIYNJ8sVfSfUF
-         mSKogDDbqpTJXjp0f3gLaK7CgAk802JrjQUaeU6aDJBFnJo8yjHdDhSYpxfsQ3KWhu
-         fgMdLmAjOGJSpgO4xz/m1TlKO3/4mHf9Bg+DNfRk=
+        b=tf6JEorafV7JLBE2nemRjKbFhypsw3Y1Lr2C37+nJ75S6tq3abR23v8rruNMp6Aqn
+         6sNxNSntTgth9boSSmi866Wu7uL2U/URS1zQBHOOln7edFLYGc3R0+cw+fnyzDZRNC
+         f/uIHZMenTRIZpP4ABHoNvqkFCAVanNtIekAIw/o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.18 12/67] netfilter: nf_tables: hold mutex on netns pre_exit path
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 29/75] x86, kvm: use correct GFP flags for preemption disabled
 Date:   Fri,  3 Jun 2022 19:43:13 +0200
-Message-Id: <20220603173821.084953001@linuxfoundation.org>
+Message-Id: <20220603173822.575077404@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
-References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-commit 3923b1e4406680d57da7e873da77b1683035d83f upstream.
+commit baec4f5a018fe2d708fc1022330dba04b38b5fe3 upstream.
 
-clean_net() runs in workqueue while walking over the lists, grab mutex.
+Commit ddd7ed842627 ("x86/kvm: Alloc dummy async #PF token outside of
+raw spinlock") leads to the following Smatch static checker warning:
 
-Fixes: 767d1216bff8 ("netfilter: nftables: fix possible UAF over chains from packet path in netns")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+	arch/x86/kernel/kvm.c:212 kvm_async_pf_task_wake()
+	warn: sleeping in atomic context
+
+arch/x86/kernel/kvm.c
+    202         raw_spin_lock(&b->lock);
+    203         n = _find_apf_task(b, token);
+    204         if (!n) {
+    205                 /*
+    206                  * Async #PF not yet handled, add a dummy entry for the token.
+    207                  * Allocating the token must be down outside of the raw lock
+    208                  * as the allocator is preemptible on PREEMPT_RT kernels.
+    209                  */
+    210                 if (!dummy) {
+    211                         raw_spin_unlock(&b->lock);
+--> 212                         dummy = kzalloc(sizeof(*dummy), GFP_KERNEL);
+                                                                ^^^^^^^^^^
+Smatch thinks the caller has preempt disabled.  The `smdb.py preempt
+kvm_async_pf_task_wake` output call tree is:
+
+sysvec_kvm_asyncpf_interrupt() <- disables preempt
+-> __sysvec_kvm_asyncpf_interrupt()
+   -> kvm_async_pf_task_wake()
+
+The caller is this:
+
+arch/x86/kernel/kvm.c
+   290        DEFINE_IDTENTRY_SYSVEC(sysvec_kvm_asyncpf_interrupt)
+   291        {
+   292                struct pt_regs *old_regs = set_irq_regs(regs);
+   293                u32 token;
+   294
+   295                ack_APIC_irq();
+   296
+   297                inc_irq_stat(irq_hv_callback_count);
+   298
+   299                if (__this_cpu_read(apf_reason.enabled)) {
+   300                        token = __this_cpu_read(apf_reason.token);
+   301                        kvm_async_pf_task_wake(token);
+   302                        __this_cpu_write(apf_reason.token, 0);
+   303                        wrmsrl(MSR_KVM_ASYNC_PF_ACK, 1);
+   304                }
+   305
+   306                set_irq_regs(old_regs);
+   307        }
+
+The DEFINE_IDTENTRY_SYSVEC() is a wrapper that calls this function
+from the call_on_irqstack_cond().  It's inside the call_on_irqstack_cond()
+where preempt is disabled (unless it's already disabled).  The
+irq_enter/exit_rcu() functions disable/enable preempt.
+
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/kernel/kvm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -9892,7 +9892,11 @@ static int __net_init nf_tables_init_net
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -209,7 +209,7 @@ again:
+ 		 */
+ 		if (!dummy) {
+ 			raw_spin_unlock(&b->lock);
+-			dummy = kzalloc(sizeof(*dummy), GFP_KERNEL);
++			dummy = kzalloc(sizeof(*dummy), GFP_ATOMIC);
  
- static void __net_exit nf_tables_pre_exit_net(struct net *net)
- {
-+	struct nftables_pernet *nft_net = nft_pernet(net);
-+
-+	mutex_lock(&nft_net->commit_mutex);
- 	__nft_release_hooks(net);
-+	mutex_unlock(&nft_net->commit_mutex);
- }
- 
- static void __net_exit nf_tables_exit_net(struct net *net)
+ 			/*
+ 			 * Continue looping on allocation failure, eventually
 
 

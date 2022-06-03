@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABC853CA14
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C1953CA17
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238976AbiFCMg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S241489AbiFCMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiFCMgw (ORCPT
+        with ESMTP id S229883AbiFCMhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:36:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B693A712;
-        Fri,  3 Jun 2022 05:36:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58A74B82338;
-        Fri,  3 Jun 2022 12:36:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C26C385B8;
-        Fri,  3 Jun 2022 12:36:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654259796;
-        bh=X5+Q4bdVh1TVXN5s2RYm5wbG5xeVTt7YcpesFs/f8wg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XZAHQ3GUKS4+wsCT5hKKLDDpTa8PN2NY2cOPfP8XQozb1Zl5CLtB2n6o4ci5PZTut
-         huFY7zAUo8DD8QshWmjfvvn0i93KLJ4IaVTMnmzVYoX6G4nWaIU4HzaHgPEli5ceTV
-         coUB544Bt/I6R1DtZ+LuNYpF3YwBOCK5TND1B5f9RJ/aZfNgVXg+Ryz9u89NztlRwI
-         e+9KdFycjaiFxuUxqgaQQFEm2XKWERFv/fLWbNwdld8hR/1MlVX09DaMr/SYBF0opU
-         jEV/bEWyg6WEh2C0XaKHlQUHkpKdJzb9aJXpWiACPT2bhqU5YtobPG4hWKLoVz31kT
-         mBYDHi1S3Qk+A==
-Message-ID: <e8bc3470-11fe-16d0-a967-92bd4352d411@kernel.org>
-Date:   Fri, 3 Jun 2022 15:36:30 +0300
+        Fri, 3 Jun 2022 08:37:50 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E433A5E0
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:37:49 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id h19so10015087edj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YrBwkRdvXLz7+jm3aOsGJs/0ErMfrv6pPp4W4cTpnsc=;
+        b=lU6T2dV5ri5pmTMT6Mbiz1EQgTQhwZGxrRXAYVWfB5NmV8ZqAZj9v9QPOohoodr0b1
+         79uyw1nq5zUmUdfya6dlH9RnoKW5316fqsCHXRZO4YgZM0zFDcwgyKdQzdl/fpMQkI9d
+         eKjXAUS92LFIE+J0QlN+0m9sz2DLQsgM/tEGCa4Dfx/qwcVBRhtpue7pTyxslSjB/A1w
+         o8jvBKpdYsQrusdrRo48AuRFgCFS+SPbyht3s+oOM+tQtiduLwZYb6rFFPEnzOI8Bg5B
+         tFcIl99IE0mJ1/e6i1Fc562Zznby3G/gTt4XNAGyJTWbwernPIWzLeNRSi8H8U+1FHoc
+         JrJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YrBwkRdvXLz7+jm3aOsGJs/0ErMfrv6pPp4W4cTpnsc=;
+        b=1fg62EEM4JTADwNZHZpAEjU1FJWYbChFEQtud1HQppjZ/cP5KfQJHLyMAXQ8b4iPQ/
+         JKOYXWHpPzU6Qubu5BqtfCa9gYn5JRwYQdnMvvgMZiUqjlnPq9KnxYo4Zb/a/5Q0WYFb
+         aUGwSL9CTjIo3xehymBAty3pyVQ1JLIUH31AfQrtJTz/uYdG0+P+rtWIws6q7LaF0tQ3
+         CxJMjL/iwpwYFIC0M9N0eBdSewchB3lf5eJi8LD+NUWLNthADZwMVMesJMTzb/axHMHr
+         jeLsqlyeXfg1/Wloc1qeCi1NuPpfmfaX2xIZGLXguBy9hX1ShaY0JdyoZqqBzTEsT2V5
+         k4Rw==
+X-Gm-Message-State: AOAM532RFUp0hlG+jfDq1nBQFKMOaSOAocz1T34jfqxWbgSp7boIbeG6
+        uFMcMTou84uVjWeGdzUc7owa2HIWed0=
+X-Google-Smtp-Source: ABdhPJxeCabJNbfYESsSsGF42ubf1R5Slv0JDKE/9PlNrQtqy1GE4Zsa18k3wAnt2ZmtPBrmuSNsjA==
+X-Received: by 2002:a05:6402:4410:b0:427:ab6f:a39a with SMTP id y16-20020a056402441000b00427ab6fa39amr10621435eda.120.1654259867780;
+        Fri, 03 Jun 2022 05:37:47 -0700 (PDT)
+Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170906660c00b0070e3f58ed5csm716120ejp.48.2022.06.03.05.37.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 05:37:47 -0700 (PDT)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
+        GPU IP),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
+        IP)
+Subject: [PATCH] drm/etnaviv: print offender task information on hangcheck recovery
+Date:   Fri,  3 Jun 2022 14:37:05 +0200
+Message-Id: <20220603123706.678320-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
- J7200
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     robh+dt@kernel.org, lee.jones@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        dan.carpenter@oracle.com, kishon@ti.com, grygorii.strashko@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220531111221.22963-1-s-vadapalli@ti.com>
- <20220531111221.22963-2-s-vadapalli@ti.com>
- <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
- <b5353c06-c8b4-c065-3843-28b2a34e1867@ti.com>
- <a7754c31-bfc6-6451-8340-5d3aa671e3c4@kernel.org>
- <985ab302-17aa-c0de-ccac-63525589918a@ti.com>
- <12afd8fc-ad03-a0f1-fad4-a9902e8a690c@kernel.org>
- <1baaa67e-43e9-49c6-f99b-5f24da4c2f1b@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <1baaa67e-43e9-49c6-f99b-5f24da4c2f1b@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,220 +75,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Siddharth,
+Track the pid per submit, so we can print the name and cmdline of
+the task which submitted the batch that caused the gpu to hang.
 
-On 03/06/2022 13:49, Siddharth Vadapalli wrote:
-> Hello Roger,
-> 
-> On 03/06/22 14:18, Roger Quadros wrote:
->> Hi Siddharth,
->>
->> On 01/06/2022 14:27, Siddharth Vadapalli wrote:
->>> Hello Roger,
->>>
->>> On 01/06/22 15:08, Roger Quadros wrote:
->>>> Siddharth,
->>>>
->>>> On 01/06/2022 09:01, Siddharth Vadapalli wrote:
->>>>> Hello Roger,
->>>>>
->>>>> On 31/05/22 17:15, Roger Quadros wrote:
->>>>>> Hi Siddharth,
->>>>>>
->>>>>> On 31/05/2022 14:12, Siddharth Vadapalli wrote:
->>>>>>> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
->>>>>>> that are not supported on earlier SoCs. Add a compatible for it.
->>>>>>>
->>>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>>>>> ---
->>>>>>>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
->>>>>>>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
->>>>>>>  2 files changed, 28 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>>>>> index fa86691ebf16..e381ba62a513 100644
->>>>>>> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>>>>> @@ -48,6 +48,11 @@ patternProperties:
->>>>>>>      description:
->>>>>>>        This is the SERDES lane control mux.
->>>>>>>  
->>>>>>> +  "phy@[0-9a-f]+$":
->>>>>>> +    type: object
->>>>>>> +    description:
->>>>>>> +      This is the register to set phy mode through phy-gmii-sel driver.
->>>>>>> +
->>>>>>
->>>>>> Is this really required? The system controller has 100s of different such registers and it is not practical to mention about all.
->>>>>
->>>>> The property has to be mentioned in order to pass: make dtbs_check.
->>>>>
->>>>>>
->>>>>>>  required:
->>>>>>>    - compatible
->>>>>>>    - reg
->>>>>>> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>>>>> index ff8a6d9eb153..7427758451e7 100644
->>>>>>> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>>>>> @@ -53,12 +53,21 @@ properties:
->>>>>>>        - ti,am43xx-phy-gmii-sel
->>>>>>>        - ti,dm814-phy-gmii-sel
->>>>>>>        - ti,am654-phy-gmii-sel
->>>>>>> +      - ti,j7200-cpsw5g-phy-gmii-sel
->>>>>>
->>>>>> Why not just "ti,j7200-phy-gmii-sel" so it is consistent naming.
->>>>>
->>>>> In TI's J7200 device, there are two CPSW MACs, namely CPSW2G and CPSW5G. While
->>>>> CPSW5G supports QSGMII mode, CPSW2G does not. Hence, the compatible being added
->>>>> with the extra mode (QSGMII) enabled is applicable only for CPSW5G and not for
->>>>> CPSW2G. Thus, to highlight this, the word "CPSW5G" has been included in the name
->>>>> of the compatible.
->>>>
->>>> Here we are talking about the PHY driver (phy-gmii-sel) and not the MAC (CPSW2G / CPSW5G)
->>>> Does this PHY on J7200 always support QSGMII mode? if yes then embedding "cpsw5g" in compatible is wrong.
->>>
->>> The PHY on J7200 is part of the Add-On Ethernet card. It is possible to connect
->>> RGMII, QSGMII and SGMII PHY. The CPSW5G MAC supports all these modes. With the
->>> current patch, I am adding just QSGMII mode as an extra mode, but in a future
->>> patch, I will be adding SGMII also as an extra mode. For this reason, CPSW5G is
->>> being mentioned in the compatible name, to differentiate supported modes for
->>> CPSW2G and CPSW5G. Also, the phy-gmii-sel driver actually configures CPSW MAC
->>> registers and not the PHY.
->>
->> phy-gmii-sel configures CTRL MMR register right? How does it configure CPSW MAC register?
->>
->> Anyways, I just looked at the TRM and there are in fact separate phy-gmii-sel (ENET_CTRL)
->> registers for CPSW2g and CPSW5g. So they warrant for separate compatibles as they are
->> not identical.
-> 
-> By CPSW MAC registers being configured, I meant that the configuration being
-> done is for the MAC and not for the PHY. As per the TRM, for CPSW2G, the
-> CTRLMMR_MCU_ENET_CTRL register is configured and for CPSW5G, the
-> CTRLMMR_ENETx_CTRL registers are configured, with x ranging from 1 to 4
-> (corresponding to the 4 ports of CPSW5G). These registers configure the CPSW MAC
-> (CPSW2G/CPSW5G) and not the PHY. For this reason, I think that it would be
-> appropriate to use cpsw5g in the compatible name, to indicate which CTRLMMR
-> registers are being configured.
+Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+---
+ drivers/gpu/drm/etnaviv/etnaviv_gem.h        |  1 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c |  6 ++++++
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c        | 18 +++++++++++++++++-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h        |  2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_sched.c      |  2 +-
+ 5 files changed, 26 insertions(+), 3 deletions(-)
 
-Yes, I already agreed that separate compatible is fine :).
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.h b/drivers/gpu/drm/etnaviv/etnaviv_gem.h
+index 63688e6e4580..baa81cbf701a 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem.h
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.h
+@@ -96,6 +96,7 @@ struct etnaviv_gem_submit {
+ 	int out_fence_id;
+ 	struct list_head node; /* GPU active submit list */
+ 	struct etnaviv_cmdbuf cmdbuf;
++	struct pid *pid;       /* submitting process */
+ 	bool runtime_resumed;
+ 	u32 exec_state;
+ 	u32 flags;
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
+index 1ac916b24891..1491159d0d20 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
+@@ -399,6 +399,9 @@ static void submit_cleanup(struct kref *kref)
+ 		mutex_unlock(&submit->gpu->fence_lock);
+ 		dma_fence_put(submit->out_fence);
+ 	}
++
++	put_pid(submit->pid);
++
+ 	kfree(submit->pmrs);
+ 	kfree(submit);
+ }
+@@ -422,6 +425,7 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 	struct sync_file *sync_file = NULL;
+ 	struct ww_acquire_ctx ticket;
+ 	int out_fence_fd = -1;
++	struct pid *pid = get_pid(task_pid(current));
+ 	void *stream;
+ 	int ret;
+ 
+@@ -519,6 +523,8 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 		goto err_submit_ww_acquire;
+ 	}
+ 
++	submit->pid = pid;
++
+ 	ret = etnaviv_cmdbuf_init(priv->cmdbuf_suballoc, &submit->cmdbuf,
+ 				  ALIGN(args->stream_size, 8) + 8);
+ 	if (ret)
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+index 37018bc55810..7d9bf4673e2d 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+@@ -1045,12 +1045,28 @@ int etnaviv_gpu_debugfs(struct etnaviv_gpu *gpu, struct seq_file *m)
+ }
+ #endif
+ 
+-void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu)
++void etnaviv_gpu_recover_hang(struct etnaviv_gem_submit *submit)
+ {
++	struct etnaviv_gpu *gpu = submit->gpu;
++	char *comm = NULL, *cmd = NULL;
++	struct task_struct *task;
+ 	unsigned int i;
+ 
+ 	dev_err(gpu->dev, "recover hung GPU!\n");
+ 
++	task = get_pid_task(submit->pid, PIDTYPE_PID);
++	if (task) {
++		comm = kstrdup(task->comm, GFP_KERNEL);
++		cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
++		put_task_struct(task);
++	}
++
++	if (comm && cmd)
++		dev_err(gpu->dev, "offending task: %s (%s)\n", comm, cmd);
++
++	kfree(cmd);
++	kfree(comm);
++
+ 	if (pm_runtime_get_sync(gpu->dev) < 0)
+ 		goto pm_put;
+ 
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+index 85eddd492774..b3a0941d56fd 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+@@ -168,7 +168,7 @@ bool etnaviv_fill_identity_from_hwdb(struct etnaviv_gpu *gpu);
+ int etnaviv_gpu_debugfs(struct etnaviv_gpu *gpu, struct seq_file *m);
+ #endif
+ 
+-void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu);
++void etnaviv_gpu_recover_hang(struct etnaviv_gem_submit *submit);
+ void etnaviv_gpu_retire(struct etnaviv_gpu *gpu);
+ int etnaviv_gpu_wait_fence_interruptible(struct etnaviv_gpu *gpu,
+ 	u32 fence, struct drm_etnaviv_timespec *timeout);
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sched.c b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
+index 72e2553fbc98..d29f467eee13 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_sched.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
+@@ -67,7 +67,7 @@ static enum drm_gpu_sched_stat etnaviv_sched_timedout_job(struct drm_sched_job
+ 
+ 	/* get the GPU back into the init state */
+ 	etnaviv_core_dump(submit);
+-	etnaviv_gpu_recover_hang(gpu);
++	etnaviv_gpu_recover_hang(submit);
+ 
+ 	drm_sched_resubmit_jobs(&gpu->sched);
+ 
+-- 
+2.36.1
 
-> 
->>>
->>>>
->>>> You need to use a different compatible in CPSW driver and make sure CPSW2G doesn't initiate QSGMII mode.
->>>
->>> Yes, I will add a check there too by using a different compatible in the CPSW
->>> driver, but shouldn't the phy-gmii-sel driver also have a check to ensure that
->>> it doesn't try configuring QSGMII mode for CPSW2G?
->>
->> Yes, additional check in phy-gmii-sel driver is fine.
->>
->>>
->>>>
->>>>>
->>>>>>
->>>>>>>  
->>>>>>>    reg:
->>>>>>>      maxItems: 1
->>>>>>>  
->>>>>>>    '#phy-cells': true
->>>>>>>  
->>>>>>> +  ti,enet-ctrl-qsgmii:
->>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>>>> +    description: |
->>>>>>> +      Required only for QSGMII mode. Bitmask to select the port for
->>>>>>> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
->>>>>>> +      ports automatically. Any of the 4 CPSW5G ports can act as the
->>>>>>> +      main port with the rest of them being the QSGMII_SUB ports.
->>>>>>> +
->>>>>>
->>>>>> This is weird way of doing things.
->>>>>>
->>>>>> The Ethernet controller driver already knows which mode the port is
->>>>>> supposed to operate.
->>>>>
->>>>> From the ethernet driver perspective, there is no difference between the QSGMII
->>>>> or QSGMII-SUB modes and both are treated the same. However, the phy-gmii-sel
->>>>> driver configures CPSW MAC registers differently depending on the mode being
->>
->> You mean the ENET_CTRL register in CTRL_MMR space?
-> 
-> Yes I am referring to the CTRLMMR_ENETx_CTRL registers as per the J7200 TRM,
-> corresponding to the CPSW5G MAC.
-> 
->>
->>>>> QSGMII or QSGMII-SUB. Hence, the ti,enet-ctrl-qsgmii property is used to
->>>>> identify the QSGMII main port and the rest are configured in CPSW MAC as
->>>>> QSGMII-SUB ports.
->>>>>
->>>>>>
->>>>>> e.g.
->>>>>> +&cpsw0_port1 {
->>>>>> +	phy-handle = <&cpsw5g_phy0>;
->>>>>> +	phy-mode = "qsgmii";
->>>>>> +	mac-address = [00 00 00 00 00 00];
->>>>>> +	phys = <&cpsw0_phy_gmii_sel 1>;
->>>>>> +};
->>>>>> +
->>>>>> +&cpsw0_port2 {
->>>>>> +	phy-handle = <&cpsw5g_phy1>;
->>>>>> +	phy-mode = "qsgmii-sub";
->>>>>> +	mac-address = [00 00 00 00 00 00];
->>>>>> +	phys = <&cpsw0_phy_gmii_sel 2>;
->>>>>>
->>>>>> And it can convey the mode to the PHY driver via phy_ops->set_mode.
->>>>>> So you should be depending on that instead of adding this new property.
->>>>>
->>>>> QSGMII-SUB is not a standard mode in the Linux kernel. In order to proceed with
->>>>> the suggested implementation, a new phy mode named PHY_INTERFACE_MODE_QSGMII_SUB
->>>>> has to be introduced to the kernel. Additionally, all existing phy drivers will
->>>>> have to be updated to recognize the new phy mode.
->>>>>
->>>>> Since the QSGMII-SUB mode is TI specific, it was decided that it would be better
->>>>> to add a new property in TI specific files for identifying the QSGMII main port
->>>>> and treating the rest as QSGMII-SUB ports.
->>>>
->>>> Who decides which port should be MAIN and which should be SUB? Can all ports be MAIN?
->>>> Can all ports be SUB or there has to be at least one MAIN?
->>>
->>> All 4 ports in CPSW5G have the capability to be the MAIN port, with the only
->>> restriction being that only one of them should be the MAIN port at a time. The
->>> role of the CPSW5G ports is decided based on what PHY port each of the CPSW5G
->>> ports connects to.
->>
->> OK, then instead of using bitmask and property being named "ti,enet-ctrl-qsgmii", why not
->> just say "ti,qsgmii-main-port" = <main_port_number>;
-> 
-> I plan to send patches for J721e device which has CPSW9G (8 external ports) MAC.
-> CPSW9G can work with two sets of QSGMII interfaces (4 ports + 4 ports). Thus,
-> using a bitmask for the QSGMII main port will help identify the QSGMII main port
-> across both sets of QSGMII interfaces. The bitmask in case of J721e CPSW9G will
-> consider the first 4 bits for the first interface's 4 ports and the next 4 bits
-> for the second interface's 4 ports. In this manner, it will be possible to
-> extend it for 8 port CPSW9G MAC as well, without having to add a new property
-> for the second QSGMII interface.
-> 
->>
->> Also do some sanity check when getting that property.
-> 
-> To ensure that multiple QSGMII ports are not declared as the main port, the
-> "ti,enet-ctrl-qsgmii" property has been declared as an enum: [1,2,4,8]. If a
-
-All I'm saying is that instead of bitmask please use port number to specify main port.
-You can use minimum/maximum to limit the values.
-
-Take care of limit checking per compatible and converting into bitmask in the driver.
-
-> different value other than the value in enum were to be used, then "make
-> dtbs_check" would raise an error. This will prevent configuring multiple QSGMII
-> ports as the main port at once. Also, in the phy-gmii-sel driver, a default
-> value of 1 is being assigned to the variable that will store the value
-> corresponding to the ti,enet-ctrl-qsgmii property from the device tree, thereby
-> treating the first CPSW5G port as the QSGMII main port by default.
-> 
-> Thanks,
-> Siddharth.
-
-cheers,
--roger

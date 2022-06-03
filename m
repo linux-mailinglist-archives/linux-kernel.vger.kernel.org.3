@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C30553D1D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBC853D1C9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349032AbiFCSu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
+        id S1347999AbiFCSug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349134AbiFCSuL (ORCPT
+        with ESMTP id S1349239AbiFCSuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:50:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD09027FF0;
-        Fri,  3 Jun 2022 11:50:10 -0700 (PDT)
+        Fri, 3 Jun 2022 14:50:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F23286D4;
+        Fri,  3 Jun 2022 11:50:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD7A619C2;
-        Fri,  3 Jun 2022 18:50:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 030BCC385B8;
-        Fri,  3 Jun 2022 18:50:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33E07619D9;
+        Fri,  3 Jun 2022 18:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CE14C36AE5;
+        Fri,  3 Jun 2022 18:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654282210;
-        bh=bOriYyJek/0gWTzeUpshNdx4hLR6hEcL+erxtFQ1q6Q=;
+        s=k20201202; t=1654282218;
+        bh=m591v3STS7SyfXpP9BlxK4XZiKIq2ToOWCGMX4Uu/BA=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Evqa9V+gShN4CKTki1Qc95yc8OQ6s9PLcauHwWuQWN/qHkuUNZ3Ib2o0b29gwpynZ
-         FRgXrSMXOhDap47vgkuQWBTzhhSlqdXRt/x0Mm2Q7px6ynj/GTJtEY2YI8lCMm0foC
-         tCzxlmZLw9mQEMDl6Ck+F4hfp9+VRvbgfh+AG/b1ERk5aKSf0lA34orC2kL0heSbP1
-         KSyyYSWbqd8GlD1k7CqRTvyLLEhZbKDqDUFqCXaJU3Zqven3aHo0fD3BqHSRRQ0IbI
-         Wvb9n5mPF5ea0BrsoYqVv8cJ4usD9SvY/gvd0zrWD7kgkOyV3Ja5WW7Y3ZE+OzLFsv
-         SHtKdUIA0I91g==
+        b=oP1Yw4H1THn+/ASQVMz/8EQ0MGa20lsgY3RtBl3fYJ8SGPoV93AY4lZGj/FoCJlMt
+         ubvFqc5Z1Zs2kbrrc0nt2cdnRsiLNEhAX7rqCNEffshT7yZ5ic15ulPw79boky+wje
+         A9EB5W+Uyf3D1uDRjWTJqho2oXeId2bn8CyiyIxgEbttsEvNcUvMTy506TBU9Qolj8
+         cLYv0LiCNk1MiJK9A/s3x0xgCLx5Y22E4TT5ecqvRwrClWWAXiBSqTlNwx2xgxzPQA
+         fEfLcmIjiJiDe/Fo0iUXNQ0hvmOQRXRBWInibiPER1pmrhemnZWG+lAaguIsdGWjGo
+         Yn75zGL2i05IQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E093BF03953;
-        Fri,  3 Jun 2022 18:50:09 +0000 (UTC)
-Subject: Re: [GIT PULL] vhost,virtio,vdpa: features, fixes, cleanups
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 89124F0394E;
+        Fri,  3 Jun 2022 18:50:18 +0000 (UTC)
+Subject: Re: [GIT PULL] USB / Thunderbolt driver updates for 5.19-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220602161124-mutt-send-email-mst@kernel.org>
-References: <20220602161124-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220602161124-mutt-send-email-mst@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-X-PR-Tracked-Commit-Id: bd8bb9aed56b1814784a975e2dfea12a9adcee92
+In-Reply-To: <YpnhBp/nzjpz+Pxr@kroah.com>
+References: <YpnhBp/nzjpz+Pxr@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YpnhBp/nzjpz+Pxr@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc1
+X-PR-Tracked-Commit-Id: 97fa5887cf283bb75ffff5f6b2c0e71794c02400
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6e5f6a86915d65210e90acac0402e6f37e21fc7b
-Message-Id: <165428220991.10974.157104839485276628.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Jun 2022 18:50:09 +0000
-To:     "Michael S. Tsirkin" <mst@redhat.com>
+X-PR-Merge-Commit-Id: 54c2cc79194c961a213c1d375fe3aa4165664cc4
+Message-Id: <165428221855.10974.5753214896868680091.pr-tracker-bot@kernel.org>
+Date:   Fri, 03 Jun 2022 18:50:18 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arbn@yandex-team.com, arei.gonglei@huawei.com,
-        christophe.jaillet@wanadoo.fr, cohuck@redhat.com,
-        dan.carpenter@oracle.com, dinechin@redhat.com, elic@nvidia.com,
-        eperezma@redhat.com, gautam.dawar@xilinx.com, gdawar@xilinx.com,
-        helei.sig11@bytedance.com, jasowang@redhat.com,
-        lingshan.zhu@intel.com, linux-s390@vger.kernel.org,
-        liuke94@huawei.com, lkp@intel.com, lulu@redhat.com, maz@kernel.org,
-        michael.christie@oracle.com, mst@redhat.com, muriloo@linux.ibm.com,
-        oberpar@linux.ibm.com, pasic@linux.ibm.com, paulmck@kernel.org,
-        peterz@infradead.org, pizhenwei@bytedance.com, sgarzare@redhat.com,
-        solomonbstoner@protonmail.ch, stable@vger.kernel.org,
-        suwan.kim027@gmail.com, tglx@linutronix.de, vneethv@linux.ibm.com,
-        xianting.tian@linux.alibaba.com, zheyuma97@gmail.com
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 2 Jun 2022 16:11:24 -0400:
+The pull request you sent on Fri, 3 Jun 2022 12:23:02 +0200:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6e5f6a86915d65210e90acac0402e6f37e21fc7b
+https://git.kernel.org/torvalds/c/54c2cc79194c961a213c1d375fe3aa4165664cc4
 
 Thank you!
 

@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B757C53D13A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D95653D10D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243754AbiFCSRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S1347779AbiFCSP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347611AbiFCSGK (ORCPT
+        with ESMTP id S1346255AbiFCSAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537A75C36A;
-        Fri,  3 Jun 2022 10:59:08 -0700 (PDT)
+        Fri, 3 Jun 2022 14:00:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643AD44A39;
+        Fri,  3 Jun 2022 10:55:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9956B6165B;
-        Fri,  3 Jun 2022 17:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C409C3411F;
-        Fri,  3 Jun 2022 17:58:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBEF6B82189;
+        Fri,  3 Jun 2022 17:55:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146BCC3411C;
+        Fri,  3 Jun 2022 17:55:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279096;
-        bh=Cd2X9X9D1pUtLT7Y22U/EmbcPT8vW5ZoQ885p5Z6CdU=;
+        s=korg; t=1654278950;
+        bh=CVX7ifswhwcQdtQzFlElZGzhD98c4LLhRKYPlmhrabY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x2v4lypfoo81qMJ7lOOa01X7x0YqUvcL/6htIuitQWLc7W/xwFc/Ps/xBs68otxvb
-         LazbucnFvA4ahJ3srDIHcErCDbPAfWqAKvLwmVygQZOklwcec0/1veCaP1QcfOBhiT
-         tdLH5ARYzGM/QlJmkH1Z3BXi6+bcup1ZUaBUfGGw=
+        b=aLJ9DwLwYLf/hiSDZjEG/3aI3YckS7slU3AK9VW9Jm/gRsxphquJ0ZkIiVNGHPvPw
+         SPoyxh9Jlp33E1+xpxFHvkorxX25jDiCwtYzrJv8VsZNrIEvS+Y1/951HgC4hvcqYC
+         8lY2Kujg7ex9pCP99AdzI3tTZLqqxAVotBXEMn3c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.18 52/67] media: i2c: imx412: Fix reset GPIO polarity
+        stable@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 5.17 69/75] bpf: Fix potential array overflow in bpf_trampoline_get_progs()
 Date:   Fri,  3 Jun 2022 19:43:53 +0200
-Message-Id: <20220603173822.227553579@linuxfoundation.org>
+Message-Id: <20220603173823.686886343@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
-References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,67 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Yuntao Wang <ytcoode@gmail.com>
 
-commit bb25f071fc92d3d227178a45853347c7b3b45a6b upstream.
+commit a2aa95b71c9bbec793b5c5fa50f0a80d882b3e8d upstream.
 
-The imx412/imx577 sensor has a reset line that is active low not active
-high. Currently the logic for this is inverted.
+The cnt value in the 'cnt >= BPF_MAX_TRAMP_PROGS' check does not
+include BPF_TRAMP_MODIFY_RETURN bpf programs, so the number of
+the attached BPF_TRAMP_MODIFY_RETURN bpf programs in a trampoline
+can exceed BPF_MAX_TRAMP_PROGS.
 
-The right way to define the reset line is to declare it active low in the
-DTS and invert the logic currently contained in the driver.
+When this happens, the assignment '*progs++ = aux->prog' in
+bpf_trampoline_get_progs() will cause progs array overflow as the
+progs field in the bpf_tramp_progs struct can only hold at most
+BPF_MAX_TRAMP_PROGS bpf programs.
 
-The DTS should represent the hardware does i.e. reset is active low.
-So:
-+               reset-gpios = <&tlmm 78 GPIO_ACTIVE_LOW>;
-not:
--               reset-gpios = <&tlmm 78 GPIO_ACTIVE_HIGH>;
-
-I was a bit reticent about changing this logic since I thought it might
-negatively impact @intel.com users. Googling a bit though I believe this
-sensor is used on "Keem Bay" which is clearly a DTS based system and is not
-upstream yet.
-
-Fixes: 9214e86c0cc1 ("media: i2c: Add imx412 camera sensor driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 88fd9e5352fe ("bpf: Refactor trampoline update code")
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Link: https://lore.kernel.org/r/20220430130803.210624-1-ytcoode@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/i2c/imx412.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/bpf/trampoline.c |   18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
---- a/drivers/media/i2c/imx412.c
-+++ b/drivers/media/i2c/imx412.c
-@@ -1011,7 +1011,7 @@ static int imx412_power_on(struct device
- 	struct imx412 *imx412 = to_imx412(sd);
- 	int ret;
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -423,7 +423,7 @@ int bpf_trampoline_link_prog(struct bpf_
+ {
+ 	enum bpf_tramp_prog_type kind;
+ 	int err = 0;
+-	int cnt;
++	int cnt = 0, i;
  
--	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
-+	gpiod_set_value_cansleep(imx412->reset_gpio, 0);
+ 	kind = bpf_attach_type_to_tramp(prog);
+ 	mutex_lock(&tr->mutex);
+@@ -434,7 +434,10 @@ int bpf_trampoline_link_prog(struct bpf_
+ 		err = -EBUSY;
+ 		goto out;
+ 	}
+-	cnt = tr->progs_cnt[BPF_TRAMP_FENTRY] + tr->progs_cnt[BPF_TRAMP_FEXIT];
++
++	for (i = 0; i < BPF_TRAMP_MAX; i++)
++		cnt += tr->progs_cnt[i];
++
+ 	if (kind == BPF_TRAMP_REPLACE) {
+ 		/* Cannot attach extension if fentry/fexit are in use. */
+ 		if (cnt) {
+@@ -512,16 +515,19 @@ out:
  
- 	ret = clk_prepare_enable(imx412->inclk);
- 	if (ret) {
-@@ -1024,7 +1024,7 @@ static int imx412_power_on(struct device
- 	return 0;
- 
- error_reset:
--	gpiod_set_value_cansleep(imx412->reset_gpio, 0);
-+	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
- 
- 	return ret;
- }
-@@ -1040,7 +1040,7 @@ static int imx412_power_off(struct devic
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct imx412 *imx412 = to_imx412(sd);
- 
--	gpiod_set_value_cansleep(imx412->reset_gpio, 0);
-+	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
- 
- 	clk_disable_unprepare(imx412->inclk);
- 
+ void bpf_trampoline_put(struct bpf_trampoline *tr)
+ {
++	int i;
++
+ 	if (!tr)
+ 		return;
+ 	mutex_lock(&trampoline_mutex);
+ 	if (!refcount_dec_and_test(&tr->refcnt))
+ 		goto out;
+ 	WARN_ON_ONCE(mutex_is_locked(&tr->mutex));
+-	if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[BPF_TRAMP_FENTRY])))
+-		goto out;
+-	if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[BPF_TRAMP_FEXIT])))
+-		goto out;
++
++	for (i = 0; i < BPF_TRAMP_MAX; i++)
++		if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[i])))
++			goto out;
++
+ 	/* This code will be executed even when the last bpf_tramp_image
+ 	 * is alive. All progs are detached from the trampoline and the
+ 	 * trampoline image is patched with jmp into epilogue to skip
 
 

@@ -2,196 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFCF53D321
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 23:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A092953D325
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 23:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344375AbiFCVTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 17:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S1346707AbiFCVUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 17:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiFCVTI (ORCPT
+        with ESMTP id S230399AbiFCVUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 17:19:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6693328713
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 14:19:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7A0B61B04
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 21:19:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB51C385A9;
-        Fri,  3 Jun 2022 21:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654291142;
-        bh=d1Q9IPKvjPok8OAnN8PoPnUQadcNmLlAPGerCI7jOBM=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=L65XZnLU73fFbHiQ3HoNW52hsUxf9wZWVQr+vBMiuBwt/iIssaNOSaeWuzM14O7L5
-         NFgJ3Lv9JzFl3/SWM+DJ/tosGwEb5jDEFxwPcVc5x2414DnhuEuq8FzOG+bA29TtZV
-         kugUY/cxExetrr3OfBTvmj5+kpt3LPhpaHqtpbwKReJtLaKpfd28cLFGOLaOeVm50R
-         6FN8NVG8v3f+Z5CSQE/KsYTNI/iFsOv9Tnvj5muUWnepDJVbb30pjvA4TgGKBvWXJC
-         1kLBk96A7GMGF6SMp37Xdwy5z+Kth8tEviWn/h3P3ozj+d2uyeGRYS0DWti4DZSYj9
-         CcY7anQdJYB3A==
-Date:   Fri, 3 Jun 2022 14:19:00 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-Subject: Re: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages
- instead of real RAM ones
-In-Reply-To: <1652810658-27810-3-git-send-email-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop>
-References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com> <1652810658-27810-3-git-send-email-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 3 Jun 2022 17:20:18 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221862871F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 14:20:17 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id e66so8122683pgc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 14:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aSL7ZHMXz3P5XlI8cikK9k/wBwL3m4ZnnGzl4LDbF5w=;
+        b=yNAzb0ajq75+NUTWQ6F/Imkp+LkAOvWyjvIEZ9Ah9mLyIFvXVmZByYLwWgzXGPugJH
+         MZUuBsPksKXivdKiY3wf5wMtR12nIaXA6IVFdxR7/USFhYToEqM8KTUL5jdj/vHXeGh1
+         olb4yI9AOqG/8V8wmwUW2Z91bj9n5R+WM0//+OmgWylvnq0NhEYoGaqWJTLkAmL0QNAr
+         60jA9p5eud68gO4TkVyG1Ac1+bCKirNYFckPPkX5eCbAhOZoOiMj2Vx3YgEZfVI03H/s
+         agkeGuWvGhFYWY5Qbj+wNfabulM2TXDfn6iB7RnlIACHBFT6laOahv13Vh2nn13Z53gQ
+         ZLBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=aSL7ZHMXz3P5XlI8cikK9k/wBwL3m4ZnnGzl4LDbF5w=;
+        b=IP61s0cilEOuEzKwdUQ+WnbqT+f5cXyAt4HQMMdG7Y6FDo9eTcP25u5kRdAIOeHHbk
+         +H04eORboVeHH46j1jiZ8OhIQd7Py5U6cbA6jqhrexwN+EwI249+qHBuAIfK8PrmttYd
+         dR7wRmStgm2GjsZ2ciHKBdpnzjyStBDo+/rW52MiPO9zEC7HCOvaUg9P7ShYN5TwbSmP
+         dYUadTOTNWY7myHeuSKYeJglZupqUS4L3TIrTPGzc5j3Gk4TPA+wNt1xDTI3Xhl+KQvM
+         0xnbaBElJtUFhgxlpVYNFMunn9ULambQmMI6BRs1kTLqGhN3Z5yVn7gSks/+YUYl/5YS
+         x8Ag==
+X-Gm-Message-State: AOAM533GJBYrZ70fHhmEodn7R0HDGyxuGNWfLyBFaCTBYRJUh8uCj2Is
+        GFsw12XS0gAj5pkEPtEdxmDaCw==
+X-Google-Smtp-Source: ABdhPJy74UdT1UAYK7NS4BOTDuipUyhVJ4Wcq5kgiiy/hpj0AmjWPiOSYCycussqXvJh6aPittlOqQ==
+X-Received: by 2002:a63:b57:0:b0:3fb:a948:6d96 with SMTP id a23-20020a630b57000000b003fba9486d96mr10378007pgl.596.1654291216494;
+        Fri, 03 Jun 2022 14:20:16 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id t10-20020a17090a950a00b001e28e80a8d6sm5604411pjo.38.2022.06.03.14.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 14:20:15 -0700 (PDT)
+Date:   Fri, 03 Jun 2022 14:20:15 -0700 (PDT)
+X-Google-Original-Date: Fri, 03 Jun 2022 14:20:14 PDT (-0700)
+Subject:     Re: (RISC-V KVM) Re: [PATCH] RISC-V: fix typos in comments
+In-Reply-To: <CAAhSdy3+imWabbArUAg0Bki3qvD1PGVB-L-xY5CvNa_YBu80aA@mail.gmail.com>
+CC:     Julia.Lawall@inria.fr, kernel-janitors@vger.kernel.org,
+        atishp@atishpatra.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     anup@brainfault.org
+Message-ID: <mhng-90fa273a-b4b0-4078-887b-5e4f58986006@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
-> DMAable (contiguous) pages will be allocated for grant mapping into
-> instead of ballooning out real RAM pages.
-> 
-> TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
-> fails.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> ---
->  drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
-> index 8ccccac..2bb4392 100644
-> --- a/drivers/xen/grant-table.c
-> +++ b/drivers/xen/grant-table.c
-> @@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
->   */
->  int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
->  {
-> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
-> +	int ret;
+On Thu, 02 Jun 2022 21:33:00 PDT (-0700), anup@brainfault.org wrote:
+> On Thu, Jun 2, 2022 at 9:56 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>
+>> On Sat, 30 Apr 2022 12:11:20 PDT (-0700), Julia.Lawall@inria.fr wrote:
+>> > Various spelling mistakes in comments.
+>> > Detected with the help of Coccinelle.
+>> >
+>> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+>> >
+>> > ---
+>> >  arch/riscv/kvm/vmid.c |    2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
+>> > index 2fa4f7b1813d..4a2178c60b5d 100644
+>> > --- a/arch/riscv/kvm/vmid.c
+>> > +++ b/arch/riscv/kvm/vmid.c
+>> > @@ -92,7 +92,7 @@ void kvm_riscv_stage2_vmid_update(struct kvm_vcpu *vcpu)
+>> >                * We ran out of VMIDs so we increment vmid_version and
+>> >                * start assigning VMIDs from 1.
+>> >                *
+>> > -              * This also means existing VMIDs assignement to all Guest
+>> > +              * This also means existing VMIDs assignment to all Guest
+>> >                * instances is invalid and we have force VMID re-assignement
+>> >                * for all Guest instances. The Guest instances that were not
+>> >                * running will automatically pick-up new VMIDs because will
+>>
+>> Anup: I'm guessing you didn't see this because it didn't have KVM in the
+>> subject?
+>>
+>> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> if that helps any, I don't see in anywhere but not sure if I'm just
+>> missing it.
+>
+> Thanks Palmer, I had already planned to pick this as a RC fix for 5.19
+> but I forgot to reply here.
 
-This is an alternative implementation of the same function. If we are
-going to use #ifdef, then I would #ifdef the entire function, rather
-than just the body. Otherwise within the function body we can use
-IS_ENABLED.
-
-
-> +	ret = xen_alloc_unpopulated_dma_pages(args->dev, args->nr_pages,
-> +			args->pages);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = gnttab_pages_set_private(args->nr_pages, args->pages);
-> +	if (ret < 0) {
-> +		gnttab_dma_free_pages(args);
-
-it should xen_free_unpopulated_dma_pages ?
-
-
-> +		return ret;
-> +	}
-> +
-> +	args->vaddr = page_to_virt(args->pages[0]);
-> +	args->dev_bus_addr = page_to_phys(args->pages[0]);
-
-There are two things to note here. 
-
-The first thing to note is that normally we would call pfn_to_bfn to
-retrieve the dev_bus_addr of a page because pfn_to_bfn takes into
-account foreign mappings. However, these are freshly allocated pages
-without foreign mappings, so page_to_phys/dma should be sufficient.
-
-
-The second has to do with physical addresses and DMA addresses. The
-functions are called gnttab_dma_alloc_pages and
-xen_alloc_unpopulated_dma_pages which make you think we are retrieving a
-DMA address here. However, to get a DMA address we need to call
-page_to_dma rather than page_to_phys.
-
-page_to_dma takes into account special offsets that some devices have
-when accessing memory. There are real cases on ARM where the physical
-address != DMA address, e.g. RPi4.
-
-However, to call page_to_dma you need to specify as first argument the
-DMA-capable device that is expected to use those pages for DMA (e.g. an
-ethernet device or a MMC controller.) While the args->dev we have in
-gnttab_dma_alloc_pages is the gntdev_miscdev.
-
-So this interface cannot actually be used to allocate memory that is
-supposed to be DMA-able by a DMA-capable device, such as an ethernet
-device.
-
-But I think that should be fine because the memory is meant to be used
-by a userspace PV backend for grant mappings. If any of those mappings
-end up being used for actual DMA in the kernel they should go through the
-drivers/xen/swiotlb-xen.c and xen_phys_to_dma should be called, which
-ends up calling page_to_dma as appropriate.
-
-It would be good to double-check that the above is correct and, if so,
-maybe add a short in-code comment about it:
-
-/*
- * These are not actually DMA addresses but regular physical addresses.
- * If these pages end up being used in a DMA operation then the
- * swiotlb-xen functions are called and xen_phys_to_dma takes care of
- * the address translations:
- *
- * - from gfn to bfn in case of foreign mappings
- * - from physical to DMA addresses in case the two are different for a
- *   given DMA-mastering device
- */
-
-
-
-> +	return ret;
-> +#else
->  	unsigned long pfn, start_pfn;
->  	size_t size;
->  	int i, ret;
-> @@ -910,6 +929,7 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
->  fail:
->  	gnttab_dma_free_pages(args);
->  	return ret;
-> +#endif
->  }
->  EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
->  
-> @@ -919,6 +939,12 @@ EXPORT_SYMBOL_GPL(gnttab_dma_alloc_pages);
->   */
->  int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
->  {
-> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
-> +	gnttab_pages_clear_private(args->nr_pages, args->pages);
-> +	xen_free_unpopulated_dma_pages(args->dev, args->nr_pages, args->pages);
-> +
-> +	return 0;
-> +#else
->  	size_t size;
->  	int i, ret;
->  
-> @@ -946,6 +972,7 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args *args)
->  		dma_free_wc(args->dev, size,
->  			    args->vaddr, args->dev_bus_addr);
->  	return ret;
-> +#endif
->  }
->  EXPORT_SYMBOL_GPL(gnttab_dma_free_pages);
->  #endif
-> -- 
-> 2.7.4
-> 
+OK, no worries.  I was't going to do anything with it as it's 
+arch/riscv/kvm, so no rush on my end.

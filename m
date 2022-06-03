@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C7453D103
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2F853D017
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346411AbiFCSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
+        id S1346631AbiFCSA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346374AbiFCSAP (ORCPT
+        with ESMTP id S1347219AbiFCRwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:00:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E0B583BA;
-        Fri,  3 Jun 2022 10:56:19 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA63562DA;
+        Fri,  3 Jun 2022 10:50:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C73C6147E;
-        Fri,  3 Jun 2022 17:56:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB71C385A9;
-        Fri,  3 Jun 2022 17:56:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB9FC60EE9;
+        Fri,  3 Jun 2022 17:50:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75FDC3411C;
+        Fri,  3 Jun 2022 17:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278978;
-        bh=+jKGu2m+qotB5j1a1TjLLakeDpMh01+5nUzTVxMt6Vo=;
+        s=korg; t=1654278632;
+        bh=sQ0GPSl5NoQwPN9POfGGNsMy+Sxch4CTIxQGvcHIVJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yRuprK4N0uW9KA91MoS6frGxWtvLNGq9+Q/mYRIDBWxLZa6GOlErNDtFuCsiKffKJ
-         pGPouzKVL4rRnlcNRzJ/6vPFDW/7FP8K1GxNETEo4wG3dYvd5rb2P5V1Emj7rpRBtx
-         2Verpy9UzV4VccgoS66b/61G+LxJcGvs3Cpw34r0=
+        b=uNVmtlsI96A2wYZ40DU+Fu95l8C8eENXStboWnRUCz6hUHomfdAO4CncSQ0WEhN7r
+         nxWsKZCsFx+UikUYP4tKKnMB5krM0yM4VE0+qwsVcliIXcXlfLyUylvSBD2K4E0kLM
+         YvLdPUaNX0Z7fGRycTcG8Iuv/wGEFPUgFyy4ky1s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+793a590957d9c1b96620@syzkaller.appspotmail.com,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.18 14/67] netfilter: conntrack: re-fetch conntrack after insertion
+        stable@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.15 35/66] crypto: ecrdsa - Fix incorrect use of vli_cmp
 Date:   Fri,  3 Jun 2022 19:43:15 +0200
-Message-Id: <20220603173821.142120889@linuxfoundation.org>
+Message-Id: <20220603173821.665178127@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
-References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,43 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Vitaly Chikunov <vt@altlinux.org>
 
-commit 56b14ecec97f39118bf85c9ac2438c5a949509ed upstream.
+commit 7cc7ab73f83ee6d50dc9536bc3355495d8600fad upstream.
 
-In case the conntrack is clashing, insertion can free skb->_nfct and
-set skb->_nfct to the already-confirmed entry.
+Correctly compare values that shall be greater-or-equal and not just
+greater.
 
-This wasn't found before because the conntrack entry and the extension
-space used to free'd after an rcu grace period, plus the race needs
-events enabled to trigger.
-
-Reported-by: <syzbot+793a590957d9c1b96620@syzkaller.appspotmail.com>
-Fixes: 71d8c47fc653 ("netfilter: conntrack: introduce clash resolution on insertion race")
-Fixes: 2ad9d7747c10 ("netfilter: conntrack: free extension area immediately")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 0d7a78643f69 ("crypto: ecrdsa - add EC-RDSA (GOST 34.10) algorithm")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/netfilter/nf_conntrack_core.h |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ crypto/ecrdsa.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/include/net/netfilter/nf_conntrack_core.h
-+++ b/include/net/netfilter/nf_conntrack_core.h
-@@ -58,8 +58,13 @@ static inline int nf_conntrack_confirm(s
- 	int ret = NF_ACCEPT;
+--- a/crypto/ecrdsa.c
++++ b/crypto/ecrdsa.c
+@@ -113,15 +113,15 @@ static int ecrdsa_verify(struct akcipher
  
- 	if (ct) {
--		if (!nf_ct_is_confirmed(ct))
-+		if (!nf_ct_is_confirmed(ct)) {
- 			ret = __nf_conntrack_confirm(skb);
-+
-+			if (ret == NF_ACCEPT)
-+				ct = (struct nf_conn *)skb_nfct(skb);
-+		}
-+
- 		if (likely(ret == NF_ACCEPT))
- 			nf_ct_deliver_cached_events(ct);
- 	}
+ 	/* Step 1: verify that 0 < r < q, 0 < s < q */
+ 	if (vli_is_zero(r, ndigits) ||
+-	    vli_cmp(r, ctx->curve->n, ndigits) == 1 ||
++	    vli_cmp(r, ctx->curve->n, ndigits) >= 0 ||
+ 	    vli_is_zero(s, ndigits) ||
+-	    vli_cmp(s, ctx->curve->n, ndigits) == 1)
++	    vli_cmp(s, ctx->curve->n, ndigits) >= 0)
+ 		return -EKEYREJECTED;
+ 
+ 	/* Step 2: calculate hash (h) of the message (passed as input) */
+ 	/* Step 3: calculate e = h \mod q */
+ 	vli_from_le64(e, digest, ndigits);
+-	if (vli_cmp(e, ctx->curve->n, ndigits) == 1)
++	if (vli_cmp(e, ctx->curve->n, ndigits) >= 0)
+ 		vli_sub(e, e, ctx->curve->n, ndigits);
+ 	if (vli_is_zero(e, ndigits))
+ 		e[0] = 1;
+@@ -137,7 +137,7 @@ static int ecrdsa_verify(struct akcipher
+ 	/* Step 6: calculate point C = z_1P + z_2Q, and R = x_c \mod q */
+ 	ecc_point_mult_shamir(&cc, z1, &ctx->curve->g, z2, &ctx->pub_key,
+ 			      ctx->curve);
+-	if (vli_cmp(cc.x, ctx->curve->n, ndigits) == 1)
++	if (vli_cmp(cc.x, ctx->curve->n, ndigits) >= 0)
+ 		vli_sub(cc.x, cc.x, ctx->curve->n, ndigits);
+ 
+ 	/* Step 7: if R == r signature is valid */
 
 

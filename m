@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006EA53CB7E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA63F53CB81
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245078AbiFCO2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
+        id S245091AbiFCOaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiFCO2S (ORCPT
+        with ESMTP id S230293AbiFCOaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:28:18 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B2A22B38
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 07:28:17 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t6so10637514wra.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 07:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xEYT24Mw/3xwhggZ/dpbmQG99woOPJwgkQGW8eylJQs=;
-        b=zvsMZh6sLDlicrdTGeylEAw0Q1YIMm9o7fadQF8XPiqdYFOu82UeM3gyvT0tNKQx0V
-         QtfnOhpaMS6/olRJQJmIvNAF+XTbT5GKyjnYQmo49/MGEcLXAkdZ/IOPVjfItNW8YvyM
-         oSfbsGy//J3DR4BaK449AbnXMGbVdzTaVeuSa7QCrwjt0RD3O3K1WOVnYtu2KNaVJloT
-         dxLrm9R8JCzmhSm9XZFWrlTa0lmihGYrNPh6D/N/FZl2FcDcW8YlGafJmEs6WMJ1POVk
-         BxqxOxLX16zCsZTbQjPT1K6ehsWp/z4wxwKIWq1X7iozSFWh0+rrQJAD8hIW0QLQRb4p
-         XN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xEYT24Mw/3xwhggZ/dpbmQG99woOPJwgkQGW8eylJQs=;
-        b=Dk6FqMOQhp/gj78DPB4mLZbbkgC0nUpE82owNot2VMBpws6NYhpQOJO97IofSdVKDP
-         9+0PkpvoA4t9ufuztzX9XKZm1iGltwaxLriebLXt+OmYtJzfSm6Wy1YIkibHMO4FDBW4
-         rdtQqEYYAKPDjO6hZqLovaBIWvd5Ne0gaShobuTNYXLSbLgP66o3XU041pWGdhXRKazE
-         X3mk3xG7nSu4dp+RxDQYpQkLqnoK/lX1ewxgvF+I8XMeMnxxesWc2CscVfg74C2N5gHv
-         8yiYcPoc/vnGNuPugZqWubfgH0KWm5fmytWzq1jVH1h5ketgAoriLWnBRqnfG+ralTyp
-         mXfw==
-X-Gm-Message-State: AOAM5333dJd94vBs+C5scFReVQEM12zVknt3up3zZnpbC8//WhEnDG0b
-        IlaAyJ57shUEfzJpvszoREsfUlBSNot+YA==
-X-Google-Smtp-Source: ABdhPJyovDLQyMgqK1CVt47Mttdzalhw7oxXByv7wtrOyjSW+woe/77ysnzSCDi+GJOQwyyhg3vJrg==
-X-Received: by 2002:a05:6000:1568:b0:20f:d416:e5ac with SMTP id 8-20020a056000156800b0020fd416e5acmr8608338wrz.190.1654266495652;
-        Fri, 03 Jun 2022 07:28:15 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:327a:d111:d547:a6d2])
-        by smtp.gmail.com with ESMTPSA id a21-20020a05600c349500b003958af7d0c8sm8616581wmq.45.2022.06.03.07.28.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 07:28:15 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: updates for v5.19-rc1
-Date:   Fri,  3 Jun 2022 16:28:12 +0200
-Message-Id: <20220603142812.66869-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+        Fri, 3 Jun 2022 10:30:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33614C42B;
+        Fri,  3 Jun 2022 07:30:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E31D617B8;
+        Fri,  3 Jun 2022 14:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C99EBC34115;
+        Fri,  3 Jun 2022 14:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654266613;
+        bh=cL4qE2iRzT0xOYU4TvM0a+oTGcBqs57YFySGH2gBdLs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=X3ghMwLRTrutWlHkznIguQRbZvSOmhwBwclAfTOA1T20D13XmOgf2bWLToXG/7HDH
+         bUQ2rWFfFzPB7qA2nMwxyz+BFTeseLqD7NR5ye/nFJv0qsK+qiixPHWq16yxojU3iO
+         5eN+jkzNi0McebKYxpLog2Zd7MftJffl39QKutVYNnTFyHGbzKy7go/9b8DAUl00Ir
+         EOJKHky+evHAzAOXjMftYB+gzDhI0jaAY0QrxzgftwFiJe8R2S63Zl5sDJByDTA+yX
+         RaQq8ShvnqD46dYfCuxVlQG3LO0HSCs9vUzVtL0B0R9iXTpEv1oomoVn/Fq3saN3q7
+         /JfC2wG85mUnA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ABA39F03945;
+        Fri,  3 Jun 2022 14:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3] Bluetooth: When HCI work queue is drained,
+ only queue chained work
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165426661369.25346.7610455116995225922.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Jun 2022 14:30:13 +0000
+References: <20220603081914.42512-1-schspa@gmail.com>
+In-Reply-To: <20220603081914.42512-1-schspa@gmail.com>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hello:
 
-Please pull the following set of fixes for the upcoming rc.
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Marcel Holtmann <marcel@holtmann.org>:
 
-Best regards,
-Bartosz Golaszewski
+On Fri,  3 Jun 2022 16:19:14 +0800 you wrote:
+> The HCI command, event, and data packet processing workqueue is drained
+> to avoid deadlock in commit
+> 76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state").
+> 
+> There is another delayed work, which will queue command to this drained
+> workqueue. Which results in the following error report:
+> 
+> [...]
 
-The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
+Here is the summary with links:
+  - [v3] Bluetooth: When HCI work queue is drained, only queue chained work
+    https://git.kernel.org/bluetooth/bluetooth-next/c/dba7abaead13
 
-  Linux 5.18 (2022-05-22 09:52:31 -1000)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.19-rc1
-
-for you to fetch changes up to 7bb8a0cf49d5fede1104afdcb43bd2f8a1df3253:
-
-  gpio: adp5588: Remove support for platform setup and teardown callbacks (2022-06-02 09:17:38 +0200)
-
-----------------------------------------------------------------
-gpio updates for v5.19-rc1
-
-- use the correct register for regcache sync in gpio-pca953x
-- remove unused and potentially harmful code from gpio-adp5588
-- MAINTAINERS update
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      MAINTAINERS: Update GPIO ACPI library to Supported
-      MAINTAINERS: Update Intel GPIO (PMIC and PCH) to Supported
-
-Haibo Chen (1):
-      gpio: pca953x: use the correct register address to do regcache sync
-
-Uwe Kleine-König (1):
-      gpio: adp5588: Remove support for platform setup and teardown callbacks
-
- MAINTAINERS                 |  6 +++---
- drivers/gpio/gpio-adp5588.c | 19 -------------------
- drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
- 3 files changed, 14 insertions(+), 30 deletions(-)

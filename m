@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BC553D0AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA42A53D083
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347222AbiFCSKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S1347373AbiFCSF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345777AbiFCR4x (ORCPT
+        with ESMTP id S1346382AbiFCRvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:56:53 -0400
+        Fri, 3 Jun 2022 13:51:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427456F97;
-        Fri,  3 Jun 2022 10:54:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA4454BEE;
+        Fri,  3 Jun 2022 10:47:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4209DB82430;
-        Fri,  3 Jun 2022 17:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C942C341C0;
-        Fri,  3 Jun 2022 17:54:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1EBBB82419;
+        Fri,  3 Jun 2022 17:47:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 455AFC385A9;
+        Fri,  3 Jun 2022 17:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278841;
-        bh=u3IpJg7f52QEmZoiTs+geEPRmnLMhe+3HVFYgwUxjcA=;
+        s=korg; t=1654278471;
+        bh=Q8CnHLsLepW4XKMWQD92Z0o3evO6/YHu3TkLR5iToKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NfplIdH5VWQBNcX7nAjS2H99ntgDNP6ofPHzSkCTJpJqpXugim9Elr15L1haOCzv+
-         2PHc32p9XFXsPy8buVugH552s69xDnDZQ4frZBUncc793UcjLpEtKN41j2ADeg5/6M
-         ND7OoYns9TBHE+TA1eZo+302S+SSVgn2EoKyh+KE=
+        b=cnETZ8Mz7P4DY+Dvr+1WDDa64W+4Cn+C3AYWTI9SkoLOx3TWoN10dJhLem3KrTAJ1
+         6pxZrodxmmBy2MSoLl4zHE8XGR9+/M0L1RbcEUaUiroY0nhAGMDeLaoWpDsmoTfX9k
+         XAjdpCzWi3oBGAAK/X0j8D323fSD9jh0VoBCHxI0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Maris Abele <maris7abele@gmail.com>
-Subject: [PATCH 5.17 44/75] ALSA: usb-audio: Workaround for clock setup on TEAC devices
+        stable@vger.kernel.org,
+        Sarthak Kukreti <sarthakkukreti@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.10 43/53] dm verity: set DM_TARGET_IMMUTABLE feature flag
 Date:   Fri,  3 Jun 2022 19:43:28 +0200
-Message-Id: <20220603173822.998263429@linuxfoundation.org>
+Message-Id: <20220603173819.973095357@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Sarthak Kukreti <sarthakkukreti@google.com>
 
-commit 5ce0b06ae5e69e23142e73c5c3c0260e9f2ccb4b upstream.
+commit 4caae58406f8ceb741603eee460d79bacca9b1b5 upstream.
 
-Maris reported that TEAC UD-501 (0644:8043) doesn't work with the
-typical "clock source 41 is not valid, cannot use" errors on the
-recent kernels.  The currently known workaround so far is to restore
-(partially) what we've done unconditionally at the clock setup;
-namely, re-setup the USB interface immediately after the clock is
-changed.  This patch re-introduces the behavior conditionally for TEAC
-devices.
+The device-mapper framework provides a mechanism to mark targets as
+immutable (and hence fail table reloads that try to change the target
+type). Add the DM_TARGET_IMMUTABLE flag to the dm-verity target's
+feature flags to prevent switching the verity target with a different
+target type.
 
-Further notes:
-- The USB interface shall be set later in
-  snd_usb_endpoint_configure(), but this seems to be too late.
-- Even calling  usb_set_interface() right after
-  sne_usb_init_sample_rate() doesn't help; so this must be related
-  with the clock validation, too.
-- The device may still spew the "clock source 41 is not valid" error
-  at the first clock setup.  This seems happening at the very first
-  try of clock setup, but it disappears at later attempts.
-  The error is likely harmless because the driver retries the clock
-  setup (such an error is more or less expected on some devices).
-
-Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
-Reported-and-tested-by: Maris Abele <maris7abele@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220521064627.29292-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: a4ffc152198e ("dm: add verity target")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sarthak Kukreti <sarthakkukreti@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/clock.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/md/dm-verity-target.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/usb/clock.c
-+++ b/sound/usb/clock.c
-@@ -572,6 +572,13 @@ static int set_sample_rate_v2v3(struct s
- 		/* continue processing */
- 	}
+--- a/drivers/md/dm-verity-target.c
++++ b/drivers/md/dm-verity-target.c
+@@ -1242,6 +1242,7 @@ bad:
  
-+	/* FIXME - TEAC devices require the immediate interface setup */
-+	if (rate != prev_rate && USB_ID_VENDOR(chip->usb_id) == 0x0644) {
-+		usb_set_interface(chip->dev, fmt->iface, fmt->altsetting);
-+		if (chip->quirk_flags & QUIRK_FLAG_IFACE_DELAY)
-+			msleep(50);
-+	}
-+
- validation:
- 	/* validate clock after rate change */
- 	if (!uac_clock_source_is_valid(chip, fmt, clock))
+ static struct target_type verity_target = {
+ 	.name		= "verity",
++	.features	= DM_TARGET_IMMUTABLE,
+ 	.version	= {1, 7, 0},
+ 	.module		= THIS_MODULE,
+ 	.ctr		= verity_ctr,
 
 

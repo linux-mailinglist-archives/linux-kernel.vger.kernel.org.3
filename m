@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD24553CE84
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A9553CE81
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344701AbiFCRnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S1344893AbiFCRnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344920AbiFCRmw (ORCPT
+        with ESMTP id S1344866AbiFCRmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:42:52 -0400
+        Fri, 3 Jun 2022 13:42:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146C62720;
-        Fri,  3 Jun 2022 10:41:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE9D544CD;
+        Fri,  3 Jun 2022 10:41:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 548FCB82431;
-        Fri,  3 Jun 2022 17:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938B5C385A9;
-        Fri,  3 Jun 2022 17:41:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50BE2B8241E;
+        Fri,  3 Jun 2022 17:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718E5C385B8;
+        Fri,  3 Jun 2022 17:41:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278104;
-        bh=8lwdtJgoL6EYum2fMrK+hR+J004muThwKO/3lIxOmZM=;
+        s=korg; t=1654278095;
+        bh=3ViZWjmJ+Nek5pl0FuNMo3ymqto6EzWkpqpCjbVe+J8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eZsLmPBtm1A5gzVxoR1oizMiZrdLiC9hZrgyJogJbVMdoak1B08HL5sTnTsIfsFbm
-         OhQ53HjUX9U/NR88qI5KZZNjJtN04wueI2BHk40of6B1Sd28SJ5AQrzua1Ig4FiMAz
-         JEzfEPGXhenhRwLPLhX5KlvGm4HDnzjuhdUHgT78=
+        b=q+UhhMdM8ZGiHeU+Wu9gYbJ8SIehtwd30o0Mb9XbmwAJz5OiMJVKS9GD9daCBpXqo
+         hJFeS8uUp/JVmb6pkUfvD+M3RyAaUV6yNfaJephoCJG1Xogha4qx06a4uH0oSEisUB
+         MQKnC30D5e/y1U7RpSAPpl72BnvSj9SS2wpbC9Pc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.19 11/30] assoc_array: Fix BUG_ON during garbage collect
-Date:   Fri,  3 Jun 2022 19:39:39 +0200
-Message-Id: <20220603173815.426807838@linuxfoundation.org>
+        stable@vger.kernel.org, Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vegard Nossum <vegard.nossum@oracle.com>
+Subject: [PATCH 4.14 13/23] exec: Force single empty string when argv is empty
+Date:   Fri,  3 Jun 2022 19:39:40 +0200
+Message-Id: <20220603173814.769065032@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.088143764@linuxfoundation.org>
-References: <20220603173815.088143764@linuxfoundation.org>
+In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
+References: <20220603173814.362515009@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,163 +62,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Brennan <stephen.s.brennan@oracle.com>
+From: Kees Cook <keescook@chromium.org>
 
-commit d1dc87763f406d4e67caf16dbe438a5647692395 upstream.
+commit dcd46d897adb70d63e025f175a00a89797d31a43 upstream.
 
-A rare BUG_ON triggered in assoc_array_gc:
+Quoting[1] Ariadne Conill:
 
-    [3430308.818153] kernel BUG at lib/assoc_array.c:1609!
+"In several other operating systems, it is a hard requirement that the
+second argument to execve(2) be the name of a program, thus prohibiting
+a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+but it is not an explicit requirement[2]:
 
-Which corresponded to the statement currently at line 1593 upstream:
+    The argument arg0 should point to a filename string that is
+    associated with the process being started by one of the exec
+    functions.
+...
+Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
+but there was no consensus to support fixing this issue then.
+Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
+of this bug in a shellcode, we can reconsider.
 
-    BUG_ON(assoc_array_ptr_is_meta(p));
+This issue is being tracked in the KSPP issue tracker[5]."
 
-Using the data from the core dump, I was able to generate a userspace
-reproducer[1] and determine the cause of the bug.
+While the initial code searches[6][7] turned up what appeared to be
+mostly corner case tests, trying to that just reject argv == NULL
+(or an immediately terminated pointer list) quickly started tripping[8]
+existing userspace programs.
 
-[1]: https://github.com/brenns10/kernel_stuff/tree/master/assoc_array_gc
+The next best approach is forcing a single empty string into argv and
+adjusting argc to match. The number of programs depending on argc == 0
+seems a smaller set than those calling execve with a NULL argv.
 
-After running the iterator on the entire branch, an internal tree node
-looked like the following:
+Account for the additional stack space in bprm_stack_limits(). Inject an
+empty string when argc == 0 (and set argc = 1). Warn about the case so
+userspace has some notice about the change:
 
-    NODE (nr_leaves_on_branch: 3)
-      SLOT [0] NODE (2 leaves)
-      SLOT [1] NODE (1 leaf)
-      SLOT [2..f] NODE (empty)
+    process './argc0' launched './argc0' with NULL argv: empty string added
 
-In the userspace reproducer, the pr_devel output when compressing this
-node was:
+Additionally WARN() and reject NULL argv usage for kernel threads.
 
-    -- compress node 0x5607cc089380 --
-    free=0, leaves=0
-    [0] retain node 2/1 [nx 0]
-    [1] fold node 1/1 [nx 0]
-    [2] fold node 0/1 [nx 2]
-    [3] fold node 0/2 [nx 2]
-    [4] fold node 0/3 [nx 2]
-    [5] fold node 0/4 [nx 2]
-    [6] fold node 0/5 [nx 2]
-    [7] fold node 0/6 [nx 2]
-    [8] fold node 0/7 [nx 2]
-    [9] fold node 0/8 [nx 2]
-    [10] fold node 0/9 [nx 2]
-    [11] fold node 0/10 [nx 2]
-    [12] fold node 0/11 [nx 2]
-    [13] fold node 0/12 [nx 2]
-    [14] fold node 0/13 [nx 2]
-    [15] fold node 0/14 [nx 2]
-    after: 3
+[1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
+[2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+[3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
+[4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+[5] https://github.com/KSPP/linux/issues/176
+[6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
+[7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
+[8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
 
-At slot 0, an internal node with 2 leaves could not be folded into the
-node, because there was only one available slot (slot 0). Thus, the
-internal node was retained. At slot 1, the node had one leaf, and was
-able to be folded in successfully. The remaining nodes had no leaves,
-and so were removed. By the end of the compression stage, there were 14
-free slots, and only 3 leaf nodes. The tree was ascended and then its
-parent node was compressed. When this node was seen, it could not be
-folded, due to the internal node it contained.
-
-The invariant for compression in this function is: whenever
-nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT, the node should contain all
-leaf nodes. The compression step currently cannot guarantee this, given
-the corner case shown above.
-
-To fix this issue, retry compression whenever we have retained a node,
-and yet nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT. This second
-compression will then allow the node in slot 1 to be folded in,
-satisfying the invariant. Below is the output of the reproducer once the
-fix is applied:
-
-    -- compress node 0x560e9c562380 --
-    free=0, leaves=0
-    [0] retain node 2/1 [nx 0]
-    [1] fold node 1/1 [nx 0]
-    [2] fold node 0/1 [nx 2]
-    [3] fold node 0/2 [nx 2]
-    [4] fold node 0/3 [nx 2]
-    [5] fold node 0/4 [nx 2]
-    [6] fold node 0/5 [nx 2]
-    [7] fold node 0/6 [nx 2]
-    [8] fold node 0/7 [nx 2]
-    [9] fold node 0/8 [nx 2]
-    [10] fold node 0/9 [nx 2]
-    [11] fold node 0/10 [nx 2]
-    [12] fold node 0/11 [nx 2]
-    [13] fold node 0/12 [nx 2]
-    [14] fold node 0/13 [nx 2]
-    [15] fold node 0/14 [nx 2]
-    internal nodes remain despite enough space, retrying
-    -- compress node 0x560e9c562380 --
-    free=14, leaves=1
-    [0] fold node 2/15 [nx 0]
-    after: 3
-
-Changes
-=======
-DH:
- - Use false instead of 0.
- - Reorder the inserted lines in a couple of places to put retained before
-   next_slot.
-
-ver #2)
- - Fix typo in pr_devel, correct comparison to "<="
-
-Fixes: 3cb989501c26 ("Add a generic associative array implementation.")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: keyrings@vger.kernel.org
-Link: https://lore.kernel.org/r/20220511225517.407935-1-stephen.s.brennan@oracle.com/ # v1
-Link: https://lore.kernel.org/r/20220512215045.489140-1-stephen.s.brennan@oracle.com/ # v2
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Ariadne Conill <ariadne@dereferenced.org>
+Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Acked-by: Christian Brauner <brauner@kernel.org>
+Acked-by: Ariadne Conill <ariadne@dereferenced.org>
+Acked-by: Andy Lutomirski <luto@kernel.org>
+Link: https://lore.kernel.org/r/20220201000947.2453721-1-keescook@chromium.org
+[vegard: fixed conflicts due to missing
+ 886d7de631da71e30909980fdbf318f7caade262^- and
+ 3950e975431bc914f7e81b8f2a2dbdf2064acb0f^- and
+ 655c16a8ce9c15842547f40ce23fd148aeccc074]
+Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/assoc_array.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/exec.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
---- a/lib/assoc_array.c
-+++ b/lib/assoc_array.c
-@@ -1465,6 +1465,7 @@ int assoc_array_gc(struct assoc_array *a
- 	struct assoc_array_ptr *cursor, *ptr;
- 	struct assoc_array_ptr *new_root, *new_parent, **new_ptr_pp;
- 	unsigned long nr_leaves_on_tree;
-+	bool retained;
- 	int keylen, slot, nr_free, next_slot, i;
+This has been tested in both argc == 0 and argc >= 1 cases, but I would
+still appreciate a review given the differences with mainline. If it's
+considered too risky I'm also fine with dropping it -- just wanted to
+make sure this didn't fall through the cracks, as it does block a real
+(albeit old by now) exploit.
+
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1788,6 +1788,9 @@ static int do_execveat_common(int fd, st
+ 		goto out_unmark;
  
- 	pr_devel("-->%s()\n", __func__);
-@@ -1541,6 +1542,7 @@ continue_node:
- 		goto descend;
- 	}
+ 	bprm->argc = count(argv, MAX_ARG_STRINGS);
++	if (bprm->argc == 0)
++		pr_warn_once("process '%s' launched '%s' with NULL argv: empty string added\n",
++			     current->comm, bprm->filename);
+ 	if ((retval = bprm->argc) < 0)
+ 		goto out;
  
-+retry_compress:
- 	pr_devel("-- compress node %p --\n", new_n);
+@@ -1812,6 +1815,20 @@ static int do_execveat_common(int fd, st
+ 	if (retval < 0)
+ 		goto out;
  
- 	/* Count up the number of empty slots in this node and work out the
-@@ -1558,6 +1560,7 @@ continue_node:
- 	pr_devel("free=%d, leaves=%lu\n", nr_free, new_n->nr_leaves_on_branch);
- 
- 	/* See what we can fold in */
-+	retained = false;
- 	next_slot = 0;
- 	for (slot = 0; slot < ASSOC_ARRAY_FAN_OUT; slot++) {
- 		struct assoc_array_shortcut *s;
-@@ -1607,9 +1610,14 @@ continue_node:
- 			pr_devel("[%d] retain node %lu/%d [nx %d]\n",
- 				 slot, child->nr_leaves_on_branch, nr_free + 1,
- 				 next_slot);
-+			retained = true;
- 		}
- 	}
- 
-+	if (retained && new_n->nr_leaves_on_branch <= ASSOC_ARRAY_FAN_OUT) {
-+		pr_devel("internal nodes remain despite enough space, retrying\n");
-+		goto retry_compress;
++	/*
++	 * When argv is empty, add an empty string ("") as argv[0] to
++	 * ensure confused userspace programs that start processing
++	 * from argv[1] won't end up walking envp. See also
++	 * bprm_stack_limits().
++	 */
++	if (bprm->argc == 0) {
++		const char *argv[] = { "", NULL };
++		retval = copy_strings_kernel(1, argv, bprm);
++		if (retval < 0)
++			goto out;
++		bprm->argc = 1;
 +	}
- 	pr_devel("after: %lu\n", new_n->nr_leaves_on_branch);
- 
- 	nr_leaves_on_tree = new_n->nr_leaves_on_branch;
++
+ 	retval = exec_binprm(bprm);
+ 	if (retval < 0)
+ 		goto out;
 
 

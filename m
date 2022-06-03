@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12FA53D06B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77E753D0CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbiFCSEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S1346431AbiFCSJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347271AbiFCRwL (ORCPT
+        with ESMTP id S1345821AbiFCR4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D525C15827;
-        Fri,  3 Jun 2022 10:52:04 -0700 (PDT)
+        Fri, 3 Jun 2022 13:56:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280AE5674D;
+        Fri,  3 Jun 2022 10:53:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 942A6B82419;
-        Fri,  3 Jun 2022 17:52:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E93C385B8;
-        Fri,  3 Jun 2022 17:52:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E5A6147E;
+        Fri,  3 Jun 2022 17:53:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B66B0C3411C;
+        Fri,  3 Jun 2022 17:53:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278722;
-        bh=o2LDBO1b8iC0wppgbfky3VEsUppuRsfLKRLQ/QY0Rq4=;
+        s=korg; t=1654278826;
+        bh=9h2Ia9UMLLLrz40r159dqMLmt2Y+I7MDiyxSYUSFbSY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lTHiS+P9cMABSI8lTg/Qt3eSm/Mh7x1rKvAwFx+O7e9iDKZhqPbsP8NWt0IKQpAyu
-         zei09popk0qU7RaUoPkdX7wknScJrdjx1eYN4g37mEuC/SneZsOZr5SVzPhjfgJipt
-         yB+9rNYjrEJjdMTeU7BqdJEx98fkqNpkFQHmB+Vs=
+        b=gSYiTFTU7yd3SxrgdQE/yaAB56rLF7QQM8BV9qryPBojI0dTtJq3h3S19l3tR4RAz
+         3aIwf34Oxbn928JEplmbY0+tKQgS3xUJT7NITulCQgL4JyBHZxEWM95uFxU7qP4WCq
+         VqYhhTyUL4yM6ZYfIGu+QnQ6FH5CqOFk2hYr3gKg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.15 42/66] dm integrity: fix error code in dm_integrity_ctr()
-Date:   Fri,  3 Jun 2022 19:43:22 +0200
-Message-Id: <20220603173821.886142555@linuxfoundation.org>
+        stable@vger.kernel.org, Andy Nguyen <theflow@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 39/75] KVM: SVM: Use kzalloc for sev ioctl interfaces to prevent kernel data leak
+Date:   Fri,  3 Jun 2022 19:43:23 +0200
+Message-Id: <20220603173822.854269922@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +57,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Ashish Kalra <ashish.kalra@amd.com>
 
-commit d3f2a14b8906df913cb04a706367b012db94a6e8 upstream.
+commit d22d2474e3953996f03528b84b7f52cc26a39403 upstream.
 
-The "r" variable shadows an earlier "r" that has function scope.  It
-means that we accidentally return success instead of an error code.
-Smatch has a warning for this:
+For some sev ioctl interfaces, the length parameter that is passed maybe
+less than or equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data
+that PSP firmware returns. In this case, kmalloc will allocate memory
+that is the size of the input rather than the size of the data.
+Since PSP firmware doesn't fully overwrite the allocated buffer, these
+sev ioctl interface may return uninitialized kernel slab memory.
 
-	drivers/md/dm-integrity.c:4503 dm_integrity_ctr()
-	warn: missing error code 'r'
-
-Fixes: 7eada909bfd7 ("dm: add integrity target")
+Reported-by: Andy Nguyen <theflow@google.com>
+Suggested-by: David Rientjes <rientjes@google.com>
+Suggested-by: Peter Gonda <pgonda@google.com>
+Cc: kvm@vger.kernel.org
 Cc: stable@vger.kernel.org
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Fixes: eaf78265a4ab3 ("KVM: SVM: Move SEV code to separate file")
+Fixes: 2c07ded06427d ("KVM: SVM: add support for SEV attestation command")
+Fixes: 4cfdd47d6d95a ("KVM: SVM: Add KVM_SEV SEND_START command")
+Fixes: d3d1af85e2c75 ("KVM: SVM: Add KVM_SEND_UPDATE_DATA command")
+Fixes: eba04b20e4861 ("KVM: x86: Account a variety of miscellaneous allocations")
+Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+Reviewed-by: Peter Gonda <pgonda@google.com>
+Message-Id: <20220516154310.3685678-1-Ashish.Kalra@amd.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-integrity.c |    2 --
- 1 file changed, 2 deletions(-)
+ arch/x86/kvm/svm/sev.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -4478,8 +4478,6 @@ try_smaller_buffer:
- 	}
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -684,7 +684,7 @@ static int sev_launch_measure(struct kvm
+ 		if (params.len > SEV_FW_BLOB_MAX_SIZE)
+ 			return -EINVAL;
  
- 	if (should_write_sb) {
--		int r;
--
- 		init_journal(ic, 0, ic->journal_sections, 0);
- 		r = dm_integrity_failed(ic);
- 		if (unlikely(r)) {
+-		blob = kmalloc(params.len, GFP_KERNEL_ACCOUNT);
++		blob = kzalloc(params.len, GFP_KERNEL_ACCOUNT);
+ 		if (!blob)
+ 			return -ENOMEM;
+ 
+@@ -804,7 +804,7 @@ static int __sev_dbg_decrypt_user(struct
+ 	if (!IS_ALIGNED(dst_paddr, 16) ||
+ 	    !IS_ALIGNED(paddr,     16) ||
+ 	    !IS_ALIGNED(size,      16)) {
+-		tpage = (void *)alloc_page(GFP_KERNEL);
++		tpage = (void *)alloc_page(GFP_KERNEL | __GFP_ZERO);
+ 		if (!tpage)
+ 			return -ENOMEM;
+ 
+@@ -1090,7 +1090,7 @@ static int sev_get_attestation_report(st
+ 		if (params.len > SEV_FW_BLOB_MAX_SIZE)
+ 			return -EINVAL;
+ 
+-		blob = kmalloc(params.len, GFP_KERNEL_ACCOUNT);
++		blob = kzalloc(params.len, GFP_KERNEL_ACCOUNT);
+ 		if (!blob)
+ 			return -ENOMEM;
+ 
+@@ -1172,7 +1172,7 @@ static int sev_send_start(struct kvm *kv
+ 		return -EINVAL;
+ 
+ 	/* allocate the memory to hold the session data blob */
+-	session_data = kmalloc(params.session_len, GFP_KERNEL_ACCOUNT);
++	session_data = kzalloc(params.session_len, GFP_KERNEL_ACCOUNT);
+ 	if (!session_data)
+ 		return -ENOMEM;
+ 
+@@ -1296,11 +1296,11 @@ static int sev_send_update_data(struct k
+ 
+ 	/* allocate memory for header and transport buffer */
+ 	ret = -ENOMEM;
+-	hdr = kmalloc(params.hdr_len, GFP_KERNEL_ACCOUNT);
++	hdr = kzalloc(params.hdr_len, GFP_KERNEL_ACCOUNT);
+ 	if (!hdr)
+ 		goto e_unpin;
+ 
+-	trans_data = kmalloc(params.trans_len, GFP_KERNEL_ACCOUNT);
++	trans_data = kzalloc(params.trans_len, GFP_KERNEL_ACCOUNT);
+ 	if (!trans_data)
+ 		goto e_free_hdr;
+ 
 
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523D753D10A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD6A53CFD2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348396AbiFCSQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
+        id S1345839AbiFCR45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346729AbiFCSFH (ORCPT
+        with ESMTP id S1346456AbiFCRvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4352122B2C;
-        Fri,  3 Jun 2022 10:58:12 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0818156C3D;
+        Fri,  3 Jun 2022 10:48:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83F12615E3;
-        Fri,  3 Jun 2022 17:57:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75AF5C385B8;
-        Fri,  3 Jun 2022 17:57:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98E4F60F3E;
+        Fri,  3 Jun 2022 17:48:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F4FC385A9;
+        Fri,  3 Jun 2022 17:48:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279048;
-        bh=k8dwY4UsBqEZIeUNq0npNOB1aRN/HTu4O5GznizTuIE=;
+        s=korg; t=1654278499;
+        bh=21SXVznNk8nrAqUXqJHMAyEw3zH9dw0VNUvKpqJuS0o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RXNmc5cVJZwLxupz1V1v7oLjo3Zcjc8ZhVFD90F27bedTjopSsZvOb2+vU0bjXItM
-         KeiodrPY4Qu06JR4UAxi7pee6rcw+jfQy9+/iLgBIjq8ST16kcV1VIAK+MBdgoL6iO
-         kTT3kzGgIZRds5tepgEgq7yGsTt9pSHEgbuU+J3I=
+        b=IxvBQdyO44ggWoIUq8pxz1ZtkctGuZzIDxvR2OhiYe2BmrcuJ6mK38WwtGkpMTyuQ
+         WlFWjYTXafdkcNQ9tytyrsXMNCLjUzFrKluARpzR5JnK4EAkk3GFbfDrj2qvUmsYRw
+         dPaCJP08mJCZ48niOixu03X5UfB7fNZJ+/TaxaQw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Andr=C3=A9=20Kapelrud?= <a.kapelrud@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.18 35/67] ALSA: usb-audio: Add missing ep_idx in fixed EP quirks
+        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 5.10 51/53] NFSD: Fix possible sleep during nfsd4_release_lockowner()
 Date:   Fri,  3 Jun 2022 19:43:36 +0200
-Message-Id: <20220603173821.742858262@linuxfoundation.org>
+Message-Id: <20220603173820.202073618@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
-References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-commit 7b0efea4baf02f5e2f89e5f9b75ef891571b45f1 upstream.
+commit ce3c4ad7f4ce5db7b4f08a1e237d8dd94b39180b upstream.
 
-The quirk entry for Focusrite Saffire 6 had no proper ep_idx for the
-capture endpoint, and this confused the driver, resulting in the
-broken sound.  This patch adds the missing ep_idx in the entry.
+nfsd4_release_lockowner() holds clp->cl_lock when it calls
+check_for_locks(). However, check_for_locks() calls nfsd_file_get()
+/ nfsd_file_put() to access the backing inode's flc_posix list, and
+nfsd_file_put() can sleep if the inode was recently removed.
 
-While we are at it, a couple of other entries (for Digidesign MBox and
-MOTU MicroBook II) seem to have the same problem, and those are
-covered as well.
+Let's instead rely on the stateowner's reference count to gate
+whether the release is permitted. This should be a reliable
+indication of locks-in-use since file lock operations and
+->lm_get_owner take appropriate references, which are released
+appropriately when file locks are removed.
 
-Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
-Reported-by: André Kapelrud <a.kapelrud@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220521065325.426-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Reported-by: Dai Ngo <dai.ngo@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/quirks-table.h |    3 +++
- 1 file changed, 3 insertions(+)
+ fs/nfsd/nfs4state.c |   12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
---- a/sound/usb/quirks-table.h
-+++ b/sound/usb/quirks-table.h
-@@ -2672,6 +2672,7 @@ YAMAHA_DEVICE(0x7010, "UB99"),
- 					.altset_idx = 1,
- 					.attributes = 0,
- 					.endpoint = 0x82,
-+					.ep_idx = 1,
- 					.ep_attr = USB_ENDPOINT_XFER_ISOC,
- 					.datainterval = 1,
- 					.maxpacksize = 0x0126,
-@@ -2875,6 +2876,7 @@ YAMAHA_DEVICE(0x7010, "UB99"),
- 					.altset_idx = 1,
- 					.attributes = 0x4,
- 					.endpoint = 0x81,
-+					.ep_idx = 1,
- 					.ep_attr = USB_ENDPOINT_XFER_ISOC |
- 						USB_ENDPOINT_SYNC_ASYNC,
- 					.maxpacksize = 0x130,
-@@ -3391,6 +3393,7 @@ YAMAHA_DEVICE(0x7010, "UB99"),
- 					.altset_idx = 1,
- 					.attributes = 0,
- 					.endpoint = 0x03,
-+					.ep_idx = 1,
- 					.rates = SNDRV_PCM_RATE_96000,
- 					.ep_attr = USB_ENDPOINT_XFER_ISOC |
- 						   USB_ENDPOINT_SYNC_ASYNC,
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -7122,16 +7122,12 @@ nfsd4_release_lockowner(struct svc_rqst
+ 		if (sop->so_is_open_owner || !same_owner_str(sop, owner))
+ 			continue;
+ 
+-		/* see if there are still any locks associated with it */
+-		lo = lockowner(sop);
+-		list_for_each_entry(stp, &sop->so_stateids, st_perstateowner) {
+-			if (check_for_locks(stp->st_stid.sc_file, lo)) {
+-				status = nfserr_locks_held;
+-				spin_unlock(&clp->cl_lock);
+-				return status;
+-			}
++		if (atomic_read(&sop->so_count) != 1) {
++			spin_unlock(&clp->cl_lock);
++			return nfserr_locks_held;
+ 		}
+ 
++		lo = lockowner(sop);
+ 		nfs4_get_stateowner(sop);
+ 		break;
+ 	}
 
 

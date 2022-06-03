@@ -2,59 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8069753CCFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498E753CD10
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343664AbiFCQMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 12:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S1343830AbiFCQVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 12:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343659AbiFCQMU (ORCPT
+        with ESMTP id S1343818AbiFCQVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 12:12:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3CC24591;
-        Fri,  3 Jun 2022 09:12:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3765D61988;
-        Fri,  3 Jun 2022 16:12:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3980C385A9;
-        Fri,  3 Jun 2022 16:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654272737;
-        bh=O9M5jqdylfIYfPPpysrTSvpb5Slsp0Ov8SEYrUNJiRs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KQVT60gjcauzcYjwva9tzOpQ2w+i89jrkPNenFv4Y74edbsCMOv5m50Ec+jofIe6c
-         C+EqPf6Wd3vnsieZ/Pj72WbHbtO8ihiv/EcpJaRbpkB0gwr2vdde1wEzgaSkkO7kWI
-         U1ZXQjPAAzB3ZfvBZp3sdsRAf+PUn9shAuYbCmnvdPzmWIZu8nO/z8+jRdxvnLqHXS
-         0l9fy9HXF4CPmfmAPCluDMT7BySyzznnWyM3jXzsNjHORYgGJ2P6vjq3ZRY+rU0lqk
-         xfiWFz79f+EI8EyMMyihqFD0APlz6dfM/abhxLHRhYVy4w+6P01L1/3Ew+ftJQjmKe
-         wiOfUL8KR8bLA==
-Date:   Fri, 3 Jun 2022 17:21:17 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v3 2/6] iio: adc: meson_saradc: Align messages to be
- with physical device prefix
-Message-ID: <20220603172117.792ce869@jic23-huawei>
-In-Reply-To: <20220603100004.70336-2-andriy.shevchenko@linux.intel.com>
-References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
-        <20220603100004.70336-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Fri, 3 Jun 2022 12:21:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4C039808;
+        Fri,  3 Jun 2022 09:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=Kl50zb1H5h1iw6GsZC1FYxxnr0hwKKM6SR7HaocL/H0=; b=SxBQ9HiA1HndIQD8kolM150WZ2
+        d/VcJ27ZLABBbIjDapkcYxgNxsT6xBZcfbrfEZ5Wble60t7DxVNcOMlP4EN7jSUARESl213ef3DMK
+        NZR+K8RgNpHhDZ2hTCNozVHAba5Vyzxrq+dKSrVGxOY05O9KBuh4uf3xGm55N8OAd2VdJzNy/qkFh
+        HWmY4FhGrV5mlTmNVVlFrX+IZkIl/iyDiL66Dby9TmjiGv6C489KGCFrSwKJtvbLrS9ZmZMis9NYo
+        1RZ1Kw1LKHSLG0z5FK1vphBsiVwZHGzJsrARPGoVuUr5dttM5GniCdyzW0n6UlACU1fsizsVVgxDb
+        M4o4HbzA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nxA3J-008027-1v; Fri, 03 Jun 2022 16:21:33 +0000
+Message-ID: <727bc913-794a-800c-9b06-31e9257870ef@infradead.org>
+Date:   Fri, 3 Jun 2022 09:21:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: Tree for Jun 3 (mm/memory-failure.c)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+References: <20220603144935.5b67f75b@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220603144935.5b67f75b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,53 +56,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Jun 2022 13:00:00 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> Align messages to be printed with the physical device prefix as it's done
-> everywhere else in this driver.
+
+On 6/2/22 21:49, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Here I'm fine with the use of the parent as can only happen after all
-the setup is done, so it's obvious the parent will be assigned
-(some might argue it is obvious in the previous patch, but I had to check
-as I couldn't remember when we set it :)
-
-Anyhow, LGTM. 
-> ---
-> v3: new patch (inspired by previous change)
->  drivers/iio/adc/meson_saradc.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+> Note: please do not add any v5.20 material to your linux-next included
+> branches until after v5.19-rc1 has been related.
 > 
-> diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
-> index 4fe6b997cd03..658047370db0 100644
-> --- a/drivers/iio/adc/meson_saradc.c
-> +++ b/drivers/iio/adc/meson_saradc.c
-> @@ -345,6 +345,7 @@ static int meson_sar_adc_read_raw_sample(struct iio_dev *indio_dev,
->  					 int *val)
->  {
->  	struct meson_sar_adc_priv *priv = iio_priv(indio_dev);
-> +	struct device *dev = indio_dev->dev.parent;
->  	int regval, fifo_chan, fifo_val, count;
->  
->  	if (!wait_for_completion_timeout(&priv->done,
-> @@ -353,16 +354,14 @@ static int meson_sar_adc_read_raw_sample(struct iio_dev *indio_dev,
->  
->  	count = meson_sar_adc_get_fifo_count(indio_dev);
->  	if (count != 1) {
-> -		dev_err(&indio_dev->dev,
-> -			"ADC FIFO has %d element(s) instead of one\n", count);
-> +		dev_err(dev, "ADC FIFO has %d element(s) instead of one\n", count);
->  		return -EINVAL;
->  	}
->  
->  	regmap_read(priv->regmap, MESON_SAR_ADC_FIFO_RD, &regval);
->  	fifo_chan = FIELD_GET(MESON_SAR_ADC_FIFO_RD_CHAN_ID_MASK, regval);
->  	if (fifo_chan != chan->address) {
-> -		dev_err(&indio_dev->dev,
-> -			"ADC FIFO entry belongs to channel %d instead of %lu\n",
-> +		dev_err(dev, "ADC FIFO entry belongs to channel %d instead of %lu\n",
->  			fifo_chan, chan->address);
->  		return -EINVAL;
->  	}
+> Changes since 20220602:
+> 
 
+on i386 or x86_64:
+
+../mm/memory-failure.c: In function ‘__get_huge_page_for_hwpoison’:
+../mm/memory-failure.c:1545:2: error: implicit declaration of function ‘hugetlb_set_page_hwpoison’; did you mean ‘hugetlb_page_subpool’? [-Werror=implicit-function-declaration]
+  hugetlb_set_page_hwpoison(head, page);
+
+
+when CONFIG_HUGETLB_PAGE is not set.
+The inline function hugetlb_set_page_hwpoison() is only defined
+when CONFIG_HUGETLB_PAGE is set.
+
+
+-- 
+~Randy

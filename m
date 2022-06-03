@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607C253C3C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E5353C3CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238187AbiFCEb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 00:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S238566AbiFCEdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 00:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237890AbiFCEby (ORCPT
+        with ESMTP id S230475AbiFCEdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:31:54 -0400
-Received: from mail-ua1-x963.google.com (mail-ua1-x963.google.com [IPv6:2607:f8b0:4864:20::963])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947F62180
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:31:53 -0700 (PDT)
-Received: by mail-ua1-x963.google.com with SMTP id z15so2202620uad.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:31:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:dkim-signature:mime-version:references
-         :in-reply-to:from:date:message-id:subject:to:cc;
-        bh=TfOfY9nDE6EgdzK7eHo1wPWpr31B0AhtWoqNGscvDio=;
-        b=ioiRTafpOE2wSHTS4AYSBmd0KKQennzL2LCi1YXKVTAdwabeFOLlhtyPQ5a7gJjK84
-         0hqsChxsAW01WDn3qMras0ZNxOLfguHaK6ziNjks9UNi3qfsWZ1DAnQRm3QtvSB6YxEJ
-         YO7SvXNdG8zusECZPCf1qed3jToZ6CXjQdMuHAoaLxsFkWcv62Hp9zPiLb71Oga5UNn0
-         cz/2GTrq33uGAumodBuW8c/s9AHhAhIgqVLBvm1qt5fXFKLht5i6bdZZsOnAvUKCAV0s
-         +RjAZNKoT/iUTW6W0iT4+a9y0xw10AAsMuIdcL46Qx/0cFJXN5vMKAGyhcpwcZx2wAoU
-         f9WQ==
-X-Gm-Message-State: AOAM533EfvLy4AQhj2A78j3yYJ0AruBMgtU7Evc5FbJaQEoqjbrKoBbb
-        eQ1xa1qsPjkXfRS2zrewaG78qYQ/xitGHtiTX2fqi7oyJbJcfQ==
-X-Google-Smtp-Source: ABdhPJyfOPwYVkAFLvZg8n+5bgxLHoUhKnuOLLZJC7j97JjMEbK7MwQJpOVcKjbYsxZbkaecJ3fpBZCwTuM0
-X-Received: by 2002:a9f:386c:0:b0:362:9220:ce10 with SMTP id q41-20020a9f386c000000b003629220ce10mr25930067uad.68.1654230681079;
-        Thu, 02 Jun 2022 21:31:21 -0700 (PDT)
-Received: from netskope.com ([163.116.128.209])
-        by smtp-relay.gmail.com with ESMTPS id b23-20020ab03917000000b003735b2deef2sm819089uaw.13.2022.06.02.21.31.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 21:31:21 -0700 (PDT)
-X-Relaying-Domain: riotgames.com
-Received: by mail-qk1-f197.google.com with SMTP id j12-20020ae9c20c000000b0069e8ac6b244so5189437qkg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:31:19 -0700 (PDT)
+        Fri, 3 Jun 2022 00:33:15 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CEC36178
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:33:13 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id k16so8876981wrg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:33:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riotgames.com; s=riotgames;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TfOfY9nDE6EgdzK7eHo1wPWpr31B0AhtWoqNGscvDio=;
-        b=EB0xhxnrrBnHMP+Yw1n+L6/aBww/dvWK+IVeF09JEDipF5Hblr7ZZ3BsnJKTyT+ru6
-         lMbAs+t8Vw0xSjQDS8SvPfKDDZ2fXhgGGIEZQvhFveC26VsbjQ68eNbjAgPCO5AovCG8
-         mNwCZojcO25AASOYLNPvXo+S4c7KbmB7K9ies=
-X-Received: by 2002:a05:620a:4154:b0:6a5:7577:3e1b with SMTP id k20-20020a05620a415400b006a575773e1bmr5309327qko.694.1654230678936;
-        Thu, 02 Jun 2022 21:31:18 -0700 (PDT)
-X-Received: by 2002:a05:620a:4154:b0:6a5:7577:3e1b with SMTP id
- k20-20020a05620a415400b006a575773e1bmr5309317qko.694.1654230678725; Thu, 02
- Jun 2022 21:31:18 -0700 (PDT)
+        bh=vD4OLfKIFfGtPa5y0jFVwdykOdv+Mnr0Uixx1FpZoy0=;
+        b=yU/SgzSBAt1nzCv+gtsQNekuiPdjc7en8Za9CNTL+CXMx+z1HaYPZjPlIpqzf5rIlg
+         cao9VPP6LfSHgTMgw3UZopSsoOgZQnYAPvnLEPez95+7+vUHCdbZLwoaMqIOfvZN/CNO
+         W9qHVGZPGJGLpXImyr0XPjtFB0u0MBd5lBU8/3Trugv5obA4YQxLackcJW8QS5vTrSXs
+         24EGlZZmaokB5XPj5tviqqAaOjogoR9AJTfM1FQQ0ewV9gkCw9ysoTgVq9ZOCkLH8DAa
+         iGu6a1c0Rbe7onMz5grzmI1C9A5OZaPs5vdn1H84YoLg/yRQNJVUilWrbIj/mDa0vpZB
+         0k0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vD4OLfKIFfGtPa5y0jFVwdykOdv+Mnr0Uixx1FpZoy0=;
+        b=X2YuzLUj84HojQUMLwVweeQjDxBsWziONpDvxzZ6S60q1pUjFAriq+onWPCvfva17T
+         2sjS1GJgT5uLDEcS+RNa2lbb0oKcdLpnSGA3Lq8ns4YnXt1117wDNsgjX7fAHdWT9VB0
+         SRPTLW4LbeDQn3SzZ4+4mjom1QC3zwmfOygGKEGxjmSwQA33PWh7fA+0pBaZz7b8H7bO
+         FNmEWfbOcpRCnrGeWSGal4fC0/YJnWtC/aMvIp/v1502uUNhUnyiGboOuNNgizs3YkrF
+         fRMTPc5LXDq7Wxti6b1cwN2S2vlpyR0re6sic4be5ib6nNNeXt1Bosh0vBrrHzC2yqbF
+         Ty6g==
+X-Gm-Message-State: AOAM533rCLZdxrxJIu/OgTaVr9AuG54ik6iFNYsh+C/9IT6dljthwnB8
+        2Xt3UaCGRXKL1TtKhX7qoFW/Pq0vhNMQD0koKir1ZrLcB6h/DA==
+X-Google-Smtp-Source: ABdhPJwt7W+KX4MtCMg6NzWsDLRyzubaw5RShkTBjOfLyk3i7t5J1gsnfZjgOrEkIxeXfFUcKMzwahlSWGkcgBksuGc=
+X-Received: by 2002:a05:6000:1f18:b0:20f:e61b:520e with SMTP id
+ bv24-20020a0560001f1800b0020fe61b520emr6348325wrb.214.1654230792135; Thu, 02
+ Jun 2022 21:33:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220603041701.2799595-1-irogers@google.com>
-In-Reply-To: <20220603041701.2799595-1-irogers@google.com>
-From:   Zvi Effron <zeffron@riotgames.com>
-Date:   Thu, 2 Jun 2022 21:31:07 -0700
-Message-ID: <CAC1LvL12oxCojWBxqCj=g+cC=UbAHoQ6kT4TQXSi1j78L5zn3g@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: Fix is_pow_of_2
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuze Chi <chiyuze@google.com>
+References: <20220430191122.8667-6-Julia.Lawall@inria.fr> <mhng-523319d8-fda9-4737-9c43-d54bcfd7a7f2@palmer-ri-x1c9>
+In-Reply-To: <mhng-523319d8-fda9-4737-9c43-d54bcfd7a7f2@palmer-ri-x1c9>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 3 Jun 2022 10:03:00 +0530
+Message-ID: <CAAhSdy3+imWabbArUAg0Bki3qvD1PGVB-L-xY5CvNa_YBu80aA@mail.gmail.com>
+Subject: Re: (RISC-V KVM) Re: [PATCH] RISC-V: fix typos in comments
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Julia Lawall <Julia.Lawall@inria.fr>,
+        kernel-janitors@vger.kernel.org,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-x-netskope-inspected: true
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 9:17 PM Ian Rogers <irogers@google.com> wrote:
+On Thu, Jun 2, 2022 at 9:56 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
 >
-> From: Yuze Chi <chiyuze@google.com>
+> On Sat, 30 Apr 2022 12:11:20 PDT (-0700), Julia.Lawall@inria.fr wrote:
+> > Various spelling mistakes in comments.
+> > Detected with the help of Coccinelle.
+> >
+> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> >
+> > ---
+> >  arch/riscv/kvm/vmid.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
+> > index 2fa4f7b1813d..4a2178c60b5d 100644
+> > --- a/arch/riscv/kvm/vmid.c
+> > +++ b/arch/riscv/kvm/vmid.c
+> > @@ -92,7 +92,7 @@ void kvm_riscv_stage2_vmid_update(struct kvm_vcpu *vcpu)
+> >                * We ran out of VMIDs so we increment vmid_version and
+> >                * start assigning VMIDs from 1.
+> >                *
+> > -              * This also means existing VMIDs assignement to all Guest
+> > +              * This also means existing VMIDs assignment to all Guest
+> >                * instances is invalid and we have force VMID re-assignement
+> >                * for all Guest instances. The Guest instances that were not
+> >                * running will automatically pick-up new VMIDs because will
 >
-> There is a missing not. Consider a power of 2 number like 4096:
+> Anup: I'm guessing you didn't see this because it didn't have KVM in the
+> subject?
 >
-> x && (x & (x - 1))
-> 4096 && (4096 & (4096 - 1))
-> 4096 && (4096 & 4095)
-> 4096 && 0
-> 0
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 >
-> with the not this is:
-> x && !(x & (x - 1))
-> 4096 && !(4096 & (4096 - 1))
-> 4096 && !(4096 & 4095)
-> 4096 && !0
-> 4096 && 1
-> 1
->
-> Reported-by: Yuze Chi <chiyuze@google.com>
-> Signed-off-by: Yuze Chi <chiyuze@google.com>
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/bpf/libbpf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 3f4f18684bd3..fd0414ea00df 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -4956,7 +4956,7 @@ static void bpf_map__destroy(struct bpf_map *map);
->
->  static bool is_pow_of_2(size_t x)
->  {
-> -       return x && (x & (x - 1));
-> +       return x && !(x & (x - 1));
+> if that helps any, I don't see in anywhere but not sure if I'm just
+> missing it.
 
-No idea if anyone cares about the consistency, but in linker.c (same directory)
-the same static function is defined using == 0 at the end instead of using the
-not operator.
+Thanks Palmer, I had already planned to pick this as a RC fix for 5.19
+but I forgot to reply here.
 
-Aside from the consistency issue, personally I find the == 0 version a little
-bit easier to read and understand because it's a bit less dense (and a "!" next
-to a "(" is an easy character to overlook).
-
->  }
->
->  static size_t adjust_ringbuf_sz(size_t sz)
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+Regards,
+Anup

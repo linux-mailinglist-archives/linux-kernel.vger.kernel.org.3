@@ -2,76 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3E753C2A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FDE53C1AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239900AbiFCAmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S242529AbiFCAx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiFCAmg (ORCPT
+        with ESMTP id S240242AbiFCApm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 20:42:36 -0400
-Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id F0CB1614F;
-        Thu,  2 Jun 2022 17:42:30 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 3 Jun 2022 08:42:07
- +0800 (GMT+08:00)
-X-Originating-IP: [106.117.80.109]
-Date:   Fri, 3 Jun 2022 08:42:07 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Jeff Johnson" <quic_jjohnson@quicinc.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitkarwar@gmail.com, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        gregkh@linuxfoundation.org, johannes@sipsolutions.net,
-        rafael@kernel.org
-Subject: Re: [PATCH v4 1/2] devcoredump: remove the useless gfp_t parameter
- in dev_coredumpv
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <e8d9d010-7fa1-da61-feeb-43f0a101a323@quicinc.com>
-References: <cover.1654175941.git.duoming@zju.edu.cn>
- <338a65fe8f30d23339cfc09fe1fb7be751ad655b.1654175941.git.duoming@zju.edu.cn>
- <e8d9d010-7fa1-da61-feeb-43f0a101a323@quicinc.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <397aa8b.4be56.181270327b5.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgDXQCDfWJliO88wAQ--.29039W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggKAVZdtaBKlgAAsD
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW5Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 2 Jun 2022 20:45:42 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22551344F8
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:45:27 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id g129-20020a636b87000000b003fd1deac6ebso135910pgc.23
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=3+V17MeEPjvQg09WlN2EBYPY536bBdHzqlWlFeq99WM=;
+        b=kVfh+vPHcGM1lNaIV0EGYJvz0D25wwuiua+OEiHcKV3KObeTffpxHa8OBQO/Bfvkvc
+         YzziWeYKgfK6ltmIYp74F81H6q+y0Mj4nSOk8D67J70bx/dFA9aEHAmsFfbYJaK+ylpq
+         sABxIuIK6LMLTAg8XylgHeurvSZwZQ9+X08FFv8lWsrxpiv6E+pL8xn7V3lqTRqbXpZ2
+         Wm7lpWHOSVpbKUTm8SIMutG98dLlUMD1nhqaQG81c7ymhxTH8yWA2h4nxyagj1dLZXic
+         9FYCO2gPgzqkg94EXDVvKvM7gHFGoADItYh1HTd6tP7qLb0d4ekTlxN/AGf2OEYOz2MM
+         AnhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=3+V17MeEPjvQg09WlN2EBYPY536bBdHzqlWlFeq99WM=;
+        b=7O2Jmj/M93s/UTYs5VSqbpJsxPI2cjY+jZ9h8lX9D1KdjfXsBM2Z/4KPEAej1aQQpC
+         6XCNTHTmluG9DUUHvi7HLDcqHNWySSGk34gqES6zAnygak/3wjIGME3y0wOueAyMpQTG
+         8jRLLhyO9BQWC2s7d/pRCh7iTQKeNX3XxWQmxV2bRLnNxeQENhbYTRBhmhx6KyK+ndFT
+         OXnC65HvAUICprfG79Ni/J/T9PzY/Ykn4xK3KHWq8PSdDdVKDUa8l8ZwKFISYdj3ORF5
+         b30BW6oLPJGeRCUlLZZdxPQFgRx15ca9xikrd+0+B5a2e7TTMn7otbs7cl/ASvRnrmfU
+         ChJg==
+X-Gm-Message-State: AOAM531ofMGzJLb1QgWQ42kDKky5cXjOwWzio76pnn4/876hbMBb/W9M
+        +VqMTXQMkXID045tKSOK6/ZzBcvMlAg=
+X-Google-Smtp-Source: ABdhPJw4kln2CObNdfF++iT6Gp4BzDVa0eaG40S1Zj/G7HIetNH3tHqf3rRmZXs3DQz04oj6BdR5MG+fZr4=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1ad2:b0:51b:c63b:95f0 with SMTP id
+ f18-20020a056a001ad200b0051bc63b95f0mr6460313pfv.16.1654217126547; Thu, 02
+ Jun 2022 17:45:26 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri,  3 Jun 2022 00:42:07 +0000
+In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
+Message-Id: <20220603004331.1523888-61-seanjc@google.com>
+Mime-Version: 1.0
+References: <20220603004331.1523888-1-seanjc@google.com>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v2 060/144] KVM: selftests: Convert state_test away from VCPU_ID
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDIgSnVuIDIwMjIgMTM6MzI6NDggLTA3MDAgSmVmZiBKb2huc29uIHdy
-b3RlOgoKPiBPbiA2LzIvMjAyMiA2OjMzIEFNLCBEdW9taW5nIFpob3Ugd3JvdGU6Cj4gPiBUaGUg
-ZGV2X2NvcmVkdW1wdigpIGNvdWxkIG5vdCBiZSB1c2VkIGluIGF0b21pYyBjb250ZXh0LCBiZWNh
-dXNlCj4gPiBpdCBjYWxscyBrdmFzcHJpbnRmX2NvbnN0KCkgYW5kIGtzdHJkdXAoKSB3aXRoIEdG
-UF9LRVJORUwgcGFyYW1ldGVyLgo+ID4gVGhlIHByb2Nlc3MgaXMgc2hvd24gYmVsb3c6Cj4gPiAK
-PiA+IGRldl9jb3JlZHVtcHYoLi4uLCBnZnBfdCBnZnApCj4gPiAgICBkZXZfY29yZWR1bXBtCj4g
-PiAgICAgIGRldl9zZXRfbmFtZQo+ID4gICAgICAgIGtvYmplY3Rfc2V0X25hbWVfdmFyZ3MKPiA+
-ICAgICAgICAgIGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwgLi4uKTsgLy9tYXkgc2xlZXAK
-PiA+ICAgICAgICAgICAga3N0cmR1cChzLCBHRlBfS0VSTkVMKTsgLy9tYXkgc2xlZXAKPiA+IAo+
-ID4gVGhpcyBwYXRjaCByZW1vdmVzIGdmcF90IHBhcmFtZXRlciBvZiBkZXZfY29yZWR1bXB2KCkg
-YW5kIGNoYW5nZXMgdGhlCj4gPiBnZnBfdCBwYXJhbWV0ZXIgb2YgZGV2X2NvcmVkdW1wbSgpIHRv
-IEdGUF9LRVJORUwgaW4gb3JkZXIgdG8gc2hvdwo+ID4gZGV2X2NvcmVkdW1wdigpIGNvdWxkIG5v
-dCBiZSB1c2VkIGluIGF0b21pYyBjb250ZXh0Lgo+IAo+IHNob3VsZG4ndCB5b3UgcmVtb3ZlIHRo
-ZSBnZnAgcGFyYW1ldGVyIHRvIGRldl9jb3JlZHVtcG0oKSBhcyB3ZWxsIHNpbmNlIAo+IGl0IGlz
-IGFjdHVhbGx5IHdpdGhpbiB0aGF0IGZ1bmN0aW9uIHdoZXJlIGRldl9zZXRfbmFtZSgpIGlzIGNh
-bGxlZCB3aGljaCAKPiBjYW5ub3QgYmUgZG9uZSBpbiBhdG9taWMgY29udGV4dD8KClRoYW5rcyBm
-b3IgeW91ciBzdWdnZXN0aW9uLCBJIHdpbGwgcmVtb3ZlIHRoZSBnZnBfdCBwYXJhbWV0ZXIgb2Yg
-ZGV2X2NvcmVkdW1wbSgpIGFzIHdlbGwuIAoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK
+Convert state_test to use vm_create_with_one_vcpu() and
+vm_recreate_with_one_vcpu(), and pass around a 'struct kvm_vcpu' object
+instead of using a global VCPU_ID.  Note, this is a "functional" change
+in the sense that the test now creates a vCPU with vcpu_id==0 instead of
+vcpu_id==5.  The non-zero VCPU_ID was 100% arbitrary and added little to
+no validation coverage.  If testing non-zero vCPU IDs is desirable for
+generic tests, that can be done in the future by tweaking the VM creation
+helpers.
+
+Opportunistically use vcpu_run() instead of _vcpu_run(), the test expects
+KVM_RUN to succeed.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../testing/selftests/kvm/x86_64/state_test.c | 29 +++++++++----------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/state_test.c b/tools/testing/selftests/kvm/x86_64/state_test.c
+index 41f7faaef2ac..b7869efad22a 100644
+--- a/tools/testing/selftests/kvm/x86_64/state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/state_test.c
+@@ -20,7 +20,6 @@
+ #include "vmx.h"
+ #include "svm_util.h"
+ 
+-#define VCPU_ID		5
+ #define L2_GUEST_STACK_SIZE 256
+ 
+ void svm_l2_guest_code(void)
+@@ -157,6 +156,7 @@ int main(int argc, char *argv[])
+ 	vm_vaddr_t nested_gva = 0;
+ 
+ 	struct kvm_regs regs1, regs2;
++	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 	struct kvm_run *run;
+ 	struct kvm_x86_state *state;
+@@ -164,10 +164,10 @@ int main(int argc, char *argv[])
+ 	int stage;
+ 
+ 	/* Create VM */
+-	vm = vm_create_default(VCPU_ID, 0, guest_code);
+-	run = vcpu_state(vm, VCPU_ID);
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	run = vcpu->run;
+ 
+-	vcpu_regs_get(vm, VCPU_ID, &regs1);
++	vcpu_regs_get(vm, vcpu->id, &regs1);
+ 
+ 	if (kvm_check_cap(KVM_CAP_NESTED_STATE)) {
+ 		if (nested_svm_supported())
+@@ -179,16 +179,16 @@ int main(int argc, char *argv[])
+ 	if (!nested_gva)
+ 		pr_info("will skip nested state checks\n");
+ 
+-	vcpu_args_set(vm, VCPU_ID, 1, nested_gva);
++	vcpu_args_set(vm, vcpu->id, 1, nested_gva);
+ 
+ 	for (stage = 1;; stage++) {
+-		_vcpu_run(vm, VCPU_ID);
++		vcpu_run(vm, vcpu->id);
+ 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+ 			    "Stage %d: unexpected exit reason: %u (%s),\n",
+ 			    stage, run->exit_reason,
+ 			    exit_reason_str(run->exit_reason));
+ 
+-		switch (get_ucall(vm, VCPU_ID, &uc)) {
++		switch (get_ucall(vm, vcpu->id, &uc)) {
+ 		case UCALL_ABORT:
+ 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
+ 			       	  __FILE__, uc.args[1]);
+@@ -206,22 +206,21 @@ int main(int argc, char *argv[])
+ 			    uc.args[1] == stage, "Stage %d: Unexpected register values vmexit, got %lx",
+ 			    stage, (ulong)uc.args[1]);
+ 
+-		state = vcpu_save_state(vm, VCPU_ID);
++		state = vcpu_save_state(vm, vcpu->id);
+ 		memset(&regs1, 0, sizeof(regs1));
+-		vcpu_regs_get(vm, VCPU_ID, &regs1);
++		vcpu_regs_get(vm, vcpu->id, &regs1);
+ 
+ 		kvm_vm_release(vm);
+ 
+ 		/* Restore state in a new VM.  */
+-		kvm_vm_restart(vm);
+-		vm_vcpu_add(vm, VCPU_ID);
+-		vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+-		vcpu_load_state(vm, VCPU_ID, state);
+-		run = vcpu_state(vm, VCPU_ID);
++		vcpu = vm_recreate_with_one_vcpu(vm);
++		vcpu_set_cpuid(vm, vcpu->id, kvm_get_supported_cpuid());
++		vcpu_load_state(vm, vcpu->id, state);
++		run = vcpu->run;
+ 		kvm_x86_state_cleanup(state);
+ 
+ 		memset(&regs2, 0, sizeof(regs2));
+-		vcpu_regs_get(vm, VCPU_ID, &regs2);
++		vcpu_regs_get(vm, vcpu->id, &regs2);
+ 		TEST_ASSERT(!memcmp(&regs1, &regs2, sizeof(regs2)),
+ 			    "Unexpected register values after vcpu_load_state; rdi: %lx rsi: %lx",
+ 			    (ulong) regs2.rdi, (ulong) regs2.rsi);
+-- 
+2.36.1.255.ge46751e96f-goog
+

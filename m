@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A774653C5A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDFC53C5AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242365AbiFCHBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S242230AbiFCHCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242307AbiFCHBj (ORCPT
+        with ESMTP id S242314AbiFCHBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Jun 2022 03:01:39 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FBD38D8D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 23:59:27 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id t13so7524020ljd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 23:59:27 -0700 (PDT)
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBB8E080
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 23:59:29 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id h23so11206908lfe.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 23:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j+1GcNao+MpcpUVYncd1ScTVUmB5P8PxXyVNWxX2GeI=;
-        b=hXxiVy1rMerVPYFxAvTrykMJn8GqMTIJNFtHoByV5ZBEWKRtM39ia9F2+cH8fgXEIr
-         iP7gJYpSd/3qtmlrWywrzA6HIomjjBXUGwI/GgpjN2KffBFs6XIUujHTMsRypkcaxU5i
-         OlXkg1AnmArJyAm26K/MQGFTK/Ulg0HeFb9rYrJ+4pzNX1dPF4EtcRQUeisB4fQddQop
-         9D0qUbeL/Crer8BcYc68rYX7iWR1rtc3CnHJaI9p3tEVnFA/s7gFYG5A3w4vtGFTob50
-         6YN1DVfe5YWhCMk7HPYNWbrdkzdMxOLOQ+h53dCW20Yp+ZBn959P9B3vsF3Cmzw7ak+n
-         vkRg==
+        bh=y5fnCbT6pV3770HPEOFrw72v0s1ib7hyazGd68SatYM=;
+        b=TKhiCnK1kmZG/fpGFFJ3Ape86OiOt3cDgpibzXpc9d9/wULO6w12oD7N2h9UQahDcQ
+         PE3AxwGstUR+jILm2MUKibZU+BdC03oP0Jn76pzGlJJGl7mfJJveZ50FcA/Z50F12NEX
+         9QzeZzKWKbvRdzkbSW5xFy05E9I2ilYkeVeCfV3kVxitozLPk2SR+15F7jpuodMul0ZR
+         QCePMmuELZxfPC+zCts0S2PrC3qXcyfM7Q17mcuVQIyT4wswNlrOP6L0QSbxDIULUTFO
+         qeHQE2/gWWYagitik8vzCYWtoX9kKWXibxzl+ti6Rx2wKaqWSxetpC6Ddl91lb9vT7CA
+         IGVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j+1GcNao+MpcpUVYncd1ScTVUmB5P8PxXyVNWxX2GeI=;
-        b=QrE1mzYWzYguZq7EHjG30EVkI6WzC0z429AVVIE8kluN6l/TC53FevhjarQUGQpqb5
-         s5180+hj/YgqgtjTK3zTXMiL+Bff6INMQXuVmOyMLoRs6Ts1mN4A9IvWNJPkpAcqw+vk
-         M3czL0IRnRz3m3/p3z7HF/2udL/VeAKqzfxg1ET9dWEnDPDScRRcncKjq41qTak7a12j
-         3knI+KQi6rH42785FVGW+w32LYstNgVCSw1yIwQQkJ/aZ7LzfOXcTy1w09NbSP2Vlb/Q
-         IuD6tCVz2Ref+Cf6D3vWJF6Ehkb2Pin4vfT3KJSs972+uHrIXrqw/dPvomD2v90xGdpL
-         NgbA==
-X-Gm-Message-State: AOAM530xM+PRPBav7ZDiJAmYFh6dT1nHMqKHBxYSroI/29jKVhwutcKe
-        BfZh8FPYfyXAe9QJwOFaN/eEBQ==
-X-Google-Smtp-Source: ABdhPJxHYTA/EEeEDJiAAhWlWqMNTPnVXX/fz/LXtjkkK3yxKHbGCiRqOCNrUak3T/G6aOkRiV4erA==
-X-Received: by 2002:a2e:b601:0:b0:255:6786:bbc0 with SMTP id r1-20020a2eb601000000b002556786bbc0mr8202055ljn.27.1654239565917;
-        Thu, 02 Jun 2022 23:59:25 -0700 (PDT)
+        bh=y5fnCbT6pV3770HPEOFrw72v0s1ib7hyazGd68SatYM=;
+        b=rCRKYL6MbMb9tbdd8m7bIzbzvRSwxiWzwptDjGswLXzSrXUCLyTDpUTmSsBZ2DW1im
+         5mPdwem9FoVI5hQJ3wF5VcWUtN3n6BFElS6DSiFvdx6P7uNZhDTCydiasBfX619eNLu2
+         A78l50rcdFfvzwSDy0Yb4DSIPp8NOTNJP8RvanBrWgvPCCfHZ0Yu3WlSKvflpJaxiyT3
+         05QPElXQ0JLGWfLWdI9nW3TvJ66LPQzZfYcvpPaG1isHG+/58hIRWWDo4tBspn/+E136
+         zyFiXN2FaxB+6gA8D3YoYY2YQgs4VJnxpxDpls0Qw9zU7HJ/rL+1lZsgA1qLDnaig0s4
+         5nXg==
+X-Gm-Message-State: AOAM5334AuevbKBOvl8Ic4muj8ShOxdlGuUvAYA8YiSd/udlKLshuEwN
+        4Ab6dZVkYmZRA4DddvowCsjPiQ==
+X-Google-Smtp-Source: ABdhPJwCvwZXoPjUzhLVY2GSbh466VVUaxaedPyI7Z4tX0Z+7YioNtOJ2w5lhGjPcVto6vX0U3pxXA==
+X-Received: by 2002:a05:6512:3f9a:b0:478:1:6ad with SMTP id x26-20020a0565123f9a00b00478000106admr5972890lfa.558.1654239567411;
+        Thu, 02 Jun 2022 23:59:27 -0700 (PDT)
 Received: from panikiel.roam.corp.google.com (staticline-31-182-204-250.toya.net.pl. [31.182.204.250])
-        by smtp.gmail.com with ESMTPSA id b8-20020ac247e8000000b004786321c697sm1056447lfp.138.2022.06.02.23.59.24
+        by smtp.gmail.com with ESMTPSA id b8-20020ac247e8000000b004786321c697sm1056447lfp.138.2022.06.02.23.59.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 23:59:25 -0700 (PDT)
+        Thu, 02 Jun 2022 23:59:27 -0700 (PDT)
 From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         dinguyen@kernel.org
@@ -55,9 +55,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, amstan@chromium.org,
         upstream@semihalf.com,
         =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v3 2/5] ARM: dts: socfpga: Move sdmmc-ecc node to Arria 10 dts
-Date:   Fri,  3 Jun 2022 08:58:13 +0200
-Message-Id: <20220603065816.87952-3-pan@semihalf.com>
+Subject: [PATCH v3 3/5] ARM: dts: socfpga: Add atsha204a node to Mercury+ AA1 dts
+Date:   Fri,  3 Jun 2022 08:58:14 +0200
+Message-Id: <20220603065816.87952-4-pan@semihalf.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220603065816.87952-1-pan@semihalf.com>
 References: <20220603065816.87952-1-pan@semihalf.com>
@@ -74,59 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ecc manager is a part of the Arria 10 SoC, move it to the correct
-dts.
+Add atsha204a node to Mercury+ AA1 dts
 
 Signed-off-by: Paweł Anikiel <pan@semihalf.com>
 ---
- arch/arm/boot/dts/socfpga_arria10.dtsi             | 10 ++++++++++
- arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi | 12 ------------
- 2 files changed, 10 insertions(+), 12 deletions(-)
+ arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
-index 26bda2557fe8..4370e3cbbb4b 100644
---- a/arch/arm/boot/dts/socfpga_arria10.dtsi
-+++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
-@@ -736,6 +736,16 @@ emac0-tx-ecc@ff8c0c00 {
- 					     <37 IRQ_TYPE_LEVEL_HIGH>;
- 			};
- 
-+			sdmmca-ecc@ff8c2c00 {
-+				compatible = "altr,socfpga-sdmmc-ecc";
-+				reg = <0xff8c2c00 0x400>;
-+				altr,ecc-parent = <&mmc>;
-+				interrupts = <15 IRQ_TYPE_LEVEL_HIGH>,
-+					     <47 IRQ_TYPE_LEVEL_HIGH>,
-+					     <16 IRQ_TYPE_LEVEL_HIGH>,
-+					     <48 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+
- 			dma-ecc@ff8c8000 {
- 				compatible = "altr,socfpga-dma-ecc";
- 				reg = <0xff8c8000 0x400>;
 diff --git a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-index 4b21351f2694..b0d20101cd00 100644
+index b0d20101cd00..ad7cd14de6b6 100644
 --- a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
 +++ b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
-@@ -23,18 +23,6 @@ chosen {
- 	};
+@@ -1,4 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2022 Google LLC
++ */
+ 
+ #include "socfpga_arria10.dtsi"
+ 
+@@ -54,6 +57,11 @@ phy3: ethernet-phy@3 {
  };
  
--&eccmgr {
--	sdmmca-ecc@ff8c2c00 {
--		compatible = "altr,socfpga-sdmmc-ecc";
--		reg = <0xff8c2c00 0x400>;
--		altr,ecc-parent = <&mmc>;
--		interrupts = <15 IRQ_TYPE_LEVEL_HIGH>,
--			     <47 IRQ_TYPE_LEVEL_HIGH>,
--			     <16 IRQ_TYPE_LEVEL_HIGH>,
--			     <48 IRQ_TYPE_LEVEL_HIGH>;
--	};
--};
--
- &gmac0 {
- 	phy-mode = "rgmii";
- 	phy-addr = <0xffffffff>; /* probe for phy addr */
+ &i2c1 {
++	atsha204a: crypto@64 {
++		compatible = "atmel,atsha204a";
++		reg = <0x64>;
++	};
++
+ 	isl12022: isl12022@6f {
+ 		compatible = "isil,isl12022";
+ 		reg = <0x6f>;
 -- 
 2.36.1.255.ge46751e96f-goog
 

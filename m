@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56753CFBA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1094B53D0C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345807AbiFCR4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
+        id S1346332AbiFCSJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346325AbiFCRvE (ORCPT
+        with ESMTP id S1345790AbiFCR4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C218D54020;
-        Fri,  3 Jun 2022 10:47:32 -0700 (PDT)
+        Fri, 3 Jun 2022 13:56:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D7E56744;
+        Fri,  3 Jun 2022 10:53:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DFD3B823B0;
-        Fri,  3 Jun 2022 17:47:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C78AC3411C;
-        Fri,  3 Jun 2022 17:47:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B902B8241D;
+        Fri,  3 Jun 2022 17:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D61C385A9;
+        Fri,  3 Jun 2022 17:53:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278450;
-        bh=V/yGTt7Ocp4ajWdl5FHnoH8c4RKdCJlTJGqL+no4af0=;
+        s=korg; t=1654278823;
+        bh=IP407a4ArB2pOP24D24dkDZNJr7SZbmMtP6GkgG7oRI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CI+ZXyKWUfXJaEliAU14xeyRbAkYLjq8qibbJ/E/j2NrdPSH3cLawwhnafVlhBeiJ
-         RN5FYfyacyPY3Ho7KjBivf9IKihRNPCirA73GufBelTjS2+QVlrmYyoTSFrJ1gyLBH
-         dZmfkP1Gb85cSenX5daB44m8oJ+BxHhBZRw+qR6s=
+        b=TBRdqaL53Ez7AD8u/bmC/EnMMMLv3fgsNcP8+nc/A7ZZfhqaKS17FPd1HphpGFhqM
+         qB9ESxYoqeDobs7v8l9hvAr5ZUw2Ge6SzvPvMIryUCLoEEMljyVNaxAjPLgkkYHCx+
+         StYlFm88MwSMVnwd+l2wS8Vx1FdLzkpmnn2eoXSE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.10 37/53] zsmalloc: fix races between asynchronous zspage free and page migration
+        stable@vger.kernel.org, Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 38/75] KVM: x86/mmu: Dont rebuild page when the page is synced and no tlb flushing is required
 Date:   Fri,  3 Jun 2022 19:43:22 +0200
-Message-Id: <20220603173819.801075996@linuxfoundation.org>
+Message-Id: <20220603173822.826001379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,86 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sultan Alsawaf <sultan@kerneltoast.com>
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-commit 2505a981114dcb715f8977b8433f7540854851d8 upstream.
+commit 8d5678a76689acbf91245a3791fe853ab773090f upstream.
 
-The asynchronous zspage free worker tries to lock a zspage's entire page
-list without defending against page migration.  Since pages which haven't
-yet been locked can concurrently migrate off the zspage page list while
-lock_zspage() churns away, lock_zspage() can suffer from a few different
-lethal races.
+Before Commit c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page()
+to return true when remote flush is needed"), the return value
+of kvm_sync_page() indicates whether the page is synced, and
+kvm_mmu_get_page() would rebuild page when the sync fails.
+But now, kvm_sync_page() returns false when the page is
+synced and no tlb flushing is required, which leads to
+rebuild page in kvm_mmu_get_page(). So return the return
+value of mmu->sync_page() directly and check it in
+kvm_mmu_get_page(). If the sync fails, the page will be
+zapped and the invalid_list is not empty, so set flush as
+true is accepted in mmu_sync_children().
 
-It can lock a page which no longer belongs to the zspage and unsafely
-dereference page_private(), it can unsafely dereference a torn pointer to
-the next page (since there's a data race), and it can observe a spurious
-NULL pointer to the next page and thus not lock all of the zspage's pages
-(since a single page migration will reconstruct the entire page list, and
-create_page_chain() unconditionally zeroes out each list pointer in the
-process).
-
-Fix the races by using migrate_read_lock() in lock_zspage() to synchronize
-with page migration.
-
-Link: https://lkml.kernel.org/r/20220509024703.243847-1-sultan@kerneltoast.com
-Fixes: 77ff465799c602 ("zsmalloc: zs_page_migrate: skip unnecessary loops but not return -EBUSY if zspage is not inuse")
-Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-Acked-by: Minchan Kim <minchan@kernel.org>
-Cc: Nitin Gupta <ngupta@vflare.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Acked-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Message-Id: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
+[mmu_sync_children should not flush if the page is zapped. - Paolo]
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/zsmalloc.c |   37 +++++++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/mmu.c |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1748,11 +1748,40 @@ static enum fullness_group putback_zspag
-  */
- static void lock_zspage(struct zspage *zspage)
- {
--	struct page *page = get_first_page(zspage);
-+	struct page *curr_page, *page;
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1894,17 +1894,14 @@ static void kvm_mmu_commit_zap_page(stru
+ 	  &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])	\
+ 		if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
  
--	do {
--		lock_page(page);
--	} while ((page = get_next_page(page)) != NULL);
-+	/*
-+	 * Pages we haven't locked yet can be migrated off the list while we're
-+	 * trying to lock them, so we need to be careful and only attempt to
-+	 * lock each page under migrate_read_lock(). Otherwise, the page we lock
-+	 * may no longer belong to the zspage. This means that we may wait for
-+	 * the wrong page to unlock, so we must take a reference to the page
-+	 * prior to waiting for it to unlock outside migrate_read_lock().
-+	 */
-+	while (1) {
-+		migrate_read_lock(zspage);
-+		page = get_first_page(zspage);
-+		if (trylock_page(page))
-+			break;
-+		get_page(page);
-+		migrate_read_unlock(zspage);
-+		wait_on_page_locked(page);
-+		put_page(page);
-+	}
-+
-+	curr_page = page;
-+	while ((page = get_next_page(curr_page))) {
-+		if (trylock_page(page)) {
-+			curr_page = page;
-+		} else {
-+			get_page(page);
-+			migrate_read_unlock(zspage);
-+			wait_on_page_locked(page);
-+			put_page(page);
-+			migrate_read_lock(zspage);
-+		}
-+	}
-+	migrate_read_unlock(zspage);
+-static bool kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
++static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 			 struct list_head *invalid_list)
+ {
+ 	int ret = vcpu->arch.mmu->sync_page(vcpu, sp);
+ 
+-	if (ret < 0) {
++	if (ret < 0)
+ 		kvm_mmu_prepare_zap_page(vcpu->kvm, sp, invalid_list);
+-		return false;
+-	}
+-
+-	return !!ret;
++	return ret;
  }
  
- static int zs_init_fs_context(struct fs_context *fc)
+ static bool kvm_mmu_remote_flush_or_zap(struct kvm *kvm,
+@@ -2033,7 +2030,7 @@ static int mmu_sync_children(struct kvm_
+ 
+ 		for_each_sp(pages, sp, parents, i) {
+ 			kvm_unlink_unsync_page(vcpu->kvm, sp);
+-			flush |= kvm_sync_page(vcpu, sp, &invalid_list);
++			flush |= kvm_sync_page(vcpu, sp, &invalid_list) > 0;
+ 			mmu_pages_clear_parents(&parents);
+ 		}
+ 		if (need_resched() || rwlock_needbreak(&vcpu->kvm->mmu_lock)) {
+@@ -2074,6 +2071,7 @@ static struct kvm_mmu_page *kvm_mmu_get_
+ 	struct hlist_head *sp_list;
+ 	unsigned quadrant;
+ 	struct kvm_mmu_page *sp;
++	int ret;
+ 	int collisions = 0;
+ 	LIST_HEAD(invalid_list);
+ 
+@@ -2126,11 +2124,13 @@ static struct kvm_mmu_page *kvm_mmu_get_
+ 			 * If the sync fails, the page is zapped.  If so, break
+ 			 * in order to rebuild it.
+ 			 */
+-			if (!kvm_sync_page(vcpu, sp, &invalid_list))
++			ret = kvm_sync_page(vcpu, sp, &invalid_list);
++			if (ret < 0)
+ 				break;
+ 
+ 			WARN_ON(!list_empty(&invalid_list));
+-			kvm_flush_remote_tlbs(vcpu->kvm);
++			if (ret > 0)
++				kvm_flush_remote_tlbs(vcpu->kvm);
+ 		}
+ 
+ 		__clear_sp_write_flooding_count(sp);
 
 

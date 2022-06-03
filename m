@@ -2,82 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498E753CD10
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95F753CD17
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343830AbiFCQVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 12:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S1343860AbiFCQWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 12:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343818AbiFCQVj (ORCPT
+        with ESMTP id S1343813AbiFCQWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 12:21:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4C039808;
-        Fri,  3 Jun 2022 09:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Kl50zb1H5h1iw6GsZC1FYxxnr0hwKKM6SR7HaocL/H0=; b=SxBQ9HiA1HndIQD8kolM150WZ2
-        d/VcJ27ZLABBbIjDapkcYxgNxsT6xBZcfbrfEZ5Wble60t7DxVNcOMlP4EN7jSUARESl213ef3DMK
-        NZR+K8RgNpHhDZ2hTCNozVHAba5Vyzxrq+dKSrVGxOY05O9KBuh4uf3xGm55N8OAd2VdJzNy/qkFh
-        HWmY4FhGrV5mlTmNVVlFrX+IZkIl/iyDiL66Dby9TmjiGv6C489KGCFrSwKJtvbLrS9ZmZMis9NYo
-        1RZ1Kw1LKHSLG0z5FK1vphBsiVwZHGzJsrARPGoVuUr5dttM5GniCdyzW0n6UlACU1fsizsVVgxDb
-        M4o4HbzA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nxA3J-008027-1v; Fri, 03 Jun 2022 16:21:33 +0000
-Message-ID: <727bc913-794a-800c-9b06-31e9257870ef@infradead.org>
-Date:   Fri, 3 Jun 2022 09:21:26 -0700
+        Fri, 3 Jun 2022 12:22:42 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF9122519;
+        Fri,  3 Jun 2022 09:22:41 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e93bbb54f9so11162648fac.12;
+        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
+        b=joqdIXgCTJQK6rmOLq9hEzhW5hwG3cLQXUjb+cboAdPNERXpcXFUz62Yn33raBmc3o
+         blplY+PffT0s0Ma3Gjv1Dfji90dnBCQ0JR2M8adnSDl9hJoyKJqgg3aWFvyFxeB5RM+K
+         YoAkXQ88H8i9uUo9rKmbeuT/ZimhUj19/+ld6yWtzKNq1afkr3t3eiBm7Wso6leCedKO
+         cuYkfF5vxJ3xYJodra8xm2bhjpd+/hhXjeu6V0/G4NB9CrRPaFaXSDKbCX7KZsCwi2wh
+         jgjHN74aQl6bGwmJ2pDkbljmkUhKU6f8aC4TFk5T5u6RrZj1ScAJgyYyVZMHyM/ekVkJ
+         64vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
+        b=q4VDddI+QV9bvDivCISA403lqF09R7dQMCssj1lIxbg0tfAg6ncGIVWR33DuCgEoj+
+         0Fa/gc+QI7TQO8SGg+vTZUOrbRA1fNWY3RgQ9WCLSUmJk6LZnN7JX7V46USJNxpJ5UIw
+         7Y/a5e8P+qqkMt6Kg2fPUCG2XYnubceSRHjPkWBkT+g6rasYjFv4zA7Z1HVo+RhMg1CI
+         Y2VlGY6XiktwGC9b2Vlj9H8K8vdbFyiK4XF7qZCT1JEZya9QZPlX99FyMlXllMZPOAjt
+         VkKkerHrydYk7UlogzRMqNnNv+Bf1fDLyMFxpZN+Fr0rpM9cwtaBr3/VcxjjvwvGs8A9
+         MsMg==
+X-Gm-Message-State: AOAM533nIMgvlWy9pSnN3rfYWOyG1ozmMcevcUKoueKdq974HJFzogZ1
+        lRpK1uBW3A/AWJvgNkrv5gBga8wVlcU=
+X-Google-Smtp-Source: ABdhPJx2XtRXI3hkPrfqrFyv7zA3+CCZ1oBRo6S2VY+rDVqlMJ2cFUadZ8sCGk08GLh4x3pQ99KDyw==
+X-Received: by 2002:a05:6870:891f:b0:e1:ec98:3c59 with SMTP id i31-20020a056870891f00b000e1ec983c59mr6325967oao.295.1654273361054;
+        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056870530900b000f33b23a030sm3412594oan.57.2022.06.03.09.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 09:22:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4ef87536-7a71-0d1b-3121-94e763041562@roeck-us.net>
+Date:   Fri, 3 Jun 2022 09:22:37 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: linux-next: Tree for Jun 3 (mm/memory-failure.c)
+Subject: Re: [PATCH 6/6] watchdog: max77620: update Luca Ceresoli's e-mail
+ address
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-References: <20220603144935.5b67f75b@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220603144935.5b67f75b@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Leon Luo <leonl@leopardimaging.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+References: <20220603155727.1232061-1-luca@lucaceresoli.net>
+ <20220603155727.1232061-6-luca@lucaceresoli.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220603155727.1232061-6-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/2/22 21:49, Stephen Rothwell wrote:
-> Hi all,
+On 6/3/22 08:57, Luca Ceresoli wrote:
+> My Bootlin address is preferred from now on.
 > 
-> Note: please do not add any v5.20 material to your linux-next included
-> branches until after v5.19-rc1 has been related.
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+An entry in .mailmap might be easier, though.
+
+Guenter
+
+> ---
+>   drivers/watchdog/max77620_wdt.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Changes since 20220602:
-> 
+> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+> index b76ad6ba0915..33835c0b06de 100644
+> --- a/drivers/watchdog/max77620_wdt.c
+> +++ b/drivers/watchdog/max77620_wdt.c
+> @@ -6,7 +6,7 @@
+>    * Copyright (C) 2022 Luca Ceresoli
+>    *
+>    * Author: Laxman Dewangan <ldewangan@nvidia.com>
+> - * Author: Luca Ceresoli <luca@lucaceresoli.net>
+> + * Author: Luca Ceresoli <luca.ceresoli@bootlin.com>
+>    */
+>   
+>   #include <linux/err.h>
+> @@ -260,5 +260,5 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
+>   	"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>   
+>   MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
+> -MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
+> +MODULE_AUTHOR("Luca Ceresoli <luca.ceresoli@bootlin.com>");
+>   MODULE_LICENSE("GPL v2");
 
-on i386 or x86_64:
-
-../mm/memory-failure.c: In function ‘__get_huge_page_for_hwpoison’:
-../mm/memory-failure.c:1545:2: error: implicit declaration of function ‘hugetlb_set_page_hwpoison’; did you mean ‘hugetlb_page_subpool’? [-Werror=implicit-function-declaration]
-  hugetlb_set_page_hwpoison(head, page);
-
-
-when CONFIG_HUGETLB_PAGE is not set.
-The inline function hugetlb_set_page_hwpoison() is only defined
-when CONFIG_HUGETLB_PAGE is set.
-
-
--- 
-~Randy

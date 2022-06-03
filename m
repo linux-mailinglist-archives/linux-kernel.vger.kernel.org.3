@@ -2,62 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D2553C8EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1F053C8F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243842AbiFCKrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S243852AbiFCKtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243824AbiFCKrC (ORCPT
+        with ESMTP id S230419AbiFCKt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:47:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5110B5F67;
-        Fri,  3 Jun 2022 03:47:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE15860F2F;
-        Fri,  3 Jun 2022 10:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007DAC385A9;
-        Fri,  3 Jun 2022 10:46:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654253220;
-        bh=1JJQz3UdwRxC9MMFwkq+HL+DNSzXgDWjlgnmDRlx4FM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jx9LJ4NGvPt6Ir9yXs1AmQ9ePpUNGYwNkzFT6weocAq902qBtn8QqjnwvBX8nxqRJ
-         kIVHuzMG8kQXL6y6WBo+KdUsuE0m3FOZKzvuDaFuTm1qF6netlE+WH0WuR+LfdP4Y1
-         DUahIAPTWi7pn1bOHaRCW23U+pSgVevU8XGJic9zGbHD+3m52X9lBYfLInO2fmgPWK
-         3lUWspyDcjR05S2eTI8YEGqIzJTjK0398K2xlLjkWoRpQCpT7Gp004x0OutSyNEoE7
-         r1vGbdjE23l1p4jDjeYKKk1ZBHS7SryE0FYccVDwf1MJGDvP7vFdjTT58EJNj2IR+2
-         mypszZBPsQLoA==
-Message-ID: <289512ce-1bef-dae5-8440-d990b8cf972d@kernel.org>
-Date:   Fri, 3 Jun 2022 13:46:54 +0300
+        Fri, 3 Jun 2022 06:49:26 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381D63A5DB;
+        Fri,  3 Jun 2022 03:49:24 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 253AnEdl099538;
+        Fri, 3 Jun 2022 05:49:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654253354;
+        bh=jFZ3kxb4YVZfl93KabyguACJCuo5qo11oSTzQIOe81s=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=hmowvmF5Oe9JV8YnnlGMTCjwfFDKL/HLpqO3a6koVhpS4oK+/dlLtnaXTEeRW1RJi
+         O+ByUyOH6hGEVOl8iybkiPnqTQKPL9F3I7lxu1BvwmaeO2gDkIQppF/kq0ajzu/a13
+         cdOlm1n5d6QZ2VuRMFTxIuarVbix67oARDcpBNiM=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 253AnEnZ052483
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Jun 2022 05:49:14 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
+ Jun 2022 05:49:14 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 3 Jun 2022 05:49:14 -0500
+Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 253An9I1041980;
+        Fri, 3 Jun 2022 05:49:10 -0500
+Message-ID: <1baaa67e-43e9-49c6-f99b-5f24da4c2f1b@ti.com>
+Date:   Fri, 3 Jun 2022 16:19:09 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
+ J7200
 Content-Language: en-US
-To:     Puranjay Mohan <p-mohan@ti.com>, Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
-        linux-arm-kernel@lists.infradead.org, grygorii.strashko@ti.com,
-        vigneshr@ti.com, kishon@ti.com
-References: <20220418104118.12878-1-p-mohan@ti.com>
- <20220418104118.12878-2-p-mohan@ti.com> <YnA3dtaqptLgZBrV@robh.at.kernel.org>
- <6c054a1b-2842-a6f0-733a-92cfda76f828@ti.com>
- <5bf638ee-6cc8-d5cb-5795-a840d8d2bb87@kernel.org>
- <0f766b85-0d64-7f28-6139-ca5ed53edc94@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <0f766b85-0d64-7f28-6139-ca5ed53edc94@ti.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Roger Quadros <rogerq@kernel.org>
+CC:     <robh+dt@kernel.org>, <lee.jones@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <dan.carpenter@oracle.com>, <kishon@ti.com>,
+        <grygorii.strashko@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>
+References: <20220531111221.22963-1-s-vadapalli@ti.com>
+ <20220531111221.22963-2-s-vadapalli@ti.com>
+ <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
+ <b5353c06-c8b4-c065-3843-28b2a34e1867@ti.com>
+ <a7754c31-bfc6-6451-8340-5d3aa671e3c4@kernel.org>
+ <985ab302-17aa-c0de-ccac-63525589918a@ti.com>
+ <12afd8fc-ad03-a0f1-fad4-a9902e8a690c@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <12afd8fc-ad03-a0f1-fad4-a9902e8a690c@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,187 +76,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Roger,
 
-
-On 03/06/2022 13:14, Puranjay Mohan wrote:
-> Hi Roger,
+On 03/06/22 14:18, Roger Quadros wrote:
+> Hi Siddharth,
 > 
-> On 03/06/22 13:41, Roger Quadros wrote:
->> Hi Puranjay,
+> On 01/06/2022 14:27, Siddharth Vadapalli wrote:
+>> Hello Roger,
 >>
->> On 02/06/2022 08:28, Puranjay Mohan wrote:
->>> Hi Rob,
+>> On 01/06/22 15:08, Roger Quadros wrote:
+>>> Siddharth,
 >>>
->>> On 03/05/22 01:26, Rob Herring wrote:
->>>> On Mon, Apr 18, 2022 at 04:11:14PM +0530, Puranjay Mohan wrote:
->>>>> From: Suman Anna <s-anna@ti.com>
+>>> On 01/06/2022 09:01, Siddharth Vadapalli wrote:
+>>>> Hello Roger,
+>>>>
+>>>> On 31/05/22 17:15, Roger Quadros wrote:
+>>>>> Hi Siddharth,
 >>>>>
->>>>> Add a YAML binding document for PRU consumers. The binding includes
->>>>> all the common properties that can be used by different PRU consumer
->>>>> or application nodes and supported by the PRU remoteproc driver.
->>>>> These are used to configure the PRU hardware for specific user
->>>>> applications.
+>>>>> On 31/05/2022 14:12, Siddharth Vadapalli wrote:
+>>>>>> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
+>>>>>> that are not supported on earlier SoCs. Add a compatible for it.
+>>>>>>
+>>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>>>> ---
+>>>>>>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
+>>>>>>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
+>>>>>>  2 files changed, 28 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>>>>>> index fa86691ebf16..e381ba62a513 100644
+>>>>>> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+>>>>>> @@ -48,6 +48,11 @@ patternProperties:
+>>>>>>      description:
+>>>>>>        This is the SERDES lane control mux.
+>>>>>>  
+>>>>>> +  "phy@[0-9a-f]+$":
+>>>>>> +    type: object
+>>>>>> +    description:
+>>>>>> +      This is the register to set phy mode through phy-gmii-sel driver.
+>>>>>> +
 >>>>>
->>>>> The application nodes themselves should define their own bindings.
+>>>>> Is this really required? The system controller has 100s of different such registers and it is not practical to mention about all.
+>>>>
+>>>> The property has to be mentioned in order to pass: make dtbs_check.
+>>>>
 >>>>>
->>>>> Co-developed-by: Tero Kristo <t-kristo@ti.com>
->>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->>>>> ---
->>>>>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 70 +++++++++++++++++++
->>>>>  1 file changed, 70 insertions(+)
->>>>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>>>>>>  required:
+>>>>>>    - compatible
+>>>>>>    - reg
+>>>>>> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>>>>>> index ff8a6d9eb153..7427758451e7 100644
+>>>>>> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+>>>>>> @@ -53,12 +53,21 @@ properties:
+>>>>>>        - ti,am43xx-phy-gmii-sel
+>>>>>>        - ti,dm814-phy-gmii-sel
+>>>>>>        - ti,am654-phy-gmii-sel
+>>>>>> +      - ti,j7200-cpsw5g-phy-gmii-sel
 >>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..5b1f1cb2f098
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->>>>> @@ -0,0 +1,70 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Common TI PRU Consumer Binding
->>>>> +
->>>>> +maintainers:
->>>>> +  - Suman Anna <s-anna@ti.com>
->>>>> +
->>>>> +description: |
->>>>> +  A PRU application/consumer/user node typically uses one or more PRU device
->>>>> +  nodes to implement a PRU application/functionality. Each application/client
->>>>> +  node would need a reference to at least a PRU node, and optionally define
->>>>> +  some properties needed for hardware/firmware configuration. The below
->>>>> +  properties are a list of common properties supported by the PRU remoteproc
->>>>> +  infrastructure.
->>>>> +
->>>>> +  The application nodes shall define their own bindings like regular platform
->>>>> +  devices, so below are in addition to each node's bindings.
->>>>> +
->>>>> +properties:
->>>>> +  ti,prus:
->>>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>>> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
->>>>> +    minItems: 1
->>>>> +    maxItems: 6
->>>>> +    items:
->>>>> +      maxItems: 1
->>>>> +
->>>>> +  firmware-name:
->>>>> +    $ref: /schemas/types.yaml#/definitions/string-array
->>>>> +    description: |
->>>>> +      firmwares for the PRU cores, the default firmware for the core from
->>>>> +      the PRU node will be used if not provided. The firmware names should
->>>>> +      correspond to the PRU cores listed in the 'ti,prus' property
+>>>>> Why not just "ti,j7200-phy-gmii-sel" so it is consistent naming.
 >>>>
->>>> So should be the name number of entries?:
->>>>
->>>> minItems: 1
->>>> maxItems: 6
+>>>> In TI's J7200 device, there are two CPSW MACs, namely CPSW2G and CPSW5G. While
+>>>> CPSW5G supports QSGMII mode, CPSW2G does not. Hence, the compatible being added
+>>>> with the extra mode (QSGMII) enabled is applicable only for CPSW5G and not for
+>>>> CPSW2G. Thus, to highlight this, the word "CPSW5G" has been included in the name
+>>>> of the compatible.
 >>>
->>> will add in v4
->>>
->>>>
->>>>> +
->>>>> +  ti,pruss-gp-mux-sel:
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>>>
->>>> minItems: 1
->>>
->>> will add in v4
->>>
->>>>
->>>>> +    maxItems: 6
->>>>> +    items:
->>>>> +      enum: [0, 1, 2, 3, 4]
->>>>> +    description: |
->>>>> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
->>>>> +      This selects the internal muxing scheme for the PRU instance. Values
->>>>> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
->>>>> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
->>>>> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
->>>>> +      same slice in the associative array. If the array size is smaller than
->>>>> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
->>>>> +      PRU core is used.
->>>>> +
->>>>> +required:
->>>>> +  - ti,prus
->>>>> +
->>>>> +dependencies:
->>>>> +  firmware-name: [ 'ti,prus' ]
->>>>> +  ti,pruss-gp-mux-sel: [ 'ti,prus' ]
->>>>
->>>> This doesn't make sense because 'ti,prus' is already required. Should 
->>>> all 3 properties always be required?
->>>
->>> All three of these are always required, so, I will remove the
+>>> Here we are talking about the PHY driver (phy-gmii-sel) and not the MAC (CPSW2G / CPSW5G)
+>>> Does this PHY on J7200 always support QSGMII mode? if yes then embedding "cpsw5g" in compatible is wrong.
 >>
->> Are you sure? It should not be required and remoteproc driver should use
->> default name if not provided in DT.
->> In patch 5 see what is being done in pru_rproc_get().
->> It doesn't error out if firmware-name is not provided.
+>> The PHY on J7200 is part of the Add-On Ethernet card. It is possible to connect
+>> RGMII, QSGMII and SGMII PHY. The CPSW5G MAC supports all these modes. With the
+>> current patch, I am adding just QSGMII mode as an extra mode, but in a future
+>> patch, I will be adding SGMII also as an extra mode. For this reason, CPSW5G is
+>> being mentioned in the compatible name, to differentiate supported modes for
+>> CPSW2G and CPSW5G. Also, the phy-gmii-sel driver actually configures CPSW MAC
+>> registers and not the PHY.
 > 
-> Yes, you are right, I missed this part.
-> So, only 'ti,prus' is required and 'firmware-name',
-> 'ti,pruss-gp-mux-sel' are optional but are dependent on 'ti,prus'
+> phy-gmii-sel configures CTRL MMR register right? How does it configure CPSW MAC register?
 > 
-> So, as 'ti,prus' is always required we don't need the dependencies tag
-> to show that 'firmware-name', 'ti,pruss-gp-mux-sel' are dependent on
-> 'ti,prus'
-> 
-> So, the change that I will be making in v4 is the removal of the
-> dependencies tag. This seems right?
+> Anyways, I just looked at the TRM and there are in fact separate phy-gmii-sel (ENET_CTRL)
+> registers for CPSW2g and CPSW5g. So they warrant for separate compatibles as they are
+> not identical.
 
-Look good to me.
+By CPSW MAC registers being configured, I meant that the configuration being
+done is for the MAC and not for the PHY. As per the TRM, for CPSW2G, the
+CTRLMMR_MCU_ENET_CTRL register is configured and for CPSW5G, the
+CTRLMMR_ENETx_CTRL registers are configured, with x ranging from 1 to 4
+(corresponding to the 4 ports of CPSW5G). These registers configure the CPSW MAC
+(CPSW2G/CPSW5G) and not the PHY. For this reason, I think that it would be
+appropriate to use cpsw5g in the compatible name, to indicate which CTRLMMR
+registers are being configured.
+
+>>
+>>>
+>>> You need to use a different compatible in CPSW driver and make sure CPSW2G doesn't initiate QSGMII mode.
+>>
+>> Yes, I will add a check there too by using a different compatible in the CPSW
+>> driver, but shouldn't the phy-gmii-sel driver also have a check to ensure that
+>> it doesn't try configuring QSGMII mode for CPSW2G?
+> 
+> Yes, additional check in phy-gmii-sel driver is fine.
 > 
 >>
->> Same for ti,pruss-gp-mux-sel. Did you miss the patch that adds support for this
->> in this series?
-> 
-> Yes, the patch you are referring to was not a part of v2 so I didn't add
-> it in v3. I will add it in v4 now as it make more sense to add it with
-> the series.
-
-Alright. Thanks!
-
-> 
->>
->>> "dependencies:" tag and add all three of them to "required:" in v4
->>> Will it be the correct way to do it?
 >>>
 >>>>
->>>>> +
->>>>> +additionalProperties: true
->>>>> +
->>>>> +examples:
->>>>> +  - |
->>>>> +    /* PRU application node example */
->>>>> +    pru-app {
->>>>> +        ti,prus = <&pru0>, <&pru1>;
->>>>> +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
->>>>> +        ti,pruss-gp-mux-sel = <2>, <1>;
->>>>
->>>> This example never validates, but okay I guess.
->>>>
->>>>> +    };
->>>>> -- 
->>>>> 2.17.1
 >>>>>
+>>>>>>  
+>>>>>>    reg:
+>>>>>>      maxItems: 1
+>>>>>>  
+>>>>>>    '#phy-cells': true
+>>>>>>  
+>>>>>> +  ti,enet-ctrl-qsgmii:
+>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>> +    description: |
+>>>>>> +      Required only for QSGMII mode. Bitmask to select the port for
+>>>>>> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
+>>>>>> +      ports automatically. Any of the 4 CPSW5G ports can act as the
+>>>>>> +      main port with the rest of them being the QSGMII_SUB ports.
+>>>>>> +
 >>>>>
->>>
->>> Thanks,
->>> Puranjay Mohan
->>
->> cheers,
->> -roger
+>>>>> This is weird way of doing things.
+>>>>>
+>>>>> The Ethernet controller driver already knows which mode the port is
+>>>>> supposed to operate.
+>>>>
+>>>> From the ethernet driver perspective, there is no difference between the QSGMII
+>>>> or QSGMII-SUB modes and both are treated the same. However, the phy-gmii-sel
+>>>> driver configures CPSW MAC registers differently depending on the mode being
 > 
-> Thanks,
-> Puranjay Mohan
+> You mean the ENET_CTRL register in CTRL_MMR space?
 
-cheers,
--roger
+Yes I am referring to the CTRLMMR_ENETx_CTRL registers as per the J7200 TRM,
+corresponding to the CPSW5G MAC.
+
+> 
+>>>> QSGMII or QSGMII-SUB. Hence, the ti,enet-ctrl-qsgmii property is used to
+>>>> identify the QSGMII main port and the rest are configured in CPSW MAC as
+>>>> QSGMII-SUB ports.
+>>>>
+>>>>>
+>>>>> e.g.
+>>>>> +&cpsw0_port1 {
+>>>>> +	phy-handle = <&cpsw5g_phy0>;
+>>>>> +	phy-mode = "qsgmii";
+>>>>> +	mac-address = [00 00 00 00 00 00];
+>>>>> +	phys = <&cpsw0_phy_gmii_sel 1>;
+>>>>> +};
+>>>>> +
+>>>>> +&cpsw0_port2 {
+>>>>> +	phy-handle = <&cpsw5g_phy1>;
+>>>>> +	phy-mode = "qsgmii-sub";
+>>>>> +	mac-address = [00 00 00 00 00 00];
+>>>>> +	phys = <&cpsw0_phy_gmii_sel 2>;
+>>>>>
+>>>>> And it can convey the mode to the PHY driver via phy_ops->set_mode.
+>>>>> So you should be depending on that instead of adding this new property.
+>>>>
+>>>> QSGMII-SUB is not a standard mode in the Linux kernel. In order to proceed with
+>>>> the suggested implementation, a new phy mode named PHY_INTERFACE_MODE_QSGMII_SUB
+>>>> has to be introduced to the kernel. Additionally, all existing phy drivers will
+>>>> have to be updated to recognize the new phy mode.
+>>>>
+>>>> Since the QSGMII-SUB mode is TI specific, it was decided that it would be better
+>>>> to add a new property in TI specific files for identifying the QSGMII main port
+>>>> and treating the rest as QSGMII-SUB ports.
+>>>
+>>> Who decides which port should be MAIN and which should be SUB? Can all ports be MAIN?
+>>> Can all ports be SUB or there has to be at least one MAIN?
+>>
+>> All 4 ports in CPSW5G have the capability to be the MAIN port, with the only
+>> restriction being that only one of them should be the MAIN port at a time. The
+>> role of the CPSW5G ports is decided based on what PHY port each of the CPSW5G
+>> ports connects to.
+> 
+> OK, then instead of using bitmask and property being named "ti,enet-ctrl-qsgmii", why not
+> just say "ti,qsgmii-main-port" = <main_port_number>;
+
+I plan to send patches for J721e device which has CPSW9G (8 external ports) MAC.
+CPSW9G can work with two sets of QSGMII interfaces (4 ports + 4 ports). Thus,
+using a bitmask for the QSGMII main port will help identify the QSGMII main port
+across both sets of QSGMII interfaces. The bitmask in case of J721e CPSW9G will
+consider the first 4 bits for the first interface's 4 ports and the next 4 bits
+for the second interface's 4 ports. In this manner, it will be possible to
+extend it for 8 port CPSW9G MAC as well, without having to add a new property
+for the second QSGMII interface.
+
+> 
+> Also do some sanity check when getting that property.
+
+To ensure that multiple QSGMII ports are not declared as the main port, the
+"ti,enet-ctrl-qsgmii" property has been declared as an enum: [1,2,4,8]. If a
+different value other than the value in enum were to be used, then "make
+dtbs_check" would raise an error. This will prevent configuring multiple QSGMII
+ports as the main port at once. Also, in the phy-gmii-sel driver, a default
+value of 1 is being assigned to the variable that will store the value
+corresponding to the ti,enet-ctrl-qsgmii property from the device tree, thereby
+treating the first CPSW5G port as the QSGMII main port by default.
+
+Thanks,
+Siddharth.

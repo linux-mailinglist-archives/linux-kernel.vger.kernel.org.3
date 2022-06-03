@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3070B53CA81
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5474053CA87
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244559AbiFCNO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S242633AbiFCNPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241257AbiFCNOY (ORCPT
+        with ESMTP id S240900AbiFCNPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:14:24 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59292DA89;
-        Fri,  3 Jun 2022 06:14:22 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id h9-20020a056830400900b0060b03bfe792so5482823ots.12;
-        Fri, 03 Jun 2022 06:14:22 -0700 (PDT)
+        Fri, 3 Jun 2022 09:15:45 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B832DABF;
+        Fri,  3 Jun 2022 06:15:44 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id t22-20020a0568301e3600b0060b333f7a1eso5525743otr.0;
+        Fri, 03 Jun 2022 06:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=rCnbF91LIkxHhaVG1Alz8mNBG7NVUai+EV3oRdthdwc=;
-        b=epaLeTStOQVQYmyc06vyKPPmUEuubF/tg7w534cTgzzVx2tPJL/ZnYn1soMrzu57E0
-         nIxFlixwXwZN219KY+LIw7+FTp1qQceiltp3eeumhoeyD4WK9XNO/u2Ik+e6dyz1VgW4
-         Ln2G3FidUo0WLdPf9MNJKjNfR7mg2oB0tuNH1Mj6/brEnJ4sHXK8w0q/Rj8pM/x2mVcd
-         GMd78NM38faYaqn7umXeLkvGJbG0Q/vjg1dc+gw6vME3SdWFGfimEKEhHyks3FYPO5+O
-         FgbEQ2JWTJ2PocwCKTgSIyKt2PxQNQbQtLoDO9KatvCVPeA+0XSA/IGuiBmL2Opj8rCN
-         JdbA==
+        bh=N+RG0Zk5ys6ys2VQCOn4syuja/2pBVS/SvIxFJpa7jE=;
+        b=aLydiZUKwihBsQQiiKCuqciNN8KaSoK3pFDIt38r72VZAm9rB79zHbT3v34VubviDi
+         vtr+sro4J8j6vS/5e7QibCiTJeteIJnkt7ZpuPw2dnumfacYti/AiXiAW+gn5SpfLxZx
+         wgIEhIkC8vwGA+iez7sMLadk00m4EF91Is8j4a1MtdS6PA+6roO6F3jYK6Zbq18O8DFY
+         4DoutGF1x14CvXdbaUk5MmVlOLOBpDLvmQmYo4tMQzbCfydxOtQ+GUfJMQIaEDgQkKpW
+         rzUJbjPLlZ1/gzWYzzLi+h0njXLBDI4tYTqZHi9NANT86JWoZ1/teU18ySjr1z97gUEO
+         7F3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=rCnbF91LIkxHhaVG1Alz8mNBG7NVUai+EV3oRdthdwc=;
-        b=yk5jRnB3xUTggNjvTK82AayYnAlq7+bP1sjcZkZ1bUeiRliS9ap1nMgPQPSE33ofGn
-         39sOwlwlJRJKKgMe0fGCGpL/9bs13kMdMqDv9NaW9CaPdfafhdEp1NxWWqvMQGET201j
-         xFlWBNpBsEgxNJ8YGGbcZwmxrLsxo7UBKcTJhNL5kYy/XcT7VtTFXeAcjFeWeAgMvdim
-         5hZjytIh/oLHJjM9slrfY//p0QOVAfxmJbZwx/INXKkLMTr685Dcmich6gidJJRsgidW
-         oAKoTHlvldXqFaxL3Wz2pt1fQb5EsWXAaEL9Lh1W/2saYXrG9RLk+HMUlwj3RL028ePP
-         pfyg==
-X-Gm-Message-State: AOAM5320RLgZpx+be9eQv80Lm+Crj7RqqfSL08vE78TwoCO2KUczRW1p
-        VDcdVVaUvR8UR3E9tcU+m/g=
-X-Google-Smtp-Source: ABdhPJzLtEwQ/esm74d/F634Zk44P3yo84Oy3SfH5ELpHgfOwaQKdIcDChbPMdKw3xr6O3VY+K5ibA==
-X-Received: by 2002:a9d:6a8f:0:b0:60b:c33f:46f4 with SMTP id l15-20020a9d6a8f000000b0060bc33f46f4mr2881236otq.296.1654262062300;
-        Fri, 03 Jun 2022 06:14:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n13-20020aca240d000000b00326d2cba5d3sm3940151oic.8.2022.06.03.06.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 06:14:21 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=N+RG0Zk5ys6ys2VQCOn4syuja/2pBVS/SvIxFJpa7jE=;
+        b=DXcrRkcuFu8+THNtz47Y9Gc2svP+Suv8W40Vyd8OxrFfbWKqusEX2HryTgwUlCvmLG
+         EOUO8WwqGvl0tiQZBk36+AsKtFNqCoKq4yhQPuCIvwtU/4vVONnBkY+tqvqLhSQAPikI
+         A8bPt7sVnbOOC2KmGkELo9Bm4SwFXe5yN94+5BupjYjruFe+tPToxNkGP5q39Qi2CvkE
+         kAEUGZVQc9o3uHQQB40G+HDvomwD3P6Cx/CqOBMxHYTa31zilGUhcI2+rdFg2HmCfPNv
+         rdvUj9jvf0IGFnQ7+3xBAHMBfK3kYFWAfjJSxK1DMwTzMSqikgRBJQXZhVBf99cb6f9y
+         hAxg==
+X-Gm-Message-State: AOAM5316mfIQmg2boQbyFmYrvy03lzLk0RebA588SvxBmrBCdvO4FYiI
+        a9f/gGpd3bNxDJhSvka/r4CUl+daMQM=
+X-Google-Smtp-Source: ABdhPJx0G+0uzl4GbXnADDD9iSN1yINSR6uJN+50E0Y7tlzFlEK2PIcEv4hr4fpDp514J2peP/pjKw==
+X-Received: by 2002:a9d:6197:0:b0:60b:232e:8bc0 with SMTP id g23-20020a9d6197000000b0060b232e8bc0mr4082705otk.285.1654262143548;
+        Fri, 03 Jun 2022 06:15:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e28-20020a544f1c000000b0032c18f04800sm4029969oiy.1.2022.06.03.06.15.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 06:15:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Jean-Marie Verdun <verdun@hpe.com>, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] watchdog: gxp: Add missing MODULE_LICENSE
-Date:   Fri,  3 Jun 2022 06:14:19 -0700
-Message-Id: <20220603131419.2948578-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+Message-ID: <10f49cf3-3f92-e5e2-d69a-77c37f12a1fe@roeck-us.net>
+Date:   Fri, 3 Jun 2022 06:15:41 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: mainline build failure due to 6b47441bed49 ("watchdog: hpe-wdt:
+ Introduce HPE GXP Watchdog")
+Content-Language: en-US
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jean-Marie Verdun <verdun@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org
+References: <YpncSXSTTyKGprLi@debian>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YpncSXSTTyKGprLi@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The build system says:
+On 6/3/22 03:02, Sudip Mukherjee wrote:
+> Hi All,
+> 
+> The latest mainline kernel branch fails to build for "arm allmodconfig"
+> with the error:
+> ERROR: modpost: missing MODULE_LICENSE() in drivers/watchdog/gxp-wdt.o
+> make[1]: *** [scripts/Makefile.modpost:134: modules-only.symvers] Error 1
+> 
+> The file is missing MODULE_LICENSE().
+> 
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/watchdog/gxp-wdt.o
+I sent a patch fixing the problem a minute ago.
 
-Add the missing MODULE_LICENSE.
-
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/watchdog/gxp-wdt.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c
-index b0b2d7a6fdde..2fd85be88278 100644
---- a/drivers/watchdog/gxp-wdt.c
-+++ b/drivers/watchdog/gxp-wdt.c
-@@ -172,3 +172,4 @@ module_platform_driver(gxp_wdt_driver);
- MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
- MODULE_AUTHOR("Jean-Marie Verdun <verdun@hpe.com>");
- MODULE_DESCRIPTION("Driver for GXP watchdog timer");
-+MODULE_LICENSE("GPL");
--- 
-2.35.1
+Guenter
 

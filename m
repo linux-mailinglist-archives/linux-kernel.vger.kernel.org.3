@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57DF53CF61
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B3553CEE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345634AbiFCRxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S1345295AbiFCRsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345775AbiFCRuZ (ORCPT
+        with ESMTP id S242471AbiFCRsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D005908A;
-        Fri,  3 Jun 2022 10:46:18 -0700 (PDT)
+        Fri, 3 Jun 2022 13:48:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF61657114;
+        Fri,  3 Jun 2022 10:44:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9CE960A54;
-        Fri,  3 Jun 2022 17:46:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A18C385A9;
-        Fri,  3 Jun 2022 17:46:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83F13B82433;
+        Fri,  3 Jun 2022 17:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA81EC3411E;
+        Fri,  3 Jun 2022 17:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278377;
-        bh=7oYHfS1M/s+Jkhydgv6K62l+sh0VCTWVcZ0tPKS1+5w=;
+        s=korg; t=1654278265;
+        bh=eAgeRX0XfrOtYG0LIdo5Tzi4tDG+++Ix0SbqivlBhe4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GUnY8gLc6+hT4+/czs/NubQ+kgjDinwwYcX01aYkKmk0997nEZTaglQslY/ODWS/i
-         lrpd+aYQL/IZ/rKG9SIAQCiA7OQ6/K2KPj4UgJQUPgElKbFx8ldu4nDtGNOgSZegw6
-         YoRyK0ReVaA/dwSS/UdodUrt5I2llqSpaR5RZz9c=
+        b=IuGydQr+uF753CPS05b+kvUnygsd2mLb6FmiHXg0OoMmTngqsqRCJUfsn4Z/dGOZA
+         rxvc4vaMdpYGJpu8kSc+9qVNGBolGCwBPPTtZwNnxLkzSbAYaCWZO4hx50vWTpswUq
+         2cRFW11enJqDNYLl3nefN9gSMFg+gCL9PTN03BP0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH 5.10 13/53] io_uring: dont re-import iovecs from callbacks
+        stable@vger.kernel.org,
+        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Dusty Mabe <dustymabe@redhat.com>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Noah Meyerhans <noahm@debian.org>,
+        Noah Meyerhans <nmeyerha@amazon.com>
+Subject: [PATCH 5.4 02/34] x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
 Date:   Fri,  3 Jun 2022 19:42:58 +0200
-Message-Id: <20220603173819.107725914@linuxfoundation.org>
+Message-Id: <20220603173816.063706442@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,70 +59,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 
-We can't re-import or modify iterators from iocb callbacks, it's not
-safe as it might be reverted and/or reexpanded while unwinding stack.
-It's also not safe to resubmit as io-wq thread will race with stack
-undwinding for the iterator and other data.
+commit 7e0815b3e09986d2fe651199363e135b9358132a upstream.
 
-Disallow resubmission from callbacks, it can fail some cases that were
-handled before, but the possibility of such a failure was a part of the
-API from the beginning and so it should be fine.
+When a XEN_HVM guest uses the XEN PIRQ/Eventchannel mechanism, then
+PCI/MSI[-X] masking is solely controlled by the hypervisor, but contrary to
+XEN_PV guests this does not disable PCI/MSI[-X] masking in the PCI/MSI
+layer.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+This can lead to a situation where the PCI/MSI layer masks an MSI[-X]
+interrupt and the hypervisor grants the write despite the fact that it
+already requested the interrupt. As a consequence interrupt delivery on the
+affected device is not happening ever.
+
+Set pci_msi_ignore_mask to prevent that like it's done for XEN_PV guests
+already.
+
+Fixes: 809f9267bbab ("xen: map MSIs into pirqs")
+Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Reported-by: Dusty Mabe <dustymabe@redhat.com>
+Reported-by: Salvatore Bonaccorso <carnil@debian.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Noah Meyerhans <noahm@debian.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/87tuaduxj5.ffs@tglx
+[nmeyerha@amazon.com: backported to 5.4]
+Signed-off-by: Noah Meyerhans <nmeyerha@amazon.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |   39 ---------------------------------------
- 1 file changed, 39 deletions(-)
+ arch/x86/pci/xen.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -2579,45 +2579,6 @@ static void io_complete_rw_common(struct
- #ifdef CONFIG_BLOCK
- static bool io_resubmit_prep(struct io_kiocb *req, int error)
- {
--	struct iovec inline_vecs[UIO_FASTIOV], *iovec = inline_vecs;
--	ssize_t ret = -ECANCELED;
--	struct iov_iter iter;
--	int rw;
--
--	if (error) {
--		ret = error;
--		goto end_req;
--	}
--
--	switch (req->opcode) {
--	case IORING_OP_READV:
--	case IORING_OP_READ_FIXED:
--	case IORING_OP_READ:
--		rw = READ;
--		break;
--	case IORING_OP_WRITEV:
--	case IORING_OP_WRITE_FIXED:
--	case IORING_OP_WRITE:
--		rw = WRITE;
--		break;
--	default:
--		printk_once(KERN_WARNING "io_uring: bad opcode in resubmit %d\n",
--				req->opcode);
--		goto end_req;
--	}
--
--	if (!req->async_data) {
--		ret = io_import_iovec(rw, req, &iovec, &iter, false);
--		if (ret < 0)
--			goto end_req;
--		ret = io_setup_async_rw(req, iovec, inline_vecs, &iter, false);
--		if (!ret)
--			return true;
--		kfree(iovec);
--	} else {
--		return true;
--	}
--end_req:
- 	req_set_fail_links(req);
- 	return false;
+--- a/arch/x86/pci/xen.c
++++ b/arch/x86/pci/xen.c
+@@ -442,6 +442,11 @@ void __init xen_msi_init(void)
+ 
+ 	x86_msi.setup_msi_irqs = xen_hvm_setup_msi_irqs;
+ 	x86_msi.teardown_msi_irq = xen_teardown_msi_irq;
++	/*
++	 * With XEN PIRQ/Eventchannels in use PCI/MSI[-X] masking is solely
++	 * controlled by the hypervisor.
++	 */
++	pci_msi_ignore_mask = 1;
  }
+ #endif
+ 
 
 

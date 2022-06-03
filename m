@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F122453CF27
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995B053D0FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244653AbiFCRx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S243965AbiFCSM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345379AbiFCRsz (ORCPT
+        with ESMTP id S1346095AbiFCR6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:48:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98155523B;
-        Fri,  3 Jun 2022 10:45:43 -0700 (PDT)
+        Fri, 3 Jun 2022 13:58:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875DA580C3;
+        Fri,  3 Jun 2022 10:55:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6D21B82435;
-        Fri,  3 Jun 2022 17:45:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197E8C385A9;
-        Fri,  3 Jun 2022 17:45:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE7F5612DA;
+        Fri,  3 Jun 2022 17:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7073C385B8;
+        Fri,  3 Jun 2022 17:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278341;
-        bh=+8/rSL0dktqyZfvWABToCYxgk0Wct5z+yxpZFfy6gak=;
+        s=korg; t=1654278902;
+        bh=bftCAUS1CFLOhyDhxNmw9rQEm8llGxgW7+GrrahPN1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nIIxnuG0XPIsjGoqLbBJnOPu0z/HducjIYpHWMU2nn0KVJ67MDdnll/fbAAEEWUi3
-         3t15U0+GR2yfBWZEjcmUVjguvrozc9yp3xCzVxi5kHSTA2Awrs/Fc/CvPDkh7NEauO
-         XpcBs6S5YtRfleAuHsKzjralnRhoWO2MwQDJ7uV8=
+        b=rlbvIwooOEGthI+nowKKrDD1yRq81fjfP0Jc7Vf2K7P1hJzHf9kN9zclxTdlurZQ6
+         LOXhAdHhqK4LVtYVDTuV7b/JK8U6UxZE/Ux8Hp4W7sdhBek+8L7O//OlcR1FSLR+qq
+         kYOleaY+129CcWPWryvHC/XtHwfgEKmxChwp1dOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, IotaHydrae <writeforever@foxmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 11/34] pinctrl: sunxi: fix f1c100s uart2 function
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.17 23/75] netfilter: nf_tables: hold mutex on netns pre_exit path
 Date:   Fri,  3 Jun 2022 19:43:07 +0200
-Message-Id: <20220603173816.325039941@linuxfoundation.org>
+Message-Id: <20220603173822.405677031@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: IotaHydrae <writeforever@foxmail.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit fa8785e5931367e2b43f2c507f26bcf3e281c0ca ]
+commit 3923b1e4406680d57da7e873da77b1683035d83f upstream.
 
-Change suniv f1c100s pinctrl,PD14 multiplexing function lvds1 to uart2
+clean_net() runs in workqueue while walking over the lists, grab mutex.
 
-When the pin PD13 and PD14 is setting up to uart2 function in dts,
-there's an error occurred:
-1c20800.pinctrl: unsupported function uart2 on pin PD14
-
-Because 'uart2' is not any one multiplexing option of PD14,
-and pinctrl don't know how to configure it.
-
-So change the pin PD14 lvds1 function to uart2.
-
-Signed-off-by: IotaHydrae <writeforever@foxmail.com>
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Link: https://lore.kernel.org/r/tencent_70C1308DDA794C81CAEF389049055BACEC09@qq.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 767d1216bff8 ("netfilter: nftables: fix possible UAF over chains from packet path in netns")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_tables_api.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c b/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c
-index 2801ca706273..68a5b627fb9b 100644
---- a/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c
-@@ -204,7 +204,7 @@ static const struct sunxi_desc_pin suniv_f1c100s_pins[] = {
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
- 		  SUNXI_FUNCTION(0x1, "gpio_out"),
- 		  SUNXI_FUNCTION(0x2, "lcd"),		/* D20 */
--		  SUNXI_FUNCTION(0x3, "lvds1"),		/* RX */
-+		  SUNXI_FUNCTION(0x3, "uart2"),		/* RX */
- 		  SUNXI_FUNCTION_IRQ_BANK(0x6, 0, 14)),
- 	SUNXI_PIN(SUNXI_PINCTRL_PIN(D, 15),
- 		  SUNXI_FUNCTION(0x0, "gpio_in"),
--- 
-2.35.1
-
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -9813,7 +9813,11 @@ static int __net_init nf_tables_init_net
+ 
+ static void __net_exit nf_tables_pre_exit_net(struct net *net)
+ {
++	struct nftables_pernet *nft_net = nft_pernet(net);
++
++	mutex_lock(&nft_net->commit_mutex);
+ 	__nft_release_hooks(net);
++	mutex_unlock(&nft_net->commit_mutex);
+ }
+ 
+ static void __net_exit nf_tables_exit_net(struct net *net)
 
 

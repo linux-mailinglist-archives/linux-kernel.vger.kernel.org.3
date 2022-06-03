@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8BD53D0FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B757C53D13A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346837AbiFCSN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S243754AbiFCSRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346238AbiFCSAG (ORCPT
+        with ESMTP id S1347611AbiFCSGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:00:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14E144A0E;
-        Fri,  3 Jun 2022 10:55:49 -0700 (PDT)
+        Fri, 3 Jun 2022 14:06:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537A75C36A;
+        Fri,  3 Jun 2022 10:59:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90856B82433;
-        Fri,  3 Jun 2022 17:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C32C2C385B8;
-        Fri,  3 Jun 2022 17:55:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9956B6165B;
+        Fri,  3 Jun 2022 17:58:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C409C3411F;
+        Fri,  3 Jun 2022 17:58:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278947;
-        bh=TdDP+Db7xcOWnxSQDmXme3EoRbglcHsVWz0Cb2tdDok=;
+        s=korg; t=1654279096;
+        bh=Cd2X9X9D1pUtLT7Y22U/EmbcPT8vW5ZoQ885p5Z6CdU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PdlN/NrnKt0iibXYSNGufBFBbNTpzUduNzAj36QQaxymRhHd18kGdim53Z1gRH8vD
-         xkB4Sm4ZeRWcByZ5ckzGNwcThV9Y0dkYy7Mxs9XJImD56N7ZpcDCioRbZZGPGkSIqZ
-         ALEMggcwUjR5KmQ+jdg/rO1krNmVvli6bU+OfTSo=
+        b=x2v4lypfoo81qMJ7lOOa01X7x0YqUvcL/6htIuitQWLc7W/xwFc/Ps/xBs68otxvb
+         LazbucnFvA4ahJ3srDIHcErCDbPAfWqAKvLwmVygQZOklwcec0/1veCaP1QcfOBhiT
+         tdLH5ARYzGM/QlJmkH1Z3BXi6+bcup1ZUaBUfGGw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [PATCH 5.17 68/75] NFSD: Fix possible sleep during nfsd4_release_lockowner()
-Date:   Fri,  3 Jun 2022 19:43:52 +0200
-Message-Id: <20220603173823.659712353@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.18 52/67] media: i2c: imx412: Fix reset GPIO polarity
+Date:   Fri,  3 Jun 2022 19:43:53 +0200
+Message-Id: <20220603173822.227553579@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-commit ce3c4ad7f4ce5db7b4f08a1e237d8dd94b39180b upstream.
+commit bb25f071fc92d3d227178a45853347c7b3b45a6b upstream.
 
-nfsd4_release_lockowner() holds clp->cl_lock when it calls
-check_for_locks(). However, check_for_locks() calls nfsd_file_get()
-/ nfsd_file_put() to access the backing inode's flc_posix list, and
-nfsd_file_put() can sleep if the inode was recently removed.
+The imx412/imx577 sensor has a reset line that is active low not active
+high. Currently the logic for this is inverted.
 
-Let's instead rely on the stateowner's reference count to gate
-whether the release is permitted. This should be a reliable
-indication of locks-in-use since file lock operations and
-->lm_get_owner take appropriate references, which are released
-appropriately when file locks are removed.
+The right way to define the reset line is to declare it active low in the
+DTS and invert the logic currently contained in the driver.
 
-Reported-by: Dai Ngo <dai.ngo@oracle.com>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+The DTS should represent the hardware does i.e. reset is active low.
+So:
++               reset-gpios = <&tlmm 78 GPIO_ACTIVE_LOW>;
+not:
+-               reset-gpios = <&tlmm 78 GPIO_ACTIVE_HIGH>;
+
+I was a bit reticent about changing this logic since I thought it might
+negatively impact @intel.com users. Googling a bit though I believe this
+sensor is used on "Keem Bay" which is clearly a DTS based system and is not
+upstream yet.
+
+Fixes: 9214e86c0cc1 ("media: i2c: Add imx412 camera sensor driver")
 Cc: stable@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Reviewed-by: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfsd/nfs4state.c |   12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ drivers/media/i2c/imx412.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -7330,16 +7330,12 @@ nfsd4_release_lockowner(struct svc_rqst
- 		if (sop->so_is_open_owner || !same_owner_str(sop, owner))
- 			continue;
+--- a/drivers/media/i2c/imx412.c
++++ b/drivers/media/i2c/imx412.c
+@@ -1011,7 +1011,7 @@ static int imx412_power_on(struct device
+ 	struct imx412 *imx412 = to_imx412(sd);
+ 	int ret;
  
--		/* see if there are still any locks associated with it */
--		lo = lockowner(sop);
--		list_for_each_entry(stp, &sop->so_stateids, st_perstateowner) {
--			if (check_for_locks(stp->st_stid.sc_file, lo)) {
--				status = nfserr_locks_held;
--				spin_unlock(&clp->cl_lock);
--				return status;
--			}
-+		if (atomic_read(&sop->so_count) != 1) {
-+			spin_unlock(&clp->cl_lock);
-+			return nfserr_locks_held;
- 		}
+-	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
++	gpiod_set_value_cansleep(imx412->reset_gpio, 0);
  
-+		lo = lockowner(sop);
- 		nfs4_get_stateowner(sop);
- 		break;
- 	}
+ 	ret = clk_prepare_enable(imx412->inclk);
+ 	if (ret) {
+@@ -1024,7 +1024,7 @@ static int imx412_power_on(struct device
+ 	return 0;
+ 
+ error_reset:
+-	gpiod_set_value_cansleep(imx412->reset_gpio, 0);
++	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
+ 
+ 	return ret;
+ }
+@@ -1040,7 +1040,7 @@ static int imx412_power_off(struct devic
+ 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+ 	struct imx412 *imx412 = to_imx412(sd);
+ 
+-	gpiod_set_value_cansleep(imx412->reset_gpio, 0);
++	gpiod_set_value_cansleep(imx412->reset_gpio, 1);
+ 
+ 	clk_disable_unprepare(imx412->inclk);
+ 
 
 

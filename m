@@ -2,143 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F45153C33A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C8653C340
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237461AbiFCCOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 22:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S233089AbiFCCYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 22:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiFCCOs (ORCPT
+        with ESMTP id S229526AbiFCCYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 22:14:48 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA97D369C0;
-        Thu,  2 Jun 2022 19:14:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654222486; x=1685758486;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=qSqyxUGSBvwO+iIfAgD4DbrPTpHhtxYDB+NXlueOkUk=;
-  b=FVkQ0V12NyiFVyHN9vd4v30bvUZN8xdEs+484mCSZkfRZURB4bnHNx+P
-   S7Tpp5Cd1XyfSzxiW13oRMDvUdmRmMLqcKjSJrGa4WpIZmwvOwPzHZWYd
-   8v6qm/+GEXdL2oucUam0YG0ygn1p9hnuU2ej2n2CG2AhNC1QFIrRWJACJ
-   Y=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Jun 2022 19:14:45 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 19:14:45 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 19:14:44 -0700
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 2 Jun 2022 19:14:44 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <krzysztof.kozlowski+dt@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
-        <bjorn.andersson@linaro.org>, <kishon@ti.com>,
-        <robh+dt@kernel.org>, <agross@kernel.org>, <vkoul@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH] dt-bindings: Update QCOM USB subsystem maintainer information
-Date:   Thu, 2 Jun 2022 19:14:32 -0700
-Message-ID: <20220603021432.13365-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 2 Jun 2022 22:24:01 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188F377C3
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 19:23:59 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220603022358epoutp04cc91aed03867d30b70220893c885a0fa~0_xa1HxK40508705087epoutp04L
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:23:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220603022358epoutp04cc91aed03867d30b70220893c885a0fa~0_xa1HxK40508705087epoutp04L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1654223038;
+        bh=pVfyquUiCztu8odxdc3iVsb9cC99Xcjd5w1voSgjL+c=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=QDsLtOg7ZgBXCHRxSD/qq79esuHFcjMaXHxzz8qBSzsU/GudbT28hKSJo9drWQMq8
+         ZOelKtbwnx3dfWcM341vZ/mA3PmuCFYCS9Hom+FoI1598DdKirRS3UGWUhy5sqpMQx
+         ha7BJQlfr/MG/zli2FxxDXnbxTIrAImGIqsXChKw=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220603022357epcas2p235cc51e0e6bc9248f73a9378a885a5af~0_xaSr3b01082810828epcas2p2c;
+        Fri,  3 Jun 2022 02:23:57 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4LDmsQ0Qcyz4x9Q1; Fri,  3 Jun
+        2022 02:23:54 +0000 (GMT)
+X-AuditID: b6c32a45-a8fff70000002755-7e-629970b906a1
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AD.65.10069.9B079926; Fri,  3 Jun 2022 11:23:53 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
+Reply-To: wangseok.lee@samsung.com
+Sender: Wangseok Lee <wangseok.lee@samsung.com>
+From:   Wangseok Lee <wangseok.lee@samsung.com>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220603022353epcms2p5d83a4a7d95584ce6a65a63356cd46e76@epcms2p5>
+Date:   Fri, 03 Jun 2022 11:23:53 +0900
+X-CMS-MailID: 20220603022353epcms2p5d83a4a7d95584ce6a65a63356cd46e76
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmhe7OgplJBm+nWFgsacqweHlI02L+
+        kXOsFrtnLGeymDn1DLPF80OzmC0+tahaXHjaw2bxctY9NouGnt+sFkfefGS22H98JZPF5V1z
+        2CzOzjvOZjFh1TcWize/X7BbnFucadG69wi7xc47J5gdhD3WzFvD6HF9XYDHgk2lHptWdbJ5
+        PLkynclj85J6j74tqxg9jt/YzuTxeZNcAGdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmB
+        oa6hpYW5kkJeYm6qrZKLT4CuW2YO0D9KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKU
+        nALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMzx+bmAsOWlXsXtDH2sDYqtXFyMEhIWAi0bGm
+        pouRk0NIYAejxO8eHpAwr4CgxN8dwiBhYQE3iaW3VzBBlChJ7Fgzjxkiri9xfUU3K4jNJqAr
+        8W/xS7YuRi4OEYGzTBI3725nBXGYBeawSFxv/gBWJSHAKzGj/SkLhC0tsX35VkYQm1PAT+Lc
+        ly42iLiGxI9lvcwQtqjEzdVv2WHs98fmM0LYIhKt985C1QhKPPi5GyouJbHgySGoXdUS+//+
+        ZoKwGxgl+u+nQvyrL7HjujFImFfAV+LKlp9ga1kEVCUerJkGVe4icX/ia7AxzALyEtvfzmEG
+        aWUW0JRYv0sfYoqyxJFbLDBPNWz8zY7OZhbgk+g4/BcuvmPeE6jpahLzVu5knsCoPAsR0LOQ
+        7JqFsGsBI/MqRrHUguLc9NRiowJDeMwm5+duYgSnay3XHYyT337QO8TIxMF4iFGCg1lJhLdk
+        19QkId6UxMqq1KL8+KLSnNTiQ4ymQF9OZJYSTc4HZoy8knhDE0sDEzMzQ3MjUwNzJXFer5QN
+        iUIC6YklqdmpqQWpRTB9TBycUg1MO+Ptvu55V60SdlJLcu+1iKecE9Qenrt3Lm/n8pv+GiaW
+        4vOPfdn96tc6y8OsMy7+KbUz7uifsUZ2Qti8vL4Nd9mNd5ReZpu5/KduzZvn38/f7W5x2e5z
+        bkZUQiLLQtWrNrw3j2zTOv37sdUC1hO8b7rOzjlx6ueZH2IP7q060JvJxGgX28YfO2FHvJtw
+        /09xI3v3nufftvJ5+f185BVQMztrkVqRyIGfs5QizGLcTrPujAr8WC4YGn40uGeudNXBu6/W
+        toYKsr6W/hMsssrY58anTM8WZ89K7jWp1nKTHn/5eWJ51bur3y473H1QoSPHJ51fOOHgpPh/
+        5j80dpWIeR+xsEuZ3S1fk+V4KS8hXImlOCPRUIu5qDgRALo9ZlhgBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220603015431epcms2p6203908cebe6a320854136559a32b54cb
+References: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+        <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p5>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update devicetree binding files with the proper maintainer, and updated
-contact email.
+Add description to support Axis, ARTPEC-8 SoC.
+ARTPEC-8 is the SoC platform of Axis Communications
+and PCIe controller is designed based on Design-Ware PCIe controller.
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+changes since v1 :
+-'make dt_binding_check' result improvement
+-Add the missing property list
+-Align the indentation of continued lines/entries
+
+Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
 ---
- Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml | 2 +-
- Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml       | 2 +-
- .../devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml         | 2 +-
- .../devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml  | 2 +-
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml            | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 108 ++++++++++++++++++
+ .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 123 +++++++++++++++++++++
+ 2 files changed, 231 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-index 60dc27834e1d..b078009ed509 100644
---- a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
-@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: Qualcomm QMP USB3 DP PHY controller
- 
- maintainers:
--  - Manu Gautam <mgautam@codeaurora.org>
-+  - Wesley Cheng <quic_wcheng@quicinc.com>
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
-index 0ab3dad3f121..d68ab49345b8 100644
---- a/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml
-@@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: Qualcomm QUSB2 phy controller
- 
- maintainers:
--  - Manu Gautam <mgautam@codeaurora.org>
-+  - Wesley Cheng <quic_wcheng@quicinc.com>
- 
- description:
-   QUSB2 controller supports LS/FS/HS usb connectivity on Qualcomm chipsets.
-diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-index 1ce251de0855..7a0e6a9854da 100644
---- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
-@@ -7,7 +7,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
- title: Qualcomm Synopsys Femto High-Speed USB PHY V2
- 
- maintainers:
--  - Wesley Cheng <wcheng@codeaurora.org>
-+  - Wesley Cheng <quic_wcheng@quicinc.com>
- 
- description: |
-   Qualcomm High-Speed USB PHY
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
-index 12ed98c28aaa..dbe78cd4adba 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: The Qualcomm PMIC VBUS output regulator driver
- 
- maintainers:
--  - Wesley Cheng <wcheng@codeaurora.org>
-+  - Wesley Cheng <quic_wcheng@quicinc.com>
- 
- description: |
-   This regulator driver controls the VBUS output by the Qualcomm PMIC.  This
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index e336fe2e03cc..749e1963ddbb 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Qualcomm SuperSpeed DWC3 USB SoC controller
- 
- maintainers:
--  - Manu Gautam <mgautam@codeaurora.org>
-+  - Wesley Cheng <quic_wcheng@quicinc.com>
- 
- properties:
-   compatible:
+diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+new file mode 100644
+index 0000000..3512e38
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+@@ -0,0 +1,108 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie-ep.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ARTPEC-8 SoC PCIe Controller Device Tree Bindings
++
++maintainers:
++  - Jesper Nilsson <jesper.nilsson@axis.com>
++
++description: |+
++  This PCIe end-point controller is based on the Synopsys DesignWare PCIe IP
++  and thus inherits all the common properties defined in snps,dw-pcie-ep.yaml.
++
++allOf:
++  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
++
++properties:
++  compatible:
++    const: axis,artpec8-pcie-ep
++
++  reg:
++    items:
++      - description: Data Bus Interface (DBI) registers.
++      - description: Data Bus Interface (DBI2) registers.
++      - description: PCIe address space region.
++
++  reg-names:
++    items:
++      - const: dbi
++      - const: dbi2
++      - const: addr_space
++
++  interrupts:
++    maxItems: 1
++
++  interrupts-names:
++    items:
++      - const: intr
++
++  clocks:
++    items:
++      - description: PIPE clock, used by the controller to clock the PIPE
++      - description: PCIe dbi clock, ungated version
++      - description: PCIe master clock, ungated version
++      - description: PCIe slave clock, ungated version
++
++  clock-names:
++    items:
++      - const: pipe_clk
++      - const: dbi_clk
++      - const: mstr_clk
++      - const: slv_clk
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    items:
++      - const: pcie_phy
++
++  num-lanes:
++    const: 2
++
++required:
++  - reg
++  - reg-names
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - phys
++  - num-lanes
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    artpec8 {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        pcie_ep: pcie-ep@17200000 {
++            compatible = "axis,artpec8-pcie-ep";
++            reg = <0x0 0x17200000 0x0 0x1000>,
++                  <0x0 0x17201000 0x0 0x1000>,
++                  <0x2 0x00000000 0x6 0x00000000>;
++            reg-names = "dbi", "dbi2", "addr_space";
++            #interrupt-cells = <1>;
++            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "intr";
++            clocks = <&clock_cmu_fsys 39>,
++                     <&clock_cmu_fsys 38>,
++                     <&clock_cmu_fsys 37>,
++                     <&clock_cmu_fsys 36>;
++            clock-names = "pipe_clk", "dbi_clk", "mstr_clk", "slv_clk";
++            phys = <&pcie_phy>;
++            phy-names = "pcie_phy";
++            num-lanes = <2>;
++            bus-range = <0x00 0xff>;
++            num-ib-windows = <16>;
++            num-ob-windows = <16>;
++        };
++    };
++...
+diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+new file mode 100644
+index 0000000..945a061
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Artpec-8 SoC PCIe Controller Device Tree Bindings
++
++maintainers:
++  - Jesper Nilsson <jesper.nilsson@axis.com>
++
++description: |+
++  This PCIe host controller is based on the Synopsys DesignWare PCIe IP
++  and thus inherits all the common properties defined in snps,dw-pcie.yaml.
++
++allOf:
++  - $ref: /schemas/pci/snps,dw-pcie.yaml#
++
++properties:
++  compatible:
++    const: axis,artpec8-pcie
++
++  reg:
++    items:
++      - description: Data Bus Interface (DBI) registers.
++      - description: External Local Bus interface (ELBI) registers.
++      - description: PCIe configuration space region.
++
++  reg-names:
++    items:
++      - const: dbi
++      - const: elbi
++      - const: config
++
++  device_type:
++    items:
++      - const: pci
++
++  ranges:
++    maxItems: 2
++
++  num-lanes:
++    const: 2
++
++  interrupts:
++    maxItems: 1
++
++  interrupts-names:
++    items:
++      - const: intr
++
++  clocks:
++    items:
++      - description: PIPE clock, used by the controller to clock the PIPE
++      - description: PCIe dbi clock, ungated version
++      - description: PCIe master clock,  ungated version
++      - description: PCIe slave clock, ungated version
++
++  clock-names:
++    items:
++      - const: pipe_clk
++      - const: dbi_clk
++      - const: mstr_clk
++      - const: slv_clk
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    items:
++      - const: pcie_phy
++
++required:
++  - reg
++  - reg-names
++  - device_type
++  - ranges
++  - num-lanes
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - phys
++  - phy-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    artpec8 {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        pcie: pcie@17200000 {
++            compatible = "axis,artpec8-pcie";
++            reg = <0x0 0x17200000 0x0 0x1000>,
++                  <0x0 0x16ca0000 0x0 0x2000>,
++                  <0x7 0x0001e000 0x0 0x2000>;
++            reg-names = "dbi", "elbi", "config";
++            #address-cells = <3>;
++            #size-cells = <2>;
++            device_type = "pci";
++            ranges = </* non-prefetchable memory */
++                      0x83000000 0x0 0x0000000 0x2 0x00000000 0x5 0x00000000
++                      /* downstream I/O */
++                      0x81000000 0x0 0x0000000 0x7 0x00000000 0x0 0x00010000>;
++            num-lanes = <2>;
++            bus-range = <0x00 0xff>;
++            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "intr";
++            #interrupt-cells = <1>;
++            clocks = <&cmu_fsys 39>,
++                     <&cmu_fsys 38>,
++                     <&cmu_fsys 37>,
++                     <&cmu_fsys 36>;
++            clock-names = "pipe_clk", "dbi_clk", "mstr_clk", "slv_clk";
++            phys = <&pcie_phy>;
++            phy-names = "pcie_phy";
++        };
++    };
++...
+-- 
+2.9.5

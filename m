@@ -2,120 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F384C53CBFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EEF53CC06
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245330AbiFCPFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S245341AbiFCPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238913AbiFCPFR (ORCPT
+        with ESMTP id S230486AbiFCPKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:05:17 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D8E64D8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:05:16 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id j3so5783101qvn.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 08:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cllboZHiVczGnHfW6HsiE6kGDCt0KqAkqMwEbcO5ZyQ=;
-        b=yG0jjw+ZXuTfAKzTsYnPPb3n6i2Y5eQSUU7g2+O4ca7JlB0M2jX8bIQpTjafIzt415
-         J1NNwKDaHSMNOQJeEmQbJY+Vbo+pbIPzCY2ZRW8I4WP82MjJADczj3log1eDk8oOhBJY
-         ODAn1YOpP0yuPSHyoylf3oAI9axDsZTNjn0HU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cllboZHiVczGnHfW6HsiE6kGDCt0KqAkqMwEbcO5ZyQ=;
-        b=BNCA9YKnPauAtQZTFW905/njxuL4brkokxrxXIRV5ETl0Hg07H654jJ+QIllVqyEy1
-         CbE6k3cqukonz9RSI/DVN6oZJvgarEdhmOn6yMvWOZdjM2JRk/vS1lsx6QWWeTtkEMpH
-         Y7mVkoRGhJEtHEDfhklMgAJJS1/lZOkLWND7oklvetlwrJt1nyAfQRfxpU6acOwNqMVs
-         p/Emu9j06VwiQklKHFfAjYX0ImualfvvFbMDhN68PjWf+v7a15Rp0nYEuDQlB/9pU6SP
-         yP1A7wHhQbwvwrSX6kT5ANqqWaPr86MA3eIC62zt5LZgbuVJZKt7pqFJm3pXdZ/WLepI
-         d+eg==
-X-Gm-Message-State: AOAM533ku8/E5QVLlFbv8lzbBNtbUqfPG85cgaWdEH4h9PqmViDj5Ivn
-        8hEtCKoqbnA8Cteb3lX+tO9JaA==
-X-Google-Smtp-Source: ABdhPJwu/AosTQGX+41XOFG+X3xAR4RlHUc16mMpPfjSCpspZQ24Q71q6gl0sMfEZILoYzpqOPEAkg==
-X-Received: by 2002:a05:6214:2301:b0:435:38af:2f87 with SMTP id gc1-20020a056214230100b0043538af2f87mr7243142qvb.83.1654268715843;
-        Fri, 03 Jun 2022 08:05:15 -0700 (PDT)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05622a010700b00302ee555a18sm5410437qtw.5.2022.06.03.08.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 08:05:15 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 15:05:15 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        James Morris <jmorris@namei.org>
-Subject: Re: [PATCH] perf/core: Call LSM hook after copying perf_event_attr
-Message-ID: <YpojK0iaPofkAzd4@google.com>
-References: <20220602224754.602074-1-namhyung@kernel.org>
+        Fri, 3 Jun 2022 11:10:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDC7393FD
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:10:25 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253Dvmeu039165;
+        Fri, 3 Jun 2022 15:10:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=g7jUFWBxlvBEqq1quOiCvFi96EvwCZUtaqf3egOZBgw=;
+ b=R8iOlcOVS7fJjcbdzbv19n3ZO6onF0ufsfiUeyDTkVl0BBLBSUMGj3lxrk3RRWOyKsMV
+ FoxqD7FcwSGhPtzRPoltucsByWGfozqaYdgBk+2clXwWqyCVOfmfkpJQVPhlh2LJI8CW
+ SRbZ+qk9HTHtYkyznoExKJtDt09s80AuFgNEHkMdKmJgPh/gPXi5FDq4lcvM54tPIXy+
+ yOwKfIWqXGqlR/abeash4Wgb11w73cEUzFaXlTAcY5AAX5o/k/F+yEP/TUKunULDJBMv
+ td+RZ9qk6ZWU+8TpqaunIRk1pzSPCGo0EG0Yeo8RKWnA43j2o/fHDdanazFmPdW12Rvz WQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfkn69df9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 15:10:00 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 253F8QTZ039849;
+        Fri, 3 Jun 2022 15:10:00 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfkn69def-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 15:10:00 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 253F6DCq014972;
+        Fri, 3 Jun 2022 15:09:57 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3gbc97xhxj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 15:09:57 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 253F9t8L38207904
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Jun 2022 15:09:55 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 213C242042;
+        Fri,  3 Jun 2022 15:09:55 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A6BA342041;
+        Fri,  3 Jun 2022 15:09:49 +0000 (GMT)
+Received: from [9.43.93.173] (unknown [9.43.93.173])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Jun 2022 15:09:49 +0000 (GMT)
+Message-ID: <046c373a-f30b-091d-47a1-e28bfb7e9394@linux.ibm.com>
+Date:   Fri, 3 Jun 2022 20:39:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v4 7/7] mm/demotion: Demote pages according to
+ allocation fallback order
+Content-Language: en-US
+To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-8-aneesh.kumar@linux.ibm.com>
+ <b102d5773bffd6391283773044f756e810c1f044.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <b102d5773bffd6391283773044f756e810c1f044.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8x6etQlFsFBiMkGXOAXlYGd_HIYEx0EX
+X-Proofpoint-GUID: vXFrfR2MtraSKq6ABD5k3wf9zz8ThVPu
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602224754.602074-1-namhyung@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-03_05,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 phishscore=0 adultscore=0
+ clxscore=1015 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206030067
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 03:47:54PM -0700, Namhyung Kim wrote:
-> It passes the attr struct to the security_perf_event_open() but it's
-> not initialized yet.
+On 6/2/22 1:05 PM, Ying Huang wrote:
+> On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>
+>> currently, a higher tier node can only be demoted to selected
+>> nodes on the next lower tier as defined by the demotion path,
+>> not any other node from any lower tier.  This strict, hard-coded
+>> demotion order does not work in all use cases (e.g. some use cases
+>> may want to allow cross-socket demotion to another node in the same
+>> demotion tier as a fallback when the preferred demotion node is out
+>> of space). This demotion order is also inconsistent with the page
+>> allocation fallback order when all the nodes in a higher tier are
+>> out of space: The page allocation can fall back to any node from any
+>> lower tier, whereas the demotion order doesn't allow that currently.
+>>
+>> This patch adds support to get all the allowed demotion targets mask
+>> for node, also demote_page_list() function is modified to utilize this
+>> allowed node mask by filling it in migration_target_control structure
+>> before passing it to migrate_pages().
+>
+
+...
+
+>>    * Take pages on @demote_list and attempt to demote them to
+>>    * another node.  Pages which are not demoted are left on
+>> @@ -1481,6 +1464,19 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
+>>   {
+>>   	int target_nid = next_demotion_node(pgdat->node_id);
+>>   	unsigned int nr_succeeded;
+>> +	nodemask_t allowed_mask;
+>> +
+>> +	struct migration_target_control mtc = {
+>> +		/*
+>> +		 * Allocate from 'node', or fail quickly and quietly.
+>> +		 * When this happens, 'page' will likely just be discarded
+>> +		 * instead of migrated.
+>> +		 */
+>> +		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) | __GFP_NOWARN |
+>> +			__GFP_NOMEMALLOC | GFP_NOWAIT,
+>> +		.nid = target_nid,
+>> +		.nmask = &allowed_mask
+>> +	};
 > 
-> Fixes: da97e18458fb ("perf_event: Add support for LSM and SELinux checks")
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  kernel/events/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> IMHO, we should try to allocate from preferred node firstly (which will
+> kick kswapd of the preferred node if necessary).  If failed, we will
+> fallback to all allowed node.
 > 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 7858bafffa9d..e035545f624f 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -12033,12 +12033,12 @@ SYSCALL_DEFINE5(perf_event_open,
->  	if (flags & ~PERF_FLAG_ALL)
->  		return -EINVAL;
->  
-> -	/* Do we allow access to perf_event_open(2) ? */
-> -	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
-> +	err = perf_copy_attr(attr_uptr, &attr);
->  	if (err)
->  		return err;
->  
-> -	err = perf_copy_attr(attr_uptr, &attr);
-> +	/* Do we allow access to perf_event_open(2) ? */
-> +	err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
-
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
-thanks,
-
- - Joel
-
-
-
->  	if (err)
->  		return err;
->  
-> -- 
-> 2.36.1.255.ge46751e96f-goog
+> As we discussed as follows,
 > 
+> https://lore.kernel.org/lkml/69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com/
+> 
+> That is, something like below,
+> 
+> static struct page *alloc_demote_page(struct page *page, unsigned long node)
+> {
+> 	struct page *page;
+> 	nodemask_t allowed_mask;
+> 	struct migration_target_control mtc = {
+> 		/*
+> 		 * Allocate from 'node', or fail quickly and quietly.
+> 		 * When this happens, 'page' will likely just be discarded
+> 		 * instead of migrated.
+> 		 */
+> 		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) |
+> 			    __GFP_THISNODE  | __GFP_NOWARN |
+> 			    __GFP_NOMEMALLOC | GFP_NOWAIT,
+> 		.nid = node
+> 	};
+> 
+> 	page = alloc_migration_target(page, (unsigned long)&mtc);
+> 	if (page)
+> 		return page;
+> 
+> 	mtc.gfp_mask &= ~__GFP_THISNODE;
+> 	mtc.nmask = &allowed_mask;
+> 
+> 	return alloc_migration_target(page, (unsigned long)&mtc);
+> }
+
+I skipped doing this in v5 because I was not sure this is really what we 
+want. I guess we can do this as part of the change that is going to 
+introduce the usage of memory policy for the allocation?
+
+-aneesh

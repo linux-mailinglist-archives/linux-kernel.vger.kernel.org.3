@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E675653D07C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21E953CF4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346831AbiFCSFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S1343605AbiFCRxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345463AbiFCRwl (ORCPT
+        with ESMTP id S1345680AbiFCRuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:41 -0400
+        Fri, 3 Jun 2022 13:50:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71D51A827;
-        Fri,  3 Jun 2022 10:52:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349CA580FF;
+        Fri,  3 Jun 2022 10:46:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC2C7B82433;
-        Fri,  3 Jun 2022 17:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ECE7C385A9;
-        Fri,  3 Jun 2022 17:52:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6805AB82419;
+        Fri,  3 Jun 2022 17:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E0DC385A9;
+        Fri,  3 Jun 2022 17:46:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278740;
-        bh=vDKShUhCqzjc8Sf6bpgAp7e22LI592LUlHmvwrPh4rM=;
+        s=korg; t=1654278371;
+        bh=6Ppkon/hC2eAj/T1dzUhBA7Eve7f37CkXZaPIG8Z9Sc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RDxzjbwJ0EwzZux4HdFCBVhCrPhzS9Nk5e8ACkqy6Czd6cbQo5i87cvh7bR+LZ+Ef
-         hgak6sm8f2uBttiK0stYIP05N1BWyyhv+wkVAp4i23+oKjU7hOGMDtOYUhzM56t8pj
-         TSMqmzCAd8lYFRqOInZ8UucSyb9ZkvLgHYFosdz0=
+        b=ppz38QBJVFyVu4Wy/z/+k8prCoKerIqCiUJ9alXQVYNAEOLWl3mIq23kEAIEuW7PY
+         N2d0gYBI+PNkG7EQLz43im5OzQfrnOA/2Gwh59RxcH18TAJRbFTXB9xSLYKzdIvdoD
+         PjYM1qPU8mu4FB7tzerQYSnSmmKExA2WWMmjR1BA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Aaron Adams <edg-e@nccgroup.com>
-Subject: [PATCH 5.17 12/75] netfilter: nf_tables: disallow non-stateful expression in sets earlier
+        stable@vger.kernel.org,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.10 11/53] cfg80211: set custom regdomain after wiphy registration
 Date:   Fri,  3 Jun 2022 19:42:56 +0200
-Message-Id: <20220603173822.097170931@linuxfoundation.org>
+Message-Id: <20220603173819.050098450@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,98 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Miri Korenblit <miriam.rachel.korenblit@intel.com>
 
-commit 520778042ccca019f3ffa136dd0ca565c486cedd upstream.
+commit 1b7b3ac8ff3317cdcf07a1c413de9bdb68019c2b upstream.
 
-Since 3e135cd499bf ("netfilter: nft_dynset: dynamic stateful expression
-instantiation"), it is possible to attach stateful expressions to set
-elements.
+We used to set regulatory info before the registration of
+the device and then the regulatory info didn't get set, because
+the device isn't registered so there isn't a device to set the
+regulatory info for. So set the regulatory info after the device
+registration.
+Call reg_process_self_managed_hints() once again after the device
+registration because it does nothing before it.
 
-cd5125d8f518 ("netfilter: nf_tables: split set destruction in deactivate
-and destroy phase") introduces conditional destruction on the object to
-accomodate transaction semantics.
-
-nft_expr_init() calls expr->ops->init() first, then check for
-NFT_STATEFUL_EXPR, this stills allows to initialize a non-stateful
-lookup expressions which points to a set, which might lead to UAF since
-the set is not properly detached from the set->binding for this case.
-Anyway, this combination is non-sense from nf_tables perspective.
-
-This patch fixes this problem by checking for NFT_STATEFUL_EXPR before
-expr->ops->init() is called.
-
-The reporter provides a KASAN splat and a poc reproducer (similar to
-those autogenerated by syzbot to report use-after-free errors). It is
-unknown to me if they are using syzbot or if they use similar automated
-tool to locate the bug that they are reporting.
-
-For the record, this is the KASAN splat.
-
-[   85.431824] ==================================================================
-[   85.432901] BUG: KASAN: use-after-free in nf_tables_bind_set+0x81b/0xa20
-[   85.433825] Write of size 8 at addr ffff8880286f0e98 by task poc/776
-[   85.434756]
-[   85.434999] CPU: 1 PID: 776 Comm: poc Tainted: G        W         5.18.0+ #2
-[   85.436023] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-
-Fixes: 0b2d8a7b638b ("netfilter: nf_tables: add helper functions for expression handling")
-Reported-and-tested-by: Aaron Adams <edg-e@nccgroup.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Miri Korenblit <miriam.rachel.korenblit@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20210618133832.c96eadcffe80.I86799c2c866b5610b4cf91115c21d8ceb525c5aa@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |   19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ net/wireless/core.c |    8 ++++----
+ net/wireless/reg.c  |    1 +
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -2794,27 +2794,31 @@ static struct nft_expr *nft_expr_init(co
+--- a/net/wireless/core.c
++++ b/net/wireless/core.c
+@@ -5,7 +5,7 @@
+  * Copyright 2006-2010		Johannes Berg <johannes@sipsolutions.net>
+  * Copyright 2013-2014  Intel Mobile Communications GmbH
+  * Copyright 2015-2017	Intel Deutschland GmbH
+- * Copyright (C) 2018-2020 Intel Corporation
++ * Copyright (C) 2018-2021 Intel Corporation
+  */
  
- 	err = nf_tables_expr_parse(ctx, nla, &expr_info);
- 	if (err < 0)
--		goto err1;
-+		goto err_expr_parse;
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+@@ -918,9 +918,6 @@ int wiphy_register(struct wiphy *wiphy)
+ 		return res;
+ 	}
+ 
+-	/* set up regulatory info */
+-	wiphy_regulatory_register(wiphy);
+-
+ 	list_add_rcu(&rdev->list, &cfg80211_rdev_list);
+ 	cfg80211_rdev_list_generation++;
+ 
+@@ -931,6 +928,9 @@ int wiphy_register(struct wiphy *wiphy)
+ 	cfg80211_debugfs_rdev_add(rdev);
+ 	nl80211_notify_wiphy(rdev, NL80211_CMD_NEW_WIPHY);
+ 
++	/* set up regulatory info */
++	wiphy_regulatory_register(wiphy);
 +
-+	err = -EOPNOTSUPP;
-+	if (!(expr_info.ops->type->flags & NFT_EXPR_STATEFUL))
-+		goto err_expr_stateful;
+ 	if (wiphy->regulatory_flags & REGULATORY_CUSTOM_REG) {
+ 		struct regulatory_request request;
  
- 	err = -ENOMEM;
- 	expr = kzalloc(expr_info.ops->size, GFP_KERNEL);
- 	if (expr == NULL)
--		goto err2;
-+		goto err_expr_stateful;
+--- a/net/wireless/reg.c
++++ b/net/wireless/reg.c
+@@ -4001,6 +4001,7 @@ void wiphy_regulatory_register(struct wi
  
- 	err = nf_tables_newexpr(ctx, &expr_info, expr);
- 	if (err < 0)
--		goto err3;
-+		goto err_expr_new;
- 
- 	return expr;
--err3:
-+err_expr_new:
- 	kfree(expr);
--err2:
-+err_expr_stateful:
- 	owner = expr_info.ops->type->owner;
- 	if (expr_info.ops->type->release_ops)
- 		expr_info.ops->type->release_ops(expr_info.ops);
- 
- 	module_put(owner);
--err1:
-+err_expr_parse:
- 	return ERR_PTR(err);
+ 	wiphy_update_regulatory(wiphy, lr->initiator);
+ 	wiphy_all_share_dfs_chan_state(wiphy);
++	reg_process_self_managed_hints();
  }
  
-@@ -5334,9 +5338,6 @@ struct nft_expr *nft_set_elem_expr_alloc
- 		return expr;
- 
- 	err = -EOPNOTSUPP;
--	if (!(expr->ops->type->flags & NFT_EXPR_STATEFUL))
--		goto err_set_elem_expr;
--
- 	if (expr->ops->type->flags & NFT_EXPR_GC) {
- 		if (set->flags & NFT_SET_TIMEOUT)
- 			goto err_set_elem_expr;
+ void wiphy_regulatory_deregister(struct wiphy *wiphy)
 
 

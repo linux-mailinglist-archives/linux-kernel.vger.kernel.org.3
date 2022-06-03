@@ -2,99 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C5053D25C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6BE53D25F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349273AbiFCT2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S1349309AbiFCTaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244845AbiFCT2v (ORCPT
+        with ESMTP id S241021AbiFCTan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:28:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8D956FB5;
-        Fri,  3 Jun 2022 12:28:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19BCE61A5F;
-        Fri,  3 Jun 2022 19:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493CEC385A9;
-        Fri,  3 Jun 2022 19:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654284529;
-        bh=4gv4IEpTaFP2QCjC2iXwNPdffpE5b9Mjy7L03jXTa4Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JlRBbwHu5MQMJ4fZjaalTOo3AZ4iWdRZvhYLnDTfzpntZEsWvq5TsbuB5/OSmmaE0
-         w/DfN4uxvg8IBwXnJ9uUD5XZ81+pkIWEYplhFNNqGb98RYQddXrIOdFRhxZA0n1RY9
-         4Aoep7UAAk//OT9dvsl22hzmfrgxJdkrhkVLI9lsepq5dId54uX33XfNn2YFBHAw9/
-         1O2T03DpmyIXuwODm8ZYQFv/zgKO51GE1hj/Y8hMFtLXd//JJDQiR1PXrpnyW/fWjz
-         2Kj7MvYacP5cGLTBzOIx0JJ/2hWswJhuupMC1ZNbpyc3ynrugEeJzDr/j7pV0gs7ky
-         OCOIpqjMy/6IA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7BC324096F; Fri,  3 Jun 2022 21:28:47 +0200 (CEST)
-Date:   Fri, 3 Jun 2022 21:28:47 +0200
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH 1/5] perf lock: Change to synthesize task events
-Message-ID: <Yppg7yCks8JWEjK9@kernel.org>
-References: <20220601065846.456965-1-namhyung@kernel.org>
- <20220601065846.456965-2-namhyung@kernel.org>
+        Fri, 3 Jun 2022 15:30:43 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F78159BBA;
+        Fri,  3 Jun 2022 12:30:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id D56CA3FD55B;
+        Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PoAEU5B-W_Nf; Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 56F813FD2E8;
+        Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 56F813FD2E8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1654284635;
+        bh=f56zKEv6Nh3cphP2EsdkVgMEWZOWaZE4zDAQFr2H9Qs=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=vFAGmtmgVTf/yuynbZKkUFMRNW/uJyOVJqkg/bEX1v+fmPO6c6nz+RnRjbiMG0MRG
+         lMI5cWVsQNHKa3fYuL4g8R/CL1gtDnTYDUpBSZl+W/hsBAJMHlKsWcPbnEbe6vgEYK
+         Vc0s6yDzyVVtgVrNktJ4ql4mhJFhj/DQj7xGa4P6TQjj9jZt5odsVmDXaaLRV65aSx
+         aX7U+/zQkF3nqalzvrP6bikr+pp+EW6Y7pWS73MvpP4uRkvyB8U8ekug85E8/OVu6V
+         LI1S7BVCWktSJFgm9HCvsU0h2YxAFl4dhnX5w8XOeESs/MqSXOyWO4kEmNeMlhOM+z
+         +iixtNM3AUV5g==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id y1CIPhIGFxiu; Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 4BE963FD619;
+        Fri,  3 Jun 2022 15:30:35 -0400 (EDT)
+Date:   Fri, 3 Jun 2022 15:30:35 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev <lttng-dev@lists.lttng.org>,
+        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <846400291.20840.1654284635213.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.13.4 and 2.12.9 (Linux kernel tracer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601065846.456965-2-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4272 (ZimbraWebClient - FF100 (Linux)/8.8.15_GA_4257)
+Thread-Index: DHrGG1JJg8YJlaBmRz8CT/+mTxeC+w==
+Thread-Topic: LTTng-modules 2.13.4 and 2.12.9 (Linux kernel tracer)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, May 31, 2022 at 11:58:42PM -0700, Namhyung Kim escreveu:
-> With -t/--threads option, it needs to display task names so synthesize
-> task related events at the beginning.
+Hi,
 
-Cherry picked this one.
- 
-> Fixes: 7c3bcbdf449f ("perf lock: Add -t/--thread option for report")
-> Acked-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-lock.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index b1200b7340a6..23a33ac15e68 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -1083,7 +1083,7 @@ static int __cmd_report(bool display_info)
->  static int __cmd_record(int argc, const char **argv)
->  {
->  	const char *record_args[] = {
-> -		"record", "-R", "-m", "1024", "-c", "1", "--synth", "no",
-> +		"record", "-R", "-m", "1024", "-c", "1", "--synth", "task",
->  	};
->  	unsigned int rec_argc, i, j, ret;
->  	const char **rec_argv;
-> 
-> base-commit: 9dde6cadb92b5670b23b97ec53091df0530ec38b
-> -- 
-> 2.36.1.255.ge46751e96f-goog
+The 2.13.4 and 2.12.9 releases are bug fix releases for the currently
+maintained LTTng-modules stable branches.
+
+Noteworthy in the 2.12.9 release:
+
+The README.md file now document that the stable-2.12 branch of
+LTTng-modules supports Linux kernels between 3.0 and 5.17 (inclusive).
+Support for the 5.18 kernel is provided starting from the stable-2.13
+branch of LTTng-modules. Also, tracepoint instrumentation was adapted
+to follow changes to upstream kernels: the "random" tracepoint
+subsystem was removed from 5.18, and this removal was backported to
+stable kernels as well. Finally, a compaction subsystem instrumentation
+name-spacing fix is included.
+
+Noteworthy in the 2.13.4 release: 
+
+The same instrumentation fixes as 2.12.4 were integrated, affecting the
+compaction and random subsystems. Changes to tracepoint instrumentation
+were done to support the 5.18 Linux kernel, affecting the block, compaction,
+sched, scsi, and kvm subsystems. The kprobes instrumentation was adapted
+to use the rethooks if possible (needed for 5.18).
+
+Now that the kvm subsystem unexports the kvm_x86_ops symbols in 5.18,
+lttng-modules relies on kallsyms to use this symbol.
+
+Finally, two changes are really more in the "bug fix" category rather than
+adapting to newer kernels: the bytecode interpreter in lttng-modules left the
+context fields byte order uninitialized, thus leading to bogus context field
+values in the event notification capture feature. Fix this by initializing
+the byte order. A hard-to-trigger race is also fixed in the event notifier
+use of the ring buffer.
+
+Changelog:
+
+2022-06-03 (National Repeat Day) (National Repeat Day) LTTng modules 2.13.4
+        * Fix: event notifier: racy use of last subbuffer record
+        * Fix: bytecode interpreter context_get_index() leaves byte order uninitialized
+        * fix: 'random' tracepoints removed in stable kernels
+        * fix: random: remove unused tracepoints (v5.10, v5.15)
+        * fix: sched/tracing: Append prev_state to tp args instead (v5.18)
+        * fix: mm: compaction: cleanup the compaction trace events (v5.18)
+        * fix: scsi: core: Remove <scsi/scsi_request.h> (v5.18)
+        * fix: kprobes: Use rethook for kretprobe if possible (v5.18)
+        * fix: random: remove unused tracepoints (v5.18)
+        * fix: scsi: block: Remove REQ_OP_WRITE_SAME support (v5.18)
+        * fix: block: remove genhd.h (v5.18)
+        * fix: sched/tracing: Don't re-read p->state when emitting sched_switch event (v5.18)
+        * fix: KVM: x86: Unexport kvm_x86_ops (v5.18)
+        * Fix: do not warn on unknown counter ioctl
+        * Fix: tracepoint event: allow same provider and event name
+        * Fix: compaction migratepages event name
+
+2022-06-03 (National Repeat Day) (National Repeat Day) LTTng modules 2.12.9
+        * fix: 'random' tracepoints removed in stable kernels
+        * fix: random: remove unused tracepoints (v5.10, v5.15)
+        * fix: random: remove unused tracepoints (v5.18)
+        * Document supported kernel versions for stable-2.12 branch
+        * Fix: include erroneously removed by backport
+        * Fix: tracepoint event: allow same provider and event name
+        * Fix: compaction migratepages event name
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
 -- 
-
-- Arnaldo
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

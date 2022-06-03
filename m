@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31DA53C7B2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FFF53C7B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243108AbiFCJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S243116AbiFCJjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiFCJir (ORCPT
+        with ESMTP id S235991AbiFCJjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:38:47 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036CE3A5EB;
-        Fri,  3 Jun 2022 02:38:42 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id F13D41F45735
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654249120;
-        bh=JF0dKCc0L02G1KVh5HkaPXlohcDSdspKEYOdcEvE2V4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Y5/SkoioXO8xg+2/iOPIiepGG/cYoQYDxYue3HE6KQKKMuXHIu9pNFuMO8o9hq+6N
-         2VHJgXFvUfVygfE0xCBRQz4Jo3tBhxhCcyLr0iPtPhqIitY78zHs43S4iIF8d6MeTI
-         lpTQBijFmnrNRZqS2jBAoE34jH2hSgufcjnghp4fPhVtpEmAmC4E/L+A0AAgrW+v6X
-         jnTSHUP11TQnExnEKo5p78D3WtvFbGfuBIe+0Pv+Dy3tn2IVEzjVQtzTE4x5x3b7SL
-         TPG3HoW1Euc4fUlfsmKKRJ0K+WVMMAhDAJ9+2jQ1o9WiyC3c8YBdtcLX+Ez7RgOawh
-         S/mtlXQYMNldg==
-Message-ID: <930f3721-ab1e-4bab-de1e-eaf83982e3ea@collabora.com>
-Date:   Fri, 3 Jun 2022 12:38:37 +0300
+        Fri, 3 Jun 2022 05:39:11 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EDC3A5EC;
+        Fri,  3 Jun 2022 02:39:10 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id u2so4782804iln.2;
+        Fri, 03 Jun 2022 02:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+4F0qudayc+M93j//60ABCGINuGmdSDmE1k3s0/tpIY=;
+        b=ptoox3EvR5d8yx7hbII4t2fKA+Qr9RtMCdevGQjv+qch0HSQMaD8+vIjTdhK9Ilagx
+         Cbbmd6pw16ZyMLSyyugZ+2QwdozoM/8QcKGp0g2akI7dAKiQ5epQdy3xTh9UFJk0Cach
+         /5I2gpHS2Ppm/kGMc9fesWp19I8XIXcwYtODTzupBlDX+SQNTVzZNLCYwVP6BTvIrgWa
+         +ZVpa0nhY+relt5AdnoDg+0JPX2+rwclUwWxxNytO0LOPOhU24t9LOvuSTjaK7k2fnMQ
+         /yP8l1k7r4dMT78VjaE+nggCU7K0p3w/KlqdbEe7m2nZ9xJTdVRmgdmDyj3q01FZkKkX
+         surg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+4F0qudayc+M93j//60ABCGINuGmdSDmE1k3s0/tpIY=;
+        b=MrcIvJZpJwlfqIKPIbo40Ddr1x5aTxIA4wSKyb5gHjeA78egNEtb/gC3YB1idhr5zr
+         +YHFmelZHPA0C3sx2CxLLlMK9ZEvE17xBQUQx1wUZhl5bnaO2ekQ1+g9/fjDu8RL/J48
+         kG27yR71YeVGaE9VT8qdLquc9sRaGkgBAn4If10QHieopp4IZBzWkVXy/273xrOtVKzy
+         2Ng/LGKwhDMJcSUebrq3J8o7rowUo9ZtTYphOODmKxO4cdbiB5W5SbQFR3prhWdWxSqS
+         rqTUKPmmxDE4N+FTyWPiAztqojBtPPSj479wKa4ULh9fMiLZk+aS7H4zeWKNKexOhBKX
+         x7+Q==
+X-Gm-Message-State: AOAM532alfISIrHex814Y0YvrBJfsIO1voRB1CWEY3g8N6KjC7JMKhQB
+        iFeN4HYAYRmpFiUV9gw1R2tCcRzup4Kf6/2j
+X-Google-Smtp-Source: ABdhPJzFjjxHNNWgJiTr5xAqufCU8cGVjPYvArJY7s9M6OZ/v86cLSHUBr5C1Fsuiht12lQ9uCQKlA==
+X-Received: by 2002:a02:1986:0:b0:331:5c52:5b9b with SMTP id b128-20020a021986000000b003315c525b9bmr5222552jab.69.1654249149977;
+        Fri, 03 Jun 2022 02:39:09 -0700 (PDT)
+Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id w69-20020a025d48000000b0032e2dce10aesm2314800jaa.160.2022.06.03.02.39.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 Jun 2022 02:39:09 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     ndesaulniers@google.com, masahiroy@kernel.org,
+        michal.lkml@markovi.net
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, Schspa Shi <schspa@gmail.com>
+Subject: [PATCH] kbuild: Allow to select bash in a modified environment
+Date:   Fri,  3 Jun 2022 17:38:52 +0800
+Message-Id: <20220603093852.13818-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v1 00/13] Host1x support on Tegra234
-Content-Language: en-US
-To:     cyndis@kapsi.fi, thierry.reding@gmail.com, jonathanh@nvidia.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        digetx@gmail.com
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mikko Perttunen <mperttunen@nvidia.com>
-References: <20220516100213.1536571-1-cyndis@kapsi.fi>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220516100213.1536571-1-cyndis@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 13:02, cyndis@kapsi.fi wrote:
-> Hi all,
-> 
-> This series adds support for Host1x and VIC on the recently released
-> Tegra234 (Orin) SoC. It's split into the following parts:
-> 
-> * Device tree binding updates
-> * Cleanup in host1x driver
-> * Add programming of new registers and old registers that now need to
->   be programmed to a non-reset value
-> * Tegra234 device data and headers
-> * Rewrite of the job opcode sequence, and related patches to
->   support MLOCKs on Tegra186+.
-> 
-> The rewrite of the job opcode sequence brings Tegra186, Tegra194 and
-> Tegra234 support to a 'full-featured' status that is necessary to
-> support all host1x features in the future. This should not have any
-> impact on older SoCs.
-> 
-> This series should be applied on top of the Host1x context isolation
-> series.
-> 
-> Tested on Jetson AGX Xavier and Jetson AGX Orin.
+This fixes the build error when the system has a default bash version
+which is too old to support associative array variables.
 
-The code looks okay at a quick glance. Please rebase the patches on top
-of latest -next. Perhaps won't hurt to merge all the related patchsets
-into a single series for 5.20.
+The build error log as fellowing:
+linux/scripts/check-local-export: line 11: declare: -A: invalid option
+declare: usage: declare [-afFirtx] [-p] [name[=value] ...]
 
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ scripts/check-local-export | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/check-local-export b/scripts/check-local-export
+index 017119d89cd2..2defd0bf3552 100755
+--- a/scripts/check-local-export
++++ b/scripts/check-local-export
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+ # Copyright (C) 2022 Masahiro Yamada <masahiroy@kernel.org>
 -- 
-Best regards,
-Dmitry
+2.24.3 (Apple Git-128)
+

@@ -2,148 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FD753C3CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B69953C3D1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238805AbiFCEeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 00:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S233303AbiFCEn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 00:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiFCEeH (ORCPT
+        with ESMTP id S229665AbiFCEnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:34:07 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC536323
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:34:01 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220603043356epoutp02d7180d2a899e88f6222ecec66fdafdfc~1Ai5XYT4y0482604826epoutp02c
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 04:33:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220603043356epoutp02d7180d2a899e88f6222ecec66fdafdfc~1Ai5XYT4y0482604826epoutp02c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654230836;
-        bh=Bjg9nXj462IMIr5qb5SJpdPuDBVXCpWmWsSmQSOdq70=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=ZlCwI8QR8LIsWncCtfqYu2hRK49pkxuMt5mjfEBNtDgATaRdn+qrEd2m8PDOZdv+b
-         kk8pJDhN/VVYMXcH3rl2HUvvvdfF/ceEXj5IMsLxBGLsNPhxmB60/XxygAhG+TTZ9i
-         G6iModzcfL+E8mhEnKMcSPWEl1cp9s793R8kbh2Y=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220603043355epcas2p43b7ddaf46104a6f70d3c5491e5165971~1Ai4qq_en0894908949epcas2p4T;
-        Fri,  3 Jun 2022 04:33:55 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LDqlQ3myNz4x9Pt; Fri,  3 Jun
-        2022 04:33:54 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FE.CE.10028.23F89926; Fri,  3 Jun 2022 13:33:54 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220603043353epcas2p383b491b9e919f77376b029410a6413c8~1Ai2wa_9D2320823208epcas2p3l;
-        Fri,  3 Jun 2022 04:33:53 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220603043353epsmtrp1e940120083defcd3461af79e2a692608~1Ai2vhMYV0429804298epsmtrp1B;
-        Fri,  3 Jun 2022 04:33:53 +0000 (GMT)
-X-AuditID: b6c32a47-589ff7000000272c-c9-62998f321968
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D6.F1.11276.13F89926; Fri,  3 Jun 2022 13:33:53 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220603043353epsmtip2a7f902cfd44ff37a1147ccc4c107d60c~1Ai2fAyxR2191321913epsmtip2V;
-        Fri,  3 Jun 2022 04:33:53 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        "'Tomasz Figa'" <tomasz.figa@gmail.com>,
-        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
-        "'Linus Walleij'" <linus.walleij@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-In-Reply-To: <20220601152720.232383-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH v2 0/7] pinctrl/arm: dt-bindings: deprecate header with
- register constants
-Date:   Fri, 3 Jun 2022 13:33:53 +0900
-Message-ID: <000501d87703$211ff7a0$635fe6e0$@samsung.com>
+        Fri, 3 Jun 2022 00:43:23 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5428C36B59;
+        Thu,  2 Jun 2022 21:43:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LDqyD49Hlz4xD7;
+        Fri,  3 Jun 2022 14:43:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654231397;
+        bh=bglz4sZohKUx/6D+QBESld/9ICNrShVB8JDfs7YyIfU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qJKuHNmJMjJi2+NNFWARfHNNivpwFUibxTpUMp0e0yuQxEOW2/0jengOgLE24Gkjv
+         gnO0HpLlEcI3Vkw9MhDk8FAGjhDXNHNJcrqsg9mKVJujPlsp9lY0S2V1vnsxwh9J+A
+         dZqDwrmC9XYzqXjPOppnSgOhhveI1CrkeQeDKgFdeaeMiMKTIo/lRKSkxU9hA4yfad
+         3qxuNVMEsKvEgAy0ssDYLT44Vy/EL/B1G6DmtpG3VIl9sPzFT1yTJIYd9LqKav9CWC
+         8q6KBpTI/oNZwmjbHG54iz5gI0tkoRFc5J7h2OEYQvgcYiAZsYdWp63Ih0zN8UBui8
+         UeX0q7WDtd5fg==
+Date:   Fri, 3 Jun 2022 14:43:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Dave Airlie <airlied@linux.ie>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220603144315.5adcddbf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIWHmU798Y7haEPVJB1jko1Mvp8lAHBvrEtrLO6ubA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmua5R/8wkgz3vZCwezNvGZjH/yDlW
-        i74XD5kt9r7eym4x5c9yJotNj6+xWmye/4fR4vKuOWwWM87vY7Jo3XuE3eLwm3ZWi1W7/jA6
-        8HjsnHWX3WPTqk42jzvX9rB5bF5S79G3ZRWjx+dNcgFsUdk2GamJKalFCql5yfkpmXnptkre
-        wfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUA3KimUJeaUAoUCEouLlfTtbIryS0tSFTLy
-        i0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0MjEyBChOyM/pmrGAvOM1a8XjqJ+YGxr0sXYyc
-        HBICJhLXdq5i62Lk4hAS2MEocejOBUYI5xOjxOS136Ay3xglep/dYoVpubBgJTNEYi9Q1bEX
-        LBDOC0aJn2uXMYFUsQnoS7zs2AbWISLQySLxq98FxOYUcJW4e3g3O4gtLJAgsfHiSrB6FgEV
-        iQNXNzOC2LwClhKTzxxhh7AFJU7OfAJ2LLOAvMT2t3OYIa5QkPj5dBnUfCuJ7gtbmSFqRCRm
-        d7aBXSchsIND4vL0s0BFHECOi8SWHbUQvcISr45vYYewpSRe9rdB2cUSS2d9YoLobWCUuLzt
-        FxtEwlhi1rN2RpA5zAKaEut36UOMVJY4cgvqND6JjsN/2SHCvBIdbUIQjeoSB7ZPhwa1rET3
-        nM/QMPSQeHHvPPMERsVZSJ6cheTJWUiemYWwdwEjyypGsdSC4tz01GKjAmN4ZCfn525iBCdf
-        LfcdjDPeftA7xMjEwXiIUYKDWUmEt2TX1CQh3pTEyqrUovz4otKc1OJDjKbAYJ/ILCWanA9M
-        /3kl8YYmlgYmZmaG5kamBuZK4rxeKRsShQTSE0tSs1NTC1KLYPqYODilGpjK/rK4n7xnf0e4
-        5fZz9XM6Hcc4G+7fFJNKTeExXXJjtez/Facbq8NPpTyZ8u3LiRMfPZuOa+qceXZVSpGNJ8zU
-        WLJzqv9Z+asTeW82zuY2cBS3nuZa3tJ4sOz9C+spTP8t55w+w+Aj2h4VFln8R/Hc17d/zOfF
-        XPqtVhc5L5xvqmHCCYnuVX+K9DYmXeBgXWB7cE3NLKfyqrwfvza1WNdEq6y6G9bLl2H//XFE
-        /EVphxsOj87I7xac+fJCnuumJTOzSvZPPRDFl/Buntwam5ylBhbZ80JqM7fdtT33v+ax4+N7
-        vv12VS3rHwjXJ1bejd78sEP0z4uaxfzMr08EVtfLL7gqUNhxsi1R9EWx3zwlluKMREMt5qLi
-        RAB4195pRwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSvK5h/8wkg+kNfBYP5m1js5h/5Byr
-        Rd+Lh8wWe19vZbeY8mc5k8Wmx9dYLTbP/8NocXnXHDaLGef3MVm07j3CbnH4TTurxapdfxgd
-        eDx2zrrL7rFpVSebx51re9g8Ni+p9+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6Mvhkr2AtO
-        s1Y8nvqJuYFxL0sXIyeHhICJxIUFK5lBbCGB3YwSLzZFQsRlJZ6928EOYQtL3G85wtrFyAVU
-        84xR4uTRmUwgCTYBfYmXHdtYQWwRgYksEldXJEIUTWOUWPDpFVgRp4CrxN3Du8EmCQvESZyY
-        dpQNxGYRUJE4cHUzI4jNK2ApMfnMEXYIW1Di5MwnQNdxcDAL6Em0bQQrYRaQl9j+dg4zxEEK
-        Ej+fLoPaayXRfWErM0SNiMTszjbmCYxCs5BMmoUwaRaSSbOQdCxgZFnFKJlaUJybnltsWGCY
-        l1quV5yYW1yal66XnJ+7iREcbVqaOxi3r/qgd4iRiYPxEKMEB7OSCG/JrqlJQrwpiZVVqUX5
-        8UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBKNTDNsy7ctSyU5ei60/Wm2scn
-        21bVWO79rnYtTmrTWh97LRkr5xhmMf7J3pc7/89ra3gn4XPU9uaOV2EBLNpTte0/8rLeEVXz
-        vHKQXcRYL/jUlPK7Gz4lX02b8k7629rwcybMHnwbjn2Mv3PhcuAUv1fp/GIsbs3pstmyXpvr
-        le5uXh8rPl3O8stpOSfDAmG1A1a6x2QDMiWeJlZyHdhzqvSu9b+X70/sUU7XFN4lWfS958gS
-        nVlhaTt2/Xi5STEtNvTq6+hPe9ZOzrv3/k2V5Vzp3Sq7FZTvzs9o01wsd89upcRLH5uTm/o3
-        rj0UU3Cr4ZZim3HGXqXVO1X++rNWMPa4tnUn7o5dzjWBwWDW5TolluKMREMt5qLiRAAA2Qa6
-        JQMAAA==
-X-CMS-MailID: 20220603043353epcas2p383b491b9e919f77376b029410a6413c8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220601152757epcas2p30927b9924e9371cdfa79986c6efb6eaf
-References: <CGME20220601152757epcas2p30927b9924e9371cdfa79986c6efb6eaf@epcas2p3.samsung.com>
-        <20220601152720.232383-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Iqqin6z3DvvDMuKuw08d4Nm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Krzysztof Kozlowski (7):
->   ARM: dts: s3c2410: use local header for pinctrl register values
->   ARM: dts: s3c64xx: use local header for pinctrl register values
->   ARM: dts: s5pv210: use local header for pinctrl register values
->   ARM: dts: exynos: use local header for pinctrl register values
->   arm64: dts: exynos: use local header for pinctrl register values
->   arm64: dts: fsd: use local header for pinctrl register values
->   dt-bindings: pinctrl: deprecate header with register constants
+--Sig_/Iqqin6z3DvvDMuKuw08d4Nm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-nit: Put the comment closure to the next line.
+Hi all,
 
-+ * Author: Krzysztof Kozlowski <krzk@kernel.org>  */
+After merging the amdgpu tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Otherwise,
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: I=
+n function 'dml32_ModeSupportAndSystemConfigurationFull':
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:38=
+35:1: error: the frame size of 2752 bytes is larger than 2048 bytes [-Werro=
+r=3Dframe-larger-than=3D]
+ 3835 | } // ModeSupportAndSystemConfigurationFull
+      | ^
+cc1: all warnings being treated as errors
+make[5]: *** [scripts/Makefile.build:250: drivers/gpu/drm/amd/amdgpu/../dis=
+play/dc/dml/dcn32/display_mode_vba_32.o] Error 1
+gcc: error: unrecognized command-line option '-msse'
+gcc: error: unrecognized command-line option '-msse2'
+make[5]: *** [scripts/Makefile.build:251: drivers/gpu/drm/amd/amdgpu/../dis=
+play/dc/dcn32/dcn32_resource.o] Error 1
+gcc: error: unrecognized command-line option '-msse'
+gcc: error: unrecognized command-line option '-msse2'
 
-Best Regards,
-Chanho Park
+Caused (probably) by commits
 
+  5cbb369e32bd ("drm/amd/display: DML changes for DCN32/321")
+  b5dbe04a9c8c ("drm/amd/display: add CLKMGR changes for DCN32/321")
+  4f185390597e ("drm/amd/display: add DCN32/321 specific files for Display =
+Core")
+
+I have used the amdgpu tree from next-20220601 again for today.
+
+Is this new stuff really for the current merge window?  If so, it has
+arrived pretty late.  If not then it should not have been in linux-next
+at all ...
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Iqqin6z3DvvDMuKuw08d4Nm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKZkWMACgkQAVBC80lX
+0Gx4EAf/ZSx9kndMooybyfvl/xs9uQbnbTSizQDEhArCiLJM1qLiygS/A0Mdtbzn
+P9kRJifpo59SKkvwyFuFpYXwoyXyDME26Ju7yJRVsNSCObTNS/CF3qb75Nb/Assf
+Ch3rSAPHVgoHmOwrK0RFzIx33fcx+KdSNYL3OVG76CwByphadhRWMk8ptrZviWbz
+u2FW4Tvn6xoQBBdgoowEZ5sNixC4WuFsTSkY/lEMHZp1z6wP05y64uNFmX+zoZXL
+2meaojU51kUHzT5UfEHq3n7DVbgOGyHevG562utM0Vh/IV0+hd+hJZgWMVrsbCyG
+H6jMzQLkwfLTzvY4MkSYqqRu7Np2tw==
+=6k6h
+-----END PGP SIGNATURE-----
+
+--Sig_/Iqqin6z3DvvDMuKuw08d4Nm--

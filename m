@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F0353D116
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A90753D127
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348175AbiFCSQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S1348321AbiFCSQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346456AbiFCSBu (ORCPT
+        with ESMTP id S1346320AbiFCSEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:01:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A8B56C25;
-        Fri,  3 Jun 2022 10:57:50 -0700 (PDT)
+        Fri, 3 Jun 2022 14:04:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E135712F;
+        Fri,  3 Jun 2022 10:58:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F1BD60F3B;
-        Fri,  3 Jun 2022 17:57:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862C4C341C6;
-        Fri,  3 Jun 2022 17:57:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 366A5B82189;
+        Fri,  3 Jun 2022 17:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FB2C385B8;
+        Fri,  3 Jun 2022 17:57:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279022;
-        bh=4VdjQBOf3jnTTd1WKTY/qJzK8WAWb5QYzkD9VU0fllk=;
+        s=korg; t=1654279025;
+        bh=wTV5cVFc5rKLzg7MqcEFuVDlN6PsOXkUdWpdiX9W7qI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cdyvD2mzeX4Nr2uRjDLLqDVC7HWE5o/wfT6DoCoiY/algPHyF3wVL4TkvZ5TLwiME
-         h5Dp7Zu7OggOiBK4NKK7T/8cUePYcuUWzBqKoIzAtd2SKlnc1btjKmHi/CFWsIZPsp
-         GgrHKvA5XVg9Hskx5nIjVH/tUzUUhHUrUDmN0H8Y=
+        b=XLDvkMc/Bq4S5SvdIZCQ4GpGJxuUhdFFKrMHdTxTokL/G9HZ3MYKRK1sJgtt60Hga
+         qMJbc6vmDaov765QYnsRTe9GuHHCMkffsGFlDxaBte99WHRXu9oPUiOb+44u9MaiUM
+         gZUT/veLR3/hG1A/vChceoU2IRHPbeyU4ugirBtM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
+        stable@vger.kernel.org, Andy Nguyen <theflow@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        Ashish Kalra <ashish.kalra@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.18 27/67] KVM: x86/mmu: Dont rebuild page when the page is synced and no tlb flushing is required
-Date:   Fri,  3 Jun 2022 19:43:28 +0200
-Message-Id: <20220603173821.507311892@linuxfoundation.org>
+Subject: [PATCH 5.18 28/67] KVM: SVM: Use kzalloc for sev ioctl interfaces to prevent kernel data leak
+Date:   Fri,  3 Jun 2022 19:43:29 +0200
+Message-Id: <20220603173821.535586563@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
 References: <20220603173820.731531504@linuxfoundation.org>
@@ -55,89 +57,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Wenlong <houwenlong.hwl@antgroup.com>
+From: Ashish Kalra <ashish.kalra@amd.com>
 
-commit 8d5678a76689acbf91245a3791fe853ab773090f upstream.
+commit d22d2474e3953996f03528b84b7f52cc26a39403 upstream.
 
-Before Commit c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page()
-to return true when remote flush is needed"), the return value
-of kvm_sync_page() indicates whether the page is synced, and
-kvm_mmu_get_page() would rebuild page when the sync fails.
-But now, kvm_sync_page() returns false when the page is
-synced and no tlb flushing is required, which leads to
-rebuild page in kvm_mmu_get_page(). So return the return
-value of mmu->sync_page() directly and check it in
-kvm_mmu_get_page(). If the sync fails, the page will be
-zapped and the invalid_list is not empty, so set flush as
-true is accepted in mmu_sync_children().
+For some sev ioctl interfaces, the length parameter that is passed maybe
+less than or equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data
+that PSP firmware returns. In this case, kmalloc will allocate memory
+that is the size of the input rather than the size of the data.
+Since PSP firmware doesn't fully overwrite the allocated buffer, these
+sev ioctl interface may return uninitialized kernel slab memory.
 
+Reported-by: Andy Nguyen <theflow@google.com>
+Suggested-by: David Rientjes <rientjes@google.com>
+Suggested-by: Peter Gonda <pgonda@google.com>
+Cc: kvm@vger.kernel.org
 Cc: stable@vger.kernel.org
-Fixes: c3e5e415bc1e6 ("KVM: X86: Change kvm_sync_page() to return true when remote flush is needed")
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Acked-by: Lai Jiangshan <jiangshanlai@gmail.com>
-Message-Id: <0dabeeb789f57b0d793f85d073893063e692032d.1647336064.git.houwenlong.hwl@antgroup.com>
-[mmu_sync_children should not flush if the page is zapped. - Paolo]
+Cc: linux-kernel@vger.kernel.org
+Fixes: eaf78265a4ab3 ("KVM: SVM: Move SEV code to separate file")
+Fixes: 2c07ded06427d ("KVM: SVM: add support for SEV attestation command")
+Fixes: 4cfdd47d6d95a ("KVM: SVM: Add KVM_SEV SEND_START command")
+Fixes: d3d1af85e2c75 ("KVM: SVM: Add KVM_SEND_UPDATE_DATA command")
+Fixes: eba04b20e4861 ("KVM: x86: Account a variety of miscellaneous allocations")
+Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+Reviewed-by: Peter Gonda <pgonda@google.com>
+Message-Id: <20220516154310.3685678-1-Ashish.Kalra@amd.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/mmu.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ arch/x86/kvm/svm/sev.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1843,17 +1843,14 @@ static void kvm_mmu_commit_zap_page(stru
- 	  &(_kvm)->arch.mmu_page_hash[kvm_page_table_hashfn(_gfn)])	\
- 		if ((_sp)->gfn != (_gfn) || (_sp)->role.direct) {} else
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -688,7 +688,7 @@ static int sev_launch_measure(struct kvm
+ 		if (params.len > SEV_FW_BLOB_MAX_SIZE)
+ 			return -EINVAL;
  
--static bool kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-+static int kvm_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 			 struct list_head *invalid_list)
- {
- 	int ret = vcpu->arch.mmu->sync_page(vcpu, sp);
+-		blob = kmalloc(params.len, GFP_KERNEL_ACCOUNT);
++		blob = kzalloc(params.len, GFP_KERNEL_ACCOUNT);
+ 		if (!blob)
+ 			return -ENOMEM;
  
--	if (ret < 0) {
-+	if (ret < 0)
- 		kvm_mmu_prepare_zap_page(vcpu->kvm, sp, invalid_list);
--		return false;
--	}
--
--	return !!ret;
-+	return ret;
- }
+@@ -808,7 +808,7 @@ static int __sev_dbg_decrypt_user(struct
+ 	if (!IS_ALIGNED(dst_paddr, 16) ||
+ 	    !IS_ALIGNED(paddr,     16) ||
+ 	    !IS_ALIGNED(size,      16)) {
+-		tpage = (void *)alloc_page(GFP_KERNEL);
++		tpage = (void *)alloc_page(GFP_KERNEL | __GFP_ZERO);
+ 		if (!tpage)
+ 			return -ENOMEM;
  
- static bool kvm_mmu_remote_flush_or_zap(struct kvm *kvm,
-@@ -1975,7 +1972,7 @@ static int mmu_sync_children(struct kvm_
+@@ -1094,7 +1094,7 @@ static int sev_get_attestation_report(st
+ 		if (params.len > SEV_FW_BLOB_MAX_SIZE)
+ 			return -EINVAL;
  
- 		for_each_sp(pages, sp, parents, i) {
- 			kvm_unlink_unsync_page(vcpu->kvm, sp);
--			flush |= kvm_sync_page(vcpu, sp, &invalid_list);
-+			flush |= kvm_sync_page(vcpu, sp, &invalid_list) > 0;
- 			mmu_pages_clear_parents(&parents);
- 		}
- 		if (need_resched() || rwlock_needbreak(&vcpu->kvm->mmu_lock)) {
-@@ -2016,6 +2013,7 @@ static struct kvm_mmu_page *kvm_mmu_get_
- 	struct hlist_head *sp_list;
- 	unsigned quadrant;
- 	struct kvm_mmu_page *sp;
-+	int ret;
- 	int collisions = 0;
- 	LIST_HEAD(invalid_list);
+-		blob = kmalloc(params.len, GFP_KERNEL_ACCOUNT);
++		blob = kzalloc(params.len, GFP_KERNEL_ACCOUNT);
+ 		if (!blob)
+ 			return -ENOMEM;
  
-@@ -2068,11 +2066,13 @@ static struct kvm_mmu_page *kvm_mmu_get_
- 			 * If the sync fails, the page is zapped.  If so, break
- 			 * in order to rebuild it.
- 			 */
--			if (!kvm_sync_page(vcpu, sp, &invalid_list))
-+			ret = kvm_sync_page(vcpu, sp, &invalid_list);
-+			if (ret < 0)
- 				break;
+@@ -1176,7 +1176,7 @@ static int sev_send_start(struct kvm *kv
+ 		return -EINVAL;
  
- 			WARN_ON(!list_empty(&invalid_list));
--			kvm_flush_remote_tlbs(vcpu->kvm);
-+			if (ret > 0)
-+				kvm_flush_remote_tlbs(vcpu->kvm);
- 		}
+ 	/* allocate the memory to hold the session data blob */
+-	session_data = kmalloc(params.session_len, GFP_KERNEL_ACCOUNT);
++	session_data = kzalloc(params.session_len, GFP_KERNEL_ACCOUNT);
+ 	if (!session_data)
+ 		return -ENOMEM;
  
- 		__clear_sp_write_flooding_count(sp);
+@@ -1300,11 +1300,11 @@ static int sev_send_update_data(struct k
+ 
+ 	/* allocate memory for header and transport buffer */
+ 	ret = -ENOMEM;
+-	hdr = kmalloc(params.hdr_len, GFP_KERNEL_ACCOUNT);
++	hdr = kzalloc(params.hdr_len, GFP_KERNEL_ACCOUNT);
+ 	if (!hdr)
+ 		goto e_unpin;
+ 
+-	trans_data = kmalloc(params.trans_len, GFP_KERNEL_ACCOUNT);
++	trans_data = kzalloc(params.trans_len, GFP_KERNEL_ACCOUNT);
+ 	if (!trans_data)
+ 		goto e_free_hdr;
+ 
 
 

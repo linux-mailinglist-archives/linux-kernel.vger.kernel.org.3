@@ -2,132 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0CD953D281
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B998D53D280
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346474AbiFCTxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S245165AbiFCTxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346038AbiFCTxH (ORCPT
+        with ESMTP id S230405AbiFCTw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:53:07 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF461AD86
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:53:05 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso6896375wma.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 12:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=75r9OCRaKxDbstDb8Q6rmHNx4VG7/Ol3FIsxmmQpCKE=;
-        b=OFS10OD5jepWzQUQgDwqO+/YoB6ZmGdD0wKjnuqRWMntCfyc/zl6FJU7+8IfeQ28pE
-         xXfqBHZknnzrk9L1ttKK0MWceb5jWsOOQGLBa0wl39d8rGlcGwBUk2ZanvmgXNAtJyZr
-         60Sf9V22ufhliS6cH9dvm+s6oX7B+irq5RWBwlaMWJ4Xko5YT9bz2OEzwuwSJ7i+fw0Z
-         HR7HtVHJFw3Nj/n/X/vSCH6u1nQYW0Y81pb2f61wqTFPRYwQMCGNLv7vUeDBbRKT3Ig5
-         +QjBWVhxJyQFtQQtDtDUdoy97HliJNHK5A1yPoWyiD/mzBH/EmKmZkHNRagT44RS6jjS
-         ZZEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=75r9OCRaKxDbstDb8Q6rmHNx4VG7/Ol3FIsxmmQpCKE=;
-        b=v3uc/8kzypeg3marMVh+cmB7Tm/mFNfQSVX05NvPZRO0lbgmheOg1e4TCCy2RWZgqJ
-         V1c/Llw34/yB0Ng99WLIiLerrxlywnFBigu8Qazjsn28B3/ywq5ox/jC++bpYyNL+W+l
-         97UBEt0IO3QX26hnDnl/wxfu8TvhBfU/zMbxtmbVs34RsbA/qQiuQR0Dwg8URTmdMj3M
-         Xp16Nf2mk0fu1yYSfKqSlyMWmEuBa1i0TjVKyXGOkgY6bOYiWppV2c9zE24DJpUqROr8
-         gbtpFT2IEIB9VjknhCa0J14t+KspfdcbYZbpGB6mN7DAjC4f6XnlbY57a0kq/xYcTTGZ
-         kwfQ==
-X-Gm-Message-State: AOAM531DzHPEZJyaWAUv6E12SJA/YoScN/HNfQixvVNHdrVZgtX9fakV
-        GT0GN+YMk8s4VxFI5IXn3GYXaldIOQFyaDl8BBjvMA==
-X-Google-Smtp-Source: ABdhPJwuIVg8jNRLLKtimZoxTZU6/bvcyWF6n4woePM0h8xaQiqgd73SV9wNp6ELv1Q5jfaQTtZvszkc2RZLgXb8uqY=
-X-Received: by 2002:a05:600c:3788:b0:39c:3a20:a50e with SMTP id
- o8-20020a05600c378800b0039c3a20a50emr6019549wmr.196.1654285983632; Fri, 03
- Jun 2022 12:53:03 -0700 (PDT)
+        Fri, 3 Jun 2022 15:52:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C165818B08
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654285977; x=1685821977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bwZS9fM1j608qGijOGH6qy5ZVrEpBHDkEYemfQnRjio=;
+  b=dStBLs8TxKFA82IKrWBtHzq2FqBcvhJ/eQb3pmIkB+Fx3t3+uhKA+8to
+   ryJggUHVUnHZD7O4vkck2LrtpKqxwtOTrZ74Y55eYynY3O9S/f4gxugie
+   hWMMmSvwIrsS7FSnaPAbBxWS3wT4r8UL7haRrPIEVLuYfcUVUkyK1NJgp
+   N7XKNORJhO/eskqshl2Del7Cjjrmww+q4akd7vmg+fcQ+C56QXhOO8L0r
+   BHIIbngHEVCfKhq5sHSTt5m5xITx1QM0sEqkYNzFaAqjDArBHGrCAdAFE
+   C5fDHuWKV6cWyy2uAdVCnCBJYtBSnzC1HUQ39qFvJpZ0ZGUBBg1n7+6AH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="273897774"
+X-IronPort-AV: E=Sophos;i="5.91,275,1647327600"; 
+   d="scan'208";a="273897774"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 12:52:56 -0700
+X-IronPort-AV: E=Sophos;i="5.91,275,1647327600"; 
+   d="scan'208";a="708195670"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 12:52:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nxDLo-000Sl3-EF;
+        Fri, 03 Jun 2022 22:52:52 +0300
+Date:   Fri, 3 Jun 2022 22:52:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] kernel.h: Move sysfs related macro to sysfs.h
+Message-ID: <Yppmk94fTWCM3NjZ@smile.fi.intel.com>
+References: <20220603172101.49950-1-andriy.shevchenko@linux.intel.com>
+ <20220603121511.78aa66b02376d02557c29819@linux-foundation.org>
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-6-yosryahmed@google.com> <20220603162339.GA25043@blackbody.suse.cz>
-In-Reply-To: <20220603162339.GA25043@blackbody.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 3 Jun 2022 12:52:27 -0700
-Message-ID: <CAJD7tkYwU5dW9Oof+pC81R9Bi-F=-EuiXpTn+HDeqbhTOTCcuw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 5/5] bpf: add a selftest for cgroup
- hierarchical stats collection
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603121511.78aa66b02376d02557c29819@linux-foundation.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for taking a look at this!
+On Fri, Jun 03, 2022 at 12:15:11PM -0700, Andrew Morton wrote:
+> On Fri,  3 Jun 2022 20:21:01 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > As stated in the comment of VERIFY_OCTAL_PERMISSIONS() it's related to sysfs.
+> > Move it to the corresponding header.
+> 
+> arm allmodconfig:
 
-On Fri, Jun 3, 2022 at 9:23 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote:
->
-> On Fri, May 20, 2022 at 01:21:33AM +0000, Yosry Ahmed <yosryahmed@google.=
-com> wrote:
-> > +#define CGROUP_PATH(p, n) {.name =3D #n, .path =3D #p"/"#n}
-> > +
-> > +static struct {
-> > +     const char *name, *path;
->
-> Please unify the order of path and name with the macro (slightly
-> confusing ;-).
+Thanks
 
-Totally agree, will do.
+x86 builds :(
 
->
-> > +SEC("tp_btf/mm_vmscan_memcg_reclaim_end")
-> > +int BPF_PROG(vmscan_end, struct lruvec *lruvec, struct scan_control *s=
-c)
-> > +{
-> > [...]
-> > +     struct cgroup *cgrp =3D task_memcg(current);
-> > [...]
-> > +     /* cgrp may not have memory controller enabled */
-> > +     if (!cgrp)
-> > +             return 0;
->
-> Yes, the controller may not be enabled (for a cgroup).
-> Just noting that the task_memcg() implementation will fall back to
-> root_mem_cgroup in such a case (or nearest ancestor), you may want to
-> use cgroup_ss_mask() for proper detection.
+I will look into it later on.
 
-Good catch. I get confused between cgrp->subsys and
-task->cgroups->subsys sometimes because of different fallback
-behavior. IIUC cgrp->subsys should have NULL if the memory controller
-is not enabled (no nearest ancestor fallback), and hence I can use
-memory_subsys_enabled() that I defined just above task_memcg() to test
-for this (I have no idea why I am not already using it here). Is my
-understanding correct?
+-- 
+With Best Regards,
+Andy Shevchenko
 
->
-> Regards,
-> Michal
+

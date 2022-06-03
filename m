@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C54353CA27
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4D553CA29
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244227AbiFCMrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S244408AbiFCMri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiFCMrO (ORCPT
+        with ESMTP id S244389AbiFCMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:47:14 -0400
+        Fri, 3 Jun 2022 08:47:34 -0400
 Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2505D5F41
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:47:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E31EBC81
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:47:32 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 51AF4609B3C1;
-        Fri,  3 Jun 2022 14:47:09 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id 57095609B3C1;
+        Fri,  3 Jun 2022 14:47:31 +0200 (CEST)
 Received: from lithops.sigma-star.at ([127.0.0.1])
         by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CPGJgO34VG6Q; Fri,  3 Jun 2022 14:47:08 +0200 (CEST)
+        with ESMTP id zgza6Iw92Vaj; Fri,  3 Jun 2022 14:47:31 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id C2DD5609B3C2;
-        Fri,  3 Jun 2022 14:47:08 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id 087F2609B3C2;
+        Fri,  3 Jun 2022 14:47:31 +0200 (CEST)
 Received: from lithops.sigma-star.at ([127.0.0.1])
         by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PlKBWE2AaC1S; Fri,  3 Jun 2022 14:47:08 +0200 (CEST)
+        with ESMTP id cfWZlBJTWb8r; Fri,  3 Jun 2022 14:47:30 +0200 (CEST)
 Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 994E7609B3C1;
-        Fri,  3 Jun 2022 14:47:08 +0200 (CEST)
-Date:   Fri, 3 Jun 2022 14:47:08 +0200 (CEST)
+        by lithops.sigma-star.at (Postfix) with ESMTP id DEAC7609B3C1;
+        Fri,  3 Jun 2022 14:47:30 +0200 (CEST)
+Date:   Fri, 3 Jun 2022 14:47:30 +0200 (CEST)
 From:   Richard Weinberger <richard@nod.at>
 To:     torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <735024820.130152.1654260428562.JavaMail.zimbra@nod.at>
-Subject: [GIT PULL] JFFS2, UBI and UBIFS updates for v5.19-rc1
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>
+Message-ID: <1471475855.130153.1654260450880.JavaMail.zimbra@nod.at>
+Subject: [GIT PULL] UML updates for v5.19-rc1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [195.201.40.130]
 X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Index: 1D42N45nL6ShMgyGtxZkZMfsOi2J+w==
-Thread-Topic: JFFS2, UBI and UBIFS updates for v5.19-rc1
+Thread-Index: 3VceN5utQRUfs6JID6rD6pLjE6sKbQ==
+Thread-Topic: UML updates for v5.19-rc1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
@@ -61,48 +61,44 @@ The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rw/ubifs.git tags/for-linus-5.19-rc1
+  git://git.kernel.org/pub/scm/linux/kernel/git/rw/uml.git tags/for-linus-5.19-rc1
 
-for you to fetch changes up to 8c03a1c21d72210f81cb369cc528e3fde4b45411:
+for you to fetch changes up to 2a4a62a14be1947fa945c5c11ebf67326381a568:
 
-  ubi: ubi_create_volume: Fix use-after-free when volume creation failed (2022-05-27 16:49:41 +0200)
-
-----------------------------------------------------------------
-This pull request contains fixes for JFFS2, UBI and UBIFS
-
-JFFS2:
-        - Fixes for a memory leak
-
-UBI:
-        - Fixes for fastmap (UAF, high CPU usage)
-
-UBIFS:
-        - Minor cleanups
+  um: Fix out-of-bounds read in LDT setup (2022-05-27 09:03:41 +0200)
 
 ----------------------------------------------------------------
-Baokun Li (1):
-      jffs2: fix memory leak in jffs2_do_fill_super
+This pull request contains the following changes for UML:
 
-Haowen Bai (2):
-      jffs2: Use kzalloc instead of kmalloc/memset
-      ubifs: Use NULL instead of using plain integer as pointer
+- Various cleanups and fixes: xterm, serial line, time travel
+- Set ARCH_HAS_GCOV_PROFILE_ALL
 
-Minghao Chi (1):
-      ubifs: Simplify the return expression of run_gc()
+----------------------------------------------------------------
+Johannes Berg (6):
+      um: xterm: Make default terminal emulator configurable
+      um: daemon: Make default socket configurable
+      um: Use asm-generic/dma-mapping.h
+      um: line: Use separate IRQs per line
+      um: virtio_uml: Fix broken device handling in time-travel
+      um: chan_user: Fix winch_tramp() return value
 
-Zhihao Cheng (3):
-      ubi: fastmap: Fix high cpu usage of ubi_bgt by making sure wl_pool not empty
-      ubi: fastmap: Check wl_pool for free peb before wear leveling
-      ubi: ubi_create_volume: Fix use-after-free when volume creation failed
+Vincent Whitchurch (2):
+      um: Enable ARCH_HAS_GCOV_PROFILE_ALL
+      um: Fix out-of-bounds read in LDT setup
 
- drivers/mtd/ubi/fastmap-wl.c | 121 +++++++++++++++++++++++++++++++++++--------
- drivers/mtd/ubi/fastmap.c    |  11 ----
- drivers/mtd/ubi/ubi.h        |   4 +-
- drivers/mtd/ubi/vmt.c        |   1 -
- drivers/mtd/ubi/wl.c         |  33 ++++++++----
- drivers/mtd/ubi/wl.h         |   2 +
- fs/jffs2/erase.c             |   6 +--
- fs/jffs2/fs.c                |   1 +
- fs/ubifs/budget.c            |   7 +--
- fs/ubifs/xattr.c             |   2 +-
- 10 files changed, 129 insertions(+), 59 deletions(-)
+ arch/um/Kconfig                 |  1 +
+ arch/um/drivers/Kconfig         | 15 +++++++++++++++
+ arch/um/drivers/Makefile        |  2 ++
+ arch/um/drivers/chan_kern.c     | 10 +++++-----
+ arch/um/drivers/chan_user.c     |  9 +++++----
+ arch/um/drivers/daemon_kern.c   |  2 +-
+ arch/um/drivers/line.c          | 22 +++++++++++++---------
+ arch/um/drivers/line.h          |  4 ++--
+ arch/um/drivers/ssl.c           |  2 --
+ arch/um/drivers/stdio_console.c |  2 --
+ arch/um/drivers/virtio_uml.c    | 33 +++++++++++++++++++++++----------
+ arch/um/drivers/xterm.c         |  7 ++++---
+ arch/um/include/asm/Kbuild      |  1 +
+ arch/um/include/asm/irq.h       | 22 +++++++++-------------
+ arch/x86/um/ldt.c               |  6 ++++--
+ 15 files changed, 85 insertions(+), 53 deletions(-)

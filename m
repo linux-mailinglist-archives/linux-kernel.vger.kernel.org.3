@@ -2,106 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BA153CD69
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3265D53CD6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344037AbiFCQnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 12:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S1344054AbiFCQoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 12:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237520AbiFCQnw (ORCPT
+        with ESMTP id S1344039AbiFCQoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 12:43:52 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9298344A3A;
-        Fri,  3 Jun 2022 09:43:51 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id e24so7793380pjt.0;
-        Fri, 03 Jun 2022 09:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AuAWb6wr3U5ZYzaZw4rE0IYBApAjbR2PJcAEHrA6+Iw=;
-        b=d4yPnqqouR+ytAC2ZLVf52Yaw+X8gPBlmY1beiTtGuLwGwauvdx9u5LHWz4oQq58/4
-         Jp4J6AWnlTDoT2R8kjmWa9bNPbo5BK/hTuIo3K4t793jeeMQfJ5zX0heoq6oGJ1sg4qI
-         YP/QinIXgi9f/0pS0IeJaqC+bxC34V0wwFFBRctuORurCvPudaC18UJifSmHd2JcgKn/
-         IYLXu2R3Scqdk813CvVMH1KHnE83ur+ECuvLQok76ybwzMU0gIVT8kDZrZqyCumnWqTq
-         wd1mgbefK+HdoLIVD/v5/egrUs4CxRr7PAl3cwlJ6EMO7hynV796ealb9MDvtRKMa8mO
-         Y7tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AuAWb6wr3U5ZYzaZw4rE0IYBApAjbR2PJcAEHrA6+Iw=;
-        b=anKXf8+qiVbHL/HdiksDjw0d732K/PWX+wPlarwDdgJHcxyPmqBV4DQ/6c43BtJRF3
-         51zXmUfBHPTSzNktcjxqwAwSmRCtOs4MAkNEQPns3JuGd6YiSjp3sPxvhcB9QizyRTDU
-         ag2wTgmLCwJFiQ7r6o4PPAXwlkb241bFYQaibIFYzfw2CvQtFo2V/jME5sjuDf/JJB7H
-         eJjh8fGGbiNa+B3TN/1KweQGOd7CuF3J89wbLDmmumUkHKfW6ggrIymc9uqk9JW0fyHg
-         d0w4iN5WkGpe/HnKPren52AThFT/qe+vNiJfqWgr8IyvaOb3bHoZ88M6tNwVUbZXDecs
-         +05Q==
-X-Gm-Message-State: AOAM530TqrnoxG3uZZLFQQR4eOAKFgjWtLfnLUrRj0zeofmqEqSCcBJ9
-        ht4yFw5yG1FaKlrtM0Z4+MA=
-X-Google-Smtp-Source: ABdhPJwlE088p+kcNsgtfPkbTvErk1jixHRTtRD603m5NWJwVpEWF5hI71dDVBkOTGz7MsiCxLestA==
-X-Received: by 2002:a17:90b:3b4c:b0:1e0:3354:5e5d with SMTP id ot12-20020a17090b3b4c00b001e033545e5dmr47077808pjb.239.1654274630956;
-        Fri, 03 Jun 2022 09:43:50 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:aea8:f22c:dcaf:b60e])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902a38c00b00163b2c46ef1sm5550337pla.222.2022.06.03.09.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 09:43:50 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 09:43:47 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [RFC PATCH 2/2] dt-bindings: input: gpio-keys: document label
- and autorepeat properties
-Message-ID: <Ypo6Q8/SuPGxp/ac@google.com>
-References: <20220603101601.542054-1-krzysztof.kozlowski@linaro.org>
- <20220603101601.542054-3-krzysztof.kozlowski@linaro.org>
+        Fri, 3 Jun 2022 12:44:17 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5447E517DE;
+        Fri,  3 Jun 2022 09:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654274656; x=1685810656;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xsNqvl0vWM4js1N6rZvuJ6nvPTp8oPY0FhSTTjdvN+0=;
+  b=MDoNLHzlAJSNmi16A00dcPQ140S1oPVucpBjnCHEfRnem9ZdheuXVK5f
+   oxXMBP09C/Q6gtQ6WI+JnmYl83UYAQ6OWjVq3f9VfKuQRa2ZPqxH4Wm/h
+   baDAg2B0ShOmaiZkHD+wcaJs0LdBsLCgCmfvVP0bgwpdOGFVA3mTsDoi/
+   vlVh58a2aPkOcRDQ6lWEg1KDm40bRsIwq5/khpur/22Q54nggyQgbc0zl
+   D4kJ4/JG5U/kVb1uoEnuG1Vbu6xeyJSy/kWiM0rY3RQCv1LV+kPzGw8F3
+   6KtG3zaPMH4QPCSwnynHPQz19E89jtYcXwqdH4TwqA1U7v7T9Z46SWwpo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="258378053"
+X-IronPort-AV: E=Sophos;i="5.91,275,1647327600"; 
+   d="scan'208";a="258378053"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 09:44:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,275,1647327600"; 
+   d="scan'208";a="905526826"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Jun 2022 09:44:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BA87CF8; Fri,  3 Jun 2022 19:44:15 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH v1 1/2] wireless: ray_cs: Utilize strnlen() in parse_addr()
+Date:   Fri,  3 Jun 2022 19:44:13 +0300
+Message-Id: <20220603164414.48436-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603101601.542054-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:16:01PM +0200, Krzysztof Kozlowski wrote:
-> The original text bindings documented "autorepeat" and "label"
-> properties (in the device node, beside the nodes with keys).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/input/gpio-keys.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-> index 49d388dc8d78..b1c910a5e233 100644
-> --- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
-> +++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
-> @@ -15,6 +15,14 @@ properties:
->        - gpio-keys
->        - gpio-keys-polled
->  
-> +  autorepeat:
-> +    type: boolean
-> +    description:
-> +      Enable operating system (not hardware) key auto repeat feature.
+Instead of doing simple operations and using an additional variable on stack,
+utilize strnlen() and reuse len variable.
 
-Should we refer to the generic input device property here instead (one
-on described in input.yaml)?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/wireless/ray_cs.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-Thanks.
-
+diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
+index 87e98ab068ed..9ac371d6cd6c 100644
+--- a/drivers/net/wireless/ray_cs.c
++++ b/drivers/net/wireless/ray_cs.c
+@@ -1643,31 +1643,29 @@ static void authenticate_timeout(struct timer_list *t)
+ /*===========================================================================*/
+ static int parse_addr(char *in_str, UCHAR *out)
+ {
++	int i, k;
+ 	int len;
+-	int i, j, k;
+ 	int status;
+ 
+ 	if (in_str == NULL)
+ 		return 0;
+-	if ((len = strlen(in_str)) < 2)
++	len = strnlen(in_str, ADDRLEN * 2 + 1) - 1;
++	if (len < 1)
+ 		return 0;
+ 	memset(out, 0, ADDRLEN);
+ 
+ 	status = 1;
+-	j = len - 1;
+-	if (j > 12)
+-		j = 12;
+ 	i = 5;
+ 
+-	while (j > 0) {
+-		if ((k = hex_to_bin(in_str[j--])) != -1)
++	while (len > 0) {
++		if ((k = hex_to_bin(in_str[len--])) != -1)
+ 			out[i] = k;
+ 		else
+ 			return 0;
+ 
+-		if (j == 0)
++		if (len == 0)
+ 			break;
+-		if ((k = hex_to_bin(in_str[j--])) != -1)
++		if ((k = hex_to_bin(in_str[len--])) != -1)
+ 			out[i] += k << 4;
+ 		else
+ 			return 0;
 -- 
-Dmitry
+2.35.1
+

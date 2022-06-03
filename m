@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF4B53C4AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E0C53C4B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241341AbiFCFwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S241331AbiFCFzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237523AbiFCFwD (ORCPT
+        with ESMTP id S241408AbiFCFy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:52:03 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43BC2AC0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 22:52:01 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id i8-20020a170902c94800b0016517194819so3700345pla.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 22:52:01 -0700 (PDT)
+        Fri, 3 Jun 2022 01:54:58 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64E2369ED
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 22:54:56 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-30c87716af6so60275107b3.22
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 22:54:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=8MGcac1+NMnCFqTNkAP3LH9iYhQFVupT03fTHS13h/k=;
-        b=F1Frl6XmIOttiQHw5FYbqF5lSf7HlRCqVLHgOovpTeymFO1a9nMk21DnGkcnWy4hIV
-         ZofZpNRqKGZ8xlqbJvoXaYY0iS7U9QTfQ6uNUByBlD9w/w+Co2Vs1TUrcf2R3FMqTwaM
-         N4OxKdK3ljmff2HKEmldBCuFo49YnQjVgDwcJ1la+nvxmCo57wL+RrSJks4HfYIRKFVX
-         YYMje3sos8w6ArzxpkSeu7M3qla0CTNY6jUFPOabo+MPoy6TEs5qajEt/P7fSdh3fgmn
-         BJpO2las5+kqfhfJRbREihkHZgWFMXi/wOMsdYQShW6Gc9XRFv57eWR7nj/scGuK1Cw4
-         NY5A==
+        bh=RoBwt0zHEU67rWp9+CrvlYFHsmCCA3p1PhfaqmCXOeo=;
+        b=eyKFF1dCiNQ57w+ZE4SE0yw/Wk1OUn8JtcfiepC6euZILuQsEFeufqeYpMcWksZMK7
+         /ptJkoZXkNKzLA6PvqA0DSYuN54L6fTY2qpHmADDonr8NFRrHYfTeXgdNLOFdsUzWxRc
+         WQtR2vhz6vdFUPnjsbaQPV3pbT3l/em6jjE4W+JiqIJsIFs/Z19Ni4bJ7j5zXvx44V1B
+         trF2eged2CrGSyMshmoMhuJgQOVuhWTASkJW6zVPTS0okM8lVKOeluWgQNLUqpkvhIKo
+         RnnRehXjulITx8JOuKh4aV5T98Z9vBni8p09a99k8lqRlXpD3iUxci4TCQ3CMRqKzFGD
+         lMpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=8MGcac1+NMnCFqTNkAP3LH9iYhQFVupT03fTHS13h/k=;
-        b=0AAlw+pYmti9+ZJKWY0V63xIBrVZc3lZmGR84GoBN0+IXsL0/FNX+flmH3G+17j7k/
-         OUD7BzILFmFqc28xabg7Db+geA0hXIAssGHLtKiUDEKOw4Yg1n8z24g84Q0eswe7KyMj
-         ZcQCXV6zVacbueAfgq16Mj6eDNyuZoPVqQ4QHMkup+Mld3VMZLaY1bqiF7yzlXobtbDF
-         bkB5o3G5/5+U2Zh7mM1NG7I/oBZC3ezIH/g/0TVTM8S0xr4z4MuPOYpQXAoze6mK/LW8
-         6YxasIB7jt+JwAXOYc2reXNEg5qL08xS3UnZq6J69B78mP+rJ8mw2UarHinrOQQrt3jb
-         SNKg==
-X-Gm-Message-State: AOAM533O6E3LOkFzDO9oC/AY6Nmn4TeyvGVV9Hwm8e4Q69+MiNzQBUS8
-        o7fB6aK3nD+vdMgYpHGTDm741o8TWAQM
-X-Google-Smtp-Source: ABdhPJyocRs8naUtOBDapn9dNnFxP6PLE+KWzr0IdfOtTWVs45RklCV6XMaOSN4VDKwxdYmj4cKkFCgFwkNZ
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:e5a:e82c:d3a4:578c])
- (user=irogers job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
- q15-20020a17090a178f00b001e303bac185mr352114pja.1.1654235520615; Thu, 02 Jun
- 2022 22:52:00 -0700 (PDT)
-Date:   Thu,  2 Jun 2022 22:51:56 -0700
-Message-Id: <20220603055156.2830463-1-irogers@google.com>
+        bh=RoBwt0zHEU67rWp9+CrvlYFHsmCCA3p1PhfaqmCXOeo=;
+        b=MdK9Jnd6GibLGYiShXVP4Zn1tha7dY+7hJEkZk3AeiARjcRYLCS36HeRmenBLMNBRK
+         0wRO3peZf74IJpsyU9BEtwDeZNXMZu4Ue+sXS8BT/zHFNbNYgMZzvkDZm/1qLAiqT55r
+         Wvh7QO1CBPTmrQneRxBR/eXjzPyhZXJbZRdKn/NjVQGig/FotykhdS3eh6PubDZZ0b85
+         Z8RK4LVTrn9FS0s+kzE1h6MGk9z2NKiNAqH0Wt/q6/Ccm9Ggqnk9yC1ILV3s2i3yENdu
+         D4a3pf3I4mVIaFkEUlERF8FH7jk5V8aRaKYABsyyaDG02ksl4tdJXcRT+mKlVKgwZkDA
+         W08g==
+X-Gm-Message-State: AOAM531vKDKlqX3wTKKlUPxIVqMHTBowGiGw55zV2hMLaOaosU4XmvV9
+        pOeep5e/37nuYUgTOkH22UJoiGnkp13dPJc=
+X-Google-Smtp-Source: ABdhPJy8VzzznD94DSeEqNKWVPj7DmQUo3V9uDzsA9D0R+CJlbAToM3qWHIj6HjhA2UkYUUKPkhabzvAsKaUU7E=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f95e:2d1c:c00f:e866])
+ (user=saravanak job=sendgmr) by 2002:a25:7c1:0:b0:65c:c093:134 with SMTP id
+ 184-20020a2507c1000000b0065cc0930134mr9648263ybh.356.1654235695989; Thu, 02
+ Jun 2022 22:54:55 -0700 (PDT)
+Date:   Thu,  2 Jun 2022 22:54:41 -0700
+Message-Id: <20220603055442.521888-1-saravanak@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2] libbpf: Fix is_pow_of_2
-From:   Ian Rogers <irogers@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yuze Chi <chiyuze@google.com>, Ian Rogers <irogers@google.com>
+Subject: [PATCH v1] module: Add support for default value for module async_probe
+From:   Saravana Kannan <saravanak@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,65 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuze Chi <chiyuze@google.com>
+Add a module.async_probe kernel command line option that allows enabling
+async probing for all modules. When this command line option is used,
+there might still be some modules for which we want to explicitly force
+synchronous probing, so extend <modulename>.async_probe to take an
+optional bool input so that async probing can be disabled for a specific
+module.
 
-Move the correct definition from linker.c into libbpf_internal.h.
-
-Reported-by: Yuze Chi <chiyuze@google.com>
-Signed-off-by: Yuze Chi <chiyuze@google.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- tools/lib/bpf/libbpf.c          | 5 -----
- tools/lib/bpf/libbpf_internal.h | 5 +++++
- tools/lib/bpf/linker.c          | 5 -----
- 3 files changed, 5 insertions(+), 10 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |  8 ++++++--
+ kernel/module/main.c                            | 11 ++++++++++-
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 3f4f18684bd3..346f941bb995 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -4954,11 +4954,6 @@ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 710b52d87bdd..32083056bd25 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1147,8 +1147,12 @@
+ 	nopku		[X86] Disable Memory Protection Keys CPU feature found
+ 			in some Intel CPUs.
  
- static void bpf_map__destroy(struct bpf_map *map);
+-	<module>.async_probe [KNL]
+-			Enable asynchronous probe on this module.
++	<module>.async_probe[=<bool>] [KNL]
++			If no <bool> value is specified or if the value
++			specified is not a valid <bool>, enable asynchronous
++			probe on this module.  Otherwise, enable/disable
++			asynchronous probe on this module as indicated by the
++			<bool> value.
  
--static bool is_pow_of_2(size_t x)
--{
--	return x && (x & (x - 1));
--}
--
- static size_t adjust_ringbuf_sz(size_t sz)
- {
- 	__u32 page_sz = sysconf(_SC_PAGE_SIZE);
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 4abdbe2fea9d..ef5d975078e5 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -580,4 +580,9 @@ struct bpf_link * usdt_manager_attach_usdt(struct usdt_manager *man,
- 					   const char *usdt_provider, const char *usdt_name,
- 					   __u64 usdt_cookie);
- 
-+static inline bool is_pow_of_2(size_t x)
-+{
-+	return x && (x & (x - 1)) == 0;
-+}
-+
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 9aa016fb55aa..85c0fddf55d1 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -697,11 +697,6 @@ static int linker_load_obj_file(struct bpf_linker *linker, const char *filename,
- 	return err;
+ 	early_ioremap_debug [KNL]
+ 			Enable debug messages in early_ioremap support. This
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index fed58d30725d..47085795f037 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2410,6 +2410,12 @@ static void do_free_init(struct work_struct *w)
+ 	}
  }
  
--static bool is_pow_of_2(size_t x)
--{
--	return x && (x & (x - 1)) == 0;
--}
--
- static int linker_sanity_check_elf(struct src_obj *obj)
- {
- 	struct src_sec *sec;
++#undef MODULE_PARAM_PREFIX
++#define MODULE_PARAM_PREFIX "module."
++/* Default value for module->async_probe_requested */
++static bool async_probe;
++module_param(async_probe, bool, 0644);
++
+ /*
+  * This is where the real work happens.
+  *
+@@ -2630,7 +2636,8 @@ static int unknown_module_param_cb(char *param, char *val, const char *modname,
+ 	int ret;
+ 
+ 	if (strcmp(param, "async_probe") == 0) {
+-		mod->async_probe_requested = true;
++		if (strtobool(val, &mod->async_probe_requested))
++			mod->async_probe_requested = true;
+ 		return 0;
+ 	}
+ 
+@@ -2797,6 +2804,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	if (err)
+ 		goto bug_cleanup;
+ 
++	mod->async_probe_requested = async_probe;
++
+ 	/* Module is ready to execute: parsing args may do that. */
+ 	after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
+ 				  -32768, 32767, mod,
 -- 
 2.36.1.255.ge46751e96f-goog
 

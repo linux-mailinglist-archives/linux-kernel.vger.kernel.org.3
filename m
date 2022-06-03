@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168A653D0E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2A753CFCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347888AbiFCSLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S1345624AbiFCR4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345998AbiFCR5m (ORCPT
+        with ESMTP id S1346439AbiFCRvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:57:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B23A222A5;
-        Fri,  3 Jun 2022 10:54:25 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C6453B40;
+        Fri,  3 Jun 2022 10:48:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C8884CE247C;
-        Fri,  3 Jun 2022 17:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E5AC385A9;
-        Fri,  3 Jun 2022 17:54:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33734B82189;
+        Fri,  3 Jun 2022 17:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859CBC385A9;
+        Fri,  3 Jun 2022 17:48:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278862;
-        bh=CrskhCGudGloMsjS6L0WZPfEK9Z6nD6+NYPtc/n9nTA=;
+        s=korg; t=1654278493;
+        bh=gL/j46Vo0RPyW+VAjcvOzLGMRh1Gj7E6e1zfGX6QSB8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UxAvskvl9ucuTj8Tompsh9LcHdRlSht+DXi1D2IAckZoEGnjeNn8Wu52J9m7+Q5ZR
-         ESyFxhxaP1EpFEmXWepIPBM++cB4i5t4tpxs6Bp4Cb6htlXqHjrPrri/qtnqAH0T1E
-         BCXeM+Jh01h8bI65aQpEfyokrBQ4kVRIB1hKvlh4=
+        b=IbYDt15DTYyuEFGihhxP3/gilgoZeHizO2YfCgWtg9Z5YjdwmyUhenp6ZcNBWmzSY
+         KuFET/JkTwVXMRH6CyHKDfAMJS0mFHTKdAT0ifhbEtfJdrQVxsmXIIiCPCI1uK19oF
+         4SkrPAgE1Mpvl/Ox7GJEOom49eYdeP9gHPdJJzLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Milan Broz <gmazyland@gmail.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.17 50/75] dm crypt: make printing of the key constant-time
+        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.10 49/53] docs: submitting-patches: Fix crossref to The canonical patch format
 Date:   Fri,  3 Jun 2022 19:43:34 +0200
-Message-Id: <20220603173823.164330819@linuxfoundation.org>
+Message-Id: <20220603173820.143736210@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-commit 567dd8f34560fa221a6343729474536aa7ede4fd upstream.
+commit 6d5aa418b3bd42cdccc36e94ee199af423ef7c84 upstream.
 
-The device mapper dm-crypt target is using scnprintf("%02x", cc->key[i]) to
-report the current key to userspace. However, this is not a constant-time
-operation and it may leak information about the key via timing, via cache
-access patterns or via the branch predictor.
+The reference to `explicit_in_reply_to` is pointless as when the
+reference was added in the form of "#15" [1], Section 15) was "The
+canonical patch format".
+The reference of "#15" had not been properly updated in a couple of
+reorganizations during the plain-text SubmittingPatches era.
 
-Change dm-crypt's key printing to use "%c" instead of "%02x". Also
-introduce hex2asc() that carefully avoids any branching or memory
-accesses when converting a number in the range 0 ... 15 to an ascii
-character.
+Fix it by using `the_canonical_patch_format`.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Tested-by: Milan Broz <gmazyland@gmail.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+[1]: 2ae19acaa50a ("Documentation: Add "how to write a good patch summary" to SubmittingPatches")
+
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Fixes: 5903019b2a5e ("Documentation/SubmittingPatches: convert it to ReST markup")
+Fixes: 9b2c76777acc ("Documentation/SubmittingPatches: enrich the Sphinx output")
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: stable@vger.kernel.org # v4.9+
+Link: https://lore.kernel.org/r/64e105a5-50be-23f2-6cae-903a2ea98e18@gmail.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-crypt.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ Documentation/process/submitting-patches.rst |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -3449,6 +3449,11 @@ static int crypt_map(struct dm_target *t
- 	return DM_MAPIO_SUBMITTED;
- }
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -71,7 +71,7 @@ as you intend it to.
  
-+static char hex2asc(unsigned char c)
-+{
-+	return c + '0' + ((unsigned)(9 - c) >> 4 & 0x27);
-+}
-+
- static void crypt_status(struct dm_target *ti, status_type_t type,
- 			 unsigned status_flags, char *result, unsigned maxlen)
- {
-@@ -3467,9 +3472,12 @@ static void crypt_status(struct dm_targe
- 		if (cc->key_size > 0) {
- 			if (cc->key_string)
- 				DMEMIT(":%u:%s", cc->key_size, cc->key_string);
--			else
--				for (i = 0; i < cc->key_size; i++)
--					DMEMIT("%02x", cc->key[i]);
-+			else {
-+				for (i = 0; i < cc->key_size; i++) {
-+					DMEMIT("%c%c", hex2asc(cc->key[i] >> 4),
-+					       hex2asc(cc->key[i] & 0xf));
-+				}
-+			}
- 		} else
- 			DMEMIT("-");
+ The maintainer will thank you if you write your patch description in a
+ form which can be easily pulled into Linux's source code management
+-system, ``git``, as a "commit log".  See :ref:`explicit_in_reply_to`.
++system, ``git``, as a "commit log".  See :ref:`the_canonical_patch_format`.
  
+ Solve only one problem per patch.  If your description starts to get
+ long, that's a sign that you probably need to split up your patch.
 
 

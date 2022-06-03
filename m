@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946EA53CE35
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFBA53CE57
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245744AbiFCRkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S1344818AbiFCRlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344555AbiFCRj6 (ORCPT
+        with ESMTP id S1344708AbiFCRkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:39:58 -0400
+        Fri, 3 Jun 2022 13:40:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBFF532D2;
-        Fri,  3 Jun 2022 10:39:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7D153A4E;
+        Fri,  3 Jun 2022 10:40:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13AD561AFE;
-        Fri,  3 Jun 2022 17:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01135C385A9;
-        Fri,  3 Jun 2022 17:39:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADE5761AE9;
+        Fri,  3 Jun 2022 17:40:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3EDC385A9;
+        Fri,  3 Jun 2022 17:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654277996;
-        bh=91WP0WsekVQqxGMEqgheIRA1Sj3Gwf5SBCJ8OU/bmX8=;
+        s=korg; t=1654278031;
+        bh=bqXp61k5CiwTWKkWEi6iswvZK06vWgdHmhXGjp6f8uQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v3CYmvT116cWtWsebWEyU4AKGPz7HE5DztZvyyLCIK2GBfGbb/23B002jtdBX6JqE
-         08jY1tzQsNfersR6a6tOi9kcHuD2bA+7KisKPA0/qL9zwVo88UKG+HbpSRK/Z5Hbwr
-         rUaQn6Du6T+jhC5ZCuR/R+ejEZdPkCBNR6UmhrTs=
+        b=hn9lMDPhw0wEhXU+htDVO7Rgo26Ugaw9GbH7LZB6MFwOyK4Q9vEVrvSg8KkIewcWj
+         0YiFarTVyeCw7eUORhQvsWzCbqymwStvfrqzcQTmMjd2TfWQlQb00cy03CbSCjVURq
+         4hT1JtU2AY49uncuAp02zsspYk2dH3tAsL/aGGo8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Jian <liujian56@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH 4.9 12/12] bpf: Enlarge offset check value to INT_MAX in bpf_skb_{load,store}_bytes
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH 4.14 11/23] drm/i915: Fix -Wstringop-overflow warning in call to intel_read_wm_latency()
 Date:   Fri,  3 Jun 2022 19:39:38 +0200
-Message-Id: <20220603173812.887419971@linuxfoundation.org>
+Message-Id: <20220603173814.710422047@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173812.524184588@linuxfoundation.org>
-References: <20220603173812.524184588@linuxfoundation.org>
+In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
+References: <20220603173814.362515009@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Jian <liujian56@huawei.com>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-commit 45969b4152c1752089351cd6836a42a566d49bcf upstream.
+commit 336feb502a715909a8136eb6a62a83d7268a353b upstream.
 
-The data length of skb frags + frag_list may be greater than 0xffff, and
-skb_header_pointer can not handle negative offset. So, here INT_MAX is used
-to check the validity of offset. Add the same change to the related function
-skb_store_bytes.
+Fix the following -Wstringop-overflow warnings when building with GCC-11:
 
-Fixes: 05c74e5e53f6 ("bpf: add bpf_skb_load_bytes helper")
-Signed-off-by: Liu Jian <liujian56@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20220416105801.88708-2-liujian56@huawei.com
+drivers/gpu/drm/i915/intel_pm.c:3106:9: warning: ‘intel_read_wm_latency’ accessing 16 bytes in a region of size 10 [-Wstringop-overflow=]
+ 3106 |         intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/i915/intel_pm.c:3106:9: note: referencing argument 2 of type ‘u16 *’ {aka ‘short unsigned int *’}
+drivers/gpu/drm/i915/intel_pm.c:2861:13: note: in a call to function ‘intel_read_wm_latency’
+ 2861 | static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+
+by removing the over-specified array size from the argument declarations.
+
+It seems that this code is actually safe because the size of the
+array depends on the hardware generation, and the function checks
+for that.
+
+Notice that wm can be an array of 5 elements:
+drivers/gpu/drm/i915/intel_pm.c:3109:   intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+
+or an array of 8 elements:
+drivers/gpu/drm/i915/intel_pm.c:3131:   intel_read_wm_latency(dev_priv, dev_priv->wm.skl_latency);
+
+and the compiler legitimately complains about that.
+
+This helps with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/181
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/filter.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/intel_pm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1388,7 +1388,7 @@ BPF_CALL_5(bpf_skb_store_bytes, struct s
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -2793,7 +2793,7 @@ hsw_compute_linetime_wm(const struct int
+ }
  
- 	if (unlikely(flags & ~(BPF_F_RECOMPUTE_CSUM | BPF_F_INVALIDATE_HASH)))
- 		return -EINVAL;
--	if (unlikely(offset > 0xffff))
-+	if (unlikely(offset > INT_MAX))
- 		return -EFAULT;
- 	if (unlikely(bpf_try_make_writable(skb, offset + len)))
- 		return -EFAULT;
-@@ -1423,7 +1423,7 @@ BPF_CALL_4(bpf_skb_load_bytes, const str
+ static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+-				  uint16_t wm[8])
++				  uint16_t wm[])
  {
- 	void *ptr;
- 
--	if (unlikely(offset > 0xffff))
-+	if (unlikely(offset > INT_MAX))
- 		goto err_clear;
- 
- 	ptr = skb_header_pointer(skb, offset, len, to);
+ 	if (INTEL_GEN(dev_priv) >= 9) {
+ 		uint32_t val;
 
 

@@ -2,570 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F5F53CD98
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B658553CDC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344153AbiFCQ5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 12:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S1344212AbiFCRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiFCQ5P (ORCPT
+        with ESMTP id S1344205AbiFCRHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 12:57:15 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADAD13E84;
-        Fri,  3 Jun 2022 09:57:11 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 92AEC100003;
-        Fri,  3 Jun 2022 16:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654275430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QZE9qS7TQkY684bsp1aOtO1TIYwTBearn5vIKQv58Zc=;
-        b=BORFok4Mtr0Fzd56JjplsJYQ5nnKMlBm87bQ0CFW/MPvO4A67a+s5wuK3Vb7b6aagOQ9eA
-        uCqZXPzFv1uKEV+9je4mjG4fRKjP0UTsWWekvdzrlu8Vt/Vb5FVdErmqkV1Lnhxh0uWy0M
-        m++iKvsl/vmefO/rnocUtWyDxxU8jMyV+gKLuYWyl3MstfGlak/KjiYvcLd8xs0nfj6zDr
-        uVuNX7Gig32mxWNC+g9Adc++kF8uQDH9C9ONbtqAhnyn/VvWa34sF/ODKeBrUee7thU6xI
-        2ZvXOWmeNb5RiExfK6XP4OFQEnW1pow0tYKqIyjkq0SoOq04BaK/EHE7iV4SQw==
-Date:   Fri, 3 Jun 2022 18:57:06 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     mani@kernel.org, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH] mtd: rawnand: qcom: Implement exec_op()
-Message-ID: <20220603185706.55e85123@xps-13>
-In-Reply-To: <1654273498-31998-1-git-send-email-quic_mdalam@quicinc.com>
-References: <1654273498-31998-1-git-send-email-quic_mdalam@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 3 Jun 2022 13:07:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530EECE0B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:07:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B20E5B8226A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 17:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6639FC385B8;
+        Fri,  3 Jun 2022 17:07:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654276036;
+        bh=N1Vq92CQyZ+uHfKV8gnGwkdg61gd1r+JO9l8jWBGnFw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GDv3wl6qXo8+Ob55BO72qL4Q1tkqrOHKWx063N3ShlraBm3E84wk+zWyZbZ286mDA
+         eiLpbsZ0rCHMr+8XidklhkOLpYKFiNOUhqnwYAlUAPUrFq2hpxFLGd+fAijdZsD8s+
+         l7wDKMr6kbpVcTfCLme8Mx08ho9VW4ogy8sMgFli1PGsyvz7LSp810CzpZ53GvIKnV
+         iRaABgjY7bi0nF1W5iJfyoqgLzb+VCK5u0t+2CM2o1MEY+4ZtbRiZ9KXolwN+kD2/T
+         NXb8v2ZC3sTLkzAiIdtPePNM2XBEBSYvLOXQzVc1jNszA7dk0sly/y3UrsuY/QcgbC
+         PgAsPCXpeGw9Q==
+Date:   Sat, 4 Jun 2022 00:58:39 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] riscv: add irq stack support
+Message-ID: <Ypo9v/IMaEFxlICO@xhacker>
+References: <20220515050336.1023-1-jszhang@kernel.org>
+ <mhng-9935842d-867d-4fc0-a3bd-e3ee86225798@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <mhng-9935842d-867d-4fc0-a3bd-e3ee86225798@palmer-ri-x1c9>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 02, 2022 at 02:44:46PM -0700, Palmer Dabbelt wrote:
+> On Sat, 14 May 2022 22:03:36 PDT (-0700), jszhang@kernel.org wrote:
+> > Currently, IRQs are still handled on the kernel stack of the current
+> > task on riscv platforms. If the task has a deep call stack at the time
+> > of interrupt, and handling the interrupt also requires a deep stack,
+> > it's possible to see stack overflow.
+> > 
+> > Before this patch, the stack_max_size of a v5.17-rc1 kernel running on
+> > a lichee RV board gave:
+> > ~ # cat /sys/kernel/debug/tracing/stack_max_size
+> > 3736
+> > 
+> > After this patch,
+> > ~ # cat /sys/kernel/debug/tracing/stack_max_size
+> > 3176
+> > 
+> > We reduce the max kernel stack usage by 560 bytes!
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> > since v2:
+> >  - rebase on v5.18-rcN
+> >  - update commit msg, I.E remove the "it's possible to reduce the
+> > THREAD_SIZE to 8KB for RV64 platforms..."
+> > 
+> > since v1:
+> >  - add __ro_after_init to the irq_stack[] array.
+> > 
+> >  arch/riscv/include/asm/thread_info.h |  1 +
+> >  arch/riscv/kernel/asm-offsets.c      |  2 ++
+> >  arch/riscv/kernel/entry.S            | 33 +++++++++++++++++++++++++---
+> >  arch/riscv/kernel/irq.c              | 16 ++++++++++++++
+> >  4 files changed, 49 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > index 74d888c8d631..98ea73721a0b 100644
+> > --- a/arch/riscv/include/asm/thread_info.h
+> > +++ b/arch/riscv/include/asm/thread_info.h
+> > @@ -25,6 +25,7 @@
+> >  #endif
+> >  #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
+> > 
+> > +#define IRQ_STACK_SIZE		THREAD_SIZE
+> >  /*
+> >   * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
+> >   * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
+> > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> > index df9444397908..9e32748af0e8 100644
+> > --- a/arch/riscv/kernel/asm-offsets.c
+> > +++ b/arch/riscv/kernel/asm-offsets.c
+> > @@ -37,6 +37,8 @@ void asm_offsets(void)
+> >  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+> >  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> >  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+> > +	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> > +	OFFSET(TASK_STACK, task_struct, stack);
+> > 
+> >  	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+> >  	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index c8b9ce274b9a..e91cae183ef4 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -126,12 +126,39 @@ skip_context_tracking:
+> >  	 */
+> >  	bge s4, zero, 1f
+> > 
+> > -	la ra, ret_from_exception
+> > +	/* preserve the sp */
+> > +	move s0, sp
+> > 
+> > -	/* Handle interrupts */
+> >  	move a0, sp /* pt_regs */
+> > +
+> > +	/*
+> > +	 * Compare sp with the base of the task stack.
+> > +	 * If the top ~(THREAD_SIZE - 1) bits match, we are on a task stack,
+> > +	 * and should switch to the irq stack.
+> > +	 */
+> > +	REG_L t0, TASK_STACK(tp)
+> 
+> This fails to build on some configurations, as TASK_STACK doesn't fit within
 
-quic_mdalam@quicinc.com wrote on Fri,  3 Jun 2022 21:54:58 +0530:
+Hi Palmer,
 
-> Implement exec_op() so we can later get rid of the legacy interface
-> implementation.
+Thanks for the catching. IIUC, you may enable GCC_PLUGIN_RANDSTRUCT.
 
-Thanks for doing this conversion!
+> the load immediate.  IIRC we added a macro for this at some point (to select
+> the short/long addressing sequence), but there's a trivial fix
 
->=20
-> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> ---
->  drivers/mtd/nand/raw/qcom_nandc.c | 368 +++++++++++++++++++++-----------=
-------
->  1 file changed, 204 insertions(+), 164 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qco=
-m_nandc.c
-> index 048b255..507921b 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -14,6 +14,7 @@
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/delay.h>
-> +#include <linux/iopoll.h>
->  #include <linux/dma/qcom_bam_dma.h>
-> =20
->  /* NANDc reg offsets */
-> @@ -1305,15 +1306,13 @@ static int nandc_param(struct qcom_nand_host *hos=
-t)
->  }
-> =20
->  /* sets up descriptors for NAND_CMD_ERASE1 */
-> -static int erase_block(struct qcom_nand_host *host, int page_addr)
-> +static int erase_block(struct qcom_nand_host *host)
->  {
->  	struct nand_chip *chip =3D &host->chip;
->  	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> =20
->  	nandc_set_reg(chip, NAND_FLASH_CMD,
->  		      OP_BLOCK_ERASE | PAGE_ACC | LAST_PAGE);
-> -	nandc_set_reg(chip, NAND_ADDR0, page_addr);
-> -	nandc_set_reg(chip, NAND_ADDR1, 0);
->  	nandc_set_reg(chip, NAND_DEV0_CFG0,
->  		      host->cfg0_raw & ~(7 << CW_PER_PAGE));
->  	nandc_set_reg(chip, NAND_DEV0_CFG1, host->cfg1_raw);
-> @@ -1321,14 +1320,8 @@ static int erase_block(struct qcom_nand_host *host=
-, int page_addr)
->  	nandc_set_reg(chip, NAND_FLASH_STATUS, host->clrflashstatus);
->  	nandc_set_reg(chip, NAND_READ_STATUS, host->clrreadstatus);
-> =20
-> -	write_reg_dma(nandc, NAND_FLASH_CMD, 3, NAND_BAM_NEXT_SGL);
-> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
->  	write_reg_dma(nandc, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
-> -	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-> -
-> -	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
-> -
-> -	write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
-> -	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
-> =20
->  	return 0;
->  }
-> @@ -1343,16 +1336,12 @@ static int read_id(struct qcom_nand_host *host, i=
-nt column)
->  		return 0;
-> =20
->  	nandc_set_reg(chip, NAND_FLASH_CMD, OP_FETCH_ID);
-> -	nandc_set_reg(chip, NAND_ADDR0, column);
-> -	nandc_set_reg(chip, NAND_ADDR1, 0);
->  	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
->  		      nandc->props->is_bam ? 0 : DM_EN);
->  	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-> =20
-> -	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
-> -	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-> -
-> -	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
-> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
-> +	write_reg_dma(nandc, NAND_FLASH_CHIP_SELECT, 1, NAND_BAM_NEXT_SGL);
-> =20
->  	return 0;
->  }
-> @@ -1491,7 +1480,6 @@ static void parse_erase_write_errors(struct qcom_na=
-nd_host *host, int command)
-> =20
->  	for (i =3D 0; i < num_cw; i++) {
->  		u32 flash_status =3D le32_to_cpu(nandc->reg_read_buf[i]);
-> -
->  		if (flash_status & FS_MPU_ERR)
->  			host->status &=3D ~NAND_STATUS_WP;
-> =20
-> @@ -1523,86 +1511,6 @@ static void post_command(struct qcom_nand_host *ho=
-st, int command)
->  }
-> =20
->  /*
-> - * Implements chip->legacy.cmdfunc. It's  only used for a limited set of
-> - * commands. The rest of the commands wouldn't be called by upper layers.
-> - * For example, NAND_CMD_READOOB would never be called because we have o=
-ur own
-> - * versions of read_oob ops for nand_ecc_ctrl.
-> - */
-> -static void qcom_nandc_command(struct nand_chip *chip, unsigned int comm=
-and,
-> -			       int column, int page_addr)
-> -{
-> -	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> -	struct nand_ecc_ctrl *ecc =3D &chip->ecc;
-> -	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> -	bool wait =3D false;
-> -	int ret =3D 0;
-> -
-> -	pre_command(host, command);
-> -
-> -	switch (command) {
-> -	case NAND_CMD_RESET:
-> -		ret =3D reset(host);
-> -		wait =3D true;
-> -		break;
-> -
-> -	case NAND_CMD_READID:
-> -		nandc->buf_count =3D 4;
-> -		ret =3D read_id(host, column);
-> -		wait =3D true;
-> -		break;
-> -
-> -	case NAND_CMD_PARAM:
-> -		ret =3D nandc_param(host);
-> -		wait =3D true;
-> -		break;
-> -
-> -	case NAND_CMD_ERASE1:
-> -		ret =3D erase_block(host, page_addr);
-> -		wait =3D true;
-> -		break;
-> -
-> -	case NAND_CMD_READ0:
-> -		/* we read the entire page for now */
-> -		WARN_ON(column !=3D 0);
-> -
-> -		host->use_ecc =3D true;
-> -		set_address(host, 0, page_addr);
-> -		update_rw_regs(host, ecc->steps, true, 0);
-> -		break;
-> -
-> -	case NAND_CMD_SEQIN:
-> -		WARN_ON(column !=3D 0);
-> -		set_address(host, 0, page_addr);
-> -		break;
-> -
-> -	case NAND_CMD_PAGEPROG:
-> -	case NAND_CMD_STATUS:
-> -	case NAND_CMD_NONE:
-> -	default:
-> -		break;
-> -	}
-> -
-> -	if (ret) {
-> -		dev_err(nandc->dev, "failure executing command %d\n",
-> -			command);
-> -		free_descs(nandc);
-> -		return;
-> -	}
-> -
-> -	if (wait) {
-> -		ret =3D submit_descs(nandc);
-> -		if (ret)
-> -			dev_err(nandc->dev,
-> -				"failure submitting descs for command %d\n",
-> -				command);
-> -	}
-> -
-> -	free_descs(nandc);
-> -
-> -	post_command(host, command);
-> -}
-> -
-> -/*
->   * when using BCH ECC, the HW flags an error in NAND_FLASH_STATUS if it =
-read
->   * an erased CW, and reports an erased CW in NAND_ERASED_CW_DETECT_STATU=
-S.
->   *
-> @@ -2044,7 +1952,6 @@ static int qcom_nandc_read_page(struct nand_chip *c=
-hip, uint8_t *buf,
->  	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
->  	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
->  	u8 *data_buf, *oob_buf =3D NULL;
-> -
->  	nand_read_page_op(chip, page, 0, NULL, 0);
->  	data_buf =3D buf;
->  	oob_buf =3D oob_required ? chip->oob_poi : NULL;
-> @@ -2366,64 +2273,6 @@ static int qcom_nandc_block_markbad(struct nand_ch=
-ip *chip, loff_t ofs)
->  }
-> =20
->  /*
-> - * the three functions below implement chip->legacy.read_byte(),
-> - * chip->legacy.read_buf() and chip->legacy.write_buf() respectively. th=
-ese
-> - * aren't used for reading/writing page data, they are used for smaller =
-data
-> - * like reading	id, status etc
-> - */
-> -static uint8_t qcom_nandc_read_byte(struct nand_chip *chip)
-> -{
-> -	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> -	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> -	u8 *buf =3D nandc->data_buffer;
-> -	u8 ret =3D 0x0;
-> -
-> -	if (host->last_command =3D=3D NAND_CMD_STATUS) {
-> -		ret =3D host->status;
-> -
-> -		host->status =3D NAND_STATUS_READY | NAND_STATUS_WP;
-> -
-> -		return ret;
-> -	}
-> -
-> -	if (nandc->buf_start < nandc->buf_count)
-> -		ret =3D buf[nandc->buf_start++];
-> -
-> -	return ret;
-> -}
-> -
-> -static void qcom_nandc_read_buf(struct nand_chip *chip, uint8_t *buf, in=
-t len)
-> -{
-> -	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> -	int real_len =3D min_t(size_t, len, nandc->buf_count - nandc->buf_start=
-);
-> -
-> -	memcpy(buf, nandc->data_buffer + nandc->buf_start, real_len);
-> -	nandc->buf_start +=3D real_len;
-> -}
-> -
-> -static void qcom_nandc_write_buf(struct nand_chip *chip, const uint8_t *=
-buf,
-> -				 int len)
-> -{
-> -	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> -	int real_len =3D min_t(size_t, len, nandc->buf_count - nandc->buf_start=
-);
-> -
-> -	memcpy(nandc->data_buffer + nandc->buf_start, buf, real_len);
-> -
-> -	nandc->buf_start +=3D real_len;
-> -}
-> -
-> -/* we support only one external chip for now */
-> -static void qcom_nandc_select_chip(struct nand_chip *chip, int chipnr)
-> -{
-> -	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> -
-> -	if (chipnr <=3D 0)
-> -		return;
-> -
-> -	dev_warn(nandc->dev, "invalid chip select\n");
-> -}
-> -
-> -/*
->   * NAND controller page layout info
->   *
->   * Layout with ECC enabled:
-> @@ -2738,8 +2587,207 @@ static int qcom_nand_attach_chip(struct nand_chip=
- *chip)
->  	return 0;
->  }
-> =20
-> +static int nandc_status(struct nand_chip *chip)
-> +{
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> +
-> +	memcpy(nandc->data_buffer, &host->status, 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static int qcom_nand_send_command(struct nand_chip *chip, u8 command)
-> +{
-> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	struct nand_ecc_ctrl *ecc =3D &chip->ecc;
-> +
-> +	int ret =3D 0;
-> +
-> +	pre_command(host, command);
-> +
-> +	switch (command) {
-> +	case NAND_CMD_RESET:
-> +		ret =3D reset(host);
-> +		break;
-> +	case NAND_CMD_READID:
-> +		nandc->buf_count =3D 4;
-> +		ret =3D read_id(host, 0);
-> +		break;
-> +	case NAND_CMD_PARAM:
-> +		ret =3D nandc_param(host);
-> +		break;
-> +	case NAND_CMD_ERASE1:
-> +		ret =3D erase_block(host);
-> +		break;
-> +	case NAND_CMD_STATUS:
-> +		ret =3D nandc_status(chip);
-> +		break;
-> +	case NAND_CMD_READ0:
-> +		host->use_ecc =3D true;
+I searched the kernel source tree, didn't find the macro.
 
-->exec_op() and ECC are orthogonal
+> 
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 99bc411d12f4..095fef82e910 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -136,7 +136,9 @@ skip_context_tracking:
+> 	 * If the top ~(THREAD_SIZE - 1) bits match, we are on a task stack,
+> 	 * and should switch to the irq stack.
+> 	 */
+> -	REG_L t0, TASK_STACK(tp)
+> +	li t0, TASK_STACK
+> +	add t0, t0, tp
+> +	REG_L t0, 0(t0)
+> 	xor t0, t0, s0
+> 	li t1, ~(THREAD_SIZE - 1)
+> 	and t0, t0, t1
+> 
+> Unfortunatly even with that fix this still blows up early in boot on some of
+> my test configs.  Looks like pretty much anything with kasan is failing.
+> Nothing is jumping out at me and it's pretty late so I won't have time to
+> debug it myself, sorry.
 
-> +		update_rw_regs(host, ecc->steps, true, 0);
-> +		break;
-> +	case NAND_CMD_ERASE2:
-> +		break;
-> +	case NAND_CMD_SEQIN:
-> +		break;
-> +	case NAND_CMD_PAGEPROG:
-> +		break;
+Could you please share your .config with me? I tried some combinations of
+KASAN, KASAN_VMALLOC VMAP_STACK and but didn't reproduce the failure.
 
-I am sorry but this is not following ->exec_op() main idea. The
-controller is just here to forward requests to the device it must
-respect a number of cycles but that's pretty much all. Here you are
-actually re-writing ->cmdfunc() which is not what we expect.
-
-
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int qcom_nand_send_address(struct nand_chip *chip,
-> +				  const struct nand_op_instr *instr, int cmd)
-> +{
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	u32 page_addr =3D 0x0, page_mask =3D 0x0;
-> +
-> +	page_addr =3D instr->ctx.addr.addrs[0];
-> +
-> +	/*
-> +	 *Form page address for erase, read, write to using existing api
-> +	 */
-> +
-> +	switch (cmd) {
-> +	case NAND_CMD_ERASE1:
-> +		page_addr =3D instr->ctx.addr.addrs[0];
-> +		page_mask =3D instr->ctx.addr.addrs[1];
-> +		page_mask <<=3D 8;
-> +		page_addr =3D (page_addr | page_mask);
-> +		page_mask =3D instr->ctx.addr.addrs[2];
-> +		page_mask <<=3D 16;
-> +		page_addr =3D (page_addr | page_mask);
-> +		page_mask =3D instr->ctx.addr.addrs[3];
-> +		page_mask <<=3D 24;
-> +		page_addr =3D (page_addr | page_mask);
-> +		break;
-> +	case NAND_CMD_READ0:
-> +	case NAND_CMD_SEQIN:
-> +		page_addr =3D instr->ctx.addr.addrs[3];
-> +		page_addr <<=3D 24;
-> +		page_mask =3D instr->ctx.addr.addrs[2];
-> +		page_mask <<=3D 16;
-> +		page_addr |=3D page_mask;
-> +		page_mask =3D instr->ctx.addr.addrs[1];
-> +		page_mask <<=3D 8;
-> +		page_addr |=3D page_mask;
-> +		page_mask =3D instr->ctx.addr.addrs[0];
-> +		page_addr |=3D page_mask;
-
-Same here, just write the number of address cycles that were requested
-by the core.
-
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (cmd =3D=3D NAND_CMD_PARAM)
-> +		return 0;
-> +
-> +	nandc_set_reg(chip, NAND_ADDR0, page_addr);
-> +	nandc_set_reg(chip, NAND_ADDR1, 0);
-> +
-> +	if (cmd !=3D NAND_CMD_SEQIN)
-> +		write_reg_dma(nandc, NAND_ADDR0, 2, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static void qcom_nand_read_buf(struct nand_chip *chip, u8 *buf, int len)
-> +{
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +
-> +	memcpy(buf, nandc->data_buffer, len);
-
-Is this bounce buffer needed?
-
-> +}
-> +
-> +static int qcom_nand_exec_instr(struct nand_chip *chip,
-> +				const struct nand_op_instr *instr)
-> +{
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> +	u32 status;
-> +	int ret =3D 0;
-> +	bool wait =3D false;
-> +	static int opcode;
-> +
-> +	switch (instr->type) {
-> +	case NAND_OP_CMD_INSTR:
-> +		ret =3D qcom_nand_send_command(chip, instr->ctx.cmd.opcode);
-> +		if (instr->ctx.cmd.opcode =3D=3D NAND_CMD_RESET)
-> +			wait =3D true;
-> +		opcode =3D instr->ctx.cmd.opcode;
-> +		break;
-> +	case NAND_OP_ADDR_INSTR:
-> +		qcom_nand_send_address(chip, instr, opcode);
-> +		if (opcode !=3D NAND_CMD_READ0 && opcode !=3D NAND_CMD_READSTART &&
-> +		    opcode !=3D NAND_CMD_PARAM && opcode !=3D NAND_CMD_SEQIN)
-> +			wait =3D true;
-> +		break;
-> +	case NAND_OP_DATA_IN_INSTR:
-> +		qcom_nand_read_buf(chip, instr->ctx.data.buf.in, instr->ctx.data.len);
-> +		break;
-> +	case NAND_OP_DATA_OUT_INSTR:
-> +		wait =3D false;
-> +		break;
-> +	case NAND_OP_WAITRDY_INSTR:
-> +		ret =3D readl_poll_timeout(nandc->base + NAND_FLASH_STATUS, status,
-> +					 (status & FS_READY_BSY_N), 20,
-> +					 instr->ctx.waitrdy.timeout_ms * 1000);
-> +		if (opcode =3D=3D NAND_CMD_PARAM)
-> +			wait =3D true;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (wait) {
-> +		if (opcode !=3D NAND_CMD_PARAM)
-> +			write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-> +
-> +		if (opcode =3D=3D NAND_CMD_READID)
-> +			read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
-> +
-> +		if (opcode =3D=3D NAND_CMD_ERASE1) {
-> +			read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
-> +			write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
-> +			write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
-> +		}
-> +
-> +		ret =3D submit_descs(nandc);
-> +		if (ret)
-> +			dev_err(nandc->dev, "failure submitting descs for command 0x%02x\n",
-> +				opcode);
-> +
-> +		free_descs(nandc);
-> +		post_command(host, opcode);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int qcom_nand_exec_op(struct nand_chip *chip,
-> +			     const struct nand_operation *op,
-> +				bool check_only)
-> +{
-> +	unsigned int i;
-> +	int ret =3D 0;
-> +
-> +	if (check_only)
-> +		return 0;
-> +
-> +	for (i =3D 0; i < op->ninstrs; i++) {
-> +		ret =3D qcom_nand_exec_instr(chip, &op->instrs[i]);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static const struct nand_controller_ops qcom_nandc_ops =3D {
->  	.attach_chip =3D qcom_nand_attach_chip,
-> +	.exec_op =3D qcom_nand_exec_op,
->  };
-> =20
->  static void qcom_nandc_unalloc(struct qcom_nand_controller *nandc)
-> @@ -2938,14 +2986,6 @@ static int qcom_nand_host_init_and_register(struct=
- qcom_nand_controller *nandc,
->  	mtd->owner =3D THIS_MODULE;
->  	mtd->dev.parent =3D dev;
-> =20
-> -	chip->legacy.cmdfunc	=3D qcom_nandc_command;
-> -	chip->legacy.select_chip	=3D qcom_nandc_select_chip;
-> -	chip->legacy.read_byte	=3D qcom_nandc_read_byte;
-> -	chip->legacy.read_buf	=3D qcom_nandc_read_buf;
-> -	chip->legacy.write_buf	=3D qcom_nandc_write_buf;
-> -	chip->legacy.set_features	=3D nand_get_set_features_notsupp;
-> -	chip->legacy.get_features	=3D nand_get_set_features_notsupp;
-> -
->  	/*
->  	 * the bad block marker is readable only when we read the last codeword
->  	 * of a page with ECC disabled. currently, the nand_base and nand_bbt
-
-
-Thanks,
-Miqu=C3=A8l
+Thanks in advance
+> 
+> > +	xor t0, t0, s0
+> > +	li t1, ~(THREAD_SIZE - 1)
+> > +	and t0, t0, t1
+> > +	bnez t0, 2f
+> > +
+> > +	la t1, irq_stack
+> > +	REG_L t2, TASK_TI_CPU(tp)
+> > +	slli t2, t2, RISCV_LGPTR
+> > +	add t1, t1, t2
+> > +	REG_L t2, 0(t1)
+> > +	li t1, IRQ_STACK_SIZE
+> > +	/* switch to the irq stack */
+> > +	add sp, t2, t1
+> > +
+> > +2:
+> > +	/* Handle interrupts */
+> >  	la a1, generic_handle_arch_irq
+> > -	jr a1
+> > +	jalr a1
+> > +
+> > +	/* Restore sp */
+> > +	move sp, s0
+> > +	j ret_from_exception
+> >  1:
+> >  	/*
+> >  	 * Exceptions run with interrupts enabled or disabled depending on the
+> > diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+> > index 7207fa08d78f..f20cbfd42e82 100644
+> > --- a/arch/riscv/kernel/irq.c
+> > +++ b/arch/riscv/kernel/irq.c
+> > @@ -10,6 +10,8 @@
+> >  #include <linux/seq_file.h>
+> >  #include <asm/smp.h>
+> > 
+> > +void *irq_stack[NR_CPUS] __ro_after_init;
+> > +
+> >  int arch_show_interrupts(struct seq_file *p, int prec)
+> >  {
+> >  	show_ipi_stats(p, prec);
+> > @@ -18,7 +20,21 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+> > 
+> >  void __init init_IRQ(void)
+> >  {
+> > +	int cpu;
+> > +
+> >  	irqchip_init();
+> >  	if (!handle_arch_irq)
+> >  		panic("No interrupt controller found.");
+> > +
+> > +	for_each_possible_cpu(cpu) {
+> > +#ifdef CONFIG_VMAP_STACK
+> > +		void *s = __vmalloc_node(IRQ_STACK_SIZE, THREAD_ALIGN,
+> > +					 THREADINFO_GFP, cpu_to_node(cpu),
+> > +					 __builtin_return_address(0));
+> > +#else
+> > +		void *s = (void *)__get_free_pages(GFP_KERNEL, get_order(IRQ_STACK_SIZE));
+> > +#endif
+> > +
+> > +		irq_stack[cpu] = s;
+> > +	}
+> >  }

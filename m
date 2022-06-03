@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F29B53D081
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB2953D0B5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347223AbiFCSFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S1347302AbiFCSKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346397AbiFCRvI (ORCPT
+        with ESMTP id S1345955AbiFCR5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0FF54FB1;
-        Fri,  3 Jun 2022 10:47:59 -0700 (PDT)
+        Fri, 3 Jun 2022 13:57:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54EC57103;
+        Fri,  3 Jun 2022 10:54:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2E2DB823B0;
-        Fri,  3 Jun 2022 17:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F13C385A9;
-        Fri,  3 Jun 2022 17:47:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77761B82419;
+        Fri,  3 Jun 2022 17:54:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A82C385A9;
+        Fri,  3 Jun 2022 17:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278477;
-        bh=y3BGFbSmlIT+4iN4zliES5xE1cfw7pDm2wu+KvDfUCk=;
+        s=korg; t=1654278847;
+        bh=rsXX6yLeIHVO6O+swiWLs088Z3L8fZkQ83Rdgo4SA0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=coxV+srzzOZcimK2rFpwtf1K6DcTA3AJAJ8al+NWQ/HUjB7FkbtFXH+/F2S16N4h6
-         siJcc+4nD8XQIWAHCJYWajGO9z9syDfjeS1+rsAH94S0KP9W2xxD1B/lbnJI4DX1PO
-         x86zIYRk+tiRY8mQH8hiGCDcI/28ZXUHWTSQsYoc=
+        b=Qpbum80npmMJ6T8JYQGk2+futFlhPZ+Ap25l401H8Q33yuD5oGzBBBGpxnMLYrwwg
+         nkCW5jJapioUhGSrycAQXLwzFRdDRCU3izOpPp6Y6MfkqKjML/vERzi6cI9jVOHV8g
+         rEzWkG9MZ3tt/bsj6JGCVfLSbUeL4Fyvi0bS4+Sg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Maslanka <mm@semihalf.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 5.10 45/53] HID: multitouch: Add support for Google Whiskers Touchpad
+        stable@vger.kernel.org, Craig McLure <craig@mclure.net>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.17 46/75] ALSA: usb-audio: Configure sync endpoints before data
 Date:   Fri,  3 Jun 2022 19:43:30 +0200
-Message-Id: <20220603173820.029926088@linuxfoundation.org>
+Message-Id: <20220603173823.053919630@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Maślanka <mm@semihalf.com>
+From: Craig McLure <craig@mclure.net>
 
-commit 1d07cef7fd7599450b3d03e1915efc2a96e1f03f upstream.
+commit 0e85a22d01dfe9ad9a9d9e87cd4a88acce1aad65 upstream.
 
-The Google Whiskers touchpad does not work properly with the default
-multitouch configuration. Instead, use the same configuration as Google
-Rose.
+Devices such as the TC-Helicon GoXLR require the sync endpoint to be
+configured in advance of the data endpoint in order for sound output
+to work.
 
-Signed-off-by: Marek Maslanka <mm@semihalf.com>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+This patch simply changes the ordering of EP configuration to resolve
+this.
+
+Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215079
+Signed-off-by: Craig McLure <craig@mclure.net>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220524062115.25968-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-multitouch.c |    3 +++
- 1 file changed, 3 insertions(+)
+ sound/usb/pcm.c |   17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -2129,6 +2129,9 @@ static const struct hid_device_id mt_dev
- 	{ .driver_data = MT_CLS_GOOGLE,
- 		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
- 			USB_DEVICE_ID_GOOGLE_TOUCH_ROSE) },
-+	{ .driver_data = MT_CLS_GOOGLE,
-+		HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8, USB_VENDOR_ID_GOOGLE,
-+			USB_DEVICE_ID_GOOGLE_WHISKERS) },
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -439,16 +439,21 @@ static int configure_endpoints(struct sn
+ 		/* stop any running stream beforehand */
+ 		if (stop_endpoints(subs, false))
+ 			sync_pending_stops(subs);
++		if (subs->sync_endpoint) {
++			err = snd_usb_endpoint_configure(chip, subs->sync_endpoint);
++			if (err < 0)
++				return err;
++		}
+ 		err = snd_usb_endpoint_configure(chip, subs->data_endpoint);
+ 		if (err < 0)
+ 			return err;
+ 		snd_usb_set_format_quirk(subs, subs->cur_audiofmt);
+-	}
+-
+-	if (subs->sync_endpoint) {
+-		err = snd_usb_endpoint_configure(chip, subs->sync_endpoint);
+-		if (err < 0)
+-			return err;
++	} else {
++		if (subs->sync_endpoint) {
++			err = snd_usb_endpoint_configure(chip, subs->sync_endpoint);
++			if (err < 0)
++				return err;
++		}
+ 	}
  
- 	/* Generic MT device */
- 	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_MULTITOUCH, HID_ANY_ID, HID_ANY_ID) },
+ 	return 0;
 
 

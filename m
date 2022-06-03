@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEB853D390
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C67953D394
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348129AbiFCWUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 18:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S1346261AbiFCWVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 18:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiFCWUQ (ORCPT
+        with ESMTP id S231882AbiFCWVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 18:20:16 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5C72F389;
-        Fri,  3 Jun 2022 15:20:10 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a10so8312774pju.3;
-        Fri, 03 Jun 2022 15:20:10 -0700 (PDT)
+        Fri, 3 Jun 2022 18:21:00 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04DE30547
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:20:59 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id r82so16048019ybc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:20:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=wzD5mA3Q7bnJEiZpaHczvVNh6Js6wc6fDQF182vrLro=;
-        b=Nsjs1Icmc/tjIcQ+e1aOarscCNRccs/2GZCTJo0tFsBiHAXo7beRDcag+1UzbS406L
-         VaBGZpqSqbOG+VqXlKn76vxfp04gP3IHT0gtAW04stLw/+lbG+gnV9jg1IerlUedl1h7
-         IWb0xjd9KC2tukE00H7mPtveQS6wDKyvcn6PAPqhCO7lLM+bZlyN4LbFekNvPD4IQFrh
-         THonzxol5WmMDc5ZCkGq/AfnrdCYyZyDOz9KcFWHzT3UGhrN9HHK84oGRceuVK7ahGrb
-         /To1bhbULEQCLqLGRxv4/wCD5gN6Chz7SR+pu5e9NMtm48+yKFEBcEiFuIT2l9pMbnTS
-         dlYw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iBmGnyk/fT87aTvwCZ7SGg/w21dxvgBIz/PICCr/er8=;
+        b=pS+AMKNqRiVvzo6ZVTD8dg69G/k4sqIacy5qIAm7y+4E5KP1VLpfWKv1Rucnx/2Q1F
+         xutvw/gH7feLph6noEf1cY2ysvt9kdh3wzl8TASEtEwEkxF05jukK89RfkikcZet2X2B
+         lWkD+7WUqf62+qGfPl+PkldnQIwcwgW4P0iSM3IzfdI7I7oGUAa/MzkF0bjh1CWL8tiJ
+         gwvDDxR0juJe4TX38pAAnF5VC0BiyWUnrOX2lHZW+VJTTewwdcUHAditX1EXWRnVcd7m
+         KzHLHsLkdDAQykNefJFpyj4NT+0AJ8Ed+/pN81fYcViOF8Nvxwb8PjSmh1GgxP5xhaBc
+         cyMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=wzD5mA3Q7bnJEiZpaHczvVNh6Js6wc6fDQF182vrLro=;
-        b=OcAiI4+nt0Dq18XbwNoaVzE7+TkdmPqRhABqWXpv1CDAM1iuFd4xMVHYRgWLUGgUPT
-         aSZkk1nSfVV33dX/5NKejI51HWUuSTqk0cb8J4PMqYQRmomdx4IcA83knDmiKRm/xVbp
-         uvxP136l09tpLqjJw8ZOVwSsgMPGMZzseBByRNoOjZaDaHe1yaKrxfbVWLjU7P4EvpsM
-         ug0CvMBwNYBnFMGSzQAZMfrJET/OkXxRnC0WUU9Cq5O3d3gOZ+KUsC4laONijgCSPVoy
-         y8MCqS/WC3nNnzcF27AIifAhDypdDWemuxU/Yygka29Yhu57R1hv5qXVmAWH/+guSRt3
-         oCjA==
-X-Gm-Message-State: AOAM531P5sfm5Fb3TnI4DY6faAe23qn76aq56AhoW6TG7VopBXyUsCYT
-        9goZfugcWwDKcMQhcKRYJPC/jK8ttfVF7X1NLF4=
-X-Google-Smtp-Source: ABdhPJxzWKWAdOxfbomQhMo219/BEeIdNxSfsbzeiPXu1Gf2p700cYhBWtzf7MZZXhTm5Kesax+48w==
-X-Received: by 2002:a17:90b:21d3:b0:1e3:2eee:3aba with SMTP id ll19-20020a17090b21d300b001e32eee3abamr13174205pjb.232.1654294809511;
-        Fri, 03 Jun 2022 15:20:09 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id z12-20020a17090a8b8c00b001df666ebddesm8122696pjn.6.2022.06.03.15.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 15:20:09 -0700 (PDT)
-Message-ID: <629a8919.1c69fb81.37ff2.42db@mx.google.com>
-Date:   Fri, 03 Jun 2022 15:20:09 -0700 (PDT)
-X-Google-Original-Date: Fri, 03 Jun 2022 22:20:07 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-Subject: RE: [PATCH 5.17 00/75] 5.17.13-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iBmGnyk/fT87aTvwCZ7SGg/w21dxvgBIz/PICCr/er8=;
+        b=Kt6/PZCgY4ugRBu+RxExXFhpdwjUZmtoQX7ZmFDs/X5ImF2LPve3SN8kYZ2Mmjs6n9
+         TZYfadz04O8XNIze0zXnSY3O3uHcVn/wiR30SNJRIf03PWCNjemXUemT4J3NPupHeEFo
+         tBOttae2sWcyz0RakWqobxQdSz90nhJGgLB1rUpdX1huhHcM4fS+l/vnd0yO0EJcH7VX
+         jfcXqn2ubuly4jyb0GsVxY09zimL/GKGE2aqeZbGLJIXv8JpWAU/sP2OsiS7X1LUNylu
+         K8fuVqrL/4xvejyiYgVDvhf1YV3+GcTQPbXh9hv5N/A14fUZ+RSx76mDXsIsyMdhKVgO
+         0s9g==
+X-Gm-Message-State: AOAM5339XVXRIWP4r+R9dJoxsGoH5bxsjoFDE8DOAu5yqlBqdPcQykP8
+        nsYQR3YYRT20tRZuKYBY6Pmj3mLDK3zKMNZPr39fCpW6jIw=
+X-Google-Smtp-Source: ABdhPJz3MCvbJp+EF5TmzD/07fbTOmvJe9al4WPPRfctVqBJzUo1AAw8BTN7TagCtID6Uu8GNv7hKbBDl0Y9BxX+T4I=
+X-Received: by 2002:a25:dc0b:0:b0:65d:e5d:a87a with SMTP id
+ y11-20020a25dc0b000000b0065d0e5da87amr13101954ybe.295.1654294859010; Fri, 03
+ Jun 2022 15:20:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220526143707.767490-1-krzysztof.kozlowski@linaro.org> <20220526143707.767490-8-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220526143707.767490-8-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 4 Jun 2022 00:20:47 +0200
+Message-ID: <CACRpkdYS1yV5v7MfqF1hcTe7ETjqOjCYzyLB6KeHHzTzaJbLsA@mail.gmail.com>
+Subject: Re: [PATCH 7/7] dt-bindings: pinctrl: deprecate header with register constants
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Jun 2022 19:42:44 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.17.13 release.
-> There are 75 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Thu, May 26, 2022 at 4:37 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-5.17.13-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+> For convenience (less code duplication, some meaning added to raw
+> number), the pin controller pin configuration register values
+> were defined in the bindings header.  These are not some IDs or other
+> abstraction layer but raw numbers used in the registers
+>
+> These constants do not fit the purpose of bindings.  They do not provide
+> any abstraction, any hardware and driver independent ID.  With minor
+> exceptions, the Linux drivers actually do not use the bindings header at
+> all.
+>
+> All of the constants were moved already to headers local to DTS
+> (residing in DTS directory), so remove any references to the bindings
+> header and add a warning tha tit is deprecated.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+This looks like something that needs to be merged on top of the
+other patches so if you wanna merge this through ARM SoC:
+Reviewed-by: Linus Walleij <linus.wallej@linaro.org>
+
+Else just tell me a merging strategy and I'll use it!
+
+Yours,
+Linus Walleij

@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10C353C70C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BB353C722
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242848AbiFCInK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
+        id S242888AbiFCIrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241085AbiFCInI (ORCPT
+        with ESMTP id S236477AbiFCIrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:43:08 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7471AF08;
-        Fri,  3 Jun 2022 01:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1654245788; x=1685781788;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yxeS19Ie7EpNl/oaJ6C+O+T88X917wAoRTSCg0t/yDo=;
-  b=hDWnUUpfuVuWUfF7fKyWaxGowEWUyR5tAhWeZaMHcjmgBJ38F24M0a4A
-   0o+29KO1WXtZvFxwI6WGDmBu/SU/X3Kgg99Z3hd1rq3m3Aokt8r42LH+E
-   snjuP+mYj39QOumeoSrtHiCRGZv/bgegv0L4gF9H1BusHFSjXYzQtHmzT
-   A=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="299504368"
-X-IronPort-AV: E=Sophos;i="5.91,274,1647298800"; 
-   d="scan'208";a="299504368"
-Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:43:05 +0200
-Received: from MUCSE814.infineon.com (MUCSE814.infineon.com [172.23.29.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
-        Fri,  3 Jun 2022 10:43:04 +0200 (CEST)
-Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE814.infineon.com
- (172.23.29.40) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 3 Jun 2022
- 10:43:04 +0200
-Received: from smaha-lin-dev01.agb.infineon.com (172.23.8.247) by
- MUCSE818.infineon.com (172.23.29.44) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Fri, 3 Jun 2022 10:43:04 +0200
-From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-To:     <jarkko@kernel.org>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
-        Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Subject: [PATCH v3] tpm: Add upgrade/reduced mode support for TPM1.2 modules
-Date:   Fri, 3 Jun 2022 10:41:58 +0200
-Message-ID: <20220603084156.7090-1-stefan.mahnke-hartmann@infineon.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE805.infineon.com (172.23.29.31) To
- MUCSE818.infineon.com (172.23.29.44)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 3 Jun 2022 04:47:47 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41A0422508;
+        Fri,  3 Jun 2022 01:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=W3JiO5UY4+ex2grmCg
+        7a8OXWeSx+fkxzA9451eGZd0s=; b=YuhlqzOr9G8xK8pkLg/tE3S9E681hv6NV2
+        VXIjYyQi3jN07ADjbnem/+QrB+WVwOUJuMeBzioFUkPJDbGuZ1p1wa6H1zZ7ZEXY
+        7+aCwf/70VdFCinfg/t6YUxRFKy3DRtmTzuMA/YCn5663Qw6cGEVPjAnXPNgDefy
+        8RLlGw5Tk=
+Received: from localhost.localdomain (unknown [218.88.124.148])
+        by smtp11 (Coremail) with SMTP id D8CowAB3U9ltypliCzpDFw--.50149S2;
+        Fri, 03 Jun 2022 16:46:41 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     nbd@nbd.name, kuba@kernel.org
+Cc:     john@phrozen.org, sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        matthias.bgg@gmail.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alexander.duyck@gmail.com, Chen Lin <chen45464546@163.com>
+Subject: [PATCH v2] net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+Date:   Fri,  3 Jun 2022 16:46:08 +0800
+Message-Id: <1654245968-8067-1-git-send-email-chen45464546@163.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <2997c5b0-3611-5e00-466c-b2966f09f067@nbd.name>
+References: <2997c5b0-3611-5e00-466c-b2966f09f067@nbd.name>
+X-CM-TRANSID: D8CowAB3U9ltypliCzpDFw--.50149S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyfKF13AFy7trWxWry5twb_yoW8CFyUpF
+        WUta4fAFW8Ar4DGws5Aa1UZF45Kw18trWDKr13Z34fZwnxtFWFkryktFWUCFySkrWDCF1f
+        trs0vr9I9F98Gw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR4xRDUUUUU=
+X-Originating-IP: [218.88.124.148]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbB2BEVnmBHKy0oDwAAsE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case a TPM in failure mode is detected, the TPM should be accessible
-through a transparent communication channel for analysing purposes (e.g.
-TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
-similar reduced functionality as in field upgrade mode, the flag
-TPM_CHIP_FLAG_FIRMWARE_UPGRADE is also valid.
+When rx_flag == MTK_RX_FLAGS_HWLRO, 
+rx_data_len = MTK_MAX_LRO_RX_LENGTH(4096 * 3) > PAGE_SIZE.
+netdev_alloc_frag is for alloction of page fragment only.
+Reference to other drivers and Documentation/vm/page_frags.rst
 
-As described in TCG TPM Main Part1 Design Principles, Revision 116,
-chapter 9.2.1. the TPM also allows an update function in case a TPM is
-in failure mode.
+Branch to use alloc_pages when ring->frag_size > PAGE_SIZE.
 
-If the TPM in failure mode is detected, the function tpm1_auto_startup()
-sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE flag, which is used later during
-driver initialization/deinitialization to disable functionality which
-makes no sense or will fail in the current TPM state. The following
-functionality is affected:
- * Do not register TPM as a hwrng
- * Do not get pcr allocation
- * Do not register sysfs entries which provide information impossible to
-   obtain in limited mode
-
-Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Signed-off-by: Chen Lin <chen45464546@163.com>
 ---
-Changelog:
- * v3:
-   * Change kernel messages
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c |   22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
- drivers/char/tpm/tpm.h      | 1 +
- drivers/char/tpm/tpm1-cmd.c | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 2163c6ee0d36..24ee4e1cc452 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -55,6 +55,7 @@ enum tpm_addr {
- #define TPM_WARN_DOING_SELFTEST 0x802
- #define TPM_ERR_DEACTIVATED     0x6
- #define TPM_ERR_DISABLED        0x7
-+#define TPM_ERR_FAILEDSELFTEST  0x1C
- #define TPM_ERR_INVALID_POSTINIT 38
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index b3b3c07..772d903 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1467,7 +1467,16 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 			goto release_desc;
  
- #define TPM_TAG_RQU_COMMAND 193
-diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-index f7dc986fa4a0..cf64c7385105 100644
---- a/drivers/char/tpm/tpm1-cmd.c
-+++ b/drivers/char/tpm/tpm1-cmd.c
-@@ -709,7 +709,12 @@ int tpm1_auto_startup(struct tpm_chip *chip)
- 	if (rc)
- 		goto out;
- 	rc = tpm1_do_selftest(chip);
--	if (rc) {
-+	if (rc == TPM_ERR_FAILEDSELFTEST) {
-+		dev_warn(&chip->dev, "TPM self test failed, switching to the firmware upgrade mode\n");
-+		/* A TPM in this state possibly allows or needs a firmware upgrade */
-+		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
-+		return 0;
-+	} else if (rc) {
- 		dev_err(&chip->dev, "TPM self test failed\n");
- 		goto out;
+ 		/* alloc new buffer */
+-		new_data = napi_alloc_frag(ring->frag_size);
++		if (ring->frag_size <= PAGE_SIZE) {
++			new_data = napi_alloc_frag(ring->frag_size);
++		} else {
++			struct page *page;
++			unsigned int order = get_order(ring->frag_size);
++
++			page = alloc_pages(GFP_ATOMIC | __GFP_COMP |
++					    __GFP_NOWARN, order);
++			new_data = page ? page_address(page) : NULL;
++		}
+ 		if (unlikely(!new_data)) {
+ 			netdev->stats.rx_dropped++;
+ 			goto release_desc;
+@@ -1914,7 +1923,16 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < rx_dma_size; i++) {
+-		ring->data[i] = netdev_alloc_frag(ring->frag_size);
++		if (ring->frag_size <= PAGE_SIZE) {
++			ring->data[i] = netdev_alloc_frag(ring->frag_size);
++		} else {
++			struct page *page;
++			unsigned int order = get_order(ring->frag_size);
++
++			page = alloc_pages(GFP_KERNEL | __GFP_COMP |
++					    __GFP_NOWARN, order);
++			ring->data[i] = page ? page_address(page) : NULL;
++		}
+ 		if (!ring->data[i])
+ 			return -ENOMEM;
  	}
 -- 
-2.25.1
+1.7.9.5
 

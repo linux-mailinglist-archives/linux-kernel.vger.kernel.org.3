@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0226F53D3A7
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7360953D3B8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349554AbiFCWd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 18:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S1348387AbiFCW5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 18:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348633AbiFCWd0 (ORCPT
+        with ESMTP id S231585AbiFCW5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 18:33:26 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615F12FE4A;
-        Fri,  3 Jun 2022 15:33:26 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b135so8125903pfb.12;
-        Fri, 03 Jun 2022 15:33:26 -0700 (PDT)
+        Fri, 3 Jun 2022 18:57:09 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340DFFD3C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:57:04 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id s8so6955417oib.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=7spu2rzPMkeoBhrHijWu4VEzaLPZluC22QeM3SMgIcQ=;
-        b=hPoAlBVjQOROOx9g8K5qk9LkKK+3ku/GvGIHASJLthgVfiLgJ8s+CczNM+vyk2Akzo
-         3hBqvLNlBUgEcv50Rk2AbPLQPsLzCzlcVj0A7/wXBFxqCwCishZ2EG8MW2yk1Lg2u6AJ
-         CEggLktKGAlqdcClo/cyUqH+Z0Yc5+tsoG9J8xjxWrNQ1OBbY9ptoVF1E9Yia3VfESgf
-         MxQ7QgWIbb9bIeT0eAnme0LFKoHiEuK8wrNMTeN5iuUrlf8vqSulX5CshOMBRkA9iYSv
-         5JST09Gl8xORpI22eiHZh9+vB4HIFYAsFs+08ziC04DoGrN/sasjjUSQfdsXGqClDKZU
-         gqjw==
+        bh=xV4M2H0rzmou3qhfz68sQHKbNfHEagjbKOGZ0VFo8bs=;
+        b=L+OmDC7FwYS006jvc9HDHowRNj5zeOHWE3rr4Nu5HPVro5DllJvjW9bt1PayKysQ3o
+         s7DpQpItSjcfp4iHk2m8AekFpjqF6H3lUUY7badx1w0hptRLcgS7Cl93Y2FmdpHMBLZB
+         llgmJATsXYeeCDGsLW6r2ge9c9AmzIvnwumuA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7spu2rzPMkeoBhrHijWu4VEzaLPZluC22QeM3SMgIcQ=;
-        b=i6HvEYB3xTl7kE5lTDwaJPKvt9JLStivAVJlMA3UGOnr6oLZcKkpdBIvjS6ur16UDJ
-         H2x2kcCvuarEElmyi116GmW61Cjfr1EKypdbBlAOK1rimUoqSHHJn+34XQaVsO3A7q9R
-         AS/4a/+PJZA6Pcg6JPzA2tgWbAYvGELqinu/ROqioEHbjzRpar7BM5YqMY5UY6BpltPS
-         aVZHKwTa6fNwZvbe3JKvqBmomHIddi+CgVZ4Q9NB6wby65B44uxPaBVyvwbl3pF9zZh4
-         G03oDGDAjaalcKGrPLn2DJy/wRnvPBOW7PEL5v/JEuYNQUyxbmLuFiq+LaZVtsaORzTx
-         t21w==
-X-Gm-Message-State: AOAM5319qCKPb4xuZZU9YO2oFofb7VGTMopUHU8T5mfyFGOtmKdA34MZ
-        wQjnBcO0/SZoKf1vDYfToFXWH0xz7n8=
-X-Google-Smtp-Source: ABdhPJw9Ry/YCHEcc4m1fA4rhsLeyMXcDtco4DmSZoR4cxFOKRa4zbS8iDoByCq+2T5MojgVTivJFg==
-X-Received: by 2002:a65:6552:0:b0:3db:772a:2465 with SMTP id a18-20020a656552000000b003db772a2465mr10783786pgw.225.1654295605590;
-        Fri, 03 Jun 2022 15:33:25 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:aea8:f22c:dcaf:b60e])
-        by smtp.gmail.com with ESMTPSA id e3-20020a170902cf4300b0015e8d4eb29csm5807377plg.230.2022.06.03.15.33.24
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=xV4M2H0rzmou3qhfz68sQHKbNfHEagjbKOGZ0VFo8bs=;
+        b=hQBOmSOOZHtgnk22IRfM/SmrkV7w8tfQsCVUuia14jsx5cv5hS+gbQdpZRsCRzjqG9
+         faA8aTqzivxj+G2bI6+rkW9HjR9QhPBUo26s+8PoZJGA0pHC3U5BUurFFKx0UOXs+bKy
+         QfXaCmF+1IHPJmVClup1M4K9/e0eUYtej2YHkq0/ucs3oa0gF2Ysuy7a84kzC+aldtBj
+         /cjT3oauyElfXbpT93SyuP2mqofT+75yso6ztt9HryHdCU6q5kBzEs4TYq4QMabCs8HE
+         o+Od32vMwF8SPJLQBgnTWb4Wh/bdYeuVgbCR7h8vI3crwOmJAYQ7tDtUADlRUiJ4aqLT
+         vgKg==
+X-Gm-Message-State: AOAM532QXbGof9hFf3hJ1Xb91P0Ohy7bwi4EDEzUw9VhBS6wmvWhHORA
+        77+aw60VH5uk/Dzjnh+OVy2T9A==
+X-Google-Smtp-Source: ABdhPJy0IEWN2jxFAn0hLFf86E7fhM8ujpC5YR3dEU3A4Tiy/PUSZSHvZ4UqcoUH0ta6gZZk7ANIuQ==
+X-Received: by 2002:a05:6808:13ce:b0:328:da83:aba3 with SMTP id d14-20020a05680813ce00b00328da83aba3mr7179295oiw.265.1654297023490;
+        Fri, 03 Jun 2022 15:57:03 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id f17-20020a056870549100b000fb2aa6eef2sm35215oan.32.2022.06.03.15.57.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 15:33:24 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 15:33:22 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Marius Hoch <mail@mariushoch.de>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: soc_button_array - also add Lenovo Yoga Tablet2
- 1051F to dmi_use_low_level_irq
-Message-ID: <YpqMMmIH6Rr0RbeP@google.com>
-References: <20220603120246.3065-1-mail@mariushoch.de>
+        Fri, 03 Jun 2022 15:57:02 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Fri, 3 Jun 2022 17:57:00 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 00/75] 5.17.13-rc1 review
+Message-ID: <YpqRvANDbYTPMnSp@fedora64.linuxtx.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220603120246.3065-1-mail@mariushoch.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 02:02:46PM +0200, Marius Hoch wrote:
-> Commit 223f61b8c5ad ("Input: soc_button_array - add Lenovo Yoga Tablet2
-> 1051L to the dmi_use_low_level_irq list") added the 1051L to this list
-> already, but the same problem applies to the 1051F. As there are no
-> further 1051 variants (just the F/L), we can just DMI match 1051.
+On Fri, Jun 03, 2022 at 07:42:44PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.13 release.
+> There are 75 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Tested on a Lenovo Yoga Tablet2 1051F: Without this patch the
-> home-button stops working after a wakeup from suspend.
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Marius Hoch <mail@mariushoch.de>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Adding Hans for his input...
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-> ---
->  drivers/input/misc/soc_button_array.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/input/misc/soc_button_array.c b/drivers/input/misc/soc_button_array.c
-> index cbb1599a520e..480476121c01 100644
-> --- a/drivers/input/misc/soc_button_array.c
-> +++ b/drivers/input/misc/soc_button_array.c
-> @@ -85,13 +85,13 @@ static const struct dmi_system_id dmi_use_low_level_irq[] = {
->  	},
->  	{
->  		/*
-> -		 * Lenovo Yoga Tab2 1051L, something messes with the home-button
-> +		 * Lenovo Yoga Tab2 1051F/1051L, something messes with the home-button
->  		 * IRQ settings, leading to a non working home-button.
->  		 */
->  		.matches = {
->  			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
->  			DMI_MATCH(DMI_PRODUCT_NAME, "60073"),
-> -			DMI_MATCH(DMI_PRODUCT_VERSION, "1051L"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "1051"),
->  		},
->  	},
->  	{} /* Terminating entry */
-> -- 
-> 2.36.1
-> 
-
--- 
-Dmitry
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DB353D070
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1955D53D121
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346587AbiFCSEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S1346133AbiFCSQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346953AbiFCRvp (ORCPT
+        with ESMTP id S1347009AbiFCSFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67F35A2EE;
-        Fri,  3 Jun 2022 10:49:51 -0700 (PDT)
+        Fri, 3 Jun 2022 14:05:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1E45A598;
+        Fri,  3 Jun 2022 10:58:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 490A660F70;
-        Fri,  3 Jun 2022 17:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A03C385A9;
-        Fri,  3 Jun 2022 17:49:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC58561653;
+        Fri,  3 Jun 2022 17:57:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF672C385A9;
+        Fri,  3 Jun 2022 17:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278590;
-        bh=cFrmnNl9L7po2P5cc20mN8UGOG2sPnDsfXvs7hKmLbA=;
+        s=korg; t=1654279061;
+        bh=M2d9iS/i0OY0KVXBVPir97YtU4ReZeixnC1Ob7/0Aok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R8lJlQfWSgPXi+yWFdnlYAOUHG+qcLVcGHcyBM/D13kbAGn5sckBYn/ld7Y3UMs3p
-         /s98MvRt9FmCGR2BBHcADnGLKyWzJv9/nbYAx+wcjoGqsn/wp4CSjpjfy4TH9/0NtD
-         Msuun90VT9BR/ai7ypMXY7w8eZQ34VWGqCS1h7k4=
+        b=EiwhaCFVSa184u/qrT2jcHHejk3dpf6+ie0ivQhNF0xMfnxLlfBVOQc8BuY76zJOY
+         g03nnXV0nMs8DbnYuVeG9vwgcuPH1kQ+x4vIHdTw986h+rcYoiATECvBp+wUSfgZpX
+         pKqbUmTOzT6XnpE1sCcX5Z8CQiia2MulWYYMjm2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 28/66] KVM: PPC: Book3S HV: fix incorrect NULL check on list iterator
-Date:   Fri,  3 Jun 2022 19:43:08 +0200
-Message-Id: <20220603173821.469405318@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH 5.18 08/67] exfat: check if cluster num is valid
+Date:   Fri,  3 Jun 2022 19:43:09 +0200
+Message-Id: <20220603173820.972203402@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +57,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-commit 300981abddcb13f8f06ad58f52358b53a8096775 upstream.
+commit 64ba4b15e5c045f8b746c6da5fc9be9a6b00b61d upstream.
 
-The bug is here:
-	if (!p)
-                return ret;
+Syzbot reported slab-out-of-bounds read in exfat_clear_bitmap.
+This was triggered by reproducer calling truncute with size 0,
+which causes the following trace:
 
-The list iterator value 'p' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found.
+BUG: KASAN: slab-out-of-bounds in exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
+Read of size 8 at addr ffff888115aa9508 by task syz-executor251/365
 
-To fix the bug, Use a new value 'iter' as the list iterator, while use
-the old value 'p' as a dedicated variable to point to the found element.
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
+ print_address_description+0x81/0x3c0 mm/kasan/report.c:233
+ __kasan_report mm/kasan/report.c:419 [inline]
+ kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
+ __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
+ exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
+ exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
+ __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
+ exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
+ exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
+ notify_change+0xb76/0xe10 fs/attr.c:336
+ do_truncate+0x1ea/0x2d0 fs/open.c:65
 
-Fixes: dfaa973ae960 ("KVM: PPC: Book3S HV: In H_SVM_INIT_DONE, migrate remaining normal-GFNs to secure-GFNs")
-Cc: stable@vger.kernel.org # v5.9+
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220414062103.8153-1-xiam0nd.tong@gmail.com
+Move the is_valid_cluster() helper from fatent.c to a common
+header to make it reusable in other *.c files. And add is_valid_cluster()
+to validate if cluster number is within valid range in exfat_clear_bitmap()
+and exfat_set_bitmap().
+
+Link: https://syzkaller.appspot.com/bug?id=50381fc73821ecae743b8cf24b4c9a04776f767c
+Reported-by: syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
+Fixes: 1e49a94cf707 ("exfat: add bitmap operations")
+Cc: stable@vger.kernel.org # v5.7+
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kvm/book3s_hv_uvmem.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ fs/exfat/balloc.c   |    8 ++++++--
+ fs/exfat/exfat_fs.h |    6 ++++++
+ fs/exfat/fatent.c   |    6 ------
+ 3 files changed, 12 insertions(+), 8 deletions(-)
 
---- a/arch/powerpc/kvm/book3s_hv_uvmem.c
-+++ b/arch/powerpc/kvm/book3s_hv_uvmem.c
-@@ -360,13 +360,15 @@ static bool kvmppc_gfn_is_uvmem_pfn(unsi
- static bool kvmppc_next_nontransitioned_gfn(const struct kvm_memory_slot *memslot,
- 		struct kvm *kvm, unsigned long *gfn)
- {
--	struct kvmppc_uvmem_slot *p;
-+	struct kvmppc_uvmem_slot *p = NULL, *iter;
- 	bool ret = false;
- 	unsigned long i;
+--- a/fs/exfat/balloc.c
++++ b/fs/exfat/balloc.c
+@@ -148,7 +148,9 @@ int exfat_set_bitmap(struct inode *inode
+ 	struct super_block *sb = inode->i_sb;
+ 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
  
--	list_for_each_entry(p, &kvm->arch.uvmem_pfns, list)
--		if (*gfn >= p->base_pfn && *gfn < p->base_pfn + p->nr_pfns)
-+	list_for_each_entry(iter, &kvm->arch.uvmem_pfns, list)
-+		if (*gfn >= iter->base_pfn && *gfn < iter->base_pfn + iter->nr_pfns) {
-+			p = iter;
- 			break;
-+		}
- 	if (!p)
- 		return ret;
- 	/*
+-	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
++	if (!is_valid_cluster(sbi, clu))
++		return -EINVAL;
++
+ 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
+ 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
+ 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
+@@ -166,7 +168,9 @@ void exfat_clear_bitmap(struct inode *in
+ 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
+ 	struct exfat_mount_options *opts = &sbi->options;
+ 
+-	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
++	if (!is_valid_cluster(sbi, clu))
++		return;
++
+ 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
+ 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
+ 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
+--- a/fs/exfat/exfat_fs.h
++++ b/fs/exfat/exfat_fs.h
+@@ -381,6 +381,12 @@ static inline int exfat_sector_to_cluste
+ 		EXFAT_RESERVED_CLUSTERS;
+ }
+ 
++static inline bool is_valid_cluster(struct exfat_sb_info *sbi,
++		unsigned int clus)
++{
++	return clus >= EXFAT_FIRST_CLUSTER && clus < sbi->num_clusters;
++}
++
+ /* super.c */
+ int exfat_set_volume_dirty(struct super_block *sb);
+ int exfat_clear_volume_dirty(struct super_block *sb);
+--- a/fs/exfat/fatent.c
++++ b/fs/exfat/fatent.c
+@@ -81,12 +81,6 @@ int exfat_ent_set(struct super_block *sb
+ 	return 0;
+ }
+ 
+-static inline bool is_valid_cluster(struct exfat_sb_info *sbi,
+-		unsigned int clus)
+-{
+-	return clus >= EXFAT_FIRST_CLUSTER && clus < sbi->num_clusters;
+-}
+-
+ int exfat_ent_get(struct super_block *sb, unsigned int loc,
+ 		unsigned int *content)
+ {
 
 

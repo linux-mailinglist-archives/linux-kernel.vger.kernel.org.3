@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B06353D0BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8732053D148
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241938AbiFCSLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S1347658AbiFCSU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346040AbiFCR6L (ORCPT
+        with ESMTP id S1347203AbiFCSFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:58:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E170579AD;
-        Fri,  3 Jun 2022 10:54:47 -0700 (PDT)
+        Fri, 3 Jun 2022 14:05:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178285AA47;
+        Fri,  3 Jun 2022 10:58:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 010D160F3B;
-        Fri,  3 Jun 2022 17:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BCFC36AF9;
-        Fri,  3 Jun 2022 17:54:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA3D261607;
+        Fri,  3 Jun 2022 17:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE8CC385A9;
+        Fri,  3 Jun 2022 17:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278886;
-        bh=Yfnk07oKDBiOJUyFrj4HSR43uk7wA50wyOLT0Zmxy70=;
+        s=korg; t=1654279052;
+        bh=r07Ht/o8tyr7rzBej9Sx5OpKHymm6LYC2S7Uzqujyko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VI8zOnaGKQtl8Pvb3GfXwrdwAL+UtYj55M0MPW3cX2kjX3WA+gGs92qoGvJjH/MmJ
-         hii5UfGEchjfjcqv8rYYIxo+CyIT4BvHkEFB8418gWHQdYQ9a/PV9U/8wd1IKKmCVe
-         ogfl8FT5WXuT1Z8eXzG1JyVESLWgRWdo8qWWhDuQ=
+        b=bspohtLeVgr7Jz27/5hbmzRyaQa5GYMaa8JpjtcrMSJrtMIKnLumHL0yCvI/W2lC5
+         oonhEjBUGbCDBsslF9JRHTyj1zjesPIJ7ZySqNQPqws4AA23QbIJ4PbbiPn9GtF1RA
+         2rZliusndY1F76vLrnuG6kdxe4E9Syxgib3hUhqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, zhangziming.zzm@antgroup.com,
-        Stefano Brivio <sbrivio@redhat.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.17 22/75] netfilter: nf_tables: sanitize nft_set_desc_concat_parse()
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        zdi-disclosures@trendmicro.com
+Subject: [PATCH 5.18 05/67] pipe: Fix missing lock in pipe_resize_ring()
 Date:   Fri,  3 Jun 2022 19:43:06 +0200
-Message-Id: <20220603173822.377561939@linuxfoundation.org>
+Message-Id: <20220603173820.888231000@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: David Howells <dhowells@redhat.com>
 
-commit fecf31ee395b0295f2d7260aa29946b7605f7c85 upstream.
+commit 189b0ddc245139af81198d1a3637cac74f96e13a upstream.
 
-Add several sanity checks for nft_set_desc_concat_parse():
+pipe_resize_ring() needs to take the pipe->rd_wait.lock spinlock to
+prevent post_one_notification() from trying to insert into the ring
+whilst the ring is being replaced.
 
-- validate desc->field_count not larger than desc->field_len array.
-- field length cannot be larger than desc->field_len (ie. U8_MAX)
-- total length of the concatenation cannot be larger than register array.
+The occupancy check must be done after the lock is taken, and the lock
+must be taken after the new ring is allocated.
 
-Joint work with Florian Westphal.
+The bug can lead to an oops looking something like:
 
-Fixes: f3a2181e16f1 ("netfilter: nf_tables: Support for sets with multiple ranged fields")
-Reported-by: <zhangziming.zzm@antgroup.com>
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+ BUG: KASAN: use-after-free in post_one_notification.isra.0+0x62e/0x840
+ Read of size 4 at addr ffff88801cc72a70 by task poc/27196
+ ...
+ Call Trace:
+  post_one_notification.isra.0+0x62e/0x840
+  __post_watch_notification+0x3b7/0x650
+  key_create_or_update+0xb8b/0xd20
+  __do_sys_add_key+0x175/0x340
+  __x64_sys_add_key+0xbe/0x140
+  do_syscall_64+0x5c/0xc0
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Reported by Selim Enes Karaduman @Enesdex working with Trend Micro Zero
+Day Initiative.
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-17291
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |   17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ fs/pipe.c |   31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -4167,6 +4167,9 @@ static int nft_set_desc_concat_parse(con
- 	u32 len;
- 	int err;
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -1245,30 +1245,33 @@ unsigned int round_pipe_size(unsigned lo
  
-+	if (desc->field_count >= ARRAY_SIZE(desc->field_len))
-+		return -E2BIG;
-+
- 	err = nla_parse_nested_deprecated(tb, NFTA_SET_FIELD_MAX, attr,
- 					  nft_concat_policy, NULL);
- 	if (err < 0)
-@@ -4176,9 +4179,8 @@ static int nft_set_desc_concat_parse(con
- 		return -EINVAL;
- 
- 	len = ntohl(nla_get_be32(tb[NFTA_SET_FIELD_LEN]));
--
--	if (len * BITS_PER_BYTE / 32 > NFT_REG32_COUNT)
--		return -E2BIG;
-+	if (!len || len > U8_MAX)
-+		return -EINVAL;
- 
- 	desc->field_len[desc->field_count++] = len;
- 
-@@ -4189,7 +4191,8 @@ static int nft_set_desc_concat(struct nf
- 			       const struct nlattr *nla)
+ /*
+  * Resize the pipe ring to a number of slots.
++ *
++ * Note the pipe can be reduced in capacity, but only if the current
++ * occupancy doesn't exceed nr_slots; if it does, EBUSY will be
++ * returned instead.
+  */
+ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
  {
- 	struct nlattr *attr;
--	int rem, err;
-+	u32 num_regs = 0;
-+	int rem, err, i;
+ 	struct pipe_buffer *bufs;
+ 	unsigned int head, tail, mask, n;
  
- 	nla_for_each_nested(attr, nla, rem) {
- 		if (nla_type(attr) != NFTA_LIST_ELEM)
-@@ -4200,6 +4203,12 @@ static int nft_set_desc_concat(struct nf
- 			return err;
- 	}
+-	/*
+-	 * We can shrink the pipe, if arg is greater than the ring occupancy.
+-	 * Since we don't expect a lot of shrink+grow operations, just free and
+-	 * allocate again like we would do for growing.  If the pipe currently
+-	 * contains more buffers than arg, then return busy.
+-	 */
+-	mask = pipe->ring_size - 1;
+-	head = pipe->head;
+-	tail = pipe->tail;
+-	n = pipe_occupancy(pipe->head, pipe->tail);
+-	if (nr_slots < n)
+-		return -EBUSY;
+-
+ 	bufs = kcalloc(nr_slots, sizeof(*bufs),
+ 		       GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+ 	if (unlikely(!bufs))
+ 		return -ENOMEM;
  
-+	for (i = 0; i < desc->field_count; i++)
-+		num_regs += DIV_ROUND_UP(desc->field_len[i], sizeof(u32));
++	spin_lock_irq(&pipe->rd_wait.lock);
++	mask = pipe->ring_size - 1;
++	head = pipe->head;
++	tail = pipe->tail;
 +
-+	if (num_regs > NFT_REG32_COUNT)
-+		return -E2BIG;
++	n = pipe_occupancy(head, tail);
++	if (nr_slots < n) {
++		spin_unlock_irq(&pipe->rd_wait.lock);
++		kfree(bufs);
++		return -EBUSY;
++	}
 +
+ 	/*
+ 	 * The pipe array wraps around, so just start the new one at zero
+ 	 * and adjust the indices.
+@@ -1300,6 +1303,8 @@ int pipe_resize_ring(struct pipe_inode_i
+ 	pipe->tail = tail;
+ 	pipe->head = head;
+ 
++	spin_unlock_irq(&pipe->rd_wait.lock);
++
+ 	/* This might have made more room for writers */
+ 	wake_up_interruptible(&pipe->wr_wait);
  	return 0;
- }
- 
 
 

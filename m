@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B5B53D380
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10A653D382
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349518AbiFCWNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 18:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S1349524AbiFCWNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 18:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349315AbiFCWNB (ORCPT
+        with ESMTP id S234075AbiFCWNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 18:13:01 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C4A18E0F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:12:59 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id a10so6991168ioe.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:12:58 -0700 (PDT)
+        Fri, 3 Jun 2022 18:13:47 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7251E3F1
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:13:46 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j10so14602512lfe.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YQaA0ysz+S1FZGYLa7EUyi8nddJMkVXVtwd4BwqcCVE=;
-        b=HV4UoRzWQTlgPnhbgwevANk/jO/pR2mdRCjEqrQhcd5tWSRAUreuEBlIgi0N7EUe5A
-         l4HXBsnEQLSSf3cI4CB6HWibojnau5wf0TBFvkKNvZAPcAbyAXQ2P8f/k9jT7lqGe+wt
-         tVoesIjkL5kxbVbPY9AiNmv4RUob7joWxnksc=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xSlVDrcC6ThhuqFYVSDbH5zX5O/WG80a5ABV8+/WiYc=;
+        b=jaXFhDCS8i3EMl+QHJtBD5GpPr5TQXbP2mE+ZuLw9VbjZMEY7AVTB//49N2rYgKc0j
+         GjdW3v6cfPeBGqpOD+aZtY/rh+QlkTnf+Pnjf5ErLzn27MclKpSjJXZtF3dkvr8bICm/
+         rW4E1nRdwfRFb4hjEXPugXZD44dkyt/sGRopzgsj021Jg3FnT3asCMUjXEMd2tT7/Z3C
+         1AYAjXIg8B81YEqSmimrxPk1jYZRTVhuNBRGLI8LEcZD8cZvMQNJEPADEeYfS99sKYfZ
+         /5SWpfwDusOzwIMwRhDtIT+W0a96l0AhulLR9NKYAQeFzhmqkn77KfW8Yy9pvkLX8QMh
+         ENJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YQaA0ysz+S1FZGYLa7EUyi8nddJMkVXVtwd4BwqcCVE=;
-        b=l1ayurzwDcP2epqT4YiwadG/fPi7kZ9KTni3jFX7rafEOHN9TvdglgMoYoOQLEBQ2p
-         tGdA+UVjVOFY0x7Wueoz4n7X3W0jpNqyzf8HnU02xHAWnFw6kwX982M8jb7NtcbLVY3w
-         OsyFlt2jOoWgoYERAr+uw+5XRMcCxN/3fm/EP7q2oAT940BHpBTEltLx8Q+oWP9WvLQy
-         MUCHc1hs+bX0RTUZFeZo4LQr2RLVs0chpL35Q4xqDpf7Q0iaC6XVAJ/mSAy0I6KSqHZV
-         46L2MJpEPd/J/cbzGS2HPlT3m2ggl76kjea98Rl2HQsXYwttSGYWIN3YUb8JKmsCJT0z
-         WjKw==
-X-Gm-Message-State: AOAM530yFxh43OUTcH5VbHhutlyOcD9CPJL+zXDXd/dNhve95M0pmsU/
-        WQli1YtMC1Obl73L5Q//IoDKXQ==
-X-Google-Smtp-Source: ABdhPJwRZzdUFPObenCqqK8QSOyTpq8ELKioDcBezTTqdyBLuX1Qc4YsdPX8WvzjpdZYUeiXr7NzNw==
-X-Received: by 2002:a05:6602:1653:b0:665:6f74:db21 with SMTP id y19-20020a056602165300b006656f74db21mr5723622iow.33.1654294378143;
-        Fri, 03 Jun 2022 15:12:58 -0700 (PDT)
-Received: from irdv-mkhalfella.dev.purestorage.com ([208.88.158.129])
-        by smtp.googlemail.com with ESMTPSA id e10-20020a92a00a000000b002d3ded31668sm2901016ili.41.2022.06.03.15.12.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 Jun 2022 15:12:57 -0700 (PDT)
-From:   Mohamed Khalfella <mkhalfella@purestorage.com>
-To:     mkhalfella@purestorage.com
-Cc:     bhelgaas@google.com, ebadger@purestorage.com, helgaas@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, msaggi@purestorage.com,
-        oohall@gmail.com, rajatja@google.com, ruscur@russell.cc,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] PCI/AER: Iterate over error counters instead of error
-Date:   Fri,  3 Jun 2022 22:12:47 +0000
-Message-Id: <20220603221247.5118-1-mkhalfella@purestorage.com>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20220510211756.5237-1-mkhalfella@purestorage.com>
-References: <20220510211756.5237-1-mkhalfella@purestorage.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xSlVDrcC6ThhuqFYVSDbH5zX5O/WG80a5ABV8+/WiYc=;
+        b=UxCXvh7xIVuxUUOggUlL1df2QsW+KHXLeLkkLKnY/75fnN2LsTNLgjjWBfqQu7E3F1
+         9dotJGYpU/vEDW6CSpOsK+zqRsWdlkwuVBSBpv1H30AnT+V3YJra1iszV2Xa8axjadB7
+         Ne1quXSUiLsgx45Sia6CA0OvC/ZIlUIxpz4OrWNEJwLYcDZ3FzOezSwnJEBt67ZdOh7+
+         ZQ+uTyMj+PdOc8GptwlmCKkeLHwnixJw8upBGfN0GHZydcmI4hSoeGckftSF9ReWpo8o
+         vR9Uo4DwRUmLzAZ7T3pLMxcieL4PAXp7bMF3316BC3C5Tk5MvmNS76Y7zCusTHw/BElw
+         KI9A==
+X-Gm-Message-State: AOAM532aNFoK9295k4fSGTcJClRYZ5dreWf/3BZTOt0EyowWYCkHJj42
+        Uv7L1r6zKyYI3W85a2Lu/5FB77kSL6PzchfE6A9N0w==
+X-Google-Smtp-Source: ABdhPJz5rB3V9OJ/RwPFdNbD9H6X0cg6eR5CVzghqkVYkNmu/4n5c5l5xYeWVXBVbpbswIbFmiBStEMzc1bzTe7AzPA=
+X-Received: by 2002:a05:6512:ad3:b0:479:911:8463 with SMTP id
+ n19-20020a0565120ad300b0047909118463mr8005984lfu.103.1654294424159; Fri, 03
+ Jun 2022 15:13:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAEQFVGZ=6K8wudbS--3z+JpKTsL_dfM-8Co7NwViRo0i3t2EZg@mail.gmail.com>
+ <Ym2qdHAB6BMMlegB@thelio-3990X> <CAEQFVGZB6eAetmt1kk+TYbGxpfrDut37DEO_-1HECqM6FEERww@mail.gmail.com>
+ <CAEQFVGby3Q1mf1GGJwkFyAgaq38NvVAMx6tQM+9LO+HE8Z8Z8A@mail.gmail.com>
+ <YnhbOpXHT8k+g9Qu@dev-arch.thelio-3990X> <CAEQFVGYSV=boBYGHfJLis8ayftzNPJy1UYgeEEQLuNb0hSfhjg@mail.gmail.com>
+ <CAKwvOd=c=9xbzg0CjGxNnHtu3BOatWpe0gYQU7TWw0rkjwCCxA@mail.gmail.com> <CAEQFVGYOkTi4oNSnfyN48Re_4uhQqPF81+M7Xd5VJ0+tETwSbA@mail.gmail.com>
+In-Reply-To: <CAEQFVGYOkTi4oNSnfyN48Re_4uhQqPF81+M7Xd5VJ0+tETwSbA@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 3 Jun 2022 15:13:32 -0700
+Message-ID: <CAKwvOdmrwfm3HsyvGg2_HwYw1tdcj67DLj22oeGGf8MUO4x=mQ@mail.gmail.com>
+Subject: Re: arch/x86/entry/entry: RFC on recent kernels building error with
+ llvm 11.0.2 internal assembler
+To:     Mauro Rossi <issor.oruam@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, luto@kernel.org,
+        Chih-Wei Huang <cwhuang@android-x86.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Is there any chance for this to land in 5.19?
-
-On 5/10/22 14:17, Mohamed Khalfella wrote:
-> > Thanks for catching this; it definitely looks like a real issue!  I
-> > guess you're probably seeing junk in the sysfs files?
-> 
-> That is correct. The initial report was seeing junk when reading sysfs
-> files. As descibed, this is happening because we reading data past the
-> end of the stats counters array.
-> 
-> 
-> > I think maybe we should populate the currently NULL entries in the
-> > string[] arrays and simplify the code here, e.g.,
-> > 
-> > static const char *aer_correctable_error_string[] = {
-> >        "RxErr",                        /* Bit Position 0       */
-> >        "dev_cor_errs_bit[1]",
-> >	...
+On Wed, Jun 1, 2022 at 5:57 AM Mauro Rossi <issor.oruam@gmail.com> wrote:
+>
+> On Wed, Jun 1, 2022 at 12:09 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
 > >
-> >  if (stats[i])
-> >    len += sysfs_emit_at(buf, len, "%s %llu\n", strings_array[i], stats[i]);
-> 
-> Doing it this way will change the output format. In this case we will show
-> stats only if their value is greater than zero. The current code shows all the
-> stats those have names (regardless of their value) plus those have non-zero
-> values.
-> 
-> >> @@ -1342,6 +1342,11 @@ static int aer_probe(struct pcie_device *dev)
-> >>  	struct device *device = &dev->device;
-> >>  	struct pci_dev *port = dev->port;
-> >>
-> >> +	BUILD_BUG_ON(ARRAY_SIZE(aer_correctable_error_string) <
-> >> +		     AER_MAX_TYPEOF_COR_ERRS);
-> >> +	BUILD_BUG_ON(ARRAY_SIZE(aer_uncorrectable_error_string) <
-> >> +		     AER_MAX_TYPEOF_UNCOR_ERRS);
+> > As Nathan noted, I messed up the commit "ANDROID: x86: entry: work
+> > around LLVM_IAS=1 bug in LSL". Please see:
+> > https://android-review.googlesource.com/c/kernel/common/+/1521061
+> > https://android-review.googlesource.com/c/kernel/common/+/1560152/
 > >
-> > And make these check for "!=" instead of "<".
+> > If you're using an older toolchain, you'll need just the first. If
+> > you're using a newer toolchain, you'll need BOTH (or none, including
+> > dropping "ANDROID: x86: entry: work around LLVM_IAS=1 bug in LSL").
+>
+> Thanks Nick,
+>
+> I had already applied the squashed commit composed of  "ANDROID: x86:
+> entry: work around LLVM_IAS=1 bug in LSL" (the one using .quad) and
+> "ANDROID: x86: entry: fix LSL open coding", so I have already:
+>
+> .macro LOAD_CPU_AND_NODE_SEG_LIMIT reg:req
+> movq $__CPUNODE_SEG, \reg
+> +#ifdef __clang__
+> +.long 0xc0030f48
 
-I am happy to remove these BUILD_BUG_ON() if you think it is a good
-idea to do so.
+LGTM
 
-> 
-> This will require unnecessarily extending stats arrays to have 32 entries
-> in order to match names arrays. If you don't feel strogly about changing
-> "<" to "!=", I prefer to keep the code as it is. 
+> +#else
+> lsl \reg, \reg
+> +#endif
+> .endm
+>
+>
+> So in principle my kernel image should boot when built with LLVM_IAS=1
+> but to my surprise all my systems (Sony VAIO i7, Intel NUC DN2820FYKH
+> with Celeron D2830, Athlon 200GE) are affected by hard reboot when
+> executing the kernel image
+
+Might need more info.  Do they boot when LLVM_IAS=0 is explicitly set
+with your command line invocation of make? i.e. `make LLVM=1
+LLVM_IAS=0 ...`?  Can you launch these kernels in qemu?
+
+>
+> I'm trying to understand how to build (and boot) with LLVM_IAS=1 and
+> using clang 11.0.2 shipped with AOSP Android 11
+
+I think this combo should work; we are testing x86_64 with mainline
+https://github.com/ClangBuiltLinux/continuous-integration2/blob/95b9a12cad31675118d61c26d0b541fa4e3c8f09/generator.yml#L1694
+
+Could be something in your .config files though.
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,243 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C907553C704
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C5853C707
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238147AbiFCIkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S242811AbiFCIl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242817AbiFCIkB (ORCPT
+        with ESMTP id S242753AbiFCIl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:40:01 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134DB36E0C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:39:59 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id h1so6374693plf.11
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kCVrRc4NVvmeRfDYNLQpFovvIlkEHz3avyGKdl7f8cs=;
-        b=dhDBnMsglw2I4/hKmtWmP3lc9f2wDdTGnFAsg0hC/AKHxqx8EMr0i7zVm9VCgLZoOj
-         nZypmTQ+2CrkEDXNTqhDoKJaD9Lbaynr/HDS7RkvH8MYY3YZFSXfUEmY/z4CivzE87Gm
-         R5vGkyRV5HFdyGPLUHb6LLxdflRuEfD+SG2B8254kd9G4bsdKOy65XNy7uIO+s1yglv8
-         VG8NjTTnLKbBBUz55RKXsUs6v9odihI5GLd4NBw4zvS15L/aeYjl946mvipJhQQ9ppW1
-         mVfeClisH1iRvKpEbOSI4q8BM1uIDKMaABAr5yrIdYKBWBaDTbx0YzYGNPjB9PQ/IhJ3
-         lWDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kCVrRc4NVvmeRfDYNLQpFovvIlkEHz3avyGKdl7f8cs=;
-        b=fFf15Kzhzscq4jB1llB1NL+YfBGPZqAc4Z8h5ljOKJ3J2dV8Y8nnsgfjGvUFqcoyNh
-         t2529kDWOy6LCH1UYlkjqBKO96GwIlbwIetRtEZZzGOuucIi8MCgtNBuC+CiMW3TkNrA
-         pVjULKkgd79UVlRE4J97oCN7SsL/Yvu/Nn4wIjUha7L/E0Hlj4Wbb+DtTKKlmu+qLlk1
-         euct2gEqF31VKH+GKinRzlfvufWwevcU/kvKPGHp05lO96HQU6hStvx4OtoOlXIAd1zx
-         But0pValiSBqHwaxX+FWCzV5AiOWxASYWJrwa4JOzNe6nz43kAw84HQ5wH1qudedIiVU
-         3tQA==
-X-Gm-Message-State: AOAM530hkRiSRbzR/CvPWl4O18UPKFCUGf96oDJBqT0vgmRZigcEY8/P
-        w7ea2TiLx5lHd1sZNGipCrlL8AJqehZvVgg8Z0duuA==
-X-Google-Smtp-Source: ABdhPJzo3b5hw6ZjNuMIq2BMHZLSqnWz2D88juzIl0iTFHcs73EzpgDZNfhLrvuJscVMDhvAXKjnmXZkUaozvtIglWU=
-X-Received: by 2002:a17:903:1c6:b0:161:9fbc:5a6 with SMTP id
- e6-20020a17090301c600b001619fbc05a6mr9218199plh.65.1654245598449; Fri, 03 Jun
- 2022 01:39:58 -0700 (PDT)
+        Fri, 3 Jun 2022 04:41:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AE736E0D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:41:25 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2536t036028175;
+        Fri, 3 Jun 2022 08:41:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=sa8kRbjthzzK9WfXNfBIPgKgAssAmJdhEU6a/RgzQBo=;
+ b=oNsBW2mwWvUBcLrTsiKT1HxnSRiweE90lZCkmG3l762oemVtMcXMHvEA4PUBaO7SMNJ2
+ vqbmiHKJrltB9q7AFLkFh3IBmnESei9yxO5q1pIu3V55oXkNj02wJB78MunvQFOaFaqq
+ lB/AUeEMTM/mqJUzJqXalNOoyvBoptZJ4k5WjY656RfAZHl0nV0qtFXcqpg23GQnwWce
+ RoYdvYFeC5QJ/Qagk9XMb1BJxXCZw+rSbbbp8ciaTk7KOZc6jQqY555DQjbShaueyFHz
+ wLh5NFsNoYkfP2kxFLxJm+w/yuos6RbcRn9cL3j+9K2ojr+M89VXxvATAsRRJEWcs8kr hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfdephswn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 08:41:00 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2538exIX027109;
+        Fri, 3 Jun 2022 08:40:59 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfdephsw7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 08:40:59 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2538aV2G018023;
+        Fri, 3 Jun 2022 08:40:57 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06fra.de.ibm.com with ESMTP id 3gf2afghpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 08:40:57 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2538ensE23331254
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Jun 2022 08:40:49 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 155EE4C044;
+        Fri,  3 Jun 2022 08:40:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 23D094C040;
+        Fri,  3 Jun 2022 08:40:49 +0000 (GMT)
+Received: from [9.43.93.173] (unknown [9.43.93.173])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Jun 2022 08:40:48 +0000 (GMT)
+Message-ID: <fbebbd2b-2ddb-bee6-5e12-67e3e18648ee@linux.ibm.com>
+Date:   Fri, 3 Jun 2022 14:10:47 +0530
 MIME-Version: 1.0
-References: <20220601124250.60968-1-robert.foss@linaro.org>
- <20220601124250.60968-4-robert.foss@linaro.org> <20220602145228.GA2299532-robh@kernel.org>
-In-Reply-To: <20220602145228.GA2299532-robh@kernel.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 3 Jun 2022 10:39:47 +0200
-Message-ID: <CAG3jFyutTWpV06FU4iZrp=TJ3SSr3nAm8AWkEzSbEXjof7Lfvw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, krzk+dt@kernel.org,
-        jonathan@marek.ca, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
+ sysfs
+Content-Language: en-US
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+ <20220527151531.00002a0c@Huawei.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <20220527151531.00002a0c@Huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7mA6V2_BsxSjLJRcCal5aKmMLZtySSaS
+X-Proofpoint-GUID: LgQUlLnFE9f9KowMQ8s7GqkTq0pKeKFd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-03_02,2022-06-02_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 impostorscore=0
+ adultscore=0 spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206030035
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 at 16:52, Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Jun 01, 2022 at 02:42:47PM +0200, Robert Foss wrote:
-> > Add device tree bindings for graphics clock controller for
-> > Qualcomm Technology Inc's SM8350 SoCs.
-> >
-> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> > Reviewed-by: Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
-> > ---
-> >
-> > Changes since v3
-> >  - Separate from qcom,gpucc
-> >  - Remove clock-names
-> >  - Make example sm8350 based
-> >  - Changed author to me due to size of changes
-> >
-> >
-> >  .../bindings/clock/qcom,gpucc-sm8350.yaml     | 72 +++++++++++++++++++
-> >  include/dt-bindings/clock/qcom,gpucc-sm8350.h | 52 ++++++++++++++
-> >  2 files changed, 124 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
-> >  create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
-> > new file mode 100644
-> > index 000000000000..0a0546c079a9
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
-> > @@ -0,0 +1,72 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/qcom,gpucc-sm8350.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm Graphics Clock & Reset Controller Binding
-> > +
-> > +maintainers:
-> > +  - Robert Foss <robert.foss@linaro.org>
-> > +
-> > +description: |
-> > +  Qualcomm graphics clock control module which supports the clocks, resets and
-> > +  power domains on Qualcomm SoCs.
-> > +
-> > +  See also:
-> > +    dt-bindings/clock/qcom,gpucc-sm8350.h
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - qcom,sm8350-gpucc
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Board XO source
-> > +      - description: GPLL0 main branch source
-> > +      - description: GPLL0 div branch source
-> > +
-> > +  '#clock-cells':
-> > +    const: 1
-> > +
-> > +  '#reset-cells':
-> > +    const: 1
-> > +
-> > +  '#power-domain-cells':
-> > +    const: 1
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - '#clock-cells'
-> > +  - '#reset-cells'
-> > +  - '#power-domain-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/qcom,gcc-sm8350.h>
-> > +    #include <dt-bindings/clock/qcom,rpmh.h>
-> > +
-> > +    soc {
-> > +        #address-cells = <2>;
-> > +        #size-cells = <2>;
-> > +
-> > +        clock-controller@3d90000 {
-> > +            compatible = "qcom,sm8350-gpucc";
-> > +            reg = <0 0x03d90000 0 0x9000>;
-> > +            clocks = <&rpmhcc RPMH_CXO_CLK>,
-> > +                     <&gcc GCC_GPU_GPLL0_CLK_SRC>,
-> > +                     <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
-> > +            #clock-cells = <1>;
-> > +            #reset-cells = <1>;
-> > +            #power-domain-cells = <1>;
-> > +        };
-> > +    };
-> > +...
-> > diff --git a/include/dt-bindings/clock/qcom,gpucc-sm8350.h b/include/dt-bindings/clock/qcom,gpucc-sm8350.h
-> > new file mode 100644
-> > index 000000000000..d2294e0d527e
-> > --- /dev/null
-> > +++ b/include/dt-bindings/clock/qcom,gpucc-sm8350.h
-> > @@ -0,0 +1,52 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
->
-> Dual license.
+On 5/27/22 7:45 PM, Jonathan Cameron wrote:
+> On Fri, 27 May 2022 17:55:23 +0530
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
+> 
+>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>
+>> Add support to read/write the memory tierindex for a NUMA node.
+>>
+>> /sys/devices/system/node/nodeN/memtier
+>>
+>> where N = node id
+>>
+>> When read, It list the memory tier that the node belongs to.
+>>
+>> When written, the kernel moves the node into the specified
+>> memory tier, the tier assignment of all other nodes are not
+>> affected.
+>>
+>> If the memory tier does not exist, writing to the above file
+>> create the tier and assign the NUMA node to that tier.
+> creates
+> 
+> There was some discussion in v2 of Wei Xu's RFC that what matter
+> for creation is the rank, not the tier number.
+> 
+> My suggestion is move to an explicit creation file such as
+> memtier/create_tier_from_rank
+> to which writing the rank gives results in a new tier
+> with the next device ID and requested rank.
 
-Ack.
+I think the below workflow is much simpler.
 
->
-> > +/*
-> > + * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
-> > + */
-> > +
-> > +#ifndef _DT_BINDINGS_CLK_QCOM_GPU_CC_SM8350_H
-> > +#define _DT_BINDINGS_CLK_QCOM_GPU_CC_SM8350_H
-> > +
-> > +/* GPU_CC clocks */
-> > +#define GPU_CC_AHB_CLK                       0
-> > +#define GPU_CC_CB_CLK                        1
-> > +#define GPU_CC_CRC_AHB_CLK           2
-> > +#define GPU_CC_CX_APB_CLK            3
-> > +#define GPU_CC_CX_GMU_CLK            4
-> > +#define GPU_CC_CX_QDSS_AT_CLK                5
-> > +#define GPU_CC_CX_QDSS_TRIG_CLK              6
-> > +#define GPU_CC_CX_QDSS_TSCTR_CLK     7
-> > +#define GPU_CC_CX_SNOC_DVM_CLK               8
-> > +#define GPU_CC_CXO_AON_CLK           9
-> > +#define GPU_CC_CXO_CLK                       10
-> > +#define GPU_CC_FREQ_MEASURE_CLK              11
-> > +#define GPU_CC_GMU_CLK_SRC           12
-> > +#define GPU_CC_GX_GMU_CLK            13
-> > +#define GPU_CC_GX_QDSS_TSCTR_CLK     14
-> > +#define GPU_CC_GX_VSENSE_CLK         15
-> > +#define GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK       16
-> > +#define GPU_CC_HUB_AHB_DIV_CLK_SRC   17
-> > +#define GPU_CC_HUB_AON_CLK           18
-> > +#define GPU_CC_HUB_CLK_SRC           19
-> > +#define GPU_CC_HUB_CX_INT_CLK                20
-> > +#define GPU_CC_HUB_CX_INT_DIV_CLK_SRC        21
-> > +#define GPU_CC_MND1X_0_GFX3D_CLK     22
-> > +#define GPU_CC_MND1X_1_GFX3D_CLK     23
-> > +#define GPU_CC_PLL0                  24
-> > +#define GPU_CC_PLL1                  25
-> > +#define GPU_CC_SLEEP_CLK             26
-> > +
-> > +/* GPU_CC resets */
-> > +#define GPUCC_GPU_CC_ACD_BCR         0
-> > +#define GPUCC_GPU_CC_CB_BCR          1
-> > +#define GPUCC_GPU_CC_CX_BCR          2
-> > +#define GPUCC_GPU_CC_FAST_HUB_BCR    3
-> > +#define GPUCC_GPU_CC_GFX3D_AON_BCR   4
-> > +#define GPUCC_GPU_CC_GMU_BCR         5
-> > +#define GPUCC_GPU_CC_GX_BCR          6
-> > +#define GPUCC_GPU_CC_XO_BCR          7
-> > +
-> > +/* GPU_CC GDSCRs */
-> > +#define GPU_CX_GDSC                  0
-> > +#define GPU_GX_GDSC                  1
-> > +
-> > +#endif
-> > --
-> > 2.34.1
-> >
-> >
+:/sys/devices/system# cat memtier/memtier1/nodelist
+1-3
+:/sys/devices/system# cat node/node1/memtier
+1
+:/sys/devices/system# ls memtier/memtier*
+nodelist  power  rank  subsystem  uevent
+/sys/devices/system# ls memtier/
+default_rank  max_tier  memtier1  power  uevent
+:/sys/devices/system# echo 2 > node/node1/memtier
+:/sys/devices/system#
+
+:/sys/devices/system# ls memtier/
+default_rank  max_tier  memtier1  memtier2  power  uevent
+:/sys/devices/system# cat memtier/memtier1/nodelist
+2-3
+:/sys/devices/system# cat memtier/memtier2/nodelist
+1
+:/sys/devices/system#
+
+ie, to create a tier we just write the tier id/tier index to 
+node/nodeN/memtier file. That will create a new memory tier if needed 
+and add the node to that specific memory tier. Since for now we are 
+having 1:1 mapping between tier index to rank value, we can derive the 
+rank value from the memory tier index.
+
+For dynamic memory tier support, we can assign a rank value such that 
+new memory tiers are always created such that it comes last in the 
+demotion order.
+
+-aneesh
+
+
+
+

@@ -2,156 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9374253D250
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7281153D253
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345855AbiFCTVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
+        id S1349174AbiFCTVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiFCTVI (ORCPT
+        with ESMTP id S231741AbiFCTVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:21:08 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C3749CBC
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:21:06 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40554)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nxCr2-00HJnH-Hh; Fri, 03 Jun 2022 13:21:04 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47998 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nxCr1-001Dcz-Am; Fri, 03 Jun 2022 13:21:04 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Date:   Fri, 03 Jun 2022 14:20:38 -0500
-Message-ID: <87bkv97dvd.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 3 Jun 2022 15:21:34 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FCD48889;
+        Fri,  3 Jun 2022 12:21:32 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id h23so14091369lfe.4;
+        Fri, 03 Jun 2022 12:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vRu2HMj+s0FqdXBsHbhcGVbuFfWd/V443d4ot13YWmo=;
+        b=OKV7tTcP036iyUftGLcun4D6VX/mIbJnOq4KbylU0UckLQV0YRi7rT20aalYukRkbB
+         x5ztf/ipTvP7Aclc2Yk8Oug9b6uiclWXsTxwWWHTfF2hnQ5DUra8Tc71Eeyzq5PzP4+7
+         jT7neRneUab4RjY5G+Q3SqnJMP5Oviq/ixZWD/HsQ4lHEeQNTh+o6OYeCG3pWn6bYI78
+         gzVzLvFBc/npFvyaFYPysstw+gN7bPMN44vtBD2k/yDBlGEnK+ks4pINO1n38lqH7y4S
+         OAjofZF6yPpvsFVMvdXpEwIvywbS8KtA8lq4NKFoC6hFvdkfVdo2KfVFCDlyUIO9fRUu
+         ta6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vRu2HMj+s0FqdXBsHbhcGVbuFfWd/V443d4ot13YWmo=;
+        b=neMM2MWL/UcMb2R0HfJVjEoYHu2gfUdiZULgI49Pj5lJBh76t/VT7KC2YBWV642HTf
+         2QWTK7mnh3ChT2zsRvGkcRCY4B+UEgOzrBd0leFFZ50xKHDvA+hvugNBtz7qZE93ufqQ
+         ZS4Zoik2YbPF2V+jNPOKdAdTTRemZ1tpjMTDY0u/6lpwb/5YIINPDRo6hja16dc3zSpX
+         ElsQYDNZl6nZH/pBhF+0+s3nCd9E1GvuLdogAYpnHX2BfZjkkZ8a4AAYGCAsaFi3Vsb4
+         C2oeclbRXbAk8TEAldHdmHUjIfIG56oKne19Q4gzmvGKWRJUSAZj4OD/16kcm62DdMXr
+         oWXg==
+X-Gm-Message-State: AOAM532x1TNX7Hs2Mw+aM0J1lBYbNVTRyP9JVJK57/VZ9SRRTx+8YfSF
+        NqKhETjpttxe8iiqbWy2ZWnSXuKCYxC/PaJhtcM=
+X-Google-Smtp-Source: ABdhPJwMLUFTdm93iXq8E4Z/0ob4mwl9RuQRIleNT7awKXEEwPxrOOobu6es6AroM4YQ/4R62QnGVt+d9OBosxaSwdc=
+X-Received: by 2002:a05:6512:685:b0:479:176c:5a5e with SMTP id
+ t5-20020a056512068500b00479176c5a5emr3578203lfe.408.1654284090835; Fri, 03
+ Jun 2022 12:21:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nxCr1-001Dcz-Am;;;mid=<87bkv97dvd.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19Er4ajgHLfRA6qKXcVH31u8naeoWdWm5o=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <165189881197.175864.14757002789194211860.stgit@devnote2>
+ <20220524192301.0c2ab08a@gandalf.local.home> <20220526232530.cb7d0aed0c60625ef093a735@kernel.org>
+ <Yo+TWcfpyHy55Il5@krava> <20220527011434.9e8c47d1b40f549baf2cf52a@kernel.org>
+ <YpFMQOjvV/tgwsuK@krava> <20220528101928.5118395f2d97142f7625b761@kernel.org>
+In-Reply-To: <20220528101928.5118395f2d97142f7625b761@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 3 Jun 2022 12:21:19 -0700
+Message-ID: <CAEf4BzZdPc3HVUwtuyifaPwz_=9VtykafJsSsvDbYonLA=K=2Q@mail.gmail.com>
+Subject: Re: [PATCH] rethook: Reject getting a rethook if RCU is not watching
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 464 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 9 (2.0%), b_tie_ro: 8 (1.7%), parse: 0.89 (0.2%),
-        extract_message_metadata: 12 (2.6%), get_uri_detail_list: 2.7 (0.6%),
-        tests_pri_-1000: 13 (2.8%), tests_pri_-950: 1.32 (0.3%),
-        tests_pri_-900: 0.96 (0.2%), tests_pri_-90: 56 (12.0%), check_bayes:
-        54 (11.7%), b_tokenize: 9 (1.9%), b_tok_get_all: 10 (2.3%),
-        b_comp_prob: 3.1 (0.7%), b_tok_touch_all: 29 (6.2%), b_finish: 0.83
-        (0.2%), tests_pri_0: 352 (75.9%), check_dkim_signature: 1.39 (0.3%),
-        check_dkim_adsp: 3.7 (0.8%), poll_dns_idle: 0.66 (0.1%), tests_pri_10:
-        1.86 (0.4%), tests_pri_500: 14 (3.0%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] 
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 27, 2022 at 6:19 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> On Sat, 28 May 2022 00:10:08 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> > On Fri, May 27, 2022 at 01:14:34AM +0900, Masami Hiramatsu wrote:
+> > > On Thu, 26 May 2022 16:49:26 +0200
+> > > Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > > On Thu, May 26, 2022 at 11:25:30PM +0900, Masami Hiramatsu wrote:
+> > > > > On Tue, 24 May 2022 19:23:01 -0400
+> > > > > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > > > >
+> > > > > > On Sat,  7 May 2022 13:46:52 +0900
+> > > > > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > > > >
+> > > > > > Is this expected to go through the BPF tree?
+> > > > > >
+> > > > >
+> > > > > Yes, since rethook (fprobe) is currently used only from eBPF.
+> > > > > Jiri, can you check this is good for your test case?
+> > > >
+> > > > sure I'll test it.. can't see the original email,
+> > > > perhaps I wasn't cc-ed.. but I'll find it
+> > >
+> > > Here it is. I Cc-ed your @kernel.org address.
+> > > https://lore.kernel.org/all/165189881197.175864.14757002789194211860.stgit@devnote2/T/#u
+> > >
+> > > >
+> > > > is this also related to tracing 'idle' functions,
+> > > > as discussed in here?
+> > > >   https://lore.kernel.org/bpf/20220515203653.4039075-1-jolsa@kernel.org/
+> > >
+> > > Ah, yes. So this may not happen with the above patch, but for the
+> > > hardening (ensuring it is always safe), I would like to add this.
+> > >
+> > > >
+> > > > because that's the one I can reproduce.. but I can
+> > > > certainly try that with your change as well
+> > >
+> > > Thank you!
+> >
+> > it did not help the idle warning as expected, but I did not
+> > see any problems running bpf tests on top of this
+>
+> Oops, right. I forgot this is only for the rethook, not protect the
+> fprobe handlers, since fprobe code doesn't involve the RCU code (it
+> depends on ftrace's check). Sorry about that.
+> Hmm, I need to add a test code for this issue, but that could be
+> solved by your noninstr patch.
+>
 
-Linus,
 
-Please pull the ptrace_stop-cleanup-for-v5.19 tag from the git tree:
+Masami,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace_stop-cleanup-for-v5.19
-  HEAD: 31cae1eaae4fd65095ad6a3659db467bc3c2599e sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
+It's not clear to me, do you intend to send a new revision with some
+more tests or this patch as is ready to go into bpf tree?
 
-While looking at the ptrace problems with PREEMPT_RT and the problems
-of Peter Zijlstra was encountering with ptrace in his freezer rewrite
-I identified some cleanups to ptrace_stop that make sense on their own
-and move make resolving the other problems much simpler.
 
-The biggest issue is the habbit of the ptrace code to change task->__state
-from the tracer to suppress TASK_WAKEKILL from waking up the tracee.  No
-other code in the kernel does that and it is straight forward to update
-signal_wake_up and friends to make that unnecessary.
-
-Peter's task freezer sets frozen tasks to a new state TASK_FROZEN and
-then it stores them by calling "wake_up_state(t, TASK_FROZEN)" relying
-on the fact that all stopped states except the special stop states can
-tolerate spurious wake up and recover their state.
-
-The state of stopped and traced tasked is changed to be stored in
-task->jobctl as well as in task->__state.  This makes it possible for
-the freezer to recover tasks in these special states, as well as
-serving as a general cleanup.  With a little more work in that
-direction I believe TASK_STOPPED can learn to tolerate spurious wake
-ups and become an ordinary stop state.
-
-The TASK_TRACED state has to remain a special state as the registers for
-a process are only reliably available when the process is stopped in
-the scheduler.  Fundamentally ptrace needs acess to the saved
-register values of a task.
-
-There are bunch of semi-random ptrace related cleanups that were found
-while looking at these issues.
-
-One cleanup that deserves to be called out is from commit 57b6de08b5f6
-("ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs").  This
-makes a change that is technically user space visible, in the handling
-of what happens to a tracee when a tracer dies unexpectedly.
-According to our testing and our understanding of userspace nothing
-cares that spurious SIGTRAPs can be generated in that case.
-
-The entire discussion can be found at:
-  https://lkml.kernel.org/r/87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org
-
-Eric W. Biederman (11):
-      signal: Rename send_signal send_signal_locked
-      signal: Replace __group_send_sig_info with send_signal_locked
-      ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP
-      ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
-      ptrace: Remove arch_ptrace_attach
-      signal: Use lockdep_assert_held instead of assert_spin_locked
-      ptrace: Reimplement PTRACE_KILL by always sending SIGKILL
-      ptrace: Document that wait_task_inactive can't fail
-      ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs
-      ptrace: Don't change __state
-      ptrace: Always take siglock in ptrace_resume
-
-Peter Zijlstra (1):
-      sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
-
- arch/ia64/include/asm/ptrace.h    |   4 --
- arch/ia64/kernel/ptrace.c         |  57 ----------------
- arch/um/include/asm/thread_info.h |   2 +
- arch/um/kernel/exec.c             |   2 +-
- arch/um/kernel/process.c          |   2 +-
- arch/um/kernel/ptrace.c           |   8 +--
- arch/um/kernel/signal.c           |   4 +-
- arch/x86/kernel/step.c            |   3 +-
- arch/xtensa/kernel/ptrace.c       |   4 +-
- arch/xtensa/kernel/signal.c       |   4 +-
- drivers/tty/tty_jobctrl.c         |   4 +-
- include/linux/ptrace.h            |   7 --
- include/linux/sched.h             |  10 ++-
- include/linux/sched/jobctl.h      |   8 +++
- include/linux/sched/signal.h      |  20 ++++--
- include/linux/signal.h            |   3 +-
- kernel/ptrace.c                   |  87 ++++++++---------------
- kernel/sched/core.c               |   5 +-
- kernel/signal.c                   | 140 +++++++++++++++++---------------------
- kernel/time/posix-cpu-timers.c    |   6 +-
- 20 files changed, 140 insertions(+), 240 deletions(-)
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-
-p.s.  My apologies this is coming in so late, everyone in my house has
-been sick.
+> Thank you,
+>
+> >
+> > jirka
+> >
+> > >
+> > > >
+> > > > jirka
+> > > >
+> > > > >
+> > > > > Thank you,
+> > > > >
+> > > > >
+> > > > > > -- Steve
+> > > > > >
+> > > > > >
+> > > > > > > Since the rethook_recycle() will involve the call_rcu() for reclaiming
+> > > > > > > the rethook_instance, the rethook must be set up at the RCU available
+> > > > > > > context (non idle). This rethook_recycle() in the rethook trampoline
+> > > > > > > handler is inevitable, thus the RCU available check must be done before
+> > > > > > > setting the rethook trampoline.
+> > > > > > >
+> > > > > > > This adds a rcu_is_watching() check in the rethook_try_get() so that
+> > > > > > > it will return NULL if it is called when !rcu_is_watching().
+> > > > > > >
+> > > > > > > Fixes: 54ecbe6f1ed5 ("rethook: Add a generic return hook")
+> > > > > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > > > ---
+> > > > > > >  kernel/trace/rethook.c |    9 +++++++++
+> > > > > > >  1 file changed, 9 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+> > > > > > > index b56833700d23..c69d82273ce7 100644
+> > > > > > > --- a/kernel/trace/rethook.c
+> > > > > > > +++ b/kernel/trace/rethook.c
+> > > > > > > @@ -154,6 +154,15 @@ struct rethook_node *rethook_try_get(struct rethook *rh)
+> > > > > > >     if (unlikely(!handler))
+> > > > > > >             return NULL;
+> > > > > > >
+> > > > > > > +   /*
+> > > > > > > +    * This expects the caller will set up a rethook on a function entry.
+> > > > > > > +    * When the function returns, the rethook will eventually be reclaimed
+> > > > > > > +    * or released in the rethook_recycle() with call_rcu().
+> > > > > > > +    * This means the caller must be run in the RCU-availabe context.
+> > > > > > > +    */
+> > > > > > > +   if (unlikely(!rcu_is_watching()))
+> > > > > > > +           return NULL;
+> > > > > > > +
+> > > > > > >     fn = freelist_try_get(&rh->pool);
+> > > > > > >     if (!fn)
+> > > > > > >             return NULL;
+> > > > > >
+> > > > >
+> > > > >
+> > > > > --
+> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > >
+> > >
+> > > --
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>

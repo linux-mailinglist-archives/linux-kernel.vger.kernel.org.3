@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6951C53D0AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F303353CEE7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346304AbiFCSJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S1345433AbiFCRtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345878AbiFCR41 (ORCPT
+        with ESMTP id S1345004AbiFCRsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:56:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAEC1FA65;
-        Fri,  3 Jun 2022 10:53:49 -0700 (PDT)
+        Fri, 3 Jun 2022 13:48:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF185541AA;
+        Fri,  3 Jun 2022 10:45:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 746D660A54;
-        Fri,  3 Jun 2022 17:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72438C385A9;
-        Fri,  3 Jun 2022 17:53:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C25A60A6B;
+        Fri,  3 Jun 2022 17:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB3BC385B8;
+        Fri,  3 Jun 2022 17:45:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278828;
-        bh=tSQXz/ZFbI2pYTh4TigjjrPwJuuXCKdaX9A7q3dypck=;
+        s=korg; t=1654278323;
+        bh=e1GvVuGQ+unzosyZcj6xC7FjpppfWqxA/blqXv1Kyd4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LkTaUJvMiNp+MANtIrszTc/TW3YQZ1D8QYdqHWNBAbVX+N4YL6ozD0ndJyi6Yp1RL
-         5CqirfLC2aSrNpl9NRyli8RFX+otCr3YQKOTFKbXkZ32d8mv4U+uzE9IBMoBpLYWaX
-         jdqWDll4UT8Kxsg6lgSTR3sKg5A+G5IQJ13RQR0g=
+        b=faVpcDpdOgk7m2EIL3xxanoDyuwZWeSsd+calvMaG0P7GpQSTXgmEA4vBb199+EB/
+         ekf8C3fSsr/YIJooKRhHk8toGdZH4jV5r2bX2QWL0RKAIhBDsbsmoZj8yg8dnaSdwA
+         AqAnloLn8Qh7vlqnizWLbkyC5cTVeY0CEuNFfv3Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
-        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
-        Vabhav Sharma <vabhav.sharma@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.17 40/75] crypto: caam - fix i.MX6SX entropy delay value
-Date:   Fri,  3 Jun 2022 19:43:24 +0200
-Message-Id: <20220603173822.883275707@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 5.4 29/34] tpm: Fix buffer access in tpm2_get_tpm_pt()
+Date:   Fri,  3 Jun 2022 19:43:25 +0200
+Message-Id: <20220603173817.028616126@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+From: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
 
-commit 4ee4cdad368a26de3967f2975806a9ee2fa245df upstream.
+commit e57b2523bd37e6434f4e64c7a685e3715ad21e9a upstream.
 
-Since commit 358ba762d9f1 ("crypto: caam - enable prediction resistance
-in HRWNG") the following CAAM errors can be seen on i.MX6SX:
+Under certain conditions uninitialized memory will be accessed.
+As described by TCG Trusted Platform Module Library Specification,
+rev. 1.59 (Part 3: Commands), if a TPM2_GetCapability is received,
+requesting a capability, the TPM in field upgrade mode may return a
+zero length list.
+Check the property count in tpm2_get_tpm_pt().
 
-caam_jr 2101000.jr: 20003c5b: CCB: desc idx 60: RNG: Hardware error
-hwrng: no data available
-
-This error is due to an incorrect entropy delay for i.MX6SX.
-
-Fix it by increasing the minimum entropy delay for i.MX6SX
-as done in U-Boot:
-https://patchwork.ozlabs.org/project/uboot/patch/20220415111049.2565744-1-gaurav.jain@nxp.com/
-
-As explained in the U-Boot patch:
-
-"RNG self tests are run to determine the correct entropy delay.
-Such tests are executed with different voltages and temperatures to identify
-the worst case value for the entropy delay. For i.MX6SX, it was determined
-that after adding a margin value of 1000 the minimum entropy delay should be
-at least 12000."
-
-Cc: <stable@vger.kernel.org>
-Fixes: 358ba762d9f1 ("crypto: caam - enable prediction resistance in HRWNG")
-Signed-off-by: Fabio Estevam <festevam@denx.de>
-Reviewed-by: Horia Geantă <horia.geanta@nxp.com>
-Reviewed-by: Vabhav Sharma <vabhav.sharma@nxp.com>
-Reviewed-by: Gaurav Jain <gaurav.jain@nxp.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 2ab3241161b3 ("tpm: migrate tpm2_get_tpm_pt() to use struct tpm_buf")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/caam/ctrl.c |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/char/tpm/tpm2-cmd.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/crypto/caam/ctrl.c
-+++ b/drivers/crypto/caam/ctrl.c
-@@ -609,6 +609,13 @@ static bool check_version(struct fsl_mc_
- }
- #endif
- 
-+static bool needs_entropy_delay_adjustment(void)
-+{
-+	if (of_machine_is_compatible("fsl,imx6sx"))
-+		return true;
-+	return false;
-+}
-+
- /* Probe routine for CAAM top (controller) level */
- static int caam_probe(struct platform_device *pdev)
- {
-@@ -855,6 +862,8 @@ static int caam_probe(struct platform_de
- 			 * Also, if a handle was instantiated, do not change
- 			 * the TRNG parameters.
- 			 */
-+			if (needs_entropy_delay_adjustment())
-+				ent_delay = 12000;
- 			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
- 				dev_info(dev,
- 					 "Entropy delay = %u\n",
-@@ -871,6 +880,15 @@ static int caam_probe(struct platform_de
- 			 */
- 			ret = instantiate_rng(dev, inst_handles,
- 					      gen_sk);
-+			/*
-+			 * Entropy delay is determined via TRNG characterization.
-+			 * TRNG characterization is run across different voltages
-+			 * and temperatures.
-+			 * If worst case value for ent_dly is identified,
-+			 * the loop can be skipped for that platform.
-+			 */
-+			if (needs_entropy_delay_adjustment())
-+				break;
- 			if (ret == -EAGAIN)
- 				/*
- 				 * if here, the loop will rerun,
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -706,7 +706,16 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip
+ 	if (!rc) {
+ 		out = (struct tpm2_get_cap_out *)
+ 			&buf.data[TPM_HEADER_SIZE];
+-		*value = be32_to_cpu(out->value);
++		/*
++		 * To prevent failing boot up of some systems, Infineon TPM2.0
++		 * returns SUCCESS on TPM2_Startup in field upgrade mode. Also
++		 * the TPM2_Getcapability command returns a zero length list
++		 * in field upgrade mode.
++		 */
++		if (be32_to_cpu(out->property_cnt) > 0)
++			*value = be32_to_cpu(out->value);
++		else
++			rc = -ENODATA;
+ 	}
+ 	tpm_buf_destroy(&buf);
+ 	return rc;
 
 

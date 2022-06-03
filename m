@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CFA53D093
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7886253D071
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348456AbiFCSHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S1346601AbiFCSEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345953AbiFCRza (ORCPT
+        with ESMTP id S1346895AbiFCRvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:55:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C6D65C8;
-        Fri,  3 Jun 2022 10:53:07 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA05F5A2C0;
+        Fri,  3 Jun 2022 10:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 748AB612EA;
-        Fri,  3 Jun 2022 17:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832D4C385A9;
-        Fri,  3 Jun 2022 17:53:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60F2BB8241D;
+        Fri,  3 Jun 2022 17:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC04CC385A9;
+        Fri,  3 Jun 2022 17:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278786;
-        bh=C5arwU05RqA1ctL2UY79lqz2JT3jbYppZjc/zSBAfIc=;
+        s=korg; t=1654278578;
+        bh=3pOtbOQ8N6t6Rw8X0QXHDepYORdmz7gTCpQzOAuGKFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TPhsYbPtOIYj6OEJYNyzqRVlwoocFzio7hpCmr44uknYDPkOGhKUXZ1CFpQUR0I1J
-         30i143PlcwabYRPzayzy2chjMGOPqEvgoTF6dH57z+Y6v0nCk+Ae9zNaYEUEO5rrve
-         VpcKJrJNuOrzY0eUX30F4ozYPoAbmXAUlC0yTpkU=
+        b=Xm6i/q4Vejn9VTe96rfn4svdWLV1V2Wq/9LUWvyyPEa/UV+dIK571ZOwBbPePjNJU
+         hK9EJQmNnJgSrU4BhTZXteY8Wpuj9y2FpbVE+Id/hdlal4q8HTSmgtJuTTqpIj7nId
+         yVFKJJN/vyrlzNi2yFSP5sUYnNgNjQCZ9MFHN0oM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 5.17 19/75] exfat: check if cluster num is valid
-Date:   Fri,  3 Jun 2022 19:43:03 +0200
-Message-Id: <20220603173822.293395249@linuxfoundation.org>
+        stable@vger.kernel.org, zhangziming.zzm@antgroup.com,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 24/66] netfilter: nf_tables: sanitize nft_set_desc_concat_parse()
+Date:   Fri,  3 Jun 2022 19:43:04 +0200
+Message-Id: <20220603173821.358045008@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,104 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 64ba4b15e5c045f8b746c6da5fc9be9a6b00b61d upstream.
+commit fecf31ee395b0295f2d7260aa29946b7605f7c85 upstream.
 
-Syzbot reported slab-out-of-bounds read in exfat_clear_bitmap.
-This was triggered by reproducer calling truncute with size 0,
-which causes the following trace:
+Add several sanity checks for nft_set_desc_concat_parse():
 
-BUG: KASAN: slab-out-of-bounds in exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
-Read of size 8 at addr ffff888115aa9508 by task syz-executor251/365
+- validate desc->field_count not larger than desc->field_len array.
+- field length cannot be larger than desc->field_len (ie. U8_MAX)
+- total length of the concatenation cannot be larger than register array.
 
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
- print_address_description+0x81/0x3c0 mm/kasan/report.c:233
- __kasan_report mm/kasan/report.c:419 [inline]
- kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
- __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
- exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
- exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
- __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
- exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
- exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
- notify_change+0xb76/0xe10 fs/attr.c:336
- do_truncate+0x1ea/0x2d0 fs/open.c:65
+Joint work with Florian Westphal.
 
-Move the is_valid_cluster() helper from fatent.c to a common
-header to make it reusable in other *.c files. And add is_valid_cluster()
-to validate if cluster number is within valid range in exfat_clear_bitmap()
-and exfat_set_bitmap().
-
-Link: https://syzkaller.appspot.com/bug?id=50381fc73821ecae743b8cf24b4c9a04776f767c
-Reported-by: syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-Fixes: 1e49a94cf707 ("exfat: add bitmap operations")
-Cc: stable@vger.kernel.org # v5.7+
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Fixes: f3a2181e16f1 ("netfilter: nf_tables: Support for sets with multiple ranged fields")
+Reported-by: <zhangziming.zzm@antgroup.com>
+Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/exfat/balloc.c   |    8 ++++++--
- fs/exfat/exfat_fs.h |    6 ++++++
- fs/exfat/fatent.c   |    6 ------
- 3 files changed, 12 insertions(+), 8 deletions(-)
+ net/netfilter/nf_tables_api.c |   17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
---- a/fs/exfat/balloc.c
-+++ b/fs/exfat/balloc.c
-@@ -148,7 +148,9 @@ int exfat_set_bitmap(struct inode *inode
- 	struct super_block *sb = inode->i_sb;
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -4151,6 +4151,9 @@ static int nft_set_desc_concat_parse(con
+ 	u32 len;
+ 	int err;
  
--	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
-+	if (!is_valid_cluster(sbi, clu))
++	if (desc->field_count >= ARRAY_SIZE(desc->field_len))
++		return -E2BIG;
++
+ 	err = nla_parse_nested_deprecated(tb, NFTA_SET_FIELD_MAX, attr,
+ 					  nft_concat_policy, NULL);
+ 	if (err < 0)
+@@ -4160,9 +4163,8 @@ static int nft_set_desc_concat_parse(con
+ 		return -EINVAL;
+ 
+ 	len = ntohl(nla_get_be32(tb[NFTA_SET_FIELD_LEN]));
+-
+-	if (len * BITS_PER_BYTE / 32 > NFT_REG32_COUNT)
+-		return -E2BIG;
++	if (!len || len > U8_MAX)
 +		return -EINVAL;
-+
- 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
- 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
- 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
-@@ -166,7 +168,9 @@ void exfat_clear_bitmap(struct inode *in
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
- 	struct exfat_mount_options *opts = &sbi->options;
  
--	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
-+	if (!is_valid_cluster(sbi, clu))
-+		return;
-+
- 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
- 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
- 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
---- a/fs/exfat/exfat_fs.h
-+++ b/fs/exfat/exfat_fs.h
-@@ -380,6 +380,12 @@ static inline int exfat_sector_to_cluste
- 		EXFAT_RESERVED_CLUSTERS;
- }
+ 	desc->field_len[desc->field_count++] = len;
  
-+static inline bool is_valid_cluster(struct exfat_sb_info *sbi,
-+		unsigned int clus)
-+{
-+	return clus >= EXFAT_FIRST_CLUSTER && clus < sbi->num_clusters;
-+}
+@@ -4173,7 +4175,8 @@ static int nft_set_desc_concat(struct nf
+ 			       const struct nlattr *nla)
+ {
+ 	struct nlattr *attr;
+-	int rem, err;
++	u32 num_regs = 0;
++	int rem, err, i;
+ 
+ 	nla_for_each_nested(attr, nla, rem) {
+ 		if (nla_type(attr) != NFTA_LIST_ELEM)
+@@ -4184,6 +4187,12 @@ static int nft_set_desc_concat(struct nf
+ 			return err;
+ 	}
+ 
++	for (i = 0; i < desc->field_count; i++)
++		num_regs += DIV_ROUND_UP(desc->field_len[i], sizeof(u32));
 +
- /* super.c */
- int exfat_set_volume_dirty(struct super_block *sb);
- int exfat_clear_volume_dirty(struct super_block *sb);
---- a/fs/exfat/fatent.c
-+++ b/fs/exfat/fatent.c
-@@ -81,12 +81,6 @@ int exfat_ent_set(struct super_block *sb
++	if (num_regs > NFT_REG32_COUNT)
++		return -E2BIG;
++
  	return 0;
  }
  
--static inline bool is_valid_cluster(struct exfat_sb_info *sbi,
--		unsigned int clus)
--{
--	return clus >= EXFAT_FIRST_CLUSTER && clus < sbi->num_clusters;
--}
--
- int exfat_ent_get(struct super_block *sb, unsigned int loc,
- 		unsigned int *content)
- {
 
 

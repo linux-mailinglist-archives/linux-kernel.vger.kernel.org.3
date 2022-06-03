@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8195253CF36
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F3453D150
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345459AbiFCRxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S1347683AbiFCSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345602AbiFCRuC (ORCPT
+        with ESMTP id S1347033AbiFCSFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:02 -0400
+        Fri, 3 Jun 2022 14:05:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A925258391;
-        Fri,  3 Jun 2022 10:46:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4B05A59B;
+        Fri,  3 Jun 2022 10:58:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59D62B8243A;
-        Fri,  3 Jun 2022 17:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE27C385A9;
-        Fri,  3 Jun 2022 17:46:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E525B82436;
+        Fri,  3 Jun 2022 17:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625DCC385A9;
+        Fri,  3 Jun 2022 17:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278362;
-        bh=JK1DF1VgNAq4TDyPSFj/H5fnS9OR7dFiNc1Idiqfw2Q=;
+        s=korg; t=1654279033;
+        bh=3UL3x2f2WyP8DSvLWX62I8m/JkJuzbJBFvpyHQs11YU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qg9HsXlk9LQRb6sViR/Bf/atwLDeo9W9UUYU+FWAlkpVwmyC9JjNlt4GyiP8cU8E6
-         WcN+QuV3QzESLyfZkmtWLnLE8r9/E442Epcs2wsddEjkeVbFA6EIcvMuF2Hlo1xau1
-         xg+CmQTWU1Ki0ik7qEGDlXdnl3f+T7U8Uz/5PFWo=
+        b=Zz3hAYvK6zI/+slKwbrZHkT+uTVJTqlDQrK3RZcglhbev6fif0gLGijjuKRoYUQ7L
+         EltNwT6FZ4bakOpJ24yzBZndEC/t59qUx35zs9dkPKFBhHzaosBTcxydhNBc0ryVgd
+         aF855MD7kHtZ92taLw4stzZ5J2k7MDbz6Xx+r5HE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH 5.4 08/34] media: vim2m: initialize the media device earlier
-Date:   Fri,  3 Jun 2022 19:43:04 +0200
-Message-Id: <20220603173816.239438872@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Alexander Duyck <alexander.h.duyck@intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        "Soheil Hassas Yeganeh" <soheil@google.com>,
+        "Sridhar Samudrala" <sridhar.samudrala@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.18 04/67] pipe: make poll_usage boolean and annotate its access
+Date:   Fri,  3 Jun 2022 19:43:05 +0200
+Message-Id: <20220603173820.860166986@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +60,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 
-commit 1a28dce222a6ece725689ad58c0cf4a1b48894f4 upstream.
+commit f485922d8fe4e44f6d52a5bb95a603b7c65554bb upstream.
 
-Before the video device node is registered, the v4l2_dev.mdev
-pointer must be set in order to correctly associate the video
-device with the media device. Move the initialization of the
-media device up.
+Patch series "Fix data-races around epoll reported by KCSAN."
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+This series suppresses a false positive KCSAN's message and fixes a real
+data-race.
+
+
+This patch (of 2):
+
+pipe_poll() runs locklessly and assigns 1 to poll_usage.  Once poll_usage
+is set to 1, it never changes in other places.  However, concurrent writes
+of a value trigger KCSAN, so let's make KCSAN happy.
+
+BUG: KCSAN: data-race in pipe_poll / pipe_poll
+
+write to 0xffff8880042f6678 of 4 bytes by task 174 on cpu 3:
+ pipe_poll (fs/pipe.c:656)
+ ep_item_poll.isra.0 (./include/linux/poll.h:88 fs/eventpoll.c:853)
+ do_epoll_wait (fs/eventpoll.c:1692 fs/eventpoll.c:1806 fs/eventpoll.c:2234)
+ __x64_sys_epoll_wait (fs/eventpoll.c:2246 fs/eventpoll.c:2241 fs/eventpoll.c:2241)
+ do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+ entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
+
+write to 0xffff8880042f6678 of 4 bytes by task 177 on cpu 1:
+ pipe_poll (fs/pipe.c:656)
+ ep_item_poll.isra.0 (./include/linux/poll.h:88 fs/eventpoll.c:853)
+ do_epoll_wait (fs/eventpoll.c:1692 fs/eventpoll.c:1806 fs/eventpoll.c:2234)
+ __x64_sys_epoll_wait (fs/eventpoll.c:2246 fs/eventpoll.c:2241 fs/eventpoll.c:2241)
+ do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+ entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 177 Comm: epoll_race Not tainted 5.17.0-58927-gf443e374ae13 #6
+Hardware name: Red Hat KVM, BIOS 1.11.0-2.amzn2 04/01/2014
+
+Link: https://lkml.kernel.org/r/20220322002653.33865-1-kuniyu@amazon.co.jp
+Link: https://lkml.kernel.org/r/20220322002653.33865-2-kuniyu@amazon.co.jp
+Fixes: 3b844826b6c6 ("pipe: avoid unnecessary EPOLLET wakeups under normal loads")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc: Alexander Duyck <alexander.h.duyck@intel.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Kuniyuki Iwashima <kuni1840@gmail.com>
+Cc: "Soheil Hassas Yeganeh" <soheil@google.com>
+Cc: "Sridhar Samudrala" <sridhar.samudrala@intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/vim2m.c |   14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ fs/pipe.c                 |    2 +-
+ include/linux/pipe_fs_i.h |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/media/platform/vim2m.c
-+++ b/drivers/media/platform/vim2m.c
-@@ -1347,12 +1347,6 @@ static int vim2m_probe(struct platform_d
- 		goto error_dev;
- 	}
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -653,7 +653,7 @@ pipe_poll(struct file *filp, poll_table
+ 	unsigned int head, tail;
  
--	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
--	if (ret) {
--		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
--		goto error_m2m;
--	}
--
- #ifdef CONFIG_MEDIA_CONTROLLER
- 	dev->mdev.dev = &pdev->dev;
- 	strscpy(dev->mdev.model, "vim2m", sizeof(dev->mdev.model));
-@@ -1361,7 +1355,15 @@ static int vim2m_probe(struct platform_d
- 	media_device_init(&dev->mdev);
- 	dev->mdev.ops = &m2m_media_ops;
- 	dev->v4l2_dev.mdev = &dev->mdev;
-+#endif
+ 	/* Epoll has some historical nasty semantics, this enables them */
+-	pipe->poll_usage = 1;
++	WRITE_ONCE(pipe->poll_usage, true);
  
-+	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
-+	if (ret) {
-+		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
-+		goto error_m2m;
-+	}
-+
-+#ifdef CONFIG_MEDIA_CONTROLLER
- 	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
- 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
- 	if (ret) {
+ 	/*
+ 	 * Reading pipe state only -- no need for acquiring the semaphore.
+--- a/include/linux/pipe_fs_i.h
++++ b/include/linux/pipe_fs_i.h
+@@ -71,7 +71,7 @@ struct pipe_inode_info {
+ 	unsigned int files;
+ 	unsigned int r_counter;
+ 	unsigned int w_counter;
+-	unsigned int poll_usage;
++	bool poll_usage;
+ 	struct page *tmp_page;
+ 	struct fasync_struct *fasync_readers;
+ 	struct fasync_struct *fasync_writers;
 
 

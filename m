@@ -2,112 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3C153C73C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C12D53C73F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242946AbiFCJFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S242957AbiFCJGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiFCJFF (ORCPT
+        with ESMTP id S229761AbiFCJGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:05:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0670A381B1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:05:04 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2536DNMu018802;
-        Fri, 3 Jun 2022 09:04:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=fkgjiBbvfssojcLQ5Xrtaf/b+dhAnuUhltuZxxE14dI=;
- b=Wnm87g9cv/OXyRG2iPsmT0vdxsFSuIvKeOHM8JuM/Qxtjh6f6JvoPBQAhgn9nK9Kl+30
- YicjWWZLTm2D/g3IjKTWANv7vp5Zwt9rQhU56OySYx2e0RmNv3M2v1qFw7Yoy9EC5s7d
- G7t8UokrZs60Zi0hKzI5p1eE4ypTnzIhjXJZ25dgyQBM/KX6RMCl/otn8/xjLpOYAAeu
- P0etDZTOeCt81w0yAixagmYRzpSJRcLqi7p4c0dKJN6qNQ7lJcljLyaFs9JbMCHxVSfp
- qK3Pr8gRfizOC5hSCBSZNEeJT97S2Lbx5VSg76re2EXXNWUG/ibyd9UW7/IbnMs1oTo9 wA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfcu8jss1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 09:04:44 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2538usfW020405;
-        Fri, 3 Jun 2022 09:04:43 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfcu8jsrg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 09:04:43 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2538pqgb014509;
-        Fri, 3 Jun 2022 09:04:41 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gbcae85bu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 09:04:41 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25394doC44302756
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Jun 2022 09:04:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0ED5A4C044;
-        Fri,  3 Jun 2022 09:04:39 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C18B34C046;
-        Fri,  3 Jun 2022 09:04:32 +0000 (GMT)
-Received: from [9.43.93.173] (unknown [9.43.93.173])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Jun 2022 09:04:32 +0000 (GMT)
-Message-ID: <c98eb873-a5bb-edcc-743d-89cfffe52cd9@linux.ibm.com>
-Date:   Fri, 3 Jun 2022 14:34:31 +0530
+        Fri, 3 Jun 2022 05:06:32 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EF0381BA;
+        Fri,  3 Jun 2022 02:06:31 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2533qU8Q006126;
+        Fri, 3 Jun 2022 02:06:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pfpt0220; bh=Zjta6WAMAVbUUOCc2zQ58NhveVqPhuWBMIk3Oto4ocU=;
+ b=P1KV6GV8lsesL0dslyYTMbnUVyZKwChC93OEvAPifGaRqjxScMrQoE86eCx6Ji5DwaSS
+ qmbrHsOOKp5eNqMQM4W5OZBWTJ9+9q2tN9l2YWq3XKKDQ8V8/20L1jeMKRtVUcvHZOjk
+ jQz2P03XwzEMluFwQWSEgP/G/EaAhorFsU8tWgrWqj+26weYspg6SjwLxsluEAMKYHpx
+ 5w2SXdKckrldwHtlFsAfJNU+/eZA4UoKyoPQfSD7pS3+5tBttaP/l/q3dUb9PIOWeKnI
+ XhR3Lhn0au9uZhV03wypO1VSuX8pkMlvpaEvouuzAbCi31Fb0CmXDdh/yee6rgEGLGjO hw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3geupucjjr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 02:06:22 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Jun
+ 2022 02:06:20 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Fri, 3 Jun 2022 02:06:20 -0700
+Received: from Dell2s-9 (unknown [10.110.150.250])
+        by maili.marvell.com (Postfix) with ESMTP id 1AC523F7097;
+        Fri,  3 Jun 2022 02:06:19 -0700 (PDT)
+Date:   Fri, 3 Jun 2022 02:06:18 -0700
+From:   Piyush Malgujar <pmalgujar@marvell.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <brgl@bgdev.pl>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <rric@kernel.org>, <cchavva@marvell.com>, <wsadowski@marvell.com>
+Subject: Re: [PATCH 2/5] dt-bindings: gpio: gpio-thunderx: Describe pin-cfg
+ option
+Message-ID: <20220603090618.GA27121@Dell2s-9>
+References: <20220427144620.9105-1-pmalgujar@marvell.com>
+ <20220427144620.9105-3-pmalgujar@marvell.com>
+ <CACRpkdaqeTs-jHPBmtdiz+LdMM0pz0zqt4diX=e+YpgaGr0Jbw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v4 4/7] mm/demotion/dax/kmem: Set node's memory tier
- to MEMORY_TIER_PMEM
-Content-Language: en-US
-To:     Bharata B Rao <bharata@amd.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
- <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
- <20220527122528.129445-5-aneesh.kumar@linux.ibm.com>
- <5706f5e9-0609-98c9-a0cd-7d96336d73dd@amd.com>
- <8e651a1e-d189-3e8a-438f-298f21402bd2@linux.ibm.com>
- <d45374fa-6e51-36cb-9a2c-96f85d9de528@amd.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <d45374fa-6e51-36cb-9a2c-96f85d9de528@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oSx9HJET7Gpw0PQRshfj_d5cI9DoJaRx
-X-Proofpoint-ORIG-GUID: kEMdneNsbdlx1A764xvy2vRfXW557sLJ
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdaqeTs-jHPBmtdiz+LdMM0pz0zqt4diX=e+YpgaGr0Jbw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-GUID: gCXpW5evpxy7rs0xJH5A1GfdPXzso7p9
+X-Proofpoint-ORIG-GUID: gCXpW5evpxy7rs0xJH5A1GfdPXzso7p9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-03_02,2022-06-02_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206030039
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -116,34 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 12:06 PM, Bharata B Rao wrote:
-> On 6/1/2022 7:19 PM, Aneesh Kumar K V wrote:
->> On 6/1/22 11:59 AM, Bharata B Rao wrote:
->>> I was experimenting with this patchset and found this behaviour.
->>> Here's what I did:
->>>
->>> Boot a KVM guest with vNVDIMM device which ends up with device_dax
->>> driver by default.
->>>
->>> Use it as RAM by binding it to dax kmem driver. It now appears as
->>> RAM with a new NUMA node that is put to memtier1 (the existing tier
->>> where DRAM already exists)
->>>
->>
->> That should have placed it in memtier2.
->>
->>> I can move it to memtier2 (MEMORY_RANK_PMEM) manually, but isn't
->>> that expected to happen automatically when a node with dax kmem
->>> device comes up?
->>>
->>
->> This can happen if we have added the same NUMA node to memtier1 before dax kmem driver initialized the pmem memory. Can you check before the above node_set_memory_tier_rank() whether the specific NUMA node is already part of any memory tier?
+Hi Linus,
+
+Thanks for reviewing.
+
+On Mon, May 02, 2022 at 12:15:34AM +0200, Linus Walleij wrote:
+> On Wed, Apr 27, 2022 at 4:47 PM Piyush Malgujar <pmalgujar@marvell.com> wrote:
 > 
-> When we reach node_set_memory_tier_rank(), node1 (that has the pmem device)
-> is already part of memtier1 whose nodelist shows 0-1.
+> > Add support for pin-cfg to configure GPIO Pins
+> >
+> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
+> > ---
+> >  Documentation/devicetree/bindings/gpio/gpio-thunderx.txt | 4 ++++
+> 
+> Would be nice to rewrite this binding in YAML
 > 
 
-can you find out which code path added node1 to memtier1? Do you have 
-regular memory also appearing on node1?
+Sure, will take care in V2.
 
--aneesh
+> >    - First cell is the GPIO pin number relative to the controller.
+> >    - Second cell is triggering flags as defined in interrupts.txt.
+> > +- pin-cfg: Configuration of pin's function, filters, XOR and output mode.
+> > +  - First cell is the GPIO pin number
+> > +  - Second cell is a value written to GPIO_BIT_CFG register at driver probe.
+> 
+> Just poking magic hex values into some random register as
+> part of a binding is not a good idea.
+> 
+> This looks like trying to reinvent the pin config subsystem.
+> 
+> GPIO is using the standard pin configurations in the second cell of
+> the handle, use them in this driver as well and add new ones if we
+> need.
+> 
+> You find the existing flags here:
+> include/dt-bindings/gpio/gpio.h
+> 
+> If you need something more sophisticated than a simple flag, I think
+> you need to implement proper pin config.
+> 
+> Yours,
+> Linus Walleij
+
+The purpose of this pin-cfg entry is different than the standard GPIO pin config usage.
+It is to write a value to GPIO_BIT_CFG register which is used to configure fields like
+pin function, selecting which signal is reported to GPIO output or which signal GPIO
+input need to connect, filters, XOR and output mode.
+We will define new entry specific to thunderx GPIO usage, instead of pin-cfg.
+
+Thanks,
+Piyush

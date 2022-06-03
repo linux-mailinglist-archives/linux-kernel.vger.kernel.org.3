@@ -2,137 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0D853CA1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BE253CA21
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244293AbiFCMm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S244365AbiFCMoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241456AbiFCMm5 (ORCPT
+        with ESMTP id S241456AbiFCMoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:42:57 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7753A5E8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:42:55 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 7so6336540pga.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jCaeN99qbe80XdllZmNt/NTUfNqd3MU7NsYrWBRHqB8=;
-        b=buW7IdY3iqfdV6Y6qR7TYjHvNuMvA/L04H0R8YSMDhiClFymdVYWGX8PmytWGvqRxh
-         FOhWxuHje/Jlz6IoOzONeQaXPpN2OLDgyHokkR6JrZC94wWxXvaVQTIHnbw0oOX3bOBJ
-         o82+3Iy/EtwXNT2MraVUNLfAyO3D/+DFTDiO1kq0lD1Lkylufvdn/Ze2kfaoynZmHJwI
-         8Th8yW3GWOeE3s/f0D+uH7C5WB6Kdhq76q/f8XTbJc3w4jj3aTtKy4oc+5TLENSp4Ocv
-         GtuMF1vcGj13EZEPNCpl5iJ7uysZn6ExNB9pXJqf1qwmyYAvAsZjxu5eQqlSu0KAnvRl
-         7Bng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jCaeN99qbe80XdllZmNt/NTUfNqd3MU7NsYrWBRHqB8=;
-        b=FtMUJEOxY1SXsF9xgl56igz8psoCKGuUirB1/jxqXqAyZHUkmr9n6jy+OR329rfgCu
-         79PtZeNtfgCwI9lbR71a7d2cw8DbzLSnqEz7dsmvlzRYLUpb5nCDdRJC0Qu5Dodpiuhw
-         iY8mVKJgWVCXa3rnkF3nc45Lj6hI20xxPfzPCzAQdepV5B32YJPEJfGL8Tg86ZKbviGq
-         znRW84IRkPirl4XPfvokFGNHdEynbM5ufC33rqxVuO9Fd0pvTaW+RytzsudBiF63aeUL
-         psfHhHVHfx3oSNC35jKiwWQ2FE30eKZ0hbBbcetRiUL1Rum6I71Y7bNIJBRsCH4bEFCe
-         SBiA==
-X-Gm-Message-State: AOAM530rcpBYdGVTHnvPP6m5rbneDXGoV9UICHYWnnO5/KxN8Oijh64a
-        u6UQeGkGIN47UDpDh+W097c=
-X-Google-Smtp-Source: ABdhPJxtjqcZQQnfkaDUcq0d4BxEe41StW6Nl7kFFyr+bh4ai1NO4S9DbH8MfP9DcPew/6oFyFwHRw==
-X-Received: by 2002:aa7:8008:0:b0:51a:cae3:7563 with SMTP id j8-20020aa78008000000b0051acae37563mr33507197pfi.16.1654260175367;
-        Fri, 03 Jun 2022 05:42:55 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id v22-20020a17090ad59600b001e281acb2f1sm5079719pju.57.2022.06.03.05.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 05:42:54 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        PC Liao <pc.liao@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Koro Chen <koro.chen@mediatek.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: mediatek: mt8173-rt5650: Fix refcount leak in mt8173_rt5650_dev_probe
-Date:   Fri,  3 Jun 2022 16:42:41 +0400
-Message-Id: <20220603124243.31358-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Jun 2022 08:44:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930783A5EB
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:44:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DFA4B82230
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:44:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE46C385A9;
+        Fri,  3 Jun 2022 12:44:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654260260;
+        bh=MdwQN6E1zYdXGIcK3Plde1ard+3rWpXNOrXF6sGmiEY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oY6BGao0PIeSnp42jfpSkjurP6exEWid0KVVXEXG7YrMTGW8907IL1jQA9hAf8rOm
+         DkQg69x1bVdLa5BmeytSNdpI12jIv4k64KdbwthmDjijAvCsGvS8KlEJjlLYmmD3SS
+         PmJNoSlErJTrmVWvhyCDkFn7X1cXIiAD8iclGWXM=
+Date:   Fri, 3 Jun 2022 14:44:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     arnd@arndb.de, Shreenidhi Shedi <sshedi@vmware.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] char: lp: ensure that index has not exceeded LP_NO
+Message-ID: <YpoCIS1HVft8MbmB@kroah.com>
+References: <20220515075455.306082-1-sshedi@vmware.com>
+ <64570db1-e9f2-4f23-1d14-3d4b35776bca@gmail.com>
+ <991f7966-0734-36ea-b206-a428620efe41@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <991f7966-0734-36ea-b206-a428620efe41@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Fix refcount leak in some error paths.
+On Fri, Jun 03, 2022 at 05:32:25PM +0530, Shreenidhi Shedi wrote:
+> On 03/06/22 5:27 pm, Shreenidhi Shedi wrote:
+> > On 15/05/22 1:24 pm, Shreenidhi Shedi wrote:
+> >> After finishing the loop, index value can be equal to LP_NO and lp_table
+> >> array is of size LP_NO, so this can end up in accessing an out of bound
+> >> address in lp_register function.
+> >>
+> >> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> >> ---
+> >>  drivers/char/lp.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/char/lp.c b/drivers/char/lp.c
+> >> index bd95aba1f..e61060f3c 100644
+> >> --- a/drivers/char/lp.c
+> >> +++ b/drivers/char/lp.c
+> >> @@ -971,7 +971,7 @@ static void lp_attach(struct parport *port)
+> >>  			if (port_num[i] == -1)
+> >>  				break;
+> >>  
+> >> -		if (!lp_register(i, port))
+> >> +		if (i < LP_NO && !lp_register(i, port))
+> >>  			lp_count++;
+> >>  		break;
+> >>  
+> > 
+> > Hi Greg and Arnd Bergmann,
+> > 
+> > Please review the above changes. Ignore second patch.
+> > 
+> > --
+> > Shedi
+> 
+> Sorry, not the second patch. Ignore the 3rd patch which fixes checkspec.pl warnings.
 
-Fixes: 0f83f9296d5c ("ASoC: mediatek: Add machine driver for ALC5650 codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-- update fixes tag.
-v1 Link: https://lore.kernel.org/r/20220603081308.1332-1-linmq006@gmail.com
----
- sound/soc/mediatek/mt8173/mt8173-rt5650.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+I have no way to do that, please fix up and resend the correct series,
+our tools can not pick and choose from a series easily.
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-index d1c94acb4516..e05f2b0231fe 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-@@ -280,7 +280,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
- 	if (!mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[0].of_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[1].of_node =
- 		mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[0].of_node;
-@@ -293,7 +294,7 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
- 			dev_err(&pdev->dev,
- 				"%s codec_capture_dai name fail %d\n",
- 				__func__, ret);
--			return ret;
-+			goto put_platform_node;
- 		}
- 		mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[1].dai_name =
- 			codec_capture_dai;
-@@ -315,12 +316,14 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
- 	if (!mt8173_rt5650_dais[DAI_LINK_HDMI_I2S].codecs->of_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	card->dev = &pdev->dev;
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
- 
-+put_platform_node:
- 	of_node_put(platform_node);
- 	return ret;
- }
--- 
-2.25.1
+Also remember this is the middle of the merge window and we can not do
+anything at the moment.
 
+greg k-h

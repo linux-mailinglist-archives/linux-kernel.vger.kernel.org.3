@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B4F53C9A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AF353C9A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244124AbiFCL5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 07:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S244128AbiFCMCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238386AbiFCL5M (ORCPT
+        with ESMTP id S241360AbiFCMCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 07:57:12 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24482DF76
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 04:57:11 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so7032731pjq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 04:57:11 -0700 (PDT)
+        Fri, 3 Jun 2022 08:02:30 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136FA261B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:02:29 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso11899991pjl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:cc:from:in-reply-to:content-transfer-encoding;
-        bh=34rSocizJb09HjwR+91Khzk0c3L2rvbKlfunkNL6ZSM=;
-        b=ie3hggV9l5qcE0vEJaPy/d+ITeToBpoxavsFPO0485cnFmybFwkg9xY2hHbiY+ulOI
-         Ia1rQyEy/PCxPcSXlcQKYkinxe0MIqkN+cMuyBym8QA72T8iRK3U5zI5vdWCfBG/go3C
-         yX1Xf4Wgb8ZI0QkWlPN0O6hicizw8q6TMr7+cQlNdQFe37CDBmyBqorR4XOty6/4zkQD
-         CcV4oTK8keYaVSwsBSSEeSB6TU9yssFQFmQVvmPwtp0cxQ4xvwdEBzVBihRwZu/ZOP1W
-         +AMf/RmDy5ZeeFpp1Du2C6p4oAjwyJOsqUl1uG6tFb9k70bSg/jfPMeugU0mbF1JPGlk
-         1G1A==
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9xBy4wFvn5xJAaUn+NnronTtWBh/ftM5UxRMYDW/EYg=;
+        b=NH9O3UoCSpdTdnjQaS2ULUL/iFc3T+XynkP3zEhKRZ6ESmKk43pHQ5REXixinsWqFK
+         WARGm9p0MuUMHR2CNkY4pSfbp8SSm/nSez42JWB9brZdQYCv0YilZZFpuv+xD+6Wbgqv
+         V2n9uwMr5KK7WsyTXM/p4qSvHNazRu1KceC/uTcy4J32ioXYaCzyHBn6Lw2C/m5Tl/sP
+         DpCetx8nEUKWzp7DV7gVlYidpClLcBvX7dGs7Q6RgOl4XVvms2EePApN0sTprp6lT0VI
+         /EDbGxQkInod2UiBjC+fr2PGih7ZWl0FaHKgUyM+TcR/p7K5sMGK2z3NRl5d8/lDgXp8
+         V4Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=34rSocizJb09HjwR+91Khzk0c3L2rvbKlfunkNL6ZSM=;
-        b=Rb02JvDDTiLl0LtohzMkz42wP4A0tODEj6tC6hJQzpYQp/UKZS6U9yFkl64xcvp468
-         K1eNT2xBk9NWOd+GvNdLWh3bai1LOje2AgCUwsO55T0Qhz5F7dzovrbeDv+IccrHHyyU
-         dWFi8VtsfBhfqvwZAFWcAoARpcpKmSQQKwpkjuno8FLxXMXz3At3q4FseBmI2Sr/6wkV
-         xRmZEu2kSn7WNglU5JCok5Yy/DzQLifS1mAoYM1aGdEy9LL50vgPYRX1jCGY9faT9HXI
-         4fLWkjTKf2556/dPvW4qPtIuY0zvqohXH9zisIWisp7TbW7q8/DnxBAGwhxcyYPNPVfD
-         DIeA==
-X-Gm-Message-State: AOAM532UaP93x2Hsl7JEBQgsG2LaKa93BJak/BGZ1y251lo7MRfWgr7B
-        xl/yLUnm6BrAMH18xTLHwmw=
-X-Google-Smtp-Source: ABdhPJyEeVXjpH76hxW8r29sZUD7ZV2+MCtDjMvUlOT9dUiTtfKaRep4Csnb9Mfw04p81OVyyj0Hlw==
-X-Received: by 2002:a17:902:c407:b0:163:df01:bbbc with SMTP id k7-20020a170902c40700b00163df01bbbcmr9899611plk.4.1654257430575;
-        Fri, 03 Jun 2022 04:57:10 -0700 (PDT)
+        bh=9xBy4wFvn5xJAaUn+NnronTtWBh/ftM5UxRMYDW/EYg=;
+        b=XPjV/RUXpBe1m8qEKUepfyZsNUV0Yg3E+YWh8N0BneQRfMXnSkwWYuic1qaTf/GZVc
+         eQRBAiSRHrFm+FyAa2BKyY9QZuLi4UmHqDYo/p2jC8hs6KcjfNcuWkepSogJBOYcQd3y
+         NabjCOwRoMVnO2MfPRCvViX5sJFXuccYRvaw5QSGq8DkzW9/pr+QrnQdvZiv/39OAts9
+         4pF/E9+Hhc8Xqf0oFRxx63QCjloH7oo2+kKHZt8fwWqK0et5OPwByZYHS++hMuqm36qE
+         jIub4aW2vm3+ifhykrgtO887eGohHWeDyzKsUC2hxpBIgslbTyZpaa4Edmr50BIjWE9G
+         z4kQ==
+X-Gm-Message-State: AOAM531xTTZzHlmGbXZFOop+90fCjhRhPy/gjgI+bb6Yd66use1Aucf4
+        awZnUOXYdREfcIIu7fRVuqf2Hz+ys6u+wRAc
+X-Google-Smtp-Source: ABdhPJzJ9NES9xNdg5+Seft2pbfbt8o/L7o09YDCBvzSKZlUgr+nfBzrQ0pVmTxeBg6T6clLWql+jQ==
+X-Received: by 2002:a17:90a:5d03:b0:1e0:cc5b:4808 with SMTP id s3-20020a17090a5d0300b001e0cc5b4808mr10789277pji.180.1654257748528;
+        Fri, 03 Jun 2022 05:02:28 -0700 (PDT)
 Received: from [192.168.0.100] ([106.51.243.30])
-        by smtp.gmail.com with ESMTPSA id a10-20020a056a001d0a00b0051be2ae1fb5sm1196345pfx.61.2022.06.03.04.57.08
+        by smtp.gmail.com with ESMTPSA id a5-20020aa79705000000b0051850716942sm5492158pfg.140.2022.06.03.05.02.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 04:57:10 -0700 (PDT)
-Message-ID: <64570db1-e9f2-4f23-1d14-3d4b35776bca@gmail.com>
-Date:   Fri, 3 Jun 2022 17:27:06 +0530
+        Fri, 03 Jun 2022 05:02:28 -0700 (PDT)
+Message-ID: <991f7966-0734-36ea-b206-a428620efe41@gmail.com>
+Date:   Fri, 3 Jun 2022 17:32:25 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.9.1
 Subject: Re: [PATCH 1/3] char: lp: ensure that index has not exceeded LP_NO
 Content-Language: en-US
 To:     gregkh@linuxfoundation.org, arnd@arndb.de
+Cc:     Shreenidhi Shedi <sshedi@vmware.com>, linux-kernel@vger.kernel.org
 References: <20220515075455.306082-1-sshedi@vmware.com>
-Cc:     yesshedi@gmail.com, Shreenidhi Shedi <sshedi@vmware.com>,
-        linux-kernel@vger.kernel.org
+ <64570db1-e9f2-4f23-1d14-3d4b35776bca@gmail.com>
 From:   Shreenidhi Shedi <yesshedi@gmail.com>
-In-Reply-To: <20220515075455.306082-1-sshedi@vmware.com>
+In-Reply-To: <64570db1-e9f2-4f23-1d14-3d4b35776bca@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,33 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/22 1:24 pm, Shreenidhi Shedi wrote:
-> After finishing the loop, index value can be equal to LP_NO and lp_table
-> array is of size LP_NO, so this can end up in accessing an out of bound
-> address in lp_register function.
+On 03/06/22 5:27 pm, Shreenidhi Shedi wrote:
+> On 15/05/22 1:24 pm, Shreenidhi Shedi wrote:
+>> After finishing the loop, index value can be equal to LP_NO and lp_table
+>> array is of size LP_NO, so this can end up in accessing an out of bound
+>> address in lp_register function.
+>>
+>> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+>> ---
+>>  drivers/char/lp.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/char/lp.c b/drivers/char/lp.c
+>> index bd95aba1f..e61060f3c 100644
+>> --- a/drivers/char/lp.c
+>> +++ b/drivers/char/lp.c
+>> @@ -971,7 +971,7 @@ static void lp_attach(struct parport *port)
+>>  			if (port_num[i] == -1)
+>>  				break;
+>>  
+>> -		if (!lp_register(i, port))
+>> +		if (i < LP_NO && !lp_register(i, port))
+>>  			lp_count++;
+>>  		break;
+>>  
 > 
-> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
-> ---
->  drivers/char/lp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Greg and Arnd Bergmann,
 > 
-> diff --git a/drivers/char/lp.c b/drivers/char/lp.c
-> index bd95aba1f..e61060f3c 100644
-> --- a/drivers/char/lp.c
-> +++ b/drivers/char/lp.c
-> @@ -971,7 +971,7 @@ static void lp_attach(struct parport *port)
->  			if (port_num[i] == -1)
->  				break;
->  
-> -		if (!lp_register(i, port))
-> +		if (i < LP_NO && !lp_register(i, port))
->  			lp_count++;
->  		break;
->  
+> Please review the above changes. Ignore second patch.
+> 
+> --
+> Shedi
 
-Hi Greg and Arnd Bergmann,
-
-Please review the above changes. Ignore second patch.
+Sorry, not the second patch. Ignore the 3rd patch which fixes checkspec.pl warnings.
 
 --
 Shedi

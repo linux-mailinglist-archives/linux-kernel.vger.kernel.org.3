@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581ED53CBB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F8A53CBB9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245168AbiFCOoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S245185AbiFCOpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiFCOoR (ORCPT
+        with ESMTP id S235709AbiFCOpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:44:17 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3B7CF19295
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 07:44:16 -0700 (PDT)
-Received: (qmail 303030 invoked by uid 1000); 3 Jun 2022 10:44:15 -0400
-Date:   Fri, 3 Jun 2022 10:44:15 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Vladimir Zapolskiy <vz@mleia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roland Stigge <stigge@antcom.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-nxp: Fix refcount leak in ohci_hcd_nxp_probe
-Message-ID: <YpoePyzPNQZXhuNu@rowland.harvard.edu>
-References: <20220603141231.979-1-linmq006@gmail.com>
+        Fri, 3 Jun 2022 10:45:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F02843AD9;
+        Fri,  3 Jun 2022 07:45:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A4E617D2;
+        Fri,  3 Jun 2022 14:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA6CFC385A9;
+        Fri,  3 Jun 2022 14:45:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654267540;
+        bh=qgZ6/AFouFZNlHDq3we/rEMDrAR/urFfhfyaZ5Lf4eA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FkIVa7IDXQoKA4CLqyleWeWjZlNThrRbCEN7WP0Bbd9W3UIaYlTRDU96hbbSxJKGc
+         6Bf7jjV7cAoVBIQI7HcGPaSM0QoW+Jl9gsYbKPtQmuenwo5OqYvP43R/VSD67LiiVu
+         F0dxksEtEwiGxweUJqCPyGsZa0IbrcuFdB06Z7lk=
+Date:   Fri, 3 Jun 2022 16:45:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     stable@vger.kernel.org, Haimin Zhang <tcs.kernel@gmail.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4.14 0/1] block-map: backport fix for CVE-2022-0494
+Message-ID: <YpoekNgtsCBi3yw5@kroah.com>
+References: <20220602150157.2255674-1-dragos.panait@windriver.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220603141231.979-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220602150157.2255674-1-dragos.panait@windriver.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 06:12:30PM +0400, Miaoqian Lin wrote:
-> of_parse_phandle() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
+On Thu, Jun 02, 2022 at 06:01:56PM +0300, Dragos-Marian Panait wrote:
+> The following commit is needed to fix CVE-2022-0494:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cc8f7fe1f5eab010191aa4570f27641876fa1267
 > 
-> Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
->  drivers/usb/host/ohci-nxp.c | 1 +
->  1 file changed, 1 insertion(+)
+> Haimin Zhang (1):
+>   block-map: add __GFP_ZERO flag for alloc_page in function
+>     bio_copy_kern
 > 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index 85878e8ad331..106a6bcefb08 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -164,6 +164,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
->  	}
->  
->  	isp1301_i2c_client = isp1301_get_client(isp1301_node);
-> +	of_node_put(isp1301_node);
->  	if (!isp1301_i2c_client)
->  		return -EPROBE_DEFER;
->  
+>  block/bio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> 
+> base-commit: 501eec4f9e138b958fc7438e7a745c0d6a7c68b3
 > -- 
-> 2.25.1
+> 2.36.1
 > 
+
+All now queued up, thanks.
+
+greg k-h

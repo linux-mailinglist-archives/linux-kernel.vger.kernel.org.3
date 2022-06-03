@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995B053D0FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4A853D000
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243965AbiFCSM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S1346036AbiFCR7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346095AbiFCR6s (ORCPT
+        with ESMTP id S1344991AbiFCRs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:58:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875DA580C3;
-        Fri,  3 Jun 2022 10:55:03 -0700 (PDT)
+        Fri, 3 Jun 2022 13:48:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5076855359;
+        Fri,  3 Jun 2022 10:45:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE7F5612DA;
-        Fri,  3 Jun 2022 17:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7073C385B8;
-        Fri,  3 Jun 2022 17:55:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B52A260C47;
+        Fri,  3 Jun 2022 17:45:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F31C385B8;
+        Fri,  3 Jun 2022 17:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278902;
-        bh=bftCAUS1CFLOhyDhxNmw9rQEm8llGxgW7+GrrahPN1g=;
+        s=korg; t=1654278344;
+        bh=MFTKNe6w2Me8NT2WM3LGHJPXBnG8b7aPudi9BrSnwjE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rlbvIwooOEGthI+nowKKrDD1yRq81fjfP0Jc7Vf2K7P1hJzHf9kN9zclxTdlurZQ6
-         LOXhAdHhqK4LVtYVDTuV7b/JK8U6UxZE/Ux8Hp4W7sdhBek+8L7O//OlcR1FSLR+qq
-         kYOleaY+129CcWPWryvHC/XtHwfgEKmxChwp1dOQ=
+        b=dOmZjO8aPE0znGPYM0Q2rtcySQnxnW/bYxYjEpzWmZsLMhk3QqXmNHpj0wP4LZ2fB
+         wgzjeWiCJnHcleEcUQLxhxHxQfisByeTatY9IpvNEyeissxv/X2sIUvnKcfx2wrkgc
+         n66ywdmLk8/Vs+gPjNTeJYRZeh0C5gfxw1P/3kOw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.17 23/75] netfilter: nf_tables: hold mutex on netns pre_exit path
-Date:   Fri,  3 Jun 2022 19:43:07 +0200
-Message-Id: <20220603173822.405677031@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Thomas Bartschies <thomas.bartschies@cvk.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 12/34] net: af_key: check encryption module availability consistency
+Date:   Fri,  3 Jun 2022 19:43:08 +0200
+Message-Id: <20220603173816.353260373@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Thomas Bartschies <thomas.bartschies@cvk.de>
 
-commit 3923b1e4406680d57da7e873da77b1683035d83f upstream.
+[ Upstream commit 015c44d7bff3f44d569716117becd570c179ca32 ]
 
-clean_net() runs in workqueue while walking over the lists, grab mutex.
+Since the recent introduction supporting the SM3 and SM4 hash algos for IPsec, the kernel
+produces invalid pfkey acquire messages, when these encryption modules are disabled. This
+happens because the availability of the algos wasn't checked in all necessary functions.
+This patch adds these checks.
 
-Fixes: 767d1216bff8 ("netfilter: nftables: fix possible UAF over chains from packet path in netns")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Thomas Bartschies <thomas.bartschies@cvk.de>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ net/key/af_key.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -9813,7 +9813,11 @@ static int __net_init nf_tables_init_net
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index f67d3ba72c49..dd064d5eff6e 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -2904,7 +2904,7 @@ static int count_ah_combs(const struct xfrm_tmpl *t)
+ 			break;
+ 		if (!aalg->pfkey_supported)
+ 			continue;
+-		if (aalg_tmpl_set(t, aalg))
++		if (aalg_tmpl_set(t, aalg) && aalg->available)
+ 			sz += sizeof(struct sadb_comb);
+ 	}
+ 	return sz + sizeof(struct sadb_prop);
+@@ -2922,7 +2922,7 @@ static int count_esp_combs(const struct xfrm_tmpl *t)
+ 		if (!ealg->pfkey_supported)
+ 			continue;
  
- static void __net_exit nf_tables_pre_exit_net(struct net *net)
- {
-+	struct nftables_pernet *nft_net = nft_pernet(net);
-+
-+	mutex_lock(&nft_net->commit_mutex);
- 	__nft_release_hooks(net);
-+	mutex_unlock(&nft_net->commit_mutex);
- }
+-		if (!(ealg_tmpl_set(t, ealg)))
++		if (!(ealg_tmpl_set(t, ealg) && ealg->available))
+ 			continue;
  
- static void __net_exit nf_tables_exit_net(struct net *net)
+ 		for (k = 1; ; k++) {
+@@ -2933,7 +2933,7 @@ static int count_esp_combs(const struct xfrm_tmpl *t)
+ 			if (!aalg->pfkey_supported)
+ 				continue;
+ 
+-			if (aalg_tmpl_set(t, aalg))
++			if (aalg_tmpl_set(t, aalg) && aalg->available)
+ 				sz += sizeof(struct sadb_comb);
+ 		}
+ 	}
+-- 
+2.35.1
+
 
 

@@ -2,158 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E4C53C296
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF29053C2AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240907AbiFCBew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S240882AbiFCBgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiFCBeo (ORCPT
+        with ESMTP id S236345AbiFCBgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:34:44 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E233376
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:34:42 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id i185so6133478pge.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 18:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WmOqgdw/lnzn8y98yzEspXlCbFr81s8ZPh+l/fuZnvU=;
-        b=xeAlMB6iggUl/Q8oT9BpeIQvESRsiCcKlbCJYKeCd+AcQwHrX+ICmf4uTA0ijqOnhb
-         hxEH8wEdkCxiO39rdJvSTuiSk+QmJah1jdSSFKYR16Vch89RSDb+rLFKgvEqB6nzM7C/
-         x4GILcrRidctOmr4tvRVPSzso60xvcL3oT7C4uJfyvIcemKJ6ei+Ip1bkliuZ3M4nug4
-         dLqxlSUe7qMZIQlVWMIx2+W6w0hvM/XeGRINsuZ7tlNzTFbUXJ3f2kA0S6pxoSkhCPaH
-         rF4/o2im3XsBaehO8nwSNKjSVo5nSQNm5L5QqiUfKUZEs5D8sga4hDWdZOW1h9YwCAjo
-         brwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=WmOqgdw/lnzn8y98yzEspXlCbFr81s8ZPh+l/fuZnvU=;
-        b=uSC57xdVN0YNYtR2z17tsA9wzHqgK/vfbQhR9fYNpDhYc63aGcyOE1YSN/mLPyOu/A
-         jdxAg0u26FpCM+EuX51NXeILhrXI+JeIEgtGFHgEqOXUkcLJmhWOR0XUC87e9HVCfi/z
-         GiS6F1XOR9CcgXb83EfAVm1oJ2td7koGDqxFPaIh+HQdyecLsBqbQTVYY+D+x5dx+M7f
-         J7WpEESuIUw5848NWa/XkDOf1JxdS2c0ImmbxFpf55euAsHhNWj+P3BnoB6jwB7XhI09
-         Lm5EqoJrAH3UuMFjZ1bKi5Zq81mLLaTQa2kqjbleToQH7UYN/b8UZJxBjI+AxCeoLPh/
-         Y18w==
-X-Gm-Message-State: AOAM531dHEglYHH5j9P2gQMDDbrsSMr2mKP1GQk+XPKTcSQ5dkxnIvZk
-        PnToEC5ZQpYFSzEVEZSjMQsHZQ==
-X-Google-Smtp-Source: ABdhPJxwYUZESxzEAwVBw31/r+YLXs53IRagWzDsSQ7NAeM1zO5QT7RF2ZuUyKJXdRv88efZm8Br8Q==
-X-Received: by 2002:a05:6a00:2353:b0:518:96b7:ceb8 with SMTP id j19-20020a056a00235300b0051896b7ceb8mr8062973pfj.5.1654220082298;
-        Thu, 02 Jun 2022 18:34:42 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b0016232dbd01fsm4082360plg.292.2022.06.02.18.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 18:34:41 -0700 (PDT)
-Date:   Thu, 02 Jun 2022 18:34:41 -0700 (PDT)
-X-Google-Original-Date: Thu, 02 Jun 2022 18:34:32 PDT (-0700)
-Subject:     Re: [PATCH] riscv: Move alternative length validation into subsection
-In-Reply-To: <20220516214520.3252074-1-nathan@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        ndesaulniers@google.com, heiko@sntech.de,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev, nathan@kernel.org,
-        lkp@intel.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     nathan@kernel.org
-Message-ID: <mhng-e4c58f1b-2015-48b1-88ae-dbb9db72643f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 2 Jun 2022 21:36:39 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5305133A04;
+        Thu,  2 Jun 2022 18:36:38 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3ArwVZJ64Dro/DWqQeyRqkjgxRtMXGchMFZxGqfqr?=
+ =?us-ascii?q?LsXjdYENS0mcEmzQcX2nXaKuPZGv0ct9zPY+y905XucTdx4djQFc5pCpnJ55og?=
+ =?us-ascii?q?ZCbXIzGdC8cHM8zwvXrFRsht4NHAjX5BJhcokT0+1H9YtANkVEmjfvSHuCkUba?=
+ =?us-ascii?q?dUsxMbVQMpBkJ2EsLd9ER0tYAbeiRW2thiPuqyyHtEAbNNw1cbgr435m+RCZH5?=
+ =?us-ascii?q?5wejt+3UmsWPpintHeG/5Uc4Ql2yauZdxMUSaEMdgK2qnqq8V23wo/Z109F5tK?=
+ =?us-ascii?q?NmbC9fFAIQ6LJIE6FjX8+t6qK20AE/3JtlP1gcqd0hUR/0l1lm/hr1dxLro32R?=
+ =?us-ascii?q?wEyIoXCheYcTwJFVSp5OMWq/ZeeeyTh4ZTMkBOun3zEhq8G4FsNFYER5Od7KW9?=
+ =?us-ascii?q?U8vkfMjoMclaIgOfe6La6TOxtj8MjIeHrIYoAt3AmxjbcZd4mSpDrQqPE/9ZU0?=
+ =?us-ascii?q?T48wMdUEp72eMsdbStHbRLOeRRDN14bTpUkk4+AinD5NT8et1ORoas+5nP7zQp?=
+ =?us-ascii?q?t3byrO93QEvSGR9pSmEmwpW/c+Wn9RBYAO7S3zTuD72Lpg+rnnj3yU4FUE6e3n?=
+ =?us-ascii?q?tZjg0WW7mgSDgAGEFW8vP+1g1K/XNQZLFYbkgIos6Qz8UmDStjmQwb+pH+Cow5?=
+ =?us-ascii?q?aV9dOe8U84Qacw+zU5ByYCXUPTj9pbtEt8sQxQFQC1FaPkpXiBSFHt6ecQnaQs?=
+ =?us-ascii?q?LyTqFuaIycSKWMddCksVhYe7p/vrekbihPJU8YmHrW5g8P4HRnuzD2Q6isznbM?=
+ =?us-ascii?q?eiYgMzarT1VTGhS+845vEVAg44i3JUW+/qAB0foioY8qv81ezxfJBKpuJC0mPp?=
+ =?us-ascii?q?1AalMWEquMDF5eAkGqKWuplNK+o/fGtIjDagEApG5gn6iTr/GSsO51TiAySjm8?=
+ =?us-ascii?q?B3t0sIGevORGM/1gKosI7AZdjVocvC6rZNijg5fGI+QzZa83p?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AtJB6VqFW5lr8p9qlpLqE1MeALOsnbusQ8zAX?=
+ =?us-ascii?q?PiFKOHhom6mj+vxG88506faKslwssR0b+OxoW5PwJE80l6QFgrX5VI3KNGbbUQ?=
+ =?us-ascii?q?CTXeNfBOXZowHIKmnX8+5x8eNaebFiNduYNzNHpPe/zA6mM9tI+rW6zJw=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124680776"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 03 Jun 2022 09:36:37 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id D86C64D68A22;
+        Fri,  3 Jun 2022 09:36:36 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 3 Jun 2022 09:36:35 +0800
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 3 Jun 2022 09:36:37 +0800
+Received: from [10.167.201.2] (10.167.201.2) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Fri, 3 Jun 2022 09:36:36 +0800
+Message-ID: <73a4d378-ea7d-1423-778c-c757bdc631c4@fujitsu.com>
+Date:   Fri, 3 Jun 2022 09:36:35 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <djwong@kernel.org>,
+        <dan.j.williams@intel.com>, <david@fromorbit.com>,
+        <hch@infradead.org>, <jane.chu@oracle.com>, <rgoldwyn@suse.de>,
+        <viro@zeniv.linux.org.uk>, <willy@infradead.org>,
+        <naoya.horiguchi@nec.com>, <linmiaohe@huawei.com>
+References: <20220508143620.1775214-1-ruansy.fnst@fujitsu.com>
+ <20220602115640.69f7f295e731e615344a160a@linux-foundation.org>
+ <09048a58-65ea-b92c-5586-dc337bf18d1a@fujitsu.com>
+In-Reply-To: <09048a58-65ea-b92c-5586-dc337bf18d1a@fujitsu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-yoursite-MailScanner-ID: D86C64D68A22.A0F03
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 14:45:21 PDT (-0700), nathan@kernel.org wrote:
-> After commit 49b290e430d3 ("riscv: prevent compressed instructions in
-> alternatives"), builds with LLVM's integrated assembler fail:
->
->   In file included from arch/riscv/mm/init.c:10:
->   In file included from ./include/linux/mm.h:29:
->   In file included from ./include/linux/pgtable.h:6:
->   In file included from ./arch/riscv/include/asm/pgtable.h:108:
->   ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
->           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
->           ^
->   ./arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
->   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
->       ^
->   ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
->           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
->           ^
->   ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
->           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
->           ^
->   ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
->           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
->           ^
->   ./arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
->           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
->            ^
->   <inline asm>:26:6: note: instantiated into assembly here
->   .org    . - (889b - 888b) + (887b - 886b)
->           ^
->
-> This error happens because LLVM's integrated assembler has a one-pass
-> design, which means it cannot figure out the instruction lengths when
-> the .org directive is outside of the subsection that contains the
-> instructions, which was changed by the .option directives added by the
-> above change.
->
-> Move the .org directives before the .previous directive so that these
-> directives are always within the same subsection, which resolves the
-> failures and does not introduce any new issues with GNU as. This was
-> done for arm64 in commit 966a0acce2fc ("arm64/alternatives: move length
-> validation inside the subsection") and commit 22315a2296f4 ("arm64:
-> alternatives: Move length validation in alternative_{insn, endif}").
->
-> While there is no error from the assembly versions of the macro, they
-> appear to have the same problem so just make the same change there as
-> well so that there are no problems in the future.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1640
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/include/asm/alternative-macros.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> index e13b1f6bb400..ec2f3f1b836f 100644
-> --- a/arch/riscv/include/asm/alternative-macros.h
-> +++ b/arch/riscv/include/asm/alternative-macros.h
-> @@ -27,9 +27,9 @@
->  	\new_c
->  	.option pop
->  889 :
-> -	.previous
->  	.org    . - (889b - 888b) + (887b - 886b)
->  	.org    . - (887b - 886b) + (889b - 888b)
-> +	.previous
->  	.endif
->  .endm
->
-> @@ -94,9 +94,9 @@
->  	new_c "\n"							\
->  	".option pop\n"							\
->  	"889 :\n"							\
-> -	".previous\n"							\
->  	".org	. - (887b - 886b) + (889b - 888b)\n"			\
->  	".org	. - (889b - 888b) + (887b - 886b)\n"			\
-> +	".previous\n"							\
->  	".endif\n"
->
->  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
->
-> base-commit: 93c0651617a62a69717299f1464dda798af8bebb
 
-Thanks, this in on for-next (still for 5.19).  I'm going to CC stable so 
-it'll get backported, as it seems pretty harmless.
+
+在 2022/6/3 9:07, Shiyang Ruan 写道:
+> 
+> 
+> 在 2022/6/3 2:56, Andrew Morton 写道:
+>> On Sun, 8 May 2022 22:36:06 +0800 Shiyang Ruan 
+>> <ruansy.fnst@fujitsu.com> wrote:
+>>
+>>> This is a combination of two patchsets:
+>>>   1.fsdax-rmap: 
+>>> https://lore.kernel.org/linux-xfs/20220419045045.1664996-1-ruansy.fnst@fujitsu.com/ 
+>>>
+>>>   2.fsdax-reflink: 
+>>> https://lore.kernel.org/linux-xfs/20210928062311.4012070-1-ruansy.fnst@fujitsu.com/ 
+>>>
+>>
+>> I'm getting lost in conflicts trying to get this merged up.  Mainly
+>> memory-failure.c due to patch series "mm, hwpoison: enable 1GB hugepage
+>> support".
+>>
+>> Could you please take a look at what's in the mm-unstable branch at
+>> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm a few hours from
+>> now?  Or the next linux-next.
+
+OK, let me rebase this patchset on your mm-unstable branch.
+
+
+--
+Thanks,
+Ruan.
+
+>>
+>> And I suggest that converting it all into a single 14-patch series
+>> would be more straightforward.
+> 
+> The patchset in this thread is the 14-patch series.  I have solved many 
+> conflicts.  It's an updated / newest version, and a combination of the 2 
+> urls quoted above.  In an other word, instead of using this two:
+> 
+>  >> This is a combination of two patchsets:
+>  >>   1.fsdax-rmap: https://...
+>  >>   2.fsdax-reflink: https://...
+> 
+> you could take this (the url of the current thread):
+> https://lore.kernel.org/linux-xfs/20220508143620.1775214-1-ruansy.fnst@fujitsu.com/ 
+> 
+> 
+> My description misleaded you.  Sorry for that.
+> 
+> 
+> -- 
+> Thanks,
+> Ruan.
+> 
+>>
+>> Thanks.
+> 
+> 
+> 
+
+

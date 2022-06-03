@@ -2,198 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EEF53CC06
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284C553CBE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245341AbiFCPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        id S245291AbiFCPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiFCPKZ (ORCPT
+        with ESMTP id S230457AbiFCPBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:10:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDC7393FD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:10:25 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253Dvmeu039165;
-        Fri, 3 Jun 2022 15:10:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=g7jUFWBxlvBEqq1quOiCvFi96EvwCZUtaqf3egOZBgw=;
- b=R8iOlcOVS7fJjcbdzbv19n3ZO6onF0ufsfiUeyDTkVl0BBLBSUMGj3lxrk3RRWOyKsMV
- FoxqD7FcwSGhPtzRPoltucsByWGfozqaYdgBk+2clXwWqyCVOfmfkpJQVPhlh2LJI8CW
- SRbZ+qk9HTHtYkyznoExKJtDt09s80AuFgNEHkMdKmJgPh/gPXi5FDq4lcvM54tPIXy+
- yOwKfIWqXGqlR/abeash4Wgb11w73cEUzFaXlTAcY5AAX5o/k/F+yEP/TUKunULDJBMv
- td+RZ9qk6ZWU+8TpqaunIRk1pzSPCGo0EG0Yeo8RKWnA43j2o/fHDdanazFmPdW12Rvz WQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfkn69df9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 15:10:00 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 253F8QTZ039849;
-        Fri, 3 Jun 2022 15:10:00 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfkn69def-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 15:10:00 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 253F6DCq014972;
-        Fri, 3 Jun 2022 15:09:57 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3gbc97xhxj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 15:09:57 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 253F9t8L38207904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Jun 2022 15:09:55 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 213C242042;
-        Fri,  3 Jun 2022 15:09:55 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6BA342041;
-        Fri,  3 Jun 2022 15:09:49 +0000 (GMT)
-Received: from [9.43.93.173] (unknown [9.43.93.173])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Jun 2022 15:09:49 +0000 (GMT)
-Message-ID: <046c373a-f30b-091d-47a1-e28bfb7e9394@linux.ibm.com>
-Date:   Fri, 3 Jun 2022 20:39:47 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v4 7/7] mm/demotion: Demote pages according to
- allocation fallback order
-Content-Language: en-US
-To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
- <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
- <20220527122528.129445-8-aneesh.kumar@linux.ibm.com>
- <b102d5773bffd6391283773044f756e810c1f044.camel@intel.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <b102d5773bffd6391283773044f756e810c1f044.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8x6etQlFsFBiMkGXOAXlYGd_HIYEx0EX
-X-Proofpoint-GUID: vXFrfR2MtraSKq6ABD5k3wf9zz8ThVPu
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 3 Jun 2022 11:01:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815BD4249B;
+        Fri,  3 Jun 2022 08:01:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3762DB822D1;
+        Fri,  3 Jun 2022 15:01:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1264FC385A9;
+        Fri,  3 Jun 2022 15:01:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654268496;
+        bh=P2GX9HtyRXt4RIWOGgfY4NtR2QmjoTRTaFyv7WzjYrY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e+rxoohAU8ECV40mEB9ppea8osoCte3S0eZZDHCiFnnTQ+eBOD59mnjdWlMKIQsiO
+         dssLF5PTV6BjUe7byCLCfoNlFwFxT1x9tIt4CYuDWxoik/UXWRXAFhQov5EawDYpdS
+         pmAXD4Xq6KMlaa6dVxtJi9JxL7TwqymhXdi8sZ0DUUfpMdCpbMWXskdVeS+cK+3iDi
+         SnZ9YDhh6tkcGj4XMwQXAQVcpeeMPJvenII0TdXcldiKBB1MHS/JT8GYbsAn5+9F1j
+         A4A3KhlcXLCy+Y1EELd0KLfiseIrEQzpSgf/YuXeF9e2kd4PTVjdPA2ew1CifF8Rrf
+         Josvx/T1N5mqA==
+Date:   Fri, 3 Jun 2022 16:10:35 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "m.shams" <m.shams@samsung.com>
+Cc:     <lars@metafoo.de>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <geert@linux-m68k.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <paul@crapouillou.net>,
+        <linux-fsd@tesla.com>
+Subject: Re: [PATCH v2 2/3] iio: adc: exynos-adc: Add support for ADC FSD-HW
+ controller
+Message-ID: <20220603161035.0f22420b@jic23-huawei>
+In-Reply-To: <015b01d874ca$69aa8bb0$3cffa310$@samsung.com>
+References: <20220520145820.67667-1-m.shams@samsung.com>
+        <CGME20220520145802epcas5p2153cb572493e3bccd702e0ecce1171fb@epcas5p2.samsung.com>
+        <20220520145820.67667-3-m.shams@samsung.com>
+        <20220522122555.6c65d2b6@jic23-huawei>
+        <015b01d874ca$69aa8bb0$3cffa310$@samsung.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-03_05,2022-06-03_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 phishscore=0 adultscore=0
- clxscore=1015 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206030067
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/2/22 1:05 PM, Ying Huang wrote:
-> On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
->> From: Jagdish Gediya <jvgediya@linux.ibm.com>
->>
->> currently, a higher tier node can only be demoted to selected
->> nodes on the next lower tier as defined by the demotion path,
->> not any other node from any lower tier.  This strict, hard-coded
->> demotion order does not work in all use cases (e.g. some use cases
->> may want to allow cross-socket demotion to another node in the same
->> demotion tier as a fallback when the preferred demotion node is out
->> of space). This demotion order is also inconsistent with the page
->> allocation fallback order when all the nodes in a higher tier are
->> out of space: The page allocation can fall back to any node from any
->> lower tier, whereas the demotion order doesn't allow that currently.
->>
->> This patch adds support to get all the allowed demotion targets mask
->> for node, also demote_page_list() function is modified to utilize this
->> allowed node mask by filling it in migration_target_control structure
->> before passing it to migrate_pages().
->
+On Tue, 31 May 2022 14:12:46 +0530
+"m.shams" <m.shams@samsung.com> wrote:
 
-...
+> Hi Jonathan,
+> 
+> On Fri, 20 May 2022 20:28:19 +0530
+> Tamseel Shams <m.shams@samsung.com> wrote:
+> 
+> >> From: Alim Akhtar <alim.akhtar@samsung.com>
+> >> 
+> >> Exynos's ADC-FSD-HW has some difference in registers set, number of 
+> >> programmable channels (16 channel) etc. This patch adds support for 
+> >> ADC-FSD-HW controller version.
+> >> 
+> >> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> >> Signed-off-by: Tamseel Shams <m.shams@samsung.com>  
+> >
+> > Hi,
+> >
+> > One suggestion inline, otherwise LGTM. Plenty of time to tidy this up as  
+> this won't make the upcoming merge window - I'll be queuing it up for 5.20
+> >
+> > Thanks,
+> >
+> > Jonathan
+> >  
+> 
+> Okay, Thanks for reviewing.
+> 
+> >> ---
+> >> - Changes since v1
+> >> * Addressed Jonathan's comment by using already provided isr handle
+> >> 
+> >>  drivers/iio/adc/exynos_adc.c | 55 
+> >> ++++++++++++++++++++++++++++++++++++
+> >>  1 file changed, 55 insertions(+)
+> >> 
+> >> diff --git a/drivers/iio/adc/exynos_adc.c 
+> >> b/drivers/iio/adc/exynos_adc.c index cff1ba57fb16..183ae591327a 100644
+> >> --- a/drivers/iio/adc/exynos_adc.c
+> >> +++ b/drivers/iio/adc/exynos_adc.c
+> >> @@ -55,6 +55,11 @@
+> >>  #define ADC_V2_INT_ST(x)	((x) + 0x14)
+> >>  #define ADC_V2_VER(x)		((x) + 0x20)
+> >>  
+> >> +/* ADC_FSD_HW register definitions */
+> >> +#define ADC_FSD_DAT(x)			((x) + 0x08)  
+> >
+> > I mention this below, but these different register sets should be in the  
+> struct exynos_adc_data to avoid the need for an if "compatible" == check on
+> each use of > them.
+> >  
+> 
+> Can you clarify on how exactly you want me to add these register sets to
+> struct exynos_adc_data?
+> Do you mean just for these registers or other registers too which are
+> defined in this way only?
 
->>    * Take pages on @demote_list and attempt to demote them to
->>    * another node.  Pages which are not demoted are left on
->> @@ -1481,6 +1464,19 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
->>   {
->>   	int target_nid = next_demotion_node(pgdat->node_id);
->>   	unsigned int nr_succeeded;
->> +	nodemask_t allowed_mask;
->> +
->> +	struct migration_target_control mtc = {
->> +		/*
->> +		 * Allocate from 'node', or fail quickly and quietly.
->> +		 * When this happens, 'page' will likely just be discarded
->> +		 * instead of migrated.
->> +		 */
->> +		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) | __GFP_NOWARN |
->> +			__GFP_NOMEMALLOC | GFP_NOWAIT,
->> +		.nid = target_nid,
->> +		.nmask = &allowed_mask
->> +	};
-> 
-> IMHO, we should try to allocate from preferred node firstly (which will
-> kick kswapd of the preferred node if necessary).  If failed, we will
-> fallback to all allowed node.
-> 
-> As we discussed as follows,
-> 
-> https://lore.kernel.org/lkml/69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com/
-> 
-> That is, something like below,
-> 
-> static struct page *alloc_demote_page(struct page *page, unsigned long node)
-> {
-> 	struct page *page;
-> 	nodemask_t allowed_mask;
-> 	struct migration_target_control mtc = {
-> 		/*
-> 		 * Allocate from 'node', or fail quickly and quietly.
-> 		 * When this happens, 'page' will likely just be discarded
-> 		 * instead of migrated.
-> 		 */
-> 		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) |
-> 			    __GFP_THISNODE  | __GFP_NOWARN |
-> 			    __GFP_NOMEMALLOC | GFP_NOWAIT,
-> 		.nid = node
-> 	};
-> 
-> 	page = alloc_migration_target(page, (unsigned long)&mtc);
-> 	if (page)
-> 		return page;
-> 
-> 	mtc.gfp_mask &= ~__GFP_THISNODE;
-> 	mtc.nmask = &allowed_mask;
-> 
-> 	return alloc_migration_target(page, (unsigned long)&mtc);
-> }
+Any registers addresses that are different for the different chip variants
+supported by the driver.
 
-I skipped doing this in v5 because I was not sure this is really what we 
-want. I guess we can do this as part of the change that is going to 
-introduce the usage of memory policy for the allocation?
+In cases where the only difference between versions is a register address then
+define something like
+#define ADC_FSD_DAT_BASE 0x08
 
--aneesh
+In the structure have a
+
+dat_addr = ADC_FSD_DAT_BASE
+
+and use dat_addr + x to access.
+
+If things are more complex (and I haven't looked closely so that may apply to
+the example give above, the wrap the different access sequence and register
+addresses in a callback similar to already done for clear_irq.
+
+
+Jonathan
+
+
+> 
+> 
+> Thanks & Regards,
+> Tamseel Shams
+> 
+

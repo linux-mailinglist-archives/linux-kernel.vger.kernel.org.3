@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382D653D06C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDFA53D0A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346519AbiFCSEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
+        id S245266AbiFCSIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347275AbiFCRwL (ORCPT
+        with ESMTP id S1346074AbiFCRzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2504713E9C;
-        Fri,  3 Jun 2022 10:51:57 -0700 (PDT)
+        Fri, 3 Jun 2022 13:55:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08EE562E9;
+        Fri,  3 Jun 2022 10:53:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B687D60F3B;
-        Fri,  3 Jun 2022 17:51:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF593C385B8;
-        Fri,  3 Jun 2022 17:51:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A3A5B82419;
+        Fri,  3 Jun 2022 17:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB51C3411C;
+        Fri,  3 Jun 2022 17:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278716;
-        bh=tfgjU31NPL+z9713wFziaUtlFoPM/QCEwzK8ujtven8=;
+        s=korg; t=1654278814;
+        bh=QSqdrBXq5Smm/co4R3m8i5KuO0M2hHfHRZtBXITNQCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uV01uIL7yYahrUm1ov4hLIijDLv7R3wkQioVpB1uBQpXeUrN/pMicQQN5+rhELHHb
-         YVBxtUFaGASQb/k3wNBGF7/VWrU1qewwrGXWBxbg+q40OePh7AplRaf78Jwts3RVwl
-         3+hbfckBOXTgtITSFYbMAq0FUs0P0yAFXHKM4r1A=
+        b=gqd4pHKtJJN282t39dxWBZ9qAUnF8Ax25URYuQKcESNViEe0XVhouSwLXOhn8wu4k
+         Hr6N14lf7K/uQpzf4X9OwZPn/boj87TxZ6qlE6gcxMuJYJGkHT3be3CGhVCzaMHH0Y
+         gY9tY4SYF4FEFBolW4E64M+2Q8DCg5T+l3GMz/tI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.15 40/66] Bluetooth: hci_qca: Use del_timer_sync() before freeing
+        stable@vger.kernel.org, Yanfei Xu <yanfei.xu@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 36/75] KVM: x86: Fix the intel_pt PMI handling wrongly considered from guest
 Date:   Fri,  3 Jun 2022 19:43:20 +0200
-Message-Id: <20220603173821.830759872@linuxfoundation.org>
+Message-Id: <20220603173822.770199379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Yanfei Xu <yanfei.xu@intel.com>
 
-commit 72ef98445aca568a81c2da050532500a8345ad3a upstream.
+commit ffd1925a596ce68bed7d81c61cb64bc35f788a9d upstream.
 
-While looking at a crash report on a timer list being corrupted, which
-usually happens when a timer is freed while still active. This is
-commonly triggered by code calling del_timer() instead of
-del_timer_sync() just before freeing.
+When kernel handles the vm-exit caused by external interrupts and NMI,
+it always sets kvm_intr_type to tell if it's dealing an IRQ or NMI. For
+the PMI scenario, it could be IRQ or NMI.
 
-One possible culprit is the hci_qca driver, which does exactly that.
+However, intel_pt PMIs are only generated for HARDWARE perf events, and
+HARDWARE events are always configured to generate NMIs.  Use
+kvm_handling_nmi_from_guest() to precisely identify if the intel_pt PMI
+came from the guest; this avoids false positives if an intel_pt PMI/NMI
+arrives while the host is handling an unrelated IRQ VM-Exit.
 
-Eric mentioned that wake_retrans_timer could be rearmed via the work
-queue, so also move the destruction of the work queue before
-del_timer_sync().
-
-Cc: Eric Dumazet <eric.dumazet@gmail.com>
+Fixes: db215756ae59 ("KVM: x86: More precisely identify NMI from guest when handling PMI")
+Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+Message-Id: <20220523140821.1345605-1-yanfei.xu@intel.com>
 Cc: stable@vger.kernel.org
-Fixes: 0ff252c1976da ("Bluetooth: hciuart: Add support QCA chipset for UART")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/hci_qca.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/vmx/vmx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -696,9 +696,9 @@ static int qca_close(struct hci_uart *hu
- 	skb_queue_purge(&qca->tx_wait_q);
- 	skb_queue_purge(&qca->txq);
- 	skb_queue_purge(&qca->rx_memdump_q);
--	del_timer(&qca->tx_idle_timer);
--	del_timer(&qca->wake_retrans_timer);
- 	destroy_workqueue(qca->workqueue);
-+	del_timer_sync(&qca->tx_idle_timer);
-+	del_timer_sync(&qca->wake_retrans_timer);
- 	qca->hu = NULL;
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7858,7 +7858,7 @@ static unsigned int vmx_handle_intel_pt_
+ 	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
  
- 	kfree_skb(qca->rx_skb);
+ 	/* '0' on failure so that the !PT case can use a RET0 static call. */
+-	if (!kvm_arch_pmi_in_guest(vcpu))
++	if (!vcpu || !kvm_handling_nmi_from_guest(vcpu))
+ 		return 0;
+ 
+ 	kvm_make_request(KVM_REQ_PMI, vcpu);
 
 

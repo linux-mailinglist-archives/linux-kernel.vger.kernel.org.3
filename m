@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7421553CAB2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D539553CAC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244652AbiFCNcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
+        id S244710AbiFCNkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240806AbiFCNct (ORCPT
+        with ESMTP id S234405AbiFCNkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:32:49 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1396324;
-        Fri,  3 Jun 2022 06:32:48 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id e11so7196339pfj.5;
-        Fri, 03 Jun 2022 06:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ECC1+okgsMaiWvHxJAvUSB9hG1Q5Ly0yeqZYvfrES/8=;
-        b=RIWLo7064YQ/76wZkg6f2CO99pIe7brrz3E4IN/MuMvlgFJRzEV6Uxfft3kWIf+kTa
-         NmoNPC7cacJIoKHkaQHznvER7Fa54zd25kYDLax7rnsWjn1kQQOi+s604sJYiUDfaDRB
-         NwrjJBl0Cq+l6+Rg5s2ZHs1F/0Xru3teb5zNC2VndgT7QCYylCux78ggf6xUBSRppr0A
-         LUPPDTelEygHSSGWIv2RaVdytrgFcBnZgOUwLwQcI2Cl8lVxNXH3DuYHfpVkWDF7DI6C
-         nc2WQvKUX3x7FAnlzAUgPc8Td4rG7O+wetkL9WgsVUqykRy2CaqlRuaiR86s8wlouGVz
-         DT/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ECC1+okgsMaiWvHxJAvUSB9hG1Q5Ly0yeqZYvfrES/8=;
-        b=ga7ZEPWHkd9hb8YlV3w+CG/nM22HgXUABbG2mfq5gKVqL8gh19b/LexQpjMwzLaSPv
-         rDKjHAcpP83Ho+0HotVS1cMfcC8rT2L4SNPEZ7djOlf2fNf/jZR2cPn1NX7LEzoM7YJ9
-         oKKIitMM6vmaD6ny4liXCshHQP+Pr8OmAaC+c4TslomM4ewrFlcuTvNGX/ZiOd+cRbjI
-         lXkZuiaCd7aZsKqUUQEYB+J4WVI4nlKzzYMMTHeXlL8zhcBua98QBmJshTsmFZ08/2zu
-         ni4xKfzaWf8U2U/esx1ZZAX+veEn/RAuIZ+wG+yPvOwTODH6h2kjXbsZkhCUKIxurzEm
-         MxSA==
-X-Gm-Message-State: AOAM533iiujKztNVh9sulviyAICYcA8/T1FXmdfSf4K5OSgNIjL3wqHC
-        Jjqk911ljnqy/jqhCkUNgHc=
-X-Google-Smtp-Source: ABdhPJyXLt4vvfEg8t4R8Pv9RjRFHaE6pAdqXmSydDh4o7v1KuU5NSRdzN9aVudkXFRZO9x63zoZ4g==
-X-Received: by 2002:a65:52cd:0:b0:3f5:f3fb:6780 with SMTP id z13-20020a6552cd000000b003f5f3fb6780mr9219011pgp.150.1654263168130;
-        Fri, 03 Jun 2022 06:32:48 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id t15-20020a1709028c8f00b00163d4dc6e95sm5334767plo.307.2022.06.03.06.32.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 06:32:47 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jon Mason <jon.mason@broadcom.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] net: ethernet: bgmac: Fix refcount leak in bcma_mdio_mii_register
-Date:   Fri,  3 Jun 2022 17:32:38 +0400
-Message-Id: <20220603133238.44114-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Jun 2022 09:40:33 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712DB2ED79;
+        Fri,  3 Jun 2022 06:40:31 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0E7721BF207;
+        Fri,  3 Jun 2022 13:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1654263629;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/PDivizaxZ+AZVI8p6z9vlgef9z49p8d3VW+VGNrFXQ=;
+        b=FyImQt/znIZ3l9LMdZ0YhyUCnm8jZNezAY+ZF2LrLu5+lFQyM6ady0UJG32AVkeNcXDR1b
+        eQqgT8r55nCwyn+w87wZtn52dhsFvmEQmOrr98AaC2wCDFSb5yeHuJasulwXo1ubBOgB52
+        2ZdD/b/c0tSyL6Xmesr/4co48HjYzx65CUOCkP7ByAC+iTcuV6FFG5+8VZ8ONelSLgc/MZ
+        /nIPfrKqOkV/Um8Mzbk7mzYbqSYkEY7k0247463pkejI/L7GnCiSO5hbWJGGgrKdDW5mCp
+        N+QKuEvj8NkAMLRjc09Leu0e4zzHtr/MUaNE8AptT3KletmN9jvAB2jQMtB4fA==
+Date:   Fri, 3 Jun 2022 15:40:24 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUs=?= =?UTF-8?B?w7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mtd: mxc-nand: Drop undocumented
+ properties from example
+Message-ID: <20220603154024.27ae9ad5@xps-13>
+In-Reply-To: <20220531150515.GB1742958-robh@kernel.org>
+References: <20220525205947.2487165-1-robh@kernel.org>
+        <20220527093839.3byc6r6ixuu5givt@pengutronix.de>
+        <20220531150515.GB1742958-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hi Rob, Marc,
 
-Fixes: 55954f3bfdac ("net: ethernet: bgmac: move BCMA MDIO Phy code into a separate file")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- update Fixes tag.
-v1 Link: https://lore.kernel.org/r/20220602133629.35528-1-linmq006@gmail.com
----
- drivers/net/ethernet/broadcom/bgmac-bcma-mdio.c | 1 +
- 1 file changed, 1 insertion(+)
+robh@kernel.org wrote on Tue, 31 May 2022 10:05:15 -0500:
 
-diff --git a/drivers/net/ethernet/broadcom/bgmac-bcma-mdio.c b/drivers/net/ethernet/broadcom/bgmac-bcma-mdio.c
-index 086739e4f40a..9b83d5361699 100644
---- a/drivers/net/ethernet/broadcom/bgmac-bcma-mdio.c
-+++ b/drivers/net/ethernet/broadcom/bgmac-bcma-mdio.c
-@@ -234,6 +234,7 @@ struct mii_bus *bcma_mdio_mii_register(struct bgmac *bgmac)
- 	np = of_get_child_by_name(core->dev.of_node, "mdio");
- 
- 	err = of_mdiobus_register(mii_bus, np);
-+	of_node_put(np);
- 	if (err) {
- 		dev_err(&core->dev, "Registration of mii bus failed\n");
- 		goto err_free_bus;
--- 
-2.25.1
+> On Fri, May 27, 2022 at 11:38:39AM +0200, Marc Kleine-Budde wrote:
+> > On 25.05.2022 15:59:46, Rob Herring wrote: =20
+> > > With unevaluatedProperties issues fixed, 'nand-bus-width' and
+> > > 'nand-ecc-mode' are flagged as undocumented. Removing them from the e=
+xample
+> > > is the easiest solution to silence the warnings.
+> > >=20
+> > > Signed-off-by: Rob Herring <robh@kernel.org> =20
+> >=20
+> > At least the 'nand-bus-width' property is described in
+> > "nand-controller.yaml" and the "mxc-nand.yaml" refers to it.
+> >=20
+> > | allOf:
+> > |   - $ref: "nand-controller.yaml"
+> >=20
+> > Is this ref broken? =20
+>=20
+> Nope, read my note below. 'nand-bus-width' is documented as a nand chip=20
+> (child node) property, not a nand controller property.
+>=20
+>=20
+> > regards,
+> > Marc
+> >  =20
+> > > ---
+> > > These properties may be deprecated, but they are still widely used in
+> > > bindings. They either need to be documented (and marked deprecated) or
+> > > removed from current users (i.e. dts files). =20
 
+I don't mind keeping them undocumented to encourage people to migrate
+to a better description. For the record, in the past controllers and
+devices where not separated in the description, hence we had NAND chip
+specific properties landing in to the NAND controller description.
+
+So I'm fine with the current approach.
+
+Thanks,
+Miqu=C3=A8l

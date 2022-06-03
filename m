@@ -2,85 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A9353D23B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CBE53D23F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348054AbiFCTLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
+        id S1349128AbiFCTML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348827AbiFCTLv (ORCPT
+        with ESMTP id S1348878AbiFCTL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:11:51 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F762280
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:11:49 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x5so6282686edi.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 12:11:49 -0700 (PDT)
+        Fri, 3 Jun 2022 15:11:59 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC000286FE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:11:55 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ff90e0937aso91968727b3.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 12:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KIclXdDuwkuHFRF1yGwl+vB5wE/sELhI0XxIv8Oxd5U=;
-        b=Uah1rtndf2sVwhb8DZfowbNVE3U5P1CmFUvrcf7fR9U/u69ua6fBafj7xD8H8sP7qX
-         NjyJhOUAf3w1jzioceyGRyOl4ve6BfQdgq73df2ZQjHFrbLTpD0PeWoR/949yHHnRWKs
-         D+r1IGycNIBpwfHdFpR4lMXZyGhLfL+UmAh6U=
+        bh=5fDvBQ9pqnOyeFIGsW6/UXw+F1U5aWM1AabDKQN3DYA=;
+        b=sbHxZFWtLPJzqSmFanseJeEPL/ALu0sQSxEJQocSQIsAYQUBcFJXhscWQcNSmfW230
+         9rGYlKRGdc8+NCOtXd2QYQ2XQvkPWGrUdp03vXdekmYY9e2qdJp1uNuzLW9Jd7qinut+
+         Ucgv06zsk3X2VyQCWX4Jb6t/PfpbW+yc+9vdGhOzMheX7HMUapqW3A1s2XfR5HIv0Agq
+         elgZuBluPxPTAsSlHtoZErhKO59lkdTlBMQiKjoovrnNUk+VrG2hHbUT/6BCtCQF7T0s
+         l4pxZlAX/b52GuTokRfKfbVxdKCQqSp0ZEXlF2RRTj0w4dQuw3jptgt+I1RJdICqXtZI
+         HuAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KIclXdDuwkuHFRF1yGwl+vB5wE/sELhI0XxIv8Oxd5U=;
-        b=op8vaCRqLgTiv9KZP7rsHIEqUWa0gG/cezyUa1KJCU5F9MTDB7jgIr+DqRjKa2glKQ
-         hvM46ph3idgwm9XR21ta/r6Mh8KdeJI90dyGS16goeVmKFzzPoye6otNNfTTBav92Yfw
-         Rj24pXfwsGDhOMQhSRSGgn9fx0fAVqkBK6c3wbIW27C/PXDsLAp7Dp/EOGWSIGYSA/Pu
-         8M0Z5gDFe5XPR/qtO/szP5CHn7XebIFN75vDeuinxDS3S4AP2BhwLKRfzeX0pobIklM+
-         zIvIMJvDw/Sqvf/jI0ILp4FEIpqfvpe9w2hz9r9Ywj1E8ceTs7qm7hLWn7M6+LCljRuR
-         3XpA==
-X-Gm-Message-State: AOAM531SaqbS5HJ266vMR9OxtPUJffsNDQhuFsMyy6lXI4NHpYAVrNSd
-        lYsI9DKypGh/W3F3+QA3Z9N9dP+PwunO1qMWp/8=
-X-Google-Smtp-Source: ABdhPJzpbsRREA60E5r8m2ffk3ipwYees5UGcvT3QBNU03WbGyuVuwODtoY7UiaSUe1BjAunqOsBBA==
-X-Received: by 2002:a05:6402:1d4a:b0:42e:9ec8:320b with SMTP id dz10-20020a0564021d4a00b0042e9ec8320bmr4164434edb.119.1654283507574;
-        Fri, 03 Jun 2022 12:11:47 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id l23-20020a170906645700b006fe8a4ec62fsm3159203ejn.4.2022.06.03.12.11.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 12:11:47 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id a15so3020026wrh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 12:11:46 -0700 (PDT)
-X-Received: by 2002:a5d:414d:0:b0:213:be00:a35 with SMTP id
- c13-20020a5d414d000000b00213be000a35mr4018506wrq.97.1654283505845; Fri, 03
- Jun 2022 12:11:45 -0700 (PDT)
+        bh=5fDvBQ9pqnOyeFIGsW6/UXw+F1U5aWM1AabDKQN3DYA=;
+        b=w1duk/HjdTHkIjHBL9Ug74FU+I+qNtdeyp/FR4JaDsmPuvzW+ETuKlAJM2pcaZtQlC
+         z0y7vOQEmA/iw5wQtLo+pyAXeW1YF+/9iOSJfuKhsCBEOFcIDv1UWnH0xHSkVeXvUjkW
+         KtgBJgrJ1uJM7OBKe5EhF2sy38+YFlCXn8zA9pY327T0bcFR2r3nHrukFWsH8GDgzWlO
+         5tIjmKDl4j0SvXHlAz2fu1x3rkbWbRCK6ruaPZFT4nem1JwO0wBXOiUsXxVRY7Gp0c9r
+         aac9W0DNs+/LM6wwm8o7GPywdMU+JwzuW72YcuYxnNuPp6PzG6xvmitiKW3Mj3bhZ1M0
+         vlvw==
+X-Gm-Message-State: AOAM532hIxM5UD8fVs2RNw5YdVNR9HDjTNIIU8bydVFhKLTeavS46yoM
+        M3GcFsWIfEeidUwSX+QYLOA4uSMOQPV1tn4UbOGXGQ==
+X-Google-Smtp-Source: ABdhPJy51STo1wv/NPeMQzs5HJJXun6eDnFOS3demyDMpHxmfb2j2pVRLASUIT3YfUHydKoFN9BCWC8eCqX08kRNFjI=
+X-Received: by 2002:a81:b401:0:b0:300:2e86:e7e5 with SMTP id
+ h1-20020a81b401000000b003002e86e7e5mr12645707ywi.467.1654283514691; Fri, 03
+ Jun 2022 12:11:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <YpnwZ/Q5yTKRDBOD@kroah.com>
-In-Reply-To: <YpnwZ/Q5yTKRDBOD@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 3 Jun 2022 12:11:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgUHjXWUCyyS9Q5TFS8Wc=qJk2q2-sLFVVtqgUi4vfnrQ@mail.gmail.com>
-Message-ID: <CAHk-=wgUHjXWUCyyS9Q5TFS8Wc=qJk2q2-sLFVVtqgUi4vfnrQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Driver core changes for 5.19-rc1
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
+References: <2997c5b0-3611-5e00-466c-b2966f09f067@nbd.name>
+ <1654245968-8067-1-git-send-email-chen45464546@163.com> <CANn89iKiyh36ULH4PCXF4c8sBdh9WLksMoMcmQwipZYWCzBkMA@mail.gmail.com>
+ <20220603115956.6ad82a53@kernel.org>
+In-Reply-To: <20220603115956.6ad82a53@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 3 Jun 2022 12:11:43 -0700
+Message-ID: <CANn89i+dW+paaybeDkkC0XxYM+Mv_AOnbi6GSLtTgAv9L=TX7Q@mail.gmail.com>
+Subject: Re: [PATCH v2] net: ethernet: mtk_eth_soc: fix misuse of mem alloc
+ interface netdev[napi]_alloc_frag
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Chen Lin <chen45464546@163.com>, Felix Fietkau <nbd@nbd.name>,
+        john@phrozen.org, sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 4:28 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Fri, Jun 3, 2022 at 11:59 AM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> It's that last change that I'm the most worried about.  It has been
-> reported to cause boot problems for a number of systems, and I have a
-> tested patch series that resolves this issue.
+> On Fri, 3 Jun 2022 10:25:16 -0700 Eric Dumazet wrote:
+> > >                         goto release_desc;
+> > > @@ -1914,7 +1923,16 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
+> > >                 return -ENOMEM;
+> > >
+> > >         for (i = 0; i < rx_dma_size; i++) {
+> > > -               ring->data[i] = netdev_alloc_frag(ring->frag_size);
+> >
+> > Note aside, calling netdev_alloc_frag() in a loop like that is adding
+> > GFP_ATOMIC pressure.
+> >
+> > mtk_rx_alloc() being in process context, using GFP_KERNEL allocations
+> > would be less aggressive and
+> > have more chances to succeed.
+> >
+> > We probably should offer a generic helper. This could be used from
+> > driver/net/tun.c and others.
+>
+> Do cases where netdev_alloc_frag() is not run from a process context
+> from to your mind? My feeling is that the prevailing pattern is what
+> this driver does, which is netdev_alloc_frag() at startup / open and
+> napi_alloc_frag() from the datapath. So maybe we can even spare the
+> detail in the API and have napi_alloc_frag() assume GFP_KERNEL by
+> default?
 
-Ok, pulled and the two patches applied on top.
+Yes, we only have to review callers and change the documentation and
+implementation.
 
-               Linus
+The confusion/overhead/generalization came with :
+
+commit 7ba7aeabbaba484347cc98fbe9045769ca0d118d
+Author: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date:   Fri Jun 7 21:20:34 2019 +0200
+
+    net: Don't disable interrupts in napi_alloc_frag()
+
+    netdev_alloc_frag() can be used from any context and is used by NAPI
+    and non-NAPI drivers. Non-NAPI drivers use it in interrupt context
+    and NAPI drivers use it during initial allocation (->ndo_open() or
+    ->ndo_change_mtu()). Some NAPI drivers share the same function for the
+    initial allocation and the allocation in their NAPI callback.
+
+    The interrupts are disabled in order to ensure locked access from every
+    context to `netdev_alloc_cache'.
+
+    Let netdev_alloc_frag() check if interrupts are disabled. If they are,
+    use `netdev_alloc_cache' otherwise disable BH and invoke
+    __napi_alloc_frag() for the allocation. The IRQ check is cheaper
+    compared to disabling & enabling interrupts and memory allocation with
+    disabled interrupts does not work on -RT.
+
+    Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    Signed-off-by: David S. Miller <davem@davemloft.net>

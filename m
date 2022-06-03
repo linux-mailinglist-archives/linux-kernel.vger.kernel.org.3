@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B4853CE44
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE78853CE60
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236200AbiFCRkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S1344884AbiFCRl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344623AbiFCRkd (ORCPT
+        with ESMTP id S1344847AbiFCRlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:40:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BD753734;
-        Fri,  3 Jun 2022 10:40:23 -0700 (PDT)
+        Fri, 3 Jun 2022 13:41:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A80453E15;
+        Fri,  3 Jun 2022 10:40:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01C40B8241D;
-        Fri,  3 Jun 2022 17:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43366C385B8;
-        Fri,  3 Jun 2022 17:40:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A3C61AFE;
+        Fri,  3 Jun 2022 17:40:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E7A3C385B8;
+        Fri,  3 Jun 2022 17:40:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278020;
-        bh=Mhd7UTT6zPQOdm7M0jqXy6UQ/4oBn6Jsa5byy3zImKY=;
+        s=korg; t=1654278055;
+        bh=DZ/F7hfto6+zZNrsEDnnEnfL6SgqUExG+EhCpoew7Y8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MxM2mQiM+xCT0U/RRFAMvObKsV+mMgF+w1nDLMsrCVICsNdXvtu12pVPvxVLGyhBy
-         nxTYIaEZlDTF6Ehw9EjGhmQnXkCQCkmLloN+L+kuKs1sNShgNz/FjZ92yw/blGRP0v
-         0dYGh/g/IUIFT1NIP0OcHUxtWd0wYc4g4j8OQezQ=
+        b=kIX1UJtaWGGgKvsg6MtCPut/5WFE1mh9emK1oYuNhHSLID0iV6gm+jk/1OWRCrWgX
+         6/XQlTdZrg/MAgN7ObFyIHEAAUOeBA1PietGg0LclySRCWYSIZjj4LpIlzRMlKkLNk
+         MGmk9QSlFJ4fcTCX/X7kgxtGrVChSXTjWp+LNKi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sarthak Kukreti <sarthakkukreti@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.9 09/12] dm verity: set DM_TARGET_IMMUTABLE feature flag
+        stable@vger.kernel.org, David Wilder <wilder@us.ibm.com>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 08/23] net: ftgmac100: Disable hardware checksum on AST2600
 Date:   Fri,  3 Jun 2022 19:39:35 +0200
-Message-Id: <20220603173812.801934643@linuxfoundation.org>
+Message-Id: <20220603173814.619431272@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173812.524184588@linuxfoundation.org>
-References: <20220603173812.524184588@linuxfoundation.org>
+In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
+References: <20220603173814.362515009@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +57,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sarthak Kukreti <sarthakkukreti@google.com>
+From: Joel Stanley <joel@jms.id.au>
 
-commit 4caae58406f8ceb741603eee460d79bacca9b1b5 upstream.
+[ Upstream commit 6fd45e79e8b93b8d22fb8fe22c32fbad7e9190bd ]
 
-The device-mapper framework provides a mechanism to mark targets as
-immutable (and hence fail table reloads that try to change the target
-type). Add the DM_TARGET_IMMUTABLE flag to the dm-verity target's
-feature flags to prevent switching the verity target with a different
-target type.
+The AST2600 when using the i210 NIC over NC-SI has been observed to
+produce incorrect checksum results with specific MTU values. This was
+first observed when sending data across a long distance set of networks.
 
-Fixes: a4ffc152198e ("dm: add verity target")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sarthak Kukreti <sarthakkukreti@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On a local network, the following test was performed using a 1MB file of
+random data.
+
+On the receiver run this script:
+
+ #!/bin/bash
+ while [ 1 ]; do
+        # Zero the stats
+        nstat -r  > /dev/null
+        nc -l 9899 > test-file
+        # Check for checksum errors
+        TcpInCsumErrors=$(nstat | grep TcpInCsumErrors)
+        if [ -z "$TcpInCsumErrors" ]; then
+                echo No TcpInCsumErrors
+        else
+                echo TcpInCsumErrors = $TcpInCsumErrors
+        fi
+ done
+
+On an AST2600 system:
+
+ # nc <IP of  receiver host> 9899 < test-file
+
+The test was repeated with various MTU values:
+
+ # ip link set mtu 1410 dev eth0
+
+The observed results:
+
+ 1500 - good
+ 1434 - bad
+ 1400 - good
+ 1410 - bad
+ 1420 - good
+
+The test was repeated after disabling tx checksumming:
+
+ # ethtool -K eth0 tx-checksumming off
+
+And all MTU values tested resulted in transfers without error.
+
+An issue with the driver cannot be ruled out, however there has been no
+bug discovered so far.
+
+David has done the work to take the original bug report of slow data
+transfer between long distance connections and triaged it down to this
+test case.
+
+The vendor suspects this this is a hardware issue when using NC-SI. The
+fixes line refers to the patch that introduced AST2600 support.
+
+Reported-by: David Wilder <wilder@us.ibm.com>
+Reviewed-by: Dylan Hung <dylan_hung@aspeedtech.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-verity-target.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/faraday/ftgmac100.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/md/dm-verity-target.c
-+++ b/drivers/md/dm-verity-target.c
-@@ -1056,6 +1056,7 @@ bad:
- 
- static struct target_type verity_target = {
- 	.name		= "verity",
-+	.features	= DM_TARGET_IMMUTABLE,
- 	.version	= {1, 3, 0},
- 	.module		= THIS_MODULE,
- 	.ctr		= verity_ctr,
+diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+index f35c5dbe54ee..a1caca6accf3 100644
+--- a/drivers/net/ethernet/faraday/ftgmac100.c
++++ b/drivers/net/ethernet/faraday/ftgmac100.c
+@@ -1845,6 +1845,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
+ 	/* AST2400  doesn't have working HW checksum generation */
+ 	if (np && (of_device_is_compatible(np, "aspeed,ast2400-mac")))
+ 		netdev->hw_features &= ~NETIF_F_HW_CSUM;
++
++	/* AST2600 tx checksum with NCSI is broken */
++	if (priv->use_ncsi && of_device_is_compatible(np, "aspeed,ast2600-mac"))
++		netdev->hw_features &= ~NETIF_F_HW_CSUM;
++
+ 	if (np && of_get_property(np, "no-hw-checksum", NULL))
+ 		netdev->hw_features &= ~(NETIF_F_HW_CSUM | NETIF_F_RXCSUM);
+ 	netdev->features |= netdev->hw_features;
+-- 
+2.35.1
+
 
 

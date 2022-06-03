@@ -2,109 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF9353C43E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4044753C44D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240595AbiFCFbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S240696AbiFCFdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240572AbiFCFbU (ORCPT
+        with ESMTP id S234979AbiFCFdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:31:20 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A42538DB6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 22:31:18 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id w27so8748073edl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 22:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=yFbf+rXeDHG885MgXcNO51F92YtprLRprfusKhUHuBo=;
-        b=HvAPt7FU+EKdVfe4M56mrmA88Z2Sb3LN+iFmf/An2t2gpkgvQ3W83g/WnnJYQ84SdT
-         G7vi61e8GzCWZspwwxCSSBF3viBVC/3S5Ooy5miiKnW+QvHV+rzvgrcYQ4BmpHIk0XFN
-         3KVL8DoTsQJNNy8KwExUyusxwt/t+80CJvD7NsoFEpDOw0erh8mxFBxIkQMSQ3iWpLNf
-         CnVyUovmE1Q1SfpjyDcnjnGXMQxNUivUPDTFGJ/OsmymUY4YPMnOOukeHzR50frZZ9rf
-         ozXjhkMPf9lKrPRJAshFOCcSMEUyevHZ93/5fYXSuExQKpEiuVJD78+8x7UUSwSkc6XN
-         iCPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=yFbf+rXeDHG885MgXcNO51F92YtprLRprfusKhUHuBo=;
-        b=T0PHv3IUXhXoag0OK6M/OMQvYyZ6NBytTCAdzdnx0F51ZRAOpBNKKETnNElqDlLwCH
-         PcNEXInV5xNyWMyo4u/KT6GMLtQ4pEr9ga9KYaod2DIy4I1fpO3mSkNIHIM3R2hYIe9X
-         tdq0NYtRhAjBBsURoMK6ThJuEhOjTnwbAGn2DY4+XW56DiEMwUSOD0VL9zXh1OjlAPgz
-         IAijY92C80huEgx7Twfxn9uOrw/rQ8ws7Ryh833Qm5XLGghugZck99CMOYLw3vPOrdF2
-         2htyLLO5yn4Xkw3zp3y7o2IIBYEsjDDrw+lkQmSTYQBwT1OvLHM2L3WtTVUw1hIhh6dH
-         nFAQ==
-X-Gm-Message-State: AOAM532S8qY5jwqvXVfVu6r770rAz+Z2KCvyiodd4097y6h5WTNqo1zX
-        Hv6c7caE6Q/I6FXMD90iC6DLXw==
-X-Google-Smtp-Source: ABdhPJytg9hlGbrqAJkmbUkOLFwR2Mp42qHfQVrb4vP92ORErxOSUQl/RMSZVGmH5dPo0cpyKWBMFw==
-X-Received: by 2002:a05:6402:1d4a:b0:42e:93de:17f4 with SMTP id dz10-20020a0564021d4a00b0042e93de17f4mr693550edb.8.1654234276765;
-        Thu, 02 Jun 2022 22:31:16 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm2422104ejb.80.2022.06.02.22.31.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 22:31:15 -0700 (PDT)
-Message-ID: <65daf4b7-212d-b726-cc7e-bcdf5d4664b8@linaro.org>
-Date:   Fri, 3 Jun 2022 07:31:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/7] pinctrl/arm: dt-bindings: deprecate header with
- register constants
+        Fri, 3 Jun 2022 01:33:51 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5787738DB4;
+        Thu,  2 Jun 2022 22:33:49 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 5D6555FD02;
+        Fri,  3 Jun 2022 08:33:47 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1654234427;
+        bh=b9GzNc2WzHZEJq4QtMm9PZjoUEvGtrSFFwftlDQ1gMs=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=AersA+wy3i1Sk0Ws4oMv1WxulXlzA+iGQxmqXhbV2j1N6py8peQFv0YK6tUPUnAYF
+         TUpaOvWba1FveyVgL4Djk3bSa8eyxZFObmW9QsC8MXgvsZvkmjq0iibmE+oP6RVDiz
+         QDY02l1rpzP1kx0glOveb/LzLK2iDh9mFNoiWbR+rUbe/7KwN3yx3nfj3d5u2VogUV
+         y75vSn53WbjmrVipNUhnZ9VGdERbFsDnFBFetWfR86g917FXPYaYWGbGmtODTn8pND
+         JTv/7h3iusStTJyE6NASEsbUMYlfC3ncWK0A01WJHCZOdbATZP8JWrEctwvmiu/q8M
+         7WwmP2REVwN0Q==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Fri,  3 Jun 2022 08:33:32 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: [RFC PATCH v2 2/8] vhost/vsock: rework packet allocation logic
+Thread-Topic: [RFC PATCH v2 2/8] vhost/vsock: rework packet allocation logic
+Thread-Index: AQHYdwtmNyMIn8KDWEakLUC7mf1LGg==
+Date:   Fri, 3 Jun 2022 05:33:04 +0000
+Message-ID: <72ae7f76-ffee-3e64-d445-7a0f4261d891@sberdevices.ru>
+In-Reply-To: <e37fdf9b-be80-35e1-ae7b-c9dfeae3e3db@sberdevices.ru>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Chanho Park <chanho61.park@samsung.com>,
-        'Rob Herring' <robh+dt@kernel.org>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        'Alim Akhtar' <alim.akhtar@samsung.com>,
-        'Tomasz Figa' <tomasz.figa@gmail.com>,
-        'Sylwester Nawrocki' <s.nawrocki@samsung.com>,
-        'Linus Walleij' <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-References: <CGME20220601152757epcas2p30927b9924e9371cdfa79986c6efb6eaf@epcas2p3.samsung.com>
- <20220601152720.232383-1-krzysztof.kozlowski@linaro.org>
- <000501d87703$211ff7a0$635fe6e0$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <000501d87703$211ff7a0$635fe6e0$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <45162A55C80F4745A2F2E93FE9A70961@sberdevices.ru>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/03 01:19:00 #19656765
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 06:33, Chanho Park wrote:
->> Krzysztof Kozlowski (7):
->>   ARM: dts: s3c2410: use local header for pinctrl register values
->>   ARM: dts: s3c64xx: use local header for pinctrl register values
->>   ARM: dts: s5pv210: use local header for pinctrl register values
->>   ARM: dts: exynos: use local header for pinctrl register values
->>   arm64: dts: exynos: use local header for pinctrl register values
->>   arm64: dts: fsd: use local header for pinctrl register values
->>   dt-bindings: pinctrl: deprecate header with register constants
-> 
-> nit: Put the comment closure to the next line.
-> 
-> + * Author: Krzysztof Kozlowski <krzk@kernel.org>  */
-
-Which file has the comment in wrong place? I checked now and everywhere
-it is:
-
-+ * Author: Krzysztof Kozlowski <krzk@kernel.org>
-+ */
-+
-
-
-Best regards,
-Krzysztof
+Rm9yIHBhY2tldHMgcmVjZWl2ZWQgZnJvbSB2aXJ0aW8gUlggcXVldWUsIHVzZSBidWRkeQ0KYWxs
+b2NhdG9yIGluc3RlYWQgb2YgJ2ttYWxsb2MoKScgdG8gYmUgYWJsZSB0byBpbnNlcnQNCnN1Y2gg
+cGFnZXMgdG8gdXNlciBwcm92aWRlZCB2bWEuIFNpbmdsZSBjYWxsIHRvDQonY29weV9mcm9tX2l0
+ZXIoKScgcmVwbGFjZWQgd2l0aCBwZXItcGFnZSBsb29wLg0KDQpTaWduZWQtb2ZmLWJ5OiBBcnNl
+bml5IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCi0tLQ0KIGRyaXZlcnMvdmhv
+c3QvdnNvY2suYyB8IDgxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0t
+LS0NCiAxIGZpbGUgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKSwgMTIgZGVsZXRpb25zKC0pDQoN
+CmRpZmYgLS1naXQgYS9kcml2ZXJzL3Zob3N0L3Zzb2NrLmMgYi9kcml2ZXJzL3Zob3N0L3Zzb2Nr
+LmMNCmluZGV4IGU2YzlkNDFkYjFkZS4uMGRjMjIyOWYxOGY3IDEwMDY0NA0KLS0tIGEvZHJpdmVy
+cy92aG9zdC92c29jay5jDQorKysgYi9kcml2ZXJzL3Zob3N0L3Zzb2NrLmMNCkBAIC01OCw2ICs1
+OCw3IEBAIHN0cnVjdCB2aG9zdF92c29jayB7DQogDQogCXUzMiBndWVzdF9jaWQ7DQogCWJvb2wg
+c2VxcGFja2V0X2FsbG93Ow0KKwlib29sIHplcm9jb3B5X3J4X29uOw0KIH07DQogDQogc3RhdGlj
+IHUzMiB2aG9zdF90cmFuc3BvcnRfZ2V0X2xvY2FsX2NpZCh2b2lkKQ0KQEAgLTM1Nyw2ICszNTgs
+NyBAQCB2aG9zdF92c29ja19hbGxvY19wa3Qoc3RydWN0IHZob3N0X3ZpcnRxdWV1ZSAqdnEsDQog
+CQkgICAgICB1bnNpZ25lZCBpbnQgb3V0LCB1bnNpZ25lZCBpbnQgaW4pDQogew0KIAlzdHJ1Y3Qg
+dmlydGlvX3Zzb2NrX3BrdCAqcGt0Ow0KKwlzdHJ1Y3Qgdmhvc3RfdnNvY2sgKnZzb2NrOw0KIAlz
+dHJ1Y3QgaW92X2l0ZXIgaW92X2l0ZXI7DQogCXNpemVfdCBuYnl0ZXM7DQogCXNpemVfdCBsZW47
+DQpAQCAtMzkzLDIwICszOTUsNzUgQEAgdmhvc3RfdnNvY2tfYWxsb2NfcGt0KHN0cnVjdCB2aG9z
+dF92aXJ0cXVldWUgKnZxLA0KIAkJcmV0dXJuIE5VTEw7DQogCX0NCiANCi0JcGt0LT5idWYgPSBr
+bWFsbG9jKHBrdC0+bGVuLCBHRlBfS0VSTkVMKTsNCi0JaWYgKCFwa3QtPmJ1Zikgew0KLQkJa2Zy
+ZWUocGt0KTsNCi0JCXJldHVybiBOVUxMOw0KLQl9DQotDQogCXBrdC0+YnVmX2xlbiA9IHBrdC0+
+bGVuOw0KKwl2c29jayA9IGNvbnRhaW5lcl9vZih2cS0+ZGV2LCBzdHJ1Y3Qgdmhvc3RfdnNvY2ss
+IGRldik7DQogDQotCW5ieXRlcyA9IGNvcHlfZnJvbV9pdGVyKHBrdC0+YnVmLCBwa3QtPmxlbiwg
+Jmlvdl9pdGVyKTsNCi0JaWYgKG5ieXRlcyAhPSBwa3QtPmxlbikgew0KLQkJdnFfZXJyKHZxLCAi
+RXhwZWN0ZWQgJXUgYnl0ZSBwYXlsb2FkLCBnb3QgJXp1IGJ5dGVzXG4iLA0KLQkJICAgICAgIHBr
+dC0+bGVuLCBuYnl0ZXMpOw0KLQkJdmlydGlvX3RyYW5zcG9ydF9mcmVlX3BrdChwa3QpOw0KLQkJ
+cmV0dXJuIE5VTEw7DQorCWlmICghdnNvY2stPnplcm9jb3B5X3J4X29uKSB7DQorCQlwa3QtPmJ1
+ZiA9IGttYWxsb2MocGt0LT5sZW4sIEdGUF9LRVJORUwpOw0KKw0KKwkJaWYgKCFwa3QtPmJ1Zikg
+ew0KKwkJCWtmcmVlKHBrdCk7DQorCQkJcmV0dXJuIE5VTEw7DQorCQl9DQorDQorCQlwa3QtPnNs
+YWJfYnVmID0gdHJ1ZTsNCisJCW5ieXRlcyA9IGNvcHlfZnJvbV9pdGVyKHBrdC0+YnVmLCBwa3Qt
+PmxlbiwgJmlvdl9pdGVyKTsNCisJCWlmIChuYnl0ZXMgIT0gcGt0LT5sZW4pIHsNCisJCQl2cV9l
+cnIodnEsICJFeHBlY3RlZCAldSBieXRlIHBheWxvYWQsIGdvdCAlenUgYnl0ZXNcbiIsDQorCQkJ
+CXBrdC0+bGVuLCBuYnl0ZXMpOw0KKwkJCXZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3QocGt0KTsN
+CisJCQlyZXR1cm4gTlVMTDsNCisJCX0NCisJfSBlbHNlIHsNCisJCXN0cnVjdCBwYWdlICpidWZf
+cGFnZTsNCisJCXNzaXplX3QgcGt0X2xlbjsNCisJCWludCBwYWdlX2lkeDsNCisNCisJCS8qIFRo
+aXMgY3JlYXRlcyBtZW1vcnkgb3ZlcnJ1biwgYXMgd2UgYWxsb2NhdGUNCisJCSAqIGF0IGxlYXN0
+IG9uZSBwYWdlIGZvciBlYWNoIHBhY2tldC4NCisJCSAqLw0KKwkJYnVmX3BhZ2UgPSBhbGxvY19w
+YWdlcyhHRlBfS0VSTkVMLCBnZXRfb3JkZXIocGt0LT5sZW4pKTsNCisNCisJCWlmIChidWZfcGFn
+ZSA9PSBOVUxMKSB7DQorCQkJa2ZyZWUocGt0KTsNCisJCQlyZXR1cm4gTlVMTDsNCisJCX0NCisN
+CisJCXBrdC0+YnVmID0gcGFnZV90b192aXJ0KGJ1Zl9wYWdlKTsNCisNCisJCXBhZ2VfaWR4ID0g
+MDsNCisJCXBrdF9sZW4gPSBwa3QtPmxlbjsNCisNCisJCS8qIEFzIGFsbG9jYXRlZCBwYWdlcyBh
+cmUgbm90IG1hcHBlZCwgcHJvY2Vzcw0KKwkJICogcGFnZXMgb25lIGJ5IG9uZS4NCisJCSAqLw0K
+KwkJd2hpbGUgKHBrdF9sZW4gPiAwKSB7DQorCQkJdm9pZCAqbWFwcGVkOw0KKwkJCXNpemVfdCB0
+b19jb3B5Ow0KKw0KKwkJCW1hcHBlZCA9IGttYXAoYnVmX3BhZ2UgKyBwYWdlX2lkeCk7DQorDQor
+CQkJaWYgKG1hcHBlZCA9PSBOVUxMKSB7DQorCQkJCXZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3Qo
+cGt0KTsNCisJCQkJcmV0dXJuIE5VTEw7DQorCQkJfQ0KKw0KKwkJCXRvX2NvcHkgPSBtaW4ocGt0
+X2xlbiwgKChzc2l6ZV90KVBBR0VfU0laRSkpOw0KKw0KKwkJCW5ieXRlcyA9IGNvcHlfZnJvbV9p
+dGVyKG1hcHBlZCwgdG9fY29weSwgJmlvdl9pdGVyKTsNCisJCQlpZiAobmJ5dGVzICE9IHRvX2Nv
+cHkpIHsNCisJCQkJdnFfZXJyKHZxLCAiRXhwZWN0ZWQgJXp1IGJ5dGUgcGF5bG9hZCwgZ290ICV6
+dSBieXRlc1xuIiwNCisJCQkJICAgICAgIHRvX2NvcHksIG5ieXRlcyk7DQorCQkJCWt1bm1hcCht
+YXBwZWQpOw0KKwkJCQl2aXJ0aW9fdHJhbnNwb3J0X2ZyZWVfcGt0KHBrdCk7DQorCQkJCXJldHVy
+biBOVUxMOw0KKwkJCX0NCisNCisJCQlrdW5tYXAobWFwcGVkKTsNCisNCisJCQlwa3RfbGVuIC09
+IHRvX2NvcHk7DQorCQkJcGFnZV9pZHgrKzsNCisJCX0NCiAJfQ0KIA0KIAlyZXR1cm4gcGt0Ow0K
+LS0gDQoyLjI1LjENCg==

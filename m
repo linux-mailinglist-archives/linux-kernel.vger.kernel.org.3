@@ -2,117 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2978553C3F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AF553C402
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239721AbiFCFFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        id S240141AbiFCFLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236793AbiFCFFH (ORCPT
+        with ESMTP id S240012AbiFCFLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:05:07 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1663917E;
-        Thu,  2 Jun 2022 22:05:06 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id v7so4975835ilo.3;
-        Thu, 02 Jun 2022 22:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V69MdHZeArGR1p037iUfHw/ib1Y8p6jjj2w/lS/WKCY=;
-        b=O4+rsuFI4q2IP6f0kZluT+02DEU246uyHHow4FVb0J3mZ+w6QZ+L7adWYcZDUgcl5h
-         ZgrPzh0NN0iMHRsEC2ODXobnG7acV3TpCPOYVhV4E3iXgCHyHO8Puarr70+u0JVBSyuU
-         5SICaERPcmUqM6txeFYpwKgbZ1yvAxCmKUane++nAtjUEmuJzH1kdiICFhgJNWnulMh/
-         qZG2hcyJLrI/ewZXcjabuyZ81SjHoCpWfExTG+TuSKpF4E/84130KgexiwgtXMxb2H2I
-         GsG9qinfM6Mq25TgGzrzD6fEJBtFqoq67uWejWJuQntFiY3TqYjPqwr9WOIjuzAcErAI
-         dWmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V69MdHZeArGR1p037iUfHw/ib1Y8p6jjj2w/lS/WKCY=;
-        b=Y1Ce6HyFfwm5cxdHczRxM+Ief9Wh+ucykyNduhgMVSirvmcX2NegqHEDXwHicQgzU2
-         uXsYOZusCvENmHE35T9cdbFlk94+9fD+mA8HC8+aMLcUAwImfMsJINi3JZcjQmSLgW0Q
-         VV4QY3WBm0luxWc21skUYKS/HTVKbLQvZnnqjhv0hRXHYXVbFu47qrW3nF1CiOwsUdia
-         PoSNS/T60hKKYcmJuGUx+Lo2RNz3zEuTAPicXOP1mtHXKTQcQKAwogqhF4kZDja5trRa
-         V2/Kk4/tJGt7sg4z7i1TQibWqHPstFx8YryubikNIzF334EQGV3foZ0m/4Q2j0zmm+6k
-         wAqA==
-X-Gm-Message-State: AOAM532Vgct46uLL5rmNVo16vzUsOQs2bWRCilAEJf2wmpCR/26x6Veb
-        4ews4AE6hOabUd21tsS5OWNjWlteea8fLXPrEnY=
-X-Google-Smtp-Source: ABdhPJx1Q2URPgzhZwqCBR98Ngqy/AKTQqxQ6EdjLoGuIhPccdjI8x/MzaUCZEQPUAIOTsazaOTNjHjF1YNkqi5X4ww=
-X-Received: by 2002:a02:6014:0:b0:331:57b2:8a3a with SMTP id
- i20-20020a026014000000b0033157b28a3amr4683275jac.169.1654232705473; Thu, 02
- Jun 2022 22:05:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-2-chenhuacai@loongson.cn> <e68000bf-a271-d1f2-56a5-a9ddce2bbb7c@infradead.org>
-In-Reply-To: <e68000bf-a271-d1f2-56a5-a9ddce2bbb7c@infradead.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 3 Jun 2022 13:04:55 +0800
-Message-ID: <CAAhV-H4MhHvXMTXN==z2xonfWEtcW8CiBrwnOEznKGira8Yw=g@mail.gmail.com>
-Subject: Re: [PATCH V14 01/24] irqchip: Adjust Kconfig for Loongson
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marc Zyngier <maz@kernel.org>, WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Jun 2022 01:11:13 -0400
+Received: from azure-sdnproxy-3.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 784D5393C7;
+        Thu,  2 Jun 2022 22:11:08 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.80.109])
+        by mail-app4 (Coremail) with SMTP id cS_KCgCnieKRl5li3pgyAQ--.52150S2;
+        Fri, 03 Jun 2022 13:09:48 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
+        rafael@kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH v5 0/2] Remove useless param of devcoredump functions and fix bugs
+Date:   Fri,  3 Jun 2022 13:09:33 +0800
+Message-Id: <cover.1654229964.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgCnieKRl5li3pgyAQ--.52150S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW8JFyDtw18XFyDJw1UZFb_yoW8Cry5pF
+        48Kas3ZrySkrs8uayxJF1xCas8J3WxWa47Kr9Fv3s5W3WfAF1rJr15uFyFkryqqFW8ta43
+        tF13Jr13GF9aqFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbDDG5UUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggKAVZdtaBKlgAWsV
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Randy,
+The first patch removes the extra gfp_t param of dev_coredumpv()
+and dev_coredumpm().
 
-On Fri, Jun 3, 2022 at 12:34 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi,
->
-> On 6/2/22 04:51, Huacai Chen wrote:
-> > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> > index 44fb8843e80e..1cb3967fe798 100644
-> > --- a/drivers/irqchip/Kconfig
-> > +++ b/drivers/irqchip/Kconfig
-> > @@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
-> >
-> >  config LOONGSON_HTPIC
-> >       bool "Loongson3 HyperTransport PIC Controller"
-> > -     depends on MACH_LOONGSON64
-> > +     depends on (MACH_LOONGSON64 && MIPS)
->
-> If you ever have another patch version, please drop the unnecessary left and
-> right parentheses above.
-OK, thanks, I will do that.
+The second patch fix sleep in atomic context bugs of mwifiex
+caused by dev_coredumpv().
 
-Huacai
->
->         depends on MACH_LOONGSON64 && MIPS
->
-> >       default y
-> >       select IRQ_DOMAIN
-> >       select GENERIC_IRQ_CHIP
->
-> thanks.
-> --
-> ~Randy
+Duoming Zhou (2):
+  devcoredump: remove the useless gfp_t parameter in dev_coredumpv and
+    dev_coredumpm
+  mwifiex: fix sleep in atomic context bugs caused by dev_coredumpv
+
+ drivers/base/devcoredump.c                       | 16 ++++++----------
+ drivers/bluetooth/btmrvl_sdio.c                  |  2 +-
+ drivers/bluetooth/hci_qca.c                      |  2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_dump.c           |  2 +-
+ drivers/gpu/drm/msm/disp/msm_disp_snapshot.c     |  4 ++--
+ drivers/gpu/drm/msm/msm_gpu.c                    |  4 ++--
+ drivers/media/platform/qcom/venus/core.c         |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c   |  2 +-
+ drivers/net/wireless/ath/ath10k/coredump.c       |  2 +-
+ .../net/wireless/ath/wil6210/wil_crash_dump.c    |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/debug.c |  2 +-
+ drivers/net/wireless/intel/iwlwifi/fw/dbg.c      |  6 ++----
+ drivers/net/wireless/marvell/mwifiex/init.c      | 10 ++++++----
+ drivers/net/wireless/marvell/mwifiex/main.c      |  3 +--
+ drivers/net/wireless/marvell/mwifiex/main.h      |  2 +-
+ drivers/net/wireless/marvell/mwifiex/sta_event.c |  6 +++---
+ drivers/net/wireless/mediatek/mt76/mt7615/mac.c  |  3 +--
+ drivers/net/wireless/mediatek/mt76/mt7921/mac.c  |  3 +--
+ drivers/net/wireless/realtek/rtw88/main.c        |  2 +-
+ drivers/net/wireless/realtek/rtw89/ser.c         |  2 +-
+ drivers/remoteproc/qcom_q6v5_mss.c               |  2 +-
+ drivers/remoteproc/remoteproc_coredump.c         |  8 ++++----
+ include/drm/drm_print.h                          |  2 +-
+ include/linux/devcoredump.h                      | 13 ++++++-------
+ sound/soc/intel/avs/apl.c                        |  2 +-
+ sound/soc/intel/avs/skl.c                        |  2 +-
+ sound/soc/intel/catpt/dsp.c                      |  2 +-
+ 27 files changed, 50 insertions(+), 58 deletions(-)
+
+-- 
+2.17.1
+

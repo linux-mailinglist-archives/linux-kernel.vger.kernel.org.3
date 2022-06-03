@@ -2,161 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AA953C99C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B4F53C9A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244100AbiFCLyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 07:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S244124AbiFCL5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 07:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244103AbiFCLyJ (ORCPT
+        with ESMTP id S238386AbiFCL5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 07:54:09 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADD8237D8;
-        Fri,  3 Jun 2022 04:54:06 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253APJir032493;
-        Fri, 3 Jun 2022 13:53:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=FKNUpyVIm2CLWGCn06bJoa+bMwjpTz6taBDfFnjmWeM=;
- b=eYu69aYxSK7uvhzjWMBLonngbwhJqsInLXxLFQkcNQUidE0rdJshCx4SI/AmDT9RfKSt
- 3S5ouF4FstHIp22BXpCJ6pXCnaVsiqAeK1c6LeRFf+EmZcdhyGotbviWXeAGvV6lPaWJ
- FY7VBcd/3EwWzqj/fDfH+qn/ZVUWpS4O4FvgNEaFbosWte7vqKf22HnfECmE7NArUrL0
- 93Lp/nKp7kqfcqRQhhQ7rF5olAXELOUlMr3D7eb/IYR9CuLPnobcRPWRw3qa3G4khKun
- IfFy4LqjSDXqDKQJYzbg2QK2/5Bw2KphgvihQyeSIEZxfcV0vI202wh4J9nBuaawPbHQ dw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3get03qg0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 13:53:57 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C29C1100034;
-        Fri,  3 Jun 2022 13:53:54 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4095421E69A;
-        Fri,  3 Jun 2022 13:53:54 +0200 (CEST)
-Received: from [10.211.10.149] (10.75.127.44) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 3 Jun
- 2022 13:53:51 +0200
-Message-ID: <b85c7526-80a4-35f2-7629-319d172bc734@foss.st.com>
-Date:   Fri, 3 Jun 2022 13:53:50 +0200
+        Fri, 3 Jun 2022 07:57:12 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24482DF76
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 04:57:11 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so7032731pjq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 04:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:cc:from:in-reply-to:content-transfer-encoding;
+        bh=34rSocizJb09HjwR+91Khzk0c3L2rvbKlfunkNL6ZSM=;
+        b=ie3hggV9l5qcE0vEJaPy/d+ITeToBpoxavsFPO0485cnFmybFwkg9xY2hHbiY+ulOI
+         Ia1rQyEy/PCxPcSXlcQKYkinxe0MIqkN+cMuyBym8QA72T8iRK3U5zI5vdWCfBG/go3C
+         yX1Xf4Wgb8ZI0QkWlPN0O6hicizw8q6TMr7+cQlNdQFe37CDBmyBqorR4XOty6/4zkQD
+         CcV4oTK8keYaVSwsBSSEeSB6TU9yssFQFmQVvmPwtp0cxQ4xvwdEBzVBihRwZu/ZOP1W
+         +AMf/RmDy5ZeeFpp1Du2C6p4oAjwyJOsqUl1uG6tFb9k70bSg/jfPMeugU0mbF1JPGlk
+         1G1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:cc:from:in-reply-to
+         :content-transfer-encoding;
+        bh=34rSocizJb09HjwR+91Khzk0c3L2rvbKlfunkNL6ZSM=;
+        b=Rb02JvDDTiLl0LtohzMkz42wP4A0tODEj6tC6hJQzpYQp/UKZS6U9yFkl64xcvp468
+         K1eNT2xBk9NWOd+GvNdLWh3bai1LOje2AgCUwsO55T0Qhz5F7dzovrbeDv+IccrHHyyU
+         dWFi8VtsfBhfqvwZAFWcAoARpcpKmSQQKwpkjuno8FLxXMXz3At3q4FseBmI2Sr/6wkV
+         xRmZEu2kSn7WNglU5JCok5Yy/DzQLifS1mAoYM1aGdEy9LL50vgPYRX1jCGY9faT9HXI
+         4fLWkjTKf2556/dPvW4qPtIuY0zvqohXH9zisIWisp7TbW7q8/DnxBAGwhxcyYPNPVfD
+         DIeA==
+X-Gm-Message-State: AOAM532UaP93x2Hsl7JEBQgsG2LaKa93BJak/BGZ1y251lo7MRfWgr7B
+        xl/yLUnm6BrAMH18xTLHwmw=
+X-Google-Smtp-Source: ABdhPJyEeVXjpH76hxW8r29sZUD7ZV2+MCtDjMvUlOT9dUiTtfKaRep4Csnb9Mfw04p81OVyyj0Hlw==
+X-Received: by 2002:a17:902:c407:b0:163:df01:bbbc with SMTP id k7-20020a170902c40700b00163df01bbbcmr9899611plk.4.1654257430575;
+        Fri, 03 Jun 2022 04:57:10 -0700 (PDT)
+Received: from [192.168.0.100] ([106.51.243.30])
+        by smtp.gmail.com with ESMTPSA id a10-20020a056a001d0a00b0051be2ae1fb5sm1196345pfx.61.2022.06.03.04.57.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 04:57:10 -0700 (PDT)
+Message-ID: <64570db1-e9f2-4f23-1d14-3d4b35776bca@gmail.com>
+Date:   Fri, 3 Jun 2022 17:27:06 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v5 2/4] remoteproc: core: Introduce
- rproc_register_rvdev function
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH 1/3] char: lp: ensure that index has not exceeded LP_NO
 Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-References: <20220406095446.1187968-1-arnaud.pouliquen@foss.st.com>
- <20220406095446.1187968-3-arnaud.pouliquen@foss.st.com>
- <20220601174159.GD531268@p14s>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20220601174159.GD531268@p14s>
-Content-Type: text/plain; charset="UTF-8"
+To:     gregkh@linuxfoundation.org, arnd@arndb.de
+References: <20220515075455.306082-1-sshedi@vmware.com>
+Cc:     yesshedi@gmail.com, Shreenidhi Shedi <sshedi@vmware.com>,
+        linux-kernel@vger.kernel.org
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+In-Reply-To: <20220515075455.306082-1-sshedi@vmware.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-03_03,2022-06-03_01,2022-02-23_01
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mathieu,
+On 15/05/22 1:24 pm, Shreenidhi Shedi wrote:
+> After finishing the loop, index value can be equal to LP_NO and lp_table
+> array is of size LP_NO, so this can end up in accessing an out of bound
+> address in lp_register function.
+> 
+> Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> ---
+>  drivers/char/lp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/lp.c b/drivers/char/lp.c
+> index bd95aba1f..e61060f3c 100644
+> --- a/drivers/char/lp.c
+> +++ b/drivers/char/lp.c
+> @@ -971,7 +971,7 @@ static void lp_attach(struct parport *port)
+>  			if (port_num[i] == -1)
+>  				break;
+>  
+> -		if (!lp_register(i, port))
+> +		if (i < LP_NO && !lp_register(i, port))
+>  			lp_count++;
+>  		break;
+>  
 
-On 6/1/22 19:41, Mathieu Poirier wrote:
-> On Wed, Apr 06, 2022 at 11:54:44AM +0200, Arnaud Pouliquen wrote:
->> The rproc structure contains a list of registered rproc_vdev structure.
-> 
-> This should be rproc_rvdev.
+Hi Greg and Arnd Bergmann,
 
-Thanks for your review!
+Please review the above changes. Ignore second patch.
 
-I will send a new version according to your comments except
-this one.
-The structure name rproc_vdev is the good one, or
-or maybe I'm missing something?
-
-Thanks,
-Arnaud
-
-> 
->> To be able to move the management of the rproc_vdev structure in
->> remoteproc_virtio.c (i.e rproc_rvdev_add_device and
->> rproc_rvdev_remove_device functions), introduce the rproc_register_rvdev
->> and rproc_unregister_rvdev functions.
-> 
-> The name of those functions doesn't match the content of the patch.
-> 
->>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->> ---
->>  drivers/remoteproc/remoteproc_core.c | 16 ++++++++++++++--
->>  1 file changed, 14 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->> index 3a469220ac73..081bea39daf4 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -484,6 +484,18 @@ static int copy_dma_range_map(struct device *to, struct device *from)
->>  	return 0;
->>  }
->>  
->> +static void rproc_add_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev)
->> +{
->> +	if (rvdev && rproc)
->> +		list_add_tail(&rvdev->node, &rproc->rvdevs);
->> +}
->> +
->> +static void rproc_remove_rvdev(struct rproc_vdev *rvdev)
->> +{
->> +	if (rvdev)
->> +		list_del(&rvdev->node);
->> +}
->> +
->>  static struct rproc_vdev *
->>  rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
->>  {
->> @@ -547,7 +559,7 @@ rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
->>  			goto unwind_vring_allocations;
->>  	}
->>  
->> -	list_add_tail(&rvdev->node, &rproc->rvdevs);
->> +	rproc_add_rvdev(rproc, rvdev);
->>  
->>  	rvdev->subdev.start = rproc_vdev_do_start;
->>  	rvdev->subdev.stop = rproc_vdev_do_stop;
->> @@ -576,7 +588,7 @@ static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
->>  	}
->>  
->>  	rproc_remove_subdev(rproc, &rvdev->subdev);
->> -	list_del(&rvdev->node);
->> +	rproc_remove_rvdev(rvdev);
-> 
-> With the above:
-> 
-> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> 
->>  	device_unregister(&rvdev->dev);
->>  }
->>  
->> -- 
->> 2.25.1
->>
+--
+Shedi

@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CAA53D3DA
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 01:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B506653D3D8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 01:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349441AbiFCXZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 19:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S1349696AbiFCXZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 19:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349755AbiFCXZH (ORCPT
+        with ESMTP id S1343947AbiFCXZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 19:25:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C31F1F620
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 16:25:06 -0700 (PDT)
+        Fri, 3 Jun 2022 19:25:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4001F620
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 16:25:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE1BB60B08
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 23:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59D46C3411C;
+        by sin.source.kernel.org (Postfix) with ESMTPS id A3316CE2548
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 23:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13E76C385A9;
         Fri,  3 Jun 2022 23:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1654298705;
-        bh=MgWj+1MLla81lkU4pLEHQjXnj36W+5iUdw8gc2iV0+M=;
+        bh=GXQUZOliOQvVsG0Mci5osOJcfbgOTiFd23jfQdwYEXM=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JbWSEnH8H9OE6rnIt+gtND+UrYAbrLwm5rN1/+iGwMu90w+4S1Fdof+NBx95JnnFI
-         KvmdmiqsjFnj5eJchh4Hrwij3XpMWkM1FjdLoakrOXa25kZ94DxC2e0hj6GJUuP4Vf
-         G5PmnNlRgr2x/r6ydbnPuj1PMvuX47HWS4o5nqoB4nj4WWyFgJ30EjNxLDGzGiYG6k
-         MFSFmfUOMxnjK1Fx4Uc+Ir+nPP06Ara1qW2M14OOQkUdMgpEqqnV+zmsVlnR7/pc7i
-         kc/basOQNX1/GookEi3X4VmUrf/R0ofXYru+dRIDiGIAs+KW+tinHxJLg3vLl9Vhxd
-         LrQO0rrODM0LA==
+        b=MBxIVEgHM6BtZ5Oo/p9Watg/Hu0qMKQSxv5rItxq48dONmrYLS5bdzdb3oq+l3+gH
+         7RtSpo1zZn19Ces0lftgnTw9FhbMM7u3SvyLyg3+bsp+B2FVn39yh4rufOETXCgOEy
+         s3keUUr5XXn6MneCt0RjCx9n5gKoBoltBqw3xW18kYihI+YABlAmMfzBy5XO7vXzqw
+         lcV2usc4DQH/4PLLC4THQALriK4mCdfBYQu8KBB76Eh8olu1+KjtWb9ghO1dsIclfc
+         4Y9Ch4rD9fBb2dHfLiT53MksD5KoUIbanZrvETBNYaB6q9tgZyjbEZHLpXa7zVXP+i
+         Mhq+tFjJ2gEBg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 45625F03950;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 01EE5F5F176;
         Fri,  3 Jun 2022 23:25:05 +0000 (UTC)
-Subject: Re: [GIT PULL] 
+Subject: Re: [GIT PULL v2] kthread cleanups for v5.19
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87bkv97dvd.fsf@email.froward.int.ebiederm.org>
-References: <87bkv97dvd.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87mtet7i04.fsf@email.froward.int.ebiederm.org>
+References: <87v8th7i58.fsf@email.froward.int.ebiederm.org> <87mtet7i04.fsf@email.froward.int.ebiederm.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <87bkv97dvd.fsf@email.froward.int.ebiederm.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace_stop-cleanup-for-v5.19
-X-PR-Tracked-Commit-Id: 31cae1eaae4fd65095ad6a3659db467bc3c2599e
+X-PR-Tracked-Message-Id: <87mtet7i04.fsf@email.froward.int.ebiederm.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git kthread-cleanups-for-v5.19
+X-PR-Tracked-Commit-Id: b3f9916d81e8ffb21cbe7abccf63f86a5a1d598a
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 67850b7bdcd2803e10d019f0da5673a92139b43a
-Message-Id: <165429870528.22913.15112936217165537642.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 1ec6574a3c0a22c130c08e8c36c825cb87d68f8e
+Message-Id: <165429870500.22913.3604226113522176181.pr-tracker-bot@kernel.org>
 Date:   Fri, 03 Jun 2022 23:25:05 +0000
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 03 Jun 2022 14:20:38 -0500:
+The pull request you sent on Fri, 03 Jun 2022 12:51:23 -0500:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace_stop-cleanup-for-v5.19
+> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git kthread-cleanups-for-v5.19
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/67850b7bdcd2803e10d019f0da5673a92139b43a
+https://git.kernel.org/torvalds/c/1ec6574a3c0a22c130c08e8c36c825cb87d68f8e
 
 Thank you!
 

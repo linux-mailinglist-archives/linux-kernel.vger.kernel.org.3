@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BCC53D2D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 22:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5318353D2DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 22:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346664AbiFCUdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 16:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S1348237AbiFCUed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 16:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiFCUdX (ORCPT
+        with ESMTP id S230012AbiFCUeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 16:33:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCACE09A;
-        Fri,  3 Jun 2022 13:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654288398;
-        bh=VoWXLCtPUI4TuIxXgRZjDEmtacMUqoKfVu8X0ezR1HU=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=Co9jLger6zrv3n0d2m3AMN8JWAH3VewxF/KGgk86R5zgCxd5Yzioc3OBTSMBWMYGh
-         2HTzqhYXK/g5dyZ/Ki9aE/iPYkEIUlGmLmtXTNvGYfh7txR9xgbb07LoPodppg9KF7
-         ROzIYdw9rwEdCZAgJcy/v4deltVLXbx1qjNPgwLg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.35.224]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4QsY-1np16O0fPq-011VSt; Fri, 03
- Jun 2022 22:33:18 +0200
-Message-ID: <7217b8cc-f50d-2633-29d1-9706193e5932@gmx.de>
-Date:   Fri, 3 Jun 2022 22:33:17 +0200
+        Fri, 3 Jun 2022 16:34:31 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5D12CC9B;
+        Fri,  3 Jun 2022 13:34:30 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e656032735so12121980fac.0;
+        Fri, 03 Jun 2022 13:34:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jJw0B5tn4BmXSGtMVrepajRG0uVNOV/u4Rk3XgkDC7A=;
+        b=XkWLs8ARyhlzkHBRIlXf2NrQQtC03JNDpjRt0/1Uhs2OTCmcbPo8M7S28iCUAy+tVa
+         RTCUhdvh4DlaifmfI7mZDs867CfSPyIYFYHg7yHxyuDsYA8I/hZcxt4nfoQzgT1gUdmP
+         IdHQHQQ8WIBPPNOPM0zHTDVwZHuH4Vox0IeFoojni+lM6j7wWd+caVMojS2bROIRFXnm
+         co/cADVKxQl8xWJmtjl0iwJj8mja/J5zuPxE1Ee8nsW5nqMYKgYNN7Ojah1K/1g08NSU
+         /lyte9Hdnbu1P9FLKYiKFf9ZMs5BVf3gZ9RTRnMzW5JV1uubc98loCSrI513iVpDzm6E
+         UjYg==
+X-Gm-Message-State: AOAM5313jntNM6iWebTrEySHoh9ZpxHUaXSl8QyN9IRbIPe15TDn0gze
+        25ooBJK/Fx/OztSaUqbyqA==
+X-Google-Smtp-Source: ABdhPJxxdyoxC3Rw40umBO2Z+JkgH098pk9/seLSsYxGasFWZIAMt9BGhGwEeRHvr/JdlzCpsyu7dQ==
+X-Received: by 2002:a05:6870:c88a:b0:f2:8d92:318a with SMTP id er10-20020a056870c88a00b000f28d92318amr6954189oab.281.1654288469986;
+        Fri, 03 Jun 2022 13:34:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f7-20020a056830264700b0060b1e040014sm3982071otu.51.2022.06.03.13.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 13:34:29 -0700 (PDT)
+Received: (nullmailer pid 861878 invoked by uid 1000);
+        Fri, 03 Jun 2022 20:34:29 -0000
+Date:   Fri, 3 Jun 2022 15:34:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: mfd: atmel,flexcom: Convert to
+ json-schema
+Message-ID: <20220603203429.GA858060-robh@kernel.org>
+References: <20220603121802.30320-1-kavyasree.kotagiri@microchip.com>
+ <20220603121802.30320-2-kavyasree.kotagiri@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.18 00/67] 5.18.2-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:NwBdrgm6DjwS5y3yWuixe2IqXXdDmicnM3pSx3IU8b0MPst2f4v
- GW5xVpZLHL1PABye/1XbN+1yiT9Ahxof21tfMy/9RROoERXouYUNB/GSYM6TUQiB4Fu5Gq0
- kCcYBi84E9JAL4QmHuyfuu/gYAkBjoBAe5vawfwVD5jAEvFdpvsC3bWNbrDxJvXhNVl5C6W
- d9SMHdeP4c0pxb6fw66vQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:coIjRg5LKCc=:PArP4Ll71SaZ/YI1P4PJ95
- xMfbTBnMzVLsAUfT0PztbP1PXa6BJu6MrrHdVilHwesH42gHRjjnWRrAvIL5rWpzQqDAIFwvX
- NjbEsuAAsR7VrTnMZIDbez1lzWiKssaNRBCX/hLhWNPXDJ1KMsvf042VCkizDUyISTsvA4DKs
- +TK4Q84GKyR27JhrPOUzQgWUcSIIKHITu5Vb0J9ZBb4i5IYuLubY1V8VvHjx0vptSSHx9m5MN
- 4pwKla/Af/xblUdbBffI10ZA947Fg1hCUhHnkiKmj2OpAWiWFWhyfHyK5LTv+lf/S2bBVoTQL
- QWqYLwjpdMa1HQmpW5uVX7j8TRT4VyeET87krK0cA/AwRXqZzPEg72/O2goailT9zqottM5Hr
- U/LayoH7PsjjHe02vt4XlkHVs7iUrmp3QWpKOT3xXLTZP2tGX2w5nQAAg6yRprYs7iMsKGlJP
- jSIzLkkBEfkkjpVZlprcTUcwJat3KNPA0allux25xgdtLVedPkVbpV5q4wQAOu8Ny/2Dy0nOR
- B1Gul6Rx+3vbEZDCA7BMdWnVeGI3kKuP3UcNgTtCuMV0Cncw/D0K7mFvHnNqGmHBgj5NoTFlY
- DcdfpG4385R5tK6BRu2RyefaoxVQeQ5SC7j0yQC3Tv4QK9UAD76YBzQbzj7VTMR2VEhFHAllu
- Cwj8vzO+Im9Qlzq0l7mNB5Dez1HxzZc6KjP8bslYJ9xpc7TNfmEjn8piSvmi3JsxvOlJss5e2
- lW3AOsuJnemAOCLKndWc/2Hrcy1e+eAo0s+7MmvaNPEB1aWiLPxadOEbifpL+bYffzF9SRoXf
- oQpWpw0USJkbVlX1mSVxnZivQf8WmoCj8ZqkCp/vXK3Z/vUfZWLuDEaNN6WRr0aySKkQ/WmOJ
- 2I2R8RBoLEW4Pg6hOkyBee5Bw3iPdGS5F7pwj/obkZBN97mPM/qmqPQ9SV8ZtpOj7DLAKjjV1
- cmoi1LQY9OhUwGIcwS2CydEPKqhtvh1DRGdilFa7bJP5fErcfQsXEdaTktBRdPshCrVCwTpAp
- jGYL6X0vbFjm7aN07VELUP/br5tWwlKT1L734FwumHZHzmqM7VCPztjvERGRiva2+QHREQtug
- hNFXa7RtmD6fGGN60S6ukBZ4fbXpq2ovVf8uN3DKPMUHlRbgptXQXjQRw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603121802.30320-2-kavyasree.kotagiri@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+On Fri, Jun 03, 2022 at 05:48:00PM +0530, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
+> 
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+>  .../bindings/mfd/atmel,flexcom.yaml           | 97 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ------------
+>  2 files changed, 97 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 
-5.18.2-rc1
+Doesn't apply for me. If there's some 5.19-rc1 dependency, then resend 
+after the merge window. Otherwise, at least document the dependency.
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 36)
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de
-
-Ronald
-
+Rob

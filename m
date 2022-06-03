@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BD253D176
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E4853D17A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243004AbiFCSbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S1347202AbiFCSdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347293AbiFCSbW (ORCPT
+        with ESMTP id S1347588AbiFCSdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:31:22 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20FE193F6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:17:25 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id i1so7361422plg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Az2acnj16/aXPRCs4OX6YtuTWRNeGltXq9+PbmTT2go=;
-        b=P+Blsdx7NzfX+tc3SEE3y7hR4zxwbKm4W2XIzjhNeSBoA+J3idLz4PKuU0Rgg4bqeT
-         8lBP2muYp3hJexMlCEEKRnfjA8kkU7Ktpm+ktqsZzLj/Bps9oNU5lakmUmkSzZZvJbIw
-         0qVv48vpCqMPKK6//GckvorWP4FKNyXfKRdKBPD2dx7i7608+Pyv7jcbzu4PhcIU7dL9
-         jJ9Mhm1GemcsDHTmQh64GVr7Yiv0UXLF3ltn2JxNuZClpwltYgmNH6Wk0P7s3/watLWM
-         9ucceQ8xk1cXq4I+OjOirraMAlWREjNJ1kYf8gOJHA86ZxrD0DrXqxCLe5WOy7pXbakk
-         CQsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Az2acnj16/aXPRCs4OX6YtuTWRNeGltXq9+PbmTT2go=;
-        b=dq5oPYEnMMAuMOF0HBeCJKtDj8sbPUlZJ3F58x9rYHVkMVadnoDRhVW33b/vzJVIK7
-         ut4ntgrmNO3OdBnjxMSdh4uXavcDr+aznyym9zHoMQ4PbuMNV58O0BTmYg6Rs9aQlbSb
-         iV+f4VYwijf5Wh14ZYN0FPGsQ68sc47HFH+Y7m9mDIhj9iiKnJZ/Mi8ZuoQK5kkOgd9A
-         R7m3udj9TRb4vTiDpiX7SpIxfxOBwJbe3A877uV+NrNBs1K/O4eWeKMqfQxUDNowgRac
-         Dk1jJRLShMr3IXAWoOSxo/Z4RIQmlNWGQ97kAmyJdudDq4i8eUkxdbCRGvyTJeU/uQD+
-         /kWw==
-X-Gm-Message-State: AOAM532dpF76aohMh1Ynn+eLgeaXq5flIKvAmXHvQJXMMTWiq7Zz1Ysu
-        BlePF7nlOaXxC4Oxjn1B+9x2sQ==
-X-Google-Smtp-Source: ABdhPJzckn8Awkez5EOaYciBPRY6e4DtCmXwaSw9DADx5xuCE92so+iP50Z8yVuSHpMTrhIC0nGoTA==
-X-Received: by 2002:a17:90b:1646:b0:1e3:15ef:2871 with SMTP id il6-20020a17090b164600b001e315ef2871mr27004228pjb.105.1654280244917;
-        Fri, 03 Jun 2022 11:17:24 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id bx9-20020a17090af48900b001e270cc443dsm7965713pjb.46.2022.06.03.11.17.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 11:17:24 -0700 (PDT)
-Message-ID: <0c37c2b9-a89a-54d7-9fd3-f035f6816aa8@linaro.org>
-Date:   Fri, 3 Jun 2022 11:17:23 -0700
+        Fri, 3 Jun 2022 14:33:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784D38E1A1;
+        Fri,  3 Jun 2022 11:19:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB60EB82461;
+        Fri,  3 Jun 2022 18:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901BBC3411D;
+        Fri,  3 Jun 2022 18:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654280369;
+        bh=AKP1J+1j86MsDU30/l9xw5gmZtjPSuVq9IYDsmcm1yk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R1hI1HIE1hi6gYqrNl/2z7OJovjvqO5OUKQWPJ6pAh7AE68ktuEbPWDf8/zqsH2P2
+         Xl9rsxNzO8w4eNVUYUeq4TrLlsw++cM5Xjl01EY56WTmJ/uGsXkuK8ZLWdZKlzsR6B
+         ncHcpW3oAoz3eCLsetAkdaJ88ExbpayBQiWxTNjXqZEaxTifmlOY602BCjGOO5+67z
+         MDz0SizcYuR5isul7uAJfrd8wVREXJc3uE7avMaedOET7CJzbKDDqM7WaZgokgrkBi
+         9Z1pnKVpsvSbJEOEBzfUG6CSWJlWFPKU8zMNJG9BwltAK52MwGVHdmP1o6aeaMYv7+
+         wSnSsRzVZ021w==
+Received: by mail-vk1-f177.google.com with SMTP id bs5so3762974vkb.4;
+        Fri, 03 Jun 2022 11:19:29 -0700 (PDT)
+X-Gm-Message-State: AOAM533ivNX4y40U+qd1aqcg4yxVMQMIG1vPjUcFWfV+nH9eGG53Bc5A
+        /Hptkbl1Kh2QeNy3dW8B0kUYHwA/MkeJ448aYg==
+X-Google-Smtp-Source: ABdhPJwh1UGsiub0fkA5rgY7ZXQQ7STjVOpo/uLoefNfIXTYEkvJHTFpOG3dnE3b6MFeBTZvHTPs//qBfZY1d95df10=
+X-Received: by 2002:a1f:b253:0:b0:35d:1225:2dfb with SMTP id
+ b80-20020a1fb253000000b0035d12252dfbmr6330997vkf.19.1654280368525; Fri, 03
+ Jun 2022 11:19:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] cgroup: serialize css kill and release paths
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Michal Koutny <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, cgroups@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-References: <20220603173455.441537-1-tadeusz.struk@linaro.org>
- <20220603181321.443716-1-tadeusz.struk@linaro.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <20220603181321.443716-1-tadeusz.struk@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
+ <20220525165849.7789-2-Alexander.Steffen@infineon.com> <8c4941a1-e047-1352-32ba-8595cd0143f0@linaro.org>
+ <20220602134848.GA2178372-robh@kernel.org> <aa5a8e73-b9b4-38e7-4f85-2bf309a346e0@infineon.com>
+In-Reply-To: <aa5a8e73-b9b4-38e7-4f85-2bf309a346e0@infineon.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 3 Jun 2022 13:19:17 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+0Tk9O4=UAvqxxCbt95+ATqXe6S=W54ArWDqx9b747xA@mail.gmail.com>
+Message-ID: <CAL_Jsq+0Tk9O4=UAvqxxCbt95+ATqXe6S=W54ArWDqx9b747xA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: trivial-devices: Add two I2C TPM devices
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        jarkko@kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        devicetree@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,39 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 11:13, Tadeusz Struk wrote:
-> Syzbot found a corrupted list bug scenario that can be triggered from
-> cgroup_subtree_control_write(cgrp). The reproduces writes to
-> cgroup.subtree_control file, which invokes:
-> cgroup_apply_control_enable()->css_create()->css_populate_dir(), which
-> then fails with a fault injected -ENOMEM.
-> In such scenario the css_killed_work_fn will be en-queued via
-> cgroup_apply_control_disable(cgrp)->kill_css(css), and bail out to
-> cgroup_kn_unlock(). Then cgroup_kn_unlock() will call:
-> cgroup_put(cgrp)->css_put(&cgrp->self), which will try to enqueue
-> css_release_work_fn for the same css instance, causing a list_add
-> corruption bug, as can be seen in the syzkaller report [1].
-> 
-> Fix this by synchronizing the css ref_kill and css_release jobs.
-> css_release() function will check if the css_killed_work_fn() has been
-> scheduled for the css and only en-queue the css_release_work_fn()
-> if css_killed_work_fn wasn't already en-queued. Otherwise css_release() will
-> set the CSS_REL_LATER flag for that css. This will cause the
-> css_release_work_fn() work to be executed after css_killed_work_fn() is finished.
-> 
-> Two scc flags have been introduced to implement this serialization mechanizm:
-> 
->   * CSS_KILL_ENQED, which will be set when css_killed_work_fn() is en-queued, and
->   * CSS_REL_LATER, which, if set, will cause the css_release_work_fn() to be
->     scheduled after the css_killed_work_fn is finished.
-> 
-> There is also a new lock, which will protect the integrity of the css flags.
-> 
-> [1] https://syzkaller.appspot.com/bug?id=e26e54d6eac9d9fb50b221ec3e4627b327465dbd
+On Thu, Jun 2, 2022 at 10:34 AM Alexander Steffen
+<Alexander.Steffen@infineon.com> wrote:
+>
+> On 02.06.22 15:48, Rob Herring wrote:
+> > On Thu, May 26, 2022 at 02:29:56PM +0200, Krzysztof Kozlowski wrote:
+> >> On 25/05/2022 18:58, Alexander Steffen wrote:
+> >>> Both are supported by the upcoming tpm_tis_i2c driver.
+> >>>
+> >>> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> >>> ---
+> >>>   Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+> >>>   1 file changed, 4 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> >>> index 550a2e5c9e05..dc52822331dd 100644
+> >>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> >>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> >>> @@ -135,6 +135,8 @@ properties:
+> >>>             - infineon,slb9635tt
+> >>>               # Infineon SLB9645 I2C TPM (new protocol, max 400khz)
+> >>>             - infineon,slb9645tt
+> >>> +            # Infineon SLB9673 I2C TPM 2.0
+> >>> +          - infineon,slb9673
+> >>>               # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+> >>>             - infineon,tlv493d-a1b6
+> >>>               # Infineon Multi-phase Digital VR Controller xdpe11280
+> >>> @@ -323,6 +325,8 @@ properties:
+> >>>             - st,24c256
+> >>>               # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+> >>>             - taos,tsl2550
+> >>> +            # TCG TIS-compliant TPM with I2C interface
+> >>> +          - tcg,tpm_tis-i2c
+> >>
+> >> One flavor uses tpm-tis, another tpm_tis... I guess it is too late to
+> >> make it consistent, but let's stick to the one more reasonable, so:
+> >> "tpm-tis-i2c".
+> >
+> > Neither should be used except perhaps as a fallback.
+>
+> That is the intention, yes.
 
-This also fixes a similar, cgroup related list corrupt issue:
-https://syzkaller.appspot.com/bug?id=3c7ff113ccb695e839b859da3fc481c36eb1cfd5
+Then it is not a trivial device as those don't have more than 1
+compatible string.
 
--- 
-Thanks,
-Tadeusz
+> > Does 'TCG TIS-compliant TPM' encompass every property of a device? Power
+> > supplies, resets, interrupts, quirks, etc.?
+>
+> In an ideal world, yes. In practice, of course implementations do have
+> bugs that might require different workarounds. By selecting
+> tcg,tpm-tis-i2c instead of anything more specific, you promise that the
+> device is fully compliant to the TCG specification and does not require
+> any such workarounds.
+
+We don't want broken promises. The problem is you can't know up front
+whether you will need a work-around. Adding a compatible later is not
+ideal as that would require a DT update which may be in your firmware
+(separate from the OS).
+
+Rob

@@ -2,201 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C31053CBC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8926353CBF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245215AbiFCOx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S245309AbiFCPDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245210AbiFCOx0 (ORCPT
+        with ESMTP id S238431AbiFCPDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:53:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9965536E29;
-        Fri,  3 Jun 2022 07:53:25 -0700 (PDT)
+        Fri, 3 Jun 2022 11:03:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6D464D8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:03:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54D49B82353;
-        Fri,  3 Jun 2022 14:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0635C34115;
-        Fri,  3 Jun 2022 14:53:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B5ABB82345
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:03:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D53C385A9;
+        Fri,  3 Jun 2022 15:03:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654268003;
-        bh=RGs1KTCePcSrsr1+5HQQpGae3Pc4JtwnBu3hdoIvrOY=;
+        s=k20201202; t=1654268597;
+        bh=KJA7norXveckb626KwhiBUG0LTnBlZk25DMASuaqYgQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WyGYjYddMk07o8bazntYbtCK4zbeCa7DEFE/TCozDMhF03Fe4kU8LPm3p5kSO9WSj
-         t3nk+MJHJEX0Yv2UYRgLUFBV3Hc84R61uyURYdZ3/eSIkFLkP6KKBi0TSTllFLd7JP
-         +2teddVxCFSl8S/YtwTHoTophTXWrIyq2O/Ug1pjO3cnW67rIVdln312x0G470x0UX
-         002zGcinS6p0imEfVb1ZI5xg2WnTpGyqcQGluIwWrbIwPXAZEWaRdvrWw/TLm8tfnw
-         Zp6/LuokL19/fMx0waN2xmdGuMl2dvo+KCy8Hpm+Ilj2IfHgr+e519ywVOgM2cn78o
-         PHgMnTz8aZq5g==
-Date:   Fri, 3 Jun 2022 16:02:22 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lars@metafoo.de,
-        svarbanov@mm-sol.com, iivanov@mm-sol.com,
-        jonathan.cameron@huawei.com, linux-arm-msm@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fuyq@stu.pku.edu.cn
-Subject: Re: [PATCH v4] iio: vadc: Fix potential dereference of NULL pointer
-Message-ID: <20220603160222.1ad6ef49@jic23-huawei>
-In-Reply-To: <1653238427-73587-1-git-send-email-lyz_cs@pku.edu.cn>
-References: <20220522120109.7ead18a7@jic23-huawei>
-        <1653238427-73587-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        b=fwK53WQoXp8iCJXzGTIv1dXnd+NmM+ofk7tapEFrgysbFrmI3F1601g6iKwkWBOj9
+         +iGFHoSauxyf8vx4KHM0kxfT0cH9hyPqJVqm9uZONeBdjbt9zZcq1aUACEIV0g8KQg
+         EobxoP4QaRHXzqbxCAZX6hjP7wmenTmKWFsSOmzz0/Wt7cQr3boqLvd9ofkoWyGzCe
+         iQJp9UE9lDHSdDuoHDBStSvjnVEUyX0i5f7ZLE7cIOdtvy9rNR1ldahjpKipnuuWKP
+         Ic3jRObOVGVAyKB25SUKNdq96vza3FZ7ypyjPKPlrKOyCzAdoByQSoTaAGfUkf/5qm
+         zpIZCeutFlAyw==
+Date:   Sat, 4 Jun 2022 00:03:12 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Chuang <nashuiliang@gmail.com>
+Cc:     Jingren Zhou <zhoujingren@didiglobal.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Rollback kprobe flags on failed arm_kprobe
+Message-Id: <20220604000312.69f42c92e932152da256c2bb@kernel.org>
+In-Reply-To: <20220602073259.25669-1-nashuiliang@gmail.com>
+References: <20220602073259.25669-1-nashuiliang@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 22 May 2022 09:53:47 -0700
-Yongzhi Liu <lyz_cs@pku.edu.cn> wrote:
+Hi Chuang,
 
-> The return value of vadc_get_channel() needs to be checked to
-> avoid use of NULL pointer. vadc_do_conversion() already provides
-> error prints in at least some of it's error paths. Thus it is
-> reasonable to add the null pointer check on prop and drop the
-> extra reporting in vadc_measure_ref_points().
+On Thu,  2 Jun 2022 15:32:59 +0800
+Chuang <nashuiliang@gmail.com> wrote:
+
+> From: Chuang Wang <nashuiliang@gmail.com>
 > 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+> In aggrprobe scenes, if arm_kprobe() returns an error(e.g. livepatch and
+> kprobe are using the same function X), kprobe flags, while has been
+> modified to ~KPROBE_FLAG_DISABLED, is not rollled back.
+> 
+> Then, __disable_kprobe() will be failed in __unregister_kprobe_top(),
+> the kprobe list will be not removed from aggrprobe, memory leaks or
+> illegal pointers will be caused.
+> 
+> WARN disarm_kprobe:
+>  Failed to disarm kprobe-ftrace at 00000000c729fdbc (-2)
+>  RIP: 0010:disarm_kprobe+0xcc/0x110
+>  Call Trace:
+>   __disable_kprobe+0x78/0x90
+>   __unregister_kprobe_top+0x13/0x1b0
+>   ? _cond_resched+0x15/0x30
+>   unregister_kprobes+0x32/0x80
+>   unregister_kprobe+0x1a/0x20
+> 
+> Illegal Pointers:
+>  BUG: unable to handle kernel paging request at 0000000000656369
+>  RIP: 0010:__get_valid_kprobe+0x69/0x90
+>  Call Trace:
+>   register_kprobe+0x30/0x60
+>   __register_trace_kprobe.part.7+0x8b/0xc0
+>   create_local_trace_kprobe+0xd2/0x130
+>   perf_kprobe_init+0x83/0xd0
 
-Hi
+Oops, thanks for reporting!
+ 
+> Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
+> Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
 
-Biggest remaining thing is squashing
-ret = -ENODEV;
-return ret;
+This should go to stable, so add below tag. (No need to CC to stable)
 
-into the shorter
-return -ENODEV;
+Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
+Cc: stable@vger.kernel.org
 
+And could you also update this patch as below?
 
 > ---
->  drivers/iio/adc/qcom-spmi-vadc.c | 38 ++++++++++++++++++++++++++++----------
->  1 file changed, 28 insertions(+), 10 deletions(-)
+>  kernel/kprobes.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
-> index 34202ba..43a52b1 100644
-> --- a/drivers/iio/adc/qcom-spmi-vadc.c
-> +++ b/drivers/iio/adc/qcom-spmi-vadc.c
-> @@ -358,22 +358,33 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
->  	vadc->graph[VADC_CALIB_ABSOLUTE].dx = VADC_ABSOLUTE_RANGE_UV;
->  
->  	prop = vadc_get_channel(vadc, VADC_REF_1250MV);
-> +	if (!prop) {
-> +		dev_err(vadc->dev, "Please define 1.25V channel\n");
-Probably makes more sense to have the error as 
-"No 1.25V channel found\n");
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f214f8c088ed..96c75e23113c 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -2422,8 +2422,10 @@ int enable_kprobe(struct kprobe *kp)
+>  	if (!kprobes_all_disarmed && kprobe_disabled(p)) {
+>  		p->flags &= ~KPROBE_FLAG_DISABLED;
+>  		ret = arm_kprobe(p);
+> -		if (ret)
+> +		if (ret) {
+>  			p->flags |= KPROBE_FLAG_DISABLED;
 
-It's not obvious to anyone getting this error what 'define' might mean
-without them looking at the code, so I'd rather we just said what had
-gone wrong rather offering incomplete advice.
+Here, can you add a check?
 
-> +		ret = -ENODEV;
+	if (p != kp) 
 
-Don't bother assigning a variable just to return it in the next line.
+> +			kp->flags |= KPROBE_FLAG_DISABLED;
 
-return -ENODEV;
+Thus is is clear that this is corresponding to
+---
+        if (p != kp)
+                kp->flags &= ~KPROBE_FLAG_DISABLED;
+---
 
-> +		return ret;
-> +	}
->  	ret = vadc_do_conversion(vadc, prop, &read_1);
->  	if (ret)
-> -		goto err;
-> +		return ret;
->  
->  	/* Try with buffered 625mV channel first */
->  	prop = vadc_get_channel(vadc, VADC_SPARE1);
-> -	if (!prop)
-> +	if (!prop) {
->  		prop = vadc_get_channel(vadc, VADC_REF_625MV);
-> +		if (!prop) {
-> +			dev_err(vadc->dev, "Please define 0.625V channel\n");
-"No 0.625V channel found\n"
-> +			ret = -ENODEV;
+Thank you,
 
-return -ENODEV;
-
-> +			return ret;
 > +		}
-> +	}
->  
->  	ret = vadc_do_conversion(vadc, prop, &read_2);
->  	if (ret)
-> -		goto err;
-> +		return ret;
->  
->  	if (read_1 == read_2) {
->  		ret = -EINVAL;
-> -		goto err;
-> +		return ret;
 >  	}
->  
->  	vadc->graph[VADC_CALIB_ABSOLUTE].dy = read_1 - read_2;
-> @@ -381,25 +392,32 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
->  
->  	/* Ratiometric calibration */
->  	prop = vadc_get_channel(vadc, VADC_VDD_VADC);
-> +	if (!prop) {
-> +		dev_err(vadc->dev, "Please define VDD channel\n");
-
-"No VDD channel found\n"
-
-> +		ret = -ENODEV;
-> +		return ret;
-> +	}
->  	ret = vadc_do_conversion(vadc, prop, &read_1);
->  	if (ret)
-> -		goto err;
-> +		return ret;
->  
->  	prop = vadc_get_channel(vadc, VADC_GND_REF);
-> +	if (!prop) {
-> +		dev_err(vadc->dev, "Please define GND channel\n");
-
-"No GND channel found\n"
-
-> +		ret = -ENODEV;
-> +		return ret;
-
-return -ENODEV;
-
-> +	}
->  	ret = vadc_do_conversion(vadc, prop, &read_2);
->  	if (ret)
-> -		goto err;
-> +		return ret;
->  
->  	if (read_1 == read_2) {
->  		ret = -EINVAL;
-> -		goto err;
-> +		return ret;
-
-return -ENODEV;
-
->  	}
->  
->  	vadc->graph[VADC_CALIB_RATIOMETRIC].dy = read_1 - read_2;
->  	vadc->graph[VADC_CALIB_RATIOMETRIC].gnd = read_2;
-> -err:
-> -	if (ret)
-> -		dev_err(vadc->dev, "measure reference points failed\n");
->  
->  	return ret;
-
-Can't get here with anything other than ret == 0 so
-	return 0;
-to make that explicit.
+>  out:
+>  	mutex_unlock(&kprobe_mutex);
+> -- 
+> 2.34.1
+> 
 
 
->  }
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

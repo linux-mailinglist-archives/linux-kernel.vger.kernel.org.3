@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C15B53D02C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C1253CEF8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346178AbiFCR7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S1345267AbiFCRtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346313AbiFCRvE (ORCPT
+        with ESMTP id S1345368AbiFCRsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38F65372D;
-        Fri,  3 Jun 2022 10:47:27 -0700 (PDT)
+        Fri, 3 Jun 2022 13:48:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E821B5418F;
+        Fri,  3 Jun 2022 10:45:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DAB60A0F;
-        Fri,  3 Jun 2022 17:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E26C385A9;
-        Fri,  3 Jun 2022 17:47:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 859E660A0F;
+        Fri,  3 Jun 2022 17:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E10DC385B8;
+        Fri,  3 Jun 2022 17:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278446;
-        bh=sQ0GPSl5NoQwPN9POfGGNsMy+Sxch4CTIxQGvcHIVJU=;
+        s=korg; t=1654278310;
+        bh=NnEyWjMihEvGC1ycsFdaXgQ+EWmAJe/cwgy1WOjErkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g90jNOUm3qi7wUq/iPH57bApQtGrtWlEst3S7sBv9rFp65fpYIIKZrSV1ObJZ7+99
-         YRoCmM6FeRPsruJe2PAsnVpGBp7AS+OIhNDlvboDJzDRNkOeLKnstTgVVrR0PSkT/U
-         ubxTfcGKZpEDD5/LT5BClXESfKIOVQxNXKKak2wU=
+        b=mSUZdAoPym97KU2ubp9gK3epjmL9A90oRf7BVhKakGAsuDq/hOQPnVxqeoq95pumc
+         puPQSl7VJC4KkMcrehfb3gGYhInEPiFvnXok9l7cDTa1cAusKKbl9z3BTQD/7Mj1n6
+         KRXaPbaSnvd8kcKY0+zmqqeduT9y7lWK3zLmNa4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.10 36/53] crypto: ecrdsa - Fix incorrect use of vli_cmp
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.4 25/34] dm stats: add cond_resched when looping over entries
 Date:   Fri,  3 Jun 2022 19:43:21 +0200
-Message-Id: <20220603173819.772771364@linuxfoundation.org>
+Message-Id: <20220603173816.915846548@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Chikunov <vt@altlinux.org>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit 7cc7ab73f83ee6d50dc9536bc3355495d8600fad upstream.
+commit bfe2b0146c4d0230b68f5c71a64380ff8d361f8b upstream.
 
-Correctly compare values that shall be greater-or-equal and not just
-greater.
+dm-stats can be used with a very large number of entries (it is only
+limited by 1/4 of total system memory), so add rescheduling points to
+the loops that iterate over the entries.
 
-Fixes: 0d7a78643f69 ("crypto: ecrdsa - add EC-RDSA (GOST 34.10) algorithm")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/ecrdsa.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/md/dm-stats.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/crypto/ecrdsa.c
-+++ b/crypto/ecrdsa.c
-@@ -113,15 +113,15 @@ static int ecrdsa_verify(struct akcipher
+--- a/drivers/md/dm-stats.c
++++ b/drivers/md/dm-stats.c
+@@ -224,6 +224,7 @@ void dm_stats_cleanup(struct dm_stats *s
+ 				       atomic_read(&shared->in_flight[READ]),
+ 				       atomic_read(&shared->in_flight[WRITE]));
+ 			}
++			cond_resched();
+ 		}
+ 		dm_stat_free(&s->rcu_head);
+ 	}
+@@ -313,6 +314,7 @@ static int dm_stats_create(struct dm_sta
+ 	for (ni = 0; ni < n_entries; ni++) {
+ 		atomic_set(&s->stat_shared[ni].in_flight[READ], 0);
+ 		atomic_set(&s->stat_shared[ni].in_flight[WRITE], 0);
++		cond_resched();
+ 	}
  
- 	/* Step 1: verify that 0 < r < q, 0 < s < q */
- 	if (vli_is_zero(r, ndigits) ||
--	    vli_cmp(r, ctx->curve->n, ndigits) == 1 ||
-+	    vli_cmp(r, ctx->curve->n, ndigits) >= 0 ||
- 	    vli_is_zero(s, ndigits) ||
--	    vli_cmp(s, ctx->curve->n, ndigits) == 1)
-+	    vli_cmp(s, ctx->curve->n, ndigits) >= 0)
- 		return -EKEYREJECTED;
+ 	if (s->n_histogram_entries) {
+@@ -325,6 +327,7 @@ static int dm_stats_create(struct dm_sta
+ 		for (ni = 0; ni < n_entries; ni++) {
+ 			s->stat_shared[ni].tmp.histogram = hi;
+ 			hi += s->n_histogram_entries + 1;
++			cond_resched();
+ 		}
+ 	}
  
- 	/* Step 2: calculate hash (h) of the message (passed as input) */
- 	/* Step 3: calculate e = h \mod q */
- 	vli_from_le64(e, digest, ndigits);
--	if (vli_cmp(e, ctx->curve->n, ndigits) == 1)
-+	if (vli_cmp(e, ctx->curve->n, ndigits) >= 0)
- 		vli_sub(e, e, ctx->curve->n, ndigits);
- 	if (vli_is_zero(e, ndigits))
- 		e[0] = 1;
-@@ -137,7 +137,7 @@ static int ecrdsa_verify(struct akcipher
- 	/* Step 6: calculate point C = z_1P + z_2Q, and R = x_c \mod q */
- 	ecc_point_mult_shamir(&cc, z1, &ctx->curve->g, z2, &ctx->pub_key,
- 			      ctx->curve);
--	if (vli_cmp(cc.x, ctx->curve->n, ndigits) == 1)
-+	if (vli_cmp(cc.x, ctx->curve->n, ndigits) >= 0)
- 		vli_sub(cc.x, cc.x, ctx->curve->n, ndigits);
+@@ -345,6 +348,7 @@ static int dm_stats_create(struct dm_sta
+ 			for (ni = 0; ni < n_entries; ni++) {
+ 				p[ni].histogram = hi;
+ 				hi += s->n_histogram_entries + 1;
++				cond_resched();
+ 			}
+ 		}
+ 	}
+@@ -474,6 +478,7 @@ static int dm_stats_list(struct dm_stats
+ 			}
+ 			DMEMIT("\n");
+ 		}
++		cond_resched();
+ 	}
+ 	mutex_unlock(&stats->mutex);
  
- 	/* Step 7: if R == r signature is valid */
+@@ -750,6 +755,7 @@ static void __dm_stat_clear(struct dm_st
+ 				local_irq_enable();
+ 			}
+ 		}
++		cond_resched();
+ 	}
+ }
+ 
+@@ -865,6 +871,8 @@ static int dm_stats_print(struct dm_stat
+ 
+ 		if (unlikely(sz + 1 >= maxlen))
+ 			goto buffer_overflow;
++
++		cond_resched();
+ 	}
+ 
+ 	if (clear)
 
 

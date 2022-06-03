@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4924453D07F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5572E53D088
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347010AbiFCSFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S1347788AbiFCSGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345501AbiFCRxD (ORCPT
+        with ESMTP id S1345728AbiFCRuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:53:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1833D1F624;
-        Fri,  3 Jun 2022 10:52:25 -0700 (PDT)
+        Fri, 3 Jun 2022 13:50:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AEF58E78;
+        Fri,  3 Jun 2022 10:46:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7411460F7F;
-        Fri,  3 Jun 2022 17:52:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 693AEC385B8;
-        Fri,  3 Jun 2022 17:52:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 679A7B82433;
+        Fri,  3 Jun 2022 17:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA768C385B8;
+        Fri,  3 Jun 2022 17:46:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278743;
-        bh=K6tYsH8bSgs3PfSjUaakxOh0TLf3zeJAhtERYiKfyYg=;
+        s=korg; t=1654278374;
+        bh=ZCDvb/lEcXJjYOpYuWAGBXcbz47R0k27Spe8HvZyXr4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m65Z/RwzF2D+ojxP/aDMAJY6kqAGddAJf8P6tTfTqYKeIFPLk1Ojkb7I3v5kRqdhm
-         1ivq8nc0D/aAMxDNrBReOAxc7G7dzKmYJT4fq/rkmHQeVnH3IPzVqbL1CmyD2Om86o
-         SEd5sde/vWfkZjchRx7cMQp/YAj/k9IooGaSLZlI=
+        b=I1CyQyPpD0Guxj2HYmrKJPGb8btQJV/pgg+ZOjg0iDOeL9fjWQwFkBg4gAY8WpWxp
+         y+g+sJycy7THEjUx1vD9cMQTCrq8HEQV39ATzWDbpt34c+XXRtVmJh0HLUW5UC8uPo
+         Fyjnm/XLarHFZ97JuAnRewIQxjWdY6aB8ydxnh5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH 5.17 13/75] i2c: ismt: prevent memory corruption in ismt_access()
+        stable@vger.kernel.org,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 12/53] assoc_array: Fix BUG_ON during garbage collect
 Date:   Fri,  3 Jun 2022 19:42:57 +0200
-Message-Id: <20220603173822.125311085@linuxfoundation.org>
+Message-Id: <20220603173819.078577350@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +58,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Stephen Brennan <stephen.s.brennan@oracle.com>
 
-commit 690b2549b19563ec5ad53e5c82f6a944d910086e upstream.
+commit d1dc87763f406d4e67caf16dbe438a5647692395 upstream.
 
-The "data->block[0]" variable comes from the user and is a number
-between 0-255.  It needs to be capped to prevent writing beyond the end
-of dma_buffer[].
+A rare BUG_ON triggered in assoc_array_gc:
 
-Fixes: 5e9a97b1f449 ("i2c: ismt: Adding support for I2C_SMBUS_BLOCK_PROC_CALL")
-Reported-and-tested-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+    [3430308.818153] kernel BUG at lib/assoc_array.c:1609!
+
+Which corresponded to the statement currently at line 1593 upstream:
+
+    BUG_ON(assoc_array_ptr_is_meta(p));
+
+Using the data from the core dump, I was able to generate a userspace
+reproducer[1] and determine the cause of the bug.
+
+[1]: https://github.com/brenns10/kernel_stuff/tree/master/assoc_array_gc
+
+After running the iterator on the entire branch, an internal tree node
+looked like the following:
+
+    NODE (nr_leaves_on_branch: 3)
+      SLOT [0] NODE (2 leaves)
+      SLOT [1] NODE (1 leaf)
+      SLOT [2..f] NODE (empty)
+
+In the userspace reproducer, the pr_devel output when compressing this
+node was:
+
+    -- compress node 0x5607cc089380 --
+    free=0, leaves=0
+    [0] retain node 2/1 [nx 0]
+    [1] fold node 1/1 [nx 0]
+    [2] fold node 0/1 [nx 2]
+    [3] fold node 0/2 [nx 2]
+    [4] fold node 0/3 [nx 2]
+    [5] fold node 0/4 [nx 2]
+    [6] fold node 0/5 [nx 2]
+    [7] fold node 0/6 [nx 2]
+    [8] fold node 0/7 [nx 2]
+    [9] fold node 0/8 [nx 2]
+    [10] fold node 0/9 [nx 2]
+    [11] fold node 0/10 [nx 2]
+    [12] fold node 0/11 [nx 2]
+    [13] fold node 0/12 [nx 2]
+    [14] fold node 0/13 [nx 2]
+    [15] fold node 0/14 [nx 2]
+    after: 3
+
+At slot 0, an internal node with 2 leaves could not be folded into the
+node, because there was only one available slot (slot 0). Thus, the
+internal node was retained. At slot 1, the node had one leaf, and was
+able to be folded in successfully. The remaining nodes had no leaves,
+and so were removed. By the end of the compression stage, there were 14
+free slots, and only 3 leaf nodes. The tree was ascended and then its
+parent node was compressed. When this node was seen, it could not be
+folded, due to the internal node it contained.
+
+The invariant for compression in this function is: whenever
+nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT, the node should contain all
+leaf nodes. The compression step currently cannot guarantee this, given
+the corner case shown above.
+
+To fix this issue, retry compression whenever we have retained a node,
+and yet nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT. This second
+compression will then allow the node in slot 1 to be folded in,
+satisfying the invariant. Below is the output of the reproducer once the
+fix is applied:
+
+    -- compress node 0x560e9c562380 --
+    free=0, leaves=0
+    [0] retain node 2/1 [nx 0]
+    [1] fold node 1/1 [nx 0]
+    [2] fold node 0/1 [nx 2]
+    [3] fold node 0/2 [nx 2]
+    [4] fold node 0/3 [nx 2]
+    [5] fold node 0/4 [nx 2]
+    [6] fold node 0/5 [nx 2]
+    [7] fold node 0/6 [nx 2]
+    [8] fold node 0/7 [nx 2]
+    [9] fold node 0/8 [nx 2]
+    [10] fold node 0/9 [nx 2]
+    [11] fold node 0/10 [nx 2]
+    [12] fold node 0/11 [nx 2]
+    [13] fold node 0/12 [nx 2]
+    [14] fold node 0/13 [nx 2]
+    [15] fold node 0/14 [nx 2]
+    internal nodes remain despite enough space, retrying
+    -- compress node 0x560e9c562380 --
+    free=14, leaves=1
+    [0] fold node 2/15 [nx 0]
+    after: 3
+
+Changes
+=======
+DH:
+ - Use false instead of 0.
+ - Reorder the inserted lines in a couple of places to put retained before
+   next_slot.
+
+ver #2)
+ - Fix typo in pr_devel, correct comparison to "<="
+
+Fixes: 3cb989501c26 ("Add a generic associative array implementation.")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Andrew Morton <akpm@linux-foundation.org>
+cc: keyrings@vger.kernel.org
+Link: https://lore.kernel.org/r/20220511225517.407935-1-stephen.s.brennan@oracle.com/ # v1
+Link: https://lore.kernel.org/r/20220512215045.489140-1-stephen.s.brennan@oracle.com/ # v2
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-ismt.c |    3 +++
- 1 file changed, 3 insertions(+)
+ lib/assoc_array.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/i2c/busses/i2c-ismt.c
-+++ b/drivers/i2c/busses/i2c-ismt.c
-@@ -528,6 +528,9 @@ static int ismt_access(struct i2c_adapte
+--- a/lib/assoc_array.c
++++ b/lib/assoc_array.c
+@@ -1462,6 +1462,7 @@ int assoc_array_gc(struct assoc_array *a
+ 	struct assoc_array_ptr *cursor, *ptr;
+ 	struct assoc_array_ptr *new_root, *new_parent, **new_ptr_pp;
+ 	unsigned long nr_leaves_on_tree;
++	bool retained;
+ 	int keylen, slot, nr_free, next_slot, i;
  
- 	case I2C_SMBUS_BLOCK_PROC_CALL:
- 		dev_dbg(dev, "I2C_SMBUS_BLOCK_PROC_CALL\n");
-+		if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
-+			return -EINVAL;
-+
- 		dma_size = I2C_SMBUS_BLOCK_MAX;
- 		desc->tgtaddr_rw = ISMT_DESC_ADDR_RW(addr, 1);
- 		desc->wr_len_cmd = data->block[0] + 1;
+ 	pr_devel("-->%s()\n", __func__);
+@@ -1538,6 +1539,7 @@ continue_node:
+ 		goto descend;
+ 	}
+ 
++retry_compress:
+ 	pr_devel("-- compress node %p --\n", new_n);
+ 
+ 	/* Count up the number of empty slots in this node and work out the
+@@ -1555,6 +1557,7 @@ continue_node:
+ 	pr_devel("free=%d, leaves=%lu\n", nr_free, new_n->nr_leaves_on_branch);
+ 
+ 	/* See what we can fold in */
++	retained = false;
+ 	next_slot = 0;
+ 	for (slot = 0; slot < ASSOC_ARRAY_FAN_OUT; slot++) {
+ 		struct assoc_array_shortcut *s;
+@@ -1604,9 +1607,14 @@ continue_node:
+ 			pr_devel("[%d] retain node %lu/%d [nx %d]\n",
+ 				 slot, child->nr_leaves_on_branch, nr_free + 1,
+ 				 next_slot);
++			retained = true;
+ 		}
+ 	}
+ 
++	if (retained && new_n->nr_leaves_on_branch <= ASSOC_ARRAY_FAN_OUT) {
++		pr_devel("internal nodes remain despite enough space, retrying\n");
++		goto retry_compress;
++	}
+ 	pr_devel("after: %lu\n", new_n->nr_leaves_on_branch);
+ 
+ 	nr_leaves_on_tree = new_n->nr_leaves_on_branch;
 
 

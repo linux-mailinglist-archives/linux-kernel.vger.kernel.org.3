@@ -2,103 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D40E53C6C9
+	by mail.lfdr.de (Postfix) with ESMTP id BF4BB53C6CA
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242752AbiFCINB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S242763AbiFCINY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiFCIM4 (ORCPT
+        with ESMTP id S242754AbiFCINV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:12:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B1E20F50;
-        Fri,  3 Jun 2022 01:12:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CADA9B8222E;
-        Fri,  3 Jun 2022 08:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C474C3411E;
-        Fri,  3 Jun 2022 08:12:51 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BvS+UY8S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654243967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cp+q50RJ/J+jLT5bCGZYImfbQiAwy6ER+VrGCgIzXt4=;
-        b=BvS+UY8SsHnwMpRt/Q8qSLybCqZSXLVnUYSNkC8VbJE629AsVMNQJhZA/tVmzZYef30DZr
-        rpbtUYqbf/dSjGC/Zqyfi0617q7TeaxzYGgbtaHuQzvLSNWyfXz11CNZdIUshYTukfNk/r
-        vzXCk8tBITSiophTSQ4EREVcy7Osz4s=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d9895c2e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 3 Jun 2022 08:12:47 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id i11so12442461ybq.9;
-        Fri, 03 Jun 2022 01:12:46 -0700 (PDT)
-X-Gm-Message-State: AOAM533qRLSD7e8tZXzO8fDllkjhIIfLd/OTnUYOcVrjcFCE3Iqwp0Ja
-        wcjCOoVBwu1+anXPTMLmp3PqMz7o15YkHDowY7Q=
-X-Google-Smtp-Source: ABdhPJzrhSCz7gBuCt8q4wzGb2/GphetcVIRLQlUxYaxaV1KkfGj7tdAWfj4OJmq0nWvT7bHOPKUFMHeDRRHBwHJHYs=
-X-Received: by 2002:a5b:dcf:0:b0:64a:6923:bbba with SMTP id
- t15-20020a5b0dcf000000b0064a6923bbbamr10037670ybr.398.1654243965027; Fri, 03
- Jun 2022 01:12:45 -0700 (PDT)
+        Fri, 3 Jun 2022 04:13:21 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C3627CDE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:13:20 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id c14so6653606pgu.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jJndwsNGJ35YpfT/6ZKzsPH00jUacPeRpJYnOHA8axY=;
+        b=bCedhaJN+3BeY6a2bO0Sz6Cv+ieP/MqSu7rAmZaMfRV0u23z583tS5kcCsjcjlAbyg
+         jW/S0/2riIakoh/gVc3nfWbOy9RS2cS56xFtDgTF4S4IFLoC7XIxBK1qQtDCYr1tFE1r
+         Zq9SR8HzQfqaEYKZ1J+maSu0J0YxsMpOeNWqf1j4UxNGvi/NV7CFcxpstn4XHvB1odjN
+         Tr3b5SNo1uQ3GhnHixh80GE2mNPrvXzs9MwTKVOLWLKtJ8NPvmQrJQPbHj8nNgVokgaL
+         pJbrDWYC5kFIGL1jyWU59WagyhGwEHlOVgEVYQIChRG5/PwDfovy4efBiSR/iLBCmE9o
+         X85A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jJndwsNGJ35YpfT/6ZKzsPH00jUacPeRpJYnOHA8axY=;
+        b=ulNDu0h1wl6ewsNCorp/uOo/GbRdUwbVgUCWycNdA5bQ2KsS3bCr5Z4q7Gmkl44Eh9
+         KebkdAuYc33ixWJ2FiIB+gBbyyTsPDQ2glWQQlnyhxwhbiLB7Gdizr038GLjsf5NiFqj
+         TRnFoXZEf2Pw4xAQuIFu21r9l/RlYKqNu/zTR9FRWE0+7vxlfjk9klQakDBpJr2ysaa4
+         9GCSM1LfjiK+xEdwpLyIt+c2aeN9IRP773wGmIe7MvfKDNjPxj34yXxye4MMW/kUct4y
+         vVlNOU6dviU0CrGkvcyAaR/Wjukn+4S/0cWOSClCMLsHiuP0538QkGACwXyeqZ47IPCq
+         Lq0A==
+X-Gm-Message-State: AOAM5327JThtBnffKeua/2RNi+B3XNTKrKerQrW8XZpsp08jSdADvldR
+        qb4whvXQjp2UunsCs5F2kfc=
+X-Google-Smtp-Source: ABdhPJzLhSSgE1fP7Y2/aGP4aExAqPKXsnEkw1E0WB57GnC/qOzY/ZO6hIqB9pDe+P7Zrd5CDEqevw==
+X-Received: by 2002:a62:1744:0:b0:51b:ab76:e8c4 with SMTP id 65-20020a621744000000b0051bab76e8c4mr9339294pfx.42.1654243999461;
+        Fri, 03 Jun 2022 01:13:19 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id g6-20020a170902c38600b00163de9e9342sm4829424plg.17.2022.06.03.01.13.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 01:13:18 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: mediatek: mt8173-rt5650: Fix refcount leak in mt8173_rt5650_dev_probe
+Date:   Fri,  3 Jun 2022 12:13:06 +0400
+Message-Id: <20220603081308.1332-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6407:b0:181:6914:78f6 with HTTP; Fri, 3 Jun 2022
- 01:12:44 -0700 (PDT)
-In-Reply-To: <CAMj1kXFJ2d-8aEV0-NNzXeL5qQO1JHdhqEDN+84DkA=8+jpoKg@mail.gmail.com>
-References: <20220602212234.344394-1-Jason@zx2c4.com> <CAMj1kXE=17f7kVs7RbUnBsUxyJKoH9mr-bR7jVR-XTBivqZRTw@mail.gmail.com>
- <CAHmME9otJN__Hq87JBiy7C_O6ZaFFFpBteuypML10BOAoZPBYw@mail.gmail.com> <CAMj1kXFJ2d-8aEV0-NNzXeL5qQO1JHdhqEDN+84DkA=8+jpoKg@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 3 Jun 2022 10:12:44 +0200
-X-Gmail-Original-Message-ID: <CAHmME9o0+qC+qrCBoWp=FLcVABYrO+Bcihu_oWWaGJ3XuthseA@mail.gmail.com>
-Message-ID: <CAHmME9o0+qC+qrCBoWp=FLcVABYrO+Bcihu_oWWaGJ3XuthseA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: initialize jump labels before setup_machine_fdt()
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "# 3.4.x" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Fix refcount leak in some error paths.
 
-On 6/3/22, Ard Biesheuvel <ardb@kernel.org> wrote:
-> The problem is that your original patch
+Fixes: format:0f83f9296d5c ("ASoC: mediatek: Add machine driver for ALC5650 codec")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/mediatek/mt8173/mt8173-rt5650.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-You remain extremely unpleasant to communicate with. Can we keep
-things on topic please?
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+index d1c94acb4516..e05f2b0231fe 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+@@ -280,7 +280,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (!mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[0].of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[1].of_node =
+ 		mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[0].of_node;
+@@ -293,7 +294,7 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 			dev_err(&pdev->dev,
+ 				"%s codec_capture_dai name fail %d\n",
+ 				__func__, ret);
+-			return ret;
++			goto put_platform_node;
+ 		}
+ 		mt8173_rt5650_dais[DAI_LINK_CODEC_I2S].codecs[1].dai_name =
+ 			codec_capture_dai;
+@@ -315,12 +316,14 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
+ 	if (!mt8173_rt5650_dais[DAI_LINK_HDMI_I2S].codecs->of_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	card->dev = &pdev->dev;
+ 
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 
++put_platform_node:
+ 	of_node_put(platform_node);
+ 	return ret;
+ }
+-- 
+2.25.1
 
-> As far as I can tell, the early patching code on ARM does not rely on
-> the early fixmap code. Did you try just moving jump_label_init()
-> earlier in the function?
->
-> Also, how did you test this change?
-
-Just booting a few configs in QEMU. I don't have access to real
-hardware right now unfortunately.
-
-Let me give a try to just moving the jump_label_init() function alone.
-That'd certainly make this patch a lot more basic, which would be a
-good thing, and might assuage your well justified concerns that too
-much boot order churn will break something subtle. I was just afraid
-of complicated intermingling with the other stuff after I saw that
-arm64 did things in the other order. But maybe that's silly.
-
-I'll send a v2 if that works, and send an update here if it doesn't.
-Thanks for the suggestion.
-
-Jason

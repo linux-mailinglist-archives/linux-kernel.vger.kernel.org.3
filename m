@@ -2,308 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEA453C6B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7813A53C6BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242707AbiFCICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S242712AbiFCIGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242024AbiFCIBz (ORCPT
+        with ESMTP id S229685AbiFCIGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:01:55 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD7E1F1;
-        Fri,  3 Jun 2022 01:01:53 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so4429472wmq.1;
-        Fri, 03 Jun 2022 01:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZWqxINbJ7iFdxIil6If2SDWq69slkShlezEpSvrr7HU=;
-        b=TQs+moXeRsZ/FkStEHbgDBpJC0N/FN8q/6qSlEDcv3zzEAU9eysVlE6oYun4aHrL6W
-         ftzC6fPUl5re+nDMO5nYPsP8W1vyjt+uYGh8C74UUS8m2i5MA1SxTDMNht5rDc3eXSPg
-         VVRg7N4wwAkjlfUTkv01e1ijJ8gE7eO8ic7Kc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZWqxINbJ7iFdxIil6If2SDWq69slkShlezEpSvrr7HU=;
-        b=dmcQTneTmYw28UtfKHGX5FpYrtkMVvgZDVhJg23eYxcXw+Mrl1K2BjvOX0AogtAHLS
-         l5+QSbve/b0FvMSVTXk18ztDCiyM1KkvBuMBKOjqftXCrCxaxsOT6k8pTalJFzdAZQJo
-         BQiy0qhtHCYymc72i0Dliwm3wCOgANG77SmHfhIVTF05R0MSo9AcIu8yazGLPw7G8xWk
-         j+u1f1MQFr5GIEWGqitFEa6pN40kh2X4DAsgPyf5+e6uSyH99JM6KAIt6wPna/zM3pDO
-         ns/yxvDJ1Yed2H2toinCr5WyOSIu6pmH0trvFLjz/0+H558qoVdEChzIkn8fLed2kkvM
-         zZVQ==
-X-Gm-Message-State: AOAM530jFKh5L7LuG9kja1HeFT+fA/loK4Jj/tgzPUvuJRDHVR2msKxD
-        FqniUvRaDlWUofJd9N+37x56IeL4FjRT00V8R+k=
-X-Google-Smtp-Source: ABdhPJxWxPCyIsUwcgWRlEoQ7nKS/RgnrjI7HT05hNJpTqQEnGEqr5saaTLSVlhfa1OuH0YgZY1r3EIr0RW4oumEiE8=
-X-Received: by 2002:a05:600c:3cc:b0:397:337e:14ca with SMTP id
- z12-20020a05600c03cc00b00397337e14camr37002619wmd.10.1654243311469; Fri, 03
- Jun 2022 01:01:51 -0700 (PDT)
+        Fri, 3 Jun 2022 04:06:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110D0366A0;
+        Fri,  3 Jun 2022 01:06:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCE6AB8223C;
+        Fri,  3 Jun 2022 08:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEA1C34114;
+        Fri,  3 Jun 2022 08:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654243575;
+        bh=jOV+4kFXxe0Izp6qfoGIZGnSMAjSISLkHUXMmU5Ma48=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n81v8zzmlZiXXK4SJ2kJ16T41dNZjrV3LAQdUsLCBQ0BoUr99AvQhS1MHOUgpALrZ
+         pK39rk+qSvvrNwSjqerMMKe9B5aw23jGdbpJx/eEHcCXKR4RHuluc2CR7tYaIsdsIc
+         02Sb9F2hl57xWLbsabjw+tqCQHN9YYIx1owzcSlPWvLLkJyBqdmM2oveNyMnxxrkl0
+         giIeJyscI2lEnythaEmuf8TCT9UgPa0HOM8J8T5unp+AW1a1XMusEAAMDdDOofm7h2
+         Io1KP9yh3g/mR5PppyhD8Q8u3Q2xhHlu3v9WxDdnUbvDQVpOFpZ7XrF95D+n9wJant
+         DURu5b6acboAQ==
+Received: by mail-oi1-f175.google.com with SMTP id m82so9483095oif.13;
+        Fri, 03 Jun 2022 01:06:15 -0700 (PDT)
+X-Gm-Message-State: AOAM5326UKZFTIy1HxueMgIPSM2b1baNdZ9mcPjtla2PAmBqju/kIs2k
+        8DDZT1ADfQYOHy9hyp4Df1EvuCblnnLcCXn1od0=
+X-Google-Smtp-Source: ABdhPJw/6Ot/7ORY+siZEHzE7xqvrizivnS2lpIwWPL5vwKdw9ZBSnsK11wCCZUSF7zPJsWa5B2gMoW5gIbnqvAOQbY=
+X-Received: by 2002:a05:6808:300e:b0:32c:425e:df34 with SMTP id
+ ay14-20020a056808300e00b0032c425edf34mr4753594oib.126.1654243574554; Fri, 03
+ Jun 2022 01:06:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526205334.64114-1-eajames@linux.ibm.com> <20220526205334.64114-2-eajames@linux.ibm.com>
-In-Reply-To: <20220526205334.64114-2-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Fri, 3 Jun 2022 08:01:38 +0000
-Message-ID: <CACPK8XdVF0qMtkPsk5SEJycLfBVOnk3eo6FBk_75pP+itx2rkw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] i2c: core: Add mux root adapter operations
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
+References: <20220602212234.344394-1-Jason@zx2c4.com> <CAMj1kXE=17f7kVs7RbUnBsUxyJKoH9mr-bR7jVR-XTBivqZRTw@mail.gmail.com>
+ <CAHmME9otJN__Hq87JBiy7C_O6ZaFFFpBteuypML10BOAoZPBYw@mail.gmail.com> <CAMj1kXFJ2d-8aEV0-NNzXeL5qQO1JHdhqEDN+84DkA=8+jpoKg@mail.gmail.com>
+In-Reply-To: <CAMj1kXFJ2d-8aEV0-NNzXeL5qQO1JHdhqEDN+84DkA=8+jpoKg@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 3 Jun 2022 10:06:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGo=Jr2mZJ2ryh7Z7FgoXSBttAyX=yMhBnikK6vCXnRGg@mail.gmail.com>
+Message-ID: <CAMj1kXGo=Jr2mZJ2ryh7Z7FgoXSBttAyX=yMhBnikK6vCXnRGg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: initialize jump labels before setup_machine_fdt()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Milton Miller II <miltonm@us.ibm.com>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "# 3.4.x" <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 at 20:53, Eddie James <eajames@linux.ibm.com> wrote:
+On Fri, 3 Jun 2022 at 09:51, Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> Some I2C clients need the ability to control the root I2C bus even if the
-> endpoint device is behind a mux. For example, a driver for a chip that
-> can't handle any I2C traffic on the bus while coming out of reset
-> (including an I2C-driven mux switching channels) may need to lock the root
-> bus with the mux selection fixed for the entire time the device is in
-> reset.
-> For this purpose, add a new structure containing two function pointers to
-> the adapter structure. These functions pointers should be defined for
-> every adapter. The lock_select operation, for a mux adapter, locks the
-> parent adpaters up to the root and selects the adapter's channel. The
-> unlock_deselect operation deselects the mux channel and unlocks all the
-> adapters. For a non-mux adapter, the operations lock and unlock the
-> adapters up to the root. This scheme should work with multiple levels of
-> muxes and regular adapters in between.
+> (+ Greg)
 >
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> On Fri, 3 Jun 2022 at 09:37, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >
+> > Hi Ard,
+> >
+> > On 6/3/22, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > On Thu, 2 Jun 2022 at 23:22, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > >>
+> > >> Stephen reported that a static key warning splat appears during early
+> > >> boot on arm64 systems that credit randomness from device trees that
+> > >> contain an "rng-seed" property, because setup_machine_fdt() is called
+> > >> before jump_label_init() during setup_arch(), which was fixed by
+> > >> 73e2d827a501 ("arm64: Initialize jump labels before
+> > >> setup_machine_fdt()").
+> > >>
+> > >> Upon cursory inspection, the same basic issue appears to apply to arm32
+> > >> as well. In this case, we reorder setup_arch() to do things in the same
+> > >> order as is now the case on arm64.
+> > >>
+> > >> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> > >> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > >> Cc: Ard Biesheuvel <ardb@kernel.org>
+> > >> Cc: stable@vger.kernel.org
+> > >> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
+> > >
+> > > Wouldn't it be better to defer the
+> > > static_branch_enable(&crng_is_ready) call to later in the boot (e.g.,
+> > > using an initcall()), rather than going around 'fixing' fragile,
+> > > working early boot code across multiple architectures?
+> >
+> > Yes, maybe. It's just more book keeping that's potentially
+> > unnecessary, which would be nice to avoid. I wrote a patch for this
+> > before, but it wasn't beautiful. And Catalin got a pretty easy arm64
+> > patch queued up sufficiently fast that I figured this was better.
+> >
+>
+> The problem is that your original patch was already backported as far
+> back as 5.10, and so this fix will need to be as well.
+>
+> Playing with the code that runs before the call to setup_machine_fdt()
+> is risky because it implies that issues that are introduced are likely
+> to limit the ability of the system to generate diagnostic output of
+> any kind, given that the device tree is what describes the topology of
+> the system to the kernel. Before that, there is no serial or graphical
+> console, and the only way to figure out what goes on is to connect a
+> JTAG debugger and single step through the code or dump the contents of
+> __log_buf[].
+>
+> I like the /dev/random work you have been doing but as you know, I was
+> skeptical about the need to backport all of that work to -stable, and
+> it appears my skepticism may have been justified.
+>
+> The patch in question is an unquantified performance optimization,
+> which means it does not meet the stable-kernel-rules.rst criteria, but
+> it was backported nonetheless. Now, we are in a situation where we
+> must refactor very early boot code to address a regression introduced
+> by that backport.
+>
+> > >
+> > >> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > >> ---
+> > >>  arch/arm/kernel/setup.c | 12 ++++++------
+> > >>  1 file changed, 6 insertions(+), 6 deletions(-)
+> > >>
+> > >> diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
+> > >> index 1e8a50a97edf..ef40d9f5d5a7 100644
+> > >> --- a/arch/arm/kernel/setup.c
+> > >> +++ b/arch/arm/kernel/setup.c
+> > >> @@ -1097,10 +1097,15 @@ void __init setup_arch(char **cmdline_p)
+> > >>         const struct machine_desc *mdesc = NULL;
+> > >>         void *atags_vaddr = NULL;
+> > >>
+> > >> +       setup_initial_init_mm(_text, _etext, _edata, _end);
+> > >> +       setup_processor();
+> > >> +       early_fixmap_init();
+> > >> +       early_ioremap_init();
+> > >> +       jump_label_init();
+> > >> +
+> > >
+> > > Is it really necessary to reorder all these calls? What does
+> > > jump_label_init() actually need?
+> >
+> > I'm not quite sure, but it matched how arm64 does things now. Was
+> > hoping somebody with deep arm32 knowledge (e.g. you or rmk) would be
+> > able to eyeball that to confirm.
+> >
+>
+> As far as I can tell, the early patching code on ARM does not rely on
+> the early fixmap code. Did you try just moving jump_label_init()
+> earlier in the function?
+>
 
-I think this looks okay. It was hard to understand at first, but makes
-more sense with the context of the existing bus locking code.
+The below seems to work too:
 
-There's a typo in one of your comments that the 0day bot found.
+--- a/arch/arm/kernel/setup.c
++++ b/arch/arm/kernel/setup.c
+@@ -1101,6 +1101,7 @@ void __init setup_arch(char **cmdline_p)
+                atags_vaddr = FDT_VIRT_BASE(__atags_pointer);
 
-Have you tested with CONFIG_DEBUG_MUTEXES?
-
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-> ---
->  drivers/i2c/i2c-core-base.c | 38 ++++++++++++++++++++++++++++
->  drivers/i2c/i2c-mux.c       | 50 +++++++++++++++++++++++++++++++++++++
->  include/linux/i2c.h         | 42 +++++++++++++++++++++++++++++++
->  3 files changed, 130 insertions(+)
->
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index d43db2c3876e..e2c365348e1f 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -1357,6 +1357,41 @@ static const struct i2c_lock_operations i2c_adapter_lock_ops = {
->         .unlock_bus =  i2c_adapter_unlock_bus,
->  };
->
-> +/*
-> + * For a non-mux adapter, the lock_select operation locks the chain of
-> + * adapters upwards, returning the root. If there's a mux above this adapter
-> + * somehow, it should also get locked and the desired channel selected.
-> + */
-
-Recursive lock the set of adaptors.
-
-> +static struct i2c_adapter *i2c_adapter_lock_select(struct i2c_adapter *adapter)
-> +{
-> +       struct i2c_adapter *ret = adapter;
-> +       struct i2c_adapter *parent = i2c_parent_is_i2c_adapter(adapter);
-> +
-> +       if (parent) {
-> +               ret = parent->mux_root_ops->lock_select(parent);
-> +               if (IS_ERR(ret))
-> +                       return ret;
-> +       }
-> +
-> +       adapter->lock_ops->lock_bus(adapter, I2C_LOCK_ROOT_ADAPTER);
-> +       return ret;
-> +}
-> +
-> +static void i2c_adapter_unlock_deselect(struct i2c_adapter *adapter)
-> +{
-> +       struct i2c_adapter *parent = i2c_parent_is_i2c_adapter(adapter);
-> +
-> +       adapter->lock_ops->unlock_bus(adapter, I2C_LOCK_ROOT_ADAPTER);
-> +
-> +       if (parent)
-> +               parent->mux_root_ops->unlock_deselect(parent);
-> +}
-> +
-> +static const struct i2c_mux_root_operations i2c_adapter_mux_root_ops = {
-> +       .lock_select = i2c_adapter_lock_select,
-> +       .unlock_deselect = i2c_adapter_unlock_deselect,
-> +};
-> +
->  static void i2c_host_notify_irq_teardown(struct i2c_adapter *adap)
->  {
->         struct irq_domain *domain = adap->host_notify_domain;
-> @@ -1452,6 +1487,9 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
->         if (!adap->lock_ops)
->                 adap->lock_ops = &i2c_adapter_lock_ops;
->
-> +       if (!adap->mux_root_ops)
-> +               adap->mux_root_ops = &i2c_adapter_mux_root_ops;
-> +
->         adap->locked_flags = 0;
->         rt_mutex_init(&adap->bus_lock);
->         rt_mutex_init(&adap->mux_lock);
-> diff --git a/drivers/i2c/i2c-mux.c b/drivers/i2c/i2c-mux.c
-> index 774507b54b57..c7db770e4198 100644
-> --- a/drivers/i2c/i2c-mux.c
-> +++ b/drivers/i2c/i2c-mux.c
-> @@ -210,6 +210,49 @@ static void i2c_parent_unlock_bus(struct i2c_adapter *adapter,
->         rt_mutex_unlock(&parent->mux_lock);
->  }
->
-> +/*
-> + * For a mux adapter, the lock_select operation first locks just like the
-> + * lock_bus operation. Then it selects the channel for this adapter and
-> + * returns the root adapter. If there is another mux above this one, calling
-> + * the parent lock_select should ensure that the channel is correctly
-> + * selected.
-> + */
-> +static struct i2c_adapter *i2c_mux_lock_select(struct i2c_adapter *adapter)
-> +{
-> +       int ret;
-> +       struct i2c_mux_priv *priv = adapter->algo_data;
-> +       struct i2c_mux_core *muxc = priv->muxc;
-> +       struct i2c_adapter *parent = muxc->parent;
-> +
-> +       rt_mutex_lock_nested(&parent->mux_lock, i2c_adapter_depth(adapter));
-> +
-> +       adapter = parent->mux_root_ops->lock_select(parent);
-> +       if (IS_ERR(adapter))
-> +               return adapter;
-> +
-> +       ret = muxc->select(muxc, priv->chan_id);
-> +       if (ret < 0) {
-> +               parent->mux_root_ops->unlock_deselect(parent);
-> +               rt_mutex_unlock(&parent->mux_lock);
-> +               return ERR_PTR(ret);
-> +       }
-> +
-> +       return adapter;
-> +}
-> +
-> +static void i2c_mux_unlock_deselect(struct i2c_adapter *adapter)
-> +{
-> +       struct i2c_mux_priv *priv = adapter->algo_data;
-> +       struct i2c_mux_core *muxc = priv->muxc;
-> +       struct i2c_adapter *parent = muxc->parent;
-> +
-> +       if (muxc->deselect)
-> +               muxc->deselect(muxc, priv->chan_id);
-> +
-> +       parent->mux_root_ops->unlock_deselect(parent);
-> +       rt_mutex_unlock(&parent->mux_lock);
-> +}
-> +
->  struct i2c_adapter *i2c_root_adapter(struct device *dev)
->  {
->         struct device *i2c;
-> @@ -279,6 +322,11 @@ static const struct i2c_lock_operations i2c_parent_lock_ops = {
->         .unlock_bus =  i2c_parent_unlock_bus,
->  };
->
-> +static const struct i2c_mux_root_operations i2c_mux_root_ops = {
-> +       .lock_select = i2c_mux_lock_select,
-> +       .unlock_deselect = i2c_mux_unlock_deselect,
-> +};
-> +
->  int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
->                         u32 force_nr, u32 chan_id,
->                         unsigned int class)
-> @@ -339,6 +387,8 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
->         else
->                 priv->adap.lock_ops = &i2c_parent_lock_ops;
->
-> +       priv->adap.mux_root_ops = &i2c_mux_root_ops;
-> +
->         /* Sanity check on class */
->         if (i2c_mux_parent_classes(parent) & class)
->                 dev_err(&parent->dev,
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index fbda5ada2afc..a3596f61b417 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -583,6 +583,26 @@ struct i2c_lock_operations {
->         void (*unlock_bus)(struct i2c_adapter *adapter, unsigned int flags);
->  };
->
-> +/**
-> + * struct i2c_mux_root_operations - represent operations to lock and select
-> + * the adapter's mux channel (if a mux is present)
-> + * @lock_select: Get exclusive access to the root I2C bus adapter with the
-> + *   correct mux channel selected for the adapter
-> + * @unlock_deslect: Release exclusive access to the root I2C bus adapter and
-> + *   deselect the mux channel for the adapter
-> + *
-> + * Some I2C clients need the ability to control the root I2C bus even if the
-> + * endpoint device is behind a mux. For example, a driver for a chip that
-> + * can't handle any I2C traffic on the bus while coming out of reset (including
-> + * an I2C-driven mux switching channels) may need to lock the root bus with
-> + * the mux selection fixed for the entire time the device is in reset.
-> + * These operations are for such a purpose.
-> + */
-> +struct i2c_mux_root_operations {
-> +       struct i2c_adapter *(*lock_select)(struct i2c_adapter *adapter);
-> +       void (*unlock_deselect)(struct i2c_adapter *adapter);
-> +};
-> +
->  /**
->   * struct i2c_timings - I2C timing information
->   * @bus_freq_hz: the bus frequency in Hz
-> @@ -725,6 +745,7 @@ struct i2c_adapter {
->
->         /* data fields that are valid for all devices   */
->         const struct i2c_lock_operations *lock_ops;
-> +       const struct i2c_mux_root_operations *mux_root_ops;
->         struct rt_mutex bus_lock;
->         struct rt_mutex mux_lock;
->
-> @@ -817,6 +838,27 @@ i2c_unlock_bus(struct i2c_adapter *adapter, unsigned int flags)
->         adapter->lock_ops->unlock_bus(adapter, flags);
->  }
->
-> +/**
-> + * i2c_lock_select_bus - Get exclusive access to the root I2C bus with the
-> + *   target's mux channel (if a mux is present) selected.
-> + * @adapter: Target I2C bus
-> + *
-> + * Return the root I2C bus if mux selection succeeds, an ERR_PTR otherwise
-> + */
-> +static inline struct i2c_adapter *i2c_lock_select_bus(struct i2c_adapter *adapter)
-> +{
-> +       return adapter->mux_root_ops->lock_select(adapter);
-> +}
-> +
-> +/**
-> + * i2c_unlock_deslect_bus - Release exclusive access to the root I2C bus
-> + * @adapter: Target I2C bus
-> + */
-> +static inline void i2c_unlock_deselect_bus(struct i2c_adapter *adapter)
-> +{
-> +       adapter->mux_root_ops->unlock_deselect(adapter);
-> +}
-> +
->  /**
->   * i2c_mark_adapter_suspended - Report suspended state of the adapter to the core
->   * @adap: Adapter to mark as suspended
-> --
-> 2.27.0
->
+        setup_processor();
++       jump_label_init();
+        if (atags_vaddr) {
+                mdesc = setup_machine_fdt(atags_vaddr);
+                if (mdesc)

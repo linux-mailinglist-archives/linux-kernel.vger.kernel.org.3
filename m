@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1534753CDDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153D453CDDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344290AbiFCRNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S1344293AbiFCRNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344276AbiFCRNA (ORCPT
+        with ESMTP id S1344325AbiFCRNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:13:00 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F86933883;
-        Fri,  3 Jun 2022 10:12:59 -0700 (PDT)
+        Fri, 3 Jun 2022 13:13:13 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E4234BA0;
+        Fri,  3 Jun 2022 10:13:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654276379; x=1685812379;
+  t=1654276389; x=1685812389;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=XWRmseNj/TXPSSv5UXCm5K5PY9LHAlx8KYtaV8T5AWI=;
-  b=d4DlocTqUmU3tVZJCLV6mmEa9dMMXvMRsEiNtfjROV1BOK3aJroA77Ab
-   l0wkC+d3QJIrRNM6dIj3MEmOFTn3c9JulW/AK/uo8Do3FrP4V9efBUSiH
-   QYNe21W6DBXtE9CQb4ZZTk0dRKpibbm6wUy/b+n7yFysLsLoW4TUHTWn+
-   Y=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 03 Jun 2022 10:12:59 -0700
+  bh=r79Lv8Tpc0oVus0BBEyrwDuYWHc751ghgdapTd8vfFo=;
+  b=swBJWY8dV3k9g5aREN2tcd++lUKeEJlWMoj8ndRl0co5CaKiKMvi4osb
+   Usmek/cWdK1OM/bsWThkCi7olDPO9FtqpVZXncUsOPBmzeDFMN+AtHmdF
+   rXasEvrOihF7IeANbJqEspup/h6sHki/GgWllG7JnssrtQmc82SgBEGoF
+   M=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Jun 2022 10:13:06 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:12:58 -0700
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:13:06 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 3 Jun 2022 10:12:58 -0700
+ 15.2.986.22; Fri, 3 Jun 2022 10:13:05 -0700
 Received: from hu-harshq-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 3 Jun 2022 10:12:53 -0700
+ 15.2.986.22; Fri, 3 Jun 2022 10:13:01 -0700
 From:   Harsh Agarwal <quic_harshq@quicinc.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
         <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
         <ahalaney@redhat.com>, Harsh Agarwal <quic_harshq@quicinc.com>
-Subject: [PATCH v2 1/3] dt-bindings: usb: dwc3: Add support for multiport related properties
-Date:   Fri, 3 Jun 2022 22:42:40 +0530
-Message-ID: <1654276362-28930-2-git-send-email-quic_harshq@quicinc.com>
+Subject: [PATCH v2 2/3] usb: phy: Add devm_of_usb_get_phy_by_phandle
+Date:   Fri, 3 Jun 2022 22:42:41 +0530
+Message-ID: <1654276362-28930-3-git-send-email-quic_harshq@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com>
 References: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com>
@@ -70,86 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added support for multiport, mport, num_usb2_phy and num_usb3_phy
-properties. These properties are used to support devices having
-a multiport controller.
+Adding support for devm_of_usb_get_phy_by_phandle which allows
+us to get PHY phandles of a device declared inside lookup_node.
 
 Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
 ---
- .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/usb/phy/phy.c   | 34 ++++++++++++++++++++++++++++++++++
+ include/linux/usb/phy.h |  8 ++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index d41265b..fdf3655 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -343,6 +343,34 @@ properties:
-       This port is used with the 'usb-role-switch' property  to connect the
-       dwc3 to type C connector.
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index 1b24492..0843757 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -615,6 +615,40 @@ struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
+ EXPORT_SYMBOL_GPL(devm_usb_get_phy_by_phandle);
  
-+  multiport:
-+    description:
-+      If a single USB controller supports multiple ports, then it's referred to as
-+      a multiport controller. Each port of the multiport controller can support
-+      either High Speed or Super Speed or both and have their own PHY phandles. Each
-+      port is represented by "mport" node and all the "mport" nodes are grouped
-+      together inside the "multiport" node where individual "mport" node defines the
-+      PHYs supported by that port.
-+    required:
-+      - mport
+ /**
++ * devm_of_usb_get_phy_by_phandle - find the USB PHY by phandle in lookup_node
++ * @dev: device that requests this phy
++ * @phandle: name of the property holding the phy phandle value
++ * @index: the index of the phy
++ * @lookup_node: The node to search for PHY phandles.
++ *
++ * Returns the phy driver associated with the given phandle value,
++ * after getting a refcount to it, -ENODEV if there is no such phy or
++ * -EPROBE_DEFER if there is a phandle to the phy, but the device is
++ * not yet loaded. While at that, it also associates the device with
++ * the phy using devres. On driver detach, release function is invoked
++ * on the devres data, then, devres data is freed.
++ *
++ * For use by USB host and peripheral drivers.
++ */
++struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
++	const char *phandle, u8 index, struct device_node *lookup_node)
++{
++	struct device_node *node;
++	struct usb_phy	*phy;
 +
-+  num_usb2_phy:
-+    description: Total number of HS-PHYs defined by the multiport controller.
-+    $ref: /schemas/types.yaml#/definitions/uint32
++	node = of_parse_phandle(lookup_node, phandle, index);
++	if (!node) {
++		dev_dbg(dev, "failed to get %s phandle in %pOF node\n", phandle,
++			dev->of_node);
++		return ERR_PTR(-ENODEV);
++	}
++	phy = devm_usb_get_phy_by_node(dev, node, NULL);
++	of_node_put(node);
++	return phy;
++}
++EXPORT_SYMBOL_GPL(devm_of_usb_get_phy_by_phandle);
 +
-+  num_usb3_phy:
-+    description: Total number of SS-PHYs defined by the multiport controller.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  mport:
-+    description: Each mport node represents one port of the multiport controller.
-+    oneOf:
-+       - required:
-+         - usb-phy
-+       - required:
-+          - phys
-+          - phy-names
-+
- unevaluatedProperties: false
++/**
+  * devm_usb_put_phy - release the USB PHY
+  * @dev: device that wants to release this phy
+  * @phy: the phy returned by devm_usb_get_phy()
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc..2581c72 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -220,6 +220,8 @@ extern struct usb_phy *devm_usb_get_phy(struct device *dev,
+ 	enum usb_phy_type type);
+ extern struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
+ 	const char *phandle, u8 index);
++extern struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
++	const char *phandle, u8 index, struct device_node *lookup_node);
+ extern struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
+ 	struct device_node *node, struct notifier_block *nb);
+ extern void usb_put_phy(struct usb_phy *);
+@@ -249,6 +251,12 @@ static inline struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
+ 	return ERR_PTR(-ENXIO);
+ }
  
- required:
-@@ -371,4 +399,31 @@ examples:
-       snps,dis_u2_susphy_quirk;
-       snps,dis_enblslpm_quirk;
-     };
-+  - |
-+    usb@4a000000 {
-+      compatible = "snps,dwc3";
-+      reg = <0x4a000000 0xcfff>;
-+      interrupts = <0 92 4>;
++extern inline struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
++	const char *phandle, u8 index, struct device_node *lookup_node)
++{
++	return ERR_PTR(-ENXIO);
++}
 +
-+      multiport {
-+
-+        MP_1: mport1 {
-+          usb-phy = <&usb2_phy0>, <&usb3_phy0>;
-+          /* Can define Generic PHYs also */
-+        };
-+
-+        MP_2: mport2 {
-+          usb-phy = <&usb2_phy1>, <&usb3_phy1>;
-+        };
-+
-+        MP_3: mport3 {
-+          usb-phy = <&usb2_phy2>;
-+        };
-+
-+        MP_4: mport4 {
-+          usb-phy = <&usb2_phy3>;
-+        };
-+
-+      };
-+    };
- ...
+ static inline struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
+ 	struct device_node *node, struct notifier_block *nb)
+ {
 -- 
 2.7.4
 

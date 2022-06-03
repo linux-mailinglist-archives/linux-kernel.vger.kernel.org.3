@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F0753C418
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B307253C417
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240315AbiFCFQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        id S240349AbiFCFQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240238AbiFCFQB (ORCPT
+        with ESMTP id S240270AbiFCFQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:16:01 -0400
+        Fri, 3 Jun 2022 01:16:03 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F5E1DA7A;
-        Thu,  2 Jun 2022 22:16:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02BB1DA7A;
+        Thu,  2 Jun 2022 22:16:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654233360; x=1685769360;
+  t=1654233363; x=1685769363;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=PhL0Jx26bW8fPzRbWM63sB+vZMdeYCJTu8TFvCSjIsU=;
-  b=lWoACLs2YAJEGWcPqGC+5A5HTNKnJ3ui0E+ijfRWaTF5kJqXWHb6kBse
-   60RphcKqjaoaAWnnKmFp3B3SDxzShfCvk5/FVIEPZEQwIQGO4wcLnjwAu
-   oNtIVxMjEjd1BCCG/V4hx7s7KyrJyzA1XiaBt916Lw5WSHOTl2SbzPweZ
-   4=;
+  bh=L3zoPueqFT9hkpqSI029vmCiT8m18QNBxmuKtLar2Cs=;
+  b=hN3kSmVdkMFpjCevTK4D513MM2KHK9npsGS3DAewytrc+D0SVd08Wk0q
+   nt3MJ2V6jSs2Zso6sDZVisU6nuFYgKG08f2PRfe0BOFW2QkFNorHE/wSH
+   BywBTdDmliRFRVGVzMX5VbMTT3+NBADlb3ru180fIELL4MZYavk6c+2c5
+   o=;
 Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 02 Jun 2022 22:16:00 -0700
+  by alexa-out.qualcomm.com with ESMTP; 02 Jun 2022 22:16:03 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Jun 2022 22:15:59 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Jun 2022 22:16:01 -0700
 X-QCInternal: smtphost
 Received: from hu-sartgarg-hyd.qualcomm.com (HELO hu-maiyas-hyd.qualcomm.com) ([10.213.105.147])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Jun 2022 10:45:50 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Jun 2022 10:45:59 +0530
 Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2339771)
-        id 7A40A5001CD; Fri,  3 Jun 2022 10:45:49 +0530 (+0530)
+        id C43A25001CD; Fri,  3 Jun 2022 10:45:57 +0530 (+0530)
 From:   Sarthak Garg <quic_sartgarg@quicinc.com>
 To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, quic_kamasali@quicinc.com,
         quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
         quic_sayalil@quicinc.com, Sarthak Garg <quic_sartgarg@quicinc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        =?UTF-8?q?Christian=20L=C3=B6hle?= <CLoehle@hyperstone.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH V1 1/2] mmc: core: Introduce new flag to force hardware reset
-Date:   Fri,  3 Jun 2022 10:45:32 +0530
-Message-Id: <20220603051534.22672-2-quic_sartgarg@quicinc.com>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH V1 2/2] mmc: sdhci-msm: Enable force hw reset during cqe recovery
+Date:   Fri,  3 Jun 2022 10:45:33 +0530
+Message-Id: <20220603051534.22672-3-quic_sartgarg@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220603051534.22672-1-quic_sartgarg@quicinc.com>
 References: <20220603051534.22672-1-quic_sartgarg@quicinc.com>
@@ -65,40 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce new flag cqe_recovery_reset_always to allow vendors to force
-hardware reset during cqe recovery.
+Enable force hw reset during cqe recovery to make recovery more robust.
 
 Signed-off-by: Sarthak Garg <quic_sartgarg@quicinc.com>
 ---
- drivers/mmc/core/block.c | 2 +-
- include/linux/mmc/host.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-msm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 1259ca22d625..496cdd8a2999 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1497,7 +1497,7 @@ void mmc_blk_cqe_recovery(struct mmc_queue *mq)
- 	pr_debug("%s: CQE recovery start\n", mmc_hostname(host));
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index e395411fb6fd..7fc40bd16031 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -2781,6 +2781,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
  
- 	err = mmc_cqe_recovery(host);
--	if (err)
-+	if (err || host->cqe_recovery_reset_always)
- 		mmc_blk_reset(mq->blkdata, host, MMC_BLK_CQE_RECOVERY);
- 	else
- 		mmc_blk_reset_success(mq->blkdata, MMC_BLK_CQE_RECOVERY);
-diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-index c193c50ccd78..3e2fe950b4ec 100644
---- a/include/linux/mmc/host.h
-+++ b/include/linux/mmc/host.h
-@@ -492,6 +492,7 @@ struct mmc_host {
- 	int			cqe_qdepth;
- 	bool			cqe_enabled;
- 	bool			cqe_on;
-+	bool			cqe_recovery_reset_always;
+ 	msm_host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY | MMC_CAP_NEED_RSP_BUSY;
  
- 	/* Inline encryption support */
- #ifdef CONFIG_MMC_CRYPTO
++	/* Enable force hw reset during cqe recovery */
++	msm_host->mmc->cqe_recovery_reset_always = true;
++
+ 	/* Set the timeout value to max possible */
+ 	host->max_timeout_count = 0xF;
+ 
 -- 
 2.17.1
 

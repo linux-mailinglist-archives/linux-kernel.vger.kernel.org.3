@@ -2,112 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA7F53CDFB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253D453CE01
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344362AbiFCRV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S1344380AbiFCRXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235281AbiFCRV4 (ORCPT
+        with ESMTP id S1344375AbiFCRXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:21:56 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D90116C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:21:55 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:46024)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nxAzi-00Gdhh-7l; Fri, 03 Jun 2022 11:21:54 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41234 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nxAzh-00HHJ3-7S; Fri, 03 Jun 2022 11:21:53 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     <linux-kernel@vger.kernel.org>, Alexey Gladkov <legion@kernel.org>,
-        Linux Containers <containers@lists.linux.dev>
-Date:   Fri, 03 Jun 2022 12:21:46 -0500
-Message-ID: <875ylh8xxx.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 3 Jun 2022 13:23:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337F8527FE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:23:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DD22621B35;
+        Fri,  3 Jun 2022 17:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1654276989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UPMomr3jzTc6gcXGmXLj0Br1avJ9TWeGe+quz6nhksE=;
+        b=FBr3uWFAKiPnWWIx3Sz21Y7eogyRuw9PoWzwr8WfvYbPxJow5GJMnecyM/pc0R44W6V6Gz
+        QxKjWjmn6ABSboCJXUfW4iQlX9jFhrr6gOk55o7jWFcuEZ5Yy5xvKoy+W+FFq3AL2YFtlF
+        tHla8nIB5bLCxav9bxojI+Tb5PNOgvM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1654276989;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UPMomr3jzTc6gcXGmXLj0Br1avJ9TWeGe+quz6nhksE=;
+        b=+K8MayvxFlWvSJh6B29VGb2H61gLR5nPEhIBFCa7Jcd/FtkpELUMxeP0PDiCo6WMKU2ZTR
+        NeVpGzIhAktMvHBg==
+Received: from lion.mk-sys.cz (unknown [10.100.200.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C2BB42C141;
+        Fri,  3 Jun 2022 17:23:09 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id 9D17D60426; Fri,  3 Jun 2022 19:23:09 +0200 (CEST)
+Date:   Fri, 3 Jun 2022 19:23:09 +0200
+From:   Michal Kubecek <mkubecek@suse.cz>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     "Yang, Philip" <Philip.Yang@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: (REGRESSION bisected) Re: amdgpu errors (VM fault / GPU fault
+ detected) with 5.19 merge window snapshots
+Message-ID: <20220603172309.kq47e4kyopz2qqi3@lion.mk-sys.cz>
+References: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz>
+ <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
+ <CADnq5_Pr-FKfhuXT9DR2rYD=dMfD=+Dfev+CO-xeaPGnhwSQaA@mail.gmail.com>
+ <20220602142254.2ck7dw7u3xlzdnt2@lion.mk-sys.cz>
+ <CADnq5_MiQKX4JA-3xbxGYXKHpJqD0Px1NYSiL6yPeTwseoNVGg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nxAzh-00HHJ3-7S;;;mid=<875ylh8xxx.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX190rHEzYxtUa/aQ3ZUqCkNLM08+VG1MKnY=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mcayuoy6vmkfigea"
+Content-Disposition: inline
+In-Reply-To: <CADnq5_MiQKX4JA-3xbxGYXKHpJqD0Px1NYSiL6yPeTwseoNVGg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 459 ms - load_scoreonly_sql: 0.09 (0.0%),
-        signal_user_changed: 12 (2.7%), b_tie_ro: 11 (2.3%), parse: 0.95
-        (0.2%), extract_message_metadata: 12 (2.5%), get_uri_detail_list: 1.83
-        (0.4%), tests_pri_-1000: 13 (2.8%), tests_pri_-950: 1.14 (0.2%),
-        tests_pri_-900: 0.90 (0.2%), tests_pri_-90: 127 (27.7%), check_bayes:
-        126 (27.4%), b_tokenize: 6 (1.2%), b_tok_get_all: 6 (1.3%),
-        b_comp_prob: 2.0 (0.4%), b_tok_touch_all: 108 (23.6%), b_finish: 0.91
-        (0.2%), tests_pri_0: 265 (57.7%), check_dkim_signature: 0.88 (0.2%),
-        check_dkim_adsp: 3.5 (0.8%), poll_dns_idle: 0.74 (0.2%), tests_pri_10:
-        4.1 (0.9%), tests_pri_500: 21 (4.5%), rewrite_mail: 0.00 (0.0%)
-Subject: [GIT PULL] ipc: per namespace ipc sysctl changes for v5.19
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Linus,
+--mcayuoy6vmkfigea
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please pull the per-namespace-ipc-sysctls-for-v5.19 tag from the git tree:
+On Fri, Jun 03, 2022 at 11:49:31AM -0400, Alex Deucher wrote:
+> On Thu, Jun 2, 2022 at 10:22 AM Michal Kubecek <mkubecek@suse.cz> wrote:
+> >
+> > On Thu, Jun 02, 2022 at 09:58:22AM -0400, Alex Deucher wrote:
+> > > On Fri, May 27, 2022 at 8:58 AM Michal Kubecek <mkubecek@suse.cz> wro=
+te:
+> > > > On Fri, May 27, 2022 at 11:00:39AM +0200, Michal Kubecek wrote:
+> > > > > Hello,
+> > > > >
+> > > > > while testing 5.19 merge window snapshots (commits babf0bb978e3 a=
+nd
+> > > > > 7e284070abe5), I keep getting errors like below. I have not seen =
+them
+> > > > > with 5.18 final or older.
+> > > > >
+> > > > > -----------------------------------------------------------------=
+-------
+> > > > > [  247.150333] gmc_v8_0_process_interrupt: 46 callbacks suppressed
+> > > > > [  247.150336] amdgpu 0000:0c:00.0: amdgpu: GPU fault detected: 1=
+47 0x00020802 for process firefox pid 6101 thread firefox:cs0 pid 6116
+> > > > > [  247.150339] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECT=
+ION_FAULT_ADDR   0x00107800
+> > > > > [  247.150340] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECT=
+ION_FAULT_STATUS 0x0D008002
+> > > > > [  247.150341] amdgpu 0000:0c:00.0: amdgpu: VM fault (0x02, vmid =
+6, pasid 32780) at page 1079296, write from 'TC2' (0x54433200) (8)
+> > > > [...]
+> > > > > [  249.925909] amdgpu 0000:0c:00.0: amdgpu: IH ring buffer overfl=
+ow (0x000844C0, 0x00004A00, 0x000044D0)
+> > > > > [  250.434986] [drm] Fence fallback timer expired on ring sdma0
+> > > > > [  466.621568] gmc_v8_0_process_interrupt: 122 callbacks suppress=
+ed
+> > > > [...]
+> > > > > -----------------------------------------------------------------=
+-------
+> > > > >
+> > > > > There does not seem to be any apparent immediate problem with gra=
+phics
+> > > > > but when running commit babf0bb978e3, there seemed to be a notice=
+able
+> > > > > lag in some operations, e.g. when moving a window or repainting l=
+arge
+> > > > > part of the terminal window in konsole (no idea if it's related).
+> > > > >
+> > > > > My GPU is Radeon Pro WX 2100 (1002:6995). What other information =
+should
+> > > > > I collect to help debugging the issue?
+> > > >
+> > > > Bisected to commit 5255e146c99a ("drm/amdgpu: rework TLB flushing").
+> > > > There seem to be later commits depending on it so I did not test
+> > > > a revert on top of current mainline.
+> > > >
+> > > > I should also mention that most commits tested as "bad" during the
+> > > > bisect did behave much worse than current mainline (errors starting=
+ as
+> > > > early as with sddm, visibly damaged screen content, sometimes even
+> > > > crashes). But all of them issued messages similar to those above in=
+to
+> > > > kernel log.
+> > >
+> > > Can you verify that the kernel you tested has this patch:
+> > > https://cgit.freedesktop.org/drm/drm/commit/?id=3D5be323562c6a699d384=
+30bc068a3fd192be8ed0d
+> >
+> > Yes, both of them:
+> >
+> > mike@lion:~/work/git/kernel-upstream> git merge-base --is-ancestor 5be3=
+23562c6a babf0bb978e3 && echo yes
+> > yes
+> >
+> > (7e284070abe5 is a later mainline snapshot so it also contains
+> > 5be323562c6a)
+> >
+> > But it's likely that commit 5be323562c6a fixed most of the problem and
+> > only some corner case was left as most bisect steps had many more error
+> > messages and some even crashed before I was able to even log into KDE.
+> > Compared to that, the mainline snapshots show much fewer errors, no
+> > distorted picture and no crash; on the other hand, applications like
+> > firefox or stellarium seem to trigger the errors quite consistently.
+>=20
+> This patch should help:
+> https://patchwork.freedesktop.org/patch/488258/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace.git per-namespace-ipc-sysctls-for-v5.19
-  HEAD: 38cd5b12b7854941ede1954cf5a2393eb94b5d37 ipc: Remove extra braces
+It seems to help, I'm running a kernel built with this patch on top of
+mainline commit 50fd82b3a9a9 (current head) and I haven't seen any
+errors yet. I'll give it some more time and report back.
 
-These changes update the ipc sysctls so that they are fundamentally
-per ipc namespace.  Previously these sysctls depended upon a hack to
-simulate being per ipc namespace by looking up the ipc namespace in
-read or write.  With this set of changes the ipc sysctls are
-registered per ipc namespace and open looks up the ipc namespace.
+Michal
 
-Not only does this series of changes ensure the traditional binding at
-open time happens, but it sets a foundation for being able to relax the
-permission checks to allow a user namspace root to change the ipc sysctls
-for an ipc namespace that the user namespace root requires.  To do this
-requires the ipc namespace to be known at open time.
+--mcayuoy6vmkfigea
+Content-Type: application/pgp-signature; name="signature.asc"
 
-These changes were sent for v5.18[1] but were dropped because some
-additional cleanups were requested.  Linus has given his nod[2] to the
-cleanups so I hope enough cleanups are present this time.
+-----BEGIN PGP SIGNATURE-----
 
-[1] https://lkml.kernel.org/r/877d8kfmdp.fsf@email.froward.int.ebiederm.org
-[2] https://lkml.kernel.org/r/CAHk-=whi2SzU4XT_FsdTCAuK2qtYmH+-hwi1cbSdG8zu0KXL=g@mail.gmail.com
+iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmKaQ3cACgkQ538sG/LR
+dpXmCggAgQk48eQZJOBICUS7Vy2W1l+t7ZkV3KeG6iHfiKv3N6XaxdgeXZPDCHmU
+ER4fq6lc6jqj+kvFqumeyPt3lDjuo60t8GqM/Ba80ZTKLTAj2boaw8j9M0O9gi4m
+mLrzXmYIFpRLBiw0OJt7bNfevxU7eKwLO6SPORKm/L8HTUD+InurJdmVxkiBEHTo
+xkYsFjEoOLPmGyIWOls+hGkzz9/LdwlBWWsgU2vpPs0Fr8xtyu7AaTP0uR5nxi2n
+LZQzGG/FBR3pk4cEkcA0/2mJtJdJl/zDS8aL15z4x9Fv3geug6kAEFwkklW2MVe5
+hB1FjEBmS1dBQvGPlSjgNA4ktoW0wQ==
+=LYI5
+-----END PGP SIGNATURE-----
 
-Alexey Gladkov (6):
-      ipc: Store mqueue sysctls in the ipc namespace
-      ipc: Store ipc sysctls in the ipc namespace
-      ipc: Use the same namespace to modify and validate
-      ipc: Remove extra1 field abuse to pass ipc namespace
-      ipc: Check permissions for checkpoint_restart sysctls at open time
-      ipc: Remove extra braces
-
-
- include/linux/ipc_namespace.h |  37 +++++++-
- ipc/ipc_sysctl.c              | 205 +++++++++++++++++++++++++-----------------
- ipc/mq_sysctl.c               | 121 +++++++++++++------------
- ipc/mqueue.c                  |  10 +--
- ipc/namespace.c               |  10 +++
- 5 files changed, 238 insertions(+), 145 deletions(-)
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-
-p.s. My apologies for this coming in so late.  Everyone in the house has
-been sick.
-
+--mcayuoy6vmkfigea--

@@ -2,94 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9AF53C67C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5B553C68A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242556AbiFCHkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S242645AbiFCHv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiFCHk3 (ORCPT
+        with ESMTP id S242395AbiFCHv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:40:29 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516BE37038
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:40:28 -0700 (PDT)
-Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MVNF1-1oOqAI23Yl-00SNzi for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022
- 09:40:25 +0200
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f83983782fso74100997b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 00:40:25 -0700 (PDT)
-X-Gm-Message-State: AOAM531h8sHen+Vl/NL7UDjQErgZPNtbZwCifTUPR2NsqDFvpuDm97nA
-        RXwEDtjeO7DayTVk78GioMV5cJ0MONiK/i1h6bE=
-X-Google-Smtp-Source: ABdhPJyoKcG7HwT0epHhqyR9k2OLyyQ8Z+fyvWxq+MyNtBds3sgzOpMUe6hXdU1GhLplGXey9+/vbRa+obzDhQ1F3gk=
-X-Received: by 2002:a81:745:0:b0:30f:b172:9efb with SMTP id
- 66-20020a810745000000b0030fb1729efbmr10200079ywh.495.1654242024298; Fri, 03
- Jun 2022 00:40:24 -0700 (PDT)
+        Fri, 3 Jun 2022 03:51:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15A2BC8;
+        Fri,  3 Jun 2022 00:51:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6547B8213E;
+        Fri,  3 Jun 2022 07:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFAAC34114;
+        Fri,  3 Jun 2022 07:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654242711;
+        bh=F6fAf2H6hEuWT2QfME2T7wKPqzsyRfWDVYtaxh8qcOo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KyCuNu85SmYu+/nw/enKejVqqpWoVN5/rbpg3kQ2wSnlvUBIcqeLGnnmfjTyYcM3Q
+         zm6QZsx0hVk2euVnnW8XMakFi6lUu/hlUmNFmO5FThEKP5FDbJUs8HNfiFXAWS01yE
+         bbBb0G1MQEkyuRZcC74sTuA6p7tK9Q4VV53z9br4AJTtZlvlKEsknr9n9YUupFy1UB
+         visVssr2bFcV3RSh3OJfFEgrGU+UodlWffjs3iAF/SS9IjlMLFSva8SVJ/f0bH+pjq
+         mG5tom24OvXjqjD8G9Ar6YEHf8KIQ0WKsbdUR+lx3gtm7xGUDNNFyK8GWiYsdt+AU8
+         5rWV/HEJKTYwA==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f2cd424b9cso9717098fac.7;
+        Fri, 03 Jun 2022 00:51:51 -0700 (PDT)
+X-Gm-Message-State: AOAM5305Y5QfZ11pkFZ+hxmVMHCp68YOcdZbGflEraYcwWwOkyCcAtKc
+        f/3F3Snawz0eOl3LT11toiN1SS9yibMk2WOzAbg=
+X-Google-Smtp-Source: ABdhPJyFpx364FP3BgPiioRnPS+ikR8nzJrxv1NWFcwCVYxlC2TSqOjqFFtIttTL2ZFwFMN4X1KZXHQ2A4AnI6JuTCc=
+X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
+ v8-20020a05687105c800b000f33c1c126fmr4936557oan.126.1654242710568; Fri, 03
+ Jun 2022 00:51:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYts-KH-R5EkBpz2u6H_Cx6YTXus1JKJS6yBxGhb0O2qQQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYts-KH-R5EkBpz2u6H_Cx6YTXus1JKJS6yBxGhb0O2qQQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 3 Jun 2022 09:40:07 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3QKWxqGore3+_DJnWo7bJgvDhkZjtkyg5EUg4_D=mE2w@mail.gmail.com>
-Message-ID: <CAK8P3a3QKWxqGore3+_DJnWo7bJgvDhkZjtkyg5EUg4_D=mE2w@mail.gmail.com>
-Subject: Re: gcc-12: build errors: arch/arm64/kernel/setup.c:225:56: warning:
- array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+References: <20220602212234.344394-1-Jason@zx2c4.com> <CAMj1kXE=17f7kVs7RbUnBsUxyJKoH9mr-bR7jVR-XTBivqZRTw@mail.gmail.com>
+ <CAHmME9otJN__Hq87JBiy7C_O6ZaFFFpBteuypML10BOAoZPBYw@mail.gmail.com>
+In-Reply-To: <CAHmME9otJN__Hq87JBiy7C_O6ZaFFFpBteuypML10BOAoZPBYw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 3 Jun 2022 09:51:38 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFJ2d-8aEV0-NNzXeL5qQO1JHdhqEDN+84DkA=8+jpoKg@mail.gmail.com>
+Message-ID: <CAMj1kXFJ2d-8aEV0-NNzXeL5qQO1JHdhqEDN+84DkA=8+jpoKg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: initialize jump labels before setup_machine_fdt()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
+        Stephen Boyd <swboyd@chromium.org>,
+        "# 3.4.x" <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:8AYpfq2+TVDR1ig/fkiZrIyp5SLUEBKHEd4toZ7am6kHyYa9QLc
- mtsNAvoMcqWmbLthQJaVvGsKPK4IGpeR9gbjRJWZVFcap0lVF29dxpRFNvqh0FuncsBUbXN
- p0EiUMvGOeFH3OHQMGm3rRslOnPjOsm2GlZrXtD0nQ62NCsseiTAzlxsZS2FzzAMgDk5B9k
- i8DinwB3MrgL6zeVSUuXw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Dsq4n3VxSqk=:GHvPR8aZyB67I188P1eXqv
- uHIxMUYEJO2cIxCuWcKRdkYF1kX78HmL03kH7KDzEZgpEVXYqrxol/3P/bxty8IIeizoMvg4D
- ueQwgkvLPIO8jCWE8qf59ek2Z4lxuKD6o9FKikWPhJWxYfrNzHX/DwV8LraLrBKikKw/Rnj66
- HWEKJjNJYCcf8dGaNBETg6s4ZQHAI33qirHD+KX2P7bLXMtA3IJO6MBNfIooFIWT/0BlUuyav
- aCC9s58TTNWnb4r+EECLN4KD+RiFR9QnbZ1T+fsT23sixJDZtLYfi1BAHu+haVvTa5B0kkDaO
- x9q0JYfMczXHxXL0boXrytnaMe4Z8nVeQj420tOU11GHQGwYW6yMSuQ5AcsH6q82mDRSkX2Uk
- pUCX6VxvK38BKrpgt9eP8Y/JgZi+RGDw3VNaWI3Asz0yccN1aFuAq1m0zw1HbBZztpcR7uCYB
- mbjpO/Bc8EZgjqG5Kmo6j4YKkouTomiiaBuP8ICVOaPER7zwoE25/lsrM39SF3/dnG5OliSeT
- dPmwXXxVbe2dTlrE++xCKoKZx5AITyW2rUJF+MMfska0/BU3MHJJjAqIR3TMffEqDtQklbtID
- /GOHaCMW7zawhiCHj0VmVwmhK6nezt6bXyP/BfIxDr1x3JNG3Y6s/KeOIpuXFOUd/E2nDHRS5
- O4nW+JQIIc0UtYb+46EX13woXJt2MSbpBbKurWm78oRly69GFwjzer0eQc/yDRHt0MCTvYir1
- TVsUlVnnQC2KP9f/fHsCRDPZauXTKdJb0bEPIA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 4:03 AM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->     inlined from 'setup_arch' at arch/arm64/kernel/setup.c:350:2:
-> arch/arm64/kernel/setup.c:225:56: warning: array subscript -1 is
-> outside array bounds of 'char[]' [-Warray-bounds]
->   225 |         kernel_code.end     = __pa_symbol(__init_begin - 1);
+(+ Greg)
+
+On Fri, 3 Jun 2022 at 09:37, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hi Ard,
+>
+> On 6/3/22, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > On Thu, 2 Jun 2022 at 23:22, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> >>
+> >> Stephen reported that a static key warning splat appears during early
+> >> boot on arm64 systems that credit randomness from device trees that
+> >> contain an "rng-seed" property, because setup_machine_fdt() is called
+> >> before jump_label_init() during setup_arch(), which was fixed by
+> >> 73e2d827a501 ("arm64: Initialize jump labels before
+> >> setup_machine_fdt()").
+> >>
+> >> Upon cursory inspection, the same basic issue appears to apply to arm32
+> >> as well. In this case, we reorder setup_arch() to do things in the same
+> >> order as is now the case on arm64.
+> >>
+> >> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> >> Cc: Ard Biesheuvel <ardb@kernel.org>
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: f5bda35fba61 ("random: use static branch for crng_ready()")
+> >
+> > Wouldn't it be better to defer the
+> > static_branch_enable(&crng_is_ready) call to later in the boot (e.g.,
+> > using an initcall()), rather than going around 'fixing' fragile,
+> > working early boot code across multiple architectures?
+>
+> Yes, maybe. It's just more book keeping that's potentially
+> unnecessary, which would be nice to avoid. I wrote a patch for this
+> before, but it wasn't beautiful. And Catalin got a pretty easy arm64
+> patch queued up sufficiently fast that I figured this was better.
 >
 
-Is this the only warning of this type that you get for arm64?
+The problem is that your original patch was already backported as far
+back as 5.10, and so this fix will need to be as well.
 
-I think the easy fix would be to reword this line to
+Playing with the code that runs before the call to setup_machine_fdt()
+is risky because it implies that issues that are introduced are likely
+to limit the ability of the system to generate diagnostic output of
+any kind, given that the device tree is what describes the topology of
+the system to the kernel. Before that, there is no serial or graphical
+console, and the only way to figure out what goes on is to connect a
+JTAG debugger and single step through the code or dump the contents of
+__log_buf[].
 
-       kernel_code.end     = __pa_symbol(__init_begin) - 1;
+I like the /dev/random work you have been doing but as you know, I was
+skeptical about the need to backport all of that work to -stable, and
+it appears my skepticism may have been justified.
 
+The patch in question is an unquantified performance optimization,
+which means it does not meet the stable-kernel-rules.rst criteria, but
+it was backported nonetheless. Now, we are in a situation where we
+must refactor very early boot code to address a regression introduced
+by that backport.
 
-        Arnd
+> >
+> >> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >> ---
+> >>  arch/arm/kernel/setup.c | 12 ++++++------
+> >>  1 file changed, 6 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
+> >> index 1e8a50a97edf..ef40d9f5d5a7 100644
+> >> --- a/arch/arm/kernel/setup.c
+> >> +++ b/arch/arm/kernel/setup.c
+> >> @@ -1097,10 +1097,15 @@ void __init setup_arch(char **cmdline_p)
+> >>         const struct machine_desc *mdesc = NULL;
+> >>         void *atags_vaddr = NULL;
+> >>
+> >> +       setup_initial_init_mm(_text, _etext, _edata, _end);
+> >> +       setup_processor();
+> >> +       early_fixmap_init();
+> >> +       early_ioremap_init();
+> >> +       jump_label_init();
+> >> +
+> >
+> > Is it really necessary to reorder all these calls? What does
+> > jump_label_init() actually need?
+>
+> I'm not quite sure, but it matched how arm64 does things now. Was
+> hoping somebody with deep arm32 knowledge (e.g. you or rmk) would be
+> able to eyeball that to confirm.
+>
+
+As far as I can tell, the early patching code on ARM does not rely on
+the early fixmap code. Did you try just moving jump_label_init()
+earlier in the function?
+
+Also, how did you test this change?

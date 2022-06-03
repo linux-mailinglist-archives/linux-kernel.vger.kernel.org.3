@@ -2,164 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D583953CAE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBD553CAEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244821AbiFCNvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S244829AbiFCNvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiFCNvN (ORCPT
+        with ESMTP id S244823AbiFCNva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:51:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0F311A33;
-        Fri,  3 Jun 2022 06:51:12 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h19so10281998edj.0;
-        Fri, 03 Jun 2022 06:51:12 -0700 (PDT)
+        Fri, 3 Jun 2022 09:51:30 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2B212AE4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 06:51:27 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q26so112358wra.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 06:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aMqXqUGRfNMZQv1fI4AkbZKumYHl+MkAFWRa5Y54Goo=;
-        b=f4SQWq7ubiPNLt62nB1w+QbKnddSR2UqNKrIElxz2SjAA83iXNHL+9t1MNo9eHY4IK
-         wWm9AS2N2WtIf6yoXu8a4boVF1xebN16pUDiH2hbnIkIgWm4ajLhRwzjkPb71QI91Mon
-         WYbqizc0uCJHV0b1lqEjGqcM0knG7Y1w+csy2rmiYiBs303QJ+r/hrViGfj4f9suWe6V
-         MDmsb2LH/MkArcI29w8a05ncdgB3tlLLVciXwqCd7RtPIAlij1CGa7XvpQ+w432uNsDb
-         KjWnsUct2pZEw7PUu+XOwn7GJBoi27ep32TufKW9ccrMhP4+GjOgLQ9PmQaLkQPuRMPs
-         OPAw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GRMGCtp/pcXc6Jwt2ZQ73If4VD1oOQ82kJYe2MDP5KQ=;
+        b=jvIOVUif0AV+NqGfZt0L7lidNlegTLuQqOYNUJ3eyXMo90nL1QGKgC6gdgT4tZhL1H
+         /JBa8vdjyUwbuTHv1AX/MRswbsGsJ+01SZH9r50yZ9kS3Nrl9LiaeJNfJ9OwmxSfdkJG
+         W5cQIajysk2v2DKBqBAevAST7farFy67Ty+/8qEbLHsytDrm4ssK1kimtHZhr15pTx3z
+         RHiWU1GOFOScS+gBL5AuY2Qnd0kCcAOolgRnjE4kyljMW6/HwqS0PNFuFsySYrr0wo2e
+         HcstGvkypMoT4/QfzS5TRtWMk2rhQS4+yFjoNUEs17jfulfUC+h7Am4Bnjc6SezRm9eU
+         ybUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aMqXqUGRfNMZQv1fI4AkbZKumYHl+MkAFWRa5Y54Goo=;
-        b=m3O3neIuQ5Nib61aR9lZ8IjiWhn0jyRjy2VKHvctt8C6TURk34ZnWFzN4u3G1mrfU2
-         GZIwSG9Lfa8Rkn39MjNbHvrqpzpd63juq37UXsRv2uF8dV+gVbWkmVW3iOrMj8QmTlX6
-         7i0YSHqbHEH1W03ZDfVL/RfhVmIm88maPLPfU+cJSwj+eaIbJY3oDZnauoFghadVXU1w
-         /mVeL70cVsS+YK6dRV1Yf/7u4Oe7mvoCrZLwym0qcqGAc4hhqRbsmVJE8MvlG2xQ21VI
-         572YopsHmA4sTj6ALxx1CPyA5EYK++jiAx++NoUaYb6gg90y5tOBGF1FxxO+FKBZoW/G
-         x4kQ==
-X-Gm-Message-State: AOAM533OeDdzfHWZlbV3vlVNNV8hNZbA7aWziqFCEe30ap3RkTuX2C7h
-        6vHPRpPcEwiP2dYgI/PfWNLIyfKp9U10ut4rrXggdo2MATE6MhRw
-X-Google-Smtp-Source: ABdhPJzFX+uYM3v6+egRyESVeyRs+3DV1e5516MyxPYkV9a4MUQH/u1cf+emgdugvUANC13J/0T/9pVga1hloqRRa/M=
-X-Received: by 2002:a05:6402:42c1:b0:42d:fba6:d5c5 with SMTP id
- i1-20020a05640242c100b0042dfba6d5c5mr11043283edc.295.1654264270581; Fri, 03
- Jun 2022 06:51:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GRMGCtp/pcXc6Jwt2ZQ73If4VD1oOQ82kJYe2MDP5KQ=;
+        b=nMQfuG4mmdrj4ENeAnqXnbu1WBm1vGdpchNPfrnVTy6oFiPWu/b+3EvSYEW2PnmCt2
+         Ncy1uRuamPvOveHIwKVaF0wx34pVwrS47RzAuzwGkF2Fe2+EopwFymVuErmH5G9WF0yV
+         OajmKMQ0DLb4ndIUzRy8y+FeXv37N1ozTb3DyxshIyhc2kGKknFsaxDIxgqI7rq3YBRF
+         NUbsuG1tigctm17nsWyjWG/uSSJiLNGa3Th3CKf4tgKst1ISHzZyZHDo5MplOpHwFJQX
+         OQE1rxr6xlmmyXCGuG/a/5PmQPzNMApR9WzCc1IfsemzHoMrO+WE3B2Mt+ZWMYKIAEj4
+         csUw==
+X-Gm-Message-State: AOAM532O6dHxtIwOm0s3o/dTDjwm3518XwCaPhW2Vd7VYBnkHP1PhPW3
+        jSw8ZJC4TurHdozK6MnBiqg=
+X-Google-Smtp-Source: ABdhPJw1rhsFVYnBm3vBIFYi5Q9X0N+T8Mn7ZG2rpjGMr09qKUqKIhtClLTd4OTIv0+SykFwjlihEA==
+X-Received: by 2002:adf:fccb:0:b0:213:bbe1:ba6c with SMTP id f11-20020adffccb000000b00213bbe1ba6cmr3050523wrs.252.1654264286162;
+        Fri, 03 Jun 2022 06:51:26 -0700 (PDT)
+Received: from localhost (92.40.203.126.threembb.co.uk. [92.40.203.126])
+        by smtp.gmail.com with ESMTPSA id o10-20020adfeaca000000b0020c5253d8c2sm7345323wrn.14.2022.06.03.06.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 06:51:25 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mtd: spinand: Add support for ATO25D1GA
+Date:   Fri,  3 Jun 2022 14:51:49 +0100
+Message-Id: <20220603135149.11570-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-References: <20220602055633.849545-1-dzm91@hust.edu.cn> <53417E03-4D3C-44DC-AA8A-5F9FE340483A@oracle.com>
-In-Reply-To: <53417E03-4D3C-44DC-AA8A-5F9FE340483A@oracle.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Fri, 3 Jun 2022 21:50:44 +0800
-Message-ID: <CAD-N9QUAvTZMFz6A+=NxvyHaO102mrc7+5gL4K9xV5j3AEuvjQ@mail.gmail.com>
-Subject: Re: [PATCH] nfsd: make destory function more elegant
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 10:30 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
->
->
->
-> > On Jun 2, 2022, at 1:56 AM, Dongliang Mu <dzm91@hust.edu.cn> wrote:
-> >
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > In init_nfsd, the undo operation of create_proc_exports_entry is:
-> >
-> >        remove_proc_entry("fs/nfs/exports", NULL);
-> >        remove_proc_entry("fs/nfs", NULL);
-> >
-> > This may lead to maintaince issue. Declare the undo function
->
-> "maintenance"
+Add support for the ATO25D1GA SPI NAND flash.
 
-Sorry for the typo.
+Datasheet:
+- https://atta.szlcsc.com/upload/public/pdf/source/20191212/C469320_04599D67B03B078044EB65FF5AEDDDE9.pdf
 
->
->
-> > destroy_proc_exports_entry based on CONFIG_PROC_FS
->
-> IIUC, the issue is that if CONFIG_PROC_FS is not set,
-> fs/nfsd/nfsctl.c fails to compile?
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ drivers/mtd/nand/spi/Makefile |  2 +-
+ drivers/mtd/nand/spi/ato.c    | 86 +++++++++++++++++++++++++++++++++++
+ drivers/mtd/nand/spi/core.c   |  1 +
+ include/linux/mtd/spinand.h   |  1 +
+ 4 files changed, 89 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/mtd/nand/spi/ato.c
 
-The answer is no. There is no bug in the code.
+diff --git a/drivers/mtd/nand/spi/Makefile b/drivers/mtd/nand/spi/Makefile
+index 80dabe6ff0f3..ae17c13d1abe 100644
+--- a/drivers/mtd/nand/spi/Makefile
++++ b/drivers/mtd/nand/spi/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+-spinand-objs := core.o gigadevice.o macronix.o micron.o paragon.o toshiba.o winbond.o xtx.o
++spinand-objs := ato.o core.o gigadevice.o macronix.o micron.o paragon.o toshiba.o winbond.o xtx.o
+ obj-$(CONFIG_MTD_SPI_NAND) += spinand.o
+diff --git a/drivers/mtd/nand/spi/ato.c b/drivers/mtd/nand/spi/ato.c
+new file mode 100644
+index 000000000000..82b377c06812
+--- /dev/null
++++ b/drivers/mtd/nand/spi/ato.c
+@@ -0,0 +1,86 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Aidan MacDonald
++ *
++ * Author: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
++ */
++
++#include <linux/device.h>
++#include <linux/kernel.h>
++#include <linux/mtd/spinand.h>
++
++
++#define SPINAND_MFR_ATO		0x9b
++
++
++static SPINAND_OP_VARIANTS(read_cache_variants,
++		SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
++		SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
++		SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, 0));
++
++static SPINAND_OP_VARIANTS(write_cache_variants,
++		SPINAND_PROG_LOAD_X4(true, 0, NULL, 0),
++		SPINAND_PROG_LOAD(true, 0, NULL, 0));
++
++static SPINAND_OP_VARIANTS(update_cache_variants,
++		SPINAND_PROG_LOAD_X4(false, 0, NULL, 0),
++		SPINAND_PROG_LOAD(false, 0, NULL, 0));
++
++
++static int ato25d1ga_ooblayout_ecc(struct mtd_info *mtd, int section,
++				   struct mtd_oob_region *region)
++{
++	if (section > 3)
++		return -ERANGE;
++
++	region->offset = (16 * section) + 8;
++	region->length = 8;
++	return 0;
++}
++
++static int ato25d1ga_ooblayout_free(struct mtd_info *mtd, int section,
++				   struct mtd_oob_region *region)
++{
++	if (section > 3)
++		return -ERANGE;
++
++	if (section) {
++		region->offset = (16 * section);
++		region->length = 8;
++	} else {
++		/* first byte of section 0 is reserved for the BBM */
++		region->offset = 1;
++		region->length = 7;
++	}
++
++	return 0;
++}
++
++static const struct mtd_ooblayout_ops ato25d1ga_ooblayout = {
++	.ecc = ato25d1ga_ooblayout_ecc,
++	.free = ato25d1ga_ooblayout_free,
++};
++
++
++static const struct spinand_info ato_spinand_table[] = {
++	SPINAND_INFO("ATO25D1GA",
++		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_ADDR, 0x12),
++		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
++		     NAND_ECCREQ(1, 512),
++		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
++					      &write_cache_variants,
++					      &update_cache_variants),
++		     SPINAND_HAS_QE_BIT,
++		     SPINAND_ECCINFO(&ato25d1ga_ooblayout, NULL)),
++};
++
++static const struct spinand_manufacturer_ops ato_spinand_manuf_ops = {
++};
++
++const struct spinand_manufacturer ato_spinand_manufacturer = {
++	.id = SPINAND_MFR_ATO,
++	.name = "ATO",
++	.chips = ato_spinand_table,
++	.nchips = ARRAY_SIZE(ato_spinand_table),
++	.ops = &ato_spinand_manuf_ops,
++};
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index d5b685d1605e..9d73910a7ae8 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -927,6 +927,7 @@ static const struct nand_ops spinand_ops = {
+ };
+ 
+ static const struct spinand_manufacturer *spinand_manufacturers[] = {
++	&ato_spinand_manufacturer,
+ 	&gigadevice_spinand_manufacturer,
+ 	&macronix_spinand_manufacturer,
+ 	&micron_spinand_manufacturer,
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 5584d3bb6556..6d3392a7edc6 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -260,6 +260,7 @@ struct spinand_manufacturer {
+ };
+ 
+ /* SPI NAND manufacturers */
++extern const struct spinand_manufacturer ato_spinand_manufacturer;
+ extern const struct spinand_manufacturer gigadevice_spinand_manufacturer;
+ extern const struct spinand_manufacturer macronix_spinand_manufacturer;
+ extern const struct spinand_manufacturer micron_spinand_manufacturer;
+-- 
+2.35.1
 
-At first, I thought this might cause the miscompilation or bug. But
-actually the code is fine.
-
-Because remove_proc_entry is defined as an empty function if
-CONFIG_PROC_FS is not set,
-
->
->
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
-> > fs/nfsd/nfsctl.c | 16 ++++++++++++----
-> > 1 file changed, 12 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
-> > index 0621c2faf242..83b34ccbef5a 100644
-> > --- a/fs/nfsd/nfsctl.c
-> > +++ b/fs/nfsd/nfsctl.c
-> > @@ -1450,11 +1450,21 @@ static int create_proc_exports_entry(void)
-> >       }
-> >       return 0;
-> > }
-> > +
-> > +static void destroy_proc_exports_entry(void)
-> > +{
-> > +     remove_proc_entry("fs/nfs/exports", NULL);
-> > +     remove_proc_entry("fs/nfs", NULL);
-> > +}
-> > #else /* CONFIG_PROC_FS */
-> > static int create_proc_exports_entry(void)
-> > {
-> >       return 0;
-> > }
-> > +
-> > +static void destroy_proc_exports_entry(void)
-> > +{
-> > +}
-> > #endif
-> >
-> > unsigned int nfsd_net_id;
-> > @@ -1555,8 +1565,7 @@ static int __init init_nfsd(void)
-> > out_free_subsys:
-> >       unregister_pernet_subsys(&nfsd_net_ops);
-> > out_free_exports:
-> > -     remove_proc_entry("fs/nfs/exports", NULL);
-> > -     remove_proc_entry("fs/nfs", NULL);
-> > +     destroy_proc_exports_entry();
-> > out_free_lockd:
-> >       nfsd_lockd_shutdown();
-> >       nfsd_drc_slab_free();
-> > @@ -1576,8 +1585,7 @@ static void __exit exit_nfsd(void)
-> >       unregister_cld_notifier();
-> >       unregister_pernet_subsys(&nfsd_net_ops);
-> >       nfsd_drc_slab_free();
-> > -     remove_proc_entry("fs/nfs/exports", NULL);
-> > -     remove_proc_entry("fs/nfs", NULL);
-> > +     destroy_proc_exports_entry();
-> >       nfsd_stat_shutdown();
-> >       nfsd_lockd_shutdown();
-> >       nfsd4_free_slabs();
-> > --
-> > 2.25.1
-> >
->
-> --
-> Chuck Lever
->
->
->

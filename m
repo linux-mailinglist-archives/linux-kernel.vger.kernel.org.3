@@ -2,197 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D78D53C6D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADBF53C6DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242786AbiFCITi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S242792AbiFCIUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241021AbiFCITg (ORCPT
+        with ESMTP id S242799AbiFCIUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:19:36 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647271A822;
-        Fri,  3 Jun 2022 01:19:34 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id r3so5483415ilt.8;
-        Fri, 03 Jun 2022 01:19:34 -0700 (PDT)
+        Fri, 3 Jun 2022 04:20:35 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392CD1AF2F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:20:34 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso6742982pjg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TK3AysTtR0qNSoTXRQfI9MmzeRKPRXKi7E94xqdy03I=;
-        b=XX9H8fgRlIHpKXvwSpOkg5bk2Nkp0mC8bcTk2xL+tP2xInMkAxLZaBFTX66ACoZRON
-         pH+7zrUy6sr4xIpyLO3tSK5j2ZjVyVpPL6XFT1FUyov4fCrX8XNrbVB2fOsBzrb2UjB6
-         YbMv9nb3RWzN47+195aKF9er1hSpw4oAN/SYxLgvJmlBo6dwjE+VhRNUBRW8D3p+/403
-         Pzaw2fKYaV3F+BB3P+K2tnPGyQ6ozBofJcSLBTy6/un494kDVzjGgPXntLCWsZsBpcOs
-         7cLSZxUYU0WIgIiAZWvVS1CHQKyzcbkF+/kgmGndE9qn8Tzi+yJ23Tu/Xuy3F09Ruqz5
-         9BsQ==
+        d=norberthealth-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D4NXs0gM6EmWNl9SZtPfrcFL6Z+go5/snO+sCnoTH3o=;
+        b=OJVPOaSK5wJTmLCMhuJyeLXIlXkwAYg5vYpjvrV87ZVWAzh4cSaT6wr/ggQuS7LBKj
+         SFRu4wk1Waz92BT/Utiz2+hcY/6cI2Y5mYyu+smntCrAfKCi9HxZvtWN04I8wznOrCyw
+         7am54LTnDKZ6O7A3JPJeUzkc9ydHffkYzx3oS6+dLE1ooMYoIQ3fDv3QGR8W+q5WUz2+
+         B8tJpbVoJBIblSD8uTt0lDqlgKnVtErwPVBrwXmtZf1eHzs0cv0f/F+96gFGmqdcPE9l
+         ka+PNtLZZaRI/9ZNyZ5TkClEnZPWZCi5bSOP9R9Xoml/NUGVTVHsfwEkon7Es14bu+yS
+         IqdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TK3AysTtR0qNSoTXRQfI9MmzeRKPRXKi7E94xqdy03I=;
-        b=fasi57z2vM4luSeI/s5B1isLFjFtFjyEl41Uucwva8cHRlqNQsvp6Zx3GGobhJa96q
-         ok1SMO4eMXdpi+0pdow8fIx6SLwkEswtmLgPDe1eIL/Su8pJkS7kmnyY1NC8U8TFqCnK
-         3LjNNi2iSVWmfEQKN8lDF6FbvPmhWxi3PQNy+eGxVnYHRy7FGrMvU/e8hK2gNFOskNF8
-         obexXIgUuuNrmAzu6zKHZeK3GB1mcF2mkOlOM6v/cugApjaYb1O+LEx1L1Rskm1ne9FN
-         +/PMW2QnIO/cfnIOfT/atEN3hRQD8+Icnpucq/piECqUwySVRsi8g1ChAx/9UN9dy4y6
-         DCfQ==
-X-Gm-Message-State: AOAM532pMdYUxPLybx/qkd73qDT/j1j2tASj/dD8w+CBfrzMMzwc9UQQ
-        oRHNuv9KyRU/PpG7p5NmiSI=
-X-Google-Smtp-Source: ABdhPJzCnVfesOGR1WJBjeMBHLfF/ORjm7ebmlYuqy94E0wbJB6sfV8gfaIllw0abmjh8rPXTAmN0g==
-X-Received: by 2002:a05:6602:2a45:b0:669:17b2:b71c with SMTP id k5-20020a0566022a4500b0066917b2b71cmr2544395iov.10.1654244373734;
-        Fri, 03 Jun 2022 01:19:33 -0700 (PDT)
-Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id t67-20020a025446000000b0032ec5c47c17sm2236864jaa.46.2022.06.03.01.19.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 Jun 2022 01:19:33 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
-Subject: [PATCH v3] Bluetooth: When HCI work queue is drained, only queue chained work
-Date:   Fri,  3 Jun 2022 16:19:14 +0800
-Message-Id: <20220603081914.42512-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D4NXs0gM6EmWNl9SZtPfrcFL6Z+go5/snO+sCnoTH3o=;
+        b=2M4iLN6B/73E/CujYA5ll9y6lSW6UXzRWuM3FOhqIZNUis3U1QW+YTVqgHn+1uibT3
+         XJFjPKklmZoGyiNrDBDAPJOG9eUxKDIVwdwlasDalGWgSSNj+fEj2O3wlmpk5f85iN/V
+         CRdrHWMw7wloZI5JDhzUsmw2Cqpt59xZEUYlMR1Gwln5jcNl0zBQlOM2324HCWGeS+5h
+         JJTZ/ec+74zwgnViUaWE5RUlOxxH8KdV7lCDpz2WJPvQnFv8D8Z9AzhLPe8eCkSWP5Jh
+         TiCxPd4CWTnxgC0UXJR3IPUny8sIBvxJYEFxMNo2LPWltsBha35KVY7K1kC0REtw4RBf
+         Y91g==
+X-Gm-Message-State: AOAM53290kZaM0yMxQvazJmzOAT/Va/DCJR0ZZY5RbcPzhe8lzhCTWpw
+        rtOQEsrn/2HX/1sNnwhuJtYgRbbgboyIwcForhXS+g==
+X-Google-Smtp-Source: ABdhPJwvMSX7bJ0sMwvdFp20lychh+sXCuA4C/mut7/HEWAGVctaQxnXeAwtCZxAMkeOUv+YHq4v2qAr7hpIJA5Njmw=
+X-Received: by 2002:a17:903:130d:b0:164:17f5:9de5 with SMTP id
+ iy13-20020a170903130d00b0016417f59de5mr9406413plb.132.1654244433615; Fri, 03
+ Jun 2022 01:20:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220521124745.8747-1-roger@norberthealth.com>
+ <a728cf17-4866-1151-0740-56b06257c917@infradead.org> <CAO_iFwrHcSWJm17fL-Q83DZ5i1xr+_dkEjh5Yt3Hxso0VtnzZw@mail.gmail.com>
+ <47a68855-4547-49dd-d7eb-8ef83630552c@infradead.org> <Ypjwh5f6ByoZl5YE@zx2c4.com>
+In-Reply-To: <Ypjwh5f6ByoZl5YE@zx2c4.com>
+From:   Roger Knecht <roger@norberthealth.com>
+Date:   Fri, 3 Jun 2022 10:20:22 +0200
+Message-ID: <CAO_iFwrAm-bqRgkD+1QSW8JwjV+Whp_BfNz9Bv1-9XOwy2poFw@mail.gmail.com>
+Subject: Re: [PATCH v5] crc-itu-t: Fix typo in CRC ITU-T polynom comment
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Ivo van Doorn <IvDoorn@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-doc@vger.kernel.org,
+        Kristian Hoegsberg <krh@redhat.com>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HCI command, event, and data packet processing workqueue is drained
-to avoid deadlock in commit
-76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state").
+On Thu, Jun 2, 2022 at 7:17 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Thu, Jun 02, 2022 at 09:31:24AM -0700, Randy Dunlap wrote:
+> > Yes, Andrew can merge it.
+> > Or possibly Jason (also Cc-ed).
+>
+> Sure, I can take this.
+>
+> Jason
 
-There is another delayed work, which will queue command to this drained
-workqueue. Which results in the following error report:
-
-Bluetooth: hci2: command 0x040f tx timeout
-WARNING: CPU: 1 PID: 18374 at kernel/workqueue.c:1438 __queue_work+0xdad/0x1140
-Workqueue: events hci_cmd_timeout
-RIP: 0010:__queue_work+0xdad/0x1140
-RSP: 0000:ffffc90002cffc60 EFLAGS: 00010093
-RAX: 0000000000000000 RBX: ffff8880b9d3ec00 RCX: 0000000000000000
-RDX: ffff888024ba0000 RSI: ffffffff814e048d RDI: ffff8880b9d3ec08
-RBP: 0000000000000008 R08: 0000000000000000 R09: 00000000b9d39700
-R10: ffffffff814f73c6 R11: 0000000000000000 R12: ffff88807cce4c60
-R13: 0000000000000000 R14: ffff8880796d8800 R15: ffff8880796d8800
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c0174b4000 CR3: 000000007cae9000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ? queue_work_on+0xcb/0x110
- ? lockdep_hardirqs_off+0x90/0xd0
- queue_work_on+0xee/0x110
- process_one_work+0x996/0x1610
- ? pwq_dec_nr_in_flight+0x2a0/0x2a0
- ? rwlock_bug.part.0+0x90/0x90
- ? _raw_spin_lock_irq+0x41/0x50
- worker_thread+0x665/0x1080
- ? process_one_work+0x1610/0x1610
- kthread+0x2e9/0x3a0
- ? kthread_complete_and_exit+0x40/0x40
- ret_from_fork+0x1f/0x30
- </TASK>
-
-To fix this, we can add a new HCI_DRAIN_WQ flag, and don't queue the
-timeout workqueue while command workqueue is draining.
-
-Fixes: 76727c02c1e1 ("Bluetooth: Call drain_workqueue() before resetting state")
-Reported-by: syzbot+63bed493aebbf6872647@syzkaller.appspotmail.com
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-
-Changelog:
-v1 -> v2:
-        - Move the workqueue drain flag to controller flags, and
-          use hci_dev_*_flag.
-        - Add missing ncmd_timer cancel.
-        - Clear DRAIN_WORKQUEUE flag after device command flushed.
-v2 -> v3:
-        - Fix typos in comments and adjust the description.
----
- include/net/bluetooth/hci.h |  1 +
- net/bluetooth/hci_core.c    | 10 +++++++++-
- net/bluetooth/hci_event.c   |  5 +++--
- 3 files changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-index fe7935be7dc4..4a45c48eb0d2 100644
---- a/include/net/bluetooth/hci.h
-+++ b/include/net/bluetooth/hci.h
-@@ -361,6 +361,7 @@ enum {
- 	HCI_QUALITY_REPORT,
- 	HCI_OFFLOAD_CODECS_ENABLED,
- 	HCI_LE_SIMULTANEOUS_ROLES,
-+	HCI_CMD_DRAIN_WORKQUEUE,
- 
- 	__HCI_NUM_FLAGS,
- };
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 5abb2ca5b129..8539b4233da8 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -593,6 +593,11 @@ static int hci_dev_do_reset(struct hci_dev *hdev)
- 	skb_queue_purge(&hdev->rx_q);
- 	skb_queue_purge(&hdev->cmd_q);
- 
-+	/* Cancel these to avoid queueing non-chained pending work */
-+	hci_dev_set_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE);
-+	cancel_delayed_work(&hdev->cmd_timer);
-+	cancel_delayed_work(&hdev->ncmd_timer);
-+
- 	/* Avoid potential lockdep warnings from the *_flush() calls by
- 	 * ensuring the workqueue is empty up front.
- 	 */
-@@ -606,6 +611,8 @@ static int hci_dev_do_reset(struct hci_dev *hdev)
- 	if (hdev->flush)
- 		hdev->flush(hdev);
- 
-+	hci_dev_clear_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE);
-+
- 	atomic_set(&hdev->cmd_cnt, 1);
- 	hdev->acl_cnt = 0; hdev->sco_cnt = 0; hdev->le_cnt = 0;
- 
-@@ -3861,7 +3868,8 @@ static void hci_cmd_work(struct work_struct *work)
- 			if (res < 0)
- 				__hci_cmd_sync_cancel(hdev, -res);
- 
--			if (test_bit(HCI_RESET, &hdev->flags))
-+			if (test_bit(HCI_RESET, &hdev->flags) ||
-+			    hci_dev_test_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE))
- 				cancel_delayed_work(&hdev->cmd_timer);
- 			else
- 				schedule_delayed_work(&hdev->cmd_timer,
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index af17dfb20e01..7cb956d3abb2 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -3768,8 +3768,9 @@ static inline void handle_cmd_cnt_and_timer(struct hci_dev *hdev, u8 ncmd)
- 			cancel_delayed_work(&hdev->ncmd_timer);
- 			atomic_set(&hdev->cmd_cnt, 1);
- 		} else {
--			schedule_delayed_work(&hdev->ncmd_timer,
--					      HCI_NCMD_TIMEOUT);
-+			if (!hci_dev_test_flag(hdev, HCI_CMD_DRAIN_WORKQUEUE))
-+				schedule_delayed_work(&hdev->ncmd_timer,
-+						      HCI_NCMD_TIMEOUT);
- 		}
- 	}
- }
--- 
-2.24.3 (Apple Git-128)
-
+Great, thanks Jason

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C3653CE9F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EED53CE9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345114AbiFCRoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S1343698AbiFCRok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344885AbiFCRnt (ORCPT
+        with ESMTP id S1344895AbiFCRnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Jun 2022 13:43:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3982253A4E;
-        Fri,  3 Jun 2022 10:42:19 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA90153A52;
+        Fri,  3 Jun 2022 10:42:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F18EFB82189;
-        Fri,  3 Jun 2022 17:42:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E3CC385A9;
-        Fri,  3 Jun 2022 17:42:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 355C761AE4;
+        Fri,  3 Jun 2022 17:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E13C385A9;
+        Fri,  3 Jun 2022 17:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278136;
-        bh=TAFoB58GkJgcHsUaPVkQbIny7KMUv+5ZQHx316qJw2Q=;
+        s=korg; t=1654278139;
+        bh=FtO2RLN9CrpjYCc5A46uz2lhr5W97xly3lDUSs8kygk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1D9ckzg6Io4T1eeSskFq7rpzQdVbH0mh32mwTq08vT6uagU6lF04Wt2wO88x5XnCw
-         oQxty0lAgTC0H6BW/sTqAZfBd442IxcnUnccPF3iusrdNVXKrr3QZUSoaVgh9KX1NV
-         9uuVgP7nveSZ0wUlHf1zdZNXPYZ+6qzWZZ72m9Ww=
+        b=0zOPD0SE6ttI17jl3mYnbwEHdzx/EtveJulRmSexQ0W9OIgHroLk8v6LWuckUF2m3
+         GLNRRNBkXun+wJ4RePFWKaJ5FQviXvl8d18cLjHmLBtt96NrI5wfnw/OoR0tgE1y6/
+         lJFNAYfiXP/WwRDBRqjE+2ohptug72xG1XE5Yiik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Milan Broz <gmazyland@gmail.com>,
         Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.19 21/30] dm integrity: fix error code in dm_integrity_ctr()
-Date:   Fri,  3 Jun 2022 19:39:49 +0200
-Message-Id: <20220603173815.718723788@linuxfoundation.org>
+Subject: [PATCH 4.19 22/30] dm crypt: make printing of the key constant-time
+Date:   Fri,  3 Jun 2022 19:39:50 +0200
+Message-Id: <20220603173815.747049681@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603173815.088143764@linuxfoundation.org>
 References: <20220603173815.088143764@linuxfoundation.org>
@@ -55,37 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit d3f2a14b8906df913cb04a706367b012db94a6e8 upstream.
+commit 567dd8f34560fa221a6343729474536aa7ede4fd upstream.
 
-The "r" variable shadows an earlier "r" that has function scope.  It
-means that we accidentally return success instead of an error code.
-Smatch has a warning for this:
+The device mapper dm-crypt target is using scnprintf("%02x", cc->key[i]) to
+report the current key to userspace. However, this is not a constant-time
+operation and it may leak information about the key via timing, via cache
+access patterns or via the branch predictor.
 
-	drivers/md/dm-integrity.c:4503 dm_integrity_ctr()
-	warn: missing error code 'r'
+Change dm-crypt's key printing to use "%c" instead of "%02x". Also
+introduce hex2asc() that carefully avoids any branching or memory
+accesses when converting a number in the range 0 ... 15 to an ascii
+character.
 
-Fixes: 7eada909bfd7 ("dm: add integrity target")
 Cc: stable@vger.kernel.org
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Tested-by: Milan Broz <gmazyland@gmail.com>
 Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-integrity.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/md/dm-crypt.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -3565,8 +3565,6 @@ try_smaller_buffer:
- 	}
+--- a/drivers/md/dm-crypt.c
++++ b/drivers/md/dm-crypt.c
+@@ -2932,6 +2932,11 @@ static int crypt_map(struct dm_target *t
+ 	return DM_MAPIO_SUBMITTED;
+ }
  
- 	if (should_write_sb) {
--		int r;
--
- 		init_journal(ic, 0, ic->journal_sections, 0);
- 		r = dm_integrity_failed(ic);
- 		if (unlikely(r)) {
++static char hex2asc(unsigned char c)
++{
++	return c + '0' + ((unsigned)(9 - c) >> 4 & 0x27);
++}
++
+ static void crypt_status(struct dm_target *ti, status_type_t type,
+ 			 unsigned status_flags, char *result, unsigned maxlen)
+ {
+@@ -2950,9 +2955,12 @@ static void crypt_status(struct dm_targe
+ 		if (cc->key_size > 0) {
+ 			if (cc->key_string)
+ 				DMEMIT(":%u:%s", cc->key_size, cc->key_string);
+-			else
+-				for (i = 0; i < cc->key_size; i++)
+-					DMEMIT("%02x", cc->key[i]);
++			else {
++				for (i = 0; i < cc->key_size; i++) {
++					DMEMIT("%c%c", hex2asc(cc->key[i] >> 4),
++					       hex2asc(cc->key[i] & 0xf));
++				}
++			}
+ 		} else
+ 			DMEMIT("-");
+ 
 
 

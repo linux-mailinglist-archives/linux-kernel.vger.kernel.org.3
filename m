@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF4253C352
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCDB53C357
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237701AbiFCCqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 22:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        id S238061AbiFCCsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 22:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiFCCq2 (ORCPT
+        with ESMTP id S230193AbiFCCsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 22:46:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F0733375;
-        Thu,  2 Jun 2022 19:46:26 -0700 (PDT)
+        Thu, 2 Jun 2022 22:48:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CF6338BA;
+        Thu,  2 Jun 2022 19:48:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21D42B82155;
-        Fri,  3 Jun 2022 02:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7517EC385A5;
-        Fri,  3 Jun 2022 02:46:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5995061618;
+        Fri,  3 Jun 2022 02:48:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D68C385A5;
+        Fri,  3 Jun 2022 02:48:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654224383;
-        bh=uxZ53R3ThWE3FSFIh9D1ha7bSA75C1JjHKEUkquN/9Y=;
+        s=k20201202; t=1654224517;
+        bh=0yjv6yIGuuCsF28jC1oWN37CAZe1OojLqJTyuK1fAlM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IAgJSZ0A3zKUuOxFbkQYGjaNt+dv6aplR2WymS08Fj9kT2PAFST/PiaXke5d5Rg7k
-         POIIB6tZwDwa9xSC1/bVxD4HYFQA0Tly29TyV2CL0PHRHRArTKN7I+NkgHf21+eNf9
-         ydC4EghpdIJZAcVrBgq2qVt+j3TSz4ghlyIqa5wL1/knGXjhb5KKLWn7ez9w2yJitR
-         g5y2ZlUE4Mcl0diZnyxKfQTGjrmWd3p12dHAmHiM7kb9e/9SqQrCSR/Llo9N5kXbt/
-         PQ1IVVVJMmo7P7XrVAnuLVE3VnprYtkypTo4B9pUS0cog3dZNMYTgcJPUNsO4HEbjg
-         QKVwTLPu+GJog==
-Date:   Thu, 2 Jun 2022 19:46:22 -0700
+        b=dqvjSemHn4B/SAqJrv5LWrVHNQlq67l+qJ7JhnO55wKhSUt63Z+sfm0lgHM6MBH6Z
+         Y5vxgRQCLYtQqTlfriFNhhQ4V0+jBttVFU5uRr8Y5tixohL+x0zjKafli4bXy1i4dY
+         18CRvghUAixrc946nIYCudw7fY7p/uo9YhfacZPwb86XRbaF6qv5R5gQbhVKSZOqhB
+         eJLUYX0O43Iic1S7w4EdYC0+JgSTWP221lvj5Sh3HPqxXh/MOFCR6vMXHqDYH0kTl8
+         NiurbE2z8sSp0zpqCr23lubzH6eDy6uxHkELJ8YXvPPiqiCkrtBZ4qZreCMmZ79xMT
+         D8mH/PO7L9hZQ==
+Date:   Thu, 2 Jun 2022 19:48:36 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Kaarel =?UTF-8?B?UMOkcnRlbA==?= <kaarelp2rtel@gmail.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: add operstate for vcan and dummy
-Message-ID: <20220602194622.0c54a256@kernel.org>
-In-Reply-To: <20220602081929.21929-1-kaarelp2rtel@gmail.com>
-References: <20220602081929.21929-1-kaarelp2rtel@gmail.com>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux@armlinux.org.uk>, <vladimir.oltean@nxp.com>,
+        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>
+Subject: Re: [PATCH v2 0/3] J7200: CPSW5G: Add support for QSGMII mode to
+ am65-cpsw driver
+Message-ID: <20220602194836.37e41003@kernel.org>
+In-Reply-To: <20220602114558.6204-1-s-vadapalli@ti.com>
+References: <20220602114558.6204-1-s-vadapalli@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,48 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  2 Jun 2022 11:19:29 +0300 Kaarel P=C3=A4rtel wrote:
-> The idea here is simple. The vcan and the dummy network devices
-> currently do not set the operational state of the interface.
-> The result is that the interface state will be UNKNOWN.
->=20
-> The kernel considers the unknown state to be the same as up:
-> https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#=
-L4125
->=20
-> However for users this creates confusion:
-> https://serverfault.com/questions/629676/dummy-network-interface-in-linux
->=20
-> The change in this patch is very simple. When the interface is set up, the
-> operational state is set to IF_OPER_UP.
->=20
-> Signed-off-by: Kaarel P=C3=A4rtel <kaarelp2rtel@gmail.com>
+On Thu, 2 Jun 2022 17:15:55 +0530 Siddharth Vadapalli wrote:
+> Add support for QSGMII mode to am65-cpsw driver.
+> 
+> Change log:
+> v1 -> v2:
+> 1. Add new compatible for CPSW5G in ti,k3-am654-cpsw-nuss.yaml and extend
+>    properties for new compatible.
+> 2. Add extra_modes member to struct am65_cpsw_pdata to be used for QSGMII
+>    mode by new compatible.
+> 3. Add check for phylink supported modes to ensure that only one phy mode
+>    is advertised as supported.
+> 4. Check if extra_modes supports QSGMII mode in am65_cpsw_nuss_mac_config()
+>    for register write.
+> 5. Add check for assigning port->sgmii_base only when extra_modes is valid.
+> 
+> v1: https://lore.kernel.org/r/20220531113058.23708-1-s-vadapalli@ti.com
 
-You can change the carrier state from user space on a dummy device,
-that will inform the kernel of the operstate:
+# Form letter - net-next is closed
 
-# ip link add type dummy
-# ip link show dev dummy0
-8: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT gr=
-oup default qlen 1000
-    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
-# ip link set dev dummy0 up
-# ip link show dev dummy0
-8: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNO=
-WN mode DEFAULT group default qlen 1000
-    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
-# ip link set dev dummy0 carrier off
-# ip link set dev dummy0 carrier on
-# ip link show dev dummy0
-8: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mo=
-de DEFAULT group default qlen 1000
-    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
+We have already sent the networking pull request for 5.19
+and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
+Please repost when net-next reopens after 5.19-rc1 is cut.
 
-Flipping all soft devices which don't have a lower or don't expect user
-space management to UP is fine but doing it one by one feels icky.
-Yet another random thing a driver author has to know to flip.
-
-If people are confused about seeing UNKNOWN in ip link output maybe we
-should move displaying that under the -d flag (detailed output)?
-Saves space, and nobody will get confused.
+RFC patches sent for review only are obviously welcome at any time.

@@ -2,155 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE7F53C4A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF4B53C4AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241405AbiFCFtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S241341AbiFCFwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241361AbiFCFtM (ORCPT
+        with ESMTP id S237523AbiFCFwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:49:12 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C652011C11;
-        Thu,  2 Jun 2022 22:49:09 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4D2485C013C;
-        Fri,  3 Jun 2022 01:49:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 03 Jun 2022 01:49:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1654235347; x=1654321747; bh=lI
-        jU4LaO1rApVvOShyS8GsBVRsoSsVXvjryTJrZtKjg=; b=nYy0O1P4Jg3wrrSfTQ
-        i1ZV2JXrHfgfVbbmBZe862UKfJaGUqdX3KZuUZnKHPsAiNp7fsYkCyJj395RHnna
-        NX8ziLucahVzPWgc3eV+EIBy6f5XnqRrdY3QY6OZyY8jLiVSlSptBu1NYNTKKlUg
-        wzli+cpj+QudXBh4uJqCBvKA8Kdd+N5BfJnEwBwTdvNIaO49gwdMfhQ/LOzpDEXM
-        Uyy65GIQqWBls0aVqyiU4Oz4DjMvfp35igT54Es2ef5MtYoq03nPd87EoOb4yDuh
-        5nLMDaYkvI9HvS6QOFV8eyvpPpAoWvjm0cFflfrgdqlikGx+4jgxIgGXyBfIEIvp
-        Vrtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1654235347; x=1654321747; bh=lIjU4LaO1rApVvOShyS8GsBVRsoS
-        sVXvjryTJrZtKjg=; b=DWYLET/+XU0wgIpSjFaGJqNfUWigRsswi65wQSs1vnYS
-        zBmqyej4l+7Eyh3eOfJargM2gMrF8Ty9hUZBmIEnAUzfIdKCme9rQoN6z9H6HQxt
-        p5RuAQHXZNlZBNaIwCEJlDz8ldxjqbt+SsZtsxAVdEE2qsAWHyHwj4nrUVHNYlHg
-        qIMAOtpMEaFMyWBSx4uyv2BecJrpOfIeAMML3R8ek7N3IP8/I/D8BPEO8UzmOpAK
-        G1qq8FxEd3OMW6spsu3yk2apr/YJlX5eaUVM0jvBwT0QvAG9lTCs39jaBgrgZbsb
-        y3yqLw+f6f9IAfAQvwYjZWGztIR6IQYZGw+8e8qZcQ==
-X-ME-Sender: <xms:0qCZYmx_z6_DqH4Me6LAylQuyrsjgqyeTNi3FqNR3vhNCsw-k0JHNw>
-    <xme:0qCZYiRlWq-4IJNRYwf44fjmlXXzDHu2V5SRmkfEnLEmQDWaIGGV3EPyzwe-RpiVI
-    TfxtTbDYdtKKbyIsTY>
-X-ME-Received: <xmr:0qCZYoXA60zcQ31LtSBRgkprWwnkI8RgQGCwXCpxWCNjGoZXWuUjXvWSxGCLg1P1Hmkt7L2vvUE3yUj2iA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleehgdellecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpefmlhgruhhs
-    ucflvghnshgvnhcuoehithhssehirhhrvghlvghvrghnthdrughkqeenucggtffrrghtth
-    gvrhhnpeejgfejfeffvdeuhfeifefhgffgueelhedukeevjeevtdduudegieegteffffej
-    veenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehith
-    hssehirhhrvghlvghvrghnthdrughk
-X-ME-Proxy: <xmx:0qCZYsji16QNHoWnUZyivblJITBw7cfdpqBySyBx8Jpi-QPp7BQL0Q>
-    <xmx:0qCZYoADT-KyZuTywC0LYuIq19GkQ721risq-V9BStA_XTJqMUyCiQ>
-    <xmx:0qCZYtIZsBNGuASds4zG95lJRcHQN-rZRliBCaIHcLtsjKlsS_M_Mg>
-    <xmx:06CZYs51fTr8av9ucwhbWcQ0ev30R5OcwABGfGFsbxrxmG32wTT8uw>
-Feedback-ID: idc91472f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Jun 2022 01:49:04 -0400 (EDT)
-Date:   Fri, 3 Jun 2022 07:49:02 +0200
-From:   Klaus Jensen <its@irrelevant.dk>
-To:     linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Wolfram Sang <wsa@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Klaus Jensen <k.jensen@samsung.com>
-Subject: Re: [PATCH] i2c: aspeed: do not mask SLAVE_MATCH
-Message-ID: <YpmgzroKbMO3TIsY@apples>
-References: <20220602054842.122271-1-its@irrelevant.dk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H0uRup5aAnlYFzFn"
-Content-Disposition: inline
-In-Reply-To: <20220602054842.122271-1-its@irrelevant.dk>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 3 Jun 2022 01:52:03 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43BC2AC0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 22:52:01 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id i8-20020a170902c94800b0016517194819so3700345pla.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 22:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=8MGcac1+NMnCFqTNkAP3LH9iYhQFVupT03fTHS13h/k=;
+        b=F1Frl6XmIOttiQHw5FYbqF5lSf7HlRCqVLHgOovpTeymFO1a9nMk21DnGkcnWy4hIV
+         ZofZpNRqKGZ8xlqbJvoXaYY0iS7U9QTfQ6uNUByBlD9w/w+Co2Vs1TUrcf2R3FMqTwaM
+         N4OxKdK3ljmff2HKEmldBCuFo49YnQjVgDwcJ1la+nvxmCo57wL+RrSJks4HfYIRKFVX
+         YYMje3sos8w6ArzxpkSeu7M3qla0CTNY6jUFPOabo+MPoy6TEs5qajEt/P7fSdh3fgmn
+         BJpO2las5+kqfhfJRbREihkHZgWFMXi/wOMsdYQShW6Gc9XRFv57eWR7nj/scGuK1Cw4
+         NY5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=8MGcac1+NMnCFqTNkAP3LH9iYhQFVupT03fTHS13h/k=;
+        b=0AAlw+pYmti9+ZJKWY0V63xIBrVZc3lZmGR84GoBN0+IXsL0/FNX+flmH3G+17j7k/
+         OUD7BzILFmFqc28xabg7Db+geA0hXIAssGHLtKiUDEKOw4Yg1n8z24g84Q0eswe7KyMj
+         ZcQCXV6zVacbueAfgq16Mj6eDNyuZoPVqQ4QHMkup+Mld3VMZLaY1bqiF7yzlXobtbDF
+         bkB5o3G5/5+U2Zh7mM1NG7I/oBZC3ezIH/g/0TVTM8S0xr4z4MuPOYpQXAoze6mK/LW8
+         6YxasIB7jt+JwAXOYc2reXNEg5qL08xS3UnZq6J69B78mP+rJ8mw2UarHinrOQQrt3jb
+         SNKg==
+X-Gm-Message-State: AOAM533O6E3LOkFzDO9oC/AY6Nmn4TeyvGVV9Hwm8e4Q69+MiNzQBUS8
+        o7fB6aK3nD+vdMgYpHGTDm741o8TWAQM
+X-Google-Smtp-Source: ABdhPJyocRs8naUtOBDapn9dNnFxP6PLE+KWzr0IdfOtTWVs45RklCV6XMaOSN4VDKwxdYmj4cKkFCgFwkNZ
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:e5a:e82c:d3a4:578c])
+ (user=irogers job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
+ q15-20020a17090a178f00b001e303bac185mr352114pja.1.1654235520615; Thu, 02 Jun
+ 2022 22:52:00 -0700 (PDT)
+Date:   Thu,  2 Jun 2022 22:51:56 -0700
+Message-Id: <20220603055156.2830463-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v2] libbpf: Fix is_pow_of_2
+From:   Ian Rogers <irogers@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Yuze Chi <chiyuze@google.com>, Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Yuze Chi <chiyuze@google.com>
 
---H0uRup5aAnlYFzFn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Move the correct definition from linker.c into libbpf_internal.h.
 
-On Jun  2 07:48, Klaus Jensen wrote:
-> From: Klaus Jensen <k.jensen@samsung.com>
->=20
-> When commit f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed
-> I2C driver") added slave mode support, the SLAVE_MATCH interrupt bit
-> (bit 7) was not added to INTR_ALL and so will never be set by the Aspeed
-> I2C controller.
->=20
-> Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C dri=
-ver")
-> Signed-off-by: Klaus Jensen <k.jensen@samsung.com>
-> ---
-> I am working on slave mode in QEMU and noticed that the device would not
-> generate the SLAVE_ADDR_RX_MATCH interrupt. This patch fixes it, but I
-> do not have a spec sheet on the Aspeed, so I am not sure if this is the
-> intended behavior?
->=20
->  drivers/i2c/busses/i2c-aspeed.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-asp=
-eed.c
-> index 771e53d3d197..7f432babcd72 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -86,6 +86,7 @@
->  #define ASPEED_I2CD_INTR_ALL						       \
->  		(ASPEED_I2CD_INTR_SDA_DL_TIMEOUT |			       \
->  		 ASPEED_I2CD_INTR_BUS_RECOVER_DONE |			       \
-> +		 ASPEED_I2CD_INTR_SLAVE_MATCH |				       \
->  		 ASPEED_I2CD_INTR_SCL_TIMEOUT |				       \
->  		 ASPEED_I2CD_INTR_ABNORMAL |				       \
->  		 ASPEED_I2CD_INTR_NORMAL_STOP |				       \
-> --=20
-> 2.36.1
->=20
+Reported-by: Yuze Chi <chiyuze@google.com>
+Signed-off-by: Yuze Chi <chiyuze@google.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/lib/bpf/libbpf.c          | 5 -----
+ tools/lib/bpf/libbpf_internal.h | 5 +++++
+ tools/lib/bpf/linker.c          | 5 -----
+ 3 files changed, 5 insertions(+), 10 deletions(-)
 
-I've been informed that SLAVE_MATCH should always be generated,
-regardless of INTR_CTRL, so please ignore this patch.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3f4f18684bd3..346f941bb995 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4954,11 +4954,6 @@ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
+ 
+ static void bpf_map__destroy(struct bpf_map *map);
+ 
+-static bool is_pow_of_2(size_t x)
+-{
+-	return x && (x & (x - 1));
+-}
+-
+ static size_t adjust_ringbuf_sz(size_t sz)
+ {
+ 	__u32 page_sz = sysconf(_SC_PAGE_SIZE);
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 4abdbe2fea9d..ef5d975078e5 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -580,4 +580,9 @@ struct bpf_link * usdt_manager_attach_usdt(struct usdt_manager *man,
+ 					   const char *usdt_provider, const char *usdt_name,
+ 					   __u64 usdt_cookie);
+ 
++static inline bool is_pow_of_2(size_t x)
++{
++	return x && (x & (x - 1)) == 0;
++}
++
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 9aa016fb55aa..85c0fddf55d1 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -697,11 +697,6 @@ static int linker_load_obj_file(struct bpf_linker *linker, const char *filename,
+ 	return err;
+ }
+ 
+-static bool is_pow_of_2(size_t x)
+-{
+-	return x && (x & (x - 1)) == 0;
+-}
+-
+ static int linker_sanity_check_elf(struct src_obj *obj)
+ {
+ 	struct src_sec *sec;
+-- 
+2.36.1.255.ge46751e96f-goog
 
---H0uRup5aAnlYFzFn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEUigzqnXi3OaiR2bATeGvMW1PDekFAmKZoMwACgkQTeGvMW1P
-DemGlAf/aII/yHlSNHBjG7id0U5uz2uhWKpOBXclCdnrJdDhxNxlXN1R0rGlpUP4
-1PX6c9dlVwPdyO3xiu6egzUsvwJdQ8i28xjZZldVIYtNKC4ruvEaR/PCjCQGBRzh
-p5QaZAseo1PoAj1M5JJupcgrs20SSoVWs9Sr0X2qNEaCsCgQ3+E1NXS0qhf+0tp7
-DXfw6ICyofMrm8Qmjz6WX6f0+SedpmIKBnzxAgyG5W9a/6jC2tWxNEam/W3bozA9
-x412Op9vT2UtrN3jHy6gnJQR+mJfMUTk24kLTk1htmBWyY0HP0lRtFex65EVxozO
-uuQMHDRxT54gNlrroIl9Rx1qmS3LvQ==
-=6I9B
------END PGP SIGNATURE-----
-
---H0uRup5aAnlYFzFn--

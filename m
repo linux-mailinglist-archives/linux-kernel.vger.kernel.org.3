@@ -2,137 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DFE53C949
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621BF53C945
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243977AbiFCL1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 07:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
+        id S243983AbiFCL2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 07:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237380AbiFCL1E (ORCPT
+        with ESMTP id S237380AbiFCL22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 07:27:04 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CBB13D44;
-        Fri,  3 Jun 2022 04:26:59 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 49AEC2698;
-        Fri,  3 Jun 2022 11:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1654255584;
-        bh=HVPX9ugwZpjN4d10W+xJnrpqV9wwOQw9BPCuiHwX/Z4=;
-        h=Date:To:CC:From:Subject;
-        b=XsmIGJkbYCZ/8M03RLAOCj60tGHjaZZ4KYoBL30IENFRY8HO6vvRAvdPppu2Le/qX
-         szw96Y1ikALRSYczYTpcb/3JtYAaUlw/cRSWAi1GPVXk9Yuh/601qhJVYMbZCeQgZd
-         0pzI+fbueqaKRPf6g26GluIBZziY5AaDvC1fhb+Q=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 3 Jun 2022 14:26:57 +0300
-Message-ID: <c5c16f3d-c8a7-96b0-4fd6-056c4159fcef@paragon-software.com>
-Date:   Fri, 3 Jun 2022 14:26:57 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     <torvalds@linux-foundation.org>
-CC:     <ntfs3@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [GIT PULL] ntfs3: bugfixes for 5.19
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 3 Jun 2022 07:28:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B26289A8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 04:28:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 424BBB8232B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A58BFC385B8;
+        Fri,  3 Jun 2022 11:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654255705;
+        bh=EqGc+P0tONcO6nizjGhuBe1C0PNRcK0YubdUL4WmPXE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DUelBsEv98JlbPeJiCYLuNPRMugIEN8Y//ViBw49CdYLjJ5VLzzQY597FUa/ZEOi7
+         mtEgTQZjy0ypbMduzRxX6Xwjmzn6iLKXrgl+rI5LnytrgzeL2fSiSyojz7YkEopNSB
+         moL5t2CS36LmdteNr38bnT1SR7Org/DOZD6TY6f3Z10U3XAMpmUyTZ400ZFGaPOkTe
+         AhZBeVv9vuicfKcKQnFk1/4xK2vU4rqO1eREwj5fGWdJvbAq1XjrzFGqJfu3Sr5d+3
+         uN2pjWYYMWO2een+lFiZQYIKxEkc/P8XK2QY8Vv1i4g1xEPJf/7nOFgknOEXbR8mFn
+         MJR97D2jIcatQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator fixes for v5.19-rc0
+Date:   Fri, 03 Jun 2022 13:28:08 +0200
+Message-Id: <20220603112824.A58BFC385B8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+The following changes since commit 68d6c8476fd4f448e70e0ab31ff972838ac41dae:
 
-Please pull this branch containing ntfs3 code for 5.19.
-
-Fixed:
-- some memory leaks and panic;
-- fixed xfstests (tested on x86_64)
-generic/092 generic/099 generic/228 generic/240 generic/307 generic/444;
-- bugfix (memory leak) for 5.18 [1];
-- some typos, dead code, etc.
-
-Most of the code was in linux-next branch for several months,
-but there are some patches, that were in linux-next branch only
-for a couple of days. Hopefully it is ok - no regression
-was detected in tests.
-
-Note: after first 9 commits there was merge with Linux 5.18.
-I'm not sure if this complicates things, so I've listed all commits too.
-
-Regards,
-
-Konstantin
-
-[1]: https://www.spinics.net/lists/ntfs3/msg01036.html
-
-----------------------------------------------------------------
-
-The following changes since commit 8bb7eca972ad531c9b149c0a51ab43a417385813:
-
-   Linux 5.15 (Sun Oct 31 13:53:10 2021 -0700)
+  regulator: scmi: Fix refcount leak in scmi_regulator_probe (2022-05-17 11:58:13 +0100)
 
 are available in the Git repository at:
 
-   https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_5.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.19-rc0
 
-for you to fetch changes up to 724bbe49c5e427cb077357d72d240a649f2e4054:
+for you to fetch changes up to 28cbc2d4c54c09a427b18a1604740efb6b2cc2d6:
 
-   fs/ntfs3: provide block_invalidate_folio to fix memory leak (Mon May 30 13:36:45 2022 +0200)
-
-All commits:
-
-724bbe49c5e4 fs/ntfs3: provide block_invalidate_folio to fix memory leak
-f26967b9f7a8 fs/ntfs3: Fix invalid free in log_replay
-< merge with 5.18 happened >
-52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUEUED
-114346978cf6 fs/ntfs3: Check new size for limits
-3880f2b816a7 fs/ntfs3: Fix fiemap + fix shrink file size (to remove preallocated space)
-9186d472ee78 fs/ntfs3: In function ntfs_set_acl_ex do not change inode->i_mode if called from function ntfs_init_acl
-3a2154b25a9f fs/ntfs3: Optimize locking in ntfs_save_wsl_perm
-2d44667c306e fs/ntfs3: Update i_ctime when xattr is added
-87e21c99bad7 fs/ntfs3: Restore ntfs_xattr_get_acl and ntfs_xattr_set_acl functions
-e95113ed4d42 fs/ntfs3: Keep preallocated only if option prealloc enabled
-e589f9b7078e fs/ntfs3: Fix some memory leaks in an error handling path of 'log_replay()'
+  regulator: mt6315-regulator: fix invalid allowed mode (2022-06-01 12:24:11 +0200)
 
 ----------------------------------------------------------------
+regulator: Fix for v5.19
 
-Konstantin Komarov (8)
-  fs/ntfs3: Update valid size if -EIOCBQUEUED
-  fs/ntfs3: Check new size for limits
-  fs/ntfs3: Fix fiemap + fix shrink file size (to remove preallocated space)
-  fs/ntfs3: In function ntfs_set_acl_ex do not change inode->i_mode if called from function ntfs_init_acl
-  fs/ntfs3: Optimize locking in ntfs_save_wsl_perm
-  fs/ntfs3: Update i_ctime when xattr is added
-  fs/ntfs3: Restore ntfs_xattr_get_acl and ntfs_xattr_set_acl functions
-  fs/ntfs3: Keep preallocated only if option prealloc enabled
+One fix that came in during the merge window, fixing an error in
+the examples in the DT binding documentation for mt6315.
 
-Mikulas Patocka (1)
-  fs/ntfs3: provide block_invalidate_folio to fix memory leak
+----------------------------------------------------------------
+Fabien Parent (1):
+      regulator: mt6315-regulator: fix invalid allowed mode
 
-Namjae Jeon (1)
-  fs/ntfs3: Fix invalid free in log_replay
-
-Christophe JAILLET (1)
-  fs/ntfs3: Fix some memory leaks in an error handling path of 'log_replay()'
-
-  fs/ntfs3/file.c    |  12 +++++++++---
-  fs/ntfs3/frecord.c |  10 +++++++---
-  fs/ntfs3/fslog.c   |  12 +++++++-----
-  fs/ntfs3/inode.c   |   9 ++++++--
-  fs/ntfs3/xattr.c   | 136 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
-  5 files changed, 149 insertions(+), 30 deletions(-)
+ Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)

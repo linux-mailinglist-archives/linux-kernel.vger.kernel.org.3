@@ -2,109 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7B053C34E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF4253C352
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbiFCCn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 22:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S237701AbiFCCqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 22:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiFCCnz (ORCPT
+        with ESMTP id S229714AbiFCCq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 22:43:55 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7950131DED
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 19:43:52 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220603024351epoutp0208cea4e49f73ed909a8feb6fafada5f8~0-Cx07fAm0966409664epoutp02N
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:43:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220603024351epoutp0208cea4e49f73ed909a8feb6fafada5f8~0-Cx07fAm0966409664epoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654224231;
-        bh=xGD0aaO2qyPPbOAOGaZYEnVMOmOX5jr0Q2SBdx4lNTM=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=L4a0frKiPsLHTh7P0mDTOERKnnhSNv2n8dC0PYObnoUv2MgqT//EQx2oEesZn4qgc
-         A5UbJRqDAWRFxUZlP9BDHPodQAoKZbyb0hSvFitJwsqUPbtWOmBL+jqJ+hQCbVSAek
-         kHXtY7p3/soIa6OyiYWZmBl9STNyeqsJYIS5aWbo=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220603024349epcas2p3b3a713e5f9cf5248e4e3d1304c162191~0-Cwxa_8Q1867018670epcas2p3o;
-        Fri,  3 Jun 2022 02:43:49 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.102]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4LDnJN2MP7z4x9Q8; Fri,  3 Jun
-        2022 02:43:48 +0000 (GMT)
-X-AuditID: b6c32a47-573ff7000000272c-4d-62997564780d
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1F.99.10028.46579926; Fri,  3 Jun 2022 11:43:48 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2 5/5] MAINTAINERS: Add maintainer for Axis ARTPEC-8 PCIe
- PHY driver
-Reply-To: wangseok.lee@samsung.com
-Sender: Wangseok Lee <wangseok.lee@samsung.com>
-From:   Wangseok Lee <wangseok.lee@samsung.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220603024347epcms2p48d01596e10b251bec077581a6c609c48@epcms2p4>
-Date:   Fri, 03 Jun 2022 11:43:47 +0900
-X-CMS-MailID: 20220603024347epcms2p48d01596e10b251bec077581a6c609c48
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmuW5K6cwkgz/3uC2WNGVYvDykaTH/
-        yDlWi90zljNZzJx6htni+aFZzBafWlQtLjztYbN4Oesem0VDz29WiyNvPjJb7D++ksni8q45
-        bBZn5x1ns5iw6huLxZvfL9gtzi3OtGjde4TdYuedE8wOwh5r5q1h9Li+LsBjwaZSj02rOtk8
-        nlyZzuSxeUm9R9+WVYwex29sZ/L4vEkugDMq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzA
-        UNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6B8lhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFK
-        ToF5gV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbGrfbZjAUzOSrOPTJvYPzH1sXIwSEhYCLRPLOq
-        i5GLQ0hgB6PElVk97CBxXgFBib87hLsYOTmEBcIlfjQ+YAexhQSUJHasmccMEdeXuL6imxXE
-        ZhPQlfi3+CUbyBwRgbNMEjfvbmcFcZgF5rBIXG/+AFYlIcArMaP9KQuELS2xfflWRhCbU8BP
-        4tyXLjaIuIbEj2W9zBC2qMTN1W/ZYez3x+YzQtgiEq33zkLVCEo8+LkbKi4lseDJIahd1RL7
-        //5mgrAbGCX676dCPKwvseO6MUiYV8BXYt2MqWDlLAKqEtffLIY6wUXiT9NusFZmAXmJ7W/n
-        MIO0MgtoSqzfpQ8xRVniyC0WmKcaNv5mR2czC/BJdBz+CxffMe8J1DFqEvNW7mSewKg8CxHQ
-        s5DsmoWwawEj8ypGsdSC4tz01GKjAmN4zCbn525iBKdrLfcdjDPeftA7xMjEwXiIUYKDWUmE
-        t2TX1CQh3pTEyqrUovz4otKc1OJDjKZAX05klhJNzgdmjLySeEMTSwMTMzNDcyNTA3MlcV6v
-        lA2JQgLpiSWp2ampBalFMH1MHJxSDUw6klMfcCe9/DCHg8uF+Xnmhny3670K9000U88INn0P
-        6Q16dFhXVCt+lXOIqzvHrODTq7m5p2p9mySYc7LT+e2bPxIndkh9P3btzC0VXSdfjoOOU+Oz
-        lm+QO19wyG1x/HfXzOfT3z6fwGLIHGMW1rI+bcMept5DL6P3RfCLzffT1ma8Jvvyjfg8hSnX
-        rq/+lae00TuBZ1t6cPzUxJpsrtWhVhPfNzIqp2QlbNj287zZhfhpO1za7/pk6DR/7dnilxJy
-        +ldQUuqPjXf83l5g36t8Wyh0VeQhHqesttsqT98/175kkHfgbkJHabjGkndRh9dprChkLYhT
-        aji8M59f5UTgxDMv/Wykl4vYuUZs+aDEUpyRaKjFXFScCABmhRjWYAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220603015431epcms2p6203908cebe6a320854136559a32b54cb
-References: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
-        <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p4>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 2 Jun 2022 22:46:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F0733375;
+        Thu,  2 Jun 2022 19:46:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21D42B82155;
+        Fri,  3 Jun 2022 02:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7517EC385A5;
+        Fri,  3 Jun 2022 02:46:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654224383;
+        bh=uxZ53R3ThWE3FSFIh9D1ha7bSA75C1JjHKEUkquN/9Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IAgJSZ0A3zKUuOxFbkQYGjaNt+dv6aplR2WymS08Fj9kT2PAFST/PiaXke5d5Rg7k
+         POIIB6tZwDwa9xSC1/bVxD4HYFQA0Tly29TyV2CL0PHRHRArTKN7I+NkgHf21+eNf9
+         ydC4EghpdIJZAcVrBgq2qVt+j3TSz4ghlyIqa5wL1/knGXjhb5KKLWn7ez9w2yJitR
+         g5y2ZlUE4Mcl0diZnyxKfQTGjrmWd3p12dHAmHiM7kb9e/9SqQrCSR/Llo9N5kXbt/
+         PQ1IVVVJMmo7P7XrVAnuLVE3VnprYtkypTo4B9pUS0cog3dZNMYTgcJPUNsO4HEbjg
+         QKVwTLPu+GJog==
+Date:   Thu, 2 Jun 2022 19:46:22 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kaarel =?UTF-8?B?UMOkcnRlbA==?= <kaarelp2rtel@gmail.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: add operstate for vcan and dummy
+Message-ID: <20220602194622.0c54a256@kernel.org>
+In-Reply-To: <20220602081929.21929-1-kaarelp2rtel@gmail.com>
+References: <20220602081929.21929-1-kaarelp2rtel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,37 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add maintainer for Axis ARTPEC-8 PCIe PHY.
+On Thu,  2 Jun 2022 11:19:29 +0300 Kaarel P=C3=A4rtel wrote:
+> The idea here is simple. The vcan and the dummy network devices
+> currently do not set the operational state of the interface.
+> The result is that the interface state will be UNKNOWN.
+>=20
+> The kernel considers the unknown state to be the same as up:
+> https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#=
+L4125
+>=20
+> However for users this creates confusion:
+> https://serverfault.com/questions/629676/dummy-network-interface-in-linux
+>=20
+> The change in this patch is very simple. When the interface is set up, the
+> operational state is set to IF_OPER_UP.
+>=20
+> Signed-off-by: Kaarel P=C3=A4rtel <kaarelp2rtel@gmail.com>
 
-Add Jesper Nilsson <jesper.nilsson@axis.com> and
-Lars Persson <lars.persson@axis.com> as Maintainer for these files.
+You can change the carrier state from user space on a dummy device,
+that will inform the kernel of the operstate:
 
-ARTPEC-8 is the SoC platform of Axis Communications
-and PCIe phy is designed based on Samsung PHY.
+# ip link add type dummy
+# ip link show dev dummy0
+8: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT gr=
+oup default qlen 1000
+    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
+# ip link set dev dummy0 up
+# ip link show dev dummy0
+8: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNO=
+WN mode DEFAULT group default qlen 1000
+    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
+# ip link set dev dummy0 carrier off
+# ip link set dev dummy0 carrier on
+# ip link show dev dummy0
+8: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mo=
+de DEFAULT group default qlen 1000
+    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
 
-Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d4d4aa2..cd6f75b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1864,12 +1864,14 @@ M:	Jesper Nilsson <jesper.nilsson@axis.com>
- M:	Lars Persson <lars.persson@axis.com>
- L:	linux-arm-kernel@axis.com
- S:	Maintained
-+F:	Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
- F:	Documentation/devicetree/bindings/pinctrl/axis,artpec6-pinctrl.txt
- F:	arch/arm/boot/dts/artpec6*
- F:	arch/arm/mach-artpec
- F:	drivers/clk/axis
- F:	drivers/crypto/axis
- F:	drivers/mmc/host/usdhi6rol0.c
-+F:	drivers/phy/artpec/phy-artpec*
- F:	drivers/pinctrl/pinctrl-artpec*
- 
- ARM/ASPEED I2C DRIVER
--- 
-2.9.5
+Flipping all soft devices which don't have a lower or don't expect user
+space management to UP is fine but doing it one by one feels icky.
+Yet another random thing a driver author has to know to flip.
+
+If people are confused about seeing UNKNOWN in ip link output maybe we
+should move displaying that under the -d flag (detailed output)?
+Saves space, and nobody will get confused.

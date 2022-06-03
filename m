@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC52853D229
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727A853D22E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347956AbiFCTGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S1345544AbiFCTGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348938AbiFCTFW (ORCPT
+        with ESMTP id S1348914AbiFCTFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:05:22 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE5030F78;
-        Fri,  3 Jun 2022 12:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654282936;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=GN32FHxgQcHqH2ucXhtQRiGh0eXPPIP92mFkqoNojOw=;
-    b=NcenauWPTPMC//K3fNo54K+j79IWwc/2lRt9IAjn+ZA7EAehD9f3toPwur/SByZyy1
-    dN6bYMCufLOg74gkUBgzuT8y9dR6jGT3N+NkWVGq9bxLphd3F+rzEslD7OqhmdidPGYf
-    hmtgzlmxcU++3t9NYqydQx96VEKWKeIIde3J8k33yb2RByQySh69paiY4rMSHchvDPkT
-    jxGADZIjyJegCYGD8zslD3KDuTMkoosndUoq/2WTK6lYW+wBhYP3AP9XHv+xAMN7eXZ5
-    HR7n0BdbIKsTxa0OzB1uAnm5EcBUOc2VMRooHHyDdNA6QG9Fx4+5Hjse3qfRnzisRqAM
-    Z5TQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLVrKw7/aY="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id 9056edy53J2Fwnt
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 3 Jun 2022 21:02:15 +0200 (CEST)
-Date:   Fri, 3 Jun 2022 21:02:14 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sdm845-oneplus: split
- qcom,board-id into tuples
-Message-ID: <Yppatj7KuQLPdDW1@gerhold.net>
-References: <20220529202629.47588-1-krzysztof.kozlowski@linaro.org>
- <20220529202629.47588-5-krzysztof.kozlowski@linaro.org>
+        Fri, 3 Jun 2022 15:05:18 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5B30F78;
+        Fri,  3 Jun 2022 12:05:17 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id u3so11537323wrg.3;
+        Fri, 03 Jun 2022 12:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H4l6l2+LqiOAH0dZelhPsMXnUGKfvd85Zt0GdanrYgo=;
+        b=M5hnMb4CuBoUZpZeyvJDSxPSJ9OKj9E4VW0RDQ2aQNYV7/RnjpzNdxWpaAyjvTKLN7
+         USHIBU9qf22PFo4NgZ3humWSzMGISiVv666dwxX3rlb1OOQWksEomMKRWukUL8apazlR
+         KPRl8LyO4WQvhm1CENAZKFlWqsr57FK+YpRv8gANAz0miyCko1XScotlwE5dcACPUjfe
+         9ILTCLGcaiWkQnQKFPXGMXNhJ8VnJoaqLUVgj3Noyr/Nn/1Gwl39ikS/rpTENK5LT5Oj
+         Ns9gvKC20I9JCkCW9/rOxDFfwvRmis//ni+8mACpmwP/3+PIp+Tx5vJr5bZTvKHqhUKJ
+         hSkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H4l6l2+LqiOAH0dZelhPsMXnUGKfvd85Zt0GdanrYgo=;
+        b=684s/57T8w+PVvG2fCdCRpuSHHHJZFck9Fm2uFCxsT/9eydB7IRE6wK4p6ejhEfIct
+         T76B40dcfR/lIxnvb/XSlvVda7F4IywZSqjs3YmQjxs3yzMo20cLbZe6BAbGryamNWJS
+         aCjMNhT5zXq9BCjCjk1j3yEq9h9tEgN45VtjptznDdI4ByLslM64qT2XvFk/uj/AzSEI
+         Q5AZ6myQ0q4p5v90YWSxij92HSUkphQXpwC+V8700cQsh1LXDiX693Ns3K4RNDUHScgU
+         R91y48fFHnYaKU9rshIJHw4lJ9udTtWKk0IMlAlfkCdnMfXOXiDOzRAufFyRNiKgiNcA
+         xVAg==
+X-Gm-Message-State: AOAM533p/KDnI2In+qznO0t0hVozHcqqUbYYoGNAjTC3lpzjXPqvCxBV
+        7y/+w5ktaPWLjdITXUiY/mkTu/+Boho=
+X-Google-Smtp-Source: ABdhPJyenvVHsJ92MUvPmQJQfRXhRzsHiPrPAS0MBFnshuaYBPsmApjEVhnJsiJ+UARO477OXI92lA==
+X-Received: by 2002:a5d:6348:0:b0:213:3a8e:e75d with SMTP id b8-20020a5d6348000000b002133a8ee75dmr7758317wrw.55.1654283115278;
+        Fri, 03 Jun 2022 12:05:15 -0700 (PDT)
+Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
+        by smtp.gmail.com with ESMTPSA id d12-20020a5d4f8c000000b00210346cd0b7sm8059568wru.101.2022.06.03.12.05.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 12:05:14 -0700 (PDT)
+From:   Romain Perier <romain.perier@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Daniel Palmer <daniel@0x0f.com>,
+        Romain Perier <romain.perier@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v5 0/1] ARM: mstar: cpupll
+Date:   Fri,  3 Jun 2022 21:05:08 +0200
+Message-Id: <20220603190509.45986-1-romain.perier@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220529202629.47588-5-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Cc Caleb Connolly <caleb@connolly.tech>
+This is a resend of the remaining patches of this series. I have kept
+the cover letter in order to do not loose context of the previous series.
 
-On Sun, May 29, 2022 at 10:26:29PM +0200, Krzysztof Kozlowski wrote:
-> The qcom,board-id is an uint32 matrix, so a list of tuples.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts | 2 +-
->  arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-> index bf2cf92e8976..8897a2f4cfe3 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
-> @@ -12,7 +12,7 @@ / {
->  	compatible = "oneplus,enchilada", "qcom,sdm845";
->  	chassis-type = "handset";
->  	qcom,msm-id = <0x141 0x20001>;
-> -	qcom,board-id = <8 0 17819 22>;
-> +	qcom,board-id = <8 0>, <17819 22>;
+This series adds a basic driver for the PLL that generates
+the cpu clock on MStar/SigmaStar ARMv7 SoCs.
 
-FWIW: While it's just a cosmetic change this is a bit misleading in my
-opinion. Having two tuples suggests this should be interpreted as:
+Unfortunately there isn't much documentation for this thing
+so there are few magic values and guesses.
 
-"This device tree is suitable for two different boards:
- board-id = <8 0> (aka sdm845-mtp, a standard qcom reference board)
- OR, alternatively: board-id = <17819 22>"
+This needs to come after the MPLL DT changes.
 
-Since this device tree is clearly not meant for sdm845-mtp one could now
-argue that the <8 0> could be removed, and only the second tuple covers
-the actual device. It might be worth a try (maybe Caleb can try?), but
-I suspect the bootloader will not accept that...
+Changes since v4:
+- Removed merged patches (dt-bindings documentation and dt-bindings)
+- Rebased onto 5.19
 
-I think the bootloader from OPPO/OnePlus is actually looking for
-quadruples instead of tuples on this board. I have seen similar hacks on
-several other OPPO devices as well. They usually add their project ID
-(here: 17819) somewhere and look for that in the bootloader.
+Changes since v3:
+- Added Reviewed-by on Daniel's patches
+- Removed "[PATCH v3 8/9] ARM: mstar: Add OPP table for mercury5"
 
-In this case maybe adding a short comment would be sufficient, just to
-make it more obvious that this doesn't actually follow the binding
-documentation.
+Changes since v2:
+- Re-ordered Kconfig by name
+- Re-ordered includes alphabetically and removed useless ones
+- Used timeout for cpu_relax
+- Returned DIV_ROUND_DOWN_ULL() directly in
+  msc313_cpupll_frequencyforreg()
+- Returned DIV_ROUND_DOWN_ULL() directly in
+  msc313_cpupll_regforfrequecy()
+- Reduced the number of lines for msc313_cpupll_of_match
+- Removed CLK_IS_CRITICAL
 
-But this kind of brings up the question if it's worth making any
-constraints in the DT schema at all, if some of the device trees
-can not follow it.
+Changes since v1:
+- Re-worked the series and ensure that 'make dt_binding_check' passes.
+  The required commit is merged now, so it is okay.
+- Fixed coding style issues in the driver and makes check_patch.pl happy
+- Added one more commit for extending the opp_table for infinity2m.
 
-For example, older OPPO bootloaders actually look for triples instead,
-e.g.: (This is from a real device!)
-	qcom,board-id = <8 0 15009>;
 
-So maybe it's just a matter of time until someone tries to add a DT
-with a format that cannot be changed cosmetically to fit the DT schema...
+Daniel Palmer (1):
+  clk: mstar: msc313 cpupll clk driver
 
-Stephan
+ drivers/clk/mstar/Kconfig             |   8 +
+ drivers/clk/mstar/Makefile            |   2 +-
+ drivers/clk/mstar/clk-msc313-cpupll.c | 221 ++++++++++++++++++++++++++
+ 3 files changed, 230 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
+
+-- 
+2.35.1
+

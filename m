@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126D453CE74
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C303D53CE8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344654AbiFCRmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S1344998AbiFCRn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344756AbiFCRlz (ORCPT
+        with ESMTP id S240604AbiFCRni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:41:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6B53A51;
-        Fri,  3 Jun 2022 10:41:15 -0700 (PDT)
+        Fri, 3 Jun 2022 13:43:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B00554019;
+        Fri,  3 Jun 2022 10:42:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A975361B00;
-        Fri,  3 Jun 2022 17:41:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9955BC385A9;
-        Fri,  3 Jun 2022 17:41:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97E3961AFD;
+        Fri,  3 Jun 2022 17:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7735C385A9;
+        Fri,  3 Jun 2022 17:41:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278074;
-        bh=nEEt0MjSOfaKM23Di3zdTZzjV4Q96cjTsIQFdDcNp/8=;
+        s=korg; t=1654278119;
+        bh=lD/i58mJ1mzC0KR7f+afWNEDoc7pInkWcARBKYxsdxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E5gKrqq7HPbZxESwJQPR2fsnAHre+aQgy3g4fG24Ufyk0uf6J3Dz/8xShx2hQZc5+
-         2lG6/9mShwFMbcubmTnwg0NS+hWwNlnlpiOI738FNJ5/7BsWLaXMTbOKU48hnfzIjr
-         z0Zd20snTy2Ted0gMWLkrjBtyTJCW9Jht4SYonwg=
+        b=AUue1vL/BQpj1XszhTlwhozgFGlVOE7B32QtHefLOI9/cmXzmMysskx6WZ1Wk6s/f
+         TNipghOMy3PXK2IZLWubRiXaepGlV4mwqTN65l7kLuvB4uLDXKk0qzpvN0FyaXTJcz
+         vk62u1tGwdzKf7OfDUK+d4s1uw8GQQKGZyDiMh0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 4.14 16/23] dm integrity: fix error code in dm_integrity_ctr()
-Date:   Fri,  3 Jun 2022 19:39:43 +0200
-Message-Id: <20220603173814.856716104@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH 4.19 16/30] drm/i915: Fix -Wstringop-overflow warning in call to intel_read_wm_latency()
+Date:   Fri,  3 Jun 2022 19:39:44 +0200
+Message-Id: <20220603173815.574880171@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
-References: <20220603173814.362515009@linuxfoundation.org>
+In-Reply-To: <20220603173815.088143764@linuxfoundation.org>
+References: <20220603173815.088143764@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-commit d3f2a14b8906df913cb04a706367b012db94a6e8 upstream.
+commit 336feb502a715909a8136eb6a62a83d7268a353b upstream.
 
-The "r" variable shadows an earlier "r" that has function scope.  It
-means that we accidentally return success instead of an error code.
-Smatch has a warning for this:
+Fix the following -Wstringop-overflow warnings when building with GCC-11:
 
-	drivers/md/dm-integrity.c:4503 dm_integrity_ctr()
-	warn: missing error code 'r'
+drivers/gpu/drm/i915/intel_pm.c:3106:9: warning: ‘intel_read_wm_latency’ accessing 16 bytes in a region of size 10 [-Wstringop-overflow=]
+ 3106 |         intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/i915/intel_pm.c:3106:9: note: referencing argument 2 of type ‘u16 *’ {aka ‘short unsigned int *’}
+drivers/gpu/drm/i915/intel_pm.c:2861:13: note: in a call to function ‘intel_read_wm_latency’
+ 2861 | static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+      |             ^~~~~~~~~~~~~~~~~~~~~
 
-Fixes: 7eada909bfd7 ("dm: add integrity target")
-Cc: stable@vger.kernel.org
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+by removing the over-specified array size from the argument declarations.
+
+It seems that this code is actually safe because the size of the
+array depends on the hardware generation, and the function checks
+for that.
+
+Notice that wm can be an array of 5 elements:
+drivers/gpu/drm/i915/intel_pm.c:3109:   intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+
+or an array of 8 elements:
+drivers/gpu/drm/i915/intel_pm.c:3131:   intel_read_wm_latency(dev_priv, dev_priv->wm.skl_latency);
+
+and the compiler legitimately complains about that.
+
+This helps with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/181
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-integrity.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/gpu/drm/i915/intel_pm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -3156,8 +3156,6 @@ static int dm_integrity_ctr(struct dm_ta
- 	}
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -2814,7 +2814,7 @@ hsw_compute_linetime_wm(const struct int
+ }
  
- 	if (should_write_sb) {
--		int r;
--
- 		init_journal(ic, 0, ic->journal_sections, 0);
- 		r = dm_integrity_failed(ic);
- 		if (unlikely(r)) {
+ static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+-				  uint16_t wm[8])
++				  uint16_t wm[])
+ {
+ 	if (INTEL_GEN(dev_priv) >= 9) {
+ 		uint32_t val;
 
 

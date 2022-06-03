@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CC353CEFF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2169C53D06A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345398AbiFCRtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S1346502AbiFCSDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237724AbiFCRsN (ORCPT
+        with ESMTP id S1347274AbiFCRwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:48:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A855418C;
-        Fri,  3 Jun 2022 10:45:09 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:11 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B1F15703;
+        Fri,  3 Jun 2022 10:52:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FCC7B82419;
-        Fri,  3 Jun 2022 17:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1743C385A9;
-        Fri,  3 Jun 2022 17:45:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 92C1DCE247C;
+        Fri,  3 Jun 2022 17:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E13DC385A9;
+        Fri,  3 Jun 2022 17:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278307;
-        bh=9PFnQ6U/pODrMpclM6aw2q4n7Wt6WMpJbMXQn9a3ZHg=;
+        s=korg; t=1654278719;
+        bh=/EyG57P4jtW4RHdb3WPUV5f8lPpG5g2cOM8KMHmq+5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CKL14HomZ2Eq7xpeX1aBiL8lHKjGRfLlpAB9Z5/+VNmtXiwKldKQXmqITIlWO498h
-         zpRHtqvYgCMiq8rtUmoejSMpTqHKArpoXoNPhMWjoVeOqGwZxSaXMow6SaEFu7WY57
-         lQYBO6oNOevKGt8BnO84kmw7cZabNLDdpx42q+zM=
+        b=PyvNMzbqsFmvp6q52Sk5FBIWuMIT3pcOiVwtaUdBPM25EfEF4eYA0aGj0DD3vlzBU
+         eCbgKkhsNCzAThg6kr+GWrLFWTz35Fw6CPotwq3qHbrV3wDVDNfiDfx/SrNUrVJqrb
+         QIaqLgsWZXMApUk4zw6Ns2B+Oj5+g1IM6K1Pm+2Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Milan Broz <gmazyland@gmail.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.4 24/34] dm crypt: make printing of the key constant-time
-Date:   Fri,  3 Jun 2022 19:43:20 +0200
-Message-Id: <20220603173816.695539048@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Bakker <xc-racer2@live.ca>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 5.15 41/66] ARM: dts: s5pv210: Correct interrupt name for bluetooth in Aries
+Date:   Fri,  3 Jun 2022 19:43:21 +0200
+Message-Id: <20220603173821.858530708@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Jonathan Bakker <xc-racer2@live.ca>
 
-commit 567dd8f34560fa221a6343729474536aa7ede4fd upstream.
+commit 3f5e3d3a8b895c8a11da8b0063ba2022dd9e2045 upstream.
 
-The device mapper dm-crypt target is using scnprintf("%02x", cc->key[i]) to
-report the current key to userspace. However, this is not a constant-time
-operation and it may leak information about the key via timing, via cache
-access patterns or via the branch predictor.
+Correct the name of the bluetooth interrupt from host-wake to
+host-wakeup.
 
-Change dm-crypt's key printing to use "%c" instead of "%02x". Also
-introduce hex2asc() that carefully avoids any branching or memory
-accesses when converting a number in the range 0 ... 15 to an ascii
-character.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Tested-by: Milan Broz <gmazyland@gmail.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Fixes: 1c65b6184441b ("ARM: dts: s5pv210: Correct BCM4329 bluetooth node")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+Link: https://lore.kernel.org/r/CY4PR04MB0567495CFCBDC8D408D44199CB1C9@CY4PR04MB0567.namprd04.prod.outlook.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-crypt.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/s5pv210-aries.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -2817,6 +2817,11 @@ static int crypt_map(struct dm_target *t
- 	return DM_MAPIO_SUBMITTED;
- }
- 
-+static char hex2asc(unsigned char c)
-+{
-+	return c + '0' + ((unsigned)(9 - c) >> 4 & 0x27);
-+}
-+
- static void crypt_status(struct dm_target *ti, status_type_t type,
- 			 unsigned status_flags, char *result, unsigned maxlen)
- {
-@@ -2835,9 +2840,12 @@ static void crypt_status(struct dm_targe
- 		if (cc->key_size > 0) {
- 			if (cc->key_string)
- 				DMEMIT(":%u:%s", cc->key_size, cc->key_string);
--			else
--				for (i = 0; i < cc->key_size; i++)
--					DMEMIT("%02x", cc->key[i]);
-+			else {
-+				for (i = 0; i < cc->key_size; i++) {
-+					DMEMIT("%c%c", hex2asc(cc->key[i] >> 4),
-+					       hex2asc(cc->key[i] & 0xf));
-+				}
-+			}
- 		} else
- 			DMEMIT("-");
+--- a/arch/arm/boot/dts/s5pv210-aries.dtsi
++++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
+@@ -895,7 +895,7 @@
+ 		device-wakeup-gpios = <&gpg3 4 GPIO_ACTIVE_HIGH>;
+ 		interrupt-parent = <&gph2>;
+ 		interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+-		interrupt-names = "host-wake";
++		interrupt-names = "host-wakeup";
+ 	};
+ };
  
 
 

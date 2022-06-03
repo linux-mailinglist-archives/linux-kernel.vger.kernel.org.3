@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA8C53C642
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADEF53C647
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242465AbiFCHd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S242498AbiFCHeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242441AbiFCHdW (ORCPT
+        with ESMTP id S242565AbiFCHd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:33:22 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1748038D97
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:33:16 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id w27so9036593edl.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 00:33:16 -0700 (PDT)
+        Fri, 3 Jun 2022 03:33:57 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159E4396AE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:33:49 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id h23so3225415ejj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 00:33:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v4EM3dPasfZitoQH8LU4gnwy1t1cMAZ7lAV86zPiO4I=;
-        b=IpLU+4n4iGD1z+DRgpvxnYm0AyOc5eTVc7omXkKu85Rt5dHNJdImqHyjMYw+m+xQ9+
-         6+U5EmqeXbMhh0G+peDzKL3ESBp9o64dtWLzu/yDeTZVr7ibNqdHM83Q9+PIjsrmlAbv
-         oJP0JQZzvxqbAEz5/D25E98e4HWXT7CYdf1USgC/lMRkZlccSHayWgTzLxq6r+rfRhcW
-         I+FOOnn2X7M2CTyswgmdbOXodDsMETr3phkOIMHzAogJT37F+1453klWnIPGe1dJwRv8
-         TaRvboI+ECl5sRVFcNX4mYh1DexfAVt8hb+2rkDvEW2j4TXNcx8XRehTfqJ0OXm/q789
-         +mJg==
+        bh=M10o54sTZvRy17C3pDC23gX+CuR4aMGD8UzGX2WMoMQ=;
+        b=kFDEaqUzl3hYfbJ0sxUumnEbCBnKfF+EOl9AvTzBjiuP4XKwPl+nZlvehW7y3VE8PG
+         lNRjXc8N/vvsf040kvBQZzeaCgcCEXygqygB0wQnAeN4KDjKFyjtxFa6BfJ+Pu6hM+8e
+         mXoSRz9aKys+M9uf6lGJRigGkH6K5yZH2PwwWo/kaFzXetUNUP+GnZtr2PvXSASpeKgj
+         h0sBACxcQiXTdr5pDPjehv4ljtGY3hY5eK/RiHadB0gXjg/recI9vsJZVuVu7KryAvZa
+         8beSCB4hK01FSCxfptrKX7fLr4jWYErOYnYtXpkxMZJIHTKPO3mt9W/MJ6KZXhpXQGb8
+         pXOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=v4EM3dPasfZitoQH8LU4gnwy1t1cMAZ7lAV86zPiO4I=;
-        b=m8UCdiKc1OLbg7LwjIpKdB+ta6Xf6IEQ1+STSPCCBnfabqK5DrC5Apgrx8B6dBgjPQ
-         duf6LrBXerwIq5jN87MIjqIsMJangXsfWXX0nDD1r8Xyl5ahK1+mUStKoW2do+20Kj1w
-         eb9GuSi4SAo09nsQNgxp+pUhu9CMwoGKAcvOypfDgFAcxv+6j3DLGntL4K2/HqE6oF7U
-         DdoQsXpwqIH6JcDkiB6TfBSP0/PI2uvJqX/oUSx2Uoy+had0gwKzLMtS1yWsdDvy60K7
-         9Phj7MfvTS2pYglKU0HZXKZkD0JwfolvAgZlzoDjpjDJ9vC1zafehwzS0aY+s3QBdJYy
-         KyOQ==
-X-Gm-Message-State: AOAM5306JN2fMQRoQVWG6agiwrw2YwHQqZhufZVThXzUpOuec5F2ERIT
-        xQp0taLTGrt/ZpaXqxbAfkSKAQ==
-X-Google-Smtp-Source: ABdhPJy3rIcq0bmEyzjKNR/kZPKD1do3wbJt3k7DEsjEef/5Z2LIFy5VydAUbMFsoL2n6Ytxvgml4w==
-X-Received: by 2002:a05:6402:28a5:b0:42d:df55:5b91 with SMTP id eg37-20020a05640228a500b0042ddf555b91mr9293709edb.353.1654241594458;
-        Fri, 03 Jun 2022 00:33:14 -0700 (PDT)
+        bh=M10o54sTZvRy17C3pDC23gX+CuR4aMGD8UzGX2WMoMQ=;
+        b=VR1vUpyRsAx89vHf5zpLV7JGjSyNiwEX64NwfijKWoTSoeRHe/JRXIaf1fC00MkIxn
+         ZMOEjDddNlJF0mEsPfQ8fRlflGsTnhMTA3xC47QU5FwVgB9f4DzEBVoUJcXu9LNY97+k
+         /HhOAT+APfm9iKc0InxVCTjtc5tinVa4YRemx3cBBqXBrEYMH1CSA5bLouiYv9VdaMBp
+         oaELGOUObZ5rgnsy16N3dS+LmaOZgcxg/vUOvHXyw4F7/0jSjhu7Q/37nUDv01V6xqTk
+         KpWT96y/x1PL6gA+RkVjxxqkb4TBMCSKm+T/AaSSEhT/vGYKwrDWvulxNXb0I6PyFZvD
+         /ohw==
+X-Gm-Message-State: AOAM530eB9OJGGudQaPscl+VuSIRKGsh6yqynHjba7koIIVDWc6TYPzU
+        pA1FN7qcqvrLGQu7qDq1b0asAg==
+X-Google-Smtp-Source: ABdhPJw/l8CtC/oAgwkZakL9NahA1dUU5X0+2D/Z6/uAlo7dulXIk0x+O/uittuON2sFQiK9v2K8yA==
+X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id nb13-20020a1709071c8d00b006f20eb21cd6mr7282450ejc.568.1654241627415;
+        Fri, 03 Jun 2022 00:33:47 -0700 (PDT)
 Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id kl10-20020a170907994a00b006fec69a3978sm2546835ejc.207.2022.06.03.00.33.13
+        by smtp.gmail.com with ESMTPSA id t26-20020a17090605da00b006fe7d269db8sm2535595ejt.104.2022.06.03.00.33.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 00:33:13 -0700 (PDT)
-Message-ID: <46528513-dd44-35a4-1456-4867dfbcc90a@linaro.org>
-Date:   Fri, 3 Jun 2022 09:33:12 +0200
+        Fri, 03 Jun 2022 00:33:46 -0700 (PDT)
+Message-ID: <6a421c56-0616-c61a-608c-2907faeff424@linaro.org>
+Date:   Fri, 3 Jun 2022 09:33:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: Input: st1232 - Support power supply
- regulators
+Subject: Re: [PATCH] dt-bindings: Update QCOM USB subsystem maintainer
+ information
 Content-Language: en-US
-To:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dmitry.torokhov@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        geert+renesas@glider.be, martink@posteo.de, hechtb@gmail.com
-References: <20220603051058.6075-1-mike.looijmans@topic.nl>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org, kishon@ti.com, robh+dt@kernel.org,
+        agross@kernel.org, vkoul@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com
+References: <20220603021432.13365-1-quic_wcheng@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220603051058.6075-1-mike.looijmans@topic.nl>
+In-Reply-To: <20220603021432.13365-1-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,15 +80,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 07:10, Mike Looijmans wrote:
-> Add support for the VDD and IOVDD power supply inputs. This allows the
-> chip to share its supplies with other components (e.g. panel) and manage
-> them.
+On 03/06/2022 04:14, Wesley Cheng wrote:
+> Update devicetree binding files with the proper maintainer, and updated
+> contact email.
 > 
-> This provides the devicetree bindings.
-> 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+
+Thanks for updating the email address!
+
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof

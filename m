@@ -2,206 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A75553C269
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3E753C2A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242551AbiFCAxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S239900AbiFCAmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240122AbiFCAp0 (ORCPT
+        with ESMTP id S229493AbiFCAmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 20:45:26 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E53D344DC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:45:25 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id x128-20020a628686000000b0051bbf64668cso2306809pfd.23
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=vajAbei/4C9mgrY+khRdf/uO0MSBsnVlUWjUXwWT13A=;
-        b=YBqmkltO8ZZtK+njPxAFiv4uwwmyejmw9f58OdVdsGRpxHPQC2zKRN5WchZRp43HyO
-         CD+a7Nmx+Mfx5s+IBgp22ieMcadRD0aQ2cOSZId3c3rveZwqa6AMI7A3MEgCQ0UVKWIq
-         evAKk20wYTic48pbMoOBTkOqxo/CoaMWZZLhpfaLE5FhUMbb85x3e76S3AQJr0ooykB1
-         9YRpjdDqPMOzNoVt4651LIXtUtGgMdCLDIJnHcIyHvskvQt5Q9AglEnLJegKWN/3q1g4
-         P3A5BJlRLQaZUQD28xb7ywfc9j6JWRy3RqYgDuo+ZdSX/xZd+P5IBeJRLbALiepi9MtF
-         fooA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=vajAbei/4C9mgrY+khRdf/uO0MSBsnVlUWjUXwWT13A=;
-        b=QYX9P8UFbW/x02hGO/LldT1Gb0nOewe+znsHp6LYIaN7zZmVIRpnNsKoB2fsyyHKin
-         PFP0Rn1bWPgqxakIbO4yZ0zGyV1Q8M20URkh31V3GR0J0rv/f7eJOEN4qQ2XYBw8WnFI
-         Rz7rYIiy9BBLO4z3t8MJE/z7CjKQH9ITiyo6OyC/wONTk0E335FBLGO5t0ehkQvylJs5
-         o0XIi2KSjaVPIp0m55Uwgvd9pmhcpKClHwnJqnr47yT7gMPWsIJ2WzqiRJHRGGDaGEJs
-         hWN93w5Zwu3IxjKz9bWWxyWFkA5GrqsJjUCM4APpzPgEMIW/AWrz5uzWJiYczhBzir+y
-         BK/g==
-X-Gm-Message-State: AOAM532sbtB7UIG7lc6MbRu0Y/wR67Q8LL1hZvmlVfaZZBgV16f05tZQ
-        9hek4ZmhT6DJmFgwLJwfNqwtmkE4ndw=
-X-Google-Smtp-Source: ABdhPJyv4tJ6letBnTpa9q3pxcZ30aBmjpQbG1UGieNBULB12H7dmnj54b5JOSGj/rCKuh95A4buphRC/lU=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a63:74d:0:b0:3fc:8fd3:c23b with SMTP id
- 74-20020a63074d000000b003fc8fd3c23bmr6589692pgh.392.1654217124985; Thu, 02
- Jun 2022 17:45:24 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:42:06 +0000
-In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-60-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220603004331.1523888-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 059/144] KVM: selftests: Convert smm_test away from VCPU_ID
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Jun 2022 20:42:36 -0400
+Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F0CB1614F;
+        Thu,  2 Jun 2022 17:42:30 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 3 Jun 2022 08:42:07
+ +0800 (GMT+08:00)
+X-Originating-IP: [106.117.80.109]
+Date:   Fri, 3 Jun 2022 08:42:07 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jeff Johnson" <quic_jjohnson@quicinc.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        gregkh@linuxfoundation.org, johannes@sipsolutions.net,
+        rafael@kernel.org
+Subject: Re: [PATCH v4 1/2] devcoredump: remove the useless gfp_t parameter
+ in dev_coredumpv
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <e8d9d010-7fa1-da61-feeb-43f0a101a323@quicinc.com>
+References: <cover.1654175941.git.duoming@zju.edu.cn>
+ <338a65fe8f30d23339cfc09fe1fb7be751ad655b.1654175941.git.duoming@zju.edu.cn>
+ <e8d9d010-7fa1-da61-feeb-43f0a101a323@quicinc.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Message-ID: <397aa8b.4be56.181270327b5.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgDXQCDfWJliO88wAQ--.29039W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggKAVZdtaBKlgAAsD
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW5Jw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert smm_test to use vm_create_with_one_vcpu() and pass around a
-'struct kvm_vcpu' object instead of using a global VCPU_ID.  Note, this
-is a "functional" change in the sense that the test now creates a vCPU
-with vcpu_id==0 instead of vcpu_id==1.  The non-zero VCPU_ID was 100%
-arbitrary and added little to no validation coverage.  If testing
-non-zero vCPU IDs is desirable for generic tests, that can be done in the
-future by tweaking the VM creation helpers.
-
-Opportunistically use vcpu_run() instead of _vcpu_run(), the test expects
-KVM_RUN to succeed.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/x86_64/smm_test.c | 37 +++++++++----------
- 1 file changed, 18 insertions(+), 19 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
-index dd2c1522ab90..36165b774a28 100644
---- a/tools/testing/selftests/kvm/x86_64/smm_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
-@@ -19,8 +19,6 @@
- #include "vmx.h"
- #include "svm_util.h"
- 
--#define VCPU_ID	      1
--
- #define SMRAM_SIZE 65536
- #define SMRAM_MEMSLOT ((1 << 16) | 1)
- #define SMRAM_PAGES (SMRAM_SIZE / PAGE_SIZE)
-@@ -116,22 +114,23 @@ static void guest_code(void *arg)
- 	sync_with_host(DONE);
- }
- 
--void inject_smi(struct kvm_vm *vm)
-+void inject_smi(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vcpu_events events;
- 
--	vcpu_events_get(vm, VCPU_ID, &events);
-+	vcpu_events_get(vcpu->vm, vcpu->id, &events);
- 
- 	events.smi.pending = 1;
- 	events.flags |= KVM_VCPUEVENT_VALID_SMM;
- 
--	vcpu_events_set(vm, VCPU_ID, &events);
-+	vcpu_events_set(vcpu->vm, vcpu->id, &events);
- }
- 
- int main(int argc, char *argv[])
- {
- 	vm_vaddr_t nested_gva = 0;
- 
-+	struct kvm_vcpu *vcpu;
- 	struct kvm_regs regs;
- 	struct kvm_vm *vm;
- 	struct kvm_run *run;
-@@ -139,9 +138,9 @@ int main(int argc, char *argv[])
- 	int stage, stage_reported;
- 
- 	/* Create VM */
--	vm = vm_create_default(VCPU_ID, 0, guest_code);
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 
--	run = vcpu_state(vm, VCPU_ID);
-+	run = vcpu->run;
- 
- 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, SMRAM_GPA,
- 				    SMRAM_MEMSLOT, SMRAM_PAGES, 0);
-@@ -152,7 +151,7 @@ int main(int argc, char *argv[])
- 	memcpy(addr_gpa2hva(vm, SMRAM_GPA) + 0x8000, smi_handler,
- 	       sizeof(smi_handler));
- 
--	vcpu_set_msr(vm, VCPU_ID, MSR_IA32_SMBASE, SMRAM_GPA);
-+	vcpu_set_msr(vm, vcpu->id, MSR_IA32_SMBASE, SMRAM_GPA);
- 
- 	if (kvm_check_cap(KVM_CAP_NESTED_STATE)) {
- 		if (nested_svm_supported())
-@@ -164,17 +163,17 @@ int main(int argc, char *argv[])
- 	if (!nested_gva)
- 		pr_info("will skip SMM test with VMX enabled\n");
- 
--	vcpu_args_set(vm, VCPU_ID, 1, nested_gva);
-+	vcpu_args_set(vm, vcpu->id, 1, nested_gva);
- 
- 	for (stage = 1;; stage++) {
--		_vcpu_run(vm, VCPU_ID);
-+		vcpu_run(vm, vcpu->id);
- 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 			    "Stage %d: unexpected exit reason: %u (%s),\n",
- 			    stage, run->exit_reason,
- 			    exit_reason_str(run->exit_reason));
- 
- 		memset(&regs, 0, sizeof(regs));
--		vcpu_regs_get(vm, VCPU_ID, &regs);
-+		vcpu_regs_get(vm, vcpu->id, &regs);
- 
- 		stage_reported = regs.rax & 0xff;
- 
-@@ -191,7 +190,7 @@ int main(int argc, char *argv[])
- 		 * return from it. Do not perform save/restore while in SMM yet.
- 		 */
- 		if (stage == 8) {
--			inject_smi(vm);
-+			inject_smi(vcpu);
- 			continue;
- 		}
- 
-@@ -200,15 +199,15 @@ int main(int argc, char *argv[])
- 		 * during L2 execution.
- 		 */
- 		if (stage == 10)
--			inject_smi(vm);
-+			inject_smi(vcpu);
- 
--		state = vcpu_save_state(vm, VCPU_ID);
-+		state = vcpu_save_state(vm, vcpu->id);
- 		kvm_vm_release(vm);
--		kvm_vm_restart(vm);
--		vm_vcpu_add(vm, VCPU_ID);
--		vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
--		vcpu_load_state(vm, VCPU_ID, state);
--		run = vcpu_state(vm, VCPU_ID);
-+
-+		vcpu = vm_recreate_with_one_vcpu(vm);
-+		vcpu_set_cpuid(vm, vcpu->id, kvm_get_supported_cpuid());
-+		vcpu_load_state(vm, vcpu->id, state);
-+		run = vcpu->run;
- 		kvm_x86_state_cleanup(state);
- 	}
- 
--- 
-2.36.1.255.ge46751e96f-goog
-
+SGVsbG8sCgpPbiBUaHUsIDIgSnVuIDIwMjIgMTM6MzI6NDggLTA3MDAgSmVmZiBKb2huc29uIHdy
+b3RlOgoKPiBPbiA2LzIvMjAyMiA2OjMzIEFNLCBEdW9taW5nIFpob3Ugd3JvdGU6Cj4gPiBUaGUg
+ZGV2X2NvcmVkdW1wdigpIGNvdWxkIG5vdCBiZSB1c2VkIGluIGF0b21pYyBjb250ZXh0LCBiZWNh
+dXNlCj4gPiBpdCBjYWxscyBrdmFzcHJpbnRmX2NvbnN0KCkgYW5kIGtzdHJkdXAoKSB3aXRoIEdG
+UF9LRVJORUwgcGFyYW1ldGVyLgo+ID4gVGhlIHByb2Nlc3MgaXMgc2hvd24gYmVsb3c6Cj4gPiAK
+PiA+IGRldl9jb3JlZHVtcHYoLi4uLCBnZnBfdCBnZnApCj4gPiAgICBkZXZfY29yZWR1bXBtCj4g
+PiAgICAgIGRldl9zZXRfbmFtZQo+ID4gICAgICAgIGtvYmplY3Rfc2V0X25hbWVfdmFyZ3MKPiA+
+ICAgICAgICAgIGt2YXNwcmludGZfY29uc3QoR0ZQX0tFUk5FTCwgLi4uKTsgLy9tYXkgc2xlZXAK
+PiA+ICAgICAgICAgICAga3N0cmR1cChzLCBHRlBfS0VSTkVMKTsgLy9tYXkgc2xlZXAKPiA+IAo+
+ID4gVGhpcyBwYXRjaCByZW1vdmVzIGdmcF90IHBhcmFtZXRlciBvZiBkZXZfY29yZWR1bXB2KCkg
+YW5kIGNoYW5nZXMgdGhlCj4gPiBnZnBfdCBwYXJhbWV0ZXIgb2YgZGV2X2NvcmVkdW1wbSgpIHRv
+IEdGUF9LRVJORUwgaW4gb3JkZXIgdG8gc2hvdwo+ID4gZGV2X2NvcmVkdW1wdigpIGNvdWxkIG5v
+dCBiZSB1c2VkIGluIGF0b21pYyBjb250ZXh0Lgo+IAo+IHNob3VsZG4ndCB5b3UgcmVtb3ZlIHRo
+ZSBnZnAgcGFyYW1ldGVyIHRvIGRldl9jb3JlZHVtcG0oKSBhcyB3ZWxsIHNpbmNlIAo+IGl0IGlz
+IGFjdHVhbGx5IHdpdGhpbiB0aGF0IGZ1bmN0aW9uIHdoZXJlIGRldl9zZXRfbmFtZSgpIGlzIGNh
+bGxlZCB3aGljaCAKPiBjYW5ub3QgYmUgZG9uZSBpbiBhdG9taWMgY29udGV4dD8KClRoYW5rcyBm
+b3IgeW91ciBzdWdnZXN0aW9uLCBJIHdpbGwgcmVtb3ZlIHRoZSBnZnBfdCBwYXJhbWV0ZXIgb2Yg
+ZGV2X2NvcmVkdW1wbSgpIGFzIHdlbGwuIAoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK

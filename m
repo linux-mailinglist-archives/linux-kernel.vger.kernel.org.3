@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B649753C307
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F04A53C282
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239597AbiFCBZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        id S241084AbiFCB3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235464AbiFCBYx (ORCPT
+        with ESMTP id S241087AbiFCB3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:24:53 -0400
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B3C03B297;
-        Thu,  2 Jun 2022 18:24:50 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowACniT7YYplitu8TAA--.28879S2;
-        Fri, 03 Jun 2022 09:24:46 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     marcel@holtmann.org
-Cc:     luiz.dentz@gmail.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] Bluetooth: hci_intel: Add check for platform_driver_register
-Date:   Fri,  3 Jun 2022 09:24:36 +0800
-Message-Id: <20220603012436.3332620-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Jun 2022 21:29:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B353B57F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654219743; x=1685755743;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BTN5UI1ItXsE016Lb2worRoce/9SC0gmkZSxEN5u3mc=;
+  b=BgZaIdSh2/vvCqhf/Pnx30ECW/KuSUd2RqrMZ+RaSaJ6g8IF5c0P6W4H
+   PbKa40U4bK5RTBmY8zLLME4Hy1gf0TI18lLRIJA3QRQJdQ+IhDJMG9FlY
+   9cMh0eo8Pn3oaOvkGw/1V4dW/sA3dyv/f3va2U5dUtfGUI6Jma8O9nJVG
+   KcquDACM/KkQWE6uKkr8VLaaxdEI1jEgbOEP0L7fBPeFuFA/RF7alz12H
+   PVe3T3nQhoNRFZVezJUfTdTUlQpWS+ve5QopW9ZwwChEbag/It9I5wNYA
+   v8PSeC1H9Red0oz3i3kEYgK72FeqIy6aNsVSytamOGel4guS8/FyjkMUT
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="256613803"
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="256613803"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 18:29:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="607150976"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 02 Jun 2022 18:28:59 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nww7X-0005ft-9r;
+        Fri, 03 Jun 2022 01:28:59 +0000
+Date:   Fri, 3 Jun 2022 09:28:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Helge Deller <deller@gmx.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [deller-fbdev:fb-fixes 1/5] drivers/video/console/sticore.c:1131:5:
+ warning: no previous prototype for 'fb_is_primary_device'
+Message-ID: <202206030949.FluWpZnn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACniT7YYplitu8TAA--.28879S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GFy5urWDXr18Zrb_yoWDArX_ur
-        1rZa43A3y8GFn3CF1jya13u34Yy3Z0grZ3XwnFqFyag3sxCrnxXw1UZrW7t3WxWryjqryD
-        Ar1DWFyxAr13GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbwAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-        1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,40 +61,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As platform_driver_register() could fail, it should be better
-to deal with the return value in order to maintain the code
-consisitency.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git fb-fixes
+head:   d92f129b594fe3eebf2f7abfffea2e6dbdc5936c
+commit: f1a3b3c2b5b1b846963ffa5b4fddfaf8c9a4c985 [1/5] parisc/stifb: Implement fb_is_primary_device()
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220603/202206030949.FluWpZnn-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=f1a3b3c2b5b1b846963ffa5b4fddfaf8c9a4c985
+        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
+        git fetch --no-tags deller-fbdev fb-fixes
+        git checkout f1a3b3c2b5b1b846963ffa5b4fddfaf8c9a4c985
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/video/console/
 
-Fixes: 1ab1f239bf17 ("Bluetooth: hci_intel: Add support for platform driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-v1 -> v2
+All warnings (new ones prefixed by >>):
 
-*Change 1. Change "iBluetooth" to "Bluetooth" in title.
-*Change 2. Change "ret" to "err" in code.
----
- drivers/bluetooth/hci_intel.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+>> drivers/video/console/sticore.c:1131:5: warning: no previous prototype for 'fb_is_primary_device' [-Wmissing-prototypes]
+    1131 | int fb_is_primary_device(struct fb_info *info)
+         |     ^~~~~~~~~~~~~~~~~~~~
 
-diff --git a/drivers/bluetooth/hci_intel.c b/drivers/bluetooth/hci_intel.c
-index 7249b91d9b91..78afb9a348e7 100644
---- a/drivers/bluetooth/hci_intel.c
-+++ b/drivers/bluetooth/hci_intel.c
-@@ -1217,7 +1217,11 @@ static struct platform_driver intel_driver = {
- 
- int __init intel_init(void)
- {
--	platform_driver_register(&intel_driver);
-+	int err;
-+
-+	err = platform_driver_register(&intel_driver);
-+	if (err)
-+		return err;
- 
- 	return hci_uart_register_proto(&intel_proto);
- }
+
+vim +/fb_is_primary_device +1131 drivers/video/console/sticore.c
+
+  1129	
+  1130	/* check if given fb_info is the primary device */
+> 1131	int fb_is_primary_device(struct fb_info *info)
+  1132	{
+  1133		struct sti_struct *sti;
+  1134	
+  1135		sti = sti_get_rom(0);
+  1136	
+  1137		/* if no built-in graphics card found, allow any fb driver as default */
+  1138		if (!sti)
+  1139			return true;
+  1140	
+  1141		/* return true if it's the default built-in framebuffer driver */
+  1142		return (sti->info == info);
+  1143	}
+  1144	EXPORT_SYMBOL(fb_is_primary_device);
+  1145	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

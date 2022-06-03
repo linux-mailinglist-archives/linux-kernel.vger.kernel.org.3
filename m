@@ -2,328 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DC053C430
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C562853C436
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240473AbiFCF1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S240557AbiFCF2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239345AbiFCF1N (ORCPT
+        with ESMTP id S240486AbiFCF2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:27:13 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DBF17E02;
-        Thu,  2 Jun 2022 22:27:11 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id f7so5022571ilr.5;
-        Thu, 02 Jun 2022 22:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oGb27Ak0z2Rkt5N/UACfnN99nvmSQ69B5OG+/UGAQLM=;
-        b=qjUHwWtDO6aI7Fmssc++fi3v4jwxDc0kJYEk1vDRyhGSso7W1ZkZFSkqajhql3wNEA
-         M5hmNYlaxDWWcrdcotJ+aZvuYIgBgoNZnbJqss8yvTjzrr5UHsYCVWIbgQjNyjKS9yN6
-         XSKnbUokIFEYVUfpi3gmuc6AO5GGBQNmpL6wcya0hBiCkvePk92MFbN9gnDfCn2W3k4f
-         vq1rvXMWPW0B7BL7G933m6hgdw0D7VNfTLmJlN4fW75Y10i/xYRMQNCu97jekuzCDAqs
-         cca8vUxo3bCj1ChZ5wzKSgv4o3wQ5IImVCu8YJHpNeNh9fhcVjXcEIZZgSfmXv42OxgH
-         Ya/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oGb27Ak0z2Rkt5N/UACfnN99nvmSQ69B5OG+/UGAQLM=;
-        b=dTclK/5SghxYRy4NUYOCYrqjwD6uMqX03rOGiV/knH9pbP6Yvpyl/T37LaNJ0GXEgR
-         cGr4KgLSvfKhAinDYdFyFDoLnV2d932BaPpHDuYvwK+OpHwUl1m0nFTZcs/hwp7/9wSK
-         MOE2r0caDKICCda8u+NoNrkE43TpdbGVzE17nlsJc/A4YaRKSykeMlixhkfskXUIFz6O
-         HguW8Wvl5oLiyl0iNvX0TruGLH7dDGb9Rpi4wP+q9XGxK7YSbPLBlXyuio10TNjFkxF6
-         BiNk1jqmL6ZIG2h/UG2P++u3xDoTkLg6HIzBU6enB64rB2VcxejymuP9HIJQnRm1ePWr
-         wNig==
-X-Gm-Message-State: AOAM532yI0k6vOVh1bV6dlaXV6jYbxqmLsOU+OeEIVjn/RuDOf2QcN2G
-        G7MiKlgA4dssPWdYqigs4FUyV1w71RxCJdELujM=
-X-Google-Smtp-Source: ABdhPJxTxG2jY7cybAXHG6BSEzYABkT93h++rypNIN3GXMjB+z1lq7/A/l4005ZP15S5fZveJqS40vrOm/RZYuEXguM=
-X-Received: by 2002:a05:6638:4407:b0:331:692c:1d5f with SMTP id
- bp7-20020a056638440700b00331692c1d5fmr3236731jab.208.1654234030909; Thu, 02
- Jun 2022 22:27:10 -0700 (PDT)
+        Fri, 3 Jun 2022 01:28:38 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4166D37ABC;
+        Thu,  2 Jun 2022 22:28:31 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id EBC195FD02;
+        Fri,  3 Jun 2022 08:28:27 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1654234108;
+        bh=oht4gbQPlTi/rOmdUgW/djRI05DtUhmK5LxNHxmuDtE=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=FHEO5fVTS8EeQDtc2JI1hq+5hQuJ9zzhB9lm5v3Dj+9CiM1lYVTEZ5EVR4OiaiDZ4
+         9V7cCKk3PCkYLvPKdBzIu7pM7mbHY5kQEKTgBlFjMNh+wi36wy4ryTjAZiuCIDUW+e
+         IRBkGxflvXzat9edeMpfetFnO0JXDwxsIlTNUkPRvVaOPFWjDtAmXABkrr+o3xpCYG
+         hrC1cl/MnPT376Fy96R58hK6ns8tYZK7z/pzgtofozmpST/+1rrhSV4P5aIURdz5tU
+         39gKoKlhKKKdARIOpZQXYPKNsTKUdH0gH9+SNuJZODANr6fXdPzRwbq3VU27rS2jFh
+         mThGkxPWJa5aw==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Fri,  3 Jun 2022 08:28:23 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: [RFC PATCH v2 0/8] virtio/vsock: experimental zerocopy receive
+Thread-Topic: [RFC PATCH v2 0/8] virtio/vsock: experimental zerocopy receive
+Thread-Index: AQHYdwquMlGCdyA1qUCtor+NkIn5wQ==
+Date:   Fri, 3 Jun 2022 05:27:56 +0000
+Message-ID: <e37fdf9b-be80-35e1-ae7b-c9dfeae3e3db@sberdevices.ru>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <56034BD2F7D286419339938E9C83A2EE@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-4-chenhuacai@loongson.cn> <YplnruNz++gABlU0@debian.me>
-In-Reply-To: <YplnruNz++gABlU0@debian.me>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 3 Jun 2022 13:27:00 +0800
-Message-ID: <CAAhV-H5Hi_gYvrO6DAGGA=OVExunCubNpDBdkRBxFxiP1APAKw@mail.gmail.com>
-Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic documentations
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/03 01:19:00 #19656765
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bagas,
-
-On Fri, Jun 3, 2022 at 9:45 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On Thu, Jun 02, 2022 at 07:51:20PM +0800, Huacai Chen wrote:
-> > +Legacy IRQ model
-> > +================
-> > +
-> > +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> > +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> > +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
-> > +to LIOINTC, and then CPUINTC.
-> > +
-> > + +---------------------------------------------+
-> > + |::                                           |
-> > + |                                             |
-> > + |    +-----+     +---------+     +-------+    |
-> > + |    | IPI | --> | CPUINTC | <-- | Timer |    |
-> > + |    +-----+     +---------+     +-------+    |
-> > + |                     ^                       |
-> > + |                     |                       |
-> > + |                +---------+     +-------+    |
-> > + |                | LIOINTC | <-- | UARTs |    |
-> > + |                +---------+     +-------+    |
-> > + |                     ^                       |
-> > + |                     |                       |
-> > + |               +-----------+                 |
-> > + |               | HTVECINTC |                 |
-> > + |               +-----------+                 |
-> > + |                ^         ^                  |
-> > + |                |         |                  |
-> > + |          +---------+ +---------+            |
-> > + |          | PCH-PIC | | PCH-MSI |            |
-> > + |          +---------+ +---------+            |
-> > + |            ^     ^           ^              |
-> > + |            |     |           |              |
-> > + |    +---------+ +---------+ +---------+      |
-> > + |    | PCH-LPC | | Devices | | Devices |      |
-> > + |    +---------+ +---------+ +---------+      |
-> > + |         ^                                   |
-> > + |         |                                   |
-> > + |    +---------+                              |
-> > + |    | Devices |                              |
-> > + |    +---------+                              |
-> > + |                                             |
-> > + |                                             |
-> > + +---------------------------------------------+
-> > +
-> > +Extended IRQ model
-> > +==================
-> > +
-> > +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> > +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> > +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
-> > +to CPUINTC directly.
-> > +
-> > + +--------------------------------------------------------+
-> > + |::                                                      |
-> > + |                                                        |
-> > + |         +-----+     +---------+     +-------+          |
-> > + |         | IPI | --> | CPUINTC | <-- | Timer |          |
-> > + |         +-----+     +---------+     +-------+          |
-> > + |                      ^       ^                         |
-> > + |                      |       |                         |
-> > + |               +---------+ +---------+     +-------+    |
-> > + |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-> > + |               +---------+ +---------+     +-------+    |
-> > + |                ^       ^                               |
-> > + |                |       |                               |
-> > + |         +---------+ +---------+                        |
-> > + |         | PCH-PIC | | PCH-MSI |                        |
-> > + |         +---------+ +---------+                        |
-> > + |           ^     ^           ^                          |
-> > + |           |     |           |                          |
-> > + |   +---------+ +---------+ +---------+                  |
-> > + |   | PCH-LPC | | Devices | | Devices |                  |
-> > + |   +---------+ +---------+ +---------+                  |
-> > + |        ^                                               |
-> > + |        |                                               |
-> > + |   +---------+                                          |
-> > + |   | Devices |                                          |
-> > + |   +---------+                                          |
-> > + |                                                        |
-> > + |                                                        |
-> > + +--------------------------------------------------------+
-> > +
->
-> I think for consistency with other diagrams in Documentation/, just use
-> literal code block, like:
->
-> diff --git a/Documentation/loongarch/irq-chip-model.rst b/Documentation/loongarch/irq-chip-model.rst
-> index 35c962991283ff..3cfd528021de05 100644
-> --- a/Documentation/loongarch/irq-chip-model.rst
-> +++ b/Documentation/loongarch/irq-chip-model.rst
-> @@ -24,40 +24,38 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
->  interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
->  to LIOINTC, and then CPUINTC.
->
-> - +---------------------------------------------+
-> - |::                                           |
-> - |                                             |
-> - |    +-----+     +---------+     +-------+    |
-> - |    | IPI | --> | CPUINTC | <-- | Timer |    |
-> - |    +-----+     +---------+     +-------+    |
-> - |                     ^                       |
-> - |                     |                       |
-> - |                +---------+     +-------+    |
-> - |                | LIOINTC | <-- | UARTs |    |
-> - |                +---------+     +-------+    |
-> - |                     ^                       |
-> - |                     |                       |
-> - |               +-----------+                 |
-> - |               | HTVECINTC |                 |
-> - |               +-----------+                 |
-> - |                ^         ^                  |
-> - |                |         |                  |
-> - |          +---------+ +---------+            |
-> - |          | PCH-PIC | | PCH-MSI |            |
-> - |          +---------+ +---------+            |
-> - |            ^     ^           ^              |
-> - |            |     |           |              |
-> - |    +---------+ +---------+ +---------+      |
-> - |    | PCH-LPC | | Devices | | Devices |      |
-> - |    +---------+ +---------+ +---------+      |
-> - |         ^                                   |
-> - |         |                                   |
-> - |    +---------+                              |
-> - |    | Devices |                              |
-> - |    +---------+                              |
-> - |                                             |
-> - |                                             |
-> - +---------------------------------------------+
-> + ::
-> +
-> +     +-----+     +---------+     +-------+
-> +     | IPI | --> | CPUINTC | <-- | Timer |
-> +     +-----+     +---------+     +-------+
-> +                      ^
-> +                      |
-> +                 +---------+     +-------+
-> +                 | LIOINTC | <-- | UARTs |
-> +                 +---------+     +-------+
-> +                      ^
-> +                      |
-> +                +-----------+
-> +                | HTVECINTC |
-> +                +-----------+
-> +                 ^         ^
-> +                 |         |
-> +           +---------+ +---------+
-> +           | PCH-PIC | | PCH-MSI |
-> +           +---------+ +---------+
-> +             ^     ^           ^
-> +             |     |           |
-> +     +---------+ +---------+ +---------+
-> +     | PCH-LPC | | Devices | | Devices |
-> +     +---------+ +---------+ +---------+
-> +          ^
-> +          |
-> +     +---------+
-> +     | Devices |
-> +     +---------+
-> +
-> +
->
->  Extended IRQ model
->  ==================
-> @@ -67,35 +65,33 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
->  interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
->  to CPUINTC directly.
->
-> - +--------------------------------------------------------+
-> - |::                                                      |
-> - |                                                        |
-> - |         +-----+     +---------+     +-------+          |
-> - |         | IPI | --> | CPUINTC | <-- | Timer |          |
-> - |         +-----+     +---------+     +-------+          |
-> - |                      ^       ^                         |
-> - |                      |       |                         |
-> - |               +---------+ +---------+     +-------+    |
-> - |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-> - |               +---------+ +---------+     +-------+    |
-> - |                ^       ^                               |
-> - |                |       |                               |
-> - |         +---------+ +---------+                        |
-> - |         | PCH-PIC | | PCH-MSI |                        |
-> - |         +---------+ +---------+                        |
-> - |           ^     ^           ^                          |
-> - |           |     |           |                          |
-> - |   +---------+ +---------+ +---------+                  |
-> - |   | PCH-LPC | | Devices | | Devices |                  |
-> - |   +---------+ +---------+ +---------+                  |
-> - |        ^                                               |
-> - |        |                                               |
-> - |   +---------+                                          |
-> - |   | Devices |                                          |
-> - |   +---------+                                          |
-> - |                                                        |
-> - |                                                        |
-> - +--------------------------------------------------------+
-> + ::
-> +
-> +          +-----+     +---------+     +-------+
-> +          | IPI | --> | CPUINTC | <-- | Timer |
-> +          +-----+     +---------+     +-------+
-> +                       ^       ^
-> +                       |       |
-> +                +---------+ +---------+     +-------+
-> +                | EIOINTC | | LIOINTC | <-- | UARTs |
-> +                +---------+ +---------+     +-------+
-> +                 ^       ^
-> +                 |       |
-> +          +---------+ +---------+
-> +          | PCH-PIC | | PCH-MSI |
-> +          +---------+ +---------+
-> +            ^     ^           ^
-> +            |     |           |
-> +    +---------+ +---------+ +---------+
-> +    | PCH-LPC | | Devices | | Devices |
-> +    +---------+ +---------+ +---------+
-> +         ^
-> +         |
-> +    +---------+
-> +    | Devices |
-> +    +---------+
-> +
-> +
->
->  ACPI-related definitions
->  ========================
->
-> Otherwise, htmldocs builds successfully without any new warnings related
-> to this patch series.
-Thank you for your testing. In my environment (sphinx_2.4.4), with or
-without the border both have no warnings. :)
-And I think these are more pretty if we keep the border, especially
-when formatted into PDF. How do you think?
-
-Huacai
->
-> Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
->
-> --
-> An old man doll... just what I always wanted! - Clara
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSU5UUk9EVUNUSU9ODQoNCglIZWxsbywgdGhp
+cyBpcyBleHBlcmltZW50YWwgaW1wbGVtZW50YXRpb24gb2YgdmlydGlvIHZzb2NrIHplcm9jb3B5
+DQpyZWNlaXZlLiBJdCB3YXMgaW5zcGlyZWQgYnkgVENQIHplcm9jb3B5IHJlY2VpdmUgYnkgRXJp
+YyBEdW1hemV0LiBUaGlzIEFQSSB1c2VzDQpzYW1lIGlkZWE6IGNhbGwgJ21tYXAoKScgb24gc29j
+a2V0J3MgZGVzY3JpcHRvciwgdGhlbiBldmVyeSAnZ2V0c29ja29wdCgpJyB3aWxsDQpmaWxsIHBy
+b3ZpZGVkIHZtYSBhcmVhIHdpdGggcGFnZXMgb2YgdmlydGlvIFJYIGJ1ZmZlcnMuIEFmdGVyIHJl
+Y2VpdmVkIGRhdGEgd2FzDQpwcm9jZXNzZWQgYnkgdXNlciwgcGFnZXMgbXVzdCBiZSBmcmVlZCBi
+eSAnbWFkdmlzZSgpJyAgY2FsbCB3aXRoIE1BRFZfRE9OVE5FRUQNCmZsYWcgc2V0KGlmIHVzZXIg
+d29uJ3QgY2FsbCAnbWFkdmlzZSgpJywgbmV4dCAnZ2V0c29ja29wdCgpJyB3aWxsIGZhaWwpLg0K
+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBERVRBSUxTDQoNCglIZXJlIGlzIGhv
+dyBtYXBwaW5nIHdpdGggbWFwcGVkIHBhZ2VzIGxvb2tzIGV4YWN0bHk6IGZpcnN0IHBhZ2UgbWFw
+cGluZw0KY29udGFpbnMgYXJyYXkgb2YgdHJpbW1lZCB2aXJ0aW8gdnNvY2sgcGFja2V0IGhlYWRl
+cnMgKGluIGNvbnRhaW5zIG9ubHkgbGVuZ3RoDQpvZiBkYXRhIG9uIHRoZSBjb3JyZXNwb25kaW5n
+IHBhZ2UgYW5kICdmbGFncycgZmllbGQpOg0KDQoJc3RydWN0IHZpcnRpb192c29ja191c3JfaGRy
+IHsNCgkJdWludDMyX3QgbGVuZ3RoOw0KCQl1aW50MzJfdCBmbGFnczsNCgkJdWludDMyX3QgY29w
+eV9sZW47DQoJfTsNCg0KRmllbGQgICdsZW5ndGgnIGFsbG93cyB1c2VyIHRvIGtub3cgZXhhY3Qg
+c2l6ZSBvZiBwYXlsb2FkIHdpdGhpbiBlYWNoIHNlcXVlbmNlDQpvZiBwYWdlcyBhbmQgJ2ZsYWdz
+JyBhbGxvd3MgdXNlciB0byBoYW5kbGUgU09DS19TRVFQQUNLRVQgZmxhZ3Moc3VjaCBhcyBtZXNz
+YWdlDQpib3VuZHMgb3IgcmVjb3JkIGJvdW5kcykuIEZpZWxkICdjb3B5X2xlbicgaXMgZGVzY3Jp
+YmVkIGJlbG93IGluICd2MS0+djInIHBhcnQuDQpBbGwgb3RoZXIgcGFnZXMgYXJlIGRhdGEgcGFn
+ZXMgZnJvbSBSWCBxdWV1ZS4NCg0KICAgICAgICAgICAgIFBhZ2UgMCAgICAgIFBhZ2UgMSAgICAg
+IFBhZ2UgTg0KDQoJWyBoZHIxIC4uIGhkck4gXVsgZGF0YSBdIC4uIFsgZGF0YSBdDQogICAgICAg
+ICAgIHwgICAgICAgIHwgICAgICAgXiAgICAgICAgICAgXg0KICAgICAgICAgICB8ICAgICAgICB8
+ICAgICAgIHwgICAgICAgICAgIHwNCiAgICAgICAgICAgfCAgICAgICAgKi0tLS0tLS0tLS0tLS0t
+LS0tLS0qDQogICAgICAgICAgIHwgICAgICAgICAgICAgICAgfA0KICAgICAgICAgICB8ICAgICAg
+ICAgICAgICAgIHwNCiAgICAgICAgICAgKi0tLS0tLS0tLS0tLS0tLS0qDQoNCglPZiBjb3Vyc2Us
+IHNpbmdsZSBoZWFkZXIgY291bGQgcmVwcmVzZW50IGFycmF5IG9mIHBhZ2VzICh3aGVuIHBhY2tl
+dCdzDQpidWZmZXIgaXMgYmlnZ2VyIHRoYW4gb25lIHBhZ2UpLlNvIGhlcmUgaXMgZXhhbXBsZSBv
+ZiBkZXRhaWxlZCBtYXBwaW5nIGxheW91dA0KZm9yIHNvbWUgc2V0IG9mIHBhY2thZ2VzLiBMZXRz
+IGNvbnNpZGVyIHRoYXQgd2UgaGF2ZSB0aGUgZm9sbG93aW5nIHNlcXVlbmNlICBvZg0KcGFja2Fn
+ZXM6IDU2IGJ5dGVzLCA0MDk2IGJ5dGVzIGFuZCA4MjAwIGJ5dGVzLiBBbGwgcGFnZXM6IDAsMSwy
+LDMsNCBhbmQgNSB3aWxsDQpiZSBpbnNlcnRlZCB0byB1c2VyJ3Mgdm1hKHZtYSBpcyBsYXJnZSBl
+bm91Z2gpLg0KDQoJUGFnZSAwOiBbWyBoZHIwIF1bIGhkciAxIF1bIGhkciAyIF1bIGhkciAzIF0g
+Li4uIF0NCglQYWdlIDE6IFsgNTYgXQ0KCVBhZ2UgMjogWyA0MDk2IF0NCglQYWdlIDM6IFsgNDA5
+NiBdDQoJUGFnZSA0OiBbIDQwOTYgXQ0KCVBhZ2UgNTogWyA4IF0NCg0KCVBhZ2UgMCBjb250YWlu
+cyBvbmx5IGFycmF5IG9mIGhlYWRlcnM6DQoJJ2hkcjAnIGhhcyA1NiBpbiBsZW5ndGggZmllbGQu
+DQoJJ2hkcjEnIGhhcyA0MDk2IGluIGxlbmd0aCBmaWVsZC4NCgknaGRyMicgaGFzIDgyMDAgaW4g
+bGVuZ3RoIGZpZWxkLg0KCSdoZHIzJyBoYXMgMCBpbiBsZW5ndGggZmllbGQodGhpcyBpcyBlbmQg
+b2YgZGF0YSBtYXJrZXIpLg0KDQoJUGFnZSAxIGNvcnJlc3BvbmRzIHRvICdoZHIwJyBhbmQgaGFz
+IG9ubHkgNTYgYnl0ZXMgb2YgZGF0YS4NCglQYWdlIDIgY29ycmVzcG9uZHMgdG8gJ2hkcjEnIGFu
+ZCBmaWxsZWQgd2l0aCBkYXRhLg0KCVBhZ2UgMyBjb3JyZXNwb25kcyB0byAnaGRyMicgYW5kIGZp
+bGxlZCB3aXRoIGRhdGEuDQoJUGFnZSA0IGNvcnJlc3BvbmRzIHRvICdoZHIyJyBhbmQgZmlsbGVk
+IHdpdGggZGF0YS4NCglQYWdlIDUgY29ycmVzcG9uZHMgdG8gJ2hkcjInIGFuZCBoYXMgb25seSA4
+IGJ5dGVzIG9mIGRhdGEuDQoNCglUaGlzIHBhdGNoc2V0IGFsc28gY2hhbmdlcyBwYWNrZXRzIGFs
+bG9jYXRpb24gd2F5OiB0b2RheSBpbXBsZW1lbnRhdGlvbg0KdXNlcyBvbmx5ICdrbWFsbG9jKCkn
+IHRvIGNyZWF0ZSBkYXRhIGJ1ZmZlci4gUHJvYmxlbSBoYXBwZW5zIHdoZW4gd2UgdHJ5IHRvIG1h
+cA0Kc3VjaCBidWZmZXJzIHRvIHVzZXIncyB2bWEgLSBrZXJuZWwgZm9yYmlkcyB0byBtYXAgc2xh
+YiBwYWdlcyB0byB1c2VyJ3Mgdm1hKGFzDQpwYWdlcyBvZiAibm90IGxhcmdlIiAna21hbGxvYygp
+JyBhbGxvY2F0aW9ucyBhcmUgbWFya2VkIHdpdGggUGFnZVNsYWIgZmxhZyBhbmQNCiJub3QgbGFy
+Z2UiIGNvdWxkIGJlIGJpZ2dlciB0aGFuIG9uZSBwYWdlKS4gU28gdG8gYXZvaWQgdGhpcywgZGF0
+YSBidWZmZXJzIG5vdw0KYWxsb2NhdGVkIHVzaW5nICdhbGxvY19wYWdlcygpJyBjYWxsLg0KDQog
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRFU1RTDQoNCglUaGlzIHBhdGNoc2V0
+IHVwZGF0ZXMgJ3Zzb2NrX3Rlc3QnIHV0aWxpdHk6IHR3byB0ZXN0cyBmb3IgbmV3IGZlYXR1cmUN
+CndlcmUgYWRkZWQuIEZpcnN0IHRlc3QgY292ZXJzIGludmFsaWQgY2FzZXMuIFNlY29uZCBjaGVj
+a3MgdmFsaWQgdHJhbnNtaXNzaW9uDQpjYXNlLg0KDQogICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIEJFTkNITUFSS0lORw0KDQoJRm9yIGJlbmNobWFrcmluZyBJJ3ZlIGFkZGVkIHNtYWxs
+IHV0aWxpdHkgJ3J4X3plcm9jb3B5Jy4gSXQgd29ya3MgaW4NCmNsaWVudC9zZXJ2ZXIgbW9kZS4g
+V2hlbiBjbGllbnQgY29ubmVjdHMgdG8gc2VydmVyLCBzZXJ2ZXIgc3RhcnRzIHNlbmRpbmcgZXhh
+Y3QNCmFtb3VudCBvZiBkYXRhIHRvIGNsaWVudChhbW91bnQgaXMgc2V0IGFzIGlucHV0IGFyZ3Vt
+ZW50KS5DbGllbnQgcmVhZHMgZGF0YSBhbmQNCndhaXRzIGZvciBuZXh0IHBvcnRpb24gb2YgaXQu
+IENsaWVudCB3b3JrcyBpbiB0d28gbW9kZXM6IGNvcHkgYW5kIHplcm8tY29weS4gSW4NCmNvcHkg
+bW9kZSBjbGllbnQgdXNlcyAncmVhZCgpJyBjYWxsIHdoaWxlIGluIHplcm9jb3B5IG1vZGUgc2Vx
+dWVuY2Ugb2YgJ21tYXAoKScNCi8nZ2V0c29ja29wdCgpJy8nbWFkdmlzZSgpJyBhcmUgdXNlZC4g
+U21hbGxlciBhbW91bnQgb2YgdGltZSBmb3IgdHJhbnNtaXNzaW9uIA0KaXMgYmV0dGVyLiBGb3Ig
+c2VydmVyLCB3ZSBjYW4gc2V0IHNpemUgb2YgdHggYnVmZmVyIGFuZCBmb3IgY2xpZW50IHdlIGNh
+biBzZXQNCnNpemUgb2YgcnggYnVmZmVyIG9yIHJ4IG1hcHBpbmcgc2l6ZShpbiB6ZXJvY29weSBt
+b2RlKS4gVXNhZ2Ugb2YgdGhpcyB1dGlsaXR5DQppcyBxdWlldCBzaW1wbGU6DQoNCkZvciBjbGll
+bnQgbW9kZToNCg0KLi9yeF96ZXJvY29weSAtLW1vZGUgY2xpZW50IFstLXplcm9jb3B5XSBbLS1y
+eF0NCg0KRm9yIHNlcnZlciBtb2RlOg0KDQouL3J4X3plcm9jb3B5IC0tbW9kZSBzZXJ2ZXIgWy0t
+bWJdIFstLXR4XQ0KDQpbLS1tYl0gc2V0cyBudW1iZXIgb2YgbWVnYWJ5dGVzIHRvIHRyYW5zZmVy
+Lg0KWy0tcnhdIHNldHMgc2l6ZSBvZiByZWNlaXZlIGJ1ZmZlci9tYXBwaW5nIGluIHBhZ2VzLg0K
+Wy0tdHhdIHNldHMgc2l6ZSBvZiB0cmFuc21pdCBidWZmZXIgaW4gcGFnZXMuDQoNCkkgY2hlY2tl
+ZCBmb3IgdHJhbnNtaXNzaW9uIG9mIDQwMDBtYiBvZiBkYXRhLiBIZXJlIGFyZSBzb21lIHJlc3Vs
+dHM6DQoNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpemUgb2YgcngvdHggYnVmZmVycyBp
+biBwYWdlcw0KICAgICAgICAgICAgICAgKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLSoNCiAgICAgICAgICAgICAgIHwgICAgOCAgIHwgICAgMzIgICAg
+fCAgICA2NCAgIHwgICAyNTYgICAgfCAgIDUxMiAgICB8DQoqLS0tLS0tLS0tLS0tLS0qLS0tLS0t
+LS0qLS0tLS0tLS0tLSotLS0tLS0tLS0qLS0tLS0tLS0tLSotLS0tLS0tLS0tKg0KfCAgIHplcm9j
+b3B5ICAgfCAgIDI0ICAgfCAgIDEwLjYgICB8ICAxMi4yICAgfCAgIDIzLjYgICB8ICAgIDIxICAg
+IHwgc2VjcyB0bw0KKi0tLS0tLS0tLS0tLS0tKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0gcHJvY2Vzcw0KfCBub24temVyb2NvcHkgfCAgIDEzICAg
+fCAgIDE2LjQgICB8ICAyNC43ICAgfCAgIDI3LjIgICB8ICAgMjMuOSAgIHwgNDAwMCBtYg0KKi0t
+LS0tLS0tLS0tLS0tKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0NCg0KUmVzdWx0IGluIGZpcnN0IGNvbHVtbih3aGVyZSBub24temVyb2NvcHkgd29y
+a3MgYmV0dGVyIHRoYW4gemVyb2NvcHkpIGhhcHBlbnMNCmJlY2F1c2UgdGltZSwgc3BlbnQgaW4g
+J3JlYWQoKScgc3lzdGVtIGNhbGwgaXMgc21hbGxlciB0aGF0IHRpbWUgaW4gJ2dldHNvY2tvcHQn
+DQorICdtYWR2aXNlJy4gSSd2ZSBjaGVja2VkIHRoYXQuDQoNCkkgdGhpbmssIHRoYXQgcmVzdWx0
+cyBhcmUgbm90IHNvIGltcHJlc3NpdmUsIGJ1dCBhdCBsZWFzdCBpdCBpcyBub3Qgd29yc2UgdGhh
+bg0KY29weSBtb2RlIGFuZCB0aGVyZSBpcyBubyBuZWVkIHRvIGFsbG9jYXRlIG1lbW9yeSBmb3Ig
+cHJvY2Vzc2luZyBkYXRlLg0KDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQUk9C
+TEVNUw0KDQoJVXBkYXRlZCBwYWNrZXQncyBhbGxvY2F0aW9uIGxvZ2ljIGNyZWF0ZXMgc29tZSBw
+cm9ibGVtOiB3aGVuIGhvc3QgZ2V0cw0KZGF0YSBmcm9tIGd1ZXN0KGluIHZob3N0LXZzb2NrKSwg
+aXQgYWxsb2NhdGVzIGF0IGxlYXN0IG9uZSBwYWdlIGZvciBlYWNoIHBhY2tldA0KKGV2ZW4gaWYg
+cGFja2V0IGhhcyAxIGJ5dGUgcGF5bG9hZCkuIEkgdGhpbmsgdGhpcyBjb3VsZCBiZSByZXNvbHZl
+ZCBpbiBzZXZlcmFsDQp3YXlzOg0KCTEpIE1ha2UgemVyb2NvcHkgcnggbW9kZSBkaXNhYmxlZCBi
+eSBkZWZhdWx0LCBzbyBpZiB1c2VyIGRpZG4ndCBlbmFibGUNCml0LCBjdXJyZW50ICdrbWFsbG9j
+KCknIHdheSB3aWxsIGJlIHVzZWQuIDw8PDw8PDwgKElNUExFTUVOVEVEIElOIFYyKQ0KCTIpIFVz
+ZSAna21hbGxvYygpJyBmb3IgInNtYWxsIiBwYWNrZXRzLCBlbHNlIGNhbGwgcGFnZSBhbGxvY2F0
+b3IuIEJ1dA0KaW4gdGhpcyBjYXNlLCB3ZSBoYXZlIG1peCBvZiBwYWNrZXRzLCBhbGxvY2F0ZWQg
+aW4gdHdvIGRpZmZlcmVudCB3YXlzIHRodXMNCmR1cmluZyB6ZXJvY29weWluZyB0byB1c2VyKGUu
+Zy4gbWFwcGluZyBwYWdlcyB0byB2bWEpLCBzdWNoIHNtYWxsIHBhY2tldHMgd2lsbA0KYmUgaGFu
+ZGxlZCBpbiBzb21lIHN0dXBpZCB3YXk6IHdlIG5lZWQgdG8gYWxsb2NhdGUgb25lIHBhZ2UgZm9y
+IHVzZXIsIGNvcHkgZGF0YQ0KdG8gaXQgYW5kIHRoZW4gaW5zZXJ0IHBhZ2UgdG8gdXNlcidzIHZt
+YS4NCg0KdjEgLT4gdjI6DQogMSkgWmVyb2NvcHkgcmVjZWl2ZSBtb2RlIGNvdWxkIGJlIGVuYWJs
+ZWQvZGlzYWJsZWQoZGlzYWJsZWQgYnkgZGVmYXVsdCkuIEkNCiAgICBkaWRuJ3QgdXNlIGdlbmVy
+aWMgU09fWkVST0NPUFkgZmxhZywgYmVjYXVzZSBpbiB2aXJ0aW8tdnNvY2sgY2FzZSB0aGlzDQog
+ICAgZmVhdHVyZSBkZXBlbmRzIG9uIHRyYW5zcG9ydCBzdXBwb3J0LiBJbnN0ZWFkIG9mIFNPX1pF
+Uk9DT1BZLCBBRl9WU09DSw0KICAgIGxheWVyIGZsYWcgd2FzIGFkZGVkOiBTT19WTV9TT0NLRVRT
+X1pFUk9DT1BZLCB3aGlsZSBwcmV2aW91cyBtZWFuaW5nIG9mDQogICAgU09fVk1fU09DS0VUU19a
+RVJPQ09QWShpbnNlcnQgcmVjZWl2ZSBidWZmZXJzIHRvIHVzZXIncyB2bSBhcmVhKSBub3cNCiAg
+ICByZW5hbWVkIHRvIFNPX1ZNX1NPQ0tFVFNfTUFQX1JYLg0KIDIpIFBhY2tldCBoZWFkZXIgd2hp
+Y2ggaXMgZXhwb3J0ZWQgdG8gdXNlciBub3cgZ2V0IG5ldyBmaWVsZDogJ2NvcHlfbGVuJy4NCiAg
+ICBUaGlzIGZpZWxkIGhhbmRsZXMgc3BlY2lhbCBjYXNlOiAgdXNlciByZWFkcyBkYXRhIGZyb20g
+c29ja2V0IGluIG5vbg0KICAgIHplcm9jb3B5IHdheSh3aXRoIGRpc2FibGVkIHplcm9jb3B5KSBh
+bmQgdGhlbiBlbmFibGVzIHplcm9jb3B5IGZlYXR1cmUuDQogICAgSW4gdGhpcyBjYXNlIHZob3N0
+IHBhcnQgd2lsbCBzd2l0Y2ggZGF0YSBidWZmZXIgYWxsb2NhdGlvbiBsb2dpYyBmcm9tDQogICAg
+J2ttYWxsb2MoKScgdG8gZGlyZWN0IGNhbGxzIGZvciBidWRkeSBhbGxvY2F0b3IuIEJ1dCwgdGhl
+cmUgY291bGQgYmUNCiAgICBzb21lIHBlbmRpbmcgJ2ttYWxsb2MoKScgYWxsb2NhdGVkIHBhY2tl
+dHMgaW4gc29ja2V0J3MgcnggbGlzdCwgYW5kIHRoZW4NCiAgICB1c2VyIHRyaWVzIHRvIHJlYWQg
+c3VjaCBwYWNrZXRzIGluIHplcm9jb3B5IHdheSwgZGVxdWV1ZSB3aWxsIGZhaWwsDQogICAgYmVj
+YXVzZSBTTEFCIHBhZ2VzIGNvdWxkIG5vdCBiZSBpbnNlcnRlZCB0byB1c2VyJ3Mgdm0gYXJlYS4g
+U28gd2hlbiBzdWNoDQogICAgcGFja2V0IGlzIGZvdW5kIGR1cmluZyB6ZXJvY29weSBkZXF1ZXVl
+LCBkZXF1ZXVlIGxvb3Agd2lsbCBicmVhayBhbmQNCiAgICAnY29weV9sZW4nIHdpbGwgc2hvdyBz
+aXplIG9mIHN1Y2ggImJhZCIgcGFja2V0LiBBZnRlciB1c2VyIGRldGVjdHMgdGhpcw0KICAgIGNh
+c2UsIGl0IG11c3QgdXNlICdyZWFkKCkvcmVjdigpJyBjYWxscyB0byBkZXF1ZXVlIHN1Y2ggcGFj
+a2V0Lg0KIDMpIEFsc28gbWF5IGJlIG1vdmUgdGhpcyBmZWF0dXJlcyB1bmRlciBjb25maWcgb3B0
+aW9uPw0KDQpBcnNlbml5IEtyYXNub3YoOCkNCiB2aXJ0aW8vdnNvY2s6IHJld29yayBwYWNrZXQg
+YWxsb2NhdGlvbiBsb2dpYw0KIHZob3N0L3Zzb2NrOiByZXdvcmsgcGFja2V0IGFsbG9jYXRpb24g
+bG9naWMNCiBhZl92c29jazogYWRkIHplcm9jb3B5IHJlY2VpdmUgbG9naWMNCiB2aXJ0aW8vdnNv
+Y2s6IGFkZCB0cmFuc3BvcnQgemVyb2NvcHkgY2FsbGJhY2sNCiB2aG9zdC92c29jazogZW5hYmxl
+IHplcm9jb3B5IGNhbGxiYWNrDQogdmlydGlvL3Zzb2NrOiBlbmFibGUgemVyb2NvcHkgY2FsbGJh
+Y2sNCiB0ZXN0L3Zzb2NrOiBhZGQgcmVjZWl2ZSB6ZXJvY29weSB0ZXN0cw0KIHRlc3QvdnNvY2s6
+IHZzb2NrIHJ4IHplcm9jb3B5IHV0aWxpdHkNCg0KIGRyaXZlcnMvdmhvc3QvdnNvY2suYyAgICAg
+ICAgICAgICAgICAgICB8IDEyMSArKysrKysrKystLQ0KIGluY2x1ZGUvbGludXgvdmlydGlvX3Zz
+b2NrLmggICAgICAgICAgICB8ICAgNSArDQogaW5jbHVkZS9uZXQvYWZfdnNvY2suaCAgICAgICAg
+ICAgICAgICAgIHwgICA3ICsNCiBpbmNsdWRlL3VhcGkvbGludXgvdmlydGlvX3Zzb2NrLmggICAg
+ICAgfCAgIDYgKw0KIGluY2x1ZGUvdWFwaS9saW51eC92bV9zb2NrZXRzLmggICAgICAgICB8ICAg
+MyArDQogbmV0L3Ztd192c29jay9hZl92c29jay5jICAgICAgICAgICAgICAgIHwgMTAwICsrKysr
+KysrKw0KIG5ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jICAgICAgICB8ICA1MSArKysr
+LQ0KIG5ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYyB8IDIxMSArKysrKysr
+KysrKysrKysrKystDQogdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L3ZpcnRpb192c29jay5oIHwg
+IDExICsNCiB0b29scy9pbmNsdWRlL3VhcGkvbGludXgvdm1fc29ja2V0cy5oICAgfCAgIDggKw0K
+IHRvb2xzL3Rlc3RpbmcvdnNvY2svTWFrZWZpbGUgICAgICAgICAgICB8ICAgMSArDQogdG9vbHMv
+dGVzdGluZy92c29jay9jb250cm9sLmMgICAgICAgICAgIHwgIDM0ICsrKw0KIHRvb2xzL3Rlc3Rp
+bmcvdnNvY2svY29udHJvbC5oICAgICAgICAgICB8ICAgMiArDQogdG9vbHMvdGVzdGluZy92c29j
+ay9yeF96ZXJvY29weS5jICAgICAgIHwgMzU2ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrDQogdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgICAgICAgIHwgMjk1ICsrKysr
+KysrKysrKysrKysrKysrKysrKysrDQogMTUgZmlsZXMgY2hhbmdlZCwgMTE5NiBpbnNlcnRpb25z
+KCspLCAxNSBkZWxldGlvbnMoLSkNCg0KLS0gDQoyLjI1LjENCg==

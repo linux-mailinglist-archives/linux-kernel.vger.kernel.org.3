@@ -2,83 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC81B53D396
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A47953D398
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347921AbiFCWWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 18:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
+        id S1349546AbiFCWXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 18:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiFCWWf (ORCPT
+        with ESMTP id S231882AbiFCWXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 18:22:35 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CAD286F5
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:22:34 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id l204so16084107ybf.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:22:34 -0700 (PDT)
+        Fri, 3 Jun 2022 18:23:38 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A687D3524A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:23:37 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 25so11598485edw.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:23:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jbsgqnojhBY4V415x3C0fDTOg6GG6s3cxgXrWlI1RRs=;
-        b=vZZr8iprlZrWBkzFpxmomNEmLN9CfD1JTqvF5qBt2o84s3Xa1T3qgGz+J56QLbL77Y
-         axL+HiOLq3EM348vIMSvMR3cKiVUQleIcPWU6FyP/WdnPf7Wyv0dAhCe4Ih5s5mBZgz0
-         Qbb56h5a9ZsaC3sjzoGJyPva2YcruT0CwIuHWOXxJuEZCt4AtSSHktbAvLiahcdrtc9f
-         44FVXHppSQbz4wpplEo9W0JSGAdQHIrc7ejPd5QrJg38OtoI1ltsMOivLzRMArYgCsiG
-         uqjA21xhWQvcY/cCJ0xxTvIWYxj9OTF/nTnRAiiWyh/aeoR+FZ2sqRihoW856/AiLq6W
-         ZUHg==
+        bh=p3OHmTUWRLi2a9puFadc7t+O3rYGfcwkImBjPtsts/w=;
+        b=KHXmqdVp1Py6tPB4jihW6F8gAB7ePDwC80+2OA2LXUT5rqg6K18ghEQC7FVZ1vN+1v
+         eG276KEtetF5sUv5GWAKtIgImyVvz+peHUo4qmqPCQZeA4wIuEY7FQXh5WFSojXQF09v
+         XdXsjSVZxHub8oI7LXmskOukvjMqllUJ/Zyno=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jbsgqnojhBY4V415x3C0fDTOg6GG6s3cxgXrWlI1RRs=;
-        b=3/dnp2C1/FUhZT7jIUKksYfs82Atcm2QUia5H2rrxMzQglCrMEvaWWMzOzj2ij3Lrr
-         8lY4+sm1draMV2tR6682GQ/Hlsgq7eQpQNRl/421+0aT130FC9KMWvJkGEnb9cTD/Qx5
-         mdeBmhozesX6rRwRsHSvJJDTx8/CdKZLah3+XlRVbIBRDVtz4eqUWt6lX+ogNU6DtJsR
-         LUvtstDOIiI2jo9Adx6saNbCHvAsVSX2SUouPX3NH17oHsMBOh44VPq3AOgYMo44JPmf
-         f3EnXY+GjsQOJvtfZwWOZhncb0fZyOgD8jf6W3JXwwESbh5LDFdcZ3pTLCW95qzwPvOx
-         hU+Q==
-X-Gm-Message-State: AOAM531HUX9/yszn+6DywYUzAUGVKGzQr3N/oR2k4V7HYdC/eEiEJkY3
-        aLQ4yEsnnEtwTA0Nh1G4tEEy8qR9iCN3p8i8MBDoUg==
-X-Google-Smtp-Source: ABdhPJzK4KSQwxvyeYkM8nwzhwDrVml+dsYJsEDSZ3ExN3FHy9LipBWD2wRf514AHIUo75t/iR/84tr5YAR01oNzZTU=
-X-Received: by 2002:a5b:302:0:b0:64b:a20a:fcd9 with SMTP id
- j2-20020a5b0302000000b0064ba20afcd9mr13266629ybp.492.1654294953955; Fri, 03
- Jun 2022 15:22:33 -0700 (PDT)
+        bh=p3OHmTUWRLi2a9puFadc7t+O3rYGfcwkImBjPtsts/w=;
+        b=76z4pFHQxIMSm/bAZTJe3cV/QyampTxvHsVv6/D6vTyondvkURrtWin1H3IiSwjvQ+
+         ObHQy7SocTpDSeGEpSKDVxwMFeAH1INUOB1powdD1mlkE/5qA7ohTY6aOTNgHPpGetWH
+         yEdyDPnqDwwZjWZWWlL05GVxSHtrcJ2sxIZgGP8unWJWdFPqChwMgxFWRTScO/RlyNM1
+         WVYV4IQSGMPs7HnvSqdBLhvuUlO3YycmcVYDMgzScamG70GEuhmQ61+BKwJ3ZMO2QQAx
+         KCAP+qkcxgpg2CR5lHJnWTh8J4ETGUTdsI8hDs2+ypoJ/JCE0pba2nCTuTJndaasST1C
+         0bIA==
+X-Gm-Message-State: AOAM530IdYFE2L5nUPT0P/ztt9OnXaYXHIDNYn2SzfWX3Jyr4mJUuxSd
+        BT8FmaCxX2XmOxf9S64N1q4VSltE3mB2HJUs
+X-Google-Smtp-Source: ABdhPJyiqpmyRcGZWyOVFjwCEOLjYOeIaBql368TKm88+hcLp9nuiAZAx6NAr1R/ClnL0yc4JDZe1w==
+X-Received: by 2002:aa7:dc09:0:b0:42a:aadd:8e71 with SMTP id b9-20020aa7dc09000000b0042aaadd8e71mr12935229edu.41.1654295016024;
+        Fri, 03 Jun 2022 15:23:36 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id j25-20020a50ed19000000b0042bcf1e0060sm4368856eds.65.2022.06.03.15.23.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 15:23:35 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id v4-20020a1cac04000000b00397001398c0so7006574wme.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:23:34 -0700 (PDT)
+X-Received: by 2002:a05:600c:2e07:b0:39c:37df:2c40 with SMTP id
+ o7-20020a05600c2e0700b0039c37df2c40mr6874704wmf.154.1654295014299; Fri, 03
+ Jun 2022 15:23:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526024956.49500-1-samuel@sholland.org>
-In-Reply-To: <20220526024956.49500-1-samuel@sholland.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 4 Jun 2022 00:22:22 +0200
-Message-ID: <CACRpkdbuOm1EQgGsanb50oSFseDmgVrmf_FE1FgL7JUJJiaGtA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: sunxi: a83t: Fix NAND function name for some pins
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Vishnu Patekar <vishnupatekar0510@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <YpnwZ/Q5yTKRDBOD@kroah.com>
+In-Reply-To: <YpnwZ/Q5yTKRDBOD@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 3 Jun 2022 15:23:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjxbyfaqvS9+p9SsN34B4D=jXGdrUtCwFY+QurVKhDFyA@mail.gmail.com>
+Message-ID: <CAHk-=wjxbyfaqvS9+p9SsN34B4D=jXGdrUtCwFY+QurVKhDFyA@mail.gmail.com>
+Subject: Re: [GIT PULL] Driver core changes for 5.19-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>, Takashi Iwai <tiwai@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 4:49 AM Samuel Holland <samuel@sholland.org> wrote:
+Augh.
 
-> The other NAND pins on Port C use the "nand0" function name.
-> "nand0" also matches all of the other Allwinner SoCs.
+This was very badly done, and I'm not talking about the deferred probe
+timeout things that caused problems for people.
+
+On Fri, Jun 3, 2022 at 4:28 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> Fixes: 4730f33f0d82 ("pinctrl: sunxi: add allwinner A83T PIO controller support")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>         - firmware_loader reorganization and additions including the
+>           ability to have XZ compressed firmware images and the ability
+>           for userspace to initiate the firmware load when it needs to,
+>           instead of being always initiated by the kernel.
 
-Patch applied for fixes.
+This is actively misleading.
 
-Yours,
-Linus Walleij
+We *always* supported XZ compressed firmware images, and it was
+enabled by CONFIG_FW_LOADER_COMPRESS,
+
+What's new is the option to use ZSTD compression.
+
+However, the Kconfig file addition for this was done as badly as the
+above explanation was, and the FW_LOADER_COMPRESS_XZ option was added
+with a help message and a default value that both are complete
+garbage.
+
+So when you do "make oldconfig", you would be expected to say 'N', and
+in the process you lose the existing XZ compression.
+
+Only when the resulting kernel doesn't boot, and you spent half an
+hour trying to bisect things, and you start looking closer, do you
+notice that "ooh, the config changed in bad ways".
+
+Yeah, I'm a bit grumpy. This was *really* annoying.
+
+The commit that does this breakage is literally called "firmware: Add
+the support for ZSTD-compressed firmware files", and only when looking
+closer do you notice that IT REMOVES SUPPORT FOR XZ COMPRESSION BY
+DEFAULT.
+
+Because even when keeping the FW_LOADER_COMPRESS option enabled, the
+XZ compression is just gone, gone, gone, unless you realize that it
+was implicitly enabled before, and now needs that default disable of
+FW_LOADER_COMPRESS_XZ to be enabled.
+
+I've said this before, and I'll say it here again (and I bet I'll have
+to say it in the future too): the kernel config is probably the most
+annoying part of building a kernel for anybody.
+
+And it damn well does NOT HELP when people then actively break things,
+and ask actively bad and misleading questions. In this case, for
+example, it's not just that the XZ option is now misleading by
+default, it's also that the whole thing has been set up so that you
+can say "enable compressed images", but then HAVE NO ACTUAL
+COMPRESSION METHOD!
+
+Grr. This was *REALLY* badly done.
+
+                      Linus

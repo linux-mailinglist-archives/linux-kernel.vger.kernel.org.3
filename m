@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD3153C520
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 08:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4BA53C51E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 08:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241647AbiFCGkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 02:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S241711AbiFCGkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 02:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241628AbiFCGj6 (ORCPT
+        with ESMTP id S241628AbiFCGkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 02:39:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7999538787;
-        Thu,  2 Jun 2022 23:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/qB9gxrKGTNOzMJzvvVbgCLr/R5FGBh4VoOWfCq44ZQ=; b=KRj+Ey/Rr2SB20Q1D3iuLZQ1Hy
-        IAK3MTi6/6h4lRiBTkT2Thew6/Qcuen9go+KyDHYEi3H4bUQbnZLvkvoPNoj374nfMu5b0iTxJX2o
-        YxVAicmeaTegJg8GB7ovR3749ztwgYXnxNhsegHrStiYUaAp1+bIHLuBwAGL7tpuJkWiepuizANCh
-        Z3b/WtbCv8Kx1mESKwIkG09wIvEeTXyYahyF62A/0+arRwhbd90u+YwXebhS30M0KQsPE8EAYd7Yd
-        12YWe8dyZqrZg7UnPnq9XEslJkaSoq07sRx9v2whhK/RWO4mZ3vEHLYfIElplYV6L5MS7ZyaJ6HB4
-        FQ2ZayNQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nx0yO-0063An-Gv; Fri, 03 Jun 2022 06:39:52 +0000
-Date:   Thu, 2 Jun 2022 23:39:52 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Donald Buczek <buczek@molgen.mpg.de>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-Subject: Re: [PATCH v3 04/11] md/raid5-cache: Take mddev_lock in
- r5c_journal_mode_show()
-Message-ID: <YpmsuIQhk+i8LShF@infradead.org>
-References: <20220602181818.50729-1-logang@deltatee.com>
- <20220602181818.50729-5-logang@deltatee.com>
+        Fri, 3 Jun 2022 02:40:37 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8215C387BD
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 23:40:35 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-30c143c41e5so73143647b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 23:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RfTNEksliZ3y2poNDmDeIKONIqonojXSfIHkatdp5wA=;
+        b=IzFzYEXuWY1GJiMU/NqMxDg9AH710M3ZuBEesd8VJGccuOl+bIht9xKv4Th4TqHSpc
+         eWOJoiIdi/j5QAenz9PGqOifjhIfuICyi5m0hn2YYejz+TsDGSf1fFa/kyrlthrWONxq
+         jDaHVXtfUkkYOwNB9qw/7Rj8QZRTrUcEUl76XejrlXfx62lG/x4lFnPHIbTdhD8MaOnG
+         a9yjumLGdKWxqTkIDdkNQJdJh2OjQpuwB21L+GDVsKgYDzMDw3uTwM4xyMUQctyezlMj
+         Du0QDBbyTJuhyjY3sunXEH9KxEdVVoTSV7oCOu77Q6Li9ncnngBEFE/e77ZujC/S7uxo
+         ES6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RfTNEksliZ3y2poNDmDeIKONIqonojXSfIHkatdp5wA=;
+        b=S0kxPfl6AzUgzSCLRRlgaznYdMJOPUeYIv8z11Dk06SzkRXvHAXxvqRY0SySXMjfkw
+         zzaP6u0Atdq/nXEih1kR62jJq5zLeNppYJ7EoB4aYLPrN/eRiozE8eVMAP/bcsxMpo0r
+         Z0JDrmjH/GfM5JzTqk5EW+LseTfV2G6f39842RMGcCeHln7Xj+A3Qmd4kO8Z09n0z20D
+         4rXMa1cZ24WqJZgyrdjA6LjqWVTbIslSHgJ7PHf04v4pH9iKt/30daotlSZA/UwAQ5XD
+         8Gt+nPE7oldsqmftoZ+LqljppuyaZNZWnlhm3sqSsL+u5A6KwnSwefjabNl/fsV6QZep
+         tr/A==
+X-Gm-Message-State: AOAM533q7L2crToSqbt5IODSNFHzRN0TyOPiLWbOLR+uGe7FOY9lBEkN
+        SxPA40i63oPyhQ5X1mDi2dOViWgaIHHAWgAbNyuR7gfTFqqxXg==
+X-Google-Smtp-Source: ABdhPJzbniNopbD7WI9L6d2fjFTtiuHbwNIZGmDW2ibkKHKW8tsgdRqstdZMqPsBAzAoBIJQEpbXcX2nDDJS7S6LUy8=
+X-Received: by 2002:a81:4c8e:0:b0:300:37ba:2c1e with SMTP id
+ z136-20020a814c8e000000b0030037ba2c1emr10333837ywa.141.1654238434452; Thu, 02
+ Jun 2022 23:40:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602181818.50729-5-logang@deltatee.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+References: <20220525065050.38905-1-songmuchun@bytedance.com>
+In-Reply-To: <20220525065050.38905-1-songmuchun@bytedance.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Fri, 3 Jun 2022 14:39:58 +0800
+Message-ID: <CAMZfGtU_Sp28CO2ZfvO_ta2_f5V5hVax3q86TqqHbOskCJPp7Q@mail.gmail.com>
+Subject: Re: [PATCH v3] sysctl: handle table->maxlen robustly for proc_dobool
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +69,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 12:18:10PM -0600, Logan Gunthorpe wrote:
->  	conf = mddev->private;
->  	if (!conf || !conf->log) {
-> -		spin_unlock(&mddev->lock);
-> +		mddev_unlock(mddev);
->  		return 0;
->  	}
->  
-> @@ -2557,7 +2560,7 @@ static ssize_t r5c_journal_mode_show(struct mddev *mddev, char *page)
->  	default:
->  		ret = 0;
->  	}
-> -	spin_unlock(&mddev->lock);
-> +	mddev_unlock(mddev);
->  	return ret;
+Hi all,
 
-Using a goto out_unlock would be nice here to keep the critical
-sections simple.  But even as-is this looks good:
+Ping guys. Any comments or objections?
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-
-> +	lockdep_assert_held(&conf->mddev->reconfig_mutex);
+On Wed, May 25, 2022 at 2:51 PM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> Setting ->proc_handler to proc_dobool at the same time setting ->maxlen
+> to sizeof(int) is counter-intuitive, it is easy to make mistakes in the
+> future (When I first use proc_dobool() in my driver, I assign
+> sizeof(variable) to table->maxlen.  Then I found it was wrong, it should
+> be sizeof(int) which was very counter-intuitive).  For robustness,
+> rework proc_dobool() robustly.  So it is an improvement not a real bug
+> fix.
+>
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Iurii Zaikin <yzaikin@google.com>
+> ---
+> v3:
+>  - Update commit log.
+>
+> v2:
+>  - Reimplementing proc_dobool().
+>
+>  fs/lockd/svc.c  |  2 +-
+>  kernel/sysctl.c | 38 +++++++++++++++++++-------------------
+>  2 files changed, 20 insertions(+), 20 deletions(-)
+>
+> diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
+> index 59ef8a1f843f..6e48ee787f49 100644
+> --- a/fs/lockd/svc.c
+> +++ b/fs/lockd/svc.c
+> @@ -496,7 +496,7 @@ static struct ctl_table nlm_sysctls[] = {
+>         {
+>                 .procname       = "nsm_use_hostnames",
+>                 .data           = &nsm_use_hostnames,
+> -               .maxlen         = sizeof(int),
+> +               .maxlen         = sizeof(nsm_use_hostnames),
+>                 .mode           = 0644,
+>                 .proc_handler   = proc_dobool,
+>         },
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index e52b6e372c60..50a2c29efc94 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -423,21 +423,6 @@ static void proc_put_char(void **buf, size_t *size, char c)
+>         }
+>  }
+>
+> -static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
+> -                               int *valp,
+> -                               int write, void *data)
+> -{
+> -       if (write) {
+> -               *(bool *)valp = *lvalp;
+> -       } else {
+> -               int val = *(bool *)valp;
+> -
+> -               *lvalp = (unsigned long)val;
+> -               *negp = false;
+> -       }
+> -       return 0;
+> -}
+> -
+>  static int do_proc_dointvec_conv(bool *negp, unsigned long *lvalp,
+>                                  int *valp,
+>                                  int write, void *data)
+> @@ -708,16 +693,31 @@ int do_proc_douintvec(struct ctl_table *table, int write,
+>   * @lenp: the size of the user buffer
+>   * @ppos: file position
+>   *
+> - * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
+> - * values from/to the user buffer, treated as an ASCII string.
+> + * Reads/writes up to table->maxlen/sizeof(bool) bool values from/to
+> + * the user buffer, treated as an ASCII string.
+>   *
+>   * Returns 0 on success.
+>   */
+>  int proc_dobool(struct ctl_table *table, int write, void *buffer,
+>                 size_t *lenp, loff_t *ppos)
+>  {
+> -       return do_proc_dointvec(table, write, buffer, lenp, ppos,
+> -                               do_proc_dobool_conv, NULL);
+> +       struct ctl_table tmp = *table;
+> +       bool *data = table->data;
+> +       unsigned int val = READ_ONCE(*data);
+> +       int ret;
 > +
-
-.. but this looks unrelated and misplaced in this patch.
-
+> +       /* Do not support arrays yet. */
+> +       if (table->maxlen != sizeof(bool))
+> +               return -EINVAL;
+> +
+> +       tmp.maxlen = sizeof(val);
+> +       tmp.data = &val;
+> +       ret = do_proc_douintvec(&tmp, write, buffer, lenp, ppos, NULL, NULL);
+> +       if (ret)
+> +               return ret;
+> +       if (write)
+> +               WRITE_ONCE(*data, val ? true : false);
+> +       return 0;
+>  }
+>
+>  /**
+> --
+> 2.11.0
+>

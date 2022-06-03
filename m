@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B049053C358
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF4753C35B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiFCCw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 22:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S238090AbiFCC5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 22:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiFCCwy (ORCPT
+        with ESMTP id S229494AbiFCC5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 22:52:54 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22EC237E0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 19:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654224773; x=1685760773;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hrra3fUBgDeLA/XvDHrVdOmC2xlDgugKSB++AYO2cvU=;
-  b=kB+U8+c1BuJHEpQ8GUqU+Jb1Ty+4inCBqWa+QMcS5nCC1h3AYgmDooby
-   atpH7NqsVhotK3Qqg3GUaM1cCdjE5z/VRGhlvE2Y0n/S/pjEkkUPGsLLc
-   njy4xIwBwQd4yfo7d2qUesT2jg8IXEsC7Q91zaqTAPqh1lQAO7+fz9xV2
-   lXqdW4/jl3ACjVCwjU27AuNzwH27MUwhh8egXrS8rwG39zoj5kJC9uxbU
-   aofBN4BnvirHuwDoCvQ2AE269jjYcQtyDIHLiwu/wj396F+wu4TxdqO7D
-   UvsWX4CW67WIBJE7bLw043Zeb+Ce03HHuyUJ2hS7ly1sPJ5QdGYmByjUQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="301519492"
-X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
-   d="scan'208";a="301519492"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 19:52:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
-   d="scan'208";a="530840377"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jun 2022 19:52:51 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwxQh-0005vJ-7A;
-        Fri, 03 Jun 2022 02:52:51 +0000
-Date:   Fri, 3 Jun 2022 10:50:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 34/63]
- drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c:414:6:
- warning: no previous prototype for 'dcn32_clock_read_ss_info'
-Message-ID: <202206031013.jYog18lK-lkp@intel.com>
+        Thu, 2 Jun 2022 22:57:52 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E05C140E5;
+        Thu,  2 Jun 2022 19:57:47 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q123so6236211pgq.6;
+        Thu, 02 Jun 2022 19:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x820pLXCsqkyIOD33ZRcyDFQsozHdZWLRbOvlupxM6Y=;
+        b=NDVs7le7eCjhAMs5Buj4u9LWNHEViT99BY68+RNb6hrQOt8/o1pD/MCcbbvF09GdkS
+         66lGkrAL9ZiLRIHQmjARe976DldUtD40tGRHxlQL6k+0ZZgYZxZs/2MQV742rWF3X4sU
+         0717vVygxtarruhlweMGXd+844loIrYlW5FuBgs2DixPa6wAsN4BnZxszR4Ll8AVU7Vs
+         iUTW8hmtdfl5dzTTaOMCXegaPLVjVqt/dyd9SfOJaw/7eemo8BCCKYKjxY6Ox0BnqPlr
+         WsHXPYyjXenSjUImK5mLlCrBkz8YZ4jNcWqRUwBZj07jIyYe0NOzatAT3N1Y9vyM6o7k
+         Utwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x820pLXCsqkyIOD33ZRcyDFQsozHdZWLRbOvlupxM6Y=;
+        b=lTf+Fz5oUNx5RH4OOXvfWjV8VjtQm0RSg6KUowIlhXYVt/VlQjj0dBFVDMFUkT/Re6
+         ejqHwKKoOXi7ow9hr83mI7vvOv1l9dArRSSZ0/uOOGX7CyI+mxAJlaZDTPB/VObZkJkA
+         Js25lh1ewsJwUMzHcnDpo1apVMesM6yR/6IvDz7SuG22uEM8nL03TtW1ftCMAJtm//Po
+         emytQGM++MstvwHBDhhYjUhOFATTgZGhe2GoZ/43B9PRrHsWtjqzQR6kunq4yRStkHwg
+         K0GwWuqxeQZwhG2WtuobNPD4cq+Dzh/UQwfBkKeZaWUPaAHJyLo9+GB6D0D51csEtQo3
+         l4HQ==
+X-Gm-Message-State: AOAM531/+WnHO2783A6RvMynJ3iX5kVOT4r/3ZUmu7UqikhSZ9MJSs8t
+        C2xYGBQp1gpoMinzMuJURo9xLzS2X1a5HA==
+X-Google-Smtp-Source: ABdhPJzd4bR4jGaSMzsYqTsWFkC6YiPrkFfEEtA93z+N5w9JNYeCWlgrqyD3vdIQRzSGf4nj3kKfxQ==
+X-Received: by 2002:a65:6e9b:0:b0:3fc:587a:6dcd with SMTP id bm27-20020a656e9b000000b003fc587a6dcdmr6833105pgb.200.1654225065976;
+        Thu, 02 Jun 2022 19:57:45 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+        by smtp.gmail.com with ESMTPSA id w16-20020a1709026f1000b00166496ba268sm1393055plk.285.2022.06.02.19.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 19:57:45 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] leds: Add leds-qcom-lpg entry to documentation table of contents
+Date:   Fri,  3 Jun 2022 09:57:35 +0700
+Message-Id: <20220603025735.17953-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   0401cdad37f8a62e64363b2a6fc16c7fafba66e2
-commit: b5dbe04a9c8ce5c728b827c452b99517c0e387af [34/63] drm/amd/display: add CLKMGR changes for DCN32/321
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220603/202206031013.jYog18lK-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout b5dbe04a9c8ce5c728b827c452b99517c0e387af
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
+After merging linux-leds tree to the mainline [1], htmldocs build produces
+a new warning:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+checking consistency... /home/bagas/repo/linux-stable/Documentation/leds/leds-qcom-lpg.rst: WARNING: document isn't included in any toctree
 
-All warnings (new ones prefixed by >>):
+The warning above is because leds-qcom-lpg.rst is missing in the table of
+contents.
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c:414:6: warning: no previous prototype for 'dcn32_clock_read_ss_info' [-Wmissing-prototypes]
-     414 | void dcn32_clock_read_ss_info(struct clk_mgr_internal *clk_mgr)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/resource.h:28,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/hw/clk_mgr_internal.h:36,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c:27:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     133 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:130:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
-     130 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:128:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     128 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:127:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     127 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+Add the missing entry.
 
+[1]: https://lore.kernel.org/all/20220531200619.GA8906@duo.ucw.cz/
 
-vim +/dcn32_clock_read_ss_info +414 drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
+Fixes: e98a860f65428a ("leds: qcom-lpg: Require pattern to follow documentation")
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>
+Cc: linux-leds@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Documentation/leds/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-   413	
- > 414	void dcn32_clock_read_ss_info(struct clk_mgr_internal *clk_mgr)
-   415	{
-   416		struct dc_bios *bp = clk_mgr->base.ctx->dc_bios;
-   417		int ss_info_num = bp->funcs->get_ss_entry_number(
-   418				bp, AS_SIGNAL_TYPE_GPU_PLL);
-   419	
-   420		if (ss_info_num) {
-   421			struct spread_spectrum_info info = { { 0 } };
-   422			enum bp_result result = bp->funcs->get_spread_spectrum_info(
-   423					bp, AS_SIGNAL_TYPE_GPU_PLL, 0, &info);
-   424	
-   425			/* SSInfo.spreadSpectrumPercentage !=0 would be sign
-   426			 * that SS is enabled
-   427			 */
-   428			if (result == BP_RESULT_OK &&
-   429					info.spread_spectrum_percentage != 0) {
-   430				clk_mgr->ss_on_dprefclk = true;
-   431				clk_mgr->dprefclk_ss_divider = info.spread_percentage_divider;
-   432	
-   433				if (info.type.CENTER_MODE == 0) {
-   434					/* Currently for DP Reference clock we
-   435					 * need only SS percentage for
-   436					 * downspread
-   437					 */
-   438					clk_mgr->dprefclk_ss_percentage =
-   439							info.spread_spectrum_percentage;
-   440				}
-   441			}
-   442		}
-   443	}
-   444	static void dcn32_notify_wm_ranges(struct clk_mgr *clk_mgr_base)
-   445	{
-   446		struct clk_mgr_internal *clk_mgr = TO_CLK_MGR_INTERNAL(clk_mgr_base);
-   447		WatermarksExternal_t *table = (WatermarksExternal_t *) clk_mgr->wm_range_table;
-   448	
-   449		if (!clk_mgr->smu_present)
-   450			return;
-   451	
-   452		if (!table)
-   453			return;
-   454	
-   455		memset(table, 0, sizeof(*table));
-   456	
-   457		dcn30_smu_set_dram_addr_high(clk_mgr, clk_mgr->wm_range_table_addr >> 32);
-   458		dcn30_smu_set_dram_addr_low(clk_mgr, clk_mgr->wm_range_table_addr & 0xFFFFFFFF);
-   459		dcn32_smu_transfer_wm_table_dram_2_smu(clk_mgr);
-   460	}
-   461	
+diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
+index e5d63b9400459c..014e009b076159 100644
+--- a/Documentation/leds/index.rst
++++ b/Documentation/leds/index.rst
+@@ -25,4 +25,5 @@ LEDs
+    leds-lp5562
+    leds-lp55xx
+    leds-mlxcpld
++   leds-qcom-lpg
+    leds-sc27xx
 
+base-commit: 50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara
+

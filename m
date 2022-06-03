@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D4653C2E9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39B553C25B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbiFCAov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        id S240129AbiFCApP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240002AbiFCAoD (ORCPT
+        with ESMTP id S239997AbiFCAoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 20:44:03 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5AF3465B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:43:56 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id lw3-20020a17090b180300b001e31fad7d5aso6397515pjb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:43:56 -0700 (PDT)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6717337A19
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:43:58 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id i9-20020a632209000000b003facc62e253so3048324pgi.11
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=aE6X5aIfjmoZMi1iYEAJcoIlasrtQaqLVj89AeYY4Cw=;
-        b=fpAMkds5U0PawHg7Nz1aRzfBl76q66Z6oRmBVphY6V79rJfPEj8u01Rt4f9jhxDVSz
-         Lo3Xr5Mk0uV8SF7Tvbn3NWGAf5Zih/jLLsaxRzdY8fgCuypix60YO8u6YFLoQu4xaAuJ
-         mF6b4i8YQr3L5vI5e7MAwon/z6kqFQASjjfZkKXzaZGM1IiA8OW1lWqQ8kbl0ur0m2Pz
-         UPjKQQ80plgrYHwTAoYkduOMRdwTjPqGz1EAsbSZAgmG1g4Vg8xEXxIc0nDu98ODVRvD
-         7FeA6JydHBLp0swoKuTRzZRzi5/giPbF7LpvJ3kc1a8dXND/bkS7YKOLBZalIFeZEjdK
-         W+bw==
+        bh=6TqR2TtIAFDMyHtwdQ6ENJHifFWcPp2E/NJNAkiSnxY=;
+        b=rZo71jz3I3CHllW5m5dbKxPzI1pahTR9DNVlag83m6Pe4XBUeASe+SZzMU+ciNtnPB
+         vRd+DaUa5qB/4JZWvhlp4awSpPgP8dAXrS+gA3hI7C94HkfWuZovsblQc6nck67ouwXu
+         g2HdrIfPNqLLoCdz8GmF1dtWRcMcF5gUvArVKfC+4LeIX5187lG9KKDStS51RZqI3BCD
+         tu15Q7ZB1O6xnrrqp0ed9DLJJ8F+h6/RIZq5tI1LAOblgqurGWg25wH1ZCF2Ut3IaNOO
+         xGr3RL/ZGbPPbdJv+rjrIXwq/R/wQCD37vPbF3M2jvCrvP3IT5AWMZat/uT8Jl3mw+WR
+         A6Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=aE6X5aIfjmoZMi1iYEAJcoIlasrtQaqLVj89AeYY4Cw=;
-        b=WHBeyvIRXYQ9bybQGNxdN34f8CWSzVjIXTOlAjZcZMLPz6j6eCndTxVhOL2QaMaL8C
-         smcn6Ba9MqeFswfvCzC5nAJdlcTDBr4dHfDrd1nnu5/ou6pQ/9vYeTvmF+2d+4xvEMSe
-         nyyFzI6H86bt3nJC7OACXahPUL4KITiJSF8Kc7snW9vhda3sS4f1OKiblLF95bP6qgs0
-         3KEg+jz5ST1nFYWHO4iXUi9J6beqswCSZYbzfkcuaeJiy0u26hRiAqFBu/chSuUTDQwN
-         7viP9qj+u8SMs7KCxA52lH7qzF1/jXAFma4mKc040cQNeX8Fs92rFw6cHsIreaXYeO4m
-         2nAw==
-X-Gm-Message-State: AOAM531fXoxumg8eHDE6J6vRYE2jcfbGIq6K9v4igHJFXqYz1jG5p9w5
-        XH6/iMO6YI9GsIhtEYK1svK15WPZBGc=
-X-Google-Smtp-Source: ABdhPJxA8TpuxBnJt5vYMgGydp3GjUq4sn2VeD/NOU6Cqi6YmFmNey14bakMa8BQ9Uv4e3ltX/2kLCSS1r8=
+        bh=6TqR2TtIAFDMyHtwdQ6ENJHifFWcPp2E/NJNAkiSnxY=;
+        b=a3y3IxFEzTBnqcBn4xuvRM6buzKzJ5lmSWC830U5cxLfn76Dm4wwu7AiG0oSJYm/6V
+         Xdm2/n8d8UVpaGmak17UFBg649KYKZgiJAoLvmUptjxxl8MnYfM4RIZ5taVDGsStDk5F
+         xKq515Trqno/kUkcPqT5+XTANgyX6Cr3OHXETyqrtriQnpeL9ykGeC7+Qfgiv8oLSLN+
+         87FndzWY/DHumXRH9gKyxtGdE7Jb9ZwpFTZ8rl+0lb896hra/WOgTpaw6ZU75myWTxvR
+         fxBcbh96+EGk1k7s4LYKoIzsgGK5y5+48YItW5FzlLe42Pqm8tmuXwsHiKWjxgzP3KQ6
+         iRhA==
+X-Gm-Message-State: AOAM532z9iK6GAmdiPeONvH4FRJr/LEbrgZDMNlwxAXhADmX2LAvumSh
+        KXrb4XwgT98cugQZGG0KYN9o49iF17U=
+X-Google-Smtp-Source: ABdhPJz/dR2aPeg6ELGl/oGUTP9IRPOfyOKM8EWXAZUO3HGRY3QyZtgvPshueIfkhUrHPXkgdF/bWDBeMiA=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:a583:b0:15d:197b:9259 with SMTP id
- az3-20020a170902a58300b0015d197b9259mr7707341plb.51.1654217036046; Thu, 02
- Jun 2022 17:43:56 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:903:18a:b0:166:ba97:8b19 with SMTP id
+ z10-20020a170903018a00b00166ba978b19mr2371326plg.62.1654217037855; Thu, 02
+ Jun 2022 17:43:57 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:41:18 +0000
+Date:   Fri,  3 Jun 2022 00:41:19 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-12-seanjc@google.com>
+Message-Id: <20220603004331.1523888-13-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 011/144] KVM: selftests: Add __vcpu_run() helper
+Subject: [PATCH v2 012/144] KVM: selftests: Use vcpu_access_device_attr() in
+ arm64 code
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -72,109 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add __vcpu_run() so that tests that want to avoid asserts on KVM_RUN
-failures don't need to open code the ioctl() call.
+Use vcpu_access_device_attr() in arm's arch_timer test instead of
+manually retrieving the vCPU's fd.  This will allow dropping vcpu_get_fd()
+in a future patch.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/aarch64/vgic_init.c     | 6 ++----
- tools/testing/selftests/kvm/dirty_log_test.c        | 6 ++----
- tools/testing/selftests/kvm/include/kvm_util_base.h | 6 ++++++
- tools/testing/selftests/kvm/lib/kvm_util.c          | 6 ++----
- 4 files changed, 12 insertions(+), 12 deletions(-)
+ tools/testing/selftests/kvm/aarch64/arch_timer.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/aarch64/vgic_init.c b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-index 8c16b5a750e5..a4d015e1d2f6 100644
---- a/tools/testing/selftests/kvm/aarch64/vgic_init.c
-+++ b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-@@ -55,10 +55,8 @@ static void guest_code(void)
- static int run_vcpu(struct kvm_vm *vm, uint32_t vcpuid)
+diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+index 3b940a101bc0..f55c4c20d8b3 100644
+--- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
++++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+@@ -349,12 +349,10 @@ static void test_run(struct kvm_vm *vm)
+ static void test_init_timer_irq(struct kvm_vm *vm)
  {
- 	ucall_init(vm, NULL);
--	int ret = __vcpu_ioctl(vm, vcpuid, KVM_RUN, NULL);
--	if (ret)
--		return -errno;
--	return 0;
-+
-+	return __vcpu_run(vm, vcpuid) ? -errno : 0;
- }
- 
- static struct vm_gic vm_gic_create_with_vcpus(uint32_t gic_dev_type, uint32_t nr_vcpus)
-diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-index 01c01d40201f..5752486764c9 100644
---- a/tools/testing/selftests/kvm/dirty_log_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_test.c
-@@ -509,7 +509,7 @@ static void generate_random_array(uint64_t *guest_array, uint64_t size)
- 
- static void *vcpu_worker(void *data)
- {
--	int ret, vcpu_fd;
-+	int ret;
- 	struct kvm_vm *vm = data;
- 	uint64_t *guest_array;
- 	uint64_t pages_count = 0;
-@@ -517,8 +517,6 @@ static void *vcpu_worker(void *data)
- 						 + sizeof(sigset_t));
- 	sigset_t *sigset = (sigset_t *) &sigmask->sigset;
- 
--	vcpu_fd = vcpu_get_fd(vm, VCPU_ID);
+ 	/* Timer initid should be same for all the vCPUs, so query only vCPU-0 */
+-	int vcpu0_fd = vcpu_get_fd(vm, 0);
 -
- 	/*
- 	 * SIG_IPI is unblocked atomically while in KVM_RUN.  It causes the
- 	 * ioctl to return with -EINTR, but it is still pending and we need
-@@ -539,7 +537,7 @@ static void *vcpu_worker(void *data)
- 		generate_random_array(guest_array, TEST_PAGES_PER_LOOP);
- 		pages_count += TEST_PAGES_PER_LOOP;
- 		/* Let the guest dirty the random pages */
--		ret = ioctl(vcpu_fd, KVM_RUN, NULL);
-+		ret = __vcpu_run(vm, VCPU_ID);
- 		if (ret == -1 && errno == EINTR) {
- 			int sig = -1;
- 			sigwait(sigset, &sig);
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 4f18f03c537f..6b7a5297053e 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -208,6 +208,12 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva);
- struct kvm_run *vcpu_state(struct kvm_vm *vm, uint32_t vcpuid);
- void vcpu_run(struct kvm_vm *vm, uint32_t vcpuid);
- int _vcpu_run(struct kvm_vm *vm, uint32_t vcpuid);
-+
-+static inline int __vcpu_run(struct kvm_vm *vm, uint32_t vcpuid)
-+{
-+	return __vcpu_ioctl(vm, vcpuid, KVM_RUN, NULL);
-+}
-+
- int vcpu_get_fd(struct kvm_vm *vm, uint32_t vcpuid);
- void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid);
- struct kvm_reg_list *vcpu_get_reg_list(struct kvm_vm *vm, uint32_t vcpuid);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 7ac4516d764c..45895c9ca35a 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1597,12 +1597,10 @@ void vcpu_run(struct kvm_vm *vm, uint32_t vcpuid)
+-	kvm_device_access(vcpu0_fd, KVM_ARM_VCPU_TIMER_CTRL,
+-			KVM_ARM_VCPU_TIMER_IRQ_PTIMER, &ptimer_irq, false);
+-	kvm_device_access(vcpu0_fd, KVM_ARM_VCPU_TIMER_CTRL,
+-			KVM_ARM_VCPU_TIMER_IRQ_VTIMER, &vtimer_irq, false);
++	vcpu_access_device_attr(vm, 0, KVM_ARM_VCPU_TIMER_CTRL,
++				KVM_ARM_VCPU_TIMER_IRQ_PTIMER, &ptimer_irq, false);
++	vcpu_access_device_attr(vm, 0, KVM_ARM_VCPU_TIMER_CTRL,
++				KVM_ARM_VCPU_TIMER_IRQ_VTIMER, &vtimer_irq, false);
  
- int _vcpu_run(struct kvm_vm *vm, uint32_t vcpuid)
- {
--	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
- 	int rc;
- 
--	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
- 	do {
--		rc = ioctl(vcpu->fd, KVM_RUN, NULL);
-+		rc = __vcpu_run(vm, vcpuid);
- 	} while (rc == -1 && errno == EINTR);
- 
- 	assert_on_unhandled_exception(vm, vcpuid);
-@@ -1627,7 +1625,7 @@ void vcpu_run_complete_io(struct kvm_vm *vm, uint32_t vcpuid)
- 	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
- 
- 	vcpu->state->immediate_exit = 1;
--	ret = ioctl(vcpu->fd, KVM_RUN, NULL);
-+	ret = __vcpu_run(vm, vcpuid);
- 	vcpu->state->immediate_exit = 0;
- 
- 	TEST_ASSERT(ret == -1 && errno == EINTR,
+ 	sync_global_to_guest(vm, ptimer_irq);
+ 	sync_global_to_guest(vm, vtimer_irq);
 -- 
 2.36.1.255.ge46751e96f-goog
 

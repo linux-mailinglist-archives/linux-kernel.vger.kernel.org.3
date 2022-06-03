@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80D253C440
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF9353C43E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240650AbiFCFbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S240595AbiFCFbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240572AbiFCFbc (ORCPT
+        with ESMTP id S240572AbiFCFbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:31:32 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F3638DB4;
-        Thu,  2 Jun 2022 22:31:30 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id D5EF95FD02;
-        Fri,  3 Jun 2022 08:31:27 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1654234287;
-        bh=+4MNda9ZVaWsO3OSMFy39GadvoLLcTiXQPmvOw9yBqY=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=OtnvFT2hWMHelc/RdeLxaqAPMtB3GTqXTl54pXjcE8WK+2p0/AEHMPYtdC30Kf00w
-         gB/OlMdlWbfjoS3JVBo/vziQ9X2nO0FrAYyNKuUqVL5r5dgf8leEiH/JMNs9gv7D7O
-         hQ1TPYoc7bxMATsx4JZeFjwf4zSdgMMQPgKEMPf3E5Mu1DQdi13oAdL9uLimobl501
-         69+5wWuEHSAC5CYMjOCNONZi/9eNqGbcOUWgP0H3iCNiWlo3KN/s176QsqypWe9flZ
-         jVzl9NR6B66hlTsa1ctOIXhyFC3cOJTbTyzDFRj5VxMONltJuLJnuo7UOL2k6AGnIJ
-         ER0D3ASDKzpag==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  3 Jun 2022 08:31:27 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jason Wang <jasowang@redhat.com>,
-        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: [RFC PATCH v2 1/8] virtio/vsock: rework packet allocation logic
-Thread-Topic: [RFC PATCH v2 1/8] virtio/vsock: rework packet allocation logic
-Thread-Index: AQHYdwsc/NV43wr3F0ycDhhxOYPufQ==
-Date:   Fri, 3 Jun 2022 05:31:00 +0000
-Message-ID: <78157286-3663-202f-da94-1a17e4ffe819@sberdevices.ru>
-In-Reply-To: <e37fdf9b-be80-35e1-ae7b-c9dfeae3e3db@sberdevices.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DDEE10671C4F8C49BDC9D3EDFA3C6DD6@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Fri, 3 Jun 2022 01:31:20 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A42538DB6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 22:31:18 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id w27so8748073edl.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 22:31:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=yFbf+rXeDHG885MgXcNO51F92YtprLRprfusKhUHuBo=;
+        b=HvAPt7FU+EKdVfe4M56mrmA88Z2Sb3LN+iFmf/An2t2gpkgvQ3W83g/WnnJYQ84SdT
+         G7vi61e8GzCWZspwwxCSSBF3viBVC/3S5Ooy5miiKnW+QvHV+rzvgrcYQ4BmpHIk0XFN
+         3KVL8DoTsQJNNy8KwExUyusxwt/t+80CJvD7NsoFEpDOw0erh8mxFBxIkQMSQ3iWpLNf
+         CnVyUovmE1Q1SfpjyDcnjnGXMQxNUivUPDTFGJ/OsmymUY4YPMnOOukeHzR50frZZ9rf
+         ozXjhkMPf9lKrPRJAshFOCcSMEUyevHZ93/5fYXSuExQKpEiuVJD78+8x7UUSwSkc6XN
+         iCPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yFbf+rXeDHG885MgXcNO51F92YtprLRprfusKhUHuBo=;
+        b=T0PHv3IUXhXoag0OK6M/OMQvYyZ6NBytTCAdzdnx0F51ZRAOpBNKKETnNElqDlLwCH
+         PcNEXInV5xNyWMyo4u/KT6GMLtQ4pEr9ga9KYaod2DIy4I1fpO3mSkNIHIM3R2hYIe9X
+         tdq0NYtRhAjBBsURoMK6ThJuEhOjTnwbAGn2DY4+XW56DiEMwUSOD0VL9zXh1OjlAPgz
+         IAijY92C80huEgx7Twfxn9uOrw/rQ8ws7Ryh833Qm5XLGghugZck99CMOYLw3vPOrdF2
+         2htyLLO5yn4Xkw3zp3y7o2IIBYEsjDDrw+lkQmSTYQBwT1OvLHM2L3WtTVUw1hIhh6dH
+         nFAQ==
+X-Gm-Message-State: AOAM532S8qY5jwqvXVfVu6r770rAz+Z2KCvyiodd4097y6h5WTNqo1zX
+        Hv6c7caE6Q/I6FXMD90iC6DLXw==
+X-Google-Smtp-Source: ABdhPJytg9hlGbrqAJkmbUkOLFwR2Mp42qHfQVrb4vP92ORErxOSUQl/RMSZVGmH5dPo0cpyKWBMFw==
+X-Received: by 2002:a05:6402:1d4a:b0:42e:93de:17f4 with SMTP id dz10-20020a0564021d4a00b0042e93de17f4mr693550edb.8.1654234276765;
+        Thu, 02 Jun 2022 22:31:16 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bk2-20020a170906b0c200b006fef557bb7asm2422104ejb.80.2022.06.02.22.31.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 22:31:15 -0700 (PDT)
+Message-ID: <65daf4b7-212d-b726-cc7e-bcdf5d4664b8@linaro.org>
+Date:   Fri, 3 Jun 2022 07:31:14 +0200
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/06/03 01:19:00 #19656765
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/7] pinctrl/arm: dt-bindings: deprecate header with
+ register constants
+Content-Language: en-US
+To:     Chanho Park <chanho61.park@samsung.com>,
+        'Rob Herring' <robh+dt@kernel.org>,
+        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
+        'Alim Akhtar' <alim.akhtar@samsung.com>,
+        'Tomasz Figa' <tomasz.figa@gmail.com>,
+        'Sylwester Nawrocki' <s.nawrocki@samsung.com>,
+        'Linus Walleij' <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+References: <CGME20220601152757epcas2p30927b9924e9371cdfa79986c6efb6eaf@epcas2p3.samsung.com>
+ <20220601152720.232383-1-krzysztof.kozlowski@linaro.org>
+ <000501d87703$211ff7a0$635fe6e0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <000501d87703$211ff7a0$635fe6e0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VG8gc3VwcG9ydCB6ZXJvY29weSByZWNlaXZlLCBwYWNrZXQncyBidWZmZXIgYWxsb2NhdGlvbg0K
-aXMgY2hhbmdlZDogZm9yIGJ1ZmZlcnMgd2hpY2ggY291bGQgYmUgbWFwcGVkIHRvIHVzZXIncw0K
-dm1hIHdlIGNhbid0IHVzZSAna21hbGxvYygpJyhhcyBrZXJuZWwgcmVzdHJpY3RzIHRvIG1hcA0K
-c2xhYiBwYWdlcyB0byB1c2VyJ3Mgdm1hKSBhbmQgcmF3IGJ1ZGR5IGFsbG9jYXRvciBub3cNCmNh
-bGxlZC4gQnV0LCBmb3IgdHggcGFja2V0cyhzdWNoIHBhY2tldHMgd29uJ3QgYmUgbWFwcGVkDQp0
-byB1c2VyKSwgcHJldmlvdXMgJ2ttYWxsb2MoKScgd2F5IGlzIHVzZWQsIGJ1dCB3aXRoIHNwZWNp
-YWwNCmZsYWcgaW4gcGFja2V0J3Mgc3RydWN0dXJlIHdoaWNoIGFsbG93cyB0byBkaXN0aW5ndWlz
-aA0KYmV0d2VlbiAna21hbGxvYygpJyBhbmQgcmF3IHBhZ2VzIGJ1ZmZlcnMuDQoNClNpZ25lZC1v
-ZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQog
-aW5jbHVkZS9saW51eC92aXJ0aW9fdnNvY2suaCAgICAgICAgICAgIHwgMSArDQogbmV0L3Ztd192
-c29jay92aXJ0aW9fdHJhbnNwb3J0LmMgICAgICAgIHwgOCArKysrKystLQ0KIG5ldC92bXdfdnNv
-Y2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYyB8IDkgKysrKysrKystDQogMyBmaWxlcyBjaGFu
-Z2VkLCAxNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvaW5j
-bHVkZS9saW51eC92aXJ0aW9fdnNvY2suaCBiL2luY2x1ZGUvbGludXgvdmlydGlvX3Zzb2NrLmgN
-CmluZGV4IDM1ZDdlZWRiNWU4ZS4uZDAyY2I3YWE5MjJmIDEwMDY0NA0KLS0tIGEvaW5jbHVkZS9s
-aW51eC92aXJ0aW9fdnNvY2suaA0KKysrIGIvaW5jbHVkZS9saW51eC92aXJ0aW9fdnNvY2suaA0K
-QEAgLTUwLDYgKzUwLDcgQEAgc3RydWN0IHZpcnRpb192c29ja19wa3Qgew0KIAl1MzIgb2ZmOw0K
-IAlib29sIHJlcGx5Ow0KIAlib29sIHRhcF9kZWxpdmVyZWQ7DQorCWJvb2wgc2xhYl9idWY7DQog
-fTsNCiANCiBzdHJ1Y3QgdmlydGlvX3Zzb2NrX3BrdF9pbmZvIHsNCmRpZmYgLS1naXQgYS9uZXQv
-dm13X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnQuYyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5z
-cG9ydC5jDQppbmRleCBhZDY0ZjQwMzUzNmEuLjE5OTA5YzFlOWJhMyAxMDA2NDQNCi0tLSBhL25l
-dC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydC5jDQorKysgYi9uZXQvdm13X3Zzb2NrL3ZpcnRp
-b190cmFuc3BvcnQuYw0KQEAgLTI1NSwxNiArMjU1LDIwIEBAIHN0YXRpYyB2b2lkIHZpcnRpb192
-c29ja19yeF9maWxsKHN0cnVjdCB2aXJ0aW9fdnNvY2sgKnZzb2NrKQ0KIAl2cSA9IHZzb2NrLT52
-cXNbVlNPQ0tfVlFfUlhdOw0KIA0KIAlkbyB7DQorCQlzdHJ1Y3QgcGFnZSAqYnVmX3BhZ2U7DQor
-DQogCQlwa3QgPSBremFsbG9jKHNpemVvZigqcGt0KSwgR0ZQX0tFUk5FTCk7DQogCQlpZiAoIXBr
-dCkNCiAJCQlicmVhazsNCiANCi0JCXBrdC0+YnVmID0ga21hbGxvYyhidWZfbGVuLCBHRlBfS0VS
-TkVMKTsNCi0JCWlmICghcGt0LT5idWYpIHsNCisJCWJ1Zl9wYWdlID0gYWxsb2NfcGFnZShHRlBf
-S0VSTkVMKTsNCisNCisJCWlmICghYnVmX3BhZ2UpIHsNCiAJCQl2aXJ0aW9fdHJhbnNwb3J0X2Zy
-ZWVfcGt0KHBrdCk7DQogCQkJYnJlYWs7DQogCQl9DQogDQorCQlwa3QtPmJ1ZiA9IHBhZ2VfdG9f
-dmlydChidWZfcGFnZSk7DQogCQlwa3QtPmJ1Zl9sZW4gPSBidWZfbGVuOw0KIAkJcGt0LT5sZW4g
-PSBidWZfbGVuOw0KIA0KZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9y
-dF9jb21tb24uYyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KaW5k
-ZXggZWMyYzJhZmJmMGQwLi4yNzg1NjdmNzQ4ZjIgMTAwNjQ0DQotLS0gYS9uZXQvdm13X3Zzb2Nr
-L3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMNCisrKyBiL25ldC92bXdfdnNvY2svdmlydGlvX3Ry
-YW5zcG9ydF9jb21tb24uYw0KQEAgLTY5LDYgKzY5LDcgQEAgdmlydGlvX3RyYW5zcG9ydF9hbGxv
-Y19wa3Qoc3RydWN0IHZpcnRpb192c29ja19wa3RfaW5mbyAqaW5mbywNCiAJCWlmICghcGt0LT5i
-dWYpDQogCQkJZ290byBvdXRfcGt0Ow0KIA0KKwkJcGt0LT5zbGFiX2J1ZiA9IHRydWU7DQogCQlw
-a3QtPmJ1Zl9sZW4gPSBsZW47DQogDQogCQllcnIgPSBtZW1jcHlfZnJvbV9tc2cocGt0LT5idWYs
-IGluZm8tPm1zZywgbGVuKTsNCkBAIC0xMzQyLDcgKzEzNDMsMTMgQEAgRVhQT1JUX1NZTUJPTF9H
-UEwodmlydGlvX3RyYW5zcG9ydF9yZWN2X3BrdCk7DQogDQogdm9pZCB2aXJ0aW9fdHJhbnNwb3J0
-X2ZyZWVfcGt0KHN0cnVjdCB2aXJ0aW9fdnNvY2tfcGt0ICpwa3QpDQogew0KLQlrZnJlZShwa3Qt
-PmJ1Zik7DQorCWlmIChwa3QtPmJ1Zl9sZW4pIHsNCisJCWlmIChwa3QtPnNsYWJfYnVmKQ0KKwkJ
-CWtmcmVlKHBrdC0+YnVmKTsNCisJCWVsc2UNCisJCQlmcmVlX3BhZ2VzKGJ1ZiwgZ2V0X29yZGVy
-KHBrdC0+YnVmX2xlbikpOw0KKwl9DQorDQogCWtmcmVlKHBrdCk7DQogfQ0KIEVYUE9SVF9TWU1C
-T0xfR1BMKHZpcnRpb190cmFuc3BvcnRfZnJlZV9wa3QpOw0KLS0gDQoyLjI1LjENCg==
+On 03/06/2022 06:33, Chanho Park wrote:
+>> Krzysztof Kozlowski (7):
+>>   ARM: dts: s3c2410: use local header for pinctrl register values
+>>   ARM: dts: s3c64xx: use local header for pinctrl register values
+>>   ARM: dts: s5pv210: use local header for pinctrl register values
+>>   ARM: dts: exynos: use local header for pinctrl register values
+>>   arm64: dts: exynos: use local header for pinctrl register values
+>>   arm64: dts: fsd: use local header for pinctrl register values
+>>   dt-bindings: pinctrl: deprecate header with register constants
+> 
+> nit: Put the comment closure to the next line.
+> 
+> + * Author: Krzysztof Kozlowski <krzk@kernel.org>  */
+
+Which file has the comment in wrong place? I checked now and everywhere
+it is:
+
++ * Author: Krzysztof Kozlowski <krzk@kernel.org>
++ */
++
+
+
+Best regards,
+Krzysztof

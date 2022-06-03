@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAD853D08B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFE753D02B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347990AbiFCSGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S1346333AbiFCSAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345396AbiFCRxY (ORCPT
+        with ESMTP id S1346815AbiFCRvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:53:24 -0400
+        Fri, 3 Jun 2022 13:51:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B5723174;
-        Fri,  3 Jun 2022 10:52:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817F557B00;
+        Fri,  3 Jun 2022 10:49:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99C24B82189;
-        Fri,  3 Jun 2022 17:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8071BC385A9;
-        Fri,  3 Jun 2022 17:52:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2391B82419;
+        Fri,  3 Jun 2022 17:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495DEC385B8;
+        Fri,  3 Jun 2022 17:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278750;
-        bh=3UL3x2f2WyP8DSvLWX62I8m/JkJuzbJBFvpyHQs11YU=;
+        s=korg; t=1654278565;
+        bh=TIS2GoTaI2/zpFafNEpWpq5sRvOtRLPlkLlhchtllhE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nDrXwBVUndLlPWZLSf+1MDJLRuLB8hCChN9KSblJUfYjsjJsK2WYTd/nUJ0PjQuai
-         NMpVhzJAYirpm/sIL/ZNijppv2DRylHJ9Z4BG4MVJwJJf/rdC1wiQdorMGZF5VJvS/
-         rlIuszrYI2mGTn9YrjO6tcm5b+IVndBg3Qb3i098=
+        b=E6Oz771+h058gH4BVniw3drqvTvpvd3Cw7vUhIXYqaEktyxq9BWzXCmVaiHaqSVdi
+         NGQONY3J/ZB+oTG//wqJDHTgloX0hdYqY37Pag5gum479eNtAOArwYL/rysCfHFRlm
+         VfiQ+vZL4pgGhiflW74opXMrYp3HJhmpbLfb5TOI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Alexander Duyck <alexander.h.duyck@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        "Soheil Hassas Yeganeh" <soheil@google.com>,
-        "Sridhar Samudrala" <sridhar.samudrala@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.17 15/75] pipe: make poll_usage boolean and annotate its access
-Date:   Fri,  3 Jun 2022 19:42:59 +0200
-Message-Id: <20220603173822.181504981@linuxfoundation.org>
+        stable@vger.kernel.org, Nicolai Stange <nstange@suse.de>,
+        =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 20/66] crypto: drbg - prepare for more fine-grained tracking of seeding state
+Date:   Fri,  3 Jun 2022 19:43:00 +0200
+Message-Id: <20220603173821.247230562@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,82 +56,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Nicolai Stange <nstange@suse.de>
 
-commit f485922d8fe4e44f6d52a5bb95a603b7c65554bb upstream.
+commit ce8ce31b2c5c8b18667784b8c515650c65d57b4e upstream.
 
-Patch series "Fix data-races around epoll reported by KCSAN."
+There are two different randomness sources the DRBGs are getting seeded
+from, namely the jitterentropy source (if enabled) and get_random_bytes().
+At initial DRBG seeding time during boot, the latter might not have
+collected sufficient entropy for seeding itself yet and thus, the DRBG
+implementation schedules a reseed work from a random_ready_callback once
+that has happened. This is particularly important for the !->pr DRBG
+instances, for which (almost) no further reseeds are getting triggered
+during their lifetime.
 
-This series suppresses a false positive KCSAN's message and fixes a real
-data-race.
+Because collecting data from the jitterentropy source is a rather expensive
+operation, the aforementioned asynchronously scheduled reseed work
+restricts itself to get_random_bytes() only. That is, it in some sense
+amends the initial DRBG seed derived from jitterentropy output at full
+(estimated) entropy with fresh randomness obtained from get_random_bytes()
+once that has been seeded with sufficient entropy itself.
 
+With the advent of rng_is_initialized(), there is no real need for doing
+the reseed operation from an asynchronously scheduled work anymore and a
+subsequent patch will make it synchronous by moving it next to related
+logic already present in drbg_generate().
 
-This patch (of 2):
+However, for tracking whether a full reseed including the jitterentropy
+source is required or a "partial" reseed involving only get_random_bytes()
+would be sufficient already, the boolean struct drbg_state's ->seeded
+member must become a tristate value.
 
-pipe_poll() runs locklessly and assigns 1 to poll_usage.  Once poll_usage
-is set to 1, it never changes in other places.  However, concurrent writes
-of a value trigger KCSAN, so let's make KCSAN happy.
+Prepare for this by introducing the new enum drbg_seed_state and change
+struct drbg_state's ->seeded member's type from bool to that type.
 
-BUG: KCSAN: data-race in pipe_poll / pipe_poll
+For facilitating review, enum drbg_seed_state is made to only contain
+two members corresponding to the former ->seeded values of false and true
+resp. at this point: DRBG_SEED_STATE_UNSEEDED and DRBG_SEED_STATE_FULL. A
+third one for tracking the intermediate state of "seeded from jitterentropy
+only" will be introduced with a subsequent patch.
 
-write to 0xffff8880042f6678 of 4 bytes by task 174 on cpu 3:
- pipe_poll (fs/pipe.c:656)
- ep_item_poll.isra.0 (./include/linux/poll.h:88 fs/eventpoll.c:853)
- do_epoll_wait (fs/eventpoll.c:1692 fs/eventpoll.c:1806 fs/eventpoll.c:2234)
- __x64_sys_epoll_wait (fs/eventpoll.c:2246 fs/eventpoll.c:2241 fs/eventpoll.c:2241)
- do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
+There is no change in behaviour at this point.
 
-write to 0xffff8880042f6678 of 4 bytes by task 177 on cpu 1:
- pipe_poll (fs/pipe.c:656)
- ep_item_poll.isra.0 (./include/linux/poll.h:88 fs/eventpoll.c:853)
- do_epoll_wait (fs/eventpoll.c:1692 fs/eventpoll.c:1806 fs/eventpoll.c:2234)
- __x64_sys_epoll_wait (fs/eventpoll.c:2246 fs/eventpoll.c:2241 fs/eventpoll.c:2241)
- do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 177 Comm: epoll_race Not tainted 5.17.0-58927-gf443e374ae13 #6
-Hardware name: Red Hat KVM, BIOS 1.11.0-2.amzn2 04/01/2014
-
-Link: https://lkml.kernel.org/r/20220322002653.33865-1-kuniyu@amazon.co.jp
-Link: https://lkml.kernel.org/r/20220322002653.33865-2-kuniyu@amazon.co.jp
-Fixes: 3b844826b6c6 ("pipe: avoid unnecessary EPOLLET wakeups under normal loads")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc: Alexander Duyck <alexander.h.duyck@intel.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Kuniyuki Iwashima <kuni1840@gmail.com>
-Cc: "Soheil Hassas Yeganeh" <soheil@google.com>
-Cc: "Sridhar Samudrala" <sridhar.samudrala@intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Nicolai Stange <nstange@suse.de>
+Reviewed-by: Stephan Müller <smueller@chronox.de>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/pipe.c                 |    2 +-
- include/linux/pipe_fs_i.h |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ crypto/drbg.c         |   19 ++++++++++---------
+ include/crypto/drbg.h |    7 ++++++-
+ 2 files changed, 16 insertions(+), 10 deletions(-)
 
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -653,7 +653,7 @@ pipe_poll(struct file *filp, poll_table
- 	unsigned int head, tail;
+--- a/crypto/drbg.c
++++ b/crypto/drbg.c
+@@ -1043,7 +1043,7 @@ static inline int __drbg_seed(struct drb
+ 	if (ret)
+ 		return ret;
  
- 	/* Epoll has some historical nasty semantics, this enables them */
--	pipe->poll_usage = 1;
-+	WRITE_ONCE(pipe->poll_usage, true);
+-	drbg->seeded = true;
++	drbg->seeded = DRBG_SEED_STATE_FULL;
+ 	/* 10.1.1.2 / 10.1.1.3 step 5 */
+ 	drbg->reseed_ctr = 1;
  
- 	/*
- 	 * Reading pipe state only -- no need for acquiring the semaphore.
---- a/include/linux/pipe_fs_i.h
-+++ b/include/linux/pipe_fs_i.h
-@@ -71,7 +71,7 @@ struct pipe_inode_info {
- 	unsigned int files;
- 	unsigned int r_counter;
- 	unsigned int w_counter;
--	unsigned int poll_usage;
-+	bool poll_usage;
- 	struct page *tmp_page;
- 	struct fasync_struct *fasync_readers;
- 	struct fasync_struct *fasync_writers;
+@@ -1088,14 +1088,14 @@ static void drbg_async_seed(struct work_
+ 	if (ret)
+ 		goto unlock;
+ 
+-	/* Set seeded to false so that if __drbg_seed fails the
+-	 * next generate call will trigger a reseed.
++	/* Reset ->seeded so that if __drbg_seed fails the next
++	 * generate call will trigger a reseed.
+ 	 */
+-	drbg->seeded = false;
++	drbg->seeded = DRBG_SEED_STATE_UNSEEDED;
+ 
+ 	__drbg_seed(drbg, &seedlist, true);
+ 
+-	if (drbg->seeded)
++	if (drbg->seeded == DRBG_SEED_STATE_FULL)
+ 		drbg->reseed_threshold = drbg_max_requests(drbg);
+ 
+ unlock:
+@@ -1386,13 +1386,14 @@ static int drbg_generate(struct drbg_sta
+ 	 * here. The spec is a bit convoluted here, we make it simpler.
+ 	 */
+ 	if (drbg->reseed_threshold < drbg->reseed_ctr)
+-		drbg->seeded = false;
++		drbg->seeded = DRBG_SEED_STATE_UNSEEDED;
+ 
+-	if (drbg->pr || !drbg->seeded) {
++	if (drbg->pr || drbg->seeded == DRBG_SEED_STATE_UNSEEDED) {
+ 		pr_devel("DRBG: reseeding before generation (prediction "
+ 			 "resistance: %s, state %s)\n",
+ 			 drbg->pr ? "true" : "false",
+-			 drbg->seeded ? "seeded" : "unseeded");
++			 (drbg->seeded ==  DRBG_SEED_STATE_FULL ?
++			  "seeded" : "unseeded"));
+ 		/* 9.3.1 steps 7.1 through 7.3 */
+ 		len = drbg_seed(drbg, addtl, true);
+ 		if (len)
+@@ -1577,7 +1578,7 @@ static int drbg_instantiate(struct drbg_
+ 	if (!drbg->core) {
+ 		drbg->core = &drbg_cores[coreref];
+ 		drbg->pr = pr;
+-		drbg->seeded = false;
++		drbg->seeded = DRBG_SEED_STATE_UNSEEDED;
+ 		drbg->reseed_threshold = drbg_max_requests(drbg);
+ 
+ 		ret = drbg_alloc_state(drbg);
+--- a/include/crypto/drbg.h
++++ b/include/crypto/drbg.h
+@@ -105,6 +105,11 @@ struct drbg_test_data {
+ 	struct drbg_string *testentropy; /* TEST PARAMETER: test entropy */
+ };
+ 
++enum drbg_seed_state {
++	DRBG_SEED_STATE_UNSEEDED,
++	DRBG_SEED_STATE_FULL,
++};
++
+ struct drbg_state {
+ 	struct mutex drbg_mutex;	/* lock around DRBG */
+ 	unsigned char *V;	/* internal state 10.1.1.1 1a) */
+@@ -127,7 +132,7 @@ struct drbg_state {
+ 	struct crypto_wait ctr_wait;		/* CTR mode async wait obj */
+ 	struct scatterlist sg_in, sg_out;	/* CTR mode SGLs */
+ 
+-	bool seeded;		/* DRBG fully seeded? */
++	enum drbg_seed_state seeded;		/* DRBG fully seeded? */
+ 	bool pr;		/* Prediction resistance enabled? */
+ 	bool fips_primed;	/* Continuous test primed? */
+ 	unsigned char *prev;	/* FIPS 140-2 continuous test value */
 
 

@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D0B53C2BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0B053C1D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240325AbiFCAqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
+        id S240280AbiFCApn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240050AbiFCAoX (ORCPT
+        with ESMTP id S240054AbiFCAoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 20:44:23 -0400
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E4237A3B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:44:19 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id c11-20020a17090a4d0b00b001e4e081d525so3929345pjg.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:44:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98CF37A3F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:44:21 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id g9-20020a17090a3c8900b001e0b21c4d68so3393164pjc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=k1Q42T/S1yGxYqwtKybSTPfRe2IMMYvCe2uCWIlmgTA=;
-        b=ebkLZ0HK3dOEvtoudU28vFAk9x01xfHmY1dxW8/4g9TCe5ceH/j4/zL0WvK/IL3N5K
-         +aE9C0CI/fP6PAc4sQwaP5xIWAFcYCB6lcDcfd0bbyaSsi2G8FiB6c9SsTnaq7mWgW/C
-         TGHRc+Ifha8DHVYsVXsBFZI3PkdNFwHYROzPTbDyJxPlhhLBnYxilmZy2zFkmbzvoyCi
-         jHEeFUjJKT4FvkOmBwiNXtkzG2j7GHuv1Ok9MYLJBT9uVGCHiIC0L1T2Tx2xabuIPzf3
-         O5vfigYVGuqR4eFy5A2XTyEtZN5+2+OzN3DWNyUNKZJPpVPaFvnU9OV1HSaLyESdJ/CT
-         msww==
+        bh=YQR+b5OeEVvL6VtC5wb44JTG7irNUdL3F/WIGJP+RwM=;
+        b=DQMUjhQ71Bxj1FyyI1Qz5olUwdGxj1si1kXxQl4K6XyzqNOSDWAKYkIMSiKxRp30uP
+         D2YSg4uTj9GU0E89lGlNNmGYKd/K6HS/PaaxX1ZKm6kVAVyWcEHl4kyvfJnbkrsFizyE
+         0siOpbqtoMaN5ldAu8t87N5y4Q7tG9A6d6jxmv2gjIv4Fpmz2Rbpz1Vjjt4bDnUtYD9d
+         Wlw8PHxmlSOcz09dPCtgs3crefBXOwUFojvq/2ujtwu7AdACRD7RODQVHzGGU1D2ACyu
+         nguEyk7PwjTEh1tiH4lgNgPQShmjgKky5Z92OR0wbzpkiUmFUBH3y2DKfWp0vV4Hp10y
+         pPRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=k1Q42T/S1yGxYqwtKybSTPfRe2IMMYvCe2uCWIlmgTA=;
-        b=TILyDNNX8NHe2Zw4HPzf9JQ8C65+TGVdkeWTlFbc5Rf/8iypETkH2JqRzfPtKQ7lW2
-         pVS1TzILCeiv5jjrHeCuqY3BktSQcoN+rUq6MHpKIEe5uDxKU5fyUQY6fzjKRGN2lD1A
-         YbOUYqDBOU6O2P/6uQIF9EAE5eVMCkB6/gplknN2kszdqp8FRvDfSdUOs723DIECgxe0
-         vlExbcqc2JCT7l0NbdWxeL+vYtyzNUFWu0Apv4nXb3DPieFESKFJK47ayKwVxpazEKr5
-         OTjOmDot9rsazCnwxZkCGtgD/+WVERNRQP3kI/uL1/V+cwTZF7EDshVEXPdFbqT9EDfG
-         SKrw==
-X-Gm-Message-State: AOAM530uqNGJYfb8EsKIBs3oV3Liy6j+dx3u+gF0xiQIovM3YktF0CPB
-        iPfxPcRsYpwPVWMESJCMW7JOApA0hTo=
-X-Google-Smtp-Source: ABdhPJyE/Hx8D/Xb1v7h3qXbULKPRJHSfomSLoJ8sU/LXNsLbL6qodc91CH5RRQ9x2zACWn74bxsNWHgmCo=
+        bh=YQR+b5OeEVvL6VtC5wb44JTG7irNUdL3F/WIGJP+RwM=;
+        b=Whp3jY7qnxhuYljOAHneeMZzK5xmT80zE3BmJ9XmRaYuudUREDtLboGQ8f9VpJ4nqf
+         y1AP5X4WQZnxdLoFTkbsDVSaVwAiHH8RUDEjcixzMGZ8boxf/+T4+QvT2wNbcMxbUzsH
+         aXBlwg3WYaktnegLHcePj/xiDHX9o2um1vwXcZmlmKXxH8DrE4H+wuNIYmPhmsKtmUS9
+         F8hIez1XP2d8LF+08hUsEewb5i4ZMiAFNiqRUgSuA6HYNW40hAcr/vs1hH7BYq8WCFFW
+         yUL53JiGJ2iKEYqmouRW4IL+o1FvRU9Qemg7f8mbfsOVWUK/yEB/9RkVYbc9yDaPvfFw
+         k+nQ==
+X-Gm-Message-State: AOAM533Urt19pET5XmA9/o4TCXJys+xAMO9jYeyBp4k62w+pym9hUHSy
+        L708/wyj0nqBFduE8UxqAMTcMe+2jpo=
+X-Google-Smtp-Source: ABdhPJzuRv/UJXBKRY7AWWjmJsAVUBl25WV0DIZIRv/Vc9cnp+Afr0NlTJSt5jym7vWQlKkCoY0CEelXJVI=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:338e:b0:51b:c452:4210 with SMTP id
- cm14-20020a056a00338e00b0051bc4524210mr6976736pfb.69.1654217059225; Thu, 02
- Jun 2022 17:44:19 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr307291pje.0.1654217060998; Thu, 02 Jun
+ 2022 17:44:20 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:41:31 +0000
+Date:   Fri,  3 Jun 2022 00:41:32 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-25-seanjc@google.com>
+Message-Id: <20220603004331.1523888-26-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 024/144] KVM: selftests: Move KVM_CREATE_DEVICE_TEST code
- to separate helper
+Subject: [PATCH v2 025/144] KVM: selftests: Multiplex return code and fd in __kvm_create_device()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -66,131 +65,117 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move KVM_CREATE_DEVICE_TEST to its own helper, identifying "real" versus
-"test" device creation based on a hardcoded boolean buried in the middle
-of a param list is painful for readers.
+Multiplex the return value and fd (on success) in __kvm_create_device()
+to mimic common library helpers that return file descriptors, e.g. open().
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../testing/selftests/kvm/aarch64/vgic_init.c | 10 ++++----
- .../selftests/kvm/include/kvm_util_base.h     |  3 ++-
- .../testing/selftests/kvm/lib/aarch64/vgic.c  |  3 +--
- tools/testing/selftests/kvm/lib/kvm_util.c    | 23 ++++++++++++++-----
- 4 files changed, 25 insertions(+), 14 deletions(-)
+ tools/testing/selftests/kvm/aarch64/vgic_init.c  |  6 +++---
+ .../selftests/kvm/include/kvm_util_base.h        |  2 +-
+ tools/testing/selftests/kvm/lib/aarch64/vgic.c   |  5 +++--
+ tools/testing/selftests/kvm/lib/kvm_util.c       | 16 +++++++---------
+ 4 files changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/aarch64/vgic_init.c b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-index 48b795eadafd..77ba8a160887 100644
+index 77ba8a160887..4519ca2a48d1 100644
 --- a/tools/testing/selftests/kvm/aarch64/vgic_init.c
 +++ b/tools/testing/selftests/kvm/aarch64/vgic_init.c
-@@ -648,24 +648,24 @@ int test_kvm_device(uint32_t gic_dev_type)
+@@ -642,8 +642,8 @@ static void test_v3_its_region(void)
+ int test_kvm_device(uint32_t gic_dev_type)
+ {
+ 	struct vm_gic v;
+-	int ret, fd;
+ 	uint32_t other;
++	int ret;
+ 
  	v.vm = vm_create_default_with_vcpus(NR_VCPUS, 0, 0, guest_code, NULL);
  
- 	/* try to create a non existing KVM device */
--	ret = _kvm_create_device(v.vm, 0, true, &fd);
-+	ret = __kvm_test_create_device(v.vm, 0);
- 	TEST_ASSERT(ret && errno == ENODEV, "unsupported device");
- 
- 	/* trial mode */
--	ret = _kvm_create_device(v.vm, gic_dev_type, true, &fd);
-+	ret = __kvm_test_create_device(v.vm, gic_dev_type);
- 	if (ret)
+@@ -657,8 +657,8 @@ int test_kvm_device(uint32_t gic_dev_type)
  		return ret;
  	v.gic_fd = kvm_create_device(v.vm, gic_dev_type);
  
--	ret = _kvm_create_device(v.vm, gic_dev_type, false, &fd);
-+	ret = __kvm_create_device(v.vm, gic_dev_type, &fd);
- 	TEST_ASSERT(ret && errno == EEXIST, "create GIC device twice");
+-	ret = __kvm_create_device(v.vm, gic_dev_type, &fd);
+-	TEST_ASSERT(ret && errno == EEXIST, "create GIC device twice");
++	ret = __kvm_create_device(v.vm, gic_dev_type);
++	TEST_ASSERT(ret < 0 && errno == EEXIST, "create GIC device twice");
  
  	/* try to create the other gic_dev_type */
  	other = VGIC_DEV_IS_V2(gic_dev_type) ? KVM_DEV_TYPE_ARM_VGIC_V3
- 					     : KVM_DEV_TYPE_ARM_VGIC_V2;
- 
--	if (!_kvm_create_device(v.vm, other, true, &fd)) {
--		ret = _kvm_create_device(v.vm, other, false, &fd);
-+	if (!__kvm_test_create_device(v.vm, other)) {
-+		ret = __kvm_test_create_device(v.vm, other);
- 		TEST_ASSERT(ret && errno == EINVAL,
- 				"create GIC device while other version exists");
- 	}
 diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 6e1926abb248..8795f4624c2c 100644
+index 8795f4624c2c..1ccf44805fa0 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -484,7 +484,8 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...);
- 
+@@ -485,7 +485,7 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...);
  int _kvm_device_check_attr(int dev_fd, uint32_t group, uint64_t attr);
  int kvm_device_check_attr(int dev_fd, uint32_t group, uint64_t attr);
--int _kvm_create_device(struct kvm_vm *vm, uint64_t type, bool test, int *fd);
-+int __kvm_test_create_device(struct kvm_vm *vm, uint64_t type);
-+int __kvm_create_device(struct kvm_vm *vm, uint64_t type, int *fd);
+ int __kvm_test_create_device(struct kvm_vm *vm, uint64_t type);
+-int __kvm_create_device(struct kvm_vm *vm, uint64_t type, int *fd);
++int __kvm_create_device(struct kvm_vm *vm, uint64_t type);
  int kvm_create_device(struct kvm_vm *vm, uint64_t type);
  int _kvm_device_access(int dev_fd, uint32_t group, uint64_t attr,
  		       void *val, bool write);
 diff --git a/tools/testing/selftests/kvm/lib/aarch64/vgic.c b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
-index c34f0f116f39..74b4bcaffcfa 100644
+index 74b4bcaffcfa..7925b4c5dad0 100644
 --- a/tools/testing/selftests/kvm/lib/aarch64/vgic.c
 +++ b/tools/testing/selftests/kvm/lib/aarch64/vgic.c
-@@ -51,8 +51,7 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
+@@ -51,8 +51,9 @@ int vgic_v3_setup(struct kvm_vm *vm, unsigned int nr_vcpus, uint32_t nr_irqs,
  			nr_vcpus, nr_vcpus_created);
  
  	/* Distributor setup */
--	if (_kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3,
--			       false, &gic_fd) != 0)
-+	if (__kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, &gic_fd))
- 		return -1;
+-	if (__kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3, &gic_fd))
+-		return -1;
++	gic_fd = __kvm_create_device(vm, KVM_DEV_TYPE_ARM_VGIC_V3);
++	if (gic_fd < 0)
++		return gic_fd;
  
  	kvm_device_access(gic_fd, KVM_DEV_ARM_VGIC_GRP_NR_IRQS,
+ 			0, &nr_irqs, true);
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index cb2e42aa1c03..9c0122b0e393 100644
+index 9c0122b0e393..17e226107b65 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1629,14 +1629,25 @@ int kvm_device_check_attr(int dev_fd, uint32_t group, uint64_t attr)
- 	return ret;
+@@ -1639,27 +1639,25 @@ int __kvm_test_create_device(struct kvm_vm *vm, uint64_t type)
+ 	return __vm_ioctl(vm, KVM_CREATE_DEVICE, &create_dev);
  }
  
--int _kvm_create_device(struct kvm_vm *vm, uint64_t type, bool test, int *fd)
-+int __kvm_test_create_device(struct kvm_vm *vm, uint64_t type)
+-int __kvm_create_device(struct kvm_vm *vm, uint64_t type, int *fd)
++int __kvm_create_device(struct kvm_vm *vm, uint64_t type)
  {
--	struct kvm_create_device create_dev;
-+	struct kvm_create_device create_dev = {
-+		.type = type,
-+		.flags = KVM_CREATE_DEVICE_TEST,
-+	};
-+
-+	return __vm_ioctl(vm, KVM_CREATE_DEVICE, &create_dev);
-+}
-+
-+int __kvm_create_device(struct kvm_vm *vm, uint64_t type, int *fd)
-+{
-+	struct kvm_create_device create_dev = {
-+		.type = type,
-+		.fd = -1,
-+		.flags = 0,
-+	};
- 	int ret;
+ 	struct kvm_create_device create_dev = {
+ 		.type = type,
+ 		.fd = -1,
+ 		.flags = 0,
+ 	};
+-	int ret;
++	int err;
  
--	create_dev.type = type;
--	create_dev.fd = -1;
--	create_dev.flags = test ? KVM_CREATE_DEVICE_TEST : 0;
- 	ret = __vm_ioctl(vm, KVM_CREATE_DEVICE, &create_dev);
- 	*fd = create_dev.fd;
- 	return ret;
-@@ -1646,7 +1657,7 @@ int kvm_create_device(struct kvm_vm *vm, uint64_t type)
+-	ret = __vm_ioctl(vm, KVM_CREATE_DEVICE, &create_dev);
+-	*fd = create_dev.fd;
+-	return ret;
++	err = __vm_ioctl(vm, KVM_CREATE_DEVICE, &create_dev);
++	TEST_ASSERT(err <= 0, "KVM_CREATE_DEVICE shouldn't return a positive value");
++	return err ? : create_dev.fd;
+ }
+ 
+ int kvm_create_device(struct kvm_vm *vm, uint64_t type)
  {
- 	int fd, ret;
+-	int fd, ret;
++	int fd = __kvm_create_device(vm, type);
  
--	ret = _kvm_create_device(vm, type, false, &fd);
-+	ret = __kvm_create_device(vm, type, &fd);
- 
- 	TEST_ASSERT(!ret, "KVM_CREATE_DEVICE IOCTL failed, rc: %i errno: %i", ret, errno);
+-	ret = __kvm_create_device(vm, type, &fd);
+-
+-	TEST_ASSERT(!ret, "KVM_CREATE_DEVICE IOCTL failed, rc: %i errno: %i", ret, errno);
++	TEST_ASSERT(fd >= 0, "KVM_CREATE_DEVICE IOCTL failed, rc: %i errno: %i", fd, errno);
  	return fd;
+ }
+ 
 -- 
 2.36.1.255.ge46751e96f-goog
 

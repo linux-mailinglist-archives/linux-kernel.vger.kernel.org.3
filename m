@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE2753CE55
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F2353CE3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344772AbiFCRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
+        id S1344617AbiFCRkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344768AbiFCRlG (ORCPT
+        with ESMTP id S1344641AbiFCRkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:41:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6778C53A5C;
-        Fri,  3 Jun 2022 10:40:46 -0700 (PDT)
+        Fri, 3 Jun 2022 13:40:14 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394D152E73;
+        Fri,  3 Jun 2022 10:40:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0276B82432;
-        Fri,  3 Jun 2022 17:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD77C385A9;
-        Fri,  3 Jun 2022 17:40:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8E572CE247C;
+        Fri,  3 Jun 2022 17:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75348C385A9;
+        Fri,  3 Jun 2022 17:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278043;
-        bh=sN7wRxbdbo9D8Yq5WNQYC5GLQgZO7z+fJyeL/zVH8sU=;
+        s=korg; t=1654278008;
+        bh=komNFgnS0FqLDSYmW+a2ifBD02kTTJqYIBqeGiPTkEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SGFxvmWsawjoPC+rWMmlYnhYzVzCyC1McIlJUX/zCOLnyYpBfZBcuoNPOJVDba0gC
-         EgR4THwCAopYI8CScr1Oh4q1UmDhszGJJ9h0qh9b/YJXWh4vW48XEvkEpowHt7v5WC
-         NJiHUJHtvuFOcz3jwy7gsqeyc2C5MGGtyMPEG8RY=
+        b=w07WZQ3HHKLuSE9CBwcHzujbBeIHirwic+tJjie1Yn4QjYAMKq+XLL91GQVv3bwJB
+         x9PC1Pc3hEHeJWLC6078OM53pBVE0gLTjSdLqQaC8YuufrceDXsLCgJwkQOf8HF/Qk
+         EVm1uiuKQ+mxbsj9NBxFL86+O99OMdgq/0Y0LKEM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stefan Ghinea <stefan.ghinea@windriver.com>
-Subject: [PATCH 4.14 04/23] secure_seq: use the 64 bits of the siphash for port offset calculation
+        stable@vger.kernel.org, Haimin Zhang <tcs.kernel@gmail.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Dragos-Marian Panait <dragos.panait@windriver.com>
+Subject: [PATCH 4.9 05/12] block-map: add __GFP_ZERO flag for alloc_page in function bio_copy_kern
 Date:   Fri,  3 Jun 2022 19:39:31 +0200
-Message-Id: <20220603173814.498717948@linuxfoundation.org>
+Message-Id: <20220603173812.684682590@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
-References: <20220603173814.362515009@linuxfoundation.org>
+In-Reply-To: <20220603173812.524184588@linuxfoundation.org>
+References: <20220603173812.524184588@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,139 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willy Tarreau <w@1wt.eu>
+From: Haimin Zhang <tcs.kernel@gmail.com>
 
-commit b2d057560b8107c633b39aabe517ff9d93f285e3 upstream.
+commit cc8f7fe1f5eab010191aa4570f27641876fa1267 upstream.
 
-SipHash replaced MD5 in secure_ipv{4,6}_port_ephemeral() via commit
-7cd23e5300c1 ("secure_seq: use SipHash in place of MD5"), but the output
-remained truncated to 32-bit only. In order to exploit more bits from the
-hash, let's make the functions return the full 64-bit of siphash_3u32().
-We also make sure the port offset calculation in __inet_hash_connect()
-remains done on 32-bit to avoid the need for div_u64_rem() and an extra
-cost on 32-bit systems.
+Add __GFP_ZERO flag for alloc_page in function bio_copy_kern to initialize
+the buffer of a bio.
 
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Moshe Kol <moshe.kol@mail.huji.ac.il>
-Cc: Yossi Gilad <yossi.gilad@mail.huji.ac.il>
-Cc: Amit Klein <aksecurity@gmail.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-[SG: Adjusted context]
-Signed-off-by: Stefan Ghinea <stefan.ghinea@windriver.com>
+Signed-off-by: Haimin Zhang <tcs.kernel@gmail.com>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220216084038.15635-1-tcs.kernel@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+[DP: Backported to 4.19: Manually added __GFP_ZERO flag]
+Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/inet_hashtables.h |    2 +-
- include/net/secure_seq.h      |    4 ++--
- net/core/secure_seq.c         |    4 ++--
- net/ipv4/inet_hashtables.c    |   10 ++++++----
- net/ipv6/inet6_hashtables.c   |    4 ++--
- 5 files changed, 13 insertions(+), 11 deletions(-)
+ block/bio.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -390,7 +390,7 @@ static inline void sk_rcv_saddr_set(stru
- }
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -1538,7 +1538,7 @@ struct bio *bio_copy_kern(struct request
+ 		if (bytes > len)
+ 			bytes = len;
  
- int __inet_hash_connect(struct inet_timewait_death_row *death_row,
--			struct sock *sk, u32 port_offset,
-+			struct sock *sk, u64 port_offset,
- 			int (*check_established)(struct inet_timewait_death_row *,
- 						 struct sock *, __u16,
- 						 struct inet_timewait_sock **));
---- a/include/net/secure_seq.h
-+++ b/include/net/secure_seq.h
-@@ -4,8 +4,8 @@
+-		page = alloc_page(q->bounce_gfp | gfp_mask);
++		page = alloc_page(q->bounce_gfp | __GFP_ZERO | gfp_mask);
+ 		if (!page)
+ 			goto cleanup;
  
- #include <linux/types.h>
- 
--u32 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport);
--u32 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
-+u64 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport);
-+u64 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
- 			       __be16 dport);
- u32 secure_tcp_seq(__be32 saddr, __be32 daddr,
- 		   __be16 sport, __be16 dport);
---- a/net/core/secure_seq.c
-+++ b/net/core/secure_seq.c
-@@ -96,7 +96,7 @@ u32 secure_tcpv6_seq(const __be32 *saddr
- }
- EXPORT_SYMBOL(secure_tcpv6_seq);
- 
--u32 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
-+u64 secure_ipv6_port_ephemeral(const __be32 *saddr, const __be32 *daddr,
- 			       __be16 dport)
- {
- 	const struct {
-@@ -145,7 +145,7 @@ u32 secure_tcp_seq(__be32 saddr, __be32
- 	return seq_scale(hash);
- }
- 
--u32 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport)
-+u64 secure_ipv4_port_ephemeral(__be32 saddr, __be32 daddr, __be16 dport)
- {
- 	net_secret_init();
- 	return siphash_4u32((__force u32)saddr, (__force u32)daddr,
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -389,7 +389,7 @@ not_unique:
- 	return -EADDRNOTAVAIL;
- }
- 
--static u32 inet_sk_port_offset(const struct sock *sk)
-+static u64 inet_sk_port_offset(const struct sock *sk)
- {
- 	const struct inet_sock *inet = inet_sk(sk);
- 
-@@ -599,7 +599,7 @@ EXPORT_SYMBOL_GPL(inet_unhash);
- static u32 table_perturb[1 << INET_TABLE_PERTURB_SHIFT];
- 
- int __inet_hash_connect(struct inet_timewait_death_row *death_row,
--		struct sock *sk, u32 port_offset,
-+		struct sock *sk, u64 port_offset,
- 		int (*check_established)(struct inet_timewait_death_row *,
- 			struct sock *, __u16, struct inet_timewait_sock **))
- {
-@@ -639,7 +639,9 @@ int __inet_hash_connect(struct inet_time
- 	net_get_random_once(table_perturb, sizeof(table_perturb));
- 	index = hash_32(port_offset, INET_TABLE_PERTURB_SHIFT);
- 
--	offset = (READ_ONCE(table_perturb[index]) + port_offset) % remaining;
-+	offset = READ_ONCE(table_perturb[index]) + port_offset;
-+	offset %= remaining;
-+
- 	/* In first pass we try ports of @low parity.
- 	 * inet_csk_get_port() does the opposite choice.
- 	 */
-@@ -715,7 +717,7 @@ ok:
- int inet_hash_connect(struct inet_timewait_death_row *death_row,
- 		      struct sock *sk)
- {
--	u32 port_offset = 0;
-+	u64 port_offset = 0;
- 
- 	if (!inet_sk(sk)->inet_num)
- 		port_offset = inet_sk_port_offset(sk);
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -248,7 +248,7 @@ not_unique:
- 	return -EADDRNOTAVAIL;
- }
- 
--static u32 inet6_sk_port_offset(const struct sock *sk)
-+static u64 inet6_sk_port_offset(const struct sock *sk)
- {
- 	const struct inet_sock *inet = inet_sk(sk);
- 
-@@ -260,7 +260,7 @@ static u32 inet6_sk_port_offset(const st
- int inet6_hash_connect(struct inet_timewait_death_row *death_row,
- 		       struct sock *sk)
- {
--	u32 port_offset = 0;
-+	u64 port_offset = 0;
- 
- 	if (!inet_sk(sk)->inet_num)
- 		port_offset = inet6_sk_port_offset(sk);
 
 

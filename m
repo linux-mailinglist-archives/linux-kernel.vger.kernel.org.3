@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E7853D084
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C0A53CF07
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347447AbiFCSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S231362AbiFCRwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346361AbiFCRvG (ORCPT
+        with ESMTP id S1345325AbiFCRss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A101854BFC;
-        Fri,  3 Jun 2022 10:47:49 -0700 (PDT)
+        Fri, 3 Jun 2022 13:48:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E2854684;
+        Fri,  3 Jun 2022 10:45:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4EE604EF;
-        Fri,  3 Jun 2022 17:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8A7C385B8;
-        Fri,  3 Jun 2022 17:47:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A886B82189;
+        Fri,  3 Jun 2022 17:45:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6840EC385A9;
+        Fri,  3 Jun 2022 17:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278468;
-        bh=NnEyWjMihEvGC1ycsFdaXgQ+EWmAJe/cwgy1WOjErkM=;
+        s=korg; t=1654278329;
+        bh=feL5DhGpFr9fOQ+CVlQslnoobzfhYmtKXTcaAR7THEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IyBYEftoQoio5Z1QwBioYoH6ychr6yVSXGY8SFPwA4FpBep0BSHbrsSB1P41ibZKV
-         IMzmMVzn/ic1E4ixT9fU1TJTTiNvrc8WWn2Vhue3IvkPWPrMTf6hpNeypSI1qGlQnn
-         W4h8OSeW4y9q72n86EBAp7749JbCET1KWnW5ck7M=
+        b=SYPCZ5+9y/g3/Yj233yH0AjuZCvctGhChGIGr4bsjzs8qOXreEd9C1EXeApwkOBja
+         sxTlUc28ifGeIQ3zty69IfDc1v6JWuO2sajftkcHPgra5ExjGd1wh+R3NXG0ty8IXh
+         Fv2osr5MJHvEOaL2qC4WXILCHUv3A6J9AUXpcQLA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.10 42/53] dm stats: add cond_resched when looping over entries
+        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.4 31/34] docs: submitting-patches: Fix crossref to The canonical patch format
 Date:   Fri,  3 Jun 2022 19:43:27 +0200
-Message-Id: <20220603173819.944245381@linuxfoundation.org>
+Message-Id: <20220603173817.085758905@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,80 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-commit bfe2b0146c4d0230b68f5c71a64380ff8d361f8b upstream.
+commit 6d5aa418b3bd42cdccc36e94ee199af423ef7c84 upstream.
 
-dm-stats can be used with a very large number of entries (it is only
-limited by 1/4 of total system memory), so add rescheduling points to
-the loops that iterate over the entries.
+The reference to `explicit_in_reply_to` is pointless as when the
+reference was added in the form of "#15" [1], Section 15) was "The
+canonical patch format".
+The reference of "#15" had not been properly updated in a couple of
+reorganizations during the plain-text SubmittingPatches era.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Fix it by using `the_canonical_patch_format`.
+
+[1]: 2ae19acaa50a ("Documentation: Add "how to write a good patch summary" to SubmittingPatches")
+
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Fixes: 5903019b2a5e ("Documentation/SubmittingPatches: convert it to ReST markup")
+Fixes: 9b2c76777acc ("Documentation/SubmittingPatches: enrich the Sphinx output")
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: stable@vger.kernel.org # v4.9+
+Link: https://lore.kernel.org/r/64e105a5-50be-23f2-6cae-903a2ea98e18@gmail.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-stats.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/process/submitting-patches.rst |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-stats.c
-+++ b/drivers/md/dm-stats.c
-@@ -224,6 +224,7 @@ void dm_stats_cleanup(struct dm_stats *s
- 				       atomic_read(&shared->in_flight[READ]),
- 				       atomic_read(&shared->in_flight[WRITE]));
- 			}
-+			cond_resched();
- 		}
- 		dm_stat_free(&s->rcu_head);
- 	}
-@@ -313,6 +314,7 @@ static int dm_stats_create(struct dm_sta
- 	for (ni = 0; ni < n_entries; ni++) {
- 		atomic_set(&s->stat_shared[ni].in_flight[READ], 0);
- 		atomic_set(&s->stat_shared[ni].in_flight[WRITE], 0);
-+		cond_resched();
- 	}
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -133,7 +133,7 @@ as you intend it to.
  
- 	if (s->n_histogram_entries) {
-@@ -325,6 +327,7 @@ static int dm_stats_create(struct dm_sta
- 		for (ni = 0; ni < n_entries; ni++) {
- 			s->stat_shared[ni].tmp.histogram = hi;
- 			hi += s->n_histogram_entries + 1;
-+			cond_resched();
- 		}
- 	}
+ The maintainer will thank you if you write your patch description in a
+ form which can be easily pulled into Linux's source code management
+-system, ``git``, as a "commit log".  See :ref:`explicit_in_reply_to`.
++system, ``git``, as a "commit log".  See :ref:`the_canonical_patch_format`.
  
-@@ -345,6 +348,7 @@ static int dm_stats_create(struct dm_sta
- 			for (ni = 0; ni < n_entries; ni++) {
- 				p[ni].histogram = hi;
- 				hi += s->n_histogram_entries + 1;
-+				cond_resched();
- 			}
- 		}
- 	}
-@@ -474,6 +478,7 @@ static int dm_stats_list(struct dm_stats
- 			}
- 			DMEMIT("\n");
- 		}
-+		cond_resched();
- 	}
- 	mutex_unlock(&stats->mutex);
- 
-@@ -750,6 +755,7 @@ static void __dm_stat_clear(struct dm_st
- 				local_irq_enable();
- 			}
- 		}
-+		cond_resched();
- 	}
- }
- 
-@@ -865,6 +871,8 @@ static int dm_stats_print(struct dm_stat
- 
- 		if (unlikely(sz + 1 >= maxlen))
- 			goto buffer_overflow;
-+
-+		cond_resched();
- 	}
- 
- 	if (clear)
+ Solve only one problem per patch.  If your description starts to get
+ long, that's a sign that you probably need to split up your patch.
 
 

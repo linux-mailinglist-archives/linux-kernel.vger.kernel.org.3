@@ -2,97 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078D053D2C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 22:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BE053D2DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 22:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346334AbiFCUXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 16:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S1348569AbiFCUhc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Jun 2022 16:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240755AbiFCUXJ (ORCPT
+        with ESMTP id S230012AbiFCUha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 16:23:09 -0400
-X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Jun 2022 13:23:07 PDT
-Received: from mail.tpi.com (mail.tpi.com [50.126.108.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998B743AE6;
-        Fri,  3 Jun 2022 13:23:07 -0700 (PDT)
-Received: from sushi.tpi.com (sushi.tpi.com [10.0.0.212])
-        by mail.tpi.com (Postfix) with ESMTPA id 55DBD47EC7EC;
-        Fri,  3 Jun 2022 13:15:01 -0700 (PDT)
-From:   Dean Gehnert <deang@tpi.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dean Gehnert <deang@tpi.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        stable@vger.kernel.org
-Subject: [PATCH] ASoC: topology: Avoid card NULL deref in snd_soc_tplg_component_remove()
-Date:   Fri,  3 Jun 2022 13:14:25 -0700
-Message-Id: <20220603201425.2590-1-deang@tpi.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 3 Jun 2022 16:37:30 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Jun 2022 13:37:29 PDT
+Received: from srv-correo.valvulasarco.es (srv-correo.valvulasarco.es [217.130.82.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AFA417AB3
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 13:37:28 -0700 (PDT)
+Received: from [103.153.79.240] (103.153.79.240) by SRV-MAIL.jferrer.es
+ (172.16.22.8) with Microsoft SMTP Server (TLS) id 8.3.348.2; Fri, 3 Jun 2022
+ 22:36:25 +0200
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Hi...
+To:     Recipients <mbravo@valvulasarco.es>
+From:   MIKE TAILOR INVESTMENT <mbravo@valvulasarco.es>
+Date:   Fri, 3 Jun 2022 13:21:37 -0700
+Reply-To: <investmentdept2022@miketailorinv.us>
+Message-ID: <03df7d81-a300-4dd9-8aff-ac0e43fa2a2b@SRV-MAIL.jferrer.es>
+X-EXCLAIMER-MD-CONFIG: 34136305-f895-4c7a-ba04-06adf52f1cb6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't deference card in comp->card->snd_card before checking for NULL card.
-
-During the unloading of ASoC kernel modules, there is a kernel oops in
-snd_soc_tplg_component_remove() that happens because comp->card is set to
-NULL in soc_cleanup_component().
-
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Fixes: 7e567b5ae063 ("ASoC: topology: Add missing rwsem around snd_ctl_remove() calls")
-Signed-off-by: Dean Gehnert <deang@tpi.com>
----
- sound/soc/soc-topology.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/sound/soc/soc-topology.c b/sound/soc/soc-topology.c
-index 3f9d314fba16..cf0efe1147c2 100644
---- a/sound/soc/soc-topology.c
-+++ b/sound/soc/soc-topology.c
-@@ -2613,15 +2613,18 @@ EXPORT_SYMBOL_GPL(snd_soc_tplg_component_load);
- /* remove dynamic controls from the component driver */
- int snd_soc_tplg_component_remove(struct snd_soc_component *comp)
- {
--	struct snd_card *card = comp->card->snd_card;
-+	struct snd_card *card;
- 	struct snd_soc_dobj *dobj, *next_dobj;
- 	int pass;
- 
- 	/* process the header types from end to start */
- 	for (pass = SOC_TPLG_PASS_END; pass >= SOC_TPLG_PASS_START; pass--) {
- 
-+		card = (comp->card) ? comp->card->snd_card : NULL;
-+
- 		/* remove mixer controls */
--		down_write(&card->controls_rwsem);
-+		if (card)
-+			down_write(&card->controls_rwsem);
- 		list_for_each_entry_safe(dobj, next_dobj, &comp->dobj_list,
- 			list) {
- 
-@@ -2660,7 +2663,8 @@ int snd_soc_tplg_component_remove(struct snd_soc_component *comp)
- 				break;
- 			}
- 		}
--		up_write(&card->controls_rwsem);
-+		if (card)
-+			up_write(&card->controls_rwsem);
- 	}
- 
- 	/* let caller know if FW can be freed when no objects are left */
--- 
-2.17.1
-
+Mike Tailor INV is currently doing a great investment Promo, You have the opportunity to invest at least $250 USD and earn $2,500 USD in 4 working days. Contact the investment company via this email: ( investmentdept2022@miketailorinv.us ). The higher you invest the higher your profit value.

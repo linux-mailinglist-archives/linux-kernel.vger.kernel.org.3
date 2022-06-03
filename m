@@ -2,122 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C600F53C451
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A404453C448
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240727AbiFCFeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S240759AbiFCFeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240705AbiFCFeE (ORCPT
+        with ESMTP id S240737AbiFCFeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:34:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B8B38DB6;
-        Thu,  2 Jun 2022 22:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654234442; x=1685770442;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dsMVJcKJEcaeF8QAGuahkwXPqxSC4I8wQTrHBh2W82k=;
-  b=aQk/nJQlSVQA9F0hHPsyA3DL/4VHyww1PUyrEavj/zfAfUgfu24SeCg2
-   OmHv/NXu+QS1bq/TaJS65LVG5XW2Aqz9b9O0caK+UX/Uw+1WiVBOA8JI5
-   3WGl8/drixLYjUU+2tuQ7bRTr3uJzghZTHjIT+7dI6UoBeUpb3KEYv2ga
-   T+nWANYUv9mIwfjKmJQjxOXK6PhYsIckUDiggwybYrAkybORk1lUjIZ1k
-   RlPCCNrMWO0lPMVPEuvCgmXEN3T35LwL4KrgUXKmeYs5tE5AjbD+E+6ZK
-   I/OK4M8ESNuFbnGJpoNQlfBqjRwxw03xZWSJyO2isYL2a/d7f/cxbixHe
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="263815475"
-X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
-   d="scan'208";a="263815475"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 22:33:55 -0700
-X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
-   d="scan'208";a="607227864"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.54.219])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 22:33:50 -0700
-Message-ID: <bbcd824b-457a-1009-835d-3e51ed04c1c2@intel.com>
-Date:   Fri, 3 Jun 2022 08:33:46 +0300
+        Fri, 3 Jun 2022 01:34:09 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA13638DBF;
+        Thu,  2 Jun 2022 22:34:07 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a2so10970668lfc.2;
+        Thu, 02 Jun 2022 22:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KF5yq6Enx4Bdz3Avcm29+ohVRRzQl9wm8VtLxXbcBX4=;
+        b=cRTNqE6jJImVaKeCqWv+jepE5wEhrLx3ue0PRddNVpBoagJiFrAttnxaoZ2rLka0rg
+         zHfldgd630eYlv+XewYFN6JbIpJl2Ai9EPfsWAbI3ALVuQkqs59uAh7rpbObuBzQ+df3
+         yn6L9qUp1cdwU7u39uPEY+6WFEe7pKcMJDCR5bZolHTB7OYI+Lc7sma8CJlBE0SQL6JX
+         eD8IKUIStNsuiCtAe3OzsKQ4XhD0iwl8yYnpqGtBrtH/2755DM3RZREaugOidxVsl5vO
+         QnWjgo4vrclRYZ/vJorWoeRqxc6YkavgfZMnIypwhgMWHyGZ1eOz175MNESsedSCV0jK
+         Y80g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KF5yq6Enx4Bdz3Avcm29+ohVRRzQl9wm8VtLxXbcBX4=;
+        b=w+XwfeJnKArWQlB6TUI3Rfe3XOpLQCQciVL6JyoYYI1W+HH/iYspb+J7VQoW0hwwld
+         2pxcwaKG8Qva3Q9CbVmW103DciXsV7lMO6Tg1ye/4n5gkjk7346RCpW/xebvWa7W+baM
+         An1WSK0VIHKOtHKrDmdmHmQ8VBZ62hzRB2zUrYiqrjBei1t8/Imx0RYgWzO4wJAzyCLC
+         LyMHSTe2cWwl9OSWynLySmNzkqeES8Oz/Nu/0jJmKWsJ9uFwyIGAcrSEsFX6jfBOkc5/
+         XaFqCwOMKXTFIYZpyhRrrQJezEwl1MQmWxZZEkLBr3sp8h8RrcXhw+3ZhXoDgzU2rYSx
+         wFGQ==
+X-Gm-Message-State: AOAM531QTp0PL+crni4SgRG7iyG5t8NrqQW95ky+yFRBCqb9nGXoRXYN
+        o4+9spBUHdxR+v4yS6qParRgPKWlzOV4agooy5Q=
+X-Google-Smtp-Source: ABdhPJwcwdFuF48uAq0fBO/eVCBfRn47mZewR6RwVVhmRUEIr/whLE3znAmW+Q829Ifac3cF9ZxCpZIOfi05BZ+3l5g=
+X-Received: by 2002:a05:6512:1398:b0:448:bda0:99f2 with SMTP id
+ p24-20020a056512139800b00448bda099f2mr52603360lfa.681.1654234446024; Thu, 02
+ Jun 2022 22:34:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH V1 1/2] mmc: core: Introduce new flag to force hardware
- reset
-Content-Language: en-US
-To:     Sarthak Garg <quic_sartgarg@quicinc.com>, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, quic_kamasali@quicinc.com,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        quic_sayalil@quicinc.com, Jens Axboe <axboe@kernel.dk>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>
-References: <20220603051534.22672-1-quic_sartgarg@quicinc.com>
- <20220603051534.22672-2-quic_sartgarg@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220603051534.22672-2-quic_sartgarg@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220603041701.2799595-1-irogers@google.com> <CAC1LvL12oxCojWBxqCj=g+cC=UbAHoQ6kT4TQXSi1j78L5zn3g@mail.gmail.com>
+In-Reply-To: <CAC1LvL12oxCojWBxqCj=g+cC=UbAHoQ6kT4TQXSi1j78L5zn3g@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 2 Jun 2022 22:33:54 -0700
+Message-ID: <CAEf4BzYvxvidSPa1ewWMm7rWHP=eSfu9vXz0rkbPWpBB5HpuRA@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Fix is_pow_of_2
+To:     Zvi Effron <zeffron@riotgames.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Yuze Chi <chiyuze@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/06/22 08:15, Sarthak Garg wrote:
-> Introduce new flag cqe_recovery_reset_always to allow vendors to force
-> hardware reset during cqe recovery.
-> 
-> Signed-off-by: Sarthak Garg <quic_sartgarg@quicinc.com>
+On Thu, Jun 2, 2022 at 9:31 PM Zvi Effron <zeffron@riotgames.com> wrote:
+>
+> On Thu, Jun 2, 2022 at 9:17 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > From: Yuze Chi <chiyuze@google.com>
+> >
+> > There is a missing not. Consider a power of 2 number like 4096:
+> >
+> > x && (x & (x - 1))
+> > 4096 && (4096 & (4096 - 1))
+> > 4096 && (4096 & 4095)
+> > 4096 && 0
+> > 0
+> >
+> > with the not this is:
+> > x && !(x & (x - 1))
+> > 4096 && !(4096 & (4096 - 1))
+> > 4096 && !(4096 & 4095)
+> > 4096 && !0
+> > 4096 && 1
+> > 1
+> >
+> > Reported-by: Yuze Chi <chiyuze@google.com>
+> > Signed-off-by: Yuze Chi <chiyuze@google.com>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 3f4f18684bd3..fd0414ea00df 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -4956,7 +4956,7 @@ static void bpf_map__destroy(struct bpf_map *map);
+> >
+> >  static bool is_pow_of_2(size_t x)
+> >  {
+> > -       return x && (x & (x - 1));
+> > +       return x && !(x & (x - 1));
 
-You should re-base on top of "mmc: block: Fix CQE recovery reset success"
+ugh... *facepalm*
 
-Also you may want to consider fixes / stable tags.
+>
+> No idea if anyone cares about the consistency, but in linker.c (same directory)
+> the same static function is defined using == 0 at the end instead of using the
+> not operator.
+>
+> Aside from the consistency issue, personally I find the == 0 version a little
+> bit easier to read and understand because it's a bit less dense (and a "!" next
+> to a "(" is an easy character to overlook).
+>
 
-Otherwise, for both patches:
+I agree, even more so, logical not used with arbitrary integer (not a
+pointer or bool) is a mental stumbling block for me, so much so that I
+avoid doing !strcmp(), for example.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+But in this case, I'm not sure why I copy/pasted is_pow_of_2() instead
+of moving the one from linker.c into libbpf_internal.h as static
+inline. Let's do that instead?
 
-> ---
->  drivers/mmc/core/block.c | 2 +-
->  include/linux/mmc/host.h | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index 1259ca22d625..496cdd8a2999 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -1497,7 +1497,7 @@ void mmc_blk_cqe_recovery(struct mmc_queue *mq)
->  	pr_debug("%s: CQE recovery start\n", mmc_hostname(host));
->  
->  	err = mmc_cqe_recovery(host);
-> -	if (err)
-> +	if (err || host->cqe_recovery_reset_always)
->  		mmc_blk_reset(mq->blkdata, host, MMC_BLK_CQE_RECOVERY);
->  	else
->  		mmc_blk_reset_success(mq->blkdata, MMC_BLK_CQE_RECOVERY);
-> diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
-> index c193c50ccd78..3e2fe950b4ec 100644
-> --- a/include/linux/mmc/host.h
-> +++ b/include/linux/mmc/host.h
-> @@ -492,6 +492,7 @@ struct mmc_host {
->  	int			cqe_qdepth;
->  	bool			cqe_enabled;
->  	bool			cqe_on;
-> +	bool			cqe_recovery_reset_always;
->  
->  	/* Inline encryption support */
->  #ifdef CONFIG_MMC_CRYPTO
-
+> >  }
+> >
+> >  static size_t adjust_ringbuf_sz(size_t sz)
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >

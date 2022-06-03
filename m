@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426C753CB0B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EE653CB1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244890AbiFCN4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S244958AbiFCN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244891AbiFCN4n (ORCPT
+        with ESMTP id S244880AbiFCN4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:56:43 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEB2393F4;
-        Fri,  3 Jun 2022 06:56:41 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id o29-20020a05600c511d00b00397697f172dso5080983wms.0;
-        Fri, 03 Jun 2022 06:56:41 -0700 (PDT)
+        Fri, 3 Jun 2022 09:56:44 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6731939821;
+        Fri,  3 Jun 2022 06:56:43 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id z17so4142417wmf.1;
+        Fri, 03 Jun 2022 06:56:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JN5xhLwiBOldWzvgregOvN11Mr2QiqXZtW0+iAWNzDU=;
-        b=M99BJuI3qILh6Lg0wKaIAW9efXlTmypyZJUDLQg5Vsgk4jgB2A8gOnv5vTIWeO3QtO
-         G5AiCMZfQM3bJ3IOBB0JXrtDk4gcLHTrYuKedh0wOwW0HgFFyr0Fjy0djdxznKBc57/H
-         wsuEktCi/Q3VWgAlx8P8oUsJicA8NNbn47nry032P1rRiyYnZWCWsTnF78wryq9Dp5WP
-         kqcTIW5STPyHzK1dIPoYVD/QEhSx5Wl9UgtdS/tMghcwN8Q5pu6XInN/27uOAe9qV1ok
-         t5gxqHFgWgojG/JDz5vPBiBQFmLn0kikjnbdXXr18+mzKrWfrovnGpOckTjD3rNpGNhq
-         P/ow==
+        bh=I3/ArNj3Gx6ysweu6QmWCkRaXZNp/b8pZqhl3nfQBWw=;
+        b=ZVsQkdWZwki7857RR0N7O8162fv72qfm+dNqCFCFfzBjAeracnkR3fl6ejkCmmikaG
+         JLW0xmoFyX0dds5TZt0BkWXSsoH3gXUqJuSwVcJQ75aO1xVP17MErHY0hNrKmpaRCYMc
+         dROl2/1Yw1XLLCEvZ3wSTS2WxgtxNspljGSOmPIAE84ahPukfNsym/pRIOfd6ynt+2ME
+         xWMsNG3dhZ3sI0iVN0xpeDUivu1BVsuffwDSo8MkP3QPGBcOEqGLnqu++SPM0XDQypVr
+         HPmEJrZNhtrZakZyj65/NnkI3Xtgj6HKfuFbSFcgce2BV18muIsqyRv1MxUVnM3aA/NH
+         ZKhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JN5xhLwiBOldWzvgregOvN11Mr2QiqXZtW0+iAWNzDU=;
-        b=3kYi3qVSzsRtwz+fSGbGl58HgHvDLn+fjLCK7gvhuYM7OzNfzyTOIQUcrjJXDsXOeX
-         ML2yu4PJuBmHrdIKH6jKwttzJ5F9nipss3fzo++xGfMr8IJW3UyYhsDDezqhIC15i1Ik
-         9/orkmzQkW6CGbcnfJ5hIzFfDbBXcKFeIxM3PZoOHs8IdDbtJyagALEOnSJIPtqWozn9
-         J0rv09ssw/ySP3GPBgnA0RB8Zn2O5yyQCLROJSfsmX2uwNwFYuIDN25w9NSFGse6uBlo
-         0Py3ebXD7ONJFwQEaJcynr7LYkXJ4m0Td7YR2DKlk0YnkAiAOf9gxPQZaNwFHBP24ex+
-         zLJg==
-X-Gm-Message-State: AOAM532fZJmZsUFoBiiTcIjObYdW8x5ITDFLaWaXRC2nBezUNOMXp1MY
-        sITny91MpIDPUYenFbqMWN8=
-X-Google-Smtp-Source: ABdhPJzDNTjUPY+X2P0sqlRa/bRCrUxtmWpjrfKYF0/AkrnzCNnW+A2QMZr3TrFEBmf82EseSuM1JQ==
-X-Received: by 2002:a05:600c:1d2a:b0:39c:4215:7305 with SMTP id l42-20020a05600c1d2a00b0039c42157305mr1557747wms.136.1654264600536;
-        Fri, 03 Jun 2022 06:56:40 -0700 (PDT)
+        bh=I3/ArNj3Gx6ysweu6QmWCkRaXZNp/b8pZqhl3nfQBWw=;
+        b=SlhuY4DtW+I2cYEUD3XD20nPNQBZTrCO5K6Z+80BTdeGzZCByHN9y97P8p3dI7Lr8i
+         0McXwb07kXL21VpML3XMpHybjyZM9T82Zt2qxsoAO5snTGyE/1Yv91TqW3Q5Sj7eXE+C
+         dDBg5925Co2jodpUuK/EZg8t3GCVBlU8hmiZjxqXaGBXpl00i/lFzj/9w093y3PtSrKL
+         Z3IjqFZA3s+uqAM3txywHq+Trn/kZW5kR5H6N4n3OTPwrqSVGgtrx4ymfm/gtONeYcZ6
+         nyM6FEOTc5bHZZHU17DnKViA3AaYTWgCh7YaV3YsDJcE3NqV7d9sqhFnE2g0nzBmQaKR
+         w9yA==
+X-Gm-Message-State: AOAM5314bMKawy8GZrhTrBpg0flgBbIGYgl8WnpjzRWY6ApTM2pN8Cq5
+        4c1SmIDjAndFa7kG0CjuMaE=
+X-Google-Smtp-Source: ABdhPJymrL5pMssSod52/digpr5OcG2Is93Lvg1T53T3bk0ng83WgaxLscbYytTDi8SHmV0gTydOSA==
+X-Received: by 2002:a1c:f604:0:b0:399:c7a6:44c1 with SMTP id w4-20020a1cf604000000b00399c7a644c1mr9018967wmc.54.1654264602021;
+        Fri, 03 Jun 2022 06:56:42 -0700 (PDT)
 Received: from localhost (92.40.203.126.threembb.co.uk. [92.40.203.126])
-        by smtp.gmail.com with ESMTPSA id f12-20020a5d4dcc000000b002100316b126sm7618765wru.6.2022.06.03.06.56.39
+        by smtp.gmail.com with ESMTPSA id l13-20020a5d560d000000b0020fe35aec4bsm7606516wrv.70.2022.06.03.06.56.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 06:56:40 -0700 (PDT)
+        Fri, 03 Jun 2022 06:56:41 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
@@ -56,9 +56,9 @@ To:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
 Cc:     lars@metafoo.de, rafael@kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 02/10] dt-bindings: mfd: add bindings for AXP192 MFD device
-Date:   Fri,  3 Jun 2022 14:57:06 +0100
-Message-Id: <20220603135714.12007-3-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 03/10] dt-bindings: iio: adc: axp209: Add AXP192 compatible
+Date:   Fri,  3 Jun 2022 14:57:07 +0100
+Message-Id: <20220603135714.12007-4-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
 References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -73,25 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AXP192 is another X-Powers PMIC similar to the existing ones.
+The AXP192 is identical to the AXP20x, except for two additional
+GPIO ADC channels.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-index 3a53bae611bc..33c9b1b3cc04 100644
---- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-+++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-@@ -84,6 +84,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml b/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml
+index d6d3d8590171..1a68e650ac7d 100644
+--- a/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml
+@@ -14,6 +14,23 @@ description: |
+   Device is a child of an axp209 multifunction device
+   ADC channels and their indexes per variant:
+ 
++  AXP192
++  ------
++   0 | acin_v
++   1 | acin_i
++   2 | vbus_v
++   3 | vbus_i
++   4 | pmic_temp
++   5 | gpio0_v
++   6 | gpio1_v
++   7 | gpio2_v
++   8 | gpio3_v
++   9 | ipsout_v
++  10 | batt_v
++  11 | batt_chrg_i
++  12 | batt_dischrg_i
++  13 | ts_v
++
+   AXP209
+   ------
+    0 | acin_v
+@@ -50,6 +67,7 @@ description: |
+ properties:
+   compatible:
      oneOf:
-       - enum:
-           - x-powers,axp152
-+          - x-powers,axp192
-           - x-powers,axp202
-           - x-powers,axp209
-           - x-powers,axp221
++      - const: x-powers,axp192-adc
+       - const: x-powers,axp209-adc
+       - const: x-powers,axp221-adc
+       - const: x-powers,axp813-adc
 -- 
 2.35.1
 

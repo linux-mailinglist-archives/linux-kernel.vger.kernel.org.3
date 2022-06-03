@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F3E53D1B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B04953D1AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347337AbiFCSlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S1347253AbiFCSlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347185AbiFCSlH (ORCPT
+        with ESMTP id S1347175AbiFCSlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Jun 2022 14:41:07 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15113F24
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:41:02 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id s12so10352210ejx.3
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AED113DCF
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654281664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pa7cJ5G4COGyAzAnTJD9ItMqf7WRFzB0pDurEI93KXo=;
+        b=OyLE4ybXwrHgcWk4NfzlvZfkAjb1yVtAYzc4O+B91HJugco70pTWCqGmPFAHb/DZqQlOYK
+        Ggu6LGPx4/78D3J7X+vGJTUUKdPDIa6mz3/ljX2CFLoR+hwH0uiaAbmv4SYySxq9BKydqB
+        qVsdRLXoA/721dQdPTvYgVp2rCe7qQ0=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-YhAhfABqNluUlixJd6r3wg-1; Fri, 03 Jun 2022 14:41:03 -0400
+X-MC-Unique: YhAhfABqNluUlixJd6r3wg-1
+Received: by mail-il1-f200.google.com with SMTP id n12-20020a92260c000000b002d3c9fc68d6so6837772ile.19
         for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:41:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tfgEy8ixZ6ZzG1hX+J5dmstu4VMvlofoo5oVk+gJTR8=;
-        b=kcuuIcWkvTicxyS6+1Qm10WySwzUgBbgzqKYnkoOn+hSvpBe38/geO1lkJMb8mUr8L
-         T8SHAMd11ekLrMve/ISmr+jz5hBW7tL7PpoHzYoI4BtRfSQHWqnv8XuwDoJJ3XPAwYO7
-         Y7rMgLMQTUk7KpcezfBiGWmJgc8dvdS7hEOxg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tfgEy8ixZ6ZzG1hX+J5dmstu4VMvlofoo5oVk+gJTR8=;
-        b=Mtx9zNyeFsijlF1fRngR0KBzd9LPsZ7p25Dk7jvfeccBP1vL3cmqEzzYdLhU5HJXC4
-         TEqJ8IiVQPT1rS5q+6qxa5KwHtFo7VA8K2U86DvI4PBxc1KrRL1m/UXzOXVwdd5pAqTZ
-         wmAwv9taS08ru2oe7/75jhi0F0QxTTmxsUu4Y4J21qJvZFpXGn+6k4bdxyeddSz4Wmlf
-         ueTT0ZWqIu9qMFkUFiry86b6embu/yenZze6iPffz1QWc3gT5PQLt3pdumTMikWFyfQO
-         EljlorBdJ6lyFHr+z0DQXA9Qasp61po+8/NRJ2kTemIBNqT+9nmofHxMS3HbRkIUQi34
-         VC1Q==
-X-Gm-Message-State: AOAM532NjrGbSfwyd4+NpKX8ToYeNRGnBbWhQanMVu374VwixcSjir2L
-        d4FnxUoG7SXhO3BOPj8Q3K8hqvAtN3MtcroI/t8=
-X-Google-Smtp-Source: ABdhPJyGqqlx/rYFLT8KGAlpvSJDDhP81VYM5+pUlm+QQur7SGd13F/nDmy5R2wDVHWp1JCW24sVOQ==
-X-Received: by 2002:a17:907:62a0:b0:6fe:69f3:88de with SMTP id nd32-20020a17090762a000b006fe69f388demr9595981ejc.214.1654281661047;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Pa7cJ5G4COGyAzAnTJD9ItMqf7WRFzB0pDurEI93KXo=;
+        b=uovXBOfQthvnMg/yjH6bnX7Q0C4qFgJzjjKgyQlNlN5l7KfBxVgHyrWPbWbEUXxcie
+         2FPzR6UA8TFvUP+uW/KQ9ucEF1hJbivvK8+++pl4x19TicZ21FYp6U7U7MdLG6HAKXAZ
+         miTjNT7tr06SBPzvt/C74D6Ar7O799TEw87efvvJpLl2IUtqF3P2luwi1bJPDXD5H6LZ
+         CMuek4bVnTAhQKXIAiViZvo45ctFFqX96x0WG/jTiUOE2x+1Aex2vQkQzXy+DrL/rUEz
+         aXonWU5qMbZrPaPwq6wKjo3Sjwmk1T1Jh4Px0yKhtQslouoA0pWGijhgLYaM7xzC09co
+         WLzg==
+X-Gm-Message-State: AOAM531jtSrBAC+s9byaO38gMRHa+ie/ZdQ8aW6X4e8zmMmuPquty368
+        YedL+T63iARNMaVb6EvR7A+3TAZ2z1p8blmWR64kiNrAN3SJ1X71Wlh6cDdD/d40wf90q0Gxcy1
+        oMB5qISlQFyrQqHLjNt0lnNg1
+X-Received: by 2002:a5d:96d0:0:b0:654:91d3:97b7 with SMTP id r16-20020a5d96d0000000b0065491d397b7mr5560411iol.164.1654281662259;
+        Fri, 03 Jun 2022 11:41:02 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkDTDyNAxtQgrl3i4tHY0k/Op4bKpQ1vmRy3Ff+VxQAjwl9MttXildmqnXNEnZbpVVaYCPcg==
+X-Received: by 2002:a5d:96d0:0:b0:654:91d3:97b7 with SMTP id r16-20020a5d96d0000000b0065491d397b7mr5560398iol.164.1654281661970;
         Fri, 03 Jun 2022 11:41:01 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id k9-20020a1709061c0900b006fec27575f1sm3068849ejg.123.2022.06.03.11.40.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 11:40:59 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id u8so7120778wrm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:40:58 -0700 (PDT)
-X-Received: by 2002:a05:6000:1842:b0:210:3d62:2768 with SMTP id
- c2-20020a056000184200b002103d622768mr9493879wri.301.1654281657955; Fri, 03
- Jun 2022 11:40:57 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id cp2-20020a056638480200b0032e332882e0sm2814503jab.75.2022.06.03.11.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 11:41:00 -0700 (PDT)
+Date:   Fri, 3 Jun 2022 14:40:58 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
+ user_xfeatures to supported bits of XCR0
+Message-ID: <YppVupW+IWsm7Osr@xz-m1.local>
+References: <20220301201344.18191-1-sashal@kernel.org>
+ <20220301201344.18191-7-sashal@kernel.org>
+ <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
 MIME-Version: 1.0
-References: <1654021066-13341-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=UF3x5RHrQH-m1X-4kQSsKiufLnkew=VuJz7W9EAi3GHQ@mail.gmail.com>
- <5d950007-7a92-a41b-e569-79e806adb06a@quicinc.com> <CAD=FV=Xm1LJEoU5dKa5pMgqsHuAXuFVpdHvc1REULhAKTPbGnQ@mail.gmail.com>
- <ad393ad2-a247-3c61-5033-185d39b5596d@quicinc.com>
-In-Reply-To: <ad393ad2-a247-3c61-5033-185d39b5596d@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 3 Jun 2022 11:40:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XD+LozhkJZp0C7RUO01T-XuqBA-SJ0EQeyvGk0CxC3JQ@mail.gmail.com>
-Message-ID: <CAD=FV=XD+LozhkJZp0C7RUO01T-XuqBA-SJ0EQeyvGk0CxC3JQ@mail.gmail.com>
-Subject: Re: [PATCH] tty: serial: qcom-geni-serial: minor fixes to get_clk_div_rate()
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        quic_msavaliy@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,125 +83,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Mar 01, 2022 at 09:22:10PM +0100, Paolo Bonzini wrote:
+> On 3/1/22 21:13, Sasha Levin wrote:
+> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> > index d28829403ed08..6ac01f9828530 100644
+> > --- a/arch/x86/kernel/fpu/xstate.c
+> > +++ b/arch/x86/kernel/fpu/xstate.c
+> > @@ -1563,7 +1563,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
+> >   		fpregs_restore_userregs();
+> >   	newfps->xfeatures = curfps->xfeatures | xfeatures;
+> > -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+> > +
+> > +	if (!guest_fpu)
+> > +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
+> > +
+> >   	newfps->xfd = curfps->xfd & ~xfeatures;
+> >   	curfps = fpu_install_fpstate(fpu, newfps);
+> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> > index bf18679757c70..875dce4aa2d28 100644
+> > --- a/arch/x86/kvm/cpuid.c
+> > +++ b/arch/x86/kvm/cpuid.c
+> > @@ -276,6 +276,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+> >   	vcpu->arch.guest_supported_xcr0 =
+> >   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
+> > +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
+> > +
+> >   	kvm_update_pv_runtime(vcpu);
+> >   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
+> 
+> Leonardo, was this also buggy in 5.16?  (I should have asked for a Fixes
+> tag...).
 
-On Fri, Jun 3, 2022 at 10:43 AM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> Hi,
->
->
-> On 6/1/2022 9:03 PM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Wed, Jun 1, 2022 at 3:46 AM Vijaya Krishna Nivarthi
-> > <quic_vnivarth@quicinc.com> wrote:
-> >> Hi,
-> >>
-> >> On 6/1/2022 12:58 AM, Doug Anderson wrote:
-> >>> Hi,
-> >>>
-> >>> On Tue, May 31, 2022 at 11:18 AM Vijaya Krishna Nivarthi
-> >>> <quic_vnivarth@quicinc.com> wrote:
-> >>>> Add missing initialisation and correct type casting
-> >>>>
-> >>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> >>>> ---
-> >>>>    drivers/tty/serial/qcom_geni_serial.c | 8 ++++----
-> >>>>    1 file changed, 4 insertions(+), 4 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> >>>> index 4733a23..08f3ad4 100644
-> >>>> --- a/drivers/tty/serial/qcom_geni_serial.c
-> >>>> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> >>>> @@ -943,11 +943,11 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
-> >>>>    static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
-> >>>>                           unsigned int sampling_rate, unsigned int *clk_div)
-> >>>>    {
-> >>>> -       unsigned long ser_clk;
-> >>>> +       unsigned long ser_clk = 0;
-> >>> In this patch it's not at all obvious why you'd need to init to 0. I
-> >>> think the "for loop" is guaranteed to run at least once because
-> >>> "max_div" is known at compile time. ...and currently each time through
-> >>> the "for" loop you'll always set "ser_clk".
-> >> Ok, I realised we will never break out of for loop exceeding ULONG_MAX
-> >> in 1st pass, so yes ser_clk will always be set.
-> >>
-> >>> I think in a future patch you'll want to _remove_ this from the for loop:
-> >>>
-> >>> if (!prev)
-> >>>     ser_clk = freq;
-> >> Intent is to save (and use) 1st freq if we cannot find an exact divider.
-> >>
-> >> Isn't it ok?
-> >>
-> >> For example please find debug output for a required frequency of 51.2MHz.
-> >>
-> >> We try dividers 1, 2, 3 and end up with 52.1MHz the first result.
-> >>
-> >> [   18.815432] 20220509 get_clk_div_rate desired_clk:51200000
-> >> [   18.821081] 20220509 get_clk_div_rate maxdiv:4095
-> >> [   18.825924] 20220509 get_clk_div_rate div:1
-> >> [   18.830239] 20220509 get_clk_div_rate freq:52174000
-> >> [   18.835288] 20220509 get_clk_div_rate div:2
-> >> [   18.839628] 20220509 get_clk_div_rate freq:100000000
-> >> [   18.844794] 20220509 get_clk_div_rate div:3
-> >> [   18.849119] 20220509 get_clk_div_rate freq:100000000
-> >> [   18.854254] 20220509 get_clk_div_rate reached max frequency breaking...
-> >> [   18.861072] 20220509 get_clk_div_rate clk_div=1, ser_clk=52174000
-> >>
-> >> The behaviour was same earlier too when root_freq table was present.
-> > Are you certain about the behavior being the same earlier? Before
-> > commit c2194bc999d4 ("tty: serial: qcom-geni-serial: Remove uart
-> > frequency table..."), the behavior was that get_clk_cfg() would return
-> > 0 if there was no exact match. Then get_clk_div_rate() would see this
-> > 0 and print an error and return. Then the rest of
-> > qcom_geni_serial_set_termios() would do nothing at all.
-> >
-> > Ah, or I guess what you're saying is that the table historically
-> > contained "rounded" rates but that clk_round_rate() isn't returning
-> > nice round rates. OK, but if we truly want to support an inexact
-> > match, you'd want to pick the rate that reduces the error, not just
-> > pick the first one. In other words, something like this (untested):
-> >
-> > freq = clk_round_rate(clk, mult);
-> > diff = abs(((long)mult - freq) / div);
-> > if (diff < best_diff) {
-> >    best_diff = diff;
-> >    ser_clk = freq;
-> >    best_div = div;
-> > }
-> I am not sure if its required that freq is a multiple of best_div now
-> that we don't have a multiple of desired_clk anyway.
+I just stumbled over this patch on some migration tests in the past few
+days..
 
-How about just this (untested):
+In short, I was migrating a VM from 5.15 host to 5.18 host and the guest
+trigger double fault immediately after the switch-over (I think that's when
+it's trying to do vmenter, a VECTOR_DF was injected), with either precopy
+or postcopy.
 
-freq = clk_round_rate(clk, mult);
-candidate_div = max(1, DIV_ROUND_CLOSEST(freq, desired_clk));
-candidate_freq = freq / candidate_div;
-diff = abs((long)desired_clk - candidate_freq);
-if (diff < best_diff) {
-  best_diff = diff;
-  ser_clk = freq;
-  best_div = candidate_div;
-}
+After I upgrade 5.15 src host to 5.18 host, problem goes away. I did a
+bisect on dest and surprisingly it points to this commit.
 
-Here:
+Side note: I'm using two hosts that have the same processor model, so no
+case of missing features on either side - they just match.
 
-freq: a freq we can definitely make
+I'm not really sure whether this is a bug or by design - do we require this
+patch to be applied to all stable branches to make the guest not crash
+after migration, or it is unexpected?
 
-candidate_div: the best number to divide freq by to get the desired clock.
+FWICT, this patch modifies user_xfeatures while we don't do that trick
+before. It sounds reasonable to me from the 1st glance, say if the guest
+didn't enable some of the fpu features so we don't need to migrate those
+fpu state chunks as we're migrating things based on user_xfeatures, and it
+sounds good to solve the migration issue on "has-pksu" host to "no-pksu"
+host as described in the patch commit message.
 
-candidate_freq: the frequency we'll end up if we divide freq by
-candidate_div. We want this to be close to desired_clk.
+However there seems to be something missing at least to me, on why it'll
+fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
+In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
+patch, but 0x0 if with it.
 
-diff: how far away the candidate_freq is away from what we want.
+I think what it should be happening is user_xfeatures will be set on src
+with 0x7 (old kernel), so we should have migrated some more chunks to dest,
+but I just don't quickly understand why that's a problem there because
+fundamentally when we restore the fpu status (fpu_swap_kvm_fpstate) we use
+the max feature bitmask anyway, and the dest hardware should support all of
+them.  I don't quickly see how that could trigger a double fault, though.
 
-best_diff: how far away the best candidate was from what we wanted.
+I'll continue the dig probably next week, before that, any thoughts?
 
-ser_clk: What we should pass to clk_set_rate() to get the best candidate.
+-- 
+Peter Xu
 
-best_div: What we should use as a divider to get the best candidate.
-
-
--Doug

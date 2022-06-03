@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1052B53CF13
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BC553D0AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345404AbiFCRw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        id S1347222AbiFCSKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345389AbiFCRsu (ORCPT
+        with ESMTP id S1345777AbiFCR4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:48:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E046C0C;
-        Fri,  3 Jun 2022 10:45:34 -0700 (PDT)
+        Fri, 3 Jun 2022 13:56:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8427456F97;
+        Fri,  3 Jun 2022 10:54:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5737360A52;
-        Fri,  3 Jun 2022 17:45:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C42C385A9;
-        Fri,  3 Jun 2022 17:45:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4209DB82430;
+        Fri,  3 Jun 2022 17:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C942C341C0;
+        Fri,  3 Jun 2022 17:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278332;
-        bh=sfPesHts5NEETGJlacjo7cJ3lGQkFq0c+AHqqGjnCjA=;
+        s=korg; t=1654278841;
+        bh=u3IpJg7f52QEmZoiTs+geEPRmnLMhe+3HVFYgwUxjcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NLNF20dP4bXydS6BTyLjBsdNZQFccNjr1XpZecKmXNhAoYlULmx8xUKAuVfPAEq7d
-         O6cAlign9KW5lYcusRKH0zU1Lgd4PWRF1Yn99TVcknDPne5V8aXxNqO/90k4QwG2se
-         WCeguCXFiNM43aLCaLrCbaj/UpPVulbrvX77Do7g=
+        b=NfplIdH5VWQBNcX7nAjS2H99ntgDNP6ofPHzSkCTJpJqpXugim9Elr15L1haOCzv+
+         2PHc32p9XFXsPy8buVugH552s69xDnDZQ4frZBUncc793UcjLpEtKN41j2ADeg5/6M
+         ND7OoYns9TBHE+TA1eZo+302S+SSVgn2EoKyh+KE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>
-Subject: [PATCH 5.4 32/34] NFS: Memory allocation failures are not server fatal errors
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Maris Abele <maris7abele@gmail.com>
+Subject: [PATCH 5.17 44/75] ALSA: usb-audio: Workaround for clock setup on TEAC devices
 Date:   Fri,  3 Jun 2022 19:43:28 +0200
-Message-Id: <20220603173817.114480083@linuxfoundation.org>
+Message-Id: <20220603173822.998263429@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 452284407c18d8a522c3039339b1860afa0025a8 upstream.
+commit 5ce0b06ae5e69e23142e73c5c3c0260e9f2ccb4b upstream.
 
-We need to filter out ENOMEM in nfs_error_is_fatal_on_server(), because
-running out of memory on our client is not a server error.
+Maris reported that TEAC UD-501 (0644:8043) doesn't work with the
+typical "clock source 41 is not valid, cannot use" errors on the
+recent kernels.  The currently known workaround so far is to restore
+(partially) what we've done unconditionally at the clock setup;
+namely, re-setup the USB interface immediately after the clock is
+changed.  This patch re-introduces the behavior conditionally for TEAC
+devices.
 
-Reported-by: Olga Kornievskaia <aglo@umich.edu>
-Fixes: 2dc23afffbca ("NFS: ENOMEM should also be a fatal error.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Further notes:
+- The USB interface shall be set later in
+  snd_usb_endpoint_configure(), but this seems to be too late.
+- Even calling  usb_set_interface() right after
+  sne_usb_init_sample_rate() doesn't help; so this must be related
+  with the clock validation, too.
+- The device may still spew the "clock source 41 is not valid" error
+  at the first clock setup.  This seems happening at the very first
+  try of clock setup, but it disappears at later attempts.
+  The error is likely harmless because the driver retries the clock
+  setup (such an error is more or less expected on some devices).
+
+Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
+Reported-and-tested-by: Maris Abele <maris7abele@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220521064627.29292-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/internal.h |    1 +
- 1 file changed, 1 insertion(+)
+ sound/usb/clock.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/fs/nfs/internal.h
-+++ b/fs/nfs/internal.h
-@@ -775,6 +775,7 @@ static inline bool nfs_error_is_fatal_on
- 	case 0:
- 	case -ERESTARTSYS:
- 	case -EINTR:
-+	case -ENOMEM:
- 		return false;
+--- a/sound/usb/clock.c
++++ b/sound/usb/clock.c
+@@ -572,6 +572,13 @@ static int set_sample_rate_v2v3(struct s
+ 		/* continue processing */
  	}
- 	return nfs_error_is_fatal(err);
+ 
++	/* FIXME - TEAC devices require the immediate interface setup */
++	if (rate != prev_rate && USB_ID_VENDOR(chip->usb_id) == 0x0644) {
++		usb_set_interface(chip->dev, fmt->iface, fmt->altsetting);
++		if (chip->quirk_flags & QUIRK_FLAG_IFACE_DELAY)
++			msleep(50);
++	}
++
+ validation:
+ 	/* validate clock after rate change */
+ 	if (!uac_clock_source_is_valid(chip, fmt, clock))
 
 

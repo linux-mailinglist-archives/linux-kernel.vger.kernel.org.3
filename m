@@ -2,61 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284C553CBE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D282F53CC0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245291AbiFCPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S245376AbiFCPL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiFCPBk (ORCPT
+        with ESMTP id S245362AbiFCPLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:01:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815BD4249B;
-        Fri,  3 Jun 2022 08:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3762DB822D1;
-        Fri,  3 Jun 2022 15:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1264FC385A9;
-        Fri,  3 Jun 2022 15:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654268496;
-        bh=P2GX9HtyRXt4RIWOGgfY4NtR2QmjoTRTaFyv7WzjYrY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e+rxoohAU8ECV40mEB9ppea8osoCte3S0eZZDHCiFnnTQ+eBOD59mnjdWlMKIQsiO
-         dssLF5PTV6BjUe7byCLCfoNlFwFxT1x9tIt4CYuDWxoik/UXWRXAFhQov5EawDYpdS
-         pmAXD4Xq6KMlaa6dVxtJi9JxL7TwqymhXdi8sZ0DUUfpMdCpbMWXskdVeS+cK+3iDi
-         SnZ9YDhh6tkcGj4XMwQXAQVcpeeMPJvenII0TdXcldiKBB1MHS/JT8GYbsAn5+9F1j
-         A4A3KhlcXLCy+Y1EELd0KLfiseIrEQzpSgf/YuXeF9e2kd4PTVjdPA2ew1CifF8Rrf
-         Josvx/T1N5mqA==
-Date:   Fri, 3 Jun 2022 16:10:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     "m.shams" <m.shams@samsung.com>
-Cc:     <lars@metafoo.de>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <geert@linux-m68k.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <paul@crapouillou.net>,
-        <linux-fsd@tesla.com>
-Subject: Re: [PATCH v2 2/3] iio: adc: exynos-adc: Add support for ADC FSD-HW
- controller
-Message-ID: <20220603161035.0f22420b@jic23-huawei>
-In-Reply-To: <015b01d874ca$69aa8bb0$3cffa310$@samsung.com>
-References: <20220520145820.67667-1-m.shams@samsung.com>
-        <CGME20220520145802epcas5p2153cb572493e3bccd702e0ecce1171fb@epcas5p2.samsung.com>
-        <20220520145820.67667-3-m.shams@samsung.com>
-        <20220522122555.6c65d2b6@jic23-huawei>
-        <015b01d874ca$69aa8bb0$3cffa310$@samsung.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Fri, 3 Jun 2022 11:11:52 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E211220
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:11:49 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id f13so7632809vsp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 08:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GRR3/ZPTVsG03kPxvHaCWj5GOU1Fozuljr/KxjIdd24=;
+        b=RvB2Z7RxhhPnXx6cxqPf+5ToILBl1dmnnSMkH527a7AvoICiiK3yGW8rJlUAXElMtF
+         odcWYwMywrpaROkPhfs+3fa39YFpPOISBqdq7dp8syv+gDfGk60i4/WIVVIcULQGrEUh
+         qJ5YEbPabkqRpq3WMTljLMnruA9/2frjVJzQc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GRR3/ZPTVsG03kPxvHaCWj5GOU1Fozuljr/KxjIdd24=;
+        b=r53otJMNFhOMH22k5XGxrTjGArqtRHuLP1TEEBH/pP903HEHr6Gvai3/gVQBeRKj0T
+         KXkGOfk7lMMdi7n2acKzzAITn/P8gCvCtmmDfLiS1LgAZBTxTyG6a+O6GN+5Z/lQZ6ru
+         mrZ+RoxydEMxDJyOssZdMG1oJ1LUKE4SuIlE2HbJqQmwWKTvrcVWwTCl86Kj8iuuKqbu
+         zPlKoCJzF5qWv55eurYBazf9U3AGbA4i5UGxicsDDULpZ0TLgU2ivefE7JbxIfd0NGZU
+         Kes807bf3Hp+O5GP7VzVrhGiqM/GPL/9cF2NI8nWdZsrQi72YaIF10IJ+nzFtE1Y0frY
+         E0EQ==
+X-Gm-Message-State: AOAM531oVU/dmEKb3LbjlO49jHH3hLcYIZxEbGwf5haO0f0N445No+56
+        FO6bo7qoE5jxPHBVicjZmV3yBSgeR4tGEA==
+X-Google-Smtp-Source: ABdhPJwt8VWb+D8sgEFgUXrG9sHlEmsJ7GihAbDOPl0chbV5SEBFKch6zbVzgGT4X02nKVJLRtj+eQ==
+X-Received: by 2002:a67:b143:0:b0:337:8ce4:c2c3 with SMTP id z3-20020a67b143000000b003378ce4c2c3mr4391827vsl.53.1654269108388;
+        Fri, 03 Jun 2022 08:11:48 -0700 (PDT)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id o72-20020a1f414b000000b0035c4f114a52sm981407vka.7.2022.06.03.08.11.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 08:11:48 -0700 (PDT)
+Received: by mail-ua1-f49.google.com with SMTP id q1so2616132uao.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 08:11:47 -0700 (PDT)
+X-Received: by 2002:ab0:3311:0:b0:369:1d82:99a5 with SMTP id
+ r17-20020ab03311000000b003691d8299a5mr17684734uao.33.1654269106779; Fri, 03
+ Jun 2022 08:11:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220228202532.869740-1-briannorris@chromium.org>
+ <CA+ASDXNSThy7usMKkN22VBq2iyej7sCJ8CAmgnNvxDgZiMbukA@mail.gmail.com> <CA+ASDXMW14GqJUAogQ0=dVdamhTTGDzcMRv-8Cx-TaXShHxj+A@mail.gmail.com>
+In-Reply-To: <CA+ASDXMW14GqJUAogQ0=dVdamhTTGDzcMRv-8Cx-TaXShHxj+A@mail.gmail.com>
+From:   Sean Paul <seanpaul@chromium.org>
+Date:   Fri, 3 Jun 2022 11:11:09 -0400
+X-Gmail-Original-Message-ID: <CAOw6vb+myB0gB1kPvwuL+T1Ka10gDN5rGS2hW+UG+-+K2NGz_w@mail.gmail.com>
+Message-ID: <CAOw6vb+myB0gB1kPvwuL+T1Ka10gDN5rGS2hW+UG+-+K2NGz_w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm/bridge: analogix_dp: Self-refresh state
+ machine fixes
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sean Paul <sean@poorly.run>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Liu Ying <victor.liu@oss.nxp.com>,
+        Doug Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,88 +90,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 14:12:46 +0530
-"m.shams" <m.shams@samsung.com> wrote:
+On Mon, May 23, 2022 at 5:51 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> On Thu, Mar 10, 2022 at 3:50 PM Brian Norris <briannorris@chromium.org> wrote:
+> > On Mon, Feb 28, 2022 at 12:25 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> > Ping for review? Sean, perhaps? (You already reviewed this on the
+> > Chromium tracker.)
+>
+> Ping
 
-> Hi Jonathan,
-> 
-> On Fri, 20 May 2022 20:28:19 +0530
-> Tamseel Shams <m.shams@samsung.com> wrote:
-> 
-> >> From: Alim Akhtar <alim.akhtar@samsung.com>
-> >> 
-> >> Exynos's ADC-FSD-HW has some difference in registers set, number of 
-> >> programmable channels (16 channel) etc. This patch adds support for 
-> >> ADC-FSD-HW controller version.
-> >> 
-> >> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> >> Signed-off-by: Tamseel Shams <m.shams@samsung.com>  
-> >
-> > Hi,
-> >
-> > One suggestion inline, otherwise LGTM. Plenty of time to tidy this up as  
-> this won't make the upcoming merge window - I'll be queuing it up for 5.20
-> >
-> > Thanks,
-> >
-> > Jonathan
-> >  
-> 
-> Okay, Thanks for reviewing.
-> 
-> >> ---
-> >> - Changes since v1
-> >> * Addressed Jonathan's comment by using already provided isr handle
-> >> 
-> >>  drivers/iio/adc/exynos_adc.c | 55 
-> >> ++++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 55 insertions(+)
-> >> 
-> >> diff --git a/drivers/iio/adc/exynos_adc.c 
-> >> b/drivers/iio/adc/exynos_adc.c index cff1ba57fb16..183ae591327a 100644
-> >> --- a/drivers/iio/adc/exynos_adc.c
-> >> +++ b/drivers/iio/adc/exynos_adc.c
-> >> @@ -55,6 +55,11 @@
-> >>  #define ADC_V2_INT_ST(x)	((x) + 0x14)
-> >>  #define ADC_V2_VER(x)		((x) + 0x20)
-> >>  
-> >> +/* ADC_FSD_HW register definitions */
-> >> +#define ADC_FSD_DAT(x)			((x) + 0x08)  
-> >
-> > I mention this below, but these different register sets should be in the  
-> struct exynos_adc_data to avoid the need for an if "compatible" == check on
-> each use of > them.
-> >  
-> 
-> Can you clarify on how exactly you want me to add these register sets to
-> struct exynos_adc_data?
-> Do you mean just for these registers or other registers too which are
-> defined in this way only?
+Apologies for the delay. Please in future ping on irc/chat if you're
+waiting for review from me, my inbox is often neglected.
 
-Any registers addresses that are different for the different chip variants
-supported by the driver.
+The set still looks good to me,
 
-In cases where the only difference between versions is a register address then
-define something like
-#define ADC_FSD_DAT_BASE 0x08
-
-In the structure have a
-
-dat_addr = ADC_FSD_DAT_BASE
-
-and use dat_addr + x to access.
-
-If things are more complex (and I haven't looked closely so that may apply to
-the example give above, the wrap the different access sequence and register
-addresses in a callback similar to already done for clear_irq.
+Reviewed-by: Sean Paul <seanpaul@chromium.org>
 
 
-Jonathan
-
-
-> 
-> 
-> Thanks & Regards,
-> Tamseel Shams
-> 
-
+Sean

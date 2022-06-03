@@ -2,202 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D143553C8F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4341853C8FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243864AbiFCKys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S243891AbiFCKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiFCKyp (ORCPT
+        with ESMTP id S229863AbiFCKzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:54:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6330C3A704
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 03:54:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FF341063;
-        Fri,  3 Jun 2022 03:54:43 -0700 (PDT)
-Received: from [10.162.42.23] (unknown [10.162.42.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 583A03F73D;
-        Fri,  3 Jun 2022 03:54:40 -0700 (PDT)
-Message-ID: <a5fdc430-d00b-7236-5994-f35357944160@arm.com>
-Date:   Fri, 3 Jun 2022 16:24:37 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] arm64: Expand the static memblock memory table
+        Fri, 3 Jun 2022 06:55:16 -0400
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6433A704;
+        Fri,  3 Jun 2022 03:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=qti.qualcomm.com; i=@qti.qualcomm.com; q=dns/txt;
+  s=qccesdkim1; t=1654253715; x=1654858515;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=c8aqbGi9FXoTdenT8qt/Z3fTnUbyPOHwRqIVgDGqCY4=;
+  b=uJwGNEiCSSa6n4nE5v9O1kqGXvjMUW1a5/SK19E4Lgqf0v/vJe5Txcpj
+   6cEpfRtlz2G5ndZpOv7hE56ETG434GdMQ+Ua3U3LElVYzMdvCFzki4GGM
+   Mj9tWP9qLG9yBr43fn8EJH2NT079ImBvbqFMXpOZ4PQVPgyEmT4787Zdg
+   E=;
+Received: from mail-bn8nam04lp2043.outbound.protection.outlook.com (HELO NAM04-BN8-obe.outbound.protection.outlook.com) ([104.47.74.43])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:55:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ICfLJgdSOEvBoThH/VpmC5RK4aK55UZiPSfZicDHy4SHkC3tYXT8ibKV5JwSsZ1nN3wu4Onbc0pkDSiZ59mpiq3f+aKjb/rN/4XyI73vEuAzeADJ6vJ5taV0x2g0ES2+n0aMvQhg1VIInL1eCHSNFIdOEYXlnIEbaahDj9PzOLnd8X/ohT88P7U1An5IrB8HEfzfrGYHIaAd6r70fmUOuM7yyd+a0vpHnCxCD88pV+lXPSg6PkDFYU9BRehZ2LWqNE9pt6FkuPKkQt/o9OU4XJNbp74T1bfFEKx0wbqIB3cw2PhF7PeTjglJKkN8Sb6ga1khLKNi5i93g6U7Pk0P0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c8aqbGi9FXoTdenT8qt/Z3fTnUbyPOHwRqIVgDGqCY4=;
+ b=ZSlKZyGBT00iwxpSpn+V9fMvm92FsONvMP1rrLW5zscw0R8df2AoCcfsSNK3scVlcTl8pupVyBbUxvcxdsVAUwzNARSjcmdM5NnpzLwULbUiNEDugHSYzzylIy6tk6sY3R66NXAtGdI36pOCnbBacn4MT7NQoRC0dXkhu1VEXgvhwHfyw56HVQRognkjfJXTB3cfzTU81pAVP7+vnMr8NfIs9S9IKKSOkb5MXW50X3UytebYbymXW2ZTLUNMtGuwi1tuphwmuYSpIdpSecqWnP6MoR+qQHK8kzAQ9N5GF/5YTMj2HcZCHvstwNwFVnBXAmjMacTOxuLEnmccJy/dRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
+ header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
+Received: from BN0PR02MB8173.namprd02.prod.outlook.com (2603:10b6:408:166::9)
+ by BN6PR02MB2449.namprd02.prod.outlook.com (2603:10b6:404:50::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Fri, 3 Jun
+ 2022 10:55:09 +0000
+Received: from BN0PR02MB8173.namprd02.prod.outlook.com
+ ([fe80::5483:ae3f:a820:b25e]) by BN0PR02MB8173.namprd02.prod.outlook.com
+ ([fe80::5483:ae3f:a820:b25e%6]) with mapi id 15.20.5314.015; Fri, 3 Jun 2022
+ 10:55:09 +0000
+From:   Vinod Polimera <vpolimer@qti.qualcomm.com>
+To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "vpolimer@quicinc.com" <vpolimer@quicinc.com>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>
+Subject: RE: [v1] drm/msm: add null checks for drm device to avoid crash
+ during probe defer
+Thread-Topic: [v1] drm/msm: add null checks for drm device to avoid crash
+ during probe defer
+Thread-Index: AQHYdyuKE2gK6YgKjUuLkPHm/JYEN609bJyAgAAQNPA=
+Date:   Fri, 3 Jun 2022 10:55:08 +0000
+Message-ID: <BN0PR02MB8173E511825B236D1E2A087FE4A19@BN0PR02MB8173.namprd02.prod.outlook.com>
+References: <1654248167-10594-1-git-send-email-quic_vpolimer@quicinc.com>
+ <01f88e7a-eeef-d538-634d-bb8e7c1272a0@linaro.org>
+In-Reply-To: <01f88e7a-eeef-d538-634d-bb8e7c1272a0@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Zhouguanghui (OS Kernel)" <zhouguanghui1@huawei.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "will@kernel.org" <will@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "xuqiang (M)" <xuqiang36@huawei.com>
-References: <20220517114309.10228-1-zhouguanghui1@huawei.com>
- <de0788c0-a5a8-cf5b-5f20-eb9e99cd62ca@arm.com>
- <5d9390e36e6148e49284af3a7233accb@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <5d9390e36e6148e49284af3a7233accb@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=qti.qualcomm.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1acb664e-b095-4140-21f6-08da454f86ab
+x-ms-traffictypediagnostic: BN6PR02MB2449:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <BN6PR02MB24496037F0170C3F3CD384CAE4A19@BN6PR02MB2449.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jm2XtiLIpti1w9VuuiNbdlNl8P0NZe5AH0RuQVWPQYw/C+m/YtIFbpsoq4JXXZ1NQuZXmgMX38rjfFZECH0sP3Ny5VfEDDgiSAExwx2ZZ8XsqWLqvfTd2sgXRGGLTv66J4Ryr/khJeGb0Ji0luSqNgtNkS69/wAKh25Bat/JENX507KgotFFkPo1UHaXjg6apREFWepp6K4cbvUy71Wz15C7JBnxEKBCWa+ag8MeUWxM+2QUIOasviyBxcD3zfQmPnySAQKXCrlSI5f/AEdsjMVZ5aVOWGAsUViFfnfgxHJV1lBM/drQ4/aDDyDQ0CvyemP+pxx1d+R17j3Kd4l8HWeTLHm9nqCfamG/kDXxyYviCcUGWuqqIKXfCic6VYCxBQxtCKj7u59vwNZh/pdBM3lZ9msTtxweUmg4XctMQImcpMC0ujyf0V3UyRTsoxf9w8l7iBwq63x9aoTqWV7ERK5MGOJIpP8Be30iahM9N3AsPzqklYK2MGoWrnz9jTl+B7Vj7bcn6GbRtgvjwLCTccyUBXSr+TZa3pLtojtGPguxiCQUHXFzgDAmjVT7PVFeVTZeAOIcyHBRNidQdKI3DSqFmlM0MTZnerc8TBRLzR3AeigyjMb36dFrkZriTfqWTqErqORRd+/x1mxxt9uzY90i21Ein3jJzIBMw9G/miji2tva+HLwUy0HrprSpTRT3CuKUn6P4yTUUhCyJJDJTQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR02MB8173.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(186003)(33656002)(508600001)(5660300002)(53546011)(38100700002)(8936002)(107886003)(2906002)(83380400001)(6506007)(9686003)(7696005)(26005)(55016003)(38070700005)(52536014)(76116006)(64756008)(966005)(86362001)(316002)(54906003)(110136005)(71200400001)(66946007)(66556008)(66446008)(4326008)(66476007)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmY1ZXNDdGM5dEwrQW95d09leXBUaE5tQjh5dUVVelBucW5Fd01EUlNaRC8r?=
+ =?utf-8?B?UlVnVjNPUEZMMEx2cGdxV3oya3AvMUNmbUozTFBhYm1YQXhJZE4zRm45VWlt?=
+ =?utf-8?B?emdZUXkwZ0JQK0NMZDVwaFpESDZPREd6anQ4Y2lXRDFkS2x3UkxqZ2xJbmxj?=
+ =?utf-8?B?SFhtQlBKL21XTG9xMDFWZm45bEZGZWN5bDRsU1hiR0RLWDdaYVFIek02bk5W?=
+ =?utf-8?B?b3h2ZGZzMkZxa3lldGtlUzMxcHgyUVpYU2J1VGs2Q3Q4MFl2bkRPaGEwL3pK?=
+ =?utf-8?B?V0hvZW43REd2S3BKNjdINk5VdTl4b3dieldLQkU1aENxcUFScFI2NEZIQUtW?=
+ =?utf-8?B?Z2R4MVFCempDNW5kYXdKZVRRSzJMakFCQTRhVFplT1Z6MDRCb1lNaVdBNWtR?=
+ =?utf-8?B?ZC9IYmt2VVN2ZUFleElka1lZaVloNGRjNnlqYWhFK3JxY0hKNmVtSjh3aFd5?=
+ =?utf-8?B?TEYwbS9zcG1YUFhqdjNuS2ZTb0F1akJwOU4vamsxMW9rTkFZOUlUb3NXZFd6?=
+ =?utf-8?B?V2RGSGZ1MSs4SkhnOVRVamhmcUc1K2JLbllIZ1htbUQ0NDV2ZzhXaUVGWjFn?=
+ =?utf-8?B?REl1eGVtRGJjRUxwMG1KUzZZeVptRmtKenNWMERoczRNd2F0WGhMb250OUwx?=
+ =?utf-8?B?dlVFdTEybFMrcFd3b2tqYUlWcmVDalo2Z0ExY3NScTNFVkJYOWdqUFFHQUJ6?=
+ =?utf-8?B?Vk5pNzYrWHNzZXFMNDVic1F4aUd0T3hqY2MrT2NrbnpqbHFCS3g2NnpiaXdo?=
+ =?utf-8?B?K28wdjRzOFJMUDlmUDV5c3hDV01WNkdVVm52K0lkbXRzQmJUTVVxWEtZcDBi?=
+ =?utf-8?B?TFNsNVMyazNEM1I4RW9MdEkwUzBsWFZpQTJETVVEcHBFd2NjQ0Z1Q25zNmRz?=
+ =?utf-8?B?QUkrYkNCczFjOTZYODZsVzVYb0pBdUVMOXNpSi9lbG9wQWxmcklRZFZiUU9W?=
+ =?utf-8?B?WC9ZSmlSMDBzWVZpdlB4RFJkRUZlSHFxUUpVWEFpSnIrUkNxR1VYTG9TTTN4?=
+ =?utf-8?B?NzA1anJhUXBBWnVqSEM1R0sxc2p2SndSWDFjTVlWcC9iLzlhb2NYa3g2NkY4?=
+ =?utf-8?B?ZFRwSU5hS3NxSnp3TThObW5OMEorb1piL3FEb1pGN3NKWDN2b0tkT0J2WkJs?=
+ =?utf-8?B?L3I5ek9tSnZkK29wNlovV2ZXeDVnWnRwUGdjWTM2UG5pcTVTM0lZMms0ZDB0?=
+ =?utf-8?B?UEZkc1NJcmQ4Q1RQMHE2YzZoS0U1VlZVMDExNWQwODcwSEd2S3VtbW0vL0o3?=
+ =?utf-8?B?VTd1OUh2ekN5SHZDMXpaU3ZPcFlDaHoxVithV3RvV0czY2FGcTRYM2h6UmZB?=
+ =?utf-8?B?dWYrRVlkWVhJd3UydmVXUU00cW5weWpRRjdOVlRYdGYrczRJNXJKZlNTMTg4?=
+ =?utf-8?B?TnU3RFladzJjd3krbllHenhVQnlpTnZaa3JQSlVnMlZJSGhnOWFTdy9MTmIy?=
+ =?utf-8?B?SStiYlhkTFZpWVB2RnhrSkozOHV3cy9mYkl1ZTJaREt2ZU16KzQ1VWJGUzVX?=
+ =?utf-8?B?eTNXM2V1SjExWC9lekZtQkZJVFd6ZnMxNlMxSFQrd0w0RWZhMkxvK2MwTi93?=
+ =?utf-8?B?YVp3ZEVnZHoreTIzQTI2Q1Bvdk02aHpJSDdISFc0SnVRVVRzS290NmVZRXZM?=
+ =?utf-8?B?cWFSZjh0TkpVUkovM3JhRE1UbEJJRlI4b1RhSjhZS01rY3RaNU5DSnJiNWhH?=
+ =?utf-8?B?Mi9iZCtTZVhNbm1pNkczUklyMWw2Q1g5TmJuVlErUXE3T1FWdk5NTDUwU296?=
+ =?utf-8?B?Z1MxSjhScVN6V29PbUhVcExRdXhFUUJ1V1VjWEErRnBJaGVTNVJldGZzY2F2?=
+ =?utf-8?B?emZnRFdXSG1oTkxkWnhHU0krcDhnQmNRNkdiTlVoUHBaQ0h2RlRyR1lIWG1a?=
+ =?utf-8?B?eFFYem9jU255L0plQ3EvandMeWZnRHQ5VjZvRDZacEtqdVZKa2N2ODI0MzRw?=
+ =?utf-8?B?UTdiRkhXQjczNHN1aXlraVJNSTByQWZ0RjNQMDdNenpSZ29NNWtzZXNvYWFz?=
+ =?utf-8?B?dzlTdGUrQ0dmaHF2K2YvSFZNZnJNWENnWjBFeU40cENpeXpHNkRpYUhFbVpw?=
+ =?utf-8?B?T0Q1ZllsbklWOXl1OVMwWnVQdWZEZSsyU3ZIS1doVUIwNVVuYmc4djZXNitU?=
+ =?utf-8?B?WU9lMHhpKzRlMEI5UEd0enJrOEtkMEtSU01IWUZNYm1sY3pnbWtrWGZQbGM1?=
+ =?utf-8?B?RTR1UTZLMlU2Y0MzT3dFYndCMkk1SDJGVEJQZ3oxdTVVYzlLOHlXZ2ZTN2h3?=
+ =?utf-8?B?UWxqRytROHpWYlZFalhSTU9TWmw5WHBxVmVEUUpBbTc3WGVTVGxNTlRadnBZ?=
+ =?utf-8?B?L2hRNGZ5cktGbmlsUGZiWUVlZzdCT1dnS0RVU3g1NG5rTFhlRjFjbmVDTmM2?=
+ =?utf-8?Q?KW4iND2tlCRBITMc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: qti.qualcomm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR02MB8173.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1acb664e-b095-4140-21f6-08da454f86ab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2022 10:55:08.9973
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MIQEdhXfW24DkqvCGKztXRRERuBNtiQJZImIjU0bLmY2IA0M4TbUwqqgWJBiuaityvcLcyzyAybzWRhmNDCY2Pr/LGtcvlh4WQWUDTmp9Jk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2449
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/27/22 14:26, Zhouguanghui (OS Kernel) wrote:
-> Hi Anshuman,
-> 
-> 在 2022/5/18 12:40, Anshuman Khandual 写道:
->> Hi Zhou,
->>
->> A small nit.
->>
->> This changes generic memblock to accommodate arm64 specific scenario.
->> Keeping the subject line as 'mm/memblock: ...' might be better.
->>
-> 
-> I will add memblock to the subject line.
-> 
->> On 5/17/22 17:13, Zhou Guanghui wrote:
->>> In a system using HBM, a multi-bit ECC error occurs, and the BIOS
->>> saves the corresponding area (for example, 2 MB). When the system
->>> restarts next time, these areas are isolated and not reported or
->>> reported as EFI_UNUSABLE_MEMORY. Both of them lead to an increase
->>
->> Which cases dont get reported rather than as EFI_UNUSABLE_MEMORY ? Is
->> this supported on arm64 platform via mainline kernel ?
->>
-> 
-> The BIOS determines how to report the memory area that cannot be used to 
-> the kernel. Do not report the memory area to the kernel or inform the 
-> kernel that the memory area is unusable.
-
-Right, but just curious whether there are real systems in the field with
-this feature running mainline kernel ? OR this is just being future proof.
-
-> 
->>> in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to
->>> a larger number of memblocks.
->>>
->>> For example, if the EFI_UNUSABLE_MEMORY type is reported:
->>> ...
->>> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
->>> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
->>> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
->>> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
->>> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
->>> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
->>> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
->>> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
->>> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
->>> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
->>> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
->>> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
->>> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
->>> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
->>
->> Got it.
->>
->>> ...
->>>
->>> If the size of the init memblock regions is exceeded before the
->>> array size can be resized, the excess memory will be lost.
->>
->> Could you please elaborate more on why additional memblock regions can
->> not be accommodated via memblock array resizing ?
->>
-> 
-> As described in the memblock_double_array function: We don't allow 
-> resizing until we know about the reserved regions of memory that aren' 
-> not suitable for allocation.
-> 
->>>
->>> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
->>> ---
->>>   arch/arm64/include/asm/memory.h |  9 +++++++++
->>>   mm/memblock.c                   | 14 +++++++++-----
->>>   2 files changed, 18 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
->>> index 0af70d9abede..eda61c0389c4 100644
->>> --- a/arch/arm64/include/asm/memory.h
->>> +++ b/arch/arm64/include/asm/memory.h
->>> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
->>>   # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
->>>   #endif
->>>   
->>> +/*
->>> + * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
->>> + * memory block into multiple parts. As a result, the number of memory regions
->>> + * is large.
->>> + */
->>> +#ifdef CONFIG_EFI
->>
->> Could not memblock regions tagged with MEMBLOCK_NOMAP flag not present
->> on non-EFI systems ? Just wondering, are there not some other scenarios
->> which will also require expanded static memblock array.
-> 
-> Systems using devicetree can also have "no-map" memory. However, in this 
-> case, the expanded static memblock array is required only when a large 
-> number of such no-map reserved memories are manually added. I don't know 
-> if any users will do that.
-> 
-> Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
-> 
-> As to whether other scenarios also require expanded static memblock 
-> arrays, I really don't know.
-
-In that case could this comment here be more specific about this increased
-static array size, being applicable only for MEMBLOCK_NOMAP regions on EFI
-system with EFI_UNUSABLE_MEMORY tagging support. Is there an way to narrow
-this down further wrt EFI_UNUSABLE_MEMORY, rather than blanket EFI ?
-
-+/*
-+ * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
-+ * memory block into multiple parts. As a result, the number of memory regions
-+ * is large.
-+ */
-+#ifdef CONFIG_EFI
-+#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
-+#endif
-+
-
-> 
->>
->>> +#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
->>> +#endif
->>> +
->>>   #include <asm-generic/memory_model.h>
->>>   
->>>   #endif /* __ASM_MEMORY_H */
->>> diff --git a/mm/memblock.c b/mm/memblock.c
->>> index e4f03a6e8e56..7c63571a69d7 100644
->>> --- a/mm/memblock.c
->>> +++ b/mm/memblock.c
->>> @@ -29,6 +29,10 @@
->>>   # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->>>   #endif
->>>   
->>> +#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
->>> +#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
->>> +#endif
->>
->> Why create an additional macro INIT_MEMBLOCK_MEMORY_REGIONS ? Why cannot
->> INIT_MEMBLOCK_REGIONS be defined in the platform directly like the other
->> macro INIT_MEMBLOCK_RESERVED_REGIONS ?
->>
-> 
-> The number of reserved memblocks does not need to be increased.
-
-Got it.
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRG1pdHJ5IEJhcnlzaGtv
+diA8ZG1pdHJ5LmJhcnlzaGtvdkBsaW5hcm8ub3JnPg0KPiBTZW50OiBGcmlkYXksIEp1bmUgMywg
+MjAyMiAzOjA3IFBNDQo+IFRvOiBWaW5vZCBQb2xpbWVyYSAoUVVJQykgPHF1aWNfdnBvbGltZXJA
+cXVpY2luYy5jb20+OyBkcmktDQo+IGRldmVsQGxpc3RzLmZyZWVkZXNrdG9wLm9yZzsgbGludXgt
+YXJtLW1zbUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGZyZWVkcmVub0BsaXN0cy5mcmVlZGVza3RvcC5v
+cmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnDQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnOyByb2JkY2xhcmtAZ21haWwuY29tOw0KPiBkaWFuZGVyc0BjaHJvbWl1bS5vcmc7
+IHZwb2xpbWVyQHF1aWNpbmMuY29tOyBzd2JveWRAY2hyb21pdW0ub3JnOw0KPiBrYWx5YW50QHF1
+aWNpbmMuY29tDQo+IFN1YmplY3Q6IFJlOiBbdjFdIGRybS9tc206IGFkZCBudWxsIGNoZWNrcyBm
+b3IgZHJtIGRldmljZSB0byBhdm9pZCBjcmFzaA0KPiBkdXJpbmcgcHJvYmUgZGVmZXINCj4gDQo+
+IFdBUk5JTkc6IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgUXVhbGNvbW0u
+IFBsZWFzZSBiZSB3YXJ5DQo+IG9mIGFueSBsaW5rcyBvciBhdHRhY2htZW50cywgYW5kIGRvIG5v
+dCBlbmFibGUgbWFjcm9zLg0KPiANCj4gT24gMDMvMDYvMjAyMiAxMjoyMiwgVmlub2QgUG9saW1l
+cmEgd3JvdGU6DQo+ID4gRHVyaW5nIHByb2JlIGRlZmVyLCBkcm0gZGV2aWNlIGlzIG5vdCBpbml0
+aWFsaXplZCBhbmQgYW4gZXh0ZXJuYWwNCj4gPiB0cmlnZ2VyIHRvIHNodXRkb3duIGlzIHRyeWlu
+ZyB0byBjbGVhbiB1cCBkcm0gZGV2aWNlIGxlYWRpbmcgdG8gY3Jhc2guDQo+ID4gQWRkIGNoZWNr
+cyB0byBhdm9pZCBkcm0gZGV2aWNlIGNsZWFudXAgaW4gc3VjaCBjYXNlcy4NCj4gPg0KPiA+IEJV
+RzogdW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0IHZp
+cnR1YWwNCj4gPiBhZGRyZXNzIDAwMDAwMDAwMDAwMDAwYjgNCj4gPg0KPiA+IENhbGwgdHJhY2U6
+DQo+ID4NCj4gPiBkcm1fYXRvbWljX2hlbHBlcl9zaHV0ZG93bisweDQ0LzB4MTQ0DQo+ID4gbXNt
+X3BkZXZfc2h1dGRvd24rMHgyYy8weDM4DQo+ID4gcGxhdGZvcm1fc2h1dGRvd24rMHgyYy8weDM4
+DQo+ID4gZGV2aWNlX3NodXRkb3duKzB4MTU4LzB4MjEwDQo+ID4ga2VybmVsX3Jlc3RhcnRfcHJl
+cGFyZSsweDQwLzB4NGMNCj4gPiBrZXJuZWxfcmVzdGFydCsweDIwLzB4NmMNCj4gPiBfX2FybTY0
+X3N5c19yZWJvb3QrMHgxOTQvMHgyM2MNCj4gPiBpbnZva2Vfc3lzY2FsbCsweDUwLzB4MTNjDQo+
+ID4gZWwwX3N2Y19jb21tb24rMHhhMC8weDE3Yw0KPiA+IGRvX2VsMF9zdmNfY29tcGF0KzB4Mjgv
+MHgzNA0KPiA+IGVsMF9zdmNfY29tcGF0KzB4MjAvMHg3MA0KPiA+IGVsMHRfMzJfc3luY19oYW5k
+bGVyKzB4YTgvMHhjYw0KPiA+IGVsMHRfMzJfc3luYysweDFhOC8weDFhYw0KPiA+DQo+ID4gU2ln
+bmVkLW9mZi1ieTogVmlub2QgUG9saW1lcmEgPHF1aWNfdnBvbGltZXJAcXVpY2luYy5jb20+DQo+
+IA0KPiBGaXhlcyA/DQotIEFkZGVkIGZpeGVzIHRhZyBpbiB2Mi4NCj4gDQo+ID4gLS0tDQo+ID4g
+ICBkcml2ZXJzL2dwdS9kcm0vbXNtL21zbV9kcnYuYyB8IDYgKysrKystDQo+ID4gICAxIGZpbGUg
+Y2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9ncHUvZHJtL21zbS9tc21fZHJ2LmMNCj4gYi9kcml2ZXJzL2dwdS9kcm0v
+bXNtL21zbV9kcnYuYw0KPiA+IGluZGV4IDQ0NDg1MzYuLmQ2MmFjNjYgMTAwNjQ0DQo+ID4gLS0t
+IGEvZHJpdmVycy9ncHUvZHJtL21zbS9tc21fZHJ2LmMNCj4gPiArKysgYi9kcml2ZXJzL2dwdS9k
+cm0vbXNtL21zbV9kcnYuYw0KPiA+IEBAIC0xNDIsNiArMTQyLDkgQEAgc3RhdGljIHZvaWQgbXNt
+X2lycV91bmluc3RhbGwoc3RydWN0IGRybV9kZXZpY2UNCj4gKmRldikNCj4gPiAgICAgICBzdHJ1
+Y3QgbXNtX2RybV9wcml2YXRlICpwcml2ID0gZGV2LT5kZXZfcHJpdmF0ZTsNCj4gPiAgICAgICBz
+dHJ1Y3QgbXNtX2ttcyAqa21zID0gcHJpdi0+a21zOw0KPiA+DQo+ID4gKyAgICAgaWYgKCFpcnFf
+aGFzX2FjdGlvbihrbXMtPmlycSkpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm47DQo+ID4gKw0K
+PiANCj4gSXMgdGhpcyBwYXJ0IHJlcXVpcmVkIHdpdGgNCj4gaHR0cHM6Ly9wYXRjaHdvcmsuZnJl
+ZWRlc2t0b3Aub3JnL3BhdGNoLzQ4NTQyMi8/c2VyaWVzPTEwMzcwMiZyZXY9MT8NClllcywgSSBm
+ZWVsIGxpa2UgdGhpcyBpcyBhIGJldHRlciBhcHByb2FjaCB0aGFuIG1haW50YWluaW5nIGEgbmV3
+IHZhcmlhYmxlLiBJIHNlZSBhIGNvdXBsZSBvZiBkcml2ZXJzIGZvbGxvd2luZyBzaW1pbGFyIGFw
+cHJvYWNoIHRvIHNhZmVndWFyZCB1bmluc3RhbGwgd2l0aG91dCBiZWluZyBpbnN0YWxsIGNhbGxl
+ZC4NCj4gDQo+ID4gICAgICAga21zLT5mdW5jcy0+aXJxX3VuaW5zdGFsbChrbXMpOw0KPiA+ICAg
+ICAgIGlmIChrbXMtPmlycV9yZXF1ZXN0ZWQpDQo+ID4gICAgICAgICAgICAgICBmcmVlX2lycShr
+bXMtPmlycSwgZGV2KTsNCj4gPiBAQCAtMjU5LDYgKzI2Miw3IEBAIHN0YXRpYyBpbnQgbXNtX2Ry
+bV91bmluaXQoc3RydWN0IGRldmljZSAqZGV2KQ0KPiA+DQo+ID4gICAgICAgZGRldi0+ZGV2X3By
+aXZhdGUgPSBOVUxMOw0KPiA+ICAgICAgIGRybV9kZXZfcHV0KGRkZXYpOw0KPiA+ICsgICAgIHBy
+aXYtPmRldiA9IE5VTEw7DQo+IA0KPiBXaGF0IGFyZSB5b3UgdHJ5aW5nIHRvIHByb3RlY3QgaGVy
+ZT8NCklmIHdlIGdldCBhIHNodXRkb3duIGNhbGwgYWZ0ZXIgcHJvYmUgZGVmZXIsIHRoZXJlIGNh
+biBiZSBzdGFsZSBwb2ludGVyIGluIHByaXYtPmRldiB3aGljaCBpcyBpbnZhbGlkIHRoYXQgbmVl
+ZHMgdG8gYmUgY2xlYXJlZC4NCj4gDQo+ID4NCj4gPiAgICAgICBkZXN0cm95X3dvcmtxdWV1ZShw
+cml2LT53cSk7DQo+ID4NCj4gPiBAQCAtMTE2Nyw3ICsxMTcxLDcgQEAgdm9pZCBtc21fZHJ2X3No
+dXRkb3duKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+ID4gICAgICAgc3RydWN0
+IG1zbV9kcm1fcHJpdmF0ZSAqcHJpdiA9IHBsYXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KPiA+
+ICAgICAgIHN0cnVjdCBkcm1fZGV2aWNlICpkcm0gPSBwcml2ID8gcHJpdi0+ZGV2IDogTlVMTDsN
+Cj4gPg0KPiA+IC0gICAgIGlmICghcHJpdiB8fCAhcHJpdi0+a21zKQ0KPiA+ICsgICAgIGlmICgh
+cHJpdiB8fCAhcHJpdi0+a21zIHx8ICFkcm0pDQo+ID4gICAgICAgICAgICAgICByZXR1cm47DQo+
+ID4NCj4gPiAgICAgICBkcm1fYXRvbWljX2hlbHBlcl9zaHV0ZG93bihkcm0pOw0KPiANCj4gDQo+
+IC0tDQo+IFdpdGggYmVzdCB3aXNoZXMNCj4gRG1pdHJ5DQo=

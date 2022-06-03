@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CB253D085
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E4353D0A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347503AbiFCSGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S1347284AbiFCSKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346357AbiFCRvG (ORCPT
+        with ESMTP id S1345900AbiFCR4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB41C54BF2;
-        Fri,  3 Jun 2022 10:47:46 -0700 (PDT)
+        Fri, 3 Jun 2022 13:56:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F1456C32;
+        Fri,  3 Jun 2022 10:53:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E5FE60F36;
-        Fri,  3 Jun 2022 17:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192C1C385A9;
-        Fri,  3 Jun 2022 17:47:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38A67B82430;
+        Fri,  3 Jun 2022 17:53:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B47C385A9;
+        Fri,  3 Jun 2022 17:53:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278465;
-        bh=q0pXpUrywR1EhwQ+Bo3vKia0ydjXRDE8ufJ1eppQkXg=;
+        s=korg; t=1654278835;
+        bh=GKoL9+gfFzoAe2lfmV6JssBgfwtDzDbaPLiAC/jmV64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wAvBSg1Hwnz26JUeU1t2qpYzhwDqsSDaEiOjW3BYXZD5tKYFDxCrJGA7dkX6hvif/
-         u+CpYVx/yjwlDfm7gIiyttBSRPlN6QPASmGQN2G7tfP650YnpzgUDAWbZAv1EnTDFh
-         pOB0YaCrl5kgb9qJUsLp0HqcS5nnXF4vULnSN6So=
+        b=S03tAMEQSnDo9cCQvGdARwrEaY/yMJyeiRmgcxCAgRuCZ+3uWu02qawg6HPhL+BeG
+         VBT9miLY0njkXCvxgA6fj2ScESfYBCV0FxO94KCERVU+73Yw+tCaEkUOaSuZmkWfjm
+         0+/c4ZpcwqSCGJ6MTS98cRnkALT+zEctHk6OYNCY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Milan Broz <gmazyland@gmail.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.10 41/53] dm crypt: make printing of the key constant-time
+        stable@vger.kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.17 42/75] zsmalloc: fix races between asynchronous zspage free and page migration
 Date:   Fri,  3 Jun 2022 19:43:26 +0200
-Message-Id: <20220603173819.915827409@linuxfoundation.org>
+Message-Id: <20220603173822.939787051@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Sultan Alsawaf <sultan@kerneltoast.com>
 
-commit 567dd8f34560fa221a6343729474536aa7ede4fd upstream.
+commit 2505a981114dcb715f8977b8433f7540854851d8 upstream.
 
-The device mapper dm-crypt target is using scnprintf("%02x", cc->key[i]) to
-report the current key to userspace. However, this is not a constant-time
-operation and it may leak information about the key via timing, via cache
-access patterns or via the branch predictor.
+The asynchronous zspage free worker tries to lock a zspage's entire page
+list without defending against page migration.  Since pages which haven't
+yet been locked can concurrently migrate off the zspage page list while
+lock_zspage() churns away, lock_zspage() can suffer from a few different
+lethal races.
 
-Change dm-crypt's key printing to use "%c" instead of "%02x". Also
-introduce hex2asc() that carefully avoids any branching or memory
-accesses when converting a number in the range 0 ... 15 to an ascii
-character.
+It can lock a page which no longer belongs to the zspage and unsafely
+dereference page_private(), it can unsafely dereference a torn pointer to
+the next page (since there's a data race), and it can observe a spurious
+NULL pointer to the next page and thus not lock all of the zspage's pages
+(since a single page migration will reconstruct the entire page list, and
+create_page_chain() unconditionally zeroes out each list pointer in the
+process).
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Tested-by: Milan Broz <gmazyland@gmail.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Fix the races by using migrate_read_lock() in lock_zspage() to synchronize
+with page migration.
+
+Link: https://lkml.kernel.org/r/20220509024703.243847-1-sultan@kerneltoast.com
+Fixes: 77ff465799c602 ("zsmalloc: zs_page_migrate: skip unnecessary loops but not return -EBUSY if zspage is not inuse")
+Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
+Acked-by: Minchan Kim <minchan@kernel.org>
+Cc: Nitin Gupta <ngupta@vflare.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-crypt.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ mm/zsmalloc.c |   37 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 33 insertions(+), 4 deletions(-)
 
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -3404,6 +3404,11 @@ static int crypt_map(struct dm_target *t
- 	return DM_MAPIO_SUBMITTED;
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -1718,11 +1718,40 @@ static enum fullness_group putback_zspag
+  */
+ static void lock_zspage(struct zspage *zspage)
+ {
+-	struct page *page = get_first_page(zspage);
++	struct page *curr_page, *page;
+ 
+-	do {
+-		lock_page(page);
+-	} while ((page = get_next_page(page)) != NULL);
++	/*
++	 * Pages we haven't locked yet can be migrated off the list while we're
++	 * trying to lock them, so we need to be careful and only attempt to
++	 * lock each page under migrate_read_lock(). Otherwise, the page we lock
++	 * may no longer belong to the zspage. This means that we may wait for
++	 * the wrong page to unlock, so we must take a reference to the page
++	 * prior to waiting for it to unlock outside migrate_read_lock().
++	 */
++	while (1) {
++		migrate_read_lock(zspage);
++		page = get_first_page(zspage);
++		if (trylock_page(page))
++			break;
++		get_page(page);
++		migrate_read_unlock(zspage);
++		wait_on_page_locked(page);
++		put_page(page);
++	}
++
++	curr_page = page;
++	while ((page = get_next_page(curr_page))) {
++		if (trylock_page(page)) {
++			curr_page = page;
++		} else {
++			get_page(page);
++			migrate_read_unlock(zspage);
++			wait_on_page_locked(page);
++			put_page(page);
++			migrate_read_lock(zspage);
++		}
++	}
++	migrate_read_unlock(zspage);
  }
  
-+static char hex2asc(unsigned char c)
-+{
-+	return c + '0' + ((unsigned)(9 - c) >> 4 & 0x27);
-+}
-+
- static void crypt_status(struct dm_target *ti, status_type_t type,
- 			 unsigned status_flags, char *result, unsigned maxlen)
- {
-@@ -3422,9 +3427,12 @@ static void crypt_status(struct dm_targe
- 		if (cc->key_size > 0) {
- 			if (cc->key_string)
- 				DMEMIT(":%u:%s", cc->key_size, cc->key_string);
--			else
--				for (i = 0; i < cc->key_size; i++)
--					DMEMIT("%02x", cc->key[i]);
-+			else {
-+				for (i = 0; i < cc->key_size; i++) {
-+					DMEMIT("%c%c", hex2asc(cc->key[i] >> 4),
-+					       hex2asc(cc->key[i] & 0xf));
-+				}
-+			}
- 		} else
- 			DMEMIT("-");
- 
+ static int zs_init_fs_context(struct fs_context *fc)
 
 

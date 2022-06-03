@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C137153C1DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9CA53C230
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241984AbiFCAv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S242219AbiFCAwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240178AbiFCApX (ORCPT
+        with ESMTP id S239724AbiFCApZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 20:45:23 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D70D344E0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:45:22 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id d5-20020a17090a564500b001e031a8ad45so3398485pji.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:45:22 -0700 (PDT)
+        Thu, 2 Jun 2022 20:45:25 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E273A33887
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:45:23 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id y4-20020a17090322c400b001637287812bso3476441plg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:45:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=5M+4hKEItsfPOKfockwlyyAZ7LBuR8xnZS1ca9weHs4=;
-        b=a8aEFk0sQTnjnegfFASz0toC68xR3x6A7feoHYGWo+SPU4JXsUxiISCoHmbf09fb9/
-         vkuV8xGIV8vo4YYCJL22JzjCOCwRgHF6cDZ2/f3O4NVvvijddR5HFQ7ZsAG4gkdx/fTB
-         oP0ZYCuY+hO1AOwYQKtgFXhdgO7lsYu03zzr3mPRz441yuOu/IdspNBXh1qqOMIkB/ln
-         RfSNdd5sntKkkcx/LvzEQed4EXKzNXF6QEJy8yR9Uq0tJEAfej3aM7IEzZXjc+fgVtSz
-         YtZmCS5vKmSJDD2mAfaBWny2TxXxLrHYrt+b7xKg7eQ0gEdXlFnBixth6i+KYMQhPAg9
-         dVtA==
+        bh=O7b+a25lx0Dbw99w/vnZbZi9/Zb3kUTB3wWOPwdGJDs=;
+        b=NHOEiCUsn4p0ioi9Q7YZkrH/GQwQ8jBWkp136Qdw1qi18fUHfVBKdgc4asAKll1ioW
+         ytmoZEXEmBGv+GLyGl9wMKeokb30OnU3WOEaLwQyYdLE/yT3pi83d60NeR/MtQKK26qW
+         hXVMysMXqjKMGqScEeaY1R4vXeQKngHDcbUuhF/2fy5Aeu1ulSzDeEL6QAoRBtwq6QER
+         8E/lOtEFVnkLFviVwnWg0ecbG9OPmzmNk9Kzyq4bHKNZlWzBQic+zrC8UAYadBTXzK6+
+         YAdwA6J0w4GMH3rdHgNaoCyTIXa2N5JLw4fg6q6SnGN8mlAZ4m2HHdkBwSQRZpe3pMlF
+         ZKbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=5M+4hKEItsfPOKfockwlyyAZ7LBuR8xnZS1ca9weHs4=;
-        b=CnFhrP8+73P1eaomZGdAQ5+kVNBJcz0w30x+kk5uWd+WXvxiEsX6uJRG2BLQiymX2y
-         nMiA1h56Oh3sKNmCXZ5MVD2sMx3fQ0h0zvRmcq635ebI0WOlij//Z/l5f9HcMQOWhZV3
-         kvKLF8fB29JO6lmEVEs4NGHVSU0SyiFW4TfCrYnwjNRTHbCOcmibbxqQzezO5Gh4fw8I
-         J0xDHJq/0WO1tDEmQqJHGfUH74mMeNXANm9ltsbHLlFz9TCPmvFm5q8S6IM/8ITDPp/i
-         sgz1OYZFaQVOk7Ah5vnRJ58yNWv8X1PGIJwp6KcEPe9bI2MdhEHaeo14xbVC8UaXKl73
-         l1xQ==
-X-Gm-Message-State: AOAM531OrezGOMHkAbqtQGf+fKPjWeFbUnG/RQ26c0OhjML0tVQIpGU/
-        UF3VKzWIcCiiZLeEpLEqnDuX96KC4wA=
-X-Google-Smtp-Source: ABdhPJwgkY51U4aRoXTNi3VkSv9oUlR9dBTMl8QutZhPJiEbL+mrxTTX67SpR/M3pzLiZzYSCgYfFIWxxFg=
+        bh=O7b+a25lx0Dbw99w/vnZbZi9/Zb3kUTB3wWOPwdGJDs=;
+        b=SGnLmqJUx3KP2f1q2eqpXcwfMwSH5kxHGGETOTDaA/eQztxEDM5pX5IqQ7ExlFq7Mb
+         c/C42EZR7l6Kg2FfZ3XuBf3enO2GMHLGKCyHfHjJFLMD39jl0gf/HgvX+gP0KSXlBAov
+         5tCn2mmFNh428iNBKHzaHodiJWD8OEaGAe5PlCSq48TjKoH2oHrP92Nss0LcWftuzdKI
+         LxOJErm9ckOB4U79lfv37R7Ff+I6T1jFUf5Y5Qyp0BmbJtO3aLu6cKSJSOJOCjDH9yXi
+         4cG8L4EWZvrpSCoTJxHr3yc8bHnxVFdWs16DStThPsOnHGuvSNYjh6ne1LoADkTMsZBA
+         wRgQ==
+X-Gm-Message-State: AOAM533myYGCPiw3fmS17Z+JJqzeyxvPA6AFFoHct5cbcNI5eS/AJI8j
+        QbIaptxSkRZX8Emq5WFwULaQOAuAFLA=
+X-Google-Smtp-Source: ABdhPJx/UdgkafMBhagNizkk91xi3dNlem8ME6TVAJYYFreebQzjj74/4KkoADX+c8XPRbHLjs3dwGXM4b8=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:ce82:b0:163:f215:e3b6 with SMTP id
- f2-20020a170902ce8200b00163f215e3b6mr7820910plg.51.1654217121609; Thu, 02 Jun
- 2022 17:45:21 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:10cc:b0:506:e0:d6c3 with SMTP id
+ d12-20020a056a0010cc00b0050600e0d6c3mr7810323pfu.33.1654217123385; Thu, 02
+ Jun 2022 17:45:23 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:42:04 +0000
+Date:   Fri,  3 Jun 2022 00:42:05 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-58-seanjc@google.com>
+Message-Id: <20220603004331.1523888-59-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 057/144] KVM: selftests: Convert mmu_role_test away from VCPU_ID
+Subject: [PATCH v2 058/144] KVM: selftests: Convert pmu_event_filter_test away
+ from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -72,88 +73,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert mmu_role_test to use vm_create_with_one_vcpu() and pass around
-a 'struct kvm_vcpu' object instead of using a global VCPU_ID.
-Note, this is a "functional" change in the sense that the test now
-creates a vCPU with vcpu_id==0 instead of vcpu_id==1.  The non-zero
-VCPU_ID was 100% arbitrary and added little to no validation coverage.
-If testing non-zero vCPU IDs is desirable for generic tests, that can be
-done in the future by tweaking the VM creation helpers.
-
-Opportunistically use vcpu_run() instead of _vcpu_run() plus an open
-coded assert that KVM_RUN succeeded.
+Convert pmu_event_filter_test to use vm_create_with_one_vcpu() and pass
+around a 'struct kvm_vcpu' object instead of using a global VCPU_ID.
+Rename run_vm_to_sync() to run_vcpu_to_sync() accordingly.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/mmu_role_test.c      | 20 ++++++++-----------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+ .../kvm/x86_64/pmu_event_filter_test.c        | 69 ++++++++++---------
+ 1 file changed, 36 insertions(+), 33 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/mmu_role_test.c b/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
-index da2325fcad87..809aa0153cee 100644
---- a/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/mmu_role_test.c
-@@ -3,8 +3,6 @@
- #include "kvm_util.h"
- #include "processor.h"
+diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+index 640b1a1ab3df..96455ec6ea48 100644
+--- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
++++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+@@ -49,7 +49,6 @@ union cpuid10_ebx {
+ /* Oddly, this isn't in perf_event.h. */
+ #define ARCH_PERFMON_BRANCHES_RETIRED		5
  
--#define VCPU_ID			1
--
- #define MMIO_GPA	0x100000000ull
+-#define VCPU_ID 0
+ #define NUM_BRANCHES 42
  
- static void guest_code(void)
-@@ -25,22 +23,21 @@ static void guest_pf_handler(struct ex_regs *regs)
- static void mmu_role_test(u32 *cpuid_reg, u32 evil_cpuid_val)
+ /*
+@@ -173,17 +172,17 @@ static void amd_guest_code(void)
+  * Run the VM to the next GUEST_SYNC(value), and return the value passed
+  * to the sync. Any other exit from the guest is fatal.
+  */
+-static uint64_t run_vm_to_sync(struct kvm_vm *vm)
++static uint64_t run_vcpu_to_sync(struct kvm_vcpu *vcpu)
  {
- 	u32 good_cpuid_val = *cpuid_reg;
+-	struct kvm_run *run = vcpu_state(vm, VCPU_ID);
++	struct kvm_run *run = vcpu->run;
+ 	struct ucall uc;
+ 
+-	vcpu_run(vm, VCPU_ID);
++	vcpu_run(vcpu->vm, vcpu->id);
+ 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+ 		    "Exit_reason other than KVM_EXIT_IO: %u (%s)\n",
+ 		    run->exit_reason,
+ 		    exit_reason_str(run->exit_reason));
+-	get_ucall(vm, VCPU_ID, &uc);
++	get_ucall(vcpu->vm, vcpu->id, &uc);
+ 	TEST_ASSERT(uc.cmd == UCALL_SYNC,
+ 		    "Received ucall other than UCALL_SYNC: %lu", uc.cmd);
+ 	return uc.args[1];
+@@ -197,13 +196,13 @@ static uint64_t run_vm_to_sync(struct kvm_vm *vm)
+  * a sanity check and then GUEST_SYNC(success). In the case of failure,
+  * the behavior of the guest on resumption is undefined.
+  */
+-static bool sanity_check_pmu(struct kvm_vm *vm)
++static bool sanity_check_pmu(struct kvm_vcpu *vcpu)
+ {
+ 	bool success;
+ 
+-	vm_install_exception_handler(vm, GP_VECTOR, guest_gp_handler);
+-	success = run_vm_to_sync(vm);
+-	vm_install_exception_handler(vm, GP_VECTOR, NULL);
++	vm_install_exception_handler(vcpu->vm, GP_VECTOR, guest_gp_handler);
++	success = run_vcpu_to_sync(vcpu);
++	vm_install_exception_handler(vcpu->vm, GP_VECTOR, NULL);
+ 
+ 	return success;
+ }
+@@ -254,9 +253,9 @@ static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
+ 	return f;
+ }
+ 
+-static void test_without_filter(struct kvm_vm *vm)
++static void test_without_filter(struct kvm_vcpu *vcpu)
+ {
+-	uint64_t count = run_vm_to_sync(vm);
++	uint64_t count = run_vcpu_to_sync(vcpu);
+ 
+ 	if (count != NUM_BRANCHES)
+ 		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",
+@@ -264,17 +263,17 @@ static void test_without_filter(struct kvm_vm *vm)
+ 	TEST_ASSERT(count, "Allowed PMU event is not counting");
+ }
+ 
+-static uint64_t test_with_filter(struct kvm_vm *vm,
++static uint64_t test_with_filter(struct kvm_vcpu *vcpu,
+ 				 struct kvm_pmu_event_filter *f)
+ {
+-	vm_ioctl(vm, KVM_SET_PMU_EVENT_FILTER, (void *)f);
+-	return run_vm_to_sync(vm);
++	vm_ioctl(vcpu->vm, KVM_SET_PMU_EVENT_FILTER, (void *)f);
++	return run_vcpu_to_sync(vcpu);
+ }
+ 
+-static void test_member_deny_list(struct kvm_vm *vm)
++static void test_member_deny_list(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_pmu_event_filter *f = event_filter(KVM_PMU_EVENT_DENY);
+-	uint64_t count = test_with_filter(vm, f);
++	uint64_t count = test_with_filter(vcpu, f);
+ 
+ 	free(f);
+ 	if (count)
+@@ -283,10 +282,10 @@ static void test_member_deny_list(struct kvm_vm *vm)
+ 	TEST_ASSERT(!count, "Disallowed PMU Event is counting");
+ }
+ 
+-static void test_member_allow_list(struct kvm_vm *vm)
++static void test_member_allow_list(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_pmu_event_filter *f = event_filter(KVM_PMU_EVENT_ALLOW);
+-	uint64_t count = test_with_filter(vm, f);
++	uint64_t count = test_with_filter(vcpu, f);
+ 
+ 	free(f);
+ 	if (count != NUM_BRANCHES)
+@@ -295,14 +294,14 @@ static void test_member_allow_list(struct kvm_vm *vm)
+ 	TEST_ASSERT(count, "Allowed PMU event is not counting");
+ }
+ 
+-static void test_not_member_deny_list(struct kvm_vm *vm)
++static void test_not_member_deny_list(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_pmu_event_filter *f = event_filter(KVM_PMU_EVENT_DENY);
+ 	uint64_t count;
+ 
+ 	remove_event(f, INTEL_BR_RETIRED);
+ 	remove_event(f, AMD_ZEN_BR_RETIRED);
+-	count = test_with_filter(vm, f);
++	count = test_with_filter(vcpu, f);
+ 	free(f);
+ 	if (count != NUM_BRANCHES)
+ 		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",
+@@ -310,14 +309,14 @@ static void test_not_member_deny_list(struct kvm_vm *vm)
+ 	TEST_ASSERT(count, "Allowed PMU event is not counting");
+ }
+ 
+-static void test_not_member_allow_list(struct kvm_vm *vm)
++static void test_not_member_allow_list(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_pmu_event_filter *f = event_filter(KVM_PMU_EVENT_ALLOW);
+ 	uint64_t count;
+ 
+ 	remove_event(f, INTEL_BR_RETIRED);
+ 	remove_event(f, AMD_ZEN_BR_RETIRED);
+-	count = test_with_filter(vm, f);
++	count = test_with_filter(vcpu, f);
+ 	free(f);
+ 	if (count)
+ 		pr_info("%s: Branch instructions retired = %lu (expected 0)\n",
+@@ -332,6 +331,7 @@ static void test_not_member_allow_list(struct kvm_vm *vm)
+  */
+ static void test_pmu_config_disable(void (*guest_code)(void))
+ {
 +	struct kvm_vcpu *vcpu;
- 	struct kvm_run *run;
+ 	int r;
  	struct kvm_vm *vm;
- 	uint64_t cmd;
--	int r;
  
- 	/* Create VM */
+@@ -343,11 +343,13 @@ static void test_pmu_config_disable(void (*guest_code)(void))
+ 
+ 	vm_enable_cap(vm, KVM_CAP_PMU_CAPABILITY, KVM_PMU_CAP_DISABLE);
+ 
+-	vm_vcpu_add_default(vm, VCPU_ID, guest_code);
++	vm_vcpu_add_default(vm, 0, guest_code);
+ 	vm_init_descriptor_tables(vm);
+-	vcpu_init_descriptor_tables(vm, VCPU_ID);
+ 
+-	TEST_ASSERT(!sanity_check_pmu(vm),
++	vcpu = vcpu_get(vm, 0);
++	vcpu_init_descriptor_tables(vm, vcpu->id);
++
++	TEST_ASSERT(!sanity_check_pmu(vcpu),
+ 		    "Guest should not be able to use disabled PMU.");
+ 
+ 	kvm_vm_free(vm);
+@@ -418,6 +420,7 @@ static bool use_amd_pmu(void)
+ int main(int argc, char *argv[])
+ {
+ 	void (*guest_code)(void) = NULL;
++	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 	int r;
+ 
+@@ -440,21 +443,21 @@ int main(int argc, char *argv[])
+ 		exit(KSFT_SKIP);
+ 	}
+ 
 -	vm = vm_create_default(VCPU_ID, 0, guest_code);
--	run = vcpu_state(vm, VCPU_ID);
 +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+	run = vcpu->run;
  
- 	/* Map 1gb page without a backing memlot. */
- 	__virt_pg_map(vm, MMIO_GPA, MMIO_GPA, X86_PAGE_SIZE_1G);
- 
--	r = _vcpu_run(vm, VCPU_ID);
-+	vcpu_run(vm, vcpu->id);
- 
- 	/* Guest access to the 1gb page should trigger MMIO. */
--	TEST_ASSERT(r == 0, "vcpu_run failed: %d\n", r);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_MMIO,
- 		    "Unexpected exit reason: %u (%s), expected MMIO exit (1gb page w/o memslot)\n",
- 		    run->exit_reason, exit_reason_str(run->exit_reason));
-@@ -57,7 +54,7 @@ static void mmu_role_test(u32 *cpuid_reg, u32 evil_cpuid_val)
- 	 * returns the struct that contains the entry being modified.  Eww.
- 	 */
- 	*cpuid_reg = evil_cpuid_val;
--	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
-+	vcpu_set_cpuid(vm, vcpu->id, kvm_get_supported_cpuid());
- 
- 	/*
- 	 * Add a dummy memslot to coerce KVM into bumping the MMIO generation.
-@@ -70,13 +67,12 @@ static void mmu_role_test(u32 *cpuid_reg, u32 evil_cpuid_val)
- 
- 	/* Set up a #PF handler to eat the RSVD #PF and signal all done! */
  	vm_init_descriptor_tables(vm);
 -	vcpu_init_descriptor_tables(vm, VCPU_ID);
 +	vcpu_init_descriptor_tables(vm, vcpu->id);
- 	vm_install_exception_handler(vm, PF_VECTOR, guest_pf_handler);
  
--	r = _vcpu_run(vm, VCPU_ID);
--	TEST_ASSERT(r == 0, "vcpu_run failed: %d\n", r);
-+	vcpu_run(vm, vcpu->id);
+-	if (!sanity_check_pmu(vm)) {
++	if (!sanity_check_pmu(vcpu)) {
+ 		print_skip("Guest PMU is not functional");
+ 		exit(KSFT_SKIP);
+ 	}
  
--	cmd = get_ucall(vm, VCPU_ID, NULL);
-+	cmd = get_ucall(vm, vcpu->id, NULL);
- 	TEST_ASSERT(cmd == UCALL_DONE,
- 		    "Unexpected guest exit, exit_reason=%s, ucall.cmd = %lu\n",
- 		    exit_reason_str(run->exit_reason), cmd);
+-	test_without_filter(vm);
+-	test_member_deny_list(vm);
+-	test_member_allow_list(vm);
+-	test_not_member_deny_list(vm);
+-	test_not_member_allow_list(vm);
++	test_without_filter(vcpu);
++	test_member_deny_list(vcpu);
++	test_member_allow_list(vcpu);
++	test_not_member_deny_list(vcpu);
++	test_not_member_allow_list(vcpu);
+ 
+ 	kvm_vm_free(vm);
+ 
 -- 
 2.36.1.255.ge46751e96f-goog
 

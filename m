@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E4853D17A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D4853D18D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347202AbiFCSdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S241957AbiFCSef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347588AbiFCSdJ (ORCPT
+        with ESMTP id S1347315AbiFCSdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:33:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784D38E1A1;
-        Fri,  3 Jun 2022 11:19:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB60EB82461;
-        Fri,  3 Jun 2022 18:19:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901BBC3411D;
-        Fri,  3 Jun 2022 18:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654280369;
-        bh=AKP1J+1j86MsDU30/l9xw5gmZtjPSuVq9IYDsmcm1yk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R1hI1HIE1hi6gYqrNl/2z7OJovjvqO5OUKQWPJ6pAh7AE68ktuEbPWDf8/zqsH2P2
-         Xl9rsxNzO8w4eNVUYUeq4TrLlsw++cM5Xjl01EY56WTmJ/uGsXkuK8ZLWdZKlzsR6B
-         ncHcpW3oAoz3eCLsetAkdaJ88ExbpayBQiWxTNjXqZEaxTifmlOY602BCjGOO5+67z
-         MDz0SizcYuR5isul7uAJfrd8wVREXJc3uE7avMaedOET7CJzbKDDqM7WaZgokgrkBi
-         9Z1pnKVpsvSbJEOEBzfUG6CSWJlWFPKU8zMNJG9BwltAK52MwGVHdmP1o6aeaMYv7+
-         wSnSsRzVZ021w==
-Received: by mail-vk1-f177.google.com with SMTP id bs5so3762974vkb.4;
-        Fri, 03 Jun 2022 11:19:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533ivNX4y40U+qd1aqcg4yxVMQMIG1vPjUcFWfV+nH9eGG53Bc5A
-        /Hptkbl1Kh2QeNy3dW8B0kUYHwA/MkeJ448aYg==
-X-Google-Smtp-Source: ABdhPJwh1UGsiub0fkA5rgY7ZXQQ7STjVOpo/uLoefNfIXTYEkvJHTFpOG3dnE3b6MFeBTZvHTPs//qBfZY1d95df10=
-X-Received: by 2002:a1f:b253:0:b0:35d:1225:2dfb with SMTP id
- b80-20020a1fb253000000b0035d12252dfbmr6330997vkf.19.1654280368525; Fri, 03
- Jun 2022 11:19:28 -0700 (PDT)
+        Fri, 3 Jun 2022 14:33:44 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67912666B9;
+        Fri,  3 Jun 2022 11:20:05 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id a2so13881866lfc.2;
+        Fri, 03 Jun 2022 11:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RlH4HZM0GOqehDVq13X1kPLT+UzzEP8AsxwqPXI0mFY=;
+        b=bX//7ZiM/H5LhAkbNcM8/xvoODjgfNAHEhkyyI4yEL5mstgwWA+J3Bf0SS40+tDU+7
+         N9ikUcNaLvA2IWal7UZUsg2+rOiJ0A/g8b6WCWlucj5LRv/vFTwX70YGK89jvx5B+bId
+         93Sm8LkTanpXKOl90Rm+0Gz6ekRjFqlQW5A6jvYiAViz/9Lpix2m9VsgONUbbe2s5CXI
+         c5y9NartHaqWvzkKHl6/UIZGKeCbQGdh7hUSEVi4PbWxYNTtX/rBYRl+1+evWnrIYI8u
+         yvLwB0wj6ND5okCP1TW0YLVNANMrfIRfXC+DEqEBC6Ax159TkX6Vn0oWaeOSHkALE58d
+         9/+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RlH4HZM0GOqehDVq13X1kPLT+UzzEP8AsxwqPXI0mFY=;
+        b=5Fi29qONkuLeMCS8J8kBssTsS5pEz6SN5u8/E7I2rXfvznackLetPtNT3f3hh/Ue/B
+         ZODz7lL2Msp0ss3xtbxOO0tTkqyfbkI+ISS9s/vW3VnXEjqajeFGI1HbQ+VsZB2meXZ9
+         u/3dsEKhoMhTxcLAwfVMd/Fa+GWpLIhvCJP4qxrND+TRZAyJ6c7t1LYjsqooGD2txo8p
+         0piHcByL3K7xLTpUDIOFKfZdSzqQ6h8LeInLKY00Bq+P0D1+eFjRo7pFB3WgZKx3+U1L
+         +AabhlmulalA0JA6Rneg6wcHG7AMdkxHFqSXoZs5RnPQ4VG2e4PvfP3xurv0OBd1K4du
+         FArQ==
+X-Gm-Message-State: AOAM532E90rIhJohurdZnDyzgr8aGPd3Ry7wHWt/a8o4rylnF0hpD52B
+        uE1dyNE9uxtBHHdejitX7uh/b948JzV3JVAvCcG5TDbc
+X-Google-Smtp-Source: ABdhPJzsvLh0e0D18yiwXAEhbgT+zhG9khAkdXCw2/0TgwFPWS7jbqZ8EdMLwCo6xJnPcMmAeOWLMX7JyrgwCrzXXWc=
+X-Received: by 2002:a05:6512:b2a:b0:479:12f5:91ba with SMTP id
+ w42-20020a0565120b2a00b0047912f591bamr5371166lfu.443.1654280402791; Fri, 03
+ Jun 2022 11:20:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
- <20220525165849.7789-2-Alexander.Steffen@infineon.com> <8c4941a1-e047-1352-32ba-8595cd0143f0@linaro.org>
- <20220602134848.GA2178372-robh@kernel.org> <aa5a8e73-b9b4-38e7-4f85-2bf309a346e0@infineon.com>
-In-Reply-To: <aa5a8e73-b9b4-38e7-4f85-2bf309a346e0@infineon.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 3 Jun 2022 13:19:17 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+0Tk9O4=UAvqxxCbt95+ATqXe6S=W54ArWDqx9b747xA@mail.gmail.com>
-Message-ID: <CAL_Jsq+0Tk9O4=UAvqxxCbt95+ATqXe6S=W54ArWDqx9b747xA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: trivial-devices: Add two I2C TPM devices
-To:     Alexander Steffen <Alexander.Steffen@infineon.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        jarkko@kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        devicetree@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johannes Holland <johannes.holland@infineon.com>,
-        Amir Mizinski <amirmizi6@gmail.com>
+References: <20220603055156.2830463-1-irogers@google.com> <CAP-5=fVhVLWg+c=WJyOD8FByg_4n6V0SLSLnaw7K0J=-oNnuaA@mail.gmail.com>
+ <495f2924138069abaf49269b2c3bd1e4f5f4362e.camel@perches.com>
+In-Reply-To: <495f2924138069abaf49269b2c3bd1e4f5f4362e.camel@perches.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 3 Jun 2022 11:19:51 -0700
+Message-ID: <CAEf4Bzbwp0pgfDf-xUpWKzD2Eo=6JP0S-QrFKUZZffq49X=FQg@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: Fix is_pow_of_2
+To:     Joe Perches <joe@perches.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Yuze Chi <chiyuze@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 10:34 AM Alexander Steffen
-<Alexander.Steffen@infineon.com> wrote:
+On Fri, Jun 3, 2022 at 9:58 AM Joe Perches <joe@perches.com> wrote:
 >
-> On 02.06.22 15:48, Rob Herring wrote:
-> > On Thu, May 26, 2022 at 02:29:56PM +0200, Krzysztof Kozlowski wrote:
-> >> On 25/05/2022 18:58, Alexander Steffen wrote:
-> >>> Both are supported by the upcoming tpm_tis_i2c driver.
-> >>>
-> >>> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> >>> ---
-> >>>   Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
-> >>>   1 file changed, 4 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> >>> index 550a2e5c9e05..dc52822331dd 100644
-> >>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> >>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> >>> @@ -135,6 +135,8 @@ properties:
-> >>>             - infineon,slb9635tt
-> >>>               # Infineon SLB9645 I2C TPM (new protocol, max 400khz)
-> >>>             - infineon,slb9645tt
-> >>> +            # Infineon SLB9673 I2C TPM 2.0
-> >>> +          - infineon,slb9673
-> >>>               # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
-> >>>             - infineon,tlv493d-a1b6
-> >>>               # Infineon Multi-phase Digital VR Controller xdpe11280
-> >>> @@ -323,6 +325,8 @@ properties:
-> >>>             - st,24c256
-> >>>               # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
-> >>>             - taos,tsl2550
-> >>> +            # TCG TIS-compliant TPM with I2C interface
-> >>> +          - tcg,tpm_tis-i2c
-> >>
-> >> One flavor uses tpm-tis, another tpm_tis... I guess it is too late to
-> >> make it consistent, but let's stick to the one more reasonable, so:
-> >> "tpm-tis-i2c".
-> >
-> > Neither should be used except perhaps as a fallback.
+> On Thu, 2022-06-02 at 22:57 -0700, Ian Rogers wrote:
+> > On Thu, Jun 2, 2022 at 10:52 PM Ian Rogers <irogers@google.com> wrote:
+> > > From: Yuze Chi <chiyuze@google.com>
+> []
+> > > diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+> []
+> > > @@ -580,4 +580,9 @@ struct bpf_link * usdt_manager_attach_usdt(struct usdt_manager *man,
+> > >                                            const char *usdt_provider, const char *usdt_name,
+> > >                                            __u64 usdt_cookie);
+> > >
+> > > +static inline bool is_pow_of_2(size_t x)
+> > > +{
+> > > +       return x && (x & (x - 1)) == 0;
+> > > +}
+> > > +
+> > >  #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 >
-> That is the intention, yes.
+> If speed of execution is a potential issue, maybe:
 
-Then it is not a trivial device as those don't have more than 1
-compatible string.
+It's not, as it's not in any sort of high-frequency hot path. But even
+if it was, we should be careful with __builtin_popcount() because
+depending on target CPU architecture __builtin_popcount() can be
+turned into a helper function call instead of using hardware
+instruction. But either way, keeping it simple is prefereable.
 
-> > Does 'TCG TIS-compliant TPM' encompass every property of a device? Power
-> > supplies, resets, interrupts, quirks, etc.?
 >
-> In an ideal world, yes. In practice, of course implementations do have
-> bugs that might require different workarounds. By selecting
-> tcg,tpm-tis-i2c instead of anything more specific, you promise that the
-> device is fully compliant to the TCG specification and does not require
-> any such workarounds.
-
-We don't want broken promises. The problem is you can't know up front
-whether you will need a work-around. Adding a compatible later is not
-ideal as that would require a DT update which may be in your firmware
-(separate from the OS).
-
-Rob
+> #if __has_builtin(__builtin_popcount)
+>         return __builtin_popcount(x) == 1;
+> #else
+>         return x && (x & (x-1)) == 0;
+> #endif
+>

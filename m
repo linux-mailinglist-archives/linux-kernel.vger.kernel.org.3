@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45ACE53C6F4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EA653C6F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242847AbiFCIee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S242854AbiFCIew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFCIec (ORCPT
+        with ESMTP id S229615AbiFCIes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:34:32 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AD21835B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:34:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n8so6405440plh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GpfF8ItPMk0VJbbfMj/WC62xrovcB2QttagaUM4KJ38=;
-        b=hx9nlXm+saSHa0qlQPDeVf9Evb9JKM3WDBSe/Mibf0IxM42umtirmqRX1DYDq9SePl
-         Ee+zwR7LTa6mfdGdKNrLO++/HcpuzfJU5qcYnaBqCqy9tPJc9ZOMDI9uF92+Xi+rWDpf
-         tU3ysW+XZ2xPe3SqAvyHX9btz9ou+ZwGqhCxQuGDhc2NrMQXH4UVJISjH5yrP7pQCFmt
-         LdweHKNZwj9FwGZKLsc0ShA03be9Ok31txrcHV6dyxliOrh8VDHZjotcuo06d9Qjst4X
-         ECtzZWJU5jmNsk8eNh9sKDu5PZ1xXDLVi31/FppMY5b61Chhl9ckWdtuzKAdDEAMS0BV
-         2WqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GpfF8ItPMk0VJbbfMj/WC62xrovcB2QttagaUM4KJ38=;
-        b=fQoVufrOkQecvtDW3rNyVBscvBC6gsAh3CGHef+EpVboCnfns/HE7bSgFSgO6kV+ws
-         scXIQhyU4Hbrhsx6EWcg9BTkHbsnmutrMSkRd9/EIA50+/vAa5uWJRrxZAdMJdVLAmrs
-         3x/dg84gE5ZQbOm0mcImKCsP1sK/q4FKL8J81idzygyV6N3NyLvuRJHNax7pbU8QRu1m
-         dHR7Pi8cRnZHCpoEtEY2RFZlWQtVCM4hODGd6QZuU7JqkzWSFSD65ee9HxJeoMPd2hbn
-         bUUzCbq0kQST4LSft/BCrbd53M2Ob2DJigpGSncn1++3ymcUf01tiXKovAPUeKC7jwRl
-         2OaQ==
-X-Gm-Message-State: AOAM531l7tuC83YVxCv0xlE/hrzwDr9gFN3kCBGcbBdEbb/GPTTY/N3a
-        znFZwDvOIj5tGZ3AY6sFJeI=
-X-Google-Smtp-Source: ABdhPJy42CKbXP1g6HSFgMNfnYKPHDiOSTgrA1jna9XgHfAtjIeZISzUg9TczCGoz/8M5puUSJSJvg==
-X-Received: by 2002:a17:90b:17c6:b0:1e6:8486:b324 with SMTP id me6-20020a17090b17c600b001e68486b324mr8464340pjb.24.1654245269977;
-        Fri, 03 Jun 2022 01:34:29 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id k5-20020a170902760500b0015e8d4eb2b8sm4809485pll.258.2022.06.03.01.34.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 01:34:29 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: mt6797-mt6351: Fix refcount leak in mt6797_mt6351_dev_probe
-Date:   Fri,  3 Jun 2022 12:34:15 +0400
-Message-Id: <20220603083417.9011-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Fri, 3 Jun 2022 04:34:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B40718392
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:34:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 060641F8C9;
+        Fri,  3 Jun 2022 08:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654245286; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0YBrpJKZ/hRH5l0GGcty/QvLk9L/tja92FUO2UlGvMY=;
+        b=EYJBzyaeLdGwCnBIouQMmUAIjWM6EhyU8gkVxe/8yx5plTZJPdyQ6oxYkmvIx3KKfK/JqF
+        R+95mZg8eyOCvrY1tTZpI7RtLzuGfJJ4jskpDFXMKlzkkenI40qgk54vyAMXiMc3wQQKdY
+        MaCORTOx4jibICjDkHpHpmoBTeNy6qs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654245286;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0YBrpJKZ/hRH5l0GGcty/QvLk9L/tja92FUO2UlGvMY=;
+        b=AyJvalLwJ9jAiuRBUQv4eCLNWDWqvgCXzKXNx4VwlThhzDvyH5f1hcM+RpQnJXV8sRLFnK
+        1chE596e0zDJZ9Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D825513AA2;
+        Fri,  3 Jun 2022 08:34:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id b4peM6XHmWIZcAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 03 Jun 2022 08:34:45 +0000
+Date:   Fri, 03 Jun 2022 10:34:45 +0200
+Message-ID: <87bkva2li2.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.19-rc1
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Linus,
 
-Fixes: format:f0ab0bf250da ("ASoC: add mt6797-mt6351 driver and config option")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+please pull sound fixes for v5.18 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-fix-5.19-rc1
+
+The topmost commit is 672362cbe6df049299c8ed0a463d89daf66b081c
+
+----------------------------------------------------------------
+
+sound fixes for 5.19-rc1
+
+A collection of small fixes for 5.19 merge window.  Nothing particular
+stands out, as most changes are device-specific fixes and quirks.
+
+----------------------------------------------------------------
+
+Adam Thomson (2):
+      ASoC: da7219: Fix pole orientation detection on certain headsets
+      ASoC: da7219: cancel AAD related work earlier for jack removal
+
+David Lin (1):
+      ASoC: Intel: common: fix typo for tplg naming
+
+Marios Levogiannis (1):
+      ALSA: hda/realtek - Fix microphone noise on ASUS TUF B550M-PLUS
+
+Mark Brown (1):
+      selftests: alsa: Handle pkg-config failure more gracefully
+
+Oder Chiou (1):
+      ASoC: rt5640: Do not manipulate pin "Platform Clock" if the "Platform Clock" is not in the DAPM
+
+Pierre-Louis Bossart (1):
+      ASoC: soc-pcm: fix BE transition for TRIGGER_START
+
+Rik van der Kemp (1):
+      ALSA: hda/realtek: Enable 4-speaker output for Dell XPS 15 9520 laptop
+
+Shengjiu Wang (1):
+      ASoC: fsl_sai: Fix FSL_SAI_xDR/xFR definition
+
+Syed Saba kareem (1):
+      ASoC: SOF: amd: Fixed Build error
+
+Takashi Iwai (3):
+      ALSA: usb-audio: Add mixer mapping for Gigabyte B450/550 Mobos
+      ALSA: usb-audio: Cancel pending work at closing a MIDI substream
+      ALSA: usb-audio: Optimize TEAC clock quirk
+
+Uwe Kleine-König (1):
+      ASoC: Intel: avs: Fix build error on arc, m68k and sparc
+
+Xiang wangx (1):
+      ALSA: hda/via: Delete does not require return
+
 ---
- sound/soc/mediatek/mt6797/mt6797-mt6351.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/sound/soc/mediatek/mt6797/mt6797-mt6351.c b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
-index 496f32bcfb5e..d2f6213a6bfc 100644
---- a/sound/soc/mediatek/mt6797/mt6797-mt6351.c
-+++ b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
-@@ -217,7 +217,8 @@ static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
- 	if (!codec_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	for_each_card_prelinks(card, i, dai_link) {
- 		if (dai_link->codecs->name)
-@@ -230,6 +231,9 @@ static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
- 
-+	of_node_put(codec_node);
-+put_platform_node:
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
--- 
-2.25.1
+ sound/pci/hda/patch_realtek.c                     | 11 +++++++++
+ sound/pci/hda/patch_via.c                         |  2 --
+ sound/soc/amd/acp/acp-pci.c                       |  1 +
+ sound/soc/codecs/da7219-aad.c                     | 18 +++++++++++---
+ sound/soc/codecs/rt5640.c                         | 11 +++++++--
+ sound/soc/codecs/rt5640.h                         |  2 ++
+ sound/soc/fsl/fsl_sai.h                           |  4 +--
+ sound/soc/intel/avs/board_selection.c             |  3 ++-
+ sound/soc/intel/boards/bytcr_rt5640.c             |  2 ++
+ sound/soc/intel/common/soc-acpi-intel-adl-match.c |  2 +-
+ sound/soc/soc-pcm.c                               |  2 --
+ sound/usb/clock.c                                 | 12 ++++++---
+ sound/usb/midi.c                                  |  3 +++
+ sound/usb/mixer_maps.c                            | 30 +++++++++++++++++++++++
+ tools/testing/selftests/alsa/Makefile             |  3 +++
+ 15 files changed, 89 insertions(+), 17 deletions(-)
 

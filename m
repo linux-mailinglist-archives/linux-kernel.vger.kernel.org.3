@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703FE53D3F5
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 01:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AAD53D3F1
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 01:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349788AbiFCX5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 19:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
+        id S1349771AbiFCX5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 19:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiFCX5G (ORCPT
+        with ESMTP id S1348179AbiFCX5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Jun 2022 19:57:06 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA53F2DD53;
-        Fri,  3 Jun 2022 16:57:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n18so7856303plg.5;
-        Fri, 03 Jun 2022 16:57:01 -0700 (PDT)
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03A6BE19;
+        Fri,  3 Jun 2022 16:57:02 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id n13-20020a17090a394d00b001e30a60f82dso13219462pjf.5;
+        Fri, 03 Jun 2022 16:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5Ow3L4ws25yvgLaBaixFVYkezSMKCufZfoN+YQGdlbY=;
-        b=Zc5GMs95DUVv/E9YGQ4K314V8Vf8f94NO3JjxLvuQj/Z8NJCKWoGzZdtJVdfPqgMGp
-         8s1PH1crY8458ugAlijsB/k2J6uIuCegHA8qhUucmVhryH+oPJamKfDcENft7h3VxeWB
-         R7moV9d86zYJr4mRgY35B0j5eU9qYFgs6zWt9hu82WbGJhMykDObKUeKhDliXeins5Hn
-         Hhwsx9jWgmEa/Nz2XeznKTi5tgmYXqXI/KeBjVXDMAgQhqCnTSKD5Iw/7Vz7D09jdXzs
-         MkPNquwFHcs+MG1ETl2W4Ai9aVloXBImATpTQ76OcbYtM0tpocP5EQY1MzVWe7decTu/
-         f7Rg==
+        bh=CWHqqF01MR1hRCUv+JftvZxTCLeuaSF/IGUn/jKBQVI=;
+        b=bvLB0tB91sc5OP4Cx9RpfzMIQCntlGl65UdtCUTji8gEczrLHlA8vphgUKVyCM62tH
+         xf24reUm8P8o+uxBBJa62OkaaQTFbbdxjlNX0t05ISM8EVatAOBdCoAKBsT/aZW/FASq
+         EEyZf0pWSeQU/s07XwCr/SiVhVq98m7lLif/ZsYnHfk1DQMZbSKFVxRlPQfLktqr+hz9
+         R6loU8FarC8GyFEA0LS4ZYN3jp1Oou4xsx0HJDS2CSsj23Uk2NkBIq9iA0fqT8AF5C+t
+         rvvQ4vV01sP72KaEAkxI2FY5hsSzUlzvpbRdJXPeep8/wlvNUlQIcw3d0eNbVg9cjgFm
+         vKmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=5Ow3L4ws25yvgLaBaixFVYkezSMKCufZfoN+YQGdlbY=;
-        b=7cUOBQivFynFanEHdhRTGiK8UBGDhOyLuAIbvMqvpgsk0yjFGPwz2tBGiab8wLH/+n
-         s+aHpweSRN1cc70X4LnejYpWzErMWNLDCmZ0mjaL+9BqaTNcQnQVCaT6xjpC/ieu68xA
-         gLYXsIHsgko9D0dlwDScNq6qm2vHlHvV8afPHApVgrpat68s7g6mQ9WIovJ+zmEVXAYJ
-         LnlvQ+aJ+D/jFudw4yO/BI5Y/65Hb4O+GRa15eWV5ZFzuttZwyHO4YxcByv6/eRk12+o
-         iS78+IzyeP4V6HEyjrG39ZJJK5SEt0PBXaVkAArxRE9WO3inWWRi3IgoQTmJ0yOm+qhc
-         pp1g==
-X-Gm-Message-State: AOAM532pjIylQu1ClUYBr0EHrPjg99/yq01cH/JzLvTJVZFwVlX+kFx7
-        SW7FQhY0Qm+NyY0eMW8e/zA=
-X-Google-Smtp-Source: ABdhPJxa/ZMGDKY4qkrpd69b++jcpeG37Vpy8DcS9on4grI1/EY1nCupqsCnno4LSrAZB5iwUlTydA==
-X-Received: by 2002:a17:90b:3b4c:b0:1e0:2c34:fbe8 with SMTP id ot12-20020a17090b3b4c00b001e02c34fbe8mr13566171pjb.70.1654300621271;
-        Fri, 03 Jun 2022 16:57:01 -0700 (PDT)
+        bh=CWHqqF01MR1hRCUv+JftvZxTCLeuaSF/IGUn/jKBQVI=;
+        b=jD8B7jiHpPkjqotWTKl6cf5uKoaLU1rgYKQowyo8WOmkUeDmhJzqmXirXlzdwJHz/1
+         /MtdtndvBU948Km5527xrXFqZwcbLq5JeAFgkNNjVgVjWPth4mlZYdH2AlHodPe/lm1i
+         hszaWpFMuXn5cWbW6OHOcrdC7Ujp0jM/uvlATrvBmktuVramik7SyY8QyXZLyTofw/lq
+         9j/D+8RBv/FPROO/9hEDc/qb5hOKFXqMG+noxZT/AhpQFzuTTy3UuJ4OKLAoxzD4E/lE
+         mJ3KFOHnUsFQIToJ1FYgxFS8Zjm2zwq853v6Cr+iNKGjJBb5JS54FSm3+MkV9+7gTYNk
+         uGeg==
+X-Gm-Message-State: AOAM533uZ/f0s/sBcRkqRj1uZVQ8HH8kbrtFuQH9jd5463zqUpsZ/rRk
+        lvufRZgd3lHffd009E66FEI=
+X-Google-Smtp-Source: ABdhPJyD+Wh1DqzXpIx6Z2OjkFhYJF2YU1qvPrp1ZgW/EEAhzP7jOj/FmYTZ+tTBxuXZ9ilqWNYf6A==
+X-Received: by 2002:a17:90a:2c43:b0:1e0:b3fe:1bf5 with SMTP id p3-20020a17090a2c4300b001e0b3fe1bf5mr48384101pjm.27.1654300622383;
+        Fri, 03 Jun 2022 16:57:02 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:cb0:e599:3567:7c60:5f5a])
-        by smtp.gmail.com with ESMTPSA id a37-20020a631a65000000b003c14af50626sm5868289pgm.62.2022.06.03.16.57.00
+        by smtp.gmail.com with ESMTPSA id a37-20020a631a65000000b003c14af50626sm5868289pgm.62.2022.06.03.16.57.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 16:57:00 -0700 (PDT)
+        Fri, 03 Jun 2022 16:57:02 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH 3/5] perf lock: Handle lock contention tracepoints
-Date:   Fri,  3 Jun 2022 16:56:54 -0700
-Message-Id: <20220603235656.715800-4-namhyung@kernel.org>
+Subject: [PATCH 4/5] perf record: Allow to specify max stack depth of fp callchain
+Date:   Fri,  3 Jun 2022 16:56:55 -0700
+Message-Id: <20220603235656.715800-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220603235656.715800-1-namhyung@kernel.org>
 References: <20220603235656.715800-1-namhyung@kernel.org>
@@ -79,170 +79,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the lock contention events are used, there's no tracking of
-acquire and release.  So the state machine is simplified to use
-UNINITIALIZED -> CONTENDED -> ACQUIRED only.
+Currently it has no interface to specify the max stack depth for perf
+record.  Extend the command line parameter to accept a number after
+'fp' to specify the depth like '--call-graph fp,32'.
 
-Note that CONTENDED state is re-entrant since mutex locks can hit two
-or more consecutive contention_begin events for optimistic spinning
-and sleep.
-
-Acked-by: Ian Rogers <irogers@google.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-lock.c | 125 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 125 insertions(+)
+ tools/perf/Documentation/perf-record.txt |  5 +++++
+ tools/perf/util/callchain.c              | 18 ++++++++++++------
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 60a45973744d..d571d487fc6f 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -825,6 +825,124 @@ static int report_lock_release_event(struct evsel *evsel,
- 	return 0;
- }
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index cf8ad50f3de1..772777c2a52e 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -275,6 +275,11 @@ OPTIONS
+ 	User can change the size by passing the size after comma like
+ 	"--call-graph dwarf,4096".
  
-+static int report_lock_contention_begin_event(struct evsel *evsel,
-+					      struct perf_sample *sample)
-+{
-+	struct lock_stat *ls;
-+	struct thread_stat *ts;
-+	struct lock_seq_stat *seq;
-+	u64 addr = evsel__intval(evsel, sample, "lock_addr");
++	When "fp" recording is used, perf tries to save stack enties
++	up to the number specified in sysctl.kernel.perf_event_max_stack
++	by default.  User can change the number by passing it after comma
++	like "--call-graph fp,32".
 +
-+	if (show_thread_stats)
-+		addr = sample->tid;
-+
-+	ls = lock_stat_findnew(addr, "No name");
-+	if (!ls)
-+		return -ENOMEM;
-+
-+	ts = thread_stat_findnew(sample->tid);
-+	if (!ts)
-+		return -ENOMEM;
-+
-+	seq = get_seq(ts, addr);
-+	if (!seq)
-+		return -ENOMEM;
-+
-+	switch (seq->state) {
-+	case SEQ_STATE_UNINITIALIZED:
-+	case SEQ_STATE_ACQUIRED:
-+		break;
-+	case SEQ_STATE_CONTENDED:
-+		/*
-+		 * It can have nested contention begin with mutex spinning,
-+		 * then we would use the original contention begin event and
-+		 * ignore the second one.
-+		 */
-+		goto end;
-+	case SEQ_STATE_ACQUIRING:
-+	case SEQ_STATE_READ_ACQUIRED:
-+	case SEQ_STATE_RELEASED:
-+		/* broken lock sequence */
-+		if (!ls->broken) {
-+			ls->broken = 1;
-+			bad_hist[BROKEN_CONTENDED]++;
-+		}
-+		list_del_init(&seq->list);
-+		free(seq);
-+		goto end;
-+	default:
-+		BUG_ON("Unknown state of lock sequence found!\n");
-+		break;
-+	}
-+
-+	if (seq->state != SEQ_STATE_CONTENDED) {
-+		seq->state = SEQ_STATE_CONTENDED;
-+		seq->prev_event_time = sample->time;
-+		ls->nr_contended++;
-+	}
-+end:
-+	return 0;
-+}
-+
-+static int report_lock_contention_end_event(struct evsel *evsel,
-+					    struct perf_sample *sample)
-+{
-+	struct lock_stat *ls;
-+	struct thread_stat *ts;
-+	struct lock_seq_stat *seq;
-+	u64 contended_term;
-+	u64 addr = evsel__intval(evsel, sample, "lock_addr");
-+
-+	if (show_thread_stats)
-+		addr = sample->tid;
-+
-+	ls = lock_stat_findnew(addr, "No name");
-+	if (!ls)
-+		return -ENOMEM;
-+
-+	ts = thread_stat_findnew(sample->tid);
-+	if (!ts)
-+		return -ENOMEM;
-+
-+	seq = get_seq(ts, addr);
-+	if (!seq)
-+		return -ENOMEM;
-+
-+	switch (seq->state) {
-+	case SEQ_STATE_UNINITIALIZED:
-+		goto end;
-+	case SEQ_STATE_CONTENDED:
-+		contended_term = sample->time - seq->prev_event_time;
-+		ls->wait_time_total += contended_term;
-+		if (contended_term < ls->wait_time_min)
-+			ls->wait_time_min = contended_term;
-+		if (ls->wait_time_max < contended_term)
-+			ls->wait_time_max = contended_term;
-+		break;
-+	case SEQ_STATE_ACQUIRING:
-+	case SEQ_STATE_ACQUIRED:
-+	case SEQ_STATE_READ_ACQUIRED:
-+	case SEQ_STATE_RELEASED:
-+		/* broken lock sequence */
-+		if (!ls->broken) {
-+			ls->broken = 1;
-+			bad_hist[BROKEN_CONTENDED]++;
-+		}
-+		list_del_init(&seq->list);
-+		free(seq);
-+		goto end;
-+	default:
-+		BUG_ON("Unknown state of lock sequence found!\n");
-+		break;
-+	}
-+
-+	seq->state = SEQ_STATE_ACQUIRED;
-+	ls->nr_acquired++;
-+	ls->avg_wait_time = ls->wait_time_total/ls->nr_acquired;
-+end:
-+	return 0;
-+}
-+
- /* lock oriented handlers */
- /* TODO: handlers for CPU oriented, thread oriented */
- static struct trace_lock_handler report_lock_ops  = {
-@@ -832,6 +950,8 @@ static struct trace_lock_handler report_lock_ops  = {
- 	.acquired_event		= report_lock_acquired_event,
- 	.contended_event	= report_lock_contended_event,
- 	.release_event		= report_lock_release_event,
-+	.contention_begin_event	= report_lock_contention_begin_event,
-+	.contention_end_event	= report_lock_contention_end_event,
- };
+ -q::
+ --quiet::
+ 	Don't print any message, useful for scripting.
+diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
+index 5c27a4b2e7a7..7e663673f79f 100644
+--- a/tools/perf/util/callchain.c
++++ b/tools/perf/util/callchain.c
+@@ -31,6 +31,7 @@
+ #include "callchain.h"
+ #include "branch.h"
+ #include "symbol.h"
++#include "util.h"
+ #include "../perf.h"
  
- static struct trace_lock_handler *trace_handler;
-@@ -1117,6 +1237,11 @@ static int __cmd_report(bool display_info)
- 		goto out_delete;
- 	}
- 
-+	if (perf_session__set_tracepoints_handlers(session, contention_tracepoints)) {
-+		pr_err("Initializing perf session tracepoint handlers failed\n");
-+		goto out_delete;
-+	}
+ #define CALLCHAIN_PARAM_DEFAULT			\
+@@ -266,12 +267,17 @@ int parse_callchain_record(const char *arg, struct callchain_param *param)
+ 	do {
+ 		/* Framepointer style */
+ 		if (!strncmp(name, "fp", sizeof("fp"))) {
+-			if (!strtok_r(NULL, ",", &saveptr)) {
+-				param->record_mode = CALLCHAIN_FP;
+-				ret = 0;
+-			} else
+-				pr_err("callchain: No more arguments "
+-				       "needed for --call-graph fp\n");
++			ret = 0;
++			param->record_mode = CALLCHAIN_FP;
 +
- 	if (setup_output_field(output_fields))
- 		goto out_delete;
++			tok = strtok_r(NULL, ",", &saveptr);
++			if (tok) {
++				unsigned long size;
++
++				size = strtoul(tok, &name, 0);
++				if (size < (unsigned) sysctl__max_stack())
++					param->max_stack = size;
++			}
+ 			break;
  
+ 		/* Dwarf style */
 -- 
 2.36.1.255.ge46751e96f-goog
 

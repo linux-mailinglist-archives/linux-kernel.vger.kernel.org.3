@@ -2,118 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A079A53D312
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 23:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7E453D314
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 23:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348217AbiFCVDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 17:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S1349421AbiFCVDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 17:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiFCVDU (ORCPT
+        with ESMTP id S1348264AbiFCVDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 17:03:20 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC051C938;
-        Fri,  3 Jun 2022 14:03:19 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id m25so6353852lji.11;
-        Fri, 03 Jun 2022 14:03:19 -0700 (PDT)
+        Fri, 3 Jun 2022 17:03:52 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BB61EAE3;
+        Fri,  3 Jun 2022 14:03:50 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id n10so8183223pjh.5;
+        Fri, 03 Jun 2022 14:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=opFA97GGrUrFUT9SvfZGm6iux5I1umYstFz0GJmvO1s=;
-        b=jOMm80if0JHj8ErxTGfdh03GdgfvdFKd6Rm1alGSNt5XLLhAvf+YxjFXlBjrOPM+IH
-         Bqw7cj6W6JWPuTAHSqT8gS9wHeRaefNGImH/RqKb2oufhCm81PGpOqFMpqe2tNbHIm0J
-         7zlfwHc8fYGAs/0Ckmg+fGFHk05ZmM4j08cerriR96KFSyR04OgiYMva6Mp2mHLqLMfS
-         j//3vwk/QUFUaP7pn0C3CHL9FMbRoL8KozrVyh9d60Dj1+/BpipN+SD6BOoCXt85vwql
-         i+uKT08GonypnGrT7ceT0R5CYHMyfes2Oxln2HFd5Ag3DlumcUWfuaI4Jc1agK7EbgdW
-         4tSw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7yZRjs5yp/zT/zGdulnaH4Ufj6HPVBbkuq4QEuYkSm4=;
+        b=I/BJH20dXJsO8R2BkO3xjeeDiB1ZndSp6MLA09ZjWMRCf8pWhMbkIEEsxqsUgWNEjV
+         SiOwWkp8wr9v/t4liKKYVd8ls61dVPZ/ghmYp+/Y2V54Al6XHa4ah/cax70mehYBqNu1
+         PiDFQacqPQfleXKfVLUMVAuFcZsOVAFuRhujPoP8JomFL6sx9nYG+gN9aCSZkp91pePK
+         xsljwgPbvdbvRCcFqV1kdwWerYsN+wXiVHnRcwcDONM6+mXT+8HkLlQ2L6iPqHXkC+GP
+         Kplo+59pgVTpTJ5my4omW++47U8DTsFxfhQqutlCuez4Gg01cvrzsekKDSiDCCshSmaa
+         0GLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=opFA97GGrUrFUT9SvfZGm6iux5I1umYstFz0GJmvO1s=;
-        b=3RR4+ud4uuGzRwN+mHl8tYSNDJwJQpQYNO+dqwJWZpj1rSx7e673LhNXx+hd0OxVcL
-         a5vSLsoOiPtz4G81iCRohwBU+mAUvLDSxMUW9+WFke7w7pfYHMfwft6CbQVQr64CVh4E
-         E3jQsVVHQj1j/KQeZZ26BiE03Jdd0Z4mxF7Z0hNm0no6rqA66yG54hcVWjZYMIvfgm6V
-         BpmzfM3YHIxtjoY6Gzpx9QPyhXOGtI1WywcHkyADLgAYtQ5vOFJO5R+hlC3PVdz9mK3u
-         nKtLwAJ9xQg1cVQsSKJeSkdObzIHgsbMk9YuSUnUpzOiwaIRdAchUEK3vH5vG5CiX26G
-         TRlw==
-X-Gm-Message-State: AOAM530Cp3qOfktnZs0QVgipBTseqvd6IInkwUhXbGKdzUvs9MxLaIIU
-        HNGTUdNHXnZOVlr/bycbcCJnbr1G95BvseVPG/A=
-X-Google-Smtp-Source: ABdhPJzmpEZzWq0TOpHSFyPqm8mLnO15YE4hqSuCFi23XZFXNjH9RoA689fYNyTFgdEhQVBfT9Zar6dctkoGXtjQjo8=
-X-Received: by 2002:a2e:1f12:0:b0:255:67ae:b655 with SMTP id
- f18-20020a2e1f12000000b0025567aeb655mr10080273ljf.303.1654290197923; Fri, 03
- Jun 2022 14:03:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7yZRjs5yp/zT/zGdulnaH4Ufj6HPVBbkuq4QEuYkSm4=;
+        b=MiO/OsAzkGCxXMWRJ5jQk/YZsBiNn6GihcjWh+rMo/mkAjMtpNFjtuc6eOXBp5zneK
+         35yRbCNIlQz6demE68n5EJZsPLBxKMMv0Yz+nVIkhNO1J5hd0wg/cyHCne30MC0NLE7H
+         3ZfJdLmETdx5fXPNELHe6WwVOl6fG2ZvQp3LgZKJZ4ko8GfVxnyfPB8nPfSD5PEb8RNc
+         6fBB5bE4jRNHGe9PJIGOKlrzKpxCNi9WsxwnDGyfAE2rPU+ozCiMCD13TmCx5dQiDts1
+         FK9swpQfs0mT/bAv64g7u9KqXNR2R8cpD6Cp+u82XQmFB8u9dajSaF/54w8UGYhK0dcN
+         83wg==
+X-Gm-Message-State: AOAM532xjiQEH7Vkn8xlHqkM5+zx5SkJKFOI4EsZts1aLVkbSswanQvv
+        LZ8LOlez3TAZuPHo0uZ3ARI=
+X-Google-Smtp-Source: ABdhPJxhuYfvC5jG0PkzXAlAA/k8DnpSG/2/yT+hjh6CYp6LDTf1macjWgx9jZnX+V2R/RH8TQRn/w==
+X-Received: by 2002:a17:902:ebca:b0:15f:4cc5:f40f with SMTP id p10-20020a170902ebca00b0015f4cc5f40fmr11897289plg.96.1654290230100;
+        Fri, 03 Jun 2022 14:03:50 -0700 (PDT)
+Received: from penguin ([2620:0:1000:2514:216:3eff:fe31:a1ca])
+        by smtp.gmail.com with ESMTPSA id g5-20020a655805000000b003fbfa234818sm5919683pgr.54.2022.06.03.14.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 14:03:49 -0700 (PDT)
+Date:   Fri, 3 Jun 2022 14:03:44 -0700
+From:   Justin Stitt <jstitt007@gmail.com>
+To:     Bill Wendling <morbo@google.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] soc: qcom: smem: use correct format characters
+Message-ID: <Ypp3MA9s01bWrm2i@penguin>
+References: <20220316213118.2352683-1-morbo@google.com>
+ <20220321174912.164113-1-morbo@google.com>
 MIME-Version: 1.0
-References: <20220530092815.1112406-1-pulehui@huawei.com> <20220530092815.1112406-5-pulehui@huawei.com>
- <a31efed5-a436-49c9-4126-902303df9766@iogearbox.net>
-In-Reply-To: <a31efed5-a436-49c9-4126-902303df9766@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 3 Jun 2022 14:03:06 -0700
-Message-ID: <CAEf4BzacrRNDDYFR_4GH40+wxff=hCiyxymig6N+NVrM537AAA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/6] libbpf: Unify memory address casting
- operation style
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Pu Lehui <pulehui@huawei.com>, bpf <bpf@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321174912.164113-1-morbo@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 2:03 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 5/30/22 11:28 AM, Pu Lehui wrote:
-> > The members of bpf_prog_info, which are line_info, jited_line_info,
-> > jited_ksyms and jited_func_lens, store u64 address pointed to the
-> > corresponding memory regions. Memory addresses are conceptually
-> > unsigned, (unsigned long) casting makes more sense, so let's make
-> > a change for conceptual uniformity.
-> >
-> > Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> > ---
-> >   tools/lib/bpf/bpf_prog_linfo.c | 9 +++++----
-> >   1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/bpf_prog_linfo.c b/tools/lib/bpf/bpf_prog_linfo.c
-> > index 5c503096ef43..7beb060d0671 100644
-> > --- a/tools/lib/bpf/bpf_prog_linfo.c
-> > +++ b/tools/lib/bpf/bpf_prog_linfo.c
-> > @@ -127,7 +127,8 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
-> >       prog_linfo->raw_linfo = malloc(data_sz);
-> >       if (!prog_linfo->raw_linfo)
-> >               goto err_free;
-> > -     memcpy(prog_linfo->raw_linfo, (void *)(long)info->line_info, data_sz);
-> > +     memcpy(prog_linfo->raw_linfo, (void *)(unsigned long)info->line_info,
-> > +            data_sz);
->
-> Took in patch 1-3, lgtm, thanks! My question around the cleanups in patch 4-6 ...
-> there are various other such cases e.g. in libbpf, perhaps makes sense to clean all
-> of them up at once and not just the 4 locations in here.
+On Mon, Mar 21, 2022 at 10:49:12AM -0700, Bill Wendling wrote:
+> When compiling with -Wformat, clang emits the following warnings:
+> 
+> drivers/soc/qcom/smem.c:847:41: warning: format specifies type 'unsigned
+> short' but the argument has type 'unsigned int' [-Wformat]
+>                         dev_err(smem->dev, "bad host %hu\n", remote_host);
+>                                                      ~~~     ^~~~~~~~~~~
+>                                                      %u
+> ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+>         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> drivers/soc/qcom/smem.c:852:47: warning: format specifies type 'unsigned
+> short' but the argument has type 'unsigned int' [-Wformat]
+>                         dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+>                                                            ~~~     ^~~~~~~~~~~
+>                                                            %u
+> ./include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+>         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> 
+> The types of these arguments are unconditionally defined, so this patch
+> updates the format character to the correct one and change type of
+> remote_host to "u16" to match with other types.
+> 
 
-if (void *)(long) pattern is wrong, then I guess the best replacement
-should be (void *)(uintptr_t) ?
+This patch LGTM and fixes -Wformat warning.
 
->
-> Thanks,
-> Daniel
+Tested-by: Justin Stitt <jstitt007@gmail.com>
+Reviewed-by: Justin Stitt <jstitt007@gmail.com>
+
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+>  drivers/soc/qcom/smem.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> index e2057d8f1eff..9dd325df5682 100644
+> --- a/drivers/soc/qcom/smem.c
+> +++ b/drivers/soc/qcom/smem.c
+> @@ -819,7 +819,7 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+>  	struct smem_partition_header *header;
+>  	struct smem_ptable_entry *entry;
+>  	struct smem_ptable *ptable;
+> -	unsigned int remote_host;
+> +	u16 remote_host;
+>  	u16 host0, host1;
+>  	int i;
+>  
+> @@ -844,12 +844,12 @@ qcom_smem_enumerate_partitions(struct qcom_smem *smem, u16 local_host)
+>  			continue;
+>  
+>  		if (remote_host >= SMEM_HOST_COUNT) {
+> -			dev_err(smem->dev, "bad host %hu\n", remote_host);
+> +			dev_err(smem->dev, "bad host %u\n", remote_host);
+>  			return -EINVAL;
+>  		}
+>  
+>  		if (smem->partitions[remote_host]) {
+> -			dev_err(smem->dev, "duplicate host %hu\n", remote_host);
+> +			dev_err(smem->dev, "duplicate host %u\n", remote_host);
+>  			return -EINVAL;
+>  		}
+>  
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 
+> 

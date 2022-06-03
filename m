@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A116853C979
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA2553C946
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244017AbiFCLgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 07:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S243992AbiFCL2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 07:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiFCLgH (ORCPT
+        with ESMTP id S241616AbiFCL2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 07:36:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE213C719;
-        Fri,  3 Jun 2022 04:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654256163; x=1685792163;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KYwIuw1yxLEfO4/XQoqiJTXPNDR+57CCdyWkkwbyflE=;
-  b=YHJCAsOM2AndHgYIRpOGWlGbkaD4eEtYJ+HAyGlrxuYy07hCv5CtMrvs
-   fDh7gFY/XKjkPEdnJjKRiEd0f28swwhyPMLSfiDU4s9IzlQ35DMIDuiZo
-   yy2SUas+iWrQvI1BG1WyGWwnTPGgUPQnLREbzo/Z+zap3I2fvnCuczFyA
-   4GHcc/ip6gT2H6AosOIaJ/OrKTvLSuA3mb62uH+1B1tP1Yxen4jF2/qRt
-   6BkME6FsHUcBuNBXkg3u6TLCH3HvlT0gl2afRuR+X7+d2AwIBiD34kBov
-   KWoYBpsS7mdBnfvIGfH4l2v8WpRW0mtVoce9OM4J//QE+/DZ5z6HR27cP
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="362602448"
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="362602448"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 04:36:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="607363178"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jun 2022 04:35:59 -0700
-Date:   Fri, 3 Jun 2022 19:28:10 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
-Subject: Re: [PATCH v22 5/5] fpga: m10bmc-sec: add max10 secure update
- functions
-Message-ID: <20220603112810.GD238410@yilunxu-OptiPlex-7050>
-References: <20220527202330.839555-1-russell.h.weight@intel.com>
- <20220527202330.839555-6-russell.h.weight@intel.com>
+        Fri, 3 Jun 2022 07:28:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAD3289A8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 04:28:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DACAEB822CD
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34840C385A9;
+        Fri,  3 Jun 2022 11:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654255722;
+        bh=rCWQ8h4iZROohf/eePeMEeIAZ9OUn6bSM0M1Fgg4guA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TjWA7a1EJQdDGcPbW0X6Jf+rEPOoq2wzFz7hSbvShyFG5L8ZTeJxsjJJxesif5hZO
+         Cy24ChfTFyRzfYt76xldZD/vuVaTuAL8ypBpKIQTMS25qaqPAbkVgSyG4ma6xjASIp
+         n23yskSsuNNuhBJ6+PaDPoe1ae9UuMlJ8k+W4Tpw=
+Date:   Fri, 3 Jun 2022 13:28:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
+Subject: [GIT PULL] Driver core changes for 5.19-rc1
+Message-ID: <YpnwZ/Q5yTKRDBOD@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220527202330.839555-6-russell.h.weight@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,552 +52,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 01:23:30PM -0700, Russ Weight wrote:
-> Create firmware upload ops and call the Firmware Upload support of the
-> Firmware Loader subsystem to enable FPGA image uploads for secure
-> updates of BMC images, FPGA images, etc.
-> 
-> Tested-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
 
-> ---
-> v22:
->   - Added Tested-by tag from Tianfei.
->   - Removed unnecessary alignment check for source address from
->     m10bmc_sec_prepare().
->   - Changed the handling of a misaligned blk_size in m10bmc_sec_write().
->     Instead of allocating an aligned buffer and copying the block, copy
->     the misaligned bytes into an unsigned int and write with
->     regmap_write().
-> v21:
->   - Update m10bmc_sec_prepare() to ensure that the base address for an
->     update image is aligned with stride.
->   - Update m10bmc_sec_write() to handle a block size that is not aligned
->     with stride by allocating a zero-filled block that is aligned, and
->     copying the data before calling regmap_bulk_write().
-> v20:
->   - No change.
-> v19:
->   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
->     with the parent driver.
-> v18:
->   - Moved the firmware_upload_register() function here from an earlier
->     patch since this is where the required ops are provided.
->   - Moved the bmc_sec_remove() function here from an earlier patch to
->     unregister the firmware driver and do cleanup.
-> v17:
->   - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
->     future devices will not necessarily use the MAX10.
->   - Change from image_load class driver to the new firmware_upload 
->     functionality of the firmware_loader.
->   - fw_upload_ops functions will return "enum fw_upload_err" data types
->     instead of integer values.
-> v16:
->   - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
->   - The size alignment check was moved from the FPGA Image Load framework
->     to the prepare() op.
->   - Added cancel_request boolean flag to struct m10bmc_sec.
->   - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
->     rsu_cancel() function.
->   - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
->     The cancel_request flag is checked at the beginning of the
->     m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
->   - Adapt to changed prototypes for the prepare() and write() ops. The
->     m10bmc_sec_write_blk() function has been renamed to
->     m10bmc_sec_write().
->   - Created a cleanup() op, m10bmc_sec_cleanup(), to attempt to cancel an
->     ongoing op during when exiting the update process.
-> v15:
->   - Adapted to changes in the FPGA Image Load framework:
->     (1) All enum types (progress and errors) are now type u32
->     (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
->         and uses *blk_size as provided by the caller.
->     (3) m10bmc_sec_poll_complete() no long checks the driver_unload
->         flag.
-> v14:
->   - Changed symbol names to reflect the renaming of the Security Manager
->     Class driver to FPGA Image Load.
-> v13:
->   - No change
-> v12:
->   - Updated Date and KernelVersion fields in ABI documentation
->   - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
->     no longer has a size parameter, and the block size is determined
->     in this (the lower-level) driver.
-> v11:
->   - No change
-> v10:
->   - No change
-> v9:
->   - No change
-> v8:
->   - Previously patch 5/6, otherwise no change
-> v7:
->   - No change
-> v6:
->   - Changed (size / stride) calculation to ((size + stride - 1) / stride)
->     to ensure that the proper count is passed to regmap_bulk_write().
->   - Removed unnecessary call to rsu_check_complete() in
->     m10bmc_sec_poll_complete() and changed while loop to
->     do/while loop.
-> v5:
->   - No change
-> v4:
->   - No change
-> v3:
->   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
->   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
->     driver"
->   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
->     underlying functions are now called directly.
->   - Changed calling functions of functions that return "enum fpga_sec_err"
->     to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
-> v2:
->   - Reworked the rsu_start_done() function to make it more readable
->   - Reworked while-loop condition/content in rsu_prog_ready()
->   - Minor code cleanup per review comments
->   - Added a comment to the m10bmc_sec_poll_complete() function to
->     explain the context (could take 30+ minutes to complete).
->   - Added m10bmc_ prefix to functions in m10bmc_iops structure
->   - Moved MAX10 BMC address and function definitions to a separate
->     patch.
-> ---
->  drivers/fpga/intel-m10-bmc-sec-update.c | 394 ++++++++++++++++++++++++
->  1 file changed, 394 insertions(+)
-> 
-> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> index 65fec2a70901..72c677c910de 100644
-> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> @@ -17,8 +17,14 @@
->  struct m10bmc_sec {
->  	struct device *dev;
->  	struct intel_m10bmc *m10bmc;
-> +	struct fw_upload *fwl;
-> +	char *fw_name;
-> +	u32 fw_name_id;
-> +	bool cancel_request;
->  };
->  
-> +static DEFINE_XARRAY_ALLOC(fw_upload_xa);
-> +
->  /* Root Entry Hash (REH) support */
->  #define REH_SHA256_SIZE		32
->  #define REH_SHA384_SIZE		48
-> @@ -192,10 +198,365 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
->  	NULL,
->  };
->  
-> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> +{
-> +	u32 auth_result;
-> +
-> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> +
-> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
-> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> +}
-> +
-> +static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_BUSY;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static inline bool rsu_start_done(u32 doorbell)
-> +{
-> +	u32 status, progress;
-> +
-> +	if (doorbell & DRBL_RSU_REQUEST)
-> +		return false;
-> +
-> +	status = rsu_stat(doorbell);
-> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
-> +		return true;
-> +
-> +	progress = rsu_prog(doorbell);
-> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
-> +static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell, status;
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
-> +				 DRBL_RSU_REQUEST |
-> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> +					    HOST_STATUS_IDLE));
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				       doorbell,
-> +				       rsu_start_done(doorbell),
-> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +
-> +	if (ret == -ETIMEDOUT) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (ret) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	status = rsu_stat(doorbell);
-> +	if (status == RSU_STAT_WEAROUT) {
-> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
-> +		return FW_UPLOAD_ERR_WEAROUT;
-> +	} else if (status == RSU_STAT_ERASE_FAIL) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-> +{
-> +	unsigned long poll_timeout;
-> +	u32 doorbell, progress;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
-> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
-> +		msleep(RSU_PREP_INTERVAL_MS);
-> +		if (time_after(jiffies, poll_timeout))
-> +			break;
-> +
-> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +		if (ret)
-> +			return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	progress = rsu_prog(doorbell);
-> +	if (progress == RSU_PROG_PREPARE) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (progress != RSU_PROG_READY) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				 DRBL_HOST_STATUS,
-> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> +					    HOST_STATUS_WRITE_DONE));
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				       doorbell,
-> +				       rsu_prog(doorbell) != RSU_PROG_READY,
-> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> +
-> +	if (ret == -ETIMEDOUT) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (ret) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	switch (rsu_stat(doorbell)) {
-> +	case RSU_STAT_NORMAL:
-> +	case RSU_STAT_NIOS_OK:
-> +	case RSU_STAT_USER_OK:
-> +	case RSU_STAT_FACTORY_OK:
-> +		break;
-> +	default:
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-> +{
-> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
-> +		return -EIO;
-> +
-> +	switch (rsu_stat(*doorbell)) {
-> +	case RSU_STAT_NORMAL:
-> +	case RSU_STAT_NIOS_OK:
-> +	case RSU_STAT_USER_OK:
-> +	case RSU_STAT_FACTORY_OK:
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (rsu_prog(*doorbell)) {
-> +	case RSU_PROG_IDLE:
-> +	case RSU_PROG_RSU_DONE:
-> +		return 0;
-> +	case RSU_PROG_AUTHENTICATING:
-> +	case RSU_PROG_COPYING:
-> +	case RSU_PROG_UPDATE_CANCEL:
-> +	case RSU_PROG_PROGRAM_KEY_HASH:
-> +		return -EAGAIN;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static enum fw_upload_err rsu_cancel(struct m10bmc_sec *sec)
-> +{
-> +	u32 doorbell;
-> +	int ret;
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
-> +		return FW_UPLOAD_ERR_BUSY;
-> +
-> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> +				 DRBL_HOST_STATUS,
-> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> +					    HOST_STATUS_ABORT_RSU));
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	return FW_UPLOAD_ERR_CANCELED;
-> +}
-> +
-> +static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
-> +					     const u8 *data, u32 size)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	u32 ret;
-> +
-> +	sec->cancel_request = false;
-> +
-> +	if (!size || size > M10BMC_STAGING_SIZE)
-> +		return FW_UPLOAD_ERR_INVALID_SIZE;
-> +
-> +	ret = rsu_check_idle(sec);
-> +	if (ret != FW_UPLOAD_ERR_NONE)
-> +		return ret;
-> +
-> +	ret = rsu_update_init(sec);
-> +	if (ret != FW_UPLOAD_ERR_NONE)
-> +		return ret;
-> +
-> +	ret = rsu_prog_ready(sec);
-> +	if (ret != FW_UPLOAD_ERR_NONE)
-> +		return ret;
-> +
-> +	if (sec->cancel_request)
-> +		return rsu_cancel(sec);
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +#define WRITE_BLOCK_SIZE 0x4000	/* Default write-block size is 0x4000 bytes */
-> +
-> +static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data,
-> +					   u32 offset, u32 size, u32 *written)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	u32 blk_size, doorbell, extra_offset;
-> +	unsigned int stride, extra = 0;
-> +	int ret;
-> +
-> +	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-> +	if (sec->cancel_request)
-> +		return rsu_cancel(sec);
-> +
-> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> +	if (ret) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	WARN_ON_ONCE(WRITE_BLOCK_SIZE % stride);
-> +	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
-> +	ret = regmap_bulk_write(sec->m10bmc->regmap,
-> +				M10BMC_STAGING_BASE + offset,
-> +				(void *)data + offset,
-> +				blk_size / stride);
-> +	if (ret)
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +
-> +	/*
-> +	 * If blk_size is not aligned to stride, then handle the extra
-> +	 * bytes with regmap_write.
-> +	 */
-> +	if (blk_size % stride) {
-> +		extra_offset = offset + ALIGN_DOWN(blk_size, stride);
-> +		memcpy(&extra, (u8 *)(data + extra_offset), blk_size % stride);
-> +		ret = regmap_write(sec->m10bmc->regmap,
-> +				   M10BMC_STAGING_BASE + extra_offset, extra);
-> +		if (ret)
-> +			return FW_UPLOAD_ERR_RW_ERROR;
-> +	}
-> +
-> +	*written = blk_size;
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +static enum fw_upload_err m10bmc_sec_poll_complete(struct fw_upload *fwl)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +	unsigned long poll_timeout;
-> +	u32 doorbell, result;
-> +	int ret;
-> +
-> +	if (sec->cancel_request)
-> +		return rsu_cancel(sec);
-> +
-> +	result = rsu_send_data(sec);
-> +	if (result != FW_UPLOAD_ERR_NONE)
-> +		return result;
-> +
-> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
-> +	do {
-> +		msleep(RSU_COMPLETE_INTERVAL_MS);
-> +		ret = rsu_check_complete(sec, &doorbell);
-> +	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
-> +
-> +	if (ret == -EAGAIN) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_TIMEOUT;
-> +	} else if (ret == -EIO) {
-> +		return FW_UPLOAD_ERR_RW_ERROR;
-> +	} else if (ret) {
-> +		log_error_regs(sec, doorbell);
-> +		return FW_UPLOAD_ERR_HW_ERROR;
-> +	}
-> +
-> +	return FW_UPLOAD_ERR_NONE;
-> +}
-> +
-> +/*
-> + * m10bmc_sec_cancel() may be called asynchronously with an on-going update.
-> + * All other functions are called sequentially in a single thread. To avoid
-> + * contention on register accesses, m10bmc_sec_cancel() must only update
-> + * the cancel_request flag. Other functions will check this flag and handle
-> + * the cancel request synchronously.
-> + */
-> +static void m10bmc_sec_cancel(struct fw_upload *fwl)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +
-> +	sec->cancel_request = true;
-> +}
-> +
-> +static void m10bmc_sec_cleanup(struct fw_upload *fwl)
-> +{
-> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> +
-> +	(void)rsu_cancel(sec);
-> +}
-> +
-> +static const struct fw_upload_ops m10bmc_ops = {
-> +	.prepare = m10bmc_sec_prepare,
-> +	.write = m10bmc_sec_write,
-> +	.poll_complete = m10bmc_sec_poll_complete,
-> +	.cancel = m10bmc_sec_cancel,
-> +	.cleanup = m10bmc_sec_cleanup,
-> +};
-> +
->  #define SEC_UPDATE_LEN_MAX 32
->  static int m10bmc_sec_probe(struct platform_device *pdev)
->  {
-> +	char buf[SEC_UPDATE_LEN_MAX];
->  	struct m10bmc_sec *sec;
-> +	struct fw_upload *fwl;
-> +	unsigned int len;
-> +	int  ret;
->  
->  	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
->  	if (!sec)
-> @@ -205,6 +566,38 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
->  	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
->  	dev_set_drvdata(&pdev->dev, sec);
->  
-> +	ret = xa_alloc(&fw_upload_xa, &sec->fw_name_id, sec,
-> +		       xa_limit_32b, GFP_KERNEL);
-> +	if (ret)
-> +		return ret;
-> +
-> +	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
-> +			sec->fw_name_id);
-> +	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
-> +	if (!sec->fw_name)
-> +		return -ENOMEM;
-> +
-> +	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
-> +				       &m10bmc_ops, sec);
-> +	if (IS_ERR(fwl)) {
-> +		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
-> +		kfree(sec->fw_name);
-> +		xa_erase(&fw_upload_xa, sec->fw_name_id);
-> +		return PTR_ERR(fwl);
-> +	}
-> +
-> +	sec->fwl = fwl;
-> +	return 0;
-> +}
-> +
-> +static int m10bmc_sec_remove(struct platform_device *pdev)
-> +{
-> +	struct m10bmc_sec *sec = dev_get_drvdata(&pdev->dev);
-> +
-> +	firmware_upload_unregister(sec->fwl);
-> +	kfree(sec->fw_name);
-> +	xa_erase(&fw_upload_xa, sec->fw_name_id);
-> +
->  	return 0;
->  }
->  
-> @@ -218,6 +611,7 @@ MODULE_DEVICE_TABLE(platform, intel_m10bmc_sec_ids);
->  
->  static struct platform_driver intel_m10bmc_sec_driver = {
->  	.probe = m10bmc_sec_probe,
-> +	.remove = m10bmc_sec_remove,
->  	.driver = {
->  		.name = "intel-m10bmc-sec-update",
->  		.dev_groups = m10bmc_sec_attr_groups,
-> -- 
-> 2.25.1
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-5.19-rc1
+
+for you to fetch changes up to b232b02bf3c205b13a26dcec08e53baddd8e59ed:
+
+  driver core: fix deadlock in __device_attach (2022-05-19 19:37:08 +0200)
+
+----------------------------------------------------------------
+Driver core changes for 5.19-rc1
+
+Here is the set of driver core changes for 5.19-rc1.
+
+Note, I'm not really happy with this pull request as-is, see below for
+details, but overall this is all good for everything but a small set of
+systems, which we have a fix for already.
+
+Lots of tiny driver core changes and cleanups happened this cycle,
+but the two major things were:
+
+	- firmware_loader reorganization and additions including the
+	  ability to have XZ compressed firmware images and the ability
+	  for userspace to initiate the firmware load when it needs to,
+	  instead of being always initiated by the kernel. FPGA devices
+	  specifically want this ability to have their firmware changed
+	  over the lifetime of the system boot, and this allows them to
+	  work without having to come up with yet-another-custom-uapi
+	  interface for loading firmware for them.
+	- physical location support added to sysfs so that devices that
+	  know this information, can tell userspace where they are
+	  located in a common way.  Some ACPI devices already support
+	  this today, and more bus types should support this in the
+	  future.
+
+Smaller changes included:
+	- driver_override api cleanups and fixes
+	- error path cleanups and fixes
+	- get_abi script fixes
+	- deferred probe timeout changes.
+
+It's that last change that I'm the most worried about.  It has been
+reported to cause boot problems for a number of systems, and I have a
+tested patch series that resolves this issue.  But I didn't get it
+merged into my tree before 5.18-final came out, so it has not gotten any
+linux-next testing.
+
+I'll send the fixup patches (there are 2) as a follow-on series to this
+pull request if you want to take them directly, _OR_ I can just revert
+the probe timeout changes and they can wait for the next -rc1 merge
+cycle.  Given that the fixes are tested, and pretty simple, I'm leaning
+toward that choice.  Sorry this all came at the end of the merge window,
+I should have resolved this all 2 weeks ago, that's my fault as it was
+in the middle of some travel for me.
+
+All have been tested in linux-next for weeks, with no reported issues
+other than the above-mentioned boot time outs.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Bagas Sanjaya (2):
+      Documentation: dd: Use ReST lists for return values of driver_deferred_probe_check_state()
+      firmware_loader: describe 'module' parameter of firmware_upload_register()
+
+Christophe JAILLET (1):
+      drivers/base/memory: Fix an unlikely reference counting issue in __add_memory_block()
+
+Dan Carpenter (2):
+      driver core: location: Check for allocations failure
+      test_firmware: fix end of loop test in upload_read_show()
+
+Dietmar Eggemann (1):
+      topology: Remove unused cpu_cluster_mask()
+
+Greg Kroah-Hartman (3):
+      Revert "firmware_loader: use kernel credentials when reading firmware"
+      Merge 5.18-rc5 into driver-core-next
+      export: fix string handling of namespace in EXPORT_SYMBOL_NS
+
+Hao Luo (1):
+      kernfs: Separate kernfs_pr_cont_buf and rename_lock.
+
+Haowen Bai (1):
+      firmware: edd: Remove redundant condition
+
+Imran Khan (2):
+      kernfs: Remove reference counting for kernfs_open_node.
+      kernfs: Rename kernfs_put_open_node to kernfs_unlink_open_file.
+
+Krzysztof Kozlowski (14):
+      driver: platform: Add helper for safer setting of driver_override
+      amba: Use driver_set_override() instead of open-coding
+      fsl-mc: Use driver_set_override() instead of open-coding
+      hv: Use driver_set_override() instead of open-coding
+      PCI: Use driver_set_override() instead of open-coding
+      s390/cio: Use driver_set_override() instead of open-coding
+      spi: Use helper for safer setting of driver_override
+      vdpa: Use helper for safer setting of driver_override
+      clk: imx: scu: Fix kfree() of static memory on setting driver_override
+      slimbus: qcom-ngd: Fix kfree() of static memory on setting driver_override
+      rpmsg: Constify local variable in field store macro
+      rpmsg: Fix kfree() of static memory on setting driver_override
+      rpmsg: Fix calling device_lock() on non-initialized device
+      rpmsg: use local 'dev' variable
+
+Luis Chamberlain (1):
+      MAINTAINERS: add Russ Weight as a firmware loader maintainer
+
+Lukasz Luba (1):
+      arch_topology: Trace the update thermal pressure
+
+Mark-PK Tsai (1):
+      driver core: Prevent overriding async driver of a device before it probe
+
+Miaohe Lin (1):
+      drivers/base/node.c: fix compaction sysfs file leak
+
+Russ Weight (10):
+      firmware_loader: Clear data and size in fw_free_paged_buf
+      firmware_loader: Check fw_state_is_done in loading_store
+      firmware_loader: Split sysfs support from fallback
+      firmware_loader: Add firmware-upload support
+      firmware_loader: Add sysfs nodes to monitor fw_upload
+      test_firmware: Add test support for firmware upload
+      test_firmware: Error injection for firmware upload
+      selftests: firmware: Add firmware upload selftests
+      firmware_loader: Fix configs for sysfs split
+      firmware_loader: Move definitions from sysfs_upload.h to sysfs.h
+
+Saravana Kannan (2):
+      driver core: Add "*" wildcard support to driver_async_probe cmdline param
+      driver core: Extend deferred probe timeout on driver registration
+
+Schspa Shi (1):
+      driver: base: fix UAF when driver_attach failed
+
+SeongJae Park (1):
+      scripts/get_abi: Fix wrong script file name in the help message
+
+Sergey Shtylyov (1):
+      platform: finally disallow IRQ0 in platform_get_irq() and its ilk
+
+Takashi Iwai (5):
+      firmware: Add the support for ZSTD-compressed firmware files
+      selftests: firmware: Use smaller dictionary for XZ compression
+      selftests: firmware: Fix the request_firmware_into_buf() test for XZ format
+      selftests: firmware: Simplify test patterns
+      selftests: firmware: Add ZSTD compressed file tests
+
+Thiébaud Weksteen (1):
+      firmware_loader: use kernel credentials when reading firmware
+
+Won Chung (3):
+      driver core: Add sysfs support for physical location of a device
+      driver core: location: Free struct acpi_pld_info *pld
+      driver core: location: Add "back" as a possible output for panel
+
+Zhang Wensheng (1):
+      driver core: fix deadlock in __device_attach
+
+ Documentation/ABI/testing/sysfs-class-firmware     |  77 ++++
+ .../ABI/testing/sysfs-devices-physical_location    |  42 ++
+ Documentation/admin-guide/kernel-parameters.txt    |  11 +-
+ Documentation/driver-api/firmware/fw_upload.rst    | 126 ++++++
+ Documentation/driver-api/firmware/index.rst        |   1 +
+ MAINTAINERS                                        |   1 +
+ drivers/amba/bus.c                                 |  28 +-
+ drivers/base/Makefile                              |   1 +
+ drivers/base/arch_topology.c                       |   5 +
+ drivers/base/base.h                                |   1 +
+ drivers/base/bus.c                                 |   4 +-
+ drivers/base/core.c                                |  15 +
+ drivers/base/dd.c                                  |  44 ++-
+ drivers/base/driver.c                              |  70 ++++
+ drivers/base/firmware_loader/Kconfig               |  42 +-
+ drivers/base/firmware_loader/Makefile              |   2 +
+ drivers/base/firmware_loader/fallback.c            | 430 ---------------------
+ drivers/base/firmware_loader/fallback.h            |  46 +--
+ drivers/base/firmware_loader/firmware.h            |  16 +
+ drivers/base/firmware_loader/main.c                |  94 ++++-
+ drivers/base/firmware_loader/sysfs.c               | 422 ++++++++++++++++++++
+ drivers/base/firmware_loader/sysfs.h               | 117 ++++++
+ drivers/base/firmware_loader/sysfs_upload.c        | 397 +++++++++++++++++++
+ drivers/base/firmware_loader/sysfs_upload.h        |  41 ++
+ drivers/base/memory.c                              |   5 +-
+ drivers/base/node.c                                |   1 +
+ drivers/base/physical_location.c                   | 143 +++++++
+ drivers/base/physical_location.h                   |  16 +
+ drivers/base/platform.c                            |  34 +-
+ drivers/bus/fsl-mc/fsl-mc-bus.c                    |  25 +-
+ drivers/clk/imx/clk-scu.c                          |   7 +-
+ drivers/firmware/edd.c                             |   3 +-
+ drivers/hv/vmbus_drv.c                             |  28 +-
+ drivers/pci/pci-sysfs.c                            |  28 +-
+ drivers/rpmsg/rpmsg_core.c                         |  42 +-
+ drivers/rpmsg/rpmsg_internal.h                     |   5 +-
+ drivers/rpmsg/rpmsg_ns.c                           |   4 +-
+ drivers/s390/cio/cio.h                             |   6 +-
+ drivers/s390/cio/css.c                             |  28 +-
+ drivers/slimbus/qcom-ngd-ctrl.c                    |  13 +-
+ drivers/spi/spi.c                                  |  26 +-
+ drivers/vdpa/vdpa.c                                |  29 +-
+ fs/kernfs/dir.c                                    |  31 +-
+ fs/kernfs/file.c                                   |  47 ++-
+ include/linux/amba/bus.h                           |   6 +-
+ include/linux/device.h                             |  73 ++++
+ include/linux/device/driver.h                      |   2 +
+ include/linux/export.h                             |   7 +-
+ include/linux/firmware.h                           |  82 ++++
+ include/linux/fsl/mc.h                             |   6 +-
+ include/linux/hyperv.h                             |   6 +-
+ include/linux/pci.h                                |   6 +-
+ include/linux/platform_device.h                    |   6 +-
+ include/linux/rpmsg.h                              |  14 +-
+ include/linux/spi/spi.h                            |   2 +
+ include/linux/topology.h                           |   7 -
+ include/linux/vdpa.h                               |   4 +-
+ include/trace/events/thermal_pressure.h            |  29 ++
+ lib/test_firmware.c                                | 381 ++++++++++++++++++
+ scripts/get_abi.pl                                 |   4 +-
+ tools/testing/selftests/firmware/Makefile          |   2 +-
+ tools/testing/selftests/firmware/config            |   1 +
+ tools/testing/selftests/firmware/fw_filesystem.sh  | 170 ++++----
+ tools/testing/selftests/firmware/fw_lib.sh         |  19 +-
+ tools/testing/selftests/firmware/fw_run_tests.sh   |   4 +
+ tools/testing/selftests/firmware/fw_upload.sh      | 214 ++++++++++
+ 66 files changed, 2736 insertions(+), 863 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-firmware
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-physical_location
+ create mode 100644 Documentation/driver-api/firmware/fw_upload.rst
+ create mode 100644 drivers/base/firmware_loader/sysfs.c
+ create mode 100644 drivers/base/firmware_loader/sysfs.h
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.c
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.h
+ create mode 100644 drivers/base/physical_location.c
+ create mode 100644 drivers/base/physical_location.h
+ create mode 100644 include/trace/events/thermal_pressure.h
+ create mode 100755 tools/testing/selftests/firmware/fw_upload.sh

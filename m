@@ -2,78 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FFB53CC40
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACE053CC41
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245463AbiFCPXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S245471AbiFCPYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiFCPXW (ORCPT
+        with ESMTP id S229944AbiFCPYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:23:22 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C713701C;
-        Fri,  3 Jun 2022 08:23:21 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id n10so16608972ejk.5;
-        Fri, 03 Jun 2022 08:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lqyq5k+XF5KgaIo5e3mhOS1nBHM477MF0d9qU6OOaQk=;
-        b=HSg4VtPtX0FA6DhM4M/SK75iaIqx+VCXGg1pUX53SLtsvYkg9pR2/pFuxQOoAOefOq
-         f2mBPGr0EJPdKqptHoGR2BDFmui6PKhSl5cNSTZumEQEIEtD+AwyoOGhkaKufrb/YkyA
-         O7HW3sXJPjTYabzBxRqdVUgaUmMZeF/JWyndNXz9QHNiNKb8zhOFOgHXf+OwM5vtVX2m
-         ga+1ePUiy0iH24OzhdlMhA4lJL3L1Hevddd64pxppQ8N2RNyc+ifeBmZqWdsamxcNaGl
-         ziZC1ktFKTGilRtug72eUBvGnaFRVHgpbsfjFN9IdVMAMj/KSbx5BDYVXA7ZHxcE95GG
-         cPgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lqyq5k+XF5KgaIo5e3mhOS1nBHM477MF0d9qU6OOaQk=;
-        b=kJPMG+RxFHyH4lbLSE5nIaCf9uU2eXOOkisdJhQaXYBcqo0CWEElAzjZb+Um+bGLn5
-         FX/9UH/xbUV62UNXcyBYF7kNqvr973fjcyvcpdOtaJ/T1q7WuRi2IBFzHUwrZqiUssJB
-         Cd63oJyXIDOeP1R0UUfpAWoyNcFwS5PE/EEoDgHPn3tatE1wUanpj5CfCo61uH1tkQ+h
-         JsXNXX0rPy7QPgd6EgQ6nMQiQbs6MWAXHYV/bCEH6CY48XgtE4ztJD15HqM+DIRBqQlu
-         Hm8kuMtdLctpurunp6UVz5MLp01pi5Kso5lk1Bxd6h4hH1yh7g1ZnzKNUGNywPWPSY/Y
-         HCEA==
-X-Gm-Message-State: AOAM532gnVkGoWc7L0RgRJSpqAQp+g29aQkNz+n8C5SNf7AjAep18l27
-        eWte9lrazsZM0TGo2Z/5Cvw=
-X-Google-Smtp-Source: ABdhPJx10a+aPHP5XcUngLeIIWoBKRDAxK9Dfy8n9eTEaJ7IOZN/o5Buq3qGXf/P3sZYGpt8fkmmXg==
-X-Received: by 2002:a17:907:7290:b0:6ff:1fa2:e9e3 with SMTP id dt16-20020a170907729000b006ff1fa2e9e3mr9042275ejc.345.1654269799791;
-        Fri, 03 Jun 2022 08:23:19 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id g9-20020aa7c849000000b0042a2d9af0f8sm3998719edt.79.2022.06.03.08.23.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 08:23:19 -0700 (PDT)
-Message-ID: <629a2767.1c69fb81.ee3de.6097@mx.google.com>
-X-Google-Original-Message-ID: <YponZSfj3982xCYI@Ansuel-xps.>
-Date:   Fri, 3 Jun 2022 17:23:17 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] Add support for unprotected spare data page
-References: <20220519190112.6344-1-ansuelsmth@gmail.com>
- <20220603151806.GB26696@thinkpad>
+        Fri, 3 Jun 2022 11:24:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A46038BC2
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:24:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA63B1063;
+        Fri,  3 Jun 2022 08:24:05 -0700 (PDT)
+Received: from [192.168.1.11] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23B4B3F766;
+        Fri,  3 Jun 2022 08:24:03 -0700 (PDT)
+Message-ID: <99a207dc-93cd-1bea-2ffc-404a9f6587bf@arm.com>
+Date:   Fri, 3 Jun 2022 17:23:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220603151806.GB26696@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [aarch64] INFO: rcu_sched detected expedited stalls on CPUs/tasks
+Content-Language: en-US
+To:     Bruno Goncalves <bgoncalv@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     CKI Project <cki-project@redhat.com>, rric@kernel.org,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <CA+QYu4qTWaDzep2GGxm-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CA+QYu4qTWaDzep2GGxm-63r-xJOFf2rFCCNhWupAgZdKE7HV6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,85 +48,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 08:48:06PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, May 19, 2022 at 09:01:10PM +0200, Ansuel Smith wrote:
-> > Some background about this.
-> > On original qsdk ipq8064 based firmware there was a big separation from
-> > boot partition and user partition. With boot partition we refer to
-> > partition used to init the router (bootloader, spm firmware and other
-> > internal stuff) With user partition we refer to linux partition and data
-> > partition not used to init the router.
-> > When someone had to write to these boot partition a special mode was
-> > needed, to switch the nand driver to this special configuration.
-> > 
-> > Upstream version of the nandc driver totally dropped this and the result
-> > is that if someone try to read data from these partition a CRC warning
-> > is printed and if someone try to write that (if for example someone
-> > wants to replace the bootloader) result is a broken system as the data
-> > is badly written.
-> > 
+Hello Bruno,
+This looks like something we noticed on the PCC channel of the Tx2. Here was
+the original message:
+'''
+It seems there is synchronization issue on the PCC channels of the ThunderX2.
+
+Some abbreviations first. References are always to ACPI 6.4:
+Command Complete bit (CCb):
+1 means the OS owns the PCC channel, 0 means the firmware owns the channel,
+cf s14.2.2 "Generic Communications Channel Status Field"
+
+Doorbell Write bits (DWb):
+Write a mask (just one bit in our case) to the doorbell register to notify the
+firmware of a message waiting in the channel,
+cf s14.1.4 "HW-Reduced Communications Subspace Structure (type 1)"
+
+Minimum Request Turnaround Time (MRTT):
+PCC channels have a 'Minimum Request Turnaround Time', being 'The minimum
+amount of time that OSPM must wait after the completion of a command before
+issuing the next command'.
+cf s14.1.4 "HW-Reduced Communications Subspace Structure (type 1)"
+
+The scenario that seems to cause trouble is:
+1. The OS places a payload and clears the CCb bit
+2. The OS rings at the doorbell (sets the DWb)
+3. The firmware processes the message and then sets the CCb (the DWb seems to
+    be still set)
+4. The OS continues (the DWb seems to be still set)
+5. The OS wants to send another command. The MRTT has elapsed. So the OS does
+     1. again. (the DWb seems to be still set)
+6. The OS does 2. again, but the DWb are still set so the OS overwrites the DWb
+7. The firmware finally clears the DWb.
+
+  From 7.:
+- The OS indefinitely waits for an answer, thinking the firmware needs
+   to answer. The timeout of this request elapses, but the channel is still
+   assumed to belong to the firmware, so the OS never rings the doorbell again.
+- The firmware waits for the doorbell to ring (the DWb to be set), but the
+   OS never rings again.
+
+This can be reproduced by running a big load (e.g. 60 tasks running at 5%
+of the maximum CPU capacity). PCCT tables must have been published by
+selecting the right option in UEFI.
+
+Doubling the MRTT (going from 5ms to 10ms) makes the synchronization issue
+disappears, but it means decreasing the speed of all PCC channels.
+'''
+
+If you get messages such as:
+"PCC check channel failed for ss: XX. ret=X"
+then this should be the same issue.
+
+What might be happening for you is that a stall is detected while the
+sugov_work thread is trying to set a frequency. check_pcc_chan() waits for
+500 * 3000 us (the PCC channel nominal latency for the Tx2) = 1.5s, which
+is quite long.
+
+Cf. the end of the original message, could you try increasing the mrtt value ?
+(here it is doubled)
+pcc_data[pcc_ss_idx]->pcc_mrtt = 2 * pcc_chan->min_turnaround_time;
+https://github.com/torvalds/linux/blob/50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc/drivers/acpi/cppc_acpi.c#L547
+(for info, where the cppc dirvers waits for the mrtt to elapse)
+https://github.com/torvalds/linux/blob/50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc/drivers/acpi/cppc_acpi.c#L263
+
+On 6/3/22 11:44, Bruno Goncalves wrote:
+> Hello,
 > 
-> Can you please point me to the downstream/vendor driver that has this
-> implementation?
+> We recently started to hit this problem on some of our aarch64
+> machines. The stalls can happen even during boot.
+> 
+> [ 1086.949484] rcu: INFO: rcu_sched detected expedited stalls on
+> CPUs/tasks: { 23-... } 3 jiffies s: 3441 root: 0x2/.
+> [ 1086.949510] rcu: blocking rcu_node structures (internal RCU debug):
+> l=1:16-31:0x80/.
+> [ 1086.949524] Task dump for CPU 23:
+> [ 1086.949528] task:sugov:23        state:R  running task     stack:
+>   0 pid: 2914 ppid:     2 flags:0x0000000a
+> [ 1086.949543] Call trace:
+> [ 1086.949546]  __switch_to+0x104/0x19c
+> [ 1086.949568]  __schedule+0x410/0x67c
+> [ 1086.949576]  schedule+0x70/0xa8
+> [ 1086.949583]  schedule_hrtimeout_range_clock+0x144/0x1d8
+> [ 1086.949592]  schedule_hrtimeout_range+0x20/0x2c
+> [ 1086.949598]  usleep_range_state+0x5c/0x80
+> [ 1086.949603]  check_pcc_chan+0x7c/0xf4
+> [ 1086.949615]  send_pcc_cmd+0x130/0x2a8
+> [ 1086.949619]  cppc_set_perf+0x12c/0x22c
+> [ 1086.949624]  cppc_cpufreq_set_target+0xf8/0x15c [cppc_cpufreq]
+> [ 1086.949645]  __cpufreq_driver_target+0x94/0xfc
+> [ 1086.949658]  sugov_work+0x98/0xe0
+> [ 1086.949675]  kthread_worker_fn+0x124/0x2b8
+> [ 1086.949683]  kthread+0xd4/0x558
+> [ 1086.949689]  ret_from_fork+0x10/0x20
+> 
+> More logs:
+> https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/06/02/553734635/redhat:553734635_aarch64/tests/Storage_block_filesystem_fio_test/12073991_aarch64_1_dmesg.log
+> 
+> https://s3.us-east-1.amazonaws.com/arr-cki-prod-datawarehouse-public/datawarehouse-public/2022/06/02/553734635/redhat:553734635_aarch64/tests/Boot_test/12073991_aarch64_1_test_console.log
+> 
+> CKI issue tracker: https://datawarehouse.cki-project.org/issue/1259
 > 
 > Thanks,
-> Mani
->
-
-Sure, is it good if I give you a gist link with the source of driver?
-
-> > This series comes to fix this.
-> > 
-> > A user can declare offset and size of these special partition using the
-> > qcom,boot-pages binding.
-> > 
-> > An initial implementation of this assumed that the boot-pages started
-> > from the start of the nand but we discover that some device have backup
-> > of these special partition and we can have situation where we have this
-> > partition scheme
-> > - APPSBL (require special mode)
-> > - APPSBLENV (doesn't require special mode)
-> > - ART
-> > - APPSBLBK (back of APPSBL require special mode)
-> > - APPSBLENVBK (back of APPSBLENV doesn't require special mode)
-> > With this configuration we need to declare sparse boot page and we can't
-> > assume boot-pages always starts from the start of the nand.
-> > 
-> > A user can use this form to declare sparse boot pages
-> > qcom,boot-pages = <0x0 0x0c80000 0x0c80000 0x0500000>;
-> > 
-> > The driver internally will parse this array, convert it to nand pages
-> > and check internally on every read/write if this special configuration
-> > should used for that page or the normal one.
-> > 
-> > The reason for all of this is that qcom FOR SOME REASON, disable ECC for
-> > spare data only for these boot partition and we need to reflect this
-> > special configuration to mute these warning and to permit actually
-> > writing to these pages.
-> > 
-> > v4:
-> > - Fix wrong compatible set for boot-pages (ipq8074 instead of ipq806x)
-> > v3:
-> > - Fix typo in Docmunetation commit desription
-> > - Add items description for uint32-matrix
-> > v2:
-> > - Add fixes from Krzysztof in Documentation
-> > 
-> > Ansuel Smith (2):
-> >   mtd: nand: raw: qcom_nandc: add support for unprotected spare data
-> >     pages
-> >   dt-bindings: mtd: qcom_nandc: document qcom,boot-pages binding
-> > 
-> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   |  26 +++
-> >  drivers/mtd/nand/raw/qcom_nandc.c             | 148 +++++++++++++++++-
-> >  2 files changed, 169 insertions(+), 5 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
-> > 
+> Bruno Goncalves
 > 
-> -- 
-> மணிவண்ணன் சதாசிவம்
-
--- 
-	Ansuel

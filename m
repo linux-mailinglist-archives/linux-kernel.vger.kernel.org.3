@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DB353C835
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7613153C83E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242356AbiFCKNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S243387AbiFCKOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiFCKNb (ORCPT
+        with ESMTP id S230034AbiFCKO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:13:31 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29013B03F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 03:13:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id e184so12895553ybf.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 03:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=94ZegRhkYg/saXV+SmkOjrIFO68BuJxSlLGLu4NRWgI=;
-        b=cWnKkwPusG0TKPrwdSeL9GfiK9qV2jq8XHQI841ZQi14sBambMQZLS563NvaLZElf2
-         75115UwtrmhkAHVhZHmiunsBxqODjE2sgZG5RZUUttFd/XjwT9ELF81y1MF+VjPTBsXy
-         Ecc+OxP4Ug9Nkq1KWYx7PsS/8LdlHSvr8pmzuBVF4JJSNw/zCKM/57awLBnHtRJH+URJ
-         ivbdaF8SKbVQFRj++AP6rq74w+ppYkrOD3IrIlaZnu3m6qTtGWAs0bfx8BngaVgPvKTf
-         vdUOkox69Qac8HsvfBibu1f9UhbH8lmh5VamMeFlCaOhbP7O16w6ZyMfyL8EpGm81ssR
-         AiRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=94ZegRhkYg/saXV+SmkOjrIFO68BuJxSlLGLu4NRWgI=;
-        b=fZ3rw4NZmbxREwSfVFwEtHI7FMVsZDOcKvypieMMhuv08bO0dGzbztaRGElpoIE+7O
-         RPAZy7m3XFJUuuOvrf7u79fpAHCzKZvhGWVaya4cB8oVxvlguXQwfhKc2qipYAmQ0KH5
-         vrRQpc/nFW0xZ/l5cSXwiGW5W3AyICY4ds7MPNPrjGq6xY61Nm8RQ/yPtbPw33tTWm1K
-         JvrH4HrXU9LYiEt7O21X0EUKjGy+YaeoSJIcZRHnEolrVLy/BBFXgndQCPNhCGJXizlV
-         W2jrTt4879eezsLagm00WWzGuv7gBgCrNOG6i4HRJ8WcYq/dxJTPaKwppbA8SkfxNeMI
-         nKqQ==
-X-Gm-Message-State: AOAM531cQ9Ockidwqw9A/CCmVRc4qzNuZad+JSNIODQn/kTqtUClh13P
-        c/1A0EomKVeAa1ifsak4s5m4oWQCM4mRWgveQbQRXQ==
-X-Google-Smtp-Source: ABdhPJw/KRcAuBS5Qsp7lOCZIpBhbUKTpsBgops20ECaxi3YO08dKdMkgM9KLeB4ACdlmuIwzLo5Lgpc34BZ5v0Gd3Y=
-X-Received: by 2002:a5b:302:0:b0:64b:a20a:fcd9 with SMTP id
- j2-20020a5b0302000000b0064ba20afcd9mr10098240ybp.492.1654251210044; Fri, 03
- Jun 2022 03:13:30 -0700 (PDT)
+        Fri, 3 Jun 2022 06:14:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498913B283;
+        Fri,  3 Jun 2022 03:14:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CCFAE1063;
+        Fri,  3 Jun 2022 03:14:27 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.42.23])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CDDE03F766;
+        Fri,  3 Jun 2022 03:14:18 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        openrisc@lists.librecores.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] mm/mmap: Enable more platforms with ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Fri,  3 Jun 2022 15:44:05 +0530
+Message-Id: <20220603101411.488970-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1650508019-22554-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1650508019-22554-1-git-send-email-baihaowen@meizu.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 3 Jun 2022 12:13:18 +0200
-Message-ID: <CACRpkdZPZ5fNxt3=LCT4YRcnH5wNw+i50dde_eQGynzK0FCXFw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: aspeed: Fix potential NULL dereference in aspeed_pinmux_set_mux()
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Joel Stanley <joel@jms.id.au>,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,14 +57,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 4:28 AM Haowen Bai <baihaowen@meizu.com> wrote:
+From the last discussion [1], some more platforms (s390, mips, csky, nios2,
+openrisc) were willing to enable ARCH_HAS_VM_GET_PAGE_PROT and also provide
+custom vm_get_page_prot() via switch case statement implementation without
+any objection. All those platform specific patches have already been acked.
 
-> pdesc could be null but still dereference pdesc->name and it will lead to
-> a null pointer access. So we move a null check before dereference.
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+This series makes protection_map[] array private on platforms which define
+their own vm_get_page_prot() via ARCH_HAS_VM_GET_PAGE_PROT, and also drops
+off their __PXXX/__SXXX macros. This also enables new platforms as in this
+series, to drop off their __PXXX/__SXXX macros as generic protection_map[]
+is no longer visible to them.
 
-Patch applied, sorry for missing it!
+[1] https://lore.kernel.org/all/1646045273-9343-2-git-send-email-anshuman.khandual@arm.com/
 
-Yours,
-Linus Walleij
+This series applies on current mainline and also has been build tested on
+multiple platforms.
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: x86@kernel.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (6):
+  mm/mmap: Restrict generic protection_map[] array visibility
+  s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  openrisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+
+ arch/arm64/include/asm/pgtable-prot.h | 18 --------
+ arch/arm64/mm/mmap.c                  | 21 ++++++++++
+ arch/csky/Kconfig                     |  1 +
+ arch/csky/include/asm/pgtable.h       | 18 --------
+ arch/csky/mm/init.c                   | 32 ++++++++++++++
+ arch/mips/Kconfig                     |  1 +
+ arch/mips/include/asm/pgtable.h       | 22 ----------
+ arch/mips/mm/cache.c                  | 60 ++++++++++++++++-----------
+ arch/nios2/Kconfig                    |  1 +
+ arch/nios2/include/asm/pgtable.h      | 24 -----------
+ arch/nios2/mm/init.c                  | 47 +++++++++++++++++++++
+ arch/openrisc/Kconfig                 |  1 +
+ arch/openrisc/include/asm/pgtable.h   | 18 --------
+ arch/openrisc/mm/init.c               | 41 ++++++++++++++++++
+ arch/powerpc/include/asm/pgtable.h    |  2 +
+ arch/powerpc/mm/book3s64/pgtable.c    | 20 +++++++++
+ arch/s390/Kconfig                     |  1 +
+ arch/s390/include/asm/pgtable.h       | 17 --------
+ arch/s390/mm/mmap.c                   | 33 +++++++++++++++
+ arch/sparc/include/asm/pgtable_32.h   |  2 +
+ arch/sparc/include/asm/pgtable_64.h   | 19 ---------
+ arch/sparc/mm/init_64.c               | 20 +++++++++
+ arch/x86/include/asm/pgtable_types.h  | 19 ---------
+ arch/x86/mm/pgprot.c                  | 19 +++++++++
+ include/linux/mm.h                    |  2 +
+ mm/mmap.c                             |  2 +-
+ 26 files changed, 280 insertions(+), 181 deletions(-)
+
+-- 
+2.25.1
+

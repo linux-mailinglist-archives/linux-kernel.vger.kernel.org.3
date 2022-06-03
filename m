@@ -2,146 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41EC53D006
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C5D53CFD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345926AbiFCR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
+        id S1345913AbiFCR5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346187AbiFCRuw (ORCPT
+        with ESMTP id S1346528AbiFCRvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:52 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8496E59B9A;
-        Fri,  3 Jun 2022 10:47:04 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id l84so11260453oif.10;
-        Fri, 03 Jun 2022 10:47:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=2zNlEw4nB85sh8if2viVb9BSHeHyHaqpaxepxW9M49M=;
-        b=n/gYscpI0b0i2GFJW8a0murd+LopJSmF2fxDB/3r+h40mmHna8acD5BLAAkvLL204t
-         aDOc0HSkLu2YiCJyJkd1bcsUOEnRTjqi8vdEMke+tI3BHRnOrJu685d4zKT2meQ8lZFh
-         VQlghYgDd6OLlnvmFBJ7bCBpGXbALSNyjqhQk3elnglmHv1cq+f56uk23gg4RM81F4dX
-         G/DiwwYAT5pwb7t6ZYZ3BqU1Qk8mP/iYpInaM3Gan30kfkz1NM/9BAwLsmTAsP1FALJq
-         V047PEzWszc3PuyyJ1D7qwTMbSFeI9+hE9Hlpnne3U4A+B95BvdOnAGrQk8osE6n5XWE
-         o12g==
-X-Gm-Message-State: AOAM533Xs6K0xP+3XhYuCkXgIHgga7cunXjhdiTFSqykvNo+bX7d6+h8
-        ujkN8tRfPjUiZHk3MvXQ2Q==
-X-Google-Smtp-Source: ABdhPJxAYuZBWa+RaA5nnGfbWpx8vAvZW4aD7zx8iDtmxRLOh8cfZs6aYlLqiB+Qiwa1fO9LsX5GQw==
-X-Received: by 2002:a05:6808:120a:b0:322:3447:2d7a with SMTP id a10-20020a056808120a00b0032234472d7amr21382071oil.40.1654278423517;
-        Fri, 03 Jun 2022 10:47:03 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u1-20020a056808000100b00325cda1ff9esm4254032oic.29.2022.06.03.10.47.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 10:47:03 -0700 (PDT)
-Received: (nullmailer pid 617346 invoked by uid 1000);
-        Fri, 03 Jun 2022 17:47:02 -0000
-Date:   Fri, 3 Jun 2022 12:47:02 -0500
-From:   Rob Herring <robh@kernel.org>
+        Fri, 3 Jun 2022 13:51:15 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C9656FAA
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:48:28 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:36402)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nxBPP-00Gg1P-0c; Fri, 03 Jun 2022 11:48:27 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:42780 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nxBPN-000zSt-Ka; Fri, 03 Jun 2022 11:48:26 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree fixes for v5.19, part 1
-Message-ID: <20220603174702.GA614240-robh@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>
+Date:   Fri, 03 Jun 2022 12:48:19 -0500
+Message-ID: <87v8th7i58.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nxBPN-000zSt-Ka;;;mid=<87v8th7i58.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19mNLrrPBZ5vfWVQCM18ArZKaY0/4+5EE8=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 497 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 13 (2.7%), b_tie_ro: 11 (2.3%), parse: 1.33
+        (0.3%), extract_message_metadata: 19 (3.8%), get_uri_detail_list: 3.7
+        (0.7%), tests_pri_-1000: 19 (3.9%), tests_pri_-950: 1.76 (0.4%),
+        tests_pri_-900: 1.25 (0.3%), tests_pri_-90: 77 (15.4%), check_bayes:
+        75 (15.0%), b_tokenize: 11 (2.2%), b_tok_get_all: 9 (1.8%),
+        b_comp_prob: 3.1 (0.6%), b_tok_touch_all: 48 (9.6%), b_finish: 1.18
+        (0.2%), tests_pri_0: 330 (66.4%), check_dkim_signature: 0.71 (0.1%),
+        check_dkim_adsp: 11 (2.3%), poll_dns_idle: 1.14 (0.2%), tests_pri_10:
+        4.7 (1.0%), tests_pri_500: 25 (5.1%), rewrite_mail: 0.00 (0.0%)
+Subject: [GIT PULL] kthread cleanups for v5.19
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
 
-Please pull DT fixes for 5.19-rc.
+This set of changes updates init and user mode helper tasks to be
+ordinary user mode tasks.
 
-Rob
+In commit 40966e316f86 ("kthread: Ensure struct kthread is present for
+all kthreads") caused init and the user mode helper threads that call
+kernel_execve to have struct kthread allocated for them.  This struct
+kthread going away during execve in turned made a use after free of
+struct kthread possible.
 
+The commit 343f4c49f243 ("kthread: Don't allocate kthread_struct for
+init and umh") is enough to fix the use after free and is simple enough
+to be backportable.
 
-The following changes since commit 8ab2afa23bd197df47819a87f0265c0ac95c5b6a:
+The rest of the changes pass struct kernel_clone_args to clean things
+up and cause the code to make sense.
 
-  Merge tag 'for-5.19/fbdev-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev (2022-05-30 12:46:49 -0700)
+In making init and the user mode helpers tasks purely user mode tasks
+I ran into two complications.  The function task_tick_numa was
+detecting tasks without an mm by testing for the presence of
+PF_KTHREAD.  The initramfs code in populate_initrd_image was using
+flush_delayed_fput to ensuere the closing of all it's file descriptors
+was complete, and flush_delayed_fput does not work in a userspace thread.
 
-are available in the Git repository at:
+I have looked and looked and more complications and in my code review
+I have not found any, and neither has anyone else with the code sitting
+in linux-next.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.19-1
+Link: https://lkml.kernel.org/r/87mtfu4up3.fsf@email.froward.int.ebiederm.org
 
-for you to fetch changes up to 987cf300e76d30b1bdad88d2a662b948ead6fb21:
+Eric W. Biederman (8):
+      kthread: Don't allocate kthread_struct for init and umh
+      fork: Pass struct kernel_clone_args into copy_thread
+      fork: Explicity test for idle tasks in copy_thread
+      fork: Generalize PF_IO_WORKER handling
+      init: Deal with the init process being a user mode process
+      fork: Explicitly set PF_KTHREAD
+      fork: Stop allowing kthreads to call execve
+      sched: Update task_tick_numa to ignore tasks without an mm
 
-  dt-bindings: mtd: spi-nand: Add spi-peripheral-props.yaml reference (2022-06-03 11:56:27 -0500)
+ arch/alpha/kernel/process.c      | 13 ++++++------
+ arch/arc/kernel/process.c        | 13 ++++++------
+ arch/arm/kernel/process.c        | 12 ++++++-----
+ arch/arm64/kernel/process.c      | 12 ++++++-----
+ arch/csky/kernel/process.c       | 15 ++++++-------
+ arch/h8300/kernel/process.c      | 10 ++++-----
+ arch/hexagon/kernel/process.c    | 12 ++++++-----
+ arch/ia64/kernel/process.c       | 15 +++++++------
+ arch/m68k/kernel/process.c       | 12 ++++++-----
+ arch/microblaze/kernel/process.c | 12 ++++++-----
+ arch/mips/kernel/process.c       | 13 ++++++------
+ arch/nios2/kernel/process.c      | 12 ++++++-----
+ arch/openrisc/kernel/process.c   | 12 ++++++-----
+ arch/parisc/kernel/process.c     | 18 +++++++++-------
+ arch/powerpc/kernel/process.c    | 15 +++++++------
+ arch/riscv/kernel/process.c      | 12 ++++++-----
+ arch/s390/kernel/process.c       | 12 ++++++-----
+ arch/sh/kernel/process_32.c      | 12 ++++++-----
+ arch/sparc/kernel/process_32.c   | 12 ++++++-----
+ arch/sparc/kernel/process_64.c   | 12 ++++++-----
+ arch/um/kernel/process.c         | 15 +++++++------
+ arch/x86/include/asm/fpu/sched.h |  2 +-
+ arch/x86/include/asm/switch_to.h |  8 +++----
+ arch/x86/kernel/fpu/core.c       |  4 ++--
+ arch/x86/kernel/process.c        | 18 +++++++++-------
+ arch/xtensa/kernel/process.c     | 17 ++++++++-------
+ fs/exec.c                        |  8 ++++---
+ include/linux/sched/task.h       |  8 +++++--
+ init/initramfs.c                 |  2 ++
+ init/main.c                      |  2 +-
+ kernel/fork.c                    | 46 +++++++++++++++++++++++++++++++++-------
+ kernel/sched/fair.c              |  2 +-
+ kernel/umh.c                     |  6 +++---
+ 33 files changed, 234 insertions(+), 160 deletions(-)
 
-----------------------------------------------------------------
-Devicetree fixes for v5.19-rc:
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-- Fixes for unevaluatedProperties warnings. These were missed to due to
-  a bug in dtschema which is now fixed. The changes involve either
-  adding missing properties or removing spurious properties from
-  examples.
-
-- Update several Qualcomm binding maintainer email addresses
-
-- Fix typo in imx8mp-media-blk-ctrl example
-
-- Fix fixed string pattern in qcom,smd
-
-- Correct the order of 'reg' entries in Xilinx PCI binding
-
-----------------------------------------------------------------
-Bharat Kumar Gogada (1):
-      dt-bindings: PCI: xilinx-cpm: Fix reg property order
-
-Jeffrey Hugo (1):
-      dt-bindings: clock: Update my email address
-
-Krzysztof Kozlowski (1):
-      dt-bindings: soc: qcom,smd: do not use pattern for simple rpm-requests string
-
-Laurent Pinchart (1):
-      dt-bindings: soc: imx8mp-media-blk-ctrl: Fix DT example
-
-Rob Herring (7):
-      dt-bindings: usb: snps,dwc3: Add missing 'dma-coherent' property
-      dt-bindings: PCI: socionext,uniphier-pcie: Add missing child interrupt controller
-      dt-bindings: net: Fix unevaluatedProperties warnings in examples
-      dt-bindings: PCI: apple: Add missing 'power-domains' property
-      dt-bindings: net/dsa: Add spi-peripheral-props.yaml references
-      dt-bindings: memory-controllers: ingenic: Split out child node properties
-      dt-bindings: mtd: spi-nand: Add spi-peripheral-props.yaml reference
-
-Sibi Sankar (1):
-      dt-bindings: Update Sibi Sankar's email address
-
- .../devicetree/bindings/clock/qcom,mmcc.yaml       |   2 +-
- .../bindings/interconnect/qcom,osm-l3.yaml         |   2 +-
- .../ingenic,nemc-peripherals.yaml                  |  46 +++++++++
- .../bindings/memory-controllers/ingenic,nemc.yaml  |  32 ------
- .../devicetree/bindings/mtd/ingenic,nand.yaml      |   1 +
- .../devicetree/bindings/mtd/spi-nand.yaml          |   1 +
- .../devicetree/bindings/net/cdns,macb.yaml         |   1 -
- .../devicetree/bindings/net/dsa/brcm,b53.yaml      | 115 ++++++++++++---------
- .../devicetree/bindings/net/dsa/microchip,ksz.yaml |   1 +
- .../devicetree/bindings/net/dsa/nxp,sja1105.yaml   |   1 +
- .../devicetree/bindings/net/dsa/realtek.yaml       |   1 +
- .../devicetree/bindings/net/mediatek,net.yaml      |   3 +
- .../devicetree/bindings/net/mediatek-dwmac.yaml    |   3 +
- .../bindings/net/wireless/mediatek,mt76.yaml       |   2 +-
- .../devicetree/bindings/pci/apple,pcie.yaml        |   5 +-
- .../bindings/pci/socionext,uniphier-pcie.yaml      |  23 ++++-
- .../devicetree/bindings/pci/xilinx-versal-cpm.yaml |  10 +-
- .../devicetree/bindings/reset/qcom,aoss-reset.yaml |   2 +-
- .../devicetree/bindings/reset/qcom,pdc-global.yaml |   2 +-
- .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml         |   2 +-
- .../devicetree/bindings/soc/qcom/qcom,smd.yaml     |   4 +-
- .../devicetree/bindings/usb/snps,dwc3.yaml         |   2 +
- 22 files changed, 162 insertions(+), 99 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ingenic,nemc-peripherals.yaml
+p.s.  My apologies for this coming in so late.  The code has been ready
+just everyone in my house has been sick since the start of the merge window.

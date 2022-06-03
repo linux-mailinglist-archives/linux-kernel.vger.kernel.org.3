@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90DC53C658
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F0E53C65D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242523AbiFCHf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        id S236358AbiFCHhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242596AbiFCHfO (ORCPT
+        with ESMTP id S229684AbiFCHhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:35:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1585E1DA5B;
-        Fri,  3 Jun 2022 00:34:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 784151F8AE;
-        Fri,  3 Jun 2022 07:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654241698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=j7Ww7cKCif3bOsw9nkqMS3BtrJ26nS6Z6FXIoNR0jpQ=;
-        b=oxPMfFD9UnHIqHEMVYa+A/rDi+lEg2/rOilAxQb91rBOIGs+WQy3unBKE0vPYtMctoFn/z
-        /09HiNPJL2ckjhbJZY92zXoQZuZl1HU5yD3dxTvBWm15OPpITg6LRzkdOsFD2Q/bCCPEB9
-        0M12dN1UVy9PBuAqXUCCzZkNPxKFIVg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2439413B11;
-        Fri,  3 Jun 2022 07:34:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pJX7BaK5mWKOVQAAMHmgww
-        (envelope-from <nborisov@suse.com>); Fri, 03 Jun 2022 07:34:58 +0000
-From:   Nikolay Borisov <nborisov@suse.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikolay Borisov <nborisov@suse.com>
-Subject: [PATCH] pipe: Remove redundant zeroing of pipe->offset
-Date:   Fri,  3 Jun 2022 10:34:56 +0300
-Message-Id: <20220603073456.311724-1-nborisov@suse.com>
+        Fri, 3 Jun 2022 03:37:01 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2516C39
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654241818; x=1685777818;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mXQ2T82LqdAdgfJ8j2kCB4XNSWejs1IoGcDsOXnVo30=;
+  b=NzlCOF2n7J2YVnsn6OZIFj2B8HIAAxmBmAgSsgG51Spl7fRaLLjlbu5i
+   5krULga+SFGaG3iW0CYIa3zSdQhtBJ9LJeAj0Nii7iJ+k5AkxcbGaaBvy
+   bvgG7XxARI4WRgee29dOeHfW0EMBzW/Al1CFjKQLfWxpjivVyUB1Mr8Qb
+   5SAU1tnHoRjwG6nZ+G4qpDTCtdGg8foPCRbF4LK7OnE0uktsOWYFVJC7M
+   9VrD1hvkBhtBzN9gf7++JdeVj9tZYLVW86ZvHCCM0khPv+PDHAzVP1QTw
+   zhDTtTibsp2aLvuU7RAdKT0nKTukwHJtILxb84bzjrI3vtAxZtfG8Ns/B
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="275931073"
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="275931073"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 00:36:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="530915098"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
+  by orsmga003.jf.intel.com with ESMTP; 03 Jun 2022 00:36:56 -0700
+From:   kah.jing.lee@intel.com
+To:     gregkh@linuxfoundation.org
+Cc:     arnd@arndb.de, dinguyen@kernel.org, kah.jing.lee@intel.com,
+        lftan@altera.com, linux-kernel@vger.kernel.org,
+        tien.sung.ang@intel.com
+Subject: Re: [PATCH 0/2] New driver for Intel(Altera) FPGA System ID softIP
+Date:   Fri,  3 Jun 2022 15:35:37 +0800
+Message-Id: <20220603073536.3080721-1-kah.jing.lee@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YpmtAtIx994hnpP2@kroah.com>
+References: <YpmtAtIx994hnpP2@kroah.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This member is already set to 0 for the newly initialized buffer, no
-need to duplicate the operation.
+From: Kah Jing Lee <kah.jing.lee@intel.com>
 
-Signed-off-by: Nikolay Borisov <nborisov@suse.com>
----
- fs/pipe.c | 1 -
- 1 file changed, 1 deletion(-)
+Opps, I think I missed out the in-reply-to for the patch series.
+Will do that for v2 once I get back from Intel OTC folks, and resent =).
 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 74ae9fafd25a..56950aa850be 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -536,7 +536,6 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 				break;
- 			}
- 			ret += copied;
--			buf->offset = 0;
- 			buf->len = copied;
- 
- 			if (!iov_iter_count(from))
--- 
-2.25.1
-
+Thanks,
+KJ

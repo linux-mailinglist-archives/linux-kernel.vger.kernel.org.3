@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E807D53C7D7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0309D53C7E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243191AbiFCJrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S243205AbiFCJsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243171AbiFCJrW (ORCPT
+        with ESMTP id S243182AbiFCJsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:47:22 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C6C120BC
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:47:17 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id v1so4186807ejg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 02:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+dNjsHpB7ATpH/qWV5MFMXentqFiCOjrR0y/9QOhAEs=;
-        b=tkDkQTLWDnU/7MMzprkcxAw29BEnH+LkSj1ONc/JFnELm3w7cWG7OE3Qjv7V6J1vdi
-         mhTTknRKGQaudtX1ZHC638jQpbJ9pzNQf8AwNOErcnl6k5Q0GvTnWgUY28n2S3QHXf1u
-         t5ocphgbXHKGjvKAZmNCK4oKQwpS2LFqTbFEdJLMeQfz4/fqPR8KXeQRBko7eVcYDwWH
-         l84p9c9mOsqFTN+Sl/sgAosZvme0LUbE1awql0yS/xwjlorLZyNxpJVtZJDRpkyDLueC
-         ZkDhis5uIX+Tc7D2EIhkoJBSwTKDP1jgRd4R5GNPLYQULRDz34rWrjUFRUPSs7nkR0Ee
-         gBwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+dNjsHpB7ATpH/qWV5MFMXentqFiCOjrR0y/9QOhAEs=;
-        b=yHzyYKlfhrtpxYAKEt75mFNovaRWd8BHKInWiVJRSOgIpFqFJ2a3qV70PXxnCstQKW
-         MSxvBr9l09tGJjyBDqfWjYq0wAaJ+tdXcF7uOo6/A+YFDfe4wjxH5c5scddL0m32BsKf
-         KD7N+siRSAyQtglhGHDdVLNHVz2lb5Thb8YikhCP/k/hw5Uu7F12NljLPEZ6y9Z8jAIW
-         OU8nmQ42pCZeha0Epjub2n1qJcaCvEkp/cPxJxn79HuhKfYzWGedhZPqSB40wq94iNzA
-         XkAB4/InOa6Eaunwai68OmtfmDY3pDCuiAGtH0vmNrcsO/qCiR9Qe8DI069gL/5AGtQM
-         +xbg==
-X-Gm-Message-State: AOAM5309CJFFc2rQE6uLvBPTqnbwVLUKAh8bwWrsXwy2z3IsGlQI7wLt
-        +hAo9tvacaib1ckp8IbT6/CzRw==
-X-Google-Smtp-Source: ABdhPJyHJSDgxB1UFvg0p0jq1Iud89ayDEeekEcB+oS/QciVMHdFD3KOFW3i+Dv5I2bmRQ2W1El/fw==
-X-Received: by 2002:a17:906:d82:b0:70d:84d3:b6df with SMTP id m2-20020a1709060d8200b0070d84d3b6dfmr3007077eji.464.1654249635726;
-        Fri, 03 Jun 2022 02:47:15 -0700 (PDT)
-Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170906274f00b006f3ef214e42sm2661009ejd.168.2022.06.03.02.47.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 02:47:15 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8250: use constants for audio clocks
-Date:   Fri,  3 Jun 2022 11:47:10 +0200
-Message-Id: <20220603094710.64591-2-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603094710.64591-1-luca.weiss@fairphone.com>
-References: <20220603094710.64591-1-luca.weiss@fairphone.com>
+        Fri, 3 Jun 2022 05:48:12 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B191613D1F;
+        Fri,  3 Jun 2022 02:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1654249686; bh=yrg9on8zb+NApRYtS5qBL8mX8F/7jBwdIdZxHyDYbOg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jRWyTZmCNV/pqzL9Eg+ZxwLUSRI9QggIjDRMCfMrbky0lqSLxFkJtfEZUGVyyUYRg
+         89X1nwC1YAmllYkpH0RvCQ201k1hKMjSdHc0Op5LLuhNnls78FnzObQU7HsVRJeXBr
+         tQ2czc6m7bTnTxGA7okwYgtWi3dI1Urc/giRlB1M=
+Received: from [192.168.9.172] (unknown [101.88.28.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id EB0F560104;
+        Fri,  3 Jun 2022 17:48:05 +0800 (CST)
+Message-ID: <f7b53d2b-759c-bc5b-e2ed-a251b879f450@xen0n.name>
+Date:   Fri, 3 Jun 2022 17:48:05 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
+ Thunderbird/103.0a1
+Subject: Re: Steps forward for the LoongArch UEFI bringup patch? (was: Re:
+ [PATCH V14 11/24] LoongArch: Add boot and setup routines)
+Content-Language: en-US
+To:     Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-efi@vger.kernel.org, WANG Xuerui <git@xen0n.name>,
+        Yun Liu <liuyun@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
+ <20220602115141.3962749-12-chenhuacai@loongson.cn>
+ <d88ede74-b7a5-e568-1863-107c6c7f5fe0@xen0n.name>
+ <dab96b787bef91240c719ea1a100396350135f99.camel@xry111.site>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <dab96b787bef91240c719ea1a100396350135f99.camel@xry111.site>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of these constants was removed during merging, probably because
-the patches adding those defines and the dts patches were merged through
-different trees.
+On 6/3/22 17:32, Xi Ruoyao wrote:
+> On Thu, 2022-06-02 at 22:09 +0800, WANG Xuerui wrote:
+>
+>> For this, I don't know if Huacai should really just leave those
+>> modification in the downstream fork to keep the upstream Linux clean of
+>> such hacks, because to some degree dealing with such notoriety is life,
+>> it seems to me. I think at this point Huacai would cooperate and tweak
+>> the patch to get rid of the SVAM and other nonstandard bits as much as
+>> possible, and I'll help him where necessary too.
+> To me any new firmware for PC-like platforms should implement UEFI.  For
+> embedded platforms device tree support will be added later.
+>
+> For those guys impossible or unwilling to upgrade the firmware, it may
+> be possible to implement a compatibility layer and the booting procedure
+> will be like:
+>
+> old firmware -> bootloongarch.efi -> customized u-boot -> bootloongarch64.efi (grub) -> efi stub (kernel)
+>                  --------- compatibility layer --------    ^^^^^^^^ normal UEFI compatible stuff ^^^^^^^^^
+>
+> new firmware -> bootloongarch64.efi (grub) -> efi stub (kernel)
+>
+> The old firmware route would be similar to the booting procedure of
+> Asahi Linux.  I think this can be implemented because it's already
+> implemented on M1 even while Apple is almost completely uncooperative.
 
-Re-add them to make it clear which clocks are getting used.
+This is a bit off-topic (we're basically hurrying up to get the port 
+into v5.19-rc1 and discussing ways to achieve that), but yeah 
+definitely. I've had the same idea right after knowing the LoongArch 
+firmware would also have "new-world" variant, then I contacted some 
+firmware engineers working on LoongArch boards, I think they agreed on 
+the approach overall.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+However, making the kernel itself capable of booting on both BPI and 
+new-world UEFI firmware flavors may have its merits after all; one 
+scenario I could come up with is that user reboots and upgrades their 
+firmware, *before* updating their old-world kernel, and bang! system 
+soft-bricked. All such cases involve old-world distros that already 
+deviate a little bit from vanilla upstream code, so such BPI support 
+needn't be mainlined for avoiding this scenario.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index dc2562070336..fb7a82c3704f 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -8,6 +8,8 @@
- #include <dt-bindings/clock/qcom,gcc-sm8250.h>
- #include <dt-bindings/clock/qcom,gpucc-sm8250.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,sm8250-lpass-aoncc.h>
-+#include <dt-bindings/clock/qcom,sm8250-lpass-audiocc.h>
- #include <dt-bindings/dma/qcom-gpi.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
-@@ -2188,11 +2190,11 @@ tcsr_mutex: hwlock@1f40000 {
- 		wsamacro: codec@3240000 {
- 			compatible = "qcom,sm8250-lpass-wsa-macro";
- 			reg = <0 0x03240000 0 0x1000>;
--			clocks = <&audiocc 1>,
--				 <&audiocc 0>,
-+			clocks = <&audiocc LPASS_CDC_WSA_MCLK>,
-+				 <&audiocc LPASS_CDC_WSA_NPL>,
- 				 <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
- 				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
--				 <&aoncc 0>,
-+				 <&aoncc LPASS_CDC_VA_MCLK>,
- 				 <&vamacro>;
- 
- 			clock-names = "mclk", "npl", "macro", "dcodec", "va", "fsgen";
-@@ -2239,7 +2241,7 @@ audiocc: clock-controller@3300000 {
- 		vamacro: codec@3370000 {
- 			compatible = "qcom,sm8250-lpass-va-macro";
- 			reg = <0 0x03370000 0 0x1000>;
--			clocks = <&aoncc 0>,
-+			clocks = <&aoncc LPASS_CDC_VA_MCLK>,
- 				<&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
- 				<&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
- 
--- 
-2.36.1
-
+>
+> Just my 2 cents. I know almost nothing about booting.
+That's fine, we all know nothing in the beginning ;-)

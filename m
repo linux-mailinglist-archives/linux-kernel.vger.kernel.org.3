@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADEF53C647
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90DC53C658
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242498AbiFCHeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S242523AbiFCHf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242565AbiFCHd5 (ORCPT
+        with ESMTP id S242596AbiFCHfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:33:57 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159E4396AE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:33:49 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id h23so3225415ejj.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 00:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M10o54sTZvRy17C3pDC23gX+CuR4aMGD8UzGX2WMoMQ=;
-        b=kFDEaqUzl3hYfbJ0sxUumnEbCBnKfF+EOl9AvTzBjiuP4XKwPl+nZlvehW7y3VE8PG
-         lNRjXc8N/vvsf040kvBQZzeaCgcCEXygqygB0wQnAeN4KDjKFyjtxFa6BfJ+Pu6hM+8e
-         mXoSRz9aKys+M9uf6lGJRigGkH6K5yZH2PwwWo/kaFzXetUNUP+GnZtr2PvXSASpeKgj
-         h0sBACxcQiXTdr5pDPjehv4ljtGY3hY5eK/RiHadB0gXjg/recI9vsJZVuVu7KryAvZa
-         8beSCB4hK01FSCxfptrKX7fLr4jWYErOYnYtXpkxMZJIHTKPO3mt9W/MJ6KZXhpXQGb8
-         pXOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M10o54sTZvRy17C3pDC23gX+CuR4aMGD8UzGX2WMoMQ=;
-        b=VR1vUpyRsAx89vHf5zpLV7JGjSyNiwEX64NwfijKWoTSoeRHe/JRXIaf1fC00MkIxn
-         ZMOEjDddNlJF0mEsPfQ8fRlflGsTnhMTA3xC47QU5FwVgB9f4DzEBVoUJcXu9LNY97+k
-         /HhOAT+APfm9iKc0InxVCTjtc5tinVa4YRemx3cBBqXBrEYMH1CSA5bLouiYv9VdaMBp
-         oaELGOUObZ5rgnsy16N3dS+LmaOZgcxg/vUOvHXyw4F7/0jSjhu7Q/37nUDv01V6xqTk
-         KpWT96y/x1PL6gA+RkVjxxqkb4TBMCSKm+T/AaSSEhT/vGYKwrDWvulxNXb0I6PyFZvD
-         /ohw==
-X-Gm-Message-State: AOAM530eB9OJGGudQaPscl+VuSIRKGsh6yqynHjba7koIIVDWc6TYPzU
-        pA1FN7qcqvrLGQu7qDq1b0asAg==
-X-Google-Smtp-Source: ABdhPJw/l8CtC/oAgwkZakL9NahA1dUU5X0+2D/Z6/uAlo7dulXIk0x+O/uittuON2sFQiK9v2K8yA==
-X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id nb13-20020a1709071c8d00b006f20eb21cd6mr7282450ejc.568.1654241627415;
-        Fri, 03 Jun 2022 00:33:47 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id t26-20020a17090605da00b006fe7d269db8sm2535595ejt.104.2022.06.03.00.33.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 00:33:46 -0700 (PDT)
-Message-ID: <6a421c56-0616-c61a-608c-2907faeff424@linaro.org>
-Date:   Fri, 3 Jun 2022 09:33:45 +0200
+        Fri, 3 Jun 2022 03:35:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1585E1DA5B;
+        Fri,  3 Jun 2022 00:34:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 784151F8AE;
+        Fri,  3 Jun 2022 07:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654241698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=j7Ww7cKCif3bOsw9nkqMS3BtrJ26nS6Z6FXIoNR0jpQ=;
+        b=oxPMfFD9UnHIqHEMVYa+A/rDi+lEg2/rOilAxQb91rBOIGs+WQy3unBKE0vPYtMctoFn/z
+        /09HiNPJL2ckjhbJZY92zXoQZuZl1HU5yD3dxTvBWm15OPpITg6LRzkdOsFD2Q/bCCPEB9
+        0M12dN1UVy9PBuAqXUCCzZkNPxKFIVg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2439413B11;
+        Fri,  3 Jun 2022 07:34:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pJX7BaK5mWKOVQAAMHmgww
+        (envelope-from <nborisov@suse.com>); Fri, 03 Jun 2022 07:34:58 +0000
+From:   Nikolay Borisov <nborisov@suse.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nikolay Borisov <nborisov@suse.com>
+Subject: [PATCH] pipe: Remove redundant zeroing of pipe->offset
+Date:   Fri,  3 Jun 2022 10:34:56 +0300
+Message-Id: <20220603073456.311724-1-nborisov@suse.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: Update QCOM USB subsystem maintainer
- information
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org, kishon@ti.com, robh+dt@kernel.org,
-        agross@kernel.org, vkoul@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com
-References: <20220603021432.13365-1-quic_wcheng@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220603021432.13365-1-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 04:14, Wesley Cheng wrote:
-> Update devicetree binding files with the proper maintainer, and updated
-> contact email.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+This member is already set to 0 for the newly initialized buffer, no
+need to duplicate the operation.
 
-Thanks for updating the email address!
+Signed-off-by: Nikolay Borisov <nborisov@suse.com>
+---
+ fs/pipe.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 74ae9fafd25a..56950aa850be 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -536,7 +536,6 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ 				break;
+ 			}
+ 			ret += copied;
+-			buf->offset = 0;
+ 			buf->len = copied;
+ 
+ 			if (!iov_iter_count(from))
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

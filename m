@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81EE53CC73
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C894653CCA9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245606AbiFCPmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S232893AbiFCPv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242335AbiFCPmK (ORCPT
+        with ESMTP id S245670AbiFCPvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:42:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B46241;
-        Fri,  3 Jun 2022 08:42:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50225618CD;
-        Fri,  3 Jun 2022 15:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90173C385A9;
-        Fri,  3 Jun 2022 15:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654270927;
-        bh=uFt38kXWvTTdnaN2oP0GGgGo2/Cw36q2/icUr1V3lKo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dJ+Ti4C0KVap4cUeztpqDfBH+7Guhimexya1pTrneKuxTIlHilQHmaPbkvFb7wSue
-         otbJhlmUQPqTomW8uWpzhMwboZF1BOTWsW5MGujz9/ZwSu2GQ26gOnS1Cgky/0jABZ
-         xASzRfrKhXQd1E6X8Zx8BIeC80YEebgsCG340vKSBB+Buc+uWnInKgZ8WEvPzC3rt8
-         zPFcwGo5ok9R9Nt9O/ixe04M0U2TTtVsm+bX0HCV0rQWDVqCHwcBp927s+wWlhR44M
-         r0udqBAhpk+Fnsj0ATYQLl8DlFjvurZvEkzJTDZVlv38mHQ5xXyRvHsbO1dS/hpC5N
-         hqA6yFTDHvtjw==
-Date:   Fri, 3 Jun 2022 16:51:06 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Cc:     lars@metafoo.de, mchehab+huawei@kernel.org, ardeleanalex@gmail.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, mike.looijmans@topic.nl,
-        devicetree@vger.kernel.org, thomas.haemmerle@leica-geosystems.com
-Subject: Re: [PATCH V5 0/6] iio: accel: bmi088: support BMI085 BMI090L
-Message-ID: <20220603165106.78f13761@jic23-huawei>
-In-Reply-To: <20220526133359.2261928-1-Qing-wu.Li@leica-geosystems.com.cn>
-References: <20220526133359.2261928-1-Qing-wu.Li@leica-geosystems.com.cn>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Fri, 3 Jun 2022 11:51:54 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E075964D5;
+        Fri,  3 Jun 2022 08:51:51 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f2e0a41009so11095828fac.6;
+        Fri, 03 Jun 2022 08:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=UYOlwffmM58R+CDON6dZUZP/KSj/6r4KIPXsM0u8ZmE=;
+        b=VOgs41OGnu8/HEni6b0RedGYYv75pBW6zF+P0KDI5RcRj1cWWmOmOXpL4o7uIZg8Ua
+         QjoIaeR+tYQBm3ZqqKHvkIdPFagZqoAgR5VZVxD+1ifgGRslX0tq+RKtOk6l58HjcVAY
+         yRY4eSbU1MJF0QirSGuOissb8c+8SMbEmUFN+ibu/b3SarDIzH7MH3u5nVtwjxsaolP/
+         3lG3uC2X/BOoaHekWOLIpkcU4zD3WM6vNU0W3E/9eJNoaxBBNvyFSZd1STi5JMr33ZdW
+         FVKs8O/DZxtH+Og5Z0KjPYXCXVCdZ9vzGribcZZXmUvHUsdY/HDrOeSN1WCoegoDg7cK
+         x+Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=UYOlwffmM58R+CDON6dZUZP/KSj/6r4KIPXsM0u8ZmE=;
+        b=vrtwjv3UczBhPMz30UHSWCKmwwbPWAAhLPkkzdk3z2xN8E1q/YPldWyAuVSkhdDq+a
+         P2H7xtlQ3M5+4rOSF8p7jzafKTFmEzrWWto4hVhFXbjm3t2SX0sWE7775/hZHV83J6se
+         G23aFhjifEB1eQblN8WzB8qk++C1Sc4JGm7XlHUOlf0F3js3MIHuTwgYH2Jjt8bUzmHk
+         U2dpY5FRSOW/qNIik1F4PVzoZz1yE1hmKyxsEsJvqm+HvE7R+hq+McVDO+ZKr2UEDl+2
+         1Ai3NAq69zBJ4lDLEPRmFdUD8U2hO3vHnonh/84Q5gkNS8MJKH2elxzPMNx+V24g59Nk
+         uW5g==
+X-Gm-Message-State: AOAM5315D/L2ztgXAXVn1pvLwOE43jrKalpUqxqzFn8L+60hIIxwCYlP
+        wGOgyVnJetTL7B7DYkumUz0=
+X-Google-Smtp-Source: ABdhPJyrbh4+IGQTeLvGWmCulWznMsQdwLukWxlI2auunsMm3k4bLydWUbx2fg2chKsyxFGrBI72VQ==
+X-Received: by 2002:a05:6870:e8c1:b0:f3:1b5b:f277 with SMTP id r1-20020a056870e8c100b000f31b5bf277mr5853755oan.187.1654271511173;
+        Fri, 03 Jun 2022 08:51:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j12-20020a9d190c000000b0060b2972b503sm2156275ota.64.2022.06.03.08.51.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 08:51:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e669408a-727d-c1f8-cb91-05e950ec2881@roeck-us.net>
+Date:   Fri, 3 Jun 2022 08:51:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+References: <YpncSXSTTyKGprLi@debian>
+ <10f49cf3-3f92-e5e2-d69a-77c37f12a1fe@roeck-us.net>
+ <DM4PR84MB19274BAD84AE7497C663F70C88A19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: mainline build failure due to 6b47441bed49 ("watchdog: hpe-wdt:
+ Introduce HPE GXP Watchdog")
+In-Reply-To: <DM4PR84MB19274BAD84AE7497C663F70C88A19@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 13:33:53 +0000
-LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn> wrote:
-
-> Modified the units after application of scale from 100*m/s^2 to m/s^2,
-> since the units in the ABI documents are m/s^2.
-> Add supports for the BMI085 accelerometer.
-> Add supports for the BMI090L accelerometer.
-> Make it possible to config scales.
+On 6/3/22 08:29, Hawkins, Nick wrote:
+>> I sent a patch fixing the problem a minute ago.
 > 
-> Change in v5: 
-> - Fix the issue of 'undeclared function FIELD_GET'
->   Reported-by: kernel test robot <lkp@intel.com>
-
-I've applied this series to the togreg branch of iio.git and pushed
-out as testing.
-
-Note I can rebase that tree still (and will do anyway to move to
-rc1 or so once available) so we can resolve that question of
-whether Datasheet is a tag or not in parallel with letting 0-day
-see if it can find anything else we missed.
-
-Thanks,
-
-Jonathan
-
-> 
-> 
-> LI Qingwu (6):
->   iio: accel: bmi088: Modified the scale calculate
->   iio: accel: bmi088: Make it possible to config scales
->   iio: accel: bmi088: modified the device name
->   iio: accel: bmi088: Add support for bmi085 accel
->   iio: accel: bmi088: Add support for bmi090l accel
->   dt-bindings: iio: accel: Add bmi085 and bmi090l bindings
-> 
->  .../bindings/iio/accel/bosch,bmi088.yaml      |  2 +
->  drivers/iio/accel/bmi088-accel-core.c         | 97 +++++++++++++++----
->  drivers/iio/accel/bmi088-accel-spi.c          | 17 +++-
->  drivers/iio/accel/bmi088-accel.h              |  9 +-
->  4 files changed, 101 insertions(+), 24 deletions(-)
+> Thank you for correcting this. I had the compiler set to W=1, is there another option I should be using to catch errors like this?
 > 
 
+arm:allmodconfig reproduces the problem. I had seen it as well,
+which is why I sent a fix. The key is to enable -Werror
+(CONFIG_WERROR=y), not W=1.
+
+Guenter

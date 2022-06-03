@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8734853C7F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306BE53C7F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240548AbiFCJvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S243255AbiFCJzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236071AbiFCJvj (ORCPT
+        with ESMTP id S236071AbiFCJzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:51:39 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FC636B66;
-        Fri,  3 Jun 2022 02:51:38 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y32so11781543lfa.6;
-        Fri, 03 Jun 2022 02:51:38 -0700 (PDT)
+        Fri, 3 Jun 2022 05:55:16 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B289F3AA4D;
+        Fri,  3 Jun 2022 02:55:14 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q1so7894763ljb.5;
+        Fri, 03 Jun 2022 02:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=svAaMFjZ4+VkEP4KQDUcJdb5KNRMUW7J/+ROn1WanaU=;
-        b=it29IbuY+WJWNxBS6SnjnZDNY+TAUHka2ckpyOsv3FmahI1wV6zi+qutn33ikCn/QI
-         cQQqJuwzfCv4jq2xFTZAi6xTR9WQWv7XUxscLrUcFHfePig08ae2Mok4iHvXfF0bkpEg
-         7rnughE81acJ0FZBNwhcYlNCJHVlv9/DMDqwkgM6sfM9+wYjLZgQfDGmc99dolqUxBV1
-         6h2BlcGxvFZaAUiVIyfejg7flU1h807aVjsoC9DQJYalYxF/kGm836MP915ZkkWmW03L
-         TnpHNzEnSG7KzdQ8lSTwF8zrHmo/2elFU7bTdwrCJMki8bIBPo/qC3I1ET6hhLyuZhAG
-         3W/g==
+        bh=OWftr5rdooB1seu2CxMvWy4qJk9OeiT3kgBXgjqZdPg=;
+        b=ShCcYVwxNf9xqvzDmLZrM4BHJ0z+7tlnyFxgGORXdxDR5cDAhS+v6fvTqXwWkb+Af4
+         2y/+GlCQYSH6qUSbjlzcLF2MfW8w8SWXOjphqQAcnQHOijj7+AoCUhl4SNr3D/QcpWsV
+         sRG5Cx5WxwkSGi757m/HUMwYmNwqI/HvAC04cpM9PQEPSFR3lvynH9MY+CCDYbELf0KT
+         nKUqa7q1EHmizxWjDXr6y0Nf5zi0dZa6vqv+/VesFrhuXlwkHe2vzGwCmMy8yoOKuWFx
+         Kw2tTmGVUP5XcWENKifidR/KTRb874f9Mw+Xe8gS1UKRdX2TioLTXbY+3rE5n13HyRRV
+         VfUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=svAaMFjZ4+VkEP4KQDUcJdb5KNRMUW7J/+ROn1WanaU=;
-        b=HQXAuZ2TdMaNd9jgTQW/6018zxo+UsUf1CLWJzQqGf3Ftpfo08LRmLmyK1CCczWfT1
-         TAfJkuSpcy7oHdDnumL1UAF9qdU0Fn0J7tW3gi/diVfoixJdAJSzFtp1Hi15ppBsdi3V
-         Harzo3ey0Wmj3+krCvdA3QrzdTpgEkta1mA1cdCVz6/FgKbIkegnklj+Cyaj6e+oVZiU
-         vC52Aat1qH5cKXd3CIMQNeRBbYg+cUaxXk9lC0BvlPHSurfqmxIsfnFYzfg986p4Vvg+
-         fbDWOaDwwOpdDFhQayYH6xFMdGUT27as1evwQ1RW8Rvcqp6TFdz82pakatJbA+CCH/PI
-         wolw==
-X-Gm-Message-State: AOAM530hlerHdpNQAfbACrUZVZuA864danaUe+GqFiBTveZZ0ErUJK8/
-        uRg3PQlDnp8qGkgLVEHWVRY=
-X-Google-Smtp-Source: ABdhPJzfIQARb6Rm+l5QB9OMYlEfq48ZrCZSxd5jqFNxZv3wgvWQf1u2TG/tejYuB0x98tavZ82rZA==
-X-Received: by 2002:a05:6512:3d10:b0:478:f2ae:73c with SMTP id d16-20020a0565123d1000b00478f2ae073cmr13047138lfv.675.1654249896639;
-        Fri, 03 Jun 2022 02:51:36 -0700 (PDT)
+        bh=OWftr5rdooB1seu2CxMvWy4qJk9OeiT3kgBXgjqZdPg=;
+        b=A2pm+7wQib6FI/a7aTLQR8Jwv85Gi0L/SLVPZjvMgucVRN9ppYMcYfI0nycK5JOJOd
+         RB3+f2WOAngfAvrzfN5dJixxUhIPOfc9cv7h/W/dSheLJh/J6UbqmCPsYxBSU97jwhIW
+         xhEylWuzAoOZ/A3qKlm3Ay7Ly+ibb5xbOMvUyNVwsAnIjDnyVKp2vkHUv8AeIo2KUfbZ
+         NPtgtDxAtrg9iOqJJZEWyI1NwWpDvxTGP9txMAzUQOEllX6PSDfRJ81CMz3+rXhmKs3P
+         NWlwKteGZ460U47PlOX9zHF3ea4ZquRFRhyK7IJtpQqngfBm+v4Pan3nnwhNNH2y8fcI
+         dTxw==
+X-Gm-Message-State: AOAM533D/bwLcID3vjb+C03gBPpGkG6AeQt8d/d2jbmUt/VaVFJqozlm
+        j274ZCM5QCp2L+qgwU0FShckLXlFU7VNjg==
+X-Google-Smtp-Source: ABdhPJwFPYGwdKJjJYBBZKPQnuxSXZum+xOwCTGSjAvuv3dWejOJbQB/6YmuhueXE+AvjG6HmoVoeQ==
+X-Received: by 2002:a2e:9584:0:b0:255:829e:590a with SMTP id w4-20020a2e9584000000b00255829e590amr473270ljh.170.1654250113061;
+        Fri, 03 Jun 2022 02:55:13 -0700 (PDT)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id g2-20020a19e042000000b0047255d211e8sm1484873lfj.279.2022.06.03.02.51.35
+        by smtp.gmail.com with ESMTPSA id l26-20020a19495a000000b004790230b032sm1504717lfj.40.2022.06.03.02.55.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 02:51:36 -0700 (PDT)
+        Fri, 03 Jun 2022 02:55:12 -0700 (PDT)
 From:   Uladzislau Rezki <urezki@gmail.com>
 X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Fri, 3 Jun 2022 11:51:34 +0200
+Date:   Fri, 3 Jun 2022 11:55:10 +0200
 To:     Joel Fernandes <joel@joelfernandes.org>
 Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
@@ -58,14 +58,16 @@ Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 1/2] rcu/kvfree: Remove useless monitor_todo flag
-Message-ID: <YpnZpopF7dR3NILz@pc638.lan>
+Subject: Re: [PATCH 2/2] rcu/kvfree: Introduce KFREE_DRAIN_JIFFIES_[MAX/MIN]
+ interval
+Message-ID: <Ypnafl/65x4jHnfv@pc638.lan>
 References: <20220602080644.432156-1-urezki@gmail.com>
- <YplLK2BcTn2oM0hr@google.com>
+ <20220602080644.432156-2-urezki@gmail.com>
+ <YplIh8BoYXc8X77q@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YplLK2BcTn2oM0hr@google.com>
+In-Reply-To: <YplIh8BoYXc8X77q@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,67 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Jun 02, 2022 at 10:06:43AM +0200, Uladzislau Rezki (Sony) wrote:
-> > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+On Thu, Jun 02, 2022 at 11:32:23PM +0000, Joel Fernandes wrote:
+> On Thu, Jun 02, 2022 at 10:06:44AM +0200, Uladzislau Rezki (Sony) wrote:
+> > Currently the monitor work is scheduled with a fixed interval that
+> > is HZ/20 or each 50 milliseconds. The drawback of such approach is
+> > a low utilization of page slot in some scenarios. The page can store
+> > up to 512 records. For example on Android system it can look like:
 > > 
-> > monitor_todo is not needed as the work struct already tracks
-> > if work is pending. Just use that to know if work is pending
-> > using schedule_delayed_work() helper.
+> > <snip>
+> >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
+> >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
+> >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
+> >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
+> >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
+> >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
+> >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
+> >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
+> >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
+> >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
+> >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
+> > <snip>
+> > 
+> > where a page only carries few records to reclaim a memory. In order to
+> > improve batching and make utilization more efficient the patch introduces
+> > a drain interval that can be set either to KFREE_DRAIN_JIFFIES_MAX or
+> > KFREE_DRAIN_JIFFIES_MIN. It is adjusted if a flood is detected, in this
+> > case a memory reclaim occurs more often whereas in mostly idle cases the
+> > interval is set to its maximum timeout that improves the utilization of
+> > page slots.
 > > 
 > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > ---
-> >  kernel/rcu/tree.c | 33 ++++++++++++++++-----------------
-> >  1 file changed, 16 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 222d59299a2a..fd16c0b46d9e 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -3295,7 +3295,6 @@ struct kfree_rcu_cpu_work {
-> >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
-> >   * @lock: Synchronize access to this structure
-> >   * @monitor_work: Promote @head to @head_free after KFREE_DRAIN_JIFFIES
-> > - * @monitor_todo: Tracks whether a @monitor_work delayed work is pending
-> >   * @initialized: The @rcu_work fields have been initialized
-> >   * @count: Number of objects for which GP not started
-> >   * @bkvcache:
-> > @@ -3320,7 +3319,6 @@ struct kfree_rcu_cpu {
-> >  	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
-> >  	raw_spinlock_t lock;
-> >  	struct delayed_work monitor_work;
-> > -	bool monitor_todo;
-> >  	bool initialized;
-> >  	int count;
-> >  
-> > @@ -3500,6 +3498,18 @@ static void kfree_rcu_work(struct work_struct *work)
-> >  	}
-> >  }
-> >  
-> > +static bool
-> > +need_offload_krc(struct kfree_rcu_cpu *krcp)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < FREE_N_CHANNELS; i++)
-> > +		if (krcp->bkvhead[i])
-> > +			return true;
-> > +
-> > +	return !!krcp->head;
-> > +}
 > 
-> Thanks for modifying my original patch to do this, and thanks for giving me
-> the attribution for the patch. This function is a nice addition.
-> 
-It was you who did it :) Actually the second patch depends on it therefore 
-i decided to upload it on behalf of you with slight modification hoping that
-you would not mind.
-
->
-> For the patch in its entirety:
 > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 > 
-Thanks for the review!
+Thanks!
+
+This patch makes the interval hard-coded in some sense so you can not change
+it in runtime, only recompilation. If there is a need or request we can make
+both as module_param().
+
+If we are to do that we can just add one extra patch on top of it.
 
 --
 Uladzislau Rezki

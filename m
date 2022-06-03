@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579A953CFF7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A478953D117
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346050AbiFCR6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S1345134AbiFCSRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346857AbiFCRvd (ORCPT
+        with ESMTP id S1347374AbiFCSF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:33 -0400
+        Fri, 3 Jun 2022 14:05:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E975A156;
-        Fri,  3 Jun 2022 10:49:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF61A5BD03;
+        Fri,  3 Jun 2022 10:58:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F3E460F3E;
-        Fri,  3 Jun 2022 17:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C8EC385A9;
-        Fri,  3 Jun 2022 17:49:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 593C8615FF;
+        Fri,  3 Jun 2022 17:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48898C385A9;
+        Fri,  3 Jun 2022 17:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278572;
-        bh=mIDAvWxdB6qqu9n87Qx4+I7DdbEph4ufuQK535negPs=;
+        s=korg; t=1654279070;
+        bh=4ltGxpT2RJ3O0cMXesB42/3fugT5SM7Txn12IgNpxEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m0Y+R7YoKbh5zV9B4gfQTwR1z8XcPhtDroeB1lrzctoLlDrVQE+8K5V2n6lMSHqv6
-         3OKFQk7TWPe36n8B0yFWxe6mp2rulbfPZ91J6ON3lVYSpQ87sgJi7Ns0Q74mEhka4a
-         uohjK5K7sB3EpWZd+5G9jqEQ9Q9parREs4iWB3Jg=
+        b=w6iAj2ZdRAGfvkpRmNaM3hkpQfL4EEuLZYOrI5FOa54qxH03Mzz93j1SsGpHObQ4Z
+         gcBsPJHh8ls2fHT0Ryf3OLT6JONcsA9mtIQkAPnvk4r3llSjf7uTj0tjiKltcT2rsZ
+         dPFCM3ifDF8BLhePUUzkTPh3AMRTv2tXXZpDqk0g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicolai Stange <nstange@suse.de>,
-        =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 22/66] crypto: drbg - move dynamic ->reseed_threshold adjustments to __drbg_seed()
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Aaron Adams <edg-e@nccgroup.com>
+Subject: [PATCH 5.18 01/67] netfilter: nf_tables: disallow non-stateful expression in sets earlier
 Date:   Fri,  3 Jun 2022 19:43:02 +0200
-Message-Id: <20220603173821.302120799@linuxfoundation.org>
+Message-Id: <20220603173820.776292973@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,107 +56,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolai Stange <nstange@suse.de>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-commit 262d83a4290c331cd4f617a457408bdb82fbb738 upstream.
+commit 520778042ccca019f3ffa136dd0ca565c486cedd upstream.
 
-Since commit 42ea507fae1a ("crypto: drbg - reseed often if seedsource is
-degraded"), the maximum seed lifetime represented by ->reseed_threshold
-gets temporarily lowered if the get_random_bytes() source cannot provide
-sufficient entropy yet, as is common during boot, and restored back to
-the original value again once that has changed.
+Since 3e135cd499bf ("netfilter: nft_dynset: dynamic stateful expression
+instantiation"), it is possible to attach stateful expressions to set
+elements.
 
-More specifically, if the add_random_ready_callback() invoked from
-drbg_prepare_hrng() in the course of DRBG instantiation does not return
--EALREADY, that is, if get_random_bytes() has not been fully initialized
-at this point yet, drbg_prepare_hrng() will lower ->reseed_threshold
-to a value of 50. The drbg_async_seed() scheduled from said
-random_ready_callback will eventually restore the original value.
+cd5125d8f518 ("netfilter: nf_tables: split set destruction in deactivate
+and destroy phase") introduces conditional destruction on the object to
+accomodate transaction semantics.
 
-A future patch will replace the random_ready_callback based notification
-mechanism and thus, there will be no add_random_ready_callback() return
-value anymore which could get compared to -EALREADY.
+nft_expr_init() calls expr->ops->init() first, then check for
+NFT_STATEFUL_EXPR, this stills allows to initialize a non-stateful
+lookup expressions which points to a set, which might lead to UAF since
+the set is not properly detached from the set->binding for this case.
+Anyway, this combination is non-sense from nf_tables perspective.
 
-However, there's __drbg_seed() which gets invoked in the course of both,
-the DRBG instantiation as well as the eventual reseeding from
-get_random_bytes() in aforementioned drbg_async_seed(), if any. Moreover,
-it knows about the get_random_bytes() initialization state by the time the
-seed data had been obtained from it: the new_seed_state argument introduced
-with the previous patch would get set to DRBG_SEED_STATE_PARTIAL in case
-get_random_bytes() had not been fully initialized yet and to
-DRBG_SEED_STATE_FULL otherwise. Thus, __drbg_seed() provides a convenient
-alternative for managing that ->reseed_threshold lowering and restoring at
-a central place.
+This patch fixes this problem by checking for NFT_STATEFUL_EXPR before
+expr->ops->init() is called.
 
-Move all ->reseed_threshold adjustment code from drbg_prepare_hrng() and
-drbg_async_seed() respectively to __drbg_seed(). Make __drbg_seed()
-lower the ->reseed_threshold to 50 in case its new_seed_state argument
-equals DRBG_SEED_STATE_PARTIAL and let it restore the original value
-otherwise.
+The reporter provides a KASAN splat and a poc reproducer (similar to
+those autogenerated by syzbot to report use-after-free errors). It is
+unknown to me if they are using syzbot or if they use similar automated
+tool to locate the bug that they are reporting.
 
-There is no change in behaviour.
+For the record, this is the KASAN splat.
 
-Signed-off-by: Nicolai Stange <nstange@suse.de>
-Reviewed-by: Stephan Müller <smueller@chronox.de>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+[   85.431824] ==================================================================
+[   85.432901] BUG: KASAN: use-after-free in nf_tables_bind_set+0x81b/0xa20
+[   85.433825] Write of size 8 at addr ffff8880286f0e98 by task poc/776
+[   85.434756]
+[   85.434999] CPU: 1 PID: 776 Comm: poc Tainted: G        W         5.18.0+ #2
+[   85.436023] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+
+Fixes: 0b2d8a7b638b ("netfilter: nf_tables: add helper functions for expression handling")
+Reported-and-tested-by: Aaron Adams <edg-e@nccgroup.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/drbg.c |   30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ net/netfilter/nf_tables_api.c |   19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
---- a/crypto/drbg.c
-+++ b/crypto/drbg.c
-@@ -1047,6 +1047,27 @@ static inline int __drbg_seed(struct drb
- 	/* 10.1.1.2 / 10.1.1.3 step 5 */
- 	drbg->reseed_ctr = 1;
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -2873,27 +2873,31 @@ static struct nft_expr *nft_expr_init(co
  
-+	switch (drbg->seeded) {
-+	case DRBG_SEED_STATE_UNSEEDED:
-+		/* Impossible, but handle it to silence compiler warnings. */
-+		fallthrough;
-+	case DRBG_SEED_STATE_PARTIAL:
-+		/*
-+		 * Require frequent reseeds until the seed source is
-+		 * fully initialized.
-+		 */
-+		drbg->reseed_threshold = 50;
-+		break;
+ 	err = nf_tables_expr_parse(ctx, nla, &expr_info);
+ 	if (err < 0)
+-		goto err1;
++		goto err_expr_parse;
 +
-+	case DRBG_SEED_STATE_FULL:
-+		/*
-+		 * Seed source has become fully initialized, frequent
-+		 * reseeds no longer required.
-+		 */
-+		drbg->reseed_threshold = drbg_max_requests(drbg);
-+		break;
-+	}
-+
- 	return ret;
++	err = -EOPNOTSUPP;
++	if (!(expr_info.ops->type->flags & NFT_EXPR_STATEFUL))
++		goto err_expr_stateful;
+ 
+ 	err = -ENOMEM;
+ 	expr = kzalloc(expr_info.ops->size, GFP_KERNEL_ACCOUNT);
+ 	if (expr == NULL)
+-		goto err2;
++		goto err_expr_stateful;
+ 
+ 	err = nf_tables_newexpr(ctx, &expr_info, expr);
+ 	if (err < 0)
+-		goto err3;
++		goto err_expr_new;
+ 
+ 	return expr;
+-err3:
++err_expr_new:
+ 	kfree(expr);
+-err2:
++err_expr_stateful:
+ 	owner = expr_info.ops->type->owner;
+ 	if (expr_info.ops->type->release_ops)
+ 		expr_info.ops->type->release_ops(expr_info.ops);
+ 
+ 	module_put(owner);
+-err1:
++err_expr_parse:
+ 	return ERR_PTR(err);
  }
  
-@@ -1095,9 +1116,6 @@ static void drbg_async_seed(struct work_
+@@ -5413,9 +5417,6 @@ struct nft_expr *nft_set_elem_expr_alloc
+ 		return expr;
  
- 	__drbg_seed(drbg, &seedlist, true, DRBG_SEED_STATE_FULL);
- 
--	if (drbg->seeded == DRBG_SEED_STATE_FULL)
--		drbg->reseed_threshold = drbg_max_requests(drbg);
+ 	err = -EOPNOTSUPP;
+-	if (!(expr->ops->type->flags & NFT_EXPR_STATEFUL))
+-		goto err_set_elem_expr;
 -
- unlock:
- 	mutex_unlock(&drbg->drbg_mutex);
- 
-@@ -1533,12 +1551,6 @@ static int drbg_prepare_hrng(struct drbg
- 		return err;
- 	}
- 
--	/*
--	 * Require frequent reseeds until the seed source is fully
--	 * initialized.
--	 */
--	drbg->reseed_threshold = 50;
--
- 	return err;
- }
- 
+ 	if (expr->ops->type->flags & NFT_EXPR_GC) {
+ 		if (set->flags & NFT_SET_TIMEOUT)
+ 			goto err_set_elem_expr;
 
 

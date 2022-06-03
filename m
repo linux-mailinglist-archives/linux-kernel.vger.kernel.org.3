@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EEE53C2BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE62F53C1D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241327AbiFCAu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S240611AbiFCAsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240154AbiFCAoz (ORCPT
+        with ESMTP id S240161AbiFCAo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 20:44:55 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A125137A3D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:44:46 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id b9-20020a656689000000b003f672946300so3034817pgw.16
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:44:46 -0700 (PDT)
+        Thu, 2 Jun 2022 20:44:56 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D9237A8C
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:44:49 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id z12-20020a170903018c00b001651395dcb8so3469820plg.12
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=2V4R3DmFXt5+6CqfKg8Az1wm17KtvGgb3jxI6xyMuyw=;
-        b=mncGi7QGRUiFpwVPv+JrkoqIs+Sb5wG30Uc2+1n3Wf/sFo3XqlBfdNaCmrKgQYkgh+
-         S2wwkG/hHqricTFWNmkXYYWG62tj1pgK+xgbfr00jU79O1MaZvJaN38SKsoD9f6SNl8l
-         SfOAifDADJ8fRVZgKSaePKvvzxYa0pYTupP263tqvo6e2SwiMcKErMl0M38ok9dkq49P
-         2zKKHjMCY0Or/Sssu+pD9qngBjyUO6MnxCfUbPKFOwx/TANo20AgfdxZZ8au5P+xSupz
-         dh5GGQrH955+Nc0guHv6zLbOcS7c/egaIZ3KnUEDigec3atlcbb3gbpmHE3FX/IwJsvu
-         SWHg==
+        bh=wQLAGjAqmxLboPvfqpTswhDnNIA7VCg/qN9ZJA18oL0=;
+        b=r+UGGry7PA8bg8fHD/ts0BmiEwktP6IhSxPX/CeREtTRGA6MK4pf8d1SqSovn3gtUR
+         7Ng9Rmg4XaqNwsD9gd+wXfdCn23ThCJjlDT+AN+5BmzOgYgg9lgVlWSbuoz2xaLdkkx4
+         ryQooK9br2NOiekmeDPgFUHrATRBoniZeT5Az0s+HLQ7ipYZeURfFubtcY9g5ZYqO7hc
+         kslqKNjUX7UiIXAhXHSh+F/xT16fveZsBBfcy5DxGQ9A2uEwOuec8vIUBQ2Sn/waeA/l
+         mDZ1NIDcldOngMKU5xytWZdxfz8K/9A56KQYBVljwVv+/YiUAhXJ1CDieHsFvvzLlQuv
+         Mezw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=2V4R3DmFXt5+6CqfKg8Az1wm17KtvGgb3jxI6xyMuyw=;
-        b=5RwTzuYHUlNCkeBDY3ADgR9/4KFYlxO0+sLPRw5xw7ss+PFjnUvO2rn5F/LQtl0VZk
-         rnTDZ9CpSOz1tQAxp/pJDQ1YmoLXWZ0fdGKCvcasptzYKkAKlobKlihpYWW8aePiy7iy
-         CsOOIjwvyp9e93XdezGtgF4bTbSAhc3FbkH8z5I0eQlZvhy3gyE0Nne7vV9nBP+6LaRG
-         xRIqzAp0HAZx2DSbmRibvQg/g77iWZzQcGOumS3qENvrw3PV1DZTaBMHtKc262pPhgHg
-         ULgkhxjssjnw/gKOeGZOiEITlVPqIPiGQuYtTfkxes45zQEv1T8LaU/oL0rdfpYiOnOh
-         GLwA==
-X-Gm-Message-State: AOAM530G1o574FCcoBhSWsjX3FADJMOmxKV9im2gUVVN3Rfi9p9TL/sS
-        W531ZMM7bfnHj7oEOZa3oSPJJSGBh6Y=
-X-Google-Smtp-Source: ABdhPJwCO++fxWmXvhDMlLk6g06ZaTINDmu8iWjYidy97P2kM3TMUuq9Be1nt9NwrFUj4K/NZD2I6Y7rDhQ=
+        bh=wQLAGjAqmxLboPvfqpTswhDnNIA7VCg/qN9ZJA18oL0=;
+        b=iEWxFCDf5fsGZ+VCns3D8z5aSvf04yaAT2a/s/kp59xaKlW5PtaZjBYFAnqwF4C2Dm
+         uYBz/1tAeu9/V53WupoJokJOA50PokZWyhP6nCM9IhUtjRZYTXf3TA/ddyv4tKzu/eWN
+         72DKEA3f2lOrUC+gt7SaLfqwWfAAtmE65lv6G6XNGQUU3FaH2sAjbrwle7+ONNNRiWYL
+         Dqj/6SyGhfT9TOv2QYux60HkqkZvW4sFvbIstRu70UiMQqQMS6mZyPXn94Hv9fgJHbP6
+         SFN9fGB38CwhBsuSrQxZfpMMU1DNs86bNswpVwWyvTQ9ytn8IDlFAVcgsd9yk3vSEczw
+         E1Eg==
+X-Gm-Message-State: AOAM530pWaLK4Hk7kk2HqwkKCb6gHO+PowHIRm10CbcF9mUaMMcy0VVd
+        xX+ARWT/cLGpB7kD/Xy6GcJdrTduGBA=
+X-Google-Smtp-Source: ABdhPJwEPJE1FOhLw5UYnX4IybA0niwEsHTQcrpf3IXCJsiaLNWO9SBRfoC2+YZUFay4L1IJGuiiQ+Xggw4=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
- t9-20020a17090a024900b001e0a8a33c6cmr307295pje.0.1654217085607; Thu, 02 Jun
- 2022 17:44:45 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
+ q15-20020a17090a178f00b001e303bac185mr305565pja.1.1654217087484; Thu, 02 Jun
+ 2022 17:44:47 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:41:45 +0000
+Date:   Fri,  3 Jun 2022 00:41:46 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-39-seanjc@google.com>
+Message-Id: <20220603004331.1523888-40-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 038/144] KVM: selftests: Push vm_adjust_num_guest_pages()
- into "w/o vCPUs" helper
+Subject: [PATCH v2 039/144] KVM: selftests: Use vm_create_without_vcpus() in set_boot_cpu_id
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -73,39 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the call to vm_adjust_num_guest_pages() from vm_create_with_vcpus()
-down into vm_create_without_vcpus().  This will allow a future patch to
-make the "w/o vCPUs" variant the common inner helper, e.g. so that the
-"with_vcpus" helper calls the "without_vcpus" helper, instead of having
-them be separate paths.
+Use vm_create_without_vcpus() in set_boot_cpu_id instead of open coding
+the equivlant now that the "without_vcpus" variant does
+vm_adjust_num_guest_pages().
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/x86_64/set_boot_cpu_id.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 1c5caf2ddca4..6b0b65c26d4d 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -282,6 +282,8 @@ struct kvm_vm *vm_create_without_vcpus(enum vm_guest_mode mode, uint64_t pages)
+diff --git a/tools/testing/selftests/kvm/x86_64/set_boot_cpu_id.c b/tools/testing/selftests/kvm/x86_64/set_boot_cpu_id.c
+index b4da92ddc1c6..4c5775a8de6a 100644
+--- a/tools/testing/selftests/kvm/x86_64/set_boot_cpu_id.c
++++ b/tools/testing/selftests/kvm/x86_64/set_boot_cpu_id.c
+@@ -82,18 +82,11 @@ static void run_vcpu(struct kvm_vm *vm, uint32_t vcpuid)
+ 
+ static struct kvm_vm *create_vm(void)
  {
- 	struct kvm_vm *vm;
+-	struct kvm_vm *vm;
+ 	uint64_t vcpu_pages = (DEFAULT_STACK_PGS) * 2;
+ 	uint64_t extra_pg_pages = vcpu_pages / PTES_PER_MIN_PAGE * N_VCPU;
+ 	uint64_t pages = DEFAULT_GUEST_PHY_PAGES + vcpu_pages + extra_pg_pages;
  
-+	pages = vm_adjust_num_guest_pages(VM_MODE_DEFAULT, pages);
-+
- 	vm = __vm_create(mode, pages);
- 
- 	kvm_vm_elf_load(vm, program_invocation_name);
-@@ -341,8 +343,6 @@ struct kvm_vm *vm_create_with_vcpus(enum vm_guest_mode mode, uint32_t nr_vcpus,
- 		    "nr_vcpus = %d too large for host, max-vcpus = %d",
- 		    nr_vcpus, kvm_check_cap(KVM_CAP_MAX_VCPUS));
- 
--	pages = vm_adjust_num_guest_pages(mode, pages);
+-	pages = vm_adjust_num_guest_pages(VM_MODE_DEFAULT, pages);
+-	vm = vm_create(pages);
 -
- 	vm = vm_create_without_vcpus(mode, pages);
+-	kvm_vm_elf_load(vm, program_invocation_name);
+-	vm_create_irqchip(vm);
+-
+-	return vm;
++	return vm_create_without_vcpus(VM_MODE_DEFAULT, pages);
+ }
  
- 	for (i = 0; i < nr_vcpus; ++i) {
+ static void add_x86_vcpu(struct kvm_vm *vm, uint32_t vcpuid, bool bsp_code)
 -- 
 2.36.1.255.ge46751e96f-goog
 

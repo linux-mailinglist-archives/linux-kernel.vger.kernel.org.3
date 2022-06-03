@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A708353D125
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F7553D087
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347124AbiFCSPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S1347731AbiFCSGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346808AbiFCSAf (ORCPT
+        with ESMTP id S1346337AbiFCRvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:00:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4922712631;
-        Fri,  3 Jun 2022 10:56:50 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCA0544E8;
+        Fri,  3 Jun 2022 10:47:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0C043CE233B;
-        Fri,  3 Jun 2022 17:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F41EC385A9;
-        Fri,  3 Jun 2022 17:56:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3C12B82189;
+        Fri,  3 Jun 2022 17:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F23E8C385A9;
+        Fri,  3 Jun 2022 17:47:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279006;
-        bh=TQMi84fPYBbRRevC3hnf7QvIdSkLuhB46VbI3kQbPvg=;
+        s=korg; t=1654278456;
+        bh=BVFr+pAZdwYA4VJCP8WE7tfQLDjYn0csV1UYSw2SV0o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gRtcUx1ffKSdECKDabZ86nJy5TUp56Rg6wsCx7jhW7zfuhKj2F79LHdPQki+TcUqu
-         hivRIgkpoZoAhFIIZMV3tDecL0p2w9uQwfHGiryDZwIg8eXvkhFtLwRjQustkqpPX+
-         lyhiZ1R/6zS2wqlRyVCNyG395U97rB9qQxZEqb1Y=
+        b=Ta791vTtSp0YeimrYbWtzds9Arftdvj6zZjM64MWT1acZt5S0mBLhpvTQvO8K0RTK
+         ltEcaGLdqAYJU5M6wZYSws4q2TKa9FM+eGXV3v+f+ZeFUd92bdlPNcFR2gIsc7cPBg
+         9ierXPfRYvsfr6i5EmIU4To8oKf2ULBuysfYtT1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.18 22/67] KVM: x86: fix typo in __try_cmpxchg_user causing non-atomicness
+        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH 5.10 38/53] Bluetooth: hci_qca: Use del_timer_sync() before freeing
 Date:   Fri,  3 Jun 2022 19:43:23 +0200
-Message-Id: <20220603173821.365331799@linuxfoundation.org>
+Message-Id: <20220603173819.829448877@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
-References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Levitsky <mlevitsk@redhat.com>
+From: Steven Rostedt <rostedt@goodmis.org>
 
-commit 33fbe6befa622c082f7d417896832856814bdde0 upstream.
+commit 72ef98445aca568a81c2da050532500a8345ad3a upstream.
 
-This shows up as a TDP MMU leak when running nested.  Non-working cmpxchg on L0
-relies makes L1 install two different shadow pages under same spte, and one of
-them is leaked.
+While looking at a crash report on a timer list being corrupted, which
+usually happens when a timer is freed while still active. This is
+commonly triggered by code calling del_timer() instead of
+del_timer_sync() just before freeing.
 
-Fixes: 1c2361f667f36 ("KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses")
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-Message-Id: <20220512101420.306759-1-mlevitsk@redhat.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+One possible culprit is the hci_qca driver, which does exactly that.
+
+Eric mentioned that wake_retrans_timer could be rearmed via the work
+queue, so also move the destruction of the work queue before
+del_timer_sync().
+
+Cc: Eric Dumazet <eric.dumazet@gmail.com>
+Cc: stable@vger.kernel.org
+Fixes: 0ff252c1976da ("Bluetooth: hciuart: Add support QCA chipset for UART")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/x86.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bluetooth/hci_qca.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -7268,7 +7268,7 @@ static int emulator_cmpxchg_emulated(str
- 		goto emul_write;
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -689,9 +689,9 @@ static int qca_close(struct hci_uart *hu
+ 	skb_queue_purge(&qca->tx_wait_q);
+ 	skb_queue_purge(&qca->txq);
+ 	skb_queue_purge(&qca->rx_memdump_q);
+-	del_timer(&qca->tx_idle_timer);
+-	del_timer(&qca->wake_retrans_timer);
+ 	destroy_workqueue(qca->workqueue);
++	del_timer_sync(&qca->tx_idle_timer);
++	del_timer_sync(&qca->wake_retrans_timer);
+ 	qca->hu = NULL;
  
- 	hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
--	if (kvm_is_error_hva(addr))
-+	if (kvm_is_error_hva(hva))
- 		goto emul_write;
- 
- 	hva += offset_in_page(gpa);
+ 	kfree_skb(qca->rx_skb);
 
 

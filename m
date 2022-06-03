@@ -2,297 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778EC53C4E1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 08:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B284B53C501
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 08:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241480AbiFCGd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 02:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S241537AbiFCGg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 02:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240867AbiFCGdZ (ORCPT
+        with ESMTP id S236696AbiFCGg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 02:33:25 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3552BC4;
-        Thu,  2 Jun 2022 23:33:22 -0700 (PDT)
-Received: (Authenticated sender: peter@korsgaard.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9FCC1E0008;
-        Fri,  3 Jun 2022 06:33:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
-        (envelope-from <peter@korsgaard.com>)
-        id 1nx0rx-00AQdY-D4; Fri, 03 Jun 2022 08:33:13 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     Tanmay Shah <tanmay.shah@xilinx.com>
-Cc:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <michal.simek@xilinx.com>, <ben.levinsky@xilinx.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Fri, 3 Jun 2022 02:36:27 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757F6377E8;
+        Thu,  2 Jun 2022 23:36:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G8tBuoSYWG9sf7eEW2qbdQz0q3Uhx8CkJyWxGy6/y7H+W5yYSJE2plLuCf+sNak3Qsll76hXhzttkoiVaQcT41pWGcP8/Pt7rKHqfWo87SPlhLDvmPIG7bjioocEEzXQsX7OK7+CKxbKkeNTqdiu+xdEIDB2Acz4sfRfH5q1OudazI/U1XOuav7DCUknOowKfFE4rq+wya3uqve4vjQ9h7oT7jSv3UWZ+F7GLHsosM0GzB3TrNDmmdKAICR3+SXxGrVNnVHsTyaA/fAHWG41g4Af8ifEXzZq6qRy3xePk0DHwXHv/Vw5TnyM+s2PAycKYTHcFbcQ/2zeR3p619TRwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zhv/mg6gpAKljkgOKz37nASLa3uwHUFhz6gRCtTCt78=;
+ b=DZGaosTf4QsfWUwfkuixXVoEe8iOwxkJO3jauByuIPFvtAZdjkHxf7Nrb63YeAAjamtSBaOYwGdDapKR4LbN2U5T0UO4vDXydk0X1D+IBVjfPxIeSfPmHGdZl3E/bCxtNx+D5e68Qx/Qf7mLkbv49lkOqGKWGmlYkwVx5k2mncW3SPo+0U4zlFwkADhtYtn//eV8lGpfOuDhcS028ZKLsatkVFthuJw4CGHCQ3KHb0qizSVKW53jFW6bJmxk5/LsfKp4vlgZfBZbBESmbLL1ItBgezpgkEEF/XqYJ3v/3wVytkNx3DPZG37QNSucMwyQEdni9QVSJdouWNsTqUZyug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zhv/mg6gpAKljkgOKz37nASLa3uwHUFhz6gRCtTCt78=;
+ b=fse6oGDEQZisQ73D04u7/GCVyekDhpuVtoFSk/cyPS1bdhYPc3xm2Uuse8g0FunGE2qvp7LnBp2NVavvODlPAHCenUf5GaCtrDIaFYd0hzFpx68Z6W40ETniNH/UO15oUHqdaasDGOgcQXjr00RGI4PHIamQ08v9zSBsX1/2FmkiQ5WePJXErSNDVVWUhZEj+7BqBX4PBInG/hEjJ2nL0rcRY4iZyTmVjip1j5GhSU0aAgcZ3FwNsArwhTSZP9ptxRna5qPhyEhRIlLKEraCxrYMw1YA69Gf2HuvVIonFdcOtgC+fZa8JLporzl/1qTNrL7ysD/3a9i+LSMRITtF+g==
+Received: from DM6PR08CA0061.namprd08.prod.outlook.com (2603:10b6:5:1e0::35)
+ by BYAPR12MB3527.namprd12.prod.outlook.com (2603:10b6:a03:13c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Fri, 3 Jun
+ 2022 06:36:24 +0000
+Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::ef) by DM6PR08CA0061.outlook.office365.com
+ (2603:10b6:5:1e0::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
+ Transport; Fri, 3 Jun 2022 06:36:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5314.12 via Frontend Transport; Fri, 3 Jun 2022 06:36:24 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 3 Jun
+ 2022 06:36:23 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 2 Jun 2022
+ 23:36:23 -0700
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Thu, 2 Jun 2022 23:36:19 -0700
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <thierry.reding@gmail.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>
+CC:     <jonathanh@nvidia.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <openamp-system-reference@lists.openampproject.org>
-Subject: Re: [PATCH v8 1/6] dt-bindings: remoteproc: Add Xilinx RPU
- subsystem bindings
-References: <20220602203834.3675160-1-tanmay.shah@xilinx.com>
-        <20220602203834.3675160-2-tanmay.shah@xilinx.com>
-Date:   Fri, 03 Jun 2022 08:33:13 +0200
-In-Reply-To: <20220602203834.3675160-2-tanmay.shah@xilinx.com> (Tanmay Shah's
-        message of "Thu, 2 Jun 2022 13:38:29 -0700")
-Message-ID: <87tu921ck6.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH v3 0/6] OPE support on Tegra210 and later
+Date:   Fri, 3 Jun 2022 12:06:06 +0530
+Message-ID: <1654238172-16293-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 17161fe9-88f5-469a-3155-08da452b6147
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3527:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB352726CC55BF75DA97F050F3A7A19@BYAPR12MB3527.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oU9qz0yBGN3xfFcNti36JW8JDLppCKKVaQIPGWNTVe6p7yMnl8uMiv/SLIP1qBvKjAdMiikfncnQMDOVL37XppzFdrX8zUv3vioowSMFTYUtS5z0FvSQNifHpBfiuiwUxCkBaNrw4BeXEGD0EFqOTFBSwigYm/YiqTGJrcbPtyWwhT0LvLjYXz9KaH5RdPABVYCT1tEKckUC/0HvSpxCozZz+ZFfYKc6LnzBh3EpOjLdyp5pfBo1cJRgCglP0GhgiFRtvwzsV3RMLj4CcyeLOy9SVxW1vRVBgAvEffxy/Md8GZFYglcG49h11MEi6PvJU3MorGWSYn545pst9liuXE5sBCvT/Giql7t1X2dVgKXi5Z2MbtDxYRR+3+7wnrZtT8EIYoo0fiHnCfSwy71qYoyMFVlEBHTDD1vF40Wgecqk0sRwj235UOZAHDYRcDHUqprX3VMP4qDJS9Pi21tALngfM/kot+LFeQGGiy4GR3bL7IfrwNH9Xp/6OsDTgFy6jC6Yqn2DvI3QXDhClvxGbsJ7hdyWI3Wg/nigTOK+S9o6Jd66lGVHfMagrKR4SnKgKbrpUVA3PMx22ctut196pFq/99PD8RCoeJeuHlUwMf/uoOPVsUhtFdU3eD7WvL7t2YOwdVEZvETX7G7qPgpREc8RmN2tmaaVZi7w1wSf8+OoT8AicKEdx82eqyGPimjxtDlTjUAMTuXFkDjFkbCMFg==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(26005)(8936002)(2906002)(83380400001)(36756003)(5660300002)(82310400005)(7416002)(8676002)(4326008)(81166007)(70586007)(70206006)(316002)(336012)(86362001)(110136005)(426003)(107886003)(54906003)(36860700001)(356005)(47076005)(2616005)(508600001)(6666004)(186003)(7696005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2022 06:36:24.3218
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17161fe9-88f5-469a-3155-08da452b6147
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3527
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>>> "Tanmay" == Tanmay Shah <tanmay.shah@xilinx.com> writes:
+This series adds support for Output Prcoessing Module (OPE) module on
+Tegra210 and later generations of SoCs. OPE is a client of AHUB and
+it has sub blocks of PEQ (Parametric Equalizer) and MBDRC (Multi Band
+Dynamic Range Compressor) for data processing.
 
-Hi,
-
- > Xilinx ZynqMP platform has dual-core ARM Cortex R5 Realtime Processing
- > Unit(RPU) subsystem. This patch adds dt-bindings for RPU subsystem
- > (cluster).
-
- > Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
- > ---
-
- > Changes in v8:
- >   - Add 'items:' for sram property
-
- > Changes in v7:
- >   - Add minItems in sram property
-
- > Changes in v6:
- >   - Add maxItems to sram and memory-region property
-
- > Changes in v5:
- > - Add constraints of the possible values of xlnx,cluster-mode property
- > - fix description of power-domains property for r5 core
- > - Remove reg, address-cells and size-cells properties as it is not required
- > - Fix description of mboxes property
- > - Add description of each memory-region and remove old .txt binding link
- >   reference in the description
-
- > Changes in v4:
- >   - Add memory-region, mboxes and mbox-names properties in example
-
- > Changes in v3:
- >   - None
-
- >  .../bindings/remoteproc/xlnx,r5f-rproc.yaml   | 130 ++++++++++++++++++
- >  include/dt-bindings/power/xlnx-zynqmp-power.h |   6 +
- >  2 files changed, 138 insertions(+)
- >  create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
-
- > diff --git a/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
- > new file mode 100644
- > index 000000000000..adfe05ff157a
- > --- /dev/null
- > +++ b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
- > @@ -0,0 +1,132 @@
- > +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
- > +%YAML 1.2
- > +---
- > +$id: http://devicetree.org/schemas/remoteproc/xlnx,r5f-rproc.yaml#
- > +$schema: http://devicetree.org/meta-schemas/core.yaml#
- > +
- > +title: Xilinx R5F processor subsystem
- > +
- > +maintainers:
- > +  - Ben Levinsky <ben.levinsky@xilinx.com>
- > +  - Tanmay Shah <tanmay.shah@xilinx.com>
- > +
- > +description: |
- > +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
- > +  real-time processing based on the Cortex-R5F processor core from ARM.
- > +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
- > +  floating-point unit that implements the Arm VFPv3 instruction set.
- > +
- > +properties:
- > +  compatible:
- > +    const: xlnx,zynqmp-r5fss
- > +
- > +  xlnx,cluster-mode:
- > +    $ref: /schemas/types.yaml#/definitions/uint32
- > +    enum: [0, 1, 2]
-
-A textual mode ("dual", "lock-step", "single") would be more readable.
+An ASoC component is registered for OPE, which includes PEQ and MBDRC
+functions as well. This can be plugged in audio path using ALSA mixer
+controls. The series adds necessary binding documentaion, driver and
+DT binding patches to enable OPE module on Jetson platforms.
 
 
- > +    description: |
- > +      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
+Changelog
+=========
 
-space missing before "(Dual-processor"
+  v2 -> v3:
+  ---------
+    * Drop "Device Tree Bindings" string from bindind doc titles for
+      OPE, PEQ and MBDRC.
 
-
- > +      lock-step mode(Both RPU cores execute the same code in lock-step,
- > +      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
-
-"can be" sounds a bit weak, perhaps "is"
-
-
- > +      core 1 runs normally). The processor does not support dynamic configuration.
- > +      Switching between modes is only permitted immediately after a processor reset.
- > +      If set to  1 then lockstep mode and if 0 then split mode.
- > +      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
-
-This looks a bit confusing. If you decide to stick to the numerical
-modes, then at least list them in numerical order, E.G.:
-
- 0: split
- 1: lockstep
- 2: single
+  v1 -> v2:
+  ---------
+    * Use generic node names for OPE, PEQ and MBDRC devices. Update
+      binding doc and DT patches for this.
+    * Remove redundant nodename rule enforcement from
+      OPE, PEQ and MBDRC nodes. Update binding doc patch for this.
+    * Fix spaces before binding doc examples and remove '|'
+      from binding doc descriptions.
 
 
-> +
- > +patternProperties:
- > +  "^r5f-[a-f0-9]+$":
- > +    type: object
- > +    description: |
- > +      The RPU is located in the Low Power Domain of the Processor Subsystem.
- > +      Each processor includes separate L1 instruction and data caches and
- > +      tightly coupled memories (TCM). System memory is cacheable, but the TCM
- > +      memory space is non-cacheable.
- > +
- > +      Each RPU contains one 64KB memory and two 32KB memories that
- > +      are accessed via the TCM A and B port interfaces, for a total of 128KB
- > +      per processor. In lock-step mode, the processor has access to 256KB of
- > +      TCM memory.
- > +
- > +    properties:
- > +      compatible:
- > +        const: xlnx,zynqmp-r5f
- > +
- > +      power-domains:
- > +        description: RPU core PM domain specifier
- > +        maxItems: 1
+Sameer Pujar (6):
+  ASoC: tegra: Add binding doc for OPE module
+  ASoC: tegra: Add Tegra210 based OPE driver
+  ASoC: tegra: AHUB routes for OPE module
+  arm64: defconfig: Build Tegra OPE module
+  arm64: tegra: Add OPE device on Tegra210 and later
+  arm64: tegra: Enable OPE on various platforms
 
-A bit more detail would be good, E.G. something like arm/cpus.yaml does:
-
-      List of phandles and PM domain specifiers, as defined by bindings of the
-      PM domain provider (see also ../power_domain.txt).
-
-And the phandle-array ref.
-
-
-> +
- > +      mboxes:
- > +        minItems: 1
- > +        items:
- > +          - description: mailbox channel to send data to RPU
- > +          - description: mailbox channel to receive data from RPU
- > +
- > +      mbox-names:
- > +        minItems: 1
- > +        items:
- > +          - const: tx
- > +          - const: rx
-
-And here as well for mailbox/mailbox.txt
-
-
- > +
- > +      sram:
- > +        $ref: /schemas/types.yaml#/definitions/phandle-array
- > +        minItems: 1
- > +        maxItems: 8
- > +        items:
- > +          maxItems: 1
- > +        description: |
- > +          phandles to one or more reserved on-chip SRAM regions. Other than TCM,
- > +          the RPU can execute instructions and access data from, the OCM memory,
- > +          the main DDR memory, and other system memories.
-
-Drop the comma after "from"
-
-
- > +
- > +          The regions should be defined as child nodes of the respective SRAM
- > +          node, and should be defined as per the generic bindings in,
-
-Drop the comma after "in"
-
-
- > +          Documentation/devicetree/bindings/sram/sram.yaml
- > +
- > +      memory-region:
- > +        description: |
- > +          List of phandles to the reserved memory regions associated with the
- > +          remoteproc device. This is variable and describes the memories shared with
- > +          the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
- > +          vrings, ...). This reserved memory region will be allocated on DDR memory.
-
-s/on DDR/in DDR/
-
- > +        minItems: 1
- > +        maxItems: 8
- > +        items:
- > +          - description: region used for RPU firmware image section
- > +          - description: vdev buffer
- > +          - description: vring0
- > +          - description: vring1
- > +        additionalItems: true
- > +
- > +    required:
- > +      - compatible
- > +      - power-domains
- > +
- > +    unevaluatedProperties: false
- > +
- > +required:
- > +  - compatible
- > +
- > +additionalProperties: false
- > +
- > +examples:
- > +  - |
- > +    r5fss: r5fss {
- > +        compatible = "xlnx,zynqmp-r5fss";
- > +        xlnx,cluster-mode = <1>;
- > +
- > +        r5f-0 {
- > +            compatible = "xlnx,zynqmp-r5f";
- > +            power-domains = <&zynqmp_firmware 0x7>;
- > +            memory-region = <&rproc_0_fw_image>, <&rpu0vdev0buffer>, <&rpu0vdev0vring0>, <&rpu0vdev0vring1>;
- > +            mboxes = <&ipi_mailbox_rpu0 0>, <&ipi_mailbox_rpu0 1>;
- > +            mbox-names = "tx", "rx";
- > +        };
- > +
- > +        r5f-1 {
- > +            compatible = "xlnx,zynqmp-r5f";
- > +            power-domains = <&zynqmp_firmware 0x8>;
- > +            memory-region = <&rproc_1_fw_image>, <&rpu1vdev0buffer>, <&rpu1vdev0vring0>, <&rpu1vdev0vring1>;
- > +            mboxes = <&ipi_mailbox_rpu1 0>, <&ipi_mailbox_rpu1 1>;
- > +            mbox-names = "tx", "rx";
- > +        };
- > +    };
- > +...
- > diff --git a/include/dt-bindings/power/xlnx-zynqmp-power.h b/include/dt-bindings/power/xlnx-zynqmp-power.h
- > index 0d9a412fd5e0..618024cbb20d 100644
- > --- a/include/dt-bindings/power/xlnx-zynqmp-power.h
- > +++ b/include/dt-bindings/power/xlnx-zynqmp-power.h
- > @@ -6,6 +6,12 @@
- >  #ifndef _DT_BINDINGS_ZYNQMP_POWER_H
- >  #define _DT_BINDINGS_ZYNQMP_POWER_H
- 
- > +#define		PD_RPU_0	7
- > +#define		PD_RPU_1	8
- > +#define		PD_R5_0_ATCM	15
- > +#define		PD_R5_0_BTCM	16
- > +#define		PD_R5_1_ATCM	17
- > +#define		PD_R5_1_BTCM	18
- >  #define		PD_USB_0	22
- >  #define		PD_USB_1	23
- >  #define		PD_TTC_0	24
- > -- 
-
- > 2.25.1
-
+ .../bindings/sound/nvidia,tegra210-ahub.yaml       |    4 +
+ .../bindings/sound/nvidia,tegra210-mbdrc.yaml      |   47 +
+ .../bindings/sound/nvidia,tegra210-ope.yaml        |   87 ++
+ .../bindings/sound/nvidia,tegra210-peq.yaml        |   48 +
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts |   43 +
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |   23 +
+ arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts |   43 +
+ .../arm64/boot/dts/nvidia/tegra194-p3509-0000.dtsi |   43 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |   23 +
+ arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts |   84 ++
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |   84 ++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   40 +
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  |   43 +
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi           |   23 +
+ arch/arm64/configs/defconfig                       |    1 +
+ sound/soc/tegra/Kconfig                            |    9 +
+ sound/soc/tegra/Makefile                           |    2 +
+ sound/soc/tegra/tegra210_ahub.c                    |   39 +-
+ sound/soc/tegra/tegra210_mbdrc.c                   | 1012 ++++++++++++++++++++
+ sound/soc/tegra/tegra210_mbdrc.h                   |  215 +++++
+ sound/soc/tegra/tegra210_ope.c                     |  419 ++++++++
+ sound/soc/tegra/tegra210_ope.h                     |   90 ++
+ sound/soc/tegra/tegra210_peq.c                     |  434 +++++++++
+ sound/soc/tegra/tegra210_peq.h                     |   56 ++
+ 24 files changed, 2908 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
+ create mode 100644 sound/soc/tegra/tegra210_mbdrc.c
+ create mode 100644 sound/soc/tegra/tegra210_mbdrc.h
+ create mode 100644 sound/soc/tegra/tegra210_ope.c
+ create mode 100644 sound/soc/tegra/tegra210_ope.h
+ create mode 100644 sound/soc/tegra/tegra210_peq.c
+ create mode 100644 sound/soc/tegra/tegra210_peq.h
 
 -- 
-Bye, Peter Korsgaard
+2.7.4
+

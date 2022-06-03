@@ -2,71 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1842553C5CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C0553C5EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241519AbiFCHQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S242120AbiFCHUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiFCHQY (ORCPT
+        with ESMTP id S242185AbiFCHUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:16:24 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005832D1FF
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:16:22 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id o73so379758qke.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 00:16:22 -0700 (PDT)
+        Fri, 3 Jun 2022 03:20:10 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FB5387A4;
+        Fri,  3 Jun 2022 00:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=dIJZ7XsK+jUGLZjZMwQas9x7LlLeZtDPahCJOQk733E=;
-        b=jkyBTOxxEkc5EnW3kRRScGh7EhoEvpA+BVddYFEzXQfPdZsvrkd7HA26dG0iBYT7xJ
-         5TFos+OhidJKPZJSley/1Kzprhptn+qGCJ8tLF5rnz24g+LM8fcSXLe/1BKy8f9mqCDn
-         7rB68U2s0KqnAsp8+emdCPCEA8j/dea+a+PtHqUYJxWlbM1lsDwJhobYHUY3HR6FMj7J
-         gqI4fUkcBQ//TQjlMEiiAEwGsbPiXUpC/t/W4TyDquUD5OKnlYSoBbADKWXOrw3zYZNV
-         89iJsBtwq+W/zgn6uACJ8+FvGQJiaCCv4qSlUC1OXfG2cDy3aHd3Fe4CmO+Ew6fbIJ2r
-         uS4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=dIJZ7XsK+jUGLZjZMwQas9x7LlLeZtDPahCJOQk733E=;
-        b=aMdg9PZy7Z7PlgQjxe4IiZl5GHZXk8caj7hhg5nT3dhQvwnOQVy/+wNKZydSrCBFEM
-         dxcydYY7gwvqkgvIvFxqroFmwys6ugIxvY0M6LmtSm989c+PRGErTjhhFEbcrKtFDhpO
-         6N8pMCxifNq8pBh4jaRnw6Cz7a2VBddo/ZIIVSlY2G9xpLL+5fxo4tl6P1q/cuBJxPOl
-         U4CDKr4IigrtDL9YaY79BZXbpgU4RZzlEctT7v0BmkCyIlZIwE/ZY1l2rV9S0+upCIBy
-         wQo9g3yq5WlGIysvFHGe2LAV2sboNQfya5XL92GTYpUks3cDmYILvMFG4m+b8ZWWnFEH
-         PibQ==
-X-Gm-Message-State: AOAM531AJMs9jwJC/wz60djcQrQiGyRUD2g/m3s4fih32J/OZQGO+fkf
-        9D1QFjBAW1/oVkUlO0L02Rf7JX5ulroRq+tBNj4=
-X-Google-Smtp-Source: ABdhPJxLklb9YOxqu1LA4iqFWnJRA+XMTO74MesTEr15+f/AR/nlQ1zJT5hXJQzMOrzM/08dFX7OGLPAVBbtwbRBH4Q=
-X-Received: by 2002:a05:620a:11b6:b0:6a3:2569:7a4f with SMTP id
- c22-20020a05620a11b600b006a325697a4fmr5527968qkk.666.1654240582110; Fri, 03
- Jun 2022 00:16:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220602180118.66170-1-r.stratiienko@gmail.com> <20220602215547.scsabzbeztgduaj3@core>
-In-Reply-To: <20220602215547.scsabzbeztgduaj3@core>
-From:   Roman Stratiienko <r.stratiienko@gmail.com>
-Date:   Fri, 3 Jun 2022 10:16:10 +0300
-Message-ID: <CAGphcdk0gybTVZzgqSQDna_D-eEUtJO+Xe_2Of1vVObm_z8tZw@mail.gmail.com>
-Subject: Re: [PATCH] drm/sun4i: sun8i: Add the ability to keep scaler enabled
- for VI layer
-To:     =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>,
-        Roman Stratiienko <r.stratiienko@gmail.com>,
-        mripard@kernel.org, wens@csie.org,
-        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654240796; x=1685776796;
+  h=from:to:cc:subject:date:message-id;
+  bh=U/tw6XeuZhwyhOHppw2Jt5ifLXsByApEMsCR6mi0nkM=;
+  b=QwBZcS96i8riF4/60UIki2OJzKnrzP8dZXkw8HNBzU1bbekRDLtpC/dF
+   2aRmxmYwlR57pzESj/CfuFb92QLwHNmrnSNIKPshu0g5Dbag9M8c6VY2d
+   jVIiQNZo1MyFWac4efcFcw6Pnnmic+yyAv8g29ukRCjiV6m1zseens2uf
+   E=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 03 Jun 2022 00:19:56 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jun 2022 00:19:54 -0700
+X-QCInternal: smtphost
+Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 03 Jun 2022 12:49:33 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id 521F24151; Fri,  3 Jun 2022 12:49:32 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     helgaas@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v1] PCI: qcom: Allow L1 and its sub states on qcom dwc wrapper
+Date:   Fri,  3 Jun 2022 12:48:50 +0530
+Message-Id: <1654240730-31322-1-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,124 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ondrej,
+Allow L1 and its sub-states in the qcom dwc pcie wrapper.
+By default its disabled. So enable it explicitly.
 
-=D0=BF=D1=82, 3 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 00:55, Ond=C5=99ej =
-Jirman <megous@megous.com>:
->
-> Hi Roman,
->
-> On Thu, Jun 02, 2022 at 06:01:18PM +0000, Roman Stratiienko wrote:
-> > According to DE2.0/DE3.0 manual VI scaler enable register is double
-> > buffered, but de facto it doesn't, or the hardware has the shadow
-> > register latching issues which causes single-frame picture corruption
-> > after changing the state of scaler enable register.
-> >
-> > Allow the user to keep the scaler always enabled, preventing the UI
-> > glitches on the transition from scaled to unscaled state.
-> >
-> > NOTE:
-> > UI layer scaler has more registers with double-buffering issue and can'=
-t
-> > be workarounded in the same manner.
-> >
-> > You may find a python test and a demo video for this issue at [1]
->
-> Isn't this an issue with kernel driver not waiting for DE2 FINISH IRQ, bu=
-t
-> for VBLANK IRQ from TCON instead, before allowing to write new set of reg=
-ister
-> values?
+Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+---
+ drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-No, DE2 FINISH IRQ is triggered just some micro or even nanoseconds
-earlier from vblank IRQ
-(I have checked it using tracing).
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index 6ab9089..f60645c 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -41,6 +41,9 @@
+ #define L23_CLK_RMV_DIS				BIT(2)
+ #define L1_CLK_RMV_DIS				BIT(1)
+ 
++#define PCIE20_PARF_PM_CTRL			0x20
++#define REQ_NOT_ENTR_L1				BIT(5)
++
+ #define PCIE20_PARF_PHY_CTRL			0x40
+ #define PHY_CTRL_PHY_TX0_TERM_OFFSET_MASK	GENMASK(20, 16)
+ #define PHY_CTRL_PHY_TX0_TERM_OFFSET(x)		((x) << 16)
+@@ -1267,6 +1270,11 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+ 	val |= BIT(4);
+ 	writel(val, pcie->parf + PCIE20_PARF_MHI_CLOCK_RESET_CTRL);
+ 
++	/* Clear PARF PM REQ_NOT_ENTR_L1 bit to allow L1 states */
++	val = readl(pcie->parf + PCIE20_PARF_PM_CTRL);
++	val &= ~REQ_NOT_ENTR_L1;
++	writel(val, pcie->parf + PCIE20_PARF_PM_CTRL);
++
+ 	if (IS_ENABLED(CONFIG_PCI_MSI)) {
+ 		val = readl(pcie->parf + PCIE20_PARF_AXI_MSTR_WR_ADDR_HALT);
+ 		val |= BIT(31);
+-- 
+2.7.4
 
-I can guess MISSION FINISH IRQ triggered when the last line is being
-sent to the line buffer cache (in between of the mixer output and tcon
-input).
-But VBLANG IRQ triggers when the last line is being sent to the
-display + hfront porch time + hsync time.
-
-I have also tried scheduling the register updates that have
-double-buffering issues at VBLANK irq. And such a solution fixes the
-test for both VI and UI scalers.
-But under high loads there are still glitches happening. This patch
-solves the issue for both test and high load conditions. (but for VI
-only)
-I'll post my solution with a deferred scaling register update soon.
-
->
-> https://megous.com/dl/tmp/4fe35b3fc72ee7de.png
->
-> I haven't checked if FINISH flag is set at time of VBLANK interrupt, so m=
-aybe
-> this is not the issue.
->
-> regards,
->         o.
->
-> > [1]: https://github.com/GloDroid/glodroid_tests/issues/4
-> > Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
-> > ---
-> >  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 12 ++++++++++++
-> >  drivers/gpu/drm/sun4i/sun8i_vi_layer.c |  4 +++-
-> >  2 files changed, 15 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4=
-i/sun8i_mixer.c
-> > index 71ab0a00b4de..15cad0330f66 100644
-> > --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> > +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> > @@ -27,6 +27,18 @@
-> >  #include "sun8i_vi_layer.h"
-> >  #include "sunxi_engine.h"
-> >
-> > +/* According to DE2.0/DE3.0 manual VI scaler enable register is double
-> > + * buffered, but de facto it doesn't, or the hardware has the shadow
-> > + * register latching issues which causes single-frame picture corrupti=
-on
-> > + * after changing the state of scaler enable register.
-> > + * Allow the user to keep the scaler always enabled, preventing the UI
-> > + * glitches on the transition from scaled to unscaled state.
-> > + */
-> > +int sun8i_vi_keep_scaler_enabled;
-> > +MODULE_PARM_DESC(keep_vi_scaler_enabled,
-> > +              "Keep VI scaler enabled (1 =3D enabled, 0 =3D disabled (=
-default))");
-> > +module_param_named(keep_vi_scaler_enabled, sun8i_vi_keep_scaler_enable=
-d, int, 0644);
-> > +
-> >  struct de2_fmt_info {
-> >       u32     drm_fmt;
-> >       u32     de2_fmt;
-> > diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/s=
-un4i/sun8i_vi_layer.c
-> > index 662ba1018cc4..f005ab883503 100644
-> > --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> > +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> > @@ -17,6 +17,8 @@
-> >  #include "sun8i_vi_layer.h"
-> >  #include "sun8i_vi_scaler.h"
-> >
-> > +extern int sun8i_vi_keep_scaler_enabled;
-> > +
-> >  static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int chann=
-el,
-> >                                 int overlay, bool enable, unsigned int =
-zpos)
-> >  {
-> > @@ -149,7 +151,7 @@ static int sun8i_vi_layer_update_coord(struct sun8i=
-_mixer *mixer, int channel,
-> >        */
-> >       subsampled =3D format->hsub > 1 || format->vsub > 1;
-> >
-> > -     if (insize !=3D outsize || subsampled || hphase || vphase) {
-> > +     if (insize !=3D outsize || subsampled || hphase || vphase || sun8=
-i_vi_keep_scaler_enabled) {
-> >               unsigned int scanline, required;
-> >               struct drm_display_mode *mode;
-> >               u32 hscale, vscale, fps;
-> > --
-> > 2.30.2
-> >

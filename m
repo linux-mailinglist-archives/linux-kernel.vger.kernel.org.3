@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0D053C9B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D514653C9CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244184AbiFCMNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
+        id S244240AbiFCMPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240041AbiFCMNC (ORCPT
+        with ESMTP id S244203AbiFCMPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:13:02 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE731289A1;
-        Fri,  3 Jun 2022 05:13:01 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u12so15546723eja.8;
-        Fri, 03 Jun 2022 05:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oSn+qALKHYEwcZ0UGKZ6LRYOpOj2VTnTzs3AikaDunE=;
-        b=nc90WpIZeQWxyFlgnF0IWWIbCOc0FS3/BB0jofR8MQaqRMOwFBCdc3IgIXIiWwlHrc
-         zKp7KQV5Up0fo7Jmd+dxxVRMEKmSedM+va8lgto82BageliJC960ZpGLJD4JIJn20Sfg
-         7/LuHmbfiyW7uHv5B0dnBN7M/uzxdxUa5057JDlWT1iFu0mZ/XlYBHojhkdAA9GNdAST
-         msuLAHghaxNxGdT2lbzfw37fY0rzCnJbZ+DQ34KWnl8XUeH09ZUQTXOogFWitRYMZrDQ
-         xPKC4XbHfP9uNk88bJURrp+zwvpltqD/Sw9lgCnrL2tpJIYaF8mG1ZRhxNvE5K/qDNTT
-         zApQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oSn+qALKHYEwcZ0UGKZ6LRYOpOj2VTnTzs3AikaDunE=;
-        b=6DjFAV9TBJWBlLrvIBjKMQldWO+ySzeaDIoTbDFsDBG+4XS9aZ2/9WeSzLYsFfrwXo
-         1OFdgGgrlcMMVRFGsxqs+ja1vm+40mVn9oN5ltlkVTyQs/iV1+LTVpovFeMFmXFmi+oO
-         jcbUD2dBIJa5yrtBWoFeSapquG6zDfVZ4GJQmiv8krVIgayyyuGGChxen6q15yTDx3Xl
-         TP3oNlFTIYkbCxxi0lMg1ZfRnVU74CSrLpm1M7gBpb6YGKD/lkQtmDdO2ZCd2BElMvnH
-         DzH7L0uOF+uZOnTRLcxQF/7+ZUswEKjT4mPazoqB4uK/xsUiiCwXDV8JtLkgqmsYdPds
-         rVGg==
-X-Gm-Message-State: AOAM533Ds6W83/NmGxmlr3W2CkPt8S3yCd1snwTIz12jaam/kY3Wn53/
-        kHzG/8l+42kAnjNgObOVcQA=
-X-Google-Smtp-Source: ABdhPJyeK1lbMDJvtp7U5Ikzsw9E39URbnoaLcUVfQD3XrffaHAgOPByB0YZG1+srSBvYaAwZ0KZKQ==
-X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr8211127ejc.605.1654258380357;
-        Fri, 03 Jun 2022 05:13:00 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170906050300b006fed99e1143sm2742144eja.61.2022.06.03.05.12.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 05:13:00 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 14:12:58 +0200
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-unisoc@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: interrupt-controller: Convert
- rda,8810pl-intc to YAML
-Message-ID: <20220603121258.GA4919@standask-GA-A55M-S2HP>
-References: <20220527125633.GA5145@standask-GA-A55M-S2HP>
- <4bb8e18a-11d8-c617-7952-8887aa815301@linaro.org>
+        Fri, 3 Jun 2022 08:15:41 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2922A39826;
+        Fri,  3 Jun 2022 05:15:40 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 253CFNNf054345;
+        Fri, 3 Jun 2022 07:15:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654258523;
+        bh=wx1Z1JAWtJ0bLXfcJY0X28Tf4dQ3zbCBztSxFzw1Ksc=;
+        h=From:To:CC:Subject:Date;
+        b=lpeAHNriu5d2vuC6OQeEAbResmu00iZLeEHCyBrSBRTKAAPy8dBbj+NBaqVeSZ/bb
+         qLd0zItocBLxaay9+QNt83JVW2xYAtlIPdvZZGCQCS1ImO0s5JQP50TVfn4uriRd6V
+         vocWW41SWU7pz3AEAE58+yglAmKYxmjvRBFhAqek=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 253CFNfV031375
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 3 Jun 2022 07:15:23 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
+ Jun 2022 07:15:22 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 3 Jun 2022 07:15:22 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 253CFLg7025652;
+        Fri, 3 Jun 2022 07:15:22 -0500
+From:   Puranjay Mohan <p-mohan@ti.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
+        <kishon@ti.com>, <robh@kernel.org>
+Subject: [PATCH v4 0/6] Introduce PRU remoteproc consumer API
+Date:   Fri, 3 Jun 2022 17:45:14 +0530
+Message-ID: <20220603121520.13730-1-p-mohan@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4bb8e18a-11d8-c617-7952-8887aa815301@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 29, 2022 at 04:05:12PM +0200, Krzysztof Kozlowski wrote:
-> On 27/05/2022 14:56, Stanislav Jakubek wrote:
-> > Convert RDA Micro interrupt controller bindings to DT schema format.
-> > 
-> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> > ---
-> > 
-> > Didn't know what to do about the interrupt sources listed in the original txt file,
-> > so I've split them off into a separate file. Hope that's okay.
-> 
-> Interrupt sources are not kept in header files.
+This is the v4 of the patch series [1]. The v3 had some comments
+on the DT patch that have been addressed here. The 6th patch in this
+series was missed in the previous versions, so, it has been added now.
 
-Ok, should I move them somewhere else or is it fine to drop them?
+I have posted two more patch series that depend on this series, one to
+the soc tree and another to the networking tree. I had sent all the 3
+series, including this one as RFC [2] to get comments and to explain the
+dependencies.
 
-> Additionally are you
-> sure this is a property of the interrupt controller, not a property of
-> SoC itself? I would assume that one interrupt controller implementation
-> (e.g. GIC) can be used in different SoCs and the sources are every time
-> different because they depend on the actual wiring...
-> 
+The Programmable Real-Time Unit and Industrial Communication Subsystem
+(PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
 
-I honestly have no idea, I just wanted to make some YAML conversions.
-Maybe Mani could answer this?
+There are 3 foundation components for PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
+already merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
 
-> 
-> Best regards,
-> Krzysztof
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be:
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
+In order to make usage of common PRU resources and allow the consumer drivers to
+configure the PRU hardware for specific usage the PRU API is introduced.
 
-Thanks,
-Stanislav
+[1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220418104118.12878-1-p-mohan@ti.com/
+[2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+
+Thanks and Regards,
+Puranjay Mohan
+
+Roger Quadros (1):
+  remoteproc: pru: Add pru_rproc_set_ctable() function
+
+Suman Anna (2):
+  dt-bindings: remoteproc: Add PRU consumer bindings
+  remoteproc: pru: Make sysfs entries read-only for PRU client driven
+    boots
+
+Tero Kristo (3):
+  remoteproc: pru: Add APIs to get and put the PRU cores
+  remoteproc: pru: Configure firmware based on client setup
+  remoteproc: pru: add support for configuring GPMUX based on client
+    setup
+
+ .../bindings/remoteproc/ti,pru-consumer.yaml  |  69 +++++
+ drivers/remoteproc/pru_rproc.c                | 254 +++++++++++++++++-
+ include/linux/pruss.h                         |  78 ++++++
+ 3 files changed, 396 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+ create mode 100644 include/linux/pruss.h
+
+-- 
+2.17.1
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C0A53CF07
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067B953D044
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiFCRwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S1346105AbiFCSBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345325AbiFCRss (ORCPT
+        with ESMTP id S1347223AbiFCRwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:48:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E2854684;
-        Fri,  3 Jun 2022 10:45:32 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1ADB82;
+        Fri,  3 Jun 2022 10:50:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A886B82189;
-        Fri,  3 Jun 2022 17:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6840EC385A9;
-        Fri,  3 Jun 2022 17:45:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A751B823B0;
+        Fri,  3 Jun 2022 17:50:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3775C385B8;
+        Fri,  3 Jun 2022 17:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278329;
-        bh=feL5DhGpFr9fOQ+CVlQslnoobzfhYmtKXTcaAR7THEI=;
+        s=korg; t=1654278647;
+        bh=py7W3K5TMchg50vXQHrYE7WTrD96cuiq7L66aU9VY4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SYPCZ5+9y/g3/Yj233yH0AjuZCvctGhChGIGr4bsjzs8qOXreEd9C1EXeApwkOBja
-         sxTlUc28ifGeIQ3zty69IfDc1v6JWuO2sajftkcHPgra5ExjGd1wh+R3NXG0ty8IXh
-         Fv2osr5MJHvEOaL2qC4WXILCHUv3A6J9AUXpcQLA=
+        b=kj6Y+ndUlti7M4i9DLGljlmxq8c1XgtlXNkOzlOooVx8jV5FhS9ZBxiTAw6qfcr+d
+         LMwLsYZEreTdgdHQK6mDYO2TPAQet3NQrMwI5F+5d1CJoNA8B676z1oizQZ9G4X7Dx
+         42KhmnElGzBL9qqt+cJwAJAXeCI6Bui0E02GrpK0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.4 31/34] docs: submitting-patches: Fix crossref to The canonical patch format
-Date:   Fri,  3 Jun 2022 19:43:27 +0200
-Message-Id: <20220603173817.085758905@linuxfoundation.org>
+        stable@vger.kernel.org, Marek Maslanka <mm@semihalf.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.15 48/66] HID: multitouch: Add support for Google Whiskers Touchpad
+Date:   Fri,  3 Jun 2022 19:43:28 +0200
+Message-Id: <20220603173822.054005560@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
+From: Marek Maślanka <mm@semihalf.com>
 
-commit 6d5aa418b3bd42cdccc36e94ee199af423ef7c84 upstream.
+commit 1d07cef7fd7599450b3d03e1915efc2a96e1f03f upstream.
 
-The reference to `explicit_in_reply_to` is pointless as when the
-reference was added in the form of "#15" [1], Section 15) was "The
-canonical patch format".
-The reference of "#15" had not been properly updated in a couple of
-reorganizations during the plain-text SubmittingPatches era.
+The Google Whiskers touchpad does not work properly with the default
+multitouch configuration. Instead, use the same configuration as Google
+Rose.
 
-Fix it by using `the_canonical_patch_format`.
-
-[1]: 2ae19acaa50a ("Documentation: Add "how to write a good patch summary" to SubmittingPatches")
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Fixes: 5903019b2a5e ("Documentation/SubmittingPatches: convert it to ReST markup")
-Fixes: 9b2c76777acc ("Documentation/SubmittingPatches: enrich the Sphinx output")
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: stable@vger.kernel.org # v4.9+
-Link: https://lore.kernel.org/r/64e105a5-50be-23f2-6cae-903a2ea98e18@gmail.com
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Marek Maslanka <mm@semihalf.com>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/process/submitting-patches.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-multitouch.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -133,7 +133,7 @@ as you intend it to.
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -2176,6 +2176,9 @@ static const struct hid_device_id mt_dev
+ 	{ .driver_data = MT_CLS_GOOGLE,
+ 		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
+ 			USB_DEVICE_ID_GOOGLE_TOUCH_ROSE) },
++	{ .driver_data = MT_CLS_GOOGLE,
++		HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8, USB_VENDOR_ID_GOOGLE,
++			USB_DEVICE_ID_GOOGLE_WHISKERS) },
  
- The maintainer will thank you if you write your patch description in a
- form which can be easily pulled into Linux's source code management
--system, ``git``, as a "commit log".  See :ref:`explicit_in_reply_to`.
-+system, ``git``, as a "commit log".  See :ref:`the_canonical_patch_format`.
- 
- Solve only one problem per patch.  If your description starts to get
- long, that's a sign that you probably need to split up your patch.
+ 	/* Generic MT device */
+ 	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_MULTITOUCH, HID_ANY_ID, HID_ANY_ID) },
 
 

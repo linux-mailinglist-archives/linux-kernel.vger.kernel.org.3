@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4592253D0DC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA7053CFC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347339AbiFCSKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
+        id S1345808AbiFCR4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345960AbiFCR5i (ORCPT
+        with ESMTP id S1346421AbiFCRvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:57:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C5557120;
-        Fri,  3 Jun 2022 10:54:12 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EA756C0C;
+        Fri,  3 Jun 2022 10:48:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61658B82419;
-        Fri,  3 Jun 2022 17:54:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAC3C385B8;
-        Fri,  3 Jun 2022 17:54:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF207604EF;
+        Fri,  3 Jun 2022 17:48:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E164AC385A9;
+        Fri,  3 Jun 2022 17:48:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278850;
-        bh=tfgjU31NPL+z9713wFziaUtlFoPM/QCEwzK8ujtven8=;
+        s=korg; t=1654278483;
+        bh=yyrGhqI8IVeC53hKFu4TYqVuzOZWCA2X3vdF+q2ZsDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oHqQAxjOhlJOENyTHYmQu4DXgNNqmfvifhO9o3O/I2CozMqWrQI4GVGmXPFFuz1bJ
-         xEGBGGZwmqxpSL0JqtGjUv99HesoYxOmC6vSZS95pebatldwSbz19sY9jFbhdYKL+g
-         MVMRx++GAMomNAbqYzUj24icopG8gX44KSEqqvCg=
+        b=qVkEoYM32u4COSJsWOqgCcDmGSVc+acP1tB7ZWFKerYd8EHcPZcmEuXpEBnTC2ZWs
+         zzWCE7HTcvewZPIER4f5WZDnogLHUj5fKP3E8KpL7MV9/R+czFuGDC/wxznwca7v8n
+         LhRCZtG2AULRpg2V/Vo/Qr5FymfJ2OgS+SW8FoDw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.17 47/75] Bluetooth: hci_qca: Use del_timer_sync() before freeing
-Date:   Fri,  3 Jun 2022 19:43:31 +0200
-Message-Id: <20220603173823.082263892@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH 5.10 47/53] tpm: Fix buffer access in tpm2_get_tpm_pt()
+Date:   Fri,  3 Jun 2022 19:43:32 +0200
+Message-Id: <20220603173820.087135017@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
 
-commit 72ef98445aca568a81c2da050532500a8345ad3a upstream.
+commit e57b2523bd37e6434f4e64c7a685e3715ad21e9a upstream.
 
-While looking at a crash report on a timer list being corrupted, which
-usually happens when a timer is freed while still active. This is
-commonly triggered by code calling del_timer() instead of
-del_timer_sync() just before freeing.
+Under certain conditions uninitialized memory will be accessed.
+As described by TCG Trusted Platform Module Library Specification,
+rev. 1.59 (Part 3: Commands), if a TPM2_GetCapability is received,
+requesting a capability, the TPM in field upgrade mode may return a
+zero length list.
+Check the property count in tpm2_get_tpm_pt().
 
-One possible culprit is the hci_qca driver, which does exactly that.
-
-Eric mentioned that wake_retrans_timer could be rearmed via the work
-queue, so also move the destruction of the work queue before
-del_timer_sync().
-
-Cc: Eric Dumazet <eric.dumazet@gmail.com>
+Fixes: 2ab3241161b3 ("tpm: migrate tpm2_get_tpm_pt() to use struct tpm_buf")
 Cc: stable@vger.kernel.org
-Fixes: 0ff252c1976da ("Bluetooth: hciuart: Add support QCA chipset for UART")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/hci_qca.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/tpm/tpm2-cmd.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -696,9 +696,9 @@ static int qca_close(struct hci_uart *hu
- 	skb_queue_purge(&qca->tx_wait_q);
- 	skb_queue_purge(&qca->txq);
- 	skb_queue_purge(&qca->rx_memdump_q);
--	del_timer(&qca->tx_idle_timer);
--	del_timer(&qca->wake_retrans_timer);
- 	destroy_workqueue(qca->workqueue);
-+	del_timer_sync(&qca->tx_idle_timer);
-+	del_timer_sync(&qca->wake_retrans_timer);
- 	qca->hu = NULL;
- 
- 	kfree_skb(qca->rx_skb);
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -400,7 +400,16 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip
+ 	if (!rc) {
+ 		out = (struct tpm2_get_cap_out *)
+ 			&buf.data[TPM_HEADER_SIZE];
+-		*value = be32_to_cpu(out->value);
++		/*
++		 * To prevent failing boot up of some systems, Infineon TPM2.0
++		 * returns SUCCESS on TPM2_Startup in field upgrade mode. Also
++		 * the TPM2_Getcapability command returns a zero length list
++		 * in field upgrade mode.
++		 */
++		if (be32_to_cpu(out->property_cnt) > 0)
++			*value = be32_to_cpu(out->value);
++		else
++			rc = -ENODATA;
+ 	}
+ 	tpm_buf_destroy(&buf);
+ 	return rc;
 
 

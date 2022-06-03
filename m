@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982B453C9AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536B153C9B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244143AbiFCMH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S244156AbiFCMIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiFCMHx (ORCPT
+        with ESMTP id S230128AbiFCMIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:07:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC138140EA
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:07:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F15AB82333
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97DEC385B8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:07:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654258066;
-        bh=T934igT47qjG/TgdvSCfrEqMrn8cCh6pBKy0B3VVjT8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SG4KEVDodcEuFGVL7nKV8wof6sMda4nOj30jLoT7mESU2b16x87dQnE/98a17zgun
-         cCq1RkutvgiRfe5eHTmD2d5wGdxeXKmj3atOEO0Hd1kUZ3MYGgOUBOQ4nabHOQgAyl
-         vK18uG/XkITYoIr2vUPy5J6RlnbkwhafYjWCpANWa/IIOQM+PSSj7LF6A0T4Cflxje
-         QmAGawFOIo2ANVcO8SreeoY1UibTsjNZWblacmU9sEo1kzIKLdtjrhojewLusAw9nt
-         YMVLqcjF3Jyyq5UEgra2W7LulqtdQZ1VL/afcdTPD3Nd1lMhDI4Iqs6mFY3pzznwTZ
-         /jx/VVhYm51cA==
-Received: by mail-yb1-f176.google.com with SMTP id w2so13350874ybi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:07:46 -0700 (PDT)
-X-Gm-Message-State: AOAM530jYTFNDJLoTBmUm3ZwSAZVU9pj/r5ihZJwR2fxuQDmU9NDPBNN
-        KpHdwwnpuNv67Oh7vCUqpLsXVAdM3vI0Z0tJNja+Mw==
-X-Google-Smtp-Source: ABdhPJx0NgrkprQ5rfNp0IzDQIbalp124FvEdQVuUhK239g8tFL3tgWKjmNv7xOB0R5AVVTjw4SXx0vSecSXxGJ59ss=
-X-Received: by 2002:a5b:c12:0:b0:662:af24:c27c with SMTP id
- f18-20020a5b0c12000000b00662af24c27cmr1634522ybq.158.1654258065912; Fri, 03
- Jun 2022 05:07:45 -0700 (PDT)
+        Fri, 3 Jun 2022 08:08:46 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019A615A3A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:08:45 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id w2so13354980ybi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5kqHlwmrV1wou657daBuKPdc5MJ+PwGWwljNjG2zmb0=;
+        b=Him0+g+1O7Hmk7Y9JaK9fWhAVt3Z48xEMCquYRbnvPmrozv+FXQHZDF6P+jUxk5hJs
+         ozd8vvV3Zv/70j9/zzH12xxJsxz+lFaJm1RyvE6teR5A39TWEgGut9pj//6qVSIa4+IX
+         VVjpfX//CEzqxM4ScwKvvJO+MP54xhqJ1h97PpyTfVK6Ri/mjZCKX/jJYGpQX4jsyGWZ
+         YYCNHWJvhdx6Dvz6h803PsfoH90hDxihlkt7ZhFaG+gLldeHoahJ6Gc72Yo+E1zkyctR
+         +WoZ/7ISTFa83yINH/HmwKZe3ivQjnrX46AoGTPV2uxO4iO3UZF8WtrkHrr3vGOp+qP/
+         zNUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5kqHlwmrV1wou657daBuKPdc5MJ+PwGWwljNjG2zmb0=;
+        b=LTaja0dyEWx5aMkysdEx6dwWI8HaJaA2GgWWQe0a/M+NLE3ZUD5L1E/OUhCjiAT9Vp
+         PmgBnrFUMoY+5r9ssxTeF4ubjeduMpsNKQxldsAHavxHyoUNY8oqCsLcvRHJtV8JX4XD
+         8AmUQ3e0bOJM1wQSjEcWRrs1s3RzwCFTTpUEi8x8cY/0/TUL4k5OJEVbhw3Hnq6cwc9o
+         mq7kjgUKg/DKRXNgD6SOw+v2rYEzjya1unHW56ROBQPROcnYvJaSvtSyfdJc5eU6EOfD
+         iQI72+9tw+eqRbaqTbvROfgclCkXZ9+zwlqFn5LKwbE8bDqC/C1Q+oGuTXPuKprLJ3BE
+         tfpA==
+X-Gm-Message-State: AOAM532BoIclK+hZNG89Vxo7d75zV9Cqsi2zdSDHMROPr+pZoMHTGle9
+        0q/52xHTZ0JxfVwVRpDQr+gucOWnE2bmKTo8Tdg5XQ==
+X-Google-Smtp-Source: ABdhPJzmPmCGl3dc0kIwyk1e8uOu8LiEXgu38osh1nc9CfYHUppbcgtipj++Vz1u+snIa28MG7OqnwrG6TBWtv54mns=
+X-Received: by 2002:a05:6902:1007:b0:660:4225:2ee1 with SMTP id
+ w7-20020a056902100700b0066042252ee1mr9396661ybt.424.1654258124056; Fri, 03
+ Jun 2022 05:08:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220525132115.896698-1-roberto.sassu@huawei.com> <20220525132115.896698-2-roberto.sassu@huawei.com>
-In-Reply-To: <20220525132115.896698-2-roberto.sassu@huawei.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Fri, 3 Jun 2022 14:07:35 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
-Message-ID: <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
- verification on map values
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220601035545.82187-1-zhouchengming@bytedance.com>
+In-Reply-To: <20220601035545.82187-1-zhouchengming@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 3 Jun 2022 14:08:32 +0200
+Message-ID: <CAKfTPtAa9efmNq29KJgV46c-ncN866UViHuhJMdUrQYyhiNtzw@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: update comments in enqueue/dequeue_entity()
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,230 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 3:21 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+On Wed, 1 Jun 2022 at 05:55, Chengming Zhou <zhouchengming@bytedance.com> wrote:
 >
-> In some cases, it is desirable to ensure that a map contains data from
-> authenticated sources, for example if map data are used for making security
-> decisions.
+> When reading the sched_avg related code, I found the comments in
+> enqueue/dequeue_entity() are not updated with the current code.
+>
+> We don't add/subtract entity's runnable_avg from cfs_rq->runnable_avg
+> during enqueue/dequeue_entity(), those are done only for attach/detach.
+>
+> This patch updates the comments to reflect the current code working.
+>
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-I am guessing this comes from the discussion we had about digilim.
-I remember we discussed a BPF helper that could verify signatures.
-Why would that approach not work?
+Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
 
->
->
-> Such restriction is achieved by verifying the signature of map values, at
-> the time those values are added to the map with the bpf() system call (more
-> specifically, when the commands passed to bpf() are BPF_MAP_UPDATE_ELEM or
-> BPF_MAP_UPDATE_BATCH). Mmappable maps are not allowed in this case.
->
-> Signature verification is initially done with keys in the primary and
-> secondary kernel keyrings, similarly to kernel modules. This allows system
-> owners to enforce a system-wide policy based on the keys they trust.
-> Support for additional keyrings could be added later, based on use case
-> needs.
->
-> Signature verification is done only for those maps for which the new map
-> flag BPF_F_VERIFY_ELEM is set. When the flag is set, the kernel expects map
-> values to be in the following format:
->
-> +-------------------------------+---------------+-----+-----------------+
-> | verified data+sig size (be32) | verified data | sig | unverified data |
-> +-------------------------------+---------------+-----+-----------------+
->
-> where sig is a module-style appended signature as generated by the
-> sign-file tool. The verified data+sig size (in big endian) must be
-> explicitly provided (it is not generated by sign-file), as it cannot be
-> determined in other ways (currently, the map value size is fixed). It can
-> be obtained from the size of the file created by sign-file.
->
-> Introduce the new map flag BPF_F_VERIFY_ELEM, and additionally call the new
-> function bpf_map_verify_value_sig() from bpf_map_update_value() if the flag
-> is set. bpf_map_verify_value_sig(), declared as global for a new helper, is
-> basically equivalent to mod_verify_sig(). It additionally does the marker
-> check, that for kernel modules is done in module_sig_check(), and the
-> parsing of the verified data+sig size.
->
-> Currently, enable the usage of the flag only for the array map. Support for
-> more map types can be added later.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  include/linux/bpf.h            |  7 ++++
->  include/uapi/linux/bpf.h       |  3 ++
->  kernel/bpf/arraymap.c          |  2 +-
->  kernel/bpf/syscall.c           | 70 ++++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |  3 ++
->  5 files changed, 84 insertions(+), 1 deletion(-)
+>  kernel/sched/fair.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index a7080c86fa76..8f5c042e70a7 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1825,6 +1825,8 @@ static inline bool unprivileged_ebpf_enabled(void)
->         return !sysctl_unprivileged_bpf_disabled;
->  }
->
-> +int bpf_map_verify_value_sig(const void *mod, size_t modlen, bool verify);
-> +
->  #else /* !CONFIG_BPF_SYSCALL */
->  static inline struct bpf_prog *bpf_prog_get(u32 ufd)
->  {
-> @@ -2034,6 +2036,11 @@ static inline bool unprivileged_ebpf_enabled(void)
->         return false;
->  }
->
-> +static inline int bpf_map_verify_value_sig(const void *mod, size_t modlen,
-> +                                          bool verify)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
->  #endif /* CONFIG_BPF_SYSCALL */
->
->  void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index f4009dbdf62d..a8e7803d2593 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1226,6 +1226,9 @@ enum {
->
->  /* Create a map that is suitable to be an inner map with dynamic max entries */
->         BPF_F_INNER_MAP         = (1U << 12),
-> +
-> +/* Verify map value (fmt: ver data+sig size(be32), ver data, sig, unver data) */
-> +       BPF_F_VERIFY_ELEM       = (1U << 13)
->  };
->
->  /* Flags for BPF_PROG_QUERY. */
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index fe40d3b9458f..b430fdd0e892 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -17,7 +17,7 @@
->
->  #define ARRAY_CREATE_FLAG_MASK \
->         (BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | \
-> -        BPF_F_PRESERVE_ELEMS | BPF_F_INNER_MAP)
-> +        BPF_F_PRESERVE_ELEMS | BPF_F_INNER_MAP | BPF_F_VERIFY_ELEM)
->
->  static void bpf_array_free_percpu(struct bpf_array *array)
->  {
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 2b69306d3c6e..ca9e4a284120 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -35,6 +35,8 @@
->  #include <linux/rcupdate_trace.h>
->  #include <linux/memcontrol.h>
->  #include <linux/trace_events.h>
-> +#include <linux/verification.h>
-> +#include <linux/module_signature.h>
->
->  #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
->                           (map)->map_type == BPF_MAP_TYPE_CGROUP_ARRAY || \
-> @@ -180,6 +182,13 @@ static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
->  {
->         int err;
->
-> +       if (map->map_flags & BPF_F_VERIFY_ELEM) {
-> +               err = bpf_map_verify_value_sig(value, bpf_map_value_size(map),
-> +                                              true);
-> +               if (err < 0)
-> +                       return err;
-> +       }
-> +
->         /* Need to create a kthread, thus must support schedule */
->         if (bpf_map_is_dev_bound(map)) {
->                 return bpf_map_offload_update_elem(map, key, value, flags);
-> @@ -1057,6 +1066,11 @@ static int map_create(union bpf_attr *attr)
->         if (err)
->                 return -EINVAL;
->
-> +       /* Allow signed data to go through update/push methods only. */
-> +       if ((attr->map_flags & BPF_F_VERIFY_ELEM) &&
-> +           (attr->map_flags & BPF_F_MMAPABLE))
-> +               return -EINVAL;
-> +
->         if (attr->btf_vmlinux_value_type_id) {
->                 if (attr->map_type != BPF_MAP_TYPE_STRUCT_OPS ||
->                     attr->btf_key_type_id || attr->btf_value_type_id)
-> @@ -1353,6 +1367,62 @@ static int map_lookup_elem(union bpf_attr *attr)
->         return err;
->  }
->
-> +int bpf_map_verify_value_sig(const void *mod, size_t modlen, bool verify)
-> +{
-> +       const size_t marker_len = strlen(MODULE_SIG_STRING);
-> +       struct module_signature ms;
-> +       size_t sig_len;
-> +       u32 _modlen;
-> +       int ret;
-> +
-> +       /*
-> +        * Format of mod:
-> +        *
-> +        * verified data+sig size (be32), verified data, sig, unverified data
-> +        */
-> +       if (modlen <= sizeof(u32))
-> +               return -ENOENT;
-> +
-> +       _modlen = be32_to_cpu(*(u32 *)(mod));
-> +
-> +       if (_modlen > modlen - sizeof(u32))
-> +               return -EINVAL;
-> +
-> +       modlen = _modlen;
-> +       mod += sizeof(u32);
-> +
-> +       if (modlen <= marker_len)
-> +               return -ENOENT;
-> +
-> +       if (memcmp(mod + modlen - marker_len, MODULE_SIG_STRING, marker_len))
-> +               return -ENOENT;
-> +
-> +       modlen -= marker_len;
-> +
-> +       if (modlen <= sizeof(ms))
-> +               return -EBADMSG;
-> +
-> +       memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
-> +
-> +       ret = mod_check_sig(&ms, modlen, "bpf_map_value");
-> +       if (ret)
-> +               return ret;
-> +
-> +       sig_len = be32_to_cpu(ms.sig_len);
-> +       modlen -= sig_len + sizeof(ms);
-> +
-> +       if (verify) {
-> +               ret = verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-> +                                            VERIFY_USE_SECONDARY_KEYRING,
-> +                                            VERIFYING_UNSPECIFIED_SIGNATURE,
-> +                                            NULL, NULL);
-> +               if (ret < 0)
-> +                       return ret;
-> +       }
-> +
-> +       return modlen;
-> +}
-> +EXPORT_SYMBOL_GPL(bpf_map_verify_value_sig);
->
->  #define BPF_MAP_UPDATE_ELEM_LAST_FIELD flags
->
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index f4009dbdf62d..a8e7803d2593 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -1226,6 +1226,9 @@ enum {
->
->  /* Create a map that is suitable to be an inner map with dynamic max entries */
->         BPF_F_INNER_MAP         = (1U << 12),
-> +
-> +/* Verify map value (fmt: ver data+sig size(be32), ver data, sig, unver data) */
-> +       BPF_F_VERIFY_ELEM       = (1U << 13)
->  };
->
->  /* Flags for BPF_PROG_QUERY. */
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index b3371fa40548..e0cd4052e32f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4348,7 +4348,8 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>         /*
+>          * When enqueuing a sched_entity, we must:
+>          *   - Update loads to have both entity and cfs_rq synced with now.
+> -        *   - Add its load to cfs_rq->runnable_avg
+> +        *   - For group_entity, update its runnable_weight to reflect the new
+> +        *     h_nr_running of its group cfs_rq.
+>          *   - For group_entity, update its weight to reflect the new share of
+>          *     its group cfs_rq
+>          *   - Add its new weight to cfs_rq->load.weight
+> @@ -4433,7 +4434,8 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+>         /*
+>          * When dequeuing a sched_entity, we must:
+>          *   - Update loads to have both entity and cfs_rq synced with now.
+> -        *   - Subtract its load from the cfs_rq->runnable_avg.
+> +        *   - For group_entity, update its runnable_weight to reflect the new
+> +        *     h_nr_running of its group cfs_rq.
+>          *   - Subtract its previous weight from cfs_rq->load.weight.
+>          *   - For group entity, update its weight to reflect the new share
+>          *     of its group cfs_rq.
 > --
-> 2.25.1
+> 2.36.1
 >

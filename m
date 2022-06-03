@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E8C53C223
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD16553C241
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241554AbiFCBAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S241039AbiFCBAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241361AbiFCAvD (ORCPT
+        with ESMTP id S241365AbiFCAvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 20:51:03 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427893120C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:47:50 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 92-20020a17090a09e500b001d917022847so3532245pjo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:47:50 -0700 (PDT)
+Received: from mail-oo1-xc49.google.com (mail-oo1-xc49.google.com [IPv6:2607:f8b0:4864:20::c49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D5135249
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:47:51 -0700 (PDT)
+Received: by mail-oo1-xc49.google.com with SMTP id 188-20020a4a11c5000000b0040e4e4ced2dso3159275ooc.23
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=1ZvG+5/wZpUAC90uvh+akjpkSn0i92RxKUjEYWBqrYg=;
-        b=sgScZDk5zVz4fw/BQVRlIJp5pQMk8dEkokKERscif59Eeqo3a6F4CqAk8JFLmpiHXF
-         NHc/CFk6Z91YX0RCXgwFA8DvuUXxo4BmnP2DVk9neuEVzKIHslb2VVPqW2bNUcEIZMNY
-         fJGJxnwGEAYHk+i4RUGq/8ZZebxz6jVwF2ClNhu/0paTnTcwMBboxJ7n+iVMP1cg1ju+
-         1lX6HdYzH89D18KqzgJDDkNluwHnLe0iGV0u5cujXLbWt9Btb1vgqP2A6bA1FE+OD0a0
-         pZ1WAWeRnWW+L5TUiibIQsIPs7zZNQXIF/WRk1mXFLAqkDFbwvq6veSJXeCn41Q4+pS1
-         0fVw==
+        bh=+4nNoyX7JeBm/N7spsN6DPOga3uPSoar0+etXxoGgD4=;
+        b=NvMh4Yj+8LUmAda/RiZF1K0mOWuGUuA6Hl1yujDnw/gMWAp8EN+UZ0d5KujDvcyVBC
+         QJjP4ouu6XsidrpZw3w/tXGOIhUcFc02xHYtwWFkihpyJfNCOr4Fs/QUg5eQz9tT3uPk
+         mCHUt4t9PYUIBLQ37J6/90GtfjugR+FkSGG7nBYEXljjkvQY7+LJYyip5yTBwgR4yoJM
+         JFJcrlibEbU1UPEfX0Dy5fhvciVLQeIelNfuIcntb5kSusSM5fGE+jZJBTyTkh3tDbnF
+         mBanNkpTk1HglE+10CDnNjFChoKvNPQanFrP5gz9MgPf/j87iDttfGwS1aHvwsagr+5W
+         pbFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=1ZvG+5/wZpUAC90uvh+akjpkSn0i92RxKUjEYWBqrYg=;
-        b=Ot/HI+og77OXxyVcgBB3le274u+iGQWYhgru1YQlK5zRRliDHjmQpZphY5z757OdXc
-         s+qu0OqJnXA5ST4OB+9gxnnCI1+7MdeznNEaX5R92BKaQ/49FWLb5hYG69NLmKm7tDbH
-         R9AfiLZ73C5ECVh6l52Yi60EWwus8qIA7AT1iD5q9OrchxZkQvDNhjgDrQ0LOaJqz115
-         4Qvv6TSlH/4MK213UlXhyW52RB91h1UoOi1twdeYula+EiEgUnlIXHJAS8jLBsy8fvda
-         nAjtE7sImM7XxdBLM+7MqZ6BhS4xC4qDmHPoGJ2eNcjFRknhMRPf4MGxBv4ZHbheHBi7
-         +pjQ==
-X-Gm-Message-State: AOAM5333LixjnUi7FbLP6za3LS+GWoI0LzJ2JKC4G6MtiYoDqG0PnOeg
-        TsYfWlS1JTm5qHM2uhbcMkK7RRv4qFI=
-X-Google-Smtp-Source: ABdhPJyVF7MsShOiUhLdM3RTFRisaQrEeNwNutLK3YJNPYJsVvtsN8aAT0rvcmwqun9joKQpqnheHRRFj90=
+        bh=+4nNoyX7JeBm/N7spsN6DPOga3uPSoar0+etXxoGgD4=;
+        b=cg/9y6+1tnk8+x7wVLQiQhcqbr1u8iN0WnmSFd9XLYEg4KoQuMIzIep20Zx2iRcgce
+         exwk7SVRDSEILLBVaUE2eW/ocPOBNJMtFLP8aXb+5ju2cMux/fHufq1VUHLxkTApwi1i
+         OQv1GUn6N9Me4/kviuov5JhH9BhAvBCkttTct9L3qPL5M05ICGNigaxyQSzxTDr5TGHy
+         vWZdicaHHcgJDBNokGO97RsIcP+Onx3cTcvsH2raVRdGUnuRN68Ukqva2DUgtgJm/7t5
+         7Jg0h50dsiXJzSQYMwUNqEAEn2xEqWa1jQxYBcDYYYwkZ1BVR9AWEPt9eyDV9hVt7vOm
+         gCCQ==
+X-Gm-Message-State: AOAM530dZt09JXlFUX1efuTpr4JaG7aQONVxxzs5AVPBW0ZCkIJ/3u7s
+        5JiuA0dPWpQ/ihFbNaxkpNfYtKWhTiM=
+X-Google-Smtp-Source: ABdhPJz9agXYe3qC0Put60InXSJB1iqnJiW+Ya6NWeg2trr4toG5zFlkBkkvXEHd6cR5tugGatjlX87uXzk=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:6907:b0:162:1237:42df with SMTP id
- j7-20020a170902690700b00162123742dfmr7622482plk.157.1654217269184; Thu, 02
- Jun 2022 17:47:49 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6870:c193:b0:f3:3d31:1b94 with SMTP id
+ h19-20020a056870c19300b000f33d311b94mr4507626oad.90.1654217271021; Thu, 02
+ Jun 2022 17:47:51 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:43:27 +0000
+Date:   Fri,  3 Jun 2022 00:43:28 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-141-seanjc@google.com>
+Message-Id: <20220603004331.1523888-142-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 140/144] KVM: selftests: Drop DEFAULT_GUEST_PHY_PAGES, open
- code the magic number
+Subject: [PATCH v2 141/144] KVM: selftests: Return an 'unsigned int' from kvm_check_cap()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -73,52 +72,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove DEFAULT_GUEST_PHY_PAGES and open code the magic number (with a
-comment) in vm_nr_pages_required().  Exposing DEFAULT_GUEST_PHY_PAGES to
-tests was a symptom of the VM creation APIs not cleanly supporting tests
-that create runnable vCPUs, but can't do so immediately.  Now that tests
-don't have to manually compute the amount of memory needed for basic
-operation, make it harder for tests to do things that should be handled
-by the framework, i.e. force developers to improve the framework instead
-of hacking around flaws in individual tests.
+Return an 'unsigned int' instead of a signed 'int' from kvm_check_cap(),
+to make it more obvious that kvm_check_cap() can never return a negative
+value due to its assertion that the return is ">= 0".
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 1 -
- tools/testing/selftests/kvm/lib/kvm_util.c          | 8 +++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/include/kvm_util_base.h | 2 +-
+ tools/testing/selftests/kvm/kvm_binary_stats_test.c | 2 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c          | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index db9c00a7af4e..1c762988ab9c 100644
+index 1c762988ab9c..72cc0ecda067 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -100,7 +100,6 @@ memslot2region(struct kvm_vm *vm, uint32_t memslot);
- #define KVM_UTIL_MIN_VADDR		0x2000
- #define KVM_GUEST_PAGE_TABLE_MIN_PADDR	0x180000
+@@ -167,7 +167,7 @@ extern const struct vm_guest_mode_params vm_guest_mode_params[];
  
--#define DEFAULT_GUEST_PHY_PAGES		512
- #define DEFAULT_GUEST_STACK_VADDR_MIN	0xab6000
- #define DEFAULT_STACK_PGS		5
+ int open_path_or_exit(const char *path, int flags);
+ int open_kvm_dev_path_or_exit(void);
+-int kvm_check_cap(long cap);
++unsigned int kvm_check_cap(long cap);
  
+ #define __KVM_SYSCALL_ERROR(_name, _ret) \
+ 	"%s failed, rc: %i errno: %i (%s)", (_name), (_ret), errno, strerror(errno)
+diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+index 7f2ddc1535d7..982bf3f7d9c5 100644
+--- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
++++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	/* Check the extension for binary stats */
+-	if (kvm_check_cap(KVM_CAP_BINARY_STATS_FD) <= 0) {
++	if (!kvm_check_cap(KVM_CAP_BINARY_STATS_FD)) {
+ 		print_skip("Binary form statistics interface is not supported");
+ 		exit(KSFT_SKIP);
+ 	}
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 494bce490344..2dcd83a03cc2 100644
+index 2dcd83a03cc2..8f7ee9cb551c 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -270,7 +270,13 @@ static uint64_t vm_nr_pages_required(uint32_t nr_runnable_vcpus,
- 		    "nr_vcpus = %d too large for host, max-vcpus = %d",
- 		    nr_runnable_vcpus, kvm_check_cap(KVM_CAP_MAX_VCPUS));
- 
--	nr_pages = DEFAULT_GUEST_PHY_PAGES;
-+	/*
-+	 * Arbitrarily allocate 512 pages (2mb when page size is 4kb) for the
-+	 * test code and other per-VM assets that will be loaded into memslot0.
-+	 */
-+	nr_pages = 512;
-+
-+	/* Account for the per-vCPU stacks on behalf of the test. */
- 	nr_pages += nr_runnable_vcpus * DEFAULT_STACK_PGS;
- 
- 	/*
+@@ -69,7 +69,7 @@ int open_kvm_dev_path_or_exit(void)
+  * Looks up and returns the value corresponding to the capability
+  * (KVM_CAP_*) given by cap.
+  */
+-int kvm_check_cap(long cap)
++unsigned int kvm_check_cap(long cap)
+ {
+ 	int ret;
+ 	int kvm_fd;
 -- 
 2.36.1.255.ge46751e96f-goog
 

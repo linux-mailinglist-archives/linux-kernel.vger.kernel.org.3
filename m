@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FBE53C3E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2978553C3F6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239327AbiFCE5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 00:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
+        id S239721AbiFCFFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 01:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiFCE5w (ORCPT
+        with ESMTP id S236793AbiFCFFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:57:52 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031C421831
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:57:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-30c9a01d1c5so59694827b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:57:49 -0700 (PDT)
+        Fri, 3 Jun 2022 01:05:07 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1663917E;
+        Thu,  2 Jun 2022 22:05:06 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id v7so4975835ilo.3;
+        Thu, 02 Jun 2022 22:05:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=MEQmxhdhzj6Wva0dy8UFtG14viIsjIrwd9QZHTnb4Sg=;
-        b=WhkX3pc6B1nQlpibT1FYCsRiyGAaNvybNGGpmlm4CoUsKd3Wlca7WK5LjY5Z/KOsDs
-         sdb/q6pSoMbrvKG6pr9gVgnRCEXycNiRCTZmrdiv1j+fIFZ3thVdebsjQ2mPTxKtTKZb
-         wD+n0UaX57U6Ht3D61rYEIUV9p0fionYn2lmaYEbbjmbAL1FNBQb36bbvk0x95WWjkrE
-         Cg1Ja4E0ue3ND3QaNDiRKi3O0frT587ZQ/LOdDa1bdLjoDRJQiISUvQjXPbKvHgJkZVD
-         yA36QkodwQEPa3xec6pEe21dQnQ6GK8NERN1N4TOdvGvGf/Ka8wYO4dWy3xieJQmF8wB
-         hAdg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V69MdHZeArGR1p037iUfHw/ib1Y8p6jjj2w/lS/WKCY=;
+        b=O4+rsuFI4q2IP6f0kZluT+02DEU246uyHHow4FVb0J3mZ+w6QZ+L7adWYcZDUgcl5h
+         ZgrPzh0NN0iMHRsEC2ODXobnG7acV3TpCPOYVhV4E3iXgCHyHO8Puarr70+u0JVBSyuU
+         5SICaERPcmUqM6txeFYpwKgbZ1yvAxCmKUane++nAtjUEmuJzH1kdiICFhgJNWnulMh/
+         qZG2hcyJLrI/ewZXcjabuyZ81SjHoCpWfExTG+TuSKpF4E/84130KgexiwgtXMxb2H2I
+         GsG9qinfM6Mq25TgGzrzD6fEJBtFqoq67uWejWJuQntFiY3TqYjPqwr9WOIjuzAcErAI
+         dWmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=MEQmxhdhzj6Wva0dy8UFtG14viIsjIrwd9QZHTnb4Sg=;
-        b=yopLFbQc+9rncnm6mYYQlYApuNfqEEWSsI/4TN/SY8XQHcvQYItL+m0LjnKTqVbh4w
-         mown58Y7M8dM/6xfizG+8ZrWlSwnfRHloMtTm5nz0Zv5kTilQKJea/8OVBTzmGeGmwTE
-         1fSDUDcd7xmpjnhhODwGugTO5M9o7FWt3ECcC7aHMKyWlnMl97bqy/hpxbDJFpsXSc2x
-         1iCeR0UOH+0XgR61nopBfb8YQSQpJzpPgWNuszWz3Gl02f1jHAkEquGFXKD0Q5zAeW1I
-         pQzR4PJm8wP7HG0/KTZG3lNiFnTZ70+E/PE93GMIpgw5BlejhMKTt0gdeeNQI9qtyr8B
-         7exw==
-X-Gm-Message-State: AOAM531mwmaMxNRCDPxYSsi1oye4s56iSsLJoDTSAzgtuO44oHPG/9j9
-        fMfcR16L9t5bTAE2v6Lp8gjbghnXTmXk
-X-Google-Smtp-Source: ABdhPJxC68EAiBGvASOaIPffKNdFKZ0ETYvIPGwdmpWXvlMj0PsDeresPRUqm2vz4oret+2Hq1YldMxgGydC
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:7125:61ca:dfbf:5f0b])
- (user=irogers job=sendgmr) by 2002:a25:bd8b:0:b0:657:8392:55c3 with SMTP id
- f11-20020a25bd8b000000b00657839255c3mr9130007ybh.452.1654232269215; Thu, 02
- Jun 2022 21:57:49 -0700 (PDT)
-Date:   Thu,  2 Jun 2022 21:57:44 -0700
-Message-Id: <20220603045744.2815559-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH] perf docs: Correct typo of event_sources
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        German Gomez <german.gomez@arm.com>,
-        Alyssa Ross <hi@alyssa.is>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Like Xu <likexu@tencent.com>,
-        Joshua Martinez <joshuamart@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Kevin Nomura <nomurak@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V69MdHZeArGR1p037iUfHw/ib1Y8p6jjj2w/lS/WKCY=;
+        b=Y1Ce6HyFfwm5cxdHczRxM+Ief9Wh+ucykyNduhgMVSirvmcX2NegqHEDXwHicQgzU2
+         uXsYOZusCvENmHE35T9cdbFlk94+9fD+mA8HC8+aMLcUAwImfMsJINi3JZcjQmSLgW0Q
+         VV4QY3WBm0luxWc21skUYKS/HTVKbLQvZnnqjhv0hRXHYXVbFu47qrW3nF1CiOwsUdia
+         PoSNS/T60hKKYcmJuGUx+Lo2RNz3zEuTAPicXOP1mtHXKTQcQKAwogqhF4kZDja5trRa
+         V2/Kk4/tJGt7sg4z7i1TQibWqHPstFx8YryubikNIzF334EQGV3foZ0m/4Q2j0zmm+6k
+         wAqA==
+X-Gm-Message-State: AOAM532Vgct46uLL5rmNVo16vzUsOQs2bWRCilAEJf2wmpCR/26x6Veb
+        4ews4AE6hOabUd21tsS5OWNjWlteea8fLXPrEnY=
+X-Google-Smtp-Source: ABdhPJx1Q2URPgzhZwqCBR98Ngqy/AKTQqxQ6EdjLoGuIhPccdjI8x/MzaUCZEQPUAIOTsazaOTNjHjF1YNkqi5X4ww=
+X-Received: by 2002:a02:6014:0:b0:331:57b2:8a3a with SMTP id
+ i20-20020a026014000000b0033157b28a3amr4683275jac.169.1654232705473; Thu, 02
+ Jun 2022 22:05:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
+ <20220602115141.3962749-2-chenhuacai@loongson.cn> <e68000bf-a271-d1f2-56a5-a9ddce2bbb7c@infradead.org>
+In-Reply-To: <e68000bf-a271-d1f2-56a5-a9ddce2bbb7c@infradead.org>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Fri, 3 Jun 2022 13:04:55 +0800
+Message-ID: <CAAhV-H4MhHvXMTXN==z2xonfWEtcW8CiBrwnOEznKGira8Yw=g@mail.gmail.com>
+Subject: Re: [PATCH V14 01/24] irqchip: Adjust Kconfig for Loongson
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Marc Zyngier <maz@kernel.org>, WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,55 +83,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sysfs directory is called event_source.
+Hi, Randy,
 
-Reported-by: Kevin Nomura <nomurak@google.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Documentation/perf-record.txt | 2 +-
- tools/perf/Documentation/perf-stat.txt   | 2 +-
- tools/perf/Documentation/perf-top.txt    | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, Jun 3, 2022 at 12:34 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Hi,
+>
+> On 6/2/22 04:51, Huacai Chen wrote:
+> > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > index 44fb8843e80e..1cb3967fe798 100644
+> > --- a/drivers/irqchip/Kconfig
+> > +++ b/drivers/irqchip/Kconfig
+> > @@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
+> >
+> >  config LOONGSON_HTPIC
+> >       bool "Loongson3 HyperTransport PIC Controller"
+> > -     depends on MACH_LOONGSON64
+> > +     depends on (MACH_LOONGSON64 && MIPS)
+>
+> If you ever have another patch version, please drop the unnecessary left and
+> right parentheses above.
+OK, thanks, I will do that.
 
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index b4e9ef7edfef..cf8ad50f3de1 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -33,7 +33,7 @@ OPTIONS
-         - a raw PMU event in the form of rN where N is a hexadecimal value
-           that represents the raw register encoding with the layout of the
-           event control registers as described by entries in
--          /sys/bus/event_sources/devices/cpu/format/*.
-+          /sys/bus/event_source/devices/cpu/format/*.
- 
-         - a symbolic or raw PMU event followed by an optional colon
- 	  and a list of event modifiers, e.g., cpu-cycles:p.  See the
-diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
-index 8d1cde00b8d6..d8a33f4a47c5 100644
---- a/tools/perf/Documentation/perf-stat.txt
-+++ b/tools/perf/Documentation/perf-stat.txt
-@@ -39,7 +39,7 @@ report::
- 	- a raw PMU event in the form of rN where N is a hexadecimal value
- 	  that represents the raw register encoding with the layout of the
- 	  event control registers as described by entries in
--	  /sys/bus/event_sources/devices/cpu/format/*.
-+	  /sys/bus/event_source/devices/cpu/format/*.
- 
-         - a symbolic or raw PMU event followed by an optional colon
- 	  and a list of event modifiers, e.g., cpu-cycles:p.  See the
-diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
-index cac3dfbee7d8..c1fdba26bf53 100644
---- a/tools/perf/Documentation/perf-top.txt
-+++ b/tools/perf/Documentation/perf-top.txt
-@@ -41,7 +41,7 @@ Default is to monitor all CPUS.
- 	(use 'perf list' to list all events) or a raw PMU event in the form
- 	of rN where N is a hexadecimal value that represents the raw register
- 	encoding with the layout of the event control registers as described
--	by entries in /sys/bus/event_sources/devices/cpu/format/*.
-+	by entries in /sys/bus/event_source/devices/cpu/format/*.
- 
- -E <entries>::
- --entries=<entries>::
--- 
-2.36.1.255.ge46751e96f-goog
-
+Huacai
+>
+>         depends on MACH_LOONGSON64 && MIPS
+>
+> >       default y
+> >       select IRQ_DOMAIN
+> >       select GENERIC_IRQ_CHIP
+>
+> thanks.
+> --
+> ~Randy

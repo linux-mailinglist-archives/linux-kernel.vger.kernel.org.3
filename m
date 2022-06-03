@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1144453CDD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860F753CDD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344270AbiFCRL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S1344274AbiFCRM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344205AbiFCRL4 (ORCPT
+        with ESMTP id S1343523AbiFCRM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:11:56 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F26D31D;
-        Fri,  3 Jun 2022 10:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654276315; x=1685812315;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zo6YQ9IdWIOXgcCc9f+nONd+0knf9UreZRGv23diN2E=;
-  b=bSLIaFdiHqTwK+uDeSvVUTbaZTuemn1JccaVUzPY+36hD+vJk4OGYQzH
-   Z+rRhkwjKSLQaZf+7LfS74Suzgpluca7/tlJyeK+Wk31LXJ+glGYB+UPs
-   0jvaLPl7JHpv0vyQqHTxkZTSXKgjuO+/7X46arq/bLRla1QEJ4a1ELsJS
-   mU1pg2fA/AaFbaSsQoQS6cJVfmYzKY1dfWp0lxFrT5BlYN/ayRnVF6wM6
-   EzlSz42IcON7qLKuYr86m3HdUnvkBBfyCnoKBbBwH7Xf75gMQXQLwswTj
-   bamUMQGjCWff7rFAhYCbrepsjQWkQZPGUlkFlgO6oe7AFC+hlytCDPXpW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="263956486"
-X-IronPort-AV: E=Sophos;i="5.91,275,1647327600"; 
-   d="scan'208";a="263956486"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:11:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,275,1647327600"; 
-   d="scan'208";a="824812029"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Jun 2022 10:11:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E7414F8; Fri,  3 Jun 2022 20:11:55 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] xarray: Replace kernel.h with the necessary inclusions
-Date:   Fri,  3 Jun 2022 20:11:53 +0300
-Message-Id: <20220603171153.48928-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 3 Jun 2022 13:12:57 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E65F31DE0;
+        Fri,  3 Jun 2022 10:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654276373; x=1685812373;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Urv0hy64qRO+iwE9n3rXyY/3KPM/CjLWoCQfis2GBoo=;
+  b=p/oeStjf4tVuYJj6PW7xuv97ix5YP/BiUYE15WBKhW7kSTKkWXiNdLIv
+   jlxAgpc62KfveilT8mVVwJ+mMrtJbfhoEbz9KzGDVvopxqeg2orvQOXcE
+   mcygNFwoMW+gRh3Fdhmh/WMJ5Py53pcJMn4nTI8spGLYsLmimFrzE0inz
+   M=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 03 Jun 2022 10:12:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 10:12:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 3 Jun 2022 10:12:51 -0700
+Received: from hu-harshq-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 3 Jun 2022 10:12:47 -0700
+From:   Harsh Agarwal <quic_harshq@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <ahalaney@redhat.com>, Harsh Agarwal <quic_harshq@quicinc.com>
+Subject: [PATCH v2 0/3] Add support for multiport controller 
+Date:   Fri, 3 Jun 2022 22:42:39 +0530
+Message-ID: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
+Currently the DWC3 driver supports only single port controller which 
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode. Some of
+the port supports both SS+HS and other port supports only HS mode.
 
-Replace kernel.h inclusion with the list of what is really being used.
+This change refactors the PHY logic to support multiport controller. The 
+implementation has been tested with Generic PHYs as well.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/xarray.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+For any multiport controller we would define a new node "multiport" inside
+dwc3 and then add subsequent "mport" nodes inside it for individual ports
+that it supports. Now each individual "mport" node defines their own PHYs.
 
-diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-index 72feab5ea8d4..e9fedaa3498a 100644
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -12,13 +12,18 @@
- #include <linux/bitmap.h>
- #include <linux/bug.h>
- #include <linux/compiler.h>
-+#include <linux/err.h>
- #include <linux/gfp.h>
- #include <linux/kconfig.h>
--#include <linux/kernel.h>
-+#include <linux/limits.h>
-+#include <linux/lockdep.h>
-+#include <linux/math.h>
- #include <linux/rcupdate.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
- 
-+#include <asm/bitsperlong.h>
-+
- /*
-  * The bottom two bits of the entry determine how the XArray interprets
-  * the contents:
+e.g.
+Consider a Dual port controller where each port supports HS+SS 
+
+multiport {
+	mp_1: mport1 {
+		usb-phy = <usb2_phy0>, <usb3_phy0>;
+        /* Can define Generic PHYs also */  
+	};	
+	mp_2: mport2 {
+		usb-phy = <usb2_phy1>, <usb3_phy1>;
+	};	
+
+Changes in v2:
+Changed dwc3_count_phys to return the number of PHY Phandles in the node.
+This will be used now in dwc3_extract_num_phys to increment num_usb2_phy 
+and num_usb3_phy.
+Added new parameter "ss_idx" in dwc3_core_get_phy_ny_node and changed its
+structure such that the first half is for HS-PHY and second half is for
+SS-PHY.
+In dwc3_core_get_phy, for multiport controller, only if SS-PHY phandle is
+present, pass proper SS_IDX else pass -1.
+
+Harsh Agarwal (3):
+  dt-bindings: usb: dwc3: Add support for multiport related properties
+  usb: phy: Add devm_of_usb_get_phy_by_phandle
+  usb: dwc3: Refactor PHY logic to support Multiport Controller
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  55 +++
+ drivers/usb/dwc3/core.c                            | 403 +++++++++++++++------
+ drivers/usb/dwc3/core.h                            |  12 +-
+ drivers/usb/dwc3/drd.c                             |  16 +-
+ drivers/usb/dwc3/gadget.c                          |   4 +-
+ drivers/usb/phy/phy.c                              |  34 ++
+ include/linux/usb/phy.h                            |   8 +
+ 7 files changed, 402 insertions(+), 130 deletions(-)
+
 -- 
-2.35.1
+2.7.4
 

@@ -2,104 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399A353C5AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF8E53C5B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241774AbiFCHCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S242070AbiFCHGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242340AbiFCHBm (ORCPT
+        with ESMTP id S229631AbiFCHGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:01:42 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08E73914B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 23:59:30 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j10so11155951lfe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 23:59:30 -0700 (PDT)
+        Fri, 3 Jun 2022 03:06:07 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA06E35DE8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 00:06:03 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n18so6266881plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 00:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cxT3KDDIuP0W5p/TaOOy3SJFNBVULLGo5ttCHUhyJ/0=;
-        b=qMhv3GRM38nJp0iMW7/Gk0VA7jUEvTUNhvx5Du9L6srVhHzf8oyfJSN3u14OoG36bc
-         z3DJ3LvkTtW9usWKeMGmDCQy/F9QJMQ8XXBnjQALMAOuJ2/1gWnPUOg8XRxBVvH7GzTh
-         Vh4gEuqUVnNrPfl+qK3OxK2nAJNbokKG++IQOwrzz+JdARp7Dxv7xu8Qdv0lvJRoh3kB
-         u0ibqHpucV2Gp3CUQjsjrqhOwppPI1XJyJwbem7eIyLSHdfiZOpKpXzrs/l6QRTvraoo
-         lVujhnmphDh83r7ljd0dNTJyAErExao7mOpMBYqn95n5hhgqN+NWOBGI9Qz1eauEkJNi
-         7+Ag==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e82fukpYye7S2pSV2P+x4ME/8iEwBLqlJ1dF4LHKRB0=;
+        b=ry5NcCTXMOqj1FGTaEXhK+FobbrIVEyQmzz/PgWWOHG+peC2R1eWm4saAAl0ArXz56
+         7kqucbKX48iDB/rFpfZPlkZduVuAXQ1QWhrpK9qfw+6f/xvm6RV4FRaxl9jK5uxD1lAw
+         DbEqejaeKCPP5MKuCY1wBpCRa95O/EO4aTBT1SDvFNgyqB3BFZBd+0EA1OXZ7N+6Z0Af
+         sjz4XWY++3WN2hEqhBehtW0dKbDwTnPN1t8R1sFb/cKTEEuoU+ls60QysmRkU80dkG1T
+         AX8y6mdwYugEGK5GBYhv/yaT5R8CIqnxRr3AynW1g97mVZnDkSxaQfil2YumvXykmYQU
+         uxhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cxT3KDDIuP0W5p/TaOOy3SJFNBVULLGo5ttCHUhyJ/0=;
-        b=f3bez9jR7KQ7f6gHbLfPG2daOuPztigst9RJ/788h6bXUuFzh/JGYDsWeLhwev3NBk
-         MKed56hWtEyCqZczvjx4Pk+07svwihGOUas/NuFvGBFFF/59i5n8pBucJSFFb1uK7rAU
-         /CQrRfxdcM1ks9SYsPtU2of+Af99lIf7CU3XeKvWb692BnAsk7r/h1QJPtCSEMV2aSFp
-         rbi6I60nDVDf27IKCcfKDgvT0cbvatp9k15McuSwcYYxoHaQEsj6BT+4/eIGkIN2h88m
-         GCcZsLgNd5qEOEoQF/ygq9QbxqHfmCOAfeOAMiWZ8gbc/sucBBlDbNlIFJ7MM97fuc4b
-         Ceig==
-X-Gm-Message-State: AOAM5321FAEV6ncaX2EZbTDZgj1ooRPkXfSLZ3p+PJKsWxQ08epcguPd
-        bAOm67moxGOFch6vLmBaWLXxkA==
-X-Google-Smtp-Source: ABdhPJweB1ZHcShDaaZlkRucmwAHJ8LEVtnvQo+YMFFfDYwIsXgYKrOnRDLWVSdlkhHdUvF7/9xrKQ==
-X-Received: by 2002:a05:6512:228f:b0:478:735c:caab with SMTP id f15-20020a056512228f00b00478735ccaabmr5866521lfu.83.1654239570280;
-        Thu, 02 Jun 2022 23:59:30 -0700 (PDT)
-Received: from panikiel.roam.corp.google.com (staticline-31-182-204-250.toya.net.pl. [31.182.204.250])
-        by smtp.gmail.com with ESMTPSA id b8-20020ac247e8000000b004786321c697sm1056447lfp.138.2022.06.02.23.59.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e82fukpYye7S2pSV2P+x4ME/8iEwBLqlJ1dF4LHKRB0=;
+        b=6hiZaPW3wFc8ZG9POrQUAl5csPTw3FtqW2vqWfTxltOD8+BSTBznNLE3qCZDtsHUzc
+         Wzs7Yb+LMjQsrsKtH8e/8mNKs9EHZ/tRa9HeafJznFv5Js+o3LGqQzY8Jx8wFkSyN+dr
+         Z2BaBhug7aVPCxU0p4DzDbi38RglwXS8eN4Gn72kz+S7s1ckoEfHFqrMsqrZFjcEMQRi
+         8vIiOMW3FIGqL/lVQHppcxHzFSQ/YnDDiFtTn8hQxMSH3s6MluzRCZVFrDrwNl64xxzc
+         KSOzL3nCsxKp8JxUANJYxHS/OVKbFCewjAPpCq6fR9PNlkdDZ1mvN74wFx8/MrVgybtH
+         qVIg==
+X-Gm-Message-State: AOAM530GL+eNhl6cyW+hT8gAIG5DStYIxJXo628qdizS1sQ2v+xg68PF
+        ljZSmezvQk2jlngPszsKFCkYmA==
+X-Google-Smtp-Source: ABdhPJzgJuki2NLhaHmK8hlAK3grRo/oCn5wI6acSYyw+d//NXha49HtiC09VSEmU6CA03CNN6HfMw==
+X-Received: by 2002:a17:90b:4acd:b0:1e3:4dab:a14c with SMTP id mh13-20020a17090b4acd00b001e34daba14cmr9409659pjb.5.1654239962996;
+        Fri, 03 Jun 2022 00:06:02 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id ij4-20020a170902ab4400b0016632179ec8sm3822472plb.219.2022.06.03.00.05.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 23:59:29 -0700 (PDT)
-From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        dinguyen@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amstan@chromium.org,
-        upstream@semihalf.com,
-        =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
-Subject: [PATCH v3 5/5] dt-bindings: altera: Add Chameleon v3 board
-Date:   Fri,  3 Jun 2022 08:58:16 +0200
-Message-Id: <20220603065816.87952-6-pan@semihalf.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-In-Reply-To: <20220603065816.87952-1-pan@semihalf.com>
-References: <20220603065816.87952-1-pan@semihalf.com>
+        Fri, 03 Jun 2022 00:06:02 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     mhocko@kernel.org, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, songmuchun@bytedance.com,
+        akpm@linux-foundation.org, corbet@lwn.net
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH] mm: memcontrol: separate {pgscan,pgsteal}_{kswapd,direct} items in memory.stat of cgroup v2
+Date:   Fri,  3 Jun 2022 15:04:23 +0800
+Message-Id: <20220603070423.10025-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Mercury+ AA1 boards category, together with the Chameleon v3 board.
+There are already statistics of {pgscan,pgsteal}_kswapd and
+{pgscan,pgsteal}_direct of memcg event here, but now the sum
+of the two is displayed in memory.stat of cgroup v2.
 
-Signed-off-by: Paweł Anikiel <pan@semihalf.com>
+In order to obtain more accurate information during monitoring
+and debugging, and to align with the display in /proc/vmstat,
+it better to display {pgscan,pgsteal}_kswapd and
+{pgscan,pgsteal}_direct separately.
+
+Moreover, after this modification, all memcg events can be
+printed with a combination of vm_event_name() and memcg_events().
+This allows us to create an array to traverse and print, which
+reduces redundant seq_buf_printf() codes.
+
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 ---
- Documentation/devicetree/bindings/arm/altera.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/admin-guide/cgroup-v2.rst | 14 ++++--
+ mm/memcontrol.c                         | 61 +++++++++++--------------
+ 2 files changed, 36 insertions(+), 39 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-index 5e2017c0a051..4a08c082dbdb 100644
---- a/Documentation/devicetree/bindings/arm/altera.yaml
-+++ b/Documentation/devicetree/bindings/arm/altera.yaml
-@@ -29,6 +29,14 @@ properties:
-           - const: altr,socfpga-arria10
-           - const: altr,socfpga
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 176298f2f4de..0b9ca7e7df34 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1442,11 +1442,17 @@ PAGE_SIZE multiple when read back.
+ 	  pgrefill (npn)
+ 		Amount of scanned pages (in an active LRU list)
  
-+      - description: Mercury+ AA1 boards
-+        items:
-+          - enum:
-+              - google,chameleon-v3
-+          - const: enclustra,mercury-aa1
-+          - const: altr,socfpga-arria10
-+          - const: altr,socfpga
+-	  pgscan (npn)
+-		Amount of scanned pages (in an inactive LRU list)
++	  pgscan_kswapd (npn)
++		Amount of scanned pages by kswapd (in an inactive LRU list)
+ 
+-	  pgsteal (npn)
+-		Amount of reclaimed pages
++	  pgscan_direct (npn)
++		Amount of scanned pages directly  (in an inactive LRU list)
 +
-       - description: Cyclone 5 boards
-         items:
-           - enum:
++	  pgsteal_kswapd (npn)
++		Amount of reclaimed pages by kswapd
++
++	  pgsteal_direct (npn)
++		Amount of reclaimed pages directly
+ 
+ 	  pgactivate (npn)
+ 		Amount of pages moved to the active LRU list
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 0d3fe0a0c75a..4093062c5c9b 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1460,6 +1460,28 @@ static inline unsigned long memcg_page_state_output(struct mem_cgroup *memcg,
+ 	return memcg_page_state(memcg, item) * memcg_page_state_unit(item);
+ }
+ 
++static const unsigned int memcg_vm_event_stat[] = {
++	PGFAULT,
++	PGMAJFAULT,
++	PGREFILL,
++	PGSCAN_KSWAPD,
++	PGSCAN_DIRECT,
++	PGSTEAL_KSWAPD,
++	PGSTEAL_DIRECT,
++	PGACTIVATE,
++	PGDEACTIVATE,
++	PGLAZYFREE,
++	PGLAZYFREED,
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
++	ZSWPIN,
++	ZSWPOUT,
++#endif
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	THP_FAULT_ALLOC,
++	THP_COLLAPSE_ALLOC,
++#endif
++};
++
+ static char *memory_stat_format(struct mem_cgroup *memcg)
+ {
+ 	struct seq_buf s;
+@@ -1495,41 +1517,10 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
+ 	}
+ 
+ 	/* Accumulated memory events */
+-
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
+-		       memcg_events(memcg, PGFAULT));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
+-		       memcg_events(memcg, PGMAJFAULT));
+-	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
+-		       memcg_events(memcg, PGREFILL));
+-	seq_buf_printf(&s, "pgscan %lu\n",
+-		       memcg_events(memcg, PGSCAN_KSWAPD) +
+-		       memcg_events(memcg, PGSCAN_DIRECT));
+-	seq_buf_printf(&s, "pgsteal %lu\n",
+-		       memcg_events(memcg, PGSTEAL_KSWAPD) +
+-		       memcg_events(memcg, PGSTEAL_DIRECT));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
+-		       memcg_events(memcg, PGACTIVATE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
+-		       memcg_events(memcg, PGDEACTIVATE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
+-		       memcg_events(memcg, PGLAZYFREE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
+-		       memcg_events(memcg, PGLAZYFREED));
+-
+-#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPIN),
+-		       memcg_events(memcg, ZSWPIN));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPOUT),
+-		       memcg_events(memcg, ZSWPOUT));
+-#endif
+-
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
+-		       memcg_events(memcg, THP_FAULT_ALLOC));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
+-		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
+-#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
++	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
++		seq_buf_printf(&s, "%s %lu\n",
++			       vm_event_name(memcg_vm_event_stat[i]),
++			       memcg_events(memcg, memcg_vm_event_stat[i]));
+ 
+ 	/* The above should easily fit into one page */
+ 	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
 -- 
-2.36.1.255.ge46751e96f-goog
+2.20.1
 

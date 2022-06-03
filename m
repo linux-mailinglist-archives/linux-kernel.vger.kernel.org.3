@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDFB53CA4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4AB53CA4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244468AbiFCM7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S244475AbiFCNAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiFCM7r (ORCPT
+        with ESMTP id S233094AbiFCNAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:59:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEC831514
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:59:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cLtR22X2YMGBRu4CJqe5w4vOiyDa2dkTADcsreL0J6Y=; b=fro3tgYwYJIMFutExfLTy2/NTc
-        enNFhHBR3bjAlqnjKfkPTxarHHM2BoYPWgwsvy6c5GRj1sKQEw4Dba7t/np1TQF0YM/REBrGPa28X
-        jbBSEuPmGxkO1ruVzQmWkKMvLU0V2TuwhJdXRilN6fAk0zo3ptEDSanCN1R47AsAO4r9ErH6Zktjr
-        2lZK68C04tg1pXmG+LfJDMR3Hs7dl6Ono6nXbhghfzNVfTsaTjfFk2CpwGwGxcFKrd8uZ6vrHprNa
-        9NgjQPVxCEoCy02ZQBLuIT3b+7LRWGkIdowBk9lEWqxZqUpW3Z+oHG3d+N+gBWMSRcW6Zd7qv8Ysm
-        YSdyraDw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nx6tR-007uOt-KY; Fri, 03 Jun 2022 12:59:09 +0000
-Date:   Fri, 3 Jun 2022 13:59:09 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>,
-        Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] squashfs: implement readahead
-Message-ID: <YpoFnROxAwdSScuV@casper.infradead.org>
-References: <20220601103922.1338320-1-hsinyi@chromium.org>
- <20220601103922.1338320-4-hsinyi@chromium.org>
- <CGME20220603125421eucas1p17da286a3e7f2d4759aa4c7639dd62f75@eucas1p1.samsung.com>
- <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com>
+        Fri, 3 Jun 2022 09:00:46 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B9533E00
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 06:00:46 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so11999795pjl.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 06:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Yg5+QfDwgeA6HTgAKJPX8MPDCtSRFgD1mu+1/EW38Q=;
+        b=Ljg0TpD1gjHkEpZ8QvJzJ74WM1GkK1YQBZlBU4vH9aOBuLjUUMd64H3AWD6miIcteS
+         2ruqx6EbvA3ET+F7xlgQ1G7/RY7NIMFq7WNMVTpAJZx4hPRgiOab3tFuOSxDc5sn85Xi
+         x3taHngaRGtYjgmTwRUZ925+PAxPqzHedG2pXAWDbtDvC2zhmT+UkBH2TxqwwgWoAs/d
+         gXyWfdCnkC5k80ReKOR/2iByIwMmfZ3Pa+tiRoB77wQjw3IxrZxqT1970+k4a8/+ojh5
+         fLemkMxm/Lxjv8NODqP7fsSuGmGYr1YrAB8c6wd36KT9102f7TlZsQ2EelhZZ0Rri7Qc
+         bZ/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Yg5+QfDwgeA6HTgAKJPX8MPDCtSRFgD1mu+1/EW38Q=;
+        b=2NtKaI+1UMUs1baA5Fqyw7hEhV6sl0G8A17td/0GqL+PcP850tDPucCP4X5wV3RWxj
+         pu1+kjotPdVFBShHLRvCROuhicBvuiuaHGWUyQjdBIkBUWE0CYpvHNubml/d3RQecx0a
+         t9w46t4Uk3APy8w4d235xSrkC7YUJUSLpcAfv1WbrGZdzO1pVNRfGWcVRIcJj2cROt+b
+         KM31rxjjqROWiDhLig5qcGRjx2uIh9C9jiOP+e7HDacftv2eYLZJ8kNVsG+0ynuMSGLu
+         dCovfpk4MbngF9B+COneOv4pgTzNlsZADcRUUk4/F8/4b28ZfzRqOJr2Nq/01e8yLiv5
+         vFDA==
+X-Gm-Message-State: AOAM531UEBeRFufOpgXHrqL4Lw90OOe22plafbaTGHW9oljhWaHxjeAY
+        zWAnwumn0nvvRDAUWarPm+4=
+X-Google-Smtp-Source: ABdhPJwymQsCj33OWVSkMPuDvtNEUqNPrrH3qoe3Fm9EQ4gAEE8/0MgEsPXDCZLo1CMa9aJu8uwucg==
+X-Received: by 2002:a17:90a:bf02:b0:1e2:fadf:3f15 with SMTP id c2-20020a17090abf0200b001e2fadf3f15mr10892485pjs.91.1654261245326;
+        Fri, 03 Jun 2022 06:00:45 -0700 (PDT)
+Received: from f34-buildvm.eng.vmware.com ([66.170.99.2])
+        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b00163f7935772sm5327553plq.46.2022.06.03.06.00.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 06:00:44 -0700 (PDT)
+From:   Shreenidhi Shedi <yesshedi@gmail.com>
+X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, yesshedi@gmail.com,
+        Shreenidhi Shedi <sshedi@vmware.com>
+Subject: [PATCH 1/2] char: lp: ensure that index has not exceeded LP_NO
+Date:   Fri,  3 Jun 2022 18:30:39 +0530
+Message-Id: <20220603130040.601673-1-sshedi@vmware.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 02:54:21PM +0200, Marek Szyprowski wrote:
-> Hi,
-> 
-> On 01.06.2022 12:39, Hsin-Yi Wang wrote:
-> > Implement readahead callback for squashfs. It will read datablocks
-> > which cover pages in readahead request. For a few cases it will
-> > not mark page as uptodate, including:
-> > - file end is 0.
-> > - zero filled blocks.
-> > - current batch of pages isn't in the same datablock or not enough in a
-> >    datablock.
-> > - decompressor error.
-> > Otherwise pages will be marked as uptodate. The unhandled pages will be
-> > updated by readpage later.
-> >
-> > Suggested-by: Matthew Wilcox <willy@infradead.org>
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Reported-by: Matthew Wilcox <willy@infradead.org>
-> > Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
-> > Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
-> > ---
-> 
-> This patch landed recently in linux-next as commit 95f7a26191de 
-> ("squashfs: implement readahead"). I've noticed that it causes serious 
-> issues on my test systems (various ARM 32bit and 64bit based boards). 
-> The easiest way to observe is udev timeout 'waiting for /dev to be fully 
-> populated' and prolonged booting time. I'm using squashfs for deploying 
-> kernel modules via initrd. Reverting aeefca9dfae7 & 95f7a26191deon on 
-> top of the next-20220603 fixes the issue.
+From: Shreenidhi Shedi <sshedi@vmware.com>
 
-How large are these files?  Just a few kilobytes?
+After finishing the loop, index value can be equal to LP_NO and lp_table
+array is of size LP_NO, so this can end up in accessing an out of bound
+address in lp_register function.
+
+Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+---
+ drivers/char/lp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/lp.c b/drivers/char/lp.c
+index 0e22e3b0a..d474d02b6 100644
+--- a/drivers/char/lp.c
++++ b/drivers/char/lp.c
+@@ -972,7 +972,7 @@ static void lp_attach(struct parport *port)
+ 			if (port_num[i] == -1)
+ 				break;
+
+-		if (!lp_register(i, port))
++		if (i < LP_NO && !lp_register(i, port))
+ 			lp_count++;
+ 		break;
+
+--
+2.36.1
 

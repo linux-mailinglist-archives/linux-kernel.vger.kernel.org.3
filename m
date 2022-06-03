@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A6253D0C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC17753D0D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346498AbiFCSHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S1345847AbiFCSIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346033AbiFCRzg (ORCPT
+        with ESMTP id S1346035AbiFCRzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 3 Jun 2022 13:55:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989BB55497;
-        Fri,  3 Jun 2022 10:53:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D513A554B0;
+        Fri,  3 Jun 2022 10:53:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BDA4B823B0;
-        Fri,  3 Jun 2022 17:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBCBC385A9;
-        Fri,  3 Jun 2022 17:53:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7263D60F3B;
+        Fri,  3 Jun 2022 17:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B58C3411C;
+        Fri,  3 Jun 2022 17:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278798;
-        bh=lNOmLlFQuyuci5IwSKVo0uhTC3PXQ5cfKd6PwOA3j3o=;
+        s=korg; t=1654278801;
+        bh=28cshCFhHcYGmaIVwQFz3FvqNeEW06pVYEWmEU9XjY4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CyGjxtbKVM/PjMuPVVMytneSnuQCz7Kif70oBvbqTZHUTBo4dq/WaZD58Ybg2dyBi
-         Peif68umGbveho6ydZJURm3JouDwV7Gf3swF/16bhMs4/yiOA4GxWSa8JBNxL0HFxK
-         CQxDdG1wElUGiWMICc6DBC5eYRj2q+oysz4OMNsw=
+        b=cpO0Cr/mZJpnHOkP9b5EjSHpM4428TD4aR3zGO+Tx0H0MiQZZhs63VW45ZKYqj5D/
+         J1RHvlpUVcqeg8Vp7Pd+9Okr2/6YGe86AaCqsd+Cv3ITCHWY0DRH+8Sfwwp3Wqfe3y
+         LdMNsccLChkAIdz5k6A9fRSqx8NCqiuFxE804wus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tadeusz Struk <tadeusz.struk@linaro.org>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
-        Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.17 31/75] KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits
-Date:   Fri,  3 Jun 2022 19:43:15 +0200
-Message-Id: <20220603173822.630027131@linuxfoundation.org>
+Subject: [PATCH 5.17 32/75] KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses
+Date:   Fri,  3 Jun 2022 19:43:16 +0200
+Message-Id: <20220603173822.657950416@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
 References: <20220603173821.749019262@linuxfoundation.org>
@@ -58,82 +56,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Christopherson <seanjc@google.com>
 
-commit f122dfe4476890d60b8c679128cd2259ec96a24c upstream.
+commit 1c2361f667f3648855ceae25f1332c18413fdb9f upstream.
 
-Use the recently introduced __try_cmpxchg_user() to update guest PTE A/D
-bits instead of mapping the PTE into kernel address space.  The VM_PFNMAP
-path is broken as it assumes that vm_pgoff is the base pfn of the mapped
-VMA range, which is conceptually wrong as vm_pgoff is the offset relative
-to the file and has nothing to do with the pfn.  The horrific hack worked
-for the original use case (backing guest memory with /dev/mem), but leads
-to accessing "random" pfns for pretty much any other VM_PFNMAP case.
+Use the recently introduce __try_cmpxchg_user() to emulate atomic guest
+accesses via the associated userspace address instead of mapping the
+backing pfn into kernel address space.  Using kvm_vcpu_map() is unsafe as
+it does not coordinate with KVM's mmu_notifier to ensure the hva=>pfn
+translation isn't changed/unmapped in the memremap() path, i.e. when
+there's no struct page and thus no elevated refcount.
 
-Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
-Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Tested-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Fixes: 42e35f8072c3 ("KVM/X86: Use kvm_vcpu_map in emulator_cmpxchg_emulated")
 Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220202004945.2540433-4-seanjc@google.com>
+Message-Id: <20220202004945.2540433-5-seanjc@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/paging_tmpl.h |   38 +-------------------------------------
- 1 file changed, 1 insertion(+), 37 deletions(-)
+ arch/x86/kvm/x86.c |   35 ++++++++++++++---------------------
+ 1 file changed, 14 insertions(+), 21 deletions(-)
 
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -144,42 +144,6 @@ static bool FNAME(is_rsvd_bits_set)(stru
- 	       FNAME(is_bad_mt_xwr)(&mmu->guest_rsvd_check, gpte);
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7168,15 +7168,8 @@ static int emulator_write_emulated(struc
+ 				   exception, &write_emultor);
  }
  
--static int FNAME(cmpxchg_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
--			       pt_element_t __user *ptep_user, unsigned index,
--			       pt_element_t orig_pte, pt_element_t new_pte)
--{
--	signed char r;
+-#define CMPXCHG_TYPE(t, ptr, old, new) \
+-	(cmpxchg((t *)(ptr), *(t *)(old), *(t *)(new)) == *(t *)(old))
 -
--	if (!user_access_begin(ptep_user, sizeof(pt_element_t)))
--		return -EFAULT;
--
--#ifdef CMPXCHG
--	asm volatile("1:" LOCK_PREFIX CMPXCHG " %[new], %[ptr]\n"
--		     "setnz %b[r]\n"
--		     "2:"
--		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG, %k[r])
--		     : [ptr] "+m" (*ptep_user),
--		       [old] "+a" (orig_pte),
--		       [r] "=q" (r)
--		     : [new] "r" (new_pte)
--		     : "memory");
+-#ifdef CONFIG_X86_64
+-#  define CMPXCHG64(ptr, old, new) CMPXCHG_TYPE(u64, ptr, old, new)
 -#else
--	asm volatile("1:" LOCK_PREFIX "cmpxchg8b %[ptr]\n"
--		     "setnz %b[r]\n"
--		     "2:"
--		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG, %k[r])
--		     : [ptr] "+m" (*ptep_user),
--		       [old] "+A" (orig_pte),
--		       [r] "=q" (r)
--		     : [new_lo] "b" ((u32)new_pte),
--		       [new_hi] "c" ((u32)(new_pte >> 32))
--		     : "memory");
+-#  define CMPXCHG64(ptr, old, new) \
+-	(cmpxchg64((u64 *)(ptr), *(u64 *)(old), *(u64 *)(new)) == *(u64 *)(old))
 -#endif
--
--	user_access_end();
--	return r;
--}
--
- static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
- 				  struct kvm_mmu_page *sp, u64 *spte,
- 				  u64 gpte)
-@@ -278,7 +242,7 @@ static int FNAME(update_accessed_dirty_b
- 		if (unlikely(!walker->pte_writable[level - 1]))
- 			continue;
++#define emulator_try_cmpxchg_user(t, ptr, old, new) \
++	(__try_cmpxchg_user((t __user *)(ptr), (t *)(old), *(t *)(new), efault ## t))
  
--		ret = FNAME(cmpxchg_gpte)(vcpu, mmu, ptep_user, index, orig_pte, pte);
-+		ret = __try_cmpxchg_user(ptep_user, &orig_pte, pte, fault);
- 		if (ret)
- 			return ret;
+ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
+ 				     unsigned long addr,
+@@ -7185,12 +7178,11 @@ static int emulator_cmpxchg_emulated(str
+ 				     unsigned int bytes,
+ 				     struct x86_exception *exception)
+ {
+-	struct kvm_host_map map;
+ 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+ 	u64 page_line_mask;
++	unsigned long hva;
+ 	gpa_t gpa;
+-	char *kaddr;
+-	bool exchanged;
++	int r;
  
+ 	/* guests cmpxchg8b have to be emulated atomically */
+ 	if (bytes > 8 || (bytes & (bytes - 1)))
+@@ -7214,31 +7206,32 @@ static int emulator_cmpxchg_emulated(str
+ 	if (((gpa + bytes - 1) & page_line_mask) != (gpa & page_line_mask))
+ 		goto emul_write;
+ 
+-	if (kvm_vcpu_map(vcpu, gpa_to_gfn(gpa), &map))
++	hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
++	if (kvm_is_error_hva(addr))
+ 		goto emul_write;
+ 
+-	kaddr = map.hva + offset_in_page(gpa);
++	hva += offset_in_page(gpa);
+ 
+ 	switch (bytes) {
+ 	case 1:
+-		exchanged = CMPXCHG_TYPE(u8, kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u8, hva, old, new);
+ 		break;
+ 	case 2:
+-		exchanged = CMPXCHG_TYPE(u16, kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u16, hva, old, new);
+ 		break;
+ 	case 4:
+-		exchanged = CMPXCHG_TYPE(u32, kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u32, hva, old, new);
+ 		break;
+ 	case 8:
+-		exchanged = CMPXCHG64(kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u64, hva, old, new);
+ 		break;
+ 	default:
+ 		BUG();
+ 	}
+ 
+-	kvm_vcpu_unmap(vcpu, &map, true);
+-
+-	if (!exchanged)
++	if (r < 0)
++		goto emul_write;
++	if (r)
+ 		return X86EMUL_CMPXCHG_FAILED;
+ 
+ 	kvm_page_track_write(vcpu, gpa, new, bytes);
 
 

@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D8E53D0FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D459E53D07E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345976AbiFCSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S1346907AbiFCSFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346098AbiFCR65 (ORCPT
+        with ESMTP id S1346546AbiFCRvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:58:57 -0400
+        Fri, 3 Jun 2022 13:51:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39473580CF;
-        Fri,  3 Jun 2022 10:55:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7061856FBC;
+        Fri,  3 Jun 2022 10:48:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C376561244;
-        Fri,  3 Jun 2022 17:55:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF10BC385A9;
-        Fri,  3 Jun 2022 17:55:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B4760F64;
+        Fri,  3 Jun 2022 17:48:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A7AC385A9;
+        Fri,  3 Jun 2022 17:48:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278905;
-        bh=snqY24cQXiuqDPjvK9UZArmYw5RWFLDLHsT9hnLd69c=;
+        s=korg; t=1654278511;
+        bh=ZAUIQepYV9D04+q2+gCaXqFUGhgcHYupHHkLMcHane4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RvoNPU607iBkNZ8XxV4pBz3PHLE95HOaiOG3qO1ZfG5S4MLJuXUi3fdvATf+tzpet
-         Ox/XqnTMr4s3HeAHqzWdU1CaIiS7x7d/lBOXSVOiMB5y8HkUc0ltHv62X9Vd7xcLG6
-         m9qmn22L38ZCk2tZHaGN1zd3JONU5N9fHmOJGI2Y=
+        b=lDDUjJ6+w/Kua2nanUoUAfuGDZtGYbjNVtMgPionSuHYelzZuUQWoga5uojuSVCTf
+         nJ6UaN3SXDUPgVr0QUAdmkQS6rxug8C9hxVeCVHPObM8J3l2xk2/hbwFFVOJLoi+8f
+         1By6oMAupzfzli98q5w9nmCHQ1Dz4vKxvinEnyAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.17 24/75] netfilter: nf_tables: double hook unregistration in netns path
+        stable@vger.kernel.org, Yuezhang Mo <Yuezhang.Mo@sony.com>,
+        Andy Wu <Andy.Wu@sony.com>,
+        Aoyama Wataru <wataru.aoyama@sony.com>,
+        Daniel Palmer <daniel.palmer@sony.com>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Subject: [PATCH 5.10 23/53] exfat: fix referencing wrong parent directory information after renaming
 Date:   Fri,  3 Jun 2022 19:43:08 +0200
-Message-Id: <20220603173822.434619598@linuxfoundation.org>
+Message-Id: <20220603173819.398981832@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,137 +58,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Yuezhang Mo <Yuezhang.Mo@sony.com>
 
-commit f9a43007d3f7ba76d5e7f9421094f00f2ef202f8 upstream.
+commit d8dad2588addd1d861ce19e7df3b702330f0c7e3 upstream.
 
-__nft_release_hooks() is called from pre_netns exit path which
-unregisters the hooks, then the NETDEV_UNREGISTER event is triggered
-which unregisters the hooks again.
+During renaming, the parent directory information maybe
+updated. But the file/directory still references to the
+old parent directory information.
 
-[  565.221461] WARNING: CPU: 18 PID: 193 at net/netfilter/core.c:495 __nf_unregister_net_hook+0x247/0x270
-[...]
-[  565.246890] CPU: 18 PID: 193 Comm: kworker/u64:1 Tainted: G            E     5.18.0-rc7+ #27
-[  565.253682] Workqueue: netns cleanup_net
-[  565.257059] RIP: 0010:__nf_unregister_net_hook+0x247/0x270
-[...]
-[  565.297120] Call Trace:
-[  565.300900]  <TASK>
-[  565.304683]  nf_tables_flowtable_event+0x16a/0x220 [nf_tables]
-[  565.308518]  raw_notifier_call_chain+0x63/0x80
-[  565.312386]  unregister_netdevice_many+0x54f/0xb50
+This bug will cause 2 problems.
 
-Unregister and destroy netdev hook from netns pre_exit via kfree_rcu
-so the NETDEV_UNREGISTER path see unregistered hooks.
+(1) The renamed file can not be written.
 
-Fixes: 767d1216bff8 ("netfilter: nftables: fix possible UAF over chains from packet path in netns")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+    [10768.175172] exFAT-fs (sda1): error, failed to bmap (inode : 7afd50e4 iblock : 0, err : -5)
+    [10768.184285] exFAT-fs (sda1): Filesystem has been set read-only
+    ash: write error: Input/output error
+
+(2) Some dentries of the renamed file/directory are not set
+    to deleted after removing the file/directory.
+
+exfat_update_parent_info() is a workaround for the wrong parent
+directory information being used after renaming. Now that bug is
+fixed, this is no longer needed, so remove it.
+
+Fixes: 5f2aa075070c ("exfat: add inode operations")
+Cc: stable@vger.kernel.org # v5.7+
+Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c |   54 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 41 insertions(+), 13 deletions(-)
+ fs/exfat/namei.c |   27 +--------------------------
+ 1 file changed, 1 insertion(+), 26 deletions(-)
 
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -222,12 +222,18 @@ err_register:
+--- a/fs/exfat/namei.c
++++ b/fs/exfat/namei.c
+@@ -1061,6 +1061,7 @@ static int exfat_rename_file(struct inod
+ 
+ 		exfat_remove_entries(inode, p_dir, oldentry, 0,
+ 			num_old_entries);
++		ei->dir = *p_dir;
+ 		ei->entry = newentry;
+ 	} else {
+ 		if (exfat_get_entry_type(epold) == TYPE_FILE) {
+@@ -1151,28 +1152,6 @@ static int exfat_move_file(struct inode
+ 	return 0;
  }
  
- static void nft_netdev_unregister_hooks(struct net *net,
--					struct list_head *hook_list)
-+					struct list_head *hook_list,
-+					bool release_netdev)
- {
--	struct nft_hook *hook;
-+	struct nft_hook *hook, *next;
+-static void exfat_update_parent_info(struct exfat_inode_info *ei,
+-		struct inode *parent_inode)
+-{
+-	struct exfat_sb_info *sbi = EXFAT_SB(parent_inode->i_sb);
+-	struct exfat_inode_info *parent_ei = EXFAT_I(parent_inode);
+-	loff_t parent_isize = i_size_read(parent_inode);
+-
+-	/*
+-	 * the problem that struct exfat_inode_info caches wrong parent info.
+-	 *
+-	 * because of flag-mismatch of ei->dir,
+-	 * there is abnormal traversing cluster chain.
+-	 */
+-	if (unlikely(parent_ei->flags != ei->dir.flags ||
+-		     parent_isize != EXFAT_CLU_TO_B(ei->dir.size, sbi) ||
+-		     parent_ei->start_clu != ei->dir.dir)) {
+-		exfat_chain_set(&ei->dir, parent_ei->start_clu,
+-			EXFAT_B_TO_CLU_ROUND_UP(parent_isize, sbi),
+-			parent_ei->flags);
+-	}
+-}
+-
+ /* rename or move a old file into a new file */
+ static int __exfat_rename(struct inode *old_parent_inode,
+ 		struct exfat_inode_info *ei, struct inode *new_parent_inode,
+@@ -1203,8 +1182,6 @@ static int __exfat_rename(struct inode *
+ 		return -ENOENT;
+ 	}
  
--	list_for_each_entry(hook, hook_list, list)
-+	list_for_each_entry_safe(hook, next, hook_list, list) {
- 		nf_unregister_net_hook(net, &hook->ops);
-+		if (release_netdev) {
-+			list_del(&hook->list);
-+			kfree_rcu(hook, rcu);
-+		}
-+	}
- }
+-	exfat_update_parent_info(ei, old_parent_inode);
+-
+ 	exfat_chain_dup(&olddir, &ei->dir);
+ 	dentry = ei->entry;
  
- static int nf_tables_register_hook(struct net *net,
-@@ -253,9 +259,10 @@ static int nf_tables_register_hook(struc
- 	return nf_register_net_hook(net, &basechain->ops);
- }
+@@ -1225,8 +1202,6 @@ static int __exfat_rename(struct inode *
+ 			goto out;
+ 		}
  
--static void nf_tables_unregister_hook(struct net *net,
--				      const struct nft_table *table,
--				      struct nft_chain *chain)
-+static void __nf_tables_unregister_hook(struct net *net,
-+					const struct nft_table *table,
-+					struct nft_chain *chain,
-+					bool release_netdev)
- {
- 	struct nft_base_chain *basechain;
- 	const struct nf_hook_ops *ops;
-@@ -270,11 +277,19 @@ static void nf_tables_unregister_hook(st
- 		return basechain->type->ops_unregister(net, ops);
- 
- 	if (nft_base_chain_netdev(table->family, basechain->ops.hooknum))
--		nft_netdev_unregister_hooks(net, &basechain->hook_list);
-+		nft_netdev_unregister_hooks(net, &basechain->hook_list,
-+					    release_netdev);
- 	else
- 		nf_unregister_net_hook(net, &basechain->ops);
- }
- 
-+static void nf_tables_unregister_hook(struct net *net,
-+				      const struct nft_table *table,
-+				      struct nft_chain *chain)
-+{
-+	return __nf_tables_unregister_hook(net, table, chain, false);
-+}
-+
- static void nft_trans_commit_list_add_tail(struct net *net, struct nft_trans *trans)
- {
- 	struct nftables_pernet *nft_net = nft_pernet(net);
-@@ -7222,13 +7237,25 @@ static void nft_unregister_flowtable_hoo
- 				    FLOW_BLOCK_UNBIND);
- }
- 
--static void nft_unregister_flowtable_net_hooks(struct net *net,
--					       struct list_head *hook_list)
-+static void __nft_unregister_flowtable_net_hooks(struct net *net,
-+						 struct list_head *hook_list,
-+					         bool release_netdev)
- {
--	struct nft_hook *hook;
-+	struct nft_hook *hook, *next;
- 
--	list_for_each_entry(hook, hook_list, list)
-+	list_for_each_entry_safe(hook, next, hook_list, list) {
- 		nf_unregister_net_hook(net, &hook->ops);
-+		if (release_netdev) {
-+			list_del(&hook->list);
-+			kfree_rcu(hook);
-+		}
-+	}
-+}
-+
-+static void nft_unregister_flowtable_net_hooks(struct net *net,
-+					       struct list_head *hook_list)
-+{
-+	__nft_unregister_flowtable_net_hooks(net, hook_list, false);
- }
- 
- static int nft_register_flowtable_net_hooks(struct net *net,
-@@ -9672,9 +9699,10 @@ static void __nft_release_hook(struct ne
- 	struct nft_chain *chain;
- 
- 	list_for_each_entry(chain, &table->chains, list)
--		nf_tables_unregister_hook(net, table, chain);
-+		__nf_tables_unregister_hook(net, table, chain, true);
- 	list_for_each_entry(flowtable, &table->flowtables, list)
--		nft_unregister_flowtable_net_hooks(net, &flowtable->hook_list);
-+		__nft_unregister_flowtable_net_hooks(net, &flowtable->hook_list,
-+						     true);
- }
- 
- static void __nft_release_hooks(struct net *net)
+-		exfat_update_parent_info(new_ei, new_parent_inode);
+-
+ 		p_dir = &(new_ei->dir);
+ 		new_entry = new_ei->entry;
+ 		ep = exfat_get_dentry(sb, p_dir, new_entry, &new_bh, NULL);
 
 

@@ -2,184 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74CE53D1EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CB353D20F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbiFCSyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
+        id S1347916AbiFCTCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347797AbiFCSyo (ORCPT
+        with ESMTP id S1348708AbiFCTAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:54:44 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D787289B6;
-        Fri,  3 Jun 2022 11:54:43 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id w2so15280118ybi.7;
-        Fri, 03 Jun 2022 11:54:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lsii2M/Z+BjHQ59FvjJ8av50zu7xha2i5JDwxAF3srs=;
-        b=t8bCVTdhcprieEQdJqIg2y/nndA5I93jpd4sgMYDrpi0xnbz68kQ3f22fOUNCihCS4
-         bsBKSnzsY8N9oXEFh56UMQHiB403GhHct9GUtes7r9myu57fujIyFdO3aHdyd5jzoWxR
-         hJ27eomJTdKNWG7nplj85e+z4kiH7lcxLWeipm/bVVWtBMZYPr7/+Df3q+QJEpx/L4DF
-         MP51hrfN/0b4cqaqzXDELAoOk15lxsxCqqc73i3QQLV6BXzxUQUYMYj/ELFf6BPNSOAL
-         1jPhgv/1VR3v3D02ZqXl8pzecLeydTsk9/cf9OqT0PGhLUtxrh8t5ipzF30dS4Q8tDk3
-         BTNw==
-X-Gm-Message-State: AOAM530U3en2oYbr2wPTkRgzun5OUUbFwQyVn/a1yTPXs3Q9JkoOrz8M
-        8W0OMU1ItXFDMOMqIpIKRy7aL69BDbsUdrTKQgg=
-X-Google-Smtp-Source: ABdhPJxB4pVovVskOU85j4HEBytnIdMzJtv/l+nGCWtbsux7xavEE6caGgyM1Qro50zwzIcWaOennN+kqEZC0EQP+vo=
-X-Received: by 2002:a25:2004:0:b0:650:740:f31d with SMTP id
- g4-20020a252004000000b006500740f31dmr12046953ybg.81.1654282482815; Fri, 03
- Jun 2022 11:54:42 -0700 (PDT)
+        Fri, 3 Jun 2022 15:00:01 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E2329833;
+        Fri,  3 Jun 2022 12:00:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6C987CE24B8;
+        Fri,  3 Jun 2022 18:59:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E77CCC385B8;
+        Fri,  3 Jun 2022 18:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654282797;
+        bh=wNoOUeH436EM5Q4+ipBC6tMdcUFPQYmnJuswlasQq7s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SoILe+FIL2S6KalxEeHmls5fUj88pDOTWr2GlXkpmPjl5+15cM4zJMc0RwCu3qH/3
+         QQIsotDeOWea8wAWWgNZGA2Vzz1rv8wKxyj8Bdude0azly82ePzu51lJpXZ85CTweI
+         5elR6Htm+9ahYC0czwCImx/nIgkILwiaxVRL1ZsjkUpbVFCexeLFzuZh0MQspNLkZU
+         lZqEetTJ1+ZuY7yIHo9e6rIAXwzXdJ9Fpo38wEB64ZorajI8T/uAg3brpJGvrtmK1S
+         9+R5sPRSMtfyS0q7/Bd4Qu8OuFPKFEVvuoLnNskg6SQZH0Mhg8PZhX9aGOINHxAEoV
+         iKbEjktYZcC/g==
+Date:   Fri, 3 Jun 2022 11:59:56 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Chen Lin <chen45464546@163.com>, Felix Fietkau <nbd@nbd.name>,
+        john@phrozen.org, sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
+        David Miller <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>
+Subject: Re: [PATCH v2] net: ethernet: mtk_eth_soc: fix misuse of mem alloc
+ interface netdev[napi]_alloc_frag
+Message-ID: <20220603115956.6ad82a53@kernel.org>
+In-Reply-To: <CANn89iKiyh36ULH4PCXF4c8sBdh9WLksMoMcmQwipZYWCzBkMA@mail.gmail.com>
+References: <2997c5b0-3611-5e00-466c-b2966f09f067@nbd.name>
+        <1654245968-8067-1-git-send-email-chen45464546@163.com>
+        <CANn89iKiyh36ULH4PCXF4c8sBdh9WLksMoMcmQwipZYWCzBkMA@mail.gmail.com>
 MIME-Version: 1.0
-References: <YpnwZ/Q5yTKRDBOD@kroah.com> <20220603113138.2689444-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20220603113138.2689444-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 3 Jun 2022 20:54:31 +0200
-Message-ID: <CAJZ5v0hJ_uPakb8s8v4VJw86ShsN8Y0Hnk2NZ4ta7GKGQeW8pg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] driver core: Fix wait_for_device_probe() &
- deferred_probe_timeout interaction
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>,
-        John Stultz <jstultz@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 1:32 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> From: Saravana Kannan <saravanak@google.com>
->
-> Mounting NFS rootfs was timing out when deferred_probe_timeout was
-> non-zero [1].  This was because ip_auto_config() initcall times out
-> waiting for the network interfaces to show up when
-> deferred_probe_timeout was non-zero. While ip_auto_config() calls
-> wait_for_device_probe() to make sure any currently running deferred
-> probe work or asynchronous probe finishes, that wasn't sufficient to
-> account for devices being deferred until deferred_probe_timeout.
->
-> Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
-> until the deferred_probe_timeout fires") tried to fix that by making
-> sure wait_for_device_probe() waits for deferred_probe_timeout to expire
-> before returning.
->
-> However, if wait_for_device_probe() is called from the kernel_init()
-> context:
->
-> - Before deferred_probe_initcall() [2], it causes the boot process to
->   hang due to a deadlock.
->
-> - After deferred_probe_initcall() [3], it blocks kernel_init() from
->   continuing till deferred_probe_timeout expires and beats the point of
->   deferred_probe_timeout that's trying to wait for userspace to load
->   modules.
->
-> Neither of this is good. So revert the changes to
-> wait_for_device_probe().
->
-> [1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
-> [2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
-> [3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
->
-> Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
-> Cc: John Stultz <jstultz@google.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Cc: Basil Eljuse <Basil.Eljuse@arm.com>
-> Cc: Ferry Toth <fntoth@gmail.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anders Roxell <anders.roxell@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: John Stultz <jstultz@google.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Fri, 3 Jun 2022 10:25:16 -0700 Eric Dumazet wrote:
+> >                         goto release_desc;
+> > @@ -1914,7 +1923,16 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
+> >                 return -ENOMEM;
+> >
+> >         for (i = 0; i < rx_dma_size; i++) {
+> > -               ring->data[i] = netdev_alloc_frag(ring->frag_size);  
+> 
+> Note aside, calling netdev_alloc_frag() in a loop like that is adding
+> GFP_ATOMIC pressure.
+> 
+> mtk_rx_alloc() being in process context, using GFP_KERNEL allocations
+> would be less aggressive and
+> have more chances to succeed.
+> 
+> We probably should offer a generic helper. This could be used from
+> driver/net/tun.c and others.
 
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
-
-> ---
->  drivers/base/dd.c | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 2fc8507f59ee..91f63cd33b12 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -263,7 +263,6 @@ int driver_deferred_probe_timeout;
->  #endif
->
->  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
-> -static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
->
->  static int __init deferred_probe_timeout_setup(char *str)
->  {
-> @@ -318,7 +317,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
->         list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
->                 dev_info(p->device, "deferred probe pending\n");
->         mutex_unlock(&deferred_probe_mutex);
-> -       wake_up_all(&probe_timeout_waitqueue);
->  }
->  static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
->
-> @@ -736,9 +734,6 @@ int driver_probe_done(void)
->   */
->  void wait_for_device_probe(void)
->  {
-> -       /* wait for probe timeout */
-> -       wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
-> -
->         /* wait for the deferred probe workqueue to finish */
->         flush_work(&deferred_probe_work);
->
-> --
-> 2.36.1
->
+Do cases where netdev_alloc_frag() is not run from a process context
+from to your mind? My feeling is that the prevailing pattern is what
+this driver does, which is netdev_alloc_frag() at startup / open and
+napi_alloc_frag() from the datapath. So maybe we can even spare the
+detail in the API and have napi_alloc_frag() assume GFP_KERNEL by
+default?

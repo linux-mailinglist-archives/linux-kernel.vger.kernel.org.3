@@ -2,168 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F52B53CB34
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2DC53CB3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244949AbiFCN7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S245032AbiFCOCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238644AbiFCN7C (ORCPT
+        with ESMTP id S245023AbiFCOCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:59:02 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4EAE082;
-        Fri,  3 Jun 2022 06:59:01 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 26FF81F45910
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654264740;
-        bh=1PokqYaPEgiXhLt5emusMefjpPlRtuRVPgBT7aSIqAM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=lNBNeQ8yPFDvNcvNqJFOjmOTdCKsOFJYIqyIDiAkKuUfJpgakVkYDKQJ06WktOsJY
-         K4+jxiwjdc/9BaX+ysLBfnyDIjk7K71EJgH84mhGNvHaXDG2AEtbPkrxsxGOQYtASp
-         dO9KwSOZoT//vsWI+08+CYrKrO1f1d2JgGBklCuDv3nj8HmkjgawELdyso3EYnrJam
-         jwdPlQR2zAEbYzpdppEx2jpZehUrAw2cSAwWNDaCfPZybaU8zbEls0fzyyta+fd1up
-         sLTfoeTs92lKFc1rgiJV6ho7/SEe74DUJ9eRqICOl7fR45IGFEmLeQ73F4BMjib/Iy
-         OXat3n7Yh8s3w==
-Message-ID: <c1ccad8a-8063-1156-f18f-8cc13c65a11b@collabora.com>
-Date:   Fri, 3 Jun 2022 16:58:56 +0300
+        Fri, 3 Jun 2022 10:02:07 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E711A0F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 07:02:05 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 47D9E5C0102;
+        Fri,  3 Jun 2022 10:02:05 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 03 Jun 2022 10:02:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1654264925; x=1654351325; bh=W+
+        eqGuBXNTJREah5NjPEs8MO/LOIrmZ4w8DTz9PEUKM=; b=qa++gpww3sM7jROf29
+        Msxeiz9MXxdD9M/sKlJTFOvUkRUpZo0RMEBKZGqq86WSrvoB1kaKfjtogUd58FDh
+        jrKrYHeR+EoKBZX/buSMyw9wuSXsVSkp8hWUkvxnhxhpQKpC6l/1U3dwsDJ//AvB
+        U95vA1p9vxPip/dTBuugHoaOVEVaep1/hps1LMHDxNGMohAQmmHFi9JS89wBI5Wb
+        9dL4izCJPHJh3kN2cuFtfJLRKv9b1QxM88toqq5pgmkDvwrY/t+vR2nIRaV6CH/i
+        1EK7AL7qHpXrNkNEYwktqQX9ccbBUdskLU1JFa7+IGs4QjEi1Zshh3I4i2vfqe2d
+        Auaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1654264925; x=1654351325; bh=W+eqGuBXNTJREah5NjPEs8MO/LOIrmZ4w8D
+        Tz9PEUKM=; b=EZ+Ehd1s/kimSqtsf0NZ+ENsR5b6CQRNc2hpgNAktVZvKgNSp4y
+        aQBDOnnE8LAgsy/mMoWY1N2HTCMpSwrptNmgXB4cyJjpSG6VnUz/sBbBtYdZxrfE
+        N0r3AGLUaY5yXsCWvr4zQI0xig9I21AaXXQbcU+BA+aOkYM7Za5kwcLPb95uKs7T
+        pw2rJHvJ6lFX9NrlxyDMU0nfmGKwxRPmrrQmO2auyNPsF7PPWdtjAZCp7QW+prS5
+        PNsUp60unu5vi1PdImV7Uj5WUtf6vgJLcn6ESAE13mI1X5o++WsUZb00cTuuHT+F
+        QLMKOTVYaBSLjrivaQ5vDaCHOhcl8lC/Vbw==
+X-ME-Sender: <xms:WxSaYvqvWGqiT4Jpz7Ll5tcxOqbu1E-AdzxjGghbB2jkky_7y0WQtw>
+    <xme:WxSaYpqlS0Q8Z64LW7rQm_-gIrM55N9D9vkDsRS1noMvxL-5z14ipS8y-6PVXFgkM
+    mYbdnchOZc4mcU_Pg>
+X-ME-Received: <xmr:WxSaYsM2VjhlM3c9KH19oRS10e-EVoJuXNK0PUANjmivKeSaZPrGd60K6ht2I6mju54FOtVEwxyhCN_Oy-Vv-Gg0P03HMA1jidc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleeigdejtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvohhmucfhihht
+    iihhvghnrhihuceothhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukheqnecugg
+    ftrfgrthhtvghrnhepvddtkeejgeegieetgfeggefggfejgfefudeufffhieeilefggfdu
+    gfejvdetuedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpphhinhgvieegrdhorh
+    hgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
+    mhgrihhlfhhrohhmpehtohhmsehtohhmqdhfihhtiihhvghnrhihrdhmvgdruhhk
+X-ME-Proxy: <xmx:WxSaYi7vj0yx5aeUkiERZHbWtmtws26t_qv_50uDsJ3Uz_WUFtSmfw>
+    <xmx:WxSaYu7u14gjKroRlnofacK25yMWhhfvigRy5PNEW77re2j1DtXP2A>
+    <xmx:WxSaYqgr6WyzPiXjIWBK3k3C0JWxFIQGxDT4hdbbyKUNzLo9kqGy1Q>
+    <xmx:XRSaYmh4QYAN5Q3gdYBVfByp33VGAbXPkPHud1VkOCxcCbkfWU_ohw>
+Feedback-ID: iefc945ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Jun 2022 10:02:00 -0400 (EDT)
+From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: [PATCH] mtd: spi-nor: siliconkaiser: add support for sk25lp128
+Date:   Fri,  3 Jun 2022 23:59:34 +1000
+Message-Id: <20220603135933.143372-1-tom@tom-fitzhenry.me.uk>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] drm/tegra: dc: rgb: Fix refcount leak in
- tegra_dc_rgb_probe
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Zhang <markz@nvidia.com>,
-        Terje Bergstrom <tbergstrom@nvidia.com>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220603132703.42085-1-linmq006@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220603132703.42085-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 16:27, Miaoqian Lin wrote:
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> So add of_node_put() in error paths.
-> 
-> Fixes: d8f4a9eda006 ("drm: Add NVIDIA Tegra20 support")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> changes in v2:
-> - update Fixes tag.
-> v1 Link: https://lore.kernel.org/r/20220602155615.43277-1-linmq006@gmail.com
-> ---
->  drivers/gpu/drm/tegra/rgb.c | 31 +++++++++++++++++++++----------
->  1 file changed, 21 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tegra/rgb.c b/drivers/gpu/drm/tegra/rgb.c
-> index ff8fce36d2aa..cef2b1b72385 100644
-> --- a/drivers/gpu/drm/tegra/rgb.c
-> +++ b/drivers/gpu/drm/tegra/rgb.c
-> @@ -196,12 +196,16 @@ int tegra_dc_rgb_probe(struct tegra_dc *dc)
->  	int err;
->  
->  	np = of_get_child_by_name(dc->dev->of_node, "rgb");
-> -	if (!np || !of_device_is_available(np))
-> -		return -ENODEV;
-> +	if (!np || !of_device_is_available(np)) {
-> +		err = -ENODEV;
-> +		goto err_put_node;
-> +	}
->  
->  	rgb = devm_kzalloc(dc->dev, sizeof(*rgb), GFP_KERNEL);
-> -	if (!rgb)
-> -		return -ENOMEM;
-> +	if (!rgb) {
-> +		err = -ENOMEM;
-> +		goto err_put_node;
-> +	}
->  
->  	rgb->output.dev = dc->dev;
->  	rgb->output.of_node = np;
-> @@ -209,31 +213,34 @@ int tegra_dc_rgb_probe(struct tegra_dc *dc)
->  
->  	err = tegra_output_probe(&rgb->output);
->  	if (err < 0)
-> -		return err;
-> +		goto err_put_node;
-> +
->  
->  	rgb->clk = devm_clk_get(dc->dev, NULL);
->  	if (IS_ERR(rgb->clk)) {
->  		dev_err(dc->dev, "failed to get clock\n");
-> -		return PTR_ERR(rgb->clk);
-> +		err =  PTR_ERR(rgb->clk);
-> +		goto err_put_node;
->  	}
->  
->  	rgb->clk_parent = devm_clk_get(dc->dev, "parent");
->  	if (IS_ERR(rgb->clk_parent)) {
->  		dev_err(dc->dev, "failed to get parent clock\n");
-> -		return PTR_ERR(rgb->clk_parent);
-> +		err = PTR_ERR(rgb->clk_parent);
-> +		goto err_put_node;
->  	}
->  
->  	err = clk_set_parent(rgb->clk, rgb->clk_parent);
->  	if (err < 0) {
->  		dev_err(dc->dev, "failed to set parent clock: %d\n", err);
-> -		return err;
-> +		goto err_put_node;
->  	}
->  
->  	rgb->pll_d_out0 = clk_get_sys(NULL, "pll_d_out0");
->  	if (IS_ERR(rgb->pll_d_out0)) {
->  		err = PTR_ERR(rgb->pll_d_out0);
->  		dev_err(dc->dev, "failed to get pll_d_out0: %d\n", err);
-> -		return err;
-> +		goto err_put_node;
->  	}
->  
->  	if (dc->soc->has_pll_d2_out0) {
-> @@ -241,13 +248,17 @@ int tegra_dc_rgb_probe(struct tegra_dc *dc)
->  		if (IS_ERR(rgb->pll_d2_out0)) {
->  			err = PTR_ERR(rgb->pll_d2_out0);
->  			dev_err(dc->dev, "failed to get pll_d2_out0: %d\n", err);
-> -			return err;
-> +			goto err_put_node;
->  		}
->  	}
->  
->  	dc->rgb = &rgb->output;
->  
->  	return 0;
-> +
-> +err_put_node:
-> +	of_node_put(np);
-> +	return err;
->  }
->  
->  int tegra_dc_rgb_remove(struct tegra_dc *dc)
+Add support for the siliconkaiser sk25lp128 chip.
 
-Doesn't look like the node is put on driver removal either. Hence you
-should make it resource-managed.
+This is the flash chip used in the PinePhone Pro[0], found by physical
+inspection of the board.[1]
 
+I cannot find a datasheet, but this chip supports SFDP.
+
+This patch depends on SNOR_ID3().[2]
+
+https://lore.kernel.org/all/20220510140232.3519184-1-michael@walle.cc/
+
+Tested done: checked that the Pinephone Pro boots when a ROM is written to
+/dev/mtdblock0.
+
+$ xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+53464450060101ff00060110300000ff9d05010380000002ffffffffffff
+ffffffffffffffffffffffffffffffffffffe520f9ffffffff0744eb086b
+083b80bbfeffffffffff00ffffff44eb0c200f5210d800ff234ac90082d8
+11c7cccd68467a757a75f7a2d55c4a422cfff030c080ffffffffffffffff
+ffffffffffffffff501950169cf9c0648fecffff
+$ md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+de4d6be54e479d60859b0ca8a0ee9216
+/sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+$ cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+257018
+$ cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+sk25lp128
+$ cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+siliconkaiser
+
+0. https://wiki.pine64.org/wiki/PinePhone_Pro#Specifications
+1. Thanks to https://github.com/Biktorgj for finding that.
+2. "mtd: spi-nor: introduce SNOR_ID3()" https://lore.kernel.org/all/20220510140232.3519184-1-michael@walle.cc/
+
+Link: https://lore.kernel.org/all/20220510140232.3519184-1-michael@walle.cc/
+Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+---
+ drivers/mtd/spi-nor/Makefile        |  1 +
+ drivers/mtd/spi-nor/core.c          |  1 +
+ drivers/mtd/spi-nor/core.h          |  1 +
+ drivers/mtd/spi-nor/siliconkaiser.c | 15 +++++++++++++++
+ 4 files changed, 18 insertions(+)
+ create mode 100644 drivers/mtd/spi-nor/siliconkaiser.c
+
+diff --git a/drivers/mtd/spi-nor/Makefile b/drivers/mtd/spi-nor/Makefile
+index e347b435a038..314ac7773369 100644
+--- a/drivers/mtd/spi-nor/Makefile
++++ b/drivers/mtd/spi-nor/Makefile
+@@ -12,6 +12,7 @@ spi-nor-objs			+= intel.o
+ spi-nor-objs			+= issi.o
+ spi-nor-objs			+= macronix.o
+ spi-nor-objs			+= micron-st.o
++spi-nor-objs			+= siliconkaiser.o
+ spi-nor-objs			+= spansion.o
+ spi-nor-objs			+= sst.o
+ spi-nor-objs			+= winbond.o
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index fdde80d9f388..e542d3009915 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -1624,6 +1624,7 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
+ 	&spi_nor_issi,
+ 	&spi_nor_macronix,
+ 	&spi_nor_micron,
++	&spi_nor_siliconkaiser,
+ 	&spi_nor_st,
+ 	&spi_nor_spansion,
+ 	&spi_nor_sst,
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 87183cff3251..8997099f6c5e 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -625,6 +625,7 @@ extern const struct spi_nor_manufacturer spi_nor_intel;
+ extern const struct spi_nor_manufacturer spi_nor_issi;
+ extern const struct spi_nor_manufacturer spi_nor_macronix;
+ extern const struct spi_nor_manufacturer spi_nor_micron;
++extern const struct spi_nor_manufacturer spi_nor_siliconkaiser;
+ extern const struct spi_nor_manufacturer spi_nor_st;
+ extern const struct spi_nor_manufacturer spi_nor_spansion;
+ extern const struct spi_nor_manufacturer spi_nor_sst;
+diff --git a/drivers/mtd/spi-nor/siliconkaiser.c b/drivers/mtd/spi-nor/siliconkaiser.c
+new file mode 100644
+index 000000000000..82bb6094caa9
+--- /dev/null
++++ b/drivers/mtd/spi-nor/siliconkaiser.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/mtd/spi-nor.h>
++
++#include "core.h"
++
++static const struct flash_info siliconkaiser_nor_parts[] = {
++  { "sk25lp128", SNOR_ID3(0x257018) },
++};
++
++const struct spi_nor_manufacturer spi_nor_siliconkaiser = {
++	.name = "siliconkaiser",
++	.parts = siliconkaiser_nor_parts,
++	.nparts = ARRAY_SIZE(siliconkaiser_nor_parts),
++};
 -- 
-Best regards,
-Dmitry
+2.36.0
+

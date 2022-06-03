@@ -2,247 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6166F53C84A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89C453C895
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243486AbiFCKPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S243565AbiFCKWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243501AbiFCKPI (ORCPT
+        with ESMTP id S229852AbiFCKWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:15:08 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED5D3B295;
-        Fri,  3 Jun 2022 03:15:07 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 253AEo18059265;
-        Fri, 3 Jun 2022 05:14:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654251290;
-        bh=xcdn1/HO/Nz3XRL5291lOZsJoPbQFUVf0e5yN2z7nMY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=xtmGHz9ejmpxQGizDHpSsAZPujbV/QmKwr3yFHTNE1dQmIMlgoMMTzl7H4WljqaqS
-         4F+p2MDuV1RBSFfo5z//9ynbr+nBNo9xhQamQLMbG+hQEFQzgqUGU5IB8949Dmb3N2
-         aphC67nPGgujjupCRdP1rT2X3WaWNgdw6wxPO2OU=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 253AEnDa032476
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 3 Jun 2022 05:14:50 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
- Jun 2022 05:14:49 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 3 Jun 2022 05:14:49 -0500
-Received: from [172.24.220.119] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 253AEgi0000981;
-        Fri, 3 Jun 2022 05:14:43 -0500
-Message-ID: <0f766b85-0d64-7f28-6139-ca5ed53edc94@ti.com>
-Date:   Fri, 3 Jun 2022 15:44:41 +0530
+        Fri, 3 Jun 2022 06:22:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B630C642E;
+        Fri,  3 Jun 2022 03:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654251755; x=1685787755;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WF+UZTi1QOwSbfXLEfc65TwAKhi+9MpRsucGq2PY9BU=;
+  b=SABZb9oqjS/AdvAeHwq2kWSIjdVHTb94LjfgjQXO269/ZwPuM7X8ZtyY
+   I66W7bs0ypaCB8mdC43ACnYaiZ20bIMbz0n2n1LuM942b1GsM0Fp60IJn
+   IsDJTj1ljQB/0ZSUQjJ6qE4CmWiwcCNXGBBdLrdQ8hDVU/48UYgzBmkLP
+   10ULZqwVcing8QwrAVWCd6j9hUrc3U/ODGCSWqa/JytBNDqV7nAt+8AmO
+   hB3+6JtOSHt8OTZHM4uN0/8nVIKEBrbJuSZDQ0lOVDKNb909zJsKQ3Wpw
+   qGQva8kGtex2kTl1cnQROhQOW3zbQW1m6in3QDFeD7O/ZQosuWS91eQF+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="275022490"
+X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
+   d="scan'208";a="275022490"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 03:22:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
+   d="scan'208";a="530959412"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga003.jf.intel.com with ESMTP; 03 Jun 2022 03:22:33 -0700
+Date:   Fri, 3 Jun 2022 18:14:43 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     tien.sung.ang@intel.com
+Cc:     dinh.nguyen@intel.com, hao.wu@intel.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mdf@kernel.org, trix@redhat.com
+Subject: Re: [PATCH] fpga: altera-cvp: allow interrupt to continue next time
+Message-ID: <20220603101443.GB238410@yilunxu-OptiPlex-7050>
+References: <20220528120400.GA175058@yilunxu-OptiPlex-7050>
+ <20220531022004.2314963-1-tien.sung.ang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, Rob Herring <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
-        <mathieu.poirier@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, <grygorii.strashko@ti.com>,
-        <vigneshr@ti.com>, <kishon@ti.com>
-References: <20220418104118.12878-1-p-mohan@ti.com>
- <20220418104118.12878-2-p-mohan@ti.com> <YnA3dtaqptLgZBrV@robh.at.kernel.org>
- <6c054a1b-2842-a6f0-733a-92cfda76f828@ti.com>
- <5bf638ee-6cc8-d5cb-5795-a840d8d2bb87@kernel.org>
-From:   Puranjay Mohan <p-mohan@ti.com>
-In-Reply-To: <5bf638ee-6cc8-d5cb-5795-a840d8d2bb87@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531022004.2314963-1-tien.sung.ang@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
-
-On 03/06/22 13:41, Roger Quadros wrote:
-> Hi Puranjay,
+On Tue, May 31, 2022 at 10:20:04AM +0800, tien.sung.ang@intel.com wrote:
+> >> CFG_READY signal/bit may time-out due to firmware not responding
+> >> within the given time-out. This time varies due to numerous
+> >> factors like size of bitstream and others.
+> >> This time-out error does not impact the result of the CvP
+> >> previous transactions. The CvP driver shall then, respond with
 > 
-> On 02/06/2022 08:28, Puranjay Mohan wrote:
->> Hi Rob,
->>
->> On 03/05/22 01:26, Rob Herring wrote:
->>> On Mon, Apr 18, 2022 at 04:11:14PM +0530, Puranjay Mohan wrote:
->>>> From: Suman Anna <s-anna@ti.com>
->>>>
->>>> Add a YAML binding document for PRU consumers. The binding includes
->>>> all the common properties that can be used by different PRU consumer
->>>> or application nodes and supported by the PRU remoteproc driver.
->>>> These are used to configure the PRU hardware for specific user
->>>> applications.
->>>>
->>>> The application nodes themselves should define their own bindings.
->>>>
->>>> Co-developed-by: Tero Kristo <t-kristo@ti.com>
->>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->>>> ---
->>>>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 70 +++++++++++++++++++
->>>>  1 file changed, 70 insertions(+)
->>>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->>>> new file mode 100644
->>>> index 000000000000..5b1f1cb2f098
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
->>>> @@ -0,0 +1,70 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Common TI PRU Consumer Binding
->>>> +
->>>> +maintainers:
->>>> +  - Suman Anna <s-anna@ti.com>
->>>> +
->>>> +description: |
->>>> +  A PRU application/consumer/user node typically uses one or more PRU device
->>>> +  nodes to implement a PRU application/functionality. Each application/client
->>>> +  node would need a reference to at least a PRU node, and optionally define
->>>> +  some properties needed for hardware/firmware configuration. The below
->>>> +  properties are a list of common properties supported by the PRU remoteproc
->>>> +  infrastructure.
->>>> +
->>>> +  The application nodes shall define their own bindings like regular platform
->>>> +  devices, so below are in addition to each node's bindings.
->>>> +
->>>> +properties:
->>>> +  ti,prus:
->>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
->>>> +    minItems: 1
->>>> +    maxItems: 6
->>>> +    items:
->>>> +      maxItems: 1
->>>> +
->>>> +  firmware-name:
->>>> +    $ref: /schemas/types.yaml#/definitions/string-array
->>>> +    description: |
->>>> +      firmwares for the PRU cores, the default firmware for the core from
->>>> +      the PRU node will be used if not provided. The firmware names should
->>>> +      correspond to the PRU cores listed in the 'ti,prus' property
->>>
->>> So should be the name number of entries?:
->>>
->>> minItems: 1
->>> maxItems: 6
->>
->> will add in v4
->>
->>>
->>>> +
->>>> +  ti,pruss-gp-mux-sel:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>>
->>> minItems: 1
->>
->> will add in v4
->>
->>>
->>>> +    maxItems: 6
->>>> +    items:
->>>> +      enum: [0, 1, 2, 3, 4]
->>>> +    description: |
->>>> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
->>>> +      This selects the internal muxing scheme for the PRU instance. Values
->>>> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
->>>> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
->>>> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
->>>> +      same slice in the associative array. If the array size is smaller than
->>>> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
->>>> +      PRU core is used.
->>>> +
->>>> +required:
->>>> +  - ti,prus
->>>> +
->>>> +dependencies:
->>>> +  firmware-name: [ 'ti,prus' ]
->>>> +  ti,pruss-gp-mux-sel: [ 'ti,prus' ]
->>>
->>> This doesn't make sense because 'ti,prus' is already required. Should 
->>> all 3 properties always be required?
->>
->> All three of these are always required, so, I will remove the
-> 
-> Are you sure? It should not be required and remoteproc driver should use
-> default name if not provided in DT.
-> In patch 5 see what is being done in pru_rproc_get().
-> It doesn't error out if firmware-name is not provided.
+> >Do you mean the reprogramming is successful even if you find the time
+> >out in write_complete()? Then return 0 is better?
+> Based on the information given by the Intel FPGA firmware team,
+> CFG_READY is essential to indicate if the current FPGA 
+> configuration session is indeed a success. There are 
+> cases we test in the lab whereby, CFG_READY stays invalid and
+> the tests performed subsequently to verify the FPGA functionality
+> could not detect the failed session. A failed FPGA 
+> configuration session means, the new bitstream wasn't 
+> successfully configured and tests ran later will just be passing
+> on the previous working bitstream version. In short, CFG_READY
+> is esential, and an error indicating the time-out is a must.
+> Another example, using an incorrect SOF/Design FPGA results
+> in CFG_READY being invalid. The user must be informed of a 
+> potential error. 
+> I will correct the wordings i used earlier that says that
+> the timoeut error does not impact the results of the CvP
+> previous transactions. It may so if the firmware has some sort
+> of error. 
 
-Yes, you are right, I missed this part.
-So, only 'ti,prus' is required and 'firmware-name',
-'ti,pruss-gp-mux-sel' are optional but are dependent on 'ti,prus'
+Understood. But with your new comment why you must change the error
+code to -EAGAIN rather than timeout?
 
-So, as 'ti,prus' is always required we don't need the dependencies tag
-to show that 'firmware-name', 'ti,pruss-gp-mux-sel' are dependent on
-'ti,prus'
-
-So, the change that I will be making in v4 is the removal of the
-dependencies tag. This seems right?
-
-> 
-> Same for ti,pruss-gp-mux-sel. Did you miss the patch that adds support for this
-> in this series?
-
-Yes, the patch you are referring to was not a part of v2 so I didn't add
-it in v3. I will add it in v4 now as it make more sense to add it with
-the series.
-
-> 
->> "dependencies:" tag and add all three of them to "required:" in v4
->> Will it be the correct way to do it?
->>
->>>
->>>> +
->>>> +additionalProperties: true
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    /* PRU application node example */
->>>> +    pru-app {
->>>> +        ti,prus = <&pru0>, <&pru1>;
->>>> +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
->>>> +        ti,pruss-gp-mux-sel = <2>, <1>;
->>>
->>> This example never validates, but okay I guess.
->>>
->>>> +    };
->>>> -- 
->>>> 2.17.1
->>>>
->>>>
->>
->> Thanks,
->> Puranjay Mohan
-> 
-> cheers,
-> -roger
+I think you may change your commit message. The main change is adding
+the error handling. The error code change is minor, even not necessary
+if you don't have a strong reason.
 
 Thanks,
-Puranjay Mohan
+Yilun
+
+> 
+> >And could you specify what the time-out mean on write_init() phase?
+> I could not really understand your question. We set huge 
+> time-outs of ~10seconds. Every wait for the firmware to respond
+> is potentially a hazard. The firmware CvP is has it's limitation
+> unfortunately. 
+
+

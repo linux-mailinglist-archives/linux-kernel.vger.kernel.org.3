@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93C253D069
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06EE53D0E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242725AbiFCSDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
+        id S1346690AbiFCSIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347270AbiFCRwK (ORCPT
+        with ESMTP id S1346058AbiFCRzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B8113D16;
-        Fri,  3 Jun 2022 10:51:55 -0700 (PDT)
+        Fri, 3 Jun 2022 13:55:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A17562C0;
+        Fri,  3 Jun 2022 10:53:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67851B82419;
-        Fri,  3 Jun 2022 17:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB3CC385A9;
-        Fri,  3 Jun 2022 17:51:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A43FB612DA;
+        Fri,  3 Jun 2022 17:53:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6155CC385A9;
+        Fri,  3 Jun 2022 17:53:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278713;
-        bh=xF4TwzXvI/vuD2ZvHNLqd2yjZu07Y0fkHy+dpnoz9IY=;
+        s=korg; t=1654278811;
+        bh=/eMut8KRqjz6hw7B+wNoTdvbDTPFtvbpZT8C4Ofec78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wkDp1dJcD5SSNhf+DLlVz8jsBdsVQMLkBxRErVY6TFjTiR2xOZW0zG6al8MXiuo4J
-         WDdy5VGovXDMNSVVH+M0H5N86BWkTlfSMoAXrwuc1pTguTKKpCkFepVzPcqsycE/sl
-         0ndQq5z8VKpMrN+kTtE6bP6Gb1fVZpToOOiBhoH0=
+        b=fLZb4f6i3zZNIFg4n4MhFpeujIau/iTmQ1g9jYgaQ43Uz0/lQaX7LoSU61Untd7fh
+         Y5I+qj44la9GQ7gJSlkvAZgaR5qH8qwp6SlzzoyEiJg2m/3M1rWEsC0YIc8HvhYX6q
+         GHVMK0PtPekb/PuN7BmZlKHzPgyhX7fICLWHSSb0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Craig McLure <craig@mclure.net>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 39/66] ALSA: usb-audio: Configure sync endpoints before data
+        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 35/75] KVM: x86: avoid loading a vCPU after .vm_destroy was called
 Date:   Fri,  3 Jun 2022 19:43:19 +0200
-Message-Id: <20220603173821.802500760@linuxfoundation.org>
+Message-Id: <20220603173822.741407952@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Craig McLure <craig@mclure.net>
+From: Maxim Levitsky <mlevitsk@redhat.com>
 
-commit 0e85a22d01dfe9ad9a9d9e87cd4a88acce1aad65 upstream.
+commit 6fcee03df6a1a3101a77344be37bb85c6142d56c upstream.
 
-Devices such as the TC-Helicon GoXLR require the sync endpoint to be
-configured in advance of the data endpoint in order for sound output
-to work.
+This can cause various unexpected issues, since VM is partially
+destroyed at that point.
 
-This patch simply changes the ordering of EP configuration to resolve
-this.
+For example when AVIC is enabled, this causes avic_vcpu_load to
+access physical id page entry which is already freed by .vm_destroy.
 
-Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215079
-Signed-off-by: Craig McLure <craig@mclure.net>
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220524062115.25968-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: 8221c1370056 ("svm: Manage vcpu load/unload when enable AVIC")
+Cc: stable@vger.kernel.org
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Message-Id: <20220322172449.235575-2-mlevitsk@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/pcm.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ arch/x86/kvm/x86.c |   10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
-index 6d699065e81a..b470404a5376 100644
---- a/sound/usb/pcm.c
-+++ b/sound/usb/pcm.c
-@@ -439,16 +439,21 @@ static int configure_endpoints(struct snd_usb_audio *chip,
- 		/* stop any running stream beforehand */
- 		if (stop_endpoints(subs, false))
- 			sync_pending_stops(subs);
-+		if (subs->sync_endpoint) {
-+			err = snd_usb_endpoint_configure(chip, subs->sync_endpoint);
-+			if (err < 0)
-+				return err;
-+		}
- 		err = snd_usb_endpoint_configure(chip, subs->data_endpoint);
- 		if (err < 0)
- 			return err;
- 		snd_usb_set_format_quirk(subs, subs->cur_audiofmt);
--	}
--
--	if (subs->sync_endpoint) {
--		err = snd_usb_endpoint_configure(chip, subs->sync_endpoint);
--		if (err < 0)
--			return err;
-+	} else {
-+		if (subs->sync_endpoint) {
-+			err = snd_usb_endpoint_configure(chip, subs->sync_endpoint);
-+			if (err < 0)
-+				return err;
-+		}
- 	}
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11655,20 +11655,15 @@ static void kvm_unload_vcpu_mmu(struct k
+ 	vcpu_put(vcpu);
+ }
  
- 	return 0;
--- 
-2.36.1
-
+-static void kvm_free_vcpus(struct kvm *kvm)
++static void kvm_unload_vcpu_mmus(struct kvm *kvm)
+ {
+ 	unsigned long i;
+ 	struct kvm_vcpu *vcpu;
+ 
+-	/*
+-	 * Unpin any mmu pages first.
+-	 */
+ 	kvm_for_each_vcpu(i, vcpu, kvm) {
+ 		kvm_clear_async_pf_completion_queue(vcpu);
+ 		kvm_unload_vcpu_mmu(vcpu);
+ 	}
+-
+-	kvm_destroy_vcpus(kvm);
+ }
+ 
+ void kvm_arch_sync_events(struct kvm *kvm)
+@@ -11774,11 +11769,12 @@ void kvm_arch_destroy_vm(struct kvm *kvm
+ 		__x86_set_memory_region(kvm, TSS_PRIVATE_MEMSLOT, 0, 0);
+ 		mutex_unlock(&kvm->slots_lock);
+ 	}
++	kvm_unload_vcpu_mmus(kvm);
+ 	static_call_cond(kvm_x86_vm_destroy)(kvm);
+ 	kvm_free_msr_filter(srcu_dereference_check(kvm->arch.msr_filter, &kvm->srcu, 1));
+ 	kvm_pic_destroy(kvm);
+ 	kvm_ioapic_destroy(kvm);
+-	kvm_free_vcpus(kvm);
++	kvm_destroy_vcpus(kvm);
+ 	kvfree(rcu_dereference_check(kvm->arch.apic_map, 1));
+ 	kfree(srcu_dereference_check(kvm->arch.pmu_event_filter, &kvm->srcu, 1));
+ 	kvm_mmu_uninit_vm(kvm);
 
 

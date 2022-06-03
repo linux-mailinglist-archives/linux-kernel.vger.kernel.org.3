@@ -2,131 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FADA53D15D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A63A53D170
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiFCS0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S1347342AbiFCSah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346826AbiFCSY3 (ORCPT
+        with ESMTP id S1347828AbiFCSaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:24:29 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EB731905
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:08:15 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id o10so11175123edi.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:08:15 -0700 (PDT)
+        Fri, 3 Jun 2022 14:30:03 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6C27220C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:13:41 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id u2so7739792pfc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=muCBX2nbY4JefuazIeJqH+g1xi4+aaCLBHsL/DP3IYQ=;
-        b=Rk1wiLnkm7bKruoU+LkxDS87UBjnoVo/LWHWe/rikK54eH4YIPHiJ9Xx7eYgCndMI4
-         76FTZBVbstv0lLj1no8pSDX4z8uicoyPVsuLPPfUfoOv2fPMOUiq+u9H203bdj+f/eni
-         OZkDR6/N3Qp6Cso/x5hNTjYH3zg1f2opnZS8I=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KMzrP1ZYW7q/TidHk4y7Aa/yx0iJcaya5gROyIWR4BM=;
+        b=SIwXH7tnxO54DrmpfWx37Dnzpuo94VKI4hgsLJaP4UwHqx2y2++HlfNfMVE+I2W/OA
+         DUcWVfaaS3FYE/N/cVWCzSVDG8dVCzDAgWFJIbqQ1j0VPI0piNoE9hSLj778PbA3UH6C
+         6gtRw0QFXRiEqGe1/XrP/ujAJQzyzpXfBnKUpojGztmXaIiEngCdDgiBWLk1xXxzdr0M
+         MMJ9NQpVcTv2f2MR5gCqrUzYHtZFH+Vrg6QFG9WvpHcbvevt8i8fho6MC5p+/6paQMc9
+         68coNPXUYF9IIDxSI8QlwNpmBrzAhtXGPCCfPUMjDEoKMo5g16cE/n016vt6Pe0PiiJu
+         +nrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=muCBX2nbY4JefuazIeJqH+g1xi4+aaCLBHsL/DP3IYQ=;
-        b=yrUmoT8tGArKNKfL027/zsJ4YFB34KZpCGy8GLIuZL3BbvPbMyP637q3nPuyXvUB6B
-         YgCOI7sTtF0UV7YfVeGv4dycA62ZECcpcvBNKVIZnSzZ9F8qs+cE5gdPclD76WRcyUyQ
-         jw9UB4QRmyhNEK9Eu86VrSzXQbhQgLupvCgQfMDcadON17GCAj2rMNqsYqHI6FjGpiBa
-         ldF5F9IAkR+IbHgW1zGZxSwknfcyjmeeWhxV5zVEKxhRj1wTSvtQ6/ooNQ+SVT/9HLBu
-         ta65bICoUMb619LDxRfWKlAgxsLeLTxc8k27hDEyM0hBWCRvb5xyPGP0lVkHt1gk4mCE
-         8gtA==
-X-Gm-Message-State: AOAM533YC4B8N1b6Lc1JS9BLQtlk1p3CeM2xO0BVX2XtRlkr+oUMmy1h
-        UsuKJyosU7ndauzF4Q2Cg+K4QLuAW6ZIF6B7cco=
-X-Google-Smtp-Source: ABdhPJx/IWBmvuVJ30EOp6BdgNxuLCPdDTqIvFHtb7YtoHzk9KfEx7xf300AsXvN1mjZjVPsCBVSpA==
-X-Received: by 2002:aa7:d303:0:b0:42d:d192:4c41 with SMTP id p3-20020aa7d303000000b0042dd1924c41mr12410379edq.178.1654279683440;
-        Fri, 03 Jun 2022 11:08:03 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id jg36-20020a170907972400b00701eb600df8sm3292247ejc.169.2022.06.03.11.08.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 11:08:02 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id p10so11350289wrg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:08:02 -0700 (PDT)
-X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
- h4-20020a05600016c400b0020fcd5d4797mr9325145wrf.193.1654279682232; Fri, 03
- Jun 2022 11:08:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KMzrP1ZYW7q/TidHk4y7Aa/yx0iJcaya5gROyIWR4BM=;
+        b=YAHrDrV8zT3exDxT9TatGPyUjFmbgie4DJVfYsgBZY6SY49wLY08muql1xnsl3yuP9
+         NNh/GlOL0zB0p9WTmXvJX29FOl8LYg3cMICPu1LVgy8yi7atYaa/CE2AqhrfwW2i39Jh
+         lzBZKWax5w+470QHkPi+UzBGfX8MA5oaqkmVtWJAw0mO62cTFHKk5Is2PvjP5QNfqkiy
+         38lKaxK2KwEIVYA4Dzjv1BsKjZ3OFakjGyA3KdkofreDbBAcmq8eOsGe0QDtevfLkQg9
+         yhUf+MeejpXT2H/SVaCKz20Xdnk7Ktzdei9T0gMrq1wfs/w0NB4fLAT9EaqEMvIAdpnq
+         DI3Q==
+X-Gm-Message-State: AOAM531A3baK5j02QD3d7SLGtBU1augIlpvfkWkn9oxQhSSAf1oCOGZQ
+        2DEeLR5PpbAcfs05uqKi00DKrw==
+X-Google-Smtp-Source: ABdhPJx6Fhx/k/G6F3rQ2T+mGOIPbpXrjtVEn/vidFgj5AVDqH7jNxEZNkDQfzwCOOGN+vAN2KhRAQ==
+X-Received: by 2002:a05:6a00:2396:b0:51b:de97:7efe with SMTP id f22-20020a056a00239600b0051bde977efemr5437281pfc.8.1654280014264;
+        Fri, 03 Jun 2022 11:13:34 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902784800b001640ab19773sm5853198pln.58.2022.06.03.11.13.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 11:13:33 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Michal Koutny <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, cgroups@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+Subject: [PATCH v2] cgroup: serialize css kill and release paths
+Date:   Fri,  3 Jun 2022 11:13:21 -0700
+Message-Id: <20220603181321.443716-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220603173455.441537-1-tadeusz.struk@linaro.org>
+References: <20220603173455.441537-1-tadeusz.struk@linaro.org>
 MIME-Version: 1.0
-References: <Ypng29bf0vGJ20fo@kroah.com>
-In-Reply-To: <Ypng29bf0vGJ20fo@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 3 Jun 2022 11:07:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjTkU15iuSVrue_tRhD7=9v2YatrnFNxg=wEpT9-Szd4w@mail.gmail.com>
-Message-ID: <CAHk-=wjTkU15iuSVrue_tRhD7=9v2YatrnFNxg=wEpT9-Szd4w@mail.gmail.com>
-Subject: Re: [GIT PULL] Staging driver updates for 5.19-rc1
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 3:22 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> Note, you will have a merge conflict in the
-> drivers/net/wireless/silabs/wfx/sta.c file, please just take the change
-> that came in from the wifi tree.  We thought as I had pulled the same
-> merge point from the wifi developers this type of conflict wouldn't have
-> happened, but for some reason git flags it as something to pay attention
-> to and couldn't resolve it itself.
+Syzbot found a corrupted list bug scenario that can be triggered from
+cgroup_subtree_control_write(cgrp). The reproduces writes to
+cgroup.subtree_control file, which invokes:
+cgroup_apply_control_enable()->css_create()->css_populate_dir(), which
+then fails with a fault injected -ENOMEM.
+In such scenario the css_killed_work_fn will be en-queued via
+cgroup_apply_control_disable(cgrp)->kill_css(css), and bail out to
+cgroup_kn_unlock(). Then cgroup_kn_unlock() will call:
+cgroup_put(cgrp)->css_put(&cgrp->self), which will try to enqueue
+css_release_work_fn for the same css instance, causing a list_add
+corruption bug, as can be seen in the syzkaller report [1].
 
-That "some reason" is because the networking tree made other changes
-to the file since (ie commit 2c33360bce6a: "wfx: use container_of() to
-get vif").
+Fix this by synchronizing the css ref_kill and css_release jobs.
+css_release() function will check if the css_killed_work_fn() has been
+scheduled for the css and only en-queue the css_release_work_fn()
+if css_killed_work_fn wasn't already en-queued. Otherwise css_release() will
+set the CSS_REL_LATER flag for that css. This will cause the
+css_release_work_fn() work to be executed after css_killed_work_fn() is finished.
 
-So both branches had done the same change (the merge), but one branch
-had then done other changes on top of that same change.
+Two scc flags have been introduced to implement this serialization mechanizm:
 
-Broken SCM thinking then thinks that means that "oh, then we obviously
-have to take the extra change" (eg darcs "patch algebra"), and make
-that the basis of their resolution strategy. It's not actually a valid
-model, because it just assumes that the additional patches were right.
-Maybe there was a _reason_ that extra patch wasn't done in the other
-branch? The extra patch might have been due to particular issues in
-that branch, you can't just make the darcs assumption of reordering
-patches and taking some union of them (which is an over-simplification
-of the patch algebra rules).
+ * CSS_KILL_ENQED, which will be set when css_killed_work_fn() is en-queued, and
+ * CSS_REL_LATER, which, if set, will cause the css_release_work_fn() to be
+   scheduled after the css_killed_work_fn is finished.
 
-Now, that's not to say that git can't get things wrong too when
-resolving things. But at least it doesn't make some fundamental
-mistake like that.
+There is also a new lock, which will protect the integrity of the css flags.
 
-The git rules are basically that it will resolve changes that aren't
-overlapping, using the traditional 3-way model (it then has that whole
-"recursion and rename detection" thing, but that's more of a
-higher-level metadata thing separate from the actual code merge).
+[1] https://syzkaller.appspot.com/bug?id=e26e54d6eac9d9fb50b221ec3e4627b327465dbd
 
-So git doesn't assume any "semantics" to the changes. If it sees that
-two branches changed the same code in different ways, git will go
-"this is a conflict", and leave it to human (or scripted)
-intervention.
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Michal Koutny<mkoutny@suse.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: <cgroups@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
 
-Again, it's not that the git model is always right - you can obviously
-have changes that do *not* overlap at all, but still have a very
-fundamental semantic conflict, and git will happily merge those things
-and think it is all good.
+Reported-and-tested-by: syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+Fixes: 8f36aaec9c92 ("cgroup: Use rcu_work instead of explicit rcu and work item")
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+v2: Use correct lock in css_killed_work_fn()
+---
+ include/linux/cgroup-defs.h |  4 ++++
+ kernel/cgroup/cgroup.c      | 35 ++++++++++++++++++++++++++++++++---
+ 2 files changed, 36 insertions(+), 3 deletions(-)
 
-So the git model is basically practical and straightforward (also
-"stupid", but in a good way - do the common truly obvious 3-way
-merges, don't try to do anything clever when that fails). There's no
-"theory" behind it that might turn out to be completely wrong.
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 1bfcfb1af352..8dc8b4edb242 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -53,6 +53,8 @@ enum {
+ 	CSS_RELEASED	= (1 << 2), /* refcnt reached zero, released */
+ 	CSS_VISIBLE	= (1 << 3), /* css is visible to userland */
+ 	CSS_DYING	= (1 << 4), /* css is dying */
++	CSS_KILL_ENQED	= (1 << 5), /* kill work enqueued for the css */
++	CSS_REL_LATER	= (1 << 6), /* release needs to be done after kill */
+ };
+ 
+ /* bits in struct cgroup flags field */
+@@ -162,6 +164,8 @@ struct cgroup_subsys_state {
+ 	 */
+ 	int id;
+ 
++	/* lock to protect flags */
++	spinlock_t lock;
+ 	unsigned int flags;
+ 
+ 	/*
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 1779ccddb734..b1bbd438d426 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5210,8 +5210,23 @@ static void css_release(struct percpu_ref *ref)
+ 	struct cgroup_subsys_state *css =
+ 		container_of(ref, struct cgroup_subsys_state, refcnt);
+ 
+-	INIT_WORK(&css->destroy_work, css_release_work_fn);
+-	queue_work(cgroup_destroy_wq, &css->destroy_work);
++	spin_lock_bh(&css->lock);
++
++	/*
++	 * Check if the css_killed_work_fn work has been scheduled for this
++	 * css and enqueue css_release_work_fn only if it wasn't.
++	 * Otherwise set the CSS_REL_LATER flag, which will cause
++	 * release to be enqueued after css_killed_work_fn is finished.
++	 * This is to prevent list corruption by en-queuing two instance
++	 * of the same work struct on the same WQ, namely cgroup_destroy_wq.
++	 */
++	if (!(css->flags & CSS_KILL_ENQED)) {
++		INIT_WORK(&css->destroy_work, css_release_work_fn);
++		queue_work(cgroup_destroy_wq, &css->destroy_work);
++	} else {
++		css->flags |= CSS_REL_LATER;
++	}
++	spin_unlock_bh(&css->lock);
+ }
+ 
+ static void init_and_link_css(struct cgroup_subsys_state *css,
+@@ -5230,6 +5245,7 @@ static void init_and_link_css(struct cgroup_subsys_state *css,
+ 	INIT_LIST_HEAD(&css->rstat_css_node);
+ 	css->serial_nr = css_serial_nr_next++;
+ 	atomic_set(&css->online_cnt, 0);
++	spin_lock_init(&css->lock);
+ 
+ 	if (cgroup_parent(cgrp)) {
+ 		css->parent = cgroup_css(cgroup_parent(cgrp), ss);
+@@ -5545,10 +5561,12 @@ int cgroup_mkdir(struct kernfs_node *parent_kn, const char *name, umode_t mode)
+  */
+ static void css_killed_work_fn(struct work_struct *work)
+ {
+-	struct cgroup_subsys_state *css =
++	struct cgroup_subsys_state *css_killed, *css =
+ 		container_of(work, struct cgroup_subsys_state, destroy_work);
+ 
+ 	mutex_lock(&cgroup_mutex);
++	css_killed = css;
++	css_killed->flags &= ~CSS_KILL_ENQED;
+ 
+ 	do {
+ 		offline_css(css);
+@@ -5557,6 +5575,14 @@ static void css_killed_work_fn(struct work_struct *work)
+ 		css = css->parent;
+ 	} while (css && atomic_dec_and_test(&css->online_cnt));
+ 
++	spin_lock_bh(&css_killed->lock);
++	if (css_killed->flags & CSS_REL_LATER) {
++		/* If css_release work was delayed for the css enqueue it now. */
++		INIT_WORK(&css_killed->destroy_work, css_release_work_fn);
++		queue_work(cgroup_destroy_wq, &css_killed->destroy_work);
++		css_killed->flags &= ~CSS_REL_LATER;
++	}
++	spin_unlock_bh(&css_killed->lock);
+ 	mutex_unlock(&cgroup_mutex);
+ }
+ 
+@@ -5566,10 +5592,13 @@ static void css_killed_ref_fn(struct percpu_ref *ref)
+ 	struct cgroup_subsys_state *css =
+ 		container_of(ref, struct cgroup_subsys_state, refcnt);
+ 
++	spin_lock_bh(&css->lock);
+ 	if (atomic_dec_and_test(&css->online_cnt)) {
++		css->flags |= CSS_KILL_ENQED;
+ 		INIT_WORK(&css->destroy_work, css_killed_work_fn);
+ 		queue_work(cgroup_destroy_wq, &css->destroy_work);
+ 	}
++	spin_unlock_bh(&css->lock);
+ }
+ 
+ /**
+-- 
+2.36.1
 
-Anyway, the conflict was trivial, but I thought I'd just explain both
-the immediate "why did it conflict" _and_ the more abstract "why did
-git make that choice".
-
-                     Linus

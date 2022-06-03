@@ -2,66 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9799A53C25A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40BF53C258
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240995AbiFCBsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S233460AbiFCByl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235708AbiFCBsW (ORCPT
+        with ESMTP id S236098AbiFCByj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:48:22 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650FF26575
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:48:21 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id e2so8604114wrc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 18:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QNli7KEh4KKbtSkzKBTNfjO3jAVOCO2dCudSxyTimLk=;
-        b=FmtcCWUd8fN1FKAhCyeHgUZwJRgKg6GYUBx5XO7/O41qJaghWhaymr2HRHB0xz3zSM
-         cUsn30llFmwSdxsTHGZIGfMNSWgdgAZCr9Czhl9lrw7AGD3yXQWfwxmk22CSndaF3V4V
-         Qi7z3HypVIwhCP6y11i9wVDAf7ZoXtzt/MmcUICEY3r97taqKd1ahMoNmH9Ay2O9UTxk
-         VuHbEhIaEFRFr8quImFfNeOVKneWbIOcheNgJ5Ryfpd1HT1cTgByPAnbwwFONo/eLVb8
-         EqOBE7C0tg6RaH5czdwl9OdxnwpASKc+K+v6UzM+pahRinxy5Tn/zOTJBejO00H6E7SF
-         8yGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QNli7KEh4KKbtSkzKBTNfjO3jAVOCO2dCudSxyTimLk=;
-        b=mB31n1DygIP4bID+/T+1/biH6ZctREwx0OWaWfOnNU1N1neYksAkYycQVyBybQBdC6
-         VwI+wU9MJhzofrlur2HKlI4Zj9GOEsEQBqvq6cjUckL7gge7ox0Gi4/I1DwsA3bpfzlj
-         kekt7DeTZ7+oibaeGPzqkXb4Ob0yOrwmyEmisefrCosj3vSLYamXClU6yyCULauqDXnL
-         JKrnYGwSDyRAmmNqrDmVqDtdFc+zG+mU+tqOSv9GyBPPuqRlgp3q6Zgm0KlHfcBqT5qa
-         bW30WfRZbzDlR7m8bw1diQlLgo8jpQFfOxxHnOlk3oFjJgIB7SQ3hHHR4cN4edfPaWWF
-         /NjQ==
-X-Gm-Message-State: AOAM532tH70TC8ma0JmRHDHVJh6ZCQlRONITHdrqJd5ktDArIBTVs8dL
-        oqUctnYuzlcbDc4i9GSjvxIxzxu/hf5kjZ8SHqQ=
-X-Google-Smtp-Source: ABdhPJyztN3ZAGjzK/SDIoRSTndoMFe05zD8gn7lUuFMJS50+raT2K1CrB8lK7ntDRcYyJdjc7fHK7MoEGhvc1Kl4Z8=
-X-Received: by 2002:a05:6000:1788:b0:20c:a43c:10fa with SMTP id
- e8-20020a056000178800b0020ca43c10famr5954950wrg.511.1654220899886; Thu, 02
- Jun 2022 18:48:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220602164518.286295-2-xiehuan09@gmail.com> <202206030515.4lqqkb3W-lkp@intel.com>
-In-Reply-To: <202206030515.4lqqkb3W-lkp@intel.com>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Fri, 3 Jun 2022 09:48:07 +0800
-Message-ID: <CAEr6+ED6oJV1BmAQy6T592GX751t9QB==0vWcXUDMw3WL0YWtA@mail.gmail.com>
-Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
-To:     kernel test robot <lkp@intel.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, mingo@redhat.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Thu, 2 Jun 2022 21:54:39 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA232B243
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:54:37 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220603015435epoutp03efaeda7856138de9be445809e81a8c3f~0_Xw-BLr91052910529epoutp03P
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:54:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220603015435epoutp03efaeda7856138de9be445809e81a8c3f~0_Xw-BLr91052910529epoutp03P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1654221275;
+        bh=iltdJsmgnbu0JcWYL1RKkqqbZCa+Qc8BFE7Yie5EMQA=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=dL5Za0uDl67LA6TIx2HJ2iyHzjFxGqeSN0ZO1XtqJwJQAEefbRzewssDnOpUTa505
+         IXFzjJxvJimPbu6pYv+9BTSFvZklmItP5Qo11aTbctsm52w1kr8uxE+h26n3O5nBF6
+         qrPyiGiL3YigY1p/E0e9Wj72h4xP5pbg+gko1FYE=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220603015434epcas2p33cfb84fa687df58be91884a5d4ccd113~0_Xv-e9b23019030190epcas2p3Y;
+        Fri,  3 Jun 2022 01:54:34 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LDmCX3pgdz4x9QG; Fri,  3 Jun
+        2022 01:54:32 +0000 (GMT)
+X-AuditID: b6c32a47-573ff7000000272c-bc-629969d82301
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6E.F4.10028.8D969926; Fri,  3 Jun 2022 10:54:32 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2 0/5] Add support for Axis, ARTPEC-8 PCIe driver
+Reply-To: wangseok.lee@samsung.com
+Sender: Wangseok Lee <wangseok.lee@samsung.com>
+From:   Wangseok Lee <wangseok.lee@samsung.com>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+Date:   Fri, 03 Jun 2022 10:54:31 +0900
+X-CMS-MailID: 20220603015431epcms2p6203908cebe6a320854136559a32b54cb
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDJsWRmVeSWpSXmKPExsWy7bCmme6NzJlJBnsXiVssacqweHlI02L+
+        kXOsFrtnLGeymDn1DLPF80OzmC0+tahaXHjaw2bxctY9NouGnt+sFkfefGS22H98JZPF5V1z
+        2CzOzjvOZjFh1TcWize/X7BbnFucadG69wi7xc47J5gdhD3WzFvD6HF9XYDHgk2lHptWdbJ5
+        PLkynclj85J6j74tqxg9jt/YzuTxeZNcAGdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmB
+        oa6hpYW5kkJeYm6qrZKLT4CuW2YO0D9KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKU
+        nALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyM4w0nmQumi1b0X5/K3MB4WKCLkZNDQsBEomnl
+        F0YQW0hgB6PElOfeXYwcHLwCghJ/dwiDhIUFnCQ+LWxnhyhRktixZh4zRFxf4vqKblYQm01A
+        V+Lf4pdsXYxcHCICZ5kkbt7dzgriMAvMYZG43vyBFWIZr8SM9qcsELa0xPblWxkhbA2JH8t6
+        mSFsUYmbq9+yw9jvj82HqhGRaL13FqpGUOLBz91QcSmJBU8OQc2vltj/9zcThN3AKNF/PxXk
+        GQmgS3dcNwYJ8wr4SiyYvhZsPIuAqsSWHW2sECUuEnd2aIOEmQXkJba/ncMMEmYW0JRYv0sf
+        okJZ4sgtFpg/Gjb+ZkdnMwvwSXQc/gsX3zHvCdQtahLzVu5khhgjI7H1pf8ERqVZiGCehWTt
+        LIS1CxiZVzGKpRYU56anFhsVGMMjNjk/dxMjOFlrue9gnPH2g94hRiYOxkOMEhzMSiK8Jbum
+        JgnxpiRWVqUW5ccXleakFh9iNAX6dyKzlGhyPjBf5JXEG5pYGpiYmRmaG5kamCuJ83qlbEgU
+        EkhPLEnNTk0tSC2C6WPi4JRqYJJ6LyOnLTJt6euWROkXT37aiqwt0FWyXqVr3XKG9e29oyZP
+        z0eUqagsmXtjmuLpYu9dy1YEtzadd1ne4pObGH1l7rOfwTGzz2Vt3RpwZOZdFbOlpZs12YvM
+        m57xL22Le7Q0nWFt3KPcAAG7S5vn6X3N+ymx4fHjaSzHllyOWlC3yN1k0T8TT40XGXprpryM
+        +l9W8lsm/omtuX/VC8nPvAduT0t9H/dZTdZq5bnlUxNzvf1Op4QEskgzKpw7F+xhU8I21fLu
+        e58HP7c6xaVolBsqzbqySdiw7Udgc4qai0sN45enIoGBZ/9sltCM1hN8adPZ+4Db7nCzZFLB
+        +ZV/GH/nsu/+fWdOp0Pg+7D2g0osxRmJhlrMRcWJANKw5a5fBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220603015431epcms2p6203908cebe6a320854136559a32b54cb
+References: <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,173 +109,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi lkp,
+This v2 patchset is improvement several review comments received from patchset v1.
 
-On Fri, Jun 3, 2022 at 5:12 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Jeff,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Int=
-roduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
-> base:   b39181f7c6907dc66ff937b74758671fa6ba430c
-> config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/202=
-20603/202206030515.4lqqkb3W-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364=
-c76683f8ef241025a9556300778c07b590c2)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/765253f020469f948=
-56aedc5a3fe5444e1e8f4e8
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrac=
-e-trigger-to-trace-the-kernel-object/20220603-004723
->         git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/gpu/drm/qxl/ kerne=
-l/trace/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> kernel/trace/trace_object.c:336:61: warning: format specifies type 'lo=
-ng' but the argument has type 'unsigned int' [-Wformat]
->                    pr_err("the size of the %s should be:%ld\n", field->na=
-me, sizeof(void *));
->                                                         ~~~              =
-    ^~~~~~~~~~~~~~
->                                                         %u
+Main changes since v1 [1]:
+-'make dt_binding_check' result improvement
+-Add the missing property list
+-improvement review comment of Krzysztof on driver code
+-change folder name of phy driver to axis from artpec
 
-I will  double check it ,the sizeof(void *) on x86_64 is type =E2=80=98long
-unsigned int=E2=80=99.
+[1] https://lore.kernel.org/lkml/20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7/
 
->    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
->            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
->                                   ~~~     ^~~~~~~~~~~
->    include/linux/printk.h:446:60: note: expanded from macro 'printk'
->    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__=
-)
->                                                        ~~~    ^~~~~~~~~~~
->    include/linux/printk.h:418:19: note: expanded from macro 'printk_index=
-_wrap'
->                    _p_func(_fmt, ##__VA_ARGS__);                         =
-  \
->                            ~~~~    ^~~~~~~~~~~
->    1 warning generated.
->
->
-> vim +336 kernel/trace/trace_object.c
->
->    297
->    298  static int
->    299  event_object_trigger_parse(struct event_command *cmd_ops,
->    300                         struct trace_event_file *file,
->    301                         char *glob, char *cmd, char *param_and_fil=
-ter)
->    302  {
->    303          struct event_trigger_data *trigger_data;
->    304          struct objtrace_trigger_data *obj_data;
->    305          struct ftrace_event_field *field;
->    306          char *objtrace_cmd, *arg;
->    307          char *param, *filter;
->    308          int ret;
->    309          bool remove;
->    310
->    311          remove =3D event_trigger_check_remove(glob);
->    312
->    313          /*
->    314           * separate the param and the filter:
->    315           * objtrace:add:OBJ[:COUNT] [if filter]
->    316           */
->    317          ret =3D event_trigger_separate_filter(param_and_filter, &=
-param, &filter, true);
->    318          if (ret)
->    319                  return ret;
->    320
->    321          objtrace_cmd =3D strsep(&param, ":");
->    322          if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CMD_AD=
-D)) {
->    323                  pr_err("error objtrace command\n");
->    324                  return -EINVAL;
->    325          }
->    326
->    327          arg =3D strsep(&param, ":");
->    328          if (!arg)
->    329                  return -EINVAL;
->    330
->    331          field =3D trace_find_event_field(file->event_call, arg);
->    332          if (!field)
->    333                  return -EINVAL;
->    334
->    335          if (field->size !=3D sizeof(void *)) {
->  > 336                  pr_err("the size of the %s should be:%ld\n", fiel=
-d->name, sizeof(void *));
->    337                  return -EINVAL;
->    338          }
->    339
->    340          if (remove && !field_exist(file, cmd_ops, field->name))
->    341                  return -ENOENT;
->    342
->    343          obj_data =3D kzalloc(sizeof(*obj_data), GFP_KERNEL);
->    344          if (!obj_data)
->    345                  return -ENOMEM;
->    346
->    347          obj_data->field =3D field;
->    348          obj_data->tr =3D file->tr;
->    349          snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtra=
-ce_cmd);
->    350
->    351          trigger_data =3D event_trigger_alloc(cmd_ops, cmd, param,=
- obj_data);
->    352          if (!trigger_data) {
->    353                  kfree(obj_data);
->    354                  return -ENOMEM;
->    355          }
->    356          if (remove) {
->    357                  event_trigger_unregister(cmd_ops, file, glob+1, t=
-rigger_data);
->    358                  kfree(obj_data);
->    359                  kfree(trigger_data);
->    360                  return 0;
->    361          }
->    362
->    363          ret =3D event_trigger_parse_num(param, trigger_data);
->    364          if (ret)
->    365                  goto out_free;
->    366
->    367          ret =3D event_trigger_set_filter(cmd_ops, file, filter, t=
-rigger_data);
->    368          if (ret < 0)
->    369                  goto out_free;
->    370
->    371          ret =3D event_trigger_register(cmd_ops, file, glob, trigg=
-er_data);
->    372          if (ret)
->    373                  goto out_free;
->    374
->    375          return ret;
->    376
->    377   out_free:
->    378          event_trigger_reset_filter(cmd_ops, trigger_data);
->    379          kfree(obj_data);
->    380          kfree(trigger_data);
->    381          return ret;
->    382  }
->    383
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+--------------------------------------------------------------
+This series patches include newly PCIe support for Axis ARTPEC-8 SoC.
+ARTPEC-8 is the SoC platform of Axis Communications.
+PCIe controller driver and phy driver have been newly added.
+There is also a new MAINTAINER in the addition of phy driver.
+PCIe controller is designed based on Design-Ware PCIe controller IP
+and PCIe phy is desinged based on SAMSUNG PHY IP.
+It also includes modifications to the Design-Ware controller driver to 
+run the 64bit-based ARTPEC-8 PCIe controller driver.
+It consists of 6 patches in total.
 
-Thanks,
-JeffXie
+This series has been tested on AXIS SW bring-up board 
+with ARTPEC-8 chipset.
+--------------------------------------------------------------
+
+Wangseok Lee (5):
+  dt-bindings: pci: Add ARTPEC-8 PCIe controller
+  dt-bindings: phy: Add ARTPEC-8 PCIe phy
+  PCI: axis: Add ARTPEC-8 PCIe controller driver
+  phy: Add ARTPEC-8 PCIe PHY driver
+  MAINTAINERS: Add maintainer for Axis ARTPEC-8 PCIe PHY driver
+
+ .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 108 +++
+ .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 123 +++
+ .../bindings/phy/axis,artpec8-pcie-phy.yaml        |  70 ++
+ MAINTAINERS                                        |   2 +
+ drivers/pci/controller/dwc/Kconfig                 |  31 +
+ drivers/pci/controller/dwc/Makefile                |   1 +
+ drivers/pci/controller/dwc/pcie-artpec8.c          | 864 +++++++++++++++++++++
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/axis/Kconfig                           |   9 +
+ drivers/phy/axis/Makefile                          |   2 +
+ drivers/phy/axis/phy-artpec8-pcie.c                | 806 +++++++++++++++++++
+ 12 files changed, 2018 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
+ create mode 100644 drivers/pci/controller/dwc/pcie-artpec8.c
+ create mode 100644 drivers/phy/axis/Kconfig
+ create mode 100644 drivers/phy/axis/Makefile
+ create mode 100644 drivers/phy/axis/phy-artpec8-pcie.c
+
+-- 
+2.9.5

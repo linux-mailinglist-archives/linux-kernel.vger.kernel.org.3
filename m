@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B231953C31D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0722753C1E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242397AbiFCAwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S242298AbiFCAwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240067AbiFCApO (ORCPT
+        with ESMTP id S240115AbiFCApV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 20:45:14 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A478E34640
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:45:12 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s22-20020a252d56000000b0065d1ef35f9dso5596157ybe.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:45:12 -0700 (PDT)
+        Thu, 2 Jun 2022 20:45:21 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AB534642
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:45:14 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id z67-20020a626546000000b0051bbb66c1bdso2717164pfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=als6e8A1gJJA6StJM06gRZped3Uc2Gml0Vwsts95sPQ=;
-        b=n0gbISWg06Ll7cuaZEHv3NE802KrXOPB9IbonBpGqY2sjwmCRrmNmEviPeI3tIg0nE
-         5T0v7im6tbDuDlu3tdddA8nLiqQPjeRRiLoc4+f1pUnK0Ds+nZUsBD5fyjP8oliiJoiz
-         oUavzRLEz1vDG1dkHE+KR+BG7IVxLS9yA8jczkUY+sOQhWis7G1n8oU91IkNg9Qy+vf3
-         VKSojUY87vc2Okri+YEZGSQntbfpgjCOdP91Wg2cjObL1LE6SZzE0C3FybK1gkkSrOwV
-         409Z3XJ55ZGq2q15OzAl3mXM2KRW51IxgUGjhi/2VgyrBMxBzI7AHWfgUJGWkTyKMIm5
-         nKxA==
+        bh=+oPASWeuU3hUXSHHGwTAX+AwNGMqvMpQnDYcauVC88g=;
+        b=aj/VS9rYLAELO9VzDinP5b6wMBn+rIvp+yXI/U7HeJ0fNjcRXaG7lyXigFssnwyU7K
+         h9QIczE6M9HxUVoUvuhT+T9Ie66vMaTJ60b86OedMv3ET7XKRUWh3GUmFVDkmWlR8L2v
+         9Yr6MTtm6fzUrVH4Ry8wxPzmGlFWPJVmN6mkUQKEkty1zLYctJnj1wLjxuDCVkDdwlKI
+         NjqEANCLc4o9c6yzpIRPXxEjcAtdMviHfBymR71whgVQdjeN1OCPe8mNFc2b1+NbxY5l
+         H9qINqgMjzP5AVoCbKDARGxUWznxe6p4c8Lj7ynz01q+WNRFt8qQ2TF+uEyQ2aHgrdUN
+         s4CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=als6e8A1gJJA6StJM06gRZped3Uc2Gml0Vwsts95sPQ=;
-        b=JiQd1KONkNm7YbuWjKaQ0NcxeYcNy4ghLxnE6n+TC579FSKRvpLJcoDAkGZYc+tTWp
-         Vdd2J0ouPL9bhJ0UwxWqj/KAZwJcOvP6Jmx1efqPsuClLQtBFsTM1tC2XqAaT3A1IA/k
-         vTnFqmKmwnt/ns5txaoPGpHADyf6TaVA9i5JRD8NS4ZcnGQxd0dpmw42c3AmYbROg/h7
-         Xs0PU1P0CIxn5aYIb/dZY7HS02TVbfG1R4eX4fEtDksFTt1YkxZqrZh5gQaNyn3aj3PR
-         Hmrmv0ckduy5LHI5tO/+jMea75CxrmDRnqmli42ABuDXS3jV0Ih7vkUUzL8E6lRPclFC
-         QyBw==
-X-Gm-Message-State: AOAM5329nTlFwnD5YUPSOnIpVHWBiql6ao4t+TvUO0WLEmPFkokG4TMP
-        eFJunGvyR995D7jFWBj9X12ZHUQoD/s=
-X-Google-Smtp-Source: ABdhPJzXS2wVpq8MBsuw34ft2UUYN2PlEvadhYWO+OTpI7RJCToBCOFWNBbWN1kgRIBQm4sWFkEqhV+rHzc=
+        bh=+oPASWeuU3hUXSHHGwTAX+AwNGMqvMpQnDYcauVC88g=;
+        b=N8z1FD2V7qqEwZwGfPCg8j7xuhXDVWk2P8o78nayiOYsQj5/vNx+pO3uhvJGTY4PKh
+         WXQgFkFrNr8YyHX9qP2G5R1GXTV/6nbSqgD9wsZ7z69lv8ox8arGcgp4e44SkpwItAQC
+         eDoddo6uWPT3FHtgIGEw9KS+1dMpOobBvYfVogPXBOdnK+gEWyvtBmCxLejso6p07pnQ
+         gcZYalz6Iwto1pyXp/A+TNrwzT7l7QSz/uW7CEf4fzZvJJHKF7VA76GpvY3n/JptKYNG
+         a5s2/HVNZpFzmZ6mTpgceHMfvoTDSl1d8k1y81/FMsZhx25rQPUKobqHni989MXxAdVB
+         9fyw==
+X-Gm-Message-State: AOAM533lZ70KYmXzgBdRhAilVFBnU7q7mPyhatDutQZsWIGI1NETdJEt
+        N3vJITTHgj/3UPjq9MdjmHTltdSFJ44=
+X-Google-Smtp-Source: ABdhPJy5wc0NNleg/ScIV/2JjbKLzyv1ivroioi4hwAipX9/EXBVV4qRjFNi+lysqMQ25q6GcJW9KJeJDh0=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a5b:907:0:b0:65c:b38b:5378 with SMTP id
- a7-20020a5b0907000000b0065cb38b5378mr8096585ybq.331.1654217111825; Thu, 02
- Jun 2022 17:45:11 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1249:b0:518:c338:d4de with SMTP id
+ u9-20020a056a00124900b00518c338d4demr7846952pfi.14.1654217113696; Thu, 02 Jun
+ 2022 17:45:13 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:41:59 +0000
+Date:   Fri,  3 Jun 2022 00:42:00 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-53-seanjc@google.com>
+Message-Id: <20220603004331.1523888-54-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 052/144] KVM: selftests: Convert xss_msr_test away from VCPU_ID
+Subject: [PATCH v2 053/144] KVM: selftests: Convert vmx_preemption_timer_test
+ away from VCPU_ID
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -72,69 +73,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert xss_msr_test to use vm_create_with_one_vcpu() and pass around a
-'struct kvm_vcpu' object instead of using a global VCPU_ID.  Note, this
-is a "functional" change in the sense that the test now creates a vCPU
-with vcpu_id==0 instead of vcpu_id==1.  The non-zero VCPU_ID was 100%
-arbitrary and added little to no validation coverage.  If testing
-non-zero vCPU IDs is desirable for generic tests, that can be done in the
-future by tweaking the VM creation helpers.
+Convert vmx_preemption_timer_test to use vm_create_with_one_vcpu() and
+pass around a 'struct kvm_vcpu' object instead of using a global VCPU_ID.
+Note, this is a "functional" change in the sense that the test now
+creates a vCPU with vcpu_id==0 instead of vcpu_id==5.  The non-zero
+VCPU_ID was 100% arbitrary and added little to no validation coverage.
+If testing non-zero vCPU IDs is desirable for generic tests, that can be
+done in the future by tweaking the VM creation helpers.
+
+Opportunistically use vcpu_run() instead of _vcpu_run(), the test expects
+KVM_RUN to succeed.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/x86_64/xss_msr_test.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ .../kvm/x86_64/vmx_preemption_timer_test.c    | 30 +++++++++----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xss_msr_test.c b/tools/testing/selftests/kvm/x86_64/xss_msr_test.c
-index a6abcb559e7c..a89d49ae79a6 100644
---- a/tools/testing/selftests/kvm/x86_64/xss_msr_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xss_msr_test.c
-@@ -12,7 +12,6 @@
- #include "kvm_util.h"
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c b/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c
+index f5b4ae914131..168adc5b2272 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_preemption_timer_test.c
+@@ -22,7 +22,6 @@
+ #include "processor.h"
  #include "vmx.h"
  
--#define VCPU_ID	      1
- #define MSR_BITS      64
+-#define VCPU_ID		5
+ #define PREEMPTION_TIMER_VALUE			100000000ull
+ #define PREEMPTION_TIMER_VALUE_THRESHOLD1	 80000000ull
  
- #define X86_FEATURE_XSAVES	(1<<3)
-@@ -23,11 +22,12 @@ int main(int argc, char *argv[])
- 	bool xss_supported = false;
- 	bool xss_in_msr_list;
+@@ -159,6 +158,7 @@ int main(int argc, char *argv[])
+ 	struct kvm_regs regs1, regs2;
  	struct kvm_vm *vm;
+ 	struct kvm_run *run;
 +	struct kvm_vcpu *vcpu;
- 	uint64_t xss_val;
- 	int i, r;
- 
- 	/* Create VM */
--	vm = vm_create_default(VCPU_ID, 0, 0);
-+	vm = vm_create_with_one_vcpu(&vcpu, NULL);
- 
- 	if (kvm_get_cpuid_max_basic() >= 0xd) {
- 		entry = kvm_get_supported_cpuid_index(0xd, 1);
-@@ -38,11 +38,12 @@ int main(int argc, char *argv[])
- 		exit(KSFT_SKIP);
+ 	struct kvm_x86_state *state;
+ 	struct ucall uc;
+ 	int stage;
+@@ -175,22 +175,22 @@ int main(int argc, char *argv[])
  	}
  
--	xss_val = vcpu_get_msr(vm, VCPU_ID, MSR_IA32_XSS);
-+	xss_val = vcpu_get_msr(vm, vcpu->id, MSR_IA32_XSS);
- 	TEST_ASSERT(xss_val == 0,
- 		    "MSR_IA32_XSS should be initialized to zero\n");
+ 	/* Create VM */
+-	vm = vm_create_default(VCPU_ID, 0, guest_code);
+-	run = vcpu_state(vm, VCPU_ID);
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	run = vcpu->run;
  
--	vcpu_set_msr(vm, VCPU_ID, MSR_IA32_XSS, xss_val);
-+	vcpu_set_msr(vm, vcpu->id, MSR_IA32_XSS, xss_val);
+-	vcpu_regs_get(vm, VCPU_ID, &regs1);
++	vcpu_regs_get(vm, vcpu->id, &regs1);
+ 
+ 	vcpu_alloc_vmx(vm, &vmx_pages_gva);
+-	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
++	vcpu_args_set(vm, vcpu->id, 1, vmx_pages_gva);
+ 
+ 	for (stage = 1;; stage++) {
+-		_vcpu_run(vm, VCPU_ID);
++		vcpu_run(vm, vcpu->id);
+ 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+ 			    "Stage %d: unexpected exit reason: %u (%s),\n",
+ 			    stage, run->exit_reason,
+ 			    exit_reason_str(run->exit_reason));
+ 
+-		switch (get_ucall(vm, VCPU_ID, &uc)) {
++		switch (get_ucall(vm, vcpu->id, &uc)) {
+ 		case UCALL_ABORT:
+ 			TEST_FAIL("%s at %s:%ld", (const char *)uc.args[0],
+ 				  __FILE__, uc.args[1]);
+@@ -232,22 +232,22 @@ int main(int argc, char *argv[])
+ 				stage, uc.args[4], uc.args[5]);
+ 		}
+ 
+-		state = vcpu_save_state(vm, VCPU_ID);
++		state = vcpu_save_state(vm, vcpu->id);
+ 		memset(&regs1, 0, sizeof(regs1));
+-		vcpu_regs_get(vm, VCPU_ID, &regs1);
++		vcpu_regs_get(vm, vcpu->id, &regs1);
+ 
+ 		kvm_vm_release(vm);
+ 
+ 		/* Restore state in a new VM.  */
+-		kvm_vm_restart(vm);
+-		vm_vcpu_add(vm, VCPU_ID);
+-		vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+-		vcpu_load_state(vm, VCPU_ID, state);
+-		run = vcpu_state(vm, VCPU_ID);
++		vcpu = vm_recreate_with_one_vcpu(vm);
 +
- 	/*
- 	 * At present, KVM only supports a guest IA32_XSS value of 0. Verify
- 	 * that trying to set the guest IA32_XSS to an unsupported value fails.
-@@ -51,7 +52,7 @@ int main(int argc, char *argv[])
- 	 */
- 	xss_in_msr_list = kvm_msr_is_in_save_restore_list(MSR_IA32_XSS);
- 	for (i = 0; i < MSR_BITS; ++i) {
--		r = _vcpu_set_msr(vm, VCPU_ID, MSR_IA32_XSS, 1ull << i);
-+		r = _vcpu_set_msr(vm, vcpu->id, MSR_IA32_XSS, 1ull << i);
++		vcpu_set_cpuid(vm, vcpu->id, kvm_get_supported_cpuid());
++		vcpu_load_state(vm, vcpu->id, state);
++		run = vcpu->run;
+ 		kvm_x86_state_cleanup(state);
  
- 		/*
- 		 * Setting a list of MSRs returns the entry that "faulted", or
+ 		memset(&regs2, 0, sizeof(regs2));
+-		vcpu_regs_get(vm, VCPU_ID, &regs2);
++		vcpu_regs_get(vm, vcpu->id, &regs2);
+ 		TEST_ASSERT(!memcmp(&regs1, &regs2, sizeof(regs2)),
+ 			    "Unexpected register values after vcpu_load_state; rdi: %lx rsi: %lx",
+ 			    (ulong) regs2.rdi, (ulong) regs2.rsi);
 -- 
 2.36.1.255.ge46751e96f-goog
 

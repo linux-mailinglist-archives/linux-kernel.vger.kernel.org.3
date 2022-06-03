@@ -2,241 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0367453C724
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1943C53C72A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242896AbiFCIsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S242909AbiFCIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiFCIsM (ORCPT
+        with ESMTP id S242633AbiFCIxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:48:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6956344D5;
-        Fri,  3 Jun 2022 01:48:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3612F6196B;
-        Fri,  3 Jun 2022 08:48:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F576C385A9;
-        Fri,  3 Jun 2022 08:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654246090;
-        bh=SlYIuYb3vUt+TIhGDtDoaBNEpUVdqQ8PBrShdCpp/dg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=t+NSi1L5uA7yMCdxUlXCi5+Ouqw9y562EvUAKQbfX5OmrhG8Thvj2Nz99chst90Pq
-         0YXQGNHbh4wXbn/qr0vnFlPQntf1YJMsGR8V7wI0MuJtHD2x0YR2nEGxRsGZIvOEHg
-         mNP0YbRXzN+gn8gEwU8GStRy9qYsoweFn6WkUzoJEac40Fscrp1Ae4KxC8loQQakoV
-         bCwzK0v8EXgYtD9Cb3wpwdpw56+AltzuZwVN922jbRA+wOMgTvccjOQe64IkohE/+S
-         NkxFSQyOt/wBVj8RxJCQxlDNGDIDp1phFAh5jK8bY6gjcktx0PRRd1MoReddnSJTNs
-         UUoPdj0DWlXIg==
-Message-ID: <12afd8fc-ad03-a0f1-fad4-a9902e8a690c@kernel.org>
-Date:   Fri, 3 Jun 2022 11:48:05 +0300
+        Fri, 3 Jun 2022 04:53:16 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B5C5F6F
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654246395; x=1685782395;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wAckbd7b5AT72R9a2/eXkeom9yl4s1P+Xa6Z4g2IhNE=;
+  b=mthJlqggRnxmw9XCSloBTlumYBPxbH++ckrBJZGtJsHmOtoB0/iXWXLE
+   S9I4LWMOjy7IIPWIglYrIL9nc7lpDGMRNsBZ4MGvcW6W8M6AGnAQHPZXm
+   rClUeAq1SRtDPEy7kQgr0tST/3kfy848d5T3KJEwpUyyOucxCpiazMxke
+   2O6mW9ax6h2/x0/H+ZadNfp7O1j+r90WgUj/g7jRXth/5CuzHrx1clW5H
+   Jru9TaDV9vwOPgBBmVu3pVccokwgaLK/Sij2myXSFOqdVMkjcEvR0D6Pq
+   fESDA2erkgQR3TgjDoywl+9MgQhUF/t+wgKZh+Wv/iC7jmwIM053ON52J
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="258278763"
+X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
+   d="scan'208";a="258278763"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 01:53:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
+   d="scan'208";a="824649762"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jun 2022 01:53:13 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nx33R-00072f-0d;
+        Fri, 03 Jun 2022 08:53:13 +0000
+Date:   Fri, 03 Jun 2022 16:53:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dave.2022.06.02a] BUILD REGRESSION
+ 2efc5c4abe4cc1259378f7c1678a93540559673c
+Message-ID: <6299cbf7.qEmZuKv6oQTgxYpC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings for
- J7200
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, robh+dt@kernel.org,
-        lee.jones@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        kishon@ti.com, vkoul@kernel.org, dan.carpenter@oracle.com,
-        grygorii.strashko@ti.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20220531111221.22963-1-s-vadapalli@ti.com>
- <20220531111221.22963-2-s-vadapalli@ti.com>
- <26603540-8887-ef8d-8f4d-26f2f33d2a6f@kernel.org>
- <b5353c06-c8b4-c065-3843-28b2a34e1867@ti.com>
- <a7754c31-bfc6-6451-8340-5d3aa671e3c4@kernel.org>
- <985ab302-17aa-c0de-ccac-63525589918a@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <985ab302-17aa-c0de-ccac-63525589918a@ti.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddharth,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dave.2022.06.02a
+branch HEAD: 2efc5c4abe4cc1259378f7c1678a93540559673c  rcu-tasks: Maintain a count of tasks blocking RCU Tasks Trace grace period
 
-On 01/06/2022 14:27, Siddharth Vadapalli wrote:
-> Hello Roger,
-> 
-> On 01/06/22 15:08, Roger Quadros wrote:
->> Siddharth,
->>
->> On 01/06/2022 09:01, Siddharth Vadapalli wrote:
->>> Hello Roger,
->>>
->>> On 31/05/22 17:15, Roger Quadros wrote:
->>>> Hi Siddharth,
->>>>
->>>> On 31/05/2022 14:12, Siddharth Vadapalli wrote:
->>>>> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
->>>>> that are not supported on earlier SoCs. Add a compatible for it.
->>>>>
->>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>>> ---
->>>>>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
->>>>>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 24 ++++++++++++++++++-
->>>>>  2 files changed, 28 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>>> index fa86691ebf16..e381ba62a513 100644
->>>>> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>>> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->>>>> @@ -48,6 +48,11 @@ patternProperties:
->>>>>      description:
->>>>>        This is the SERDES lane control mux.
->>>>>  
->>>>> +  "phy@[0-9a-f]+$":
->>>>> +    type: object
->>>>> +    description:
->>>>> +      This is the register to set phy mode through phy-gmii-sel driver.
->>>>> +
->>>>
->>>> Is this really required? The system controller has 100s of different such registers and it is not practical to mention about all.
->>>
->>> The property has to be mentioned in order to pass: make dtbs_check.
->>>
->>>>
->>>>>  required:
->>>>>    - compatible
->>>>>    - reg
->>>>> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>>> index ff8a6d9eb153..7427758451e7 100644
->>>>> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>>> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
->>>>> @@ -53,12 +53,21 @@ properties:
->>>>>        - ti,am43xx-phy-gmii-sel
->>>>>        - ti,dm814-phy-gmii-sel
->>>>>        - ti,am654-phy-gmii-sel
->>>>> +      - ti,j7200-cpsw5g-phy-gmii-sel
->>>>
->>>> Why not just "ti,j7200-phy-gmii-sel" so it is consistent naming.
->>>
->>> In TI's J7200 device, there are two CPSW MACs, namely CPSW2G and CPSW5G. While
->>> CPSW5G supports QSGMII mode, CPSW2G does not. Hence, the compatible being added
->>> with the extra mode (QSGMII) enabled is applicable only for CPSW5G and not for
->>> CPSW2G. Thus, to highlight this, the word "CPSW5G" has been included in the name
->>> of the compatible.
->>
->> Here we are talking about the PHY driver (phy-gmii-sel) and not the MAC (CPSW2G / CPSW5G)
->> Does this PHY on J7200 always support QSGMII mode? if yes then embedding "cpsw5g" in compatible is wrong.
-> 
-> The PHY on J7200 is part of the Add-On Ethernet card. It is possible to connect
-> RGMII, QSGMII and SGMII PHY. The CPSW5G MAC supports all these modes. With the
-> current patch, I am adding just QSGMII mode as an extra mode, but in a future
-> patch, I will be adding SGMII also as an extra mode. For this reason, CPSW5G is
-> being mentioned in the compatible name, to differentiate supported modes for
-> CPSW2G and CPSW5G. Also, the phy-gmii-sel driver actually configures CPSW MAC
-> registers and not the PHY.
+Error/Warning reports:
 
-phy-gmii-sel configures CTRL MMR register right? How does it configure CPSW MAC register?
+https://lore.kernel.org/lkml/202206030549.YOUkgBlA-lkp@intel.com
+https://lore.kernel.org/lkml/202206030613.IxQYmIW8-lkp@intel.com
 
-Anyways, I just looked at the TRM and there are in fact separate phy-gmii-sel (ENET_CTRL)
-registers for CPSW2g and CPSW5g. So they warrant for separate compatibles as they are
-not identical.
-> 
->>
->> You need to use a different compatible in CPSW driver and make sure CPSW2G doesn't initiate QSGMII mode.
-> 
-> Yes, I will add a check there too by using a different compatible in the CPSW
-> driver, but shouldn't the phy-gmii-sel driver also have a check to ensure that
-> it doesn't try configuring QSGMII mode for CPSW2G?
+Error/Warning: (recently discovered and may have been fixed)
 
-Yes, additional check in phy-gmii-sel driver is fine.
+kernel/rcu/tasks.h:1239:8: error: variable has incomplete type 'typeof (({
+kernel/rcu/tasks.h:1239:9: error: aggregate value used where an integer was expected
+kernel/rcu/tasks.h:1245:9: error: aggregate value used where an integer was expected
 
-> 
->>
->>>
->>>>
->>>>>  
->>>>>    reg:
->>>>>      maxItems: 1
->>>>>  
->>>>>    '#phy-cells': true
->>>>>  
->>>>> +  ti,enet-ctrl-qsgmii:
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    description: |
->>>>> +      Required only for QSGMII mode. Bitmask to select the port for
->>>>> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
->>>>> +      ports automatically. Any of the 4 CPSW5G ports can act as the
->>>>> +      main port with the rest of them being the QSGMII_SUB ports.
->>>>> +
->>>>
->>>> This is weird way of doing things.
->>>>
->>>> The Ethernet controller driver already knows which mode the port is
->>>> supposed to operate.
->>>
->>> From the ethernet driver perspective, there is no difference between the QSGMII
->>> or QSGMII-SUB modes and both are treated the same. However, the phy-gmii-sel
->>> driver configures CPSW MAC registers differently depending on the mode being
+Error/Warning ids grouped by kconfigs:
 
-You mean the ENET_CTRL register in CTRL_MMR space?
+gcc_recent_errors
+|-- alpha-buildonly-randconfig-r002-20220531
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- nios2-randconfig-r005-20220602
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- riscv-allmodconfig
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- riscv-buildonly-randconfig-r003-20220531
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- riscv-buildonly-randconfig-r004-20220531
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- s390-allyesconfig
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- sh-allmodconfig
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+|-- sparc-randconfig-r036-20220531
+|   `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
+`-- xtensa-allyesconfig
+    `-- kernel-rcu-tasks.h:error:aggregate-value-used-where-an-integer-was-expected
 
->>> QSGMII or QSGMII-SUB. Hence, the ti,enet-ctrl-qsgmii property is used to
->>> identify the QSGMII main port and the rest are configured in CPSW MAC as
->>> QSGMII-SUB ports.
->>>
->>>>
->>>> e.g.
->>>> +&cpsw0_port1 {
->>>> +	phy-handle = <&cpsw5g_phy0>;
->>>> +	phy-mode = "qsgmii";
->>>> +	mac-address = [00 00 00 00 00 00];
->>>> +	phys = <&cpsw0_phy_gmii_sel 1>;
->>>> +};
->>>> +
->>>> +&cpsw0_port2 {
->>>> +	phy-handle = <&cpsw5g_phy1>;
->>>> +	phy-mode = "qsgmii-sub";
->>>> +	mac-address = [00 00 00 00 00 00];
->>>> +	phys = <&cpsw0_phy_gmii_sel 2>;
->>>>
->>>> And it can convey the mode to the PHY driver via phy_ops->set_mode.
->>>> So you should be depending on that instead of adding this new property.
->>>
->>> QSGMII-SUB is not a standard mode in the Linux kernel. In order to proceed with
->>> the suggested implementation, a new phy mode named PHY_INTERFACE_MODE_QSGMII_SUB
->>> has to be introduced to the kernel. Additionally, all existing phy drivers will
->>> have to be updated to recognize the new phy mode.
->>>
->>> Since the QSGMII-SUB mode is TI specific, it was decided that it would be better
->>> to add a new property in TI specific files for identifying the QSGMII main port
->>> and treating the rest as QSGMII-SUB ports.
->>
->> Who decides which port should be MAIN and which should be SUB? Can all ports be MAIN?
->> Can all ports be SUB or there has to be at least one MAIN?
-> 
-> All 4 ports in CPSW5G have the capability to be the MAIN port, with the only
-> restriction being that only one of them should be the MAIN port at a time. The
-> role of the CPSW5G ports is decided based on what PHY port each of the CPSW5G
-> ports connects to.
+clang_recent_errors
+`-- arm-buildonly-randconfig-r004-20220531
+    `-- kernel-rcu-tasks.h:error:variable-has-incomplete-type-typeof-((
 
-OK, then instead of using bitmask and property being named "ti,enet-ctrl-qsgmii", why not
-just say "ti,qsgmii-main-port" = <main_port_number>;
+elapsed time: 811m
 
-Also do some sanity check when getting that property.
+configs tested: 83
+configs skipped: 3
 
-> 
-> MAIN port of CPSW5G MAC is responsible for auto-negotiation with the PHY port on
-> the PHY which supports auto-negotiation. Thus, there can and should be only one
-> MAIN port.
-> 
-> Thanks,
-> Siddharth.
+gcc tested configs:
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+ia64                                defconfig
+ia64                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+sh                               allmodconfig
+arc                                 defconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+parisc64                            defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220531
+riscv                randconfig-r042-20220531
+s390                 randconfig-r044-20220531
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
 
-cheers,
--roger
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220531
+hexagon              randconfig-r045-20220531
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

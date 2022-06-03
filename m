@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F1553D031
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C4353D108
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346330AbiFCSBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S1348142AbiFCSQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347228AbiFCRwI (ORCPT
+        with ESMTP id S1346102AbiFCSBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:08 -0400
+        Fri, 3 Jun 2022 14:01:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBA7B54;
-        Fri,  3 Jun 2022 10:50:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95304A906;
+        Fri,  3 Jun 2022 10:57:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 979F7B82189;
-        Fri,  3 Jun 2022 17:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F54C385A9;
-        Fri,  3 Jun 2022 17:50:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7F38B8241E;
+        Fri,  3 Jun 2022 17:56:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F6B7C385A9;
+        Fri,  3 Jun 2022 17:56:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278644;
-        bh=EPBHgmukQQ2kavRRx6NFY8j/vcnjOWl5lgESjAPm9W8=;
+        s=korg; t=1654279018;
+        bh=visI1TTHwmCqbAwL6UAvfvNG1u2FwYk4D+zDUFCK6Sc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U4t7hFXaFvOoLuUOsdcZ2cZ6R001qTr6TsRXR1o+mi9a6rjFrrYg9vkD8wF3zLL2I
-         cTBW1TPqXLxJ5H8EYDRO1dUJEujKeCwCiTa0Ffb2uun531xGrSzfSuHUUkrLBOLMsZ
-         GBr7DsLBNtwgxQkQ8OTYAP7n/60FqOMEytmf59k0=
+        b=EEH0YNuEdLVBssrhhbFCr5rqdcryulFM1vz0YfY4NkeF9JlReHJ8rIsp3Z5wlwh6M
+         TTu7PSxVRQBT0TdWVUDMe4UJssQ8qjJ9nSdOcmQlY5etXmexusyQVgGvOnoScWoYmj
+         ltKR5YbQwwj09I14+mjfuuDauhgZZgZ2XbbhD2Pw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kari Argillander <kari.argillander@stargateuniverse.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 47/66] fs/ntfs3: validate BOOT sectors_per_clusters
+        stable@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.18 26/67] KVM: x86: Drop WARNs that assert a triple fault never "escapes" from L2
 Date:   Fri,  3 Jun 2022 19:43:27 +0200
-Message-Id: <20220603173822.025720768@linuxfoundation.org>
+Message-Id: <20220603173821.478797713@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,63 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Sean Christopherson <seanjc@google.com>
 
-commit a3b774342fa752a5290c0de36375289dfcf4a260 upstream.
+commit 45846661d10422ce9e22da21f8277540b29eca22 upstream.
 
-When the NTFS BOOT sectors_per_clusters field is > 0x80, it represents a
-shift value.  Make sure that the shift value is not too large before using
-it (NTFS max cluster size is 2MB).  Return -EVINVAL if it too large.
+Remove WARNs that sanity check that KVM never lets a triple fault for L2
+escape and incorrectly end up in L1.  In normal operation, the sanity
+check is perfectly valid, but it incorrectly assumes that it's impossible
+for userspace to induce KVM_REQ_TRIPLE_FAULT without bouncing through
+KVM_RUN (which guarantees kvm_check_nested_state() will see and handle
+the triple fault).
 
-This prevents negative shift values and shift values that are larger than
-the field size.
+The WARN can currently be triggered if userspace injects a machine check
+while L2 is active and CR4.MCE=0.  And a future fix to allow save/restore
+of KVM_REQ_TRIPLE_FAULT, e.g. so that a synthesized triple fault isn't
+lost on migration, will make it trivially easy for userspace to trigger
+the WARN.
 
-Prevents this UBSAN error:
+Clearing KVM_REQ_TRIPLE_FAULT when forcibly leaving guest mode is
+tempting, but wrong, especially if/when the request is saved/restored,
+e.g. if userspace restores events (including a triple fault) and then
+restores nested state (which may forcibly leave guest mode).  Ignoring
+the fact that KVM doesn't currently provide the necessary APIs, it's
+userspace's responsibility to manage pending events during save/restore.
 
- UBSAN: shift-out-of-bounds in ../fs/ntfs3/super.c:673:16
- shift exponent -192 is negative
+  ------------[ cut here ]------------
+  WARNING: CPU: 7 PID: 1399 at arch/x86/kvm/vmx/nested.c:4522 nested_vmx_vmexit+0x7fe/0xd90 [kvm_intel]
+  Modules linked in: kvm_intel kvm irqbypass
+  CPU: 7 PID: 1399 Comm: state_test Not tainted 5.17.0-rc3+ #808
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  RIP: 0010:nested_vmx_vmexit+0x7fe/0xd90 [kvm_intel]
+  Call Trace:
+   <TASK>
+   vmx_leave_nested+0x30/0x40 [kvm_intel]
+   vmx_set_nested_state+0xca/0x3e0 [kvm_intel]
+   kvm_arch_vcpu_ioctl+0xf49/0x13e0 [kvm]
+   kvm_vcpu_ioctl+0x4b9/0x660 [kvm]
+   __x64_sys_ioctl+0x83/0xb0
+   do_syscall_64+0x3b/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>
+  ---[ end trace 0000000000000000 ]---
 
-Link: https://lkml.kernel.org/r/20220502175342.20296-1-rdunlap@infradead.org
-Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com
-Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Kari Argillander <kari.argillander@stargateuniverse.net>
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: cb6a32c2b877 ("KVM: x86: Handle triple fault in L2 without killing L1")
+Cc: stable@vger.kernel.org
+Cc: Chenyi Qiang <chenyi.qiang@intel.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220407002315.78092-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ntfs3/super.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ arch/x86/kvm/svm/nested.c |    3 ---
+ arch/x86/kvm/vmx/nested.c |    3 ---
+ 2 files changed, 6 deletions(-)
 
---- a/fs/ntfs3/super.c
-+++ b/fs/ntfs3/super.c
-@@ -668,9 +668,11 @@ static u32 format_size_gb(const u64 byte
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -819,9 +819,6 @@ int nested_svm_vmexit(struct vcpu_svm *s
+ 	struct kvm_host_map map;
+ 	int rc;
  
- static u32 true_sectors_per_clst(const struct NTFS_BOOT *boot)
- {
--	return boot->sectors_per_clusters <= 0x80
--		       ? boot->sectors_per_clusters
--		       : (1u << (0 - boot->sectors_per_clusters));
-+	if (boot->sectors_per_clusters <= 0x80)
-+		return boot->sectors_per_clusters;
-+	if (boot->sectors_per_clusters >= 0xf4) /* limit shift to 2MB max */
-+		return 1U << (0 - boot->sectors_per_clusters);
-+	return -EINVAL;
- }
+-	/* Triple faults in L2 should never escape. */
+-	WARN_ON_ONCE(kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu));
+-
+ 	rc = kvm_vcpu_map(vcpu, gpa_to_gfn(svm->nested.vmcb12_gpa), &map);
+ 	if (rc) {
+ 		if (rc == -EINVAL)
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -4518,9 +4518,6 @@ void nested_vmx_vmexit(struct kvm_vcpu *
+ 	/* trying to cancel vmlaunch/vmresume is a bug */
+ 	WARN_ON_ONCE(vmx->nested.nested_run_pending);
  
- /*
-@@ -713,6 +715,8 @@ static int ntfs_init_from_boot(struct su
- 
- 	/* cluster size: 512, 1K, 2K, 4K, ... 2M */
- 	sct_per_clst = true_sectors_per_clst(boot);
-+	if ((int)sct_per_clst < 0)
-+		goto out;
- 	if (!is_power_of_2(sct_per_clst))
- 		goto out;
- 
+-	/* Similarly, triple faults in L2 should never escape. */
+-	WARN_ON_ONCE(kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu));
+-
+ 	if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
+ 		/*
+ 		 * KVM_REQ_GET_NESTED_STATE_PAGES is also used to map
 
 

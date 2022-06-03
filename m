@@ -2,191 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287D453CB75
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006EA53CB7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiFCOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S245078AbiFCO2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240024AbiFCOTw (ORCPT
+        with ESMTP id S230293AbiFCO2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:19:52 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4463048304
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 07:19:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 5F3913200903;
-        Fri,  3 Jun 2022 10:19:47 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 03 Jun 2022 10:19:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1654265986; x=
-        1654352386; bh=pgoZiSnqzAty0gGUl5sg2b1gr+4y+ok52CSZUbELnhs=; b=s
-        aD5VBvbWjH/db2z8oHPTUNAOcujnTSV9jgaaQCTKU/lI6S9I8nGS9VkV0uriJb3H
-        lU5B8QwFz75okTIFfUu8b6CqrR3QOIKas0Ie/gtJae5KlPn4H+GLmz3f2KettEhC
-        U0TTOmiBYWN7r/dygmyWbENX/Re+u5cjoKt8t4Y+XoyulAlJgW6QmCo2bsWW01kk
-        f4rOUgbxyIn8FCmbYPYin0N2i9daK7X3P4qDtfg4QrhVMHiaOJlwxay9sHpJKP97
-        n6tz4Q4CvIK+JKvzWzG7hiF9Eu5itQrJj7K4QKALyVTqTqE7InhxxxxoRUI6btj+
-        SVyPrXh05MF2+RKm8m7wA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654265986; x=
-        1654352386; bh=pgoZiSnqzAty0gGUl5sg2b1gr+4y+ok52CSZUbELnhs=; b=m
-        STwklVkTq53ZdBXcFpxGYQlAzb7GEIkGYNgU1g/iSlmXfqHRidn1wOUIu50qzC8r
-        z+MzGukeeIgtz8xTuK8aicpnkhOFy3SFYa1Q3/5BXdesp0i2M/cdI6art1c39dFC
-        s0TgI/1/p+A4Zp/2yeEv35XF25NbySOQ+bnzNxwQ3ml6sM81AZxEyvrYfA2XDj2T
-        TOcZbB4f5oLUo78+nEQ9lVEBFD1h7fQS4vzkc/Maj6kUQYgFnPK5NOU8vaYBjLSK
-        KzeCK9yIsukI1EnKGaQ6UqMZiQZdF/iyE4ndGwHj378EfKisifvPvx9on4/OwLAU
-        gWig2cWfKn7cOwgpKn7uQ==
-X-ME-Sender: <xms:gRiaYqz2b-6jK6fVgUAFH5tYyZoLAZ1Qa7lCN2jMc_L6xM9hV3sj5A>
-    <xme:gRiaYmSr0PPrPQxIIoUvGfWb5zTKGuYOrRVGrc0-5PdINBk9oBgbh39_VEAW94VYV
-    tNZBsZDiUUwTdT7kR4>
-X-ME-Received: <xmr:gRiaYsUpZfkLy95TMBHlV_kGTZkQXlx245HgZDNPdXoJP76cxADc81sJfy-x>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleeigdejfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeefhfejveejfefgfedtudetvdfgleethefgvdevueelhedtheejteeuheeh
-    geeikeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:gRiaYggzGbB8-kfUsokcQrt3Iq4tg2npzWMmna9lRrXJwfLegnaiRA>
-    <xmx:gRiaYsCuN9a1lOnv0bnzn-PfJx5-JQutnJ_pxBONZ4CiwkxPvXMyCA>
-    <xmx:gRiaYhKEnFaVUIxDYykDH7nqOEbuHdHk2S2BHb2KHhWbJiJfDo85EQ>
-    <xmx:ghiaYsslgSXOzPaQBvGXUzAjIygdybVm31i7lgAVX1RoWY9-lMCuCA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Jun 2022 10:19:45 -0400 (EDT)
-Date:   Fri, 3 Jun 2022 16:19:37 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     wens@csie.org,
-        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz
-Subject: Re: [PATCH] drm/sun4i: sun8i: Add the ability to keep scaler enabled
- for VI layer
-Message-ID: <20220603141937.modhvsqa3urmpcxr@penduick>
-References: <20220602180118.66170-1-r.stratiienko@gmail.com>
- <20220603082416.ukohug3mwzu43csu@penduick>
- <CAGphcdkPJ57bkw4nxuSnk0TD1RGW5j9M-A0ek6t1rDnMY2PS8Q@mail.gmail.com>
+        Fri, 3 Jun 2022 10:28:18 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B2A22B38
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 07:28:17 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id t6so10637514wra.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 07:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xEYT24Mw/3xwhggZ/dpbmQG99woOPJwgkQGW8eylJQs=;
+        b=zvsMZh6sLDlicrdTGeylEAw0Q1YIMm9o7fadQF8XPiqdYFOu82UeM3gyvT0tNKQx0V
+         QtfnOhpaMS6/olRJQJmIvNAF+XTbT5GKyjnYQmo49/MGEcLXAkdZ/IOPVjfItNW8YvyM
+         oSfbsGy//J3DR4BaK449AbnXMGbVdzTaVeuSa7QCrwjt0RD3O3K1WOVnYtu2KNaVJloT
+         dxLrm9R8JCzmhSm9XZFWrlTa0lmihGYrNPh6D/N/FZl2FcDcW8YlGafJmEs6WMJ1POVk
+         BxqxOxLX16zCsZTbQjPT1K6ehsWp/z4wxwKIWq1X7iozSFWh0+rrQJAD8hIW0QLQRb4p
+         XN2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xEYT24Mw/3xwhggZ/dpbmQG99woOPJwgkQGW8eylJQs=;
+        b=Dk6FqMOQhp/gj78DPB4mLZbbkgC0nUpE82owNot2VMBpws6NYhpQOJO97IofSdVKDP
+         9+0PkpvoA4t9ufuztzX9XKZm1iGltwaxLriebLXt+OmYtJzfSm6Wy1YIkibHMO4FDBW4
+         rdtQqEYYAKPDjO6hZqLovaBIWvd5Ne0gaShobuTNYXLSbLgP66o3XU041pWGdhXRKazE
+         X3mk3xG7nSu4dp+RxDQYpQkLqnoK/lX1ewxgvF+I8XMeMnxxesWc2CscVfg74C2N5gHv
+         8yiYcPoc/vnGNuPugZqWubfgH0KWm5fmytWzq1jVH1h5ketgAoriLWnBRqnfG+ralTyp
+         mXfw==
+X-Gm-Message-State: AOAM5333dJd94vBs+C5scFReVQEM12zVknt3up3zZnpbC8//WhEnDG0b
+        IlaAyJ57shUEfzJpvszoREsfUlBSNot+YA==
+X-Google-Smtp-Source: ABdhPJyovDLQyMgqK1CVt47Mttdzalhw7oxXByv7wtrOyjSW+woe/77ysnzSCDi+GJOQwyyhg3vJrg==
+X-Received: by 2002:a05:6000:1568:b0:20f:d416:e5ac with SMTP id 8-20020a056000156800b0020fd416e5acmr8608338wrz.190.1654266495652;
+        Fri, 03 Jun 2022 07:28:15 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:327a:d111:d547:a6d2])
+        by smtp.gmail.com with ESMTPSA id a21-20020a05600c349500b003958af7d0c8sm8616581wmq.45.2022.06.03.07.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 07:28:15 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: updates for v5.19-rc1
+Date:   Fri,  3 Jun 2022 16:28:12 +0200
+Message-Id: <20220603142812.66869-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAGphcdkPJ57bkw4nxuSnk0TD1RGW5j9M-A0ek6t1rDnMY2PS8Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 11:57:35AM +0300, Roman Stratiienko wrote:
-> Hi Maxime,
->=20
-> =D0=BF=D1=82, 3 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 11:24, Maxime Rip=
-ard <maxime@cerno.tech>:
-> >
-> > Hi,
-> >
-> > On Thu, Jun 02, 2022 at 06:01:18PM +0000, Roman Stratiienko wrote:
-> > > According to DE2.0/DE3.0 manual VI scaler enable register is double
-> > > buffered, but de facto it doesn't, or the hardware has the shadow
-> > > register latching issues which causes single-frame picture corruption
-> > > after changing the state of scaler enable register.
-> > >
-> > > Allow the user to keep the scaler always enabled, preventing the UI
-> > > glitches on the transition from scaled to unscaled state.
-> > >
-> > > NOTE:
-> > > UI layer scaler has more registers with double-buffering issue and ca=
-n't
-> > > be workarounded in the same manner.
-> > >
-> > > You may find a python test and a demo video for this issue at [1]
-> > >
-> > > [1]: https://github.com/GloDroid/glodroid_tests/issues/4
-> >
-> > Please describe the issue entirely here. The commit log must be self-su=
-fficient.
->=20
-> Commit message already states "single-frame picture corruption after
-> changing the state of scaler enable register", therefore I find it
-> already self-sufficient
->=20
-> Also I find demo videos and link to tests useful for the followers to
-> go further with investigation.
+Linus,
 
-Until a couple of years, where that URL isn't valid anymore and it's just u=
-seless.
+Please pull the following set of fixes for the upcoming rc.
 
-> If you have something specific in mind when asking to enhance the
-> commit message please say it.
+Best regards,
+Bartosz Golaszewski
 
-What sequence of events trigger the issue, what issue it triggers and
-why your solution addresses it would be nice
+The following changes since commit 4b0986a3613c92f4ec1bdc7f60ec66fea135991f:
 
-> > > Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
-> > > ---
-> > >  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 12 ++++++++++++
-> > >  drivers/gpu/drm/sun4i/sun8i_vi_layer.c |  4 +++-
-> > >  2 files changed, 15 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/su=
-n4i/sun8i_mixer.c
-> > > index 71ab0a00b4de..15cad0330f66 100644
-> > > --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> > > +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
-> > > @@ -27,6 +27,18 @@
-> > >  #include "sun8i_vi_layer.h"
-> > >  #include "sunxi_engine.h"
-> > >
-> > > +/* According to DE2.0/DE3.0 manual VI scaler enable register is doub=
-le
-> > > + * buffered, but de facto it doesn't, or the hardware has the shadow
-> > > + * register latching issues which causes single-frame picture corrup=
-tion
-> > > + * after changing the state of scaler enable register.
-> > > + * Allow the user to keep the scaler always enabled, preventing the =
-UI
-> > > + * glitches on the transition from scaled to unscaled state.
-> > > + */
-> > > +int sun8i_vi_keep_scaler_enabled;
-> > > +MODULE_PARM_DESC(keep_vi_scaler_enabled,
-> > > +              "Keep VI scaler enabled (1 =3D enabled, 0 =3D disabled=
- (default))");
-> > > +module_param_named(keep_vi_scaler_enabled, sun8i_vi_keep_scaler_enab=
-led, int, 0644);
-> > > +
-> >
-> > It's not clear to me why we would want to make that a parameter?
-> >
-> >1 If it never works, we should fix it once and for all and not allow a b=
-roken setup at all.
->=20
-> It's a hardware issue and can be fixed only within the hardware.
->=20
-> Current patch is a workaround that if enabled can cause increased
-> power consumption for existing users. Therefore I think it is better
-> to give existing distro-maintainers a chance to test it prior to
-> delivery.
+  Linux 5.18 (2022-05-22 09:52:31 -1000)
 
-Except distro-maintainers are likely never going to notice that flag
-exists in the first place, won't be using it and thus the issue will
-remain.
+are available in the Git repository at:
 
-Maxime
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.19-rc1
+
+for you to fetch changes up to 7bb8a0cf49d5fede1104afdcb43bd2f8a1df3253:
+
+  gpio: adp5588: Remove support for platform setup and teardown callbacks (2022-06-02 09:17:38 +0200)
+
+----------------------------------------------------------------
+gpio updates for v5.19-rc1
+
+- use the correct register for regcache sync in gpio-pca953x
+- remove unused and potentially harmful code from gpio-adp5588
+- MAINTAINERS update
+
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      MAINTAINERS: Update GPIO ACPI library to Supported
+      MAINTAINERS: Update Intel GPIO (PMIC and PCH) to Supported
+
+Haibo Chen (1):
+      gpio: pca953x: use the correct register address to do regcache sync
+
+Uwe Kleine-König (1):
+      gpio: adp5588: Remove support for platform setup and teardown callbacks
+
+ MAINTAINERS                 |  6 +++---
+ drivers/gpio/gpio-adp5588.c | 19 -------------------
+ drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
+ 3 files changed, 14 insertions(+), 30 deletions(-)

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA7053CFC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BA453D01F
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345808AbiFCR4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S1347071AbiFCSAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346421AbiFCRvJ (ORCPT
+        with ESMTP id S1347238AbiFCRwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EA756C0C;
-        Fri,  3 Jun 2022 10:48:04 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FB9267F;
+        Fri,  3 Jun 2022 10:50:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF207604EF;
-        Fri,  3 Jun 2022 17:48:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E164AC385A9;
-        Fri,  3 Jun 2022 17:48:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43CEF60F38;
+        Fri,  3 Jun 2022 17:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A93EC385A9;
+        Fri,  3 Jun 2022 17:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278483;
-        bh=yyrGhqI8IVeC53hKFu4TYqVuzOZWCA2X3vdF+q2ZsDc=;
+        s=korg; t=1654278658;
+        bh=mZknYQHj+Cdjluyp0jB4qVFI4izZ1I3mhdKnzaqlxis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qVkEoYM32u4COSJsWOqgCcDmGSVc+acP1tB7ZWFKerYd8EHcPZcmEuXpEBnTC2ZWs
-         zzWCE7HTcvewZPIER4f5WZDnogLHUj5fKP3E8KpL7MV9/R+czFuGDC/wxznwca7v8n
-         LhRCZtG2AULRpg2V/Vo/Qr5FymfJ2OgS+SW8FoDw=
+        b=fkgZ9vGD8yNr0h7Nfsig8SsTD//6dUssXbgkm7lPwZjMVAaUzou0+7xsgXI+wNBom
+         JDrCUDpMLQoJZ92xJF6EjqcRdOdksNGr40fcKW9Fwo+IIueY06Sn6BMAbcJk8oXLS/
+         +ERAlmVqD5wBExuNDihncVZ6eZxFQLkgbMPChyuI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>,
+        stable@vger.kernel.org, Haitao Huang <haitao.huang@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 5.10 47/53] tpm: Fix buffer access in tpm2_get_tpm_pt()
+Subject: [PATCH 5.15 52/66] x86/sgx: Obtain backing storage page with enclave mutex held
 Date:   Fri,  3 Jun 2022 19:43:32 +0200
-Message-Id: <20220603173820.087135017@linuxfoundation.org>
+Message-Id: <20220603173822.167472373@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +56,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+From: Reinette Chatre <reinette.chatre@intel.com>
 
-commit e57b2523bd37e6434f4e64c7a685e3715ad21e9a upstream.
+commit 0e4e729a830c1e7f31d3b3fbf8feb355a402b117 upstream.
 
-Under certain conditions uninitialized memory will be accessed.
-As described by TCG Trusted Platform Module Library Specification,
-rev. 1.59 (Part 3: Commands), if a TPM2_GetCapability is received,
-requesting a capability, the TPM in field upgrade mode may return a
-zero length list.
-Check the property count in tpm2_get_tpm_pt().
+Haitao reported encountering a WARN triggered by the ENCLS[ELDU]
+instruction faulting with a #GP.
 
-Fixes: 2ab3241161b3 ("tpm: migrate tpm2_get_tpm_pt() to use struct tpm_buf")
+The WARN is encountered when the reclaimer evicts a range of
+pages from the enclave when the same pages are faulted back
+right away.
+
+The SGX backing storage is accessed on two paths: when there
+are insufficient free pages in the EPC the reclaimer works
+to move enclave pages to the backing storage and as enclaves
+access pages that have been moved to the backing storage
+they are retrieved from there as part of page fault handling.
+
+An oversubscribed SGX system will often run the reclaimer and
+page fault handler concurrently and needs to ensure that the
+backing store is accessed safely between the reclaimer and
+the page fault handler. This is not the case because the
+reclaimer accesses the backing store without the enclave mutex
+while the page fault handler accesses the backing store with
+the enclave mutex.
+
+Consider the scenario where a page is faulted while a page sharing
+a PCMD page with the faulted page is being reclaimed. The
+consequence is a race between the reclaimer and page fault
+handler, the reclaimer attempting to access a PCMD at the
+same time it is truncated by the page fault handler. This
+could result in lost PCMD data. Data may still be
+lost if the reclaimer wins the race, this is addressed in
+the following patch.
+
+The reclaimer accesses pages from the backing storage without
+holding the enclave mutex and runs the risk of concurrently
+accessing the backing storage with the page fault handler that
+does access the backing storage with the enclave mutex held.
+
+In the scenario below a PCMD page is truncated from the backing
+store after all its pages have been loaded in to the enclave
+at the same time the PCMD page is loaded from the backing store
+when one of its pages are reclaimed:
+
+sgx_reclaim_pages() {              sgx_vma_fault() {
+                                     ...
+                                     mutex_lock(&encl->lock);
+                                     ...
+                                     __sgx_encl_eldu() {
+                                       ...
+                                       if (pcmd_page_empty) {
+/*
+ * EPC page being reclaimed              /*
+ * shares a PCMD page with an             * PCMD page truncated
+ * enclave page that is being             * while requested from
+ * faulted in.                            * reclaimer.
+ */                                       */
+sgx_encl_get_backing()  <---------->      sgx_encl_truncate_backing_page()
+                                        }
+                                       mutex_unlock(&encl->lock);
+}                                    }
+
+In this scenario there is a race between the reclaimer and the page fault
+handler when the reclaimer attempts to get access to the same PCMD page
+that is being truncated. This could result in the reclaimer writing to
+the PCMD page that is then truncated, causing the PCMD data to be lost,
+or in a new PCMD page being allocated. The lost PCMD data may still occur
+after protecting the backing store access with the mutex - this is fixed
+in the next patch. By ensuring the backing store is accessed with the mutex
+held the enclave page state can be made accurate with the
+SGX_ENCL_PAGE_BEING_RECLAIMED flag accurately reflecting that a page
+is in the process of being reclaimed.
+
+Consistently protect the reclaimer's backing store access with the
+enclave's mutex to ensure that it can safely run concurrently with the
+page fault handler.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
+Reported-by: Haitao Huang <haitao.huang@intel.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Tested-by: Haitao Huang <haitao.huang@intel.com>
+Link: https://lkml.kernel.org/r/fa2e04c561a8555bfe1f4e7adc37d60efc77387b.1652389823.git.reinette.chatre@intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/tpm/tpm2-cmd.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/sgx/main.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -400,7 +400,16 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip
- 	if (!rc) {
- 		out = (struct tpm2_get_cap_out *)
- 			&buf.data[TPM_HEADER_SIZE];
--		*value = be32_to_cpu(out->value);
-+		/*
-+		 * To prevent failing boot up of some systems, Infineon TPM2.0
-+		 * returns SUCCESS on TPM2_Startup in field upgrade mode. Also
-+		 * the TPM2_Getcapability command returns a zero length list
-+		 * in field upgrade mode.
-+		 */
-+		if (be32_to_cpu(out->property_cnt) > 0)
-+			*value = be32_to_cpu(out->value);
-+		else
-+			rc = -ENODATA;
- 	}
- 	tpm_buf_destroy(&buf);
- 	return rc;
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -289,6 +289,7 @@ static void sgx_reclaimer_write(struct s
+ 	sgx_encl_ewb(epc_page, backing);
+ 	encl_page->epc_page = NULL;
+ 	encl->secs_child_cnt--;
++	sgx_encl_put_backing(backing);
+ 
+ 	if (!encl->secs_child_cnt && test_bit(SGX_ENCL_INITIALIZED, &encl->flags)) {
+ 		ret = sgx_encl_get_backing(encl, PFN_DOWN(encl->size),
+@@ -362,11 +363,14 @@ static void sgx_reclaim_pages(void)
+ 			goto skip;
+ 
+ 		page_index = PFN_DOWN(encl_page->desc - encl_page->encl->base);
++
++		mutex_lock(&encl_page->encl->lock);
+ 		ret = sgx_encl_get_backing(encl_page->encl, page_index, &backing[i]);
+-		if (ret)
++		if (ret) {
++			mutex_unlock(&encl_page->encl->lock);
+ 			goto skip;
++		}
+ 
+-		mutex_lock(&encl_page->encl->lock);
+ 		encl_page->desc |= SGX_ENCL_PAGE_BEING_RECLAIMED;
+ 		mutex_unlock(&encl_page->encl->lock);
+ 		continue;
+@@ -394,7 +398,6 @@ skip:
+ 
+ 		encl_page = epc_page->owner;
+ 		sgx_reclaimer_write(epc_page, &backing[i]);
+-		sgx_encl_put_backing(&backing[i]);
+ 
+ 		kref_put(&encl_page->encl->refcount, sgx_encl_release);
+ 		epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
 
 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7926653D0CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5DE53CED4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347415AbiFCSKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S1345254AbiFCRsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345965AbiFCR5i (ORCPT
+        with ESMTP id S1345321AbiFCRsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:57:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A705712F;
-        Fri,  3 Jun 2022 10:54:14 -0700 (PDT)
+        Fri, 3 Jun 2022 13:48:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7735402D;
+        Fri,  3 Jun 2022 10:44:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9856C60A54;
-        Fri,  3 Jun 2022 17:54:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35C5C3411C;
-        Fri,  3 Jun 2022 17:54:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB089B82430;
+        Fri,  3 Jun 2022 17:44:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01735C385A9;
+        Fri,  3 Jun 2022 17:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278853;
-        bh=/5ETmfWm2uhKWwgWPbY3yLxXWCxaJ5ZGh8hkglP8XMM=;
+        s=korg; t=1654278286;
+        bh=jN3i2LdxfYzhR0w/hB0nyLMKgMI6Tdxlrm4dOLX7fsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vh4bzKP9o+jvPy6UD5NWmlWLMuFniliz01hNW34dewpADzwWYs3fM4EbRRstmEx//
-         kZCkQ3hHLcrMtf3rVQF11zSO4eriZQQbuED3/ubLL57xyj46SzTocPI4mFDtFSM8oz
-         Za8XqyRYj67K1KpY8qKDWFek0bV2Rr/IoHj+RyWk=
+        b=n/nbTdJ5R5XIvVU33rt9WD8FR8iT+2CzdBB4mIxRYbJj5Qz/zgDPTaZayC0Whi//F
+         CFttcEulqANY6i/yC0qvasaaOOMMW74xEFdTwImt6y8TemMJka0QXaM44r888Qu/Eo
+         EiWkeNKX6Zj08GKVZVSXOoUcNLJtIx2vei63B7JU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.17 21/75] netfilter: nft_limit: Clone packet limits cost value
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        dann frazier <dann.frazier@canonical.com>
+Subject: [PATCH 5.4 09/34] ACPI: sysfs: Make sparse happy about address space in use
 Date:   Fri,  3 Jun 2022 19:43:05 +0200
-Message-Id: <20220603173822.349868192@linuxfoundation.org>
+Message-Id: <20220603173816.267614104@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Sutter <phil@nwl.cc>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 558254b0b602b8605d7246a10cfeb584b1fcabfc upstream.
+commit bdd56d7d8931e842775d2e5b93d426a8d1940e33 upstream.
 
-When cloning a packet-based limit expression, copy the cost value as
-well. Otherwise the new limit is not functional anymore.
+Sparse is not happy about address space in use in acpi_data_show():
 
-Fixes: 3b9e2ea6c11bf ("netfilter: nft_limit: move stateful fields out of expression data")
-Signed-off-by: Phil Sutter <phil@nwl.cc>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+drivers/acpi/sysfs.c:428:14: warning: incorrect type in assignment (different address spaces)
+drivers/acpi/sysfs.c:428:14:    expected void [noderef] __iomem *base
+drivers/acpi/sysfs.c:428:14:    got void *
+drivers/acpi/sysfs.c:431:59: warning: incorrect type in argument 4 (different address spaces)
+drivers/acpi/sysfs.c:431:59:    expected void const *from
+drivers/acpi/sysfs.c:431:59:    got void [noderef] __iomem *base
+drivers/acpi/sysfs.c:433:30: warning: incorrect type in argument 1 (different address spaces)
+drivers/acpi/sysfs.c:433:30:    expected void *logical_address
+drivers/acpi/sysfs.c:433:30:    got void [noderef] __iomem *base
+
+Indeed, acpi_os_map_memory() returns a void pointer with dropped specific
+address space. Hence, we don't need to carry out __iomem in acpi_data_show().
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: dann frazier <dann.frazier@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_limit.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/acpi/sysfs.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/net/netfilter/nft_limit.c
-+++ b/net/netfilter/nft_limit.c
-@@ -213,6 +213,8 @@ static int nft_limit_pkts_clone(struct n
- 	struct nft_limit_priv_pkts *priv_dst = nft_expr_priv(dst);
- 	struct nft_limit_priv_pkts *priv_src = nft_expr_priv(src);
+--- a/drivers/acpi/sysfs.c
++++ b/drivers/acpi/sysfs.c
+@@ -438,7 +438,7 @@ static ssize_t acpi_data_show(struct fil
+ 			      loff_t offset, size_t count)
+ {
+ 	struct acpi_data_attr *data_attr;
+-	void __iomem *base;
++	void *base;
+ 	ssize_t rc;
  
-+	priv_dst->cost = priv_src->cost;
-+
- 	return nft_limit_clone(&priv_dst->limit, &priv_src->limit);
- }
- 
+ 	data_attr = container_of(bin_attr, struct acpi_data_attr, attr);
 
 

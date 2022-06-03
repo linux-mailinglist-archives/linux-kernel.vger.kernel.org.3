@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC8653D38D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEB853D390
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 00:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349532AbiFCWRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 18:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S1348129AbiFCWUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 18:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiFCWRh (ORCPT
+        with ESMTP id S231882AbiFCWUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 18:17:37 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904AE18382
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:17:29 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id t31so16105656ybi.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 15:17:29 -0700 (PDT)
+        Fri, 3 Jun 2022 18:20:16 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5C72F389;
+        Fri,  3 Jun 2022 15:20:10 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id a10so8312774pju.3;
+        Fri, 03 Jun 2022 15:20:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kxzrEA8REDaWwoEI9SXIgLGpIqpF9GSswLISAQIrJrw=;
-        b=i0f4i2hSBuOwU6Z41zZp12Xn6+SOGWUZoafYmhtlRSD81/YGKiB1a3m9qdHb90RuKw
-         qVRQ9b2yETSdL7OWP0uGpezSJSoI1oKCTTrN4ZsFqGvUDpToHAVB4Qpv/GsVsDDF8Wx2
-         eJQ0KBbU3MkUuanKZ+0Bs8ScSTt7loYEkVUyfdYbXrOLue05KM0lxYKXm6UJV4GGXRrb
-         EX+zfLF3pDx5Llz75rqxEW7Y4X7BV+ZZhiCDfugMQiZ10IYeDO9mX9vNM1hSaH4NuRzK
-         3K1yZswoM1W83g6r0fQRP4EgkK7wT79byzWjUbX/MRrrqbb9CW5UNK08uOiKje6SRTOw
-         myRA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=wzD5mA3Q7bnJEiZpaHczvVNh6Js6wc6fDQF182vrLro=;
+        b=Nsjs1Icmc/tjIcQ+e1aOarscCNRccs/2GZCTJo0tFsBiHAXo7beRDcag+1UzbS406L
+         VaBGZpqSqbOG+VqXlKn76vxfp04gP3IHT0gtAW04stLw/+lbG+gnV9jg1IerlUedl1h7
+         IWb0xjd9KC2tukE00H7mPtveQS6wDKyvcn6PAPqhCO7lLM+bZlyN4LbFekNvPD4IQFrh
+         THonzxol5WmMDc5ZCkGq/AfnrdCYyZyDOz9KcFWHzT3UGhrN9HHK84oGRceuVK7ahGrb
+         /To1bhbULEQCLqLGRxv4/wCD5gN6Chz7SR+pu5e9NMtm48+yKFEBcEiFuIT2l9pMbnTS
+         dlYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kxzrEA8REDaWwoEI9SXIgLGpIqpF9GSswLISAQIrJrw=;
-        b=7yyXQ9Fw+oj4TNmiBwYSTk0qc4bUkvFRdqBfLBmM5jS5fxiiZOTz7gmiu8POiVeTws
-         NTJy7vd1ECkUeutDwkH5YUyfDTJSBqRsXYKGla8kcwxeeS3lsctv38dxE6fS/2lz+FYX
-         NhKIdHIjVjJb2prZRIw18oiF/IhxR3fzZWt00Esl+ETQJgpKOeaZ8OPipgz14XGeoDjQ
-         zpWC+HptO4NNJtFVkW1b4534oaudujUvjOqyDIbZRvv1YyXtH9jXV5OlI4m8EI2NUE+B
-         HUfCY/n7OTfXlj44t6qI2kYpCLPTeeBRnMZW4TFsBQUoMCXzgLEnsIrE4aq64K9x1l0A
-         vUTA==
-X-Gm-Message-State: AOAM530y61xWzOJZvDZrSy1laJBj6dgSpWZDM0EFu2lh0o3YqJ10mrH4
-        RCRE/cM4cakQReglXz3qIytI/M122015JktGhWucc9E5UBA=
-X-Google-Smtp-Source: ABdhPJwY0Fv0WkN3GP24DF4ef8lrbyIIqDa/jyBs+8pVca4YN0rLWkYrK6fB3G72aScon/VocRlxYEWULbwUdPCqnb8=
-X-Received: by 2002:a5b:302:0:b0:64b:a20a:fcd9 with SMTP id
- j2-20020a5b0302000000b0064ba20afcd9mr13248417ybp.492.1654294648626; Fri, 03
- Jun 2022 15:17:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220526014127.2872254-1-robh@kernel.org>
-In-Reply-To: <20220526014127.2872254-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 4 Jun 2022 00:17:17 +0200
-Message-ID: <CACRpkdYRumCbt4tQs2+KeMdVjEt07J=0hAUynTHKeQ3mC1o5kQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: faraday: Fix typo in example
- 'timeout-sec' property
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=wzD5mA3Q7bnJEiZpaHczvVNh6Js6wc6fDQF182vrLro=;
+        b=OcAiI4+nt0Dq18XbwNoaVzE7+TkdmPqRhABqWXpv1CDAM1iuFd4xMVHYRgWLUGgUPT
+         aSZkk1nSfVV33dX/5NKejI51HWUuSTqk0cb8J4PMqYQRmomdx4IcA83knDmiKRm/xVbp
+         uvxP136l09tpLqjJw8ZOVwSsgMPGMZzseBByRNoOjZaDaHe1yaKrxfbVWLjU7P4EvpsM
+         ug0CvMBwNYBnFMGSzQAZMfrJET/OkXxRnC0WUU9Cq5O3d3gOZ+KUsC4laONijgCSPVoy
+         y8MCqS/WC3nNnzcF27AIifAhDypdDWemuxU/Yygka29Yhu57R1hv5qXVmAWH/+guSRt3
+         oCjA==
+X-Gm-Message-State: AOAM531P5sfm5Fb3TnI4DY6faAe23qn76aq56AhoW6TG7VopBXyUsCYT
+        9goZfugcWwDKcMQhcKRYJPC/jK8ttfVF7X1NLF4=
+X-Google-Smtp-Source: ABdhPJxzWKWAdOxfbomQhMo219/BEeIdNxSfsbzeiPXu1Gf2p700cYhBWtzf7MZZXhTm5Kesax+48w==
+X-Received: by 2002:a17:90b:21d3:b0:1e3:2eee:3aba with SMTP id ll19-20020a17090b21d300b001e32eee3abamr13174205pjb.232.1654294809511;
+        Fri, 03 Jun 2022 15:20:09 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id z12-20020a17090a8b8c00b001df666ebddesm8122696pjn.6.2022.06.03.15.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 15:20:09 -0700 (PDT)
+Message-ID: <629a8919.1c69fb81.37ff2.42db@mx.google.com>
+Date:   Fri, 03 Jun 2022 15:20:09 -0700 (PDT)
+X-Google-Original-Date: Fri, 03 Jun 2022 22:20:07 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+Subject: RE: [PATCH 5.17 00/75] 5.17.13-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 3:41 AM Rob Herring <robh@kernel.org> wrote:
+On Fri,  3 Jun 2022 19:42:44 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.17.13 release.
+> There are 75 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> The 'unevaluatedProperties' schema checks is not fully working and doesn't
-> catch some cases where there's a $ref to another schema. A fix is pending,
-> but results in new warnings in examples.
->
-> The correct common watchdog property is 'timeout-sec', not 'timeout-secs'.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+5.17.13-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-This kind of stuff is exactly what we wanted schema to find and fix.
-And now it is delivering. Success!
-
-Yours,
-Linus Walleij

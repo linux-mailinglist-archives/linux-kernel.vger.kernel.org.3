@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0301853CF01
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FE953D009
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345483AbiFCRtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
+        id S1346084AbiFCR7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345357AbiFCRsL (ORCPT
+        with ESMTP id S1346235AbiFCRuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:48:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EA253E05;
-        Fri,  3 Jun 2022 10:45:00 -0700 (PDT)
+        Fri, 3 Jun 2022 13:50:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930CD5A09A;
+        Fri,  3 Jun 2022 10:47:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BBE4B82430;
-        Fri,  3 Jun 2022 17:44:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB7F6C385A9;
-        Fri,  3 Jun 2022 17:44:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6C2260A57;
+        Fri,  3 Jun 2022 17:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B821EC385A9;
+        Fri,  3 Jun 2022 17:47:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278298;
-        bh=JRlXN+QbL40CRn9Cwv7aCRqGZNOb6OjwTpt42fLYcMk=;
+        s=korg; t=1654278435;
+        bh=4CV2YYdOdmtQY/EHPZAR8SenSGDXz6x4jpKV19cuIKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=esNiSIDpMjzKWdJUlsPeQsQCEH6REuZV7ZcAr5qg59BqYgYfApa7YVYwvQi+EVUle
-         ZEnKSwXdfq7nXoRSK1G4UraUutuI5TpryJLoCcOFbVQREjvKD3veP+PuBK0TnON09w
-         6/Rrw8rhFAtqiOuQ6V7ELsJEGNK75ikkELg2rmKQ=
+        b=UtaAMXSFh/jUidi3209vJXcff2PlDFoyIri/41GRdi74FUtEb+6TPuRe23CtJ5WJq
+         hL2wUWCioEWXS7HNYK9CzKVWbt8oGEcrqrpmkKCPD8t6zZUCPlJq9x1PYYcyt+/VFE
+         Xh2iPgyY2ybo+Pjb2MRpK2pgjKN1Y1IR66ttM7G0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.4 21/34] crypto: ecrdsa - Fix incorrect use of vli_cmp
+        stable@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 32/53] x86/kvm: Alloc dummy async #PF token outside of raw spinlock
 Date:   Fri,  3 Jun 2022 19:43:17 +0200
-Message-Id: <20220603173816.609143086@linuxfoundation.org>
+Message-Id: <20220603173819.658900854@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +55,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Chikunov <vt@altlinux.org>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 7cc7ab73f83ee6d50dc9536bc3355495d8600fad upstream.
+commit 0547758a6de3cc71a0cfdd031a3621a30db6a68b upstream.
 
-Correctly compare values that shall be greater-or-equal and not just
-greater.
+Drop the raw spinlock in kvm_async_pf_task_wake() before allocating the
+the dummy async #PF token, the allocator is preemptible on PREEMPT_RT
+kernels and must not be called from truly atomic contexts.
 
-Fixes: 0d7a78643f69 ("crypto: ecrdsa - add EC-RDSA (GOST 34.10) algorithm")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Vitaly Chikunov <vt@altlinux.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Opportunistically document why it's ok to loop on allocation failure,
+i.e. why the function won't get stuck in an infinite loop.
+
+Reported-by: Yajun Deng <yajun.deng@linux.dev>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/ecrdsa.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kernel/kvm.c |   41 +++++++++++++++++++++++++++--------------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
 
---- a/crypto/ecrdsa.c
-+++ b/crypto/ecrdsa.c
-@@ -112,15 +112,15 @@ static int ecrdsa_verify(struct akcipher
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -188,7 +188,7 @@ void kvm_async_pf_task_wake(u32 token)
+ {
+ 	u32 key = hash_32(token, KVM_TASK_SLEEP_HASHBITS);
+ 	struct kvm_task_sleep_head *b = &async_pf_sleepers[key];
+-	struct kvm_task_sleep_node *n;
++	struct kvm_task_sleep_node *n, *dummy = NULL;
  
- 	/* Step 1: verify that 0 < r < q, 0 < s < q */
- 	if (vli_is_zero(r, ndigits) ||
--	    vli_cmp(r, ctx->curve->n, ndigits) == 1 ||
-+	    vli_cmp(r, ctx->curve->n, ndigits) >= 0 ||
- 	    vli_is_zero(s, ndigits) ||
--	    vli_cmp(s, ctx->curve->n, ndigits) == 1)
-+	    vli_cmp(s, ctx->curve->n, ndigits) >= 0)
- 		return -EKEYREJECTED;
+ 	if (token == ~0) {
+ 		apf_task_wake_all();
+@@ -200,28 +200,41 @@ again:
+ 	n = _find_apf_task(b, token);
+ 	if (!n) {
+ 		/*
+-		 * async PF was not yet handled.
+-		 * Add dummy entry for the token.
++		 * Async #PF not yet handled, add a dummy entry for the token.
++		 * Allocating the token must be down outside of the raw lock
++		 * as the allocator is preemptible on PREEMPT_RT kernels.
+ 		 */
+-		n = kzalloc(sizeof(*n), GFP_ATOMIC);
+-		if (!n) {
++		if (!dummy) {
++			raw_spin_unlock(&b->lock);
++			dummy = kzalloc(sizeof(*dummy), GFP_KERNEL);
++
+ 			/*
+-			 * Allocation failed! Busy wait while other cpu
+-			 * handles async PF.
++			 * Continue looping on allocation failure, eventually
++			 * the async #PF will be handled and allocating a new
++			 * node will be unnecessary.
++			 */
++			if (!dummy)
++				cpu_relax();
++
++			/*
++			 * Recheck for async #PF completion before enqueueing
++			 * the dummy token to avoid duplicate list entries.
+ 			 */
+-			raw_spin_unlock(&b->lock);
+-			cpu_relax();
+ 			goto again;
+ 		}
+-		n->token = token;
+-		n->cpu = smp_processor_id();
+-		init_swait_queue_head(&n->wq);
+-		hlist_add_head(&n->link, &b->list);
++		dummy->token = token;
++		dummy->cpu = smp_processor_id();
++		init_swait_queue_head(&dummy->wq);
++		hlist_add_head(&dummy->link, &b->list);
++		dummy = NULL;
+ 	} else {
+ 		apf_task_wake_one(n);
+ 	}
+ 	raw_spin_unlock(&b->lock);
+-	return;
++
++	/* A dummy token might be allocated and ultimately not used.  */
++	if (dummy)
++		kfree(dummy);
+ }
+ EXPORT_SYMBOL_GPL(kvm_async_pf_task_wake);
  
- 	/* Step 2: calculate hash (h) of the message (passed as input) */
- 	/* Step 3: calculate e = h \mod q */
- 	vli_from_le64(e, digest, ndigits);
--	if (vli_cmp(e, ctx->curve->n, ndigits) == 1)
-+	if (vli_cmp(e, ctx->curve->n, ndigits) >= 0)
- 		vli_sub(e, e, ctx->curve->n, ndigits);
- 	if (vli_is_zero(e, ndigits))
- 		e[0] = 1;
-@@ -136,7 +136,7 @@ static int ecrdsa_verify(struct akcipher
- 	/* Step 6: calculate point C = z_1P + z_2Q, and R = x_c \mod q */
- 	ecc_point_mult_shamir(&cc, z1, &ctx->curve->g, z2, &ctx->pub_key,
- 			      ctx->curve);
--	if (vli_cmp(cc.x, ctx->curve->n, ndigits) == 1)
-+	if (vli_cmp(cc.x, ctx->curve->n, ndigits) >= 0)
- 		vli_sub(cc.x, cc.x, ctx->curve->n, ndigits);
- 
- 	/* Step 7: if R == r signature is valid */
 
 

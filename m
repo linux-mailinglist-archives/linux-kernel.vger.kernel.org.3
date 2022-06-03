@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9246153C6E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F1F53C6E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242815AbiFCIXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S238739AbiFCIY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbiFCIXs (ORCPT
+        with ESMTP id S229744AbiFCIYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:23:48 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F5192A3
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:23:46 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id cx11so6892479pjb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DJ5nOCm8LzcOFMf8dnh/CUtYdPr3TKZePHvPE4Ct0MA=;
-        b=TQjaqSnDFwGyupFW9eoFjOll0k72uxMIxfGVm2AnhrSZWe7ATloGVFkY/cUNwu9zbB
-         w+C3i3HZQj0Ef5OMvLZujyOCLFcT0WtZwF9GuDLv/4/b87zEiPUgEC4MjNGBRQcjqXBM
-         qzTZf31kKRrt34/KjGtbwFh9iwp5i/fRcVMiZGqUMfTamVNZh0yslWC8OFrQYDtWeXv8
-         +Zq2w5wMmnXNq4/K5qG05hBPfKzIxjlP4YMIj2P2weEsabq7s2hzW8KbQ9pySx94I+kQ
-         MB7Jtlm0Os8as7/uuRCsrTgI8/13atDyU2wJJmTMx0FU/EL7RZ1vbtcLjUcIdegBY44K
-         /N1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DJ5nOCm8LzcOFMf8dnh/CUtYdPr3TKZePHvPE4Ct0MA=;
-        b=zofiWSSBw1K541VCK++aemvksmIKM29/pHSVHtCoBQkuBMSvI6XxHm0LZFK9N+DVSW
-         J2Fsw76oxvzue/t4eqJLqIiLmzXnXzghr7FTjHY/xP4zhpMjcvi90O68jNV43WX0ZHTa
-         aY4yjOb6m/ox+FlrxuNlIvsuHDYAcJ9rwQ3v5gBUrKEQSjG7gqab9yNdxhfuXLKN1Ha/
-         0TVlN+PkBnWGANyryFtwkISWmHNcQBaFyyln2m3WxlxRCyifX7vpIrr0TtqEs87QkpXR
-         +c3WakSQSzBv3Kmkeyj+2ALeJtQ2kQiclu6UXAIzHCQwjCCtr9t3Ti56lFA/r+BcUVGd
-         U+fQ==
-X-Gm-Message-State: AOAM53051hF9hkMjxL8MrxMiqVUWaIRH+XyNQl9xseWUESNPDPqDdGqV
-        gfu9eYcBI0wMQxgXKyTqoFO6CNJVgsR9ctWmgYs=
-X-Google-Smtp-Source: ABdhPJwG680KUxCoYDSbUUqPJzsbyeO7F8Mz29YiJl6SmAvepgPoKkwAgxs7y83lsE1ERiQwCAv7jQ==
-X-Received: by 2002:a17:902:8d87:b0:162:da7:e3d6 with SMTP id v7-20020a1709028d8700b001620da7e3d6mr9212233plo.44.1654244626465;
-        Fri, 03 Jun 2022 01:23:46 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id ju10-20020a17090b20ca00b001df264610c4sm4818881pjb.0.2022.06.03.01.23.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 01:23:45 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Patrick Venture <venture@google.com>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] soc: aspeed: Fix IRQ check in aspeed_lpc_snoop_config_irq
-Date:   Fri,  3 Jun 2022 12:23:34 +0400
-Message-Id: <20220603082336.3867-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Jun 2022 04:24:23 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348BC1B793
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:24:21 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 978765C01F3;
+        Fri,  3 Jun 2022 04:24:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 03 Jun 2022 04:24:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1654244660; x=1654331060; bh=WSWWhdSOQK
+        dEUaHqyqEBOb+/qAji3ZgVcCXOcQfuj/w=; b=mX+E1LyPOiThUobyBvfFXjVreG
+        IYTDFMyvGWA8FS8FFyIPfIU2oYLOMMHn+L9gPxNFDwiMevG0nLXEkyJoEpYTbsEP
+        BIDzE0BtIH0eGd1EIa4pFaNht6Mmwkm6+uSr7vGPebatRwbHU+SN2qvRd/OZx11J
+        iS3jKMLA1HK6yweGLCTyGQ/g9jNLQMoJ8RPmVA3n68bdRqR+j5yq1gVhI7H0LNQk
+        ymYOBEPiBgEDc+QCBpdL57yR+QeBAN28w96afp2/j8WWEmfkcLot/E6sjnUf+1NC
+        FAK9jEl8zSXkwXNG1Uu7TVXNPEMeC3k6YPftgYNXx0jtZS7xCuUOwhgTmCfw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1654244660; x=1654331060; bh=WSWWhdSOQKdEUaHqyqEBOb+/qAji
+        3ZgVcCXOcQfuj/w=; b=pSVVD7CgWjuVCHvoVIbP9Hb0zvmjUspNwG2zm7F5EWYX
+        I2zrK4kjUc6dM8q5qrZ5x6kohUU09TIPTl3E58vKKB/z348qHm5Xv0Qfsh0JZaFK
+        l++7mkhTQAUbGUxNZEKDW67ponV721LbNTezqS3pJH1nflHdtAHTdwrTYK3WPb8K
+        cI2J3u+nr/ytkGKPKZf3DbybJE5DP1LIYF/ayya9h+KOVpialq3XPVs4LOn2xuWD
+        5ab73tqelbEH23Ej0ymBIwF6i8nZamnsEsI0k7mcfxZPi22Hd8CdePp2tbDCikli
+        q2iJbZebKv5Mzcat9v1lWDgxYbmy+ZfHEaUqznN5mA==
+X-ME-Sender: <xms:M8WZYjL0dBHcN5A5PfczR2j7e6KfDK3yG3KZPH4pu3h-Jx7_7XseBg>
+    <xme:M8WZYnIBP0TYiDw5jAPEznLopQ8lhiA4mk5zv48rLvHcUikl7F6TN4i-hcmHumGxA
+    tkZG9dvJfljMbH0xvM>
+X-ME-Received: <xmr:M8WZYrthmNKKC1_KyhWWzWegeHabvQpRAmtx3teOCUJUl3EtKiUn1Kxi8cMM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleeigddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepkeetjeevgfdvleeiveeutefhfeejtdegvdeugeetvdduffeigfdtveeuffet
+    feeknecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:M8WZYsYK9xlQHDCngiuRvwCvyP0TajeHNBi0JE4RD2F5NJVN67gjuQ>
+    <xmx:M8WZYqY-qeAPEQhxH1yd5kx0L9SjUwWaONTSapmaPKDX3VPAacXS4Q>
+    <xmx:M8WZYgBtR-xY_N0-moc8yw9X0BO1EBZZKt49cwZk78hlrPopYGt_JA>
+    <xmx:NMWZYglpnMRgdrdttyBZqzsYmQqedX9hiQRO27htDtQWsvtMRLzOyA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Jun 2022 04:24:18 -0400 (EDT)
+Date:   Fri, 3 Jun 2022 10:24:16 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Roman Stratiienko <r.stratiienko@gmail.com>
+Cc:     wens@csie.org, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Subject: Re: [PATCH] drm/sun4i: sun8i: Add the ability to keep scaler enabled
+ for VI layer
+Message-ID: <20220603082416.ukohug3mwzu43csu@penduick>
+References: <20220602180118.66170-1-r.stratiienko@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602180118.66170-1-r.stratiienko@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+Hi,
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
+On Thu, Jun 02, 2022 at 06:01:18PM +0000, Roman Stratiienko wrote:
+> According to DE2.0/DE3.0 manual VI scaler enable register is double
+> buffered, but de facto it doesn't, or the hardware has the shadow
+> register latching issues which causes single-frame picture corruption
+> after changing the state of scaler enable register.
+> 
+> Allow the user to keep the scaler always enabled, preventing the UI
+> glitches on the transition from scaled to unscaled state.
+> 
+> NOTE:
+> UI layer scaler has more registers with double-buffering issue and can't
+> be workarounded in the same manner.
+> 
+> You may find a python test and a demo video for this issue at [1]
+> 
+> [1]: https://github.com/GloDroid/glodroid_tests/issues/4
 
-Fix the check of return value to catch errors correctly.
+Please describe the issue entirely here. The commit log must be self-sufficient.
 
-Fixes: 524feb799408 ("soc: add aspeed folder and misc drivers")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-Link: https://lore.kernel.org/r/20220114064357.18562-1-linmq006@gmail.com
-In previous thread:
-Reviewed-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-Signed-off-by: Patrick Venture <venture@google.com>
----
- drivers/soc/aspeed/aspeed-lpc-snoop.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+> ---
+>  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 12 ++++++++++++
+>  drivers/gpu/drm/sun4i/sun8i_vi_layer.c |  4 +++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> index 71ab0a00b4de..15cad0330f66 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> @@ -27,6 +27,18 @@
+>  #include "sun8i_vi_layer.h"
+>  #include "sunxi_engine.h"
+>  
+> +/* According to DE2.0/DE3.0 manual VI scaler enable register is double
+> + * buffered, but de facto it doesn't, or the hardware has the shadow
+> + * register latching issues which causes single-frame picture corruption
+> + * after changing the state of scaler enable register.
+> + * Allow the user to keep the scaler always enabled, preventing the UI
+> + * glitches on the transition from scaled to unscaled state.
+> + */
+> +int sun8i_vi_keep_scaler_enabled;
+> +MODULE_PARM_DESC(keep_vi_scaler_enabled,
+> +		 "Keep VI scaler enabled (1 = enabled, 0 = disabled (default))");
+> +module_param_named(keep_vi_scaler_enabled, sun8i_vi_keep_scaler_enabled, int, 0644);
+> +
 
-diff --git a/drivers/soc/aspeed/aspeed-lpc-snoop.c b/drivers/soc/aspeed/aspeed-lpc-snoop.c
-index eceeaf8dfbeb..c4a03b3a5cf8 100644
---- a/drivers/soc/aspeed/aspeed-lpc-snoop.c
-+++ b/drivers/soc/aspeed/aspeed-lpc-snoop.c
-@@ -167,8 +167,8 @@ static int aspeed_lpc_snoop_config_irq(struct aspeed_lpc_snoop *lpc_snoop,
- 	int rc;
- 
- 	lpc_snoop->irq = platform_get_irq(pdev, 0);
--	if (!lpc_snoop->irq)
--		return -ENODEV;
-+	if (lpc_snoop->irq < 0)
-+		return lpc_snoop->irq;
- 
- 	rc = devm_request_irq(dev, lpc_snoop->irq,
- 			      aspeed_lpc_snoop_irq, IRQF_SHARED,
--- 
-2.25.1
+It's not clear to me why we would want to make that a parameter?
 
+If it never works, we should fix it once and for all and not allow a broken setup at all.
+
+Maxime

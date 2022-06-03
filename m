@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE6053CFD7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B34353D0C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345904AbiFCR5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S1347565AbiFCSLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346493AbiFCRvN (ORCPT
+        with ESMTP id S1345966AbiFCR6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDDA5401D;
-        Fri,  3 Jun 2022 10:48:26 -0700 (PDT)
+        Fri, 3 Jun 2022 13:58:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FA527152;
+        Fri,  3 Jun 2022 10:54:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB3EC604EF;
-        Fri,  3 Jun 2022 17:48:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE43C385B8;
-        Fri,  3 Jun 2022 17:48:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9006B823B0;
+        Fri,  3 Jun 2022 17:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14ECC385B8;
+        Fri,  3 Jun 2022 17:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278505;
-        bh=kN0AN2TNyRTIymjPqzTViSmge+OvDBcFe42A1QKtWv8=;
+        s=korg; t=1654278874;
+        bh=EPBHgmukQQ2kavRRx6NFY8j/vcnjOWl5lgESjAPm9W8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h259kxfL0y/1tng/akEao4zN33LBygStLc/I0vkMq34DkpcJ9PRV2nfyNxBw1tRG5
-         cTpwX0Rj9wO6+p/Nb+LWRuC04RjUdF1HN/RZ5gYyQZY+5ipr9eX82Tao9o4nqC6s+2
-         HCADGxmm07eFFb+NZPvUnEk4jaVvjsZDd+tkR8x4=
+        b=inUrWPpSPYFZEpZgCPwgLbwP6QP3dUj+OdRyiGVsWfxyMaDbYfAS8VAGyOaCgIbx3
+         DkSCkGDpiFCy1fh3LTCr2CX1tA5NTAeoB6eMnLULcDGrCA9RcAxxF1XQNHVu+pFBDg
+         33oYrJlIOdRLNytnAPiBYWGxp3Z5M2zULEDGoLgo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liu Jian <liujian56@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH 5.10 53/53] bpf: Enlarge offset check value to INT_MAX in bpf_skb_{load,store}_bytes
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kari Argillander <kari.argillander@stargateuniverse.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.17 54/75] fs/ntfs3: validate BOOT sectors_per_clusters
 Date:   Fri,  3 Jun 2022 19:43:38 +0200
-Message-Id: <20220603173820.259753943@linuxfoundation.org>
+Message-Id: <20220603173823.273872316@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173821.749019262@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +60,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Jian <liujian56@huawei.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 45969b4152c1752089351cd6836a42a566d49bcf upstream.
+commit a3b774342fa752a5290c0de36375289dfcf4a260 upstream.
 
-The data length of skb frags + frag_list may be greater than 0xffff, and
-skb_header_pointer can not handle negative offset. So, here INT_MAX is used
-to check the validity of offset. Add the same change to the related function
-skb_store_bytes.
+When the NTFS BOOT sectors_per_clusters field is > 0x80, it represents a
+shift value.  Make sure that the shift value is not too large before using
+it (NTFS max cluster size is 2MB).  Return -EVINVAL if it too large.
 
-Fixes: 05c74e5e53f6 ("bpf: add bpf_skb_load_bytes helper")
-Signed-off-by: Liu Jian <liujian56@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20220416105801.88708-2-liujian56@huawei.com
+This prevents negative shift values and shift values that are larger than
+the field size.
+
+Prevents this UBSAN error:
+
+ UBSAN: shift-out-of-bounds in ../fs/ntfs3/super.c:673:16
+ shift exponent -192 is negative
+
+Link: https://lkml.kernel.org/r/20220502175342.20296-1-rdunlap@infradead.org
+Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: syzbot+1631f09646bc214d2e76@syzkaller.appspotmail.com
+Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
+Cc: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Kari Argillander <kari.argillander@stargateuniverse.net>
+Cc: Namjae Jeon <linkinjeon@kernel.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/filter.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ntfs3/super.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1687,7 +1687,7 @@ BPF_CALL_5(bpf_skb_store_bytes, struct s
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -668,9 +668,11 @@ static u32 format_size_gb(const u64 byte
  
- 	if (unlikely(flags & ~(BPF_F_RECOMPUTE_CSUM | BPF_F_INVALIDATE_HASH)))
- 		return -EINVAL;
--	if (unlikely(offset > 0xffff))
-+	if (unlikely(offset > INT_MAX))
- 		return -EFAULT;
- 	if (unlikely(bpf_try_make_writable(skb, offset + len)))
- 		return -EFAULT;
-@@ -1722,7 +1722,7 @@ BPF_CALL_4(bpf_skb_load_bytes, const str
+ static u32 true_sectors_per_clst(const struct NTFS_BOOT *boot)
  {
- 	void *ptr;
+-	return boot->sectors_per_clusters <= 0x80
+-		       ? boot->sectors_per_clusters
+-		       : (1u << (0 - boot->sectors_per_clusters));
++	if (boot->sectors_per_clusters <= 0x80)
++		return boot->sectors_per_clusters;
++	if (boot->sectors_per_clusters >= 0xf4) /* limit shift to 2MB max */
++		return 1U << (0 - boot->sectors_per_clusters);
++	return -EINVAL;
+ }
  
--	if (unlikely(offset > 0xffff))
-+	if (unlikely(offset > INT_MAX))
- 		goto err_clear;
+ /*
+@@ -713,6 +715,8 @@ static int ntfs_init_from_boot(struct su
  
- 	ptr = skb_header_pointer(skb, offset, len, to);
+ 	/* cluster size: 512, 1K, 2K, 4K, ... 2M */
+ 	sct_per_clst = true_sectors_per_clst(boot);
++	if ((int)sct_per_clst < 0)
++		goto out;
+ 	if (!is_power_of_2(sct_per_clst))
+ 		goto out;
+ 
 
 

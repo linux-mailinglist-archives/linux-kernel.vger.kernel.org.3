@@ -2,147 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8926353CBF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF8953CBFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245309AbiFCPDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S245324AbiFCPEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbiFCPDU (ORCPT
+        with ESMTP id S244661AbiFCPEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:03:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6D464D8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:03:19 -0700 (PDT)
+        Fri, 3 Jun 2022 11:04:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE27C64D8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:04:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B5ABB82345
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:03:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D53C385A9;
-        Fri,  3 Jun 2022 15:03:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A91B616F9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD885C385A9;
+        Fri,  3 Jun 2022 15:04:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654268597;
-        bh=KJA7norXveckb626KwhiBUG0LTnBlZk25DMASuaqYgQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fwK53WQoXp8iCJXzGTIv1dXnd+NmM+ofk7tapEFrgysbFrmI3F1601g6iKwkWBOj9
-         +iGFHoSauxyf8vx4KHM0kxfT0cH9hyPqJVqm9uZONeBdjbt9zZcq1aUACEIV0g8KQg
-         EobxoP4QaRHXzqbxCAZX6hjP7wmenTmKWFsSOmzz0/Wt7cQr3boqLvd9ofkoWyGzCe
-         iQJp9UE9lDHSdDuoHDBStSvjnVEUyX0i5f7ZLE7cIOdtvy9rNR1ldahjpKipnuuWKP
-         Ic3jRObOVGVAyKB25SUKNdq96vza3FZ7ypyjPKPlrKOyCzAdoByQSoTaAGfUkf/5qm
-         zpIZCeutFlAyw==
-Date:   Sat, 4 Jun 2022 00:03:12 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Chuang <nashuiliang@gmail.com>
-Cc:     Jingren Zhou <zhoujingren@didiglobal.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Rollback kprobe flags on failed arm_kprobe
-Message-Id: <20220604000312.69f42c92e932152da256c2bb@kernel.org>
-In-Reply-To: <20220602073259.25669-1-nashuiliang@gmail.com>
-References: <20220602073259.25669-1-nashuiliang@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1654268690;
+        bh=lwutLgb9SNOCxmpQkrrPjmYr91eeRNJxGbGYmZ6+CXI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iaB3A9y22XEAuVmr8z1+mkmxwgdlJPj0cehin/oAo7lAZv+VKBCFWL6miUtnf8ujs
+         Mtdej2X1gwAEl38iXH9+AuFF+C7Sa6BJUJdvxNssnVqYekx4lsJ6eIN2b4knXyaLUS
+         MtlOcShlpCOOc6Azq1vbrbrx0H0hM7Mxy3Qegud69oF/SEh7/9pFYj4QBJWGyCN5QV
+         56F7gZUJSLjWHeD0XIpYiYLH9O59TR0ysJ6lJdlLzP6ziUNsrNQXuG3anlCo7+CFqp
+         jCpgAI9MGBTBujBasmglF4ZtdtN8dmpeX7X0vqLrZu5X6N3ETvCA8GRx+K2h6fEBbd
+         csNNWDlVwAi8g==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] x86/ftrace: Remove OBJECT_FILES_NON_STANDARD usage
+Date:   Fri,  3 Jun 2022 08:04:44 -0700
+Message-Id: <b7a7a42fe306aca37826043dac89e113a1acdbac.1654268610.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.34.3
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chuang,
+The file-wide OBJECT_FILES_NON_STANDARD annotation is used with
+CONFIG_FRAME_POINTER to tell objtool to skip the entire file when frame
+pointers are enabled.  However that annotation is now deprecated because
+it doesn't work with IBT, where objtool runs on vmlinux.o instead of
+individual translation units.
 
-On Thu,  2 Jun 2022 15:32:59 +0800
-Chuang <nashuiliang@gmail.com> wrote:
+Instead, use more fine-grained function-specific annotations:
 
-> From: Chuang Wang <nashuiliang@gmail.com>
-> 
-> In aggrprobe scenes, if arm_kprobe() returns an error(e.g. livepatch and
-> kprobe are using the same function X), kprobe flags, while has been
-> modified to ~KPROBE_FLAG_DISABLED, is not rollled back.
-> 
-> Then, __disable_kprobe() will be failed in __unregister_kprobe_top(),
-> the kprobe list will be not removed from aggrprobe, memory leaks or
-> illegal pointers will be caused.
-> 
-> WARN disarm_kprobe:
->  Failed to disarm kprobe-ftrace at 00000000c729fdbc (-2)
->  RIP: 0010:disarm_kprobe+0xcc/0x110
->  Call Trace:
->   __disable_kprobe+0x78/0x90
->   __unregister_kprobe_top+0x13/0x1b0
->   ? _cond_resched+0x15/0x30
->   unregister_kprobes+0x32/0x80
->   unregister_kprobe+0x1a/0x20
-> 
-> Illegal Pointers:
->  BUG: unable to handle kernel paging request at 0000000000656369
->  RIP: 0010:__get_valid_kprobe+0x69/0x90
->  Call Trace:
->   register_kprobe+0x30/0x60
->   __register_trace_kprobe.part.7+0x8b/0xc0
->   create_local_trace_kprobe+0xd2/0x130
->   perf_kprobe_init+0x83/0xd0
+- The 'save_mcount_regs' macro does funny things with the frame pointer.
+  Use STACK_FRAME_NON_STANDARD_FP to tell objtool to ignore the
+  functions using it.
 
-Oops, thanks for reporting!
+- The return_to_handler() "function" isn't actually a callable function.
+  Instead of being called, it's returned to.  The real return address
+  isn't on the stack, so unwinding is already doomed no matter which
+  unwinder is used.  So just remove the STT_FUNC annotation, telling
+  objtool to ignore it.  That also removes the implicit
+  ANNOTATE_NOENDBR, which now needs to be made explicit.
+
+Fixes the following warning:
+
+  vmlinux.o: warning: objtool: __fentry__+0x16: return with modified stack frame
+
+Fixes: ed53a0d97192 ("x86/alternative: Use .ibt_endbr_seal to seal indirect calls")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+v2:
+- fix return_to_handler()
+
+ arch/x86/kernel/Makefile      |  4 ----
+ arch/x86/kernel/ftrace_64.S   | 11 ++++++++---
+ include/linux/objtool.h       |  6 ++++++
+ tools/include/linux/objtool.h |  6 ++++++
+ 4 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 03364dc40d8d..4c8b6ae802ac 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -36,10 +36,6 @@ KCSAN_SANITIZE := n
  
-> Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
-> Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
-
-This should go to stable, so add below tag. (No need to CC to stable)
-
-Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
-Cc: stable@vger.kernel.org
-
-And could you also update this patch as below?
-
-> ---
->  kernel/kprobes.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index f214f8c088ed..96c75e23113c 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -2422,8 +2422,10 @@ int enable_kprobe(struct kprobe *kp)
->  	if (!kprobes_all_disarmed && kprobe_disabled(p)) {
->  		p->flags &= ~KPROBE_FLAG_DISABLED;
->  		ret = arm_kprobe(p);
-> -		if (ret)
-> +		if (ret) {
->  			p->flags |= KPROBE_FLAG_DISABLED;
-
-Here, can you add a check?
-
-	if (p != kp) 
-
-> +			kp->flags |= KPROBE_FLAG_DISABLED;
-
-Thus is is clear that this is corresponding to
----
-        if (p != kp)
-                kp->flags &= ~KPROBE_FLAG_DISABLED;
----
-
-Thank you,
-
-> +		}
->  	}
->  out:
->  	mutex_unlock(&kprobe_mutex);
-> -- 
-> 2.34.1
-> 
-
-
+ OBJECT_FILES_NON_STANDARD_test_nx.o			:= y
+ 
+-ifdef CONFIG_FRAME_POINTER
+-OBJECT_FILES_NON_STANDARD_ftrace_$(BITS).o		:= y
+-endif
+-
+ # If instrumentation of this dir is enabled, boot hangs during first second.
+ # Probably could be more selective here, but note that files related to irqs,
+ # boot, dumpstack/stacktrace, etc are either non-interesting or can lead to
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 4ec13608d3c6..dfeb227de561 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -175,6 +175,7 @@ SYM_INNER_LABEL(ftrace_caller_end, SYM_L_GLOBAL)
+ 
+ 	jmp ftrace_epilogue
+ SYM_FUNC_END(ftrace_caller);
++STACK_FRAME_NON_STANDARD_FP(ftrace_caller)
+ 
+ SYM_FUNC_START(ftrace_epilogue)
+ /*
+@@ -282,6 +283,7 @@ SYM_INNER_LABEL(ftrace_regs_caller_end, SYM_L_GLOBAL)
+ 	jmp	ftrace_epilogue
+ 
+ SYM_FUNC_END(ftrace_regs_caller)
++STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
+ 
+ 
+ #else /* ! CONFIG_DYNAMIC_FTRACE */
+@@ -311,10 +313,14 @@ trace:
+ 	jmp ftrace_stub
+ SYM_FUNC_END(__fentry__)
+ EXPORT_SYMBOL(__fentry__)
++STACK_FRAME_NON_STANDARD_FP(__fentry__)
++
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+-SYM_FUNC_START(return_to_handler)
++SYM_CODE_START(return_to_handler)
++	UNWIND_HINT_EMPTY
++	ANNOTATE_NOENDBR
+ 	subq  $16, %rsp
+ 
+ 	/* Save the return values */
+@@ -339,7 +345,6 @@ SYM_FUNC_START(return_to_handler)
+ 	int3
+ .Ldo_rop:
+ 	mov %rdi, (%rsp)
+-	UNWIND_HINT_FUNC
+ 	RET
+-SYM_FUNC_END(return_to_handler)
++SYM_CODE_END(return_to_handler)
+ #endif
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 6491fa8fba6d..15b940ec1eac 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -143,6 +143,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD_FP func:req
++#ifdef CONFIG_FRAME_POINTER
++	STACK_FRAME_NON_STANDARD \func
++#endif
++.endm
++
+ .macro ANNOTATE_NOENDBR
+ .Lhere_\@:
+ 	.pushsection .discard.noendbr
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index 6491fa8fba6d..15b940ec1eac 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -143,6 +143,12 @@ struct unwind_hint {
+ 	.popsection
+ .endm
+ 
++.macro STACK_FRAME_NON_STANDARD_FP func:req
++#ifdef CONFIG_FRAME_POINTER
++	STACK_FRAME_NON_STANDARD \func
++#endif
++.endm
++
+ .macro ANNOTATE_NOENDBR
+ .Lhere_\@:
+ 	.pushsection .discard.noendbr
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.3
+

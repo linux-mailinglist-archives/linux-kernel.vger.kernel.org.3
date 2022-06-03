@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B943053C1F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC7F53C297
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240000AbiFCA42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 20:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S241443AbiFCA4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 20:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240526AbiFCArS (ORCPT
+        with ESMTP id S240533AbiFCArS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 2 Jun 2022 20:47:18 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6C237BDB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:46:34 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id o8-20020a17090a9f8800b001dc9f554c7fso3522317pjp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:46:34 -0700 (PDT)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C6137BE1
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 17:46:35 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id q195-20020a632acc000000b003fcb9b2b053so2381439pgq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 17:46:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=+G2Mc4uEcLEuvE511QGrYZMpWnJKj8uJhsUqAFoxTaU=;
-        b=EBLFg8LOEt1v0b5uPUhfA/B0DzhK9G1oKVuAkjEz231j2/rvpCjYbhxnr5eI2uTCpm
-         EVEtevDkYmRjSs5HF+28JrrFY0iKWrPfZ9x5CTRqrRtdYei/6tMu2a6rUh3bNERJV6gJ
-         1opPS19FyXErT41xNTCistoenSWK/CKJVUXomQrc6xnNx/7ZJKQX1GL4oQh97/2KvITt
-         mMG+/ajz7BdHnzsaaFTE/YhdbcT2hljQpifggYUYszNeoNQ75aGvYDdcPvwCASW0hs7X
-         06vz263LGPlW61tCaUdpNrcnXU99u2H8Kc2tPNMudf1BnUY9icW3l0Eva7EA3eyNFRQp
-         PChA==
+        bh=TzsVyQIK/O28EG5/tdwYmklCNq7nGiihsFz4GFTB50s=;
+        b=cLt/uhXB96LpU36y2h1pirbmPq6hN1+4AyLY/fXuOFMZ8+dnUTZuQe8lsQFcee6DHr
+         SfF3icgvJRo/hPhSS1oOxKJVzwBpLHJYHax6+FvrXytfEBdm9AiPTCFNU99R8L8PzRhY
+         F3wg9wB50Pn+KvcKxxbvQXw7BrhqUPEKYmKpbQzgkp9Nk+nwdL6dBqM117vzfCtG6bjs
+         WcJy1cxv3eak/fgEfIXS1D+ivx++ZCJ9l6vLhQDpWvylyCOS6xV1SGVQGYUKavMQchYl
+         GtzjY76G8sKvA5v+tzaVjU/8ZfD9qzYpDmE4tGmkwRXs8EjqI3C+ud0ASzwznxCnvHj6
+         cSoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=+G2Mc4uEcLEuvE511QGrYZMpWnJKj8uJhsUqAFoxTaU=;
-        b=LjRQxJqDpDXPpML32/t+PyCjVjOZDB7RO307Wi+raYl6/nbYG2du0aLU7uQc5qBngX
-         paDyfnxnMPx93hFSBG3s2dzL762pFRQtEnMYotBRd5piQ5A6318DU3n1soOphSu8j5CT
-         PVQusT4MF8C/TZNsHfCKpS9AuV3xG2sXeMICMFbz17zFs0Mbe1ZMzzEgKrxoaPLZYCj3
-         QFlW5W7TSBk943VGImK+8475J2xII7UalR/eGvzQaDVOdm9xhoEZaMrXzqEEk+NDf5t7
-         nAvWFvDjF7QvKi+GnvB05MtgE+pnLYzydcRrrb8VfNEcQfegdHT6rBL6m9Q9btr61rz6
-         Ehow==
-X-Gm-Message-State: AOAM533X+1woqqiQ7D6LCl4FsDj0hhzE3vfoubo6oaz+3fM4/beRBOIC
-        TXQXniLNXZ1E7srCipudqqsK/HWZJCc=
-X-Google-Smtp-Source: ABdhPJweTcqTwf2ATxClTWmQRZJVLDRFJGLzBz9z4YK5OB+B7IeRWYC2yi9kbkHYoqLThNSOHLiFf9AQvjU=
+        bh=TzsVyQIK/O28EG5/tdwYmklCNq7nGiihsFz4GFTB50s=;
+        b=yGrN0luedIqhMFj6pmsRqN01rlk7RRCWO7Dy6vP6eOCzwS9a6MZQQUhiZ/8p6tYttZ
+         +Iy0HoOl3SySelbtHhPowDiWXkiHvMW1BadS0r4D/8dmoOKLL0SyGKKLzBqZwxge0Ifa
+         LHsE63tKQINC9FNZ3ipE+8TbWbfwzsAhBi9HBLmcZNEZVF51pQ6sbpsbHg2ERFZ7ngvJ
+         xIeuB/9gOp+rM7AV/24gd9NiU2fp5wy904zYXT6OB1S6QUYK9mjjR+92URngfi0Q9UF/
+         iJfvkZrvSjkwOy9fM/SL2aY5R4q4TNbt3TcZyZVJ6VslSdkRxIWle0Yi/Xl1BDxppuq+
+         Kxag==
+X-Gm-Message-State: AOAM531xk6XYbOgMU0DCC7TU78CJ4wNf1Arx/fV7prSzCjGgMAMYxkjO
+        pjvJG2in22sJwgpTQkrqK/ABN9tReNc=
+X-Google-Smtp-Source: ABdhPJxKA8IlkmPHgyiTRJyZ41ym7M8uaV1l6J9PmL26g+Me8IDHs1NRI2EFwhgbqL9wHJMeePZXkYasBAc=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90b:3841:b0:1e2:f16a:a117 with SMTP id
- nl1-20020a17090b384100b001e2f16aa117mr27262446pjb.130.1654217193862; Thu, 02
- Jun 2022 17:46:33 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a62:868c:0:b0:51b:bd62:4c87 with SMTP id
+ x134-20020a62868c000000b0051bbd624c87mr7619847pfd.83.1654217195407; Thu, 02
+ Jun 2022 17:46:35 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  3 Jun 2022 00:42:45 +0000
+Date:   Fri,  3 Jun 2022 00:42:46 +0000
 In-Reply-To: <20220603004331.1523888-1-seanjc@google.com>
-Message-Id: <20220603004331.1523888-99-seanjc@google.com>
+Message-Id: <20220603004331.1523888-100-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220603004331.1523888-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 098/144] KVM: selftests: Make arm64's guest_get_vcpuid()
- declaration arm64-only
+Subject: [PATCH v2 099/144] KVM: selftests: Move vm_is_unrestricted_guest() to x86-64
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -73,37 +72,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the declaration of guest_get_vcpuid() to include/aarch64/processor.h,
-it is implemented and used only by arm64.
+An "unrestricted guest" is an VMX-only concept, move the relevant helper
+to x86-64 code.  Assume most readers can correctly convert underscores to
+spaces and oppurtunistically trim the function comment.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/include/aarch64/processor.h | 2 ++
- tools/testing/selftests/kvm/include/kvm_util_base.h     | 2 --
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/kvm/include/kvm_util_base.h     |  2 --
+ .../selftests/kvm/include/x86_64/processor.h  |  1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 33 -------------------
+ .../selftests/kvm/lib/x86_64/processor.c      | 21 ++++++++++++
+ 4 files changed, 22 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/aarch64/processor.h b/tools/testing/selftests/kvm/include/aarch64/processor.h
-index 59ece9d4e0d1..4d2d474b6874 100644
---- a/tools/testing/selftests/kvm/include/aarch64/processor.h
-+++ b/tools/testing/selftests/kvm/include/aarch64/processor.h
-@@ -207,4 +207,6 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
- 	       uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
- 	       uint64_t arg6, struct arm_smccc_res *res);
- 
-+uint32_t guest_get_vcpuid(void);
-+
- #endif /* SELFTEST_KVM_PROCESSOR_H */
 diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index fbc54e920383..d94b6083d678 100644
+index d94b6083d678..5426de96e169 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -707,6 +707,4 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
+@@ -667,8 +667,6 @@ struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm);
+  */
+ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code);
  
- void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
- 
--uint32_t guest_get_vcpuid(void);
+-bool vm_is_unrestricted_guest(struct kvm_vm *vm);
 -
- #endif /* SELFTEST_KVM_UTIL_BASE_H */
+ unsigned int vm_get_page_size(struct kvm_vm *vm);
+ unsigned int vm_get_page_shift(struct kvm_vm *vm);
+ unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 1d46d60bb480..895d6974f7f5 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -526,6 +526,7 @@ static inline void vcpu_set_msr(struct kvm_vm *vm, uint32_t vcpuid,
+ uint32_t kvm_get_cpuid_max_basic(void);
+ uint32_t kvm_get_cpuid_max_extended(void);
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits);
++bool vm_is_unrestricted_guest(struct kvm_vm *vm);
+ 
+ struct ex_regs {
+ 	uint64_t rax, rcx, rdx, rbx;
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 8348fa19690a..5f0030257b05 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1948,39 +1948,6 @@ void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva)
+ 	return addr_gpa2hva(vm, addr_gva2gpa(vm, gva));
+ }
+ 
+-/*
+- * Is Unrestricted Guest
+- *
+- * Input Args:
+- *   vm - Virtual Machine
+- *
+- * Output Args: None
+- *
+- * Return: True if the unrestricted guest is set to 'Y', otherwise return false.
+- *
+- * Check if the unrestricted guest flag is enabled.
+- */
+-bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+-{
+-	char val = 'N';
+-	size_t count;
+-	FILE *f;
+-
+-	if (vm == NULL) {
+-		/* Ensure that the KVM vendor-specific module is loaded. */
+-		close(open_kvm_dev_path_or_exit());
+-	}
+-
+-	f = fopen("/sys/module/kvm_intel/parameters/unrestricted_guest", "r");
+-	if (f) {
+-		count = fread(&val, sizeof(char), 1, f);
+-		TEST_ASSERT(count == 1, "Unable to read from param file.");
+-		fclose(f);
+-	}
+-
+-	return val == 'Y';
+-}
+-
+ unsigned int vm_get_page_size(struct kvm_vm *vm)
+ {
+ 	return vm->page_size;
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 5c92e96300c5..67b9fb604594 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -1358,3 +1358,24 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
+ done:
+ 	return min(max_gfn, ht_gfn - 1);
+ }
++
++/* Returns true if kvm_intel was loaded with unrestricted_guest=1. */
++bool vm_is_unrestricted_guest(struct kvm_vm *vm)
++{
++	char val = 'N';
++	size_t count;
++	FILE *f;
++
++	/* Ensure that a KVM vendor-specific module is loaded. */
++	if (vm == NULL)
++		close(open_kvm_dev_path_or_exit());
++
++	f = fopen("/sys/module/kvm_intel/parameters/unrestricted_guest", "r");
++	if (f) {
++		count = fread(&val, sizeof(char), 1, f);
++		TEST_ASSERT(count == 1, "Unable to read from param file.");
++		fclose(f);
++	}
++
++	return val == 'Y';
++}
 -- 
 2.36.1.255.ge46751e96f-goog
 

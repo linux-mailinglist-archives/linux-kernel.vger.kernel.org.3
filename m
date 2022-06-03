@@ -2,153 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E787E53CC5B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AD053CC5E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245549AbiFCPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S245555AbiFCPgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242777AbiFCPeV (ORCPT
+        with ESMTP id S231142AbiFCPgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:34:21 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83A045500
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:34:20 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id j18-20020a056e02219200b002d3aff22b4cso6331584ila.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 08:34:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/5nuHQQHT2sCXiwzYSRm3GgReb0rjG8F9gT4TL+J8hU=;
-        b=hdUSh2dNixomR1FHTwXcDOKBDLS4FmDvI4xFGsva2Sy2leaJU2DxY25WxoKZWHhXBT
-         N28zIcIVm9zDVX6xbC1IlazjfNaiQSC5LVBP3i2Jyas9DhXu8gEdAM792MlimoNigOqy
-         8amdtj9PEsdwYOptRvu+ujt16pcHZac101U/c6uA18MtiZCSHexfliKmUr5VRY4q0qWE
-         LR8GOABya5vp99+31niCpjNBe+c5jlOnO4Fyi1kE/CgtvuC3GmQaTU5edEIxrmQYp5yq
-         lSQBZQ1VDgMBzU/iRKnopFYHqFjmlAL/KfWOkIbCWS86bn3VMM49jfAnC71b+wu6JP1t
-         ZePg==
-X-Gm-Message-State: AOAM530PnIr71OuZV5Wq2uhilr0obaR+/OLviM9QaIHGB8guAcFr0Qte
-        h3wWDaLD5re98FlxfV1gL5dn55XvaDc30WmJ5yy68L87gDIn
-X-Google-Smtp-Source: ABdhPJwaExqDRnW+4ewj0B4jM+plpdRGbTdtwVFfPwaWxlkonjabhfMddli8LA2zHoCtQlld6H1aRF4Pun+SfcnVkw8nLkcdUmGD
+        Fri, 3 Jun 2022 11:36:23 -0400
+Received: from mail.mutex.one (mail.mutex.one [62.77.152.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C5544A1C;
+        Fri,  3 Jun 2022 08:36:21 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.mutex.one (Postfix) with ESMTP id 9820B16C0076;
+        Fri,  3 Jun 2022 18:36:19 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at mail.mutex.one
+Received: from mail.mutex.one ([127.0.0.1])
+        by localhost (mail.mutex.one [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kEP0ZE0wriDL; Fri,  3 Jun 2022 18:36:18 +0300 (EEST)
+From:   Marian Postevca <posteuca@mutex.one>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mutex.one; s=default;
+        t=1654270578; bh=xpkzoKD+3NFGKOGZdS4+dLZEOE2yrpd76uIagdM6p7Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DT6HKYmZev2nPfWOf69FkYUiJbBxdpyessDtjcuP2bZLYYFw3G5PGHRCAQAhQSyYS
+         KC3VREYxmTSOQfS0QpHQceDNDEDmf9NQD4OHmGbReH3wR/TTXdeSwMVK2iJLGP1wmP
+         OqZBjxRJfNhCY1YhxQcTYjQCbnEnqM8N2GU4rFQA=
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Marian Postevca <posteuca@mutex.one>, stable@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: u_ether: fix regression in setting fixed MAC address
+Date:   Fri,  3 Jun 2022 18:34:59 +0300
+Message-Id: <20220603153459.32722-1-posteuca@mutex.one>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a4d:b0:2d3:d2d2:1f47 with SMTP id
- u13-20020a056e021a4d00b002d3d2d21f47mr6422611ilv.234.1654270460307; Fri, 03
- Jun 2022 08:34:20 -0700 (PDT)
-Date:   Fri, 03 Jun 2022 08:34:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000026328205e08cdbeb@google.com>
-Subject: [syzbot] WARNING: refcount bug in sk_psock_get (2)
-From:   syzbot <syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, borisp@nvidia.com,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, guwen@linux.alibaba.com,
-        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+In systemd systems setting a fixed MAC address through
+the "dev_addr" module argument fails systematically.
+When checking the MAC address after the interface is created
+it always has the same but different MAC address to the one
+supplied as argument.
 
-syzbot found the following issue on:
+This is partially caused by systemd which by default will
+set an internally generated permanent MAC address for interfaces
+that are marked as having a randomly generated address.
 
-HEAD commit:    7e062cda7d90 Merge tag 'net-next-5.19' of git://git.kernel..
-git tree:       net-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13e2c083f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2c9c27babb4d679
-dashboard link: https://syzkaller.appspot.com/bug?extid=5f26f85569bd179c18ce
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16f2520bf00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13c31fcbf00000
+Commit 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in
+setting MAC address in setup phase") didn't take into account
+the fact that the interface must be marked as having a set
+MAC address when it's set as module argument.
 
-The issue was bisected to:
+Fixed by marking the interface with NET_ADDR_SET when
+the "dev_addr" module argument is supplied.
 
-commit 341adeec9adad0874f29a0a1af35638207352a39
-Author: Wen Gu <guwen@linux.alibaba.com>
-Date:   Wed Jan 26 15:33:04 2022 +0000
-
-    net/smc: Forward wakeup to smc socket waitqueue after fallback
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12eb9635f00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=11eb9635f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=16eb9635f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5f26f85569bd179c18ce@syzkaller.appspotmail.com
-Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
-
-netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
-------------[ cut here ]------------
-refcount_t: saturated; leaking memory.
-WARNING: CPU: 1 PID: 3605 at lib/refcount.c:19 refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Modules linked in:
-CPU: 1 PID: 3605 Comm: syz-executor208 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:refcount_warn_saturate+0xf4/0x1e0 lib/refcount.c:19
-Code: 1d 58 b1 ac 09 31 ff 89 de e8 38 3d 80 fd 84 db 75 ab e8 4f 39 80 fd 48 c7 c7 e0 a3 27 8a c6 05 38 b1 ac 09 01 e8 62 c6 34 05 <0f> 0b eb 8f e8 33 39 80 fd 0f b6 1d 22 b1 ac 09 31 ff 89 de e8 03
-RSP: 0018:ffffc90002fcf9d0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888022543b00 RSI: ffffffff81606db8 RDI: fffff520005f9f2c
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff816000f9 R11: 0000000000000000 R12: 1ffff920005f9f3d
-R13: 0000000090965601 R14: ffff88807e9a0000 R15: ffffc90002fcfa08
-FS:  00005555567fa300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd252aa4300 CR3: 000000001994e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __refcount_add_not_zero include/linux/refcount.h:163 [inline]
- __refcount_inc_not_zero include/linux/refcount.h:227 [inline]
- refcount_inc_not_zero include/linux/refcount.h:245 [inline]
- sk_psock_get+0x3bc/0x410 include/linux/skmsg.h:439
- tls_data_ready+0x6d/0x1b0 net/tls/tls_sw.c:2091
- tcp_data_ready+0x106/0x520 net/ipv4/tcp_input.c:4983
- tcp_data_queue+0x25f2/0x4c90 net/ipv4/tcp_input.c:5057
- tcp_rcv_state_process+0x1774/0x4e80 net/ipv4/tcp_input.c:6659
- tcp_v4_do_rcv+0x339/0x980 net/ipv4/tcp_ipv4.c:1682
- sk_backlog_rcv include/net/sock.h:1061 [inline]
- __release_sock+0x134/0x3b0 net/core/sock.c:2849
- release_sock+0x54/0x1b0 net/core/sock.c:3404
- inet_shutdown+0x1e0/0x430 net/ipv4/af_inet.c:909
- __sys_shutdown_sock net/socket.c:2331 [inline]
- __sys_shutdown_sock net/socket.c:2325 [inline]
- __sys_shutdown+0xf1/0x1b0 net/socket.c:2343
- __do_sys_shutdown net/socket.c:2351 [inline]
- __se_sys_shutdown net/socket.c:2349 [inline]
- __x64_sys_shutdown+0x50/0x70 net/socket.c:2349
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7fbd68c61969
-Code: 28 c3 e8 4a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdfd5f2358 EFLAGS: 00000246 ORIG_RAX: 0000000000000030
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbd68c61969
-RDX: 00007fbd68c61969 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 0000000000000003 R08: bb1414ac00000000 R09: bb1414ac00000000
-R10: 0000000000000028 R11: 0000000000000246 R12: 00007ffdfd5f2370
-R13: 00007ffdfd5f2364 R14: 0000000000000003 R15: 0000000000000000
- </TASK>
-
-
+Fixes: 890d5b40908bfd1a ("usb: gadget: u_ether: fix race in setting MAC address in setup phase")
+Cc: stable@vger.kernel.org
+Signed-off-by: Marian Postevca <posteuca@mutex.one>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/gadget/function/u_ether.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index 6f5d45ef2e39a..f51694f29de92 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -775,9 +775,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
+ 	dev->qmult = qmult;
+ 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+ 
+-	if (get_ether_addr(dev_addr, addr))
++	if (get_ether_addr(dev_addr, addr)) {
++		net->addr_assign_type = NET_ADDR_RANDOM;
+ 		dev_warn(&g->dev,
+ 			"using random %s ethernet address\n", "self");
++	} else {
++		net->addr_assign_type = NET_ADDR_SET;
++	}
+ 	eth_hw_addr_set(net, addr);
+ 	if (get_ether_addr(host_addr, dev->host_mac))
+ 		dev_warn(&g->dev,
+@@ -844,6 +848,10 @@ struct net_device *gether_setup_name_default(const char *netname)
+ 
+ 	eth_random_addr(dev->dev_mac);
+ 	pr_warn("using random %s ethernet address\n", "self");
++
++	/* by default we always have a random MAC address */
++	net->addr_assign_type = NET_ADDR_RANDOM;
++
+ 	eth_random_addr(dev->host_mac);
+ 	pr_warn("using random %s ethernet address\n", "host");
+ 
+@@ -871,7 +879,6 @@ int gether_register_netdev(struct net_device *net)
+ 	dev = netdev_priv(net);
+ 	g = dev->gadget;
+ 
+-	net->addr_assign_type = NET_ADDR_RANDOM;
+ 	eth_hw_addr_set(net, dev->dev_mac);
+ 
+ 	status = register_netdev(net);
+@@ -912,6 +919,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
+ 	if (get_ether_addr(dev_addr, new_addr))
+ 		return -EINVAL;
+ 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
++	net->addr_assign_type = NET_ADDR_SET;
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(gether_set_dev_addr);
+-- 
+2.35.1
+

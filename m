@@ -2,143 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1365653CD1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B5153CD00
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 18:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343872AbiFCQWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 12:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S1343704AbiFCQOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 12:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343851AbiFCQWw (ORCPT
+        with ESMTP id S1343694AbiFCQOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 12:22:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA90D255B2;
-        Fri,  3 Jun 2022 09:22:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 3 Jun 2022 12:14:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3515B5132A;
+        Fri,  3 Jun 2022 09:14:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D8E051F8E4;
-        Fri,  3 Jun 2022 16:22:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654273369; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t/+AtZ+IDbMv3UT/dcTShtZtPHWiyNk8125DJlO9QaU=;
-        b=gMXET3lNPzF+uYOE4KQQ13gAYVSdhjnCHMidX2X6ERv+OQELUk+fiFAs5NMDvVYkmPyj+G
-        bDHyo+CLTowgn6Y4QEEVUTMkaSWcM3hnO7cLlI5AclJClQaxevRMRsRNoei+DxSv/BqJEO
-        7nQl4ugDZ6y4D/4PlNbi6+FM2AHu8LQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 62F0513AA2;
-        Fri,  3 Jun 2022 16:22:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Kw81F1k1mmLgQgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 03 Jun 2022 16:22:49 +0000
-Date:   Fri, 3 Jun 2022 18:22:48 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 0/5] bpf: rstat: cgroup hierarchical stats
-Message-ID: <20220603162247.GC16134@blackbody.suse.cz>
-References: <20220520012133.1217211-1-yosryahmed@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6DDB6198C;
+        Fri,  3 Jun 2022 16:14:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53D9C385B8;
+        Fri,  3 Jun 2022 16:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654272847;
+        bh=Pf4UcvShu0d5b4Z8DwPTXDYV1z+qP0sFlyeLVxRBXSo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d1OoTOg/qodrgQrJAE2Sh+7Yi37UqzTpHqqhe5NEpoX6lVZLpQxDx+scr8cz4Yw8h
+         xLmm5362E0JEgJz0Qic0zMGX77hVWEwt9C0cU9yoABidKs145CZhecnZOULysPIjOB
+         ughLCrsomLoOSfeYI3Upx2RKdq7Lb1vmZetbH2cEYjd217Sj4O/IIvP0DW+Jgj+96h
+         1LPSkG3ftX+L3FWTZNF2duJbbhJ1NkN6FhB/XZ+2zOCcWTjBvuoxPo4wmyERnzcvKK
+         bDCwsCuvzx1XstuTResiKIXutY/9YSt8bKgktDnu5P1yyoFwF1HMIyCN3JNWo33lCe
+         ZG6apUliTWlig==
+Date:   Fri, 3 Jun 2022 17:23:07 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v3 1/6] iio: adc: meson_saradc: Don't attach managed
+ resource to IIO device object
+Message-ID: <20220603172307.5d2f3c52@jic23-huawei>
+In-Reply-To: <20220603170612.561edfbf@jic23-huawei>
+References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
+        <20220603170612.561edfbf@jic23-huawei>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520012133.1217211-1-yosryahmed@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yosry et al.
+On Fri, 3 Jun 2022 17:06:12 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-This is an interesting piece of work, I'll add some questions and
-comments.
+> On Fri,  3 Jun 2022 12:59:59 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > It feels wrong and actually inconsistent to attach managed resources
+> > to the IIO device object, which is child of the physical device object.
+> > The rest of the ->probe() calls do that against physical device.
+> > 
+> > Resolve this by reassigning managed resources to the physical device object.
+> > 
+> > Fixes: 3adbf3427330 ("iio: adc: add a driver for the SAR ADC found in Amlogic Meson SoCs")
+> > Suggested-by: Lars-Peter Clausen <lars@metafoo.de>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
+> Hi Andy,
+> 
+> This has come up a few times in the past (and we elected to not clean it up
+> at the time, though it wasn't a decision to never do so!)
+> 
+> It would definitely be wrong if we had another driver binding against
+> the resulting created device (funnily enough I reported a bug on a driver
+> doing just that earlier this week), but in this case it's harmless because the
+> the tear down will occur with a put_device() ultimately calling device_release()
+> and devres_release_all()
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/base/core.c#L2211
+> 
+> Has a comment that covers this case (more or less).
+> "
+> 	 * Some platform devices are driven without driver attached
+> 	 * and managed resources may have been acquired.  Make sure
+> 	 * all resources are released.
+> "
+> 
+> Now, I definitely agree with your statement that it's a bit inconsistent to
+> do this, just not the fixes tag.
+> 
+> One other suggestion below.
+> 
+> 
+> > ---
+> > v3: new fix-patch
+> >  drivers/iio/adc/meson_saradc.c | 12 +++++-------
+> >  1 file changed, 5 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
+> > index 62cc6fb0ef85..4fe6b997cd03 100644
+> > --- a/drivers/iio/adc/meson_saradc.c
+> > +++ b/drivers/iio/adc/meson_saradc.c
+> > @@ -650,11 +650,11 @@ static int meson_sar_adc_clk_init(struct iio_dev *indio_dev,
+> >  				  void __iomem *base)
+> >  {
+> >  	struct meson_sar_adc_priv *priv = iio_priv(indio_dev);
+> > +	struct device *dev = indio_dev->dev.parent;  
+> 
+> I'd slightly prefer the device was passed in explicitly to this function rather
+> than using the parent assignment which feels a little fragile. 
 
-On Fri, May 20, 2022 at 01:21:28AM +0000, Yosry Ahmed <yosryahmed@google.com> wrote:
-> This patch series allows for using bpf to collect hierarchical cgroup
-> stats efficiently by integrating with the rstat framework. The rstat
-> framework provides an efficient way to collect cgroup stats and
-> propagate them through the cgroup hierarchy.
+Meh, ignore this. I see from one of the later patches, the driver is already
+making the assumption this is set in other calls, so we aren't making anything
+worse with this change.
 
-About the efficiency. Do you have any numbers or examples?
-IIUC the idea is to utilize the cgroup's rstat subgraph of full tree
-when flushing.
-I was looking at your selftest example and the measuring hooks call
-cgroup_rstat_updated() and they also allocate an entry bpf_map[cg_id].
-The flush callback then looks up the cg_id for cgroups in the rstat
-subgraph.
-(I'm not familiar with bpf_map implementation or performance but I
-imagine, you're potentially one step away from erasing bpf_map[cg_id] in
-the flush callback.)
-It seems to me that you're building a parallel structure (inside
-bpf_map(s)) with similar purpose to the rstat subgraph.
+Jonathan
 
-So I wonder whether there remains any benefit of coupling this with
-rstat?
+> 
+> 
+> >  	struct clk_init_data init;
+> >  	const char *clk_parents[1];
+> >  
+> > -	init.name = devm_kasprintf(&indio_dev->dev, GFP_KERNEL, "%s#adc_div",
+> > -				   dev_name(indio_dev->dev.parent));
+> > +	init.name = devm_kasprintf(dev, GFP_KERNEL, "%s#adc_div", dev_name(dev));
+> >  	if (!init.name)
+> >  		return -ENOMEM;
+> >  
+> > @@ -670,13 +670,11 @@ static int meson_sar_adc_clk_init(struct iio_dev *indio_dev,
+> >  	priv->clk_div.hw.init = &init;
+> >  	priv->clk_div.flags = 0;
+> >  
+> > -	priv->adc_div_clk = devm_clk_register(&indio_dev->dev,
+> > -					      &priv->clk_div.hw);
+> > +	priv->adc_div_clk = devm_clk_register(dev, &priv->clk_div.hw);
+> >  	if (WARN_ON(IS_ERR(priv->adc_div_clk)))
+> >  		return PTR_ERR(priv->adc_div_clk);
+> >  
+> > -	init.name = devm_kasprintf(&indio_dev->dev, GFP_KERNEL, "%s#adc_en",
+> > -				   dev_name(indio_dev->dev.parent));
+> > +	init.name = devm_kasprintf(dev, GFP_KERNEL, "%s#adc_en", dev_name(dev));
+> >  	if (!init.name)
+> >  		return -ENOMEM;
+> >  
+> > @@ -690,7 +688,7 @@ static int meson_sar_adc_clk_init(struct iio_dev *indio_dev,
+> >  	priv->clk_gate.bit_idx = __ffs(MESON_SAR_ADC_REG3_CLK_EN);
+> >  	priv->clk_gate.hw.init = &init;
+> >  
+> > -	priv->adc_clk = devm_clk_register(&indio_dev->dev, &priv->clk_gate.hw);
+> > +	priv->adc_clk = devm_clk_register(dev, &priv->clk_gate.hw);
+> >  	if (WARN_ON(IS_ERR(priv->adc_clk)))
+> >  		return PTR_ERR(priv->adc_clk);
+> >    
+> 
 
-
-Also, I'd expect the custom-processed data are useful in the
-structured form (within bpf_maps) but then there's the cgroup iter thing
-that takes available data and "flattens" them into text files.
-I see this was discussed in subthreads already so it's not necessary to
-return to it. IIUC you somehow intend to provide the custom info via the
-text files. If that's true, I'd include that in the next cover message
-(the purpose of the iterator).
-
-
-> * The second patch adds cgroup_rstat_updated() and cgorup_rstat_flush()
-> kfuncs, to allow bpf stat collectors and readers to communicate with rstat.
-
-kfunc means that it can be just called from any BPF program?
-(I'm thinking of an unprivileged user who issues cgroup_rstat_updated()
-deep down in the hierarchy repeatedly just to "spam" the rstat subgraph
-(which slows down flushers above). Arguably, this can be done already
-e.g. by causing certain MM events, so I'd like to just clarify if this
-can be a new source of such arbitrary updates.)
-
-> * The third patch is actually v2 of a previously submitted patch [1]
-> by Hao Luo. We agreed that it fits better as a part of this series. It
-> introduces cgroup_iter programs that can dump stats for cgroups to
-> userspace.
-> v1 - > v2:
-> - Getting the cgroup's reference at the time at attaching, instead of
->   at the time when iterating. (Yonghong) (context [1])
-
-I noticed you take the reference to cgroup, that's fine.
-But the demo program also accesses via RCU pointers
-(memory_subsys_enabled():cgroup->subsys).
-Again, my BPF ignorance here, does the iterator framework somehow take
-care of RCU locks?
-
-
-Thanks,
-Michal

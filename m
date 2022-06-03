@@ -2,169 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D6853CC7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298E353CC8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245627AbiFCPoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S245677AbiFCPs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiFCPn4 (ORCPT
+        with ESMTP id S236200AbiFCPs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:43:56 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FAC6241;
-        Fri,  3 Jun 2022 08:43:53 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LF6WC5jGqz67yLV;
-        Fri,  3 Jun 2022 23:39:19 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 3 Jun 2022 17:43:51 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Fri, 3 Jun 2022 17:43:51 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     KP Singh <kpsingh@kernel.org>
-CC:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
- verification on map values
-Thread-Topic: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
- verification on map values
-Thread-Index: AQHYcDpckKyFNQT2PU2oWx8V6Vr5oK09gwmAgAAxm2CAAAOQgIAAJWng
-Date:   Fri, 3 Jun 2022 15:43:51 +0000
-Message-ID: <cfaafb3af5be40ec80f14e134a5702cf@huawei.com>
-References: <20220525132115.896698-1-roberto.sassu@huawei.com>
- <20220525132115.896698-2-roberto.sassu@huawei.com>
- <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
- <89db5543066f4dccbfebd78ed3c025e7@huawei.com>
- <CACYkzJ4uD_k6sDktVaxkE_1QtSphZm+Rhjk4wrMm71LcmWRJ0w@mail.gmail.com>
-In-Reply-To: <CACYkzJ4uD_k6sDktVaxkE_1QtSphZm+Rhjk4wrMm71LcmWRJ0w@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
+        Fri, 3 Jun 2022 11:48:56 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6104A506C6
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:48:55 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220603154849epoutp026beee000557b359b7f199be4139043a2~1JwKGjkKS1535315353epoutp02v
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 15:48:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220603154849epoutp026beee000557b359b7f199be4139043a2~1JwKGjkKS1535315353epoutp02v
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1654271329;
+        bh=sWWYrw8VuDqq0QJl4Hk/RiH6NmDQDCjSyYfztasWBHg=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=cNKhGOOiBVesRNzVFAgZlk361F2KS8KE/ELmCThwKpuX4bM9dEAmgfQu9W7EEo/3i
+         4sHZAiuNG/teVUASZQ5AlrewtKrW5vJeGjZBp2xqQZ3Xp9hI8QcmX0UvdqVOkYKxuk
+         f1YAMXP8k3mDWC03fagu9z5vCOgoHAWDCHDbhf/U=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220603154848epcas5p3fed8acf433e416fbf58724035fb37585~1JwIvjFdL1875418754epcas5p3a;
+        Fri,  3 Jun 2022 15:48:48 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4LF6k60MFLz4x9Pp; Fri,  3 Jun
+        2022 15:48:46 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        78.A8.10063.D5D2A926; Sat,  4 Jun 2022 00:48:45 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220603154845epcas5p1b3eaea1ae6bc67e3d4c22d235102a6a8~1JwF1uals1285712857epcas5p1M;
+        Fri,  3 Jun 2022 15:48:45 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220603154845epsmtrp18f7ec9b783423038d6157dcd70616069~1JwF0ziba2840728407epsmtrp1O;
+        Fri,  3 Jun 2022 15:48:45 +0000 (GMT)
+X-AuditID: b6c32a49-4cbff7000000274f-2f-629a2d5dcd61
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C2.6C.11276.D5D2A926; Sat,  4 Jun 2022 00:48:45 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220603154842epsmtip1c73f572840caa46a8a536637525cf71d~1JwCuMgLa1990619906epsmtip1h;
+        Fri,  3 Jun 2022 15:48:41 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, chanho61.park@samsung.com,
+        pankaj.dubey@samsung.com, Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v2 0/7] Add support for UFS controller found in FSD SoC
+Date:   Fri,  3 Jun 2022 21:17:07 +0530
+Message-Id: <20220603154714.30532-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmlm6s7qwkg2U/zSwezNvGZvHy51U2
+        i2kffjJbXN6vbTH/yDlWi74XD5ktNj2+xmpxedccNosJq76xWHRf38Fmsfz4PyaLRVu/sFu0
+        7j3CbrHzzglmBz6Py1e8PTat6mTzuHNtD5vH5iX1Hh+f3mLx6NuyitHj8yY5j/YD3UwBHFHZ
+        NhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAVysplCXm
+        lAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL89L18lJLrAwNDIxMgQoTsjPe
+        HUgqeMRTsfjVH8YGxiecXYycHBICJhLbH61l7GLk4hAS2M0o8ev+N2YI5xOjxI51r1ggnG+M
+        ElPmnGSBaVm++DcbRGIvo8ShS29ZQRJCAi1MEvsmeYPYbALaEnenb2ECKRIRaGaUONixC8xh
+        Fuhjklhy+zZYh7CAu8S/Iw1ACzk4WARUJdbMZgYJ8wrYSKx8uogJYpu8xOoNB8BukhD4yS5x
+        bc1DVoiEi8TR1iZmCFtY4tXxLewQtpTEy/42dpCZEgIeEov+SEGEMyTeLl/PCGHbSxy4MocF
+        pIRZQFNi/S59kDCzAJ9E7+8nTBCdvBIdbUIQ1aoSze+uQv0uLTGxuxvqAA+J3pnnmSFej5XY
+        POcI4wRGmVkIQxcwMq5ilEwtKM5NTy02LTDMSy2HR01yfu4mRnDy0/LcwXj3wQe9Q4xMHIyH
+        GCU4mJVEeMvmzUwS4k1JrKxKLcqPLyrNSS0+xGgKDKSJzFKiyfnA9JtXEm9oYmlgYmZmZmJp
+        bGaoJM4r8L8xSUggPbEkNTs1tSC1CKaPiYNTqoGp7nOUXaxh4e2pMg+FklQbUlYaS6YlKvmz
+        qSWfXVbY83R3cNsJUYfJeW7NH+yLn7hPbGqZZdZryfrQWfCtkIH0/aUCFWdn/c9sia05Jlnv
+        W/g/jVfc295KcVrvhaofiQ/ywlwqMr+aSbnP9ef8M13viEdQaMW3xUGTTkSw3g3J/BuivTK4
+        skN+xu0NHxqmtwZc0gu4I+b43r9rO/sMgT0CvskX1fR27F33ZBOXeGBK3erpjgsdJhV7HzdZ
+        P9X48v3sKQu/Toq5EKTkVKKf6pux/rhxzscdL0w0GsJlao2DMvakBk5wXGWwa5LJ/dutC85F
+        +r8UX2nOveXc/sbJ/fyX2Q1dnllv9jQxveugosRSnJFoqMVcVJwIAL/cWcMHBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLLMWRmVeSWpSXmKPExsWy7bCSnG6s7qwkgwNP+SwezNvGZvHy51U2
+        i2kffjJbXN6vbTH/yDlWi74XD5ktNj2+xmpxedccNosJq76xWHRf38Fmsfz4PyaLRVu/sFu0
+        7j3CbrHzzglmBz6Py1e8PTat6mTzuHNtD5vH5iX1Hh+f3mLx6NuyitHj8yY5j/YD3UwBHFFc
+        NimpOZllqUX6dglcGe8OJBU84qlY/OoPYwPjE84uRk4OCQETieWLf7N1MXJxCAnsZpS40bqF
+        DSIhLXF94wR2CFtYYuW/5+wQRU1MErs/LGQFSbAJaEvcnb6FCcQWEWhnlLi/HWwSs8AsJon3
+        k54wgiSEBdwl/h1pYO5i5OBgEVCVWDObGSTMK2AjsfLpIiaIBfISqzccYJ7AyLOAkWEVo2Rq
+        QXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZwiGpp7mDcvuqD3iFGJg7GQ4wSHMxKIrxl82Ym
+        CfGmJFZWpRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1tSC1CCbLxMEp1cBkM+0Sg1fQ
+        y5lanK5OZx4s4IjSKz1Skvqt1bbQZtL+UyrbGxYmucWHHTZgPijpbKH7cJpJtOg2RsOZG79U
+        b0qq3WjYWaPWYTlrrtnDaHbz/1bfUlemhWrEsD2Pnhb7827pxudT05Z61iha8JiKiS19tj9E
+        aHmcj0HL5P0i/z994f9RJJZkNvXu6e8N3r81XN/OvW1cr7mPrfem38/ZF12KH6lvL9h/jnPG
+        7CWx7YKV1ka8dROzHz4vPf36vcmU/bq/96Ux3bHw2PKA2X6J289DfzOaxD8Znf7e13RX45t2
+        y46t9yXdSqwvyG2YHzC/RGLt9Z5pi8wOSWb/tb2tLZdeHvfjya2V/HfWac+dKvJNiaU4I9FQ
+        i7moOBEAyqhF2MACAAA=
+X-CMS-MailID: 20220603154845epcas5p1b3eaea1ae6bc67e3d4c22d235102a6a8
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+CMS-TYPE: 105P
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CMS-RootMailID: 20220603154845epcas5p1b3eaea1ae6bc67e3d4c22d235102a6a8
+References: <CGME20220603154845epcas5p1b3eaea1ae6bc67e3d4c22d235102a6a8@epcas5p1.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBLUCBTaW5naCBbbWFpbHRvOmtwc2luZ2hAa2VybmVsLm9yZ10NCj4gU2VudDogRnJp
-ZGF5LCBKdW5lIDMsIDIwMjIgNToxOCBQTQ0KPiBPbiBGcmksIEp1biAzLCAyMDIyIGF0IDM6MTEg
-UE0gUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBodWF3ZWkuY29tPg0KPiB3cm90ZToNCj4g
-Pg0KPiA+ID4gRnJvbTogS1AgU2luZ2ggW21haWx0bzprcHNpbmdoQGtlcm5lbC5vcmddDQo+ID4g
-PiBTZW50OiBGcmlkYXksIEp1bmUgMywgMjAyMiAyOjA4IFBNDQo+ID4gPiBPbiBXZWQsIE1heSAy
-NSwgMjAyMiBhdCAzOjIxIFBNIFJvYmVydG8gU2Fzc3UNCj4gPHJvYmVydG8uc2Fzc3VAaHVhd2Vp
-LmNvbT4NCj4gPiA+IHdyb3RlOg0KPiA+ID4gPg0KPiA+ID4gPiBJbiBzb21lIGNhc2VzLCBpdCBp
-cyBkZXNpcmFibGUgdG8gZW5zdXJlIHRoYXQgYSBtYXAgY29udGFpbnMgZGF0YSBmcm9tDQo+ID4g
-PiA+IGF1dGhlbnRpY2F0ZWQgc291cmNlcywgZm9yIGV4YW1wbGUgaWYgbWFwIGRhdGEgYXJlIHVz
-ZWQgZm9yIG1ha2luZw0KPiBzZWN1cml0eQ0KPiA+ID4gPiBkZWNpc2lvbnMuDQo+ID4gPg0KPiA+
-ID4gSSBhbSBndWVzc2luZyB0aGlzIGNvbWVzIGZyb20gdGhlIGRpc2N1c3Npb24gd2UgaGFkIGFi
-b3V0IGRpZ2lsaW0uDQo+ID4gPiBJIHJlbWVtYmVyIHdlIGRpc2N1c3NlZCBhIEJQRiBoZWxwZXIg
-dGhhdCBjb3VsZCB2ZXJpZnkgc2lnbmF0dXJlcy4NCj4gPiA+IFdoeSB3b3VsZCB0aGF0IGFwcHJv
-YWNoIG5vdCB3b3JrPw0KPiA+DQo+ID4gVGhlIG1haW4gcmVhc29uIGlzIHRoYXQgc2lnbmF0dXJl
-IHZlcmlmaWNhdGlvbiBjYW4gYmUgZG9uZSBhbHNvDQo+ID4gZm9yIG5vbi1zbGVlcGFibGUgaG9v
-a3MuIEZvciBleGFtcGxlLCBvbmUgaXMgZmV4aXQvYXJyYXlfbWFwX3VwZGF0ZV9lbGVtLg0KPiAN
-Cj4gRm9yIHlvdXIgdXNlLWNhc2UsIHdoeSBpcyBpdCBub3QgcG9zc2libGUgdG8gaG9vayB0aGUg
-TFNNIGhvb2sgImJwZiINCj4gaS5lIHNlY3VyaXR5X2JwZiBhbmQgdGhlbiBjaGVjayBpZiB0aGVy
-ZSBpcyBhIE1BUF9VUERBVEVfRUxFTSBvcGVyYXRpb24/DQoNCkl0IHdvdWxkIHJlcXVpcmUgdGhl
-IGZvbGxvd2luZzogYSBuZXcgaGVscGVyIHRvIGNvbXBhcmUgdGhlIHVzZXIgc3BhY2UNCmZkIHdp
-dGggdGhlIGFkZHJlc3Mgb2YgdGhlIG1hcCBpbiB0aGUgZUJQRiBwcm9ncmFtOyBjb3B5IGRhdGEg
-ZnJvbQ0KdXNlciBzcGFjZSB0byBrZXJuZWwgc3BhY2UgKHZlcmlmeV9wa2NzN19zaWduYXR1cmVJ
-KCkgZXhwZWN0cyBrZXJuZWwNCm1lbW9yeSkuIFRoYXQgY29weSB3b3VsZCBoYXBwZW4gdHdpY2Uu
-DQoNCj4gPiBDdXJyZW50bHkgdGhlIGhlbHBlciBpbiBwYXRjaCAyIGp1c3QgcmV0dXJucyB0aGUg
-c2l6ZSBvZiB2ZXJpZmllZCBkYXRhLg0KPiA+IFdpdGggYW4gYWRkaXRpb25hbCBwYXJhbWV0ZXIs
-IGl0IGNvdWxkIGFsc28gYmUgdXNlZCBhcyBhIGhlbHBlciBmb3INCj4gPiBzaWduYXR1cmUgdmVy
-aWZpY2F0aW9uIGJ5IGFueSBlQlBGIHByb2dyYW1zLg0KPiA+DQo+IA0KPiBZb3VyIGJwZl9tYXBf
-dmVyaWZ5X3ZhbHVlX3NpZyBoYXJkIGNvZGVzIHRoZSB0eXBlIG9mIHNpZ25hdHVyZQ0KPiAoYnBm
-X21hcF92ZXJpZnlfdmFsdWVfc2lnIGFzIHZlcmlmeV9wa2NzN19zaWduYXR1cmUpDQo+IGl0cyBp
-bXBsZW1lbnRhdGlvbi4gVGhpcyBpcyBub3QgZXh0ZW5zaWJsZS4NCg0KSXQgaXMgaGFyZGNvZGVk
-IG5vdywgYnV0IGl0IHdvdWxkbid0IGlmIHRoZXJlIGFyZSBtb3JlIHZlcmlmaWNhdGlvbg0KZnVu
-Y3Rpb25zLiBGb3IgZXhhbXBsZSwgaWYgJ2lkX3R5cGUnIG9mIG1vZHVsZV9zaWduYXR1cmUgaXMg
-c2V0DQp0byBQS0VZX0lEX1BHUCwgYnBmX21hcF92ZXJpZnlfdmFsdWVfc2lnKCkgd291bGQgY2Fs
-bA0KdmVyaWZ5X3BncF9zaWduYXR1cmUoKSAoYXNzdW1pbmcgdGhhdCBzdXBwb3J0IGZvciBQR1Ag
-a2V5cyBhbmQNCnNpZ25hdHVyZXMgaXMgYWRkZWQgdG8gdGhlIGtlcm5lbCkuDQoNClJvYmVydG8N
-Cg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFn
-aW5nIERpcmVjdG9yOiBMaSBQZW5nLCBZYW5nIFhpLCBMaSBIZQ0KDQo+IFdoYXQgd2UgZGlzY3Vz
-c2VkIHdhcyBhbiBleHRlbnNpYmxlIGhlbHBlciB0aGF0IGNhbiBiZSB1c2VkIGZvcg0KPiBkaWZm
-ZXJlbnQgc2lnbmF0dXJlIHR5cGVzLg0KPiANCj4gPiBUbyBiZSBob25lc3QsIEkgbGlrZSBtb3Jl
-IHRoZSBpZGVhIG9mIGEgbWFwIGZsYWcsIGFzIGl0IGlzIG1vcmUNCj4gPiBjbGVhciB0aGF0IHNp
-Z25hdHVyZSB2ZXJpZmljYXRpb24gaXMgYmVpbmcgZG9uZS4gT3RoZXJ3aXNlLA0KPiA+IHdlIHdv
-dWxkIG5lZWQgdG8gaW5mZXIgaXQgZnJvbSB0aGUgZUJQRiBwcm9ncmFtIGNvZGUuDQo+ID4NCj4g
-PiBUaGFua3MNCj4gPg0KPiA+IFJvYmVydG8NCj4gPg0KPiA+IEhVQVdFSSBURUNITk9MT0dJRVMg
-RHVlc3NlbGRvcmYgR21iSCwgSFJCIDU2MDYzDQo+ID4gTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBl
-bmcsIFlhbmcgWGksIExpIEhlDQo+ID4NCj4gPiA+ID4gU3VjaCByZXN0cmljdGlvbiBpcyBhY2hp
-ZXZlZCBieSB2ZXJpZnlpbmcgdGhlIHNpZ25hdHVyZSBvZiBtYXAgdmFsdWVzLCBhdA0KPiA+ID4g
-PiB0aGUgdGltZSB0aG9zZSB2YWx1ZXMgYXJlIGFkZGVkIHRvIHRoZSBtYXAgd2l0aCB0aGUgYnBm
-KCkgc3lzdGVtIGNhbGwNCj4gKG1vcmUNCj4gPiA+ID4gc3BlY2lmaWNhbGx5LCB3aGVuIHRoZSBj
-b21tYW5kcyBwYXNzZWQgdG8gYnBmKCkgYXJlDQo+IEJQRl9NQVBfVVBEQVRFX0VMRU0NCj4gPiA+
-IG9yDQo+ID4gPiA+IEJQRl9NQVBfVVBEQVRFX0JBVENIKS4gTW1hcHBhYmxlIG1hcHMgYXJlIG5v
-dCBhbGxvd2VkIGluIHRoaXMNCj4gY2FzZS4NCj4gPiA+ID4NCj4gPiA+ID4gU2lnbmF0dXJlIHZl
-cmlmaWNhdGlvbiBpcyBpbml0aWFsbHkgZG9uZSB3aXRoIGtleXMgaW4gdGhlIHByaW1hcnkgYW5k
-DQo+ID4gPiA+IHNlY29uZGFyeSBrZXJuZWwga2V5cmluZ3MsIHNpbWlsYXJseSB0byBrZXJuZWwg
-bW9kdWxlcy4gVGhpcyBhbGxvd3Mgc3lzdGVtDQo+ID4gPiA+IG93bmVycyB0byBlbmZvcmNlIGEg
-c3lzdGVtLXdpZGUgcG9saWN5IGJhc2VkIG9uIHRoZSBrZXlzIHRoZXkgdHJ1c3QuDQo+ID4gPiA+
-IFN1cHBvcnQgZm9yIGFkZGl0aW9uYWwga2V5cmluZ3MgY291bGQgYmUgYWRkZWQgbGF0ZXIsIGJh
-c2VkIG9uIHVzZSBjYXNlDQo+ID4gPiA+IG5lZWRzLg0KPiA+ID4gPg0KPiA+ID4gPiBTaWduYXR1
-cmUgdmVyaWZpY2F0aW9uIGlzIGRvbmUgb25seSBmb3IgdGhvc2UgbWFwcyBmb3Igd2hpY2ggdGhl
-IG5ldyBtYXANCj4gPiA+ID4gZmxhZyBCUEZfRl9WRVJJRllfRUxFTSBpcyBzZXQuIFdoZW4gdGhl
-IGZsYWcgaXMgc2V0LCB0aGUga2VybmVsIGV4cGVjdHMNCj4gbWFwDQo+ID4gPiA+IHZhbHVlcyB0
-byBiZSBpbiB0aGUgZm9sbG93aW5nIGZvcm1hdDoNCj4gPiA+ID4NCj4gPiA+ID4gKy0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tKy0tLS0tKy0tLS0tLS0tLS0t
-LS0tLS0tKw0KPiA+ID4gPiB8IHZlcmlmaWVkIGRhdGErc2lnIHNpemUgKGJlMzIpIHwgdmVyaWZp
-ZWQgZGF0YSB8IHNpZyB8IHVudmVyaWZpZWQgZGF0YSB8DQo+ID4gPiA+ICstLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tKy0tLS0tLS0tLS0tLS0tLSstLS0tLSstLS0tLS0tLS0tLS0tLS0t
-LSsNCj4gPiA+ID4NCj4gPiA+ID4gd2hlcmUgc2lnIGlzIGEgbW9kdWxlLXN0eWxlIGFwcGVuZGVk
-IHNpZ25hdHVyZSBhcyBnZW5lcmF0ZWQgYnkgdGhlDQo+ID4gPiA+IHNpZ24tZmlsZSB0b29sLiBU
-aGUgdmVyaWZpZWQgZGF0YStzaWcgc2l6ZSAoaW4gYmlnIGVuZGlhbikgbXVzdCBiZQ0KPiA+ID4g
-PiBleHBsaWNpdGx5IHByb3ZpZGVkIChpdCBpcyBub3QgZ2VuZXJhdGVkIGJ5IHNpZ24tZmlsZSks
-IGFzIGl0IGNhbm5vdCBiZQ0KPiA+ID4gPiBkZXRlcm1pbmVkIGluIG90aGVyIHdheXMgKGN1cnJl
-bnRseSwgdGhlIG1hcCB2YWx1ZSBzaXplIGlzIGZpeGVkKS4gSXQgY2FuDQo+ID4gPiA+IGJlIG9i
-dGFpbmVkIGZyb20gdGhlIHNpemUgb2YgdGhlIGZpbGUgY3JlYXRlZCBieSBzaWduLWZpbGUuDQo+
-ID4gPiA+DQo+ID4gPiA+IEludHJvZHVjZSB0aGUgbmV3IG1hcCBmbGFnIEJQRl9GX1ZFUklGWV9F
-TEVNLCBhbmQgYWRkaXRpb25hbGx5IGNhbGwgdGhlDQo+ID4gPiBuZXcNCj4gPiA+ID4gZnVuY3Rp
-b24gYnBmX21hcF92ZXJpZnlfdmFsdWVfc2lnKCkgZnJvbSBicGZfbWFwX3VwZGF0ZV92YWx1ZSgp
-IGlmIHRoZQ0KPiBmbGFnDQo+ID4gPiA+IGlzIHNldC4gYnBmX21hcF92ZXJpZnlfdmFsdWVfc2ln
-KCksIGRlY2xhcmVkIGFzIGdsb2JhbCBmb3IgYSBuZXcgaGVscGVyLCBpcw0KPiA+ID4gPiBiYXNp
-Y2FsbHkgZXF1aXZhbGVudCB0byBtb2RfdmVyaWZ5X3NpZygpLiBJdCBhZGRpdGlvbmFsbHkgZG9l
-cyB0aGUgbWFya2VyDQo+ID4gPiA+IGNoZWNrLCB0aGF0IGZvciBrZXJuZWwgbW9kdWxlcyBpcyBk
-b25lIGluIG1vZHVsZV9zaWdfY2hlY2soKSwgYW5kIHRoZQ0KPiA+ID4gPiBwYXJzaW5nIG9mIHRo
-ZSB2ZXJpZmllZCBkYXRhK3NpZyBzaXplLg0KPiA+ID4gPg0KPiA+ID4gPiBDdXJyZW50bHksIGVu
-YWJsZSB0aGUgdXNhZ2Ugb2YgdGhlIGZsYWcgb25seSBmb3IgdGhlIGFycmF5IG1hcC4gU3VwcG9y
-dCBmb3INCj4gPiA+ID4gbW9yZSBtYXAgdHlwZXMgY2FuIGJlIGFkZGVkIGxhdGVyLg0KPiA+ID4g
-Pg0KPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBSb2JlcnRvIFNhc3N1IDxyb2JlcnRvLnNhc3N1QGh1
-YXdlaS5jb20+DQo+ID4gPiA+IC0tLQ0KPiANCj4gWy4uLl0NCj4gDQo+ID4gPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE5VTEwsIE5VTEwpOw0KPiA+ID4g
-PiArICAgICAgICAgICAgICAgaWYgKHJldCA8IDApDQo+ID4gPiA+ICsgICAgICAgICAgICAgICAg
-ICAgICAgIHJldHVybiByZXQ7DQo+ID4gPiA+ICsgICAgICAgfQ0KPiA+ID4gPiArDQo+ID4gPiA+
-ICsgICAgICAgcmV0dXJuIG1vZGxlbjsNCj4gPiA+ID4gK30NCj4gPiA+ID4gK0VYUE9SVF9TWU1C
-T0xfR1BMKGJwZl9tYXBfdmVyaWZ5X3ZhbHVlX3NpZyk7DQo+ID4gPiA+DQo+ID4gPiA+ICAjZGVm
-aW5lIEJQRl9NQVBfVVBEQVRFX0VMRU1fTEFTVF9GSUVMRCBmbGFncw0KPiA+ID4gPg0KPiA+ID4g
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvdG9vbHMvaW5j
-bHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gPiA+IGluZGV4IGY0MDA5ZGJkZjYyZC4uYThlNzgw
-M2QyNTkzIDEwMDY0NA0KPiA+ID4gPiAtLS0gYS90b29scy9pbmNsdWRlL3VhcGkvbGludXgvYnBm
-LmgNCj4gPiA+ID4gKysrIGIvdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gPiA+
-IEBAIC0xMjI2LDYgKzEyMjYsOSBAQCBlbnVtIHsNCj4gPiA+ID4NCj4gPiA+ID4gIC8qIENyZWF0
-ZSBhIG1hcCB0aGF0IGlzIHN1aXRhYmxlIHRvIGJlIGFuIGlubmVyIG1hcCB3aXRoIGR5bmFtaWMg
-bWF4DQo+IGVudHJpZXMNCj4gPiA+ICovDQo+ID4gPiA+ICAgICAgICAgQlBGX0ZfSU5ORVJfTUFQ
-ICAgICAgICAgPSAoMVUgPDwgMTIpLA0KPiA+ID4gPiArDQo+ID4gPiA+ICsvKiBWZXJpZnkgbWFw
-IHZhbHVlIChmbXQ6IHZlciBkYXRhK3NpZyBzaXplKGJlMzIpLCB2ZXIgZGF0YSwgc2lnLCB1bnZl
-cg0KPiBkYXRhKSAqLw0KPiA+ID4gPiArICAgICAgIEJQRl9GX1ZFUklGWV9FTEVNICAgICAgID0g
-KDFVIDw8IDEzKQ0KPiA+ID4gPiAgfTsNCj4gPiA+ID4NCj4gPiA+ID4gIC8qIEZsYWdzIGZvciBC
-UEZfUFJPR19RVUVSWS4gKi8NCj4gPiA+ID4gLS0NCj4gPiA+ID4gMi4yNS4xDQo+ID4gPiA+DQo=
+This series adds support for UFS controller found in FSD SoC.
+The HCI is almost same as found on other Exynos SoCs with minor
+differences. This also adds the required UFS-PHY driver changes.
+
+Patch 2/7: common change to handle different CDR offsets
+
+*Changes since v1:
+- Addressed review comments from Bart, Krzysztof, Chanho
+- collected Ack-by tags
+- rebased on next-20220602
+
+Alim Akhtar (7):
+  dt-bindings: phy: Add FSD UFS PHY bindings
+  phy: samsung-ufs: move cdr offset to drvdata
+  phy: samsung-ufs: add support for FSD ufs phy driver
+  dt-bindings: ufs: exynos-ufs: add fsd compatible
+  ufs: ufs-exynos:  add mphy apb clock mask
+  ufs: host: ufs-exynos: add support for fsd ufs hci
+  arm64: dts: fsd: add ufs device node
+
+ .../bindings/phy/samsung,ufs-phy.yaml         |   1 +
+ .../bindings/ufs/samsung,exynos-ufs.yaml      |   1 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   4 +
+ arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi    |  14 ++
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  29 ++++
+ drivers/phy/samsung/Makefile                  |   1 +
+ drivers/phy/samsung/phy-exynos7-ufs.c         |   3 +
+ drivers/phy/samsung/phy-exynosautov9-ufs.c    |   2 +
+ drivers/phy/samsung/phy-fsd-ufs.c             |  58 +++++++
+ drivers/phy/samsung/phy-samsung-ufs.c         |   6 +-
+ drivers/phy/samsung/phy-samsung-ufs.h         |   3 +-
+ drivers/ufs/host/ufs-exynos.c                 | 141 +++++++++++++++++-
+ 12 files changed, 260 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/phy/samsung/phy-fsd-ufs.c
+
+
+base-commit: 2e776ccffa840ce53ee1c21bde54cbe4bc102c3b
+-- 
+2.25.1
+

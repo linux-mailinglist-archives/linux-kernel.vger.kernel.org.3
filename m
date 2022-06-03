@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAD653CE1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCFA53CE20
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344507AbiFCRe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S1344513AbiFCReg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344493AbiFCRe0 (ORCPT
+        with ESMTP id S1344493AbiFCRee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:34:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94A4C52E57
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:34:25 -0700 (PDT)
+        Fri, 3 Jun 2022 13:34:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C57252E78
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 10:34:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654277664;
+        s=mimecast20190719; t=1654277670;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=o3rRFPIEgRYgx1slpwsuoO6sNR3Uwd/3DP3MxRYw77U=;
-        b=PsGEHxomBt7yV0ZXWmoTV5SupXflFUxyLxCjxhb+AzO3kr4bJTb7qOke7bnRpvsEGHhnmV
-        vEYVBPzXT0fx/1shb6PdMmtzZTq3y57uTq68fyImb0e8Du708a3Olx4ilmj2fTb54twfSX
-        KN7+t17Js3ZHaeXOhLsBsR0Db8NAvrY=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=/Ca1MSou98O4NdvVroyRc5kObHKDy6N8tL0SYQPt+OE=;
+        b=f/BkpUV6Cq5ZtKvqea5cSSVGOYFVCiGeGSDt0iqOrd1e9aCdcY/bIe2wNzLp+bEwpfw+5o
+        UY/UEuQ7vwKipG4y5ljVRwGYgiMa3lxn5HsXzV9TqZf5+qbUwAqiKgjQYC3BO4RfBbgn3D
+        W/UQoke7PG/zeeASfZMX83myIUTiBdw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-dUg4mIVIPBmuN8uXrGet6Q-1; Fri, 03 Jun 2022 13:34:23 -0400
-X-MC-Unique: dUg4mIVIPBmuN8uXrGet6Q-1
-Received: by mail-il1-f200.google.com with SMTP id w7-20020a056e021c8700b002d3bc8e95cbso6684180ill.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 10:34:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=o3rRFPIEgRYgx1slpwsuoO6sNR3Uwd/3DP3MxRYw77U=;
-        b=XW1l/a5X4+WtaoCFpoRa8Y1OD7Udiyqf42XvEKrBFGodcflIQOC7xSmimMIeD2Q6oM
-         vl/ZrYt6Yai4bgg/nmanVc9kfx6BIh/RR0EEzQbjcU5l5CmobpBdWrmVHnh3g4jHbMnF
-         ycLXF3W0OsFdi82xUa8JeeXGhfgrrEahnJmMCrlcm2N9+tTAApbFf0dq1YN8Fo13gzSq
-         434L3+A8mTOPUeqZD4vvoG0FpIuy/yMxE3YIxbzm4ZuVqr5kB0oC4m/fTh9PBVJUwwoq
-         EC0Y2PvF9DeibLWCKES75cUlesKj4yuGuI5COdFz1+GB4E90v0107ciFPQRbLx3njvN3
-         0N8Q==
-X-Gm-Message-State: AOAM531Fk70fvxCWEZcxXHXysFcs5Mg/iszMQiqhYaNYrE7s+qRjfXQH
-        EStNfi3NLvr8LdQKDCcw2/DP2h7ZmbzsgaK74nJqK9Vm1DhoWShJ4lGSS7krIvMjOi40DqVeFLc
-        6GXiwaJ4ztzgvTWJdbfKO4QYl
-X-Received: by 2002:a05:6e02:158b:b0:2cf:e058:8ecc with SMTP id m11-20020a056e02158b00b002cfe0588eccmr6676650ilu.30.1654277662250;
-        Fri, 03 Jun 2022 10:34:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxPlXB8JiVzS7AfyRx7LCWWt4OshvqVBJJDX+iF3FaY1a6dnwRCvBVQs9qUi5geaaA8ZWLSpA==
-X-Received: by 2002:a05:6e02:158b:b0:2cf:e058:8ecc with SMTP id m11-20020a056e02158b00b002cfe0588eccmr6676629ilu.30.1654277661946;
-        Fri, 03 Jun 2022 10:34:21 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id d13-20020a5d964d000000b00665714766a2sm2677998ios.47.2022.06.03.10.34.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 10:34:21 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 13:34:19 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Alejandro Colomar <alx.manpages@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-mm@kvack.org, Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 1/2] userfaultfd.2: Add section for UFFD_USER_MODE_ONLY
-Message-ID: <YppGGxdz7m7vyb85@xz-m1.local>
-References: <20220531011157.46868-1-peterx@redhat.com>
- <20220531011157.46868-2-peterx@redhat.com>
- <ce05bd8d-087d-cfa8-6aca-02fd1f3aebb7@gmail.com>
+ us-mta-556-fMHQfR9QNhOr0gh0IvSkKQ-1; Fri, 03 Jun 2022 13:34:27 -0400
+X-MC-Unique: fMHQfR9QNhOr0gh0IvSkKQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE76685A5B9;
+        Fri,  3 Jun 2022 17:34:26 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B2FA51410DDB;
+        Fri,  3 Jun 2022 17:34:26 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 253HYQvJ025627;
+        Fri, 3 Jun 2022 13:34:26 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 253HYQSf025624;
+        Fri, 3 Jun 2022 13:34:26 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Fri, 3 Jun 2022 13:34:26 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: Warnings when suspending to disk
+In-Reply-To: <Ypjr5yIMan1N0bqH@yaz-fattaah>
+Message-ID: <alpine.LRH.2.02.2206031327190.25179@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com> <YpUcf19E+qgb6Eyu@kroah.com> <alpine.LRH.2.02.2205310324410.13770@file01.intranet.prod.int.rdu2.redhat.com> <Ypjr5yIMan1N0bqH@yaz-fattaah>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ce05bd8d-087d-cfa8-6aca-02fd1f3aebb7@gmail.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,78 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 07:11:05PM +0200, Alejandro Colomar wrote:
-> Hi Peter,
-> 
-> On 5/31/22 03:11, Peter Xu wrote:
-> > Add a paragraph for UFFD_USER_MODE_ONLY flag that was introduced in
-> > Linux 5.11.
-> > 
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> 
-> See some minor comments below.
-> 
-> Cheers,
-> 
-> Alex
-> 
-> > ---
-> >   man2/userfaultfd.2 | 14 ++++++++++++--
-> >   1 file changed, 12 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/man2/userfaultfd.2 b/man2/userfaultfd.2
-> > index cee7c01d2..0928a76d2 100644
-> > --- a/man2/userfaultfd.2
-> > +++ b/man2/userfaultfd.2
-> > @@ -29,8 +29,9 @@
-> >   userfaultfd \- create a file descriptor for handling page faults in user space
-> >   .SH SYNOPSIS
-> >   .nf
-> > -.BR "#include <fcntl.h>" "            /* Definition of " O_* " constants */"
-> > -.BR "#include <sys/syscall.h>" "      /* Definition of " SYS_* " constants */"
-> > +.BR "#include <fcntl.h>" "             /* Definition of " O_* " constants */"
-> > +.BR "#include <sys/syscall.h>" "       /* Definition of " SYS_* " constants */"
-> > +.BR "#include <linux/userfaultfd.h>" " /* Definition of " UFFD_* " constants */"
-> >   .B #include <unistd.h>
-> >   .PP
-> >   .BI "int syscall(SYS_userfaultfd, int " flags );
-> > @@ -76,6 +77,15 @@ See the description of the
-> >   .BR O_NONBLOCK
-> >   flag in
-> >   .BR open (2).
-> > +.TP
-> > +.BR UFFD_USER_MODE_ONLY
-> 
-> 
-> s/BR/B/
-> 
-> see groff_man(7):
-> 
-> [
-> 	[...]
-> 
->        .B [text]
->               Set text in bold.  If the macro is given no  argu‐
->               ments,  the  text of the next input line is set in
->               bold.
-> 
-> 	[...]
-> 
->        .BR bold‐text roman‐text ...
->               Set each argument in bold and roman, alternately.
-> ]
-> 
-> > +This is an userfaultfd specific flag that was introduced since Linux 5.11.
-> > +When set, the userfaultfd object will only be able to handle page faults
-> > +originated from the userspace on the registered regions.
-> > +When a kernel originated fault was triggered on the registered range with
-> > +this userfaultfd, a
-> > +.BR SIGBUS
-> 
-> s/BR/B/
 
-Thanks Alex, I'll fix and repost the patchset soon.
 
--- 
-Peter Xu
+On Thu, 2 Jun 2022, Yazen Ghannam wrote:
+
+> On Tue, May 31, 2022 at 03:42:12AM -0400, Mikulas Patocka wrote:
+> 
+> ...
+> 
+> > > > The machine is two six-core Opterons 8435.
+> > > > 
+> > > > Mikulas
+> 
+> Hi Mikulas,
+> 
+> I'm not able to reproduce this issue on the systems I have access to. But I
+> think the following patch may be the solution. Can you please try this?
+> 
+> Thanks,
+> Yazen
+
+I tried this patch and it doesn't help.
+
+With this patch, it's even worse - before the patch, I had 48 warnings per 
+suspend, with the patch, I have 72 warnings.
+
+Mikulas
 

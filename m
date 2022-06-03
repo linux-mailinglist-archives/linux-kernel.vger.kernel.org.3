@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89C453C895
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F3253C86B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243565AbiFCKWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S243541AbiFCKQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiFCKWh (ORCPT
+        with ESMTP id S229664AbiFCKQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:22:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B630C642E;
-        Fri,  3 Jun 2022 03:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654251755; x=1685787755;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WF+UZTi1QOwSbfXLEfc65TwAKhi+9MpRsucGq2PY9BU=;
-  b=SABZb9oqjS/AdvAeHwq2kWSIjdVHTb94LjfgjQXO269/ZwPuM7X8ZtyY
-   I66W7bs0ypaCB8mdC43ACnYaiZ20bIMbz0n2n1LuM942b1GsM0Fp60IJn
-   IsDJTj1ljQB/0ZSUQjJ6qE4CmWiwcCNXGBBdLrdQ8hDVU/48UYgzBmkLP
-   10ULZqwVcing8QwrAVWCd6j9hUrc3U/ODGCSWqa/JytBNDqV7nAt+8AmO
-   hB3+6JtOSHt8OTZHM4uN0/8nVIKEBrbJuSZDQ0lOVDKNb909zJsKQ3Wpw
-   qGQva8kGtex2kTl1cnQROhQOW3zbQW1m6in3QDFeD7O/ZQosuWS91eQF+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="275022490"
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="275022490"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 03:22:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="530959412"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga003.jf.intel.com with ESMTP; 03 Jun 2022 03:22:33 -0700
-Date:   Fri, 3 Jun 2022 18:14:43 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     tien.sung.ang@intel.com
-Cc:     dinh.nguyen@intel.com, hao.wu@intel.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mdf@kernel.org, trix@redhat.com
-Subject: Re: [PATCH] fpga: altera-cvp: allow interrupt to continue next time
-Message-ID: <20220603101443.GB238410@yilunxu-OptiPlex-7050>
-References: <20220528120400.GA175058@yilunxu-OptiPlex-7050>
- <20220531022004.2314963-1-tien.sung.ang@intel.com>
+        Fri, 3 Jun 2022 06:16:14 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ADE3B284
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 03:16:13 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id me5so14491178ejb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 03:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CE1k6uqQm8XxTm8kMTTnyye5I/ebSIAbCCt2XWDXsEI=;
+        b=JhjH3pDETFmYHEKAKLaZdtjVcA9hZwcivyVzHYnI3wS/AKELt2b4Tsn9if/terlP8t
+         JATy2D8DGgdXmOi6lmJ7A8u3Isct66UI7GgpJzd1PLmln0tGkXoQo6k2Keg/gczCZqhl
+         tDmtWgUZqHFjYqmIoQQnAvfIam3HSDe8VgxsON9O5Qp7a4zWEdI8LiB9yxP5BXWbPVDI
+         xOtRzOk4sa6900EoUrzB9ODvl0+Er70u8ZNEqNluskfRSflqX6dckj2sKtI/vj6oKG9r
+         G01BAnoARN1OgZvVyUU6Ifd36Ez0zb7EHUjYlmFeNMijzAJcvBdk5nzUAOuFoJnLVE7R
+         DmlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CE1k6uqQm8XxTm8kMTTnyye5I/ebSIAbCCt2XWDXsEI=;
+        b=YS7D9YiCEPqnM8gACC6qU9/gkrMFuD9GGFrEeyAtRPZ7ByFSEHd+A7i7sNZ+QHGovq
+         RXOsg46S79Iya5ebggXJFQEpk4sQ7sxziKPklQXM1/IMDXw5KYXAVluPBt22meDX2eDu
+         LycWJ7caHGDPwIZI9ebmD0cx5KOV6jK8xIrR9wkXo41pL6Y1sjTHlBUWoZ9rP2vA9NOY
+         5jR43UDdGUYv/11tL01dlbvXW7wSCF5KyoIyEo7r3UkigXY0Fd8Ezh16LE/ps4lFUx2w
+         +if4EXvHHbOc6ko5+pa8M38AQ+zK/KgegHceNgGO2c9xSN3Cmki+x/kQuKMgqnbCYKft
+         AjiA==
+X-Gm-Message-State: AOAM531UYNCtI+4bCcgrrLqcrUBaQsGZg9rJjUuJB8VuSKsUvv355K5c
+        r7Vx5WvQyp+VkSl7xT8KGxtP3aUEnUjXUg==
+X-Google-Smtp-Source: ABdhPJzPpiZRWh+oiv1/yJAwdjM+7tzslnDLIKqKxn+YiUPZk+INHft204nhSRv0ckPgQLfu0sJdWg==
+X-Received: by 2002:a17:907:3e15:b0:6fe:f10e:6337 with SMTP id hp21-20020a1709073e1500b006fef10e6337mr8091317ejc.209.1654251372215;
+        Fri, 03 Jun 2022 03:16:12 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170906430f00b006f3ef214dc7sm2779008ejm.45.2022.06.03.03.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 03:16:11 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stefan Hansson <newbie13xd@gmail.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RFC PATCH 0/2] dt-bindings: input: gpio-keys: rework matching children
+Date:   Fri,  3 Jun 2022 12:15:59 +0200
+Message-Id: <20220603101601.542054-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531022004.2314963-1-tien.sung.ang@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,48 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:20:04AM +0800, tien.sung.ang@intel.com wrote:
-> >> CFG_READY signal/bit may time-out due to firmware not responding
-> >> within the given time-out. This time varies due to numerous
-> >> factors like size of bitstream and others.
-> >> This time-out error does not impact the result of the CvP
-> >> previous transactions. The CvP driver shall then, respond with
-> 
-> >Do you mean the reprogramming is successful even if you find the time
-> >out in write_complete()? Then return 0 is better?
-> Based on the information given by the Intel FPGA firmware team,
-> CFG_READY is essential to indicate if the current FPGA 
-> configuration session is indeed a success. There are 
-> cases we test in the lab whereby, CFG_READY stays invalid and
-> the tests performed subsequently to verify the FPGA functionality
-> could not detect the failed session. A failed FPGA 
-> configuration session means, the new bitstream wasn't 
-> successfully configured and tests ran later will just be passing
-> on the previous working bitstream version. In short, CFG_READY
-> is esential, and an error indicating the time-out is a must.
-> Another example, using an incorrect SOF/Design FPGA results
-> in CFG_READY being invalid. The user must be informed of a 
-> potential error. 
-> I will correct the wordings i used earlier that says that
-> the timoeut error does not impact the results of the CvP
-> previous transactions. It may so if the firmware has some sort
-> of error. 
+Hi,
 
-Understood. But with your new comment why you must change the error
-code to -EAGAIN rather than timeout?
+Currently the gpio-keys schema allows any property to be present, even
+undocumented.  Narrow the pattern for children to require specific key naming like:
 
-I think you may change your commit message. The main change is adding
-the error handling. The error code change is minor, even not necessary
-if you don't have a strong reason.
+    gpio-keys {
+        compatible = "gpio-keys";
 
-Thanks,
-Yilun
+        // "up" is wrong
+        key-up {
+            label = "GPIO Key UP";
+            linux,code = <103>;
+            gpios = <&gpio1 0 1>;
+        };
+    };
 
-> 
-> >And could you specify what the time-out mean on write_init() phase?
-> I could not really understand your question. We set huge 
-> time-outs of ~10seconds. Every wait for the firmware to respond
-> is potentially a hazard. The firmware CvP is has it's limitation
-> unfortunately. 
+This will cause many, many DTS warnings, which I can fix. But before I start
+such big work, let's agree whether the approach is correct.
 
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (2):
+  dt-bindings: input: gpio-keys: enforce node names to match all
+    properties
+  dt-bindings: input: gpio-keys: document label and autorepeat
+    properties
+
+ .../devicetree/bindings/input/gpio-keys.yaml  | 177 +++++++++---------
+ 1 file changed, 91 insertions(+), 86 deletions(-)
+
+-- 
+2.34.1
 

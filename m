@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFF453D134
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9C253D155
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346722AbiFCSS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S1347387AbiFCSUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347701AbiFCSGO (ORCPT
+        with ESMTP id S1347653AbiFCSGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:06:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B180157B04;
-        Fri,  3 Jun 2022 10:59:18 -0700 (PDT)
+        Fri, 3 Jun 2022 14:06:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C193F5C679;
+        Fri,  3 Jun 2022 10:59:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D992615E3;
-        Fri,  3 Jun 2022 17:58:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2827C385A9;
-        Fri,  3 Jun 2022 17:58:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A461561555;
+        Fri,  3 Jun 2022 17:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B006EC385A9;
+        Fri,  3 Jun 2022 17:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279105;
-        bh=x5kV3Z+YxJqaxbkJ5fOTbYmq3aXHfxYboSUuniNqq7c=;
+        s=korg; t=1654279111;
+        bh=AcfFm/yHcxVrDDYCPrsFv0Wa5KiA0w+LkOopDm5lkzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fLbha1diZrIeBhHzRJxxZisok0V3WhjjM4H69YBTbHYRcMUMpNj290LulofIRYH61
-         EPp8kTLL9Ioct3NzLSk/UoqdGbbtQZxstPlWsJl7RudLLkLy3YwbD7eu7ouUsIL4f3
-         xKH2nur3/oad9OZeF4a85Ij6N+NX6lt6pLDvgdkk=
+        b=VeomguvyjrWmSJWH8HdjpzKN+Q2fCOIrEcCFJt9ElV30tNRdhddlvcF5lmtDgvYRh
+         eRM/hoQeLGbwkPCh/zWI8LrZ1Rcpst2Bx5+3SckWHxZwsDe+UItSKqEK9vbbdmF/ds
+         hj+0QNLLQNPnSAWM77RXX5/Kwj4KAPRa6y58HBi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 5.18 55/67] tpm: ibmvtpm: Correct the return value in tpm_ibmvtpm_probe()
-Date:   Fri,  3 Jun 2022 19:43:56 +0200
-Message-Id: <20220603173822.310253682@linuxfoundation.org>
+        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.18 56/67] docs: submitting-patches: Fix crossref to The canonical patch format
+Date:   Fri,  3 Jun 2022 19:43:57 +0200
+Message-Id: <20220603173822.337596431@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
 References: <20220603173820.731531504@linuxfoundation.org>
@@ -55,32 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-commit d0dc1a7100f19121f6e7450f9cdda11926aa3838 upstream.
+commit 6d5aa418b3bd42cdccc36e94ee199af423ef7c84 upstream.
 
-Currently it returns zero when CRQ response timed out, it should return
-an error code instead.
+The reference to `explicit_in_reply_to` is pointless as when the
+reference was added in the form of "#15" [1], Section 15) was "The
+canonical patch format".
+The reference of "#15" had not been properly updated in a couple of
+reorganizations during the plain-text SubmittingPatches era.
 
-Fixes: d8d74ea3c002 ("tpm: ibmvtpm: Wait for buffer to be set before proceeding")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Fix it by using `the_canonical_patch_format`.
+
+[1]: 2ae19acaa50a ("Documentation: Add "how to write a good patch summary" to SubmittingPatches")
+
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Fixes: 5903019b2a5e ("Documentation/SubmittingPatches: convert it to ReST markup")
+Fixes: 9b2c76777acc ("Documentation/SubmittingPatches: enrich the Sphinx output")
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: stable@vger.kernel.org # v4.9+
+Link: https://lore.kernel.org/r/64e105a5-50be-23f2-6cae-903a2ea98e18@gmail.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/tpm/tpm_ibmvtpm.c |    1 +
- 1 file changed, 1 insertion(+)
+ Documentation/process/submitting-patches.rst |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/char/tpm/tpm_ibmvtpm.c
-+++ b/drivers/char/tpm/tpm_ibmvtpm.c
-@@ -681,6 +681,7 @@ static int tpm_ibmvtpm_probe(struct vio_
- 	if (!wait_event_timeout(ibmvtpm->crq_queue.wq,
- 				ibmvtpm->rtce_buf != NULL,
- 				HZ)) {
-+		rc = -ENODEV;
- 		dev_err(dev, "CRQ response timed out\n");
- 		goto init_irq_cleanup;
- 	}
+--- a/Documentation/process/submitting-patches.rst
++++ b/Documentation/process/submitting-patches.rst
+@@ -77,7 +77,7 @@ as you intend it to.
+ 
+ The maintainer will thank you if you write your patch description in a
+ form which can be easily pulled into Linux's source code management
+-system, ``git``, as a "commit log".  See :ref:`explicit_in_reply_to`.
++system, ``git``, as a "commit log".  See :ref:`the_canonical_patch_format`.
+ 
+ Solve only one problem per patch.  If your description starts to get
+ long, that's a sign that you probably need to split up your patch.
 
 

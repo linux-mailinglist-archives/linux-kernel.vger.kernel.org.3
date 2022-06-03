@@ -2,95 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A77053CBEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C31053CBC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245298AbiFCPB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S245215AbiFCOx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245300AbiFCPBz (ORCPT
+        with ESMTP id S245210AbiFCOx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:01:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7A110A8;
-        Fri,  3 Jun 2022 08:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OHLzFhY1sgaXVkq2dkqUz+DXjlRYN/dI4bdYgt7Hz8c=; b=w2gkfziMSPSIJ07SVWnZmYlHmy
-        T1gBfH2AfJiFIxiGLpAYpvUBuoiUqkzW5WRorzZuXomV0iIdMIBIVsjYDUZGbwtszPYYWkx4jDct4
-        OIPYedfHpR/H5MFTA5A/M5QLQbPM20ChIWbUYx/uFD67CNhzLETygIjDkQIm7AWJao8TVOeY1+i76
-        bHOEkeyGf1D1wUpNLmWMQe+oD0R5hDf4GmPvClqF52qy1CxKupNmgmgz/1EtBPlTS4lsIIG+fjMtI
-        CSfsydhyflNa/c6N6Tz7kSunvmBXGO6T5NVL1GayEgIqTAKh6v8y23N+9BYqTmhUgwXJUJVR3Ci6m
-        WTJsAs0Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nx8o6-007vN1-US; Fri, 03 Jun 2022 15:01:46 +0000
-Date:   Fri, 3 Jun 2022 08:01:46 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH v1] module: Add support for default value for module
- async_probe
-Message-ID: <YpoiWhMqANChE/ph@bombadil.infradead.org>
-References: <20220603055442.521888-1-saravanak@google.com>
+        Fri, 3 Jun 2022 10:53:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9965536E29;
+        Fri,  3 Jun 2022 07:53:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54D49B82353;
+        Fri,  3 Jun 2022 14:53:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0635C34115;
+        Fri,  3 Jun 2022 14:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654268003;
+        bh=RGs1KTCePcSrsr1+5HQQpGae3Pc4JtwnBu3hdoIvrOY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WyGYjYddMk07o8bazntYbtCK4zbeCa7DEFE/TCozDMhF03Fe4kU8LPm3p5kSO9WSj
+         t3nk+MJHJEX0Yv2UYRgLUFBV3Hc84R61uyURYdZ3/eSIkFLkP6KKBi0TSTllFLd7JP
+         +2teddVxCFSl8S/YtwTHoTophTXWrIyq2O/Ug1pjO3cnW67rIVdln312x0G470x0UX
+         002zGcinS6p0imEfVb1ZI5xg2WnTpGyqcQGluIwWrbIwPXAZEWaRdvrWw/TLm8tfnw
+         Zp6/LuokL19/fMx0waN2xmdGuMl2dvo+KCy8Hpm+Ilj2IfHgr+e519ywVOgM2cn78o
+         PHgMnTz8aZq5g==
+Date:   Fri, 3 Jun 2022 16:02:22 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lars@metafoo.de,
+        svarbanov@mm-sol.com, iivanov@mm-sol.com,
+        jonathan.cameron@huawei.com, linux-arm-msm@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fuyq@stu.pku.edu.cn
+Subject: Re: [PATCH v4] iio: vadc: Fix potential dereference of NULL pointer
+Message-ID: <20220603160222.1ad6ef49@jic23-huawei>
+In-Reply-To: <1653238427-73587-1-git-send-email-lyz_cs@pku.edu.cn>
+References: <20220522120109.7ead18a7@jic23-huawei>
+        <1653238427-73587-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603055442.521888-1-saravanak@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 10:54:41PM -0700, Saravana Kannan wrote:
-> Add a module.async_probe kernel command line option that allows enabling
-> async probing for all modules. When this command line option is used,
-> there might still be some modules for which we want to explicitly force
-> synchronous probing, so extend <modulename>.async_probe to take an
-> optional bool input so that async probing can be disabled for a specific
-> module.
+On Sun, 22 May 2022 09:53:47 -0700
+Yongzhi Liu <lyz_cs@pku.edu.cn> wrote:
+
+> The return value of vadc_get_channel() needs to be checked to
+> avoid use of NULL pointer. vadc_do_conversion() already provides
+> error prints in at least some of it's error paths. Thus it is
+> reasonable to add the null pointer check on prop and drop the
+> extra reporting in vadc_measure_ref_points().
 > 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+
+Hi
+
+Biggest remaining thing is squashing
+ret = -ENODEV;
+return ret;
+
+into the shorter
+return -ENODEV;
+
+
 > ---
->  Documentation/admin-guide/kernel-parameters.txt |  8 ++++++--
->  kernel/module/main.c                            | 11 ++++++++++-
->  2 files changed, 16 insertions(+), 3 deletions(-)
+>  drivers/iio/adc/qcom-spmi-vadc.c | 38 ++++++++++++++++++++++++++++----------
+>  1 file changed, 28 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 710b52d87bdd..32083056bd25 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1147,8 +1147,12 @@
->  	nopku		[X86] Disable Memory Protection Keys CPU feature found
->  			in some Intel CPUs.
+> diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
+> index 34202ba..43a52b1 100644
+> --- a/drivers/iio/adc/qcom-spmi-vadc.c
+> +++ b/drivers/iio/adc/qcom-spmi-vadc.c
+> @@ -358,22 +358,33 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
+>  	vadc->graph[VADC_CALIB_ABSOLUTE].dx = VADC_ABSOLUTE_RANGE_UV;
 >  
-> -	<module>.async_probe [KNL]
-> -			Enable asynchronous probe on this module.
-> +	<module>.async_probe[=<bool>] [KNL]
-> +			If no <bool> value is specified or if the value
-> +			specified is not a valid <bool>, enable asynchronous
-> +			probe on this module.  Otherwise, enable/disable
-> +			asynchronous probe on this module as indicated by the
-> +			<bool> value.
+>  	prop = vadc_get_channel(vadc, VADC_REF_1250MV);
+> +	if (!prop) {
+> +		dev_err(vadc->dev, "Please define 1.25V channel\n");
+Probably makes more sense to have the error as 
+"No 1.25V channel found\n");
 
-The commit log says a bit more. Can you clarify this on the
-documentation?
+It's not obvious to anyone getting this error what 'define' might mean
+without them looking at the code, so I'd rather we just said what had
+gone wrong rather offering incomplete advice.
 
-We should strive slowly towards more async probes. This will take
-time. To help with further then a Kconfig option which sets this
-to a default to true if enabled would be useful so that no kernel
-parameter is needed at all to set the default. Then you can
-override the default, and blacklist each driver as well.
+> +		ret = -ENODEV;
 
-  Luis
+Don't bother assigning a variable just to return it in the next line.
+
+return -ENODEV;
+
+> +		return ret;
+> +	}
+>  	ret = vadc_do_conversion(vadc, prop, &read_1);
+>  	if (ret)
+> -		goto err;
+> +		return ret;
+>  
+>  	/* Try with buffered 625mV channel first */
+>  	prop = vadc_get_channel(vadc, VADC_SPARE1);
+> -	if (!prop)
+> +	if (!prop) {
+>  		prop = vadc_get_channel(vadc, VADC_REF_625MV);
+> +		if (!prop) {
+> +			dev_err(vadc->dev, "Please define 0.625V channel\n");
+"No 0.625V channel found\n"
+> +			ret = -ENODEV;
+
+return -ENODEV;
+
+> +			return ret;
+> +		}
+> +	}
+>  
+>  	ret = vadc_do_conversion(vadc, prop, &read_2);
+>  	if (ret)
+> -		goto err;
+> +		return ret;
+>  
+>  	if (read_1 == read_2) {
+>  		ret = -EINVAL;
+> -		goto err;
+> +		return ret;
+>  	}
+>  
+>  	vadc->graph[VADC_CALIB_ABSOLUTE].dy = read_1 - read_2;
+> @@ -381,25 +392,32 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
+>  
+>  	/* Ratiometric calibration */
+>  	prop = vadc_get_channel(vadc, VADC_VDD_VADC);
+> +	if (!prop) {
+> +		dev_err(vadc->dev, "Please define VDD channel\n");
+
+"No VDD channel found\n"
+
+> +		ret = -ENODEV;
+> +		return ret;
+> +	}
+>  	ret = vadc_do_conversion(vadc, prop, &read_1);
+>  	if (ret)
+> -		goto err;
+> +		return ret;
+>  
+>  	prop = vadc_get_channel(vadc, VADC_GND_REF);
+> +	if (!prop) {
+> +		dev_err(vadc->dev, "Please define GND channel\n");
+
+"No GND channel found\n"
+
+> +		ret = -ENODEV;
+> +		return ret;
+
+return -ENODEV;
+
+> +	}
+>  	ret = vadc_do_conversion(vadc, prop, &read_2);
+>  	if (ret)
+> -		goto err;
+> +		return ret;
+>  
+>  	if (read_1 == read_2) {
+>  		ret = -EINVAL;
+> -		goto err;
+> +		return ret;
+
+return -ENODEV;
+
+>  	}
+>  
+>  	vadc->graph[VADC_CALIB_RATIOMETRIC].dy = read_1 - read_2;
+>  	vadc->graph[VADC_CALIB_RATIOMETRIC].gnd = read_2;
+> -err:
+> -	if (ret)
+> -		dev_err(vadc->dev, "measure reference points failed\n");
+>  
+>  	return ret;
+
+Can't get here with anything other than ret == 0 so
+	return 0;
+to make that explicit.
+
+
+>  }
+

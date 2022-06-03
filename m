@@ -2,177 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7436253CAA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B51D53CAAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244630AbiFCN1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S244639AbiFCN2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238620AbiFCN1P (ORCPT
+        with ESMTP id S238620AbiFCN2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:27:15 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AEE1274A;
-        Fri,  3 Jun 2022 06:27:14 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so7198080pjs.1;
-        Fri, 03 Jun 2022 06:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zGYGCHPMc2wMb8+o7znOSNlSgZiftTrEQzD43QCV+90=;
-        b=i+7jqG7KVpeeNJ6V0vSnIFfrYVTh3rBccm8ii5aNFr8oAtqmONw/g0UFyZdHC+/HlS
-         CFMib75eX8uio37b5hjw6af7cqpT+gCDcEs57LXHZoQ/5Nxl5fok9aPlsyOgpAofkSgS
-         UA+f5V66+4EEBe6I6tCrHosahkwoXlGAwaojY4YDiZ6foQ+jH9aQs8gNwLxqCwgYHS3B
-         P1wVqrLLMJR2WkCVGuHHiynWC2mKpRTIfpu3BsaC7Wa6PkWZFP6PeiA6HqtUV62lpa0v
-         fnl+5xHFwdmwR5L4aEdBL1yVEABKWAZZhS/gCkAYrf6SOkV0fdHT6GMP9XFZYGPGbioG
-         HxWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zGYGCHPMc2wMb8+o7znOSNlSgZiftTrEQzD43QCV+90=;
-        b=XV/ow0Nn98c6MbjE/Vz6njzFk8y4VNOFtwA9pfNIoN3yGxNGi9yZ/aLBiLJf4sG2Zh
-         xjlAd8NkqoxDq7X9HRArWf0Ev9LYG5gZ7fAgS5TLLlqsx1aGWjr2BkSi0zsoPNyHDEjZ
-         Cd/Yj+HBjKk0Zc2stiCwwdvhZh1qmdHqJH7nk1ew5WZOSOMUL+mXfndoV524WnVLwjU4
-         Wh+kfv8DJQR21SZqN7qniQ6L8e88WTQXYA3io8Pk8TDzbP9am0rO+7Mm36MX6W4dDoBH
-         Va7HBXcgp/deN6Jfl1CRbwJvK9PDIf0NT3eoXVtEx8NAtRwFlAQTSys/8qBV0cyvza8P
-         rk3g==
-X-Gm-Message-State: AOAM533kyKeCrB52fgK84cGV8EQnGxbB5VaGhZGFJHIU7HVVnqVnUBYq
-        /as+Eqh/fWLojh1dlL05GD8=
-X-Google-Smtp-Source: ABdhPJzluHIhouQf927OhbZ6lRASEW4yUSiTagVN/uhD04GCE3ApYGm7UAFAiucHC3zND3JTXTWVRA==
-X-Received: by 2002:a17:903:22d0:b0:164:ec0:178c with SMTP id y16-20020a17090322d000b001640ec0178cmr10442663plg.127.1654262833917;
-        Fri, 03 Jun 2022 06:27:13 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id l24-20020a17090ac59800b001e25e3ba05csm8536780pjt.2.2022.06.03.06.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 06:27:13 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Zhang <markz@nvidia.com>,
-        Terje Bergstrom <tbergstrom@nvidia.com>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] drm/tegra: dc: rgb: Fix refcount leak in tegra_dc_rgb_probe
-Date:   Fri,  3 Jun 2022 17:27:03 +0400
-Message-Id: <20220603132703.42085-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Jun 2022 09:28:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3241625EB2;
+        Fri,  3 Jun 2022 06:28:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D38A81F8C5;
+        Fri,  3 Jun 2022 13:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1654262910; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ScwAaV/d1PlcVQ4eBWleD5go7VyA9erAnUrK82F7Qyw=;
+        b=Dj6wxxPOx9JTbYjGH9STezvqdFNpd2mPVmE0a2k9Wi+PX2QwecHg+A+e77pJDB+iWurWNg
+        vt9Eqn1ZfgbftY2wzKKOcpDyQz5e9oYJELz62hsBfBCbVCcQQRWHC4OOcais0f4rwKlTtk
+        cV2ATM13ZQVZVSUJGfveRut40B7bIC0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1654262910;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ScwAaV/d1PlcVQ4eBWleD5go7VyA9erAnUrK82F7Qyw=;
+        b=5aJCJoSFEPRLE+huJqlocsAzXj8RuYTpeJfkD3mTOKj18bubX21oRsbiJbgVVQykNvZ7L+
+        9XR3t38sXFWesFCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A51F13638;
+        Fri,  3 Jun 2022 13:28:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eR3hEn4MmmIuegAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Fri, 03 Jun 2022 13:28:30 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id b4bcd602;
+        Fri, 3 Jun 2022 13:29:10 +0000 (UTC)
+From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Gregory Farnum <gfarnum@redhat.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
+Subject: [PATCH v5] ceph: prevent a client from exceeding the MDS maximum xattr size
+Date:   Fri,  3 Jun 2022 14:29:09 +0100
+Message-Id: <20220603132909.10166-1-lhenriques@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-So add of_node_put() in error paths.
+The MDS tries to enforce a limit on the total key/values in extended
+attributes.  However, this limit is enforced only if doing a synchronous
+operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
+doesn't have a chance to enforce these limits.
 
-Fixes: d8f4a9eda006 ("drm: Add NVIDIA Tegra20 support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- update Fixes tag.
-v1 Link: https://lore.kernel.org/r/20220602155615.43277-1-linmq006@gmail.com
----
- drivers/gpu/drm/tegra/rgb.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+This patch adds support for decoding the xattrs maximum size setting that is
+distributed in the mdsmap.  Then, when setting an xattr, the kernel client
+will revert to do a synchronous operation if that maximum size is exceeded.
 
-diff --git a/drivers/gpu/drm/tegra/rgb.c b/drivers/gpu/drm/tegra/rgb.c
-index ff8fce36d2aa..cef2b1b72385 100644
---- a/drivers/gpu/drm/tegra/rgb.c
-+++ b/drivers/gpu/drm/tegra/rgb.c
-@@ -196,12 +196,16 @@ int tegra_dc_rgb_probe(struct tegra_dc *dc)
- 	int err;
+While there, fix a dout() that would trigger a printk warning:
+
+[   98.718078] ------------[ cut here ]------------
+[   98.719012] precision 65536 too large
+[   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprintf+0x5e3/0x600
+...
+
+URL: https://tracker.ceph.com/issues/55725
+Signed-off-by: Luís Henriques <lhenriques@suse.de>
+---
+ fs/ceph/mdsmap.c            | 22 ++++++++++++++++++----
+ fs/ceph/xattr.c             | 12 ++++++++----
+ include/linux/ceph/mdsmap.h |  1 +
+ 3 files changed, 27 insertions(+), 8 deletions(-)
+
+* Changes since v4
+
+- Dropped definition of MDS_MAX_XATTR_SIZE, which isn't needed anymore
+- Fixed (finally?) the compilation warning detected by bot
+(also dropped the RFC from the subject)
+
+* Changes since v3
+
+As per Xiubo review:
+  - Always force a (sync) SETXATTR Op when connecting to an old cluster
+  - use '>' instead of '>='
+Also fixed the warning detected by 0day.
+
+* Changes since v2
+
+Well, a lot has changed since v2!  Now the xattr max value setting is
+obtained through the mdsmap, which needs to be decoded, and the feature
+that was used in the previous revision was dropped.  The drawback is that
+the MDS isn't unable to know in advance if a client is aware of this xattr
+max value.
+
+* Changes since v1
+
+Added support for new feature bit to get the MDS max_xattr_pairs_size
+setting.
+
+Also note that this patch relies on a patch that hasn't been merged yet
+("ceph: use correct index when encoding client supported features"),
+otherwise the new feature bit won't be correctly encoded.
+
+diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
+index 30387733765d..8d0a6d2c2da4 100644
+--- a/fs/ceph/mdsmap.c
++++ b/fs/ceph/mdsmap.c
+@@ -352,12 +352,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
+ 		__decode_and_drop_type(p, end, u8, bad_ext);
+ 	}
+ 	if (mdsmap_ev >= 8) {
+-		u32 name_len;
+ 		/* enabled */
+ 		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
+-		ceph_decode_32_safe(p, end, name_len, bad_ext);
+-		ceph_decode_need(p, end, name_len, bad_ext);
+-		*p += name_len;
++		/* fs_name */
++		ceph_decode_skip_string(p, end, bad_ext);
+ 	}
+ 	/* damaged */
+ 	if (mdsmap_ev >= 9) {
+@@ -370,6 +368,22 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
+ 	} else {
+ 		m->m_damaged = false;
+ 	}
++	if (mdsmap_ev >= 17) {
++		/* balancer */
++		ceph_decode_skip_string(p, end, bad_ext);
++		/* standby_count_wanted */
++		ceph_decode_skip_32(p, end, bad_ext);
++		/* old_max_mds */
++		ceph_decode_skip_32(p, end, bad_ext);
++		/* min_compat_client */
++		ceph_decode_skip_8(p, end, bad_ext);
++		/* required_client_features */
++		ceph_decode_skip_set(p, end, 64, bad_ext);
++		ceph_decode_64_safe(p, end, m->m_max_xattr_size, bad_ext);
++	} else {
++		/* This forces the usage of the (sync) SETXATTR Op */
++		m->m_max_xattr_size = 0;
++	}
+ bad_ext:
+ 	dout("mdsmap_decode m_enabled: %d, m_damaged: %d, m_num_laggy: %d\n",
+ 	     !!m->m_enabled, !!m->m_damaged, m->m_num_laggy);
+diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
+index 8c2dc2c762a4..902323b12c35 100644
+--- a/fs/ceph/xattr.c
++++ b/fs/ceph/xattr.c
+@@ -1086,7 +1086,7 @@ static int ceph_sync_setxattr(struct inode *inode, const char *name,
+ 			flags |= CEPH_XATTR_REMOVE;
+ 	}
  
- 	np = of_get_child_by_name(dc->dev->of_node, "rgb");
--	if (!np || !of_device_is_available(np))
--		return -ENODEV;
-+	if (!np || !of_device_is_available(np)) {
-+		err = -ENODEV;
-+		goto err_put_node;
+-	dout("setxattr value=%.*s\n", (int)size, value);
++	dout("setxattr value size: %zu\n", size);
+ 
+ 	/* do request */
+ 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
+@@ -1184,8 +1184,14 @@ int __ceph_setxattr(struct inode *inode, const char *name,
+ 	spin_lock(&ci->i_ceph_lock);
+ retry:
+ 	issued = __ceph_caps_issued(ci, NULL);
+-	if (ci->i_xattrs.version == 0 || !(issued & CEPH_CAP_XATTR_EXCL))
++	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
++	if ((ci->i_xattrs.version == 0) || !(issued & CEPH_CAP_XATTR_EXCL) ||
++	    (required_blob_size > mdsc->mdsmap->m_max_xattr_size)) {
++		dout("%s do sync setxattr: version: %llu size: %d max: %llu\n",
++		     __func__, ci->i_xattrs.version, required_blob_size,
++		     mdsc->mdsmap->m_max_xattr_size);
+ 		goto do_sync;
 +	}
  
- 	rgb = devm_kzalloc(dc->dev, sizeof(*rgb), GFP_KERNEL);
--	if (!rgb)
--		return -ENOMEM;
-+	if (!rgb) {
-+		err = -ENOMEM;
-+		goto err_put_node;
-+	}
+ 	if (!lock_snap_rwsem && !ci->i_head_snapc) {
+ 		lock_snap_rwsem = true;
+@@ -1201,8 +1207,6 @@ int __ceph_setxattr(struct inode *inode, const char *name,
+ 	     ceph_cap_string(issued));
+ 	__build_xattrs(inode);
  
- 	rgb->output.dev = dc->dev;
- 	rgb->output.of_node = np;
-@@ -209,31 +213,34 @@ int tegra_dc_rgb_probe(struct tegra_dc *dc)
- 
- 	err = tegra_output_probe(&rgb->output);
- 	if (err < 0)
--		return err;
-+		goto err_put_node;
-+
- 
- 	rgb->clk = devm_clk_get(dc->dev, NULL);
- 	if (IS_ERR(rgb->clk)) {
- 		dev_err(dc->dev, "failed to get clock\n");
--		return PTR_ERR(rgb->clk);
-+		err =  PTR_ERR(rgb->clk);
-+		goto err_put_node;
- 	}
- 
- 	rgb->clk_parent = devm_clk_get(dc->dev, "parent");
- 	if (IS_ERR(rgb->clk_parent)) {
- 		dev_err(dc->dev, "failed to get parent clock\n");
--		return PTR_ERR(rgb->clk_parent);
-+		err = PTR_ERR(rgb->clk_parent);
-+		goto err_put_node;
- 	}
- 
- 	err = clk_set_parent(rgb->clk, rgb->clk_parent);
- 	if (err < 0) {
- 		dev_err(dc->dev, "failed to set parent clock: %d\n", err);
--		return err;
-+		goto err_put_node;
- 	}
- 
- 	rgb->pll_d_out0 = clk_get_sys(NULL, "pll_d_out0");
- 	if (IS_ERR(rgb->pll_d_out0)) {
- 		err = PTR_ERR(rgb->pll_d_out0);
- 		dev_err(dc->dev, "failed to get pll_d_out0: %d\n", err);
--		return err;
-+		goto err_put_node;
- 	}
- 
- 	if (dc->soc->has_pll_d2_out0) {
-@@ -241,13 +248,17 @@ int tegra_dc_rgb_probe(struct tegra_dc *dc)
- 		if (IS_ERR(rgb->pll_d2_out0)) {
- 			err = PTR_ERR(rgb->pll_d2_out0);
- 			dev_err(dc->dev, "failed to get pll_d2_out0: %d\n", err);
--			return err;
-+			goto err_put_node;
- 		}
- 	}
- 
- 	dc->rgb = &rgb->output;
- 
- 	return 0;
-+
-+err_put_node:
-+	of_node_put(np);
-+	return err;
- }
- 
- int tegra_dc_rgb_remove(struct tegra_dc *dc)
--- 
-2.25.1
-
+-	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
+-
+ 	if (!ci->i_xattrs.prealloc_blob ||
+ 	    required_blob_size > ci->i_xattrs.prealloc_blob->alloc_len) {
+ 		struct ceph_buffer *blob;
+diff --git a/include/linux/ceph/mdsmap.h b/include/linux/ceph/mdsmap.h
+index 523fd0452856..4c3e0648dc27 100644
+--- a/include/linux/ceph/mdsmap.h
++++ b/include/linux/ceph/mdsmap.h
+@@ -25,6 +25,7 @@ struct ceph_mdsmap {
+ 	u32 m_session_timeout;          /* seconds */
+ 	u32 m_session_autoclose;        /* seconds */
+ 	u64 m_max_file_size;
++	u64 m_max_xattr_size;		/* maximum size for xattrs blob */
+ 	u32 m_max_mds;			/* expected up:active mds number */
+ 	u32 m_num_active_mds;		/* actual up:active mds number */
+ 	u32 possible_max_rank;		/* possible max rank index */

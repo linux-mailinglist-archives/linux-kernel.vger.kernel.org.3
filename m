@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D213153CC65
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5985953CC4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245590AbiFCPiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S245520AbiFCP3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239078AbiFCPiU (ORCPT
+        with ESMTP id S243135AbiFCP3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:38:20 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936742B26B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 08:38:19 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id v5so5796710qvs.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 08:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SJXhCrUR8OTVpnLcTOK6eseLDr1ev0Qsg1uNsb9nbv8=;
-        b=Q3903lNQQOni7+M4c5ncDu0HLSUQTxvb297A868WBL3HKMBPQ9Vxh/IhIjiQX1r4Mf
-         oyPtz/NaYgx9vPorrhxthWs8nTd6jQem8/d8QfACSCYmw293IQT2yN0P/EWNdgruyhFq
-         lyiiTi+D0Udva2DO+r+itdpjfySDS4zPtxkSO5vNvipNuYnCsF7uECI0JMrsC4i6qpjG
-         t5X6fC3832TP1X39Rj60D7oR6+/p9kggMlLea+C5PdyeOkXxzW274DDdPpsUZo82YHIa
-         JFFvkH1sXQQxu2WphhiDNw8+u+F7dY6Bqc6KZ4bckG21U9BdPPBK7xWAyUe2m3/sxgjq
-         f53g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SJXhCrUR8OTVpnLcTOK6eseLDr1ev0Qsg1uNsb9nbv8=;
-        b=F+X6M3yAYOkklPEBbTOS+zD5h60fXUX+8LxJlG9wfXO0LHRkIBafvn8O8ryFkVPwJ0
-         +tQnu4bJpZuDzp05Xe/Q20VPvXHLMmKAJYmDJdCDhqs9/ICFn+OCOZl8SyJncJP5kqMT
-         g8nhE0j9zkFsrAyYid4aod0aUdVM5CLXed9IlA4uThNSOOH9EYbVXcGTUplrTzG3AjLB
-         P2hQCFucq8veLYokZrqa61auEuL2NkIYfHZlEcZgp2cc3MV8feN60fB8eQKo80vkeybR
-         ro869koRkulilLIJVx2Ax8DReMDXo5exjqSj83gABw4NVzw6GvadZ0ptSV8mFPHcinTT
-         M7Lg==
-X-Gm-Message-State: AOAM530bvBzaLYP+I+iRsMLcr0xkrGjR0z6uPfUfQuHKKRrifXrPiloA
-        vzFOueU/URpt6rhArFNBxiZOR7uI3TMm9A==
-X-Google-Smtp-Source: ABdhPJxdZQ9/SUfZZTAwPP0SSmcim7n4j2UV2gr4nbRDnef4WqhMGWV2G4k+wJYZM/q3KcMDiuC8dg==
-X-Received: by 2002:a0c:df8c:0:b0:465:d376:1ec0 with SMTP id w12-20020a0cdf8c000000b00465d3761ec0mr7369798qvl.97.1654270698608;
-        Fri, 03 Jun 2022 08:38:18 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:1d66])
-        by smtp.gmail.com with ESMTPSA id y184-20020a37afc1000000b0069fc13ce225sm5204351qke.86.2022.06.03.08.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 08:38:17 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 11:38:16 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        songmuchun@bytedance.com, akpm@linux-foundation.org,
-        corbet@lwn.net, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] mm: memcontrol: separate
- {pgscan,pgsteal}_{kswapd,direct} items in memory.stat of cgroup v2
-Message-ID: <Ypoq6KLItUWsOq+E@cmpxchg.org>
-References: <20220603070423.10025-1-zhengqi.arch@bytedance.com>
+        Fri, 3 Jun 2022 11:29:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CDF26C0;
+        Fri,  3 Jun 2022 08:29:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 465DBB82369;
+        Fri,  3 Jun 2022 15:29:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07634C385B8;
+        Fri,  3 Jun 2022 15:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654270167;
+        bh=KpdflRmfJ1wqM76YeOe+UDrket/jjDmryFB7TRBR1sU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=moR+UWAbJPl7c+xFlqYioyenD4HGkV4JkG2Lt8Cxw7Gy5AwD0m00YF1XhQ2ywzcCd
+         5Hu9DONZ3FzUnf835M67Nes1dD7rojh5sRvRXxePoW7hecrkluoi1QGbuHN9LQAC05
+         zmjcmNV7IbfipmGrcZlWxczSULCgHHPZL+KOj3t9N76oMM3n9peOQblqbRRu18mWyU
+         7BWpr9yZ0Dty3s0sNQVwcqV069ha4yH/vITDH9eBAm5pOtyTFq5Q/zBTFOfTD2cs2x
+         iF4WUSqYIkEMUqriFY2gTC/zzwHin7yByrpE0Vv6Olb9dcY9gDy/0IijE1LApnRuE5
+         qG1p0AoS16ljg==
+Date:   Fri, 3 Jun 2022 16:38:26 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     LI Qingwu <qing-wu.li@leica-geosystems.com.cn>
+Cc:     Rob Herring <robh@kernel.org>, "lars@metafoo.de" <lars@metafoo.de>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "ardeleanalex@gmail.com" <ardeleanalex@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mike.looijmans@topic.nl" <mike.looijmans@topic.nl>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        HAEMMERLE Thomas <thomas.haemmerle@leica-geosystems.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH V5 6/6] dt-bindings: iio: accel: Add bmi085 and bmi090l
+ bindings
+Message-ID: <20220603163826.65d06e0a@jic23-huawei>
+In-Reply-To: <AM9PR06MB78445C0FE66A61F6BAC4CE35D7A19@AM9PR06MB7844.eurprd06.prod.outlook.com>
+References: <20220526133359.2261928-1-Qing-wu.Li@leica-geosystems.com.cn>
+        <20220526133359.2261928-7-Qing-wu.Li@leica-geosystems.com.cn>
+        <20220602135734.GA2198822-robh@kernel.org>
+        <AM9PR06MB78445C0FE66A61F6BAC4CE35D7A19@AM9PR06MB7844.eurprd06.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603070423.10025-1-zhengqi.arch@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 03:04:23PM +0800, Qi Zheng wrote:
-> There are already statistics of {pgscan,pgsteal}_kswapd and
-> {pgscan,pgsteal}_direct of memcg event here, but now the sum
-> of the two is displayed in memory.stat of cgroup v2.
-> 
-> In order to obtain more accurate information during monitoring
-> and debugging, and to align with the display in /proc/vmstat,
-> it better to display {pgscan,pgsteal}_kswapd and
-> {pgscan,pgsteal}_direct separately.
-> 
-> Moreover, after this modification, all memcg events can be
-> printed with a combination of vm_event_name() and memcg_events().
-> This allows us to create an array to traverse and print, which
-> reduces redundant seq_buf_printf() codes.
-> 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+On Fri, 3 Jun 2022 07:32:17 +0000
+LI Qingwu <qing-wu.li@leica-geosystems.com.cn> wrote:
 
-Sounds good to me. We inititally didn't do it because /proc/vmstat has
-the breakdown to understand global reclaim behavior, and cgroup
-reclaim doesn't have a kswapd. But it's nice to stay consistent, it's
-helpful to understand if certain cgroups have a higher share of direct
-global reclaim (GFP_TRANSHUGE* for example), and we very much do want
-kswapd per cgroup down the line (we've had it in production for ages).
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Thursday, June 2, 2022 9:58 PM
+> > To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> > Cc: jic23@kernel.org; lars@metafoo.de; mchehab+huawei@kernel.org;
+> > ardeleanalex@gmail.com; linux-iio@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; mike.looijmans@topic.nl;
+> > devicetree@vger.kernel.org; HAEMMERLE Thomas
+> > <thomas.haemmerle@leica-geosystems.com>
+> > Subject: Re: [PATCH V5 6/6] dt-bindings: iio: accel: Add bmi085 and bmi090l
+> > bindings
+> > 
+> > This email is not from Hexagon's Office 365 instance. Please be careful while
+> > clicking links, opening attachments, or replying to this email.
+> > 
+> > 
+> > On Thu, May 26, 2022 at 01:33:59PM +0000, LI Qingwu wrote:  
+> > > Adds the device-tree bindings for the Bosch
+> > > BMI085 and BMI090L IMU, the accelerometer part.
+> > >
+> > > Datasheet:  
+> > https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.bos
+> > ch-sensortec.com%2Fmedia%2Fboschsensortec%2Fdownloads%2Fdatasheets%
+> > 2Fbst-bmi085-ds001.pdf&amp;data=05%7C01%7C%7C6bb7d63d627c49b946c4
+> > 08da449fd9bf%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C0%7C0%7C6378977
+> > 51065729986%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjo
+> > iV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdat
+> > a=K3PYyQAGsySCIjKuo1QRVm1HE0cuC3BVXbjuAwwhMjM%3D&amp;reserved=
+> > 0  
+> > > Datasheet:  
+> > https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fmedia.di
+> > gikey.com%2Fpdf%2FData%2520Sheets%2FBosch%2FBST-BMI090L-DS000-00.p
+> > df&amp;data=05%7C01%7C%7C6bb7d63d627c49b946c408da449fd9bf%7C1b1
+> > 6ab3eb8f64fe39f3e2db7fe549f6a%7C0%7C0%7C637897751065729986%7CUnk
+> > nown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1h
+> > aWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=8GfqaDLkn5whi%2F
+> > bsEH9UATPNkJVgsy859sIifJGv%2BHg%3D&amp;reserved=0
+> > 
+> > blank line here. These aren't part of the tags.  
+> Thank you, Rob, I did check, the most datasheets are part of the tags,
+> and few of them has a blank line, do you agree to keep it?
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Seems we have some disagreement on this.  Personally I thought they'd been
+adopted as a standard tag block entry, though I can't immediately find
+a clear statement of that. 
+
++CC Andy who has commented on this before.
+
+
+> > 
+> > With that,
+> > 
+> > Acked-by: Rob Herring <robh@kernel.org>
+> >   
+> > > Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+> > > ---
+> > >  Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml  
+> > b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml  
+> > > index 911a1ae9c83f..272eb48eef5a 100644
+> > > --- a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+> > > +++ b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+> > > @@ -17,7 +17,9 @@ description: |
+> > >  properties:
+> > >    compatible:
+> > >      enum:
+> > > +      - bosch,bmi085-accel
+> > >        - bosch,bmi088-accel
+> > > +      - bosch,bmi090l-accel
+> > >
+> > >    reg:
+> > >      maxItems: 1
+> > > --
+> > > 2.25.1
+> > >
+> > >  
+

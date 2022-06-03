@@ -2,198 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5361A53C4AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 07:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DDD53C4B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 08:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240805AbiFCFxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 01:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S241223AbiFCGAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 02:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238256AbiFCFxw (ORCPT
+        with ESMTP id S232987AbiFCGA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 01:53:52 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F2D369D5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 22:53:47 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220603055343epoutp02b3006a4d32280e7dcadcc59b80a1a6dd~1BojiwVmI1029510295epoutp02T
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:53:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220603055343epoutp02b3006a4d32280e7dcadcc59b80a1a6dd~1BojiwVmI1029510295epoutp02T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654235623;
-        bh=2vp+vtxXSovQ07+Thh72i4FtOaP2QjNC2VwRjYZww9g=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=cv+YDMrSc1/V9jXeglpYh8egp0XZIRgnrrckFbL6TUeD/AvtkDNm8fw2M2AYGDUFt
-         lBjikXTcSiSpBqbt45qa8A/G+MB2vw/NEIf06tDOzmn4+pZFJBwRuyZ1Y3JX/my593
-         s2BQVA0Vwbcwl7RwUyjHerxbJyR1PMia77JaN20k=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220603055342epcas1p4e4ad24e92599716f6335a9451a56bfae~1Boi-oBgS0033600336epcas1p4P;
-        Fri,  3 Jun 2022 05:53:42 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.227]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4LDsWV1nKDz4x9Pt; Fri,  3 Jun
-        2022 05:53:42 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        20.09.10038.6E1A9926; Fri,  3 Jun 2022 14:53:42 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220603055341epcas1p2dd357326eea0cd818daf6f0db7c2aae1~1BoiYHheo1606816068epcas1p2y;
-        Fri,  3 Jun 2022 05:53:41 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220603055341epsmtrp12261684615051a402126ed0330200330~1BoiXFzXR1836218362epsmtrp1N;
-        Fri,  3 Jun 2022 05:53:41 +0000 (GMT)
-X-AuditID: b6c32a37-127ff70000002736-b1-6299a1e6b29f
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F8.4A.11276.5E1A9926; Fri,  3 Jun 2022 14:53:41 +0900 (KST)
-Received: from jaewon-linux.10.32.193.11 (unknown [10.253.100.104]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220603055341epsmtip1cd40b857968079e4196898519385ac44~1BoiNbcR_0417204172epsmtip1e;
-        Fri,  3 Jun 2022 05:53:41 +0000 (GMT)
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        avromanov@sberdevices.ru, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        s.suk@samsung.com, ytk.lee@samsung.com, jaewon31.kim@gmail.com,
-        Jaewon Kim <jaewon31.kim@samsung.com>
-Subject: [PATCH] zram_drv: add __GFP_NOMEMALLOC not to use
- ALLOC_NO_WATERMARKS
-Date:   Fri,  3 Jun 2022 14:57:47 +0900
-Message-Id: <20220603055747.11694-1-jaewon31.kim@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIKsWRmVeSWpSXmKPExsWy7bCmnu6zhTOTDF5+5rSYs34Nm0X/5f2M
-        Ft2bZzJa9L5/xWRxedccNot7a/6zWiz7+p7dYkPLLHaLRX+vsFvs3riIzeLxem4Hbo/ZDRdZ
-        PHbOusvusWlVJ5vHpk+T2D1OzPjN4tG3ZRWjx4W1d1k9dn7azOrxeZNcAGdUtk1GamJKapFC
-        al5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0LVKCmWJOaVAoYDE4mIl
-        fTubovzSklSFjPziElul1IKUnAKzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMmbtVCo4qVTyZ
-        95CxgXGNbBcjJ4eEgInEzhfz2boYuTiEBHYwSvR8fsoKkhAS+MQocXd6CETiG6PEo68nmGA6
-        vuxbxQiR2Mso0btmNZTzg1Hiavc5sHY2AW2J9wsmgdkiAlUSfx49ZwUpYhaYzygx/9hdli5G
-        Dg5hgQCJffe9QEwWAVWJV9tTQExeAVuJPZ8rIHbJS6zecIAZpFNC4CW7xMYDD9khEi4S/85s
-        Y4OwhSVeHd8CFZeSeNnfBmVnSzw9eYQZZKaEQI5EwwZZCNNe4v0lCxCTWUBTYv0ufYhiRYmd
-        v+cygtjMAnwS7772sEJU80p0tAlBlKhJtDz7ygphy0j8/fcMyvaQ2PX+DRMk1GIlFtybwzyB
-        UXYWwoIFjIyrGMVSC4pz01OLDQuM4fGTnJ+7iRGc9rTMdzBOe/tB7xAjEwfjIUYJDmYlEd6y
-        eTOThHhTEiurUovy44tKc1KLDzGaAsNqIrOUaHI+MPHmlcQbmlgamJgZmVgYWxqbKYnzrpp2
-        OlFIID2xJDU7NbUgtQimj4mDU6qByfvMKvW+NTef6orFzt3B8VPu0p545odC9//eMcuX+PV7
-        6oJWVkMr8Sde1lWnnH7/n+fwuT9tS0OjfvUSvtPiM+bt3RRz/MFmvqW+x3J/HWzYfP7EtlAP
-        1xBz83mV6wJ1zvc5pvN+vdE1S/3ZyUN9Tu5yci8uaa964vxru92yTW8im25M/ff/gNRF/edz
-        gl5yRT7SOeAUGNv99vKnkL1KZmtsdBriVPp5i/c76UWyuym+WMB6c8mF/Z68Th+vnZOQevz5
-        3qIs04ML+X2lBCcuSkjRuWhYoffQ8PVhNa2Fh2/cCG/b63Ku5vuBS6lOD7a2Ghulpe8y6//I
-        v+WWVPf57sbbumJSavE7Xq6ba+mjsl6JpTgj0VCLuag4EQD1GykRBAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrELMWRmVeSWpSXmKPExsWy7bCSnO7ThTOTDBYdMbCYs34Nm0X/5f2M
-        Ft2bZzJa9L5/xWRxedccNot7a/6zWiz7+p7dYkPLLHaLRX+vsFvs3riIzeLxem4Hbo/ZDRdZ
-        PHbOusvusWlVJ5vHpk+T2D1OzPjN4tG3ZRWjx4W1d1k9dn7azOrxeZNcAGcUl01Kak5mWWqR
-        vl0CV8bM3SoFR5Uqnsx7yNjAuEa2i5GTQ0LAROLLvlWMXYxcHEICuxklek6+YIVIyEi8Of+U
-        pYuRA8gWljh8uBgkLCTwjVFi5Y1QEJtNQFvi/YJJYOUiAg2MEq3vk0DmMAssZZRYdm4tO0hC
-        WMBP4vTzn2BzWARUJV5tTwExeQVsJfZ8roDYJC+xesMB5gmMPAsYGVYxSqYWFOem5xYbFhjm
-        pZbrFSfmFpfmpesl5+duYgQHo5bmDsbtqz7oHWJk4mA8xCjBwawkwls2b2aSEG9KYmVValF+
-        fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzHnjRfVttxe8tjp9P1FxN6
-        7tUWvTYytuBd8Ixvi2Ba65eGnoyEkNYoM2v3aH3dt0a21+psOCtiz/6f6p69OyOiTPVWoMLT
-        hT9uWTBqFoln1r+6XqzH/6F3xX1NBa5XS542rzz88SuTxiOD392npygtevSk6eKCQxZVWRMi
-        3x7WWsR2yPVUt5cLO+dU5aCioi+drPm6a9ue/m+oUTrk9oxvOmt8hMMW4U1flk3wK94U37Zc
-        56RyDEvhv1kbd2gsaggInRT74krIRdaOq6/1jb+w+u/LfL78B7u+f18Ql2Gf3//tBqp/jtc4
-        RV+MYlLf339V4uhh3hgLSyVRVRX5OYxT1yy/Or1uZ/g1BsYDt5RYijMSDbWYi4oTAZPAd421
-        AgAA
-X-CMS-MailID: 20220603055341epcas1p2dd357326eea0cd818daf6f0db7c2aae1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220603055341epcas1p2dd357326eea0cd818daf6f0db7c2aae1
-References: <CGME20220603055341epcas1p2dd357326eea0cd818daf6f0db7c2aae1@epcas1p2.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 3 Jun 2022 02:00:27 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2059.outbound.protection.outlook.com [40.107.237.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6916B1C12E;
+        Thu,  2 Jun 2022 23:00:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FeqyYrOOedHeuRq2pOlzkwFGF6eC8lDIt0/3vJMoF6/jjOSXyhbVB0lVM7Lb2BgVtUQhemyNqMek2QW3y8q+lK6rXZ7TCqLz7IxIrGCW8k/Pc0XiWRr5pBrdL41uA78FtpSoMDmBl/NPI1eAHsJQ7gIxlUf6L7c9keMliVWVLCSeo0zgb7+qPdh5tQQNxBstTxnbs9nifCRErs65pQ513asqxtHmaeVIoCpsReaurX3bbvOdqQeE3SHGIoyaxAoLAR6Rub92yCI0GEErddUGLOmI/T2PGPhqKOMf4a6cerpxWNNK7DyOpFHuCoemZv0IEAYy5J9P/1GsDPt4DdnduQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pjs2H4ydITxM/JEr+uPczIgV0RTxDwsxckI4eSWxhmc=;
+ b=Jlm/IfyyBh4yTLBp4n2eRyOwdwaItCEfP1O31p3pKsy9BmbmmA+GXleVl1NBzXxjcH3loA0H5LIOdvWlmtf6ZMy5NLiJdD3H4MeOWx9uS+JPpkWdthDl8EFsH9SZ6RGXz/ZvjKQaw7JaWsYNDGBH8WF72kaofLirtdraO9ZSmlWs72/txpGYPQdhVcONEty9/OCbmJ78W65SF6x5RscnK4z8/zXjIWLQBgT2j4gejQL9koncTEYsRJ/kNgVBYaM/+MuQgTixV4CWglwKdwPZhA4HatsqJqk2dEUGNkLo2geuFKH4AB5Iwwi+3AVqs4jnXdoY5oVBk41ED3Z7XzkAdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pjs2H4ydITxM/JEr+uPczIgV0RTxDwsxckI4eSWxhmc=;
+ b=vN2WeYXrVExILqvUn0gCRy9Cf4lidkY/sRu1M5dVT2ZVJQC1a7SZ+xQtikW4QFlhFFmWWe/PdiMqeN/q6XO0vieIrzoIlZC4xC7DP7WSIKzYkxWySun+E0jrfvdbQjo5oC8vHMNuJCXXzR5NGjIgBFMJvhNWOyfrr38RlK3+FXM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
+ by BN6PR1201MB0226.namprd12.prod.outlook.com (2603:10b6:405:56::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.16; Fri, 3 Jun
+ 2022 06:00:19 +0000
+Received: from PH7PR12MB5712.namprd12.prod.outlook.com
+ ([fe80::4cbb:82c:675e:d463]) by PH7PR12MB5712.namprd12.prod.outlook.com
+ ([fe80::4cbb:82c:675e:d463%7]) with mapi id 15.20.5314.013; Fri, 3 Jun 2022
+ 06:00:19 +0000
+Message-ID: <13ddd896-d7a6-3539-2dcf-7ffe4f1a2569@amd.com>
+Date:   Fri, 3 Jun 2022 11:30:00 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] perf docs: Correct typo of event_sources
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Kevin Nomura <nomurak@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Like Xu <likexu@tencent.com>,
+        German Gomez <german.gomez@arm.com>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Alyssa Ross <hi@alyssa.is>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Joshua Martinez <joshuamart@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220603045744.2815559-1-irogers@google.com>
+From:   Sandipan Das <sandipan.das@amd.com>
+In-Reply-To: <20220603045744.2815559-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0179.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:26::34) To PH7PR12MB5712.namprd12.prod.outlook.com
+ (2603:10b6:510:1e3::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d6ce83dd-26a7-4d90-d17b-08da45265655
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0226:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB02262EBA89022DCCE07FD5998BA19@BN6PR1201MB0226.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +1fCJQQxDvqm8OMlZeKmGaYhzJJZ02ZsP/EhH7hOv9Q2rqTT0QY7aXnJolYRjaoXBGS/RQ/D2mQ28SbaEe12IEwPt2Mzi42mr56/6avuS2T0SpYm4KX3+fTF9BWt3C7i35Y0HiSQGfs8rCc4ghqUry7iH00ZhByJpZJ0jvP5vT32NkArCEnJe02HX4qKvRRRLO+lpAl79buYVY0dtZaG9/gAqmyEimqe0nZAS8tVKspc8d2Hhhqre67mplZPfn1+rvc9i1v92Rfe9SrUwXHyZ6ZApfaALzdviVkrUehiRi3W3vSS880nnMp2zKWywgiYkYWUMv3d28i790W0nOeK0whRq8ARIhF4bhEFh4J2DtZbl7Ir2tkPDhuc8wSnOnrhtLPU4WIlILP5kNqaQpDumJQxD6/iHfXWMDYqGpuFJBlorHvGY5YZJUttj84zDY3+5fkHeL0EDzJo6rmE7sm4Ms5DStOZXorj1h2Jh7AhkJvAEN2Z6ExDRWFHXS1xkjy8K9cN1XhTeV6R/appbRdxriG8J/JqJKH7vkQeOfVKtxWSzZXedEvgypOuDrnyoK9Rdz02g97k0csS2ysVVj2MLjvZL820HDAGudBd0PdKL3yf3dPpibyA0ykAVRFEWTDanPM7r//XC0t+bjpwBJr+/IHljF0yGrk0ugvdc0whzvK+D7D3Es3crRPVzDodKgRSiDGavEwl4cvMiLx2WSXwsGtZvYdmCUVlnPRiadCtPc0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(5660300002)(36756003)(86362001)(4326008)(508600001)(6666004)(31696002)(44832011)(4744005)(7416002)(186003)(66556008)(8936002)(66946007)(66476007)(2616005)(8676002)(38100700002)(6512007)(54906003)(316002)(6506007)(26005)(6916009)(6486002)(2906002)(53546011)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWlVckc0bndGMmN1Nkx4dzZySm5tbnVrR29uajBsZDM3d0ljaUFCdjZFVXQx?=
+ =?utf-8?B?NDJKMlhMNGcvNFRzeU1hV2RMQVNXZWRFRGpDdzJadFpQL0MwRlgzRFNwRTNx?=
+ =?utf-8?B?c1YrZnBrcS85cjI1ZVU1NlJmUWY5NnpvRWpnWitySmtHZS9NMEYrdGhlQ0cw?=
+ =?utf-8?B?VitmUWQ5U0hNMmJ4dmQ3OUlBRVpvTlhMbHNDZnQvMmRnVDdzY2V3M1YweWI4?=
+ =?utf-8?B?QmxjT3QwYnBhVWp1azlEM3pqTVpGZDBwZ0t0alpOZjJQM0Q3cGtnQlhjLzRz?=
+ =?utf-8?B?QmVwNVlCakFKUzdKTjNOMmJqYmlqRk8rdzlzU1JHL2lEMFNnZW5DQklCdUxj?=
+ =?utf-8?B?QkNtbmdMcDFvOW5PZ3VTaHlndXRuZmFCNHFyd21LSytVYm9ZWGw2K1UrTkJs?=
+ =?utf-8?B?dWw4amVVQnlKWEtXblpGRGtIS1BNSEN1OE5EMFdDSkIycnVZN1R1WGdmYW14?=
+ =?utf-8?B?bHFGUFpSVzE4bGFObEJDZW9xSi9kczYrL0Yxejg2RHJDUVQ3TjZDTkhQVVk1?=
+ =?utf-8?B?N1NCN3ljNTgydXVxb0RrZjBuV3pIZnkwRkxpVEwrbFhubDdTdGtRZHRWMmhU?=
+ =?utf-8?B?MHdmVGVaa0VqQlZUUGVNZUdHVWVLNUhlREdHN2RlRFBiWFBCd2M2WTc4c0Rk?=
+ =?utf-8?B?VEdSNFBURk5Vdks2NGRpYU04cmZGYXFSK2tZMjB2L1BMdDdPdzgzWm5oaHd3?=
+ =?utf-8?B?Z0VCbURldVZrSGorL2c4TGFKMTZMVGhFNmN5TVVqOGRneHhwMDFnNWFCOGNN?=
+ =?utf-8?B?NnhmMUlhUVhqQnFxZnRqcWtBVjBGWHJ0U0RUcXlWMXl1RlBTSTlVV1c2Uzcv?=
+ =?utf-8?B?aE92MFI1c0FHQXRGL2N5SlEyWC9ERlZ1eFpWTTBMOHlEL0JQRUpYV2xQUmNF?=
+ =?utf-8?B?SkxmTlRPQjhnODl4RjBjRFRpRWdsNkdkejM4VkZ6dlpZdytBTWpFRlpsd1g3?=
+ =?utf-8?B?MnFicG5hZmJkMVJSQlZWaGVYUjU2VU5NRjZjZldZMmdMQzdYbENxRmxrRW1r?=
+ =?utf-8?B?ci9xVnRnZGZ4MHVVOXpJZmI1NUUvV285Q0I4b3ZSQ013QlpVZUlWYXBxR3pP?=
+ =?utf-8?B?Zi9OaEl5bHJRVWxOMElMZGI5RzBPOFBKZnRoRlFvQWVhdWp5UldDck5jWXFJ?=
+ =?utf-8?B?YzhjdTJQT0NqRSs0RDJIblVMdzdaZnZTL05mWHBDTnFydHNWVmgvbmlNNFl6?=
+ =?utf-8?B?aGttWGFZQjdhaXN0MDl1RFlPcVBmRTZqZTlaVUlIcjJETVQ2dUVIa1JNVXNX?=
+ =?utf-8?B?OXVrbG9ZcU5PNDl5UjduYXlQNHd6WVF5QkNzemFieDliOWo2Q0ZBcVo4WjhM?=
+ =?utf-8?B?SlNPVitpVGRqUUdmL3p2ZGFEbHpSTXE3Y2N3T2FzVG0xQ2ZPQVRhNVROa2xq?=
+ =?utf-8?B?RDNqRFN4WUNHQjZ3QU1XUU9RUXhmNlQ4RlZya004WHgwWTV2WXRXTko1b20x?=
+ =?utf-8?B?RE1ndi9sNlJJQ3VKUXQ3LzZ6TjJVV29LangveGZhc3Mwdjc3WXdpVDA1TS9L?=
+ =?utf-8?B?K0hqR0lDRkR0VGJXWHdsaEJPNnhMRTd0Q3h6TjFHcG9rS25kMWtmWVRhVUMy?=
+ =?utf-8?B?M0Y1YXR5WGR2QVlnNllFZjRzcDJDZFU3dFFuTEtkclo3anI1aGtuNU94ZGpP?=
+ =?utf-8?B?aG10RFdGT2kyQmEzK0VPdFRSY29mcEI3Rkk1ckxZd2VaR2VkMG50RVBWNEdi?=
+ =?utf-8?B?VlJUaEF0U0hSRUY0UWVYZWh5dnZqRTVJbTY1eGZTN25UNHBDUzdpdTRjcjli?=
+ =?utf-8?B?b2pVZjZDdTZjRzZHZllPYzlOL1JEYnN3NDhoOGh2RGdQVUM2cW9GSVUrWWFD?=
+ =?utf-8?B?c3VCajR1T2lNV2pSVUdSRG5YOHA0NkM0UlkyOGw4V2k1Y2NuVEdNV1VUZ2sw?=
+ =?utf-8?B?RGV2YlRUR0FjNit6Z3h4SGY3SE9CNVlqMG5rcHhNZFd2YUJKRGRMUkorTXcv?=
+ =?utf-8?B?M0ZSdFF2KzVBYm9pd0d3MnNGVkMyNW4xb01FQmZmbGx3Vm4wSDhIZXZJWkJQ?=
+ =?utf-8?B?QUduSE1lM2tTNk5aeWpXTFRCWGZ3ZjB1OTJuZmhvMGFQWkZidVM5bjZ6bnc1?=
+ =?utf-8?B?ZnczTytuVEc2WE1lMytubktla1IzeXExSnA2N3FPMnZtWXZPZnAwRzJCM2gx?=
+ =?utf-8?B?ZTI0dzd4NjBhRjZpT1h0anoxOWZ4YzJiSmF1K1NYZy95UUFsdUJoWjlPVTlT?=
+ =?utf-8?B?cFlsWkFRc2NzMkRWZzJlaVpIQVRDZmJkNXVYV1dpMGtob1diSEVxYlByeUFq?=
+ =?utf-8?B?dWhKTEk1TllON0V5TGJvNnpjcjFEcWxPcUIzUDJNRnVxRnlUeUZGbVZ5SXBJ?=
+ =?utf-8?B?REhRcW80NmlDTkRsaW00d3gzalplUHJrSnRUVzBITXByckJ6TE1Jdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6ce83dd-26a7-4d90-d17b-08da45265655
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2022 06:00:18.9179
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CNn7ewaedOs8AiIWyqjp3o6ih4PJPvt83j9bmTBr6mGhf0+MxVaUMOZbho+QyqaMYdv6MxZOmHTuE4938d7npA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0226
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The atomic page allocation failure sometimes happened, and most of them
-seem to occur during boot time.
 
-<4>[   59.707645] system_server: page allocation failure: order:0, mode:0xa20(GFP_ATOMIC), nodemask=(null),cpuset=foreground-boost,mems_allowed=0
-<4>[   59.707676] CPU: 5 PID: 1209 Comm: system_server Tainted: G S O      5.4.161-qgki-24219806-abA236USQU0AVE1 #1
-<4>[   59.707691] Call trace:
-<4>[   59.707702]  dump_backtrace.cfi_jt+0x0/0x4
-<4>[   59.707712]  show_stack+0x18/0x24
-<4>[   59.707719]  dump_stack+0xa4/0xe0
-<4>[   59.707728]  warn_alloc+0x114/0x194
-<4>[   59.707734]  __alloc_pages_slowpath+0x828/0x83c
-<4>[   59.707740]  __alloc_pages_nodemask+0x2b4/0x310
-<4>[   59.707747]  alloc_slab_page+0x40/0x5c8
-<4>[   59.707753]  new_slab+0x404/0x420
-<4>[   59.707759]  ___slab_alloc+0x224/0x3b0
-<4>[   59.707765]  __kmalloc+0x37c/0x394
-<4>[   59.707773]  context_struct_to_string+0x110/0x1b8
-<4>[   59.707778]  context_add_hash+0x6c/0xc8
-<4>[   59.707785]  security_compute_sid.llvm.13699573597798246927+0x508/0x5d8
-<4>[   59.707792]  security_transition_sid+0x2c/0x38
-<4>[   59.707804]  selinux_socket_create+0xa0/0xd8
-<4>[   59.707811]  security_socket_create+0x68/0xbc
-<4>[   59.707818]  __sock_create+0x8c/0x2f8
-<4>[   59.707823]  __sys_socket+0x94/0x19c
-<4>[   59.707829]  __arm64_sys_socket+0x20/0x30
-<4>[   59.707836]  el0_svc_common+0x100/0x1e0
-<4>[   59.707841]  el0_svc_handler+0x68/0x74
-<4>[   59.707848]  el0_svc+0x8/0xc
-<4>[   59.707853] Mem-Info:
-<4>[   59.707890] active_anon:223569 inactive_anon:74412 isolated_anon:0
-<4>[   59.707890]  active_file:51395 inactive_file:176622 isolated_file:0
-<4>[   59.707890]  unevictable:1018 dirty:211 writeback:4 unstable:0
-<4>[   59.707890]  slab_reclaimable:14398 slab_unreclaimable:61909
-<4>[   59.707890]  mapped:134779 shmem:1231 pagetables:26706 bounce:0
-<4>[   59.707890]  free:528 free_pcp:844 free_cma:147
-<4>[   59.707900] Node 0 active_anon:894276kB inactive_anon:297648kB active_file:205580kB inactive_file:706488kB unevictable:4072kB isolated(anon):0kB isolated(file):0kB mapped:539116kB dirty:844kB writeback:16kB shmem:4924kB writeback_tmp:0kB unstable:0kB all_unreclaimable? no
-<4>[   59.707912] Normal free:2112kB min:7244kB low:68892kB high:72180kB active_anon:893140kB inactive_anon:297660kB active_file:204740kB inactive_file:706396kB unevictable:4072kB writepending:860kB present:3626812kB managed:3288700kB mlocked:4068kB kernel_stack:62416kB shadow_call_stack:15656kB pagetables:106824kB bounce:0kB free_pcp:3372kB local_pcp:176kB free_cma:588kB
-<4>[   59.707915] lowmem_reserve[]: 0 0
-<4>[   59.707922] Normal: 8*4kB (H) 5*8kB (H) 13*16kB (H) 25*32kB (H) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1080kB
-<4>[   59.707942] 242549 total pagecache pages
-<4>[   59.707951] 12446 pages in swap cache
-<4>[   59.707956] Swap cache stats: add 212408, delete 199969, find 36869/71571
-<4>[   59.707961] Free swap  = 3445756kB
-<4>[   59.707965] Total swap = 4194300kB
-<4>[   59.707969] 906703 pages RAM
-<4>[   59.707973] 0 pages HighMem/MovableOnly
-<4>[   59.707978] 84528 pages reserved
-<4>[   59.707982] 49152 pages cma reserved
+On 6/3/2022 10:27 AM, Ian Rogers wrote:
+> The sysfs directory is called event_source.
+> 
+> Reported-by: Kevin Nomura <nomurak@google.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/Documentation/perf-record.txt | 2 +-
+>  tools/perf/Documentation/perf-stat.txt   | 2 +-
+>  tools/perf/Documentation/perf-top.txt    | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+>  [...]
 
-The kswapd or other reclaim contexts may not prepare enough free pages
-for too many atomic allocations occurred in short time. But zram may not
-be helpful for this atomic allocation even though zram is used to
-reclaim.
+Thanks for fixing these.
 
-To get one zs object for a specific size, zram may allocate serveral
-pages. And this can be happened on different class sizes at the same
-time. It means zram may consume more pages to reclaim only one page.
-This inefficiency may consume all free pages below watmerk min by a
-process having PF_MEMALLOC like kswapd.
-
-We can avoid this by adding __GFP_NOMEMALLOC. PF_MEMALLOC process won't
-use ALLOC_NO_WATERMARKS.
-
-Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
----
- drivers/block/zram/zram_drv.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index b8549c61ff2c..39cd1397ed3b 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1383,6 +1383,7 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
- 
- 	handle = zs_malloc(zram->mem_pool, comp_len,
- 			__GFP_KSWAPD_RECLAIM |
-+			__GFP_NOMEMALLOC |
- 			__GFP_NOWARN |
- 			__GFP_HIGHMEM |
- 			__GFP_MOVABLE);
--- 
-2.17.1
+Reviewed-by: Sandipan Das <sandipan.das@amd.com>
 

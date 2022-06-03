@@ -2,175 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC4E53D1ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74CE53D1EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348326AbiFCSye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S239425AbiFCSyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348295AbiFCSyb (ORCPT
+        with ESMTP id S1347797AbiFCSyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:54:31 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55CE289AD;
-        Fri,  3 Jun 2022 11:54:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654282470; x=1685818470;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=+bJH935PB5pfQJUgE5Lu1i5hWq8Cu1nLmIvkALLizzI=;
-  b=D6tN55dFGcSREaxNbr547kk6a62H48RVUS6RV/k/tYP3LqOc6/SrLkJO
-   p/wvbdCr+2YS//o8c8ULAaMz1E6kYftbORGgYe5uiIyXGK9mK+bUvCbJA
-   EXDEX9Wo5gD3ecrazM/hV+sYm+upVgN26vy+L86YvE6NvmYOxa8seQedw
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jun 2022 11:54:30 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 11:54:30 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 3 Jun 2022 11:54:30 -0700
-Received: from [10.216.1.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 3 Jun 2022
- 11:54:26 -0700
-Message-ID: <f525c352-d995-0589-584f-0e9acf419f80@quicinc.com>
-Date:   Sat, 4 Jun 2022 00:24:23 +0530
+        Fri, 3 Jun 2022 14:54:44 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D787289B6;
+        Fri,  3 Jun 2022 11:54:43 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id w2so15280118ybi.7;
+        Fri, 03 Jun 2022 11:54:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lsii2M/Z+BjHQ59FvjJ8av50zu7xha2i5JDwxAF3srs=;
+        b=t8bCVTdhcprieEQdJqIg2y/nndA5I93jpd4sgMYDrpi0xnbz68kQ3f22fOUNCihCS4
+         bsBKSnzsY8N9oXEFh56UMQHiB403GhHct9GUtes7r9myu57fujIyFdO3aHdyd5jzoWxR
+         hJ27eomJTdKNWG7nplj85e+z4kiH7lcxLWeipm/bVVWtBMZYPr7/+Df3q+QJEpx/L4DF
+         MP51hrfN/0b4cqaqzXDELAoOk15lxsxCqqc73i3QQLV6BXzxUQUYMYj/ELFf6BPNSOAL
+         1jPhgv/1VR3v3D02ZqXl8pzecLeydTsk9/cf9OqT0PGhLUtxrh8t5ipzF30dS4Q8tDk3
+         BTNw==
+X-Gm-Message-State: AOAM530U3en2oYbr2wPTkRgzun5OUUbFwQyVn/a1yTPXs3Q9JkoOrz8M
+        8W0OMU1ItXFDMOMqIpIKRy7aL69BDbsUdrTKQgg=
+X-Google-Smtp-Source: ABdhPJxB4pVovVskOU85j4HEBytnIdMzJtv/l+nGCWtbsux7xavEE6caGgyM1Qro50zwzIcWaOennN+kqEZC0EQP+vo=
+X-Received: by 2002:a25:2004:0:b0:650:740:f31d with SMTP id
+ g4-20020a252004000000b006500740f31dmr12046953ybg.81.1654282482815; Fri, 03
+ Jun 2022 11:54:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [V4] serial: core: Do stop_rx in suspend path for console if
- console_suspend is disabled
-Content-Language: en-CA
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <dianders@chromium.org>,
-        <mka@chromium.org>, <swboyd@chromium.org>
-References: <1652692810-31148-1-git-send-email-quic_vnivarth@quicinc.com>
- <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
- <CGME20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b@eucas1p1.samsung.com>
- <3866c083-0064-ac9a-4587-91a83946525d@samsung.com>
- <ff029402-f90c-096a-7366-b58f53555ace@quicinc.com>
- <fb44af37-daf7-974d-95fe-1a6c2cdab676@samsung.com>
- <cb802fb1-d0b8-68af-1c04-f73bc1beca77@quicinc.com>
-In-Reply-To: <cb802fb1-d0b8-68af-1c04-f73bc1beca77@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YpnwZ/Q5yTKRDBOD@kroah.com> <20220603113138.2689444-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20220603113138.2689444-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Jun 2022 20:54:31 +0200
+Message-ID: <CAJZ5v0hJ_uPakb8s8v4VJw86ShsN8Y0Hnk2NZ4ta7GKGQeW8pg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] driver core: Fix wait_for_device_probe() &
+ deferred_probe_timeout interaction
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>,
+        John Stultz <jstultz@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-
-On 6/2/2022 9:12 PM, Vijaya Krishna Nivarthi wrote:
-> Hi,
+On Fri, Jun 3, 2022 at 1:32 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
+> From: Saravana Kannan <saravanak@google.com>
 >
-> On 6/2/2022 3:55 AM, Marek Szyprowski wrote:
->> Hi,
->>
->> On 01.06.2022 13:24, Vijaya Krishna Nivarthi wrote:
->>> On 5/24/2022 5:24 PM, Marek Szyprowski wrote:
->>>> On 23.05.2022 23:32, Marek Szyprowski wrote:
->>>>> Hi,
->>>>>
->>>>> On 16.05.2022 11:20, Vijaya Krishna Nivarthi wrote:
->>>>>> For the case of console_suspend disabled, if back to back
->>>>>> suspend/resume
->>>>>> test is executed, at the end of test, sometimes console would
->>>>>> appear to
->>>>>> be frozen not responding to input. This would happen because, during
->>>>>> resume, rx transactions can come in before system is ready,
->>>>>> malfunction
->>>>>> of rx happens in turn resulting in console appearing to be stuck.
->>>>>>
->>>>>> Do a stop_rx in suspend sequence to prevent this.
->>>>>>
->>>>>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
->>>>>> ---
->>>>>> v4: moved the change to serial core to apply for all drivers
->>>>>> v3: swapped the order of conditions to be more human readable
->>>>>> v2: restricted patch to contain only stop_rx in suspend sequence
->>>>>> v1: intial patch contained 2 additional unrelated changes in 
->>>>>> vicinity
->>>>>> ---
->>>>> This patch landed recently in linux-next as commit c9d2325cdb92
->>>>> ("serial: core: Do stop_rx in suspend path for console if
->>>>> console_suspend is disabled").
->>>>>
->>>>> Unfortunately it breaks console operation on my test systems after
->>>>> system suspend/resume cycle if 'no_console_suspend' kernel parameter
->>>>> is present. System properly resumes from suspend, the console 
->>>>> displays
->>>>> all the messages and even command line prompt, but then doesn't react
->>>>> on any input. If I remove the 'no_console_suspend' parameter, the
->>>>> console is again operational after system suspend/resume cycle. 
->>>>> Before
->>>>> this patch it worked fine regardless the 'no_console_suspend'
->>>>> parameter.
->>>>>
->>>>> If this matters, the test system is ARM 32bit Samsung 
->>>>> Exynos5422-based
->>>>> Odroid XU3lite board.
->>>> One more information. This issue can be easily reproduced with 
->>>> QEMU. It
->>>> happens both on ARM 32bit and ARM 64bit QEMU's 'virt' machines when
->>>> 'no_console_suspend' is added to kernel's cmdline.
->>>>
->>> Ideally, as comments indicate, the set_termios should have done
->>> stop_rx at begin and start_rx at end to take care of this issue.
->>>
->>> This is probably missing in your driver. Can we check if this can be
->>> fixed?
->> Sure, just point me what need to be added in amba-pl011.c and
->> samsung_tty.c. I've briefly compared the suspend/resume paths of those
->> drivers with other drivers and I don't see anything missing there.
->>
->>> OR other option is
->>>
->>> Add a start_rx in uart_resume_port after call to set_termios to handle
->>> this scenario for other drivers.
-
-Since start_rx is not exposed it doesn't seem like we will be able to 
-handle it in core.
-
-In your drivers, Can we add a call to stop_rx at begin of set_termios 
-and then undo it at end?
-
-That would ensure that set_termios functionality is unaffected while 
-fixing the broken cases?
-
-If that's not an option we will have to go back to a previous version of 
-limiting the change to qcom driver.
-
-Thank you.
-
->>>
->>> Please let me know if there are any concerns for this options.
->> IMHO this looks like an issue that affects lots of drivers and it should
->> be handled in the core.
+> Mounting NFS rootfs was timing out when deferred_probe_timeout was
+> non-zero [1].  This was because ip_auto_config() initcall times out
+> waiting for the network interfaces to show up when
+> deferred_probe_timeout was non-zero. While ip_auto_config() calls
+> wait_for_device_probe() to make sure any currently running deferred
+> probe work or asynchronous probe finishes, that wasn't sufficient to
+> account for devices being deferred until deferred_probe_timeout.
 >
-> Sure, we will look into both aspects and get back as soon as possible.
+> Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
+> until the deferred_probe_timeout fires") tried to fix that by making
+> sure wait_for_device_probe() waits for deferred_probe_timeout to expire
+> before returning.
 >
-> Thank you.
+> However, if wait_for_device_probe() is called from the kernel_init()
+> context:
 >
->>
->>   > ...
->>
->> Best regards
+> - Before deferred_probe_initcall() [2], it causes the boot process to
+>   hang due to a deadlock.
+>
+> - After deferred_probe_initcall() [3], it blocks kernel_init() from
+>   continuing till deferred_probe_timeout expires and beats the point of
+>   deferred_probe_timeout that's trying to wait for userspace to load
+>   modules.
+>
+> Neither of this is good. So revert the changes to
+> wait_for_device_probe().
+>
+> [1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
+> [2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
+> [3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
+>
+> Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
+> Cc: John Stultz <jstultz@google.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Cc: Basil Eljuse <Basil.Eljuse@arm.com>
+> Cc: Ferry Toth <fntoth@gmail.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Anders Roxell <anders.roxell@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: John Stultz <jstultz@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+
+> ---
+>  drivers/base/dd.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 2fc8507f59ee..91f63cd33b12 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -263,7 +263,6 @@ int driver_deferred_probe_timeout;
+>  #endif
+>
+>  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+> -static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
+>
+>  static int __init deferred_probe_timeout_setup(char *str)
+>  {
+> @@ -318,7 +317,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
+>         list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
+>                 dev_info(p->device, "deferred probe pending\n");
+>         mutex_unlock(&deferred_probe_mutex);
+> -       wake_up_all(&probe_timeout_waitqueue);
+>  }
+>  static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
+>
+> @@ -736,9 +734,6 @@ int driver_probe_done(void)
+>   */
+>  void wait_for_device_probe(void)
+>  {
+> -       /* wait for probe timeout */
+> -       wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
+> -
+>         /* wait for the deferred probe workqueue to finish */
+>         flush_work(&deferred_probe_work);
+>
+> --
+> 2.36.1
+>

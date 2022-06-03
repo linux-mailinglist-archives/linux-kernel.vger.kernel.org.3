@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A7B53D0B0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E7853D084
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347247AbiFCSKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S1347447AbiFCSGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243793AbiFCR4w (ORCPT
+        with ESMTP id S1346361AbiFCRvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:56:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877DF21831;
-        Fri,  3 Jun 2022 10:54:00 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A101854BFC;
+        Fri,  3 Jun 2022 10:47:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E011B82189;
-        Fri,  3 Jun 2022 17:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 940C5C385A9;
-        Fri,  3 Jun 2022 17:53:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B4EE604EF;
+        Fri,  3 Jun 2022 17:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8A7C385B8;
+        Fri,  3 Jun 2022 17:47:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278838;
-        bh=SO2iA/ugLxU2hCMzSj19M0ZZyZyDnN98h7RUXWq3yko=;
+        s=korg; t=1654278468;
+        bh=NnEyWjMihEvGC1ycsFdaXgQ+EWmAJe/cwgy1WOjErkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XOC1CJm58og51k4uF2w+dkT7nycc68wwgpy+UJVW9aT2SfuruNcI8ASpzVLIDxtp0
-         5D/3ldwGg48Y1IxhSOHLEu8KimYb31EhnCcxlqYgkPwM9ZKPjFGM2mBZdhIqzqisE+
-         PwFGtqXIxCThGcouwr88i4LS8PwsUYykdossd37g=
+        b=IyBYEftoQoio5Z1QwBioYoH6ychr6yVSXGY8SFPwA4FpBep0BSHbrsSB1P41ibZKV
+         IMzmMVzn/ic1E4ixT9fU1TJTTiNvrc8WWn2Vhue3IvkPWPrMTf6hpNeypSI1qGlQnn
+         W4h8OSeW4y9q72n86EBAp7749JbCET1KWnW5ck7M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH 5.17 43/75] tools/memory-model/README: Update klitmus7 compat table
+        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.10 42/53] dm stats: add cond_resched when looping over entries
 Date:   Fri,  3 Jun 2022 19:43:27 +0200
-Message-Id: <20220603173822.968867717@linuxfoundation.org>
+Message-Id: <20220603173819.944245381@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-commit 5b759db44195bb779828a188bad6b745c18dcd55 upstream.
+commit bfe2b0146c4d0230b68f5c71a64380ff8d361f8b upstream.
 
-EXPORT_SYMBOL of do_exec() was removed in v5.17.  Unfortunately,
-kernel modules from klitmus7 7.56 have do_exec() at the end of
-each kthread.
+dm-stats can be used with a very large number of entries (it is only
+limited by 1/4 of total system memory), so add rescheduling points to
+the loops that iterate over the entries.
 
-herdtools7 7.56.1 has addressed the issue.
-
-Update the compatibility table accordingly.
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Luc Maranget <luc.maranget@inria.fr>
-Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-Cc: stable@vger.kernel.org # v5.17+
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/memory-model/README | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/md/dm-stats.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/memory-model/README b/tools/memory-model/README
-index 9edd402704c4..dab38904206a 100644
---- a/tools/memory-model/README
-+++ b/tools/memory-model/README
-@@ -54,7 +54,8 @@ klitmus7 Compatibility Table
- 	     -- 4.14  7.48 --
- 	4.15 -- 4.19  7.49 --
- 	4.20 -- 5.5   7.54 --
--	5.6  --       7.56 --
-+	5.6  -- 5.16  7.56 --
-+	5.17 --       7.56.1 --
- 	============  ==========
+--- a/drivers/md/dm-stats.c
++++ b/drivers/md/dm-stats.c
+@@ -224,6 +224,7 @@ void dm_stats_cleanup(struct dm_stats *s
+ 				       atomic_read(&shared->in_flight[READ]),
+ 				       atomic_read(&shared->in_flight[WRITE]));
+ 			}
++			cond_resched();
+ 		}
+ 		dm_stat_free(&s->rcu_head);
+ 	}
+@@ -313,6 +314,7 @@ static int dm_stats_create(struct dm_sta
+ 	for (ni = 0; ni < n_entries; ni++) {
+ 		atomic_set(&s->stat_shared[ni].in_flight[READ], 0);
+ 		atomic_set(&s->stat_shared[ni].in_flight[WRITE], 0);
++		cond_resched();
+ 	}
  
+ 	if (s->n_histogram_entries) {
+@@ -325,6 +327,7 @@ static int dm_stats_create(struct dm_sta
+ 		for (ni = 0; ni < n_entries; ni++) {
+ 			s->stat_shared[ni].tmp.histogram = hi;
+ 			hi += s->n_histogram_entries + 1;
++			cond_resched();
+ 		}
+ 	}
  
--- 
-2.36.1
-
+@@ -345,6 +348,7 @@ static int dm_stats_create(struct dm_sta
+ 			for (ni = 0; ni < n_entries; ni++) {
+ 				p[ni].histogram = hi;
+ 				hi += s->n_histogram_entries + 1;
++				cond_resched();
+ 			}
+ 		}
+ 	}
+@@ -474,6 +478,7 @@ static int dm_stats_list(struct dm_stats
+ 			}
+ 			DMEMIT("\n");
+ 		}
++		cond_resched();
+ 	}
+ 	mutex_unlock(&stats->mutex);
+ 
+@@ -750,6 +755,7 @@ static void __dm_stat_clear(struct dm_st
+ 				local_irq_enable();
+ 			}
+ 		}
++		cond_resched();
+ 	}
+ }
+ 
+@@ -865,6 +871,8 @@ static int dm_stats_print(struct dm_stat
+ 
+ 		if (unlikely(sz + 1 >= maxlen))
+ 			goto buffer_overflow;
++
++		cond_resched();
+ 	}
+ 
+ 	if (clear)
 
 

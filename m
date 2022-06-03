@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CF453D066
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2747F53CFDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346236AbiFCSDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S1345805AbiFCR5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344868AbiFCRwS (ORCPT
+        with ESMTP id S1346664AbiFCRvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7E11A390;
-        Fri,  3 Jun 2022 10:52:17 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98810544C7;
+        Fri,  3 Jun 2022 10:49:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8F3BB82419;
-        Fri,  3 Jun 2022 17:52:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE6FC385B8;
-        Fri,  3 Jun 2022 17:52:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 338F660F3B;
+        Fri,  3 Jun 2022 17:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37334C385A9;
+        Fri,  3 Jun 2022 17:49:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278734;
-        bh=g01vBZVStxAahFQTmtaV2HaIpT1FseCZakkCwgxe3N4=;
+        s=korg; t=1654278544;
+        bh=QdzVgy+7LC1eSGiAnX9qGElIAQugWzv77O5yVZ37v+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R7FvreJ92ZDLVEBhKorjEEX6xQYbEDTpNKY0+h6oyluzyvPfvA9shtkjNODjqSroX
-         WpRqQ4jZvyzDQrCsAi6gktaWkzTrgqvchm78Tyrp/+EyjOP/thOhH/Czo2sV7JCkgh
-         et+DJZuTmItLsOob3ep/xmjwRrMlBAMKSsFJnPv0=
+        b=bJFUVTLa98eKqQC+bPkhR67o8+fzgiEWKXOn5ue1f9QmMnRA9wP3SZddZNnfP2vfT
+         bNE2MeCZrGRtbMwA3tU/Gx2QWtwxnKK1ak0mxizOchniJpBHrVRLbFc6nwGUL8/26Y
+         BP7kRX/KKnU4hQ62siIFK1XRYAfDxZc1NoOspdCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "From: Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 10/75] i2c: ismt: Provide a DMA buffer for Interrupt Cause Logging
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        zdi-disclosures@trendmicro.com
+Subject: [PATCH 5.15 14/66] pipe: Fix missing lock in pipe_resize_ring()
 Date:   Fri,  3 Jun 2022 19:42:54 +0200
-Message-Id: <20220603173822.041903257@linuxfoundation.org>
+Message-Id: <20220603173821.075314499@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,88 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 17a0f3acdc6ec8b89ad40f6e22165a4beee25663 ]
+commit 189b0ddc245139af81198d1a3637cac74f96e13a upstream.
 
-Before sending a MSI the hardware writes information pertinent to the
-interrupt cause to a memory location pointed by SMTICL register. This
-memory holds three double words where the least significant bit tells
-whether the interrupt cause of master/target/error is valid. The driver
-does not use this but we need to set it up because otherwise it will
-perform DMA write to the default address (0) and this will cause an
-IOMMU fault such as below:
+pipe_resize_ring() needs to take the pipe->rd_wait.lock spinlock to
+prevent post_one_notification() from trying to insert into the ring
+whilst the ring is being replaced.
 
-  DMAR: DRHD: handling fault status reg 2
-  DMAR: [DMA Write] Request device [00:12.0] PASID ffffffff fault addr 0
-        [fault reason 05] PTE Write access is not set
+The occupancy check must be done after the lock is taken, and the lock
+must be taken after the new ring is allocated.
 
-To prevent this from happening, provide a proper DMA buffer for this
-that then gets mapped by the IOMMU accordingly.
+The bug can lead to an oops looking something like:
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ BUG: KASAN: use-after-free in post_one_notification.isra.0+0x62e/0x840
+ Read of size 4 at addr ffff88801cc72a70 by task poc/27196
+ ...
+ Call Trace:
+  post_one_notification.isra.0+0x62e/0x840
+  __post_watch_notification+0x3b7/0x650
+  key_create_or_update+0xb8b/0xd20
+  __do_sys_add_key+0x175/0x340
+  __x64_sys_add_key+0xbe/0x140
+  do_syscall_64+0x5c/0xc0
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Reported by Selim Enes Karaduman @Enesdex working with Trend Micro Zero
+Day Initiative.
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Reported-by: zdi-disclosures@trendmicro.com # ZDI-CAN-17291
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-ismt.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ fs/pipe.c |   31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-ismt.c b/drivers/i2c/busses/i2c-ismt.c
-index f4820fd3dc13..c01430ce103a 100644
---- a/drivers/i2c/busses/i2c-ismt.c
-+++ b/drivers/i2c/busses/i2c-ismt.c
-@@ -82,6 +82,7 @@
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -1244,30 +1244,33 @@ unsigned int round_pipe_size(unsigned lo
  
- #define ISMT_DESC_ENTRIES	2	/* number of descriptor entries */
- #define ISMT_MAX_RETRIES	3	/* number of SMBus retries to attempt */
-+#define ISMT_LOG_ENTRIES	3	/* number of interrupt cause log entries */
+ /*
+  * Resize the pipe ring to a number of slots.
++ *
++ * Note the pipe can be reduced in capacity, but only if the current
++ * occupancy doesn't exceed nr_slots; if it does, EBUSY will be
++ * returned instead.
+  */
+ int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+ {
+ 	struct pipe_buffer *bufs;
+ 	unsigned int head, tail, mask, n;
  
- /* Hardware Descriptor Constants - Control Field */
- #define ISMT_DESC_CWRL	0x01	/* Command/Write Length */
-@@ -175,6 +176,8 @@ struct ismt_priv {
- 	u8 head;				/* ring buffer head pointer */
- 	struct completion cmp;			/* interrupt completion */
- 	u8 buffer[I2C_SMBUS_BLOCK_MAX + 16];	/* temp R/W data buffer */
-+	dma_addr_t log_dma;
-+	u32 *log;
- };
+-	/*
+-	 * We can shrink the pipe, if arg is greater than the ring occupancy.
+-	 * Since we don't expect a lot of shrink+grow operations, just free and
+-	 * allocate again like we would do for growing.  If the pipe currently
+-	 * contains more buffers than arg, then return busy.
+-	 */
+-	mask = pipe->ring_size - 1;
+-	head = pipe->head;
+-	tail = pipe->tail;
+-	n = pipe_occupancy(pipe->head, pipe->tail);
+-	if (nr_slots < n)
+-		return -EBUSY;
+-
+ 	bufs = kcalloc(nr_slots, sizeof(*bufs),
+ 		       GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+ 	if (unlikely(!bufs))
+ 		return -ENOMEM;
  
- static const struct pci_device_id ismt_ids[] = {
-@@ -411,6 +414,9 @@ static int ismt_access(struct i2c_adapter *adap, u16 addr,
- 	memset(desc, 0, sizeof(struct ismt_desc));
- 	desc->tgtaddr_rw = ISMT_DESC_ADDR_RW(addr, read_write);
- 
-+	/* Always clear the log entries */
-+	memset(priv->log, 0, ISMT_LOG_ENTRIES * sizeof(u32));
++	spin_lock_irq(&pipe->rd_wait.lock);
++	mask = pipe->ring_size - 1;
++	head = pipe->head;
++	tail = pipe->tail;
 +
- 	/* Initialize common control bits */
- 	if (likely(pci_dev_msi_enabled(priv->pci_dev)))
- 		desc->control = ISMT_DESC_INT | ISMT_DESC_FAIR;
-@@ -708,6 +714,8 @@ static void ismt_hw_init(struct ismt_priv *priv)
- 	/* initialize the Master Descriptor Base Address (MDBA) */
- 	writeq(priv->io_rng_dma, priv->smba + ISMT_MSTR_MDBA);
- 
-+	writeq(priv->log_dma, priv->smba + ISMT_GR_SMTICL);
++	n = pipe_occupancy(head, tail);
++	if (nr_slots < n) {
++		spin_unlock_irq(&pipe->rd_wait.lock);
++		kfree(bufs);
++		return -EBUSY;
++	}
 +
- 	/* initialize the Master Control Register (MCTRL) */
- 	writel(ISMT_MCTRL_MEIE, priv->smba + ISMT_MSTR_MCTRL);
+ 	/*
+ 	 * The pipe array wraps around, so just start the new one at zero
+ 	 * and adjust the indices.
+@@ -1299,6 +1302,8 @@ int pipe_resize_ring(struct pipe_inode_i
+ 	pipe->tail = tail;
+ 	pipe->head = head;
  
-@@ -795,6 +803,12 @@ static int ismt_dev_init(struct ismt_priv *priv)
- 	priv->head = 0;
- 	init_completion(&priv->cmp);
- 
-+	priv->log = dmam_alloc_coherent(&priv->pci_dev->dev,
-+					ISMT_LOG_ENTRIES * sizeof(u32),
-+					&priv->log_dma, GFP_KERNEL);
-+	if (!priv->log)
-+		return -ENOMEM;
++	spin_unlock_irq(&pipe->rd_wait.lock);
 +
+ 	/* This might have made more room for writers */
+ 	wake_up_interruptible(&pipe->wr_wait);
  	return 0;
- }
- 
--- 
-2.35.1
-
 
 

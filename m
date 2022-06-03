@@ -2,401 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D9353D366
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 23:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDD053D36B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 23:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348998AbiFCVxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 17:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S1349111AbiFCV4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 17:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiFCVxD (ORCPT
+        with ESMTP id S231860AbiFCV4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 17:53:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3357583B2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 14:53:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73EF6B824CE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 21:52:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4719C385B8;
-        Fri,  3 Jun 2022 21:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654293178;
-        bh=pgXaHU253phBXXtx1iKJe+k6xQpEHHkD4NWOfztbCWA=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=DjOo6fbwg+bg41Heda3LMLvcCtBXaZQ+cxFwrckVqaRGhnBMfum6FQ22n8eHlbgPQ
-         aWTo/63JBG/GVCzorqGcNfB3ENyrkPhj4kIHbf9YAK6MckjObo74FjEQs59pu3aaVl
-         iP2JL2QQft9D2esFF/VhaoOl90Zdu78cCwof2sw4QyG059+mawjfIef6QduD6pX94i
-         QshTjhCEQsfV4HSOJ63I8Ck3mkrUE5X4/gdkx42FP9bUeKmYHfyXqhJhUakv2lYQYr
-         oQq4D5r06PF74120zwja0pW3vggve0L7GMzSqgeN8uOSt6Y8mwqFhRpiq2arlPOcnF
-         KpnK1Ttcl3hdg==
-Date:   Fri, 3 Jun 2022 14:52:56 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-Subject: Re: [RFC PATCH 1/2] xen/unpopulated-alloc: Introduce helpers for
- DMA allocations
-In-Reply-To: <1652810658-27810-2-git-send-email-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2206031420430.2783803@ubuntu-linux-20-04-desktop>
-References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com> <1652810658-27810-2-git-send-email-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Fri, 3 Jun 2022 17:56:41 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56424967;
+        Fri,  3 Jun 2022 14:56:39 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id y15so4361409ljc.0;
+        Fri, 03 Jun 2022 14:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QjV2keLn8ksFTBP7+D6RPrmgrPXRhau2LX6VaRt9vA8=;
+        b=ahTiww370kDspuCZq2eTYtjPaNCKKAYGHHg5ucqUyee3trD7vZ4sy38hO4w4XvNxn0
+         nw3LQG3eJ9TOrOSXraJC5qz0Pn7U8s+kglX803z3Bu67tkGUvlF55iQzSoycFT5UNuxh
+         9pVRKG+b3G9QUhE9CAkToEIeE7DioG1fvXyl99zTeOdFpG9E01iCJUN3sZUER9VGu1KQ
+         wIJ3HxerC3GZyeQASwrzCYQwENgq8zgqJ+4b69e2it/17pPKO/aJAPBzK7J4vG6Kk10k
+         HALlrz846mahAlJwvoBd3CqYLNB9KmHvPBxJODBZ5KBvMoceg/8E1ESHi+9gOcHgGIJu
+         WhQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QjV2keLn8ksFTBP7+D6RPrmgrPXRhau2LX6VaRt9vA8=;
+        b=XoMUHHVqt7aZhApjG3xFTy5jU2brhqmcY5p5nggKunqbLw8K00+oiNE4/vBcxeRPDa
+         LMXJJtN2QZAmUPcVaxeV+yQL9oL3RqyGEAeK4lv+jaRTCCNkBeT+oZ/jGYQnGvszJ7am
+         HeVnm41tXmHLoDut1KYE+elFBayuqjaK4DMild2KUq0DEK8NuF6tvmK8eKaXYYH38Mdt
+         c2RU7k0hmiK6uGFK7TW+20wvzeSOmOu3R3cvaOfNB/MQuZftn/fIztXQmOR52Cpfl9hl
+         /tvUKTAI3sRmxK/8QFJT8a3+b+qavdR2auWZbIpXi6fagKGFIQjsAkY1PFkW8AOfpr9J
+         c61g==
+X-Gm-Message-State: AOAM533b8X0pusxQ5Nk1L6qeUoZo3cekV3000M4Va1KJ9Ju0RD8/gEuX
+        sc/mGEtgJYjuBJ49iM4ZgAuhl8PS0WU7Fgw3g30=
+X-Google-Smtp-Source: ABdhPJyGZxdn1TsyVk5tCwF3nZpAyd2Is4STQfbfpO5V1pZMYd9FOKtrDRSKSXXevP9mUjZUDgbs6OZhkRaK+z/Dz5U=
+X-Received: by 2002:a2e:87c8:0:b0:255:6d59:ebce with SMTP id
+ v8-20020a2e87c8000000b002556d59ebcemr7700808ljj.455.1654293398272; Fri, 03
+ Jun 2022 14:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220527205611.655282-1-jolsa@kernel.org> <20220527205611.655282-4-jolsa@kernel.org>
+ <CAEf4BzbY19qe6Ftzev884R_xuS4H5OD_fRLOfeekbPWjd5jkiA@mail.gmail.com>
+ <CAEf4Bza84ei+Nmyh+aKHY_LSuDfziKjYTmphHQ39xCkooygbxA@mail.gmail.com> <YpnhDxpRuUbx4b2i@krava>
+In-Reply-To: <YpnhDxpRuUbx4b2i@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 3 Jun 2022 14:56:26 -0700
+Message-ID: <CAEf4BzbVmtt238JtO6bwd-CD45WCT4CjBn1JuYw4r5=jpdmrGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] bpf: Force cookies array to follow symbols sorting
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> Add ability to allocate unpopulated DMAable (contiguous) pages
-> suitable for grant mapping into. This is going to be used by gnttab
-> code (see gnttab_dma_alloc_pages()).
-> 
-> TODO: There is a code duplication in fill_dma_pool(). Also pool
-> oparations likely need to be protected by the lock.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> ---
->  drivers/xen/unpopulated-alloc.c | 167 ++++++++++++++++++++++++++++++++++++++++
->  include/xen/xen.h               |  15 ++++
->  2 files changed, 182 insertions(+)
-> 
-> diff --git a/drivers/xen/unpopulated-alloc.c b/drivers/xen/unpopulated-alloc.c
-> index a39f2d3..bca0198 100644
-> --- a/drivers/xen/unpopulated-alloc.c
-> +++ b/drivers/xen/unpopulated-alloc.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <linux/errno.h>
-> +#include <linux/genalloc.h>
->  #include <linux/gfp.h>
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
-> @@ -16,6 +17,8 @@ static DEFINE_MUTEX(list_lock);
->  static struct page *page_list;
->  static unsigned int list_count;
->  
-> +static struct gen_pool *dma_pool;
-> +
->  static struct resource *target_resource;
->  
->  /*
-> @@ -230,6 +233,161 @@ void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages)
->  }
->  EXPORT_SYMBOL(xen_free_unpopulated_pages);
->  
-> +static int fill_dma_pool(unsigned int nr_pages)
-> +{
+On Fri, Jun 3, 2022 at 3:23 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Thu, Jun 02, 2022 at 04:02:28PM -0700, Andrii Nakryiko wrote:
+> > On Thu, Jun 2, 2022 at 4:01 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Fri, May 27, 2022 at 1:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > >
+> > > > When user specifies symbols and cookies for kprobe_multi link
+> > > > interface it's very likely the cookies will be misplaced and
+> > > > returned to wrong functions (via get_attach_cookie helper).
+> > > >
+> > > > The reason is that to resolve the provided functions we sort
+> > > > them before passing them to ftrace_lookup_symbols, but we do
+> > > > not do the same sort on the cookie values.
+> > > >
+> > > > Fixing this by using sort_r function with custom swap callback
+> > > > that swaps cookie values as well.
+> > > >
+> > > > Fixes: 0236fec57a15 ("bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link")
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >  kernel/trace/bpf_trace.c | 65 ++++++++++++++++++++++++++++++----------
+> > > >  1 file changed, 50 insertions(+), 15 deletions(-)
+> > > >
+> > > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > > index 10b157a6d73e..e5c423b835ab 100644
+> > > > --- a/kernel/trace/bpf_trace.c
+> > > > +++ b/kernel/trace/bpf_trace.c
+> > > > @@ -2423,7 +2423,12 @@ kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
+> > > >         kprobe_multi_link_prog_run(link, entry_ip, regs);
+> > > >  }
+> > > >
+> > > > -static int symbols_cmp(const void *a, const void *b)
+> > > > +struct multi_symbols_sort {
+> > > > +       const char **funcs;
+> > > > +       u64 *cookies;
+> > > > +};
+> > > > +
+> > > > +static int symbols_cmp_r(const void *a, const void *b, const void *priv)
+> > > >  {
+> > > >         const char **str_a = (const char **) a;
+> > > >         const char **str_b = (const char **) b;
+> > > > @@ -2431,6 +2436,25 @@ static int symbols_cmp(const void *a, const void *b)
+> > > >         return strcmp(*str_a, *str_b);
+> > > >  }
+> > > >
+> > > > +static void symbols_swap_r(void *a, void *b, int size, const void *priv)
+> > > > +{
+> > > > +       const struct multi_symbols_sort *data = priv;
+> > > > +       const char **name_a = a, **name_b = b;
+> > > > +       u64 *cookie_a, *cookie_b;
+> > > > +
+> > > > +       cookie_a = data->cookies + (name_a - data->funcs);
+> > > > +       cookie_b = data->cookies + (name_b - data->funcs);
+> > > > +
+> > > > +       /* swap name_a/name_b and cookie_a/cookie_b values */
+> > > > +       swap(*name_a, *name_b);
+> > > > +       swap(*cookie_a, *cookie_b);
+> > > > +}
+> > > > +
+> > > > +static int symbols_cmp(const void *a, const void *b)
+> > > > +{
+> > > > +       return symbols_cmp_r(a, b, NULL);
+> > > > +}
+> > > > +
+> > > >  int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+> > > >  {
+> > > >         struct bpf_kprobe_multi_link *link = NULL;
+> > > > @@ -2468,6 +2492,19 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+> > > >         if (!addrs)
+> > > >                 return -ENOMEM;
+> > > >
+> > > > +       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
+> > > > +       if (ucookies) {
+> > > > +               cookies = kvmalloc(size, GFP_KERNEL);
+> >
+> > oh, and you'll have to rebase anyways after kvmalloc_array patch
+>
+> true, that kvmalloc_array change went to bpf-next/master,
+> but as Song mentioned this patchset should probably go for bpf/master?
+>
+> I'm fine either way, let me know ;-)
+>
 
-I think we shouldn't need to add this function at all as we should be
-able to reuse fill_list even for contiguous pages. fill_list could
-always call gen_pool_add_virt before returning.
+I've moved kvmalloc_array() fix to bpf tree (it is an actual fix
+against potential overflow after all), so please base everything on
+bpf tree.
 
-
-> +	struct dev_pagemap *pgmap;
-> +	struct resource *res, *tmp_res = NULL;
-> +	void *vaddr;
-> +	unsigned int alloc_pages = round_up(nr_pages, PAGES_PER_SECTION);
-> +	struct range mhp_range;
-> +	int ret;
-> +
-> +	res = kzalloc(sizeof(*res), GFP_KERNEL);
-> +	if (!res)
-> +		return -ENOMEM;
-> +
-> +	res->name = "Xen DMA pool";
-> +	res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
-> +
-> +	mhp_range = mhp_get_pluggable_range(true);
-> +
-> +	ret = allocate_resource(target_resource, res,
-> +				alloc_pages * PAGE_SIZE, mhp_range.start, mhp_range.end,
-> +				PAGES_PER_SECTION * PAGE_SIZE, NULL, NULL);
-> +	if (ret < 0) {
-> +		pr_err("Cannot allocate new IOMEM resource\n");
-> +		goto err_resource;
-> +	}
-> +
-> +	/*
-> +	 * Reserve the region previously allocated from Xen resource to avoid
-> +	 * re-using it by someone else.
-> +	 */
-> +	if (target_resource != &iomem_resource) {
-> +		tmp_res = kzalloc(sizeof(*tmp_res), GFP_KERNEL);
-> +		if (!res) {
-> +			ret = -ENOMEM;
-> +			goto err_insert;
-> +		}
-> +
-> +		tmp_res->name = res->name;
-> +		tmp_res->start = res->start;
-> +		tmp_res->end = res->end;
-> +		tmp_res->flags = res->flags;
-> +
-> +		ret = request_resource(&iomem_resource, tmp_res);
-> +		if (ret < 0) {
-> +			pr_err("Cannot request resource %pR (%d)\n", tmp_res, ret);
-> +			kfree(tmp_res);
-> +			goto err_insert;
-> +		}
-> +	}
-> +
-> +	pgmap = kzalloc(sizeof(*pgmap), GFP_KERNEL);
-> +	if (!pgmap) {
-> +		ret = -ENOMEM;
-> +		goto err_pgmap;
-> +	}
-> +
-> +	pgmap->type = MEMORY_DEVICE_GENERIC;
-> +	pgmap->range = (struct range) {
-> +		.start = res->start,
-> +		.end = res->end,
-> +	};
-> +	pgmap->nr_range = 1;
-> +	pgmap->owner = res;
-> +
-> +	vaddr = memremap_pages(pgmap, NUMA_NO_NODE);
-> +	if (IS_ERR(vaddr)) {
-> +		pr_err("Cannot remap memory range\n");
-> +		ret = PTR_ERR(vaddr);
-> +		goto err_memremap;
-> +	}
-> +
-> +	ret = gen_pool_add_virt(dma_pool, (unsigned long)vaddr, res->start,
-> +			alloc_pages * PAGE_SIZE, NUMA_NO_NODE);
-> +	if (ret)
-> +		goto err_pool;
-> +
-> +	return 0;
-> +
-> +err_pool:
-> +	memunmap_pages(pgmap);
-> +err_memremap:
-> +	kfree(pgmap);
-> +err_pgmap:
-> +	if (tmp_res) {
-> +		release_resource(tmp_res);
-> +		kfree(tmp_res);
-> +	}
-> +err_insert:
-> +	release_resource(res);
-> +err_resource:
-> +	kfree(res);
-> +	return ret;
-> +}
-> +
-> +/**
-> + * xen_alloc_unpopulated_dma_pages - alloc unpopulated DMAable pages
-> + * @dev: valid struct device pointer
-> + * @nr_pages: Number of pages
-> + * @pages: pages returned
-> + * @return 0 on success, error otherwise
-> + */
-> +int xen_alloc_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-> +		struct page **pages)
-> +{
-> +	void *vaddr;
-> +	bool filled = false;
-> +	unsigned int i;
-> +	int ret;
-
-
-Also probably it might be better if xen_alloc_unpopulated_pages and
-xen_alloc_unpopulated_dma_pages shared the implementation. Something
-along these lines:
-
-int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page **pages)
-{
-    return _xen_alloc_unpopulated_pages(nr_pages, pages, false);
-}
-
-int xen_alloc_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-		struct page **pages)
-{
-    return _xen_alloc_unpopulated_pages(nr_pages, pages, true);
-}
-
-static int _xen_alloc_unpopulated_pages(unsigned int nr_pages,
-        struct page **pages, bool contiguous)
-{
-	unsigned int i;
-	int ret = 0;
-
-    if (contiguous && !xen_feature(XENFEAT_auto_translated_physmap))
-        return -EINVAL;
-
-	/*
-	 * Fallback to default behavior if we do not have any suitable resource
-	 * to allocate required region from and as the result we won't be able to
-	 * construct pages.
-	 */
-	if (!target_resource) {
-        if (contiguous)
-            return -EINVAL;
-		return xen_alloc_ballooned_pages(nr_pages, pages);
-    }
-
-	mutex_lock(&list_lock);
-	if (list_count < nr_pages) {
-		ret = fill_list(nr_pages - list_count);
-		if (ret)
-			goto out;
-	}
-
-    if (contiguous) {
-        vaddr = (void *)gen_pool_alloc(dma_pool, nr_pages * PAGE_SIZE);
-
-        for (i = 0; i < nr_pages; i++)
-            pages[i] = virt_to_page(vaddr + PAGE_SIZE * i);
-    } else {
-        for (i = 0; i < nr_pages; i++) {
-            struct page *pg = page_list;
-
-            BUG_ON(!pg);
-            page_list = pg->zone_device_data;
-            list_count--;
-            pages[i] = pg;
-
-    #ifdef CONFIG_XEN_HAVE_PVMMU
-            if (!xen_feature(XENFEAT_auto_translated_physmap)) {
-                ret = xen_alloc_p2m_entry(page_to_pfn(pg));
-                if (ret < 0) {
-                    unsigned int j;
-
-                    for (j = 0; j <= i; j++) {
-                        pages[j]->zone_device_data = page_list;
-                        page_list = pages[j];
-                        list_count++;
-                    }
-                    goto out;
-                }
-            }
-    #endif
-        }
-    }
-
-out:
-	mutex_unlock(&list_lock);
-	return ret;
-}
-
-	
-
-> +	if (!dma_pool)
-> +		return -ENODEV;
-> +
-> +	/* XXX Handle devices which support 64-bit DMA address only for now */
-> +	if (dma_get_mask(dev) != DMA_BIT_MASK(64))
-> +		return -EINVAL;
-> +
-> +	while (!(vaddr = (void *)gen_pool_alloc(dma_pool, nr_pages * PAGE_SIZE))) {
-> +		if (filled)
-> +			return -ENOMEM;
-> +		else {
-> +			ret = fill_dma_pool(nr_pages);
-> +			if (ret)
-> +				return ret;
-> +
-> +			filled = true;
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < nr_pages; i++)
-> +		pages[i] = virt_to_page(vaddr + PAGE_SIZE * i);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(xen_alloc_unpopulated_dma_pages);
-> +
-> +/**
-> + * xen_free_unpopulated_dma_pages - return unpopulated DMAable pages
-> + * @dev: valid struct device pointer
-> + * @nr_pages: Number of pages
-> + * @pages: pages to return
-> + */
-> +void xen_free_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-> +		struct page **pages)
-> +{
-> +	void *vaddr;
-> +
-> +	if (!dma_pool)
-> +		return;
-> +
-> +	vaddr = page_to_virt(pages[0]);
-> +
-> +	gen_pool_free(dma_pool, (unsigned long)vaddr, nr_pages * PAGE_SIZE);
-> +}
-> +EXPORT_SYMBOL(xen_free_unpopulated_dma_pages);
-> +
->  static int __init unpopulated_init(void)
->  {
->  	int ret;
-> @@ -241,8 +399,17 @@ static int __init unpopulated_init(void)
->  	if (ret) {
->  		pr_err("xen:unpopulated: Cannot initialize target resource\n");
->  		target_resource = NULL;
-> +		return ret;
->  	}
->  
-> +	dma_pool = gen_pool_create(PAGE_SHIFT, NUMA_NO_NODE);
-> +	if (!dma_pool) {
-> +		pr_err("xen:unpopulated: Cannot create DMA pool\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	gen_pool_set_algo(dma_pool, gen_pool_best_fit, NULL);
-> +
->  	return ret;
->  }
->  early_initcall(unpopulated_init);
-> diff --git a/include/xen/xen.h b/include/xen/xen.h
-> index a99bab8..a6a7a59 100644
-> --- a/include/xen/xen.h
-> +++ b/include/xen/xen.h
-> @@ -52,9 +52,15 @@ bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
->  extern u64 xen_saved_max_mem_size;
->  #endif
->  
-> +struct device;
-> +
->  #ifdef CONFIG_XEN_UNPOPULATED_ALLOC
->  int xen_alloc_unpopulated_pages(unsigned int nr_pages, struct page **pages);
->  void xen_free_unpopulated_pages(unsigned int nr_pages, struct page **pages);
-> +int xen_alloc_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-> +		struct page **pages);
-> +void xen_free_unpopulated_dma_pages(struct device *dev, unsigned int nr_pages,
-> +		struct page **pages);
->  #include <linux/ioport.h>
->  int arch_xen_unpopulated_init(struct resource **res);
->  #else
-> @@ -69,6 +75,15 @@ static inline void xen_free_unpopulated_pages(unsigned int nr_pages,
->  {
->  	xen_free_ballooned_pages(nr_pages, pages);
->  }
-> +static inline int xen_alloc_unpopulated_dma_pages(struct device *dev,
-> +		unsigned int nr_pages, struct page **pages)
-> +{
-> +	return -1;
-> +}
-> +static inline void xen_free_unpopulated_dma_pages(struct device *dev,
-> +		unsigned int nr_pages, struct page **pages)
-> +{
-> +}
->  #endif
-
-Given that we have these stubs, maybe we don't need to #ifdef the so
-much code in the next patch
+> thanks,
+> jirka

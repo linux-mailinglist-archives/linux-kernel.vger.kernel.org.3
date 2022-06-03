@@ -2,178 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317D953C97F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC14853C98C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244072AbiFCLjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 07:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S244093AbiFCLtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 07:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235135AbiFCLjR (ORCPT
+        with ESMTP id S235135AbiFCLtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 07:39:17 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84BB1B79A;
-        Fri,  3 Jun 2022 04:39:15 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id fd25so9783901edb.3;
-        Fri, 03 Jun 2022 04:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xRRo842VgI+QiIiUk18sUkKyKXVeEuSKEQQnN+mgccU=;
-        b=UqwnkdWsj/uQrNKdsUOEL/RAI/mfwQ1p7bz5+PVAE/sMZI2VS/k1PPsYzA2Xtknk2R
-         1cNeuYgzGSkMrbRliGTcMMOWsjeZXJaFAtZXs1CEkR/Uv/TpMlCCUuGA/1eFwDgdpEPw
-         CZh3sDqRPzzUvNaLqt+7MJ8jQafWdVZcAY7CGQ7q9jQq0+RUF4RbYlywex/f2D6wKE3d
-         zq+1Xqu3GKT+OreXO90bzYk0dXckoWTtatLfZDRoui8Oy4rTe39ZB4Ih4ud5ZpQ537dj
-         A5CwOOR77hoJ/zAf0ONqgySpS94gASRc724WMPgmtLER+8+QQsUPbLUCjPug1LYIcg8g
-         pddQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xRRo842VgI+QiIiUk18sUkKyKXVeEuSKEQQnN+mgccU=;
-        b=D6hKMVLZB4s16QqrreBmro7AeU3W0fb0vmO90ivPsBnIGg30jDHCoi8LlGlLn6eEC9
-         IHBy+p5Jc8pjtEVTBupeoh+jtdjo9KM8tZfV222zmSUyL6reIeMuATQuqP9ZJDH9cKtq
-         hv9ACveoWK9GA2Ox1KPpaGM2nP0aTLb20l2sgMq++gUZbCIyum/YVS6BRpIYr3/F6hb5
-         wax/QmCz5A12v3BID4nWhwzfnVtxG66aY4TFYiZ71H44fAHmDNdbZioAR0/E5qU/mFqh
-         C/HmktNEGVFMwciYU4uGKZ7ZMxFEYG4vmeiv/JbyK6Q1Sh0WQkzbf79T742U6iIuVjxb
-         wy5Q==
-X-Gm-Message-State: AOAM532xsPJhiHKPKyXgly6iDBhw5LVFY3RrM1HgC5SwcH/RsE2xnzaa
-        51zj0NL5cgk0Ep2OUcnMr4o=
-X-Google-Smtp-Source: ABdhPJydXL16vIRY0VomB2fgeezOelqpxRvzG0qyCI679Hb40IKz59LPVhOCSsl7F8ENU6rVfmnGNg==
-X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id f11-20020a0564021e8b00b0041c59f62c26mr10261446edf.156.1654256354076;
-        Fri, 03 Jun 2022 04:39:14 -0700 (PDT)
-Received: from localhost (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id d9-20020a50fe89000000b0042dd27ba7bfsm3786935edt.21.2022.06.03.04.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 04:39:12 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hte: New subsystem for v5.19-rc1
-Date:   Fri,  3 Jun 2022 13:39:08 +0200
-Message-Id: <20220603113908.78777-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 3 Jun 2022 07:49:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B980381B4;
+        Fri,  3 Jun 2022 04:49:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7A63B822CE;
+        Fri,  3 Jun 2022 11:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A2A1C34115;
+        Fri,  3 Jun 2022 11:48:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654256939;
+        bh=X8VUkQQIsdul5nRaZx8jcDZ3dHSCnETsIvwz4JcA9+k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HnKVQW64OQEMmE4jBWCM0wy4/jCMxwqwsZN98sUAe1Zkqa8+xEaRBx5BUWRDRapvQ
+         mwIPh5JKkkUclWhIPENdgDy84xtaUizMtHO7psKhzVY5+66dy27EzPmBWB3Jho46fp
+         jBgTGP2or2Lj+RXKqRK4tN6Q6rSSMwHyD67N2QEx2yp0j2jy5QfBf+OCHhyiosMBPn
+         9QfFj5d44xnxpz2l+VHmyh+tmeTPaqPdQ9yCRfvRn1TmGBXgqteBe+g/oxcgmJcHQ2
+         6oWpS2r5jLJUsIwQh5ZMlVP1vMFtD7Vl8pW7tI3iI1MLp0AfoxlAy3eN6iq+L0DzCh
+         PmMWtDMyOFisw==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-e5e433d66dso10275139fac.5;
+        Fri, 03 Jun 2022 04:48:59 -0700 (PDT)
+X-Gm-Message-State: AOAM532xjGCNId7cXPqc/SSS8NNCrEchQDGb0kSZFN/at8yQ1rmV2K9p
+        LEUcTkkoZNuIkCv2lAtI0ig5fDpOyZwTA95TCDc=
+X-Google-Smtp-Source: ABdhPJw05wRHg99uYpgtAnCv/XqNeM0d/Ebfy5iJ9wfQPaCKtcJTDHMiG8UneinMTluS1Utm3DjYuPp5l621EaDHkR8=
+X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
+ v8-20020a05687105c800b000f33c1c126fmr5452735oan.126.1654256938205; Fri, 03
+ Jun 2022 04:48:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220603072053.35005-1-chenhuacai@loongson.cn>
+ <20220603072053.35005-12-chenhuacai@loongson.cn> <4213df91-c762-ae56-f08d-8c925759fa63@xen0n.name>
+ <CAK8P3a2mW7KmgxqWsaf76Q4V++B+0e6bH=tb4w4cA0XkZYuSLA@mail.gmail.com> <fcdbe7bd-bb4a-fc50-a96d-c2dd1456bc9b@xen0n.name>
+In-Reply-To: <fcdbe7bd-bb4a-fc50-a96d-c2dd1456bc9b@xen0n.name>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 3 Jun 2022 13:48:45 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXENy9Wf4EtNp7F+RHfF2WaUXsaXsMJVCVAXc4i_-nH=VA@mail.gmail.com>
+Message-ID: <CAMj1kXENy9Wf4EtNp7F+RHfF2WaUXsaXsMJVCVAXc4i_-nH=VA@mail.gmail.com>
+Subject: Re: [PATCH V15 11/24] LoongArch: Add boot and setup routines
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        WANG Xuerui <git@xen0n.name>, Yun Liu <liuyun@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 3 Jun 2022 at 12:37, WANG Xuerui <kernel@xen0n.name> wrote:
+>
+> On 6/3/22 18:02, Arnd Bergmann wrote:
+> > On Fri, Jun 3, 2022 at 11:27 AM WANG Xuerui <kernel@xen0n.name> wrote:
+> >> On 6/3/22 15:20, Huacai Chen wrote:
+> >>> Add basic boot, setup and reset routines for LoongArch. Now, LoongArch
+> >>> machines use UEFI-based firmware. The firmware passes configuration
+> >>> information to the kernel via ACPI and DMI/SMBIOS.
+> >>>
+> >>> Currently an existing interface between the kernel and the bootloader
+> >>> is implemented. Kernel gets 2 values from the bootloader, passed in
+> >>> registers a0 and a1; a0 is an "EFI boot flag" distinguishing UEFI and
+> >>> non-UEFI firmware, while a1 is a pointer to an FDT with systable,
+> >>> memmap, cmdline and initrd information.
+> >>>
+> >>> The standard UEFI boot protocol (EFISTUB) will be added later.
+> >>>
+> >>> Cc: linux-efi@vger.kernel.org
+> >>> Cc: Ard Biesheuvel <ardb@kernel.org>
+> >>> Reviewed-by: WANG Xuerui <git@xen0n.name>
+> >>> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >>> Co-developed-by: Yun Liu <liuyun@loongson.cn>
+> >>> Signed-off-by: Yun Liu <liuyun@loongson.cn>
+> >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> >> Would you please look at this patch, which has all the arch-independent
+> >> changes backed out, and Ack if it is fit for mainlining?
+> >>
+> >> I communicated a little with Huacai about the approach for supporting
+> >> alternative boot protocols down the road, and we agreed to carry the
+> >> respective changes downstream. And if needs truly arise for modifying
+> >> common EFI logic, we can do so in a non-rushed manner later.
+> >>
+> >> For the current status of the code, apparently it just accepts the
+> >> standard efistub-shape FDT pointer from (whatever booting the image),
+> >> and everything onwards are fully using the common code without
+> >> modification as you can see from the diffstat. I rebased my BPI support
+> >> patch on top of this (basically translating Loongson BPI data structures
+> >> into the expected FDT form), and can confirm the boot can progress to
+> >> the same point as before -- indeed the SVAM changes etc. are not
+> >> necessary for a working system, and the code remains working.
+> > I'm a bit lost here: Does this mean the v15 version is back to the old
+> > pre-efistub interface and allows booting with existing firmware, or
+> > is it now left out completely? I still see a kernel_entry() function
+> > in head.S, and I see references to loongson_sysconf, but I don't
+> > see if that is what gets passed in from the bootloader.
+> It's not the same interface as in some of the very early revisions; the
+> earlier versions relied on "struct bootparamsinterface" or BPI, while
+> it's the same FDT-based interface to initialize EFI from, as in
+> arch/arm64 and arch/riscv I believe. No Loongson-specific things remain now.
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+OK, excellent.
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> >
+> > I really want to make sure that without the EFI stub, there is no
+> > other way to boot the kernel that would have to get maintained
+> > in the long run.
+> Yeah this is the case right now. No LoongArch bootloader that I know of
+> can prepare the EFI stub-shaped FDT that the current code expects, and I
+> don't know of any future Loongson plan to do that either (Loongson's
+> previous in-house efforts all looked something different). So it's
+> pretty safe to say the current code wouldn't get frozen once mainlined.
 
-are available in the Git repository at:
+The use of DT is part of the internal stub <-> kernel ABI, and if
+LoongArch does not make use of DT otherwise, I could well imagine
+changing this down the road.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/hte/for-5.19-rc1
-
-for you to fetch changes up to 5dad4eccd2b4316a84209603a28d34c6346392bb:
-
-  dt-bindings: timestamp: Correct id path (2022-06-02 15:56:59 +0200)
-
-This is a new subsystem that introduces support for associating
-hardware timestamps with certain events (such as GPIOs and IRQs). Dipen
-has worked on this for a couple of months and it's been in linux-next
-for a couple of weeks. We think it's now ready for inclusion in v5.19.
-
-Dipen's the official maintainer, but I volunteered to help out with the
-logistics while he gets set up with the necessary key signatures and a
-kernel.org account. Hopefully this will all be done by the next merge
-window, enabling Dipen to take over.
-
-Apologies for this being a little late, but there were a few last-minute
-tweaks in the device tree bindings that I wanted to give an extra day in
-linux-next just to make sure. The impact of this should be minimal since
-it is all new code.
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-hte: New subsystem for v5.19-rc1
-
-This contains the new HTE subsystem that has been in the works for a
-couple of months now. The infrastructure provided allows for drivers to
-register as hardware timestamp providers, while consumers will be able
-to request events that they are interested in (such as GPIOs and IRQs)
-to be timestamped by the hardware providers.
-
-Note that this currently supports only one provider, but there seems to
-be enough interest in this functionality and we expect to see more
-drivers added once this is merged.
-
-----------------------------------------------------------------
-Dan Carpenter (2):
-      hte: Fix off by one in hte_push_ts_ns()
-      hte: Uninitialized variable in hte_ts_get()
-
-Dipen Patel (12):
-      Documentation: Add HTE subsystem guide
-      drivers: Add hardware timestamp engine (HTE) subsystem
-      hte: Add Tegra194 HTE kernel provider
-      dt-bindings: Add HTE bindings
-      gpiolib: Add HTE support
-      gpio: tegra186: Add HTE support
-      gpiolib: cdev: Add hardware timestamp clock type
-      tools: gpio: Add new hardware clock type
-      hte: Add Tegra HTE test driver
-      MAINTAINERS: Add HTE Subsystem
-      dt-bindings: Renamed hte directory to timestamp
-      dt-bindings: timestamp: Correct id path
-
-Jiapeng Chong (1):
-      hte: Remove unused including <linux/version.h>
-
-Yang Yingliang (1):
-      hte: Fix possible use-after-free in tegra_hte_test_remove()
-
- .../timestamp/hardware-timestamps-common.yaml      |  29 +
- .../bindings/timestamp/hte-consumer.yaml           |  39 +
- .../bindings/timestamp/nvidia,tegra194-hte.yaml    |  88 ++
- Documentation/hte/hte.rst                          |  79 ++
- Documentation/hte/index.rst                        |  22 +
- Documentation/hte/tegra194-hte.rst                 |  49 ++
- Documentation/index.rst                            |   1 +
- MAINTAINERS                                        |   8 +
- drivers/Kconfig                                    |   2 +
- drivers/Makefile                                   |   1 +
- drivers/gpio/gpio-tegra186.c                       |  81 +-
- drivers/gpio/gpiolib-cdev.c                        | 252 +++++-
- drivers/gpio/gpiolib.c                             |  58 ++
- drivers/gpio/gpiolib.h                             |   1 +
- drivers/hte/Kconfig                                |  33 +
- drivers/hte/Makefile                               |   3 +
- drivers/hte/hte-tegra194-test.c                    | 238 ++++++
- drivers/hte/hte-tegra194.c                         | 730 ++++++++++++++++
- drivers/hte/hte.c                                  | 947 +++++++++++++++++++++
- include/linux/gpio/consumer.h                      |  16 +-
- include/linux/gpio/driver.h                        |  10 +
- include/linux/hte.h                                | 271 ++++++
- include/uapi/linux/gpio.h                          |   3 +
- tools/gpio/gpio-event-mon.c                        |   6 +-
- 24 files changed, 2930 insertions(+), 37 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
- create mode 100644 Documentation/devicetree/bindings/timestamp/hte-consumer.yaml
- create mode 100644 Documentation/devicetree/bindings/timestamp/nvidia,tegra194-hte.yaml
- create mode 100644 Documentation/hte/hte.rst
- create mode 100644 Documentation/hte/index.rst
- create mode 100644 Documentation/hte/tegra194-hte.rst
- create mode 100644 drivers/hte/Kconfig
- create mode 100644 drivers/hte/Makefile
- create mode 100644 drivers/hte/hte-tegra194-test.c
- create mode 100644 drivers/hte/hte-tegra194.c
- create mode 100644 drivers/hte/hte.c
- create mode 100644 include/linux/hte.h
+I'll send out some RFC patches for review after the merge window closes.

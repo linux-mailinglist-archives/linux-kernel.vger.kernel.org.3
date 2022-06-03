@@ -2,150 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E39D53C379
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 05:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0FE53C37D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbiFCDz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 23:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S237741AbiFCEBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 00:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238086AbiFCDzO (ORCPT
+        with ESMTP id S233213AbiFCEBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 23:55:14 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677A231DE6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 20:55:12 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id b11-20020a92340b000000b002d3dbbc7b15so4050869ila.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 20:55:12 -0700 (PDT)
+        Fri, 3 Jun 2022 00:01:37 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C34F31DC0
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:01:34 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id rq11so13623065ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:01:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W8bVxKeCs+luEXxpnTLIbgpg19GNEZEh9tmWHWEe4S4=;
+        b=fD7kHLPGCLB6BwqWqEUYpaRcFdRj6SfBXhNT8BN4I9zVIbzLaLp78HxuCGvWRZQMTi
+         uyG/1hzIApR7fvPr0IySLfmaArCFTCp8JebyXa3+LDLDErePMizdjtRfFzLMYQpXcFiQ
+         DZ2TCHIo3llis01Zupghoa06ycO+92zWx1r+s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=67s011urMPrqijMUzLCh1Hzn7U+7BzSOK/7A2nOu2uM=;
-        b=fDVnt02nt0FdyXW6ADRqGzR8FiFjOlXaew3MPOZEmMMjNloj+CrrqdPpIthngWFkBp
-         NwLYat5hJC+iMkT3DkXC36v3BWSSxGiO5JsfXH2N6sfVHevVNPax+3crXn4lPoCbW8pN
-         3Ii7ZHKdSOEThSrqIUzDUklrWSoV75jznTLIMFWYsG3A9OkHzNE86uE2eHkFVrjRDdYH
-         xJ/hF+9t5S4hOpocr8VtiikBPnEiZYOrxMMXDRXdtRHL5jZ2n8qxZOt0d9UxuERjeIEG
-         I/g9/d/9C6sEs03RVMCSyesPd24RAIdasodOBUD0rOA1y/lSrLSKn7bFHaj8i8wOVy7e
-         dkUA==
-X-Gm-Message-State: AOAM532FnbKOpW35SfWcAMYDBUn9BpA92AZ9G46JgY/42ZABPfhCeVSE
-        DXxRNZydGTVF+H7GRVxxBqfeaFR034rkMuqMQ0RtG2bZ+LZF
-X-Google-Smtp-Source: ABdhPJzZ5j51Lan1+tvuZNfsLZWSY1sZloDxOhFva3hHh+saipNbENHDArsucUXEihOzis2DfSazxyGkONd4is69KnxfcvOUjqaT
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W8bVxKeCs+luEXxpnTLIbgpg19GNEZEh9tmWHWEe4S4=;
+        b=TshGQ8kv6154XzSb/FMsDmJUsZrSA+DW65A4LvzKTo4uKA/GWFMLKb1nZmNfkOmf9z
+         flQQD1vssBMUh02SsXXk9nId8r9IbvxJQO5F0j5gn7FJDrtrSbCj3uomJrqw/xtyNGxi
+         1T6p74t2Tzz6Wka+I+TF8uGb54x5YbmZlD4o/BVV3VvmTN3lnVSOk8Lp5dhUGRRCZrQb
+         NOsm+AbV+ygqTaL5h0IhM8xWcvj2unO83n8PQfeiAStVptfkutYd2gj08zD+QRqbuuTW
+         WVQRPInkVddbCnyyW5ZGIhcHf7OY4R1Ksc9ZQPakzu/zLH2nQWNQrBhkVg7n/+STAwBy
+         QYwA==
+X-Gm-Message-State: AOAM5317WiJzqYyD+HnLHbClOkNmqqN8QpY7Dy5K9a6CQ1ghDThMov+Z
+        /7Vrj8NY9Fs7N/nzLM6bGKk+xyoqkzQy6k1jLRHIEw==
+X-Google-Smtp-Source: ABdhPJyw/i2NBojqg3RSMKZ6XZsX0ph8P35ta717/u7cXFNMwFYFBna4UYDnpqAg0IP9EfLOD4BvkdnYqa5fefRVriI=
+X-Received: by 2002:a17:907:2ce2:b0:6ff:30e2:25c3 with SMTP id
+ hz2-20020a1709072ce200b006ff30e225c3mr6928613ejc.494.1654228892918; Thu, 02
+ Jun 2022 21:01:32 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d91:b0:2d3:bef3:a073 with SMTP id
- h17-20020a056e021d9100b002d3bef3a073mr5105450ila.60.1654228512039; Thu, 02
- Jun 2022 20:55:12 -0700 (PDT)
-Date:   Thu, 02 Jun 2022 20:55:12 -0700
-In-Reply-To: <20220603033532.5154-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d6700505e083161f@google.com>
-Subject: Re: [syzbot] general protection fault in __device_attach
-From:   syzbot <syzbot+dd3c97de244683533381@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20220601094637.1200634-1-hsinyi@chromium.org> <20220601094637.1200634-4-hsinyi@chromium.org>
+ <CAD=FV=XnA80P7BoaAX6JD9Q4ggnk4g4M3wmJFEDNij3+10aL4g@mail.gmail.com>
+In-Reply-To: <CAD=FV=XnA80P7BoaAX6JD9Q4ggnk4g4M3wmJFEDNij3+10aL4g@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Fri, 3 Jun 2022 12:01:06 +0800
+Message-ID: <CAJMQK-g7CdR8sgVssGGYPCaeGz3dKwqsWBnCRCdMvsh1Mtph6g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] drm/panel: panel-edp: Implement .get_orientation callback
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 3, 2022 at 5:51 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Wed, Jun 1, 2022 at 2:46 AM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> >
+> > To return the orientation property to drm/kms driver.
+> >
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > ---
+> >  drivers/gpu/drm/panel/panel-edp.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+> > index 1732b4f56e38..a2133581a72d 100644
+> > --- a/drivers/gpu/drm/panel/panel-edp.c
+> > +++ b/drivers/gpu/drm/panel/panel-edp.c
+> > @@ -609,6 +609,13 @@ static int panel_edp_get_timings(struct drm_panel *panel,
+> >         return p->desc->num_timings;
+> >  }
+> >
+> > +static enum drm_panel_orientation panel_edp_get_orientation(struct drm_panel *panel)
+> > +{
+> > +       struct panel_edp *p = to_panel_edp(panel);
+> > +
+> > +       return p->orientation;
+> > +}
+> > +
+> >  static int detected_panel_show(struct seq_file *s, void *data)
+> >  {
+> >         struct drm_panel *panel = s->private;
+> > @@ -637,6 +644,7 @@ static const struct drm_panel_funcs panel_edp_funcs = {
+> >         .prepare = panel_edp_prepare,
+> >         .enable = panel_edp_enable,
+> >         .get_modes = panel_edp_get_modes,
+> > +       .get_orientation = panel_edp_get_orientation,
+> >         .get_timings = panel_edp_get_timings,
+> >         .debugfs_init = panel_edp_debugfs_init,
+> >  };
+>
+> I'm curious: should we be removing the old
+> drm_connector_set_panel_orientation() from panel_edp_get_modes()?
+> ...or maybe you want to keep it for now because you're only adding
+> support to the mediatek driver and for other drivers the WARN_ON is
+> better than no orientation support at all?
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-general protection fault in __device_attach
+Right, for the drm/kms drivers that calls
+drm_connector_set_panel_orientation(), the
+drm_connector_set_panel_orientation() called in panels is no-op, but
+others they still need this to be called in the panel.
+>
+> Maybe you could put a comment next to the old
+> drm_connector_set_panel_orientation() saying that it's deprecated and
+> that drm drivers are expected to add a call to get_orientation()? Then
+> when people see the WARN_ON splat they'll quickly figure out how to
+> fix it. ...and eventually we can probably remove all the old calls
+> from get_modes() ?
+Sure, sounds good to me. I will add this.
 
-usb usb9: device_add((null)) --> -22
-general protection fault, probably for non-canonical address 0xdffffc0000000021: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000108-0x000000000000010f]
-CPU: 1 PID: 4084 Comm: syz-executor.0 Not tainted 5.18.0-syzkaller-11972-gd1dc87763f40-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__device_attach+0xad/0x4a0 drivers/base/dd.c:948
-Code: e8 03 42 80 3c 20 00 0f 85 a3 03 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 48 49 8d bc 24 08 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 6e 03 00 00 45 0f b6 b4 24 08 01 00
-RSP: 0018:ffffc90003347b98 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: 1ffff92000668f74 RCX: 0000000000000000
-RDX: 0000000000000021 RSI: 0000000000000002 RDI: 0000000000000108
-RBP: ffff888021878030 R08: 0000000000000000 R09: ffffffff8dbb1097
-R10: fffffbfff1b76212 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 00000000fffffff0 R15: ffff8880218780b0
-FS:  00007f8da1571700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8da059d090 CR3: 000000006b626000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- proc_ioctl.part.0+0x48e/0x560 drivers/usb/core/devio.c:2356
- proc_ioctl drivers/usb/core/devio.c:182 [inline]
- proc_ioctl_default drivers/usb/core/devio.c:2391 [inline]
- usbdev_do_ioctl drivers/usb/core/devio.c:2747 [inline]
- usbdev_ioctl+0x2c08/0x36f0 drivers/usb/core/devio.c:2807
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f8da0489109
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8da1571168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f8da059bf60 RCX: 00007f8da0489109
-RDX: 0000000020000040 RSI: 00000000c0105512 RDI: 0000000000000005
-RBP: 00007f8da04e308d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff3b94a64f R14: 00007f8da1571300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__device_attach+0xad/0x4a0 drivers/base/dd.c:948
-Code: e8 03 42 80 3c 20 00 0f 85 a3 03 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 65 48 49 8d bc 24 08 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 6e 03 00 00 45 0f b6 b4 24 08 01 00
-RSP: 0018:ffffc90003347b98 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: 1ffff92000668f74 RCX: 0000000000000000
-RDX: 0000000000000021 RSI: 0000000000000002 RDI: 0000000000000108
-RBP: ffff888021878030 R08: 0000000000000000 R09: ffffffff8dbb1097
-R10: fffffbfff1b76212 R11: 0000000000000001 R12: 0000000000000000
-R13: 0000000000000000 R14: 00000000fffffff0 R15: ffff8880218780b0
-FS:  00007f8da1571700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8da059d090 CR3: 000000006b626000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	e8 03 42 80 3c       	callq  0x3c804208
-   5:	20 00                	and    %al,(%rax)
-   7:	0f 85 a3 03 00 00    	jne    0x3b0
-   d:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  14:	fc ff df
-  17:	4c 8b 65 48          	mov    0x48(%rbp),%r12
-  1b:	49 8d bc 24 08 01 00 	lea    0x108(%r12),%rdi
-  22:	00
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	74 06                	je     0x38
-  32:	0f 8e 6e 03 00 00    	jle    0x3a6
-  38:	45                   	rex.RB
-  39:	0f                   	.byte 0xf
-  3a:	b6 b4                	mov    $0xb4,%dh
-  3c:	24 08                	and    $0x8,%al
-  3e:	01 00                	add    %eax,(%rax)
-
-
-Tested on:
-
-commit:         d1dc8776 assoc_array: Fix BUG_ON during garbage collect
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=113f50ddf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c51cd24814bb5665
-dashboard link: https://syzkaller.appspot.com/bug?extid=dd3c97de244683533381
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12390667f00000
-
+>
+> -Doug

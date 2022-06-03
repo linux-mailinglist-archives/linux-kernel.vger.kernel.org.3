@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0839953D257
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E82153D258
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349224AbiFCTZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S1349237AbiFCT0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349214AbiFCTZw (ORCPT
+        with ESMTP id S1345133AbiFCT0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:25:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C315623C;
-        Fri,  3 Jun 2022 12:25:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89C36B82448;
-        Fri,  3 Jun 2022 19:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B74C385A9;
-        Fri,  3 Jun 2022 19:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654284349;
-        bh=NeiNF/CCbHgDNoySgxrVAjiAq33HyWlIJ6s2PpKaPY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ls3SsvgqDKp2XdXCbl0QiQ9A6+4teM4g+jNy93/6kVMdI1r/xLeEBu7Z3dBILEcPG
-         bRb/h+b1kbjn8DWCjonrZPqOYGCX9n9lyg8MzETymfEgWGQ87bNYcXgr3zfGpIlMKT
-         FrqRXoPMPnCC+cD5L05A5T36lXTCBeXXBVHEXRCy7Znxvl9kRjyltuKfCEEYbdjw17
-         51MwZJI3PsLWVACgI5Vh2wBjCVKpH0+nRE7KV+cb6gwI1Nihg0rpG158tZ3HTEPNye
-         X+xUtkufBekRlXvgykzfn1zqqu0PDnSUFWtoFbIxA1OiYJhG0hhsd1q7ldmIHcOk6/
-         Z7l3ZtTyj0KdA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 9F9594096F; Fri,  3 Jun 2022 21:25:46 +0200 (CEST)
-Date:   Fri, 3 Jun 2022 21:25:46 +0200
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     namhyung@kernel.org, kan.liang@linux.intel.com, jolsa@kernel.org,
-        irogers@google.com, peterz@infradead.org, rrichter@amd.com,
-        mingo@redhat.com, mark.rutland@arm.com, tglx@linutronix.de,
-        bp@alien8.de, james.clark@arm.com, leo.yan@linaro.org,
-        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v5 1/8] perf record ibs: Warn about sampling period skew
-Message-ID: <YppgOuFXzaTmCsmY@kernel.org>
-References: <CAM9d7ch2dtTjhSt9i96yr4JLEWy7EgNArRvSURE4h5gLL6=7EQ@mail.gmail.com>
- <20220603051223.4272-1-ravi.bangoria@amd.com>
- <76f02f9c-139b-f26b-0cc6-6edc486f5244@amd.com>
+        Fri, 3 Jun 2022 15:26:43 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B075623A
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:26:42 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id me5so17243901ejb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 12:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=omWuaWUSnOwV+8HYbTsCRJE4z3TNTNukSNQi8ScudBU=;
+        b=EasUcfCayO0OXpgHFHq40YO6LZGtkxtxVRjEW+IkVo6MX/7bOsDlgvabBNTvWWK0aH
+         iAi0V1jnmmrIYl16NDBxWAGXuzdbtYXiipBm6vdj1PcNdb2i/G4fFtr+Wh+IXhP11fuL
+         o84WkAzC5rv+Eu3fcWULlVtaUwkhs7dzZ6F8zv9a3GuBzjv8BYphChoeMxn5iNYgnlKJ
+         pSSukb/wU5l3Ap5cVrQ36K7+9uYvi15tQ85trGftxFPdbrWeU5PwDO+RAGizvOCd6Y9I
+         ySuyMS6ctRSeQ+Qe/QnGIrunN01HAgzw2l9OH8K7e4vk7Gg2ORjmQ0H5t+5ax/kQIcJ+
+         XvjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=omWuaWUSnOwV+8HYbTsCRJE4z3TNTNukSNQi8ScudBU=;
+        b=lwHxq/GuRzgxerY40Am9d1nsqxFB95DN2TBT0nXdX258ScgpyLtLd8+2zh0mLkEjAQ
+         sACuRafG7DRsDsjJU9tfun67c2gz4Ht6evfBuI1IM80gPYumf/4MRWi8Vf18B9uJqqBk
+         9KHD0L7+4XcB/6GdiM2/yn5pX5NQa7UBpSMooEhAXxv2JdF0m3B0Cws4XkZR8fKxuCa8
+         kV+eU7HzOtjQRn9ochgQyAIgMq/1qHlIQ8+ZSX9b8jhZsm1WCCUQjExkXCXZO9rwVpu6
+         IAg1o9tAy8JIHdaCybhmIRVyAX83WyPMzJipk4SPRfU3IFv8eVgvO7gFxJFkXotPV7gb
+         bvYw==
+X-Gm-Message-State: AOAM530YKgNT4Px/fddiTg5ssgBS1Gzub3H57+ltYEEQPYAzhs2+6i1w
+        aiyw2d/yFrBwhEaONs0KKBV80BUYpFQt2kWVM1I=
+X-Google-Smtp-Source: ABdhPJyeJmeC178sKnRtB8OennwBgln18dwq8hiaghocp5SScetEe5HOlMpw5VBkyeAL3F7APQGP3m21LI+XMf7Xa3U=
+X-Received: by 2002:a17:907:8a27:b0:707:cc50:e790 with SMTP id
+ sc39-20020a1709078a2700b00707cc50e790mr10102666ejc.77.1654284400772; Fri, 03
+ Jun 2022 12:26:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76f02f9c-139b-f26b-0cc6-6edc486f5244@amd.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220603171012.48880-1-andriy.shevchenko@linux.intel.com> <20220603101527.39a069809dd8c0b72920fca4@linux-foundation.org>
+In-Reply-To: <20220603101527.39a069809dd8c0b72920fca4@linux-foundation.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 3 Jun 2022 21:26:04 +0200
+Message-ID: <CAHp75VexnrOZua3j-v2y4mfcC0+LptRZ6jJX0vEX+OKqnLsZUw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] rbtree: Replace kernel.h with the necessary inclusions
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jun 03, 2022 at 10:58:13AM +0530, Ravi Bangoria escreveu:
-> On 03-Jun-22 10:42 AM, Ravi Bangoria wrote:
-> >>> +       if (ibs_fetch_pmu && ibs_fetch_pmu->type == evsel_pmu->type) {
-> >>> +               if (attr->config & (1ULL << 59)) {
-> >>
-> >> It'd be nice if we used a macro or something instead of the
-> >> magic number.
-> >>
-> >>> +                       ibs_l3miss_warn();
-> >>> +                       warned_once = 1;
-> >>> +               }
-> >>> +       } else if (ibs_op_pmu && ibs_op_pmu->type == evsel_pmu->type) {
-> >>> +               if (attr->config & (1ULL << 16)) {
-> >>
-> >> Ditto.
-> > 
-> > Thanks for the review, Namhyung.
-> > 
-> > Arnaldo, Would you be able to squash below trivial patch into original
-> > patch? Please let me know if you want me to respin the series instead.
-> 
-> I'm planning to respin with asprintf() change. Sorry for the noise.
+On Fri, Jun 3, 2022 at 9:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> On Fri,  3 Jun 2022 20:10:12 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+>
+> > When kernel.h is used in the headers it adds a lot into dependency hell,
+> > especially when there are circular dependencies are involved.
+> >
+> > Replace kernel.h inclusion with the list of what is really being used.
+>
+> There are surely thousands of files we could do this with.
 
-Ok, will wait for the respin then.
+Yes, but the idea is to touch only (global / generic) headers to clean
+up them from kernel.h.
 
-- Arnaldo
+>  Is this the
+> start of a lifelong project,
+
+Continuation of something which annoys me for a long time. We have not
+so many, btw, files that are generic and include kernel.h in the
+include/*.
+
+> or is there something special about
+> rbtree.h?
+
+Nothing except that header being included in many other modules.
+
+I believe this work goes in conjunction with Ingo's huge clean up
+series. Not sure where it's now.
+
+-- 
+With Best Regards,
+Andy Shevchenko

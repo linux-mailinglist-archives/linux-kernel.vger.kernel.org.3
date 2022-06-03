@@ -2,137 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41ACC53C3C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827B253C3C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbiFCE2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 00:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S235036AbiFCEbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 00:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiFCE2k (ORCPT
+        with ESMTP id S229540AbiFCEbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:28:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6EC65F4;
-        Thu,  2 Jun 2022 21:28:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84406B821C5;
-        Fri,  3 Jun 2022 04:28:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1501C385A9;
-        Fri,  3 Jun 2022 04:28:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654230516;
-        bh=TDep2ZD1xO4DJlmrgaXkqq3uZa8dLlF0VXlkv4ea818=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kFX3ysr0QVzY8bYj5xpxjrpgo60nRcssK4/JQrZk902y8kqmGGCj5Y7X6vUqStEQz
-         RBZ9qe7ukTr/yHosA2xX+kV/+2ww5PLiXJbrcSxpmR1kRX1E6SKUiWrAosXoIwmwgk
-         gg4+mF875B9oA7Q1T2Jo4O57VxotQpOYQMrbF5T+cLsmPabJVASijE0qxeN8PbB6GX
-         Vu2cWlzDvDXzT1tWRgO6dE03dkRlsgEg3IkLAOKsn4gpRs0qM8b7H3KYoHes2Ob/I/
-         pMG5J6A09wbD0CsTW1NYqcTiYP1Ef2gBj0A9CyubymnKZcYaDwvhbJU+K9lyDJbK0h
-         v1zqESOhu3T4w==
-Date:   Fri, 3 Jun 2022 07:26:43 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca
-Subject: Re: [PATCH v2] tpm: Add upgrade/reduced mode support for TPM1.2
- modules
-Message-ID: <YpmNg+SNxFa4d8ml@iki.fi>
-References: <20220602161301.4281-1-stefan.mahnke-hartmann@infineon.com>
+        Fri, 3 Jun 2022 00:31:12 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A9836307;
+        Thu,  2 Jun 2022 21:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
+        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=EYuaU/n29S6mPWu7974aUOfQXdaYQnassV8I6gREXSk=; b=jFs5aKNPKQND+2mAmm11jMfMsE
+        oaCck4bKK7ocz1ORSzv1n7xnYz304ARX6tWej2j4cphCoj+oDzZUJoFx4zuXIP/ZsG3p3SVCE466n
+        k0ZK2P5lPgkE1SsT+MHdzYnXqDNq3gt9SpJYllbd8tngS03nKSE90ps+c5Ha/P3Mnvps=;
+Received: from p200300daa70ef200058bb5d56adcce0c.dip0.t-ipconnect.de ([2003:da:a70e:f200:58b:b5d5:6adc:ce0c] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1nwyxP-0004ok-B8; Fri, 03 Jun 2022 06:30:43 +0200
+Message-ID: <2997c5b0-3611-5e00-466c-b2966f09f067@nbd.name>
+Date:   Fri, 3 Jun 2022 06:30:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602161301.4281-1-stefan.mahnke-hartmann@infineon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Content-Language: en-US
+To:     Chen Lin <chen45464546@163.com>, john@phrozen.org,
+        sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, matthias.bgg@gmail.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alexander.duyck@gmail.com
+References: <1654229435-2934-1-git-send-email-chen45464546@163.com>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH] net: ethernet: mtk_eth_soc: fix misuse of mem alloc
+ interface netdev_alloc_frag
+In-Reply-To: <1654229435-2934-1-git-send-email-chen45464546@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 06:13:01PM +0200, Stefan Mahnke-Hartmann wrote:
-> In case a TPM in failure mode is detected, the TPM should be accessible
-> through a transparent communication channel for analysing purposes (e.g.
-> TPM_GetTestResult) or a field upgrade. Since a TPM in failure mode has
-> similar reduced functionality as in field upgrade mode, the flag
-> TPM_CHIP_FLAG_FIRMWARE_UPGRADE is also valid.
+On 03.06.22 06:10, Chen Lin wrote:
+> When rx_flag == MTK_RX_FLAGS_HWLRO,
+> rx_data_len = MTK_MAX_LRO_RX_LENGTH(4096 * 3) > PAGE_SIZE.
+> netdev_alloc_frag is for alloction of page fragment only.
+> Reference to other drivers and Documentation/vm/page_frags.rst
 > 
-> As described in TCG TPM Main Part1 Design Principles, Revision 116,
-> chapter 9.2.1. the TPM also allows an update function in case a TPM is
-> in failure mode.
+> Branch to use kmalloc when rx_data_len > PAGE_SIZE.
 > 
-> If the TPM in failure mode is detected, the function tpm1_auto_startup()
-> sets TPM_CHIP_FLAG_FIRMWARE_UPGRADE flag, which is used later during
-> driver initialization/deinitialization to disable functionality which
-> makes no sense or will fail in the current TPM state. The following
-> functionality is affected:
->  * Do not register TPM as a hwrng
->  * Do not get pcr allocation
->  * Do not register sysfs entries which provide information impossible to
->    obtain in limited mode
-> 
-> Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+> Signed-off-by: Chen Lin <chen45464546@163.com>
 > ---
-> Changelog:
->  * v2:
->    * Commit message updated.
->    * Error handling for failed self test and other errors seperated.
-> .
->  drivers/char/tpm/tpm.h      | 1 +
->  drivers/char/tpm/tpm1-cmd.c | 9 +++++++--
->  2 files changed, 8 insertions(+), 2 deletions(-)
+>   drivers/net/ethernet/mediatek/mtk_eth_soc.c |    5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 2163c6ee0d36..c0778498bc41 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -56,6 +56,7 @@ enum tpm_addr {
->  #define TPM_ERR_DEACTIVATED     0x6
->  #define TPM_ERR_DISABLED        0x7
->  #define TPM_ERR_INVALID_POSTINIT 38
-> +#define TPM_ERR_FAILEDSELFTEST  0x1C
->  
->  #define TPM_TAG_RQU_COMMAND 193
->  
-> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> index f7dc986fa4a0..fe21679ba0b6 100644
-> --- a/drivers/char/tpm/tpm1-cmd.c
-> +++ b/drivers/char/tpm/tpm1-cmd.c
-> @@ -709,8 +709,13 @@ int tpm1_auto_startup(struct tpm_chip *chip)
->  	if (rc)
->  		goto out;
->  	rc = tpm1_do_selftest(chip);
-> -	if (rc) {
-> -		dev_err(&chip->dev, "TPM self test failed\n");
-> +	if (rc == TPM_ERR_FAILEDSELFTEST) {
-> +		dev_err(&chip->dev, "TPM self test failed, so the TPM has limited functionality\n");
+> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+> index b3b3c07..d0eebca 100644
+> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+> @@ -1914,7 +1914,10 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
+>   		return -ENOMEM;
+>   
+>   	for (i = 0; i < rx_dma_size; i++) {
+> -		ring->data[i] = netdev_alloc_frag(ring->frag_size);
+> +		if (ring->frag_size <= PAGE_SIZE)
+> +			ring->data[i] = netdev_alloc_frag(ring->frag_size);
+> +		else
+> +			ring->data[i] = kmalloc(ring->frag_size, GFP_KERNEL);
+I'm pretty sure you also need to update all the other places in the code 
+that currently assume that the buffer is allocated using the page frag 
+allocator.
 
-Given that returning to a legit state, as far as driver is concerned,
-i.e. firmware upgrade mode, I would use the following warn here instead:
-
-dev_warn(&chip->dev, "TPM self test failed, switching to the firmware upgrade mode\n");
-
-It's a success state because you are returning zero.
-
-
-> +		/* A TPM in this state possibly allows or needs a firmware upgrade */
-> +		chip->flags |= TPM_CHIP_FLAG_FIRMWARE_UPGRADE;
-> +		return 0;
-> +	} else if (rc) {
-> +		dev_err(&chip->dev, "TPM self test not successful\n");
-
-Why did you change the error message?
-
->  		goto out;
->  	}
->  
-> -- 
-> 2.25.1
-> 
-
-BR, Jarkko
+- Felix

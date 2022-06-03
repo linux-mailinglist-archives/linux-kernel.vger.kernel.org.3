@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF8053CFE3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFD853D026
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbiFCR5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S1346262AbiFCSAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346678AbiFCRv0 (ORCPT
+        with ESMTP id S1346691AbiFCRv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:26 -0400
+        Fri, 3 Jun 2022 13:51:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE9C57142;
-        Fri,  3 Jun 2022 10:49:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF3E57157;
+        Fri,  3 Jun 2022 10:49:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3276760F3E;
-        Fri,  3 Jun 2022 17:49:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415FEC385A9;
-        Fri,  3 Jun 2022 17:49:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D76E60F84;
+        Fri,  3 Jun 2022 17:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D63CC385A9;
+        Fri,  3 Jun 2022 17:49:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278547;
-        bh=utL4tx2DU7lDNCDqgGRF69/Bgz6BQ0QQnq+uQiKu+Ts=;
+        s=korg; t=1654278550;
+        bh=DMacl7IqcY9xhZ6LfYAKsMrAmHpww3Czq1nsjIJ4w0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wnD8Ug9TBwCV2MpRomjiBKJfzEo5rCVe+o8Qa+IuAKamgrCtA7rZIa+4rG7Fs4XNC
-         hiT4xmM0gj1OemoFoz0NPFF1zw6XiY8BKhzW2IqjxGN3CYoUD+Gs3rdijhZyXxcUAP
-         yTzeX4+tWQgZnlrPVXi/9mG2v2qbMiujfXxCRNqs=
+        b=QrxZztDQ/l4P6j3vBQ4Hn/G9ArFOz8dZ7vJwu1rqNAaAbPXOpkriNFIywQsAZFVLH
+         ps75ECE+7jrki1FHtaUIg5majGpTvV8sLwQ06Q5vGxDYqYgXojFX1WHnqJHR9Gu82F
+         x6O3dUaO9xNp7/vMh8C5nY+b49pKcrbJyoh/FZTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 15/66] net: ipa: compute proper aggregation limit
-Date:   Fri,  3 Jun 2022 19:42:55 +0200
-Message-Id: <20220603173821.104884211@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH 5.15 16/66] drm/i915: Fix -Wstringop-overflow warning in call to intel_read_wm_latency()
+Date:   Fri,  3 Jun 2022 19:42:56 +0200
+Message-Id: <20220603173821.132147840@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
 References: <20220603173820.663747061@linuxfoundation.org>
@@ -54,49 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Elder <elder@linaro.org>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-commit c5794097b269f15961ed78f7f27b50e51766dec9 upstream.
+commit 336feb502a715909a8136eb6a62a83d7268a353b upstream.
 
-The aggregation byte limit for an endpoint is currently computed
-based on the endpoint's receive buffer size.
+Fix the following -Wstringop-overflow warnings when building with GCC-11:
 
-However, some bytes at the front of each receive buffer are reserved
-on the assumption that--as with SKBs--it might be useful to insert
-data (such as headers) before what lands in the buffer.
+drivers/gpu/drm/i915/intel_pm.c:3106:9: warning: ‘intel_read_wm_latency’ accessing 16 bytes in a region of size 10 [-Wstringop-overflow=]
+ 3106 |         intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/i915/intel_pm.c:3106:9: note: referencing argument 2 of type ‘u16 *’ {aka ‘short unsigned int *’}
+drivers/gpu/drm/i915/intel_pm.c:2861:13: note: in a call to function ‘intel_read_wm_latency’
+ 2861 | static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+      |             ^~~~~~~~~~~~~~~~~~~~~
 
-The aggregation byte limit currently doesn't take into account that
-reserved space, and as a result, aggregation could require space
-past that which is available in the buffer.
+by removing the over-specified array size from the argument declarations.
 
-Fix this by reducing the size used to compute the aggregation byte
-limit by the NET_SKB_PAD offset reserved for each receive buffer.
+It seems that this code is actually safe because the size of the
+array depends on the hardware generation, and the function checks
+for that.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Notice that wm can be an array of 5 elements:
+drivers/gpu/drm/i915/intel_pm.c:3109:   intel_read_wm_latency(dev_priv, dev_priv->wm.pri_latency);
+
+or an array of 8 elements:
+drivers/gpu/drm/i915/intel_pm.c:3131:   intel_read_wm_latency(dev_priv, dev_priv->wm.skl_latency);
+
+and the compiler legitimately complains about that.
+
+This helps with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/181
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ipa/ipa_endpoint.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/intel_pm.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -722,13 +722,15 @@ static void ipa_endpoint_init_aggr(struc
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -2863,7 +2863,7 @@ static void ilk_compute_wm_level(const s
+ }
  
- 	if (endpoint->data->aggregation) {
- 		if (!endpoint->toward_ipa) {
-+			u32 buffer_size;
- 			bool close_eof;
- 			u32 limit;
+ static void intel_read_wm_latency(struct drm_i915_private *dev_priv,
+-				  u16 wm[8])
++				  u16 wm[])
+ {
+ 	struct intel_uncore *uncore = &dev_priv->uncore;
  
- 			val |= u32_encode_bits(IPA_ENABLE_AGGR, AGGR_EN_FMASK);
- 			val |= u32_encode_bits(IPA_GENERIC, AGGR_TYPE_FMASK);
- 
--			limit = ipa_aggr_size_kb(IPA_RX_BUFFER_SIZE);
-+			buffer_size = IPA_RX_BUFFER_SIZE - NET_SKB_PAD;
-+			limit = ipa_aggr_size_kb(buffer_size);
- 			val |= aggr_byte_limit_encoded(version, limit);
- 
- 			limit = IPA_AGGR_TIME_LIMIT;
 
 

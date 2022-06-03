@@ -2,165 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40BF53C258
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E6F53C2A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiFCByl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S240035AbiFCCDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 22:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbiFCByj (ORCPT
+        with ESMTP id S236046AbiFCCDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:54:39 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA232B243
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:54:37 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220603015435epoutp03efaeda7856138de9be445809e81a8c3f~0_Xw-BLr91052910529epoutp03P
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:54:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220603015435epoutp03efaeda7856138de9be445809e81a8c3f~0_Xw-BLr91052910529epoutp03P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654221275;
-        bh=iltdJsmgnbu0JcWYL1RKkqqbZCa+Qc8BFE7Yie5EMQA=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=dL5Za0uDl67LA6TIx2HJ2iyHzjFxGqeSN0ZO1XtqJwJQAEefbRzewssDnOpUTa505
-         IXFzjJxvJimPbu6pYv+9BTSFvZklmItP5Qo11aTbctsm52w1kr8uxE+h26n3O5nBF6
-         qrPyiGiL3YigY1p/E0e9Wj72h4xP5pbg+gko1FYE=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20220603015434epcas2p33cfb84fa687df58be91884a5d4ccd113~0_Xv-e9b23019030190epcas2p3Y;
-        Fri,  3 Jun 2022 01:54:34 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.70]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4LDmCX3pgdz4x9QG; Fri,  3 Jun
-        2022 01:54:32 +0000 (GMT)
-X-AuditID: b6c32a47-573ff7000000272c-bc-629969d82301
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.F4.10028.8D969926; Fri,  3 Jun 2022 10:54:32 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2 0/5] Add support for Axis, ARTPEC-8 PCIe driver
-Reply-To: wangseok.lee@samsung.com
-Sender: Wangseok Lee <wangseok.lee@samsung.com>
-From:   Wangseok Lee <wangseok.lee@samsung.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
-Date:   Fri, 03 Jun 2022 10:54:31 +0900
-X-CMS-MailID: 20220603015431epcms2p6203908cebe6a320854136559a32b54cb
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDJsWRmVeSWpSXmKPExsWy7bCmme6NzJlJBnsXiVssacqweHlI02L+
-        kXOsFrtnLGeymDn1DLPF80OzmC0+tahaXHjaw2bxctY9NouGnt+sFkfefGS22H98JZPF5V1z
-        2CzOzjvOZjFh1TcWize/X7BbnFucadG69wi7xc47J5gdhD3WzFvD6HF9XYDHgk2lHptWdbJ5
-        PLkynclj85J6j74tqxg9jt/YzuTxeZNcAGdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmB
-        oa6hpYW5kkJeYm6qrZKLT4CuW2YO0D9KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKU
-        nALzAr3ixNzi0rx0vbzUEitDAwMjU6DChOyM4w0nmQumi1b0X5/K3MB4WKCLkZNDQsBEomnl
-        F0YQW0hgB6PElOfeXYwcHLwCghJ/dwiDhIUFnCQ+LWxnhyhRktixZh4zRFxf4vqKblYQm01A
-        V+Lf4pdsXYxcHCICZ5kkbt7dzgriMAvMYZG43vyBFWIZr8SM9qcsELa0xPblWxkhbA2JH8t6
-        mSFsUYmbq9+yw9jvj82HqhGRaL13FqpGUOLBz91QcSmJBU8OQc2vltj/9zcThN3AKNF/PxXk
-        GQmgS3dcNwYJ8wr4SiyYvhZsPIuAqsSWHW2sECUuEnd2aIOEmQXkJba/ncMMEmYW0JRYv0sf
-        okJZ4sgtFpg/Gjb+ZkdnMwvwSXQc/gsX3zHvCdQtahLzVu5khhgjI7H1pf8ERqVZiGCehWTt
-        LIS1CxiZVzGKpRYU56anFhsVGMMjNjk/dxMjOFlrue9gnPH2g94hRiYOxkOMEhzMSiK8Jbum
-        JgnxpiRWVqUW5ccXleakFh9iNAX6dyKzlGhyPjBf5JXEG5pYGpiYmRmaG5kamCuJ83qlbEgU
-        EkhPLEnNTk0tSC2C6WPi4JRqYJJ6LyOnLTJt6euWROkXT37aiqwt0FWyXqVr3XKG9e29oyZP
-        z0eUqagsmXtjmuLpYu9dy1YEtzadd1ne4pObGH1l7rOfwTGzz2Vt3RpwZOZdFbOlpZs12YvM
-        m57xL22Le7Q0nWFt3KPcAAG7S5vn6X3N+ymx4fHjaSzHllyOWlC3yN1k0T8TT40XGXprpryM
-        +l9W8lsm/omtuX/VC8nPvAduT0t9H/dZTdZq5bnlUxNzvf1Op4QEskgzKpw7F+xhU8I21fLu
-        e58HP7c6xaVolBsqzbqySdiw7Udgc4qai0sN45enIoGBZ/9sltCM1hN8adPZ+4Db7nCzZFLB
-        +ZV/GH/nsu/+fWdOp0Pg+7D2g0osxRmJhlrMRcWJANKw5a5fBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220603015431epcms2p6203908cebe6a320854136559a32b54cb
-References: <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Jun 2022 22:03:22 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF85935DD6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 19:03:20 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-30c1c9b9b6cso69003507b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 19:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=A63naTJt6zUwlvsuridWvEjPR850QwDyhCVKh38nSkg=;
+        b=BA+nmzQ0FWBRZdwycD89lmG45gs/rZHmmHf4aXaNUBF4rJpKNO6fZv1aKWNIqY7nZF
+         woEVBUvPkFGR9N6ZkFJBmMUjvWwIY0hg8x7WUEzTTGWIsqnJ8F2ZnpTuPGQHqhagUX5S
+         zsbVo78PCaODionwH7zAabX8oO06A6vqeRZ9CxV78TTuDpJxkGJ+Nqz+Jg9tH/GJEbT8
+         iHSSS0ytgervWGnmaghPu99QRU2hSJ+8zAm6vGpuJXAc7bJACp5pPU3eZ+Nbzfxpn6/N
+         zTBzTiz5PRZ399D8AePUXfiR9I092HroZPKrXaU6jMI5UCqqBWaEqRD/u15iKhNeufBP
+         WQXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=A63naTJt6zUwlvsuridWvEjPR850QwDyhCVKh38nSkg=;
+        b=CtXDH6iT81GrfPwpL6eIDZAeNiu3LoLu6yixACUUGt/v34f9ZRaYwI64djCDtphBqH
+         gaJVerHXOV1n8/noa3d9YyB+ZoXnlTvRtRTig4M+Q1bOgzidAzm0HplmEw51Vbx0NAge
+         +t33JJZ7cSyFLjngR0vC7279UNjxC6U0AjlYsLyIMuBYFF0N/uOw/reazooMOG0pYJK2
+         AtmigCDHWY/58IjzSIhExLscYlOMmpNrRLVbfY+YAtMnFJiCdZtg285W1K+CxH/lyTjT
+         cifgsE9dop1DTL7NUOz6+iWZzHJWzyhiElPONQgZdBvWKdmMfMgc5Ow3GELfkH9diUl9
+         jqKw==
+X-Gm-Message-State: AOAM533mUp/iUgevy0oegSf2oiPe11bPfs5877DIHSdrHzHCUM7QVLMc
+        jt3KvHyo7drn+7u/+mmgJmLkGOP+1s4QWYkkY5Wqaw==
+X-Google-Smtp-Source: ABdhPJzJwy/AoL8jAbntm39SvG2wCGLTOiet46mi3kxXZTznFyNhscdIk9C8MGeZg1TG+JxhbHlKdw0wtXgD1cQgbI4=
+X-Received: by 2002:a0d:d4d5:0:b0:30c:8231:b950 with SMTP id
+ w204-20020a0dd4d5000000b0030c8231b950mr9252585ywd.189.1654221799635; Thu, 02
+ Jun 2022 19:03:19 -0700 (PDT)
+MIME-Version: 1.0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 3 Jun 2022 07:33:08 +0530
+Message-ID: <CA+G9fYts-KH-R5EkBpz2u6H_Cx6YTXus1JKJS6yBxGhb0O2qQQ@mail.gmail.com>
+Subject: gcc-12: build errors: arch/arm64/kernel/setup.c:225:56: warning:
+ array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
+To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Donnelly <john.p.donnelly@oracle.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This v2 patchset is improvement several review comments received from patchset v1.
+While building Linux kernel with gcc-12 for arm64 the following warnings/errors
+noticed. These are specific to gcc-12 builds.
 
-Main changes since v1 [1]:
--'make dt_binding_check' result improvement
--Add the missing property list
--improvement review comment of Krzysztof on driver code
--change folder name of phy driver to axis from artpec
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[1] https://lore.kernel.org/lkml/20220328014430epcms2p7063834feb0abdf2f38a62723c96c9ff1@epcms2p7/
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/2/build
+CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
+CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+In file included from arch/arm64/include/asm/thread_info.h:17,
+                 from include/linux/thread_info.h:60,
+                 from arch/arm64/include/asm/preempt.h:6,
+                 from include/linux/preempt.h:78,
+                 from include/linux/smp.h:110,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/mutex.h:17,
+                 from include/linux/kernfs.h:11,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from include/linux/of.h:17,
+                 from include/linux/irqdomain.h:35,
+                 from include/linux/acpi.h:13,
+                 from arch/arm64/kernel/setup.c:9:
+In function 'request_standard_resources',
+    inlined from 'setup_arch' at arch/arm64/kernel/setup.c:350:2:
+arch/arm64/kernel/setup.c:225:56: warning: array subscript -1 is
+outside array bounds of 'char[]' [-Warray-bounds]
+  225 |         kernel_code.end     = __pa_symbol(__init_begin - 1);
 
---------------------------------------------------------------
-This series patches include newly PCIe support for Axis ARTPEC-8 SoC.
-ARTPEC-8 is the SoC platform of Axis Communications.
-PCIe controller driver and phy driver have been newly added.
-There is also a new MAINTAINER in the addition of phy driver.
-PCIe controller is designed based on Design-Ware PCIe controller IP
-and PCIe phy is desinged based on SAMSUNG PHY IP.
-It also includes modifications to the Design-Ware controller driver to 
-run the 64bit-based ARTPEC-8 PCIe controller driver.
-It consists of 6 patches in total.
+steps to reproduce:
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
 
-This series has been tested on AXIS SW bring-up board 
-with ARTPEC-8 chipset.
---------------------------------------------------------------
+tuxmake --runtime podman --target-arch arm64 --toolchain gcc-12
+--kconfig tinyconfig CROSS_COMPILE_COMPAT=arm-linux-gnueabihf-
 
-Wangseok Lee (5):
-  dt-bindings: pci: Add ARTPEC-8 PCIe controller
-  dt-bindings: phy: Add ARTPEC-8 PCIe phy
-  PCI: axis: Add ARTPEC-8 PCIe controller driver
-  phy: Add ARTPEC-8 PCIe PHY driver
-  MAINTAINERS: Add maintainer for Axis ARTPEC-8 PCIe PHY driver
+Build link:
+https://builds.tuxbuild.com/2A2iyFqotDfgkLynaKzmpf8H7Nf/
 
- .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 108 +++
- .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 123 +++
- .../bindings/phy/axis,artpec8-pcie-phy.yaml        |  70 ++
- MAINTAINERS                                        |   2 +
- drivers/pci/controller/dwc/Kconfig                 |  31 +
- drivers/pci/controller/dwc/Makefile                |   1 +
- drivers/pci/controller/dwc/pcie-artpec8.c          | 864 +++++++++++++++++++++
- drivers/phy/Kconfig                                |   1 +
- drivers/phy/Makefile                               |   1 +
- drivers/phy/axis/Kconfig                           |   9 +
- drivers/phy/axis/Makefile                          |   2 +
- drivers/phy/axis/phy-artpec8-pcie.c                | 806 +++++++++++++++++++
- 12 files changed, 2018 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
- create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
- create mode 100644 drivers/pci/controller/dwc/pcie-artpec8.c
- create mode 100644 drivers/phy/axis/Kconfig
- create mode 100644 drivers/phy/axis/Makefile
- create mode 100644 drivers/phy/axis/phy-artpec8-pcie.c
-
--- 
-2.9.5
+--
+Linaro LKFT
+https://lkft.linaro.org

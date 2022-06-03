@@ -2,128 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7615353C8AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF45B53C8C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243860AbiFCKav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S243796AbiFCKcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243703AbiFCKaH (ORCPT
+        with ESMTP id S231309AbiFCKb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:30:07 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3283B3F8;
-        Fri,  3 Jun 2022 03:30:06 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g184so6924325pgc.1;
-        Fri, 03 Jun 2022 03:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wPNc3YvhAKuZLbvOFj+YsMRBSINjKQKB6Tw7aOecxnY=;
-        b=fjr/YLTf3JpqKnGPXEQKWeEulEUL8Cbj+DXC0/q/+SmEvIEwQN+MSO/KtRcHNn0rJk
-         eUSFlvhs5UgDYRyVN6rLyBer6rEPqmDE2tWw0YhIlwI3hJF5s4IjVSjWuKp1DyE6Qz5B
-         y3VUQgTdrgZeU1+9bWiD3+4oWVieffOuFQe3azHhxy7kbM/UeatWVzSobWW8fspD4xSE
-         lipg7a4myWbMi/MShhgm8UgYmzPZs3TZkXW9bsqyygYlEkwQlOkjUejz/VhjO+8eJ3ET
-         7WHn+dgANiC/saQ2YKliXM6bmBHpSH16MpatSgt4+vh+jwuZyRyekz6kP5htvHuvbj6x
-         fSIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=wPNc3YvhAKuZLbvOFj+YsMRBSINjKQKB6Tw7aOecxnY=;
-        b=BuKQltO/EsD8CWvtXvzwTcvPBYGMR7UO9NhLVYbIZ7rCDSw1B1fgFl68KVyzLnujvL
-         wRUWJQ4pgaD6NartZWr5S7UuqpvSBTVG6g6tExGW5L5NFCiSXzO3v7UbgOsLpkgEJg7U
-         x9WxEs4T49FPEZv+E+9g7o4jeefjBIDz5lBciCcOgFUr7StTDbQHHQxXNOSuE5A69CAy
-         UJd5eIK5cmAYejQX1X4n6EIkPtYN/5vPtGu5ukYmzahI3SZNbCfTtiMAkSOYgvNnQ8+C
-         yXx8h4J9UPWM7x7R2sa49JXKT3X2htvrck16yQ/d5jlpswwILb6Z+6xiSqvGYgCmHCct
-         zpwA==
-X-Gm-Message-State: AOAM530XAQGGCw1laRJLv/7Y+fL3K/DET3rneZVGyNTbVckUJtrFEy/E
-        DeKLwM3htbCBZb0GS/7IZoQ=
-X-Google-Smtp-Source: ABdhPJxRZSY2Y41lUKakBuNRWE1suXBEeYOsiKYabI9XVLbzYny3MxFQlKEPpazCvwmDmlnK5iF7ZA==
-X-Received: by 2002:a05:6a00:1c4e:b0:51b:ebf1:53c4 with SMTP id s14-20020a056a001c4e00b0051bebf153c4mr492238pfw.49.1654252205674;
-        Fri, 03 Jun 2022 03:30:05 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id b22-20020a056a0002d600b0050dc7628182sm3041676pft.92.2022.06.03.03.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 03:30:05 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v4 7/7] can: skb: drop tx skb if in listen only mode
-Date:   Fri,  3 Jun 2022 19:28:48 +0900
-Message-Id: <20220603102848.17907-8-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
+        Fri, 3 Jun 2022 06:31:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1C5AE4E;
+        Fri,  3 Jun 2022 03:31:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B756CCE230F;
+        Fri,  3 Jun 2022 10:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F38C385A9;
+        Fri,  3 Jun 2022 10:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654252310;
+        bh=uxKDQNP2ZIM59sJd/+dQG5xkTcM55eNMWdyr2X32D6g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o0hRM0IG/I22H9wIGay8MPt5gSxCJKew0MZ30/YttjF4KPdOUZAt9tWKlZOAztKOf
+         Bc2u2bb6ZRKIEhtWoCREM2Ss+6zn+bVDKMqX1lpJL3CkCuIKZa2/OABcKljV3flWJ7
+         GUzT053LmCTaQePuKcPLfMtEz/K1InO0HxGIjH1DV8sYcThBtdkWfwanoJDdAqQiLi
+         HKMQQrbTu/tltcWEHf6/1uRLp/T1RQmqfYtAANrjIzNe7jTxyWfCql6mEtSjmvWlgq
+         XLMF025l17iff2AShrujEzMyBxWFGaz6ngHGwcnVqUwPUYsYZJvvzJaNEqyTrM7Jyx
+         k4XpJmBUQrWMw==
+Message-ID: <5e57a1f3-1159-9277-5f8c-6ed0ad030a00@kernel.org>
+Date:   Fri, 3 Jun 2022 13:31:44 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v6 1/2] dt-bindings: interconnect: Add MediaTek CCI
+ dt-bindings
+Content-Language: en-US
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Johnson Wang <johnson.wang@mediatek.com>, krzk+dt@kernel.org,
+        robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220527110036.8810-1-johnson.wang@mediatek.com>
+ <CGME20220527110145epcas1p4c7f18d9c279de790634bffb8550ad552@epcas1p4.samsung.com>
+ <20220527110036.8810-2-johnson.wang@mediatek.com>
+ <a29667c5-9c84-b2c7-7027-926703cfe473@samsung.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <a29667c5-9c84-b2c7-7027-926703cfe473@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frames can be directly injected to a can driver via the packet
-socket. By doing so, it is possible to reach the
-net_device_ops::ndo_start_xmit function even if the driver is
-configured in listen only mode.
+On 3.06.22 3:39, Chanwoo Choi wrote:
+> Hi Georgi,
+> 
+> If you agree this dt-bidning into .../bindings/interconnect,
+> I'll merge it. Could you please review it?
+> 
+> On 5/27/22 8:00 PM, Johnson Wang wrote:
+>> Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
+>>
+>> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Add a check in can_dropped_invalid_skb() to discard the skb if
-CAN_CTRLMODE_LISTENONLY is set.
+Acked-by: Georgi Djakov <djakov@kernel.org>
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/dev/skb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Looks good to me. Thanks!
 
-diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-index dc9da76c0470..8bb62dd864c8 100644
---- a/drivers/net/can/dev/skb.c
-+++ b/drivers/net/can/dev/skb.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/can/dev.h>
-+#include <linux/can/netlink.h>
- #include <linux/module.h>
- 
- #define MOD_DESC "CAN device driver interface"
-@@ -293,6 +294,7 @@ static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
- bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- {
- 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+	struct can_priv *priv = netdev_priv(dev);
- 
- 	if (skb->protocol == htons(ETH_P_CAN)) {
- 		if (unlikely(skb->len != CAN_MTU ||
-@@ -306,8 +308,13 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- 		goto inval_skb;
- 	}
- 
--	if (!can_skb_headroom_valid(dev, skb))
-+	if (!can_skb_headroom_valid(dev, skb)) {
-+		goto inval_skb;
-+	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-+		netdev_info_once(dev,
-+				 "interface in listen only mode, dropping skb\n");
- 		goto inval_skb;
-+	}
- 
- 	return false;
- 
--- 
-2.35.1
+BR,
+Georgi
+
+>> ---
+>>   .../bindings/interconnect/mediatek,cci.yaml   | 141 ++++++++++++++++++
+>>   MAINTAINERS                                   |   1 +
+>>   2 files changed, 142 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+>> new file mode 100644
+>> index 000000000000..449c7c988229
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+>> @@ -0,0 +1,141 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: https://protect2.fireeye.com/v1/url?k=ad4ad61b-cc317c8c-ad4b5d54-74fe4860001d-01f34b7b1b45f9dd&q=1&e=81fe0992-6204-4794-b412-8ba4ca747e10&u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Finterconnect%2Fmediatek%2Ccci.yaml%23
+>> +$schema: https://protect2.fireeye.com/v1/url?k=a032f6c0-c1495c57-a0337d8f-74fe4860001d-83ce1b32f63b7f35&q=1&e=81fe0992-6204-4794-b412-8ba4ca747e10&u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
+>> +
+>> +title: MediaTek Cache Coherent Interconnect (CCI) frequency and voltage scaling
+>> +
+>> +maintainers:
+>> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> +  - Johnson Wang <johnson.wang@mediatek.com>
+>> +
+>> +description: |
+>> +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine used by
+>> +  MT8183 and MT8186 SoCs to scale the frequency and adjust the voltage in
+>> +  hardware. It can also optimize the voltage to reduce the power consumption.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - mediatek,mt8183-cci
+>> +      - mediatek,mt8186-cci
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description:
+>> +          The multiplexer for clock input of the bus.
+>> +      - description:
+>> +          A parent of "bus" clock which is used as an intermediate clock source
+>> +          when the original clock source (PLL) is under transition and not
+>> +          stable yet.
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: cci
+>> +      - const: intermediate
+>> +
+>> +  operating-points-v2: true
+>> +  opp-table: true
+>> +
+>> +  proc-supply:
+>> +    description:
+>> +      Phandle of the regulator for CCI that provides the supply voltage.
+>> +
+>> +  sram-supply:
+>> +    description:
+>> +      Phandle of the regulator for sram of CCI that provides the supply
+>> +      voltage. When it is present, the implementation needs to do
+>> +      "voltage tracking" to step by step scale up/down Vproc and Vsram to fit
+>> +      SoC specific needs. When absent, the voltage scaling flow is handled by
+>> +      hardware, hence no software "voltage tracking" is needed.
+>> +
+>> +required:
+>> +  - compatible
+>> +  - clocks
+>> +  - clock-names
+>> +  - operating-points-v2
+>> +  - proc-supply
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/mt8183-clk.h>
+>> +    cci: cci {
+>> +        compatible = "mediatek,mt8183-cci";
+>> +        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+>> +                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
+>> +        clock-names = "cci", "intermediate";
+>> +        operating-points-v2 = <&cci_opp>;
+>> +        proc-supply = <&mt6358_vproc12_reg>;
+>> +    };
+>> +
+>> +    cci_opp: opp-table-cci {
+>> +        compatible = "operating-points-v2";
+>> +        opp-shared;
+>> +        opp2_00: opp-273000000 {
+>> +            opp-hz = /bits/ 64 <273000000>;
+>> +            opp-microvolt = <650000>;
+>> +        };
+>> +        opp2_01: opp-338000000 {
+>> +            opp-hz = /bits/ 64 <338000000>;
+>> +            opp-microvolt = <687500>;
+>> +        };
+>> +        opp2_02: opp-403000000 {
+>> +            opp-hz = /bits/ 64 <403000000>;
+>> +            opp-microvolt = <718750>;
+>> +        };
+>> +        opp2_03: opp-463000000 {
+>> +            opp-hz = /bits/ 64 <463000000>;
+>> +            opp-microvolt = <756250>;
+>> +        };
+>> +        opp2_04: opp-546000000 {
+>> +            opp-hz = /bits/ 64 <546000000>;
+>> +            opp-microvolt = <800000>;
+>> +        };
+>> +        opp2_05: opp-624000000 {
+>> +            opp-hz = /bits/ 64 <624000000>;
+>> +            opp-microvolt = <818750>;
+>> +        };
+>> +        opp2_06: opp-689000000 {
+>> +            opp-hz = /bits/ 64 <689000000>;
+>> +            opp-microvolt = <850000>;
+>> +        };
+>> +        opp2_07: opp-767000000 {
+>> +            opp-hz = /bits/ 64 <767000000>;
+>> +            opp-microvolt = <868750>;
+>> +        };
+>> +        opp2_08: opp-845000000 {
+>> +            opp-hz = /bits/ 64 <845000000>;
+>> +            opp-microvolt = <893750>;
+>> +        };
+>> +        opp2_09: opp-871000000 {
+>> +            opp-hz = /bits/ 64 <871000000>;
+>> +            opp-microvolt = <906250>;
+>> +        };
+>> +        opp2_10: opp-923000000 {
+>> +            opp-hz = /bits/ 64 <923000000>;
+>> +            opp-microvolt = <931250>;
+>> +        };
+>> +        opp2_11: opp-962000000 {
+>> +            opp-hz = /bits/ 64 <962000000>;
+>> +            opp-microvolt = <943750>;
+>> +        };
+>> +        opp2_12: opp-1027000000 {
+>> +            opp-hz = /bits/ 64 <1027000000>;
+>> +            opp-microvolt = <975000>;
+>> +        };
+>> +        opp2_13: opp-1092000000 {
+>> +            opp-hz = /bits/ 64 <1092000000>;
+>> +            opp-microvolt = <1000000>;
+>> +        };
+>> +        opp2_14: opp-1144000000 {
+>> +            opp-hz = /bits/ 64 <1144000000>;
+>> +            opp-microvolt = <1025000>;
+>> +        };
+>> +        opp2_15: opp-1196000000 {
+>> +            opp-hz = /bits/ 64 <1196000000>;
+>> +            opp-microvolt = <1050000>;
+>> +        };
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 41c9c8f2b96d..7239f0e0c47b 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -5735,6 +5735,7 @@ L:	linux-pm@vger.kernel.org
+>>   S:	Maintained
+>>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+>>   F:	Documentation/devicetree/bindings/devfreq/
+>> +F:	Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+>>   F:	drivers/devfreq/
+>>   F:	include/linux/devfreq.h
+>>   F:	include/trace/events/devfreq.h
+>>
+> 
+> 
 

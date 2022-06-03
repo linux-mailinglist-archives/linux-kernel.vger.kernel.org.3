@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B65253CA4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AE853CA52
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244487AbiFCNAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S244499AbiFCNBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiFCNAu (ORCPT
+        with ESMTP id S233094AbiFCNBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:00:50 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD65A37A22
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 06:00:49 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n18so6797411plg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 06:00:49 -0700 (PDT)
+        Fri, 3 Jun 2022 09:01:43 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958EF33E00;
+        Fri,  3 Jun 2022 06:01:42 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id y17so6402901ilj.11;
+        Fri, 03 Jun 2022 06:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mDw9t4WQXBcrtm7/VRTOmbffEdum1gmVJhhAnb5FFC0=;
-        b=PKDS2oid/SEnsDgRAAcqVjf9EgAgvLTTwi5JGSL4hW+NCdz+ZZrT/NxoPWsyeaC6rq
-         s/j70TodR1+WlOCG4aY7mqgUFygIVqyJPgTt85f65L5ur6by4Jj5+8mE0048vNnVPcsN
-         L3eMVdCU62gMZ2SsxnPyvA0SgYAnBwh011108NPw5dajaksMsojSiAX1iDy5vYS1JBKq
-         izvesCLgnmThqlbW439u60rwRw6wphwk12+8nJkNinuwzWZx+7k6ApU5XxwVtQtSKuna
-         zcjsZUyaZ6bfKUtRCsWJe7Jmr0UAo/2M8N7RQwrPWnzWa7ltDh5BeOKqsN5kKbOFlJcD
-         GIFA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rgrulR9sWDCPB8J3w8134fSxmlMlybKB98GjFOYddPM=;
+        b=nZB/9Tim4HYP+RhLMDzSxYWSOsxlOt7c/zQOESbRHdxdNgnVJTtf94ATrxncZN4kD3
+         i11tzP7/xhpdjjmzkRpPfOIbYWnfu8VcelF+AMt30/pnlz1b/fBcaH96JUTz0dvmSwvR
+         yBaTYF0Qcz9Uuh9lLWrHHMtlG6oKj7pZUgIFdgwNH7ihpMCEYz4dQzHoZItFxpesI4zj
+         xVm0/mxZGsiO/MhduXeM45jZE9V+La/hlgesJqDWFNmMqdSgB8gH4MHH2rLmoMJnP9t1
+         AaMPFdDdU997v8W9YkDhoneZzLOrx7pXVUfFxJi+bbjXAsqpMZRd8DGWno6vLVQ0CfSn
+         SU+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mDw9t4WQXBcrtm7/VRTOmbffEdum1gmVJhhAnb5FFC0=;
-        b=WyBWoag9DedUFsXGHwlC3Njxy4xFnJ/p+kqpU5cb8ncapekqUCKXxhj1h2Nx407IGG
-         MgDiUCgXsleH4pqSIwhzL8YmKgMM16euPYemeTIQS0Mc03Iic3x7SLq+jvbeDnZrh/A0
-         vozWMs5qQPDZQJWfs0ukAiycgkIocj9jhN7e9lNLmmEBqa6JDkNHG//4kKPIMv3FNXMR
-         Sw0UsCOJjbSgUqaE+RrTB4AWTRV13hy8t/QxiFDisBaf/ymF4e7/3WbIGiZwjiN6uX4U
-         vF0Htov602BA/uYJOiSsWJVU51FwGSJgs9qPRzFoQ/jk2fX6ejitkG8tav83wTYlXUAp
-         BLog==
-X-Gm-Message-State: AOAM5311sgGO2p859lCRLDGpHQb5tPA/xKAxOZVkdXAxKMKXGNkz4OzZ
-        PTazpNfPz4GjSJMt61Z4sls=
-X-Google-Smtp-Source: ABdhPJyk87NTR6aw08mfmi4uJ5A7HWe4I1KK7PCmbjDQvSbtcGhI0Vh5aWzvGcRmKFh8zuFgdzXdvg==
-X-Received: by 2002:a17:90b:20d4:b0:1e2:fadf:3f09 with SMTP id ju20-20020a17090b20d400b001e2fadf3f09mr11003794pjb.236.1654261248745;
-        Fri, 03 Jun 2022 06:00:48 -0700 (PDT)
-Received: from f34-buildvm.eng.vmware.com ([66.170.99.2])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b00163f7935772sm5327553plq.46.2022.06.03.06.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 06:00:48 -0700 (PDT)
-From:   Shreenidhi Shedi <yesshedi@gmail.com>
-X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, yesshedi@gmail.com,
-        Shreenidhi Shedi <sshedi@vmware.com>
-Subject: [PATCH 2/2] char: lp: remove redundant initialization of err
-Date:   Fri,  3 Jun 2022 18:30:40 +0530
-Message-Id: <20220603130040.601673-2-sshedi@vmware.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603130040.601673-1-sshedi@vmware.com>
-References: <20220603130040.601673-1-sshedi@vmware.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rgrulR9sWDCPB8J3w8134fSxmlMlybKB98GjFOYddPM=;
+        b=WOZkqgTWgQcvIU75M2Ohi1T4qfH0Wc/011nL9ilHvOb79a9/SO0lz+77Kv0nNpCjef
+         WxLtYOP+QyN6ggvkB/1+jxrnA8jjZH8tC5IiCEFRXwfyQVTOCBEoUik6yL27HRwkjkSH
+         mP8T34pnSryfC6+TYaeoC2vUl4dqYf7YVvwGVrKkn6mKQ4y9KS+FGruqcBMlIWfsrNCA
+         7rycZlns0YMN24mlfN07/tlmJDpAE+SFvbEYLozwV+co4XSzd9XmFyY8NK6mg8kwCrF2
+         ex7L3KGI7RZp7bcMvE4xCT27HlYFbGZIBrnxVuF5VxaPr3/vfQzrmwyv8qpSLyHZscNo
+         oQ3A==
+X-Gm-Message-State: AOAM533gYsbKYXyGW/iwVOa3iDwWpapBvyD27/j5yzcWgEFzHyOASU5y
+        RE0y9Zx/LPtp0iYudWB9UmLv0nbr2Cywjy1nk08qez4kSG2XAGNTz1w=
+X-Google-Smtp-Source: ABdhPJyO+Wy90k2d7bT9meJht2LMrT2KMmjl3ZbZHYIX42IrUTb483qKosBX0l5mNBSohko5/wmN7WiKuJk6RZCTo6Y=
+X-Received: by 2002:a05:6e02:12b4:b0:2d3:a822:3a16 with SMTP id
+ f20-20020a056e0212b400b002d3a8223a16mr5629446ilr.279.1654261301972; Fri, 03
+ Jun 2022 06:01:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
+ <20220602115141.3962749-4-chenhuacai@loongson.cn> <YplnruNz++gABlU0@debian.me>
+ <CAAhV-H5Hi_gYvrO6DAGGA=OVExunCubNpDBdkRBxFxiP1APAKw@mail.gmail.com> <de31731a-5cb5-ece1-6b7f-895d9c04fa95@gmail.com>
+In-Reply-To: <de31731a-5cb5-ece1-6b7f-895d9c04fa95@gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Fri, 3 Jun 2022 21:01:31 +0800
+Message-ID: <CAAhV-H53=9=qsmasoZ6efeiCez4vo0P2Eg-itTvNh3zerCtJsg@mail.gmail.com>
+Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic documentations
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        WANG Xuerui <git@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shreenidhi Shedi <sshedi@vmware.com>
+Hi, Bagas,
 
-err is getting assigned with an appropriate value before returning,
-hence this initialization is unnecessary.
+On Fri, Jun 3, 2022 at 3:35 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 6/3/22 12:27, Huacai Chen wrote:
+> > Thank you for your testing. In my environment (sphinx_2.4.4), with or
+> > without the border both have no warnings. :)
+> > And I think these are more pretty if we keep the border, especially
+> > when formatted into PDF. How do you think?
+> >
+>
+> I think what you mean is reST table border, right?
+>
+> By comparison, in Documentation/arm/booting.rst, there is a diagram
+> in "Setup the kernel tagged list". The diagram is written just inside
+> the literal code block and works fine, albeit the code block
+> spans fully. The diagram is small, however.
+>
+> Otherwise, I see unequal padding in rendered IRQ diagrams. If I
+> remember correctly, the bottom and left padding are larger than top
+> and right padding. IDK why.
+>
+> So please apply my suggestion diff.
+Your suggestion has been accepted now, thanks.
 
-Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
----
- drivers/char/lp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/char/lp.c b/drivers/char/lp.c
-index d474d02b6..536ceb111 100644
---- a/drivers/char/lp.c
-+++ b/drivers/char/lp.c
-@@ -1019,7 +1019,7 @@ static struct parport_driver lp_driver = {
-
- static int __init lp_init(void)
- {
--	int i, err = 0;
-+	int i, err;
-
- 	if (parport_nr[0] == LP_PARPORT_OFF)
- 		return 0;
---
-2.36.1
-
+Huacai
+>
+> Thanks.
+>
+> --
+> An old man doll... just what I always wanted! - Clara

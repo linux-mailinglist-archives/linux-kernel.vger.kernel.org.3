@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF0653C3C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607C253C3C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237645AbiFCEbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 00:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S238187AbiFCEb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 00:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiFCEbc (ORCPT
+        with ESMTP id S237890AbiFCEby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:31:32 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4AD36B71;
-        Thu,  2 Jun 2022 21:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=h11mfFrK9QMlt7x6lBFFIFgCiCt5fV9MimCmymWkWMQ=; b=I208srKiAt4VBcE6LOzAteUE5T
-        J/iH43L+s9B00CBhtAekBO/BRB8C8jJjTJI3xsF5w53J799Ag5+2/FF8r0CdvrANbNPkI9JO6cGcy
-        QcQazxvlASiJBUDptiQ8I9zQHq5k39/ASmiL5L9/q96VeUy49feaoxCMclzLTu+GBYBqW8rZEyQ28
-        5XlU1AhGiMUpqUraysO/jc7VPnHyAC3G12eIi+9fGSDkX3ArZH8tA1eicdrEvAzChD+9jTvPmiLgR
-        pkVqVG3JlP+zZZYhQvN/Lp0SWjk68HrqrERGDjUd8/Be9EHF6W91pzdMjXXD+smfemW6znXjDsSpV
-        vIbyludA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwyxi-004Iu4-JQ; Fri, 03 Jun 2022 04:31:05 +0000
-Message-ID: <01bf93d3-06c4-594e-e3c6-b6f56a1efa83@infradead.org>
-Date:   Thu, 2 Jun 2022 21:30:53 -0700
+        Fri, 3 Jun 2022 00:31:54 -0400
+Received: from mail-ua1-x963.google.com (mail-ua1-x963.google.com [IPv6:2607:f8b0:4864:20::963])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947F62180
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:31:53 -0700 (PDT)
+Received: by mail-ua1-x963.google.com with SMTP id z15so2202620uad.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:31:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:dkim-signature:mime-version:references
+         :in-reply-to:from:date:message-id:subject:to:cc;
+        bh=TfOfY9nDE6EgdzK7eHo1wPWpr31B0AhtWoqNGscvDio=;
+        b=ioiRTafpOE2wSHTS4AYSBmd0KKQennzL2LCi1YXKVTAdwabeFOLlhtyPQ5a7gJjK84
+         0hqsChxsAW01WDn3qMras0ZNxOLfguHaK6ziNjks9UNi3qfsWZ1DAnQRm3QtvSB6YxEJ
+         YO7SvXNdG8zusECZPCf1qed3jToZ6CXjQdMuHAoaLxsFkWcv62Hp9zPiLb71Oga5UNn0
+         cz/2GTrq33uGAumodBuW8c/s9AHhAhIgqVLBvm1qt5fXFKLht5i6bdZZsOnAvUKCAV0s
+         +RjAZNKoT/iUTW6W0iT4+a9y0xw10AAsMuIdcL46Qx/0cFJXN5vMKAGyhcpwcZx2wAoU
+         f9WQ==
+X-Gm-Message-State: AOAM533EfvLy4AQhj2A78j3yYJ0AruBMgtU7Evc5FbJaQEoqjbrKoBbb
+        eQ1xa1qsPjkXfRS2zrewaG78qYQ/xitGHtiTX2fqi7oyJbJcfQ==
+X-Google-Smtp-Source: ABdhPJyfOPwYVkAFLvZg8n+5bgxLHoUhKnuOLLZJC7j97JjMEbK7MwQJpOVcKjbYsxZbkaecJ3fpBZCwTuM0
+X-Received: by 2002:a9f:386c:0:b0:362:9220:ce10 with SMTP id q41-20020a9f386c000000b003629220ce10mr25930067uad.68.1654230681079;
+        Thu, 02 Jun 2022 21:31:21 -0700 (PDT)
+Received: from netskope.com ([163.116.128.209])
+        by smtp-relay.gmail.com with ESMTPS id b23-20020ab03917000000b003735b2deef2sm819089uaw.13.2022.06.02.21.31.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 21:31:21 -0700 (PDT)
+X-Relaying-Domain: riotgames.com
+Received: by mail-qk1-f197.google.com with SMTP id j12-20020ae9c20c000000b0069e8ac6b244so5189437qkg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riotgames.com; s=riotgames;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TfOfY9nDE6EgdzK7eHo1wPWpr31B0AhtWoqNGscvDio=;
+        b=EB0xhxnrrBnHMP+Yw1n+L6/aBww/dvWK+IVeF09JEDipF5Hblr7ZZ3BsnJKTyT+ru6
+         lMbAs+t8Vw0xSjQDS8SvPfKDDZ2fXhgGGIEZQvhFveC26VsbjQ68eNbjAgPCO5AovCG8
+         mNwCZojcO25AASOYLNPvXo+S4c7KbmB7K9ies=
+X-Received: by 2002:a05:620a:4154:b0:6a5:7577:3e1b with SMTP id k20-20020a05620a415400b006a575773e1bmr5309327qko.694.1654230678936;
+        Thu, 02 Jun 2022 21:31:18 -0700 (PDT)
+X-Received: by 2002:a05:620a:4154:b0:6a5:7577:3e1b with SMTP id
+ k20-20020a05620a415400b006a575773e1bmr5309317qko.694.1654230678725; Thu, 02
+ Jun 2022 21:31:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1] module: Fix prefix for module.sig_enforce module param
-Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, void@manifault.com,
-        atomlin@atomlin.com, Allen Pais <allen.lkml@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Android Kernel Team <kernel-team@android.com>
-References: <20220322140344.556474-2-atomlin@redhat.com>
- <20220602035653.4167316-1-saravanak@google.com>
- <YpkMelZC+E5hKTw6@bombadil.infradead.org>
- <CAHk-=wit6ttmzdFsbH+YLkMeLucTspYADHnENn4fBXNrit0BUQ@mail.gmail.com>
- <CAGETcx9f5BiojqU6wr29eUrYr9s8k+CGj_t-7RvrTSmDm6WwJw@mail.gmail.com>
- <YplAxCvRiNnthK6d@bombadil.infradead.org>
- <CAGETcx-gEbH2ymx7FXCXZNt3p=r=5FXuhLUiMuNvofcb1HXysA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAGETcx-gEbH2ymx7FXCXZNt3p=r=5FXuhLUiMuNvofcb1HXysA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220603041701.2799595-1-irogers@google.com>
+In-Reply-To: <20220603041701.2799595-1-irogers@google.com>
+From:   Zvi Effron <zeffron@riotgames.com>
+Date:   Thu, 2 Jun 2022 21:31:07 -0700
+Message-ID: <CAC1LvL12oxCojWBxqCj=g+cC=UbAHoQ6kT4TQXSi1j78L5zn3g@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: Fix is_pow_of_2
+To:     Ian Rogers <irogers@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuze Chi <chiyuze@google.com>
+Content-Type: text/plain; charset="UTF-8"
+x-netskope-inspected: true
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,103 +83,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Thu, Jun 2, 2022 at 9:17 PM Ian Rogers <irogers@google.com> wrote:
+>
+> From: Yuze Chi <chiyuze@google.com>
+>
+> There is a missing not. Consider a power of 2 number like 4096:
+>
+> x && (x & (x - 1))
+> 4096 && (4096 & (4096 - 1))
+> 4096 && (4096 & 4095)
+> 4096 && 0
+> 0
+>
+> with the not this is:
+> x && !(x & (x - 1))
+> 4096 && !(4096 & (4096 - 1))
+> 4096 && !(4096 & 4095)
+> 4096 && !0
+> 4096 && 1
+> 1
+>
+> Reported-by: Yuze Chi <chiyuze@google.com>
+> Signed-off-by: Yuze Chi <chiyuze@google.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 3f4f18684bd3..fd0414ea00df 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -4956,7 +4956,7 @@ static void bpf_map__destroy(struct bpf_map *map);
+>
+>  static bool is_pow_of_2(size_t x)
+>  {
+> -       return x && (x & (x - 1));
+> +       return x && !(x & (x - 1));
 
-On 6/2/22 20:48, Saravana Kannan wrote:
-> On Thu, Jun 2, 2022 at 3:59 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->>
->> On Thu, Jun 02, 2022 at 02:47:04PM -0700, Saravana Kannan wrote:
->>> On Thu, Jun 2, 2022 at 12:41 PM Linus Torvalds
->>> <torvalds@linux-foundation.org> wrote:
->>>>
->>>> On Thu, Jun 2, 2022 at 12:16 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->>>>>
->>>>> Linus want to take this in or should I just queue these up?
->>>>
->>>> I'll take it, and remove the unnecessary #ifdef/#endif. The #undef
->>>> might as well be unconditional - simpler and doesn't hurt.
->>>
->>> Sounds good. I just copy-pasted how it was done elsewhere. Luis was
->>> mentioning adding a wrapper to go this cleanly and I needed it in
->>> another instance too. So I'll look into doing that in a future patch.
->>
->> Virtual hug, or something hippie like that.
-> 
-> Thanks :)
-> 
-> I gave this a shot.
-> 
-> + #define set_module_param_prefix(prefix) \
-> + #undef MODULE_PARAM_PREFIX              \
-> + #define MODULE_PARAM_PREFIX prefix
-> 
-> I even wrote up a nice chunk of "function doc" before I tried
-> compiling it. And once I compiled it, I was smacked in the head by the
-> compiler for trying to put a #define inside a #define (Duh, the
-> preprocessing in a single pass).
-> 
-> Before I tried this, I looked up the current uses of the "hacky" snippet:
-> 
-> $ git grep -l "define.*MODULE_PARAM_PREFIX" -- :^include/
-> block/disk-events.c
-> drivers/misc/cxl/fault.c
-> drivers/mmc/core/block.c
-> drivers/pci/pcie/aspm.c
-> drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> drivers/tty/serial/8250/8250_core.c
-> drivers/xen/balloon.c
-> drivers/xen/events/events_base.c
-> kernel/debug/kdb/kdb_main.c
-> kernel/kcsan/core.c
-> kernel/rcu/tree.c
-> kernel/rcu/update.c
-> mm/damon/reclaim.c
-> mm/kfence/core.c
-> 
-> 
-> In a lot of those files, there are a lot of module params that follow
-> this snippet. Going on a tangent, some of the uses of #define
-> MODULE_PARAM_PREFIX don't seem to have any obvious use or param
-> macros.
-> 
-> So adding a module_param_prefixed() doesn't make sense to me either,
-> because I'll have to repeat the same prefix in every usage of
-> module_param_prefixed() AND I'll have to create a _prefixed() variant
-> for other param macros too.
-> 
-> So, something like:
-> module_param_prefixed("module.", sig_enforce, bool, 644);
-> module_param_prefixed("module.", another_param1, bool, 644);
-> module_param_prefixed("module.", another_param2, bool, 644);
-> 
-> Or replace "module." with a MY_PREFIX so that it's easy to ensure the
-> string is the same across each use:
-> #define MY_PREFIX "module."
-> module_param_prefixed(MY_PREFIX, sig_enforce, bool, 644);
-> module_param_prefixed(MY_PREFIX, another_param1, bool, 644);
-> module_param_prefixed(MY_PREFIX, another_param2, bool, 644);
-> 
-> But at that point, all I'm avoiding is one #undef MODULE_PARAM_PREFIX
-> and a whole lot of code churn.
-> 
-> One other option is to do something like:
-> #ifndef MOD_PREFIX
-> #define MODULE_PARAM_PREFIX KBUILD_MODNAME "."
-> #else
-> #define MODULE_PARAM_PREFIX MOD_PREFIX "."
-> #endif
-> 
-> But that will have the limitation that MOD_PREFIX has to be defined
-> before any #includes is in a file (similar to pr_fmt())  and doesn't
-> allow you to redefine the prefix half way through a file -- which is
-> also a thing that happens in drivers/tty/serial/8250/8250_core.c.
-> 
-> So, long story short, none of these options sound especially appealing
-> that it's worth all the code churn across multiple maintainer trees.
-> Let me know if you have other ideas that might work or you think one
-> of the options I dismissed is actually worth doing.
+No idea if anyone cares about the consistency, but in linker.c (same directory)
+the same static function is defined using == 0 at the end instead of using the
+not operator.
 
-I agree with your assessment. Nothing new is needed.
+Aside from the consistency issue, personally I find the == 0 version a little
+bit easier to read and understand because it's a bit less dense (and a "!" next
+to a "(" is an easy character to overlook).
 
--- 
-~Randy
+>  }
+>
+>  static size_t adjust_ringbuf_sz(size_t sz)
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

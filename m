@@ -2,227 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF5853C38E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F12E53C392
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 06:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiFCET4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 00:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S237065AbiFCEYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 00:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbiFCETw (ORCPT
+        with ESMTP id S235497AbiFCEYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 00:19:52 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3F260EB
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 21:19:47 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id i10so10852064lfj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 21:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=pSYwMXTiWYFCbMo+OGvlkKXlgdvtI08BWksfEz9zHwI=;
-        b=1CODD47VWyN69Es67Z6riONBZqKuEEgP78VqiQGl2vKLYNexE0WZpG6O9FiSYe5iqv
-         ijkoUB7PQI50ZeSmOFMjjVRjN1uCRNQXm7HLQA+/dGdta3BuKcLeph449pqL+xmCSxUv
-         ibISQ35Y02uC1uLE9hupFlNAZMJ9BQwJK0pZTp4HF75l7144MaPFHMt5uG35vmDjpQNW
-         kbLx6otbwcZRihC9aa5yGdkhFBxOFsqZsj4TksediRwyE5kp6Qys6pnfLGbOAfLN/KMD
-         gHtYVUcq0tFXMMbbM2SCeXnfJQKJ/DE0whVWFW5GaBPAHWVqtc4NOjG1/TuG585ZbJzB
-         2w0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=pSYwMXTiWYFCbMo+OGvlkKXlgdvtI08BWksfEz9zHwI=;
-        b=VrhraFca0+eLGRJ99+JF3vbOZnUrQCQTEl8nuGbP52J1Gk983/b9Mb9CSpdAcjbo9w
-         h/C29l07Wg6Ko2HY4axEWX4VmepUr9p1mspLAee++q1XHwc2CRd5cTp2lY8CLHWhXN9o
-         vPysuKimifX8or4Io3ErUZtVyiu8qMYkmU64me19UKFbY3fAnNyrIOoY/W3gOpnm4Ft8
-         84mLkSrKlKCipd4pWVcskU05CIpRP1JVqkEzDW8v+8zUyG5ZXhYrAhvaGULQsbZJE7Qg
-         qkGubEPumsW9f3A75IwSVOMqlCj11reaNiAA0dMY1gFRxJd8OC1FG/wjzLxVA3jhAiDK
-         5f2Q==
-X-Gm-Message-State: AOAM531+rNoD677NIM3PSpvLeksWdjqcI/+TCMq31VjQCTfLtY73U3wA
-        en0Lk28oyqVdpPNKDM0HLMeGPQ==
-X-Google-Smtp-Source: ABdhPJxtEa4AvS+hff4wNUG2MVhq15kAG6mG6ooeCyhAFC5bOY6AHAoxBiLjCvSRTrPc/4VOHRUfdw==
-X-Received: by 2002:a05:6512:118a:b0:478:a8b3:e1ee with SMTP id g10-20020a056512118a00b00478a8b3e1eemr32562601lfr.391.1654229985403;
-        Thu, 02 Jun 2022 21:19:45 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id s17-20020a197711000000b0047255d211fasm617383lfc.297.2022.06.02.21.19.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jun 2022 21:19:44 -0700 (PDT)
-Message-ID: <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org>
-Date:   Fri, 3 Jun 2022 07:19:43 +0300
+        Fri, 3 Jun 2022 00:24:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AB435DCB;
+        Thu,  2 Jun 2022 21:24:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F156361687;
+        Fri,  3 Jun 2022 04:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C43D8C385A9;
+        Fri,  3 Jun 2022 04:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654230257;
+        bh=VcPv64F+arj4pM7sQW/MRMnr268G7RMioGuGKmtHk1w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HDBMkA0+jEtpi4t7vOKaGdzUkAsaY00BCPd5wU8y2xAN7CY0ONP/UwmBqk/AMmdgR
+         e/LoAEKtxBkQT4uawhQ/n/sSOnNkltOL+tpo2ADh9bJVIziT1sUkiLRo+/boOnIWXa
+         a+Hbb8MzmeNEy4DzOVgykKB6ecY1KvdFDD+AXpiQ08FVTbSVuGAdQDb9eoCDmfI2ES
+         dpCjtC3fLce7y2dz/X/gwjSWGhGTUmdrn0CjBVwsx4fnotxRIE8GDLV/tR/Fo1snSd
+         8Hq9ywuDwFzujTwvttyy8W8w4I6CubEqL/bsmMRwcEuNi8mhUM0qulhjIfN4tay8BR
+         0zp/prdI3fN7g==
+Date:   Thu, 2 Jun 2022 21:24:15 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Chen Lin <chen45464546@163.com>
+Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, matthias.bgg@gmail.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alexander.duyck@gmail.com
+Subject: Re: [PATCH] net: ethernet: mtk_eth_soc: fix misuse of mem alloc
+ interface netdev_alloc_frag
+Message-ID: <20220602212415.71bc5133@kernel.org>
+In-Reply-To: <1654229435-2934-1-git-send-email-chen45464546@163.com>
+References: <1654229435-2934-1-git-send-email-chen45464546@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH memcg v6] net: set proper memcg for net_init hooks allocations
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, cgroups@vger.kernel.org
-References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
-Content-Language: en-US
-In-Reply-To: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__register_pernet_operations() executes init hook of registered
-pernet_operation structure in all existing net namespaces.
+On Fri,  3 Jun 2022 12:10:35 +0800 Chen Lin wrote:
+> -		ring->data[i] = netdev_alloc_frag(ring->frag_size);
+> +		if (ring->frag_size <= PAGE_SIZE)
+> +			ring->data[i] = netdev_alloc_frag(ring->frag_size);
+> +		else
+> +			ring->data[i] = kmalloc(ring->frag_size, GFP_KERNEL);
 
-Typically, these hooks are called by a process associated with
-the specified net namespace, and all __GFP_ACCOUNT marked
-allocation are accounted for corresponding container/memcg.
+Is it legal to allocate pages with kmalloc()? I mean they will end up
+getting freed by page_frag_free(), not kfree().
 
-However __register_pernet_operations() calls the hooks in the same
-context, and as a result all marked allocations are accounted
-to one memcg for all processed net namespaces.
-
-This patch adjusts active memcg for each net namespace and helps
-to account memory allocated inside ops_init() into the proper memcg.
-
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-Acked-by: Shakeel Butt <shakeelb@google.com>
----
-v6: re-based to current upstream (v5.18-11267-gb00ed48bb0a7)
-
-v5: documented get_mem_cgroup_from_obj() and for mem_cgroup_or_root()
-    functions, asked by Shakeel.
-
-v4: get_mem_cgroup_from_kmem() renamed to get_mem_cgroup_from_obj(),
-    get_net_memcg() renamed to mem_cgroup_or_root(), suggested by Roman.
-
-v3: put_net_memcg() replaced by an alreay existing mem_cgroup_put()
-    It checks memcg before accessing it, this is required for
-    __register_pernet_operations() called before memcg initialization.
-    Additionally fixed leading whitespaces in non-memcg_kmem version
-    of mem_cgroup_from_obj().
-
-v2: introduced get/put_net_memcg(),
-    new functions are moved under CONFIG_MEMCG_KMEM
-    to fix compilation issues reported by Intel's kernel test robot
-
-v1: introduced get_mem_cgroup_from_kmem(), which takes the refcount
-    for the found memcg, suggested by Shakeel
----
- include/linux/memcontrol.h | 47 +++++++++++++++++++++++++++++++++++++-
- net/core/net_namespace.c   |  7 ++++++
- 2 files changed, 53 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 9ecead1042b9..dad16b484cd5 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1755,6 +1755,42 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
- 	rcu_read_unlock();
- }
- 
-+/**
-+ * get_mem_cgroup_from_obj - get a memcg associated with passed kernel object.
-+ * @p: pointer to object from which memcg should be extracted. It can be NULL.
-+ *
-+ * Retrieves the memory group into which the memory of the pointed kernel
-+ * object is accounted. If memcg is found, its reference is taken.
-+ * If a passed kernel object is uncharged, or if proper memcg cannot be found,
-+ * as well as if mem_cgroup is disabled, NULL is returned.
-+ *
-+ * Return: valid memcg pointer with taken reference or NULL.
-+ */
-+static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	rcu_read_lock();
-+	do {
-+		memcg = mem_cgroup_from_obj(p);
-+	} while (memcg && !css_tryget(&memcg->css));
-+	rcu_read_unlock();
-+	return memcg;
-+}
-+
-+/**
-+ * mem_cgroup_or_root - always returns a pointer to a valid memory cgroup.
-+ * @memcg: pointer to a valid memory cgroup or NULL.
-+ *
-+ * If passed argument is not NULL, returns it without any additional checks
-+ * and changes. Otherwise, root_mem_cgroup is returned.
-+ *
-+ * NOTE: root_mem_cgroup can be NULL during early boot.
-+ */
-+static inline struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
-+{
-+	return memcg ? memcg : root_mem_cgroup;
-+}
- #else
- static inline bool mem_cgroup_kmem_disabled(void)
- {
-@@ -1798,7 +1834,7 @@ static inline int memcg_kmem_id(struct mem_cgroup *memcg)
- 
- static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
- {
--       return NULL;
-+	return NULL;
- }
- 
- static inline void count_objcg_event(struct obj_cgroup *objcg,
-@@ -1806,6 +1842,15 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
- {
- }
- 
-+static inline struct mem_cgroup *get_mem_cgroup_from_obj(void *p)
-+{
-+	return NULL;
-+}
-+
-+static inline struct mem_cgroup *mem_cgroup_or_root(struct mem_cgroup *memcg)
-+{
-+	return NULL;
-+}
- #endif /* CONFIG_MEMCG_KMEM */
- 
- #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
-diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
-index 0ec2f5906a27..6b9f19122ec1 100644
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -18,6 +18,7 @@
- #include <linux/user_namespace.h>
- #include <linux/net_namespace.h>
- #include <linux/sched/task.h>
-+#include <linux/sched/mm.h>
- #include <linux/uidgid.h>
- #include <linux/cookie.h>
- 
-@@ -1143,7 +1144,13 @@ static int __register_pernet_operations(struct list_head *list,
- 		 * setup_net() and cleanup_net() are not possible.
- 		 */
- 		for_each_net(net) {
-+			struct mem_cgroup *old, *memcg;
-+
-+			memcg = mem_cgroup_or_root(get_mem_cgroup_from_obj(net));
-+			old = set_active_memcg(memcg);
- 			error = ops_init(ops, net);
-+			set_active_memcg(old);
-+			mem_cgroup_put(memcg);
- 			if (error)
- 				goto out_undo;
- 			list_add_tail(&net->exit_list, &net_exit_list);
--- 
-2.36.1
+Also there's more frag allocations here, search for napi_alloc_frag().
 

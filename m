@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FE953D009
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9721253D05E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346084AbiFCR7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S1346318AbiFCSDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346235AbiFCRuy (ORCPT
+        with ESMTP id S1347261AbiFCRwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930CD5A09A;
-        Fri,  3 Jun 2022 10:47:16 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBE9B48E;
+        Fri,  3 Jun 2022 10:51:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6C2260A57;
-        Fri,  3 Jun 2022 17:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B821EC385A9;
-        Fri,  3 Jun 2022 17:47:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2770B82419;
+        Fri,  3 Jun 2022 17:51:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23348C385A9;
+        Fri,  3 Jun 2022 17:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278435;
-        bh=4CV2YYdOdmtQY/EHPZAR8SenSGDXz6x4jpKV19cuIKQ=;
+        s=korg; t=1654278697;
+        bh=u3IpJg7f52QEmZoiTs+geEPRmnLMhe+3HVFYgwUxjcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UtaAMXSFh/jUidi3209vJXcff2PlDFoyIri/41GRdi74FUtEb+6TPuRe23CtJ5WJq
-         hL2wUWCioEWXS7HNYK9CzKVWbt8oGEcrqrpmkKCPD8t6zZUCPlJq9x1PYYcyt+/VFE
-         Xh2iPgyY2ybo+Pjb2MRpK2pgjKN1Y1IR66ttM7G0=
+        b=hCd/MzFWqOlhokl60z4HvVU0yO5QWcVXR0dbscJAdiT1HfLDu+eGfYnKMwGxZ46I+
+         cHTNsEk5iw5O999Jd1IpeuZaAftUO4XqLDUW6rQP8375u0+Uzup75YcX+1fGFAE73p
+         Pn9Dyem6r+BKFWCBZmyF8k9bpy4w0tPbc6B9bBTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.10 32/53] x86/kvm: Alloc dummy async #PF token outside of raw spinlock
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Maris Abele <maris7abele@gmail.com>
+Subject: [PATCH 5.15 37/66] ALSA: usb-audio: Workaround for clock setup on TEAC devices
 Date:   Fri,  3 Jun 2022 19:43:17 +0200
-Message-Id: <20220603173819.658900854@linuxfoundation.org>
+Message-Id: <20220603173821.742820192@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,91 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 0547758a6de3cc71a0cfdd031a3621a30db6a68b upstream.
+commit 5ce0b06ae5e69e23142e73c5c3c0260e9f2ccb4b upstream.
 
-Drop the raw spinlock in kvm_async_pf_task_wake() before allocating the
-the dummy async #PF token, the allocator is preemptible on PREEMPT_RT
-kernels and must not be called from truly atomic contexts.
+Maris reported that TEAC UD-501 (0644:8043) doesn't work with the
+typical "clock source 41 is not valid, cannot use" errors on the
+recent kernels.  The currently known workaround so far is to restore
+(partially) what we've done unconditionally at the clock setup;
+namely, re-setup the USB interface immediately after the clock is
+changed.  This patch re-introduces the behavior conditionally for TEAC
+devices.
 
-Opportunistically document why it's ok to loop on allocation failure,
-i.e. why the function won't get stuck in an infinite loop.
+Further notes:
+- The USB interface shall be set later in
+  snd_usb_endpoint_configure(), but this seems to be too late.
+- Even calling  usb_set_interface() right after
+  sne_usb_init_sample_rate() doesn't help; so this must be related
+  with the clock validation, too.
+- The device may still spew the "clock source 41 is not valid" error
+  at the first clock setup.  This seems happening at the very first
+  try of clock setup, but it disappears at later attempts.
+  The error is likely harmless because the driver retries the clock
+  setup (such an error is more or less expected on some devices).
 
-Reported-by: Yajun Deng <yajun.deng@linux.dev>
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
+Reported-and-tested-by: Maris Abele <maris7abele@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220521064627.29292-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/kvm.c |   41 +++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 14 deletions(-)
+ sound/usb/clock.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -188,7 +188,7 @@ void kvm_async_pf_task_wake(u32 token)
- {
- 	u32 key = hash_32(token, KVM_TASK_SLEEP_HASHBITS);
- 	struct kvm_task_sleep_head *b = &async_pf_sleepers[key];
--	struct kvm_task_sleep_node *n;
-+	struct kvm_task_sleep_node *n, *dummy = NULL;
- 
- 	if (token == ~0) {
- 		apf_task_wake_all();
-@@ -200,28 +200,41 @@ again:
- 	n = _find_apf_task(b, token);
- 	if (!n) {
- 		/*
--		 * async PF was not yet handled.
--		 * Add dummy entry for the token.
-+		 * Async #PF not yet handled, add a dummy entry for the token.
-+		 * Allocating the token must be down outside of the raw lock
-+		 * as the allocator is preemptible on PREEMPT_RT kernels.
- 		 */
--		n = kzalloc(sizeof(*n), GFP_ATOMIC);
--		if (!n) {
-+		if (!dummy) {
-+			raw_spin_unlock(&b->lock);
-+			dummy = kzalloc(sizeof(*dummy), GFP_KERNEL);
-+
- 			/*
--			 * Allocation failed! Busy wait while other cpu
--			 * handles async PF.
-+			 * Continue looping on allocation failure, eventually
-+			 * the async #PF will be handled and allocating a new
-+			 * node will be unnecessary.
-+			 */
-+			if (!dummy)
-+				cpu_relax();
-+
-+			/*
-+			 * Recheck for async #PF completion before enqueueing
-+			 * the dummy token to avoid duplicate list entries.
- 			 */
--			raw_spin_unlock(&b->lock);
--			cpu_relax();
- 			goto again;
- 		}
--		n->token = token;
--		n->cpu = smp_processor_id();
--		init_swait_queue_head(&n->wq);
--		hlist_add_head(&n->link, &b->list);
-+		dummy->token = token;
-+		dummy->cpu = smp_processor_id();
-+		init_swait_queue_head(&dummy->wq);
-+		hlist_add_head(&dummy->link, &b->list);
-+		dummy = NULL;
- 	} else {
- 		apf_task_wake_one(n);
+--- a/sound/usb/clock.c
++++ b/sound/usb/clock.c
+@@ -572,6 +572,13 @@ static int set_sample_rate_v2v3(struct s
+ 		/* continue processing */
  	}
- 	raw_spin_unlock(&b->lock);
--	return;
-+
-+	/* A dummy token might be allocated and ultimately not used.  */
-+	if (dummy)
-+		kfree(dummy);
- }
- EXPORT_SYMBOL_GPL(kvm_async_pf_task_wake);
  
++	/* FIXME - TEAC devices require the immediate interface setup */
++	if (rate != prev_rate && USB_ID_VENDOR(chip->usb_id) == 0x0644) {
++		usb_set_interface(chip->dev, fmt->iface, fmt->altsetting);
++		if (chip->quirk_flags & QUIRK_FLAG_IFACE_DELAY)
++			msleep(50);
++	}
++
+ validation:
+ 	/* validate clock after rate change */
+ 	if (!uac_clock_source_is_valid(chip, fmt, clock))
 
 

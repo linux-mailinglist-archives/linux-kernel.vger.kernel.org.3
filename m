@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FF253D089
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57DF53CF61
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347856AbiFCSGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S1345634AbiFCRxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345583AbiFCRxU (ORCPT
+        with ESMTP id S1345775AbiFCRuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:53:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816C2220C4;
-        Fri,  3 Jun 2022 10:52:29 -0700 (PDT)
+        Fri, 3 Jun 2022 13:50:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D005908A;
+        Fri,  3 Jun 2022 10:46:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C52CB82419;
-        Fri,  3 Jun 2022 17:52:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCC5C341C4;
-        Fri,  3 Jun 2022 17:52:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9CE960A54;
+        Fri,  3 Jun 2022 17:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A18C385A9;
+        Fri,  3 Jun 2022 17:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278747;
-        bh=YWUFwpqGOmVXmiw7aGglaLnf0+DjQhPIXhsvaJzq574=;
+        s=korg; t=1654278377;
+        bh=7oYHfS1M/s+Jkhydgv6K62l+sh0VCTWVcZ0tPKS1+5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gXY6wCJhuB84P4NH+pD+QHMPs+ul5nU0b2+oysNUIt2wsSDRt33uY+F5fSAD+vXog
-         TR2K/48gQEpsqiqHEGxvbIvsV1V6FZkXUawfyGrqmISyqHISvVHoxFNsuPGRsrw1V9
-         YP4eRBIGvT14MdfyTeSU2J1GNolD7hqxH7rfcyd0=
+        b=GUnY8gLc6+hT4+/czs/NubQ+kgjDinwwYcX01aYkKmk0997nEZTaglQslY/ODWS/i
+         lrpd+aYQL/IZ/rKG9SIAQCiA7OQ6/K2KPj4UgJQUPgElKbFx8ldu4nDtGNOgSZegw6
+         YoRyK0ReVaA/dwSS/UdodUrt5I2llqSpaR5RZz9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 14/75] assoc_array: Fix BUG_ON during garbage collect
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH 5.10 13/53] io_uring: dont re-import iovecs from callbacks
 Date:   Fri,  3 Jun 2022 19:42:58 +0200
-Message-Id: <20220603173822.153897173@linuxfoundation.org>
+Message-Id: <20220603173819.107725914@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,163 +53,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Brennan <stephen.s.brennan@oracle.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-commit d1dc87763f406d4e67caf16dbe438a5647692395 upstream.
+We can't re-import or modify iterators from iocb callbacks, it's not
+safe as it might be reverted and/or reexpanded while unwinding stack.
+It's also not safe to resubmit as io-wq thread will race with stack
+undwinding for the iterator and other data.
 
-A rare BUG_ON triggered in assoc_array_gc:
+Disallow resubmission from callbacks, it can fail some cases that were
+handled before, but the possibility of such a failure was a part of the
+API from the beginning and so it should be fine.
 
-    [3430308.818153] kernel BUG at lib/assoc_array.c:1609!
-
-Which corresponded to the statement currently at line 1593 upstream:
-
-    BUG_ON(assoc_array_ptr_is_meta(p));
-
-Using the data from the core dump, I was able to generate a userspace
-reproducer[1] and determine the cause of the bug.
-
-[1]: https://github.com/brenns10/kernel_stuff/tree/master/assoc_array_gc
-
-After running the iterator on the entire branch, an internal tree node
-looked like the following:
-
-    NODE (nr_leaves_on_branch: 3)
-      SLOT [0] NODE (2 leaves)
-      SLOT [1] NODE (1 leaf)
-      SLOT [2..f] NODE (empty)
-
-In the userspace reproducer, the pr_devel output when compressing this
-node was:
-
-    -- compress node 0x5607cc089380 --
-    free=0, leaves=0
-    [0] retain node 2/1 [nx 0]
-    [1] fold node 1/1 [nx 0]
-    [2] fold node 0/1 [nx 2]
-    [3] fold node 0/2 [nx 2]
-    [4] fold node 0/3 [nx 2]
-    [5] fold node 0/4 [nx 2]
-    [6] fold node 0/5 [nx 2]
-    [7] fold node 0/6 [nx 2]
-    [8] fold node 0/7 [nx 2]
-    [9] fold node 0/8 [nx 2]
-    [10] fold node 0/9 [nx 2]
-    [11] fold node 0/10 [nx 2]
-    [12] fold node 0/11 [nx 2]
-    [13] fold node 0/12 [nx 2]
-    [14] fold node 0/13 [nx 2]
-    [15] fold node 0/14 [nx 2]
-    after: 3
-
-At slot 0, an internal node with 2 leaves could not be folded into the
-node, because there was only one available slot (slot 0). Thus, the
-internal node was retained. At slot 1, the node had one leaf, and was
-able to be folded in successfully. The remaining nodes had no leaves,
-and so were removed. By the end of the compression stage, there were 14
-free slots, and only 3 leaf nodes. The tree was ascended and then its
-parent node was compressed. When this node was seen, it could not be
-folded, due to the internal node it contained.
-
-The invariant for compression in this function is: whenever
-nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT, the node should contain all
-leaf nodes. The compression step currently cannot guarantee this, given
-the corner case shown above.
-
-To fix this issue, retry compression whenever we have retained a node,
-and yet nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT. This second
-compression will then allow the node in slot 1 to be folded in,
-satisfying the invariant. Below is the output of the reproducer once the
-fix is applied:
-
-    -- compress node 0x560e9c562380 --
-    free=0, leaves=0
-    [0] retain node 2/1 [nx 0]
-    [1] fold node 1/1 [nx 0]
-    [2] fold node 0/1 [nx 2]
-    [3] fold node 0/2 [nx 2]
-    [4] fold node 0/3 [nx 2]
-    [5] fold node 0/4 [nx 2]
-    [6] fold node 0/5 [nx 2]
-    [7] fold node 0/6 [nx 2]
-    [8] fold node 0/7 [nx 2]
-    [9] fold node 0/8 [nx 2]
-    [10] fold node 0/9 [nx 2]
-    [11] fold node 0/10 [nx 2]
-    [12] fold node 0/11 [nx 2]
-    [13] fold node 0/12 [nx 2]
-    [14] fold node 0/13 [nx 2]
-    [15] fold node 0/14 [nx 2]
-    internal nodes remain despite enough space, retrying
-    -- compress node 0x560e9c562380 --
-    free=14, leaves=1
-    [0] fold node 2/15 [nx 0]
-    after: 3
-
-Changes
-=======
-DH:
- - Use false instead of 0.
- - Reorder the inserted lines in a couple of places to put retained before
-   next_slot.
-
-ver #2)
- - Fix typo in pr_devel, correct comparison to "<="
-
-Fixes: 3cb989501c26 ("Add a generic associative array implementation.")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: keyrings@vger.kernel.org
-Link: https://lore.kernel.org/r/20220511225517.407935-1-stephen.s.brennan@oracle.com/ # v1
-Link: https://lore.kernel.org/r/20220512215045.489140-1-stephen.s.brennan@oracle.com/ # v2
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/assoc_array.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/io_uring.c |   39 ---------------------------------------
+ 1 file changed, 39 deletions(-)
 
---- a/lib/assoc_array.c
-+++ b/lib/assoc_array.c
-@@ -1461,6 +1461,7 @@ int assoc_array_gc(struct assoc_array *a
- 	struct assoc_array_ptr *cursor, *ptr;
- 	struct assoc_array_ptr *new_root, *new_parent, **new_ptr_pp;
- 	unsigned long nr_leaves_on_tree;
-+	bool retained;
- 	int keylen, slot, nr_free, next_slot, i;
- 
- 	pr_devel("-->%s()\n", __func__);
-@@ -1536,6 +1537,7 @@ continue_node:
- 		goto descend;
- 	}
- 
-+retry_compress:
- 	pr_devel("-- compress node %p --\n", new_n);
- 
- 	/* Count up the number of empty slots in this node and work out the
-@@ -1553,6 +1555,7 @@ continue_node:
- 	pr_devel("free=%d, leaves=%lu\n", nr_free, new_n->nr_leaves_on_branch);
- 
- 	/* See what we can fold in */
-+	retained = false;
- 	next_slot = 0;
- 	for (slot = 0; slot < ASSOC_ARRAY_FAN_OUT; slot++) {
- 		struct assoc_array_shortcut *s;
-@@ -1602,9 +1605,14 @@ continue_node:
- 			pr_devel("[%d] retain node %lu/%d [nx %d]\n",
- 				 slot, child->nr_leaves_on_branch, nr_free + 1,
- 				 next_slot);
-+			retained = true;
- 		}
- 	}
- 
-+	if (retained && new_n->nr_leaves_on_branch <= ASSOC_ARRAY_FAN_OUT) {
-+		pr_devel("internal nodes remain despite enough space, retrying\n");
-+		goto retry_compress;
-+	}
- 	pr_devel("after: %lu\n", new_n->nr_leaves_on_branch);
- 
- 	nr_leaves_on_tree = new_n->nr_leaves_on_branch;
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -2579,45 +2579,6 @@ static void io_complete_rw_common(struct
+ #ifdef CONFIG_BLOCK
+ static bool io_resubmit_prep(struct io_kiocb *req, int error)
+ {
+-	struct iovec inline_vecs[UIO_FASTIOV], *iovec = inline_vecs;
+-	ssize_t ret = -ECANCELED;
+-	struct iov_iter iter;
+-	int rw;
+-
+-	if (error) {
+-		ret = error;
+-		goto end_req;
+-	}
+-
+-	switch (req->opcode) {
+-	case IORING_OP_READV:
+-	case IORING_OP_READ_FIXED:
+-	case IORING_OP_READ:
+-		rw = READ;
+-		break;
+-	case IORING_OP_WRITEV:
+-	case IORING_OP_WRITE_FIXED:
+-	case IORING_OP_WRITE:
+-		rw = WRITE;
+-		break;
+-	default:
+-		printk_once(KERN_WARNING "io_uring: bad opcode in resubmit %d\n",
+-				req->opcode);
+-		goto end_req;
+-	}
+-
+-	if (!req->async_data) {
+-		ret = io_import_iovec(rw, req, &iovec, &iter, false);
+-		if (ret < 0)
+-			goto end_req;
+-		ret = io_setup_async_rw(req, iovec, inline_vecs, &iter, false);
+-		if (!ret)
+-			return true;
+-		kfree(iovec);
+-	} else {
+-		return true;
+-	}
+-end_req:
+ 	req_set_fail_links(req);
+ 	return false;
+ }
 
 

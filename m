@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E27253CE8C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126D453CE74
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbiFCRnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S1344654AbiFCRmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344995AbiFCRnR (ORCPT
+        with ESMTP id S1344756AbiFCRlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:43:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C4B532EC;
-        Fri,  3 Jun 2022 10:41:57 -0700 (PDT)
+        Fri, 3 Jun 2022 13:41:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6B53A51;
+        Fri,  3 Jun 2022 10:41:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0F8161B0F;
-        Fri,  3 Jun 2022 17:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02ADC3411D;
-        Fri,  3 Jun 2022 17:41:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A975361B00;
+        Fri,  3 Jun 2022 17:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9955BC385A9;
+        Fri,  3 Jun 2022 17:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278116;
-        bh=4pC3B+B9HGnfVRgy18c8/h6OnNw9NHaafYHGd+R1Q6E=;
+        s=korg; t=1654278074;
+        bh=nEEt0MjSOfaKM23Di3zdTZzjV4Q96cjTsIQFdDcNp/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PUHDNFAowmaT05rQNUUiaRXj5GUE+C8D2qJ33sUjfL/TMVpQ8DExa6EOUhDWn61l
-         E1KXx9xNtfVocQxj32H2ZVFXPJ4oL7chlpsnDS7e2koLI0hCrbXuwkObC/lE+w2AoG
-         jOGzJOV9V9HL9d/M7H2P6bS4eZaF3I0RdJi8GuvI=
+        b=E5gKrqq7HPbZxESwJQPR2fsnAHre+aQgy3g4fG24Ufyk0uf6J3Dz/8xShx2hQZc5+
+         2lG6/9mShwFMbcubmTnwg0NS+hWwNlnlpiOI738FNJ5/7BsWLaXMTbOKU48hnfzIjr
+         z0Zd20snTy2Ted0gMWLkrjBtyTJCW9Jht4SYonwg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>
-Subject: [PATCH 4.19 15/30] perf tests bp_account: Make global variable static
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 4.14 16/23] dm integrity: fix error code in dm_integrity_ctr()
 Date:   Fri,  3 Jun 2022 19:39:43 +0200
-Message-Id: <20220603173815.543846863@linuxfoundation.org>
+Message-Id: <20220603173814.856716104@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.088143764@linuxfoundation.org>
-References: <20220603173815.088143764@linuxfoundation.org>
+In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
+References: <20220603173814.362515009@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit cff20b3151ccab690715cb6cf0f5da5cccb32adf ]
+commit d3f2a14b8906df913cb04a706367b012db94a6e8 upstream.
 
-To fix the build with newer gccs, that without this patch exit with:
+The "r" variable shadows an earlier "r" that has function scope.  It
+means that we accidentally return success instead of an error code.
+Smatch has a warning for this:
 
-    LD       /tmp/build/perf/tests/perf-in.o
-  ld: /tmp/build/perf/tests/bp_account.o:/git/perf/tools/perf/tests/bp_account.c:22: multiple definition of `the_var'; /tmp/build/perf/tests/bp_signal.o:/git/perf/tools/perf/tests/bp_signal.c:38: first defined here
-  make[4]: *** [/git/perf/tools/build/Makefile.build:145: /tmp/build/perf/tests/perf-in.o] Error 1
+	drivers/md/dm-integrity.c:4503 dm_integrity_ctr()
+	warn: missing error code 'r'
 
-First noticed in fedora:rawhide/32 with:
-
-  [perfbuilder@a5ff49d6e6e4 ~]$ gcc --version
-  gcc (GCC) 10.0.1 20200216 (Red Hat 10.0.1-0.8)
-
-Reported-by: Jiri Olsa <jolsa@kernel.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
+Fixes: 7eada909bfd7 ("dm: add integrity target")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/tests/bp_account.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/dm-integrity.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/tools/perf/tests/bp_account.c
-+++ b/tools/perf/tests/bp_account.c
-@@ -22,7 +22,7 @@
- #include "perf.h"
- #include "cloexec.h"
+--- a/drivers/md/dm-integrity.c
++++ b/drivers/md/dm-integrity.c
+@@ -3156,8 +3156,6 @@ static int dm_integrity_ctr(struct dm_ta
+ 	}
  
--volatile long the_var;
-+static volatile long the_var;
- 
- static noinline int test_function(void)
- {
+ 	if (should_write_sb) {
+-		int r;
+-
+ 		init_journal(ic, 0, ic->journal_sections, 0);
+ 		r = dm_integrity_failed(ic);
+ 		if (unlikely(r)) {
 
 

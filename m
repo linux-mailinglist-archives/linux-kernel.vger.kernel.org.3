@@ -2,104 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5303953C796
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F2953C79B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243070AbiFCJc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S241567AbiFCJfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiFCJcW (ORCPT
+        with ESMTP id S242559AbiFCJfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:32:22 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318C42B24E;
-        Fri,  3 Jun 2022 02:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1654248735;
-        bh=L6vnBNt1rIQ4ybJ0twJCwhIdxM9LDIUngFwqwnJ0+zg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=aA2vWSFARgbtMA6PZNK7yh2b1C4zoBwskJLD2/d8KUfXCx12jeBrzWeqzj6H1QyGO
-         G+1eHFUDZyexjmiak1ycPPoPa2ea61VluhH2k3Q8h2932b5iRxb2SQ9dBxaWzZ4nDc
-         LSpQ0WJnC00vkQ3vwhcvcnT1do1scpA4n6VCtumQ=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id E7EFD66830;
-        Fri,  3 Jun 2022 05:32:09 -0400 (EDT)
-Message-ID: <dab96b787bef91240c719ea1a100396350135f99.camel@xry111.site>
-Subject: Re: Steps forward for the LoongArch UEFI bringup patch? (was: Re:
- [PATCH V14 11/24] LoongArch: Add boot and setup routines)
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     WANG Xuerui <kernel@xen0n.name>, Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi@vger.kernel.org, WANG Xuerui <git@xen0n.name>,
-        Yun Liu <liuyun@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 03 Jun 2022 17:32:07 +0800
-In-Reply-To: <d88ede74-b7a5-e568-1863-107c6c7f5fe0@xen0n.name>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
-         <20220602115141.3962749-12-chenhuacai@loongson.cn>
-         <d88ede74-b7a5-e568-1863-107c6c7f5fe0@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 
+        Fri, 3 Jun 2022 05:35:03 -0400
+Received: from mail-oa1-x42.google.com (mail-oa1-x42.google.com [IPv6:2001:4860:4864:20::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3172C125
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:35:02 -0700 (PDT)
+Received: by mail-oa1-x42.google.com with SMTP id 586e51a60fabf-f2cd424b9cso9952926fac.7
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 02:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uEXNiRiF/+3Yj/JxmEhof2WMh5+Z+LzIkCyuz8nTcZ8=;
+        b=Y3V+iRCBy07ZDlfH2P6zjcm9N9KVkX5QVsibP9FeC6CEA+4VpnI4WGqiiO7kjf6JDv
+         UkCeActA13w+ZP3EhTDMk3NuG/+XXxoc3h+78nMX7IuIBNN5iLwjoJ+ZVVKCBvRt+oIZ
+         IAIGBmKmHX3ocdT4wATkT01FvQ6misUvnHKT2MGhlQtmbeWvppsVXG75+SHW2qogXoZm
+         Rxsp4Km/itNhpZJ4+LNd+C8QMkHvO23euMrrWmyIT152ifCrbq4uLvNREvFJfXfQZJKz
+         noBz5NXupqLcKVIW4Hv9AcH3T4Yr8Q88rux9rb6hifGfebnMYQhdVT4CI5sRaUQoREC+
+         HCpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uEXNiRiF/+3Yj/JxmEhof2WMh5+Z+LzIkCyuz8nTcZ8=;
+        b=fpolra97LmkIxNT38Fn1Ehssf528LIdhFPhP4AW3oIo31Xjw+cLVnDbyT0Fd6SIIfZ
+         aEhTsdG7LKWrR/KNiWflEfrQ5cT0kjCfFUfBaSmak4q2JyIzqo8/78zcnEfEgYK4oLLq
+         kygY+CX+K+nic+MtbC5y0u65g3JHZo/LNtB+uSyJ9FHoOrWpRTmD/TAZKRFzpNDrsBcC
+         cSM4giUZSZegkwNzk3me8uL68GQ0+09sYGJWSiGqdX440JmLvPnb3MrVHjWA7bsvlOBD
+         z47ITZkax9lgIf+BdqZ+Do+S/6FDWHqffAgCvslHnncylKOSZrFkiOrBMWu6J4invE4V
+         EHlQ==
+X-Gm-Message-State: AOAM530weiitwYx+2gUZjorxC/lMoFrF5jbFTZ88NM5UJHvwwQb5a05t
+        rbKnYsOqE9j5W76ORptL5BN7+D4F9kysQsAhOeg=
+X-Google-Smtp-Source: ABdhPJxCYGRa35lKsB8itD0GSQkPHFgOdS/M9JgV2cnjY8oxFCwrNpM5H8cG0H3TDWAYDilU3jkMcD30Ddp0OmA0fF4=
+X-Received: by 2002:a05:6870:e612:b0:f2:91f3:9c07 with SMTP id
+ q18-20020a056870e61200b000f291f39c07mr5238968oag.203.1654248901412; Fri, 03
+ Jun 2022 02:35:01 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:5920:b0:a3:426b:e756 with HTTP; Fri, 3 Jun 2022
+ 02:35:01 -0700 (PDT)
+From:   ajafor simon <lawyersimon1@gmail.com>
+Date:   Fri, 3 Jun 2022 09:35:01 +0000
+Message-ID: <CAPwRs=qcfB-qfc+dWpHEBBdUKgNqLQ0F_yB2uwdjeV72h6acag@mail.gmail.com>
+Subject: =?UTF-8?B?5Lqy54ix55qE6a2P77yM576O5aW955qE5LiA5aSp77yM?=
+To:     ajafor simon <lawyersimon1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-02 at 22:09 +0800, WANG Xuerui wrote:
-
-> For this, I don't know if Huacai should really just leave those=20
-> modification in the downstream fork to keep the upstream Linux clean of=
-=20
-> such hacks, because to some degree dealing with such notoriety is life,=
-=20
-> it seems to me. I think at this point Huacai would cooperate and tweak
-> the patch to get rid of the SVAM and other nonstandard bits as much as
-> possible, and I'll help him where necessary too.
-
-To me any new firmware for PC-like platforms should implement UEFI.  For
-embedded platforms device tree support will be added later.
-
-For those guys impossible or unwilling to upgrade the firmware, it may
-be possible to implement a compatibility layer and the booting procedure
-will be like:
-
-old firmware -> bootloongarch.efi -> customized u-boot -> bootloongarch64.e=
-fi (grub) -> efi stub (kernel)
-                --------- compatibility layer --------    ^^^^^^^^ normal U=
-EFI compatible stuff ^^^^^^^^^
-
-new firmware -> bootloongarch64.efi (grub) -> efi stub (kernel)
-
-The old firmware route would be similar to the booting procedure of
-Asahi Linux.  I think this can be implemented because it's already
-implemented on M1 even while Apple is almost completely uncooperative.
-
-Just my 2 cents. I know almost nothing about booting.
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+5Lqy54ix55qE6a2P77yM576O5aW955qE5LiA5aSp77yMDQoNCuaIkeaYr+Wkp+W+i+W4iCBTaW1v
+biBBamFmb3LvvIzopb/pnZ7mtJvnvo7lpJrlk6XnmoTkuIDlkI3ms5Xlvovku47kuJrogIXvvIzm
+mK8gKEVuZywgR2VvcmdlIFdlaSkNCueahOengeS6uuW+i+W4iO+8jOabvuWcqOilv+mdnua0m+e+
+juWkmuWTpeeahOWjs+eJjOW8gOWPkeWFrOWPuOaLheS7u+aJv+WMheWVhuOAgiAxMSDmnIggMjEg
+5pel77yM5Zyo576O5Zu977yM5LuW55qE5aa75a2Q5ZKM5ZSv5LiA55qE5aWz5YS/5q275LqODQpD
+b3ZpZC0xOe+8jOS7luatu+S6juW/g+iEj+eXhe+8m+S7jumCo+S7peWQju+8jOaIkeS4gOebtOWc
+qOWQkei0teWbvempu+WkmuWTpeWkp+S9v+mmhuivoumXruaIkeeahOWuouaIt+eahOi/nOS6su+8
+jOS9huS5n+ayoeacieaIkOWKn+OAgg0KDQrmiJHlhrPlrprpgJrov4flpJbkuqTkvb/lm6LnlZno
+qIDnsL/ov73ouKrku5bnmoTlp5PmsI/vvIzku6Xmib7liLDku5bnmoTku7vkvZXlrrbluq3miJDl
+kZjvvIzlm6DmraTmiJHpgJrov4flqpLkvZPmnI3liqHkuI7mgqjogZTns7vjgILnjrDlnKjmiJHl
+t7LogZTns7vmgqjljY/liqnlvZLov5jku7flgLwgMTI1MA0K5LiH576O5YWD55qE6LWE6YeR77yM
+6L+Z5piv5oiR5bey5pWF5a6i5oi35Zyo6KKr6ZO26KGM5rKh5pS25oiW5a6j5biD5peg5rOV5L2/
+55So5LmL5YmN55WZ5LiL55qE5Lu35YC8IDEyNTANCuS4h+e+juWFg+eahOi1hOmHke+8jOS9jeS6
+juilv+mdnua0m+e+juWkmuWTpeOAgumHkemineW3suWtmOWFpeOAguacn+W+heW+iOW/q+aUtuWI
+sOaCqOeahOadpeS/oe+8jA0KDQoNCuatpOiHtOOAgg0K5aSn5b6L5biIIFNpbW9uIEFqYWZvciAo
+RVNRKQ0K5rSb576OIOWkmuWTpSDopb/pnZ4NCg==

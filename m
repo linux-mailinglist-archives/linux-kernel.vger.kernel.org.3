@@ -2,95 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E857353C941
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DFE53C949
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 13:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243949AbiFCL0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 07:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S243977AbiFCL1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 07:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238698AbiFCL0l (ORCPT
+        with ESMTP id S237380AbiFCL1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 07:26:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E733C4BE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 04:26:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B924D612EC
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:26:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C8AC385B8;
-        Fri,  3 Jun 2022 11:26:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654255599;
-        bh=ePO0oMd2hXHYFPqfmas8/MfHkG7JTc+UdxPVMGtLXe4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=pnONbZ2p6xrbNb/5sM+6UQ2uRrIeoBT8/15qzNLogMvQ9Gfo5fsJU/j/ecWglLvVW
-         0btgbzLyxwPCTNL5rGrrGhe2EufbpK9AJ4iBhFbTrUtlGj0wE9Q9arzpEqOzfwv2r2
-         YbPRrY2P12+3IcDDelAHKOhcDB5eNnf+YSBqR2ReJwB9ewBBsk5tCkhfiMu/iSRfj2
-         nzz7ot4TH1zkn0jphhCf1yrGdug95EaYO2oX1zjTqmjBotyQFmBV0sTSKin7oMSZ7E
-         29CtqlBLvyhJWRmB1OgPQyIE+Qywk1eW/RvCok8Y+WtBO1XpRd6iay9bBmYIVj5Gm1
-         DJS3eVvFTAAsQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     brent.lu@intel.com, alsa-devel@alsa-project.org
-Cc:     yung-chuan.liao@linux.intel.com, cezary.rojewski@intel.com,
-        liam.r.girdwood@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, linux-kernel@vger.kernel.org,
-        tiwai@suse.com, perex@perex.cz, yang.jie@linux.intel.com,
-        xiang.liu@cirrus.com
-In-Reply-To: <20220602051922.1232457-1-brent.lu@intel.com>
-References: <20220602051922.1232457-1-brent.lu@intel.com>
-Subject: Re: [PATCH v2] ASoC: Intel: cirrus-common: fix incorrect channel mapping
-Message-Id: <165425559642.3863069.12777301220337016957.b4-ty@kernel.org>
-Date:   Fri, 03 Jun 2022 13:26:36 +0200
+        Fri, 3 Jun 2022 07:27:04 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CBB13D44;
+        Fri,  3 Jun 2022 04:26:59 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 49AEC2698;
+        Fri,  3 Jun 2022 11:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1654255584;
+        bh=HVPX9ugwZpjN4d10W+xJnrpqV9wwOQw9BPCuiHwX/Z4=;
+        h=Date:To:CC:From:Subject;
+        b=XsmIGJkbYCZ/8M03RLAOCj60tGHjaZZ4KYoBL30IENFRY8HO6vvRAvdPppu2Le/qX
+         szw96Y1ikALRSYczYTpcb/3JtYAaUlw/cRSWAi1GPVXk9Yuh/601qhJVYMbZCeQgZd
+         0pzI+fbueqaKRPf6g26GluIBZziY5AaDvC1fhb+Q=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 3 Jun 2022 14:26:57 +0300
+Message-ID: <c5c16f3d-c8a7-96b0-4fd6-056c4159fcef@paragon-software.com>
+Date:   Fri, 3 Jun 2022 14:26:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     <torvalds@linux-foundation.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [GIT PULL] ntfs3: bugfixes for 5.19
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Jun 2022 13:19:22 +0800, Brent Lu wrote:
-> From: xliu <xiang.liu@cirrus.com>
-> 
-> The default mapping of ASPRX1 (DAC source) is slot 0. Change the slot
-> mapping of right amplifiers (WR and TR) to slot 1 to receive right
-> channel data. Also update the ACPI instance ID mapping according to HW
-> configuration.
-> 
-> [...]
+Hi Linus,
 
-Applied to
+Please pull this branch containing ntfs3 code for 5.19.
 
-   broonie/sound.git for-linus
+Fixed:
+- some memory leaks and panic;
+- fixed xfstests (tested on x86_64)
+generic/092 generic/099 generic/228 generic/240 generic/307 generic/444;
+- bugfix (memory leak) for 5.18 [1];
+- some typos, dead code, etc.
 
-Thanks!
+Most of the code was in linux-next branch for several months,
+but there are some patches, that were in linux-next branch only
+for a couple of days. Hopefully it is ok - no regression
+was detected in tests.
 
-[1/1] ASoC: Intel: cirrus-common: fix incorrect channel mapping
-      commit: d69a155555c9d57463b788c400f6b452d976bacd
+Note: after first 9 commits there was merge with Linux 5.18.
+I'm not sure if this complicates things, so I've listed all commits too.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Regards,
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Konstantin
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+[1]: https://www.spinics.net/lists/ntfs3/msg01036.html
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+----------------------------------------------------------------
 
-Thanks,
-Mark
+The following changes since commit 8bb7eca972ad531c9b149c0a51ab43a417385813:
+
+   Linux 5.15 (Sun Oct 31 13:53:10 2021 -0700)
+
+are available in the Git repository at:
+
+   https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_5.19
+
+for you to fetch changes up to 724bbe49c5e427cb077357d72d240a649f2e4054:
+
+   fs/ntfs3: provide block_invalidate_folio to fix memory leak (Mon May 30 13:36:45 2022 +0200)
+
+All commits:
+
+724bbe49c5e4 fs/ntfs3: provide block_invalidate_folio to fix memory leak
+f26967b9f7a8 fs/ntfs3: Fix invalid free in log_replay
+< merge with 5.18 happened >
+52e00ea6b26e fs/ntfs3: Update valid size if -EIOCBQUEUED
+114346978cf6 fs/ntfs3: Check new size for limits
+3880f2b816a7 fs/ntfs3: Fix fiemap + fix shrink file size (to remove preallocated space)
+9186d472ee78 fs/ntfs3: In function ntfs_set_acl_ex do not change inode->i_mode if called from function ntfs_init_acl
+3a2154b25a9f fs/ntfs3: Optimize locking in ntfs_save_wsl_perm
+2d44667c306e fs/ntfs3: Update i_ctime when xattr is added
+87e21c99bad7 fs/ntfs3: Restore ntfs_xattr_get_acl and ntfs_xattr_set_acl functions
+e95113ed4d42 fs/ntfs3: Keep preallocated only if option prealloc enabled
+e589f9b7078e fs/ntfs3: Fix some memory leaks in an error handling path of 'log_replay()'
+
+----------------------------------------------------------------
+
+Konstantin Komarov (8)
+  fs/ntfs3: Update valid size if -EIOCBQUEUED
+  fs/ntfs3: Check new size for limits
+  fs/ntfs3: Fix fiemap + fix shrink file size (to remove preallocated space)
+  fs/ntfs3: In function ntfs_set_acl_ex do not change inode->i_mode if called from function ntfs_init_acl
+  fs/ntfs3: Optimize locking in ntfs_save_wsl_perm
+  fs/ntfs3: Update i_ctime when xattr is added
+  fs/ntfs3: Restore ntfs_xattr_get_acl and ntfs_xattr_set_acl functions
+  fs/ntfs3: Keep preallocated only if option prealloc enabled
+
+Mikulas Patocka (1)
+  fs/ntfs3: provide block_invalidate_folio to fix memory leak
+
+Namjae Jeon (1)
+  fs/ntfs3: Fix invalid free in log_replay
+
+Christophe JAILLET (1)
+  fs/ntfs3: Fix some memory leaks in an error handling path of 'log_replay()'
+
+  fs/ntfs3/file.c    |  12 +++++++++---
+  fs/ntfs3/frecord.c |  10 +++++++---
+  fs/ntfs3/fslog.c   |  12 +++++++-----
+  fs/ntfs3/inode.c   |   9 ++++++--
+  fs/ntfs3/xattr.c   | 136 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------
+  5 files changed, 149 insertions(+), 30 deletions(-)

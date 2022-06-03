@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A348253CFF8
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984BD53D13D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344719AbiFCR6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S1347091AbiFCSTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346940AbiFCRvp (ORCPT
+        with ESMTP id S1346967AbiFCSFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A70755358;
-        Fri,  3 Jun 2022 10:49:50 -0700 (PDT)
+        Fri, 3 Jun 2022 14:05:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC705A2F2;
+        Fri,  3 Jun 2022 10:58:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE5B2B82189;
-        Fri,  3 Jun 2022 17:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 280B0C385A9;
-        Fri,  3 Jun 2022 17:49:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5DA3615C8;
+        Fri,  3 Jun 2022 17:57:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A721DC385A9;
+        Fri,  3 Jun 2022 17:57:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278587;
-        bh=+jKGu2m+qotB5j1a1TjLLakeDpMh01+5nUzTVxMt6Vo=;
+        s=korg; t=1654279055;
+        bh=0Hxm7VfHN0KwafIDjex29HGSMuWAetdQhX0hc5y9oEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fVo1AST0GB+siLT2VRa+Jbm61BM0AUH5uenkMDum0ff5vOQRQ5wM88B3YFQRXFYXP
-         XXxJvhpc+W48nAifstTfZWk9LknaI8bNTLnsvr6VtE5t2BIytdg4Qg8DIDPW0m50Na
-         Gv3MdZwcIWYraavW+UVLR4ohWQtWPnF3BGUhzHys=
+        b=V9iRsgKhHgLkhf+0SZEzfYibmLNiv8fC6uaKUxySttsL+PyHshgVanOYcdLcxqth2
+         nd5AHWPRWuUNbQ0O5bZZa9X3MFmIp/ilgkE6PQ2RWjf4YpFQlTa/92vA7QZeJX8o6f
+         OegFcpIkwbZnip3qiRY1mUfN70ybcamrj6hCoKv0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+793a590957d9c1b96620@syzkaller.appspotmail.com,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: [PATCH 5.15 27/66] netfilter: conntrack: re-fetch conntrack after insertion
+        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.18 06/67] net: ipa: compute proper aggregation limit
 Date:   Fri,  3 Jun 2022 19:43:07 +0200
-Message-Id: <20220603173821.441752761@linuxfoundation.org>
+Message-Id: <20220603173820.916586811@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +54,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Alex Elder <elder@linaro.org>
 
-commit 56b14ecec97f39118bf85c9ac2438c5a949509ed upstream.
+commit c5794097b269f15961ed78f7f27b50e51766dec9 upstream.
 
-In case the conntrack is clashing, insertion can free skb->_nfct and
-set skb->_nfct to the already-confirmed entry.
+The aggregation byte limit for an endpoint is currently computed
+based on the endpoint's receive buffer size.
 
-This wasn't found before because the conntrack entry and the extension
-space used to free'd after an rcu grace period, plus the race needs
-events enabled to trigger.
+However, some bytes at the front of each receive buffer are reserved
+on the assumption that--as with SKBs--it might be useful to insert
+data (such as headers) before what lands in the buffer.
 
-Reported-by: <syzbot+793a590957d9c1b96620@syzkaller.appspotmail.com>
-Fixes: 71d8c47fc653 ("netfilter: conntrack: introduce clash resolution on insertion race")
-Fixes: 2ad9d7747c10 ("netfilter: conntrack: free extension area immediately")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+The aggregation byte limit currently doesn't take into account that
+reserved space, and as a result, aggregation could require space
+past that which is available in the buffer.
+
+Fix this by reducing the size used to compute the aggregation byte
+limit by the NET_SKB_PAD offset reserved for each receive buffer.
+
+Signed-off-by: Alex Elder <elder@linaro.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/netfilter/nf_conntrack_core.h |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/ipa/ipa_endpoint.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/include/net/netfilter/nf_conntrack_core.h
-+++ b/include/net/netfilter/nf_conntrack_core.h
-@@ -58,8 +58,13 @@ static inline int nf_conntrack_confirm(s
- 	int ret = NF_ACCEPT;
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -130,9 +130,10 @@ static bool ipa_endpoint_data_valid_one(
+ 		 */
+ 		if (data->endpoint.config.aggregation) {
+ 			limit += SZ_1K * aggr_byte_limit_max(ipa->version);
+-			if (buffer_size > limit) {
++			if (buffer_size - NET_SKB_PAD > limit) {
+ 				dev_err(dev, "RX buffer size too large for aggregated RX endpoint %u (%u > %u)\n",
+-					data->endpoint_id, buffer_size, limit);
++					data->endpoint_id,
++					buffer_size - NET_SKB_PAD, limit);
  
- 	if (ct) {
--		if (!nf_ct_is_confirmed(ct))
-+		if (!nf_ct_is_confirmed(ct)) {
- 			ret = __nf_conntrack_confirm(skb);
-+
-+			if (ret == NF_ACCEPT)
-+				ct = (struct nf_conn *)skb_nfct(skb);
-+		}
-+
- 		if (likely(ret == NF_ACCEPT))
- 			nf_ct_deliver_cached_events(ct);
- 	}
+ 				return false;
+ 			}
+@@ -739,6 +740,7 @@ static void ipa_endpoint_init_aggr(struc
+ 	if (endpoint->data->aggregation) {
+ 		if (!endpoint->toward_ipa) {
+ 			const struct ipa_endpoint_rx_data *rx_data;
++			u32 buffer_size;
+ 			bool close_eof;
+ 			u32 limit;
+ 
+@@ -746,7 +748,8 @@ static void ipa_endpoint_init_aggr(struc
+ 			val |= u32_encode_bits(IPA_ENABLE_AGGR, AGGR_EN_FMASK);
+ 			val |= u32_encode_bits(IPA_GENERIC, AGGR_TYPE_FMASK);
+ 
+-			limit = ipa_aggr_size_kb(rx_data->buffer_size);
++			buffer_size = rx_data->buffer_size;
++			limit = ipa_aggr_size_kb(buffer_size - NET_SKB_PAD);
+ 			val |= aggr_byte_limit_encoded(version, limit);
+ 
+ 			limit = IPA_AGGR_TIME_LIMIT;
 
 

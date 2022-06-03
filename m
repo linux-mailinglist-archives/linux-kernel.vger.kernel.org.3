@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1063153CF87
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD8453D11E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345671AbiFCRyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S1347598AbiFCSPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345872AbiFCRua (ORCPT
+        with ESMTP id S1346302AbiFCSAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:30 -0400
+        Fri, 3 Jun 2022 14:00:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201F65933F;
-        Fri,  3 Jun 2022 10:46:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DB254186;
+        Fri,  3 Jun 2022 10:56:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70EFC60A57;
-        Fri,  3 Jun 2022 17:46:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E796C385A9;
-        Fri,  3 Jun 2022 17:46:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10A1D60F3B;
+        Fri,  3 Jun 2022 17:56:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFBBC385B8;
+        Fri,  3 Jun 2022 17:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278388;
-        bh=zaNu4u8ZaPQGvMyvHFFFYGlt7YAl54KciriYinCwh/Y=;
+        s=korg; t=1654278966;
+        bh=K6tYsH8bSgs3PfSjUaakxOh0TLf3zeJAhtERYiKfyYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZqVVgDKRRraO8zsEVzG0d+ctJW6Z9gqqo9vlmU2UYNSKItrgHap7/Nr/J3VnGNNBv
-         LayCk0rQlVksZ2jiCfxZBpfqgPBh8Lg40eseOGjOTvkQzqHPNXfD1dxD+ST8W9DNJi
-         Ho701F1SUeC5ynvsNC6u4kUU5lc5GTt8lOXrxsXY=
+        b=2ONCK6YXqUyczCVQUi1hmlH61KKhw3A/Bf8Wq88aYvJzPn4+DdwFB4gFIzQ5hhJ0L
+         ZWcuVRJ5dfAwV9Om4AEplJyjvtd4xEdZFYoUnKz8BtG3+k2TAXDW0zR7ZqspMQBCEF
+         J0Y6chVoBdCOAcFYWf+zYyXii2T1oHwA1L7O2If4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [PATCH 5.10 17/53] xfs: show the proper user quota options
-Date:   Fri,  3 Jun 2022 19:43:02 +0200
-Message-Id: <20220603173819.223798717@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH 5.18 02/67] i2c: ismt: prevent memory corruption in ismt_access()
+Date:   Fri,  3 Jun 2022 19:43:03 +0200
+Message-Id: <20220603173820.803679942@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kaixu Xia <kaixuxia@tencent.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 237d7887ae723af7d978e8b9a385fdff416f357b upstream.
+commit 690b2549b19563ec5ad53e5c82f6a944d910086e upstream.
 
-The quota option 'usrquota' should be shown if both the XFS_UQUOTA_ACCT
-and XFS_UQUOTA_ENFD flags are set. The option 'uqnoenforce' should be
-shown when only the XFS_UQUOTA_ACCT flag is set. The current code logic
-seems wrong, Fix it and show proper options.
+The "data->block[0]" variable comes from the user and is a number
+between 0-255.  It needs to be capped to prevent writing beyond the end
+of dma_buffer[].
 
-Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
-Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Fixes: 5e9a97b1f449 ("i2c: ismt: Adding support for I2C_SMBUS_BLOCK_PROC_CALL")
+Reported-and-tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/xfs/xfs_super.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-ismt.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/xfs/xfs_super.c
-+++ b/fs/xfs/xfs_super.c
-@@ -199,10 +199,12 @@ xfs_fs_show_options(
- 		seq_printf(m, ",swidth=%d",
- 				(int)XFS_FSB_TO_BB(mp, mp->m_swidth));
+--- a/drivers/i2c/busses/i2c-ismt.c
++++ b/drivers/i2c/busses/i2c-ismt.c
+@@ -528,6 +528,9 @@ static int ismt_access(struct i2c_adapte
  
--	if (mp->m_qflags & (XFS_UQUOTA_ACCT|XFS_UQUOTA_ENFD))
--		seq_puts(m, ",usrquota");
--	else if (mp->m_qflags & XFS_UQUOTA_ACCT)
--		seq_puts(m, ",uqnoenforce");
-+	if (mp->m_qflags & XFS_UQUOTA_ACCT) {
-+		if (mp->m_qflags & XFS_UQUOTA_ENFD)
-+			seq_puts(m, ",usrquota");
-+		else
-+			seq_puts(m, ",uqnoenforce");
-+	}
- 
- 	if (mp->m_qflags & XFS_PQUOTA_ACCT) {
- 		if (mp->m_qflags & XFS_PQUOTA_ENFD)
+ 	case I2C_SMBUS_BLOCK_PROC_CALL:
+ 		dev_dbg(dev, "I2C_SMBUS_BLOCK_PROC_CALL\n");
++		if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
++			return -EINVAL;
++
+ 		dma_size = I2C_SMBUS_BLOCK_MAX;
+ 		desc->tgtaddr_rw = ISMT_DESC_ADDR_RW(addr, 1);
+ 		desc->wr_len_cmd = data->block[0] + 1;
 
 

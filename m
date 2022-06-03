@@ -2,239 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BCE53C237
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14AB53C2B5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242071AbiFCBTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S242247AbiFCBVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240977AbiFCBTi (ORCPT
+        with ESMTP id S242618AbiFCBUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:19:38 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11B13AA77;
-        Thu,  2 Jun 2022 18:19:37 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id l9-20020a056830268900b006054381dd35so4613048otu.4;
-        Thu, 02 Jun 2022 18:19:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=26LxzKjAtmzpLz3rQ+nBAAJwuvJnOiGpck4LgM4dlj8=;
-        b=S4BL4OKa+jniJKXvGllQNRJYjpqaXHLxpJJHX7yFxdIJw9+zwzmJdDbVTW9MDcMbDA
-         e016wsdN4rUfrPh//VniQ6l1uIOeWYDGRciq6+RlAaMDXSuNgadjbtdElx0GTR29PD/t
-         Ozt/MZY+vZxgG9qLW/a45Fo619/IsUhn3m7YkUg1QM3xUUPenkOXbMiLkDBbZceGni7W
-         Hhuk8hQo0vQ4V/3+QYXMjzpAkoo0m6pprid5eKraly5A+O85fJovtiNZu5QUyshDR+Fi
-         gPxy0Zh6vyNsDQFKkGjtYjgMi6d6l3XKtiWLNlCrLFIcT6+ivnOAbq4xuhT/SvwPaFGb
-         w2UA==
-X-Gm-Message-State: AOAM530Dr8DuEcp7NCYktfIbbVMhf7SLoxbJ60WgNKa1GpK8GM9re7+F
-        Q7uXeh1RCrG+2+o6tafEeg==
-X-Google-Smtp-Source: ABdhPJyfQx62oGyp3hv9Ld4l7uA17giaVpMvgorwru8eImQhFWREpfU0Y1RYXiF9LoAjpGw+a/myNA==
-X-Received: by 2002:a05:6830:310b:b0:60b:1ebe:5c73 with SMTP id b11-20020a056830310b00b0060b1ebe5c73mr3185709ots.76.1654219176994;
-        Thu, 02 Jun 2022 18:19:36 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id na14-20020a0568706c0e00b000f5d8d031b6sm2679746oab.49.2022.06.02.18.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 18:19:36 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] dt-bindings: arm: Convert CoreSight CPU debug to DT schema
-Date:   Thu,  2 Jun 2022 20:19:33 -0500
-Message-Id: <20220603011933.3277315-4-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220603011933.3277315-1-robh@kernel.org>
-References: <20220603011933.3277315-1-robh@kernel.org>
+        Thu, 2 Jun 2022 21:20:32 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFABB3B2B5
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:20:28 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220603012026epoutp030df69c872dd7c243215c7494fe18dab5~09589ofz31347113471epoutp03f
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:20:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220603012026epoutp030df69c872dd7c243215c7494fe18dab5~09589ofz31347113471epoutp03f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1654219226;
+        bh=OlGafxioBWPpmv2XvGx7UEtLeu872g/B/PGHZaTWFu4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=nhIhyzHFifLcdvjE5j0A6mgSz4MfJztf5LWCWOZUHh4d/hyvhsFIZQGQplqkR5Sf2
+         LrrMpU3jd6SBB4xkl8qlythy0KVuE1z/v4IB7P1PIfhEZDTP4pBtWrNOmyOTeDktIi
+         m7ooOntiyCGmYGWtxwjrTplgwW1bx/NIkbBE4ifU=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220603012025epcas5p185f04a84e9e38e23f0966dfa9250461e~0958cfg4v1445014450epcas5p1p;
+        Fri,  3 Jun 2022 01:20:25 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4LDlS71HTrz4x9Q7; Fri,  3 Jun
+        2022 01:20:23 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        22.66.10063.7D169926; Fri,  3 Jun 2022 10:20:23 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220603012022epcas5p1cb88b549bf569608b631f526730043df~0955ZWK7-1444914449epcas5p1f;
+        Fri,  3 Jun 2022 01:20:22 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220603012022epsmtrp2c2ad1b7cb25b0f7bd9968ef0e0eb6859~0955X-ZPQ1215912159epsmtrp27;
+        Fri,  3 Jun 2022 01:20:22 +0000 (GMT)
+X-AuditID: b6c32a49-4b5ff7000000274f-b8-629961d7c5b8
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        94.7E.11276.6D169926; Fri,  3 Jun 2022 10:20:22 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220603012020epsmtip202e2263aa8523ad5f21a558e4c2eac31~0953SA6lZ0464904649epsmtip2C;
+        Fri,  3 Jun 2022 01:20:20 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Bart Van Assche'" <bvanassche@acm.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Cc:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <avri.altman@wdc.com>, <martin.petersen@oracle.com>,
+        <chanho61.park@samsung.com>, <pankaj.dubey@samsung.com>,
+        <linux-fsd@tesla.com>, "'Bharat Uppal'" <bharat.uppal@samsung.com>
+In-Reply-To: <8be31be0-8766-061c-2544-25e296048528@acm.org>
+Subject: RE: [PATCH 1/6] dt-bindings: phy: Add FSD UFS PHY bindings
+Date:   Fri, 3 Jun 2022 06:50:18 +0530
+Message-ID: <000001d876e8$18957d50$49c077f0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEGJiXAXdobboEKZTBkhZkj5AOCHwEV9a8PAbDHaMoB6uoGq6679h+A
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmlu71xJlJBvs/s1q8/HmVzeLaywvs
+        FtM+/GS2uLxf22L+kXOsFn0vHjJbbHp8jdXi4atwi8u75rBZTFj1jcWi+/oONovlx/8xWSza
+        +oXdonXvEXaLnXdOMDvwe1y+4u2xaVUnm8eda3vYPDYvqff4+PQWi0ffllWMHv+a5rJ7fN4k
+        59F+oJspgDMq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DX
+        LTMH6HwlhbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5qiZWh
+        gYGRKVBhQnbG5pULGQvmsFe8/OnTwLiErYuRg0NCwESiaatEFyMXh5DAbkaJMysPMEM4nxgl
+        ds3dw97FyAnkfGOU2P8gDcQGaVj5+CMjRNFeRok7hxazQzgvGSXWLvzPAlLFJqArsWNxGxuI
+        LSKwnVGib38giM0ssJJJYt1UO5DVnALWErtv5YOEhQWcJd5emwi2jEVARWL9+mesIDavgKXE
+        goeToWxBiZMzn7BAjJGX2P52DjPEQQoSP58uY4VY5Sax6fcnVogacYmXR4+A3SYh8IJD4tzP
+        P4wQDS4SH+bMZoKwhSVeHd/CDmFLSXx+txcaLB4Si/5IQYQzJN4uXw/Vai9x4MocFpASZgFN
+        ifW79CFW8Un0/n7CBNHJK9HRJgRRrSrR/O4qC4QtLTGxu5sVwvaQuPDuOvMERsVZSB6bheSx
+        WUgemIWwbAEjyypGydSC4tz01GLTAsO81HJ4XCfn525iBCdsLc8djHcffNA7xMjEwXiIUYKD
+        WUmEt2TX1CQh3pTEyqrUovz4otKc1OJDjKbA0J7ILCWanA/MGXkl8YYmlgYmZmZmJpbGZoZK
+        4rwC/xuThATSE0tSs1NTC1KLYPqYODilGphWnZriqVh0bmP0gy/rzhQeb78ocsDAVmTVo8VB
+        16dd3vvkwCZGv4ecYglF77vrrtnsMbSs5Xp+UW1r/RKhQ+Kyxz5vPexx7sCMfYeOnnquxnr5
+        1H3WpNALe3r+/k88H2JQatukviK7dOEtSy8dlXLLDbN8/po7KfB+Z11n+yBd/9etHRLfP307
+        +GqGzsOMRdmzrh7csuTj7ELZ7Wzik9a2ZooFHJBd993g4EbHSmaulyvDw/U2vzJwq9mW1h1w
+        bwfXsbU8v+YtUDgt4/0z8tqLDqmgc4vFvJXfea3rto34d1qsouPqhokfyzcLuC1hMrHurnnp
+        3yX234B9b/DGZ8nXN+offbnohsxsF+2pZgcmPlJiKc5INNRiLipOBACbD1g5YQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNIsWRmVeSWpSXmKPExsWy7bCSvO61xJlJBj8nKVq8/HmVzeLaywvs
+        FtM+/GS2uLxf22L+kXOsFn0vHjJbbHp8jdXi4atwi8u75rBZTFj1jcWi+/oONovlx/8xWSza
+        +oXdonXvEXaLnXdOMDvwe1y+4u2xaVUnm8eda3vYPDYvqff4+PQWi0ffllWMHv+a5rJ7fN4k
+        59F+oJspgDOKyyYlNSezLLVI3y6BK2PzyoWMBXPYK17+9GlgXMLWxcjJISFgIrHy8UfGLkYu
+        DiGB3YwSqza+Y4dISEtc3zgByhaWWPnvOTtE0XNGiU393YwgCTYBXYkdi9vYQBIiIN0vz74E
+        G8sssJlJYu8GZYiOd4wSD7ctY+pi5ODgFLCW2H0rH6RGWMBZ4u21iWAbWARUJNavf8YKYvMK
+        WEoseDgZyhaUODnzCQvETG2JpzefQtnyEtvfzmGGuE5B4ufTZWD1IgJuEpt+f2KFqBGXeHn0
+        CPsERuFZSEbNQjJqFpJRs5C0LGBkWcUomVpQnJueW2xYYJiXWq5XnJhbXJqXrpecn7uJERy/
+        Wpo7GLev+qB3iJGJg/EQowQHs5IIb8muqUlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwX
+        EkhPLEnNTk0tSC2CyTJxcEo1ME1+2CSe3n2lnYX38XOVxMwd79edLrXOkAyeV7Z/S7eWYu6T
+        J7qmE3YdnpeT9sQ7+V619rE7b//taqwv+pf3d5aP9dWa+ssfsvImLN1r4vFihSnb2+Mzpyr1
+        an5+mf2bYcWnZcLPO95rTsnR+bPXPU224d59n0cWqX2zmUrqDbxObDdIyqhgjzrx3N0mMb1K
+        p7NGrfUDW94z3a3d22wat5QV/MtLWbF82QPOc9Z81dfPxKxQN1uYG/1zqvjhYEXev0Ycaquk
+        s59uN018FfBZTGYazzNn0Q0fEjyNJ+7VX3/luMca+4eX8u0lMn5/sP+z78KrXuVllvrl4ctn
+        XDmyx2LfYqNFQjMr64Rcs5e17VBiKc5INNRiLipOBAA8pEppTgMAAA==
+X-CMS-MailID: 20220603012022epcas5p1cb88b549bf569608b631f526730043df
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220531012336epcas5p2fcafe14c90ad3e3a0901fccd62d15437
+References: <20220531012220.80563-1-alim.akhtar@samsung.com>
+        <CGME20220531012336epcas5p2fcafe14c90ad3e3a0901fccd62d15437@epcas5p2.samsung.com>
+        <20220531012220.80563-2-alim.akhtar@samsung.com>
+        <8be31be0-8766-061c-2544-25e296048528@acm.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the CoreSight CPU debug binding to DT schema format.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
-  - Update MAINTAINERS entry
----
- .../bindings/arm/arm,coresight-cpu-debug.yaml | 81 +++++++++++++++++++
- .../bindings/arm/coresight-cpu-debug.txt      | 49 -----------
- MAINTAINERS                                   |  1 -
- 3 files changed, 81 insertions(+), 50 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
- delete mode 100644 Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
-new file mode 100644
-index 000000000000..0a6bc03ebe00
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/arm,coresight-cpu-debug.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: CoreSight CPU Debug Component
-+
-+maintainers:
-+  - Mathieu Poirier <mathieu.poirier@linaro.org>
-+  - Mike Leach <mike.leach@linaro.org>
-+  - Leo Yan <leo.yan@linaro.org>
-+  - Suzuki K Poulose <suzuki.poulose@arm.com>
-+
-+description: |
-+  CoreSight CPU debug component are compliant with the ARMv8 architecture
-+  reference manual (ARM DDI 0487A.k) Chapter 'Part H: External debug'. The
-+  external debug module is mainly used for two modes: self-hosted debug and
-+  external debug, and it can be accessed from mmio region from Coresight and
-+  eventually the debug module connects with CPU for debugging. And the debug
-+  module provides sample-based profiling extension, which can be used to sample
-+  CPU program counter, secure state and exception level, etc; usually every CPU
-+  has one dedicated debug module to be connected.
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        const: arm,coresight-cpu-debug
-+  required:
-+    - compatible
-+
-+allOf:
-+  - $ref: /schemas/arm/primecell.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: arm,coresight-cpu-debug
-+      - const: arm,primecell
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    maxItems: 1
-+
-+  cpu:
-+    description:
-+      A phandle to the cpu this debug component is bound to.
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+  power-domains:
-+    maxItems: 1
-+    description:
-+      A phandle to the debug power domain if the debug logic has its own
-+      dedicated power domain. CPU idle states may also need to be separately
-+      constrained to keep CPU cores powered.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - cpu
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    debug@f6590000 {
-+        compatible = "arm,coresight-cpu-debug", "arm,primecell";
-+        reg = <0xf6590000 0x1000>;
-+        clocks = <&sys_ctrl 1>;
-+        clock-names = "apb_pclk";
-+        cpu = <&cpu0>;
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt b/Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
-deleted file mode 100644
-index f1de3247c1b7..000000000000
---- a/Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
-+++ /dev/null
-@@ -1,49 +0,0 @@
--* CoreSight CPU Debug Component:
--
--CoreSight CPU debug component are compliant with the ARMv8 architecture
--reference manual (ARM DDI 0487A.k) Chapter 'Part H: External debug'. The
--external debug module is mainly used for two modes: self-hosted debug and
--external debug, and it can be accessed from mmio region from Coresight
--and eventually the debug module connects with CPU for debugging. And the
--debug module provides sample-based profiling extension, which can be used
--to sample CPU program counter, secure state and exception level, etc;
--usually every CPU has one dedicated debug module to be connected.
--
--Required properties:
--
--- compatible : should be "arm,coresight-cpu-debug"; supplemented with
--               "arm,primecell" since this driver is using the AMBA bus
--	       interface.
--
--- reg : physical base address and length of the register set.
--
--- clocks : the clock associated to this component.
--
--- clock-names : the name of the clock referenced by the code. Since we are
--                using the AMBA framework, the name of the clock providing
--		the interconnect should be "apb_pclk" and the clock is
--		mandatory. The interface between the debug logic and the
--		processor core is clocked by the internal CPU clock, so it
--		is enabled with CPU clock by default.
--
--- cpu : the CPU phandle the debug module is affined to. Do not assume it
--        to default to CPU0 if omitted.
--
--Optional properties:
--
--- power-domains: a phandle to the debug power domain. We use "power-domains"
--                 binding to turn on the debug logic if it has own dedicated
--		 power domain and if necessary to use "cpuidle.off=1" or
--		 "nohlt" in the kernel command line or sysfs node to
--		 constrain idle states to ensure registers in the CPU power
--		 domain are accessible.
--
--Example:
--
--	debug@f6590000 {
--		compatible = "arm,coresight-cpu-debug","arm,primecell";
--		reg = <0 0xf6590000 0 0x1000>;
--		clocks = <&sys_ctrl HI6220_DAPB_CLK>;
--		clock-names = "apb_pclk";
--		cpu = <&cpu0>;
--	};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ac2e7163ab14..59042ecb3cbc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1971,7 +1971,6 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git
- F:	Documentation/ABI/testing/sysfs-bus-coresight-devices-*
--F:	Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
- F:	Documentation/devicetree/bindings/arm/arm,coresight-*.yaml
- F:	Documentation/devicetree/bindings/arm/arm,embedded-trace-extension.yaml
- F:	Documentation/devicetree/bindings/arm/arm,trace-buffer-extension.yaml
--- 
-2.34.1
+>-----Original Message-----
+>From: Bart Van Assche [mailto:bvanassche@acm.org]
+>Sent: Tuesday, May 31, 2022 9:14 AM
+>To: Alim Akhtar <alim.akhtar@samsung.com>; linux-arm-
+>kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+>scsi@vger.kernel.org; linux-phy@lists.infradead.org
+>Cc: devicetree@vger.kernel.org; robh+dt@kernel.org;
+>krzysztof.kozlowski+dt@linaro.org; vkoul@kernel.org; avri.altman@wdc.com;
+>martin.petersen@oracle.com; chanho61.park@samsung.com;
+>pankaj.dubey@samsung.com; linux-fsd@tesla.com; Bharat Uppal
+><bharat.uppal@samsung.com>
+>Subject: Re: [PATCH 1/6] dt-bindings: phy: Add FSD UFS PHY bindings
+>
+>On 5/30/22 18:22, Alim Akhtar wrote:
+>> Adds tesla,fsd-ufs-phy compatible for Tesla FSD SoC
+>
+>What does FSD stand for? Please clarify this in the patch description.
+>
+Thanks Bart for review, I will update the commit message with about FSD SoC.
+
+>Thanks,
+>
+>Bart.
 

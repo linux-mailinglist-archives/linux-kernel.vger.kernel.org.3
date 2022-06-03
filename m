@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C12D53C73F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8E353C74A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242957AbiFCJGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S242967AbiFCJOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiFCJGc (ORCPT
+        with ESMTP id S241874AbiFCJOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:06:32 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EF0381BA;
-        Fri,  3 Jun 2022 02:06:31 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2533qU8Q006126;
-        Fri, 3 Jun 2022 02:06:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=Zjta6WAMAVbUUOCc2zQ58NhveVqPhuWBMIk3Oto4ocU=;
- b=P1KV6GV8lsesL0dslyYTMbnUVyZKwChC93OEvAPifGaRqjxScMrQoE86eCx6Ji5DwaSS
- qmbrHsOOKp5eNqMQM4W5OZBWTJ9+9q2tN9l2YWq3XKKDQ8V8/20L1jeMKRtVUcvHZOjk
- jQz2P03XwzEMluFwQWSEgP/G/EaAhorFsU8tWgrWqj+26weYspg6SjwLxsluEAMKYHpx
- 5w2SXdKckrldwHtlFsAfJNU+/eZA4UoKyoPQfSD7pS3+5tBttaP/l/q3dUb9PIOWeKnI
- XhR3Lhn0au9uZhV03wypO1VSuX8pkMlvpaEvouuzAbCi31Fb0CmXDdh/yee6rgEGLGjO hw== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3geupucjjr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 03 Jun 2022 02:06:22 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Jun
- 2022 02:06:20 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 3 Jun 2022 02:06:20 -0700
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 1AC523F7097;
-        Fri,  3 Jun 2022 02:06:19 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 02:06:18 -0700
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <brgl@bgdev.pl>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <rric@kernel.org>, <cchavva@marvell.com>, <wsadowski@marvell.com>
-Subject: Re: [PATCH 2/5] dt-bindings: gpio: gpio-thunderx: Describe pin-cfg
- option
-Message-ID: <20220603090618.GA27121@Dell2s-9>
-References: <20220427144620.9105-1-pmalgujar@marvell.com>
- <20220427144620.9105-3-pmalgujar@marvell.com>
- <CACRpkdaqeTs-jHPBmtdiz+LdMM0pz0zqt4diX=e+YpgaGr0Jbw@mail.gmail.com>
+        Fri, 3 Jun 2022 05:14:14 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A30820BF7;
+        Fri,  3 Jun 2022 02:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1654247646; bh=m1vnCsg0kMjXGWID0KuuTcJ4qjSL9FogZi8jOVhcybo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jQIYMDszzAqjFNSsOu9jYkVh+3QNGGnyjHPOYwAedAeIJV2baKTsZArIEw1xqOvIY
+         557sJRLYIFdJ/PkYzr0icbnOpWV+d2oTOLTmcQLVuI5i3dwsjrm2DIqAak8E17/Msu
+         QDdGtmG5Q/gU3+Lkpz8ZwwUSDCVFYMSF/Yi/WW6U=
+Received: from [192.168.9.172] (unknown [101.88.28.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 37EBF60104;
+        Fri,  3 Jun 2022 17:14:06 +0800 (CST)
+Message-ID: <e3af6993-bbd5-9ce6-07e8-3c180833db75@xen0n.name>
+Date:   Fri, 3 Jun 2022 17:14:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdaqeTs-jHPBmtdiz+LdMM0pz0zqt4diX=e+YpgaGr0Jbw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: gCXpW5evpxy7rs0xJH5A1GfdPXzso7p9
-X-Proofpoint-ORIG-GUID: gCXpW5evpxy7rs0xJH5A1GfdPXzso7p9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-03_02,2022-06-02_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
+ Thunderbird/103.0a1
+Subject: Re: [PATCH V15 00/24] arch: Add basic LoongArch support
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220603072053.35005-1-chenhuacai@loongson.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20220603072053.35005-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,53 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 6/3/22 15:20, Huacai Chen wrote:
+> V13 -> V14:
+> 1, Add some missing Cc;
+> 2, Add a comment for EFI_RT_VIRTUAL_LIMIT definition.
+>
+> V14 -> V15:
+> 1, Remove EFISTUB for now, since the design detail need further discussion.
 
-Thanks for reviewing.
+Thanks for the quick followup revision!
 
-On Mon, May 02, 2022 at 12:15:34AM +0200, Linus Walleij wrote:
-> On Wed, Apr 27, 2022 at 4:47 PM Piyush Malgujar <pmalgujar@marvell.com> wrote:
-> 
-> > Add support for pin-cfg to configure GPIO Pins
-> >
-> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> > ---
-> >  Documentation/devicetree/bindings/gpio/gpio-thunderx.txt | 4 ++++
-> 
-> Would be nice to rewrite this binding in YAML
-> 
+So I've pulled the latest loongarch-next HEAD (commit 
+fb575e32bdd27d57b1587227abea8d4ea2eccb71), and did allmodconfig builds 
+of ARCH={x86,mips,loongarch}. I used the LoongArch cross-toolchain 
+compiled by Arnd and my own Gentoo toolchains (native & crossdev) for 
+x86 and mips; no new problem is found.
 
-Sure, will take care in V2.
+Diff between this revision and the previous revision I tested (I think 
+it's v13) is just removal of the non-reviewed architecture-independent 
+EFI changes, which is good, and I believe we now have every commit here 
+ready for PR. (In theory, Eric didn't respond to my previous mail to 
+approve the signal.h UAPI, but I can confirm that his concerns are fully 
+addressed, which involved spelling suggestion and prefixes to the type 
+names.)
 
-> >    - First cell is the GPIO pin number relative to the controller.
-> >    - Second cell is triggering flags as defined in interrupts.txt.
-> > +- pin-cfg: Configuration of pin's function, filters, XOR and output mode.
-> > +  - First cell is the GPIO pin number
-> > +  - Second cell is a value written to GPIO_BIT_CFG register at driver probe.
-> 
-> Just poking magic hex values into some random register as
-> part of a binding is not a good idea.
-> 
-> This looks like trying to reinvent the pin config subsystem.
-> 
-> GPIO is using the standard pin configurations in the second cell of
-> the handle, use them in this driver as well and add new ones if we
-> need.
-> 
-> You find the existing flags here:
-> include/dt-bindings/gpio/gpio.h
-> 
-> If you need something more sophisticated than a simple flag, I think
-> you need to implement proper pin config.
-> 
-> Yours,
-> Linus Walleij
+On the v14 thread, Bagas suggested that the ASCII art in the 
+documentation in single-cell table form be replaced with ordinary code 
+blocks, which I think is reasonable due to consistency; but we already 
+got 2 revisions of this patchset today, and each revision adds 25 mails 
+to everyone's inbox, so I think Huacai could just apply the changes, 
+collect the Tested-by, and just push to the loongarch-next branch 
+instead (and replying here of course).
 
-The purpose of this pin-cfg entry is different than the standard GPIO pin config usage.
-It is to write a value to GPIO_BIT_CFG register which is used to configure fields like
-pin function, selecting which signal is reported to GPIO output or which signal GPIO
-input need to connect, filters, XOR and output mode.
-We will define new entry specific to thunderx GPIO usage, instead of pin-cfg.
+So, Arnd, do you think we can go ahead and send the PR today or 
+tomorrow? I know this batch of modification didn't get included in 
+today's linux-next, but there's little substantive change, and Stephen 
+didn't mention that there will be no linux-next tomorrow, so the timing 
+might still work out. We may want to get the final Acked-by from Ard for 
+the now stripped-down Patch 11, though, I'm not entirely sure.
 
-Thanks,
-Piyush

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71A053D0CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8195253CF36
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346885AbiFCSI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        id S1345459AbiFCRxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345733AbiFCR4R (ORCPT
+        with ESMTP id S1345602AbiFCRuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:56:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F6C56423;
-        Fri,  3 Jun 2022 10:53:42 -0700 (PDT)
+        Fri, 3 Jun 2022 13:50:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A925258391;
+        Fri,  3 Jun 2022 10:46:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76E79B82419;
-        Fri,  3 Jun 2022 17:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF54C385A9;
-        Fri,  3 Jun 2022 17:53:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59D62B8243A;
+        Fri,  3 Jun 2022 17:46:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE27C385A9;
+        Fri,  3 Jun 2022 17:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278820;
-        bh=Ig21DrWcYMhGZvJLpvkh2ETAM6uWDNlNzd6CvlZgm+g=;
+        s=korg; t=1654278362;
+        bh=JK1DF1VgNAq4TDyPSFj/H5fnS9OR7dFiNc1Idiqfw2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KPbSnEDvXCI4dMy5FXWpOsJzX68G3ftFjSvsBd4Z+dw7/dPLA0TF+JwGOIkkm61Q8
-         1w0tmWyCUHFgE1VUrIc1pYi7pgiA3m13m3JCUnoY6D/aOG8LgtC6jzRdYWmW+8ti8H
-         /csEx4tbO9XpMf0Xkyp9fuOYLn5oVfbGbSP4ELF0=
+        b=Qg9HsXlk9LQRb6sViR/Bf/atwLDeo9W9UUYU+FWAlkpVwmyC9JjNlt4GyiP8cU8E6
+         WcN+QuV3QzESLyfZkmtWLnLE8r9/E442Epcs2wsddEjkeVbFA6EIcvMuF2Hlo1xau1
+         xg+CmQTWU1Ki0ik7qEGDlXdnl3f+T7U8Uz/5PFWo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yuezhang Mo <Yuezhang.Mo@sony.com>,
-        Andy Wu <Andy.Wu@sony.com>,
-        Aoyama Wataru <wataru.aoyama@sony.com>,
-        Daniel Palmer <daniel.palmer@sony.com>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 5.17 20/75] exfat: fix referencing wrong parent directory information after renaming
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: [PATCH 5.4 08/34] media: vim2m: initialize the media device earlier
 Date:   Fri,  3 Jun 2022 19:43:04 +0200
-Message-Id: <20220603173822.321388602@linuxfoundation.org>
+Message-Id: <20220603173816.239438872@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,98 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuezhang Mo <Yuezhang.Mo@sony.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-commit d8dad2588addd1d861ce19e7df3b702330f0c7e3 upstream.
+commit 1a28dce222a6ece725689ad58c0cf4a1b48894f4 upstream.
 
-During renaming, the parent directory information maybe
-updated. But the file/directory still references to the
-old parent directory information.
+Before the video device node is registered, the v4l2_dev.mdev
+pointer must be set in order to correctly associate the video
+device with the media device. Move the initialization of the
+media device up.
 
-This bug will cause 2 problems.
-
-(1) The renamed file can not be written.
-
-    [10768.175172] exFAT-fs (sda1): error, failed to bmap (inode : 7afd50e4 iblock : 0, err : -5)
-    [10768.184285] exFAT-fs (sda1): Filesystem has been set read-only
-    ash: write error: Input/output error
-
-(2) Some dentries of the renamed file/directory are not set
-    to deleted after removing the file/directory.
-
-exfat_update_parent_info() is a workaround for the wrong parent
-directory information being used after renaming. Now that bug is
-fixed, this is no longer needed, so remove it.
-
-Fixes: 5f2aa075070c ("exfat: add inode operations")
-Cc: stable@vger.kernel.org # v5.7+
-Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
-Reviewed-by: Andy Wu <Andy.Wu@sony.com>
-Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
-Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
-Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/exfat/namei.c |   27 +--------------------------
- 1 file changed, 1 insertion(+), 26 deletions(-)
+ drivers/media/platform/vim2m.c |   14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/fs/exfat/namei.c
-+++ b/fs/exfat/namei.c
-@@ -1062,6 +1062,7 @@ static int exfat_rename_file(struct inod
- 
- 		exfat_remove_entries(inode, p_dir, oldentry, 0,
- 			num_old_entries);
-+		ei->dir = *p_dir;
- 		ei->entry = newentry;
- 	} else {
- 		if (exfat_get_entry_type(epold) == TYPE_FILE) {
-@@ -1149,28 +1150,6 @@ static int exfat_move_file(struct inode
- 	return 0;
- }
- 
--static void exfat_update_parent_info(struct exfat_inode_info *ei,
--		struct inode *parent_inode)
--{
--	struct exfat_sb_info *sbi = EXFAT_SB(parent_inode->i_sb);
--	struct exfat_inode_info *parent_ei = EXFAT_I(parent_inode);
--	loff_t parent_isize = i_size_read(parent_inode);
--
--	/*
--	 * the problem that struct exfat_inode_info caches wrong parent info.
--	 *
--	 * because of flag-mismatch of ei->dir,
--	 * there is abnormal traversing cluster chain.
--	 */
--	if (unlikely(parent_ei->flags != ei->dir.flags ||
--		     parent_isize != EXFAT_CLU_TO_B(ei->dir.size, sbi) ||
--		     parent_ei->start_clu != ei->dir.dir)) {
--		exfat_chain_set(&ei->dir, parent_ei->start_clu,
--			EXFAT_B_TO_CLU_ROUND_UP(parent_isize, sbi),
--			parent_ei->flags);
--	}
--}
--
- /* rename or move a old file into a new file */
- static int __exfat_rename(struct inode *old_parent_inode,
- 		struct exfat_inode_info *ei, struct inode *new_parent_inode,
-@@ -1201,8 +1180,6 @@ static int __exfat_rename(struct inode *
- 		return -ENOENT;
+--- a/drivers/media/platform/vim2m.c
++++ b/drivers/media/platform/vim2m.c
+@@ -1347,12 +1347,6 @@ static int vim2m_probe(struct platform_d
+ 		goto error_dev;
  	}
  
--	exfat_update_parent_info(ei, old_parent_inode);
+-	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
+-	if (ret) {
+-		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
+-		goto error_m2m;
+-	}
 -
- 	exfat_chain_dup(&olddir, &ei->dir);
- 	dentry = ei->entry;
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 	dev->mdev.dev = &pdev->dev;
+ 	strscpy(dev->mdev.model, "vim2m", sizeof(dev->mdev.model));
+@@ -1361,7 +1355,15 @@ static int vim2m_probe(struct platform_d
+ 	media_device_init(&dev->mdev);
+ 	dev->mdev.ops = &m2m_media_ops;
+ 	dev->v4l2_dev.mdev = &dev->mdev;
++#endif
  
-@@ -1223,8 +1200,6 @@ static int __exfat_rename(struct inode *
- 			goto out;
- 		}
- 
--		exfat_update_parent_info(new_ei, new_parent_inode);
--
- 		p_dir = &(new_ei->dir);
- 		new_entry = new_ei->entry;
- 		ep = exfat_get_dentry(sb, p_dir, new_entry, &new_bh);
++	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
++		goto error_m2m;
++	}
++
++#ifdef CONFIG_MEDIA_CONTROLLER
+ 	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
+ 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
+ 	if (ret) {
 
 

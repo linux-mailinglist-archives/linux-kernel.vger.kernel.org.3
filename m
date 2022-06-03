@@ -2,270 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3057D53C738
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3C153C73C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 11:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242938AbiFCJD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 05:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
+        id S242946AbiFCJFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 05:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiFCJDz (ORCPT
+        with ESMTP id S229761AbiFCJFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 05:03:55 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BCC1E9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654247034; x=1685783034;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=/c7hQ+QU+SR6ACN+gxaQMwgph9j7/3Uzti/cMVLNetk=;
-  b=tcc8M4o9vtBvTk25x9HHIx/3MqSNpBTvS1HpGlMXVWAgUsdeQtWhkIb6
-   W3/IZ492oZ5xQmAfwBc0GItScgUJXM4fzDff82phUVU8Hz/cYOV4Nr3W2
-   X4UcekDVdAP8O88YMuVMsT+Sxw/oePBp2KpJcz2aJxTJ5Jw8FLd8Fkgxx
-   Q=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jun 2022 02:03:53 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jun 2022 02:03:52 -0700
-X-QCInternal: smtphost
-Received: from hu-rbankapu-blr.qualcomm.com (HELO hu-ub18template-blr.qualcomm.com) ([10.131.39.233])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 03 Jun 2022 14:33:43 +0530
-Received: by hu-ub18template-blr.qualcomm.com (Postfix, from userid 4079802)
-        id 7AC7C802D96; Fri,  3 Jun 2022 14:33:42 +0530 (+0530)
-From:   Raghu Bankapur <quic_rbankapu@quicinc.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Krishna Jha <quic_kkishorj@quicinc.com>,
-        Raghu Bankapur <quic_rbankapu@quicinc.com>
-Subject: [PATCH V1 1/1] asoc: msm: use hashtable to check kcontrol
-Date:   Fri,  3 Jun 2022 14:33:38 +0530
-Message-Id: <9a0ec3f261ff80d842f926f747e3d10fbc3f9aa9.1654246653.git.quic_rbankapu@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1654246653.git.quic_rbankapu@quicinc.com>
-References: <cover.1654246653.git.quic_rbankapu@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Jun 2022 05:05:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0670A381B1
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 02:05:04 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2536DNMu018802;
+        Fri, 3 Jun 2022 09:04:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fkgjiBbvfssojcLQ5Xrtaf/b+dhAnuUhltuZxxE14dI=;
+ b=Wnm87g9cv/OXyRG2iPsmT0vdxsFSuIvKeOHM8JuM/Qxtjh6f6JvoPBQAhgn9nK9Kl+30
+ YicjWWZLTm2D/g3IjKTWANv7vp5Zwt9rQhU56OySYx2e0RmNv3M2v1qFw7Yoy9EC5s7d
+ G7t8UokrZs60Zi0hKzI5p1eE4ypTnzIhjXJZ25dgyQBM/KX6RMCl/otn8/xjLpOYAAeu
+ P0etDZTOeCt81w0yAixagmYRzpSJRcLqi7p4c0dKJN6qNQ7lJcljLyaFs9JbMCHxVSfp
+ qK3Pr8gRfizOC5hSCBSZNEeJT97S2Lbx5VSg76re2EXXNWUG/ibyd9UW7/IbnMs1oTo9 wA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfcu8jss1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 09:04:44 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2538usfW020405;
+        Fri, 3 Jun 2022 09:04:43 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gfcu8jsrg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 09:04:43 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2538pqgb014509;
+        Fri, 3 Jun 2022 09:04:41 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gbcae85bu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 09:04:41 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25394doC44302756
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Jun 2022 09:04:39 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0ED5A4C044;
+        Fri,  3 Jun 2022 09:04:39 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C18B34C046;
+        Fri,  3 Jun 2022 09:04:32 +0000 (GMT)
+Received: from [9.43.93.173] (unknown [9.43.93.173])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  3 Jun 2022 09:04:32 +0000 (GMT)
+Message-ID: <c98eb873-a5bb-edcc-743d-89cfffe52cd9@linux.ibm.com>
+Date:   Fri, 3 Jun 2022 14:34:31 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v4 4/7] mm/demotion/dax/kmem: Set node's memory tier
+ to MEMORY_TIER_PMEM
+Content-Language: en-US
+To:     Bharata B Rao <bharata@amd.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-5-aneesh.kumar@linux.ibm.com>
+ <5706f5e9-0609-98c9-a0cd-7d96336d73dd@amd.com>
+ <8e651a1e-d189-3e8a-438f-298f21402bd2@linux.ibm.com>
+ <d45374fa-6e51-36cb-9a2c-96f85d9de528@amd.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <d45374fa-6e51-36cb-9a2c-96f85d9de528@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oSx9HJET7Gpw0PQRshfj_d5cI9DoJaRx
+X-Proofpoint-ORIG-GUID: kEMdneNsbdlx1A764xvy2vRfXW557sLJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-03_02,2022-06-02_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206030039
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-use hashtabe instead of linear list to check kcontrol before
-adding them for improving early audio KPI.
+On 6/2/22 12:06 PM, Bharata B Rao wrote:
+> On 6/1/2022 7:19 PM, Aneesh Kumar K V wrote:
+>> On 6/1/22 11:59 AM, Bharata B Rao wrote:
+>>> I was experimenting with this patchset and found this behaviour.
+>>> Here's what I did:
+>>>
+>>> Boot a KVM guest with vNVDIMM device which ends up with device_dax
+>>> driver by default.
+>>>
+>>> Use it as RAM by binding it to dax kmem driver. It now appears as
+>>> RAM with a new NUMA node that is put to memtier1 (the existing tier
+>>> where DRAM already exists)
+>>>
+>>
+>> That should have placed it in memtier2.
+>>
+>>> I can move it to memtier2 (MEMORY_RANK_PMEM) manually, but isn't
+>>> that expected to happen automatically when a node with dax kmem
+>>> device comes up?
+>>>
+>>
+>> This can happen if we have added the same NUMA node to memtier1 before dax kmem driver initialized the pmem memory. Can you check before the above node_set_memory_tier_rank() whether the specific NUMA node is already part of any memory tier?
+> 
+> When we reach node_set_memory_tier_rank(), node1 (that has the pmem device)
+> is already part of memtier1 whose nodelist shows 0-1.
+> 
 
-Change-Id: I7134816736e08e338c0f22a8ae283a0520aa847a
-Signed-off-by: Raghu Bankapur <quic_rbankapu@quicinc.com>
----
- include/sound/control.h |   2 +
- include/sound/core.h    |   5 +-
- sound/core/control.c    | 106 +++++++++++++++++++++++-----------------
- sound/core/init.c       |   1 +
- 4 files changed, 68 insertions(+), 46 deletions(-)
+can you find out which code path added node1 to memtier1? Do you have 
+regular memory also appearing on node1?
 
-diff --git a/include/sound/control.h b/include/sound/control.h
-index 985c51a8fb74..e50db5c45114 100644
---- a/include/sound/control.h
-+++ b/include/sound/control.h
-@@ -70,6 +70,8 @@ struct snd_kcontrol_volatile {
- struct snd_kcontrol {
- 	struct list_head list;		/* list of controls */
- 	struct snd_ctl_elem_id id;
-+	struct hlist_node hnode;
-+	unsigned int knametoint;	/* kctl name to uint, hash key value */
- 	unsigned int count;		/* count of same elements */
- 	snd_kcontrol_info_t *info;
- 	snd_kcontrol_get_t *get;
-diff --git a/include/sound/core.h b/include/sound/core.h
-index b7e9b58d3c78..90341d6f1573 100644
---- a/include/sound/core.h
-+++ b/include/sound/core.h
-@@ -14,6 +14,7 @@
- #include <linux/pm.h>			/* pm_message_t */
- #include <linux/stringify.h>
- #include <linux/printk.h>
-+#include <linux/hashtable.h>
- 
- /* number of supported soundcards */
- #ifdef CONFIG_SND_DYNAMIC_MINORS
-@@ -24,6 +25,8 @@
- 
- #define CONFIG_SND_MAJOR	116	/* standard configuration */
- 
-+#define SND_CTL_HASH_TABLE_BITS 14	/* buckets numbers: 1 << 14 */
-+
- /* forward declarations */
- struct pci_dev;
- struct module;
-@@ -103,7 +106,7 @@ struct snd_card {
- 	size_t user_ctl_alloc_size;	// current memory allocation by user controls.
- 	struct list_head controls;	/* all controls for this card */
- 	struct list_head ctl_files;	/* active control files */
--
-+	DECLARE_HASHTABLE(ctl_htable, SND_CTL_HASH_TABLE_BITS);
- 	struct snd_info_entry *proc_root;	/* root for soundcard specific files */
- 	struct proc_dir_entry *proc_root_link;	/* number link to real id */
- 
-diff --git a/sound/core/control.c b/sound/core/control.c
-index a25c0d64d104..e00a02015837 100644
---- a/sound/core/control.c
-+++ b/sound/core/control.c
-@@ -331,43 +331,49 @@ void snd_ctl_free_one(struct snd_kcontrol *kcontrol)
- }
- EXPORT_SYMBOL(snd_ctl_free_one);
- 
--static bool snd_ctl_remove_numid_conflict(struct snd_card *card,
--					  unsigned int count)
-+enum snd_ctl_add_mode {
-+	CTL_ADD_EXCLUSIVE, CTL_REPLACE, CTL_ADD_ON_REPLACE,
-+};
-+
-+char snd_ctl_string[50] = { '\0' };
-+
-+/* Used to convert the string into int value -- BKDRHash */
-+static unsigned int snd_ctl_strtoint(const char *s)
- {
--	struct snd_kcontrol *kctl;
-+	unsigned int res = 0;
- 
--	/* Make sure that the ids assigned to the control do not wrap around */
--	if (card->last_numid >= UINT_MAX - count)
--		card->last_numid = 0;
-+	while (*s)
-+		res = (res << 5) - res + (*s++);
- 
--	list_for_each_entry(kctl, &card->controls, list) {
--		if (kctl->id.numid < card->last_numid + 1 + count &&
--		    kctl->id.numid + kctl->count > card->last_numid + 1) {
--		    	card->last_numid = kctl->id.numid + kctl->count - 1;
--			return true;
--		}
--	}
--	return false;
-+	return (res & 0x7FFFFFFF);
- }
- 
--static int snd_ctl_find_hole(struct snd_card *card, unsigned int count)
-+/**
-+ * snd_ctl_hash_check - Check the duplicate enrty on snd hashtable
-+ * @card: the card instance
-+ * @nametoint: kctl name to uint
-+ *
-+ * Finds the control instance with the given nametoint from the card.
-+ *
-+ * Return: The pointer of the instance if found, or %NULL if not.
-+ *
-+ */
-+static struct snd_kcontrol *snd_ctl_hash_check(struct snd_card *card,
-+				 unsigned int nametoint)
- {
--	unsigned int iter = 100000;
-+	struct snd_kcontrol *kctl = NULL;
- 
--	while (snd_ctl_remove_numid_conflict(card, count)) {
--		if (--iter == 0) {
--			/* this situation is very unlikely */
--			dev_err(card->dev, "unable to allocate new control numid\n");
--			return -ENOMEM;
--		}
-+	if (snd_BUG_ON(!card))
-+		return NULL;
-+
-+	hash_for_each_possible(card->ctl_htable, kctl, hnode, nametoint) {
-+		if (kctl->knametoint != nametoint)
-+			continue;
-+		return kctl;
- 	}
--	return 0;
-+	return NULL;
- }
- 
--enum snd_ctl_add_mode {
--	CTL_ADD_EXCLUSIVE, CTL_REPLACE, CTL_ADD_ON_REPLACE,
--};
--
- /* add/replace a new kcontrol object; call with card->controls_rwsem locked */
- static int __snd_ctl_add_replace(struct snd_card *card,
- 				 struct snd_kcontrol *kcontrol,
-@@ -382,26 +388,34 @@ static int __snd_ctl_add_replace(struct snd_card *card,
- 	if (id.index > UINT_MAX - kcontrol->count)
- 		return -EINVAL;
- 
--	old = snd_ctl_find_id(card, &id);
--	if (!old) {
--		if (mode == CTL_REPLACE)
--			return -EINVAL;
--	} else {
--		if (mode == CTL_ADD_EXCLUSIVE) {
--			dev_err(card->dev,
--				"control %i:%i:%i:%s:%i is already present\n",
--				id.iface, id.device, id.subdevice, id.name,
--				id.index);
--			return -EBUSY;
--		}
-+	snprintf(snd_ctl_string, strlen(kcontrol->id.name) + 6, "%s%d%d%d",
-+		kcontrol->id.name, kcontrol->id.iface, kcontrol->id.device,
-+		kcontrol->id.subdevice);
- 
--		err = snd_ctl_remove(card, old);
--		if (err < 0)
--			return err;
--	}
-+	kcontrol->knametoint = snd_ctl_strtoint(snd_ctl_string);
-+	if (kcontrol->knametoint < 0)
-+		return -EINVAL;
- 
--	if (snd_ctl_find_hole(card, kcontrol->count) < 0)
--		return -ENOMEM;
-+	old = snd_ctl_hash_check(card, kcontrol->knametoint);
-+	if (old) {
-+		old = snd_ctl_find_id(card, &id);
-+		if (!old) {
-+			if (mode == CTL_REPLACE)
-+				return -EINVAL;
-+		} else {
-+			if (mode == CTL_ADD_EXCLUSIVE) {
-+				dev_err(card->dev,
-+					"control %i:%i:%i:%s:%i is already present\n",
-+					id.iface, id.device, id.subdevice, id.name,
-+					id.index);
-+				return -EBUSY;
-+			}
-+
-+			err = snd_ctl_remove(card, old);
-+			if (err < 0)
-+				return err;
-+		}
-+	}
- 
- 	list_add_tail(&kcontrol->list, &card->controls);
- 	card->controls_count += kcontrol->count;
-@@ -411,6 +425,8 @@ static int __snd_ctl_add_replace(struct snd_card *card,
- 	for (idx = 0; idx < kcontrol->count; idx++)
- 		snd_ctl_notify_one(card, SNDRV_CTL_EVENT_MASK_ADD, kcontrol, idx);
- 
-+	hash_add(card->ctl_htable, &kcontrol->hnode, kcontrol->knametoint);
-+
- 	return 0;
- }
- 
-diff --git a/sound/core/init.c b/sound/core/init.c
-index 31ba7024e3ad..24138902e5f2 100644
---- a/sound/core/init.c
-+++ b/sound/core/init.c
-@@ -284,6 +284,7 @@ static int snd_card_init(struct snd_card *card, struct device *parent,
- 	INIT_LIST_HEAD(&card->ctl_files);
- 	spin_lock_init(&card->files_lock);
- 	INIT_LIST_HEAD(&card->files_list);
-+	hash_init(card->ctl_htable);
- 	mutex_init(&card->memory_mutex);
- #ifdef CONFIG_PM
- 	init_waitqueue_head(&card->power_sleep);
--- 
-2.17.1
-
+-aneesh

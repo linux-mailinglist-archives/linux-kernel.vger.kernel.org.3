@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A90753D127
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8AF53D013
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348321AbiFCSQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S1346932AbiFCSAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346320AbiFCSEz (ORCPT
+        with ESMTP id S1347231AbiFCRwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:04:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E135712F;
-        Fri,  3 Jun 2022 10:58:02 -0700 (PDT)
+        Fri, 3 Jun 2022 13:52:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B01CC6;
+        Fri,  3 Jun 2022 10:50:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 366A5B82189;
-        Fri,  3 Jun 2022 17:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FB2C385B8;
-        Fri,  3 Jun 2022 17:57:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A774B82419;
+        Fri,  3 Jun 2022 17:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98409C385A9;
+        Fri,  3 Jun 2022 17:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279025;
-        bh=wTV5cVFc5rKLzg7MqcEFuVDlN6PsOXkUdWpdiX9W7qI=;
+        s=korg; t=1654278650;
+        bh=UoYgQFgAeQun6qyKQWi73uIHFyzu7x4V9H4PVuQYoos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XLDvkMc/Bq4S5SvdIZCQ4GpGJxuUhdFFKrMHdTxTokL/G9HZ3MYKRK1sJgtt60Hga
-         qMJbc6vmDaov765QYnsRTe9GuHHCMkffsGFlDxaBte99WHRXu9oPUiOb+44u9MaiUM
-         gZUT/veLR3/hG1A/vChceoU2IRHPbeyU4ugirBtM=
+        b=oJ6/Sg1vurzizsbCoQ6/G8NFNfcxvjer3oYfeK5YFbqdT1L4BASEYGiaq0gj5+4Ww
+         R5c1/0PyEMQEHdxzYzKp0QN3A6LZ/lfXGe2kstKXzKrhpX0LPcV/+0rlXXq8RVVwaD
+         MfqPISi64/r65yo2JJFyIqUd8xmRJRxr7UymssO0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andy Nguyen <theflow@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.18 28/67] KVM: SVM: Use kzalloc for sev ioctl interfaces to prevent kernel data leak
+        stable@vger.kernel.org, Tao Jin <tao-j@outlook.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 5.15 49/66] HID: multitouch: add quirks to enable Lenovo X12 trackpoint
 Date:   Fri,  3 Jun 2022 19:43:29 +0200
-Message-Id: <20220603173821.535586563@linuxfoundation.org>
+Message-Id: <20220603173822.082302091@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
-References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,88 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ashish Kalra <ashish.kalra@amd.com>
+From: Tao Jin <tao-j@outlook.com>
 
-commit d22d2474e3953996f03528b84b7f52cc26a39403 upstream.
+commit 95cd2cdc88c755dcd0a58b951faeb77742c733a4 upstream.
 
-For some sev ioctl interfaces, the length parameter that is passed maybe
-less than or equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data
-that PSP firmware returns. In this case, kmalloc will allocate memory
-that is the size of the input rather than the size of the data.
-Since PSP firmware doesn't fully overwrite the allocated buffer, these
-sev ioctl interface may return uninitialized kernel slab memory.
+This applies the similar quirks used by previous generation devices
+such as X1 tablet for X12 tablet, so that the trackpoint and buttons
+can work.
 
-Reported-by: Andy Nguyen <theflow@google.com>
-Suggested-by: David Rientjes <rientjes@google.com>
-Suggested-by: Peter Gonda <pgonda@google.com>
-Cc: kvm@vger.kernel.org
-Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Fixes: eaf78265a4ab3 ("KVM: SVM: Move SEV code to separate file")
-Fixes: 2c07ded06427d ("KVM: SVM: add support for SEV attestation command")
-Fixes: 4cfdd47d6d95a ("KVM: SVM: Add KVM_SEV SEND_START command")
-Fixes: d3d1af85e2c75 ("KVM: SVM: Add KVM_SEND_UPDATE_DATA command")
-Fixes: eba04b20e4861 ("KVM: x86: Account a variety of miscellaneous allocations")
-Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-Reviewed-by: Peter Gonda <pgonda@google.com>
-Message-Id: <20220516154310.3685678-1-Ashish.Kalra@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+This patch was applied and tested working on 5.17.1 .
+
+Cc: stable@vger.kernel.org # 5.8+ given that it relies on 40d5bb87377a
+Signed-off-by: Tao Jin <tao-j@outlook.com>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/CO6PR03MB6241CB276FCDC7F4CEDC34F6E1E29@CO6PR03MB6241.namprd03.prod.outlook.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/svm/sev.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/hid/hid-ids.h        |    1 +
+ drivers/hid/hid-multitouch.c |    6 ++++++
+ 2 files changed, 7 insertions(+)
 
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -688,7 +688,7 @@ static int sev_launch_measure(struct kvm
- 		if (params.len > SEV_FW_BLOB_MAX_SIZE)
- 			return -EINVAL;
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -753,6 +753,7 @@
+ #define USB_DEVICE_ID_LENOVO_X1_COVER	0x6085
+ #define USB_DEVICE_ID_LENOVO_X1_TAB	0x60a3
+ #define USB_DEVICE_ID_LENOVO_X1_TAB3	0x60b5
++#define USB_DEVICE_ID_LENOVO_X12_TAB	0x60fe
+ #define USB_DEVICE_ID_LENOVO_OPTICAL_USB_MOUSE_600E	0x600e
+ #define USB_DEVICE_ID_LENOVO_PIXART_USB_MOUSE_608D	0x608d
+ #define USB_DEVICE_ID_LENOVO_PIXART_USB_MOUSE_6019	0x6019
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -2032,6 +2032,12 @@ static const struct hid_device_id mt_dev
+ 			   USB_VENDOR_ID_LENOVO,
+ 			   USB_DEVICE_ID_LENOVO_X1_TAB3) },
  
--		blob = kmalloc(params.len, GFP_KERNEL_ACCOUNT);
-+		blob = kzalloc(params.len, GFP_KERNEL_ACCOUNT);
- 		if (!blob)
- 			return -ENOMEM;
- 
-@@ -808,7 +808,7 @@ static int __sev_dbg_decrypt_user(struct
- 	if (!IS_ALIGNED(dst_paddr, 16) ||
- 	    !IS_ALIGNED(paddr,     16) ||
- 	    !IS_ALIGNED(size,      16)) {
--		tpage = (void *)alloc_page(GFP_KERNEL);
-+		tpage = (void *)alloc_page(GFP_KERNEL | __GFP_ZERO);
- 		if (!tpage)
- 			return -ENOMEM;
- 
-@@ -1094,7 +1094,7 @@ static int sev_get_attestation_report(st
- 		if (params.len > SEV_FW_BLOB_MAX_SIZE)
- 			return -EINVAL;
- 
--		blob = kmalloc(params.len, GFP_KERNEL_ACCOUNT);
-+		blob = kzalloc(params.len, GFP_KERNEL_ACCOUNT);
- 		if (!blob)
- 			return -ENOMEM;
- 
-@@ -1176,7 +1176,7 @@ static int sev_send_start(struct kvm *kv
- 		return -EINVAL;
- 
- 	/* allocate the memory to hold the session data blob */
--	session_data = kmalloc(params.session_len, GFP_KERNEL_ACCOUNT);
-+	session_data = kzalloc(params.session_len, GFP_KERNEL_ACCOUNT);
- 	if (!session_data)
- 		return -ENOMEM;
- 
-@@ -1300,11 +1300,11 @@ static int sev_send_update_data(struct k
- 
- 	/* allocate memory for header and transport buffer */
- 	ret = -ENOMEM;
--	hdr = kmalloc(params.hdr_len, GFP_KERNEL_ACCOUNT);
-+	hdr = kzalloc(params.hdr_len, GFP_KERNEL_ACCOUNT);
- 	if (!hdr)
- 		goto e_unpin;
- 
--	trans_data = kmalloc(params.trans_len, GFP_KERNEL_ACCOUNT);
-+	trans_data = kzalloc(params.trans_len, GFP_KERNEL_ACCOUNT);
- 	if (!trans_data)
- 		goto e_free_hdr;
- 
++	/* Lenovo X12 TAB Gen 1 */
++	{ .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
++		HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8,
++			   USB_VENDOR_ID_LENOVO,
++			   USB_DEVICE_ID_LENOVO_X12_TAB) },
++
+ 	/* MosArt panels */
+ 	{ .driver_data = MT_CLS_CONFIDENCE_MINUS_ONE,
+ 		MT_USB_DEVICE(USB_VENDOR_ID_ASUS,
 
 

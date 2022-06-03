@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9E253D037
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1AC53D111
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345775AbiFCSBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S1348256AbiFCSQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347226AbiFCRwI (ORCPT
+        with ESMTP id S238830AbiFCSEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:52:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ED7F25;
-        Fri,  3 Jun 2022 10:50:55 -0700 (PDT)
+        Fri, 3 Jun 2022 14:04:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE2A57111;
+        Fri,  3 Jun 2022 10:58:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BAFDB823B0;
-        Fri,  3 Jun 2022 17:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677A7C385A9;
-        Fri,  3 Jun 2022 17:50:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C080B8241D;
+        Fri,  3 Jun 2022 17:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB87C385A9;
+        Fri,  3 Jun 2022 17:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278652;
-        bh=0prqloLrALboBqYx7GfVhCOuXhFihqnnhoizcnn15Pc=;
+        s=korg; t=1654279027;
+        bh=tSQXz/ZFbI2pYTh4TigjjrPwJuuXCKdaX9A7q3dypck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lo/x2PSzYmImbEn+IGYQwxaCQyDiPB4HA6nCecSe7VA91IuvWs6oQuewqCYXQMu26
-         fSlpCLmZRvR6plPajG8S023X/ySIK1zWMvSHJhlIgZkqpjLZxw6wzJr3hKM/t+w/bs
-         85JirLI7qBU75kkyZ7FO+e0iKiAANjgoKy5kMjqw=
+        b=CIqgM5bzOWqa5VptNCzQD9VdXr45N0olLKqaLNocTIOjNiB5rq6sSiMWCntiJ63Gv
+         0t5f6Nh2t+FjF4/QWuJdJVA4dAJXuDcgo9GmERTksHIhDuPA1PQDlqQhz07O+zr/Z8
+         Ko8USy7XCVE1K8lmrZG0L0luQUeEboqpkbL8G7m0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Haitao Huang <haitao.huang@intel.com>
-Subject: [PATCH 5.15 50/66] x86/sgx: Disconnect backing page references from dirty status
+        stable@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Vabhav Sharma <vabhav.sharma@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.18 29/67] crypto: caam - fix i.MX6SX entropy delay value
 Date:   Fri,  3 Jun 2022 19:43:30 +0200
-Message-Id: <20220603173822.111314857@linuxfoundation.org>
+Message-Id: <20220603173821.563313170@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,165 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Reinette Chatre <reinette.chatre@intel.com>
+From: Fabio Estevam <festevam@denx.de>
 
-commit 6bd429643cc265e94a9d19839c771bcc5d008fa8 upstream.
+commit 4ee4cdad368a26de3967f2975806a9ee2fa245df upstream.
 
-SGX uses shmem backing storage to store encrypted enclave pages
-and their crypto metadata when enclave pages are moved out of
-enclave memory. Two shmem backing storage pages are associated with
-each enclave page - one backing page to contain the encrypted
-enclave page data and one backing page (shared by a few
-enclave pages) to contain the crypto metadata used by the
-processor to verify the enclave page when it is loaded back into
-the enclave.
+Since commit 358ba762d9f1 ("crypto: caam - enable prediction resistance
+in HRWNG") the following CAAM errors can be seen on i.MX6SX:
 
-sgx_encl_put_backing() is used to release references to the
-backing storage and, optionally, mark both backing store pages
-as dirty.
+caam_jr 2101000.jr: 20003c5b: CCB: desc idx 60: RNG: Hardware error
+hwrng: no data available
 
-Managing references and dirty status together in this way results
-in both backing store pages marked as dirty, even if only one of
-the backing store pages are changed.
+This error is due to an incorrect entropy delay for i.MX6SX.
 
-Additionally, waiting until the page reference is dropped to set
-the page dirty risks a race with the page fault handler that
-may load outdated data into the enclave when a page is faulted
-right after it is reclaimed.
+Fix it by increasing the minimum entropy delay for i.MX6SX
+as done in U-Boot:
+https://patchwork.ozlabs.org/project/uboot/patch/20220415111049.2565744-1-gaurav.jain@nxp.com/
 
-Consider what happens if the reclaimer writes a page to the backing
-store and the page is immediately faulted back, before the reclaimer
-is able to set the dirty bit of the page:
+As explained in the U-Boot patch:
 
-sgx_reclaim_pages() {                    sgx_vma_fault() {
-  ...
-  sgx_encl_get_backing();
-  ...                                      ...
-  sgx_reclaimer_write() {
-    mutex_lock(&encl->lock);
-    /* Write data to backing store */
-    mutex_unlock(&encl->lock);
-  }
-                                           mutex_lock(&encl->lock);
-                                           __sgx_encl_eldu() {
-                                             ...
-                                             /*
-                                              * Enclave backing store
-                                              * page not released
-                                              * nor marked dirty -
-                                              * contents may not be
-                                              * up to date.
-                                              */
-                                              sgx_encl_get_backing();
-                                              ...
-                                              /*
-                                               * Enclave data restored
-                                               * from backing store
-                                               * and PCMD pages that
-                                               * are not up to date.
-                                               * ENCLS[ELDU] faults
-                                               * because of MAC or PCMD
-                                               * checking failure.
-                                               */
-                                               sgx_encl_put_backing();
-                                            }
-                                            ...
-  /* set page dirty */
-  sgx_encl_put_backing();
-  ...
-                                            mutex_unlock(&encl->lock);
-}                                        }
+"RNG self tests are run to determine the correct entropy delay.
+Such tests are executed with different voltages and temperatures to identify
+the worst case value for the entropy delay. For i.MX6SX, it was determined
+that after adding a margin value of 1000 the minimum entropy delay should be
+at least 12000."
 
-Remove the option to sgx_encl_put_backing() to set the backing
-pages as dirty and set the needed pages as dirty right after
-receiving important data while enclave mutex is held. This ensures that
-the page fault handler can get up to date data from a page and prepares
-the code for a following change where only one of the backing pages
-need to be marked as dirty.
-
-Cc: stable@vger.kernel.org
-Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Haitao Huang <haitao.huang@intel.com>
-Link: https://lore.kernel.org/linux-sgx/8922e48f-6646-c7cc-6393-7c78dcf23d23@intel.com/
-Link: https://lkml.kernel.org/r/fa9f98986923f43e72ef4c6702a50b2a0b3c42e3.1652389823.git.reinette.chatre@intel.com
+Cc: <stable@vger.kernel.org>
+Fixes: 358ba762d9f1 ("crypto: caam - enable prediction resistance in HRWNG")
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Horia Geantă <horia.geanta@nxp.com>
+Reviewed-by: Vabhav Sharma <vabhav.sharma@nxp.com>
+Reviewed-by: Gaurav Jain <gaurav.jain@nxp.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/sgx/encl.c |   10 ++--------
- arch/x86/kernel/cpu/sgx/encl.h |    2 +-
- arch/x86/kernel/cpu/sgx/main.c |    6 ++++--
- 3 files changed, 7 insertions(+), 11 deletions(-)
+ drivers/crypto/caam/ctrl.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -94,7 +94,7 @@ static int __sgx_encl_eldu(struct sgx_en
- 	kunmap_atomic(pcmd_page);
- 	kunmap_atomic((void *)(unsigned long)pginfo.contents);
- 
--	sgx_encl_put_backing(&b, false);
-+	sgx_encl_put_backing(&b);
- 
- 	sgx_encl_truncate_backing_page(encl, page_index);
- 
-@@ -645,15 +645,9 @@ int sgx_encl_get_backing(struct sgx_encl
- /**
-  * sgx_encl_put_backing() - Unpin the backing storage
-  * @backing:	data for accessing backing storage for the page
-- * @do_write:	mark pages dirty
-  */
--void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write)
-+void sgx_encl_put_backing(struct sgx_backing *backing)
- {
--	if (do_write) {
--		set_page_dirty(backing->pcmd);
--		set_page_dirty(backing->contents);
--	}
--
- 	put_page(backing->pcmd);
- 	put_page(backing->contents);
+--- a/drivers/crypto/caam/ctrl.c
++++ b/drivers/crypto/caam/ctrl.c
+@@ -609,6 +609,13 @@ static bool check_version(struct fsl_mc_
  }
---- a/arch/x86/kernel/cpu/sgx/encl.h
-+++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -107,7 +107,7 @@ void sgx_encl_release(struct kref *ref);
- int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
- int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- 			 struct sgx_backing *backing);
--void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
-+void sgx_encl_put_backing(struct sgx_backing *backing);
- int sgx_encl_test_and_clear_young(struct mm_struct *mm,
- 				  struct sgx_encl_page *page);
+ #endif
  
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -170,6 +170,8 @@ static int __sgx_encl_ewb(struct sgx_epc
- 			  backing->pcmd_offset;
- 
- 	ret = __ewb(&pginfo, sgx_get_epc_virt_addr(epc_page), va_slot);
-+	set_page_dirty(backing->pcmd);
-+	set_page_dirty(backing->contents);
- 
- 	kunmap_atomic((void *)(unsigned long)(pginfo.metadata -
- 					      backing->pcmd_offset));
-@@ -299,7 +301,7 @@ static void sgx_reclaimer_write(struct s
- 		sgx_encl_free_epc_page(encl->secs.epc_page);
- 		encl->secs.epc_page = NULL;
- 
--		sgx_encl_put_backing(&secs_backing, true);
-+		sgx_encl_put_backing(&secs_backing);
- 	}
- 
- out:
-@@ -392,7 +394,7 @@ skip:
- 
- 		encl_page = epc_page->owner;
- 		sgx_reclaimer_write(epc_page, &backing[i]);
--		sgx_encl_put_backing(&backing[i], true);
-+		sgx_encl_put_backing(&backing[i]);
- 
- 		kref_put(&encl_page->encl->refcount, sgx_encl_release);
- 		epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
++static bool needs_entropy_delay_adjustment(void)
++{
++	if (of_machine_is_compatible("fsl,imx6sx"))
++		return true;
++	return false;
++}
++
+ /* Probe routine for CAAM top (controller) level */
+ static int caam_probe(struct platform_device *pdev)
+ {
+@@ -855,6 +862,8 @@ static int caam_probe(struct platform_de
+ 			 * Also, if a handle was instantiated, do not change
+ 			 * the TRNG parameters.
+ 			 */
++			if (needs_entropy_delay_adjustment())
++				ent_delay = 12000;
+ 			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
+ 				dev_info(dev,
+ 					 "Entropy delay = %u\n",
+@@ -871,6 +880,15 @@ static int caam_probe(struct platform_de
+ 			 */
+ 			ret = instantiate_rng(dev, inst_handles,
+ 					      gen_sk);
++			/*
++			 * Entropy delay is determined via TRNG characterization.
++			 * TRNG characterization is run across different voltages
++			 * and temperatures.
++			 * If worst case value for ent_dly is identified,
++			 * the loop can be skipped for that platform.
++			 */
++			if (needs_entropy_delay_adjustment())
++				break;
+ 			if (ret == -EAGAIN)
+ 				/*
+ 				 * if here, the loop will rerun,
 
 

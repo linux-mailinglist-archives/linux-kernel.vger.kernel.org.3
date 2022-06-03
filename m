@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C96353C65A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5750053C65E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 09:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242579AbiFCHgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 03:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S242594AbiFCHh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 03:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242363AbiFCHf7 (ORCPT
+        with ESMTP id S229684AbiFCHhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 03:35:59 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A35039168;
-        Fri,  3 Jun 2022 00:35:59 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id c196so6635139pfb.1;
-        Fri, 03 Jun 2022 00:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JBM1UPx7MD7sDC5BTG0YFwzdffsIeuB3hTo7qutHsEw=;
-        b=Kh1fuekm7amMaXiNuuuKYLkXsnDs1AZAnv6a9G2iS8mIRL89Xv35YJw3+OfGdhr3nc
-         3LO4I1jTqOkv9l09zphQkJbKYBGZFNZbglub1ZhrpObe48ODQ29cmypuAXvQD2xeVAFN
-         HtYGMZzOCxsPzV1IZ2m72L2AQvkJaty226htCO7ZTUd8Ax466HzoC4y7m64KEcXFyYoE
-         Tohmt1Bwr+6+oHlq9+ardkJoL2K3EA8wXTj3u734bw9nWoRORCZ2MsTmhAr2djxKS3QI
-         1ZNECEfWxbqNUOoJC+ALFFRAuwmAVYEVPECp50+YBv/LWW13cxaS7DfB3S9OAoBvPJ6X
-         c5sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JBM1UPx7MD7sDC5BTG0YFwzdffsIeuB3hTo7qutHsEw=;
-        b=E1vfjse8sfyodHsdM4gFFJnTMiUvEzwk751sSMCgcD3AppzefgWoIDi7nUqQuAU5ov
-         8sNNnQPI9RT9HUT7iu8kdZ/ILfG7+6bI30O2B3FphaDFarKxN0Lkd+J2QbzrkB+RcilC
-         V2Wf3yEDTJM8fUIqz+SyI9ugv6xyL2EjpgH7q6huM5Do/qLpcAC/nS1+9RHcpGUOL3ei
-         YdKowNY3TKluCOiJ1YLrI/HeV2b+o11+SbZVPelek7NaaYuwi7AMs8RR06l+lwVShfeS
-         cjE8Y4aWfItRe9xpCVcYEGQPAPxFPYC7cAyJireENWmdoT+r9GkAiw46GQqyMW2L/hFJ
-         j3OQ==
-X-Gm-Message-State: AOAM531/s8G7tVtSurBsyCxrsOZ0GHKog2Pcq/uKMXe5BmMH+JiAC6Fl
-        5om3yoZDCALTV7bvx9jHxogcUx0Pwg265w==
-X-Google-Smtp-Source: ABdhPJw/Bbs4xGDQ57g/rIq0w4x0Mz626cdS1aczMG3Bjpxhu5Y43xXeCzWqp5byKVGRDXDjN6baXA==
-X-Received: by 2002:a63:65c7:0:b0:3fc:85b5:30c0 with SMTP id z190-20020a6365c7000000b003fc85b530c0mr7888960pgb.165.1654241758619;
-        Fri, 03 Jun 2022 00:35:58 -0700 (PDT)
-Received: from [192.168.43.80] (subs10b-223-255-225-236.three.co.id. [223.255.225.236])
-        by smtp.gmail.com with ESMTPSA id r16-20020a635150000000b003f65560a1a7sm4559488pgl.53.2022.06.03.00.35.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 00:35:57 -0700 (PDT)
-Message-ID: <de31731a-5cb5-ece1-6b7f-895d9c04fa95@gmail.com>
-Date:   Fri, 3 Jun 2022 14:35:51 +0700
+        Fri, 3 Jun 2022 03:37:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CEFDFCF;
+        Fri,  3 Jun 2022 00:37:18 -0700 (PDT)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4LDvpy6wf4z4xZD;
+        Fri,  3 Jun 2022 17:37:14 +1000 (AEST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LDvpt5Mscz4xDK;
+        Fri,  3 Jun 2022 17:37:10 +1000 (AEST)
+From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Subject: [PATCH] ARM: dts: aspeed: ast2600-evb: Enable Quad SPI RX tranfers
+Date:   Fri,  3 Jun 2022 09:37:05 +0200
+Message-Id: <20220603073705.1624351-1-clg@kaod.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic
- documentations
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        WANG Xuerui <git@xen0n.name>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-4-chenhuacai@loongson.cn>
- <YplnruNz++gABlU0@debian.me>
- <CAAhV-H5Hi_gYvrO6DAGGA=OVExunCubNpDBdkRBxFxiP1APAKw@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CAAhV-H5Hi_gYvrO6DAGGA=OVExunCubNpDBdkRBxFxiP1APAKw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 12:27, Huacai Chen wrote:
-> Thank you for your testing. In my environment (sphinx_2.4.4), with or
-> without the border both have no warnings. :)
-> And I think these are more pretty if we keep the border, especially
-> when formatted into PDF. How do you think?
-> 
+Now that the pinctrl definitions of the ast2600 SoC have been fixed,
+see commit 925fbe1f7eb6 ("dt-bindings: pinctrl: aspeed-g6: add FWQSPI
+function/group"), it is safe to activate QSPI on the ast2600 evb.
 
-I think what you mean is reST table border, right?
+Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+---
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts | 2 ++
+ 1 file changed, 2 insertions(+)
 
-By comparison, in Documentation/arm/booting.rst, there is a diagram
-in "Setup the kernel tagged list". The diagram is written just inside
-the literal code block and works fine, albeit the code block
-spans fully. The diagram is small, however.
-
-Otherwise, I see unequal padding in rendered IRQ diagrams. If I
-remember correctly, the bottom and left padding are larger than top
-and right padding. IDK why.
-
-So please apply my suggestion diff.
-
-Thanks.
-
+diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+index 5a6063bd4508..87a79922ff78 100644
+--- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
++++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+@@ -182,6 +182,7 @@ flash@0 {
+ 		status = "okay";
+ 		m25p,fast-read;
+ 		label = "bmc";
++		spi-rx-bus-width = <4>;
+ 		spi-max-frequency = <50000000>;
+ #include "openbmc-flash-layout-64.dtsi"
+ 	};
+@@ -196,6 +197,7 @@ flash@0 {
+ 		status = "okay";
+ 		m25p,fast-read;
+ 		label = "pnor";
++		spi-rx-bus-width = <4>;
+ 		spi-max-frequency = <100000000>;
+ 	};
+ };
 -- 
-An old man doll... just what I always wanted! - Clara
+2.35.3
+

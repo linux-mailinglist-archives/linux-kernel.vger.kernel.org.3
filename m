@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB8F53D126
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BDA53D147
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238830AbiFCSRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:17:31 -0400
+        id S1347496AbiFCSUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:20:34 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347093AbiFCSFi (ORCPT
+        with ESMTP id S1347361AbiFCSF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:05:38 -0400
+        Fri, 3 Jun 2022 14:05:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2885AA68;
-        Fri,  3 Jun 2022 10:58:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1C85B89C;
+        Fri,  3 Jun 2022 10:58:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7152615E5;
-        Fri,  3 Jun 2022 17:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9000C385A9;
-        Fri,  3 Jun 2022 17:57:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1135061659;
+        Fri,  3 Jun 2022 17:57:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04811C385A9;
+        Fri,  3 Jun 2022 17:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654279064;
-        bh=Bkle9clltA+R6fN9FLeBxz6W1Wqn17K3e2OD2XvnkVw=;
+        s=korg; t=1654279067;
+        bh=/5ETmfWm2uhKWwgWPbY3yLxXWCxaJ5ZGh8hkglP8XMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nn7E8ALkK8SifCIGqa5h0K62z6bGTSRgzKpBl4sake295wCaFgNKEkqjWsPaNkCmN
-         /bvKOX9js0O1hyfFCWkQOSZfaXgtAzGqKonjCsWcjdxbQXLpyJa6/ujHvDZDhl1i3C
-         AIE28f7edmBojbAN9b0905zaVn932Exrtvjg6wIo=
+        b=W5KIEmeSBJjsv1LO6uA8T4Bsbwenm4h0ZJhr1PL/nglQPPBaWHETdXKCoQd5Mshod
+         RpdGEwwptaQQcrQA4wfQ6VqK8wNuyXWsewMKpiZjIpz7IvVFa/F61YmIeHEr9xSEjz
+         BGMHRvdJQtP7mpmuYqFR72SUpkO1QSxZJ3ksFcf0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yuezhang Mo <Yuezhang.Mo@sony.com>,
-        Andy Wu <Andy.Wu@sony.com>,
-        Aoyama Wataru <wataru.aoyama@sony.com>,
-        Daniel Palmer <daniel.palmer@sony.com>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 5.18 09/67] exfat: fix referencing wrong parent directory information after renaming
-Date:   Fri,  3 Jun 2022 19:43:10 +0200
-Message-Id: <20220603173821.000877880@linuxfoundation.org>
+        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.18 10/67] netfilter: nft_limit: Clone packet limits cost value
+Date:   Fri,  3 Jun 2022 19:43:11 +0200
+Message-Id: <20220603173821.029370451@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
 References: <20220603173820.731531504@linuxfoundation.org>
@@ -58,98 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuezhang Mo <Yuezhang.Mo@sony.com>
+From: Phil Sutter <phil@nwl.cc>
 
-commit d8dad2588addd1d861ce19e7df3b702330f0c7e3 upstream.
+commit 558254b0b602b8605d7246a10cfeb584b1fcabfc upstream.
 
-During renaming, the parent directory information maybe
-updated. But the file/directory still references to the
-old parent directory information.
+When cloning a packet-based limit expression, copy the cost value as
+well. Otherwise the new limit is not functional anymore.
 
-This bug will cause 2 problems.
-
-(1) The renamed file can not be written.
-
-    [10768.175172] exFAT-fs (sda1): error, failed to bmap (inode : 7afd50e4 iblock : 0, err : -5)
-    [10768.184285] exFAT-fs (sda1): Filesystem has been set read-only
-    ash: write error: Input/output error
-
-(2) Some dentries of the renamed file/directory are not set
-    to deleted after removing the file/directory.
-
-exfat_update_parent_info() is a workaround for the wrong parent
-directory information being used after renaming. Now that bug is
-fixed, this is no longer needed, so remove it.
-
-Fixes: 5f2aa075070c ("exfat: add inode operations")
-Cc: stable@vger.kernel.org # v5.7+
-Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
-Reviewed-by: Andy Wu <Andy.Wu@sony.com>
-Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
-Reviewed-by: Daniel Palmer <daniel.palmer@sony.com>
-Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Fixes: 3b9e2ea6c11bf ("netfilter: nft_limit: move stateful fields out of expression data")
+Signed-off-by: Phil Sutter <phil@nwl.cc>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/exfat/namei.c |   27 +--------------------------
- 1 file changed, 1 insertion(+), 26 deletions(-)
+ net/netfilter/nft_limit.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/exfat/namei.c
-+++ b/fs/exfat/namei.c
-@@ -1080,6 +1080,7 @@ static int exfat_rename_file(struct inod
+--- a/net/netfilter/nft_limit.c
++++ b/net/netfilter/nft_limit.c
+@@ -213,6 +213,8 @@ static int nft_limit_pkts_clone(struct n
+ 	struct nft_limit_priv_pkts *priv_dst = nft_expr_priv(dst);
+ 	struct nft_limit_priv_pkts *priv_src = nft_expr_priv(src);
  
- 		exfat_remove_entries(inode, p_dir, oldentry, 0,
- 			num_old_entries);
-+		ei->dir = *p_dir;
- 		ei->entry = newentry;
- 	} else {
- 		if (exfat_get_entry_type(epold) == TYPE_FILE) {
-@@ -1167,28 +1168,6 @@ static int exfat_move_file(struct inode
- 	return 0;
++	priv_dst->cost = priv_src->cost;
++
+ 	return nft_limit_clone(&priv_dst->limit, &priv_src->limit);
  }
  
--static void exfat_update_parent_info(struct exfat_inode_info *ei,
--		struct inode *parent_inode)
--{
--	struct exfat_sb_info *sbi = EXFAT_SB(parent_inode->i_sb);
--	struct exfat_inode_info *parent_ei = EXFAT_I(parent_inode);
--	loff_t parent_isize = i_size_read(parent_inode);
--
--	/*
--	 * the problem that struct exfat_inode_info caches wrong parent info.
--	 *
--	 * because of flag-mismatch of ei->dir,
--	 * there is abnormal traversing cluster chain.
--	 */
--	if (unlikely(parent_ei->flags != ei->dir.flags ||
--		     parent_isize != EXFAT_CLU_TO_B(ei->dir.size, sbi) ||
--		     parent_ei->start_clu != ei->dir.dir)) {
--		exfat_chain_set(&ei->dir, parent_ei->start_clu,
--			EXFAT_B_TO_CLU_ROUND_UP(parent_isize, sbi),
--			parent_ei->flags);
--	}
--}
--
- /* rename or move a old file into a new file */
- static int __exfat_rename(struct inode *old_parent_inode,
- 		struct exfat_inode_info *ei, struct inode *new_parent_inode,
-@@ -1219,8 +1198,6 @@ static int __exfat_rename(struct inode *
- 		return -ENOENT;
- 	}
- 
--	exfat_update_parent_info(ei, old_parent_inode);
--
- 	exfat_chain_dup(&olddir, &ei->dir);
- 	dentry = ei->entry;
- 
-@@ -1241,8 +1218,6 @@ static int __exfat_rename(struct inode *
- 			goto out;
- 		}
- 
--		exfat_update_parent_info(new_ei, new_parent_inode);
--
- 		p_dir = &(new_ei->dir);
- 		new_entry = new_ei->entry;
- 		ep = exfat_get_dentry(sb, p_dir, new_entry, &new_bh);
 
 

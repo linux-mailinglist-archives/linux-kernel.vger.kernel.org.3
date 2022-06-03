@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B478353D0DD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0F353D128
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347472AbiFCSK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S1344659AbiFCSRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346000AbiFCR5m (ORCPT
+        with ESMTP id S1347073AbiFCSFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:57:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B850222A9;
-        Fri,  3 Jun 2022 10:54:26 -0700 (PDT)
+        Fri, 3 Jun 2022 14:05:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7935AA4B;
+        Fri,  3 Jun 2022 10:58:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD310612EC;
-        Fri,  3 Jun 2022 17:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB2B0C36AE5;
-        Fri,  3 Jun 2022 17:54:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2507DB82369;
+        Fri,  3 Jun 2022 17:57:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778F2C385A9;
+        Fri,  3 Jun 2022 17:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278865;
-        bh=8Zu7MjpXWW9lQAoYnVgd0XW5X1hTwM+Sak8w4dzHC0g=;
+        s=korg; t=1654279045;
+        bh=u3IpJg7f52QEmZoiTs+geEPRmnLMhe+3HVFYgwUxjcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oX9A5t3WYH7nY1NVVd6snG7eFg3jY4o7NvJBA9tCLaMUNWcKbisfGpYArKW6StkL3
-         oQhyw0+doG8bJ47vOhB7eKceqed5jdtNiI5jKBK86lDS89EVemiVCugDgRYbtuWKtC
-         jp6Ydcz7niCmlwbogA9FYmCnA+1Gam4Go5ifVXn8=
+        b=pgxBmK6OvcfIDrtfeaKc7iPNMrHTrQyPaI2akW8EDifMtdKauxiu4vJlCIH9e2YAL
+         hevDK/zhstJ401OPjtmrQpSnG7rUYQjz5ke9sRM3uL2PKzHiACI9QL4ez64jDwa9Aq
+         1LLVkJWZW885XhdGMVnnbhQ1me6CUdxwZPCh+8l4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.17 51/75] dm stats: add cond_resched when looping over entries
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Maris Abele <maris7abele@gmail.com>
+Subject: [PATCH 5.18 34/67] ALSA: usb-audio: Workaround for clock setup on TEAC devices
 Date:   Fri,  3 Jun 2022 19:43:35 +0200
-Message-Id: <20220603173823.191843068@linuxfoundation.org>
+Message-Id: <20220603173821.703724527@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
-References: <20220603173821.749019262@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,80 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit bfe2b0146c4d0230b68f5c71a64380ff8d361f8b upstream.
+commit 5ce0b06ae5e69e23142e73c5c3c0260e9f2ccb4b upstream.
 
-dm-stats can be used with a very large number of entries (it is only
-limited by 1/4 of total system memory), so add rescheduling points to
-the loops that iterate over the entries.
+Maris reported that TEAC UD-501 (0644:8043) doesn't work with the
+typical "clock source 41 is not valid, cannot use" errors on the
+recent kernels.  The currently known workaround so far is to restore
+(partially) what we've done unconditionally at the clock setup;
+namely, re-setup the USB interface immediately after the clock is
+changed.  This patch re-introduces the behavior conditionally for TEAC
+devices.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Further notes:
+- The USB interface shall be set later in
+  snd_usb_endpoint_configure(), but this seems to be too late.
+- Even calling  usb_set_interface() right after
+  sne_usb_init_sample_rate() doesn't help; so this must be related
+  with the clock validation, too.
+- The device may still spew the "clock source 41 is not valid" error
+  at the first clock setup.  This seems happening at the very first
+  try of clock setup, but it disappears at later attempts.
+  The error is likely harmless because the driver retries the clock
+  setup (such an error is more or less expected on some devices).
+
+Fixes: bf6313a0ff76 ("ALSA: usb-audio: Refactor endpoint management")
+Reported-and-tested-by: Maris Abele <maris7abele@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220521064627.29292-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-stats.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ sound/usb/clock.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/md/dm-stats.c
-+++ b/drivers/md/dm-stats.c
-@@ -225,6 +225,7 @@ void dm_stats_cleanup(struct dm_stats *s
- 				       atomic_read(&shared->in_flight[READ]),
- 				       atomic_read(&shared->in_flight[WRITE]));
- 			}
-+			cond_resched();
- 		}
- 		dm_stat_free(&s->rcu_head);
- 	}
-@@ -330,6 +331,7 @@ static int dm_stats_create(struct dm_sta
- 	for (ni = 0; ni < n_entries; ni++) {
- 		atomic_set(&s->stat_shared[ni].in_flight[READ], 0);
- 		atomic_set(&s->stat_shared[ni].in_flight[WRITE], 0);
-+		cond_resched();
+--- a/sound/usb/clock.c
++++ b/sound/usb/clock.c
+@@ -572,6 +572,13 @@ static int set_sample_rate_v2v3(struct s
+ 		/* continue processing */
  	}
  
- 	if (s->n_histogram_entries) {
-@@ -342,6 +344,7 @@ static int dm_stats_create(struct dm_sta
- 		for (ni = 0; ni < n_entries; ni++) {
- 			s->stat_shared[ni].tmp.histogram = hi;
- 			hi += s->n_histogram_entries + 1;
-+			cond_resched();
- 		}
- 	}
- 
-@@ -362,6 +365,7 @@ static int dm_stats_create(struct dm_sta
- 			for (ni = 0; ni < n_entries; ni++) {
- 				p[ni].histogram = hi;
- 				hi += s->n_histogram_entries + 1;
-+				cond_resched();
- 			}
- 		}
- 	}
-@@ -497,6 +501,7 @@ static int dm_stats_list(struct dm_stats
- 			}
- 			DMEMIT("\n");
- 		}
-+		cond_resched();
- 	}
- 	mutex_unlock(&stats->mutex);
- 
-@@ -774,6 +779,7 @@ static void __dm_stat_clear(struct dm_st
- 				local_irq_enable();
- 			}
- 		}
-+		cond_resched();
- 	}
- }
- 
-@@ -889,6 +895,8 @@ static int dm_stats_print(struct dm_stat
- 
- 		if (unlikely(sz + 1 >= maxlen))
- 			goto buffer_overflow;
++	/* FIXME - TEAC devices require the immediate interface setup */
++	if (rate != prev_rate && USB_ID_VENDOR(chip->usb_id) == 0x0644) {
++		usb_set_interface(chip->dev, fmt->iface, fmt->altsetting);
++		if (chip->quirk_flags & QUIRK_FLAG_IFACE_DELAY)
++			msleep(50);
++	}
 +
-+		cond_resched();
- 	}
- 
- 	if (clear)
+ validation:
+ 	/* validate clock after rate change */
+ 	if (!uac_clock_source_is_valid(chip, fmt, clock))
 
 

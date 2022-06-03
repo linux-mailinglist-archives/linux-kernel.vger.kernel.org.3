@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9269053CBDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630E553CBE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245279AbiFCO5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S245260AbiFCO6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245260AbiFCO44 (ORCPT
+        with ESMTP id S229785AbiFCO6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:56:56 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E361140DD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 07:56:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id c2so10490307edf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 07:56:52 -0700 (PDT)
+        Fri, 3 Jun 2022 10:58:14 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D1539834;
+        Fri,  3 Jun 2022 07:58:13 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id u8so6392615wrm.13;
+        Fri, 03 Jun 2022 07:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=plkRHxZRk9CMIn7YOznv+vuUGRy66YRIHBjRF967Ovg=;
-        b=OFHroXywrVa28TjmeuM2CMND/lkHNeB16Lt8Jq4E+glKJ+M7g6kanfCClZ/vFLbsov
-         r8u80hXBHLksypvSYoPqwzFpAvd//6QXleUWoJK13uqoAIkBMosyf14qgs97WAoRRFMS
-         2KC6Aydv3OfnpRsyHYsxy5s2+idac3Jr5ftWPg1lOOMhX2cY9q1vxiYomkU9wyA37TPs
-         y092tj0B+WAidkzySllTdAu4D4oFoTQV5zFbZgVofWXuBfipvdQrWKcYFYeiqnrtaMUH
-         4A/YjJ4MwVGW9fEPcYOu8uvC7WZOVe5qBOe1jEhd3lz2/ZtjlZn/oDr2bvMun5l0roiS
-         2EfA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/R/4ToixurdvYBbWBR8c1EK1LIIPY8prRBRCCAJql14=;
+        b=L89/jjviPQbdDtiZaCn6CI2qnSZbvNAjCSTKxAXOYk0u+j4nl+51icI4jgGLXmEunr
+         mU9ErCTPBea39/n0UZdGXHlkC28VQs7BJVKWNUROGluAz0M9NhW65LfVv66HpWp55viK
+         SQP+z2shn97ZcZggMVy476j+O4xufb6UqE6E8O1Q5p7I6l4GhK94680PbODhY6lBNlP4
+         4WTsOIN9CJfYf/Mn3GT6HAMIS3/tF/kYTKphowxHKV87r/2pX+kyOyLyRzfYe0n2fw0p
+         rNyVeDaBeHfGMmfXFBFji9ePerTaWaRoAnXCSQYBRM1bDQrh3Tg6SOHGP6PcQ5ILeiYr
+         B6ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=plkRHxZRk9CMIn7YOznv+vuUGRy66YRIHBjRF967Ovg=;
-        b=MCDJSDFkVXxaMvmyMMb90wrTOGCYkeK47Wq0wVrwfD2aj2MVi3AFkDoECVbk5BH/lr
-         0umAK+VdW791MIPdPaRd1tGeL7CDcK80PoFiqFy0mDd2o2J69uxORxBXq9kyaV7U2mOW
-         DJa+EP4r9K+ZS8qaqMvr5DwyMyd5TQB/6RSOCmL6XWH7AfsL0NhGN1wn4ubDXD7PzkmL
-         2pDz6hx0cRkXzPwsQP/cnMPBnPFmsXYBZmOkj1oMwQiMONQrn4QfpE8xaw8xv00L5pFu
-         DyaktMX1AyYfgspz8iBdMCWi5v7J6XTf1YHjjwRqWp+mAkBHjuheKK3Q8boVPKWROAb5
-         tcvw==
-X-Gm-Message-State: AOAM5328Ri5rrARgz249O2DA8ya7UfFcKBA0Sy86bJoj+/Lyw8k4OpYX
-        mFOrxls+f2fA7Rxl5e1anvM=
-X-Google-Smtp-Source: ABdhPJx1tqTWq+bg3K48QBR4njKSxXrtNNk36G7Ebems4gSc3jniGgD8tYlpAFClGJES+20LMJVByg==
-X-Received: by 2002:a05:6402:b45:b0:42d:bf43:8db1 with SMTP id bx5-20020a0564020b4500b0042dbf438db1mr11221191edb.100.1654268210815;
-        Fri, 03 Jun 2022 07:56:50 -0700 (PDT)
-Received: from orion.localdomain ([93.99.228.15])
-        by smtp.gmail.com with ESMTPSA id e2-20020a1709062d4200b006fec2097d53sm2917509eji.118.2022.06.03.07.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 07:56:46 -0700 (PDT)
-Received: by orion.localdomain (Postfix, from userid 1003)
-        id AEEECA0366; Fri,  3 Jun 2022 16:57:20 +0200 (CEST)
-From:   =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
-        mgorman@techsingularity.net, willy@infradead.org,
-        liam.howlett@oracle.com, hughd@google.com, kirill@shutemov.name,
-        riel@surriel.com, rostedt@goodmis.org, peterz@infradead.org,
-        =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
-Subject: [PATCH v4 2/2] [PATCH 2/2] mm: add merging after mremap resize
-Date:   Fri,  3 Jun 2022 16:57:19 +0200
-Message-Id: <20220603145719.1012094-3-matenajakub@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220603145719.1012094-1-matenajakub@gmail.com>
-References: <20220603145719.1012094-1-matenajakub@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/R/4ToixurdvYBbWBR8c1EK1LIIPY8prRBRCCAJql14=;
+        b=ibCR/nOc7IEW4HdfG3+xN5sXlpnP6kWTibz7cOIfM3lYo2dNkiVkGsWUdC5K9P1HHt
+         9v3PKm68wlvuFVPp7UYm4l2gDw1AwCMUQdWwTy4DvelKn/BgHvezWstwlU7gZo1XQZwU
+         JseYMl5aL/ehah+9F3Ub4kocJVaOJROUTbczvRUNiCvJWOW/0hiNpjcEKtLc4R6tDVEE
+         L/SNWCs4omW4Z+aJ/hDDyxXeoEohegK8wVyVvWbEWBQEenOqHl8LcQ8OSJBkwcOmVq9Z
+         2IFsxXF9Hvk4nD3L2nHv8CFDBg2Uej0IxzbiuvnDndN8gpFFaHa8v1HijkTja+TXgjJC
+         pNeA==
+X-Gm-Message-State: AOAM532j678LGSH0OUZe76CNamLPXZTp+Xy94C15klk1VBvvvpV+QTU4
+        Qe2gDlVg61vXstu134giO4r9wynnWfuomlaMsvmEhzg7
+X-Google-Smtp-Source: ABdhPJwLkLEf+cqEIWjgsz9My/14MKmdEsJ2CQwAp3vAoyWObhmuS6Arp6/K91rdmeLKIRwQ8ndqit+2uQwKakVcnu0=
+X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
+ p18-20020a5d68d2000000b0021031cc64a6mr8289615wrw.679.1654268292227; Fri, 03
+ Jun 2022 07:58:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220603151600.19cfa617@canb.auug.org.au>
+In-Reply-To: <20220603151600.19cfa617@canb.auug.org.au>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 3 Jun 2022 07:58:14 -0700
+Message-ID: <CAF6AEGtYS1LYowjf-OiN-C1+4JFTWwOOpP__4iDLo-dFy0t0Tg@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the drm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,144 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When mremap call results in expansion, it might be possible to merge the
-VMA with the next VMA which might become adjacent. This patch adds
-vma_merge call after the expansion is done to try and merge.
+On Thu, Jun 2, 2022 at 10:16 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   8caad14e7224 ("drm/msm/dpu: Fix pointer dereferenced before checking")
+>
+> Fixes tag
+>
+>   Fixes: d7d0e73f7de33 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> Fixes tags should not be truncated or split across more than 1 line.   So:
+>
+> Fixes: d7d0e73f7de3 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback")
 
-Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
----
- mm/mremap.c                              | 19 +++++++++-
- tools/testing/selftests/vm/mremap_test.c | 47 +++++++++++++++++++++++-
- 2 files changed, 63 insertions(+), 3 deletions(-)
+Hmm, checkpatch seems to not catch this (unless it was a recent
+addition that landed after what msm-fixes is based on.
 
-diff --git a/mm/mremap.c b/mm/mremap.c
-index 0b93fac76851..66970dcd636a 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -9,6 +9,7 @@
-  */
- 
- #include <linux/mm.h>
-+#include <linux/mm_inline.h>
- #include <linux/hugetlb.h>
- #include <linux/shm.h>
- #include <linux/ksm.h>
-@@ -23,6 +24,7 @@
- #include <linux/mmu_notifier.h>
- #include <linux/uaccess.h>
- #include <linux/userfaultfd_k.h>
-+#include <linux/mempolicy.h>
- 
- #include <asm/cacheflush.h>
- #include <asm/tlb.h>
-@@ -1014,6 +1016,9 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 		/* can we just expand the current mapping? */
- 		if (vma_expandable(vma, new_len - old_len)) {
- 			long pages = (new_len - old_len) >> PAGE_SHIFT;
-+			unsigned long extension_start = addr + old_len;
-+			unsigned long extension_end = addr + new_len;
-+			pgoff_t extension_pgoff = vma->vm_pgoff + (old_len >> PAGE_SHIFT);
- 
- 			if (vma->vm_flags & VM_ACCOUNT) {
- 				if (security_vm_enough_memory_mm(mm, pages)) {
-@@ -1022,8 +1027,18 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 				}
- 			}
- 
--			if (vma_adjust(vma, vma->vm_start, addr + new_len,
--				       vma->vm_pgoff, NULL)) {
-+			/*
-+			 * Function vma_merge() is called on the extension we are adding to
-+			 * the already existing vma, vma_merge() will merge this extension with
-+			 * the already existing vma (expand operation itself) and possibly also
-+			 * with the next vma if it becomes adjacent to the expanded vma and
-+			 * otherwise compatible.
-+			 */
-+			vma = vma_merge(mm, vma, extension_start, extension_end,
-+					vma->vm_flags, vma->anon_vma, vma->vm_file,
-+					extension_pgoff, vma_policy(vma),
-+					vma->vm_userfaultfd_ctx, anon_vma_name(vma));
-+			if (!vma) {
- 				vm_unacct_memory(pages);
- 				ret = -ENOMEM;
- 				goto out;
-diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-index db0270127aeb..0865a6cb5bdb 100644
---- a/tools/testing/selftests/vm/mremap_test.c
-+++ b/tools/testing/selftests/vm/mremap_test.c
-@@ -118,6 +118,48 @@ static unsigned long long get_mmap_min_addr(void)
- 	return addr;
- }
- 
-+/*
-+ * This test validates that merge is called when expanding a mapping.
-+ * Mapping containing three pages is created, middle page is unmapped
-+ * and then the mapping containing the first page is expanded so that
-+ * it fills the created hole. The two parts should merge creating
-+ * single mapping with three pages.
-+ */
-+static void mremap_expand_merge(unsigned long page_size)
-+{
-+	char *test_name = "mremap expand merge";
-+	FILE *fp;
-+	char *line = NULL;
-+	size_t len = 0;
-+	bool success = false;
-+
-+	char *start = mmap(NULL, 3 * page_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	munmap(start + page_size, page_size);
-+	mremap(start, page_size, 2 * page_size, 0);
-+
-+	fp = fopen("/proc/self/maps", "r");
-+	if (fp == NULL) {
-+		ksft_test_result_fail("%s\n", test_name);
-+		return;
-+	}
-+
-+	while(getline(&line, &len, fp) != -1) {
-+		char *first = strtok(line,"- ");
-+		void *first_val = (void *) strtol(first, NULL, 16);
-+		char *second = strtok(NULL,"- ");
-+		void *second_val = (void *) strtol(second, NULL, 16);
-+		if (first_val == start && second_val == start + 3 * page_size) {
-+			success = true;
-+			break;
-+		}
-+	}
-+	if (success)
-+		ksft_test_result_pass("%s\n", test_name);
-+	else
-+		ksft_test_result_fail("%s\n", test_name);
-+	fclose(fp);
-+}
-+
- /*
-  * Returns the start address of the mapping on success, else returns
-  * NULL on failure.
-@@ -336,6 +378,7 @@ int main(int argc, char **argv)
- 	int i, run_perf_tests;
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 	unsigned int pattern_seed;
-+	int num_expand_tests = 1;
- 	struct test test_cases[MAX_TEST];
- 	struct test perf_test_cases[MAX_PERF_TEST];
- 	int page_size;
-@@ -407,12 +450,14 @@ int main(int argc, char **argv)
- 				(threshold_mb * _1MB >= _1GB);
- 
- 	ksft_set_plan(ARRAY_SIZE(test_cases) + (run_perf_tests ?
--		      ARRAY_SIZE(perf_test_cases) : 0));
-+		      ARRAY_SIZE(perf_test_cases) : 0) + num_expand_tests);
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
- 		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
- 				     pattern_seed);
- 
-+	mremap_expand_merge(page_size);
-+
- 	if (run_perf_tests) {
- 		ksft_print_msg("\n%s\n",
- 		 "mremap HAVE_MOVE_PMD/PUD optimization time comparison for 1GB region:");
--- 
-2.35.1
+will the truncated subject confuse the scripts that look for patches
+to backport to stable, ie. do we *really* have to rewrite history to
+fix this?
 
+BR,
+-R

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BF353CED5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163A553D07A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345205AbiFCRse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S1346772AbiFCSFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345186AbiFCRsH (ORCPT
+        with ESMTP id S1346589AbiFCRvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:48:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0069253B5F;
-        Fri,  3 Jun 2022 10:44:42 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B1A5713A;
+        Fri,  3 Jun 2022 10:48:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0951B82435;
-        Fri,  3 Jun 2022 17:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3B3C385A9;
-        Fri,  3 Jun 2022 17:44:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A90B960F4E;
+        Fri,  3 Jun 2022 17:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B257FC385A9;
+        Fri,  3 Jun 2022 17:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278280;
-        bh=eWjvNjzueHkRt9//1aAFhyP98DhCROAeyazCCvxs2UA=;
+        s=korg; t=1654278526;
+        bh=Lht8QSy6hA4TSjRiwmuGl45bCsuNlAPJMnkNYDOgl4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M3rAhdjlZib/uceFill+PWvjnm6oNqSCP5TA+JpkG0w9w8XhpcPo3THkp9SKjNECR
-         oTQEdGozk8TXENWDxGFQMh/sRjBN/zW84pwBhWM+nFZfe+bJg+mrm9+90/1vOFswI3
-         nVJv8Fr146U8jMBK52c6ClIngXR9lxaiiWEJk6wY=
+        b=SwYyg7s9S9Kfs5oLQvNc+RPngBKYkNXqdz4iOBRi51f5b/dV8rIsrXcM66j5Hlqk2
+         eGf5ZYBHXyDVhRmPvJLzXM5v7UTftVxZN4q2tz3fjxeJ1kHvJUUvyk35Y8wibw0Ilk
+         dbHKq1gxqDG+bZ/qpWNSyiKM3/G+oQ/66W0I6Dps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH 5.4 07/34] media: vim2m: Register video device after setting up internals
+        stable@vger.kernel.org, zlang@redhat.com,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH 5.10 18/53] xfs: fix the forward progress assertion in xfs_iwalk_run_callbacks
 Date:   Fri,  3 Jun 2022 19:43:03 +0200
-Message-Id: <20220603173816.210307047@linuxfoundation.org>
+Message-Id: <20220603173819.252657254@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-References: <20220603173815.990072516@linuxfoundation.org>
+In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
+References: <20220603173818.716010877@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,76 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: "Darrick J. Wong" <darrick.wong@oracle.com>
 
-commit cf7f34777a5b4100a3a44ff95f3d949c62892bdd upstream.
+commit a5336d6bb2d02d0e9d4d3c8be04b80b8b68d56c8 upstream.
 
-Prevent NULL (or close to NULL) pointer dereference in various places by
-registering the video device only when the V4L2 m2m framework has been set
-up.
+In commit 27c14b5daa82 we started tracking the last inode seen during an
+inode walk to avoid infinite loops if a corrupt inobt record happens to
+have a lower ir_startino than the record preceeding it.  Unfortunately,
+the assertion trips over the case where there are completely empty inobt
+records (which can happen quite easily on 64k page filesystems) because
+we advance the tracking cursor without actually putting the empty record
+into the processing buffer.  Fix the assert to allow for this case.
 
-Fixes: commit 96d8eab5d0a1 ("V4L/DVB: [v5,2/2] v4l: Add a mem-to-mem videobuf framework test device")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Reported-by: zlang@redhat.com
+Fixes: 27c14b5daa82 ("xfs: ensure inobt record walks always make forward progress")
+Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+Reviewed-by: Zorro Lang <zlang@redhat.com>
+Reviewed-by: Dave Chinner <dchinner@redhat.com>
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/vim2m.c |   20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+ fs/xfs/xfs_iwalk.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/media/platform/vim2m.c
-+++ b/drivers/media/platform/vim2m.c
-@@ -1333,12 +1333,6 @@ static int vim2m_probe(struct platform_d
- 	vfd->lock = &dev->dev_mutex;
- 	vfd->v4l2_dev = &dev->v4l2_dev;
+--- a/fs/xfs/xfs_iwalk.c
++++ b/fs/xfs/xfs_iwalk.c
+@@ -363,7 +363,7 @@ xfs_iwalk_run_callbacks(
+ 	/* Delete cursor but remember the last record we cached... */
+ 	xfs_iwalk_del_inobt(tp, curpp, agi_bpp, 0);
+ 	irec = &iwag->recs[iwag->nr_recs - 1];
+-	ASSERT(next_agino == irec->ir_startino + XFS_INODES_PER_CHUNK);
++	ASSERT(next_agino >= irec->ir_startino + XFS_INODES_PER_CHUNK);
  
--	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
--	if (ret) {
--		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
--		goto error_v4l2;
--	}
--
- 	video_set_drvdata(vfd, dev);
- 	v4l2_info(&dev->v4l2_dev,
- 		  "Device registered as /dev/video%d\n", vfd->num);
-@@ -1353,6 +1347,12 @@ static int vim2m_probe(struct platform_d
- 		goto error_dev;
- 	}
- 
-+	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
-+	if (ret) {
-+		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
-+		goto error_m2m;
-+	}
-+
- #ifdef CONFIG_MEDIA_CONTROLLER
- 	dev->mdev.dev = &pdev->dev;
- 	strscpy(dev->mdev.model, "vim2m", sizeof(dev->mdev.model));
-@@ -1366,7 +1366,7 @@ static int vim2m_probe(struct platform_d
- 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
- 	if (ret) {
- 		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem media controller\n");
--		goto error_dev;
-+		goto error_v4l2;
- 	}
- 
- 	ret = media_device_register(&dev->mdev);
-@@ -1381,11 +1381,13 @@ static int vim2m_probe(struct platform_d
- error_m2m_mc:
- 	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
- #endif
--error_dev:
-+error_v4l2:
- 	video_unregister_device(&dev->vfd);
- 	/* vim2m_device_release called by video_unregister_device to release various objects */
- 	return ret;
--error_v4l2:
-+error_m2m:
-+	v4l2_m2m_release(dev->m2m_dev);
-+error_dev:
- 	v4l2_device_unregister(&dev->v4l2_dev);
- error_free:
- 	kfree(dev);
+ 	error = xfs_iwalk_ag_recs(iwag);
+ 	if (error)
 
 

@@ -2,99 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AD153CB61
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB6853CB63
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 16:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244910AbiFCOMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 10:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S245064AbiFCONG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 10:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237239AbiFCOMl (ORCPT
+        with ESMTP id S237239AbiFCOND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 10:12:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FEB12754;
-        Fri,  3 Jun 2022 07:12:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso12151922pjl.3;
-        Fri, 03 Jun 2022 07:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AQ10zYcRBw5WaFdheuLXgUA9xdtkMVpnXoJErK9bTIg=;
-        b=UMVzcVtb+3Z2wU0z6hHwpYX7UN2nVww6/sPmspOqL46hQ4vBX8lmCa1JcaFLdaZGIg
-         CVAT+G22yBUe5HYrYZMCVTiMxnT1zBscvh7n8+IPenj3FjFhe6W+w9AdACJB21ufgge+
-         K0cUW4vlQTYjRsG1RVoFzIn/VfhUZybGCxhvQQMD3NP3NZVkkZXh4IMzZy4NH9V4Q3DC
-         BSfrKdbfkinvzbhA6n/0jqc7DlKf+WNhse7Sml80d+iQRQ1euHkM/l214UHW5HeFTrmB
-         jPeX4O5ZBWs815r1875FgnbuoPYwLaSDWwqB1unFJwAHITiWYclc8bOKZv01juPxPWM9
-         V5Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AQ10zYcRBw5WaFdheuLXgUA9xdtkMVpnXoJErK9bTIg=;
-        b=V7OmXEzAHA928+twBQDqCfuvx6zO8juOOcFVZxOAUzg7Ubgg19YZeb+qdfbnFhl6UF
-         tSDOLzMiwPGNB8ncw9NRxFPF2cTep69acGchb3taOTSbg2AaFNHCcniwDzsZReySBAsJ
-         g5sAGTImQHL5CwoZek0UZo44Vn8J4MvDnHAt57gre555oqF+BYXHOePUrRqE22+Mcz54
-         VkKDlEK3JrjER790RRjlRodLUATOwkPseTCzbAePNPShJBUyrV7oQTFcCca0jQbaLr5H
-         KFK6iqzOZfFjMR0Gd/gZrJ29yh3sFlhQp0+4dIl43rkjdUJg3WftvusSmT9soUI9wtNC
-         0wjA==
-X-Gm-Message-State: AOAM532wMauOli9eladTxAuQCqka6amEMnys3BnN1QDMWFlTKamyK1Ob
-        eQRkQ6pXF2HR+RH59qvpJKU=
-X-Google-Smtp-Source: ABdhPJywRw39nosBa2BdbHpD4jnRfnjqPoofU9FiYlyhxmebM9me3u2Bd0XzV0wheQS1+ffp9LkGMw==
-X-Received: by 2002:a17:90b:314a:b0:1e6:826e:73b2 with SMTP id ip10-20020a17090b314a00b001e6826e73b2mr10318647pjb.239.1654265560240;
-        Fri, 03 Jun 2022 07:12:40 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id 13-20020a170902c20d00b0015e8d4eb2adsm5403360pll.247.2022.06.03.07.12.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 07:12:39 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Vladimir Zapolskiy <vz@mleia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roland Stigge <stigge@antcom.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] usb: ohci-nxp: Fix refcount leak in ohci_hcd_nxp_probe
-Date:   Fri,  3 Jun 2022 18:12:30 +0400
-Message-Id: <20220603141231.979-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 3 Jun 2022 10:13:03 -0400
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3233B280;
+        Fri,  3 Jun 2022 07:12:46 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 128D4B0F;
+        Fri,  3 Jun 2022 16:12:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1654265564;
+        bh=ZpW3H/xbyfM4w1mopp7lcoc+iJJUqmE9TJDSlh7rVIQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=md+BKngkvMLwdcwW4W+gUTaEWzVlsJ3RjiNBcPO/OwIGgeHrc5QPlVuIOKmtT9BgY
+         vHuqoZ3z2aMSteMa5w7UIh9/bcuYnncFADhio5OXQrG5RymnYLgPZl7j0YHeH2/Cjv
+         3ZovTzodgXgqnI/hovwo2Mv+V1hicaWcWF6k9eqvEeJSnPdbZHvNJ6RpiSNuPYa/fP
+         hJa7AahwxMCwhDKjHpkgwY99Fjxg4z/QyDxI9i1pEBAobz9BmCpH07g9VpqkkAIKAj
+         W8APNA2FHkaYqUup/duGvRmTUy4jHFbtKLTDABByTK5i2MzuxvgUr1KBfmhhiwIZp0
+         xH/VUPGzU0y8A==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 0CC1928B; Fri,  3 Jun 2022 16:12:44 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id DFA9728A;
+        Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id DC79A286;
+        Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id D54884A02E6; Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 826104A02B0;
+        Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+        (Extended-Queue-bit xtech_fq@fff.in.tum.de)
+Date:   Fri, 3 Jun 2022 16:12:37 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Marco Elver <elver@google.com>
+Subject: (Non-) Ctrl Dependency in litmus-tests.txt?
+Message-ID: <YpoW1deb/QeeszO1@ethstick13.dse.in.tum.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hi all,
 
-Fixes: 73108aa90cbf ("USB: ohci-nxp: Use isp1301 driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/usb/host/ohci-nxp.c | 1 +
- 1 file changed, 1 insertion(+)
+I was going through litmus-tests.txt and came across the following:
 
-diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-index 85878e8ad331..106a6bcefb08 100644
---- a/drivers/usb/host/ohci-nxp.c
-+++ b/drivers/usb/host/ohci-nxp.c
-@@ -164,6 +164,7 @@ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
- 	}
- 
- 	isp1301_i2c_client = isp1301_get_client(isp1301_node);
-+	of_node_put(isp1301_node);
- 	if (!isp1301_i2c_client)
- 		return -EPROBE_DEFER;
- 
--- 
-2.25.1
+> LIMITATIONS
+> ===========
+> 
+> Limitations of the Linux-kernel memory model (LKMM) include:
+> 
+> 1.Compiler optimizations are not accurately modeled.  Of course,
+> 	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
+> 	ability to optimize, but under some circumstances it is possible
+> 	for the compiler to undermine the memory model.  For more
+> 	information, see Documentation/explanation.txt (in particular,
+> 	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
+> 	sections).
+> 
+> 	Note that this limitation in turn limits LKMM's ability to
+> 	accurately model address, control, and data dependencies.
+> 	For example, if the compiler can deduce the value of some variable
+> 	carrying a dependency, then the compiler can break that dependency
+> 	by substituting a constant of that value.
+> 
+> 	Conversely, LKMM sometimes doesn't recognize that a particular
+> 	optimization is not allowed, and as a result, thinks that a
+> 	dependency is not present (because the optimization would break it).
+> 	The memory model misses some pretty obvious control dependencies
+> 	because of this limitation.  A simple example is:
+> 
+> 		r1 = READ_ONCE(x);
+> 		if (r1 == 0)
+> 			smp_mb();
+> 		WRITE_ONCE(y, 1);
+> 
+> 	There is a control dependency from the READ_ONCE to the WRITE_ONCE,
+> 	even when r1 is nonzero, but LKMM doesn't realize this and thinks
+> 	that the write may execute before the read if r1 != 0.  (Yes, that
+> 	doesn't make sense if you think about it, but the memory model's
+> 	intelligence is limited.)
 
+I'm unclear as to why the documentation sees a control dependency from
+the READ_ONCE() to the WRITE_ONCE() here.
+
+Quoting from explanation.txt:
+> Finally, a read event and another memory access event are linked by a
+> control dependency if the value obtained by the read affects whether
+> the second event is executed at all.
+
+Architectures might consider this control-dependent, yes, but since the
+value of the if condition does not affect whether the WRITE_ONCE() is
+executed at all, I'm not sure why this should be considered
+control-dependent in LKMM? 
+
+I might have another question about explanation.txt's definition of
+control dependencies as per above, but will address it more thoroughly
+in another email :-)
+
+Many thanks,
+Paul 

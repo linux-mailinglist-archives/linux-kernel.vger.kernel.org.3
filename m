@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23E053CF8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB0653D079
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345692AbiFCRyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S1346699AbiFCSFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345936AbiFCRue (ORCPT
+        with ESMTP id S1346609AbiFCRvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:50:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2B95643D;
-        Fri,  3 Jun 2022 10:46:42 -0700 (PDT)
+        Fri, 3 Jun 2022 13:51:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C765A53E07;
+        Fri,  3 Jun 2022 10:48:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84EF960C3D;
-        Fri,  3 Jun 2022 17:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A3FC385B8;
-        Fri,  3 Jun 2022 17:46:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AF9BB82433;
+        Fri,  3 Jun 2022 17:48:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5E4C385A9;
+        Fri,  3 Jun 2022 17:48:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278401;
-        bh=zzK0D5fYTBTycaZxn6iEpDan7mnQBFt5zYd/KNuOLdE=;
+        s=korg; t=1654278532;
+        bh=HIPwxM3SG7OAggDsq+SZEhp1UA+7mDVc78vPygtLu9M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yXRH6WWzonvqhOthkE8lpFbHEJ0Im6NEbZZnz8mNoIUDrdzunNxDkSaShC0Bp62zs
-         cmull4fF3UsTPO6CvvbU3CeG9I5g4XWVPDpJvN2Hcrw7fWgnEO3dJklRJnonfhLhQC
-         byO6r5zT9Vz5Ny4DjF8sx0MGVavpT7N7Ntj9PJfs=
+        b=EMo1ffA+T/LDLtx34sNZxXjtLc5oQ8nOyPVYVxqYmQd9rtT1NQwG7HwEMPwxqempa
+         nf3Tn0R8pt+vjeCjPBYpDByd0Y513RFYpUM8Ln6Bth+4TBf2hCPKI03pRZsRKoCMR5
+         93GK86NvT6WPJumv3Mq1ZVqxos51gZ+NHQTlG3/E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Wilder <wilder@us.ibm.com>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 05/53] net: ftgmac100: Disable hardware checksum on AST2600
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Aaron Adams <edg-e@nccgroup.com>
+Subject: [PATCH 5.15 10/66] netfilter: nf_tables: disallow non-stateful expression in sets earlier
 Date:   Fri,  3 Jun 2022 19:42:50 +0200
-Message-Id: <20220603173818.875263971@linuxfoundation.org>
+Message-Id: <20220603173820.961939465@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-References: <20220603173818.716010877@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+References: <20220603173820.663747061@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,92 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Stanley <joel@jms.id.au>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 6fd45e79e8b93b8d22fb8fe22c32fbad7e9190bd ]
+commit 520778042ccca019f3ffa136dd0ca565c486cedd upstream.
 
-The AST2600 when using the i210 NIC over NC-SI has been observed to
-produce incorrect checksum results with specific MTU values. This was
-first observed when sending data across a long distance set of networks.
+Since 3e135cd499bf ("netfilter: nft_dynset: dynamic stateful expression
+instantiation"), it is possible to attach stateful expressions to set
+elements.
 
-On a local network, the following test was performed using a 1MB file of
-random data.
+cd5125d8f518 ("netfilter: nf_tables: split set destruction in deactivate
+and destroy phase") introduces conditional destruction on the object to
+accomodate transaction semantics.
 
-On the receiver run this script:
+nft_expr_init() calls expr->ops->init() first, then check for
+NFT_STATEFUL_EXPR, this stills allows to initialize a non-stateful
+lookup expressions which points to a set, which might lead to UAF since
+the set is not properly detached from the set->binding for this case.
+Anyway, this combination is non-sense from nf_tables perspective.
 
- #!/bin/bash
- while [ 1 ]; do
-        # Zero the stats
-        nstat -r  > /dev/null
-        nc -l 9899 > test-file
-        # Check for checksum errors
-        TcpInCsumErrors=$(nstat | grep TcpInCsumErrors)
-        if [ -z "$TcpInCsumErrors" ]; then
-                echo No TcpInCsumErrors
-        else
-                echo TcpInCsumErrors = $TcpInCsumErrors
-        fi
- done
+This patch fixes this problem by checking for NFT_STATEFUL_EXPR before
+expr->ops->init() is called.
 
-On an AST2600 system:
+The reporter provides a KASAN splat and a poc reproducer (similar to
+those autogenerated by syzbot to report use-after-free errors). It is
+unknown to me if they are using syzbot or if they use similar automated
+tool to locate the bug that they are reporting.
 
- # nc <IP of  receiver host> 9899 < test-file
+For the record, this is the KASAN splat.
 
-The test was repeated with various MTU values:
+[   85.431824] ==================================================================
+[   85.432901] BUG: KASAN: use-after-free in nf_tables_bind_set+0x81b/0xa20
+[   85.433825] Write of size 8 at addr ffff8880286f0e98 by task poc/776
+[   85.434756]
+[   85.434999] CPU: 1 PID: 776 Comm: poc Tainted: G        W         5.18.0+ #2
+[   85.436023] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
 
- # ip link set mtu 1410 dev eth0
-
-The observed results:
-
- 1500 - good
- 1434 - bad
- 1400 - good
- 1410 - bad
- 1420 - good
-
-The test was repeated after disabling tx checksumming:
-
- # ethtool -K eth0 tx-checksumming off
-
-And all MTU values tested resulted in transfers without error.
-
-An issue with the driver cannot be ruled out, however there has been no
-bug discovered so far.
-
-David has done the work to take the original bug report of slow data
-transfer between long distance connections and triaged it down to this
-test case.
-
-The vendor suspects this this is a hardware issue when using NC-SI. The
-fixes line refers to the patch that introduced AST2600 support.
-
-Reported-by: David Wilder <wilder@us.ibm.com>
-Reviewed-by: Dylan Hung <dylan_hung@aspeedtech.com>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 0b2d8a7b638b ("netfilter: nf_tables: add helper functions for expression handling")
+Reported-and-tested-by: Aaron Adams <edg-e@nccgroup.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/faraday/ftgmac100.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/netfilter/nf_tables_api.c |   19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
-index 5bc11d1bb9df..eea4bd3116e8 100644
---- a/drivers/net/ethernet/faraday/ftgmac100.c
-+++ b/drivers/net/ethernet/faraday/ftgmac100.c
-@@ -1893,6 +1893,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
- 	/* AST2400  doesn't have working HW checksum generation */
- 	if (np && (of_device_is_compatible(np, "aspeed,ast2400-mac")))
- 		netdev->hw_features &= ~NETIF_F_HW_CSUM;
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -2778,27 +2778,31 @@ static struct nft_expr *nft_expr_init(co
+ 
+ 	err = nf_tables_expr_parse(ctx, nla, &expr_info);
+ 	if (err < 0)
+-		goto err1;
++		goto err_expr_parse;
 +
-+	/* AST2600 tx checksum with NCSI is broken */
-+	if (priv->use_ncsi && of_device_is_compatible(np, "aspeed,ast2600-mac"))
-+		netdev->hw_features &= ~NETIF_F_HW_CSUM;
-+
- 	if (np && of_get_property(np, "no-hw-checksum", NULL))
- 		netdev->hw_features &= ~(NETIF_F_HW_CSUM | NETIF_F_RXCSUM);
- 	netdev->features |= netdev->hw_features;
--- 
-2.35.1
-
++	err = -EOPNOTSUPP;
++	if (!(expr_info.ops->type->flags & NFT_EXPR_STATEFUL))
++		goto err_expr_stateful;
+ 
+ 	err = -ENOMEM;
+ 	expr = kzalloc(expr_info.ops->size, GFP_KERNEL);
+ 	if (expr == NULL)
+-		goto err2;
++		goto err_expr_stateful;
+ 
+ 	err = nf_tables_newexpr(ctx, &expr_info, expr);
+ 	if (err < 0)
+-		goto err3;
++		goto err_expr_new;
+ 
+ 	return expr;
+-err3:
++err_expr_new:
+ 	kfree(expr);
+-err2:
++err_expr_stateful:
+ 	owner = expr_info.ops->type->owner;
+ 	if (expr_info.ops->type->release_ops)
+ 		expr_info.ops->type->release_ops(expr_info.ops);
+ 
+ 	module_put(owner);
+-err1:
++err_expr_parse:
+ 	return ERR_PTR(err);
+ }
+ 
+@@ -5318,9 +5322,6 @@ struct nft_expr *nft_set_elem_expr_alloc
+ 		return expr;
+ 
+ 	err = -EOPNOTSUPP;
+-	if (!(expr->ops->type->flags & NFT_EXPR_STATEFUL))
+-		goto err_set_elem_expr;
+-
+ 	if (expr->ops->type->flags & NFT_EXPR_GC) {
+ 		if (set->flags & NFT_SET_TIMEOUT)
+ 			goto err_set_elem_expr;
 
 

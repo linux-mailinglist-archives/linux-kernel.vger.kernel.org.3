@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9C553CFE7
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1E253CED9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345950AbiFCR6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S1345196AbiFCRsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346751AbiFCRv3 (ORCPT
+        with ESMTP id S1345251AbiFCRsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:51:29 -0400
+        Fri, 3 Jun 2022 13:48:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A635715E;
-        Fri,  3 Jun 2022 10:49:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A701357179;
+        Fri,  3 Jun 2022 10:44:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDE78B8241D;
-        Fri,  3 Jun 2022 17:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319C1C385A9;
-        Fri,  3 Jun 2022 17:49:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54F2FB82436;
+        Fri,  3 Jun 2022 17:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5D4C385A9;
+        Fri,  3 Jun 2022 17:44:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278559;
-        bh=ygwq7yfFRXP9bKkF4D16aTkBxZUxyK/GL3hNi2M+PPk=;
+        s=korg; t=1654278268;
+        bh=JwRn3piZByy6d3OEljMZ0zRxdm1NyDdxdF436yhUpcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VmxlhS1U+0k0mMK0G9bMr8K4jxCwBUpokRALtNDv+6jmJrU0OTZSfPR4Cjl4Q2oai
-         6JVcqbpQk2nxSSmH5gH3WSGdlZKrFih5IQdJQxcgugDxcJAfUZ+d4tyK9wnUn8DLCe
-         gfY8WoUb77yLbxUptG07y5k0qbGZlgFwnFPNEMFk=
+        b=j78zxaWy9mhr8NO8wkaIcl2FwAK1qpJVde/w7ZPgbgLYxHQxnxdUdGkl9wn8/KPtf
+         iGnIHixFVYpDVfCk6KEPZWo0QpuOIZGW8rAtkCgCqAkVXiZVOW7NM8qOoJlJveU37t
+         FB24kf3tWaB/BoRAhvOGpQGww1PRKVc6wjVOp/E8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org,
-        "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 19/66] lib/crypto: add prompts back to crypto libraries
+        stable@vger.kernel.org,
+        "Denis Efremov (Oracle)" <efremov@linux.com>
+Subject: [PATCH 5.4 03/34] staging: rtl8723bs: prevent ->Ssid overflow in rtw_wx_set_scan()
 Date:   Fri,  3 Jun 2022 19:42:59 +0200
-Message-Id: <20220603173821.218500114@linuxfoundation.org>
+Message-Id: <20220603173816.091930554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
+References: <20220603173815.990072516@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,115 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Justin M. Forbes" <jforbes@fedoraproject.org>
+From: "Denis Efremov (Oracle)" <efremov@linux.com>
 
-commit e56e18985596617ae426ed5997fb2e737cffb58b upstream.
+This code has a check to prevent read overflow but it needs another
+check to prevent writing beyond the end of the ->Ssid[] array.
 
-Commit 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in") took
-away a number of prompt texts from other crypto libraries. This makes
-values flip from built-in to module when oldconfig runs, and causes
-problems when these crypto libs need to be built in for thingslike
-BIG_KEYS.
-
-Fixes: 6048fdcc5f269 ("lib/crypto: blake2s: include as built-in")
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org
-Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
-[Jason: - moved menu into submenu of lib/ instead of root menu
-        - fixed chacha sub-dependencies for CONFIG_CRYPTO]
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: 554c0a3abf21 ("staging: Add rtl8723bs sdio wifi driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Denis Efremov (Oracle) <efremov@linux.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- crypto/Kconfig     |    2 --
- lib/Kconfig        |    2 ++
- lib/crypto/Kconfig |   17 ++++++++++++-----
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ drivers/staging/rtl8723bs/os_dep/ioctl_linux.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1924,5 +1924,3 @@ source "crypto/asymmetric_keys/Kconfig"
- source "certs/Kconfig"
+--- a/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
++++ b/drivers/staging/rtl8723bs/os_dep/ioctl_linux.c
+@@ -1351,9 +1351,11 @@ static int rtw_wx_set_scan(struct net_de
  
- endif	# if CRYPTO
--
--source "lib/crypto/Kconfig"
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -121,6 +121,8 @@ config INDIRECT_IOMEM_FALLBACK
- 	  mmio accesses when the IO memory address is not a registered
- 	  emulated region.
+ 					sec_len = *(pos++); len-= 1;
  
-+source "lib/crypto/Kconfig"
-+
- config CRC_CCITT
- 	tristate "CRC-CCITT functions"
- 	help
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+menu "Crypto library routines"
-+
- config CRYPTO_LIB_AES
- 	tristate
- 
-@@ -31,7 +33,7 @@ config CRYPTO_ARCH_HAVE_LIB_CHACHA
- 
- config CRYPTO_LIB_CHACHA_GENERIC
- 	tristate
--	select CRYPTO_ALGAPI
-+	select XOR_BLOCKS
- 	help
- 	  This symbol can be depended upon by arch implementations of the
- 	  ChaCha library interface that require the generic code as a
-@@ -40,7 +42,8 @@ config CRYPTO_LIB_CHACHA_GENERIC
- 	  of CRYPTO_LIB_CHACHA.
- 
- config CRYPTO_LIB_CHACHA
--	tristate
-+	tristate "ChaCha library interface"
-+	depends on CRYPTO
- 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	select CRYPTO_LIB_CHACHA_GENERIC if CRYPTO_ARCH_HAVE_LIB_CHACHA=n
- 	help
-@@ -65,7 +68,7 @@ config CRYPTO_LIB_CURVE25519_GENERIC
- 	  of CRYPTO_LIB_CURVE25519.
- 
- config CRYPTO_LIB_CURVE25519
--	tristate
-+	tristate "Curve25519 scalar multiplication library"
- 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
- 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
- 	help
-@@ -100,7 +103,7 @@ config CRYPTO_LIB_POLY1305_GENERIC
- 	  of CRYPTO_LIB_POLY1305.
- 
- config CRYPTO_LIB_POLY1305
--	tristate
-+	tristate "Poly1305 library interface"
- 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
- 	help
-@@ -109,14 +112,18 @@ config CRYPTO_LIB_POLY1305
- 	  is available and enabled.
- 
- config CRYPTO_LIB_CHACHA20POLY1305
--	tristate
-+	tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)"
- 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
-+	depends on CRYPTO
- 	select CRYPTO_LIB_CHACHA
- 	select CRYPTO_LIB_POLY1305
-+	select CRYPTO_ALGAPI
- 
- config CRYPTO_LIB_SHA256
- 	tristate
- 
- config CRYPTO_LIB_SM4
- 	tristate
-+
-+endmenu
+-					if (sec_len>0 && sec_len<=len) {
++					if (sec_len > 0 &&
++					    sec_len <= len &&
++					    sec_len <= 32) {
+ 						ssid[ssid_index].SsidLength = sec_len;
+-						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
++						memcpy(ssid[ssid_index].Ssid, pos, sec_len);
+ 						/* DBG_871X("%s COMBO_SCAN with specific ssid:%s, %d\n", __func__ */
+ 						/* 	, ssid[ssid_index].Ssid, ssid[ssid_index].SsidLength); */
+ 						ssid_index++;
 
 

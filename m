@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A757F53D255
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0439653D256
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 21:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349181AbiFCTXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 15:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S1349203AbiFCTYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 15:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbiFCTXN (ORCPT
+        with ESMTP id S1344263AbiFCTYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:23:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35391BC9E
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 12:23:12 -0700 (PDT)
+        Fri, 3 Jun 2022 15:24:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92D7BE22;
+        Fri,  3 Jun 2022 12:24:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4FF061A41
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 19:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7412FC385A9;
-        Fri,  3 Jun 2022 19:23:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 568EC61A40;
+        Fri,  3 Jun 2022 19:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FF6C385B8;
+        Fri,  3 Jun 2022 19:24:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654284191;
-        bh=r3tew3GTl/lQ9L5T8wfQzn0KZpDqmzXFfoPYfH2kGxg=;
+        s=k20201202; t=1654284243;
+        bh=yt+bB3Q+W8oVkpzAEgMcRoEXyzhk3C1iaR9Ljh12V+0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHsXI7s781eox2M+352pAf+14G2qTBSWAu9cp0UyLoHHhwlkTx5krjgwnyYp+NNfU
-         0T9hrmg5fjBcjqF2+HWBGBrBdwwT1JzxvMVrOYD0NyrLPbYS5xK4xUmKRQ043jeGo/
-         /GlNVFyLUz0xTdWqWEqXSyCy4PDKg7aNmrUI3gKHU9L+KiEpaP6Pirtl9zWNMrm6Mj
-         5s/g2IwwFvZThw09RgQw6k3Q0jmmM/JsAs0PWT3R/OF+DUzDcvkeAd2hghnxtdPhLC
-         NfvvkaPj8jOp0yh7YAM42mQNjPxGtlLrEsDthPrjYoeujBjbPqtensQsk+kbKp2Lku
-         CNVrPL4KAZJUw==
-Date:   Fri, 3 Jun 2022 13:23:07 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     axboe@fb.com, hch@lst.de, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        caroline.subramoney@microsoft.com, riwurd@microsoft.com,
-        nathan.obr@microsoft.com
-Subject: Re: [PATCH v2 2/2] nvme: handle persistent internal error AER from
- NVMe controller
-Message-ID: <Yppfm5n41NEcrRlU@kbusch-mbp.dhcp.thefacebook.com>
-References: <1654278961-81423-1-git-send-email-mikelley@microsoft.com>
- <1654278961-81423-2-git-send-email-mikelley@microsoft.com>
+        b=O9MHOZXYaNO1a0uNf4TGQcDx2TvE/MXiR8+rLcoxIoSZe/ykSV82GLX9qufcBKcK3
+         XeYlZBUGLdwXWglLZo/ct9mgVN+bWTjnCFPWMzLw5l51uvjZ8uHO1KmSwyF4dxJNT1
+         U6Z31jCH/wDI75npKvF3m7dYGx6WgLubziWrnzu/JesQV58NM8lHiDAI3AuqLbN481
+         THO0RULtZ0jyhxUixw270coBskVc/QYq0Pk7EsHUUBWw7i7HsgrlMxy1bMfc72wSqu
+         OITLuH13u+7gnw4BIUekewYEuBoZ/NglJy2mU6a7oosx+LZWupfU8oG7GAHjfzKGLX
+         trNk6TfYBiqhg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AB1C14096F; Fri,  3 Jun 2022 21:24:01 +0200 (CEST)
+Date:   Fri, 3 Jun 2022 21:24:01 +0200
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Fangrui Song <maskray@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Sebastian Ullrich <sebasti@nullri.ch>
+Subject: Re: [PATCH v2] perf: Fix segbase for ld.lld linked objects
+Message-ID: <Yppf0ZOhRWZunQDx@kernel.org>
+References: <20220527182039.673248-1-maskray@google.com>
+ <CAP-5=fWXm-G8M_MTBjj2h_JkHgj6WU27GDqJ0hcRthtYG-m4AQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1654278961-81423-2-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <CAP-5=fWXm-G8M_MTBjj2h_JkHgj6WU27GDqJ0hcRthtYG-m4AQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,36 +61,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 10:56:01AM -0700, Michael Kelley wrote:
+Em Fri, May 27, 2022 at 11:51:54AM -0700, Ian Rogers escreveu:
+> On Fri, May 27, 2022 at 11:20 AM Fangrui Song <maskray@google.com> wrote:
+> >
+> > segbase is the address of .eh_frame_hdr and table_data is segbase plus
+> > the header size. find_proc_info computes segbase as `map->start +
+> > segbase - map->pgoff` which is wrong when
+> >
+> > * .eh_frame_hdr and .text are in different PT_LOAD program headers
+> > * and their p_vaddr difference does not equal their p_offset difference
+> >
+> > Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
+> > such R and RX PT_LOAD program headers.
+> >
+> >     ld.lld (default) => perf report fails to unwind `perf record
+> >     --call-graph dwarf` recorded data
+> >     ld.lld --no-rosegment => ok (trivial, no R PT_LOAD)
+> >     ld.lld -z separate-code => ok but by luck: there are two PT_LOAD but
+> >     their p_vaddr difference equals p_offset difference
+> >
+> >     ld.bfd -z noseparate-code => ok (trivial, no R PT_LOAD)
+> >     ld.bfd -z separate-code (default for Linux/x86) => ok but by luck:
+> >     there are two PT_LOAD but their p_vaddr difference equals p_offset
+> >     difference
+> >
+> > To fix the issue, compute segbase as dso's base address plus
+> > PT_GNU_EH_FRAME's p_vaddr. The base address is computed by iterating
+> > over all dso-associated maps and then subtract the first PT_LOAD p_vaddr
+> > (the minimum guaranteed by generic ABI) from the minimum address.
+> >
+> > In libunwind, find_proc_info transitively called by unw_step is cached,
+> > so the iteration overhead is acceptable.
+> >
+> > Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1646
+> > Signed-off-by: Fangrui Song <maskray@google.com>
+> > Cc: Ian Rogers <irogers@google.com>
+> 
+> Reviewed-by: Ian Rogers <irogers@google.com>
 
-This series looks good to me. Just one concern below that may amount to
-nothing.
+Thanks, applied.
 
-> +static void nvme_handle_aer_persistent_error(struct nvme_ctrl *ctrl)
-> +{
-> +	u32 csts;
-> +
-> +	trace_nvme_async_event(ctrl, NVME_AER_ERROR);
-> +
-> +	if (ctrl->ops->reg_read32(ctrl, NVME_REG_CSTS, &csts) != 0 ||
+- Arnaldo
 
-The reg_read32() is non-blocking for pcie, so this is safe to call from that
-driver's irq handler. The other transports block on register reads, though, so
-they can't call this from an atomic context. The TCP context looks safe, but
-I'm not sure about RDMA or FC.
-
-> +	    nvme_should_reset(ctrl, csts)) {
-> +		dev_warn(ctrl->device, "resetting controller due to AER\n");
-> +		nvme_reset_ctrl(ctrl);
-> +	}
-> +}
-> +
->  void nvme_complete_async_event(struct nvme_ctrl *ctrl, __le16 status,
->  		volatile union nvme_result *res)
->  {
->  	u32 result = le32_to_cpu(res->u32);
->  	u32 aer_type = result & 0x07;
-> +	u32 aer_subtype = (result & 0xff00) >> 8;
-
-Since the above mask + shift is duplicated with nvme_handle_aen_notice(), an
-inline helper function seems reasonable.

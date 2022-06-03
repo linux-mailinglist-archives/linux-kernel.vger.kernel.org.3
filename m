@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827B653C23D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E4C53C296
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240896AbiFCBeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S240907AbiFCBew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiFCBem (ORCPT
+        with ESMTP id S238982AbiFCBeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:34:42 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B403336D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:34:41 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id x12so6115416pgj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 18:34:41 -0700 (PDT)
+        Thu, 2 Jun 2022 21:34:44 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26E233376
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:34:42 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id i185so6133478pge.4
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 18:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=Gm53BT7MDI0h04lUx/Z9qg/q0JdibF254ksd3FSQzS0=;
-        b=RihMf5zvQKoxS3UikQN41JNEW5ejVZG1gzhMmEhfJ99jOAB1zQeWutzq5DZRWl/S5c
-         Y98wCrxW2sf/LSckrraDaWgERlqSJ+HGWDLjrOP0iPb9cM3Mw3yjUS0U4BmRUEaL1KCz
-         6yBPZxxjJQ26aCqySHaPGfyMHPsk1+Hm99Nn/iJa2tRVDtozwH9Jg4pNs5p3cczNKzPP
-         xeopEMW6ozdmHNexHZyG9nA28ov7suqGNcC7cBeb+9L3so48G4J20Qq+MsZG+6gRNb2S
-         VC0Sd94otPff43edaASoc86nDVQTcFjPLmCn816CQQ4VNY4zBvtCqFxmhFXf3TGy9TE1
-         RTiA==
+        bh=WmOqgdw/lnzn8y98yzEspXlCbFr81s8ZPh+l/fuZnvU=;
+        b=xeAlMB6iggUl/Q8oT9BpeIQvESRsiCcKlbCJYKeCd+AcQwHrX+ICmf4uTA0ijqOnhb
+         hxEH8wEdkCxiO39rdJvSTuiSk+QmJah1jdSSFKYR16Vch89RSDb+rLFKgvEqB6nzM7C/
+         x4GILcrRidctOmr4tvRVPSzso60xvcL3oT7C4uJfyvIcemKJ6ei+Ip1bkliuZ3M4nug4
+         dLqxlSUe7qMZIQlVWMIx2+W6w0hvM/XeGRINsuZ7tlNzTFbUXJ3f2kA0S6pxoSkhCPaH
+         rF4/o2im3XsBaehO8nwSNKjSVo5nSQNm5L5QqiUfKUZEs5D8sga4hDWdZOW1h9YwCAjo
+         brwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=Gm53BT7MDI0h04lUx/Z9qg/q0JdibF254ksd3FSQzS0=;
-        b=1pxkzQiB3KUlO6k0TIn17WBWEFvJKPLpORsUw8lzu6ZguxkF1MlOJ99wXDVsimKa/1
-         wjixls8flEjajp51Ko0SyChq+tcenCGVD0w52YysQAtnx0K+v6EOvrgBoFXCRpw/Yg/W
-         8qQ5GIYslK5xD5o24Ifgmwull4FOXdfNTgBGCn1zx8Zfm2pOaGmwbdTiLBP7rcbGhy0G
-         5NBtxhH3jy2Tu7LqCp0hOI2fHkL/ND6H9vh0JQHbiMshAG4Avlp9Cu1yu3De3QI5IOJt
-         irZNI8FW1SNr6pcoMoVTYs2a0CXmCRss6j9qJztBA2P9QTmfyQL08vmYQlweQ/XtGqe7
-         fp3Q==
-X-Gm-Message-State: AOAM533iKxHf6H/x9CrzGsisQY5dzCNcFPaBXnb/9uNXLzEBNoM7a9xb
-        VypPTh8ffGVbElXkUZSSP+QAEQ==
-X-Google-Smtp-Source: ABdhPJz0q60A75VG204nrUdMksgumztgNgvXrccsvB2/VYrODvIYn1XTipjVkGeblMZiDbgoYbphvQ==
-X-Received: by 2002:a63:84c3:0:b0:3fc:8c46:2447 with SMTP id k186-20020a6384c3000000b003fc8c462447mr6554374pgd.285.1654220080533;
-        Thu, 02 Jun 2022 18:34:40 -0700 (PDT)
+        bh=WmOqgdw/lnzn8y98yzEspXlCbFr81s8ZPh+l/fuZnvU=;
+        b=uSC57xdVN0YNYtR2z17tsA9wzHqgK/vfbQhR9fYNpDhYc63aGcyOE1YSN/mLPyOu/A
+         jdxAg0u26FpCM+EuX51NXeILhrXI+JeIEgtGFHgEqOXUkcLJmhWOR0XUC87e9HVCfi/z
+         GiS6F1XOR9CcgXb83EfAVm1oJ2td7koGDqxFPaIh+HQdyecLsBqbQTVYY+D+x5dx+M7f
+         J7WpEESuIUw5848NWa/XkDOf1JxdS2c0ImmbxFpf55euAsHhNWj+P3BnoB6jwB7XhI09
+         Lm5EqoJrAH3UuMFjZ1bKi5Zq81mLLaTQa2kqjbleToQH7UYN/b8UZJxBjI+AxCeoLPh/
+         Y18w==
+X-Gm-Message-State: AOAM531dHEglYHH5j9P2gQMDDbrsSMr2mKP1GQk+XPKTcSQ5dkxnIvZk
+        PnToEC5ZQpYFSzEVEZSjMQsHZQ==
+X-Google-Smtp-Source: ABdhPJxwYUZESxzEAwVBw31/r+YLXs53IRagWzDsSQ7NAeM1zO5QT7RF2ZuUyKJXdRv88efZm8Br8Q==
+X-Received: by 2002:a05:6a00:2353:b0:518:96b7:ceb8 with SMTP id j19-20020a056a00235300b0051896b7ceb8mr8062973pfj.5.1654220082298;
+        Thu, 02 Jun 2022 18:34:42 -0700 (PDT)
 Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id k1-20020a17090a590100b001e33e264fd6sm3892645pji.40.2022.06.02.18.34.39
+        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b0016232dbd01fsm4082360plg.292.2022.06.02.18.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 18:34:39 -0700 (PDT)
-Date:   Thu, 02 Jun 2022 18:34:39 -0700 (PDT)
-X-Google-Original-Date: Thu, 02 Jun 2022 15:54:05 PDT (-0700)
-Subject:     Re: [PATCH v2] riscv: mm: init: make pt_ops_set_[early|late|fixmap] static
-In-Reply-To: <20220516143204.2603-1-jszhang@kernel.org>
+        Thu, 02 Jun 2022 18:34:41 -0700 (PDT)
+Date:   Thu, 02 Jun 2022 18:34:41 -0700 (PDT)
+X-Google-Original-Date: Thu, 02 Jun 2022 18:34:32 PDT (-0700)
+Subject:     Re: [PATCH] riscv: Move alternative length validation into subsection
+In-Reply-To: <20220516214520.3252074-1-nathan@kernel.org>
 CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        ndesaulniers@google.com, heiko@sntech.de,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        anup@brainfault.org
+        llvm@lists.linux.dev, patches@lists.linux.dev, nathan@kernel.org,
+        lkp@intel.com
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jszhang@kernel.org
-Message-ID: <mhng-6828d6a5-d8c6-43f7-8145-311bdd5188d1@palmer-ri-x1c9>
+To:     nathan@kernel.org
+Message-ID: <mhng-e4c58f1b-2015-48b1-88ae-dbb9db72643f@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -70,56 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 07:32:04 PDT (-0700), jszhang@kernel.org wrote:
-> These three functions are only used in init.c, so make them static.
-> Fix W=1 warnings like below:
+On Mon, 16 May 2022 14:45:21 PDT (-0700), nathan@kernel.org wrote:
+> After commit 49b290e430d3 ("riscv: prevent compressed instructions in
+> alternatives"), builds with LLVM's integrated assembler fail:
 >
-> arch/riscv/mm/init.c:721:13: warning: no previous prototype for function
-> 'pt_ops_set_early' [-Wmissing-prototypes]
->    void __init pt_ops_set_early(void)
->                ^
+>   In file included from arch/riscv/mm/init.c:10:
+>   In file included from ./include/linux/mm.h:29:
+>   In file included from ./include/linux/pgtable.h:6:
+>   In file included from ./arch/riscv/include/asm/pgtable.h:108:
+>   ./arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+>           ALT_FLUSH_TLB_PAGE(__asm__ __volatile__ ("sfence.vma %0" : : "r" (addr) : "memory"));
+>           ^
+>   ./arch/riscv/include/asm/errata_list.h:33:5: note: expanded from macro 'ALT_FLUSH_TLB_PAGE'
+>   asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,        \
+>       ^
+>   ./arch/riscv/include/asm/alternative-macros.h:187:2: note: expanded from macro 'ALTERNATIVE'
+>           _ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+>           ^
+>   ./arch/riscv/include/asm/alternative-macros.h:113:2: note: expanded from macro '_ALTERNATIVE_CFG'
+>           __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, IS_ENABLED(CONFIG_k))
+>           ^
+>   ./arch/riscv/include/asm/alternative-macros.h:110:2: note: expanded from macro '__ALTERNATIVE_CFG'
+>           ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)
+>           ^
+>   ./arch/riscv/include/asm/alternative-macros.h:99:3: note: expanded from macro 'ALT_NEW_CONTENT'
+>           ".org   . - (889b - 888b) + (887b - 886b)\n"                    \
+>            ^
+>   <inline asm>:26:6: note: instantiated into assembly here
+>   .org    . - (889b - 888b) + (887b - 886b)
+>           ^
 >
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Anup Patel <anup@brainfault.org>
+> This error happens because LLVM's integrated assembler has a one-pass
+> design, which means it cannot figure out the instruction lengths when
+> the .org directive is outside of the subsection that contains the
+> instructions, which was changed by the .option directives added by the
+> above change.
+>
+> Move the .org directives before the .previous directive so that these
+> directives are always within the same subsection, which resolves the
+> failures and does not introduce any new issues with GNU as. This was
+> done for arm64 in commit 966a0acce2fc ("arm64/alternatives: move length
+> validation inside the subsection") and commit 22315a2296f4 ("arm64:
+> alternatives: Move length validation in alternative_{insn, endif}").
+>
+> While there is no error from the assembly versions of the macro, they
+> appear to have the same problem so just make the same change there as
+> well so that there are no problems in the future.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1640
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
+>  arch/riscv/include/asm/alternative-macros.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> since v1:
->  - collect Reviewed-by tag
->  - move out from the static key series as a separate patch
+> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
+> index e13b1f6bb400..ec2f3f1b836f 100644
+> --- a/arch/riscv/include/asm/alternative-macros.h
+> +++ b/arch/riscv/include/asm/alternative-macros.h
+> @@ -27,9 +27,9 @@
+>  	\new_c
+>  	.option pop
+>  889 :
+> -	.previous
+>  	.org    . - (889b - 888b) + (887b - 886b)
+>  	.org    . - (887b - 886b) + (889b - 888b)
+> +	.previous
+>  	.endif
+>  .endm
 >
->  arch/riscv/mm/init.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> @@ -94,9 +94,9 @@
+>  	new_c "\n"							\
+>  	".option pop\n"							\
+>  	"889 :\n"							\
+> -	".previous\n"							\
+>  	".org	. - (887b - 886b) + (889b - 888b)\n"			\
+>  	".org	. - (889b - 888b) + (887b - 886b)\n"			\
+> +	".previous\n"							\
+>  	".endif\n"
 >
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 05ed641a1134..5f3f26dd9f21 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -849,7 +849,7 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
->   * MMU is not enabled, the page tables are allocated directly using
->   * early_pmd/pud/p4d and the address returned is the physical one.
->   */
-> -void __init pt_ops_set_early(void)
-> +static void __init pt_ops_set_early(void)
->  {
->  	pt_ops.alloc_pte = alloc_pte_early;
->  	pt_ops.get_pte_virt = get_pte_virt_early;
-> @@ -871,7 +871,7 @@ void __init pt_ops_set_early(void)
->   * Note that this is called with MMU disabled, hence kernel_mapping_pa_to_va,
->   * but it will be used as described above.
->   */
-> -void __init pt_ops_set_fixmap(void)
-> +static void __init pt_ops_set_fixmap(void)
->  {
->  	pt_ops.alloc_pte = kernel_mapping_pa_to_va((uintptr_t)alloc_pte_fixmap);
->  	pt_ops.get_pte_virt = kernel_mapping_pa_to_va((uintptr_t)get_pte_virt_fixmap);
-> @@ -889,7 +889,7 @@ void __init pt_ops_set_fixmap(void)
->   * MMU is enabled and page table setup is complete, so from now, we can use
->   * generic page allocation functions to setup page table.
->   */
-> -void __init pt_ops_set_late(void)
-> +static void __init pt_ops_set_late(void)
->  {
->  	pt_ops.alloc_pte = alloc_pte_late;
->  	pt_ops.get_pte_virt = get_pte_virt_late;
+>  #define __ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, enable)	\
+>
+> base-commit: 93c0651617a62a69717299f1464dda798af8bebb
 
-Thanks, this is on for-next.
+Thanks, this in on for-next (still for 5.19).  I'm going to CC stable so 
+it'll get backported, as it seems pretty harmless.

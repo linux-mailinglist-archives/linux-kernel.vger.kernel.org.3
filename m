@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E626A53C6EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ACE53C6F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 10:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242831AbiFCIZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 04:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
+        id S242847AbiFCIee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 04:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiFCIZj (ORCPT
+        with ESMTP id S229615AbiFCIec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 04:25:39 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA5B2AC55
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:25:37 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id k36-20020a05600c1ca400b0039c2a3394caso2280511wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:25:37 -0700 (PDT)
+        Fri, 3 Jun 2022 04:34:32 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AD21835B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 01:34:30 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n8so6405440plh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 01:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vlHNlkkfhwq7JFKAn7mhXh4Kqw+dpNnKiTAAOerdCbU=;
-        b=bJ/VFZ9T86Dpad/2A+PantdPhNRldCUJi7CH06worJoLs4fV89CmA83GPQv4XX3oQO
-         owubLRZ5eh0a3aawSkEGY5U5OJvREJW5yKC0SwJ8/R5Yh/lcudMzNWlYvqpDhNfpYTLn
-         JWo0yWc4hgNyLIqrxiDclZNllTE86MdDxnebI=
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GpfF8ItPMk0VJbbfMj/WC62xrovcB2QttagaUM4KJ38=;
+        b=hx9nlXm+saSHa0qlQPDeVf9Evb9JKM3WDBSe/Mibf0IxM42umtirmqRX1DYDq9SePl
+         Ee+zwR7LTa6mfdGdKNrLO++/HcpuzfJU5qcYnaBqCqy9tPJc9ZOMDI9uF92+Xi+rWDpf
+         tU3ysW+XZ2xPe3SqAvyHX9btz9ou+ZwGqhCxQuGDhc2NrMQXH4UVJISjH5yrP7pQCFmt
+         LdweHKNZwj9FwGZKLsc0ShA03be9Ok31txrcHV6dyxliOrh8VDHZjotcuo06d9Qjst4X
+         ECtzZWJU5jmNsk8eNh9sKDu5PZ1xXDLVi31/FppMY5b61Chhl9ckWdtuzKAdDEAMS0BV
+         2WqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vlHNlkkfhwq7JFKAn7mhXh4Kqw+dpNnKiTAAOerdCbU=;
-        b=qisalDy0x0hFn5eIw0bRrEYMrJV6PZ6jzWiS1H/LHS0u1GZPboceaq06fdJ/AtHuV4
-         9RZvXaUrsmGwAut0827lTuI85G+PfvBjclZbyFyM1yMGksr09NlAzNnmwhbIqVVefpnS
-         oFIGHkZRxyEKWlq8cCbeH9hIjaFTvnUutm9YTvUnw4MJfEPHLbIMZtu+PGM8+tkDePRO
-         RjdcTLSrDl5/rUCRBjP1PS6oInfEfVknD17V1asnG9GS8Veki7/J0Cfs5fAkPes5v5wZ
-         +NaNCdNbdFJ5++PiO0sB5hNCCmPHsS2z5QoBQ3xaQ1yYadNCvq9GzTLrL6EVxG4LeYdj
-         BGKA==
-X-Gm-Message-State: AOAM531/ZqFw1QcFWKU7LQT6PnTRDzkr3RVXVOkwq0xTokV9Z7Ms6Vu+
-        FL4s3krra7KPiuUGwVY5iOXsxGOma7pKzZOK6t4=
-X-Google-Smtp-Source: ABdhPJyu0PRaX/h4+QsgQWWvHZT59GgYnKr45nwnrWKogESQid/p43kyo7JfjDE0gBDkfLGxLEDy2LKuKmP8rqYtJaQ=
-X-Received: by 2002:a05:600c:3d11:b0:39c:1c62:cebc with SMTP id
- bh17-20020a05600c3d1100b0039c1c62cebcmr14918974wmb.147.1654244735516; Fri, 03
- Jun 2022 01:25:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GpfF8ItPMk0VJbbfMj/WC62xrovcB2QttagaUM4KJ38=;
+        b=fQoVufrOkQecvtDW3rNyVBscvBC6gsAh3CGHef+EpVboCnfns/HE7bSgFSgO6kV+ws
+         scXIQhyU4Hbrhsx6EWcg9BTkHbsnmutrMSkRd9/EIA50+/vAa5uWJRrxZAdMJdVLAmrs
+         3x/dg84gE5ZQbOm0mcImKCsP1sK/q4FKL8J81idzygyV6N3NyLvuRJHNax7pbU8QRu1m
+         dHR7Pi8cRnZHCpoEtEY2RFZlWQtVCM4hODGd6QZuU7JqkzWSFSD65ee9HxJeoMPd2hbn
+         bUUzCbq0kQST4LSft/BCrbd53M2Ob2DJigpGSncn1++3ymcUf01tiXKovAPUeKC7jwRl
+         2OaQ==
+X-Gm-Message-State: AOAM531l7tuC83YVxCv0xlE/hrzwDr9gFN3kCBGcbBdEbb/GPTTY/N3a
+        znFZwDvOIj5tGZ3AY6sFJeI=
+X-Google-Smtp-Source: ABdhPJy42CKbXP1g6HSFgMNfnYKPHDiOSTgrA1jna9XgHfAtjIeZISzUg9TczCGoz/8M5puUSJSJvg==
+X-Received: by 2002:a17:90b:17c6:b0:1e6:8486:b324 with SMTP id me6-20020a17090b17c600b001e68486b324mr8464340pjb.24.1654245269977;
+        Fri, 03 Jun 2022 01:34:29 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id k5-20020a170902760500b0015e8d4eb2b8sm4809485pll.258.2022.06.03.01.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 01:34:29 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: mt6797-mt6351: Fix refcount leak in mt6797_mt6351_dev_probe
+Date:   Fri,  3 Jun 2022 12:34:15 +0400
+Message-Id: <20220603083417.9011-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220603082336.3867-1-linmq006@gmail.com>
-In-Reply-To: <20220603082336.3867-1-linmq006@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Fri, 3 Jun 2022 08:25:23 +0000
-Message-ID: <CACPK8XdiqZ_bN+iMO8_RvMLQzJtMm1gw-dUaT8Q00vtZSeAsCQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH] soc: aspeed: Fix IRQ check in aspeed_lpc_snoop_config_irq
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        Patrick Venture <venture@google.com>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 at 08:23, Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> platform_get_irq() returns negative error number instead 0 on failure.
-> And the doc of platform_get_irq() provides a usage example:
->
->     int irq = platform_get_irq(pdev, 0);
->     if (irq < 0)
->         return irq;
->
-> Fix the check of return value to catch errors correctly.
->
-> Fixes: 524feb799408 ("soc: add aspeed folder and misc drivers")
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-That's not the commit that introduced this code, that's simply a
-commit that moved the drivers.
+Fixes: format:f0ab0bf250da ("ASoC: add mt6797-mt6351 driver and config option")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/mediatek/mt6797/mt6797-mt6351.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
-> Link: https://lore.kernel.org/r/20220114064357.18562-1-linmq006@gmail.com
-> In previous thread:
-> Reviewed-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> Signed-off-by: Patrick Venture <venture@google.com>
-> ---
->  drivers/soc/aspeed/aspeed-lpc-snoop.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/soc/aspeed/aspeed-lpc-snoop.c b/drivers/soc/aspeed/aspeed-lpc-snoop.c
-> index eceeaf8dfbeb..c4a03b3a5cf8 100644
-> --- a/drivers/soc/aspeed/aspeed-lpc-snoop.c
-> +++ b/drivers/soc/aspeed/aspeed-lpc-snoop.c
-> @@ -167,8 +167,8 @@ static int aspeed_lpc_snoop_config_irq(struct aspeed_lpc_snoop *lpc_snoop,
->         int rc;
->
->         lpc_snoop->irq = platform_get_irq(pdev, 0);
-> -       if (!lpc_snoop->irq)
-> -               return -ENODEV;
-> +       if (lpc_snoop->irq < 0)
-> +               return lpc_snoop->irq;
->
->         rc = devm_request_irq(dev, lpc_snoop->irq,
->                               aspeed_lpc_snoop_irq, IRQF_SHARED,
-> --
-> 2.25.1
->
+diff --git a/sound/soc/mediatek/mt6797/mt6797-mt6351.c b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
+index 496f32bcfb5e..d2f6213a6bfc 100644
+--- a/sound/soc/mediatek/mt6797/mt6797-mt6351.c
++++ b/sound/soc/mediatek/mt6797/mt6797-mt6351.c
+@@ -217,7 +217,8 @@ static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
+ 	if (!codec_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	for_each_card_prelinks(card, i, dai_link) {
+ 		if (dai_link->codecs->name)
+@@ -230,6 +231,9 @@ static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
+ 
++	of_node_put(codec_node);
++put_platform_node:
++	of_node_put(platform_node);
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
+

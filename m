@@ -2,94 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506B553CCBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDCD53CC88
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 17:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245719AbiFCPzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 11:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S245669AbiFCPrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 11:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbiFCPzn (ORCPT
+        with ESMTP id S245657AbiFCPrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 11:55:43 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75403BE04;
-        Fri,  3 Jun 2022 08:55:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654271742; x=1685807742;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=blHQrZ0g94mMvLynPtoK8ncChfAm2Hug5DTS5ZrddFY=;
-  b=CtJI9fgQDZorAHra/fjotVhBPOpocWYo7ZaQ3gYhAB4xVed+EOUqzAbq
-   DRIIgqAQl/r2HHB6ckyeEn+WEe9jCyNi4dsHmpTW+nuJhCKMV8dHlF2ZH
-   YE4Xc9P5ojNqt/IC7xyqmpaNscSmAWATRotnJnE71BnQ7/YUzP4Vcg3uI
-   1Saejw4A/8RxDKosn2QE7nNDWxV6wx6zzLpKnwVnF/V4Vw05OReNy5oUY
-   lwNkWyL0P03a4fJuaP2JQxvvfAuG8bfepfuqkX97FPp+gp6h9qAo8Z17J
-   pHtxnIDpygi6gO7YrnllDX7V47gmjxDg4VuA7bkvoQ2e/lpq10NrVKS1V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="362649491"
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="362649491"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 08:55:42 -0700
-X-IronPort-AV: E=Sophos;i="5.91,274,1647327600"; 
-   d="scan'208";a="613323243"
-Received: from fbarati-mobl.amr.corp.intel.com (HELO [10.251.24.19]) ([10.251.24.19])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 08:55:41 -0700
-Message-ID: <e7758ed1-5dcb-80dd-092a-a6bb21c3997d@intel.com>
-Date:   Fri, 3 Jun 2022 08:55:39 -0700
+        Fri, 3 Jun 2022 11:47:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F173286F8;
+        Fri,  3 Jun 2022 08:47:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21199618CD;
+        Fri,  3 Jun 2022 15:47:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C28C385A9;
+        Fri,  3 Jun 2022 15:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654271263;
+        bh=DkHpOszBjvs97DI/fvHycYbfHbNLMuU6YAPeq1EHMUc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DTc2jjhDIeM8HhagsgByJvmNNwsqDzXU0w3R7vhjfxhdayanpzV/2zgPYTOzqQ8/F
+         ZlEI/LJOVaNtYoZ2O7IWcbycGRkps53fEjq0oB0VHioXeV40BlmrFqaYQTjZEeQMLy
+         U6PREmURbMnDn/KE/mcJmZjYWVwZ2j+9aUOfKrrMUinnf95PlGiIPWzxzdd6wVm2h2
+         LrolcvuAhZOCJHK5jpPB4PCg06ei+QJDEf0cgw4zeFMo5SOyUDX/YVooRlfQ76UVys
+         RZmM9T86v9Hdtk2e6HuCYsHUHZawi+rwPVnpw2FRCPiEdbzDwext4x18zHntWXcj2P
+         Wam9Z0/pnbi+A==
+Date:   Fri, 3 Jun 2022 16:56:45 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     keliu <liuke94@huawei.com>
+Cc:     <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iio:  Directly use ida_alloc()/free()
+Message-ID: <20220603165645.28ecc972@jic23-huawei>
+In-Reply-To: <20220527091739.2949426-1-liuke94@huawei.com>
+References: <20220527091739.2949426-1-liuke94@huawei.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] x86/kexec: Carry forward IMA measurement log on kexec
-Content-Language: en-US
-To:     Jonathan McDowell <noodles@fb.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
- <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
- <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
- <8634d4dd0813b9522f039ed211023c2c65c6f888.camel@linux.ibm.com>
- <YpSC4AQInLM73wex@noodles-fedora.dhcp.thefacebook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <YpSC4AQInLM73wex@noodles-fedora.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/22 01:40, Jonathan McDowell wrote:
-> Borislav,
+On Fri, 27 May 2022 09:17:39 +0000
+keliu <liuke94@huawei.com> wrote:
+
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove() .
 > 
-> I don't think there are any outstanding review comments for me to deal
-> with on this, so is it safe to assume it'll get picked up at some point
-> once the merge window calms down?
+> Signed-off-by: keliu <liuke94@huawei.com>
+Looks good to me.
 
-Nothing here looks too crazy, but it's still been _very_ lightly
-reviewed.  It doesn't seem like anyone from the kexec world has seen it,
-for instance.
+Applied to the togreg branch of iio.git and pushed out initially as testing
+to let 0-day see if it can find any problems we missed.
 
-Mimi's review was a great start, but it would be really nice to make
-sure that the kexec bits look good.
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/industrialio-core.c    | 6 +++---
+>  drivers/iio/industrialio-trigger.c | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index e1ed44dec2ab..41daa10cd63d 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -1618,7 +1618,7 @@ static void iio_dev_release(struct device *device)
+>  
+>  	iio_device_detach_buffers(indio_dev);
+>  
+> -	ida_simple_remove(&iio_ida, iio_dev_opaque->id);
+> +	ida_free(&iio_ida, iio_dev_opaque->id);
+>  	kfree(iio_dev_opaque);
+>  }
+>  
+> @@ -1660,7 +1660,7 @@ struct iio_dev *iio_device_alloc(struct device *parent, int sizeof_priv)
+>  	mutex_init(&iio_dev_opaque->info_exist_lock);
+>  	INIT_LIST_HEAD(&iio_dev_opaque->channel_attr_list);
+>  
+> -	iio_dev_opaque->id = ida_simple_get(&iio_ida, 0, 0, GFP_KERNEL);
+> +	iio_dev_opaque->id = ida_alloc(&iio_ida, GFP_KERNEL);
+>  	if (iio_dev_opaque->id < 0) {
+>  		/* cannot use a dev_err as the name isn't available */
+>  		pr_err("failed to get device id\n");
+> @@ -1669,7 +1669,7 @@ struct iio_dev *iio_device_alloc(struct device *parent, int sizeof_priv)
+>  	}
+>  
+>  	if (dev_set_name(&indio_dev->dev, "iio:device%d", iio_dev_opaque->id)) {
+> -		ida_simple_remove(&iio_ida, iio_dev_opaque->id);
+> +		ida_free(&iio_ida, iio_dev_opaque->id);
+>  		kfree(iio_dev_opaque);
+>  		return NULL;
+>  	}
+> diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+> index f504ed351b3e..6eb9b721676e 100644
+> --- a/drivers/iio/industrialio-trigger.c
+> +++ b/drivers/iio/industrialio-trigger.c
+> @@ -71,7 +71,7 @@ int __iio_trigger_register(struct iio_trigger *trig_info,
+>  
+>  	trig_info->owner = this_mod;
+>  
+> -	trig_info->id = ida_simple_get(&iio_trigger_ida, 0, 0, GFP_KERNEL);
+> +	trig_info->id = ida_alloc(&iio_trigger_ida, GFP_KERNEL);
+>  	if (trig_info->id < 0)
+>  		return trig_info->id;
+>  
+> @@ -98,7 +98,7 @@ int __iio_trigger_register(struct iio_trigger *trig_info,
+>  	mutex_unlock(&iio_trigger_list_lock);
+>  	device_del(&trig_info->dev);
+>  error_unregister_id:
+> -	ida_simple_remove(&iio_trigger_ida, trig_info->id);
+> +	ida_free(&iio_trigger_ida, trig_info->id);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(__iio_trigger_register);
+> @@ -109,7 +109,7 @@ void iio_trigger_unregister(struct iio_trigger *trig_info)
+>  	list_del(&trig_info->list);
+>  	mutex_unlock(&iio_trigger_list_lock);
+>  
+> -	ida_simple_remove(&iio_trigger_ida, trig_info->id);
+> +	ida_free(&iio_trigger_ida, trig_info->id);
+>  	/* Possible issue in here */
+>  	device_del(&trig_info->dev);
+>  }
+

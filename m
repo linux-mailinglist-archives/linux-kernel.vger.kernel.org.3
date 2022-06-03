@@ -2,194 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C1953CA17
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895D553CA1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 14:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241489AbiFCMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 08:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S244357AbiFCMjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 08:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiFCMhu (ORCPT
+        with ESMTP id S229883AbiFCMjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:37:50 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E433A5E0
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:37:49 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id h19so10015087edj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:37:49 -0700 (PDT)
+        Fri, 3 Jun 2022 08:39:15 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB952381BE
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 05:39:14 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so7097735pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 05:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=YrBwkRdvXLz7+jm3aOsGJs/0ErMfrv6pPp4W4cTpnsc=;
-        b=lU6T2dV5ri5pmTMT6Mbiz1EQgTQhwZGxrRXAYVWfB5NmV8ZqAZj9v9QPOohoodr0b1
-         79uyw1nq5zUmUdfya6dlH9RnoKW5316fqsCHXRZO4YgZM0zFDcwgyKdQzdl/fpMQkI9d
-         eKjXAUS92LFIE+J0QlN+0m9sz2DLQsgM/tEGCa4Dfx/qwcVBRhtpue7pTyxslSjB/A1w
-         o8jvBKpdYsQrusdrRo48AuRFgCFS+SPbyht3s+oOM+tQtiduLwZYb6rFFPEnzOI8Bg5B
-         tFcIl99IE0mJ1/e6i1Fc562Zznby3G/gTt4XNAGyJTWbwernPIWzLeNRSi8H8U+1FHoc
-         JrJQ==
+        bh=WZeh6dPlumSxGZHW+VabBQeUNOylTh9kH627gkvPD+A=;
+        b=Y007TVDTsVw2lMEBXkR/FDRNRV6iyelZ51Ogy3OHkyUxu5lyWsKT5NvAJWTmGx+5ku
+         7SPyy8Q9FvgqXHsRr3cqUCSu8P0sEmUphieQGMnAL4rwzKq1/T4o8SShk7nGIIuVIJ7s
+         sAJk9SBu059Jsf3aZBF3WgzYewGjI/izch7jta9PIaaDYRVT6UjFIg59Z+5UdKL1n4Z3
+         o1RAhsDEs+moKuck8+3NPVgX1ag1oBcCxuxJU62Q+r8JbVAjV/qtCkNu2gSTr33n+QDj
+         5y8ZvVS/3Msue9oUKSevHa0iFV31Zdkhk/sAaYrGGFtJL/RWndHjEkXEn0sSba712JPq
+         t08g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=YrBwkRdvXLz7+jm3aOsGJs/0ErMfrv6pPp4W4cTpnsc=;
-        b=1fg62EEM4JTADwNZHZpAEjU1FJWYbChFEQtud1HQppjZ/cP5KfQJHLyMAXQ8b4iPQ/
-         JKOYXWHpPzU6Qubu5BqtfCa9gYn5JRwYQdnMvvgMZiUqjlnPq9KnxYo4Zb/a/5Q0WYFb
-         aUGwSL9CTjIo3xehymBAty3pyVQ1JLIUH31AfQrtJTz/uYdG0+P+rtWIws6q7LaF0tQ3
-         CxJMjL/iwpwYFIC0M9N0eBdSewchB3lf5eJi8LD+NUWLNthADZwMVMesJMTzb/axHMHr
-         jeLsqlyeXfg1/Wloc1qeCi1NuPpfmfaX2xIZGLXguBy9hX1ShaY0JdyoZqqBzTEsT2V5
-         k4Rw==
-X-Gm-Message-State: AOAM532RFUp0hlG+jfDq1nBQFKMOaSOAocz1T34jfqxWbgSp7boIbeG6
-        uFMcMTou84uVjWeGdzUc7owa2HIWed0=
-X-Google-Smtp-Source: ABdhPJxeCabJNbfYESsSsGF42ubf1R5Slv0JDKE/9PlNrQtqy1GE4Zsa18k3wAnt2ZmtPBrmuSNsjA==
-X-Received: by 2002:a05:6402:4410:b0:427:ab6f:a39a with SMTP id y16-20020a056402441000b00427ab6fa39amr10621435eda.120.1654259867780;
-        Fri, 03 Jun 2022 05:37:47 -0700 (PDT)
-Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170906660c00b0070e3f58ed5csm716120ejp.48.2022.06.03.05.37.46
+        bh=WZeh6dPlumSxGZHW+VabBQeUNOylTh9kH627gkvPD+A=;
+        b=uBpPkHLDfpdnymDckfSMTWi8wU1aorRSV4/+PH9TJitottjOwywe3XXSgIMBVbWu10
+         +t6YHMJD2VKfbxESZGJbDVaSesudNg2s/KfeA2AH/CI7mqr4cJRztJb8NBgbyNGK8ZyU
+         a5Oi/RR75JURLpnvSoEGuzg9WKeGhX4nH4OYUlUUsJNG7JFs3ctgab5fvqLFlMcjaOkS
+         PbdD2+wJxN0ExjJYaJi7ChO/01s8gjnlSTz+ePA9zwbtdEf6KWR8TCmSOSxLmdJfyFGS
+         jKdBmtNtKkIRnCsMA3iFljCbFVlfDFubSR7ubpRck4OGjWtdsAg+gKeXAcRSQT2StTJb
+         kFSA==
+X-Gm-Message-State: AOAM532sIWzDp249mJg3CUPv59x2cdDSbGx8AaztoimRNhFiuNP4muR+
+        qzDDi1S9S8HcVad4uHfB6xc=
+X-Google-Smtp-Source: ABdhPJxTwFTdmtpYkEYSdKalAhQdMMJ2P6PK6DiB3tuvARtFEmIIk6ddSDvYnFSLZ94zcHu1HAEyVQ==
+X-Received: by 2002:a17:902:d592:b0:161:3bf4:9047 with SMTP id k18-20020a170902d59200b001613bf49047mr3355736plh.137.1654259954469;
+        Fri, 03 Jun 2022 05:39:14 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id ju10-20020a17090b20ca00b001df264610c4sm5483212pjb.0.2022.06.03.05.39.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 05:37:47 -0700 (PDT)
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
-        GPU IP),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
-        IP)
-Subject: [PATCH] drm/etnaviv: print offender task information on hangcheck recovery
-Date:   Fri,  3 Jun 2022 14:37:05 +0200
-Message-Id: <20220603123706.678320-1-christian.gmeiner@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 03 Jun 2022 05:39:13 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Robert Lippert <roblip@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] soc: aspeed: Fix IRQ check in aspeed_lpc_snoop_config_irq
+Date:   Fri,  3 Jun 2022 16:39:02 +0400
+Message-Id: <20220603123904.30714-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Track the pid per submit, so we can print the name and cmdline of
-the task which submitted the batch that caused the gpu to hang.
+platform_get_irq() returns negative error number instead 0 on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
+
+Fix the check of return value to catch errors correctly.
+
+Fixes: 9f4f9ae81d0a ("drivers/misc: add Aspeed LPC snoop driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gem.h        |  1 +
- drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c |  6 ++++++
- drivers/gpu/drm/etnaviv/etnaviv_gpu.c        | 18 +++++++++++++++++-
- drivers/gpu/drm/etnaviv/etnaviv_gpu.h        |  2 +-
- drivers/gpu/drm/etnaviv/etnaviv_sched.c      |  2 +-
- 5 files changed, 26 insertions(+), 3 deletions(-)
+v1 Link: https://lore.kernel.org/r/20220114064357.18562-1-linmq006@gmail.com
+In previous v1 thread:
+Reviewed-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+Signed-off-by: Patrick Venture <venture@google.com>
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.h b/drivers/gpu/drm/etnaviv/etnaviv_gem.h
-index 63688e6e4580..baa81cbf701a 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.h
-@@ -96,6 +96,7 @@ struct etnaviv_gem_submit {
- 	int out_fence_id;
- 	struct list_head node; /* GPU active submit list */
- 	struct etnaviv_cmdbuf cmdbuf;
-+	struct pid *pid;       /* submitting process */
- 	bool runtime_resumed;
- 	u32 exec_state;
- 	u32 flags;
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-index 1ac916b24891..1491159d0d20 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c
-@@ -399,6 +399,9 @@ static void submit_cleanup(struct kref *kref)
- 		mutex_unlock(&submit->gpu->fence_lock);
- 		dma_fence_put(submit->out_fence);
- 	}
-+
-+	put_pid(submit->pid);
-+
- 	kfree(submit->pmrs);
- 	kfree(submit);
- }
-@@ -422,6 +425,7 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
- 	struct sync_file *sync_file = NULL;
- 	struct ww_acquire_ctx ticket;
- 	int out_fence_fd = -1;
-+	struct pid *pid = get_pid(task_pid(current));
- 	void *stream;
- 	int ret;
+v2 Link: https://lore.kernel.org/r/20220603082336.3867-1-linmq006@gmail.com
+---
+ drivers/soc/aspeed/aspeed-lpc-snoop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/soc/aspeed/aspeed-lpc-snoop.c b/drivers/soc/aspeed/aspeed-lpc-snoop.c
+index eceeaf8dfbeb..c4a03b3a5cf8 100644
+--- a/drivers/soc/aspeed/aspeed-lpc-snoop.c
++++ b/drivers/soc/aspeed/aspeed-lpc-snoop.c
+@@ -167,8 +167,8 @@ static int aspeed_lpc_snoop_config_irq(struct aspeed_lpc_snoop *lpc_snoop,
+ 	int rc;
  
-@@ -519,6 +523,8 @@ int etnaviv_ioctl_gem_submit(struct drm_device *dev, void *data,
- 		goto err_submit_ww_acquire;
- 	}
+ 	lpc_snoop->irq = platform_get_irq(pdev, 0);
+-	if (!lpc_snoop->irq)
+-		return -ENODEV;
++	if (lpc_snoop->irq < 0)
++		return lpc_snoop->irq;
  
-+	submit->pid = pid;
-+
- 	ret = etnaviv_cmdbuf_init(priv->cmdbuf_suballoc, &submit->cmdbuf,
- 				  ALIGN(args->stream_size, 8) + 8);
- 	if (ret)
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-index 37018bc55810..7d9bf4673e2d 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-@@ -1045,12 +1045,28 @@ int etnaviv_gpu_debugfs(struct etnaviv_gpu *gpu, struct seq_file *m)
- }
- #endif
- 
--void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu)
-+void etnaviv_gpu_recover_hang(struct etnaviv_gem_submit *submit)
- {
-+	struct etnaviv_gpu *gpu = submit->gpu;
-+	char *comm = NULL, *cmd = NULL;
-+	struct task_struct *task;
- 	unsigned int i;
- 
- 	dev_err(gpu->dev, "recover hung GPU!\n");
- 
-+	task = get_pid_task(submit->pid, PIDTYPE_PID);
-+	if (task) {
-+		comm = kstrdup(task->comm, GFP_KERNEL);
-+		cmd = kstrdup_quotable_cmdline(task, GFP_KERNEL);
-+		put_task_struct(task);
-+	}
-+
-+	if (comm && cmd)
-+		dev_err(gpu->dev, "offending task: %s (%s)\n", comm, cmd);
-+
-+	kfree(cmd);
-+	kfree(comm);
-+
- 	if (pm_runtime_get_sync(gpu->dev) < 0)
- 		goto pm_put;
- 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-index 85eddd492774..b3a0941d56fd 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-@@ -168,7 +168,7 @@ bool etnaviv_fill_identity_from_hwdb(struct etnaviv_gpu *gpu);
- int etnaviv_gpu_debugfs(struct etnaviv_gpu *gpu, struct seq_file *m);
- #endif
- 
--void etnaviv_gpu_recover_hang(struct etnaviv_gpu *gpu);
-+void etnaviv_gpu_recover_hang(struct etnaviv_gem_submit *submit);
- void etnaviv_gpu_retire(struct etnaviv_gpu *gpu);
- int etnaviv_gpu_wait_fence_interruptible(struct etnaviv_gpu *gpu,
- 	u32 fence, struct drm_etnaviv_timespec *timeout);
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sched.c b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-index 72e2553fbc98..d29f467eee13 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-@@ -67,7 +67,7 @@ static enum drm_gpu_sched_stat etnaviv_sched_timedout_job(struct drm_sched_job
- 
- 	/* get the GPU back into the init state */
- 	etnaviv_core_dump(submit);
--	etnaviv_gpu_recover_hang(gpu);
-+	etnaviv_gpu_recover_hang(submit);
- 
- 	drm_sched_resubmit_jobs(&gpu->sched);
- 
+ 	rc = devm_request_irq(dev, lpc_snoop->irq,
+ 			      aspeed_lpc_snoop_irq, IRQF_SHARED,
 -- 
-2.36.1
+2.25.1
 

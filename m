@@ -2,157 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B04953D1AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED9153D1B5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 20:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347253AbiFCSlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 14:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S1347185AbiFCSot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 14:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347175AbiFCSlH (ORCPT
+        with ESMTP id S1345377AbiFCSor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 14:41:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AED113DCF
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654281664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pa7cJ5G4COGyAzAnTJD9ItMqf7WRFzB0pDurEI93KXo=;
-        b=OyLE4ybXwrHgcWk4NfzlvZfkAjb1yVtAYzc4O+B91HJugco70pTWCqGmPFAHb/DZqQlOYK
-        Ggu6LGPx4/78D3J7X+vGJTUUKdPDIa6mz3/ljX2CFLoR+hwH0uiaAbmv4SYySxq9BKydqB
-        qVsdRLXoA/721dQdPTvYgVp2rCe7qQ0=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-YhAhfABqNluUlixJd6r3wg-1; Fri, 03 Jun 2022 14:41:03 -0400
-X-MC-Unique: YhAhfABqNluUlixJd6r3wg-1
-Received: by mail-il1-f200.google.com with SMTP id n12-20020a92260c000000b002d3c9fc68d6so6837772ile.19
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:41:02 -0700 (PDT)
+        Fri, 3 Jun 2022 14:44:47 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5369D1CB29
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 11:44:46 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x62so11267923ede.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PU+lgH2jqct+WW6K1XpKf6qWJO0+UHEXDRk2yDooong=;
+        b=RgqJYS7pw41Wcdw7p179aSzbVX+SlPpeSbWoigFcVS5solgszp65k0oflifqWMqoi1
+         dSGtgfW+EuPrCmzegqnWS1TqWaipEGuqA+uFVTR+3dorF1WvYsJb2zkrjk4SOjWqsCxz
+         qw8i0ZkHTtSYxXj9DU3Y+WgsQf3UekMKeBVJM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Pa7cJ5G4COGyAzAnTJD9ItMqf7WRFzB0pDurEI93KXo=;
-        b=uovXBOfQthvnMg/yjH6bnX7Q0C4qFgJzjjKgyQlNlN5l7KfBxVgHyrWPbWbEUXxcie
-         2FPzR6UA8TFvUP+uW/KQ9ucEF1hJbivvK8+++pl4x19TicZ21FYp6U7U7MdLG6HAKXAZ
-         miTjNT7tr06SBPzvt/C74D6Ar7O799TEw87efvvJpLl2IUtqF3P2luwi1bJPDXD5H6LZ
-         CMuek4bVnTAhQKXIAiViZvo45ctFFqX96x0WG/jTiUOE2x+1Aex2vQkQzXy+DrL/rUEz
-         aXonWU5qMbZrPaPwq6wKjo3Sjwmk1T1Jh4Px0yKhtQslouoA0pWGijhgLYaM7xzC09co
-         WLzg==
-X-Gm-Message-State: AOAM531jtSrBAC+s9byaO38gMRHa+ie/ZdQ8aW6X4e8zmMmuPquty368
-        YedL+T63iARNMaVb6EvR7A+3TAZ2z1p8blmWR64kiNrAN3SJ1X71Wlh6cDdD/d40wf90q0Gxcy1
-        oMB5qISlQFyrQqHLjNt0lnNg1
-X-Received: by 2002:a5d:96d0:0:b0:654:91d3:97b7 with SMTP id r16-20020a5d96d0000000b0065491d397b7mr5560411iol.164.1654281662259;
-        Fri, 03 Jun 2022 11:41:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwkDTDyNAxtQgrl3i4tHY0k/Op4bKpQ1vmRy3Ff+VxQAjwl9MttXildmqnXNEnZbpVVaYCPcg==
-X-Received: by 2002:a5d:96d0:0:b0:654:91d3:97b7 with SMTP id r16-20020a5d96d0000000b0065491d397b7mr5560398iol.164.1654281661970;
-        Fri, 03 Jun 2022 11:41:01 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id cp2-20020a056638480200b0032e332882e0sm2814503jab.75.2022.06.03.11.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 11:41:00 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 14:40:58 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-Message-ID: <YppVupW+IWsm7Osr@xz-m1.local>
-References: <20220301201344.18191-1-sashal@kernel.org>
- <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PU+lgH2jqct+WW6K1XpKf6qWJO0+UHEXDRk2yDooong=;
+        b=xQYn87o66yfm+Z0BbQAzMutN1vxm+ueEtT86w7kYFYoujlmIcHu1h/YkBMbOSDqhJW
+         ZNDxaK+9bL5nQa8VUq7ynemdj7KJcw1pZO5+RFgcx66mkGlqa1pI7CPAxos3wMKYVstH
+         NL+KCkgTUa6tBy+gXs8Z2OUwUjI/dRKh28leEuf2P7z1NX1hc8K6qiqC+i/I8UjLUbm4
+         MKpP9aRk03WVPThc2p1fKssK9wdO+5Ys3IhYDVHipXil2zGGP/BH4YmUivS0W29vT4E+
+         PUgJ7F+AMx8aSTtLZR3jw7hEjyndo4/Q+RipRAsNHRaS9jy5NPtBj8XCZoKEG3eeXE9A
+         RKfg==
+X-Gm-Message-State: AOAM532sxufiCYOrX0BLO1aZ1a/4LjTXc6xc5m+MTvfLGy54YJ7+B3OM
+        Y2eDmyDChxpdDO7S6QV7AbCjR1O0IsghTnVwGXo=
+X-Google-Smtp-Source: ABdhPJx9iNLSVNLf2lUgf5pDoNe7v5oWA7uHoy0COtp+S9a5eNM+RHxQAOvo1NuNkR8c4LJRL43rjw==
+X-Received: by 2002:a05:6402:1d51:b0:41f:cf6c:35a5 with SMTP id dz17-20020a0564021d5100b0041fcf6c35a5mr12488861edb.25.1654281884696;
+        Fri, 03 Jun 2022 11:44:44 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id b5-20020a17090691c500b006feaa22e367sm3073812ejx.165.2022.06.03.11.44.43
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 11:44:43 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id x17so11474381wrg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 11:44:43 -0700 (PDT)
+X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
+ h4-20020a05600016c400b0020fcd5d4797mr9448087wrf.193.1654281883176; Fri, 03
+ Jun 2022 11:44:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <YpnmYB8SN5dPweLV@kroah.com>
+In-Reply-To: <YpnmYB8SN5dPweLV@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 3 Jun 2022 11:44:27 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjJjkvt5rfFA=19auwz5Ahc-9Y7qL4_t9rLCcyD+BZoDA@mail.gmail.com>
+Message-ID: <CAHk-=wjJjkvt5rfFA=19auwz5Ahc-9Y7qL4_t9rLCcyD+BZoDA@mail.gmail.com>
+Subject: Re: [GIT PULL] Char/Misc driver updates 5.19-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 09:22:10PM +0100, Paolo Bonzini wrote:
-> On 3/1/22 21:13, Sasha Levin wrote:
-> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> > index d28829403ed08..6ac01f9828530 100644
-> > --- a/arch/x86/kernel/fpu/xstate.c
-> > +++ b/arch/x86/kernel/fpu/xstate.c
-> > @@ -1563,7 +1563,10 @@ static int fpstate_realloc(u64 xfeatures, unsigned int ksize,
-> >   		fpregs_restore_userregs();
-> >   	newfps->xfeatures = curfps->xfeatures | xfeatures;
-> > -	newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
-> > +
-> > +	if (!guest_fpu)
-> > +		newfps->user_xfeatures = curfps->user_xfeatures | xfeatures;
-> > +
-> >   	newfps->xfd = curfps->xfd & ~xfeatures;
-> >   	curfps = fpu_install_fpstate(fpu, newfps);
-> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > index bf18679757c70..875dce4aa2d28 100644
-> > --- a/arch/x86/kvm/cpuid.c
-> > +++ b/arch/x86/kvm/cpuid.c
-> > @@ -276,6 +276,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
-> >   	vcpu->arch.guest_supported_xcr0 =
-> >   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
-> > +	vcpu->arch.guest_fpu.fpstate->user_xfeatures = vcpu->arch.guest_supported_xcr0;
-> > +
-> >   	kvm_update_pv_runtime(vcpu);
-> >   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
-> 
-> Leonardo, was this also buggy in 5.16?  (I should have asked for a Fixes
-> tag...).
+On Fri, Jun 3, 2022 at 3:45 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> Note, there are 3 merge conflicts when merging this with your tree:
+>         - MAINTAINERS, should be easy to resolve
+>         - drivers/slimbus/qcom-ctrl.c, should be straightforward
+>           resolution
+>         - drivers/misc/lkdtm/stackleak.c, not an easy resolution.
 
-I just stumbled over this patch on some migration tests in the past few
-days..
+Heh.  They were all very straightforward, and in fact the MAINTAINERS
+one was the most annoying by far, just because there are so many
+unrelated commits there (including a re-ordering of a couple of lines
+close-by in a previous merge) and I want to make sure they had nothing
+relevant.
 
-In short, I was migrating a VM from 5.15 host to 5.18 host and the guest
-trigger double fault immediately after the switch-over (I think that's when
-it's trying to do vmenter, a VECTOR_DF was injected), with either precopy
-or postcopy.
+The stackleak one may have looked a bit nasty, but actually had a lot
+less unrelated noise around it, so I find those ones easier to verify.
 
-After I upgrade 5.15 src host to 5.18 host, problem goes away. I did a
-bisect on dest and surprisingly it points to this commit.
+Famous last words.
 
-Side note: I'm using two hosts that have the same processor model, so no
-case of missing features on either side - they just match.
-
-I'm not really sure whether this is a bug or by design - do we require this
-patch to be applied to all stable branches to make the guest not crash
-after migration, or it is unexpected?
-
-FWICT, this patch modifies user_xfeatures while we don't do that trick
-before. It sounds reasonable to me from the 1st glance, say if the guest
-didn't enable some of the fpu features so we don't need to migrate those
-fpu state chunks as we're migrating things based on user_xfeatures, and it
-sounds good to solve the migration issue on "has-pksu" host to "no-pksu"
-host as described in the patch commit message.
-
-However there seems to be something missing at least to me, on why it'll
-fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
-In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
-patch, but 0x0 if with it.
-
-I think what it should be happening is user_xfeatures will be set on src
-with 0x7 (old kernel), so we should have migrated some more chunks to dest,
-but I just don't quickly understand why that's a problem there because
-fundamentally when we restore the fpu status (fpu_swap_kvm_fpstate) we use
-the max feature bitmask anyway, and the dest hardware should support all of
-them.  I don't quickly see how that could trigger a double fault, though.
-
-I'll continue the dig probably next week, before that, any thoughts?
-
--- 
-Peter Xu
-
+                  Linus

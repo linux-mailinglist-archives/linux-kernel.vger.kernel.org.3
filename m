@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2AD53CE9A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC95853CE79
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 19:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345025AbiFCRoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 13:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S1344669AbiFCRnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 13:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244249AbiFCRnm (ORCPT
+        with ESMTP id S1344852AbiFCRmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 13:43:42 -0400
+        Fri, 3 Jun 2022 13:42:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0AA54FAC;
-        Fri,  3 Jun 2022 10:42:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B367E54193;
+        Fri,  3 Jun 2022 10:41:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6142A61B01;
-        Fri,  3 Jun 2022 17:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60401C385A9;
-        Fri,  3 Jun 2022 17:42:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6A9861AFB;
+        Fri,  3 Jun 2022 17:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0231C385A9;
+        Fri,  3 Jun 2022 17:41:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654278133;
-        bh=sKgOfk/k9VR+3swUTYAojtlfzqP43XNrNjVvVFk1g3U=;
+        s=korg; t=1654278092;
+        bh=47+WW93izh9zYfS6/3qjMleBfy11harY9ZN6Ja4SPOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mAHzjD7fv0ajeKXzi7FM1TYQZMdnLpJ/2wJcBVc9iikwhbN3cJ1ooYmYUnFYD0s+i
-         KGb/2QDOMLPNydleWp8Kbu+HzJbcdIkp9GtbfSqf2uRvot3XFaaT+2qTKYrg6Gs6eM
-         GmQWSuM+vC/BjoEsWCsWbU9COTMMqvKjFddr7Iko=
+        b=SkNMdNw55N4RaBc2BY4pb2Mdqc9zPmlnm96a9xBytDHCTos8756TCpn6/zAODtR+T
+         C+9QXpdAiZbFz9/rfn+LmgXuJvdNwPX88QyRMcWrI5oPyXsjUqdv9KDf+yZvqtyu3+
+         WR05zqzzhJrpk0D/1PmMuiY8UNmDdhdttj8CCxrw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 20/30] zsmalloc: fix races between asynchronous zspage free and page migration
-Date:   Fri,  3 Jun 2022 19:39:48 +0200
-Message-Id: <20220603173815.689743053@linuxfoundation.org>
+        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 4.14 22/23] NFSD: Fix possible sleep during nfsd4_release_lockowner()
+Date:   Fri,  3 Jun 2022 19:39:49 +0200
+Message-Id: <20220603173815.032974590@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220603173815.088143764@linuxfoundation.org>
-References: <20220603173815.088143764@linuxfoundation.org>
+In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
+References: <20220603173814.362515009@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,86 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sultan Alsawaf <sultan@kerneltoast.com>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-commit 2505a981114dcb715f8977b8433f7540854851d8 upstream.
+commit ce3c4ad7f4ce5db7b4f08a1e237d8dd94b39180b upstream.
 
-The asynchronous zspage free worker tries to lock a zspage's entire page
-list without defending against page migration.  Since pages which haven't
-yet been locked can concurrently migrate off the zspage page list while
-lock_zspage() churns away, lock_zspage() can suffer from a few different
-lethal races.
+nfsd4_release_lockowner() holds clp->cl_lock when it calls
+check_for_locks(). However, check_for_locks() calls nfsd_file_get()
+/ nfsd_file_put() to access the backing inode's flc_posix list, and
+nfsd_file_put() can sleep if the inode was recently removed.
 
-It can lock a page which no longer belongs to the zspage and unsafely
-dereference page_private(), it can unsafely dereference a torn pointer to
-the next page (since there's a data race), and it can observe a spurious
-NULL pointer to the next page and thus not lock all of the zspage's pages
-(since a single page migration will reconstruct the entire page list, and
-create_page_chain() unconditionally zeroes out each list pointer in the
-process).
+Let's instead rely on the stateowner's reference count to gate
+whether the release is permitted. This should be a reliable
+indication of locks-in-use since file lock operations and
+->lm_get_owner take appropriate references, which are released
+appropriately when file locks are removed.
 
-Fix the races by using migrate_read_lock() in lock_zspage() to synchronize
-with page migration.
-
-Link: https://lkml.kernel.org/r/20220509024703.243847-1-sultan@kerneltoast.com
-Fixes: 77ff465799c602 ("zsmalloc: zs_page_migrate: skip unnecessary loops but not return -EBUSY if zspage is not inuse")
-Signed-off-by: Sultan Alsawaf <sultan@kerneltoast.com>
-Acked-by: Minchan Kim <minchan@kernel.org>
-Cc: Nitin Gupta <ngupta@vflare.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Reported-by: Dai Ngo <dai.ngo@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/zsmalloc.c |   37 +++++++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+ fs/nfsd/nfs4state.c |   12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1812,11 +1812,40 @@ static enum fullness_group putback_zspag
-  */
- static void lock_zspage(struct zspage *zspage)
- {
--	struct page *page = get_first_page(zspage);
-+	struct page *curr_page, *page;
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -6351,16 +6351,12 @@ nfsd4_release_lockowner(struct svc_rqst
+ 		if (sop->so_is_open_owner || !same_owner_str(sop, owner))
+ 			continue;
  
--	do {
--		lock_page(page);
--	} while ((page = get_next_page(page)) != NULL);
-+	/*
-+	 * Pages we haven't locked yet can be migrated off the list while we're
-+	 * trying to lock them, so we need to be careful and only attempt to
-+	 * lock each page under migrate_read_lock(). Otherwise, the page we lock
-+	 * may no longer belong to the zspage. This means that we may wait for
-+	 * the wrong page to unlock, so we must take a reference to the page
-+	 * prior to waiting for it to unlock outside migrate_read_lock().
-+	 */
-+	while (1) {
-+		migrate_read_lock(zspage);
-+		page = get_first_page(zspage);
-+		if (trylock_page(page))
-+			break;
-+		get_page(page);
-+		migrate_read_unlock(zspage);
-+		wait_on_page_locked(page);
-+		put_page(page);
-+	}
-+
-+	curr_page = page;
-+	while ((page = get_next_page(curr_page))) {
-+		if (trylock_page(page)) {
-+			curr_page = page;
-+		} else {
-+			get_page(page);
-+			migrate_read_unlock(zspage);
-+			wait_on_page_locked(page);
-+			put_page(page);
-+			migrate_read_lock(zspage);
-+		}
-+	}
-+	migrate_read_unlock(zspage);
- }
+-		/* see if there are still any locks associated with it */
+-		lo = lockowner(sop);
+-		list_for_each_entry(stp, &sop->so_stateids, st_perstateowner) {
+-			if (check_for_locks(stp->st_stid.sc_file, lo)) {
+-				status = nfserr_locks_held;
+-				spin_unlock(&clp->cl_lock);
+-				return status;
+-			}
++		if (atomic_read(&sop->so_count) != 1) {
++			spin_unlock(&clp->cl_lock);
++			return nfserr_locks_held;
+ 		}
  
- static struct dentry *zs_mount(struct file_system_type *fs_type,
++		lo = lockowner(sop);
+ 		nfs4_get_stateowner(sop);
+ 		break;
+ 	}
 
 

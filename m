@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4AB53CA4D
+	by mail.lfdr.de (Postfix) with ESMTP id 7B65253CA4E
 	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244475AbiFCNAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S244487AbiFCNAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiFCNAq (ORCPT
+        with ESMTP id S233094AbiFCNAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:00:46 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B9533E00
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 06:00:46 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so11999795pjl.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 06:00:46 -0700 (PDT)
+        Fri, 3 Jun 2022 09:00:50 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD65A37A22
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 06:00:49 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n18so6797411plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 06:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8Yg5+QfDwgeA6HTgAKJPX8MPDCtSRFgD1mu+1/EW38Q=;
-        b=Ljg0TpD1gjHkEpZ8QvJzJ74WM1GkK1YQBZlBU4vH9aOBuLjUUMd64H3AWD6miIcteS
-         2ruqx6EbvA3ET+F7xlgQ1G7/RY7NIMFq7WNMVTpAJZx4hPRgiOab3tFuOSxDc5sn85Xi
-         x3taHngaRGtYjgmTwRUZ925+PAxPqzHedG2pXAWDbtDvC2zhmT+UkBH2TxqwwgWoAs/d
-         gXyWfdCnkC5k80ReKOR/2iByIwMmfZ3Pa+tiRoB77wQjw3IxrZxqT1970+k4a8/+ojh5
-         fLemkMxm/Lxjv8NODqP7fsSuGmGYr1YrAB8c6wd36KT9102f7TlZsQ2EelhZZ0Rri7Qc
-         bZ/w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mDw9t4WQXBcrtm7/VRTOmbffEdum1gmVJhhAnb5FFC0=;
+        b=PKDS2oid/SEnsDgRAAcqVjf9EgAgvLTTwi5JGSL4hW+NCdz+ZZrT/NxoPWsyeaC6rq
+         s/j70TodR1+WlOCG4aY7mqgUFygIVqyJPgTt85f65L5ur6by4Jj5+8mE0048vNnVPcsN
+         L3eMVdCU62gMZ2SsxnPyvA0SgYAnBwh011108NPw5dajaksMsojSiAX1iDy5vYS1JBKq
+         izvesCLgnmThqlbW439u60rwRw6wphwk12+8nJkNinuwzWZx+7k6ApU5XxwVtQtSKuna
+         zcjsZUyaZ6bfKUtRCsWJe7Jmr0UAo/2M8N7RQwrPWnzWa7ltDh5BeOKqsN5kKbOFlJcD
+         GIFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8Yg5+QfDwgeA6HTgAKJPX8MPDCtSRFgD1mu+1/EW38Q=;
-        b=2NtKaI+1UMUs1baA5Fqyw7hEhV6sl0G8A17td/0GqL+PcP850tDPucCP4X5wV3RWxj
-         pu1+kjotPdVFBShHLRvCROuhicBvuiuaHGWUyQjdBIkBUWE0CYpvHNubml/d3RQecx0a
-         t9w46t4Uk3APy8w4d235xSrkC7YUJUSLpcAfv1WbrGZdzO1pVNRfGWcVRIcJj2cROt+b
-         KM31rxjjqROWiDhLig5qcGRjx2uIh9C9jiOP+e7HDacftv2eYLZJ8kNVsG+0ynuMSGLu
-         dCovfpk4MbngF9B+COneOv4pgTzNlsZADcRUUk4/F8/4b28ZfzRqOJr2Nq/01e8yLiv5
-         vFDA==
-X-Gm-Message-State: AOAM531UEBeRFufOpgXHrqL4Lw90OOe22plafbaTGHW9oljhWaHxjeAY
-        zWAnwumn0nvvRDAUWarPm+4=
-X-Google-Smtp-Source: ABdhPJwymQsCj33OWVSkMPuDvtNEUqNPrrH3qoe3Fm9EQ4gAEE8/0MgEsPXDCZLo1CMa9aJu8uwucg==
-X-Received: by 2002:a17:90a:bf02:b0:1e2:fadf:3f15 with SMTP id c2-20020a17090abf0200b001e2fadf3f15mr10892485pjs.91.1654261245326;
-        Fri, 03 Jun 2022 06:00:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mDw9t4WQXBcrtm7/VRTOmbffEdum1gmVJhhAnb5FFC0=;
+        b=WyBWoag9DedUFsXGHwlC3Njxy4xFnJ/p+kqpU5cb8ncapekqUCKXxhj1h2Nx407IGG
+         MgDiUCgXsleH4pqSIwhzL8YmKgMM16euPYemeTIQS0Mc03Iic3x7SLq+jvbeDnZrh/A0
+         vozWMs5qQPDZQJWfs0ukAiycgkIocj9jhN7e9lNLmmEBqa6JDkNHG//4kKPIMv3FNXMR
+         Sw0UsCOJjbSgUqaE+RrTB4AWTRV13hy8t/QxiFDisBaf/ymF4e7/3WbIGiZwjiN6uX4U
+         vF0Htov602BA/uYJOiSsWJVU51FwGSJgs9qPRzFoQ/jk2fX6ejitkG8tav83wTYlXUAp
+         BLog==
+X-Gm-Message-State: AOAM5311sgGO2p859lCRLDGpHQb5tPA/xKAxOZVkdXAxKMKXGNkz4OzZ
+        PTazpNfPz4GjSJMt61Z4sls=
+X-Google-Smtp-Source: ABdhPJyk87NTR6aw08mfmi4uJ5A7HWe4I1KK7PCmbjDQvSbtcGhI0Vh5aWzvGcRmKFh8zuFgdzXdvg==
+X-Received: by 2002:a17:90b:20d4:b0:1e2:fadf:3f09 with SMTP id ju20-20020a17090b20d400b001e2fadf3f09mr11003794pjb.236.1654261248745;
+        Fri, 03 Jun 2022 06:00:48 -0700 (PDT)
 Received: from f34-buildvm.eng.vmware.com ([66.170.99.2])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b00163f7935772sm5327553plq.46.2022.06.03.06.00.44
+        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b00163f7935772sm5327553plq.46.2022.06.03.06.00.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 06:00:44 -0700 (PDT)
+        Fri, 03 Jun 2022 06:00:48 -0700 (PDT)
 From:   Shreenidhi Shedi <yesshedi@gmail.com>
 X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
 To:     arnd@arndb.de, gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, yesshedi@gmail.com,
         Shreenidhi Shedi <sshedi@vmware.com>
-Subject: [PATCH 1/2] char: lp: ensure that index has not exceeded LP_NO
-Date:   Fri,  3 Jun 2022 18:30:39 +0530
-Message-Id: <20220603130040.601673-1-sshedi@vmware.com>
+Subject: [PATCH 2/2] char: lp: remove redundant initialization of err
+Date:   Fri,  3 Jun 2022 18:30:40 +0530
+Message-Id: <20220603130040.601673-2-sshedi@vmware.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220603130040.601673-1-sshedi@vmware.com>
+References: <20220603130040.601673-1-sshedi@vmware.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,9 +74,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Shreenidhi Shedi <sshedi@vmware.com>
 
-After finishing the loop, index value can be equal to LP_NO and lp_table
-array is of size LP_NO, so this can end up in accessing an out of bound
-address in lp_register function.
+err is getting assigned with an appropriate value before returning,
+hence this initialization is unnecessary.
 
 Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
 ---
@@ -82,18 +83,18 @@ Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/char/lp.c b/drivers/char/lp.c
-index 0e22e3b0a..d474d02b6 100644
+index d474d02b6..536ceb111 100644
 --- a/drivers/char/lp.c
 +++ b/drivers/char/lp.c
-@@ -972,7 +972,7 @@ static void lp_attach(struct parport *port)
- 			if (port_num[i] == -1)
- 				break;
+@@ -1019,7 +1019,7 @@ static struct parport_driver lp_driver = {
 
--		if (!lp_register(i, port))
-+		if (i < LP_NO && !lp_register(i, port))
- 			lp_count++;
- 		break;
+ static int __init lp_init(void)
+ {
+-	int i, err = 0;
++	int i, err;
 
+ 	if (parport_nr[0] == LP_PARPORT_OFF)
+ 		return 0;
 --
 2.36.1
 

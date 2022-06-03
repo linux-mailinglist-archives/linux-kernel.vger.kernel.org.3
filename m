@@ -2,320 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F75A53C20E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9799A53C25A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 04:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240990AbiFCBpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Jun 2022 21:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S240995AbiFCBsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Jun 2022 21:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240975AbiFCBp0 (ORCPT
+        with ESMTP id S235708AbiFCBsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Jun 2022 21:45:26 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513CF24086;
-        Thu,  2 Jun 2022 18:45:23 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id h1so5835077plf.11;
-        Thu, 02 Jun 2022 18:45:23 -0700 (PDT)
+        Thu, 2 Jun 2022 21:48:22 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650FF26575
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Jun 2022 18:48:21 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id e2so8604114wrc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Jun 2022 18:48:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ykexnotmnCEPoI5Oth3kNZn8Re9RXxRddiJBLrLWIBA=;
-        b=glhKnCIao23XEkXQATLZXMVvZO+5umzisEWt5K4eEWqTXZb+jZpia8bGHlKmiu44DU
-         M0CRLXBiX+RmhTNjZ/tJfyGUya0aP6tYXif87iKHnto+wiquodWSVDLr76/3cbw9BVpZ
-         YQbJjhulDJuBkphx80ANkgad209aaT2VvpzL8JuSIycIgh1jop3w7ivErMmMOG8VI7Le
-         ygrddEQfGY5HbpVifa1RhFnF2qiwPlvfOGDKy1FiOrNdiXA5m6BLiDVOhVMoqkbUBLQW
-         KzgK0Ke3fF2MkGyDyKWraHCg8bfBtUfBqABJSH/gOTaAzJ8ZBd8aYjGVMHQKXRs0rPg1
-         20Lw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QNli7KEh4KKbtSkzKBTNfjO3jAVOCO2dCudSxyTimLk=;
+        b=FmtcCWUd8fN1FKAhCyeHgUZwJRgKg6GYUBx5XO7/O41qJaghWhaymr2HRHB0xz3zSM
+         cUsn30llFmwSdxsTHGZIGfMNSWgdgAZCr9Czhl9lrw7AGD3yXQWfwxmk22CSndaF3V4V
+         Qi7z3HypVIwhCP6y11i9wVDAf7ZoXtzt/MmcUICEY3r97taqKd1ahMoNmH9Ay2O9UTxk
+         VuHbEhIaEFRFr8quImFfNeOVKneWbIOcheNgJ5Ryfpd1HT1cTgByPAnbwwFONo/eLVb8
+         EqOBE7C0tg6RaH5czdwl9OdxnwpASKc+K+v6UzM+pahRinxy5Tn/zOTJBejO00H6E7SF
+         8yGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ykexnotmnCEPoI5Oth3kNZn8Re9RXxRddiJBLrLWIBA=;
-        b=QaokvplYBA+PTN905t92YPj9T6yEjWreOn91cGEYJWfy04M7h55xdUICm7JaBXzceT
-         RHjCBbfIIOgDmuvMQqicHWhllGnlMyVNNzVEqu6u9PK75gVGDataF2HhBV0w+zErZlSz
-         K7SZ3XJfe/Q6UMSa6D3sIU7+q/96Dfdyv2baw6GUoPHeG3RMy9RS77EnhTpEiQs/o7dn
-         QY8yo+5iUz0N+nZ9loTJt47XffZfOjvpsFZw7aknCCC1HNTSl4j4qD5SBC1hVt5ju4dQ
-         3sHXkybAAOhJ3BI6GsFji+4e1c8GI7/OOsTzU/mnerDZjSCRIHkMoe4NVSyFlrA9lHIr
-         yW0w==
-X-Gm-Message-State: AOAM533NRVPchBR985XsokTjU0QBXTq1K/dOSrOW6p+o/dpfJ2djT+g0
-        W9KmAmYsAqQ379UC38/LUME=
-X-Google-Smtp-Source: ABdhPJwQKvCtpbEUxQ5HEb2Ha2zJG7oPPAptQTp2CQVAwj13XBwCP7OPpRBf9oVy1CTq/pm8DmSuzg==
-X-Received: by 2002:a17:903:230e:b0:166:3781:1e50 with SMTP id d14-20020a170903230e00b0016637811e50mr7863272plh.20.1654220722734;
-        Thu, 02 Jun 2022 18:45:22 -0700 (PDT)
-Received: from localhost (subs28-116-206-12-38.three.co.id. [116.206.12.38])
-        by smtp.gmail.com with ESMTPSA id r12-20020a17090b050c00b001e0c1044ceasm3937393pjz.43.2022.06.02.18.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 18:45:21 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 08:45:18 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic
- documentations
-Message-ID: <YplnruNz++gABlU0@debian.me>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-4-chenhuacai@loongson.cn>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QNli7KEh4KKbtSkzKBTNfjO3jAVOCO2dCudSxyTimLk=;
+        b=mB31n1DygIP4bID+/T+1/biH6ZctREwx0OWaWfOnNU1N1neYksAkYycQVyBybQBdC6
+         VwI+wU9MJhzofrlur2HKlI4Zj9GOEsEQBqvq6cjUckL7gge7ox0Gi4/I1DwsA3bpfzlj
+         kekt7DeTZ7+oibaeGPzqkXb4Ob0yOrwmyEmisefrCosj3vSLYamXClU6yyCULauqDXnL
+         JKrnYGwSDyRAmmNqrDmVqDtdFc+zG+mU+tqOSv9GyBPPuqRlgp3q6Zgm0KlHfcBqT5qa
+         bW30WfRZbzDlR7m8bw1diQlLgo8jpQFfOxxHnOlk3oFjJgIB7SQ3hHHR4cN4edfPaWWF
+         /NjQ==
+X-Gm-Message-State: AOAM532tH70TC8ma0JmRHDHVJh6ZCQlRONITHdrqJd5ktDArIBTVs8dL
+        oqUctnYuzlcbDc4i9GSjvxIxzxu/hf5kjZ8SHqQ=
+X-Google-Smtp-Source: ABdhPJyztN3ZAGjzK/SDIoRSTndoMFe05zD8gn7lUuFMJS50+raT2K1CrB8lK7ntDRcYyJdjc7fHK7MoEGhvc1Kl4Z8=
+X-Received: by 2002:a05:6000:1788:b0:20c:a43c:10fa with SMTP id
+ e8-20020a056000178800b0020ca43c10famr5954950wrg.511.1654220899886; Thu, 02
+ Jun 2022 18:48:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220602115141.3962749-4-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220602164518.286295-2-xiehuan09@gmail.com> <202206030515.4lqqkb3W-lkp@intel.com>
+In-Reply-To: <202206030515.4lqqkb3W-lkp@intel.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Fri, 3 Jun 2022 09:48:07 +0800
+Message-ID: <CAEr6+ED6oJV1BmAQy6T592GX751t9QB==0vWcXUDMw3WL0YWtA@mail.gmail.com>
+Subject: Re: [PATCH v11 1/4] trace: Add trace any kernel object
+To:     kernel test robot <lkp@intel.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, mingo@redhat.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 07:51:20PM +0800, Huacai Chen wrote:
-> +Legacy IRQ model
-> +================
-> +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
-> +to LIOINTC, and then CPUINTC.
-> +
-> + +---------------------------------------------+
-> + |::                                           |
-> + |                                             |
-> + |    +-----+     +---------+     +-------+    |
-> + |    | IPI | --> | CPUINTC | <-- | Timer |    |
-> + |    +-----+     +---------+     +-------+    |
-> + |                     ^                       |
-> + |                     |                       |
-> + |                +---------+     +-------+    |
-> + |                | LIOINTC | <-- | UARTs |    |
-> + |                +---------+     +-------+    |
-> + |                     ^                       |
-> + |                     |                       |
-> + |               +-----------+                 |
-> + |               | HTVECINTC |                 |
-> + |               +-----------+                 |
-> + |                ^         ^                  |
-> + |                |         |                  |
-> + |          +---------+ +---------+            |
-> + |          | PCH-PIC | | PCH-MSI |            |
-> + |          +---------+ +---------+            |
-> + |            ^     ^           ^              |
-> + |            |     |           |              |
-> + |    +---------+ +---------+ +---------+      |
-> + |    | PCH-LPC | | Devices | | Devices |      |
-> + |    +---------+ +---------+ +---------+      |
-> + |         ^                                   |
-> + |         |                                   |
-> + |    +---------+                              |
-> + |    | Devices |                              |
-> + |    +---------+                              |
-> + |                                             |
-> + |                                             |
-> + +---------------------------------------------+
-> +
-> +Extended IRQ model
-> +==================
-> +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
-> +to CPUINTC directly.
-> +
-> + +--------------------------------------------------------+
-> + |::                                                      |
-> + |                                                        |
-> + |         +-----+     +---------+     +-------+          |
-> + |         | IPI | --> | CPUINTC | <-- | Timer |          |
-> + |         +-----+     +---------+     +-------+          |
-> + |                      ^       ^                         |
-> + |                      |       |                         |
-> + |               +---------+ +---------+     +-------+    |
-> + |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-> + |               +---------+ +---------+     +-------+    |
-> + |                ^       ^                               |
-> + |                |       |                               |
-> + |         +---------+ +---------+                        |
-> + |         | PCH-PIC | | PCH-MSI |                        |
-> + |         +---------+ +---------+                        |
-> + |           ^     ^           ^                          |
-> + |           |     |           |                          |
-> + |   +---------+ +---------+ +---------+                  |
-> + |   | PCH-LPC | | Devices | | Devices |                  |
-> + |   +---------+ +---------+ +---------+                  |
-> + |        ^                                               |
-> + |        |                                               |
-> + |   +---------+                                          |
-> + |   | Devices |                                          |
-> + |   +---------+                                          |
-> + |                                                        |
-> + |                                                        |
-> + +--------------------------------------------------------+
-> +
+Hi lkp,
 
-I think for consistency with other diagrams in Documentation/, just use
-literal code block, like:
+On Fri, Jun 3, 2022 at 5:12 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Jeff,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on b39181f7c6907dc66ff937b74758671fa6ba430c]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Int=
+roduce-objtrace-trigger-to-trace-the-kernel-object/20220603-004723
+> base:   b39181f7c6907dc66ff937b74758671fa6ba430c
+> config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/202=
+20603/202206030515.4lqqkb3W-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364=
+c76683f8ef241025a9556300778c07b590c2)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/765253f020469f948=
+56aedc5a3fe5444e1e8f4e8
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrac=
+e-trigger-to-trace-the-kernel-object/20220603-004723
+>         git checkout 765253f020469f94856aedc5a3fe5444e1e8f4e8
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/gpu/drm/qxl/ kerne=
+l/trace/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> kernel/trace/trace_object.c:336:61: warning: format specifies type 'lo=
+ng' but the argument has type 'unsigned int' [-Wformat]
+>                    pr_err("the size of the %s should be:%ld\n", field->na=
+me, sizeof(void *));
+>                                                         ~~~              =
+    ^~~~~~~~~~~~~~
+>                                                         %u
 
-diff --git a/Documentation/loongarch/irq-chip-model.rst b/Documentation/loongarch/irq-chip-model.rst
-index 35c962991283ff..3cfd528021de05 100644
---- a/Documentation/loongarch/irq-chip-model.rst
-+++ b/Documentation/loongarch/irq-chip-model.rst
-@@ -24,40 +24,38 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
- interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
- to LIOINTC, and then CPUINTC.
- 
-- +---------------------------------------------+
-- |::                                           |
-- |                                             |
-- |    +-----+     +---------+     +-------+    |
-- |    | IPI | --> | CPUINTC | <-- | Timer |    |
-- |    +-----+     +---------+     +-------+    |
-- |                     ^                       |
-- |                     |                       |
-- |                +---------+     +-------+    |
-- |                | LIOINTC | <-- | UARTs |    |
-- |                +---------+     +-------+    |
-- |                     ^                       |
-- |                     |                       |
-- |               +-----------+                 |
-- |               | HTVECINTC |                 |
-- |               +-----------+                 |
-- |                ^         ^                  |
-- |                |         |                  |
-- |          +---------+ +---------+            |
-- |          | PCH-PIC | | PCH-MSI |            |
-- |          +---------+ +---------+            |
-- |            ^     ^           ^              |
-- |            |     |           |              |
-- |    +---------+ +---------+ +---------+      |
-- |    | PCH-LPC | | Devices | | Devices |      |
-- |    +---------+ +---------+ +---------+      |
-- |         ^                                   |
-- |         |                                   |
-- |    +---------+                              |
-- |    | Devices |                              |
-- |    +---------+                              |
-- |                                             |
-- |                                             |
-- +---------------------------------------------+
-+ ::                                           
-+                                              
-+     +-----+     +---------+     +-------+    
-+     | IPI | --> | CPUINTC | <-- | Timer |    
-+     +-----+     +---------+     +-------+    
-+                      ^                       
-+                      |                       
-+                 +---------+     +-------+    
-+                 | LIOINTC | <-- | UARTs |    
-+                 +---------+     +-------+    
-+                      ^                       
-+                      |                       
-+                +-----------+                 
-+                | HTVECINTC |                 
-+                +-----------+                 
-+                 ^         ^                  
-+                 |         |                  
-+           +---------+ +---------+            
-+           | PCH-PIC | | PCH-MSI |            
-+           +---------+ +---------+            
-+             ^     ^           ^              
-+             |     |           |              
-+     +---------+ +---------+ +---------+      
-+     | PCH-LPC | | Devices | | Devices |      
-+     +---------+ +---------+ +---------+      
-+          ^                                   
-+          |                                   
-+     +---------+                              
-+     | Devices |                              
-+     +---------+                              
-+                                              
-+                                              
- 
- Extended IRQ model
- ==================
-@@ -67,35 +65,33 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
- interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
- to CPUINTC directly.
- 
-- +--------------------------------------------------------+
-- |::                                                      |
-- |                                                        |
-- |         +-----+     +---------+     +-------+          |
-- |         | IPI | --> | CPUINTC | <-- | Timer |          |
-- |         +-----+     +---------+     +-------+          |
-- |                      ^       ^                         |
-- |                      |       |                         |
-- |               +---------+ +---------+     +-------+    |
-- |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-- |               +---------+ +---------+     +-------+    |
-- |                ^       ^                               |
-- |                |       |                               |
-- |         +---------+ +---------+                        |
-- |         | PCH-PIC | | PCH-MSI |                        |
-- |         +---------+ +---------+                        |
-- |           ^     ^           ^                          |
-- |           |     |           |                          |
-- |   +---------+ +---------+ +---------+                  |
-- |   | PCH-LPC | | Devices | | Devices |                  |
-- |   +---------+ +---------+ +---------+                  |
-- |        ^                                               |
-- |        |                                               |
-- |   +---------+                                          |
-- |   | Devices |                                          |
-- |   +---------+                                          |
-- |                                                        |
-- |                                                        |
-- +--------------------------------------------------------+
-+ ::                                                      
-+                                                         
-+          +-----+     +---------+     +-------+          
-+          | IPI | --> | CPUINTC | <-- | Timer |          
-+          +-----+     +---------+     +-------+          
-+                       ^       ^                         
-+                       |       |                         
-+                +---------+ +---------+     +-------+    
-+                | EIOINTC | | LIOINTC | <-- | UARTs |    
-+                +---------+ +---------+     +-------+    
-+                 ^       ^                               
-+                 |       |                               
-+          +---------+ +---------+                        
-+          | PCH-PIC | | PCH-MSI |                        
-+          +---------+ +---------+                        
-+            ^     ^           ^                          
-+            |     |           |                          
-+    +---------+ +---------+ +---------+                  
-+    | PCH-LPC | | Devices | | Devices |                  
-+    +---------+ +---------+ +---------+                  
-+         ^                                               
-+         |                                               
-+    +---------+                                          
-+    | Devices |                                          
-+    +---------+                                          
-+                                                         
-+                                                         
- 
- ACPI-related definitions
- ========================
+I will  double check it ,the sizeof(void *) on x86_64 is type =E2=80=98long
+unsigned int=E2=80=99.
 
-Otherwise, htmldocs builds successfully without any new warnings related
-to this patch series.
+>    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
+>            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>                                   ~~~     ^~~~~~~~~~~
+>    include/linux/printk.h:446:60: note: expanded from macro 'printk'
+>    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__=
+)
+>                                                        ~~~    ^~~~~~~~~~~
+>    include/linux/printk.h:418:19: note: expanded from macro 'printk_index=
+_wrap'
+>                    _p_func(_fmt, ##__VA_ARGS__);                         =
+  \
+>                            ~~~~    ^~~~~~~~~~~
+>    1 warning generated.
+>
+>
+> vim +336 kernel/trace/trace_object.c
+>
+>    297
+>    298  static int
+>    299  event_object_trigger_parse(struct event_command *cmd_ops,
+>    300                         struct trace_event_file *file,
+>    301                         char *glob, char *cmd, char *param_and_fil=
+ter)
+>    302  {
+>    303          struct event_trigger_data *trigger_data;
+>    304          struct objtrace_trigger_data *obj_data;
+>    305          struct ftrace_event_field *field;
+>    306          char *objtrace_cmd, *arg;
+>    307          char *param, *filter;
+>    308          int ret;
+>    309          bool remove;
+>    310
+>    311          remove =3D event_trigger_check_remove(glob);
+>    312
+>    313          /*
+>    314           * separate the param and the filter:
+>    315           * objtrace:add:OBJ[:COUNT] [if filter]
+>    316           */
+>    317          ret =3D event_trigger_separate_filter(param_and_filter, &=
+param, &filter, true);
+>    318          if (ret)
+>    319                  return ret;
+>    320
+>    321          objtrace_cmd =3D strsep(&param, ":");
+>    322          if (!objtrace_cmd || strcmp(objtrace_cmd, OBJTRACE_CMD_AD=
+D)) {
+>    323                  pr_err("error objtrace command\n");
+>    324                  return -EINVAL;
+>    325          }
+>    326
+>    327          arg =3D strsep(&param, ":");
+>    328          if (!arg)
+>    329                  return -EINVAL;
+>    330
+>    331          field =3D trace_find_event_field(file->event_call, arg);
+>    332          if (!field)
+>    333                  return -EINVAL;
+>    334
+>    335          if (field->size !=3D sizeof(void *)) {
+>  > 336                  pr_err("the size of the %s should be:%ld\n", fiel=
+d->name, sizeof(void *));
+>    337                  return -EINVAL;
+>    338          }
+>    339
+>    340          if (remove && !field_exist(file, cmd_ops, field->name))
+>    341                  return -ENOENT;
+>    342
+>    343          obj_data =3D kzalloc(sizeof(*obj_data), GFP_KERNEL);
+>    344          if (!obj_data)
+>    345                  return -ENOMEM;
+>    346
+>    347          obj_data->field =3D field;
+>    348          obj_data->tr =3D file->tr;
+>    349          snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtra=
+ce_cmd);
+>    350
+>    351          trigger_data =3D event_trigger_alloc(cmd_ops, cmd, param,=
+ obj_data);
+>    352          if (!trigger_data) {
+>    353                  kfree(obj_data);
+>    354                  return -ENOMEM;
+>    355          }
+>    356          if (remove) {
+>    357                  event_trigger_unregister(cmd_ops, file, glob+1, t=
+rigger_data);
+>    358                  kfree(obj_data);
+>    359                  kfree(trigger_data);
+>    360                  return 0;
+>    361          }
+>    362
+>    363          ret =3D event_trigger_parse_num(param, trigger_data);
+>    364          if (ret)
+>    365                  goto out_free;
+>    366
+>    367          ret =3D event_trigger_set_filter(cmd_ops, file, filter, t=
+rigger_data);
+>    368          if (ret < 0)
+>    369                  goto out_free;
+>    370
+>    371          ret =3D event_trigger_register(cmd_ops, file, glob, trigg=
+er_data);
+>    372          if (ret)
+>    373                  goto out_free;
+>    374
+>    375          return ret;
+>    376
+>    377   out_free:
+>    378          event_trigger_reset_filter(cmd_ops, trigger_data);
+>    379          kfree(obj_data);
+>    380          kfree(trigger_data);
+>    381          return ret;
+>    382  }
+>    383
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+Thanks,
+JeffXie

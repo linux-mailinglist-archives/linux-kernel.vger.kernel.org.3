@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EC953CAE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF6553CAE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 15:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244797AbiFCNsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 09:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57502 "EHLO
+        id S244807AbiFCNtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 09:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240804AbiFCNsP (ORCPT
+        with ESMTP id S243775AbiFCNtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 09:48:15 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C597D11A33;
-        Fri,  3 Jun 2022 06:48:12 -0700 (PDT)
+        Fri, 3 Jun 2022 09:49:39 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC7A60D2;
+        Fri,  3 Jun 2022 06:49:38 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0FDF924000C;
-        Fri,  3 Jun 2022 13:48:05 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 667701BF208;
+        Fri,  3 Jun 2022 13:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654264091;
+        t=1654264177;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Jtp/yRc/uyATXr5jntdl9ignuQiC6FOqLOyBRDlGt+Y=;
-        b=F2ou3Is5D9zfFmlCo29B+n0hLZiuMnFPTKyH5VOk/3lNoaB8BLxhyYTElUMpEaZVnXAl+s
-        oRUxF0gRrtBnJdAmXTsSSQPvcN0zS6pZPebBTjbVtiKp8Nee6uZlhjmgyjsd6DhLxq+BSH
-        hj4kuHjUblCaCrkd6K8+mDw//k8bcJCGcRsSkSPqcYv0PmfCfp69pYSz7nqTVIvLBNbvCK
-        X6f70eaHLacWTIyuvcWkpBAu1mpXsk9aDawWFvhGEwINIbt+js24VHZxmXjlCeU98vWoML
-        cby6HBmFVF/YpWZg0JxkKdswRhUS5y0704Aj6qQ79dXHmRT06DH99ZeIDCMprQ==
-Date:   Fri, 3 Jun 2022 15:48:04 +0200
+        bh=HiUwik3EhO3JFdFLVKOMNj1TCjCKUI8ClkdISKetXBM=;
+        b=ZitsYbiDmmu0QEQK0tHpWRWxB7TnWCpnSoq+I8d/Yfc1w3sKzRu52h9LAQSX3QtsiTl4yW
+        RfP1AIS5Ni/6TnYd7o6XZy49Wk9HcVTkBZok3zncudqlUJjpTvUK8vsRz5wd78QethutFq
+        dLa2BLrsBHb76V05calbgIZQ+t1d+Sm+1DnUiM7ciXsMY9MspfTQEWNbecXprMnwd58/0e
+        bFqsUzOchOw+jNW5/N7uS90b5+5eAS08VeFMLT1865QackX9G017RfeWTnGGNBruv/P2Em
+        rBcOeXkxqak6EQ1TyuwG9i+rdzOUtSDsbGRL7k7K330Sl8Hf27EEHsXQfIwv3A==
+Date:   Fri, 3 Jun 2022 15:49:34 +0200
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-block@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rini <trini@konsulko.com>, Jens Axboe <axboe@kernel.dk>,
-        Davidlohr Bueso <dave@stgolabs.net>,
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v3 4/5] mtd_blkdevs: add option to enable scanning for
- partitions
-Message-ID: <20220603154804.2705bcb6@xps-13>
-In-Reply-To: <Yn1ibyUeXZttNX2a@makrotopia.org>
-References: <Yn1ibyUeXZttNX2a@makrotopia.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] Add support for unprotected spare data page
+Message-ID: <20220603154934.521c57ab@xps-13>
+In-Reply-To: <20220519190112.6344-1-ansuelsmth@gmail.com>
+References: <20220519190112.6344-1-ansuelsmth@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -60,62 +61,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Hi,
 
-daniel@makrotopia.org wrote on Thu, 12 May 2022 20:39:27 +0100:
+ansuelsmth@gmail.com wrote on Thu, 19 May 2022 21:01:10 +0200:
 
-> Add Kconfig boolean CONFIG_MTD_BLOCK_PARTITIONS and enable block
-> partition parsers on non-NAND mtdblock devices in case it is selected.
+> Some background about this.
+> On original qsdk ipq8064 based firmware there was a big separation from
+> boot partition and user partition. With boot partition we refer to
+> partition used to init the router (bootloader, spm firmware and other
+> internal stuff) With user partition we refer to linux partition and data
+> partition not used to init the router.
+> When someone had to write to these boot partition a special mode was
+> needed, to switch the nand driver to this special configuration.
 >=20
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  drivers/mtd/Kconfig       | 11 +++++++++++
->  drivers/mtd/mtd_blkdevs.c |  4 +++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+> Upstream version of the nandc driver totally dropped this and the result
+> is that if someone try to read data from these partition a CRC warning
+> is printed and if someone try to write that (if for example someone
+> wants to replace the bootloader) result is a broken system as the data
+> is badly written.
 >=20
-> diff --git a/drivers/mtd/Kconfig b/drivers/mtd/Kconfig
-> index 796a2eccbef0b8..12874dec15692a 100644
-> --- a/drivers/mtd/Kconfig
-> +++ b/drivers/mtd/Kconfig
-> @@ -69,6 +69,17 @@ config MTD_BLOCK_RO
->  	  You do not need this option for use with the DiskOnChip devices. For
->  	  those, enable NFTL support (CONFIG_NFTL) instead.
-> =20
-> +config MTD_BLOCK_PARTITIONS
-> +	bool "Scan for partitions on MTD block devices"
-> +	depends on MTD_BLOCK || MTD_BLOCK_RO
-> +	default y if FIT_PARTITION
-> +	help
-> +	  Scan MTD block devices for partitions (ie. MBR, GPT, uImage.FIT, ...).
-> +	  (NAND devices are omitted, ubiblock should be used instead when)
-> +
-> +	  Unless your MTD partitions contain sub-partitions mapped using a
-> +	  partition table, say no.
-> +
->  comment "Note that in some cases UBI block is preferred. See MTD_UBI_BLO=
-CK."
->  	depends on MTD_BLOCK || MTD_BLOCK_RO
-> =20
-> diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
-> index f7317211146550..c67ce2e6fbeb0a 100644
-> --- a/drivers/mtd/mtd_blkdevs.c
-> +++ b/drivers/mtd/mtd_blkdevs.c
-> @@ -359,7 +359,9 @@ int add_mtd_blktrans_dev(struct mtd_blktrans_dev *new)
->  	} else {
->  		snprintf(gd->disk_name, sizeof(gd->disk_name),
->  			 "%s%d", tr->name, new->devnum);
-> -		gd->flags |=3D GENHD_FL_NO_PART;
-> +
-> +		if (!IS_ENABLED(CONFIG_MTD_BLOCK_PARTITIONS) || mtd_type_is_nand(new->=
-mtd))
-> +			gd->flags |=3D GENHD_FL_NO_PART;
+> This series comes to fix this.
+>=20
+> A user can declare offset and size of these special partition using the
+> qcom,boot-pages binding.
+>=20
+> An initial implementation of this assumed that the boot-pages started
+> from the start of the nand but we discover that some device have backup
+> of these special partition and we can have situation where we have this
+> partition scheme
+> - APPSBL (require special mode)
+> - APPSBLENV (doesn't require special mode)
+> - ART
+> - APPSBLBK (back of APPSBL require special mode)
+> - APPSBLENVBK (back of APPSBLENV doesn't require special mode)
+> With this configuration we need to declare sparse boot page and we can't
+> assume boot-pages always starts from the start of the nand.
+>=20
+> A user can use this form to declare sparse boot pages
+> qcom,boot-pages =3D <0x0 0x0c80000 0x0c80000 0x0500000>;
+>=20
+> The driver internally will parse this array, convert it to nand pages
+> and check internally on every read/write if this special configuration
+> should used for that page or the normal one.
+>=20
+> The reason for all of this is that qcom FOR SOME REASON, disable ECC for
+> spare data only for these boot partition and we need to reflect this
+> special configuration to mute these warning and to permit actually
+> writing to these pages.
 
-I really wonder if we need this in mtdblock ? Isn't ubiblock enough?
+Manivannan, any feedback on this?
 
-Anyhow,
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-I'll let Richard ack the ubiblock patch.
+>=20
+> v4:
+> - Fix wrong compatible set for boot-pages (ipq8074 instead of ipq806x)
+> v3:
+> - Fix typo in Docmunetation commit desription
+> - Add items description for uint32-matrix
+> v2:
+> - Add fixes from Krzysztof in Documentation
+>=20
+> Ansuel Smith (2):
+>   mtd: nand: raw: qcom_nandc: add support for unprotected spare data
+>     pages
+>   dt-bindings: mtd: qcom_nandc: document qcom,boot-pages binding
+>=20
+>  .../devicetree/bindings/mtd/qcom,nandc.yaml   |  26 +++
+>  drivers/mtd/nand/raw/qcom_nandc.c             | 148 +++++++++++++++++-
+>  2 files changed, 169 insertions(+), 5 deletions(-)
+>=20
 
 Thanks,
 Miqu=C3=A8l

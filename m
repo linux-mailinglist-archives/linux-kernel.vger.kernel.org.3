@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B0D53C849
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B950A53C848
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Jun 2022 12:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243534AbiFCKPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 06:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        id S243606AbiFCKP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 06:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243465AbiFCKPG (ORCPT
+        with ESMTP id S243531AbiFCKPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 06:15:06 -0400
+        Fri, 3 Jun 2022 06:15:18 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADE3A3B284;
-        Fri,  3 Jun 2022 03:15:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B00FC3B2B5;
+        Fri,  3 Jun 2022 03:15:13 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 130BB15A1;
-        Fri,  3 Jun 2022 03:15:04 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62BF315DB;
+        Fri,  3 Jun 2022 03:15:13 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.42.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 864F13F766;
-        Fri,  3 Jun 2022 03:14:55 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A26C03F766;
+        Fri,  3 Jun 2022 03:15:04 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
@@ -41,11 +41,10 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         openrisc@lists.librecores.org, linux-csky@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH 4/6] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Fri,  3 Jun 2022 15:44:09 +0530
-Message-Id: <20220603101411.488970-5-anshuman.khandual@arm.com>
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 5/6] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Fri,  3 Jun 2022 15:44:10 +0530
+Message-Id: <20220603101411.488970-6-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220603101411.488970-1-anshuman.khandual@arm.com>
 References: <20220603101411.488970-1-anshuman.khandual@arm.com>
@@ -64,93 +63,113 @@ This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
 macros can be dropped which are no longer needed.
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-csky@vger.kernel.org
+Cc: Dinh Nguyen <dinguyen@kernel.org>
 Cc: linux-kernel@vger.kernel.org
-Acked-by: Guo Ren <guoren@kernel.org>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/csky/Kconfig               |  1 +
- arch/csky/include/asm/pgtable.h | 18 ------------------
- arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
- 3 files changed, 33 insertions(+), 18 deletions(-)
+ arch/nios2/Kconfig               |  1 +
+ arch/nios2/include/asm/pgtable.h | 24 ----------------
+ arch/nios2/mm/init.c             | 47 ++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 24 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 21d72b078eef..588b8a9c68ed 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -6,6 +6,7 @@ config CSKY
- 	select ARCH_HAS_GCOV_PROFILE_ALL
+diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+index 4167f1eb4cd8..e0459dffd218 100644
+--- a/arch/nios2/Kconfig
++++ b/arch/nios2/Kconfig
+@@ -6,6 +6,7 @@ config NIOS2
  	select ARCH_HAS_SYNC_DMA_FOR_CPU
  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select ARCH_HAS_DMA_SET_UNCACHED
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-index bbe245117777..229a5f4ad7fc 100644
---- a/arch/csky/include/asm/pgtable.h
-+++ b/arch/csky/include/asm/pgtable.h
-@@ -77,24 +77,6 @@
- #define MAX_SWAPFILES_CHECK() \
- 		BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
- 
--#define __P000	PAGE_NONE
--#define __P001	PAGE_READ
--#define __P010	PAGE_READ
--#define __P011	PAGE_READ
--#define __P100	PAGE_READ
--#define __P101	PAGE_READ
--#define __P110	PAGE_READ
--#define __P111	PAGE_READ
+ 	select ARCH_NO_SWAP
+ 	select COMMON_CLK
+ 	select TIMER_OF
+diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+index 262d0609268c..3c9f83c22733 100644
+--- a/arch/nios2/include/asm/pgtable.h
++++ b/arch/nios2/include/asm/pgtable.h
+@@ -34,30 +34,6 @@ struct mm_struct;
+ 				((x) ? _PAGE_EXEC : 0) |		\
+ 				((r) ? _PAGE_READ : 0) |		\
+ 				((w) ? _PAGE_WRITE : 0))
+-/*
+- * These are the macros that generic kernel code needs
+- * (to populate protection_map[])
+- */
 -
--#define __S000	PAGE_NONE
--#define __S001	PAGE_READ
--#define __S010	PAGE_WRITE
--#define __S011	PAGE_WRITE
--#define __S100	PAGE_READ
--#define __S101	PAGE_READ
--#define __S110	PAGE_WRITE
--#define __S111	PAGE_WRITE
+-/* Remove W bit on private pages for COW support */
+-#define __P000	MKP(0, 0, 0)
+-#define __P001	MKP(0, 0, 1)
+-#define __P010	MKP(0, 0, 0)	/* COW */
+-#define __P011	MKP(0, 0, 1)	/* COW */
+-#define __P100	MKP(1, 0, 0)
+-#define __P101	MKP(1, 0, 1)
+-#define __P110	MKP(1, 0, 0)	/* COW */
+-#define __P111	MKP(1, 0, 1)	/* COW */
 -
- extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
- #define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+-/* Shared pages can have exact HW mapping */
+-#define __S000	MKP(0, 0, 0)
+-#define __S001	MKP(0, 0, 1)
+-#define __S010	MKP(0, 1, 0)
+-#define __S011	MKP(0, 1, 1)
+-#define __S100	MKP(1, 0, 0)
+-#define __S101	MKP(1, 0, 1)
+-#define __S110	MKP(1, 1, 0)
+-#define __S111	MKP(1, 1, 1)
  
-diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-index bf2004aa811a..f9babbed17d4 100644
---- a/arch/csky/mm/init.c
-+++ b/arch/csky/mm/init.c
-@@ -197,3 +197,35 @@ void __init fixaddr_init(void)
- 	vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
- 	fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
+ /* Used all over the kernel */
+ #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
+diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+index 613fcaa5988a..e867f5d85580 100644
+--- a/arch/nios2/mm/init.c
++++ b/arch/nios2/mm/init.c
+@@ -124,3 +124,50 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+ {
+ 	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
  }
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
 +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	/* Remove W bit on private pages for COW support */
 +	case VM_NONE:
-+		return PAGE_NONE;
++		return MKP(0, 0, 0);
 +	case VM_READ:
++		return MKP(0, 0, 1);
++	/* COW */
 +	case VM_WRITE:
++		return MKP(0, 0, 0);
++	/* COW */
 +	case VM_WRITE | VM_READ:
++		return MKP(0, 0, 1);
 +	case VM_EXEC:
++		return MKP(1, 0, 0);
 +	case VM_EXEC | VM_READ:
++		return MKP(1, 0, 1);
++	/* COW */
 +	case VM_EXEC | VM_WRITE:
++		return MKP(1, 0, 0);
++	/* COW */
 +	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_READ;
++		return MKP(1, 0, 1);
++	/* Shared pages can have exact HW mapping */
 +	case VM_SHARED:
-+		return PAGE_NONE;
++		return MKP(0, 0, 0);
 +	case VM_SHARED | VM_READ:
-+		return PAGE_READ;
++		return MKP(0, 0, 1);
 +	case VM_SHARED | VM_WRITE:
++		return MKP(0, 1, 0);
 +	case VM_SHARED | VM_WRITE | VM_READ:
-+		return PAGE_WRITE;
++		return MKP(0, 1, 1);
 +	case VM_SHARED | VM_EXEC:
++		return MKP(1, 0, 0);
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_READ;
++		return MKP(1, 0, 1);
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
++		return MKP(1, 1, 0);
 +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_WRITE;
++		return MKP(1, 1, 1);
 +	default:
 +		BUILD_BUG();
 +	}

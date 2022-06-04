@@ -2,192 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D96553D4C9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 04:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5318353D4CB
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 04:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349936AbiFDCH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 22:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S1350056AbiFDCHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 22:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345631AbiFDCHY (ORCPT
+        with ESMTP id S1345631AbiFDCHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 22:07:24 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E973313A9;
-        Fri,  3 Jun 2022 19:07:21 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so8367752pjs.1;
-        Fri, 03 Jun 2022 19:07:21 -0700 (PDT)
+        Fri, 3 Jun 2022 22:07:30 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6175313A9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 19:07:29 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s14so7981981plk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 19:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vW/f8cKMH2tXPP5DERsOqeGBmSRqfZgMJ/o7YW6aZaA=;
-        b=O89rwX5Clw1y6HYOM9jUXOMzKZti5N0Bp8oLKBxvrTRsZr8SCMU6D50/Xw5iIbmGGM
-         Ea1Xvv8gSwcK2e3gcOVQKcmLIziYTVY+JelcKmeawLFWcsPQTFWu9K/Kp/Y2hu0wSTgL
-         vjmyus7ON2X6+em9CTi1xkd2xgqigHbYUOZLP/Wjv4XHPIZ8IJ5xBnUqX/Ubjmcps0FV
-         2PDoqXnen7va3NM6AB91gGtCr5ripbP7MeEgLab71Y8nUb+P3UY1GbTylYrGtetRLUA1
-         rdagm+MXQhnMSacHYAcsBDXcq9hOKumDJgyyVVre5UCzBsN1keZVZLFE1SGKyHU7uwwD
-         KV5Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ff/IhfCPH41H+OZSAXWB83B0oZdz+7dYMwu9KM64DQw=;
+        b=ceZCdMwmQ+8G45eBMa/Yfy/rn6hFeHi7miTK9GBzQM0Na2P3sRiZNS33cnb4VAtjzP
+         xIpg/TbOxpvQU/7irs6zU/aADpLUMdiGcQuFjUY0HLgYoj7I+paYvpkMvb7JSG3i2WpV
+         RB8AiOpYfqRJRSM4j0uvO4NbwE9/vuMq0OlCVqFoOQHHwqw4R9zb8HRu2UuGSjQZsrn5
+         0EEgLpQGwmi/WtYD9zaJaTOKpJs2zCUM8plapvqlq9jp9BW/VOdPPOytPkt47MuYdQMS
+         UFeOSwXlBTOJgPu/GNZtGFNvWsU8Iqyc0140qnFy6XAmSJh4ocbn1O4jSoIEvdIQ8n1u
+         5jig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vW/f8cKMH2tXPP5DERsOqeGBmSRqfZgMJ/o7YW6aZaA=;
-        b=g2r5dEETsmLvuCKz3ogkoSssMxbIRcvbuFtpvzttVz4qdm8+ITXg67MJe1D4wL4gnt
-         XCC9H0zjkMG93bqVWUdjimhtNPs8LNjNtSXd2mbP7zP5IOmcZd3JbxGiR3IcvsCS1JTE
-         T2t09pg0iixhJjZPzvVVX1PsTY3HeF1MWSTx315n7pu+S/DZNxG6GCiGeSwI1TdjYAmw
-         iGhxmVE3hqGRuCY2Ssm+tRenUX6C/qZSYJVw/VtTeUepl0gEWhKBZE+zfRL+5wzBog9k
-         tNobfhwx2V3ynuU0gqWxNxUQOt8tScz6PqhBqOWRurxB9gEQQ66lgn3K6WUgXzdPPG4N
-         rA8A==
-X-Gm-Message-State: AOAM531MLZnRReOV1mxPhUk5hurQyYM0w8ub78jNAd4TD4BLuIMW9Gpf
-        +ydnZ/DkfSO51QeTL+igGzKiMwSdMf8=
-X-Google-Smtp-Source: ABdhPJy4Nue4jpg7LM+nr0HISR1+I5KCAXBSSOv4nxRiYB063+TcRbZ2N6mlkGz2ch+16XRWjLUgLA==
-X-Received: by 2002:a17:902:6b42:b0:15d:3603:6873 with SMTP id g2-20020a1709026b4200b0015d36036873mr12838922plt.30.1654308440641;
-        Fri, 03 Jun 2022 19:07:20 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
-        by smtp.gmail.com with ESMTPSA id c14-20020a170902c2ce00b0015e8d4eb207sm6060553pla.81.2022.06.03.19.07.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ff/IhfCPH41H+OZSAXWB83B0oZdz+7dYMwu9KM64DQw=;
+        b=H5tmO47Hfw4MsT2SXEKqiV+QF7BTYrCdOQ+w8GJRZGW7IR67xz2We/sBrxZAaX3p9r
+         LcxxUJkSH9udbEjd9xLuqt+Ed3gRmNMRjmrH6vJFBFtfbvLUbRVIDdIxz2rI/nt31d0p
+         qnVUoOfIUGFY7WXOxBMNJzw2GktNQvi31ZQpiuSWVYZfKbxyXwhzoi7m/XhCQqe0qISq
+         rmIpbK9gDplDU8mI7G7SITRdvriF7fBMzHbM2eJIIuNR1jbjtzAKdh6YCCgqaqZnbSfh
+         7PP9GxPtkuYUYiGhEUmwYsIHVc2S5gs5t1d4uC/l6O9ayl1CrKx+LjuJVNvd5dy7/2pC
+         hKRA==
+X-Gm-Message-State: AOAM532utFGR4tz8ah5FOmVns14eHSv4jR86dAyx6v0oGNuWuu9ZZnL1
+        HnYyhXie6WH69/dKKE6ozYopSA==
+X-Google-Smtp-Source: ABdhPJyciJHiB4w7inpufhaHNS4EDndG3bC1pR3Eg/dKEgOX/M3M4LpojRWlNirzvjbZq8/I9eLCCA==
+X-Received: by 2002:a17:90b:4c8c:b0:1e8:5607:7ec0 with SMTP id my12-20020a17090b4c8c00b001e856077ec0mr523504pjb.36.1654308449330;
+        Fri, 03 Jun 2022 19:07:29 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (ec2-54-67-95-58.us-west-1.compute.amazonaws.com. [54.67.95.58])
+        by smtp.gmail.com with ESMTPSA id f17-20020a170902f39100b00163fd24ca8csm6079468ple.119.2022.06.03.19.07.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 19:07:19 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Nikolai Kondrashov <spbnick@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        llvm@lists.linux.dev, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] HID: uclogic: properly format kernel-doc comment for hid_dbg() wrappers
-Date:   Sat,  4 Jun 2022 09:07:11 +0700
-Message-Id: <20220604020711.252312-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Fri, 03 Jun 2022 19:07:28 -0700 (PDT)
+Date:   Sat, 4 Jun 2022 10:07:21 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, broonie@kernel.org,
+        acme@kernel.org, german.gomez@arm.com, mathieu.poirier@linaro.org,
+        john.garry@huawei.com, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] perf: arm64: Kernel support for Dwarf unwinding
+ through SVE functions
+Message-ID: <20220604020721.GB53464@leoy-ThinkPad-X240s>
+References: <20220517100743.3020667-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517100743.3020667-1-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running kernel-doc script on drivers/hid/hid-uclogic-params.c, it found
-6 warnings for hid_dbg() wrapper functions below:
+On Tue, May 17, 2022 at 11:07:41AM +0100, James Clark wrote:
+> Changes since v1:
+> 
+>   * Add Mark's review tag
+>   * Clarify in docs that it's the SVE register length
+>   * Split patchset into kernel side and Perf tool changes
+> 
+> When SVE registers are pushed onto the stack the VG register is required to
+> unwind because the stack offsets would vary by the SVE register width at the
+> time when the sample was taken.
+> 
+> These first two patches add support for sampling the VG register to the kernel
+> and the docs. There is another patchset to add support to userspace perf.
 
-drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-drivers/hid/hid-uclogic-params.c:48: warning: missing initial short description on line:
- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-drivers/hid/hid-uclogic-params.c:48: info: Scanning doc for function Dump
-drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-drivers/hid/hid-uclogic-params.c:80: warning: missing initial short description on line:
- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-drivers/hid/hid-uclogic-params.c:80: info: Scanning doc for function Dump
-drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * Dump tablet interface parameters with hid_dbg().
-drivers/hid/hid-uclogic-params.c:105: warning: missing initial short description on line:
- * Dump tablet interface parameters with hid_dbg().
+Hi Catalin, Will,
 
-One of them is reported by kernel test robot.
+Since James is on vacation, just want to ping if you could pick up
+this two patches?  Mark.B has given review tags for this patch set.
 
-Fix these warnings by properly format kernel-doc comment for these
-functions.
+I did this is because there has another patch set in perf tool to
+enable SVE registsers [1], which is dependent on this patch set's
+merging.
 
-Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.com/
-Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: José Expósito <jose.exposito89@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Nikolai Kondrashov <spbnick@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: llvm@lists.linux.dev
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Changes since v3 [1]:
-   - Drom stable ML from CC list (in response to Greg KH reply)
+Thanks,
+Leo
 
- [1]: https://lore.kernel.org/linux-doc/20220602082321.313143-1-bagasdotme@gmail.com/
-
- drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
-index db838f16282d64..e5e65d849faa97 100644
---- a/drivers/hid/hid-uclogic-params.c
-+++ b/drivers/hid/hid-uclogic-params.c
-@@ -23,11 +23,11 @@
- /**
-  * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
-  *                                       to a string.
-- *
-  * @inrange:	The in-range reporting type to convert.
-  *
-- * Returns:
-- *	The string representing the type, or NULL if the type is unknown.
-+ * Return:
-+ * * The string representing the type, or
-+ * * %NULL if the type is unknown.
-  */
- static const char *uclogic_params_pen_inrange_to_str(
- 				enum uclogic_params_pen_inrange inrange)
-@@ -45,10 +45,12 @@ static const char *uclogic_params_pen_inrange_to_str(
- }
- 
- /**
-- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
-- *
-+ * uclogic_params_pen_hid_dbg() - Dump tablet interface pen parameters
-  * @hdev:	The HID device the pen parameters describe.
-  * @pen:	The pen parameters to dump.
-+ *
-+ * Dump tablet interface pen parameters with hid_dbg(). The dump is indented
-+ * with a tab.
-  */
- static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
- 					const struct uclogic_params_pen *pen)
-@@ -77,11 +79,12 @@ static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
- }
- 
- /**
-- * Dump tablet interface frame parameters with hid_dbg(), indented with two
-- * tabs.
-- *
-+ * uclogic_params_frame_hid_dbg() - Dump tablet interface frame parameters
-  * @hdev:	The HID device the pen parameters describe.
-  * @frame:	The frame parameters to dump.
-+ *
-+ * Dump tablet interface frame parameters with hid_dbg(). The dump is
-+ * indented with two tabs.
-  */
- static void uclogic_params_frame_hid_dbg(
- 				const struct hid_device *hdev,
-@@ -102,10 +105,11 @@ static void uclogic_params_frame_hid_dbg(
- }
- 
- /**
-- * Dump tablet interface parameters with hid_dbg().
-- *
-+ * uclogic_params_hid_dbg() - Dump tablet interface parameters
-  * @hdev:	The HID device the parameters describe.
-  * @params:	The parameters to dump.
-+ *
-+ * Dump tablet interface parameters with hid_dbg().
-  */
- void uclogic_params_hid_dbg(const struct hid_device *hdev,
- 				const struct uclogic_params *params)
-
-base-commit: 1f952675835bfe18d6ae494a5581724d68c52352
--- 
-An old man doll... just what I always wanted! - Clara
-
+[1] https://lore.kernel.org/lkml/20220525154114.718321-1-james.clark@arm.com/

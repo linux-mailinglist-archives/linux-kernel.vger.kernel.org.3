@@ -2,139 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E13753D694
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 13:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F3D53D699
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 13:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235574AbiFDLm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 07:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S235653AbiFDLqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 07:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiFDLm0 (ORCPT
+        with ESMTP id S235537AbiFDLqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 07:42:26 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0739EBA0
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 04:42:25 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id b12so66505ljq.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 04:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to;
-        bh=8SwrRgdR9JzGwBlcOs2mbd+GmNcjHpu3NUyHm9CLdNI=;
-        b=fJRtLtsU2bmtIOImkMpo8PQCkECthFAt0naWKfmu7nEPH15Q8RdZ/VI1Q7BX18nzHN
-         uhXZge2i3oZNWw+V6FccO72+UoCPRVnm7iflWmQ+7NBOyBunV9/tPpxK3bhgHrwNezzZ
-         ZSQV40OJyK5UbIvPil9N67HGSskpGRmvl0Pcu+myI2sVVifo54xjfUFCzAwjZ2CMncB5
-         X95snmBkoiuoFcqbkCnspfSVeZtW4y7AI9fI5xTzULyxYK+f+zOKf6lWP5w6WOh0kXQY
-         qFJlRWXEWAY14jolG2yFdi9jg/q3k9XEuAkt81VUpYNPNXkaL4yNHitEpuvyqx2EblR5
-         5RFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=8SwrRgdR9JzGwBlcOs2mbd+GmNcjHpu3NUyHm9CLdNI=;
-        b=WoJ3vqSrtX1COWZ5C+q/o4jsrvtIO+iT6Xc3wDrOUgRn5BNDHYMFJmAlp+O9n+ntY6
-         E1wxEhHQQzEd4KunVDaQwn1pmm6ZQsZCId06lsTcUP3HhwUPrD1YVJa8HOeXfS2NUk65
-         YL4xJI8wlcHKH/jlOg4hgYm/Qmyt4hi6CpRfJndVSD951KdsxTFYRtuI6oP2OK2e5tqJ
-         9v37AWIN+jhcMpwMJDfFvZgxCa//4yy4z25uSdToN+Kh7uRe9pjFdXx2/gR4a3D90WJF
-         CDIBYYSGeS9/KB63y94BQEMiPY9iRHjCeVCTJT0Ws+Lha+qsG+ihC9gb/wWjDia8kk+F
-         XoRg==
-X-Gm-Message-State: AOAM5338R/duuBH6B9MRhzdYtloUswqXhg7lA/sJOJmNamob87uyq5Mw
-        /LL9eNdb1ZOhn5DpQ9630iM=
-X-Google-Smtp-Source: ABdhPJyypDEAMipFXoT/Ecjg4pAYViLXjBIG5AP/UNOmwVOX4fliozloqTcE4nFaU4qu8xCfDJK5/g==
-X-Received: by 2002:a2e:a4da:0:b0:255:799e:218a with SMTP id p26-20020a2ea4da000000b00255799e218amr5695333ljm.195.1654342943139;
-        Sat, 04 Jun 2022 04:42:23 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.4])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056512110a00b004791c4858e0sm743048lfg.114.2022.06.04.04.42.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Jun 2022 04:42:22 -0700 (PDT)
-Message-ID: <89d2979c-7e8a-f63f-327e-1969a4c03c11@gmail.com>
-Date:   Sat, 4 Jun 2022 14:42:20 +0300
+        Sat, 4 Jun 2022 07:46:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7AE9594
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 04:46:07 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nxSEH-0002VK-4o; Sat, 04 Jun 2022 13:46:05 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B6118C2FA;
+        Sat,  4 Jun 2022 11:46:03 +0000 (UTC)
+Date:   Sat, 4 Jun 2022 13:46:03 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
+Message-ID: <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] ntfs3: fix NULL deref in ntfs_update_mftmirr
-Content-Language: en-US
-To:     almaz.alexandrovich@paragon-software.com, ntfs3@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     syzbot+c95173762127ad76a824@syzkaller.appspotmail.com
-References: <85293dd018cae78e4d48d74ca77710b11eed59ba.1650574393.git.paskripkin@gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <85293dd018cae78e4d48d74ca77710b11eed59ba.1650574393.git.paskripkin@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FBHa9shtdytwPV0otyLwX20K"
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2jjncl7znrrtvgd2"
+Content-Disposition: inline
+In-Reply-To: <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FBHa9shtdytwPV0otyLwX20K
-Content-Type: multipart/mixed; boundary="------------5k9b1s0YW701NL8kLjgffOzh";
- protected-headers="v1"
-From: Pavel Skripkin <paskripkin@gmail.com>
-To: almaz.alexandrovich@paragon-software.com, ntfs3@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Cc: syzbot+c95173762127ad76a824@syzkaller.appspotmail.com
-Message-ID: <89d2979c-7e8a-f63f-327e-1969a4c03c11@gmail.com>
-Subject: Re: [PATCH 1/2] ntfs3: fix NULL deref in ntfs_update_mftmirr
-References: <85293dd018cae78e4d48d74ca77710b11eed59ba.1650574393.git.paskripkin@gmail.com>
-In-Reply-To: <85293dd018cae78e4d48d74ca77710b11eed59ba.1650574393.git.paskripkin@gmail.com>
 
---------------5k9b1s0YW701NL8kLjgffOzh
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+--2jjncl7znrrtvgd2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-T24gNC8yMS8yMiAyMzo1MywgUGF2ZWwgU2tyaXBraW4gd3JvdGU6DQo+IElmIG50ZnNfZmls
-bF9zdXBlcigpIHdhc24ndCBjYWxsZWQgdGhlbiBzYmktPnNiIHdpbGwgYmUgZXF1YWwgdG8g
-TlVMTC4NCj4gQ29kZSBzaG91bGQgY2hlY2sgdGhpcyBwdHIgYmVmb3JlIGRlcmVmZXJlbmNp
-bmcuIFN5emJvdCBoaXQgdGhpcyBpc3N1ZQ0KPiB2aWEgcGFzc2luZyB3cm9uZyBtb3VudCBw
-YXJhbSBhcyBjYW4gYmUgc2VlbiBmcm9tIGxvZyBiZWxvdw0KPiANCj4gRmFpbCBsb2c6DQo+
-IG50ZnMzOiBVbmtub3duIHBhcmFtZXRlciAnaW9jaHZyc2V0Jw0KPiBnZW5lcmFsIHByb3Rl
-Y3Rpb24gZmF1bHQsIHByb2JhYmx5IGZvciBub24tY2Fub25pY2FsIGFkZHJlc3MgMHhkZmZm
-ZmMwMDAwMDAwMDAzOiAwMDAwIFsjMV0gUFJFRU1QVCBTTVAgS0FTQU4NCj4gS0FTQU46IG51
-bGwtcHRyLWRlcmVmIGluIHJhbmdlIFsweDAwMDAwMDAwMDAwMDAwMTgtMHgwMDAwMDAwMDAw
-MDAwMDFmXQ0KPiBDUFU6IDEgUElEOiAzNTg5IENvbW06IHN5ei1leGVjdXRvcjIxMCBOb3Qg
-dGFpbnRlZCA1LjE4LjAtcmMzLXN5emthbGxlci0wMDAxNi1nYjI1MzQzNTc0NmQ5ICMwDQo+
-IC4uLg0KPiBDYWxsIFRyYWNlOg0KPiAgIDxUQVNLPg0KPiAgIHB1dF9udGZzKzB4MWVkLzB4
-MmEwIGZzL250ZnMzL3N1cGVyLmM6NDYzDQo+ICAgbnRmc19mc19mcmVlKzB4NmEvMHhlMCBm
-cy9udGZzMy9zdXBlci5jOjEzNjMNCj4gICBwdXRfZnNfY29udGV4dCsweDExOS8weDdhMCBm
-cy9mc19jb250ZXh0LmM6NDY5DQo+ICAgZG9fbmV3X21vdW50KzB4MmI0LzB4YWQwIGZzL25h
-bWVzcGFjZS5jOjMwNDQNCj4gICBkb19tb3VudCBmcy9uYW1lc3BhY2UuYzozMzgzIFtpbmxp
-bmVdDQo+ICAgX19kb19zeXNfbW91bnQgZnMvbmFtZXNwYWNlLmM6MzU5MSBbaW5saW5lXQ0K
-PiANCj4gRml4ZXM6IDgyY2FlMjY5Y2ZhOSAoImZzL250ZnMzOiBBZGQgaW5pdGlhbGl6YXRp
-b24gb2Ygc3VwZXIgYmxvY2siKQ0KPiBSZXBvcnRlZC1hbmQtdGVzdGVkLWJ5OiBzeXpib3Qr
-Yzk1MTczNzYyMTI3YWQ3NmE4MjRAc3l6a2FsbGVyLmFwcHNwb3RtYWlsLmNvbQ0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBQYXZlbCBTa3JpcGtpbiA8cGFza3JpcGtpbkBnbWFpbC5jb20+DQoNCmdl
-bnRsZSBwaW5nDQoNCg0KDQoNCldpdGggcmVnYXJkcywNClBhdmVsIFNrcmlwa2luDQo=
+Hello Vincent,
 
---------------5k9b1s0YW701NL8kLjgffOzh--
+wow! This is a great series which addresses a lot of long outstanding
+issues. Great work!
 
---------------FBHa9shtdytwPV0otyLwX20K
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+As this cover letter brings so much additional information I'll ask
+Jakub and David if they take pull request from me, which itself have
+merges. This cover letter would be part of my merge. If I get the OK,
+can you provide this series as a tag (ideally GPG signed) that I can
+pull?
+
+regards,
+Marc
+
+On 03.06.2022 19:28:41, Vincent Mailhol wrote:
+> Aside of calc_bittiming.o which can be configured with
+> CAN_CALC_BITTIMING, all objects from drivers/net/can/dev/ get linked
+> unconditionally to can-dev.o even if not needed by the user.
+>=20
+> This series first goal it to split the can-dev modules so that the
+> user can decide which features get built in during
+> compilation. Additionally, the CAN Device Drivers menu is moved from
+> the "Networking support" category to the "Device Drivers" category
+> (where all drivers are supposed to be).
+>=20
+> Below diagrams illustrate the changes made.
+> The arrow symbol "x --> y" denotes that "y depends on x".
+>=20
+> * menu before this series *
+>=20
+> CAN bus subsystem support
+>   symbol: CONFIG_CAN
+>   |
+>   +-> CAN Device Drivers
+>       (no symbol)
+>       |
+>       +-> software/virtual CAN device drivers
+>       |   (at time of writing: slcan, vcan, vxcan)
+>       |
+>       +-> Platform CAN drivers with Netlink support
+>           symbol: CONFIG_CAN_DEV
+> 	  |
+>           +-> CAN bit-timing calculation  (optional for hardware drivers)
+>           |   symbol: CONFIG_CAN_BITTIMING
+> 	  |
+> 	  +-> All other CAN devices
+>=20
+> * menu after this series *
+>=20
+> Network device support
+>   symbol: CONFIG_NETDEVICES
+>   |
+>   +-> CAN Device Drivers
+>       symbol: CONFIG_CAN_DEV
+>       |
+>       +-> software/virtual CAN device drivers
+>       |   (at time of writing: slcan, vcan, vxcan)
+>       |
+>       +-> CAN device drivers with Netlink support
+>           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+>           |
+>           +-> CAN bit-timing calculation (optional for all drivers)
+>           |   symbol: CONFIG_CAN_BITTIMING
+> 	  |
+> 	  +-> All other CAN devices not relying on RX offload
+>           |
+>           +-> CAN rx offload
+>               symbol: CONFIG_CAN_RX_OFFLOAD
+>               |
+>               +-> CAN devices relying on rx offload
+>                   (at time of writing: flexcan, ti_hecc and mcp251xfd)
+>=20
+> Patches 1 to 5 of this series do above modification.
+>=20
+> The last two patches add a check toward CAN_CTRLMODE_LISTENONLY in
+> can_dropped_invalid_skb() to discard tx skb (such skb can potentially
+> reach the driver if injected via the packet socket). In more details,
+> patch 6 moves can_dropped_invalid_skb() from skb.h to skb.o and patch
+> 7 is the actual change.
+>=20
+> Those last two patches are actually connected to the first five ones:
+> because slcan and v(x)can requires can_dropped_invalid_skb(), it was
+> necessary to add those three devices to the scope of can-dev before
+> moving the function to skb.o.
+>=20
+>=20
+> ** N.B. **
+>=20
+> This design results from the lengthy discussion in [1].
+>=20
+> I did one change from Oliver's suggestions in [2]. The initial idea
+> was that the first two config symbols should be respectively
+> CAN_DEV_SW and CAN_DEV instead of CAN_DEV and CAN_NETLINK as proposed
+> in this series.
+>=20
+>   * First symbol is changed from CAN_DEV_SW to CAN_DEV. The rationale
+>     is that it is this entry that will trigger the build of can-dev.o
+>     and it makes more sense for me to name the symbol share the same
+>     name as the module. Furthermore, this allows to create a menuentry
+>     with an explicit name that will cover both the virtual and
+>     physical devices (naming the menuentry "CAN Device Software" would
+>     be inconsistent with the fact that physical devices would also be
+>     present in a sub menu). And not using menuentry complexifies the
+>     menu.
+>=20
+>   * Second symbol is renamed from CAN_DEV to CAN_NETLINK because
+>     CAN_DEV is now taken by the previous menuconfig and netlink is the
+>     predominant feature added at this level. I am opened to other
+>     naming suggestion (CAN_DEV_NETLINK, CAN_DEV_HW...?).
+>=20
+> [1] https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vi=
+ncent@wanadoo.fr/
+> [2] https://lore.kernel.org/linux-can/22590a57-c7c6-39c6-06d5-11c6e4e1534=
+b@hartkopp.net/
+>=20
+>=20
+> ** Changelog **
+>=20
+> v3 -> v4:
+>=20
+>   * Five additional patches added to split can-dev module and refactor
+>     Kbuild. c.f. below (lengthy) thread:
+>     https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vi=
+ncent@wanadoo.fr/
+>=20
+>=20
+> v2 -> v3:
+>=20
+>   * Apply can_dropped_invalid_skb() to slcan.
+>=20
+>   * Make vcan, vxcan and slcan dependent of CONFIG_CAN_DEV by
+>     modifying Kbuild.
+>=20
+>   * fix small typos.
+>=20
+> v1 -> v2:
+>=20
+>   * move can_dropped_invalid_skb() to skb.c instead of dev.h
+>=20
+>   * also move can_skb_headroom_valid() to skb.c
+>=20
+> Vincent Mailhol (7):
+>   can: Kbuild: rename config symbol CAN_DEV into CAN_NETLINK
+>   can: Kconfig: turn menu "CAN Device Drivers" into a menuconfig using
+>     CAN_DEV
+>   can: bittiming: move bittiming calculation functions to
+>     calc_bittiming.c
+>   can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+>   net: Kconfig: move the CAN device menu to the "Device Drivers" section
+>   can: skb: move can_dropped_invalid_skb() and can_skb_headroom_valid()
+>     to skb.c
+>   can: skb: drop tx skb if in listen only mode
+>=20
+>  drivers/net/Kconfig                   |   2 +
+>  drivers/net/can/Kconfig               |  66 +++++++--
+>  drivers/net/can/dev/Makefile          |  20 ++-
+>  drivers/net/can/dev/bittiming.c       | 197 -------------------------
+>  drivers/net/can/dev/calc_bittiming.c  | 202 ++++++++++++++++++++++++++
+>  drivers/net/can/dev/dev.c             |   9 +-
+>  drivers/net/can/dev/skb.c             |  72 +++++++++
+>  drivers/net/can/spi/mcp251xfd/Kconfig |   1 +
+>  include/linux/can/skb.h               |  59 +-------
+>  net/can/Kconfig                       |   5 +-
+>  10 files changed, 351 insertions(+), 282 deletions(-)
+>  create mode 100644 drivers/net/can/dev/calc_bittiming.c
+>=20
+> --=20
+> 2.35.1
+>=20
+>=20
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--2jjncl7znrrtvgd2
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmKbRRwFAwAAAAAACgkQbk1w61LbBA3z
-oQ/+IAgmQPRhQh5nW1zoL/BL5+ZXBCnFTdcDlcTKTg1uyaFSML0HBLPrH5JzlUgjCd4KI0KfQ/u9
-Qot9iQzJRMzcG5mZhE/4CqinvY4tOkFNiMmHF8Wy7tcFdnvb8gD4dqfCjD8kxjuaFVa6idm07+oP
-nRMzeM56W5cWFQ1nNjn9LT3HnEn8DQhWGyWim4+VnR5gMwtQjVjQp836Q/TxdzVOzDANyAZ/DtRk
-gBcRPz02VN26u5i57ZX6VV1/w2ghYwcN1kSbvbg2TZCR7r6XWOHv2A+t2N7raT50zjHH5tnpY/WT
-e6kqkppR9o5iIYQmJpZ6f9a2YGpKtNVA4klz0ZJDo0SHxSzOgUNtOAscW1N9gm0f6VQYmo3dXJDj
-lmVqxCw4Z8VQYHmm7mEEPn6xwX1yP+8phABOBd1STxjO+OaEUbSgIKBB0KdRZ6S6l5TzcORTwhdF
-K1i4NcCK0FgsmoEFeVM244+kGH2G+72tgDpx6R0ElCeDmn5TR6IkAvVQctvldfr65xk00OPRpNxQ
-jywh/H6ZoAQvb9Z6wgFZd9vivNfYh+jqtJwAmm0YqzTUJqubvJjtH7EVgNI0uS4b4EIMxOXumc/k
-Fqy+d4YD/lcUz3Pifl/9UqGYLvNDiEpsM1R69uxDdEo/dZy6sa9JCWEKj8xhddh2ozWwODsnSN7/
-nKs=
-=DJ2z
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbRfgACgkQrX5LkNig
+010WtwgAjisk0+9iW56D4Ex0iNn+MT1ICrkf2OQhKxQezPO6klY6a6Fl7EbF8MJe
+SIUbgJyzz8A9LXepHUf9cbgkXXg4OiJZQu0sHbU4bLqX3+rShN4AAzVVmRAgBewx
+n3ZOog1jTl1dX05OeGqADZapQ4euTNckC4C38XFNIZkH3LWu3/wlK3s89eq8p0gs
+PwqGyA2UIoGKJKr0DPJH6BQUqNgeYh1LfAfuO4it0VYswbo0h4tmc8eAcG56gXd3
+AHz7YZK2Y0naPjS/SWxEWRgsGUZjQVcwruXxIJRwEyh3yOojHhkBfNtz9R4IFMjU
+VaV7mM2cteZPzL7JFe7k3kZmR8dUdA==
+=vadE
 -----END PGP SIGNATURE-----
 
---------------FBHa9shtdytwPV0otyLwX20K--
+--2jjncl7znrrtvgd2--

@@ -2,181 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF73353D57F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 06:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F0353D585
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 06:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349737AbiFDEbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 00:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S1348970AbiFDEiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 00:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350631AbiFDEab (ORCPT
+        with ESMTP id S232402AbiFDEiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 00:30:31 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD78756C20
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 21:30:19 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso8529867pjg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 21:30:19 -0700 (PDT)
+        Sat, 4 Jun 2022 00:38:18 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D62E3206D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 21:38:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x62so12465439ede.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 21:38:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GU0Fx5MqBypkPPR5oPl8FBqUWIca4qCm6hD5a1k+pSo=;
-        b=P3hlmhZGSSe/tHysAx9pKosNOKX136mCts9rBAP73d+2oiAMeKZE9wH0jsJbQ//uaJ
-         KRmJWP+8mXEchku3A3OmLMc11cxoBVuV+Zxkm1+JAYZhUmLggl9ivXBgStthiaLV1CLL
-         n033U5o9vCrnszomBIFhKF9yS9c2m7Du041Y6vH3LMOn4ZJUtAY+G8oO/0Dm3ZJU0lha
-         DhZDSyh7kDb4HDTxOVNuBmxcebvlLZJN5m1k6FISRwegrjJa4zqjQfQGm9hjXOR3pj2M
-         mCc0rN5Oi6FfnhFlGCJq1GNc5HbmjB1q7e6z5zd8dmrXqtnQQOCXxARtaYQEmRDjYkES
-         8Bcg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hh4ELzZPJFhmxKWds3g9V2X+IxOzPvS8KSmxMCSqtss=;
+        b=YUKSooZoVPXYG42IT9ndGNg7dC1LZpK/VfKSn0j57Z+sy/uNIrK4r7Gg/XCMWo/MXe
+         eembK/oUt12M3iUxeSnaBQ5kVxZY/it5PLDSYraoq+49vmEuFqaJXLHFKXJ+xIWcpi63
+         N1NzZSeKmfbq5jX7aFzK8yeeG9r1V9tkLi9Eg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GU0Fx5MqBypkPPR5oPl8FBqUWIca4qCm6hD5a1k+pSo=;
-        b=5MIr1FWN3nFrPL+a1fDM8ycwlJl+/1B4fsGeQ+icPJuEL/55MbwkyriVPk6B6L0vvC
-         BCtAlzs/NMeM7rhDZDjL5gLDF9hsh1roA1XQPX3iIMe+J/yBAwKL7P1vb9QLG226eFer
-         NFsFmkXW6WDBRGWJVfuxp7pZ+2aTr/rZv3dljUiMDxyG1BgKdV0vqTsUVjLk+gnDenHO
-         QKgGsWcx5t7K7dxfDdv/kJKyh8fnzYE4WZI+qDnCNAa5MnRZyMt4SPECBqAv5L4mqF1w
-         LuxO2qClP+49hw+L8R5eBUPiTei7OqeHw4gTMIk5Id3sgRwoDw91TT2XKCMo+LXLzbU9
-         q0nw==
-X-Gm-Message-State: AOAM533u4kXiwNyRs0a4BJnGJNLxKR+BW+pvlqHIxI+p/1FLVemBAiFq
-        EIeIDQXRo1WwzR4q/dPLtY40/w==
-X-Google-Smtp-Source: ABdhPJwPsv7B/cB0f9lf7gE7960SfuDJQhoEcKlSR/LEXNV7lFeDLyxi95gda2GN0VeIwR6MFMcD2w==
-X-Received: by 2002:a17:902:b703:b0:158:2667:7447 with SMTP id d3-20020a170902b70300b0015826677447mr12938801pls.92.1654317019242;
-        Fri, 03 Jun 2022 21:30:19 -0700 (PDT)
-Received: from leo-build-box.lan (ec2-54-67-95-58.us-west-1.compute.amazonaws.com. [54.67.95.58])
-        by smtp.gmail.com with ESMTPSA id w24-20020a1709027b9800b00163d4c3ffabsm6152916pll.304.2022.06.03.21.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 21:30:18 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ali Saidi <alisaidi@amazon.com>, Joe Mario <jmario@redhat.com>,
-        Adam Li <adam.li@amperecomputing.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v5 17/17] perf c2c: Update documentation for new display option 'peer'
-Date:   Sat,  4 Jun 2022 12:28:20 +0800
-Message-Id: <20220604042820.2270916-18-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220604042820.2270916-1-leo.yan@linaro.org>
-References: <20220604042820.2270916-1-leo.yan@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hh4ELzZPJFhmxKWds3g9V2X+IxOzPvS8KSmxMCSqtss=;
+        b=0gjtisUOH2V3x5Gg5HIKDciuxVQ8Mi2Rks76L/dmAHC2Y/Bn7ZozJX8TChCWeEu2rJ
+         v3sSAcnhfLwvipRr0ZLbJho9AZSNBMKRgLas0C92GwhZjeqM33zAfw9Be1abbU7TZ7BF
+         eckb+Ia7hTaDw+BjmtU5PUV3+Ftz8l0zQYO5iLVNFAnFO2b4Lwx/dP5/EEkLuOzLKKek
+         4GtCoaNgpcS4hw7Y/ltLDE5MQTzLEZs5WneyYoMwJ2zvDfWlUFjN4kEAZfJcsE0HTFgh
+         6eSKnDQsYbg+TYS43c7Tc9TOFJjN6aRF6y/oPP6nKCMDFc6c/7yxT7tFRFYUw5s1MC80
+         zj+w==
+X-Gm-Message-State: AOAM530hVk/b8iQ+u53CSo2UDYJJYMH1Src7fPk6pa4oUbhoTLrWgf38
+        C7ltK6uGY/35Osduxx3y2aE+8Qomtd/RAO8z
+X-Google-Smtp-Source: ABdhPJw3JLMro1bfHvHcuDxAGJ6QqMChLvi20p343bboemhdsB7TxgZ5GA3bdTr2JvwZD5Gx7b3lng==
+X-Received: by 2002:a05:6402:268c:b0:42a:f0ca:2840 with SMTP id w12-20020a056402268c00b0042af0ca2840mr14341732edd.343.1654317495646;
+        Fri, 03 Jun 2022 21:38:15 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056402048b00b0042ab02e3485sm4863313edv.44.2022.06.03.21.38.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 21:38:14 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so5210670wms.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 21:38:14 -0700 (PDT)
+X-Received: by 2002:a05:600c:4982:b0:39c:3c0d:437c with SMTP id
+ h2-20020a05600c498200b0039c3c0d437cmr7056295wmp.38.1654317494164; Fri, 03 Jun
+ 2022 21:38:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220603113908.78777-1-thierry.reding@gmail.com>
+In-Reply-To: <20220603113908.78777-1-thierry.reding@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 3 Jun 2022 21:37:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiVxF5VLFSuet3OrC7u1Gfb-ZyMs4W-KXAc42rXPRWmhA@mail.gmail.com>
+Message-ID: <CAHk-=wiVxF5VLFSuet3OrC7u1Gfb-ZyMs4W-KXAc42rXPRWmhA@mail.gmail.com>
+Subject: Re: [GIT PULL] hte: New subsystem for v5.19-rc1
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dipen Patel <dipenp@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the new display option 'peer' is introduced, this patch is to
-update the documentation to reflect it.
+On Fri, Jun 3, 2022 at 4:39 AM Thierry Reding <thierry.reding@gmail.com> wrote:
+>
+> Note that this currently supports only one provider, but there seems to
+> be enough interest in this functionality and we expect to see more
+> drivers added once this is merged.
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Acked-by: Ian Rogers <irogers@google.com>
-Reviewed-by: Ali Saidi <alisaidi@amazon.com>
----
- tools/perf/Documentation/perf-c2c.txt | 31 +++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+So the "one provider" worries me, but the part that really doesn't
+make me all warm and fuzzy is how this came in at the end of the merge
+window.
 
-diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
-index 6f69173731aa..f1f7ae6b08d1 100644
---- a/tools/perf/Documentation/perf-c2c.txt
-+++ b/tools/perf/Documentation/perf-c2c.txt
-@@ -109,7 +109,9 @@ REPORT OPTIONS
- 
- -d::
- --display::
--	Switch to HITM type (rmt, lcl) to display and sort on. Total HITMs as default.
-+	Switch to HITM type (rmt, lcl) or peer snooping type (peer) to display
-+	and sort on. Total HITMs (tot) as default, except Arm64 uses peer mode
-+	as default.
- 
- --stitch-lbr::
- 	Show callgraph with stitched LBRs, which may have more complete
-@@ -174,12 +176,18 @@ For each cacheline in the 1) list we display following data:
-   Cacheline
-   - cacheline address (hex number)
- 
--  Rmt/Lcl Hitm
-+  Rmt/Lcl Hitm (Display with HITM types)
-   - cacheline percentage of all Remote/Local HITM accesses
- 
--  LLC Load Hitm - Total, LclHitm, RmtHitm
-+  Peer Snoop (Display with peer type)
-+  - cacheline percentage of all peer accesses
-+
-+  LLC Load Hitm - Total, LclHitm, RmtHitm (For display with HITM types)
-   - count of Total/Local/Remote load HITMs
- 
-+  Load Peer - Total, Local, Remote (For display with peer type)
-+  - count of Total/Local/Remote load from peer cache or DRAM
-+
-   Total records
-   - sum of all cachelines accesses
- 
-@@ -201,16 +209,21 @@ For each cacheline in the 1) list we display following data:
-   - count of LLC load accesses, includes LLC hits and LLC HITMs
- 
-   RMT Load Hit - RmtHit, RmtHitm
--  - count of remote load accesses, includes remote hits and remote HITMs
-+  - count of remote load accesses, includes remote hits and remote HITMs;
-+    on Arm neoverse cores, RmtHit is used to account remote accesses,
-+    includes remote DRAM or any upward cache level in remote node
- 
-   Load Dram - Lcl, Rmt
-   - count of local and remote DRAM accesses
- 
- For each offset in the 2) list we display following data:
- 
--  HITM - Rmt, Lcl
-+  HITM - Rmt, Lcl (Display with HITM types)
-   - % of Remote/Local HITM accesses for given offset within cacheline
- 
-+  Peer Snoop - Rmt, Lcl (Display with peer type)
-+  - % of Remote/Local peer accesses for given offset within cacheline
-+
-   Store Refs - L1 Hit, L1 Miss, N/A
-   - % of store accesses that hit L1, missed L1 and N/A (no available) memory
-     level for given offset within cacheline
-@@ -227,9 +240,12 @@ For each offset in the 2) list we display following data:
-   Code address
-   - code address responsible for the accesses
- 
--  cycles - rmt hitm, lcl hitm, load
-+  cycles - rmt hitm, lcl hitm, load (Display with HITM types)
-     - sum of cycles for given accesses - Remote/Local HITM and generic load
- 
-+  cycles - rmt peer, lcl peer, load (Display with peer type)
-+    - sum of cycles for given accesses - Remote/Local peer load and generic load
-+
-   cpu cnt
-     - number of cpus that participated on the access
- 
-@@ -251,7 +267,8 @@ The 'Node' field displays nodes that accesses given cacheline
- offset. Its output comes in 3 flavors:
-   - node IDs separated by ','
-   - node IDs with stats for each ID, in following format:
--      Node{cpus %hitms %stores}
-+      Node{cpus %hitms %stores} (Display with HITM types)
-+      Node{cpus %peers %stores} (Display with peer type)
-   - node IDs with list of affected CPUs in following format:
-       Node{cpu list}
- 
--- 
-2.25.1
+And it's a bit odd in other ways.
 
+The DT bindings got the comment "why call it 'hardware timestamp'"
+when no other case seems sane.
+
+So the DT bindings got renamed. So now part of the code calls it "hte"
+(which nobody understands outside of the hte community that is
+apparently one single device: Tegra) and part of the code calls it
+"timestamp".
+
+Hmm.
+
+             Linus

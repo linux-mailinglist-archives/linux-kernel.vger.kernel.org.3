@@ -2,198 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9039B53D819
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 20:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD0253D81A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 20:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239296AbiFDSbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 14:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S239402AbiFDScC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 14:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiFDSbl (ORCPT
+        with ESMTP id S239341AbiFDSb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 14:31:41 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9557D2CDD1
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 11:31:38 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id v22so19042364ybd.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 11:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=b7Wzo4q6WiidWVfF6tif0mL6TBctH+VSiUVjalEqAqc=;
-        b=XH8F4GRaPg4EKgzniBiglO9cLqDFXkKaM3tgKQT1ltHGLvTfB3ZMDu6LoYq9Pv9fP3
-         w0IfSYbzMiCTj+kOttc40mX+CNQAhejs3faso+Q3SHyOF6xBb+X9Hde8bFiZ7a5e6XcO
-         eZTdGkw1ktpzMP4UxydNUHiBvdoQJw+I6rrPd4muBc9kb3YV0d9G5+qE68fp196jR6P8
-         UbrtgCVXrdjV/uoe4GDWxjdvdFMYcUtHjKh/wRyCKR3l5+o/IvjgEPkxUTrfFZAgcbu3
-         WSsv6RPidzH34cZdSBKUNA7VGlwjOnziSRqXO7xfVhiMIG9p64/SV0JKBwtSCbe1913Y
-         3+Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=b7Wzo4q6WiidWVfF6tif0mL6TBctH+VSiUVjalEqAqc=;
-        b=B7Kp/+Pt+kmE9LkiR4tCa3KCRZDpJVS6bnnLqzOFA+3Uyyx5w9WNNS92zco0ENhQhw
-         VIJQciq2N7bFYpM4tI8YtatO+MrWufnw9lLz6V23To7p9ZCpjd2RLEJiQBdPDr8VkP8L
-         bFFTdJCBnSeu9Td+y4kDmyeiI/CZvgR6bYESvSVnvmIW533289qtDeC0z5kcQHbiQJj1
-         U7UVDYaIJDaqeI/dljWDDBsfMfc3/huz0flz+bMgGTznCrXWVse3XDWuzA4I0QyAXELC
-         fRpHokvlnlL3CzfbMOc9IgcF/xU5EnNYeFpZiroO/PuY9gldivf+WnFityNh5XaI5CBv
-         hMMw==
-X-Gm-Message-State: AOAM532oKGFy5hTSWPpnuusEKGFf9PwbYSN7EbGe7uh9OgTDQORfdPj2
-        YHc67fZRMXB6HaLyErSVQV2K0YI2568wDrJc8S/75Q==
-X-Google-Smtp-Source: ABdhPJzQLOiMhCIK0I8VZPo0aIc9wUXIcGROMra2UfpHRcDBFbp4npiMCJlbVSrBk3Q/TENSLjwexYqpzO/eA6WTNn0=
-X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
- u5-20020a254705000000b0065d43f85652mr16213201yba.389.1654367497556; Sat, 04
- Jun 2022 11:31:37 -0700 (PDT)
+        Sat, 4 Jun 2022 14:31:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0F61D9
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 11:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654367512; x=1685903512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9XTQIzHEBj0nYIW3pXe5Kq7qGEBVyGnwuVcb/zSra5I=;
+  b=le133uZu0GdtCXGjtUzkyg3Fs++ssbgBjJbWE9U8T07SPihiIKVEqqch
+   Rzdao4yXLMgxcx6oE9VuJaEe3FWjdWXXRsjJTwthefydyImbGCYx5VxDw
+   FkQZ4CssEANGi570kHG7VWLYsQZs2LgH4iuvN/btMVv7wvnAyzELOv++C
+   dM6fL0n9N8GjHng2XX4nIvPzBCYbYIs2BDIJhes7meLd5h7LJ8WQvIehq
+   pTZJGrFEoeOxlsRK1oUSPCrCmaEXvHlLH+I+D3QrXEE6cM0dLARqCbJ1H
+   OcxI0d/7oizFpJ4EIaFVOK9DP9iZGK+lxmRVcjeW04WL4YhkG+nj0gGgc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="362829355"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="362829355"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 11:31:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="613706641"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2022 11:31:50 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxYYv-000B7p-C6;
+        Sat, 04 Jun 2022 18:31:49 +0000
+Date:   Sun, 5 Jun 2022 02:31:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse:
+ incorrect type in argument 1 (different address spaces)
+Message-ID: <202206050255.CU8yNvC3-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220603173815.088143764@linuxfoundation.org>
-In-Reply-To: <20220603173815.088143764@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sun, 5 Jun 2022 00:01:25 +0530
-Message-ID: <CA+G9fYvdXrmRCbGC1RFqv_-Kx4y6QSK3fz0AxBHPR1bCmLTLnA@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/30] 4.19.246-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 at 23:12, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.246 release.
-> There are 30 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.246-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
+commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+date:   4 months ago
+config: arm-randconfig-s032-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050255.CU8yNvC3-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/mtd/nand/onenand/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-## Build
-* kernel: 4.19.246-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 8d1c6d3581bb07a2ea5e34376791884a79ff4114
-* git describe: v4.19.245-31-g8d1c6d3581bb
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.245-31-g8d1c6d3581bb
+sparse warnings: (new ones prefixed by >>)
+>> drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     got void [noderef] __iomem *
+>> drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     got void [noderef] __iomem *
+>> drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     expected void *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     got void [noderef] __iomem *
 
-## Test Regressions (compared to v4.19.245)
-No test regressions found.
+vim +385 drivers/mtd/nand/onenand/onenand_omap2.c
 
-## Metric Regressions (compared to v4.19.245)
-No metric regressions found.
+3621311695f5b1a drivers/mtd/onenand/omap2.c              Peter Ujfalusi  2018-01-12  359  
+fb25070afdf07cc drivers/mtd/onenand/omap2.c              Ladislav Michl  2018-01-12  360  static int omap2_onenand_read_bufferram(struct mtd_info *mtd, int area,
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  361  					unsigned char *buffer, int offset,
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  362  					size_t count)
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  363  {
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  364  	struct omap2_onenand *c = container_of(mtd, struct omap2_onenand, mtd);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  365  	struct onenand_chip *this = mtd->priv;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  366  	struct device *dev = &c->pdev->dev;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  367  	void *buf = (void *)buffer;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  368  	dma_addr_t dma_src, dma_dst;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  369  	int bram_offset, err;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  370  	size_t xtra;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  371  
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  372  	bram_offset = omap2_onenand_bufferram_offset(mtd, area) + area + offset;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  373  	/*
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  374  	 * If the buffer address is not DMA-able, len is not long enough to
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  375  	 * make DMA transfers profitable or if invoked from panic_write()
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  376  	 * fallback to PIO mode.
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  377  	 */
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  378  	if (!virt_addr_valid(buf) || bram_offset & 3 || (size_t)buf & 3 ||
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  379  	    count < 384 || mtd->oops_panic_write)
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  380  		goto out_copy;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  381  
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  382  	xtra = count & 3;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  383  	if (xtra) {
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  384  		count -= xtra;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06 @385  		memcpy(buf + count, this->base + bram_offset + count, xtra);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  386  	}
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  387  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  388  	dma_dst = dma_map_single(dev, buf, count, DMA_FROM_DEVICE);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  389  	dma_src = c->phys_base + bram_offset;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  390  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  391  	if (dma_mapping_error(dev, dma_dst)) {
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  392  		dev_err(dev, "Couldn't DMA map a %d byte buffer\n", count);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  393  		goto out_copy;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  394  	}
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  395  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  396  	err = omap2_onenand_dma_transfer(c, dma_src, dma_dst, count);
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  397  	dma_unmap_single(dev, dma_dst, count, DMA_FROM_DEVICE);
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  398  	if (!err)
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  399  		return 0;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  400  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  401  	dev_err(dev, "timeout waiting for DMA\n");
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  402  
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  403  out_copy:
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  404  	memcpy(buf, this->base + bram_offset, count);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  405  	return 0;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  406  }
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  407  
+fb25070afdf07cc drivers/mtd/onenand/omap2.c              Ladislav Michl  2018-01-12  408  static int omap2_onenand_write_bufferram(struct mtd_info *mtd, int area,
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  409  					 const unsigned char *buffer,
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  410  					 int offset, size_t count)
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  411  {
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  412  	struct omap2_onenand *c = container_of(mtd, struct omap2_onenand, mtd);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  413  	struct onenand_chip *this = mtd->priv;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  414  	struct device *dev = &c->pdev->dev;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  415  	void *buf = (void *)buffer;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  416  	dma_addr_t dma_src, dma_dst;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  417  	int bram_offset, err;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  418  
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  419  	bram_offset = omap2_onenand_bufferram_offset(mtd, area) + area + offset;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  420  	/*
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  421  	 * If the buffer address is not DMA-able, len is not long enough to
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  422  	 * make DMA transfers profitable or if invoked from panic_write()
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  423  	 * fallback to PIO mode.
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  424  	 */
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  425  	if (!virt_addr_valid(buf) || bram_offset & 3 || (size_t)buf & 3 ||
+875330f87a057a7 drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  426  	    count < 384 || mtd->oops_panic_write)
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  427  		goto out_copy;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  428  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  429  	dma_src = dma_map_single(dev, buf, count, DMA_TO_DEVICE);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  430  	dma_dst = c->phys_base + bram_offset;
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  431  	if (dma_mapping_error(dev, dma_src)) {
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  432  		dev_err(dev, "Couldn't DMA map a %d byte buffer\n", count);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  433  		goto out_copy;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  434  	}
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  435  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  436  	err = omap2_onenand_dma_transfer(c, dma_src, dma_dst, count);
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  437  	dma_unmap_page(dev, dma_src, count, DMA_TO_DEVICE);
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  438  	if (!err)
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  439  		return 0;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  440  
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  441  	dev_err(dev, "timeout waiting for DMA\n");
+6732cfd4cac514b drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  442  
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  443  out_copy:
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06 @444  	memcpy(this->base + bram_offset, buf, count);
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  445  	return 0;
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  446  }
+36cd4fb5d277f34 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  447  
 
-## Test Fixes (compared to v4.19.245)
-No test fixes found.
+:::::: The code at line 385 was first introduced by commit
+:::::: 36cd4fb5d277f34fe9e4db0deac2d4efd7dff735 [MTD] [OneNAND] Add OMAP2 / OMAP3 OneNAND driver
 
-## Metric Fixes (compared to v4.19.245)
-No metric fixes found.
+:::::: TO: Adrian Hunter <ext-adrian.hunter@nokia.com>
+:::::: CC: David Woodhouse <David.Woodhouse@intel.com>
 
-## Test result summary
-total: 110351, pass: 98212, fail: 225, skip: 10998, xfail: 916
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 290 passed, 6 failed
-* arm64: 56 total, 54 passed, 2 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 51 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

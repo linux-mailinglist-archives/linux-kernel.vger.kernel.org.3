@@ -2,86 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FF253D5F8
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 09:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 233D453D5FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 09:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiFDHkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 03:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S233286AbiFDHne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 03:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiFDHkG (ORCPT
+        with ESMTP id S232682AbiFDHna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 03:40:06 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DE9275E6;
-        Sat,  4 Jun 2022 00:40:05 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 1989B2055E;
-        Sat,  4 Jun 2022 09:40:03 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jHU0zutdV4mI; Sat,  4 Jun 2022 09:40:02 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 9E1D120322;
-        Sat,  4 Jun 2022 09:40:02 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 8DF3D80004A;
-        Sat,  4 Jun 2022 09:40:02 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 4 Jun 2022 09:40:02 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 4 Jun
- 2022 09:40:02 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id D343B3182D6B; Sat,  4 Jun 2022 09:40:01 +0200 (CEST)
-Date:   Sat, 4 Jun 2022 09:40:01 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <timo.teras@iki.fi>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] xfrm: xfrm_policy: fix a possible double
- xfrm_pols_put() in xfrm_bundle_lookup()
-Message-ID: <20220604074001.GL680067@gauss3.secunet.de>
-References: <20220601064625.26414-1-hbh25y@gmail.com>
+        Sat, 4 Jun 2022 03:43:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8730F27B02
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 00:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654328609; x=1685864609;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y+24kAa+SFMhBQSj2/01dltHkZD9TuYmX7E816Ly8NU=;
+  b=brjz8qweqeKQX2Bqxwe4KzqXFSpqiw7fukb0DuBPR4W4NdoQLGETNQ+g
+   8kli1xQDicsM4F5SHendAgiomYM9nn36SuFjWCo5qH4M9gNGcNvGjCf7/
+   0tFF8ejtitCEME10wqtSXjwgzRgwHR2tXJl/QdPFHMnHPYSfnlgzEoS9z
+   Ir8e7eBmwZiHGU5CreyLHpcGyzvLLTLmd/Fr9oAf3P1KhskQZdvXP2TYf
+   24+fn/6xdPtIc960g4qzGvf8FVlCTNfTAIVmoz+/dq8baSzlZtIJJSWdF
+   YGc/gRj34YVZPJmObo/e2f71sQA1ZS2pG0AEPQm4m+voOAVCN04YmdYxS
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="276449917"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="276449917"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 00:43:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="905797902"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Jun 2022 00:43:22 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxORN-000ART-RP;
+        Sat, 04 Jun 2022 07:43:21 +0000
+Date:   Sat, 4 Jun 2022 15:43:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>, Kai Huang <kai.huang@intel.com>
+Subject: arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type
+ in assignment (different base types)
+Message-ID: <202206041508.vR5NoxR4-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601064625.26414-1-hbh25y@gmail.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:46:25PM +0800, Hangyu Hua wrote:
-> xfrm_policy_lookup() will call xfrm_pol_hold_rcu() to get a refcount of
-> pols[0]. This refcount can be dropped in xfrm_expand_policies() when
-> xfrm_expand_policies() return error. pols[0]'s refcount is balanced in
-> here. But xfrm_bundle_lookup() will also call xfrm_pols_put() with
-> num_pols == 1 to drop this refcount when xfrm_expand_policies() return
-> error.
-> 
-> This patch also fix an illegal address access. pols[0] will save a error
-> point when xfrm_policy_lookup fails. This lead to xfrm_pols_put to resolve
-> an illegal address in xfrm_bundle_lookup's error path.
-> 
-> Fix these by setting num_pols = 0 in xfrm_expand_policies()'s error path.
-> 
-> Fixes: 80c802f3073e ("xfrm: cache bundles instead of policies for outgoing flows")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
+commit: 540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba x86/sgx: Introduce virtual EPC for use by KVM guests
+date:   1 year, 2 months ago
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220604/202206041508.vR5NoxR4-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 540745ddbc70eabdc7dbd3fcc00fe4fb17cd59ba
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/sgx/
 
-Applied, thanks!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected int [assigned] ret @@     got restricted vm_fault_t @@
+   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     expected int [assigned] ret
+   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     got restricted vm_fault_t
+>> arch/x86/kernel/cpu/sgx/virt.c:60:20: sparse: sparse: restricted vm_fault_t degrades to integer
+   arch/x86/kernel/cpu/sgx/virt.c:95:35: sparse: sparse: symbol 'sgx_vepc_vm_ops' was not declared. Should it be static?
+
+vim +59 arch/x86/kernel/cpu/sgx/virt.c
+
+    32	
+    33	static int __sgx_vepc_fault(struct sgx_vepc *vepc,
+    34				    struct vm_area_struct *vma, unsigned long addr)
+    35	{
+    36		struct sgx_epc_page *epc_page;
+    37		unsigned long index, pfn;
+    38		int ret;
+    39	
+    40		WARN_ON(!mutex_is_locked(&vepc->lock));
+    41	
+    42		/* Calculate index of EPC page in virtual EPC's page_array */
+    43		index = vma->vm_pgoff + PFN_DOWN(addr - vma->vm_start);
+    44	
+    45		epc_page = xa_load(&vepc->page_array, index);
+    46		if (epc_page)
+    47			return 0;
+    48	
+    49		epc_page = sgx_alloc_epc_page(vepc, false);
+    50		if (IS_ERR(epc_page))
+    51			return PTR_ERR(epc_page);
+    52	
+    53		ret = xa_err(xa_store(&vepc->page_array, index, epc_page, GFP_KERNEL));
+    54		if (ret)
+    55			goto err_free;
+    56	
+    57		pfn = PFN_DOWN(sgx_get_epc_phys_addr(epc_page));
+    58	
+  > 59		ret = vmf_insert_pfn(vma, addr, pfn);
+  > 60		if (ret != VM_FAULT_NOPAGE) {
+    61			ret = -EFAULT;
+    62			goto err_delete;
+    63		}
+    64	
+    65		return 0;
+    66	
+    67	err_delete:
+    68		xa_erase(&vepc->page_array, index);
+    69	err_free:
+    70		sgx_free_epc_page(epc_page);
+    71		return ret;
+    72	}
+    73	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

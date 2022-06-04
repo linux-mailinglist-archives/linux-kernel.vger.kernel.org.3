@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E39153D83E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ADD53D846
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239847AbiFDTFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 15:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S239949AbiFDTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 15:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239886AbiFDTFA (ORCPT
+        with ESMTP id S235299AbiFDTaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 15:05:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72362637B
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654369499; x=1685905499;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YyXlSuWYJcOTzhgL4WtA5lHNgtBC1ctV5Bn/7IowfIQ=;
-  b=ZHIu1Sp3hphaNaMRoEjFKVECt1NDkvA8TRRaSBnNBFdMqzT3/DzPRi6I
-   m2RdgQL408ypwXdGWLZ2/OvDhy2nY8JZDCEK4IC9VaGVmoUL8kkXdnw/g
-   9yQ3NiEwbc/eHUbSwYwvNrvM/jUOeWWcGn+biFSR+lO5R9TqWOKbvyITv
-   N91/e/tapvGpE5NvP6RRokiSLaNpqSeWPHfPjEnNZZte/0I34bsTxvIPu
-   fvlHmx0FOm8JHvUg3RgW7GE1Ia1NEIN6YbVHRlJI2/oAhAnP2MNsNmWgL
-   bGa8nvd0xwikq1AZl2vhO2exE6SZuLyOM0rZhoX6Y7QsUC2rJCNfVP6cv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="362831300"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="362831300"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 12:04:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="564267972"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2022 12:04:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxZ4r-000B8t-WA;
-        Sat, 04 Jun 2022 19:04:49 +0000
-Date:   Sun, 5 Jun 2022 03:04:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202206050216.eT3Asw30-lkp@intel.com>
+        Sat, 4 Jun 2022 15:30:52 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410D022518
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:30:51 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id a184so4813982qkg.5
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 12:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6G1DFAvxmzl+wISIcuzYI9FASO1J+ClitdEYqbU0B9A=;
+        b=gxFjT7iIcuvO101svbLnG991pgCh+FCdR6UP4jzDB0BctuR0JRiv0ID9izKUI4FD5U
+         NAchjTub3+IiL1r37HhTqUmPvVwMHMHqYoDpswEKdtdZS2MI7YN8Y54mvPsmiq/mJ6gy
+         VeJ3Dz0/Q2FkV285+5BmHRgqvqsjWbshO3v2e0vdJWGdwhRNkZhvzd/d9PKQnqgs/gGb
+         w9vMGBYXPkPhhqBVI7KiWVk4CvAoZz88Fhs8edhkcud4h6qbYbF+QruW7Dk39mdl/aJd
+         PNNmi2eoH0aH+7UlZJ8MG9zV7MKSwnsv/tuVNPPlFL8TpWQTvCPTq3z/drr0SqFG+9Xy
+         QtGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6G1DFAvxmzl+wISIcuzYI9FASO1J+ClitdEYqbU0B9A=;
+        b=U1/DCKJFT9ZoEAcLgHUf3tKMp/lMPxoVtRjXEoQ6UZvUgyNDg32ARW1eA/FNnO7ppU
+         bD4UduByG/L7Bo7fB4RgDqfmQWXPZJhvlV284ILGe0hMxpgjQEQNK/CRuKBE3ZxnqzCS
+         NaaAI/8xrovU5TebcckIvejC1RbeG6HzwrFdj+N4ngyxUr7UpnT2oNIvtBq4A7iDg/cO
+         H7LiBKftCvJcPE8vHtRh5Rtpn6qPkqlInbjQ36nIt0smWpPBq5/6EnGgQdCEOaLK6043
+         zDeaH1oYJxukBq1a+1jtp0/wqd4/TWWqLwxxREcGLlXuyY9RPB/AHtABjXmBeBLxYbOp
+         qyrA==
+X-Gm-Message-State: AOAM530YxXXRrXq24pPLVjrYmkWglV0ZJPCmkli9jR0iVemXV3SZCDy+
+        Yo1oG3uDX5lxBQW4C9EIbA5O/82ck8n+
+X-Google-Smtp-Source: ABdhPJy0y6g3VJwycW9B3LO+fLxzKbjqnJAlg0CHMa7UdRSEz0DurbJ2Zcfhn74PDfyeEM7JiaShiw==
+X-Received: by 2002:a37:614a:0:b0:6a6:af3b:e9cb with SMTP id v71-20020a37614a000000b006a6af3be9cbmr2121720qkb.744.1654371049514;
+        Sat, 04 Jun 2022 12:30:49 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id o17-20020ac84291000000b00304defdb1b3sm3537426qtl.85.2022.06.04.12.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 12:30:48 -0700 (PDT)
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>, pmladek@suse.com,
+        rostedt@goodmis.org
+Subject: [PATCH v3 00/33] Printbufs
+Date:   Sat,  4 Jun 2022 15:30:09 -0400
+Message-Id: <20220604193042.1674951-1-kent.overstreet@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,125 +68,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   4 months ago
-config: arm64-randconfig-s032-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050216.eT3Asw30-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-18-g56afb504-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
+Printbufs, your new data structure for all your string-building and outputting
+needs!
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+git repo: https://evilpiepirate.org/git/bcachefs.git/log/?h=printbuf_v3
 
+Benefits:
+ - Replaces passing & returning raw char * pointers and lengths in a ton of
+   places, including especially vsprintf.c, with a much saner calling convention
+ - New helpers which greatly simplify and cleanup aforementioned vsprintf.c
+ - New standard calling convention/naming for pretty printers!
+ - New printf format string - %pf(%p) - for calling pretty printers by passing
+   them to sprintf instead of sticking them in vsprintf.c behind weird dispatch
+   code
+ - printbufs can auto-heap allocate! No need for statically sized buffers,
+   unless you want to do that
+ - Tabstops and indenting, for greatly improved formatting of multi-line output
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
+...and probably more that I've forgotten to mention.
 
-vim +437 drivers/remoteproc/ti_k3_r5_remoteproc.c
+Changes since last patche:
 
-6dedbd1d544389 Suman Anna 2020-10-02  378  
-6dedbd1d544389 Suman Anna 2020-10-02  379  /*
-6dedbd1d544389 Suman Anna 2020-10-02  380   * The R5F cores have controls for both a reset and a halt/run. The code
-6dedbd1d544389 Suman Anna 2020-10-02  381   * execution from DDR requires the initial boot-strapping code to be run
-6dedbd1d544389 Suman Anna 2020-10-02  382   * from the internal TCMs. This function is used to release the resets on
-6dedbd1d544389 Suman Anna 2020-10-02  383   * applicable cores to allow loading into the TCMs. The .prepare() ops is
-6dedbd1d544389 Suman Anna 2020-10-02  384   * invoked by remoteproc core before any firmware loading, and is followed
-6dedbd1d544389 Suman Anna 2020-10-02  385   * by the .start() ops after loading to actually let the R5 cores run.
-ee99ee7c929c3e Suman Anna 2021-03-27  386   *
-ee99ee7c929c3e Suman Anna 2021-03-27  387   * The Single-CPU mode on applicable SoCs (eg: AM64x) only uses Core0 to
-ee99ee7c929c3e Suman Anna 2021-03-27  388   * execute code, but combines the TCMs from both cores. The resets for both
-ee99ee7c929c3e Suman Anna 2021-03-27  389   * cores need to be released to make this possible, as the TCMs are in general
-ee99ee7c929c3e Suman Anna 2021-03-27  390   * private to each core. Only Core0 needs to be unhalted for running the
-ee99ee7c929c3e Suman Anna 2021-03-27  391   * cluster in this mode. The function uses the same reset logic as LockStep
-ee99ee7c929c3e Suman Anna 2021-03-27  392   * mode for this (though the behavior is agnostic of the reset release order).
-6dedbd1d544389 Suman Anna 2020-10-02  393   */
-6dedbd1d544389 Suman Anna 2020-10-02  394  static int k3_r5_rproc_prepare(struct rproc *rproc)
-6dedbd1d544389 Suman Anna 2020-10-02  395  {
-6dedbd1d544389 Suman Anna 2020-10-02  396  	struct k3_r5_rproc *kproc = rproc->priv;
-6dedbd1d544389 Suman Anna 2020-10-02  397  	struct k3_r5_cluster *cluster = kproc->cluster;
-6dedbd1d544389 Suman Anna 2020-10-02  398  	struct k3_r5_core *core = kproc->core;
-6dedbd1d544389 Suman Anna 2020-10-02  399  	struct device *dev = kproc->dev;
-7508ea19b20da8 Suman Anna 2020-11-18  400  	u32 ctrl = 0, cfg = 0, stat = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  401  	u64 boot_vec = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  402  	bool mem_init_dis;
-6dedbd1d544389 Suman Anna 2020-10-02  403  	int ret;
-6dedbd1d544389 Suman Anna 2020-10-02  404  
-7508ea19b20da8 Suman Anna 2020-11-18  405  	ret = ti_sci_proc_get_status(core->tsp, &boot_vec, &cfg, &ctrl, &stat);
-7508ea19b20da8 Suman Anna 2020-11-18  406  	if (ret < 0)
-7508ea19b20da8 Suman Anna 2020-11-18  407  		return ret;
-7508ea19b20da8 Suman Anna 2020-11-18  408  	mem_init_dis = !!(cfg & PROC_BOOT_CFG_FLAG_R5_MEM_INIT_DIS);
-7508ea19b20da8 Suman Anna 2020-11-18  409  
-ee99ee7c929c3e Suman Anna 2021-03-27  410  	/* Re-use LockStep-mode reset logic for Single-CPU mode */
-ee99ee7c929c3e Suman Anna 2021-03-27  411  	ret = (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
-ee99ee7c929c3e Suman Anna 2021-03-27  412  	       cluster->mode == CLUSTER_MODE_SINGLECPU) ?
-6dedbd1d544389 Suman Anna 2020-10-02  413  		k3_r5_lockstep_release(cluster) : k3_r5_split_release(core);
-34f2653686fecc Suman Anna 2020-10-02  414  	if (ret) {
-6dedbd1d544389 Suman Anna 2020-10-02  415  		dev_err(dev, "unable to enable cores for TCM loading, ret = %d\n",
-6dedbd1d544389 Suman Anna 2020-10-02  416  			ret);
-6dedbd1d544389 Suman Anna 2020-10-02  417  		return ret;
-6dedbd1d544389 Suman Anna 2020-10-02  418  	}
-6dedbd1d544389 Suman Anna 2020-10-02  419  
-7508ea19b20da8 Suman Anna 2020-11-18  420  	/*
-7508ea19b20da8 Suman Anna 2020-11-18  421  	 * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
-7508ea19b20da8 Suman Anna 2020-11-18  422  	 * of TCMs, so there is no need to perform the s/w memzero. This bit is
-7508ea19b20da8 Suman Anna 2020-11-18  423  	 * configurable through System Firmware, the default value does perform
-7508ea19b20da8 Suman Anna 2020-11-18  424  	 * auto-init, but account for it in case it is disabled
-7508ea19b20da8 Suman Anna 2020-11-18  425  	 */
-7508ea19b20da8 Suman Anna 2020-11-18  426  	if (cluster->soc_data->tcm_ecc_autoinit && !mem_init_dis) {
-7508ea19b20da8 Suman Anna 2020-11-18  427  		dev_dbg(dev, "leveraging h/w init for TCM memories\n");
-7508ea19b20da8 Suman Anna 2020-11-18  428  		return 0;
-7508ea19b20da8 Suman Anna 2020-11-18  429  	}
-7508ea19b20da8 Suman Anna 2020-11-18  430  
-34f2653686fecc Suman Anna 2020-10-02  431  	/*
-34f2653686fecc Suman Anna 2020-10-02  432  	 * Zero out both TCMs unconditionally (access from v8 Arm core is not
-34f2653686fecc Suman Anna 2020-10-02  433  	 * affected by ATCM & BTCM enable configuration values) so that ECC
-34f2653686fecc Suman Anna 2020-10-02  434  	 * can be effective on all TCM addresses.
-34f2653686fecc Suman Anna 2020-10-02  435  	 */
-34f2653686fecc Suman Anna 2020-10-02  436  	dev_dbg(dev, "zeroing out ATCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02 @437  	memset(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
-34f2653686fecc Suman Anna 2020-10-02  438  
-34f2653686fecc Suman Anna 2020-10-02  439  	dev_dbg(dev, "zeroing out BTCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02  440  	memset(core->mem[1].cpu_addr, 0x00, core->mem[1].size);
-34f2653686fecc Suman Anna 2020-10-02  441  
-34f2653686fecc Suman Anna 2020-10-02  442  	return 0;
-34f2653686fecc Suman Anna 2020-10-02  443  }
-34f2653686fecc Suman Anna 2020-10-02  444  
+New namespace prefixes:
+-----------------------
 
-:::::: The code at line 437 was first introduced by commit
-:::::: 34f2653686fecc9bd5a4ee16724768c72953fb57 remoteproc: k3-r5: Initialize TCM memories for ECC
+We're not overloading pr_* anymore: any standard library code that outputs to a
+printbuf should use the prt_ prefix. This is not for printbuf control code -
+that uses the printbuf_ prefix; prt_ is just for things that print.
 
-:::::: TO: Suman Anna <s-anna@ti.com>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+string_escape_mem():
+--------------------
+
+string_escape_mem() has now been properly converted to printbufs instead of just
+adding a printbuf-style wrapper; the new printbuf helpers simplify that code
+quite a bit.
+
+hexdump:
+--------
+
+The hexdump code has been converted to printbuf and also reorganized and cleaned
+up quite a bit, with better naming too. We now have
+ - prt_hex_bytes(), for printing a few hex bytes, with optional grouping
+ - prt_hex_line(), for printing a whole line of hex output with ascii characters
+   at the end
+ - prt_hex_dump(), for printing a whole multiline hex dump
+
+Important behaviour change:
+
+Previously, the hex dump code would _byte swap the output on little endian_.
+Since this is not exactly standard behaviour for a hex dumper (binutils doesn't
+do this), and is confusing as hell if you're trying to map byte offsets in
+structs to your hex output, I've dropped it. Since we only use the hex dumper in
+debug output, nothing should break, but to avoid confusion I've put this front
+and center in the commit message for that patch.
+
+tracing:
+--------
+
+This iteration of the patch series finally converts tracing to printbufs, which
+is the last seq_buf user and that code is now also deleted. The tracing
+conversion was pretty uneventful, not much to say here (except that it had its
+own unique implementation of hex dumping with byte swabbing on little endian;
+this is now replaced with just a call to prt_hex_bytes()).
+
+Kent Overstreet (33):
+  lib/printbuf: New data structure for printing strings
+  lib/string_helpers: Convert string_escape_mem() to printbuf
+  vsprintf: Convert to printbuf
+  lib/hexdump: Convert to printbuf
+  vsprintf: %pf(%p)
+  lib/string_helpers: string_get_size() now returns characters wrote
+  lib/printbuf: Heap allocation
+  lib/printbuf: Tabstops, indenting
+  lib/printbuf: Unit specifiers
+  lib/pretty-printers: prt_string_option(), prt_bitflags()
+  vsprintf: Improve number()
+  vsprintf: prt_u64_minwidth(), prt_u64()
+  test_printf: Drop requirement that sprintf not write past nul
+  vsprintf: Start consolidating printf_spec handling
+  vsprintf: Refactor resource_string()
+  vsprintf: Refactor fourcc_string()
+  vsprintf: Refactor ip_addr_string()
+  vsprintf: Refactor mac_address_string()
+  vsprintf: time_and_date() no longer takes printf_spec
+  vsprintf: flags_string() no longer takes printf_spec
+  vsprintf: Refactor device_node_string, fwnode_string
+  vsprintf: Refactor hex_string, bitmap_string_list, bitmap_string
+  Input/joystick/analog: Convert from seq_buf -> printbuf
+  mm/memcontrol.c: Convert to printbuf
+  clk: tegra: bpmp: Convert to printbuf
+  tools/testing/nvdimm: Convert to printbuf
+  powerpc: Convert to printbuf
+  x86/resctrl: Convert to printbuf
+  PCI/P2PDMA: Convert to printbuf
+  tracing: trace_events_synth: Convert to printbuf
+  d_path: prt_path()
+  tracing: Convert to printbuf
+  Delete seq_buf
+
+ Documentation/core-api/printk-formats.rst |   22 +
+ arch/powerpc/kernel/process.c             |   16 +-
+ arch/powerpc/kernel/security.c            |   75 +-
+ arch/powerpc/platforms/pseries/papr_scm.c |   34 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    |   16 +-
+ drivers/clk/tegra/clk-bpmp.c              |   21 +-
+ drivers/input/joystick/analog.c           |   23 +-
+ drivers/pci/p2pdma.c                      |   17 +-
+ fs/d_path.c                               |   34 +
+ include/linux/dcache.h                    |    1 +
+ include/linux/kernel.h                    |   12 +
+ include/linux/pretty-printers.h           |   10 +
+ include/linux/printbuf.h                  |  245 +++
+ include/linux/seq_buf.h                   |  162 --
+ include/linux/string.h                    |    5 +
+ include/linux/string_helpers.h            |    8 +-
+ include/linux/trace_events.h              |    2 +-
+ include/linux/trace_seq.h                 |   14 +-
+ kernel/trace/trace.c                      |   45 +-
+ kernel/trace/trace_dynevent.c             |   34 +-
+ kernel/trace/trace_events_filter.c        |    2 +-
+ kernel/trace/trace_events_synth.c         |   32 +-
+ kernel/trace/trace_functions_graph.c      |    6 +-
+ kernel/trace/trace_kprobe.c               |    2 +-
+ kernel/trace/trace_seq.c                  |  111 +-
+ lib/Makefile                              |    4 +-
+ lib/hexdump.c                             |  246 +--
+ lib/pretty-printers.c                     |   59 +
+ lib/printbuf.c                            |  252 +++
+ lib/seq_buf.c                             |  397 -----
+ lib/string_helpers.c                      |  141 +-
+ lib/test_hexdump.c                        |   30 +-
+ lib/test_printf.c                         |   26 +-
+ lib/vsprintf.c                            | 1716 ++++++++++-----------
+ mm/memcontrol.c                           |   68 +-
+ tools/testing/nvdimm/test/ndtest.c        |   22 +-
+ 36 files changed, 1943 insertions(+), 1967 deletions(-)
+ create mode 100644 include/linux/pretty-printers.h
+ create mode 100644 include/linux/printbuf.h
+ delete mode 100644 include/linux/seq_buf.h
+ create mode 100644 lib/pretty-printers.c
+ create mode 100644 lib/printbuf.c
+ delete mode 100644 lib/seq_buf.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0
+

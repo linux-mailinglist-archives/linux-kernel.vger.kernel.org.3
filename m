@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154B853D62A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 10:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25F253D62C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 10:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiFDIrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 04:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S233704AbiFDIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 04:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbiFDIr2 (ORCPT
+        with ESMTP id S231640AbiFDIxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 04:47:28 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CB113F83
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 01:47:27 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id m6-20020a6b3f06000000b006692874d8baso737880ioa.23
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 01:47:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=UaHwaU32taiyTeqT8kxlZyvHpAtVYBA32xb/CMdfweI=;
-        b=Lc581ntQUkT/xfMINKMzXf9yvptsw8g6uonnf8ce/zChcXy8fMAZf6pBXzsESxlU5c
-         l2tlk1XRDUnlAh3TZk15ebQDie2RwhtaV2IFo17tAl74Wob0C7RXUpY+pBJGgVmCjoab
-         8f+hdTH014SMi0PfbMKwMxExQDeACCKNJ/p7N9chBCALw2aeJujfsdewrxLW+jJuWva2
-         l5HsbxLNl+2HRod0BqcGC0aCkzETa0Ctu/grTu/v6Woo1oqSRnq2F92/sOVvM+i8Mr6q
-         MF2nrA8CXtq2Zc1h6yo5umST6aLD3bJ3G73ULlsX957juXsKJOq8OzERN2aNMViO+wah
-         xZPQ==
-X-Gm-Message-State: AOAM530I+MQj/IGrt/cnpaSMmZvzK+9T/qRryUQr42+/ix7mFYbCVNOU
-        pLwY+kydi9LoigdNZaEwqBUh5zsthcdCNX9AtZTVOv2XwMk1
-X-Google-Smtp-Source: ABdhPJyAou73aeSVYPW0jEuJolTephhgRV6INYY4gg4SViXrhc5p6kyFkiRKMnSNFFcvGaScqCF/YbV1zyvIvowtdeSF5PxmCd97
+        Sat, 4 Jun 2022 04:53:37 -0400
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCE520BD3
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 01:53:35 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id 2548p0xo013521;
+        Sat, 4 Jun 2022 17:51:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2548p0xo013521
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654332661;
+        bh=FEAy194PWq95HNbYDnr1IqurmUH0R2wQrRmS1HC000s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P1D+qmFKkOacKls3HlfteNNBNbd46qHxatZFOoNxKzKI7qCjiD7P5mXwp51JouN3e
+         WvF8ToAxeBgnAny1boG6PxhPcFE42TG+1OSnhr8UtAAdz6ncuHuVA8tYENs6QfI3sM
+         R7zrVo8VuWsASAk7d2fQbqnma/rf8H1xhe6AIQvgD7tfZNaCMvngd+gv9Z7Ts9DriX
+         13zgBwgocKc9E2+G04x8jh+7ayALIgY71pdsjLPXaAxidMveTXBtRz/2VdmC2kvynE
+         XgeL5A8l2/cFWe37pBB8rsG3m6zg1mV5SdHi56K64Ec4xfdDZdXuPvUfnN3zpyZUwQ
+         XIOXj7GpyrfGw==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Diana Craciun <diana.craciun@nxp.com>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Jason Yan <yanaijie@huawei.com>, Rob Herring <robh@kernel.org>,
+        Scott Wood <oss@buserror.net>, linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: get rid of #include <generated/compile.h>
+Date:   Sat,  4 Jun 2022 17:50:50 +0900
+Message-Id: <20220604085050.4078927-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:5a16:0:b0:668:cab7:c6d5 with SMTP id
- o22-20020a6b5a16000000b00668cab7c6d5mr6464357iob.214.1654332446626; Sat, 04
- Jun 2022 01:47:26 -0700 (PDT)
-Date:   Sat, 04 Jun 2022 01:47:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d268b905e09b4915@google.com>
-Subject: [syzbot] upstream boot error: INFO: task hung in add_early_randomness
-From:   syzbot <syzbot+760e6f85822d8b6bc5ae@syzkaller.appspotmail.com>
-To:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@dominikbrodowski.net,
-        mpm@selenic.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+You cannot include <generated/compile.h> here because it is generated
+in init/Makefile but there is no guarantee that it happens before
+arch/powerpc/mm/nohash/kaslr_booke.c is compiled for parallel builds.
 
-syzbot found the following issue on:
+The places where you can reliably include <generated/compile.h> are:
 
-HEAD commit:    032dcf09e2bf Merge tag 'gpio-fixes-for-v5.19-rc1' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1457b6dbf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3096247591885bfa
-dashboard link: https://syzkaller.appspot.com/bug?extid=760e6f85822d8b6bc5ae
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+  - init/          (because init/Makefile can specify the dependency)
+  - arch/*/boot/   (because it is compiled after vmlinux)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+760e6f85822d8b6bc5ae@syzkaller.appspotmail.com
+Commit f231e4333312 ("hexagon: get rid of #include <generated/compile.h>")
+fixed the last breakage at that time, but powerpc re-added this.
 
-INFO: task swapper/0:1 blocked for more than 143 seconds.
-      Not tainted 5.18.0-syzkaller-13760-g032dcf09e2bf #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:swapper/0       state:D stack:22136 pid:    1 ppid:     0 flags:0x00004000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5116 [inline]
- __schedule+0xa00/0x4b30 kernel/sched/core.c:6428
- schedule+0xd2/0x1f0 kernel/sched/core.c:6500
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6559
- __mutex_lock_common kernel/locking/mutex.c:679 [inline]
- __mutex_lock+0xa70/0x1350 kernel/locking/mutex.c:747
- add_early_randomness+0x1a/0x170 drivers/char/hw_random/core.c:69
- hwrng_register+0x399/0x510 drivers/char/hw_random/core.c:599
- virtrng_scan+0x37/0x90 drivers/char/hw_random/virtio-rng.c:205
- virtio_dev_probe+0x639/0x910 drivers/virtio/virtio.c:313
- call_driver_probe drivers/base/dd.c:555 [inline]
- really_probe+0x23e/0xb90 drivers/base/dd.c:634
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
- __driver_attach+0x22d/0x550 drivers/base/dd.c:1163
- bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
- bus_add_driver+0x422/0x640 drivers/base/bus.c:618
- driver_register+0x220/0x3a0 drivers/base/driver.c:240
- do_one_initcall+0x103/0x650 init/main.c:1295
- do_initcall_level init/main.c:1368 [inline]
- do_initcalls init/main.c:1384 [inline]
- do_basic_setup init/main.c:1403 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1610
- kernel_init+0x1a/0x1d0 init/main.c:1499
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
- </TASK>
+<genearated/compile.h> was unneeded because 'build_str' is almost the
+same as 'linux_banner' defined in init/version.c
 
-Showing all locks held in the system:
-2 locks held by swapper/0/1:
- #0: ffff8881460e2170 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
- #0: ffff8881460e2170 (&dev->mutex){....}-{3:3}, at: __device_driver_lock drivers/base/dd.c:1054 [inline]
- #0: ffff8881460e2170 (&dev->mutex){....}-{3:3}, at: __driver_attach+0x222/0x550 drivers/base/dd.c:1162
- #1: ffffffff8c832d88 (reading_mutex){+.+.}-{3:3}, at: add_early_randomness+0x1a/0x170 drivers/char/hw_random/core.c:69
-2 locks held by kworker/u4:0/8:
- #0: ffff888011869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888011869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888011869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888011869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
- #0: ffff888011869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
- #0: ffff888011869138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
- #1: ffffc900000d7da8 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
-2 locks held by pr/ttyS0/16:
-1 lock held by khungtaskd/29:
- #0: ffffffff8bd86be0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6491
-1 lock held by hwrng/756:
- #0: ffffffff8c832d88 (reading_mutex){+.+.}-{3:3}, at: hwrng_fillfn+0x141/0x370 drivers/char/hw_random/core.c:503
+Let's copy the solution from MIPS.
+(get_random_boot() in arch/mips/kernel/relocate.c)
 
-=============================================
-
-
-
+Fixes: 6a38ea1d7b94 ("powerpc/fsl_booke/32: randomize the kernel image offset")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+If this gets into the mainline before -rc2 or -rc3,
+I will base my kbuild work on top of this.
+
+
+ arch/powerpc/mm/nohash/kaslr_booke.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/arch/powerpc/mm/nohash/kaslr_booke.c b/arch/powerpc/mm/nohash/kaslr_booke.c
+index 96c38f971603..5f81c076621f 100644
+--- a/arch/powerpc/mm/nohash/kaslr_booke.c
++++ b/arch/powerpc/mm/nohash/kaslr_booke.c
+@@ -18,7 +18,6 @@
+ #include <asm/prom.h>
+ #include <asm/kdump.h>
+ #include <mm/mmu_decl.h>
+-#include <generated/compile.h>
+ #include <generated/utsrelease.h>
+ 
+ struct regions {
+@@ -36,10 +35,6 @@ struct regions {
+ 	int reserved_mem_size_cells;
+ };
+ 
+-/* Simplified build-specific string for starting entropy. */
+-static const char build_str[] = UTS_RELEASE " (" LINUX_COMPILE_BY "@"
+-		LINUX_COMPILE_HOST ") (" LINUX_COMPILER ") " UTS_VERSION;
+-
+ struct regions __initdata regions;
+ 
+ static __init void kaslr_get_cmdline(void *fdt)
+@@ -70,7 +65,8 @@ static unsigned long __init get_boot_seed(void *fdt)
+ {
+ 	unsigned long hash = 0;
+ 
+-	hash = rotate_xor(hash, build_str, sizeof(build_str));
++	/* build-specific string for starting entropy. */
++	hash = rotate_xor(hash, linux_banner, strlen(linux_banner));
+ 	hash = rotate_xor(hash, fdt, fdt_totalsize(fdt));
+ 
+ 	return hash;
+-- 
+2.32.0
+

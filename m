@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027DC53D66A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 12:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282A853D66D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 12:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbiFDK3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 06:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S234911AbiFDKc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 06:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiFDK3J (ORCPT
+        with ESMTP id S234845AbiFDKcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 06:29:09 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A701517A94
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 03:29:08 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id c7-20020a6bec07000000b0066942b01338so90683ioh.10
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 03:29:08 -0700 (PDT)
+        Sat, 4 Jun 2022 06:32:21 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1690F26D6
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 03:32:18 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id v22so17789358ybd.5
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 03:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sRyoBNxqpzQeBGx+4ntrAvIX7ut3gN0OpdBOsklImU0=;
+        b=HAJrJCfu+DsTg0nDUKJ0XyMdjt3uxVFBfjLKfRSqpodkrWnbpo1D3+DQZuOn3BDWRZ
+         kQAPh3OGYtg91sDdf3Z/BcgUJcyxPghMdU77Bima+RCTnHqKy81HTMazrfmTQjHXzCFt
+         R+Vp74J20FHYgEcKT3JH8XtMDDQ5dxbizXnmNWHra/mqBTAVq1KcJz7rLVap7I2mDuD7
+         LVEf3WHy/fdfkDodaefuAd2Gjb1rx3AuiZPZCD4tO38QZXK1/+mzPnvVUDzNZn72siVi
+         VhR7DFHXmjISlQF7K5pR/5spuVjjSd6PwFmjJENKnmmBm0syPwhQm8FEj0cObufKh/US
+         JeMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=wNXC2m/6IoCuykSeYloTIGgg/Di4mRUeB5x9FgRaY1E=;
-        b=xNIpxf5yhI/2nukGBLKbXTEnkcf7qq76vYFu66cjSzTO3u5YgNXTdCM2vYHw7qM6j0
-         Bxup7tiYnthh0bkfnwJTGIODj4lmsfBM8enVMRZnsdrts7Xxc/Gyk5pE7cplgbsZNl+G
-         iKnjkertgSrs6mHuR+1ED9Okt9J9ZJQ3sgmF4M90SMLvggV3fs5cHxMexslJxnohEbDw
-         kN6XkxR4O960jYz40w/d4bUvObUo59PPyUxhO9KEg1VbUVYITiqD6ajkQ2T0bVT0kS8t
-         VrkcQWBJNhUaU6vaB9soaQE97S9LeOhhs/JbDdif51pZ5JOLNUR7NWacZSul1f8RpUSQ
-         P/rg==
-X-Gm-Message-State: AOAM533c7nk+VZbBpMBGHrC8lUpg4i+ldE891AMLPZJbNqeO31UXleJo
-        Kif62MGkg8MM8AKQ+szhsYySUoTMafj2m2ykw0l0n34oDf5e
-X-Google-Smtp-Source: ABdhPJz028rOgk1V8oD10N504F+Au1sdNchit4WLjaBUMrtWitzNPXqDiq+rWxh52w9wKOYRYIKURFmGJe5BYlL9lKEoa8TfmhK0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sRyoBNxqpzQeBGx+4ntrAvIX7ut3gN0OpdBOsklImU0=;
+        b=WAtCazEVq6nJ0pIozUBD3uqbgd8zsITjrWFY0AfognCF58aaKTA6uF7rQyWk5VanjX
+         JcW18oKcrrXO6KKd54iru75DJI0RmhALfIIKuL5Cf+jazhqaUjNFq4NOmWsqmsDgVy3D
+         wBkkv4Lbx9Jo//cExJFOUQ5pgQDvwdZxLmeCuuLTJ57nF6dAV2W1rsuhb8lmedRU9Tvi
+         XwmtSoiyuC54LaLbiHxJ90Yp5BcFfBkeNPyqXiE9bGw3N6+d3XLEYm0TLmaFw7GNqxC3
+         2ydfWm/UqhboVxxvIhv0/7iIJ0X8XIp2uG9j2DKNT5thCn9gJ3so8TaV6aE5GeB3OXFe
+         mG/g==
+X-Gm-Message-State: AOAM533LhgzfLHQyi5nDLM6blnksR2f29TKmUN2VeDADWtJicouE8WXI
+        PtfffANFmKQC1mt1EOR9rbxwa5ynUPsUQJcqYHY=
+X-Google-Smtp-Source: ABdhPJxm4rReSkXEQ6I6ha6UKSGskwKhEohI7hPbC9zD8iPGzmfKpXHp2AF9cqbs7tGurblETay9SffIbL/xTofIzkI=
+X-Received: by 2002:a05:6902:100f:b0:65d:516b:d8b with SMTP id
+ w15-20020a056902100f00b0065d516b0d8bmr16186212ybt.369.1654338737245; Sat, 04
+ Jun 2022 03:32:17 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:852f:0:b0:331:8c7e:691 with SMTP id
- g44-20020a02852f000000b003318c7e0691mr1018029jai.169.1654338548070; Sat, 04
- Jun 2022 03:29:08 -0700 (PDT)
-Date:   Sat, 04 Jun 2022 03:29:08 -0700
-In-Reply-To: <20220604072852.5532-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007f016405e09cb5ed@google.com>
-Subject: Re: [syzbot] kernel BUG in __skb_gso_segment
-From:   syzbot <syzbot+7160965e6a93d826048a@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Received: by 2002:a05:7010:5f06:b0:2d2:ccf:ecca with HTTP; Sat, 4 Jun 2022
+ 03:32:16 -0700 (PDT)
+From:   "Dr. Mark Philip" <rhondamill242@gmail.com>
+Date:   Sat, 4 Jun 2022 12:32:16 +0200
+Message-ID: <CAMJKuXL=1f+-RHtF=Y_kxu2OWvB10JOMdnW6fLZa2iT9cz6C1w@mail.gmail.com>
+Subject: Ihr Fonds ist zur Auslieferung bereit.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        MONEY_FORM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Achtung Beg=C3=BCnstigter,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Seien Sie informiert, dass Ihre Entsch=C3=A4digungskasse versandbereit ist.
+Wir senden Ihnen eine Anzahlung von 7 Millionen Euro. Das Geld kommt
+in 2 Kartons, die mit synthetischem Nylon versiegelt und gepolstert
+sind. Die Kartons werden mit einem diplomatischen Agenten an Ihre
+Hausadresse geliefert. Bitte freundlich Melden Sie sich mit den
+angeforderten Informationen bei mir.
 
-Reported-and-tested-by: syzbot+7160965e6a93d826048a@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         e9d3f809 net/af_packet: make sure to pull mac header
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2c9c27babb4d679
-dashboard link: https://syzkaller.appspot.com/bug?extid=7160965e6a93d826048a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+(1)NAME:,
+(2) ADRESSE:,
+(3) TELEFON
+(4) ALTER,
+(5) GESCHLECHT:,
+(6) BERUF,
+(7) PASSKOPIE ODER FAHRERSCHEIN.
+Antworten Sie mir unter (mphil01@yandex.com)
+     Dr. Markus Philipp

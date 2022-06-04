@@ -2,156 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDF153D8C0
+	by mail.lfdr.de (Postfix) with ESMTP id 8903A53D8C1
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 00:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242240AbiFDWlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 18:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
+        id S242293AbiFDWlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 18:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241336AbiFDWlW (ORCPT
+        with ESMTP id S241336AbiFDWlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 18:41:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2562BF79
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 15:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654382478; x=1685918478;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Knviwl19JMIauYk8cJGoyLOmq4c2nR30uFsE9VFNTeg=;
-  b=jeExOVO2lQrXRN81+yivNb9+BSD5X1MPVxw/zjWblfiR6xR061TZ/m2H
-   3pZfX2F9zcYQZiCmHnZhDEb8upB0iNHwUkToG8OHKni3GLsEZsV++Zvw0
-   MZAxgm3yzQI46OSeTP4RwwVx8qvFMpeoQKkXZ2rIZQ2pY7twsXAPlkEiS
-   Re+Fr6NEzsNlvjizJegMfPF0K0DA0Jc/FYnWKIGEYazXYw/V7hVjuWWD/
-   +TtPsKy1Ek9NXMuiQfy2J0bRZ5VjISQHzXVg17Ej3geJGI6C1BpnvlKoj
-   cfLVycNykhc3dPa41+fWE20AAxbT3dMtkJx5ILZ3jmt/xjo1U1GZmxAeJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="274048659"
-X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="274048659"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 15:41:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="708522241"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2022 15:41:16 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxcSJ-000BFx-PI;
-        Sat, 04 Jun 2022 22:41:15 +0000
-Date:   Sun, 5 Jun 2022 06:40:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [frederic-dynticks:rcu/context-tracking-v4 10/20]
- kernel/entry/common.c:452: undefined reference to `ct_nmi_enter'
-Message-ID: <202206050647.OqMhvNtv-lkp@intel.com>
+        Sat, 4 Jun 2022 18:41:25 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53744CE2E;
+        Sat,  4 Jun 2022 15:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1654382472; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rptKCpjnSy70Y/kdV9v2auApDVZ4hLbfEas6KBoTjv8=;
+        b=tL6I2zgJ5kdKetzLRAr2ijBcONtbibTSBYCswQWHEq7GECf1cAJoVl6FnE5giKxsrs31A7
+        /RQZma+2fZ+iT3rRdWvHnBIhpQQx93i8Kko9FWuxyCW50YU9DcAFeF2k3O2uRkHBQTbf3q
+        SXKq+fDEPI+FhTpGTB58CXDod4yvFTk=
+Date:   Sat, 04 Jun 2022 23:41:02 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/2] iio: at91-sama5d2: Limit requested watermark value to
+ hwfifo size
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Message-Id: <EO5ZCR.QO9V0UA1ZW04@crapouillou.net>
+In-Reply-To: <20220604160557.1e82077e@jic23-huawei>
+References: <20220117102512.31725-1-paul@crapouillou.net>
+        <20220117102512.31725-2-paul@crapouillou.net>
+        <20220122170447.68f35cfa@jic23-huawei>
+        <20220604160557.1e82077e@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking-v4
-head:   77493b1db618c61dec140cbab830832f77203d69
-commit: d3d60b6390751cda15d2295725673f78303e4ea4 [10/20] context_tracking: Take NMI eqs entrypoints over RCU
-config: x86_64-randconfig-a008 (https://download.01.org/0day-ci/archive/20220605/202206050647.OqMhvNtv-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=d3d60b6390751cda15d2295725673f78303e4ea4
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks rcu/context-tracking-v4
-        git checkout d3d60b6390751cda15d2295725673f78303e4ea4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi Jonathan,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Le sam., juin 4 2022 at 16:05:57 +0100, Jonathan Cameron=20
+<jic23@kernel.org> a =E9crit :
+> On Sat, 22 Jan 2022 17:04:47 +0000
+> Jonathan Cameron <jic23@kernel.org> wrote:
+>=20
+>>  On Mon, 17 Jan 2022 10:25:12 +0000
+>>  Paul Cercueil <paul@crapouillou.net> wrote:
+>>=20
+>>  > Instead of returning an error if the watermark value is too high,=20
+>> which
+>>  > the core will silently ignore anyway, limit the value to the=20
+>> hardware
+>>  > FIFO size; a lower-than-requested value is still better than=20
+>> using the
+>>  > default, which is usually 1.
+>>=20
+>>  There is another potential error condition in this function which=20
+>> will
+>>  also be ignored by the core.
+>>=20
+>>  As such whilst I agree this is a sensible thing to do in this
+>>  particular case I think we should also be handling the error in the=20
+>> core.
+>>=20
+>>  I think it would be better to clean that up at the same time
+>>  as these improvements - particularly as I'd guess you have a=20
+>> convenient
+>>  test setup to check the error unwind is correct?
+>=20
+> Hi Paul,
+>=20
+> I was trawling through patchwork and realised this one is stalled.
+>=20
+> Thoughts on the above?
 
-All errors (new ones prefixed by >>):
+Totally forgot about this patch.
 
-   vmlinux.o: warning: objtool: pvh_start_xen()+0x0: unreachable instruction
-   ld: vmlinux.o: in function `irq_enter':
-   kernel/softirq.c:610: undefined reference to `ct_irq_enter'
-   ld: vmlinux.o: in function `irq_exit':
-   kernel/softirq.c:662: undefined reference to `ct_irq_exit'
-   ld: vmlinux.o: in function `trace_console_rcuidle':
-   include/trace/events/printk.h:10: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/printk.h:10: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `bc_set_next':
-   kernel/time/tick-broadcast-hrtimer.c:64: undefined reference to `ct_irq_enter_irqson'
-   ld: kernel/time/tick-broadcast-hrtimer.c:64: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_irq_disable_rcuidle':
-   include/trace/events/preemptirq.h:36: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/preemptirq.h:36: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_irq_enable_rcuidle':
-   include/trace/events/preemptirq.h:40: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/preemptirq.h:40: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_disable_rcuidle':
-   include/trace/events/clk.h:46: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:46: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_disable_complete_rcuidle':
-   include/trace/events/clk.h:53: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:53: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_enable_rcuidle':
-   include/trace/events/clk.h:32: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:32: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_enable_complete_rcuidle':
-   include/trace/events/clk.h:39: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:39: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `irqentry_nmi_enter':
->> kernel/entry/common.c:452: undefined reference to `ct_nmi_enter'
-   ld: vmlinux.o: in function `irqentry_nmi_exit':
->> kernel/entry/common.c:472: undefined reference to `ct_nmi_exit'
-   ld: vmlinux.o: in function `irqentry_exit':
-   kernel/entry/common.c:421: undefined reference to `ct_irq_exit'
-   ld: kernel/entry/common.c:439: undefined reference to `ct_irq_exit'
+Aren't you afraid that if we start handling these errors in the core,=20
+we'll somehow break the ABI?
+
+-Paul
+
+> Thanks,
+>=20
+> Jonathan
+>=20
+>>=20
+>>  Thanks,
+>>=20
+>>  Jonathan
+>>=20
+>>  >
+>>  > Cc: Eugen Hristev <eugen.hristev@microchip.com>
+>>  > Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+>>  > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>  > Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
+>>  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  > ---
+>>  >  drivers/iio/adc/at91-sama5d2_adc.c | 2 +-
+>>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+>>  >
+>>  > diff --git a/drivers/iio/adc/at91-sama5d2_adc.c=20
+>> b/drivers/iio/adc/at91-sama5d2_adc.c
+>>  > index 854b1f81d807..5cc84f4a17bb 100644
+>>  > --- a/drivers/iio/adc/at91-sama5d2_adc.c
+>>  > +++ b/drivers/iio/adc/at91-sama5d2_adc.c
+>>  > @@ -1752,7 +1752,7 @@ static int at91_adc_set_watermark(struct=20
+>> iio_dev *indio_dev, unsigned int val)
+>>  >  	int ret;
+>>  >
+>>  >  	if (val > AT91_HWFIFO_MAX_SIZE)
+>>  > -		return -EINVAL;
+>>  > +		val =3D AT91_HWFIFO_MAX_SIZE;
+>>  >
+>>  >  	if (!st->selected_trig->hw_trig) {
+>>  >  		dev_dbg(&indio_dev->dev, "we need hw trigger for DMA\n");
+>>=20
+>=20
 
 
-vim +452 kernel/entry/common.c
-
-   442	
-   443	irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
-   444	{
-   445		irqentry_state_t irq_state;
-   446	
-   447		irq_state.lockdep = lockdep_hardirqs_enabled();
-   448	
-   449		__nmi_enter();
-   450		lockdep_hardirqs_off(CALLER_ADDR0);
-   451		lockdep_hardirq_enter();
- > 452		ct_nmi_enter();
-   453	
-   454		instrumentation_begin();
-   455		trace_hardirqs_off_finish();
-   456		ftrace_nmi_enter();
-   457		instrumentation_end();
-   458	
-   459		return irq_state;
-   460	}
-   461	
-   462	void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t irq_state)
-   463	{
-   464		instrumentation_begin();
-   465		ftrace_nmi_exit();
-   466		if (irq_state.lockdep) {
-   467			trace_hardirqs_on_prepare();
-   468			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
-   469		}
-   470		instrumentation_end();
-   471	
- > 472		ct_nmi_exit();
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

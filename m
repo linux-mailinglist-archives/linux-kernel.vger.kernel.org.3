@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7D953D80B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 19:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020E453D80E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 19:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239232AbiFDRbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 13:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S239277AbiFDRjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 13:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiFDRbh (ORCPT
+        with ESMTP id S236212AbiFDRjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 13:31:37 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEA53335A
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 10:31:35 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-30c2f288f13so109458577b3.7
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 10:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=yFq7x3ezthL42YyRi4Hh6z4qGsAb2l4xTVLZJzOYTSI=;
-        b=UjnIJ4nQ8hCSdb3GgVUP+rkneW9G3bVFikM3oskzeex/LksmgHJwCbZhTd1k7ckjXv
-         2OFgM06D0vIKCFWgwPymgpxV8bk9ICqkBuN+6H+ded3pMM9H5K2WUi+k2wbs4eOj2Fg0
-         89mb6dxWke34ffYuNAuy97HA24+CR2OE2ZujDqwDxPyovchidgH579Xs/JlXhoM0RG0Q
-         47J86GKHHZe0VEWbZSczn344HRH4nkIDhe2znnCZvEBj6Rl0th93ciCC6a2iLJnPHGlM
-         5KWdat7Qnd8dgWXZc6QzBmPlG+ojExxUT+V8E/VKUGVyjeOtIgGip4IlvzXBOQnetb9M
-         27VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yFq7x3ezthL42YyRi4Hh6z4qGsAb2l4xTVLZJzOYTSI=;
-        b=QZ6XxsEHY//Cnggyv4HpGsd57X5qw+LRQbjH/cPGUJXswKaCeORZxjwPTq+HJNasi6
-         WtojZSVBiwUvwXj8xiWRcL9+z60WBTp4najxY8kZcMw9EMBigjY/ix3NuAsFLYfT0lEz
-         N+a454Le3UpViU5UGDOjX7l6j4LZ84n/QpJTXRhDC+1ij0ecAsia6J0VCTgI0/1l8tkY
-         c8Zs2Mv5VyzLTEvx9uau9bIE8P66b5YfmRzAJn90IU52TZLlcWRXwMYoGCJsUGHr1AEF
-         PjI7SuMzdQ9L64a71Yv5Mk2sfWEeiZZfmrDNVHlT4LGeu1E8Mc0xgIOHE010tIvyrrYD
-         936w==
-X-Gm-Message-State: AOAM531ej9cogdvpquv6iDhzY/mvHtpgJ580ljsAo62LIxRfVuZ48Vhr
-        bkzh7EPOw4XtQGZatBnXQMylkvuEOt5d5YUE9pSGdg==
-X-Google-Smtp-Source: ABdhPJxIuLQY29CVBqxKqP1FZt6ZDVKyyazmSVipVONuvr8/8pkS+mLkt5pgWWAoY88pDOoVSmGBPddr67xhuLG2d8o=
-X-Received: by 2002:a81:b343:0:b0:300:4822:e12 with SMTP id
- r64-20020a81b343000000b0030048220e12mr17819276ywh.376.1654363895333; Sat, 04
- Jun 2022 10:31:35 -0700 (PDT)
+        Sat, 4 Jun 2022 13:39:54 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12B138D9D
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 10:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654364390; x=1685900390;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fw58+DLuVveflhvtJyRFgJ7M82oNU8uKvexxbDIxiWU=;
+  b=NiReMtrIdkjoW32pUpvo4/ZEA13mgsEuQMC5jbRHCZjHkQg/wOMjMC6u
+   svR2lyqlGxVawzz4+6Xk356JhEPqkFwjLQl9X/9KHIkNo04s9b8V7x58x
+   4MiRRRzfx0tU+6gaz5SXQSzPnQ3KPW/4EX/FosDzH0EuMacYVcKm2OugH
+   PJN/GFCIOR+9V2L8xQsCzfJk09QuRdhYPJGw4nT6Pc/BldKEWfBVhZwrY
+   zvqS+p4JMm+sG6bAB6XDvzdCWQS+mhdrG1R7gTO9huEOKcJyXPEhZE60l
+   4RqJWSEOYKfqZRjEoj9z6Fyh4OHs3uUPsOOJ356X4tAOq2VMYC6pKLgRz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339530743"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="339530743"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 10:39:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="531444736"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jun 2022 10:39:48 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxXka-000B5l-6K;
+        Sat, 04 Jun 2022 17:39:48 +0000
+Date:   Sun, 5 Jun 2022 01:39:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: arch/powerpc/mm/book3s64/radix_tlb.c:418:20: error: unused function
+ '_tlbie_pid_lpid'
+Message-ID: <202206050116.iF1fFubY-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220603173815.990072516@linuxfoundation.org>
-In-Reply-To: <20220603173815.990072516@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 4 Jun 2022 23:01:24 +0530
-Message-ID: <CA+G9fYuTq5PG0wTCS22vEWWJLQKy8xBuvYHKFN7MKkkHGJzAPw@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/34] 5.4.197-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,133 +62,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 at 23:14, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.197 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.197-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Michael,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+FYI, the error/warning still remains.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
+commit: a736143afd036f2078fe19435b16fd55abc789a9 Merge branch 'topic/ppc-kvm' into next
+date:   12 months ago
+config: powerpc64-buildonly-randconfig-r006-20220604 (https://download.01.org/0day-ci/archive/20220605/202206050116.iF1fFubY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64le-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a736143afd036f2078fe19435b16fd55abc789a9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a736143afd036f2078fe19435b16fd55abc789a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
 
-## Build
-* kernel: 5.4.197-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 2b69e7392fd9509c34f22e22898d4fd8de4bac19
-* git describe: v5.4.196-35-g2b69e7392fd9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-96-35-g2b69e7392fd9
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-## Test Regressions (compared to v5.4.196-11-g04a2bb5e4a0b)
-No test regressions found.
+All errors (new ones prefixed by >>):
 
-## Metric Regressions (compared to v5.4.196-11-g04a2bb5e4a0b)
-No metric regressions found.
+>> arch/powerpc/mm/book3s64/radix_tlb.c:418:20: error: unused function '_tlbie_pid_lpid' [-Werror,-Wunused-function]
+   static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
+                      ^
+>> arch/powerpc/mm/book3s64/radix_tlb.c:662:20: error: unused function '_tlbie_va_range_lpid' [-Werror,-Wunused-function]
+   static inline void _tlbie_va_range_lpid(unsigned long start, unsigned long end,
+                      ^
+   2 errors generated.
 
-## Test Fixes (compared to v5.4.196-11-g04a2bb5e4a0b)
-No test fixes found.
 
-## Metric Fixes (compared to v5.4.196-11-g04a2bb5e4a0b)
-No metric fixes found.
+vim +/_tlbie_pid_lpid +418 arch/powerpc/mm/book3s64/radix_tlb.c
 
-## Test result summary
-total: 130079, pass: 116477, fail: 185, skip: 12140, xfail: 1277
+1a472c9dba6b96 arch/powerpc/mm/tlb-radix.c          Aneesh Kumar K.V 2016-04-29  417  
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21 @418  static inline void _tlbie_pid_lpid(unsigned long pid, unsigned long lpid,
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  419  				   unsigned long ric)
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  420  {
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  421  	asm volatile("ptesync" : : : "memory");
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  422  
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  423  	/*
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  424  	 * Workaround the fact that the "ric" argument to __tlbie_pid
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  425  	 * must be a compile-time contraint to match the "i" constraint
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  426  	 * in the asm statement.
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  427  	 */
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  428  	switch (ric) {
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  429  	case RIC_FLUSH_TLB:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  430  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_TLB);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  431  		fixup_tlbie_pid_lpid(pid, lpid);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  432  		break;
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  433  	case RIC_FLUSH_PWC:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  434  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_PWC);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  435  		break;
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  436  	case RIC_FLUSH_ALL:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  437  	default:
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  438  		__tlbie_pid_lpid(pid, lpid, RIC_FLUSH_ALL);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  439  		fixup_tlbie_pid_lpid(pid, lpid);
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  440  	}
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  441  	asm volatile("eieio; tlbsync; ptesync" : : : "memory");
+f0c6fbbb90504f arch/powerpc/mm/book3s64/radix_tlb.c Bharata B Rao    2021-06-21  442  }
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  443  struct tlbiel_pid {
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  444  	unsigned long pid;
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  445  	unsigned long ric;
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  446  };
+2275d7b5754a57 arch/powerpc/mm/book3s64/radix_tlb.c Nicholas Piggin  2019-09-03  447  
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 313 total, 313 passed, 0 failed
-* arm64: 57 total, 53 passed, 4 failed
-* i386: 28 total, 25 passed, 3 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 54 passed, 1 failed
+:::::: The code at line 418 was first introduced by commit
+:::::: f0c6fbbb90504fb7e9dbf0865463d3c2b4de49e5 KVM: PPC: Book3S HV: Add support for H_RPT_INVALIDATE
 
-## Test suites summary
-* fwts
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+:::::: TO: Bharata B Rao <bharata@linux.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
 
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

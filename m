@@ -2,196 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2793D53D6B2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6396353D6B5
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235724AbiFDMOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 08:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
+        id S235883AbiFDMOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 08:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiFDMOG (ORCPT
+        with ESMTP id S231445AbiFDMOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 08:14:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69861C923;
-        Sat,  4 Jun 2022 05:14:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99CEDB802C5;
-        Sat,  4 Jun 2022 12:14:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3397FC341CC;
-        Sat,  4 Jun 2022 12:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654344842;
-        bh=P9g5evQvLeCWlEOvlwctyGL5SApo79l0tSxaVcIHKPA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GIyFj6BBzBZ4owCCVP5Aw4h3f0cXtR3hEqmrT9g670pZU/aQzIAQ2WfJvI/DknBRp
-         4bYKwydQ0aYuGH1L5fBQCLpyzXIofO9higKucAr9Sy6M/NdNgRTqlWLPjz76TpemCg
-         o5/euygaM3XOLTr8By89APAq6jiMVCST2z+Q9PMv3E7nS9Z42DH7R0OrYd6SVheduF
-         EZlfIsJBqn4SM90nhHS8OrgxuSA94ZHCoBGkUfXicORrA8v5ly8ntcA/nQuwU0e9It
-         FE7DXLjmfzYeTqs7rwtKtwfeJR+KZPybsrMoiF6VsZOU0EImc2irdP0IzRClSsVLBw
-         zeZ+URjHsYFVg==
-Received: by mail-vs1-f45.google.com with SMTP id w10so9696538vsa.4;
-        Sat, 04 Jun 2022 05:14:02 -0700 (PDT)
-X-Gm-Message-State: AOAM533QDGbgQtUYDUt5lnPn6GA+OLSYhOxnFUcLmkURTGrp3R94X8mw
-        y5DHLtxtDNWiyDLUZ6DCMfuzifnjsP/Wl0IAvq0=
-X-Google-Smtp-Source: ABdhPJwwEZX9ryeNihnPAt9cIeqrE+zZlFv6d4BeVpnc8qN7eqFa9hlNwwNfnB2L+k7vfA514WdPGRvZColxx5FoxRk=
-X-Received: by 2002:a05:6102:292b:b0:34b:9fad:2b63 with SMTP id
- cz43-20020a056102292b00b0034b9fad2b63mr2132145vsb.51.1654344840935; Sat, 04
- Jun 2022 05:14:00 -0700 (PDT)
+        Sat, 4 Jun 2022 08:14:24 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73BC1C923;
+        Sat,  4 Jun 2022 05:14:22 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id e184so18033002ybf.8;
+        Sat, 04 Jun 2022 05:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=boxdhvDiMWyFpyyHCYcMSN/PMwteqk8YIeu/9YG1GME=;
+        b=dYylsk2XH+ELQeCei/qciNsqfuRBDsrrTkwZo9MzP7mBWceUemia22JnILaojxV6uo
+         ifPjnEhe+tDU+ZGlCZV69iunfb5hmBRt49ZOIfO35TQXszAiASK1Sn61ufPvb7fTj8u/
+         9Z0/AEx7MqlL7jvc6m5JvIiA1M47rbo81D9NU4qDOF2ILkLmWHA+AG+hczQmyCr3jMm9
+         EppNAAacOroqZIDrA73hNihTI9MBdOvQnWgiiGmhUothLmdjaFBtQQdmeBX/qWCqBzEj
+         tN6wUhRXvcUUnTZ/g7KxMbVthD7Ne4WPn1CUyAucugWuBj/qXYGgo7ZkHoDinibZXpED
+         vcuw==
+X-Gm-Message-State: AOAM531PzveUiDNMTuizBJxIupnxoCIJE0j5BY1/dXB7eQwf21euvmhx
+        Dkatu+OVtzpNJ13oLa56+suv4JJmuGDU9VRjP8I=
+X-Google-Smtp-Source: ABdhPJzUJ1prs/N8KlS25MFDQbdL1UU5LSRr8qXyz8KbVjhYq0zp1d0vPqelAsC74XdtWkDYX2ql+G2oa1Ahw3V/roY=
+X-Received: by 2002:a25:b846:0:b0:65d:1cb0:e444 with SMTP id
+ b6-20020a25b846000000b0065d1cb0e444mr14985060ybm.20.1654344862032; Sat, 04
+ Jun 2022 05:14:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220603101411.488970-1-anshuman.khandual@arm.com> <20220603101411.488970-5-anshuman.khandual@arm.com>
-In-Reply-To: <20220603101411.488970-5-anshuman.khandual@arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 4 Jun 2022 20:13:50 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
-Message-ID: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-csky@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220603102848.17907-5-mailhol.vincent@wanadoo.fr>
+ <20220604112227.nlyxulkxelgofruz@pengutronix.de>
+In-Reply-To: <20220604112227.nlyxulkxelgofruz@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 4 Jun 2022 21:14:10 +0900
+Message-ID: <CAMZ6RqLRb_n+o2eFLEzn8Er7CyaZd8Q7B3=5e4Z5d0PJHKywAg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+On Sat. 4 June 2022 at 20:22, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 03.06.2022 19:28:45, Vincent Mailhol wrote:
+> > Only a few drivers rely on the CAN rx offload framework (as of the
+> > writing of this patch, only three: flexcan, ti_hecc and
+> > mcp251xfd). Give the option to the user to deselect this features
+> > during compilation.
+> >
+> > The drivers relying on CAN rx offload are in different sub
+> > folders. All of these drivers get tagged with "select CAN_RX_OFFLOAD"
+> > so that the option is automatically enabled whenever one of those
+> > driver is chosen.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  drivers/net/can/Kconfig               | 16 ++++++++++++++++
+> >  drivers/net/can/dev/Makefile          |  2 ++
+> >  drivers/net/can/spi/mcp251xfd/Kconfig |  1 +
+> >  3 files changed, 19 insertions(+)
+> >
+> > diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> > index 8f3b97aea638..1f1d81da1c8c 100644
+> > --- a/drivers/net/can/Kconfig
+> > +++ b/drivers/net/can/Kconfig
+> > @@ -102,6 +102,20 @@ config CAN_CALC_BITTIMING
+> >
+> >         If unsure, say Y.
+> >
+> > +config CAN_RX_OFFLOAD
+> > +     bool "CAN RX offload"
+> > +     default y
+> > +     help
+> > +       Framework to offload the controller's RX FIFO during one
+> > +       interrupt. The CAN frames of the FIFO are read and put into a skb
+> > +       queue during that interrupt and transmitted afterwards in a NAPI
+> > +       context.
+> > +
+> > +       The additional features selected by this option will be added to the
+> > +       can-dev module.
+> > +
+> > +       If unsure, say Y.
+> > +
+> >  config CAN_AT91
+> >       tristate "Atmel AT91 onchip CAN controller"
+> >       depends on (ARCH_AT91 || COMPILE_TEST) && HAS_IOMEM
+> > @@ -113,6 +127,7 @@ config CAN_FLEXCAN
+> >       tristate "Support for Freescale FLEXCAN based chips"
+> >       depends on OF || COLDFIRE || COMPILE_TEST
+> >       depends on HAS_IOMEM
+> > +     select CAN_RX_OFFLOAD
+> >       help
+> >         Say Y here if you want to support for Freescale FlexCAN.
+> >
+> > @@ -162,6 +177,7 @@ config CAN_SUN4I
+> >  config CAN_TI_HECC
+> >       depends on ARM
+> >       tristate "TI High End CAN Controller"
+> > +     select CAN_RX_OFFLOAD
+> >       help
+> >         Driver for TI HECC (High End CAN Controller) module found on many
+> >         TI devices. The device specifications are available from www.ti.com
+> > diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+> > index b8a55b1d90cd..5081d8a3be57 100644
+> > --- a/drivers/net/can/dev/Makefile
+> > +++ b/drivers/net/can/dev/Makefile
+> > @@ -11,3 +11,5 @@ can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
+> >  can-dev-$(CONFIG_CAN_NETLINK) += rx-offload.o
+>              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> Do you want to remove this?
 
-On Fri, Jun 3, 2022 at 6:15 PM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
+Absolutely. As you probably guessed, this is just a leftover.
+
+> >
+> >  can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
+> > +
+> > +can-dev-$(CONFIG_CAN_RX_OFFLOAD) += rx-offload.o
+> > diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/mcp251xfd/Kconfig
+> > index dd0fc0a54be1..877e4356010d 100644
+> > --- a/drivers/net/can/spi/mcp251xfd/Kconfig
+> > +++ b/drivers/net/can/spi/mcp251xfd/Kconfig
+> > @@ -2,6 +2,7 @@
+> >
+> >  config CAN_MCP251XFD
+> >       tristate "Microchip MCP251xFD SPI CAN controllers"
+> > +     select CAN_RX_OFFLOAD
+> >       select REGMAP
+> >       select WANT_DEV_COREDUMP
+> >       help
 >
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
+> I remember I've given you a list of drivers needing RX offload, I
+> probably missed the m_can driver. Feel free to squash this patch:
+
+Added it to v5.
+
+This went through the cracks when testing. Thanks for catching this!
+
+> --- a/drivers/net/can/dev/Makefile
+> +++ b/drivers/net/can/dev/Makefile
+> @@ -8,7 +8,6 @@ can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
+>  can-dev-$(CONFIG_CAN_NETLINK) += dev.o
+>  can-dev-$(CONFIG_CAN_NETLINK) += length.o
+>  can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
+> -can-dev-$(CONFIG_CAN_NETLINK) += rx-offload.o
 >
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/csky/Kconfig               |  1 +
->  arch/csky/include/asm/pgtable.h | 18 ------------------
->  arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 33 insertions(+), 18 deletions(-)
+>  can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
 >
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 21d72b078eef..588b8a9c68ed 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -6,6 +6,7 @@ config CSKY
->         select ARCH_HAS_GCOV_PROFILE_ALL
->         select ARCH_HAS_SYNC_DMA_FOR_CPU
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> +       select ARCH_HAS_VM_GET_PAGE_PROT
->         select ARCH_USE_BUILTIN_BSWAP
->         select ARCH_USE_QUEUED_RWLOCKS
->         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-> index bbe245117777..229a5f4ad7fc 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -77,24 +77,6 @@
->  #define MAX_SWAPFILES_CHECK() \
->                 BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
+> diff --git a/drivers/net/can/m_can/Kconfig b/drivers/net/can/m_can/Kconfig
+> index 45ad1b3f0cd0..fc2afab36279 100644
+> --- a/drivers/net/can/m_can/Kconfig
+> +++ b/drivers/net/can/m_can/Kconfig
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig CAN_M_CAN
+>         tristate "Bosch M_CAN support"
+> +       select CAN_RX_OFFLOAD
+>         help
+>           Say Y here if you want support for Bosch M_CAN controller framework.
+>           This is common support for devices that embed the Bosch M_CAN IP.
 >
-> -#define __P000 PAGE_NONE
-> -#define __P001 PAGE_READ
-> -#define __P010 PAGE_READ
-> -#define __P011 PAGE_READ
-> -#define __P100 PAGE_READ
-> -#define __P101 PAGE_READ
-> -#define __P110 PAGE_READ
-> -#define __P111 PAGE_READ
-> -
-> -#define __S000 PAGE_NONE
-> -#define __S001 PAGE_READ
-> -#define __S010 PAGE_WRITE
-> -#define __S011 PAGE_WRITE
-> -#define __S100 PAGE_READ
-> -#define __S101 PAGE_READ
-> -#define __S110 PAGE_WRITE
-> -#define __S111 PAGE_WRITE
-> -
->  extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->  #define ZERO_PAGE(vaddr)       (virt_to_page(empty_zero_page))
+> Marc
 >
-> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-> index bf2004aa811a..f9babbed17d4 100644
-> --- a/arch/csky/mm/init.c
-> +++ b/arch/csky/mm/init.c
-> @@ -197,3 +197,35 @@ void __init fixaddr_init(void)
->         vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
->         fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
->  }
-> +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> +{
-> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +       case VM_NONE:
-> +               return PAGE_NONE;
-> +       case VM_READ:
-> +       case VM_WRITE:
-> +       case VM_WRITE | VM_READ:
-> +       case VM_EXEC:
-> +       case VM_EXEC | VM_READ:
-> +       case VM_EXEC | VM_WRITE:
-> +       case VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED:
-> +               return PAGE_NONE;
-> +       case VM_SHARED | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED | VM_WRITE:
-> +       case VM_SHARED | VM_WRITE | VM_READ:
-> +               return PAGE_WRITE;
-> +       case VM_SHARED | VM_EXEC:
-> +       case VM_SHARED | VM_EXEC | VM_READ:
-> +               return PAGE_READ;
-> +       case VM_SHARED | VM_EXEC | VM_WRITE:
-> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_WRITE;
-> +       default:
-> +               BUILD_BUG();
-> +       }
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
 > --
-> 2.25.1
->
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |

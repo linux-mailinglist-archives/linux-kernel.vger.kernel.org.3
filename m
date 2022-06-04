@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFE653D685
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 13:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1486A53D68A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 13:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235305AbiFDLZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 07:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S235382AbiFDL2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 07:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235195AbiFDLZm (ORCPT
+        with ESMTP id S235309AbiFDL2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 07:25:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2F92CCA2
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 04:25:41 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nxRuV-0000q2-N8; Sat, 04 Jun 2022 13:25:39 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C878A8C2E0;
-        Sat,  4 Jun 2022 11:25:38 +0000 (UTC)
-Date:   Sat, 4 Jun 2022 13:25:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v4 3/7] can: bittiming: move bittiming calculation
- functions to calc_bittiming.c
-Message-ID: <20220604112538.p4hlzgqnodyvftsj@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-4-mailhol.vincent@wanadoo.fr>
+        Sat, 4 Jun 2022 07:28:41 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C712431DD3
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 04:28:39 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k19so13403913wrd.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 04:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=3uG8xyMjnXx7c6ijyi/jcLDfsclMzUeircX6QJbta/8=;
+        b=m3q/TDCe4KEr/Dcx3rCB6H/JPC/jABlp0co9FPBCnoTd9ukVp13ue0JJ0Z+1LWKRr2
+         qQd09wlQu34iE3GlCFFAbl1Cm2OnrMKV5m8jLe7q5sMOvd2Z8nQ7HSeKFzcwvOm3jRZI
+         hSyLvBDNrE3JWff4zTjo1uY1yCoqZsoza3c+PT5MdbenHjOewpKEb8uL6hfnZAC1O9m3
+         YqEybPrN+wUUN/KBL5O7X/MPJa+oKtjxz5eF1AL8DSXWgTTt7RnDbQ+GEHTq3IpmhmZ4
+         hQETfZDyIeCHnJcrOGReO5nDwc7zTQp/ELb4T6s7xxz5zHo6I0J2vNKBnlWGvXCvnSk0
+         GitQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=3uG8xyMjnXx7c6ijyi/jcLDfsclMzUeircX6QJbta/8=;
+        b=ErXIRD2Ude5WvJ+24D/LyJFyk0rcT3NOrPYx6l0nUNtdOa0XwjRYbjxP1njdlSw/qY
+         Worv8jNOduV4A17AQUpwPqIi0bRB9BsLHJzbQ0c60z6XyWcxY4mmFKgrFfTdp9SLHISn
+         duXs6LFTPxSNeYEgAKcQSHoOyucgWU/V3Kky2wxidBICEnbnP6OKgvJamf31ZGPaoa3T
+         fIKgdvpC20pgyCcUt005euJ4oTPFawk5A27UhBaanECupKrdMuqg6GeNpCRadi0bWzRZ
+         jdhvOmS3PLuoQGVxQswEfOPiJugQVbudwoopXkvefDaBWWjLNadm3nN8wG1YxLYSjdMp
+         o32w==
+X-Gm-Message-State: AOAM531l16HWmGspbiiQPJ9qj0+W90hoV4OzPKfVTqtGxq6VPpg67K7V
+        lbarxVHzj+2431COE4xIwmdMGPh3E21UZg==
+X-Google-Smtp-Source: ABdhPJxTtXBhVP7HJ0sDgN5YLAKTZXPZIcQ8MoPwQcPB5Rx9H6+6Jrh/oxVu0meN56FeDIQaYYN0UA==
+X-Received: by 2002:adf:fb0d:0:b0:20d:97e:17ce with SMTP id c13-20020adffb0d000000b0020d097e17cemr12586543wrr.585.1654342118252;
+        Sat, 04 Jun 2022 04:28:38 -0700 (PDT)
+Received: from localhost (92.40.202.89.threembb.co.uk. [92.40.202.89])
+        by smtp.gmail.com with ESMTPSA id x14-20020adff0ce000000b00210396b2eaesm12229149wro.45.2022.06.04.04.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 04:28:37 -0700 (PDT)
+References: <20220603135149.11570-1-aidanmacdonald.0x0@gmail.com>
+ <20220603155600.3eab9890@xps-13>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: spinand: Add support for ATO25D1GA
+Date:   Sat, 04 Jun 2022 12:26:57 +0100
+In-reply-to: <20220603155600.3eab9890@xps-13>
+Message-ID: <KsriIipAd1t8rfznYrBvTQbGe3yoRXOX@localhost>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fmzaihovq3ararpb"
-Content-Disposition: inline
-In-Reply-To: <20220603102848.17907-4-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,82 +72,169 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---fmzaihovq3ararpb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Miquel Raynal <miquel.raynal@bootlin.com> writes:
 
-On 03.06.2022 19:28:44, Vincent Mailhol wrote:
-> The canonical way to select or deselect an object during compilation
-> is to use this pattern in the relevant Makefile:
->=20
-> bar-$(CONFIG_FOO) :=3D foo.o
->=20
-> bittiming.c instead uses some #ifdef CONFIG_CAN_CALC_BITTIMG.
->=20
-> Create a new file named calc_bittiming.c with all the functions which
-> are conditionally compiled with CONFIG_CAN_CALC_BITTIMG and modify the
-> Makefile according to above pattern.
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  drivers/net/can/Kconfig              |   4 +
->  drivers/net/can/dev/Makefile         |   2 +
->  drivers/net/can/dev/bittiming.c      | 197 --------------------------
->  drivers/net/can/dev/calc_bittiming.c | 202 +++++++++++++++++++++++++++
->  4 files changed, 208 insertions(+), 197 deletions(-)
->  create mode 100644 drivers/net/can/dev/calc_bittiming.c
->=20
-> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> index b1e47f6c5586..8f3b97aea638 100644
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -96,6 +96,10 @@ config CAN_CALC_BITTIMING
->  	  source clock frequencies. Disabling saves some space, but then the
->  	  bit-timing parameters must be specified directly using the Netlink
->  	  arguments "tq", "prop_seg", "phase_seg1", "phase_seg2" and "sjw".
-> +
-> +	  The additional features selected by this option will be added to the
-> +	  can-dev module.
-> +
->  	  If unsure, say Y.
-> =20
->  config CAN_AT91
-> diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
-> index 919f87e36eed..b8a55b1d90cd 100644
-> --- a/drivers/net/can/dev/Makefile
-> +++ b/drivers/net/can/dev/Makefile
-> @@ -9,3 +9,5 @@ can-dev-$(CONFIG_CAN_NETLINK) +=3D dev.o
->  can-dev-$(CONFIG_CAN_NETLINK) +=3D length.o
->  can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
->  can-dev-$(CONFIG_CAN_NETLINK) +=3D rx-offload.o
-> +
-> +can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+> Hi Aidan,
+>
+> aidanmacdonald.0x0@gmail.com wrote on Fri,  3 Jun 2022 14:51:49 +0100:
+>
+>> Add support for the ATO25D1GA SPI NAND flash.
+>>=20
+>> Datasheet:
+>> - https://atta.szlcsc.com/upload/public/pdf/source/20191212/C469320_0459=
+9D67B03B078044EB65FF5AEDDDE9.pdf
+>>=20
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  drivers/mtd/nand/spi/Makefile |  2 +-
+>>  drivers/mtd/nand/spi/ato.c    | 86 +++++++++++++++++++++++++++++++++++
+>>  drivers/mtd/nand/spi/core.c   |  1 +
+>>  include/linux/mtd/spinand.h   |  1 +
+>>  4 files changed, 89 insertions(+), 1 deletion(-)
+>>  create mode 100644 drivers/mtd/nand/spi/ato.c
+>>=20
+>> diff --git a/drivers/mtd/nand/spi/Makefile b/drivers/mtd/nand/spi/Makefi=
+le
+>> index 80dabe6ff0f3..ae17c13d1abe 100644
+>> --- a/drivers/mtd/nand/spi/Makefile
+>> +++ b/drivers/mtd/nand/spi/Makefile
+>> @@ -1,3 +1,3 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>> -spinand-objs :=3D core.o gigadevice.o macronix.o micron.o paragon.o tos=
+hiba.o winbond.o xtx.o
+>> +spinand-objs :=3D ato.o core.o gigadevice.o macronix.o micron.o paragon=
+.o toshiba.o winbond.o xtx.o
+>
+> I would keep core.o first in that list, even if it breaks alphabetical
+> ordering slightly :)
+>
+> Otherwise the patch looks good to me.
+>
 
-Nitpick:
-Can we keep this list sorted?
+Okay, I'll send a v2 to fix that.
 
-Marc
+>>  obj-$(CONFIG_MTD_SPI_NAND) +=3D spinand.o
+>> diff --git a/drivers/mtd/nand/spi/ato.c b/drivers/mtd/nand/spi/ato.c
+>> new file mode 100644
+>> index 000000000000..82b377c06812
+>> --- /dev/null
+>> +++ b/drivers/mtd/nand/spi/ato.c
+>> @@ -0,0 +1,86 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2022 Aidan MacDonald
+>> + *
+>> + * Author: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> + */
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/mtd/spinand.h>
+>> +
+>> +
+>> +#define SPINAND_MFR_ATO		0x9b
+>> +
+>> +
+>> +static SPINAND_OP_VARIANTS(read_cache_variants,
+>> +		SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
+>> +		SPINAND_PAGE_READ_FROM_CACHE_OP(true, 0, 1, NULL, 0),
+>> +		SPINAND_PAGE_READ_FROM_CACHE_OP(false, 0, 1, NULL, 0));
+>> +
+>> +static SPINAND_OP_VARIANTS(write_cache_variants,
+>> +		SPINAND_PROG_LOAD_X4(true, 0, NULL, 0),
+>> +		SPINAND_PROG_LOAD(true, 0, NULL, 0));
+>> +
+>> +static SPINAND_OP_VARIANTS(update_cache_variants,
+>> +		SPINAND_PROG_LOAD_X4(false, 0, NULL, 0),
+>> +		SPINAND_PROG_LOAD(false, 0, NULL, 0));
+>> +
+>> +
+>> +static int ato25d1ga_ooblayout_ecc(struct mtd_info *mtd, int section,
+>> +				   struct mtd_oob_region *region)
+>> +{
+>> +	if (section > 3)
+>> +		return -ERANGE;
+>> +
+>> +	region->offset =3D (16 * section) + 8;
+>> +	region->length =3D 8;
+>> +	return 0;
+>> +}
+>> +
+>> +static int ato25d1ga_ooblayout_free(struct mtd_info *mtd, int section,
+>> +				   struct mtd_oob_region *region)
+>> +{
+>> +	if (section > 3)
+>> +		return -ERANGE;
+>> +
+>> +	if (section) {
+>> +		region->offset =3D (16 * section);
+>> +		region->length =3D 8;
+>> +	} else {
+>> +		/* first byte of section 0 is reserved for the BBM */
+>> +		region->offset =3D 1;
+>> +		region->length =3D 7;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct mtd_ooblayout_ops ato25d1ga_ooblayout =3D {
+>> +	.ecc =3D ato25d1ga_ooblayout_ecc,
+>> +	.free =3D ato25d1ga_ooblayout_free,
+>> +};
+>> +
+>> +
+>> +static const struct spinand_info ato_spinand_table[] =3D {
+>> +	SPINAND_INFO("ATO25D1GA",
+>> +		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_ADDR, 0x12),
+>> +		     NAND_MEMORG(1, 2048, 64, 64, 1024, 20, 1, 1, 1),
+>> +		     NAND_ECCREQ(1, 512),
+>> +		     SPINAND_INFO_OP_VARIANTS(&read_cache_variants,
+>> +					      &write_cache_variants,
+>> +					      &update_cache_variants),
+>> +		     SPINAND_HAS_QE_BIT,
+>> +		     SPINAND_ECCINFO(&ato25d1ga_ooblayout, NULL)),
+>> +};
+>> +
+>> +static const struct spinand_manufacturer_ops ato_spinand_manuf_ops =3D {
+>> +};
+>> +
+>> +const struct spinand_manufacturer ato_spinand_manufacturer =3D {
+>> +	.id =3D SPINAND_MFR_ATO,
+>> +	.name =3D "ATO",
+>> +	.chips =3D ato_spinand_table,
+>> +	.nchips =3D ARRAY_SIZE(ato_spinand_table),
+>> +	.ops =3D &ato_spinand_manuf_ops,
+>> +};
+>> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+>> index d5b685d1605e..9d73910a7ae8 100644
+>> --- a/drivers/mtd/nand/spi/core.c
+>> +++ b/drivers/mtd/nand/spi/core.c
+>> @@ -927,6 +927,7 @@ static const struct nand_ops spinand_ops =3D {
+>>  };
+>>=20=20
+>>  static const struct spinand_manufacturer *spinand_manufacturers[] =3D {
+>> +	&ato_spinand_manufacturer,
+>>  	&gigadevice_spinand_manufacturer,
+>>  	&macronix_spinand_manufacturer,
+>>  	&micron_spinand_manufacturer,
+>> diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+>> index 5584d3bb6556..6d3392a7edc6 100644
+>> --- a/include/linux/mtd/spinand.h
+>> +++ b/include/linux/mtd/spinand.h
+>> @@ -260,6 +260,7 @@ struct spinand_manufacturer {
+>>  };
+>>=20=20
+>>  /* SPI NAND manufacturers */
+>> +extern const struct spinand_manufacturer ato_spinand_manufacturer;
+>>  extern const struct spinand_manufacturer gigadevice_spinand_manufacture=
+r;
+>>  extern const struct spinand_manufacturer macronix_spinand_manufacturer;
+>>  extern const struct spinand_manufacturer micron_spinand_manufacturer;
+>
+>
+> Thanks,
+> Miqu=C3=A8l
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---fmzaihovq3ararpb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbQS8ACgkQrX5LkNig
-010fHAf9EqWC7V8zYRf8tGNLSdm/oEsh1naw8BqOxpmbMdPMxbOaSe7WN5BYJjAc
-lRtXQVh0Sog3DkmHNso25zttV5HRJ/iZ139Mjko0TkQaJ2wWzbTIuQ17iBN1TkIP
-vidEwAwgQlPI8PiKVegZWiekwCK/XGxDgJZVZAE+7W+Ovg88eHXZwtT5o+Idhcll
-g2hH8VY5Um6sBmg08jF4FuJWReRJmTQ6fXdUeQHbs5nkrMYEL8ojIgmmPMneNbac
-tBsGAU/HXIq8wY6no2qt7iPr6efZ0SEhh8T9SgdWkI32T1cGIVMIf8R0GbBFlmS8
-x4goNIHA4MPFoGcZrbAj1DYZ2SFR/Q==
-=fWUj
------END PGP SIGNATURE-----
-
---fmzaihovq3ararpb--
+Regards,
+Aidan

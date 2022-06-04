@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0377853D860
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0F153D84B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiFDTc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 15:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S240359AbiFDTcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 15:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240649AbiFDTbk (ORCPT
+        with ESMTP id S240665AbiFDTbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 4 Jun 2022 15:31:40 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D20950001
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:31:19 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id a184so4813982qkg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 12:31:19 -0700 (PDT)
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E02B50017
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:31:21 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id c8so7974406qtj.1
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 12:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5EcspCOdO3ERymWEcbTM1mUbo49A548NGXqTZCRd2s8=;
-        b=l02443OrBLuUyG71ej4YvSDyXjAtkdq3Mh1aRuz1IYeuK8rqF0Rpq/jPGeF/j1v6hN
-         iXCIvCwEAoKluUuX8Ywo4ZyjynDP/OhfS39bwixWuRs11xDjGdbNOyRLq4akrOO3nDl6
-         bs+wvnZtqY0jOPZOXFWqmGLOyXksQ2rNU3hNkoBG4uabJrua+71Dey7PWfhbEjdHL29Z
-         8ukiSB4vvtGGJ0/rrlTsB8dHt+qTVLnb6aUCe7j3vGxwAeEgrSS8OtQWPFR19zRqdV7z
-         EQIotE6+2/GQVMQ8Yl+VGimeHkgzgF4PziiPrM7bohQSg/oyBCOfulZc8XHX5DJHRFxs
-         gHtg==
+        bh=3Kz0pz7Mia/gmCNDAqKt9rpofsruelzWNSzQfxnNHsE=;
+        b=Yk9lCBml1xUExBB5xXCaE6uEJorrNxMZIJaf6Ac+vckzLUw2vXxnWgP/R5Z06V1W2m
+         HCmlEOHThU6UsI7c1aYjZ/PV5nVou+3TJOpL1+8xJWmqtQRlIm6FOhYGzr8nYYWgYPHM
+         Ofo8xS2GBBVX3b7q8epm+vTtSx/pJoPVajwkPBgaSd0eJ8X6dunRl6BY2IlgA/l/50dL
+         NwCipFS0qJ5unGzOPey6Ay45+OVkLuJpVlPHdi+/osxop4f6hOXN74t5XVi95AtDhBmV
+         qhcgbFoW+mJ0fI1x/T/yEdM9/9oNPDSV3DsojUqFEg6HGGcQXvI/PZcLsaC39Q5B8E5J
+         v75Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5EcspCOdO3ERymWEcbTM1mUbo49A548NGXqTZCRd2s8=;
-        b=hYaVnMOVeutTlEAzhJHY0WtIF6KyosrwVcnKRlRHWrn4HYjX/osTlBg4BfAMthbPKD
-         BRrALeTpkCQaa7AgK/0GKXtUVTrzpDRdRmlEwfSAM/hhIEusEukNVsQUTuU64RMwfpbu
-         DUsQ+3BZ9HKDccpqyo2LMWE+H+/bljPzvVwndZbLCnvRHT6gUBNbnYY9LQvfyxtIWaN2
-         ZyUXUFefJ23gJl+GSvilWvez+iyFanaMtytkuNJ8HENvrA/0n17KD6+V3rqfh8K31LGf
-         DKSeHSD4hb4XfsqnpKoU+2Li1inkBPZOCIRkhnMwWXjSQF77XApog+b7n+zQE1pN9JQ7
-         gnEQ==
-X-Gm-Message-State: AOAM533YTG30przspcdbUzRSxT+BV72WsL3iAs1T6pmKU/cNz+qDTwrH
-        +mL/ZFY+T9drKSNStVgFdko4rr9qL0Wj
-X-Google-Smtp-Source: ABdhPJzBuY7gv/t5buyAi6q/RUYs/Yy+fsSFyvu5ITPo1CN3yUF3PanibFLO8vDMEg6wfBHBBrJoQg==
-X-Received: by 2002:ae9:e401:0:b0:6a3:5985:8f41 with SMTP id q1-20020ae9e401000000b006a359858f41mr11169541qkc.58.1654371078561;
-        Sat, 04 Jun 2022 12:31:18 -0700 (PDT)
+        bh=3Kz0pz7Mia/gmCNDAqKt9rpofsruelzWNSzQfxnNHsE=;
+        b=ukH2PQg9X1IsZLGabB8iX497FN1Ajc+u+peGeuXQGTT4IO5gHs8Vu7p43TWYJQy6qh
+         /i9sj+xcFvT9tneiDPfN3kn3dfVTXmrmMWvoPu8pEDhQfJpx8a3ZujIyqy7nrsA2JK3f
+         llFkKBNFlTzH6JpvRGdjVrPmss9ioSXyLDwDewymWnyBNMK+PlZoQwCGqqgXioFq6aBg
+         Na3gzK5u8aDFwWNAsC8qex31iRLdgfdQtY0+9Y0FRkqcGjjpFdww9K2nRyLXGKn1V7fG
+         wdOYC6It4sP08Oit3fzwW2aDLRCzQtlb/TR6/GTxD016rvYV6luINOcmfNvjO3wsffvF
+         0VsA==
+X-Gm-Message-State: AOAM530sR4jimShmH6R5rR5nIOTINjeAK6+GyzJl6UfP3Xrzo9ZY+E/m
+        2x4vNIBEyPobctu877JRF1wUYWUJqgRB
+X-Google-Smtp-Source: ABdhPJzIHTtna/1os7r4Gh4AU9wLMHUo8ofSn1AcfAhxWyFKssjKHFrHde23TLJfuYShzMR9eaeDvg==
+X-Received: by 2002:ac8:5e13:0:b0:304:b452:9ec8 with SMTP id h19-20020ac85e13000000b00304b4529ec8mr13038713qtx.356.1654371080158;
+        Sat, 04 Jun 2022 12:31:20 -0700 (PDT)
 Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id o17-20020ac84291000000b00304defdb1b3sm3537426qtl.85.2022.06.04.12.31.16
+        by smtp.gmail.com with ESMTPSA id o17-20020ac84291000000b00304defdb1b3sm3537426qtl.85.2022.06.04.12.31.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 12:31:17 -0700 (PDT)
+        Sat, 04 Jun 2022 12:31:19 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, pmladek@suse.com,
         rostedt@goodmis.org
-Subject: [PATCH v3 19/33] vsprintf: time_and_date() no longer takes printf_spec
-Date:   Sat,  4 Jun 2022 15:30:28 -0400
-Message-Id: <20220604193042.1674951-20-kent.overstreet@gmail.com>
+Subject: [PATCH v3 20/33] vsprintf: flags_string() no longer takes printf_spec
+Date:   Sat,  4 Jun 2022 15:30:29 -0400
+Message-Id: <20220604193042.1674951-21-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220604193042.1674951-1-kent.overstreet@gmail.com>
 References: <20220604193042.1674951-1-kent.overstreet@gmail.com>
@@ -76,76 +76,47 @@ take printf_spec.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- lib/vsprintf.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ lib/vsprintf.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 6020f55fc0..5de25723a3 100644
+index 5de25723a3..1cd08d0d5b 100644
 --- a/lib/vsprintf.c
 +++ b/lib/vsprintf.c
-@@ -1761,14 +1761,14 @@ void time_str(struct printbuf *out, const struct rtc_time *tm, bool r)
+@@ -1942,12 +1942,12 @@ void format_page_flags(struct printbuf *out, unsigned long flags)
  
  static noinline_for_stack
- void rtc_str(struct printbuf *out, const struct rtc_time *tm,
--	     struct printf_spec spec, const char *fmt)
-+	     const char *fmt)
+ void flags_string(struct printbuf *out, void *flags_ptr,
+-		  struct printf_spec spec, const char *fmt)
++		  const char *fmt)
  {
- 	bool have_t = true, have_d = true;
- 	bool raw = false, iso8601_separator = true;
- 	bool found = true;
- 	int count = 2;
+ 	unsigned long flags;
+ 	const struct trace_print_flags *names;
  
--	if (check_pointer_spec(out, tm, spec))
-+	if (check_pointer(out, tm))
+-	if (check_pointer_spec(out, flags_ptr, spec))
++	if (check_pointer(out, flags_ptr))
  		return;
  
- 	switch (fmt[count]) {
-@@ -1806,7 +1806,7 @@ void rtc_str(struct printbuf *out, const struct rtc_time *tm,
- 
- static noinline_for_stack
- void time64_str(struct printbuf *out, const time64_t time,
--		struct printf_spec spec, const char *fmt)
-+		const char *fmt)
- {
- 	struct rtc_time rtc_time;
- 	struct tm tm;
-@@ -1824,21 +1824,20 @@ void time64_str(struct printbuf *out, const time64_t time,
- 
- 	rtc_time.tm_isdst = 0;
- 
--	rtc_str(out, &rtc_time, spec, fmt);
-+	rtc_str(out, &rtc_time, fmt);
- }
- 
- static noinline_for_stack
--void time_and_date(struct printbuf *out,
--		   void *ptr, struct printf_spec spec,
-+void time_and_date(struct printbuf *out, void *ptr,
- 		   const char *fmt)
- {
  	switch (fmt[1]) {
- 	case 'R':
--		return rtc_str(out, (const struct rtc_time *)ptr, spec, fmt);
-+		return rtc_str(out, (const struct rtc_time *)ptr, fmt);
- 	case 'T':
--		return time64_str(out, *(const time64_t *)ptr, spec, fmt);
-+		return time64_str(out, *(const time64_t *)ptr, fmt);
+@@ -1962,7 +1962,7 @@ void flags_string(struct printbuf *out, void *flags_ptr,
+ 		names = gfpflag_names;
+ 		break;
  	default:
--		return error_string_spec(out, "(%pt?)", spec);
-+		return error_string(out, "(%pt?)");
+-		return error_string_spec(out, "(%pG?)", spec);
++		return error_string(out, "(%pG?)");
  	}
- }
  
-@@ -2322,7 +2321,8 @@ void pointer(struct printbuf *out, const char *fmt,
- 		dentry_name(out, ptr, fmt);
- 		return do_width_precision(out, prev_pos, spec);
- 	case 't':
--		return time_and_date(out, ptr, spec, fmt);
-+		time_and_date(out, ptr, fmt);
+ 	return format_flags(out, flags, names);
+@@ -2335,7 +2335,8 @@ void pointer(struct printbuf *out, const char *fmt,
+ #endif
+ 
+ 	case 'G':
+-		return flags_string(out, ptr, spec, fmt);
++		flags_string(out, ptr, fmt);
 +		return do_width_precision(out, prev_pos, spec);
- 	case 'C':
- 		return clock(out, ptr, spec, fmt);
- 	case 'D':
+ 	case 'O':
+ 		return device_node_string(out, ptr, spec, fmt + 1);
+ 	case 'f':
 -- 
 2.36.0
 

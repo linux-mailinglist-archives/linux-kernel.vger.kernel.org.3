@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F6953D65D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 12:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA09C53D65E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 12:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbiFDKKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 06:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S234647AbiFDKMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 06:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiFDKKb (ORCPT
+        with ESMTP id S230482AbiFDKMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 06:10:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1F617A9A
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 03:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654337431; x=1685873431;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5haCdPTsgeUARclowhw2ARAP4afuCarRczIaCvDSzTk=;
-  b=l/sxgh3M4UJOqHw0hNSJYNDOeoN04HKG6j4e8LnWKdn/fmZ9iVY8PdcG
-   o76i3FBYS1udfX3ETpYCHy+q1gYZ8Fse8DmY72qYGP9IGAaWJRmRORBjc
-   C2mL0aRmb4XqQncffUl7m1/ExyXDD2rWitgaT+lDB9xqjibl5YzPXGO+x
-   ZNfsB5hmY9lE6z+5HtXoPcK1PMCStwFLBuELloaZZfTtoV7um5YDaMVAJ
-   Kkqv/Zz8WFr+NPzn+n8OXeH7jbabJNwuXJGD+McE3oJzSEPXANnMwhJG5
-   XtXv0mz3ksdRH0N+ZYELIOf6QerhOucDUBzT2z7QRZ7EGRBHKle4bo8MP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="301796748"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="301796748"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 03:10:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="582917709"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Jun 2022 03:10:29 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxQjl-000AdY-6r;
-        Sat, 04 Jun 2022 10:10:29 +0000
-Date:   Sat, 4 Jun 2022 18:09:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keerthy <j-keerthy@ti.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: drivers/thermal/k3_j72xx_bandgap.c:532:36: sparse: sparse: symbol
- 'k3_j72xx_bandgap_j721e_data' was not declared. Should it be static?
-Message-ID: <202206041824.svJIkOwb-lkp@intel.com>
+        Sat, 4 Jun 2022 06:12:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F3A1EAC0
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 03:12:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 004B260FA7
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 10:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3CDC385B8;
+        Sat,  4 Jun 2022 10:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654337566;
+        bh=diFWkv6AXJtcnPWZtj+GKRWXyMiOs2dVsMrrhuMUnVs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OvCMrnl+xudA+Q9ocIubd2HSZzcZ7W7AIlQ80mAwyQ/md1tUZxcxEY7f/nAU/ju95
+         /eRCO5Gq8pG6FNw3qY/Ynh2hYxY43ErEcgZr3sM469fSthmWsFCRzG41Ls8aKJqc6v
+         s3om4CuVW6JrrT6mETwEjyvXRh73BBKGTOE/53U4=
+Date:   Sat, 4 Jun 2022 12:12:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-staging@lists.linux.dev
+Subject: Re: [GIT PULL] Staging driver updates for 5.19-rc1
+Message-ID: <YpswG6Obmp4b3y66@kroah.com>
+References: <Ypng29bf0vGJ20fo@kroah.com>
+ <CAHk-=wjTkU15iuSVrue_tRhD7=9v2YatrnFNxg=wEpT9-Szd4w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAHk-=wjTkU15iuSVrue_tRhD7=9v2YatrnFNxg=wEpT9-Szd4w@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0 thermal: k3_j72xx_bandgap: Add the bandgap driver support
-date:   2 weeks ago
-config: powerpc64-randconfig-s031-20220603 (https://download.01.org/0day-ci/archive/20220604/202206041824.svJIkOwb-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-18-g56afb504-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/thermal/ kernel/debug/kdb/
+On Fri, Jun 03, 2022 at 11:07:46AM -0700, Linus Torvalds wrote:
+> On Fri, Jun 3, 2022 at 3:22 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > Note, you will have a merge conflict in the
+> > drivers/net/wireless/silabs/wfx/sta.c file, please just take the change
+> > that came in from the wifi tree.  We thought as I had pulled the same
+> > merge point from the wifi developers this type of conflict wouldn't have
+> > happened, but for some reason git flags it as something to pay attention
+> > to and couldn't resolve it itself.
+> 
+> That "some reason" is because the networking tree made other changes
+> to the file since (ie commit 2c33360bce6a: "wfx: use container_of() to
+> get vif").
+> 
+> So both branches had done the same change (the merge), but one branch
+> had then done other changes on top of that same change.
+> 
+> Broken SCM thinking then thinks that means that "oh, then we obviously
+> have to take the extra change" (eg darcs "patch algebra"), and make
+> that the basis of their resolution strategy. It's not actually a valid
+> model, because it just assumes that the additional patches were right.
+> Maybe there was a _reason_ that extra patch wasn't done in the other
+> branch? The extra patch might have been due to particular issues in
+> that branch, you can't just make the darcs assumption of reordering
+> patches and taking some union of them (which is an over-simplification
+> of the patch algebra rules).
+> 
+> Now, that's not to say that git can't get things wrong too when
+> resolving things. But at least it doesn't make some fundamental
+> mistake like that.
+> 
+> The git rules are basically that it will resolve changes that aren't
+> overlapping, using the traditional 3-way model (it then has that whole
+> "recursion and rename detection" thing, but that's more of a
+> higher-level metadata thing separate from the actual code merge).
+> 
+> So git doesn't assume any "semantics" to the changes. If it sees that
+> two branches changed the same code in different ways, git will go
+> "this is a conflict", and leave it to human (or scripted)
+> intervention.
+> 
+> Again, it's not that the git model is always right - you can obviously
+> have changes that do *not* overlap at all, but still have a very
+> fundamental semantic conflict, and git will happily merge those things
+> and think it is all good.
+> 
+> So the git model is basically practical and straightforward (also
+> "stupid", but in a good way - do the common truly obvious 3-way
+> merges, don't try to do anything clever when that fails). There's no
+> "theory" behind it that might turn out to be completely wrong.
+> 
+> Anyway, the conflict was trivial, but I thought I'd just explain both
+> the immediate "why did it conflict" _and_ the more abstract "why did
+> git make that choice".
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+That makes more sense now, git is being "safe" by asking for the
+developer to look and resolve it themselves.
 
+thanks for the explanation.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/thermal/k3_j72xx_bandgap.c:532:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j721e_data' was not declared. Should it be static?
->> drivers/thermal/k3_j72xx_bandgap.c:536:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j7200_data' was not declared. Should it be static?
-
-vim +/k3_j72xx_bandgap_j721e_data +532 drivers/thermal/k3_j72xx_bandgap.c
-
-   531	
- > 532	const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
-   533		.has_errata_i2128 = 1,
-   534	};
-   535	
- > 536	const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
-   537		.has_errata_i2128 = 0,
-   538	};
-   539	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

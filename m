@@ -2,188 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA9F53D67D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 13:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B70E53D680
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 13:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235095AbiFDLFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 07:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S235189AbiFDLWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 07:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235114AbiFDLFJ (ORCPT
+        with ESMTP id S234825AbiFDLWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 07:05:09 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D37B1CFC3
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 04:05:05 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id z197so3774385iof.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 04:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LXSima+rBrCZEoEdN9Res2CXy6Ed3jHKZBixDdAZll8=;
-        b=PHV3GKBOOPM8zFLSgovBNQM6CEUPk3EF1YQWC5HUsvdBkhDIFswCP3TuCMSDWcFu1Y
-         FIM4KoackkR4uQVpQlXCCU1ufCzd8fMioUYyRMfL+NWbEoGLjzXSfUOIcYm4J3kC19cz
-         aE5aWY7B11ZW83m254oZwDglF10Vb9E5d9sqmgYeLbS2DLMnLG6exu5sheVJpj0yWmmK
-         pu8EAtbA1MWZtgtMEhBNA/Z3D7d1f0OClXtiM2syAVtrQG6c0pQg/uTiGC+eeVMRjvjJ
-         PqS+dNkqjIOcTzZ9dUmeEiPlfk3kE36G6GeL6y6Q4qxjSggyAHikgF8ZiwfEz6B/GphQ
-         s6Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LXSima+rBrCZEoEdN9Res2CXy6Ed3jHKZBixDdAZll8=;
-        b=FC/ezSRcZjkFT7ZS6Yrp7k2FjOXSiXAp/9NA7JUlzCr80eWTkz/IQ+g4LJ69mCH/Ph
-         qtpo78Qml8ErQhzZKx8H4WFmJ81r4Oa2ThxoVkkyqsMCfOjH3gqgDzJue8jY4egML6Nn
-         ObB4Dv1IjiwBzUyuSE1j9oWTA2VcxQWTFisARhrPuUVQN2rC21k7ny1sfWLprqK9vDlO
-         ynV2MkbSjuw3HfilhL0QIiXpBgmYKs6+ASkWaio97P650CezGT/umF8aLvUFouvdd8US
-         8MZzlpzf05IX+fbfa3PjsMdKKFsYpOPKWOCKSwmCGqfplGyQ0EKQzeVMX1c/Iqhq5Zlw
-         93KA==
-X-Gm-Message-State: AOAM530zgxYrhCkTvvRYeK1ilkV1j1OlEJzNK+WIu+xkz/jYZrMRD14Y
-        o4Se1zmXCT02hX7/95BEIt8=
-X-Google-Smtp-Source: ABdhPJw8dV2gItyNIZtjEdzZe9cHbFcqdcv5hFTxrgCHD7joYFdZ4SGHNtdsoRG7tLNP4KFnz831Ig==
-X-Received: by 2002:a05:6602:81b:b0:665:746a:f079 with SMTP id z27-20020a056602081b00b00665746af079mr6863759iow.125.1654340704769;
-        Sat, 04 Jun 2022 04:05:04 -0700 (PDT)
-Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
-        by smtp.gmail.com with ESMTPSA id o1-20020a056e02102100b002d3ca0d55d0sm3954868ilj.48.2022.06.04.04.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 04:05:03 -0700 (PDT)
-Date:   Sat, 4 Jun 2022 11:05:02 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Rongwei Wang <rongwei.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz,
-        roman.gushchin@linux.dev, iamjoonsoo.kim@lge.com,
-        rientjes@google.com, penberg@kernel.org, cl@linux.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm/slub: fix the race between validate_slab and
- slab_free
-Message-ID: <Yps8XtepKezXc2DM@n2.us-central1-a.c.spheric-algebra-350919.internal>
-References: <20220529081535.69275-1-rongwei.wang@linux.alibaba.com>
- <YpNa4tB/jfW3MDyi@n2.us-central1-a.c.spheric-algebra-350919.internal>
- <YpWPykstpyt+b65x@FVFYT0MHHV2J.googleapis.com>
+        Sat, 4 Jun 2022 07:22:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D6722B16
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 04:22:33 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nxRrS-0000ia-PZ; Sat, 04 Jun 2022 13:22:30 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A90578C2DA;
+        Sat,  4 Jun 2022 11:22:28 +0000 (UTC)
+Date:   Sat, 4 Jun 2022 13:22:27 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v4 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+Message-ID: <20220604112227.nlyxulkxelgofruz@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-5-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pvg7tyzpzddgwkey"
 Content-Disposition: inline
-In-Reply-To: <YpWPykstpyt+b65x@FVFYT0MHHV2J.googleapis.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220603102848.17907-5-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 11:47:22AM +0800, Muchun Song wrote:
-> On Sun, May 29, 2022 at 11:37:06AM +0000, Hyeonggon Yoo wrote:
-> > On Sun, May 29, 2022 at 04:15:33PM +0800, Rongwei Wang wrote:
-> > > In use cases where allocating and freeing slab frequently, some
-> > > error messages, such as "Left Redzone overwritten", "First byte
-> > > 0xbb instead of 0xcc" would be printed when validating slabs.
-> > > That's because an object has been filled with SLAB_RED_INACTIVE,
-> > > but has not been added to slab's freelist. And between these
-> > > two states, the behaviour of validating slab is likely to occur.
-> > > 
-> > > Actually, it doesn't mean the slab can not work stably. But, these
-> > > confusing messages will disturb slab debugging more or less.
-> > > 
-> > > Signed-off-by: Rongwei Wang <rongwei.wang@linux.alibaba.com>
-> > 
-> > Have you observed it or it's from code inspection?
-> > 
-> > > ---
-> > >  mm/slub.c | 40 +++++++++++++++++-----------------------
-> > >  1 file changed, 17 insertions(+), 23 deletions(-)
-> > > 
-> > > diff --git a/mm/slub.c b/mm/slub.c
-> > > index ed5c2c03a47a..310e56d99116 100644
-> > > --- a/mm/slub.c
-> > > +++ b/mm/slub.c
-> > > @@ -1374,15 +1374,12 @@ static noinline int free_debug_processing(
-> > >  	void *head, void *tail, int bulk_cnt,
-> > >  	unsigned long addr)
-> > >  {
-> > > -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
-> > >  	void *object = head;
-> > >  	int cnt = 0;
-> > > -	unsigned long flags, flags2;
-> > > +	unsigned long flags;
-> > >  	int ret = 0;
-> > >  
-> > > -	spin_lock_irqsave(&n->list_lock, flags);
-> > > -	slab_lock(slab, &flags2);
-> > > -
-> > > +	slab_lock(slab, &flags);
-> > >  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
-> > >  		if (!check_slab(s, slab))
-> > >  			goto out;
-> > > @@ -1414,8 +1411,7 @@ static noinline int free_debug_processing(
-> > >  		slab_err(s, slab, "Bulk freelist count(%d) invalid(%d)\n",
-> > >  			 bulk_cnt, cnt);
-> > >  
-> > > -	slab_unlock(slab, &flags2);
-> > > -	spin_unlock_irqrestore(&n->list_lock, flags);
-> > > +	slab_unlock(slab, &flags);
-> > >  	if (!ret)
-> > >  		slab_fix(s, "Object at 0x%p not freed", object);
-> > >  	return ret;
-> > > @@ -3304,7 +3300,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
-> > >  
-> > >  {
-> > >  	void *prior;
-> > > -	int was_frozen;
-> > > +	int was_frozen, to_take_off = 0;
-> > >  	struct slab new;
-> > >  	unsigned long counters;
-> > >  	struct kmem_cache_node *n = NULL;
-> > > @@ -3315,15 +3311,19 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
-> > >  	if (kfence_free(head))
-> > >  		return;
-> > >  
-> > > +	n = get_node(s, slab_nid(slab));
-> > > +	spin_lock_irqsave(&n->list_lock, flags);
-> > > +
-> > 
-> > Oh please don't do this.
-> > 
-> > SLUB free slowpath can be hit a lot depending on workload.
-> > 
-> > __slab_free() try its best not to take n->list_lock. currently takes n->list_lock
-> > only when the slab need to be taken from list.
-> > 
-> > Unconditionally taking n->list_lock will degrade performance.
-> >
-> 
-> I can confirm you are right. We have encountered this issue in practise.
-> We have deployed somen HDFS instance on a 256-CPU machine.  When there
-> are lots of IO requests from users, we can see lots of threads are contended
-> on n->list_lock.  Lots of call traces are like following:
-> 
->   ffffffff810dfbb4 native_queued_spin_lock_slowpath+0x1a4
->   ffffffff81780ffb _raw_spin_lock+0x1b
->   ffffffff8127327e get_partial_node.isra.81+0x5e
->   ffffffff812752d3 ___slab_alloc+0x2f3
->   ffffffff8127559c __slab_alloc+0x1c
->   ffffffff81275828 kmem_cache_alloc+0x278
->   ffffffff812e9e3d alloc_buffer_head+0x1d
->   ffffffff812e9f74 alloc_page_buffers+0xa4
->   ffffffff812eb0e9 create_empty_buffers+0x19
->   ffffffff812eb37d create_page_buffers+0x7d
->   ffffffff812ed78d __block_write_begin_int+0x9d
-> 
-> I thought it was because there are lots of threads which consume local
-> CPU slab cache quickly and then both of them try to get a new slab
-> from node partial list.  Since there are 256 CPUs, the contention
-> is more competitive and easy to be visible.
-> 
-> Any thoughts on this issue (e.e. how to ease contention)? Comments
-> are welcome.
 
-How does increasing number of partial slabs affect your situation?
-(increasing /sys/slab/<cache name>/cpu_partial)
+--pvg7tyzpzddgwkey
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Thanks.
-> 
-> 
+On 03.06.2022 19:28:45, Vincent Mailhol wrote:
+> Only a few drivers rely on the CAN rx offload framework (as of the
+> writing of this patch, only three: flexcan, ti_hecc and
+> mcp251xfd). Give the option to the user to deselect this features
+> during compilation.
+>=20
+> The drivers relying on CAN rx offload are in different sub
+> folders. All of these drivers get tagged with "select CAN_RX_OFFLOAD"
+> so that the option is automatically enabled whenever one of those
+> driver is chosen.
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/Kconfig               | 16 ++++++++++++++++
+>  drivers/net/can/dev/Makefile          |  2 ++
+>  drivers/net/can/spi/mcp251xfd/Kconfig |  1 +
+>  3 files changed, 19 insertions(+)
+>=20
+> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> index 8f3b97aea638..1f1d81da1c8c 100644
+> --- a/drivers/net/can/Kconfig
+> +++ b/drivers/net/can/Kconfig
+> @@ -102,6 +102,20 @@ config CAN_CALC_BITTIMING
+> =20
+>  	  If unsure, say Y.
+> =20
+> +config CAN_RX_OFFLOAD
+> +	bool "CAN RX offload"
+> +	default y
+> +	help
+> +	  Framework to offload the controller's RX FIFO during one
+> +	  interrupt. The CAN frames of the FIFO are read and put into a skb
+> +	  queue during that interrupt and transmitted afterwards in a NAPI
+> +	  context.
+> +
+> +	  The additional features selected by this option will be added to the
+> +	  can-dev module.
+> +
+> +	  If unsure, say Y.
+> +
+>  config CAN_AT91
+>  	tristate "Atmel AT91 onchip CAN controller"
+>  	depends on (ARCH_AT91 || COMPILE_TEST) && HAS_IOMEM
+> @@ -113,6 +127,7 @@ config CAN_FLEXCAN
+>  	tristate "Support for Freescale FLEXCAN based chips"
+>  	depends on OF || COLDFIRE || COMPILE_TEST
+>  	depends on HAS_IOMEM
+> +	select CAN_RX_OFFLOAD
+>  	help
+>  	  Say Y here if you want to support for Freescale FlexCAN.
+> =20
+> @@ -162,6 +177,7 @@ config CAN_SUN4I
+>  config CAN_TI_HECC
+>  	depends on ARM
+>  	tristate "TI High End CAN Controller"
+> +	select CAN_RX_OFFLOAD
+>  	help
+>  	  Driver for TI HECC (High End CAN Controller) module found on many
+>  	  TI devices. The device specifications are available from www.ti.com
+> diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+> index b8a55b1d90cd..5081d8a3be57 100644
+> --- a/drivers/net/can/dev/Makefile
+> +++ b/drivers/net/can/dev/Makefile
+> @@ -11,3 +11,5 @@ can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
+>  can-dev-$(CONFIG_CAN_NETLINK) +=3D rx-offload.o
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do you want to remove this?
+
+> =20
+>  can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+> +
+> +can-dev-$(CONFIG_CAN_RX_OFFLOAD) +=3D rx-offload.o
+> diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/=
+mcp251xfd/Kconfig
+> index dd0fc0a54be1..877e4356010d 100644
+> --- a/drivers/net/can/spi/mcp251xfd/Kconfig
+> +++ b/drivers/net/can/spi/mcp251xfd/Kconfig
+> @@ -2,6 +2,7 @@
+> =20
+>  config CAN_MCP251XFD
+>  	tristate "Microchip MCP251xFD SPI CAN controllers"
+> +	select CAN_RX_OFFLOAD
+>  	select REGMAP
+>  	select WANT_DEV_COREDUMP
+>  	help
+
+I remember I've given you a list of drivers needing RX offload, I
+probably missed the m_can driver. Feel free to squash this patch:
+
+--- a/drivers/net/can/dev/Makefile
++++ b/drivers/net/can/dev/Makefile
+@@ -8,7 +8,6 @@ can-dev-$(CONFIG_CAN_NETLINK) +=3D bittiming.o
+ can-dev-$(CONFIG_CAN_NETLINK) +=3D dev.o
+ can-dev-$(CONFIG_CAN_NETLINK) +=3D length.o
+ can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
+-can-dev-$(CONFIG_CAN_NETLINK) +=3D rx-offload.o
+=20
+ can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+=20
+diff --git a/drivers/net/can/m_can/Kconfig b/drivers/net/can/m_can/Kconfig
+index 45ad1b3f0cd0..fc2afab36279 100644
+--- a/drivers/net/can/m_can/Kconfig
++++ b/drivers/net/can/m_can/Kconfig
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig CAN_M_CAN
+        tristate "Bosch M_CAN support"
++       select CAN_RX_OFFLOAD
+        help
+          Say Y here if you want support for Bosch M_CAN controller framewo=
+rk.
+          This is common support for devices that embed the Bosch M_CAN IP.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--pvg7tyzpzddgwkey
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbQHEACgkQrX5LkNig
+012c2gf8C/gNJNvEuZbs7n7LevMALo31wcnilUdo6W7cXTyfc0/pOg+WACXex3at
+y+CDvjWkkMGbNL1sHsKdOrXN9iFY97yCvlFCNBuiHXkmsz9RXDY+G+d/FRuZ2ZUA
+gpM2u6S6Z0PjGt78k/hVqoiAgCX/HqTbqCN9A9/kn+vrIh8KDps26Bl+U8Q4FeXH
+OfRMPGgCtAJZo/9o1Lt502XuYcVXytdI1uFvhfXvH1BCFAVR+eUY0lXDrjULfw96
+0Kxj2M+PUveANkVw0WaZa+xSbi4vbfd21bxbvvfZk13cyX9WeuVAMUf9XmeCMqMA
+VR47UVj1A+pGip+ZZO/6eQ0CxrkqIQ==
+=en9U
+-----END PGP SIGNATURE-----
+
+--pvg7tyzpzddgwkey--

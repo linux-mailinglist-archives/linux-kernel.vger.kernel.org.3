@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF8253D8AF
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 00:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A58F53D8B7
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 00:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242189AbiFDWCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 18:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S242206AbiFDWK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 18:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiFDWCa (ORCPT
+        with ESMTP id S232884AbiFDWK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 18:02:30 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E86C2CC86;
-        Sat,  4 Jun 2022 15:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654380129;
-        bh=44yWatpj6wF86Z5uuPLeaz6RdApHV2+/i3FmWQnXmvI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=G+kIX1qWg/0AX2kkQvT7kvb0wtWTuks1zLYqyQKLjPBB5zwvUfmDTlbtaHZIG6xF8
-         0D+byMfqolnAVXf1pjKvvkvB3Hyg7k0TY3zLOkeKcimV+FkP2fp0r6mYSudGofoVSJ
-         IXDC2m8QiasQpXFXcSnoVYK9pRpbJyZ7NIcmbpeo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1Md6R1-1nNRsg0gFv-00aACb; Sun, 05 Jun 2022 00:02:09 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (sch56xx-common) Add DMI override table
-Date:   Sun,  5 Jun 2022 00:02:00 +0200
-Message-Id: <20220604220200.2567-1-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
+        Sat, 4 Jun 2022 18:10:56 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FAE2FFEB
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 15:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654380655; x=1685916655;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O9lxN0nnbWVu76gl4EognGBjN8hbt8L0zgC/qTcSkhQ=;
+  b=Gf6vF0dq0kjJ7QnSeQbb5FvqRUy+VeAQvwuHe9R5dojDxZIXWsq/U89X
+   y5tLfvxRRx+9auEGzPNAO4tVZ+dmH7Y4l+yOLgn9orwmWQ8/AjUrMcQmb
+   lmrAWUJH9XSpIAkrfp5JQUczdJTDGjjk+fXhPyDN4wAPCOLibfdI4G7Qs
+   ba9uRC47ot18yAjRKgmgtbCB06ZjQ/XI1kfnVJ1O0OzBKchgsPwoC2wQs
+   fDfYshOi0i8k71o8gAxYPW3pIbkmXFIpG18FixpbAd9/aZG3Fn1bZfXGd
+   +M3SXE96ywmoY6nwwJAyo12+6T5INiWzrJg9kQ449lrfiG5kSuQZGg3dS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="256347544"
+X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
+   d="scan'208";a="256347544"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 15:10:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
+   d="scan'208";a="635041269"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Jun 2022 15:10:54 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxbyv-000BFL-NB;
+        Sat, 04 Jun 2022 22:10:53 +0000
+Date:   Sun, 5 Jun 2022 06:10:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 32/38] include/linux/stddef.h:8:14:
+ warning: initialization of 'unsigned int' from 'void *' makes integer from
+ pointer without a cast
+Message-ID: <202206050641.z48IuOJU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:DP0Yr2k96AiTqZa/hhjr79M75ptPoiB0bWzo8EKAoGumkIjVrUB
- yQDYeSZENXdRH5kQZ4h4DpQu3d2yD6IiUMu0+Ue2TlXyvw11yu1U0Q6OegTfYlFqgC9CalE
- h+/bsFQlVBdToR3rQl12mah2JrPz3JdYdzVZdQMBo0ZbLUzqIRRhY49TP+O69Hcr75+jRsN
- HKWKlDbjzZvcKBwrD99QA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yXcKc3RzeoA=:kHm0lGvUkrH9CFOUS6FRz6
- dSOu/ZDI+10/Kuri0ftZnOjsBe8NsmQXzC7kEjIBrYbY/a43NfyfEHiEtZsGOUVggNLqgXrBk
- WpT++gnsW/jLSBQCfNA/4PhlJNwCgxTLErBrbVmuanTeJLmHNOiO1e4A45eZ3pwIQEuYacbio
- i+9cRX8jFZDCJKdoJQlPIXhpDaAmu3VbDv1dPJzxEqEQcIDahLdUftnVqyxZBsr77ORW5P+Ct
- O61e7APVCIzl6rrp5EI5hPJ3RkfR/L7NcrR4SkxAQ4xIYsVvGAIfCkmGZrnosB+pZVNfJzljQ
- rb9jlHaeCe3M++W0lSrgBs0Bwb1rkcOOpeACLlmz2XiYWqSBOlVzMEKKXvjhxyWbdJzqFOavx
- ca4/KcdFgc6Deu1GQhn7t+QB4qJnRij/2DaUx9+Tl7ZqVcybkeBjwTXhX/ey4iLD5xPb1IKEq
- bkZqvd5kAuBbWEaQDGkFqiaOzC9m65qc6e+u8kuqYoJdU7x9VD+ppaoKjxtBGn1ZWxwTqZ7Za
- j9ybpZc+MVDglF06U856d+LqOp8iCo7fpjsxUboqVAuN1GeEVg/LUH+0Kqab7FTkNzI7FGVXb
- P6YdfgNiwa9AICvBYnIaCOltegyTCncJABKtJmmyhqUuiIhOd54mzmgrzMo8Arq/WRDzB65f0
- 6UA+FEmCKg5SrKeSx1AfA2EzV+kbhoPh7q26E6Bqh/PWT3AhQsjTJoit04QWZxxYI8TB4z+aJ
- ZYpUvAzfBfWogOC1upm6eL3mG5jG+pXsxno4eanF+HJ38gL+3OkzTh+moXGKBf47Q2yQrOvEZ
- 9+UyCTUmRMkwFrRjexnKaNZ/r+LYtSLLerhTxXrBIq8Wfzw0CS0WrVSSc0tEK7u5FU8A/VW8c
- XncYVPgWYKWWpY5b+77dph0fvjv4OJfF+P8mcMGAMvbpr2nXlaLFcRvYv0d2V/T4t7zyVJvtI
- OYbYbx0iaDBlvwGAOJvhh1mEg74GljvhZlm3mYQy37zZJW79Yw25lehyUwi9CBlma439mwUoH
- vuMkKkzqkXlRrwqXqYpSjUYOcM902IVKqmd6mECEhFdUfc525utxHlMXdH3nLf308h1N3EzPL
- eUiyUNrWUT70JxLZYuP7V9nkzm1XyxhZjG+OW+vqpqbYC0SeWN8uaLsEw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,89 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices like the Fujitsu Celsius W380 do contain
-a working sch56xx hardware monitoring device, but do
-not contain the necessary DMI onboard device.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   0c38c32343008325233d4b0d253ce0b52c46f72e
+commit: f2fe9133a40a131ca4c946b73cc87c111ad0b407 [32/38] RISC-V: KVM: Add G-stage ioremap() and iounmap() functions
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220605/202206050641.z48IuOJU-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/avpatel/linux/commit/f2fe9133a40a131ca4c946b73cc87c111ad0b407
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_v1
+        git checkout f2fe9133a40a131ca4c946b73cc87c111ad0b407
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-Do not check for the presence of an suitable onboard device
-on these machines. The list of affected machines was created
-using data collected by the Linux Hardware Project.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested on a Fujitsu Esprimo P720, but sadly not on a affected
-machine.
+All warnings (new ones prefixed by >>):
 
-Fixes: 393935baa45e (hwmon: (sch56xx-common) Add automatic module loading =
-on supported devices)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++--------
- 1 file changed, 34 insertions(+), 10 deletions(-)
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from arch/arm64/include/asm/rwonce.h:71,
+                    from include/linux/compiler.h:248,
+                    from include/asm-generic/bug.h:5,
+                    from arch/arm64/include/asm/bug.h:26,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/mm.h:6,
+                    from include/linux/mman.h:5,
+                    from arch/arm64/kvm/mmu.c:7:
+   arch/arm64/kvm/mmu.c: In function 'kvm_phys_addr_ioremap':
+>> include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
+       8 | #define NULL ((void *)0)
+         |              ^
+   arch/arm64/kvm/mmu.c:767:62: note: in expansion of macro 'NULL'
+     767 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+         |                                                              ^~~~
+   include/linux/stddef.h:8:14: note: (near initialization for 'cache.gfp_atomic')
+       8 | #define NULL ((void *)0)
+         |              ^
+   arch/arm64/kvm/mmu.c:767:62: note: in expansion of macro 'NULL'
+     767 |         struct kvm_mmu_memory_cache cache = { 0, __GFP_ZERO, NULL, };
+         |                                                              ^~~~
 
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
-.c
-index 3ece53adabd6..de3a0886c2f7 100644
-=2D-- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -523,6 +523,28 @@ static int __init sch56xx_device_add(int address, con=
-st char *name)
- 	return PTR_ERR_OR_ZERO(sch56xx_pdev);
- }
 
-+static const struct dmi_system_id sch56xx_dmi_override_table[] __initcons=
-t =3D {
-+	{
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "CELSIUS W380"),
-+		},
-+	},
-+	{
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO P710"),
-+		},
-+	},
-+	{
-+		.matches =3D {
-+			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO E9900"),
-+		},
-+	},
-+	{ }
-+};
-+
- /* For autoloading only */
- static const struct dmi_system_id sch56xx_dmi_table[] __initconst =3D {
- 	{
-@@ -543,16 +565,18 @@ static int __init sch56xx_init(void)
- 		if (!dmi_check_system(sch56xx_dmi_table))
- 			return -ENODEV;
+vim +8 include/linux/stddef.h
 
--		/*
--		 * Some machines like the Esprimo P720 and Esprimo C700 have
--		 * onboard devices named " Antiope"/" Theseus" instead of
--		 * "Antiope"/"Theseus", so we need to check for both.
--		 */
--		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
--		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
--		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
--		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
--			return -ENODEV;
-+		if (!dmi_check_system(sch56xx_dmi_override_table)) {
-+			/*
-+			 * Some machines like the Esprimo P720 and Esprimo C700 have
-+			 * onboard devices named " Antiope"/" Theseus" instead of
-+			 * "Antiope"/"Theseus", so we need to check for both.
-+			 */
-+			if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-+			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-+			    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-+			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-+				return -ENODEV;
-+		}
- 	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  6  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  7  #undef NULL
+^1da177e4c3f41 Linus Torvalds   2005-04-16 @8  #define NULL ((void *)0)
+6e218287432472 Richard Knutsson 2006-09-30  9  
 
- 	/*
-=2D-
-2.30.2
+:::::: The code at line 8 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

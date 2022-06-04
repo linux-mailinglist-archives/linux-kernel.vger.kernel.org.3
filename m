@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEA353D3FA
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 01:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB4153D401
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348197AbiFCX7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 19:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S1349764AbiFDAGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 20:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiFCX7C (ORCPT
+        with ESMTP id S231737AbiFDAGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 19:59:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8833C31DE4;
-        Fri,  3 Jun 2022 16:59:01 -0700 (PDT)
+        Fri, 3 Jun 2022 20:06:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A8D4F9ED;
+        Fri,  3 Jun 2022 17:06:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CC6BB82500;
-        Fri,  3 Jun 2022 23:59:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56C1C385A9;
-        Fri,  3 Jun 2022 23:58:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3732B60B49;
+        Sat,  4 Jun 2022 00:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E983C385A9;
+        Sat,  4 Jun 2022 00:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654300739;
-        bh=0BSB0KdJ9TZOGWmSitv+cPteX1vDEFfMvQFuucYCfS8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VEpgatTqZ3vbeJ6CESNEHBVV/eafdAvzizMYVPxwY2w2PrVkXxaYaoSC7STz5vN8O
-         oOYGSShPOij3kbgr/AXDqqMcdFpa6paCxFHeRks4vGIwa6LelF+o1UNbLuQxd6kVwT
-         PwedxrQ5J6a6IPpYDoE769AC/mbXl4PYsWhAm3l4TWFtQut2K+jSRM3tb0YRxZSDhz
-         LSMnN2A0xyUlfmuIocYzzl9XoLqGHRhZLalwmwmNJakY8tLC/v7+rkgoHwBh9OFuLp
-         8JjOaPsaDD/SlpHkU1ZgxVBPfzqLjIWapsO7kx8VXMO9Ix3JHmt/RvVn8Xytkl65lH
-         e+XFKCW9PVK+Q==
-Date:   Fri, 3 Jun 2022 18:58:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mohamed Khalfella <mkhalfella@purestorage.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        msaggi@purestorage.com, ebadger@purestorage.com,
-        stable@vger.kernel.org, bhelgaas@google.com, oohall@gmail.com,
-        rajatja@google.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] PCI/AER: Iterate over error counters instead of error
-Message-ID: <20220603235856.GA117911@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603221247.5118-1-mkhalfella@purestorage.com>
+        s=k20201202; t=1654301160;
+        bh=bB/7Qg/ZWdTRZBizAQW+tLeYFyUrjLlJ+g9oiaJnNPQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=rF4ikw/L2wjG3Aa8eLURpCFcpl9uqcsY7m6zMeF+ead3CbyZH9+R0DCTpO5lsmawc
+         +SCIlyAZ+nG4+zLOaqjaVXzvV+op0CcTOrUuxfiSyeQK+4XBwdgq82heNSGY8MjduU
+         AFDpNO0aVaMrPkodlCbRBLadr444fhAIo+id3qGzKSYqEKkYUQVxtDmbjO/wY9+gMm
+         Y+c1xrK89GVQMWKi5qM3X1O3HRYgw3y14EEXE6rlpotDIH82J9WUDRWBmKV+twivcR
+         wFTbtumYFZphBH7x2Nk57Ptb+ZVMupbS7rbnTrMROdog4InFPH6ANtossUkWIj5ua2
+         Cnjgpyv2OkOvg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8AA20F03950;
+        Sat,  4 Jun 2022 00:06:00 +0000 (UTC)
+Subject: Re: [GIT PULL] ntfs3: bugfixes for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <c5c16f3d-c8a7-96b0-4fd6-056c4159fcef@paragon-software.com>
+References: <c5c16f3d-c8a7-96b0-4fd6-056c4159fcef@paragon-software.com>
+X-PR-Tracked-List-Id: <ntfs3.lists.linux.dev>
+X-PR-Tracked-Message-Id: <c5c16f3d-c8a7-96b0-4fd6-056c4159fcef@paragon-software.com>
+X-PR-Tracked-Remote: https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_5.19
+X-PR-Tracked-Commit-Id: 724bbe49c5e427cb077357d72d240a649f2e4054
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1f952675835bfe18d6ae494a5581724d68c52352
+Message-Id: <165430116055.8653.4989553009324938778.pr-tracker-bot@kernel.org>
+Date:   Sat, 04 Jun 2022 00:06:00 +0000
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Cc:     torvalds@linux-foundation.org, ntfs3@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,54 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 10:12:47PM +0000, Mohamed Khalfella wrote:
-> Is there any chance for this to land in 5.19?
+The pull request you sent on Fri, 3 Jun 2022 14:26:57 +0300:
 
-Too late for v5.19, since the merge window will end in a couple days.
-Remind me again if you don't see it in -next by v5.20-rc5 or so.
+> https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_5.19
 
-> On 5/10/22 14:17, Mohamed Khalfella wrote:
-> > > Thanks for catching this; it definitely looks like a real issue!  I
-> > > guess you're probably seeing junk in the sysfs files?
-> > 
-> > That is correct. The initial report was seeing junk when reading sysfs
-> > files. As descibed, this is happening because we reading data past the
-> > end of the stats counters array.
-> > 
-> > 
-> > > I think maybe we should populate the currently NULL entries in the
-> > > string[] arrays and simplify the code here, e.g.,
-> > > 
-> > > static const char *aer_correctable_error_string[] = {
-> > >        "RxErr",                        /* Bit Position 0       */
-> > >        "dev_cor_errs_bit[1]",
-> > >	...
-> > >
-> > >  if (stats[i])
-> > >    len += sysfs_emit_at(buf, len, "%s %llu\n", strings_array[i], stats[i]);
-> > 
-> > Doing it this way will change the output format. In this case we will show
-> > stats only if their value is greater than zero. The current code shows all the
-> > stats those have names (regardless of their value) plus those have non-zero
-> > values.
-> > 
-> > >> @@ -1342,6 +1342,11 @@ static int aer_probe(struct pcie_device *dev)
-> > >>  	struct device *device = &dev->device;
-> > >>  	struct pci_dev *port = dev->port;
-> > >>
-> > >> +	BUILD_BUG_ON(ARRAY_SIZE(aer_correctable_error_string) <
-> > >> +		     AER_MAX_TYPEOF_COR_ERRS);
-> > >> +	BUILD_BUG_ON(ARRAY_SIZE(aer_uncorrectable_error_string) <
-> > >> +		     AER_MAX_TYPEOF_UNCOR_ERRS);
-> > >
-> > > And make these check for "!=" instead of "<".
-> 
-> I am happy to remove these BUILD_BUG_ON() if you think it is a good
-> idea to do so.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1f952675835bfe18d6ae494a5581724d68c52352
 
-I think it's good to enforce correctness there somehow, so let's leave
-them there unless somebody has a better idea.
+Thank you!
 
-> > This will require unnecessarily extending stats arrays to have 32 entries
-> > in order to match names arrays. If you don't feel strogly about changing
-> > "<" to "!=", I prefer to keep the code as it is. 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

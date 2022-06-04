@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F52153D822
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 20:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133AD53D823
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 20:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239537AbiFDSkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 14:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S239539AbiFDStC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 14:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238142AbiFDSkQ (ORCPT
+        with ESMTP id S239334AbiFDStB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 14:40:16 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A954F3204B
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 11:40:15 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ff90e0937aso110580097b3.4
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 11:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qObx7yCQ7FjlnpZUTDh/T1TZApLND2G3LRPTQ/AToI8=;
-        b=mIPAFb7rBnPov3pwMLPKgP9nxV3GISZKpf8AZupjYwu5wqHfm/qMpPJbS7adyM2fBj
-         40yNTkLPsCvaa832yM7uLCSPr3SgVLYYKcGrVEfMvgiRhWqUuUU6wrZy1/KX5OZa3g2r
-         yNNk3jM7lEHqaPAWd3vdUMRn7LwtWle4u28rzbB4NfWow6Pha8vgjAzShRpIsuor5r3L
-         PN2/bVwx8k8/ZYXRSwZqjrbAhW0Q1uWEdirWLKKUsMes+VzozepDQWUX4uUrQqYRjjRG
-         a9C+AC1YJNMn5Gytp/hd6f3kmn7oCQYjKRNKTkcfz7FZCdTS6BLTMCHM5sY9wn/wZTiS
-         +xAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qObx7yCQ7FjlnpZUTDh/T1TZApLND2G3LRPTQ/AToI8=;
-        b=ooZBKzBhBn6habf5JuoAZY3mSXkglrGR0EQTsi4qucdo4NFI8oQAFTK7a3af8Z6trf
-         8pRGuG/+oyo0auswYYy5A+cOneMgMbobXZSTcCUEWNjQceU12BVeXEKT+HieHxKd9etz
-         yngfz6SUpA2ELn1VkkZFW4vsxHv+kcpzqW4iRp4lLTUULgCaXeh6wnAEErJEWaiKcHTf
-         Ey8ihdAGW09GMnCMbkfEEHIwk3T6o3SCtuXR+7d05sQVrQ6NNoCVaQoVk+jb6jz9ZR5k
-         YBIFOFJKvr35plxzfPD0yEY3w0iAweB4yjcaEkncUomrucVxgd1+HjHtQ39nDU+gKm0D
-         X8uQ==
-X-Gm-Message-State: AOAM532p1RIao4rcs2xeeMsZ1OEzNUiGCkr/NPjcsXAQ2CYZgrw0oDGT
-        zbstywxmybK7pqzAaJE0HFeK0MvR+boOG7h8NKOEtHlQSO9yoQ==
-X-Google-Smtp-Source: ABdhPJyjCFaHWMexdIe+Zyk6GS5EXThdDggrA76G7Y82t0ED50ArvlljBnQ4vaNUG5mfuGr29p5oEGhTbo4Z6ZZ/1IE=
-X-Received: by 2002:a81:b343:0:b0:300:4822:e12 with SMTP id
- r64-20020a81b343000000b0030048220e12mr18071981ywh.376.1654368014821; Sat, 04
- Jun 2022 11:40:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220603173814.362515009@linuxfoundation.org>
-In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sun, 5 Jun 2022 00:10:03 +0530
-Message-ID: <CA+G9fYvJEdMKKFO=OYynVPBbCqTFb4naMRWMEzQ+Tub0y5Y_eg@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/23] 4.14.282-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Sat, 4 Jun 2022 14:49:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C6133E26
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 11:48:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2671660F57
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 18:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389F5C385B8;
+        Sat,  4 Jun 2022 18:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654368538;
+        bh=AykKsuKg8j2GCkZX46bMGZ6g4meFZe03Ce6ywzT0SiA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fYBOrFm/9OJcfGHSlZUIzvWXc87Zqepjr5kVo8x5EvJdgrrWKpKadJQxSLe7fAFHz
+         79eXlfeslRSr6w1kflo2RpTU6fxfcBIAuWfpp8p+fcCp2fWsoRi90eiEOTp/lPIHbn
+         MYKD2wB10R6TRmk9slN27jms4CEtJPAEbL4AIYJM=
+Date:   Sat, 4 Jun 2022 11:48:57 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [akpm-mm:mm-unstable 179/180] fs/xfs/xfs_file.c:1273:1:
+ warning: no previous prototype for 'xfs_dax_fault'
+Message-Id: <20220604114857.0e34301eb39cfda3ff509a59@linux-foundation.org>
+In-Reply-To: <202206042008.WcIK2oVM-lkp@intel.com>
+References: <202206042008.WcIK2oVM-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,128 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 at 23:11, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.282 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.282-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, 4 Jun 2022 20:33:01 +0800 kernel test robot <lkp@intel.com> wrote:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> head:   f06e3c5104126b9a6660b58f29619b53bfa33b2b
+> commit: d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c [179/180] xfs: support CoW in fsdax mode
+> config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220604/202206042008.WcIK2oVM-lkp@intel.com/config)
+> compiler: mips-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c
+>         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+>         git fetch --no-tags akpm-mm mm-unstable
+>         git checkout d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/xfs/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> fs/xfs/xfs_file.c:1273:1: warning: no previous prototype for 'xfs_dax_fault' [-Wmissing-prototypes]
+>     1273 | xfs_dax_fault(
+>          | ^~~~~~~~~~~~~
+> 
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Works OK for me with gcc-12.1.0.
 
-## Build
-* kernel: 4.14.282-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: f412febea824d191dc7d71faf706d9312f5cac7a
-* git describe: v4.14.281-24-gf412febea824
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.281-24-gf412febea824
+I assume this will fix it.
 
-## Test Regressions (compared to v4.14.281-7-g6eab7c1004f3)
-No test regressions found.
+--- a/fs/xfs/xfs_file.c~xfs-support-cow-in-fsdax-mode-fix
++++ a/fs/xfs/xfs_file.c
+@@ -1256,7 +1256,7 @@ xfs_file_llseek(
+ }
+ 
+ #ifdef CONFIG_FS_DAX
+-int
++static int
+ xfs_dax_fault(
+ 	struct vm_fault		*vmf,
+ 	enum page_entry_size	pe_size,
+@@ -1269,7 +1269,7 @@ xfs_dax_fault(
+ 				&xfs_read_iomap_ops);
+ }
+ #else
+-int
++static int
+ xfs_dax_fault(
+ 	struct vm_fault		*vmf,
+ 	enum page_entry_size	pe_size,
+_
 
-## Metric Regressions (compared to v4.14.281-7-g6eab7c1004f3)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.281-7-g6eab7c1004f3)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.281-7-g6eab7c1004f3)
-No metric fixes found.
-
-## Test result summary
-total: 111312, pass: 98345, fail: 140, skip: 11289, xfail: 1538
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 293 total, 287 passed, 6 failed
-* arm64: 52 total, 45 passed, 7 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 22 total, 22 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 16 total, 16 passed, 0 failed
-* s390: 12 total, 9 passed, 3 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 49 total, 47 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB1953D81F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 20:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F52153D822
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 20:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239494AbiFDSjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 14:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
+        id S239537AbiFDSkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 14:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238142AbiFDSjM (ORCPT
+        with ESMTP id S238142AbiFDSkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 14:39:12 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBEA31524
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 11:39:10 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id u3so14473814wrg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 11:39:10 -0700 (PDT)
+        Sat, 4 Jun 2022 14:40:16 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A954F3204B
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 11:40:15 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ff90e0937aso110580097b3.4
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 11:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7zjb1mGSym65J9ellOm0DGmh/ve+ZjqPiIhIp48CKMg=;
-        b=AyHfIekbEa9O0Z2h216EY2CHg2BPLKqFNyNc+ZJm/WVRM/04WA8N9/2RkGQvUK8Kc3
-         JLDqCdqvbdAcL4CLa9aiP2G9cFCZQOCitOA6QIKUdoc1gwnScCmI7Dvmq7C6X9VpKyK/
-         EckOUHW7xwGgyms3yo/Z6DbfEYQjXekGyDItQ=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qObx7yCQ7FjlnpZUTDh/T1TZApLND2G3LRPTQ/AToI8=;
+        b=mIPAFb7rBnPov3pwMLPKgP9nxV3GISZKpf8AZupjYwu5wqHfm/qMpPJbS7adyM2fBj
+         40yNTkLPsCvaa832yM7uLCSPr3SgVLYYKcGrVEfMvgiRhWqUuUU6wrZy1/KX5OZa3g2r
+         yNNk3jM7lEHqaPAWd3vdUMRn7LwtWle4u28rzbB4NfWow6Pha8vgjAzShRpIsuor5r3L
+         PN2/bVwx8k8/ZYXRSwZqjrbAhW0Q1uWEdirWLKKUsMes+VzozepDQWUX4uUrQqYRjjRG
+         a9C+AC1YJNMn5Gytp/hd6f3kmn7oCQYjKRNKTkcfz7FZCdTS6BLTMCHM5sY9wn/wZTiS
+         +xAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7zjb1mGSym65J9ellOm0DGmh/ve+ZjqPiIhIp48CKMg=;
-        b=fPA2QF0Hhv+WR4DE7Unrdl6iNZD+y/TaXS6dG+lmWuAn/RZBI9yN+hfYGyFH10WZVK
-         tgRUEs5M/lc0zEKjDbpRMDIyYhz89zOVgYq1wzuNH9BvGkS7R0uzrajKNXeHQ/yOxGRk
-         Z8iv6MsooMr866q8vs7+6GTOJiMMU5zgWm/TwW3cUhfWTB8LiUswgiAIhjYlrooPoLx0
-         K9GPNXQV4jUduvKfgUwZhFE7BLnDia2H7Z32p4oyNuu09MTTw21D4EPQuxpbSbTKi5wu
-         4dp/fqevwslL2FPetEIbaD1dXvjr3/myt333uKvOnN2kOj5I2Ig9/GKakNXo6Fdl3wha
-         B6hw==
-X-Gm-Message-State: AOAM531k7IXRa7OjoOfga1uGYlNZzcBb9hXgpm/xFMp//DpIwXGLJKcL
-        1sf1/t4O1voJAhpRzAEi3BS/pWU6fsryAw==
-X-Google-Smtp-Source: ABdhPJzRj6geKqRf7J30fIivb1dEg0YG34ldikQSCda3nTTUGz7XeTsmi3BbgAmQ5/KxSGxLeHPezA==
-X-Received: by 2002:a05:6000:1841:b0:20f:d80a:963f with SMTP id c1-20020a056000184100b0020fd80a963fmr13447868wri.116.1654367949162;
-        Sat, 04 Jun 2022 11:39:09 -0700 (PDT)
-Received: from localhost.localdomain (mob-37-180-27-19.net.vodafone.it. [37.180.27.19])
-        by smtp.gmail.com with ESMTPSA id d6-20020adff846000000b0020c5253d8d2sm10814263wrq.30.2022.06.04.11.39.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 11:39:08 -0700 (PDT)
-From:   Michael Trimarchi <michael@amarulasolutions.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Cc:     devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] arm64: dts: imx8mn-bsh-smm-s2/pro: Add pmic clock connection
-Date:   Sat,  4 Jun 2022 20:38:58 +0200
-Message-Id: <20220604183905.1025201-1-michael@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qObx7yCQ7FjlnpZUTDh/T1TZApLND2G3LRPTQ/AToI8=;
+        b=ooZBKzBhBn6habf5JuoAZY3mSXkglrGR0EQTsi4qucdo4NFI8oQAFTK7a3af8Z6trf
+         8pRGuG/+oyo0auswYYy5A+cOneMgMbobXZSTcCUEWNjQceU12BVeXEKT+HieHxKd9etz
+         yngfz6SUpA2ELn1VkkZFW4vsxHv+kcpzqW4iRp4lLTUULgCaXeh6wnAEErJEWaiKcHTf
+         Ey8ihdAGW09GMnCMbkfEEHIwk3T6o3SCtuXR+7d05sQVrQ6NNoCVaQoVk+jb6jz9ZR5k
+         YBIFOFJKvr35plxzfPD0yEY3w0iAweB4yjcaEkncUomrucVxgd1+HjHtQ39nDU+gKm0D
+         X8uQ==
+X-Gm-Message-State: AOAM532p1RIao4rcs2xeeMsZ1OEzNUiGCkr/NPjcsXAQ2CYZgrw0oDGT
+        zbstywxmybK7pqzAaJE0HFeK0MvR+boOG7h8NKOEtHlQSO9yoQ==
+X-Google-Smtp-Source: ABdhPJyjCFaHWMexdIe+Zyk6GS5EXThdDggrA76G7Y82t0ED50ArvlljBnQ4vaNUG5mfuGr29p5oEGhTbo4Z6ZZ/1IE=
+X-Received: by 2002:a81:b343:0:b0:300:4822:e12 with SMTP id
+ r64-20020a81b343000000b0030048220e12mr18071981ywh.376.1654368014821; Sat, 04
+ Jun 2022 11:40:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220603173814.362515009@linuxfoundation.org>
+In-Reply-To: <20220603173814.362515009@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sun, 5 Jun 2022 00:10:03 +0530
+Message-ID: <CA+G9fYvJEdMKKFO=OYynVPBbCqTFb4naMRWMEzQ+Tub0y5Y_eg@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/23] 4.14.282-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,48 +71,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pmic clock is connected to svns_rtc using RTC_XTALI pin,
-and wifi/bluetooth chipset
+On Fri, 3 Jun 2022 at 23:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.282 release.
+> There are 23 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.282-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
----
- .../boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi     | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
-index c11895d9d582..a21ec0d1d003 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
-@@ -28,6 +28,8 @@ usdhc2_pwrseq: usdhc2-pwrseq {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_usdhc2_pwrseq>;
- 		reset-gpios = <&gpio4 27 GPIO_ACTIVE_LOW>;
-+		clocks = <&bd71847>;
-+		clock-names = "ext_clock";
- 	};
- };
- 
-@@ -214,6 +216,11 @@ &i2c4 {
- 	status = "okay";
- };
- 
-+&snvs_rtc {
-+	clocks = <&bd71847>;
-+	clock-names = "snvs-rtc";
-+};
-+
- &uart2 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart2>;
-@@ -235,6 +242,8 @@ bluetooth {
- 		shutdown-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
- 		device-wakeup-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
- 		host-wakeup-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
-+		clocks = <&bd71847>;
-+		clock-names = "lpo";
- 		max-speed = <3000000>;
- 	};
- };
--- 
-2.25.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.14.282-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: f412febea824d191dc7d71faf706d9312f5cac7a
+* git describe: v4.14.281-24-gf412febea824
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.281-24-gf412febea824
+
+## Test Regressions (compared to v4.14.281-7-g6eab7c1004f3)
+No test regressions found.
+
+## Metric Regressions (compared to v4.14.281-7-g6eab7c1004f3)
+No metric regressions found.
+
+## Test Fixes (compared to v4.14.281-7-g6eab7c1004f3)
+No test fixes found.
+
+## Metric Fixes (compared to v4.14.281-7-g6eab7c1004f3)
+No metric fixes found.
+
+## Test result summary
+total: 111312, pass: 98345, fail: 140, skip: 11289, xfail: 1538
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 293 total, 287 passed, 6 failed
+* arm64: 52 total, 45 passed, 7 failed
+* i386: 27 total, 23 passed, 4 failed
+* mips: 22 total, 22 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 16 total, 16 passed, 0 failed
+* s390: 12 total, 9 passed, 3 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 49 total, 47 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

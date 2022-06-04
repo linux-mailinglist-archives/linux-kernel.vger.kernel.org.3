@@ -2,150 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9806253D64B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 11:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C997653D64D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 11:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiFDJqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 05:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S234364AbiFDJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 05:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbiFDJqb (ORCPT
+        with ESMTP id S234289AbiFDJuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 05:46:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC4E1C912
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 02:46:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654335991; x=1685871991;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EnzYIGPT8V3M8JQKqotcWukqJZS3TOLYvVbtCoLTi/c=;
-  b=cnYXSrJbX6PBfnr3MT24X9yvxzzfIDkkT+v7uNemacvR0WLKBfR14xV3
-   eVB+d9jzdtnRbcRBYkm+ewWtJFV62I7luFMx8xMn7pPDc+siStKskP/MR
-   yZ0beNivzkLkszxL0K73tZhSw1xkL2SnA+gWuNQbMWgD6oxeUPDe45nPZ
-   V69riN2AsobXeYeMclBH4vvtPyAJtuLu5pwqSERxH+oJB0UZep5kWnjDr
-   Qj175MwzjpUEgQNpGlnHrPdQ9vSNZBs1GzwwC8EREJeupGieAw3oRWdhp
-   lWw5vO16KukpQx+ThhL1U2L1P1BpeKov/WQNDo+gd7FARcx/XufV4hPwy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="301794403"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="301794403"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 02:46:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="757822366"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 04 Jun 2022 02:46:28 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxQMW-000Abf-91;
-        Sat, 04 Jun 2022 09:46:28 +0000
-Date:   Sat, 4 Jun 2022 17:46:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>, Kai Huang <kai.huang@intel.com>
-Subject: arch/x86/kernel/cpu/sgx/virt.c:295:36: sparse: sparse: cast removes
- address space '__user' of expression
-Message-ID: <202206041712.XoJv2ESx-lkp@intel.com>
+        Sat, 4 Jun 2022 05:50:15 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F5F120AF
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 02:50:14 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-30ec2aa3b6cso103086897b3.11
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 02:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=KlFFfMPlRK8Vy4FYjFs7iZMXm4h5d8X53tYtT4+dKQbR2esjTfqDkalnCMmyVA3TfC
+         oVqXVYMBI+DqlBW11LVIrwTjdet3k8hABjd8zz8h7TDwGM+72+T/HGLubEhKST4Rc32h
+         zD4qU7q9P0hwVcT1Mb0hAXoyBfLVyfkw3bRGxdUl9dIWEBEMot4eED+gW63rumjQI1/3
+         dSVSjIjWhBXi+T/1HeO4Abdgdwaw5vWovHqm/ca8X0taFa4y1mw+/SdqORwbbxEprwjx
+         SRqyg83xhSRcdULvwzHAkR7xxp1TK1ldfrtYmXX0lJgjr3+nn+t0jpEx0KaOqIJW3CSz
+         umaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=mTe6rsF1WlocKfWRCIawejpNJl6lRYSIlYxDz8jltlQ=;
+        b=1JyLO+fh+8aU+YTgaVtVt3vNZG5NdO0OFmZ5hbd7w/iQVU8/x++UFqaXCoQTH5g7zV
+         AdnHiPKb4s9rnTORSjxYNwBPgiwzVTCH+Ec5yFmPhc8PSV+AotFY0sRYhrFVww6TiFuY
+         YF+IWSE66vVwgyn4x2qkAFYjffBibDtxMYZyiIdAYvAeCPKqlWfAAag20w/YC8w68x+S
+         PrVYiThAdoF9v23DmXfZl7ch32fQddMJrHKz+4R6McxO4B0hRbF9xG24OqEOSoS3dU66
+         520FpEa9qG3Y7ldB27U7nc33VhBesjkBNVAgKyQxxDSnX9mnQTxPDlC0KSFSj5+CPP5s
+         tb3Q==
+X-Gm-Message-State: AOAM531qDaUPU1A4XvnFktwZ+edURC0hqCvrObeRApw7+wWvwEdG2RYj
+        kbddL6gzuwG+BsqBujxEc8RBTXwMJ77WrJLOYkI=
+X-Google-Smtp-Source: ABdhPJzzwufeKcOUW5IBuyKIGuDl3rufy4hl+/COD43DbbPyhapGZKvDOYo6oqYpdFE7/mLy2ibIV+SJ2jhF+FlGIaE=
+X-Received: by 2002:a81:be05:0:b0:2e5:6c26:59fb with SMTP id
+ i5-20020a81be05000000b002e56c2659fbmr16184600ywn.94.1654336213302; Sat, 04
+ Jun 2022 02:50:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: zahirikeen@gmail.com
+Sender: abusalim078@gmail.com
+Received: by 2002:a05:7110:334a:b0:181:51b4:c370 with HTTP; Sat, 4 Jun 2022
+ 02:50:12 -0700 (PDT)
+From:   Zahiri Keen <zahirikeen789@gmail.com>
+Date:   Sat, 4 Jun 2022 09:50:12 +0000
+X-Google-Sender-Auth: aSHKD4cmJEuaoIfuw3jqcb3hxJc
+Message-ID: <CAH0O5dHh0SeUb-dnezs2a71xZd7_vMycyDHMsiBqzvbteoKUJA@mail.gmail.com>
+Subject: Good day to you,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: d155030b1e7c0e448aab22a803f7a71ea2e117d7 x86/sgx: Add helpers to expose ECREATE and EINIT to KVM
-date:   1 year, 2 months ago
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220604/202206041712.XoJv2ESx-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-18-g56afb504-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d155030b1e7c0e448aab22a803f7a71ea2e117d7
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d155030b1e7c0e448aab22a803f7a71ea2e117d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/sgx/
+Good Day,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I know this email might come to you as a surprise because is coming
+from someone you haven=E2=80=99t met with before.
 
+I am Mr. Zahiri Keen, the bank manager with BOA bank i contact you for
+a deal relating to the funds which are in my position I shall furnish
+you with more detail once your response.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse: sparse: incorrect type in assignment (different base types) @@     expected int [assigned] ret @@     got restricted vm_fault_t @@
-   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     expected int [assigned] ret
-   arch/x86/kernel/cpu/sgx/virt.c:59:13: sparse:     got restricted vm_fault_t
-   arch/x86/kernel/cpu/sgx/virt.c:60:20: sparse: sparse: restricted vm_fault_t degrades to integer
-   arch/x86/kernel/cpu/sgx/virt.c:95:35: sparse: sparse: symbol 'sgx_vepc_vm_ops' was not declared. Should it be static?
->> arch/x86/kernel/cpu/sgx/virt.c:295:36: sparse: sparse: cast removes address space '__user' of expression
-   arch/x86/kernel/cpu/sgx/virt.c:326:24: sparse: sparse: cast removes address space '__user' of expression
-   arch/x86/kernel/cpu/sgx/virt.c:326:43: sparse: sparse: cast removes address space '__user' of expression
-   arch/x86/kernel/cpu/sgx/virt.c:326:58: sparse: sparse: cast removes address space '__user' of expression
-
-vim +/__user +295 arch/x86/kernel/cpu/sgx/virt.c
-
-   260	
-   261	/**
-   262	 * sgx_virt_ecreate() - Run ECREATE on behalf of guest
-   263	 * @pageinfo:	Pointer to PAGEINFO structure
-   264	 * @secs:	Userspace pointer to SECS page
-   265	 * @trapnr:	trap number injected to guest in case of ECREATE error
-   266	 *
-   267	 * Run ECREATE on behalf of guest after KVM traps ECREATE for the purpose
-   268	 * of enforcing policies of guest's enclaves, and return the trap number
-   269	 * which should be injected to guest in case of any ECREATE error.
-   270	 *
-   271	 * Return:
-   272	 * -  0:	ECREATE was successful.
-   273	 * - <0:	on error.
-   274	 */
-   275	int sgx_virt_ecreate(struct sgx_pageinfo *pageinfo, void __user *secs,
-   276			     int *trapnr)
-   277	{
-   278		int ret;
-   279	
-   280		/*
-   281		 * @secs is an untrusted, userspace-provided address.  It comes from
-   282		 * KVM and is assumed to be a valid pointer which points somewhere in
-   283		 * userspace.  This can fault and call SGX or other fault handlers when
-   284		 * userspace mapping @secs doesn't exist.
-   285		 *
-   286		 * Add a WARN() to make sure @secs is already valid userspace pointer
-   287		 * from caller (KVM), who should already have handled invalid pointer
-   288		 * case (for instance, made by malicious guest).  All other checks,
-   289		 * such as alignment of @secs, are deferred to ENCLS itself.
-   290		 */
-   291		if (WARN_ON_ONCE(!access_ok(secs, PAGE_SIZE)))
-   292			return -EINVAL;
-   293	
-   294		__uaccess_begin();
- > 295		ret = __ecreate(pageinfo, (void *)secs);
-   296		__uaccess_end();
-   297	
-   298		if (encls_faulted(ret)) {
-   299			*trapnr = ENCLS_TRAPNR(ret);
-   300			return -EFAULT;
-   301		}
-   302	
-   303		/* ECREATE doesn't return an error code, it faults or succeeds. */
-   304		WARN_ON_ONCE(ret);
-   305		return 0;
-   306	}
-   307	EXPORT_SYMBOL_GPL(sgx_virt_ecreate);
-   308	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Mr.Zahiri

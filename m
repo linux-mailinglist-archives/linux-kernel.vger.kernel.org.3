@@ -2,115 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0D953D6FB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 15:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C258753D700
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 15:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348218AbiFDNPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 09:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S1348484AbiFDNTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 09:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiFDNPJ (ORCPT
+        with ESMTP id S232046AbiFDNTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 09:15:09 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B7F1AD8C
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 06:15:09 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id g186so437878pgc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 06:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x3E9KYBkGOld27+OrZZguQP5b56zIidZNbEieX3S8t0=;
-        b=N09CVVeQjw952tka9UQ6obnKsG0XJy1Speri0PzxQXWvhN2p8F6g8e2xBXdmHaWDMp
-         iq7Sv4eEyfnOOHUVNq+xG4JMFUScfpBEplif+rJ+ib6YxTIOGr2ZsEYxt2+OdnUkU5ls
-         P84+6T9ZfojXHpHX7KbcSfrTNExm2xudZL4VH3VhqQOzrriwGLvhyfImAfM4Gw3SGzyX
-         LTlCl9ZUAekA2uVy8F8sgqwor0xByAnDwDomK4mE93nQSSkzRCCwxFgFFxDlFDY3tzJm
-         tccNHgjcC5ae4NUlRtUt4d+C9N4slfFPTecVvCeFsgj8kU7IZhcW4/fvGSu67n9qr1lV
-         Rtmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x3E9KYBkGOld27+OrZZguQP5b56zIidZNbEieX3S8t0=;
-        b=GoZr1tOG2ppruCRH25ibqBU2vvjjuPs5lXOM/okMgv9ZqmiZIgfj92cfQ3SJe5W/cT
-         1GMtyZLsX1JPru4jcIKegylyk+EcJKGNxLG/Hb8hAHKMuDAABnpw6zMRitlSpFAIVWbq
-         t6DuwxfZAPmfXaFKMegBuQE74RHgw7HMLUFy8f53M7LbgJoLJmIZad+6cX8BSg/sK4DI
-         lx0yQyTM3n0Q1mKSwwpawAHhx5vv1v6Y504sikxonbiXtJ/2mrQp4UtqTauZRHt33u1t
-         km97EpyrcssKHVtOm9q9pjSvxkO5djoxmDmGYUyrxLzDh0NWJFQCM90RN9+doJbtN+IJ
-         +fOg==
-X-Gm-Message-State: AOAM5302UvOBUmxuEHQ50zzb/qTJZt41owLlZbUl9VN4hL6KBSlcYJCz
-        USl6QsIOshFqBAgK0dZmn92WLpGI6/DL/g==
-X-Google-Smtp-Source: ABdhPJzBKQTDr/JEJwEv3ecuCk2TMS82TwMeuBgThfaSC6uJBahhPW2fpFKwxtsILPHpX+G6x8dWLg==
-X-Received: by 2002:a63:e905:0:b0:3fa:ec8c:9013 with SMTP id i5-20020a63e905000000b003faec8c9013mr12841441pgh.599.1654348508532;
-        Sat, 04 Jun 2022 06:15:08 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id f1-20020a635101000000b003fba1a97c49sm7128026pgb.61.2022.06.04.06.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 06:15:07 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     jack@suse.cz, hch@lst.de
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Subject: [PATCH] lib/flex_proportions.c: Remove local_irq_ops in fprop_new_period()
-Date:   Sat,  4 Jun 2022 21:15:02 +0800
-Message-Id: <20220604131502.5190-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Sat, 4 Jun 2022 09:19:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D157657;
+        Sat,  4 Jun 2022 06:19:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8DC360BD4;
+        Sat,  4 Jun 2022 13:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3016FC34119;
+        Sat,  4 Jun 2022 13:19:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654348749;
+        bh=ci8xQi3kRBYwslseB4Rk9sRgkZ3TEX5HhAgsld+BiY4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VcZZoiM8n5M0BcfM/D9gdIsH4lUoKsyhWJg3s7igRx9e0zq8BLRDhk/Z0Dpn84XkJ
+         XDJCh++GucdY9ql5jY8wnqOLAbciG19eIzTY7Dib6LUL6zu/J5jSgvxWdzsnmsSkgf
+         PzBHvQ1MTBsXSsa2r+UqxR8H1kcgHow/8m6jPr0MWmZBzJu3h+SSwQmZIja/wccIws
+         Z5ku/k3szwgX/cTOkqcnG13dOmOnL+DI/Ax5oCvWVST4vX04kuZBesvebZ+weQ2MOr
+         02zY+amMM0Po4nWE0dX1SLx5q7OqAydPEybSH/7wwd4pwag814/3dO/JKsXJYUFx3k
+         vJAEt0Lz8Zvag==
+Received: by mail-io1-f44.google.com with SMTP id a10so8127712ioe.9;
+        Sat, 04 Jun 2022 06:19:09 -0700 (PDT)
+X-Gm-Message-State: AOAM53096JQkyzdOIl4Kz5IUpuUp+84fUETcMyYd56oumaLCKEm6UqEp
+        MSOIMiTTfUIzjEKKgmqX4FlXx+O+BJIBcdqY+2U=
+X-Google-Smtp-Source: ABdhPJxrDkmm3CFJKtheneWOw1Lk/af/lrPJtnKyUireiGFreCs0r1zQ/ir+DdRWYL0P+m5iAcHegGRjGm/PftugQtA=
+X-Received: by 2002:a05:6638:4407:b0:331:692c:1d5f with SMTP id
+ bp7-20020a056638440700b00331692c1d5fmr6598166jab.208.1654348748353; Sat, 04
+ Jun 2022 06:19:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+In-Reply-To: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 4 Jun 2022 21:18:56 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6KMC7OiLO74nN05+qfcR6ZZCih12T-iBGQ4_L9RVOjoQ@mail.gmail.com>
+Message-ID: <CAAhV-H6KMC7OiLO74nN05+qfcR6ZZCih12T-iBGQ4_L9RVOjoQ@mail.gmail.com>
+Subject: Re: [PATCH for-5.19 1/2] irqchip/loongson-liointc: Use architecture
+ register to get coreid
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit <e78d4833c03e28> (lib: Fix possible deadlock in flexible
-proportion code) adds the local_irq_ops because percpu_counter_{sum
-|add} ops'lock can cause deadlock by interrupts. Now percpu_counter
-_{sum|add} ops use raw_spin_(un)lock_irq*, so revert the commit and
-resolve the conflict.
+Hi, Jiaxun,
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- lib/flex_proportions.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+On Sat, Jun 4, 2022 at 8:41 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for
+> LoongArch") replaced get_ebase_cpunum with physical processor
+> id from SMP facilities. However that breaks MIPS non-SMP build
+> and makes booting from other cores inpossible on non-SMP kernel.
+>
+> Thus we revert get_ebase_cpunum back and use get_csr_cpuid for
+> LoongArch.
+>
+> Fixes: fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for LoongArch")
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  drivers/irqchip/irq-loongson-liointc.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+> index aed88857d90f..c11cf97bcd1a 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -39,6 +39,14 @@
+>
+>  #define LIOINTC_ERRATA_IRQ     10
+>
+> +#if defined(CONFIG_MIPS)
+> +#define liointc_core_id get_ebase_cpunum()
+> +#elif defined(CONFIG_LOONGARCH)
+> +#define liointc_core_id get_csr_cpuid()
+> +#else
+> +#define liointc_core_id 0
+> +#endif
+Thank you for your quick fix. But I think it is better to do like this:
 
-diff --git a/lib/flex_proportions.c b/lib/flex_proportions.c
-index 53e7eb1dd76c..05cccbcf1661 100644
---- a/lib/flex_proportions.c
-+++ b/lib/flex_proportions.c
-@@ -63,18 +63,13 @@ void fprop_global_destroy(struct fprop_global *p)
-  */
- bool fprop_new_period(struct fprop_global *p, int periods)
- {
--	s64 events;
--	unsigned long flags;
-+	s64 events = percpu_counter_sum(&p->events);
- 
--	local_irq_save(flags);
--	events = percpu_counter_sum(&p->events);
- 	/*
- 	 * Don't do anything if there are no events.
- 	 */
--	if (events <= 1) {
--		local_irq_restore(flags);
-+	if (events <= 1)
- 		return false;
--	}
- 	write_seqcount_begin(&p->sequence);
- 	if (periods < 64)
- 		events -= events >> periods;
-@@ -82,7 +77,6 @@ bool fprop_new_period(struct fprop_global *p, int periods)
- 	percpu_counter_add(&p->events, -events);
- 	p->period += periods;
- 	write_seqcount_end(&p->sequence);
--	local_irq_restore(flags);
- 
- 	return true;
- }
--- 
-2.20.1
+#if defined(CONFIG_LOONGARCH)
+#define liointc_core_id get_csr_cpuid()
+#else
+#define liointc_core_id get_ebase_cpunum()
+#endif
 
+Because this driver doesn't depend on COMPILE_TEST, it can only be
+built under MIPS and LOONGARCH. Moreover, let the else branch be the
+same as the old behavior looks more reasonable.
+
+Huacai
+
+> +
+>  struct liointc_handler_data {
+>         struct liointc_priv     *priv;
+>         u32                     parent_int_map;
+> @@ -57,7 +65,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+>         struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+>         struct irq_chip *chip = irq_desc_get_chip(desc);
+>         struct irq_chip_generic *gc = handler->priv->gc;
+> -       int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
+> +       int core = liointc_core_id % LIOINTC_NUM_CORES;
+>         u32 pending;
+>
+>         chained_irq_enter(chip, desc);
+> --
+> 2.25.1
+>

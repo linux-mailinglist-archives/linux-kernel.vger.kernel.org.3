@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633D253D4B1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA32753D4BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244721AbiFDBkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S1348648AbiFDB5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 21:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiFDBkU (ORCPT
+        with ESMTP id S232100AbiFDB5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:40:20 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6051FCF3
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:40:16 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id o6so2882257plg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:40:16 -0700 (PDT)
+        Fri, 3 Jun 2022 21:57:50 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FBC20F70;
+        Fri,  3 Jun 2022 18:57:49 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso8374029pjg.0;
+        Fri, 03 Jun 2022 18:57:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AivyL9V8Uc1O7GX3xn/Ov3A+U/0bQ+9dt+dRzOycXs0=;
-        b=L7+Bs1SPe4yG6zfNwb1n+93MU6mDc5f33dScy1wKlOYkBfGrmGKnBWVMYJmoUqeAgR
-         BM2WNlFvDNQaMEkPdisL8/mnliuVV/aRYCwNIWgpMF0B3O4q+NH2i+zMbFhbqF/jm7YH
-         S7AgH0nplAHARjqaUOWlS8bqqa58L8NmiqzdgwgFaOtUSMwo6xwxMm4aNVKw4OMoCX2z
-         uZkWp/HlUwtmvbHRtlj0CTS5kkJCMyY2jwgZp61drNAt8HYWlCvIwj5Y2iyhki/+FwGw
-         7sYN/aNRUzKY8erhvTgECbENBNnj2Bv9qHgJgB4WyD8f50jOmRjBQ0Tro2cel29bQ5JR
-         f8bA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o5hGdIU3RTq9rNarbSsXAVqYEW+DV77xSmfZJg12PYQ=;
+        b=EPjhqUYh4/vtYhYTO99L50D61QACPFudZTbqJcy6ykzVGGMsI6T+HnfatT+lKWMEh0
+         pj9NkXC8IqsgqGjG2wVkJtTAUDVck8mpCYF2tO5PsZ/0NeH/0Q/MxVaxRFtFeVep7CPp
+         OvKCULTVQLctzg04rNjzQDascX8W5RpRrnM1tcnRPgHyQPDVyny+HMtoTFgUpZhZhG4l
+         J4iIwC9DndxgK8E+a10mb4JY3ym8iaOqcVLYkmXwgdJkt7ZpH7ljIcfaAe/XVktXmzcQ
+         pxaMYC4oTBaJHhz/gciL7SemoeRI9XGVvTeVqiiQzFOWxtQAZPb/mqo7URPAGLJiFJD8
+         Voiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AivyL9V8Uc1O7GX3xn/Ov3A+U/0bQ+9dt+dRzOycXs0=;
-        b=xHAiwbBUW0fORpU5ZyAMIBIdPzihKQaomzaqSzyhGumNTDt32A6au9DKZgx+qyPSrt
-         gf7iEyxHN7hw0vTef6HPDCLcMh+/Ue1uInpBnLbL95+HGHfMKR2FfujD2F1v+IjSRvpW
-         iP2ygtvJK/3IIMTg2pzzO1Qur/mN+Kt31X0A3ykOkzuCsBK88XeLjD5NwNdxUAagWcAM
-         cT91ACy23ENUN1EBKDK7zWDGBoE1udt5kqXVRzctIMXTvea7Ym1x3yIz9B6IhDCop33B
-         17miqPktNuZEi/r9UsfqO+YfYZw/oyGVhRVBpakhfGK+0ik35RQpVaky3cV9IPxmBytw
-         r6Fw==
-X-Gm-Message-State: AOAM532foSt9jecavHvKUAwPuUBiLaMKRt4vLgDuU3jy3xsfkXVs5GuA
-        yG9MGYeevc9m3v7lCyTAPdgLcA==
-X-Google-Smtp-Source: ABdhPJwlvd7X8WnoraYcDZ3PZxnuu4vdj0qqJFZznpL4RKod2iBAB6fs58L3ry69UWUaOG/O0NMXbw==
-X-Received: by 2002:a17:902:cf06:b0:161:53b6:474d with SMTP id i6-20020a170902cf0600b0016153b6474dmr12729126plg.63.1654306814377;
-        Fri, 03 Jun 2022 18:40:14 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (ec2-54-67-95-58.us-west-1.compute.amazonaws.com. [54.67.95.58])
-        by smtp.gmail.com with ESMTPSA id h4-20020a62b404000000b0050dc76281bcsm6048270pfn.150.2022.06.03.18.40.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o5hGdIU3RTq9rNarbSsXAVqYEW+DV77xSmfZJg12PYQ=;
+        b=38Ow+uint+M7Ah6CE5YAfc6pF8GencfcOm7drZAbIjlLFeD3Db/JdJo8aDSeXQmG0l
+         PjJwlbUnilS0l+nkKhQweGWZZAnyPYM7pmsjhpLLy5gyv4FnXQcaZgCdqh9j0Q/kTniY
+         4Pf97/I0rBtWvqbHHnErbnxy2qFB98M4iVGNtWLqQXDqLRLrOeSsBKOHphh4WDxUQl7s
+         GzqIh68C3bjjcsleIANfb7aicfIrscTtWUVqoke+ECfjxFltP+Vl0Xw693qDBkX1uwup
+         8AcxKWjafinT2gOfVEQv4vcWKyVhFpnZn7Rizifcg/xUafLffEuDGyWecZCx4ND1dEuI
+         Q54Q==
+X-Gm-Message-State: AOAM532aWkCoUpYt2n5sVB66JBDL3rn7hDiHMFyDO643Cuf1Of7MOOEr
+        7m9T2dgkQmdIBK6+U73w+hsr27aAU/U=
+X-Google-Smtp-Source: ABdhPJz2TwV5LhKdZz+uWbYPjCf2IZSysv/0di1ulfqoBm7BJc4ngnlPE31btPUgnPQvEQssdi6KKg==
+X-Received: by 2002:a17:90b:1646:b0:1e3:15ef:2871 with SMTP id il6-20020a17090b164600b001e315ef2871mr28504519pjb.105.1654307868626;
+        Fri, 03 Jun 2022 18:57:48 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
+        by smtp.gmail.com with ESMTPSA id k38-20020a635a66000000b003f667cb15d6sm5973257pgm.37.2022.06.03.18.57.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 18:40:13 -0700 (PDT)
-Date:   Sat, 4 Jun 2022 09:40:05 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, Alyssa Ross <hi@alyssa.is>,
-        Ian Rogers <irogers@google.com>, Like Xu <likexu@tencent.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Joe Mario <jmario@redhat.com>,
-        Adam Li <adam.li@amperecomputing.com>,
-        German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ali Saidi <alisaidi@amazon.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/12] perf c2c: Support display for Arm64
-Message-ID: <20220604014005.GA53464@leoy-ThinkPad-X240s>
-References: <20220530114036.3225544-1-leo.yan@linaro.org>
- <Ypph9lA1qavXXZI5@kernel.org>
+        Fri, 03 Jun 2022 18:57:47 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] leds: Add leds-qcom-lpg entry to documentation table of contents
+Date:   Sat,  4 Jun 2022 08:57:35 +0700
+Message-Id: <20220604015735.249707-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ypph9lA1qavXXZI5@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+After merging linux-leds tree to the mainline [1], htmldocs build produces
+a new warning:
 
-On Fri, Jun 03, 2022 at 09:33:10PM +0200, Arnaldo Carvalho de Melo wrote:
-> Em Mon, May 30, 2022 at 07:40:24PM +0800, Leo Yan escreveu:
-> > Arm64 Neoverse CPUs supports data source in Arm SPE trace, this allows
-> > us to detect cache line contention and transfers.
-> > 
-> > This patch set is based on Ali Said's patch set v9 "perf: arm-spe: Decode SPE
-> > source and use for perf c2c" [1] and Ali's patch set doesn't need any
-> > change in this new round.
-> 
-> IIRC there is a kernel part there, please let me know when that part
-> gets merged so that I can process this 12 patches long set.
+checking consistency... /home/bagas/repo/linux-stable/Documentation/leds/leds-qcom-lpg.rst: WARNING: document isn't included in any toctree
 
-This patch set is not dependent on any kernel patch, it bases on Ali's
-patch set "perf: arm-spe: Decode SPE source and use for perf c2c".
+The warning above is because leds-qcom-lpg.rst is missing in the table of
+contents.
 
-Let me use a new patch set to include all relevant patches (include
-Ali's patches for setting data source and this patch set), will send
-out soon.  Hope this would be easier for picking up.
+Add the missing entry.
 
-Thanks,
-Leo
+[1]: https://lore.kernel.org/all/20220531200619.GA8906@duo.ucw.cz/
 
-P.s. James' patch set for enabling SVE register is dependent on kernel
-changes, James is on vacation, I will monitor the latest status and
-update in the corresponding patch set thread.
+Fixes: 24e2d05d1b6898 ("leds: Add driver for Qualcomm LPG")
+Acked-by: Pavel Machek <pavel@ucw.cz>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>
+Cc: linux-leds@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ Changes since v1 [1]:
+   - Correct commit pointed by Fixes: tag (suggested by Jonathan Corbet)
+   - Collect Acked-by: from Pavel Machek
+
+ [1]: https://lore.kernel.org/linux-doc/20220603025735.17953-1-bagasdotme@gmail.com/
+ 
+ Documentation/leds/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
+index e5d63b9400459c..014e009b076159 100644
+--- a/Documentation/leds/index.rst
++++ b/Documentation/leds/index.rst
+@@ -25,4 +25,5 @@ LEDs
+    leds-lp5562
+    leds-lp55xx
+    leds-mlxcpld
++   leds-qcom-lpg
+    leds-sc27xx
+
+base-commit: 50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc
+-- 
+An old man doll... just what I always wanted! - Clara
+

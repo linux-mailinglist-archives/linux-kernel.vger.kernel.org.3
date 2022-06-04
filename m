@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D8D53D446
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F1353D44B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244011AbiFDBVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S1349993AbiFDBVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 21:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349926AbiFDBVH (ORCPT
+        with ESMTP id S1349904AbiFDBVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:21:07 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB8B56412
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:21:06 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id i16-20020a170902cf1000b001540b6a09e3so5073017plg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:21:06 -0700 (PDT)
+        Fri, 3 Jun 2022 21:21:10 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2D95674D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:21:07 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id om5-20020a17090b3a8500b001df42f1cbaaso8053100pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=IKDfTMW8z6x1o9d3XMOVC9AQI4eSdqQ0otx03wJYtxQ=;
-        b=Od6hxSW62PBi61ZXthZrMmAqkeZSt42HLHE2Kot3JR9flrDgza6wNiQWrG/Sjx770J
-         6KY9HaGJFgMdS1SoYPRLrvj4enzaNNvdXnpCeTtNGGJ1P9DaGgQbK8EPHZWNLkmth6kz
-         UPJs+ppYg1HqaIHRQyH2f0OMMBJSXDuN5jiLu3fm7xniwfHshp7rsUaceD0U9+Tbrm2M
-         FbQNq4TrWxNft5BJ17LRYVMBYDd1aIwV9ec0i1QIlY/7+B/nVGM5yDXsBNkEQ28KEJg+
-         iNNVp/2502CU4eCU0i8a6Z667lMLJyOx/LR/oP2eoAo2+BlD3FyczcU5VFKXJCdYlBVU
-         /uxg==
+        bh=lREshGWquZfBEtYBUkE28FoLZlAZCU5tdVBzH/ZOWRY=;
+        b=ftn8Ddo8JpTu6+Gk9x/UhN9nOArl6VdD2w1pzA5HLc3fBiXRouIx9s5El5rqnc+jhu
+         cbjfmOScRMZRwlUHlT8Q4H3+QKJD1d9hKxRhP+j7hcYu5k7vRkx1OgM7LiglnLIAQ5Ph
+         yzqIzaazMExB4dK2yrCqabLaI1J4HNnrdJ6gLGJ59vYwyClkn9VFZ2vsheeJn6JvC2dO
+         D5hTRFbDZ4PXuSe6ofCKkDhHSEj+zDP/hHzpxsC66Tpy+lfFFHivHQeE/kbE/ppQbwCh
+         EnSBmLeoZ0kln+RgNm4vPAXzQJYc+qKpNoY8YZ0ts+8dwFreNa1V4W2oCoToykEWhDe2
+         O3tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=IKDfTMW8z6x1o9d3XMOVC9AQI4eSdqQ0otx03wJYtxQ=;
-        b=uX5/kda3uSoEHidQYSaqFt4MKKWY38u8Y6y5SawoJ4O04200ERsbhiK8ya8/P3RhHN
-         6wUMNxy4XNkr9c0dM/MY0ZbOAcEumdMbiXEnQ/vVhFUkLay/s1pEAOga88bcxCQjTCOt
-         kTzcl0dnSQZjYhH+bxfo9dKEuUBmH2dKs7ZmvVTSFEtfYSSobIRy6h8jSH3FQfMq9SLm
-         ZRvuCdWoj70pIjjI6Fntam3bLd04lfPNR8+sl9dbjrqC4z5wdOsx9OyAOAp6Xi56+uiF
-         ttYs2Lv6rQ+edn25I60JJ10GW2vCz29jrOWjpOWHiPQdWzwu7pC2Y/2XN1QVyN8maj87
-         JQoQ==
-X-Gm-Message-State: AOAM532kKctFRLdNhLUHOCi66iqdkJU2Usc+EnFNjkA4Ve77MiiZU0AI
-        swAL28hwpGKJpU98mRIUNkjijh6l6jQ=
-X-Google-Smtp-Source: ABdhPJy8xFm/duZUsZp4C2gpysaAkfZsELFznaiXB/8A6P4POd+k4Rdwo27dAkU5FjMJWGZvK8JM/2Ef2Dg=
+        bh=lREshGWquZfBEtYBUkE28FoLZlAZCU5tdVBzH/ZOWRY=;
+        b=U3rq4igkJy+qSA909PFk2iwWWaR3OlBy7GvLTEjuffdHOg54ytfmTONnmx3RvY3OuK
+         xGIkcLG1fJq+9awOKaVXzCMeOr+eB/jmHhrqhGhmENqJhKeD50dpsKbZLlQsdXM/Vmw3
+         GwPYNt2DL8zgQX4AxrYt7FSkc4N2eIgyXwVoDmBEqNwBO3F9AUVz5P9horKv1HAHrZ63
+         XR266GTNXHS4C1YmVgxx67q2EBMPj65XvKQ9toak2aXhfXNaiUnPsY97mKxJF82MuUMg
+         uI9YLT0NCtHjWs5B0O3DDyYTQjHo+XcjdXpmE+T7x4pP/vPFsvXuyyAULVUS5LA8aPsB
+         j9bw==
+X-Gm-Message-State: AOAM530IgzD0zrPm8BQiCzekixZGE6nrdCWQsSiRUGMSTGw9tuci92P9
+        9CaEppDgPXAwlRCKkcn4kqkUCwF2MiA=
+X-Google-Smtp-Source: ABdhPJyhYgCAxSQU/gKQDofAmbxl4N3GVumvmrnJPX0i/eqa2iLFdtnAVR6GQEK6d4qDudAHSQ9QfHGOaAs=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
- q15-20020a17090a178f00b001e303bac185mr4615pja.1.1654305665559; Fri, 03 Jun
- 2022 18:21:05 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1901:b0:518:916e:4a85 with SMTP id
+ y1-20020a056a00190100b00518916e4a85mr12703010pfi.65.1654305667281; Fri, 03
+ Jun 2022 18:21:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  4 Jun 2022 01:20:19 +0000
+Date:   Sat,  4 Jun 2022 01:20:20 +0000
 In-Reply-To: <20220604012058.1972195-1-seanjc@google.com>
-Message-Id: <20220604012058.1972195-4-seanjc@google.com>
+Message-Id: <20220604012058.1972195-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220604012058.1972195-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH 03/42] KVM: selftests: Add framework to query KVM CPUID bits
+Subject: [PATCH 04/42] KVM: selftests: Use kvm_cpu_has() in the SEV migration test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -70,249 +70,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add X86_FEATURE_* magic in the style of KVM-Unit-Tests' implementation,
-where the CPUID function, index, output register, and output bit position
-are embedded in the macro value.  Add kvm_cpu_has() to query KVM's
-supported CPUID and use it set_sregs_test, which is the most prolific
-user of manual feature querying.
+Use kvm_cpu_has() in the SEV migration test instead of open coding
+equivalent functionality using kvm_get_supported_cpuid_entry().
 
-Opportunstically rename calc_cr4_feature_bits() to
-calc_supported_cr4_feature_bits() to better capture how the CR4 bits are
-chosen.
+No functional change intended.
 
-Link: https://lore.kernel.org/all/20210422005626.564163-1-ricarkol@google.com
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-Suggested-by: Jim Mattson <jmattson@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  | 106 ++++++++++++++++--
- .../selftests/kvm/lib/x86_64/processor.c      |  22 ++++
- .../selftests/kvm/x86_64/set_sregs_test.c     |  28 ++---
- 3 files changed, 128 insertions(+), 28 deletions(-)
+ .../selftests/kvm/include/x86_64/processor.h        |  2 ++
+ .../selftests/kvm/x86_64/sev_migrate_tests.c        | 13 ++-----------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e47eba48744e..59ae869814b7 100644
+index 59ae869814b7..24ffa7c238ff 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -43,23 +43,96 @@
- #define X86_CR4_SMAP		(1ul << 21)
- #define X86_CR4_PKE		(1ul << 22)
+@@ -127,6 +127,8 @@ struct kvm_x86_cpu_feature {
+ #define X86_FEATURE_PAUSEFILTER         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 10)
+ #define X86_FEATURE_PFTHRESHOLD         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 12)
+ #define	X86_FEATURE_VGIF		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
++#define X86_FEATURE_SEV			KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 1)
++#define X86_FEATURE_SEV_ES		KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 3)
  
-+/* Note, these are ordered alphabetically to match kvm_cpuid_entry2.  Eww. */
-+enum cpuid_output_regs {
-+	KVM_CPUID_EAX,
-+	KVM_CPUID_EBX,
-+	KVM_CPUID_ECX,
-+	KVM_CPUID_EDX
-+};
-+
-+/*
-+ * Pack the information into a 64-bit value so that each X86_FEATURE_XXX can be
-+ * passed by value with no overhead.
-+ */
-+struct kvm_x86_cpu_feature {
-+	u32	function;
-+	u16	index;
-+	u8	reg;
-+	u8	bit;
-+};
-+#define	KVM_X86_CPU_FEATURE(fn, idx, gpr, __bit)	\
-+({							\
-+	struct kvm_x86_cpu_feature feature = {		\
-+		.function = fn,				\
-+		.index = idx,				\
-+		.reg = KVM_CPUID_##gpr,			\
-+		.bit = __bit,				\
-+	};						\
-+							\
-+	feature;					\
-+})
-+
-+/*
-+ * Basic Leafs, a.k.a. Intel defined
-+ */
-+#define	X86_FEATURE_MWAIT		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 3)
-+#define	X86_FEATURE_VMX			KVM_X86_CPU_FEATURE(0x1, 0, ECX, 5)
-+#define	X86_FEATURE_SMX			KVM_X86_CPU_FEATURE(0x1, 0, ECX, 6)
-+#define	X86_FEATURE_PCID		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 17)
-+#define	X86_FEATURE_MOVBE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 22)
-+#define	X86_FEATURE_TSC_DEADLINE_TIMER	KVM_X86_CPU_FEATURE(0x1, 0, ECX, 24)
-+#define	X86_FEATURE_XSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 26)
-+#define	X86_FEATURE_OSXSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 27)
-+#define	X86_FEATURE_RDRAND		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 30)
-+#define	X86_FEATURE_MCE			KVM_X86_CPU_FEATURE(0x1, 0, EDX, 7)
-+#define	X86_FEATURE_APIC		KVM_X86_CPU_FEATURE(0x1, 0, EDX, 9)
-+#define	X86_FEATURE_CLFLUSH		KVM_X86_CPU_FEATURE(0x1, 0, EDX, 19)
-+#define	X86_FEATURE_XMM			KVM_X86_CPU_FEATURE(0x1, 0, EDX, 25)
-+#define	X86_FEATURE_XMM2		KVM_X86_CPU_FEATURE(0x1, 0, EDX, 26)
-+#define	X86_FEATURE_FSGSBASE		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 0)
-+#define	X86_FEATURE_TSC_ADJUST		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 1)
-+#define	X86_FEATURE_HLE			KVM_X86_CPU_FEATURE(0x7, 0, EBX, 4)
-+#define	X86_FEATURE_SMEP	        KVM_X86_CPU_FEATURE(0x7, 0, EBX, 7)
-+#define	X86_FEATURE_INVPCID		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 10)
-+#define	X86_FEATURE_RTM			KVM_X86_CPU_FEATURE(0x7, 0, EBX, 11)
-+#define	X86_FEATURE_SMAP		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 20)
-+#define	X86_FEATURE_PCOMMIT		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 22)
-+#define	X86_FEATURE_CLFLUSHOPT		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 23)
-+#define	X86_FEATURE_CLWB		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 24)
-+#define	X86_FEATURE_UMIP		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 2)
-+#define	X86_FEATURE_PKU			KVM_X86_CPU_FEATURE(0x7, 0, ECX, 3)
-+#define	X86_FEATURE_LA57		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 16)
-+#define	X86_FEATURE_RDPID		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 22)
-+#define	X86_FEATURE_SHSTK		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 7)
-+#define	X86_FEATURE_IBT			KVM_X86_CPU_FEATURE(0x7, 0, EDX, 20)
-+#define	X86_FEATURE_SPEC_CTRL		KVM_X86_CPU_FEATURE(0x7, 0, EDX, 26)
-+#define	X86_FEATURE_ARCH_CAPABILITIES	KVM_X86_CPU_FEATURE(0x7, 0, EDX, 29)
-+#define	X86_FEATURE_PKS			KVM_X86_CPU_FEATURE(0x7, 0, ECX, 31)
-+
-+/*
-+ * Extended Leafs, a.k.a. AMD defined
-+ */
-+#define	X86_FEATURE_SVM			KVM_X86_CPU_FEATURE(0x80000001, 0, ECX, 2)
-+#define	X86_FEATURE_NX			KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 20)
-+#define	X86_FEATURE_GBPAGES		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 26)
-+#define	X86_FEATURE_RDTSCP		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 27)
-+#define	X86_FEATURE_LM			KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 29)
-+#define	X86_FEATURE_RDPRU		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 4)
-+#define	X86_FEATURE_AMD_IBPB		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 12)
-+#define	X86_FEATURE_NPT			KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 0)
-+#define	X86_FEATURE_LBRV		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 1)
-+#define	X86_FEATURE_NRIPS		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 3)
-+#define X86_FEATURE_TSCRATEMSR          KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 4)
-+#define X86_FEATURE_PAUSEFILTER         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 10)
-+#define X86_FEATURE_PFTHRESHOLD         KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 12)
-+#define	X86_FEATURE_VGIF		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
-+
  /* CPUID.1.ECX */
  #define CPUID_VMX		(1ul << 5)
--#define CPUID_SMX		(1ul << 6)
--#define CPUID_PCID		(1ul << 17)
- #define CPUID_XSAVE		(1ul << 26)
- #define CPUID_OSXSAVE		(1ul << 27)
- 
--/* CPUID.7.EBX */
--#define CPUID_FSGSBASE		(1ul << 0)
--#define CPUID_SMEP		(1ul << 7)
--#define CPUID_SMAP		(1ul << 20)
--
--/* CPUID.7.ECX */
--#define CPUID_UMIP		(1ul << 2)
--#define CPUID_PKU		(1ul << 3)
--#define CPUID_LA57		(1ul << 16)
--
- /* CPUID.0x8000_0001.EDX */
- #define CPUID_GBPAGES		(1ul << 26)
- 
-@@ -488,6 +561,15 @@ static inline void vcpu_xcrs_set(struct kvm_vcpu *vcpu, struct kvm_xcrs *xcrs)
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+index 76ba6fc80e37..56a5932165ce 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+@@ -393,23 +393,14 @@ static void test_sev_move_copy(void)
+ 	kvm_vm_free(sev_vm);
  }
  
- struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
-+
-+bool kvm_cpuid_has(const struct kvm_cpuid2 *cpuid,
-+		   struct kvm_x86_cpu_feature feature);
-+
-+static inline bool kvm_cpu_has(struct kvm_x86_cpu_feature feature)
-+{
-+	return kvm_cpuid_has(kvm_get_supported_cpuid(), feature);
-+}
-+
- struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vcpu *vcpu);
- 
- static inline int __vcpu_set_cpuid(struct kvm_vcpu *vcpu,
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index ea246a87c446..e60afab6b88f 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -735,6 +735,28 @@ struct kvm_cpuid2 *kvm_get_supported_cpuid(void)
- 	return cpuid;
- }
- 
-+bool kvm_cpuid_has(const struct kvm_cpuid2 *cpuid,
-+		   struct kvm_x86_cpu_feature feature)
-+{
-+	const struct kvm_cpuid_entry2 *entry;
-+	int i;
-+
-+	for (i = 0; i < cpuid->nent; i++) {
-+		entry = &cpuid->entries[i];
-+
-+		/*
-+		 * The output registers in kvm_cpuid_entry2 are in alphabetical
-+		 * order, but kvm_x86_cpu_feature matches that mess, so yay
-+		 * pointer shenanigans!
-+		 */
-+		if (entry->function == feature.function &&
-+		    entry->index == feature.index)
-+			return (&entry->eax)[feature.reg] & BIT(feature.bit);
-+	}
-+
-+	return false;
-+}
-+
- uint64_t kvm_get_feature_msr(uint64_t msr_index)
+-#define X86_FEATURE_SEV (1 << 1)
+-#define X86_FEATURE_SEV_ES (1 << 3)
+-
+ int main(int argc, char *argv[])
  {
- 	struct {
-diff --git a/tools/testing/selftests/kvm/x86_64/set_sregs_test.c b/tools/testing/selftests/kvm/x86_64/set_sregs_test.c
-index dd344439ad33..2bb08bf2125d 100644
---- a/tools/testing/selftests/kvm/x86_64/set_sregs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/set_sregs_test.c
-@@ -43,36 +43,32 @@ static void test_cr4_feature_bit(struct kvm_vcpu *vcpu, struct kvm_sregs *orig,
- 	TEST_ASSERT(!memcmp(&sregs, orig, sizeof(sregs)), "KVM modified sregs");
- }
- 
--static uint64_t calc_cr4_feature_bits(struct kvm_vm *vm)
-+static uint64_t calc_supported_cr4_feature_bits(void)
- {
--	struct kvm_cpuid_entry2 *cpuid_1, *cpuid_7;
- 	uint64_t cr4;
- 
--	cpuid_1 = kvm_get_supported_cpuid_entry(1);
--	cpuid_7 = kvm_get_supported_cpuid_entry(7);
+-	struct kvm_cpuid_entry2 *cpuid;
 -
- 	cr4 = X86_CR4_VME | X86_CR4_PVI | X86_CR4_TSD | X86_CR4_DE |
- 	      X86_CR4_PSE | X86_CR4_PAE | X86_CR4_MCE | X86_CR4_PGE |
- 	      X86_CR4_PCE | X86_CR4_OSFXSR | X86_CR4_OSXMMEXCPT;
--	if (cpuid_7->ecx & CPUID_UMIP)
-+	if (kvm_cpu_has(X86_FEATURE_UMIP))
- 		cr4 |= X86_CR4_UMIP;
--	if (cpuid_7->ecx & CPUID_LA57)
-+	if (kvm_cpu_has(X86_FEATURE_LA57))
- 		cr4 |= X86_CR4_LA57;
--	if (cpuid_1->ecx & CPUID_VMX)
-+	if (kvm_cpu_has(X86_FEATURE_VMX))
- 		cr4 |= X86_CR4_VMXE;
--	if (cpuid_1->ecx & CPUID_SMX)
-+	if (kvm_cpu_has(X86_FEATURE_SMX))
- 		cr4 |= X86_CR4_SMXE;
--	if (cpuid_7->ebx & CPUID_FSGSBASE)
-+	if (kvm_cpu_has(X86_FEATURE_FSGSBASE))
- 		cr4 |= X86_CR4_FSGSBASE;
--	if (cpuid_1->ecx & CPUID_PCID)
-+	if (kvm_cpu_has(X86_FEATURE_PCID))
- 		cr4 |= X86_CR4_PCIDE;
--	if (cpuid_1->ecx & CPUID_XSAVE)
-+	if (kvm_cpu_has(X86_FEATURE_XSAVE))
- 		cr4 |= X86_CR4_OSXSAVE;
--	if (cpuid_7->ebx & CPUID_SMEP)
-+	if (kvm_cpu_has(X86_FEATURE_SMEP))
- 		cr4 |= X86_CR4_SMEP;
--	if (cpuid_7->ebx & CPUID_SMAP)
-+	if (kvm_cpu_has(X86_FEATURE_SMAP))
- 		cr4 |= X86_CR4_SMAP;
--	if (cpuid_7->ecx & CPUID_PKU)
-+	if (kvm_cpu_has(X86_FEATURE_PKU))
- 		cr4 |= X86_CR4_PKE;
+ 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM));
+ 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_VM_COPY_ENC_CONTEXT_FROM));
  
- 	return cr4;
-@@ -99,7 +95,7 @@ int main(int argc, char *argv[])
+-	cpuid = kvm_get_supported_cpuid_entry(0x80000000);
+-	TEST_REQUIRE(cpuid->eax >= 0x8000001f);
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SEV));
  
- 	vcpu_sregs_get(vcpu, &sregs);
+-	cpuid = kvm_get_supported_cpuid_entry(0x8000001f);
+-	TEST_REQUIRE(cpuid->eax & X86_FEATURE_SEV);
+-
+-	have_sev_es = !!(cpuid->eax & X86_FEATURE_SEV_ES);
++	have_sev_es = kvm_cpu_has(X86_FEATURE_SEV_ES);
  
--	sregs.cr4 |= calc_cr4_feature_bits(vm);
-+	sregs.cr4 |= calc_supported_cr4_feature_bits();
- 	cr4 = sregs.cr4;
- 
- 	rc = _vcpu_sregs_set(vcpu, &sregs);
+ 	if (kvm_check_cap(KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM)) {
+ 		test_sev_migrate_from(/* es= */ false);
 -- 
 2.36.1.255.ge46751e96f-goog
 

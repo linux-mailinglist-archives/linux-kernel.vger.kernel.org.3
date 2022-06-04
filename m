@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C90453D434
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8939153D43B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349874AbiFDBC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S1349853AbiFDBMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 21:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244714AbiFDBCY (ORCPT
+        with ESMTP id S231995AbiFDBMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:02:24 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6491396B6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:02:22 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id g11-20020a056e021e0b00b002d1b5e8389bso7348412ila.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:02:22 -0700 (PDT)
+        Fri, 3 Jun 2022 21:12:31 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A41E0FB
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:12:30 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id p130so2921942iod.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7HmAcc2+RoDxk7f9Rs3Ffi6CA3TIxfq1pKNEK2z9OK0=;
+        b=mtr2P2+EYULhNxrqRuSgrTdWXC8avZSXIDKJS5U/NUBA+46r//VQkbLzDURVBtc2SY
+         GU1DxLhVJN6/SBoZoeSiBQwek6QmHylcN1a674e0EawBKtASE5QzgsjLY1IgsEY5nIKe
+         lQi7uT2zkasnDfog8B2hpkm3nnQ+Ocb4hTxCg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=a+3cX63j0HBxXf0a3L3zpLBULDl2FODnZzb1/pTxks0=;
-        b=DWGAkZdWaz6Bik4lPQ693u5kcI2YliTpfNX8YatQ8EGKsul+1Z++CA4oZ5NXenYX+a
-         Stv03qNeTRfdGp559aHh2gds7Ryue19x6t5GtzLl+dwP3gFGFDCNZoxCrl1m27m3YH30
-         +v0lT1fbFYHwBjzYVTm6x0AKI7TCkx2zus7sOhs/Q2+oI1Fv5Edk0nQJaFhhwEv7mzIT
-         d65e21iUslMopC2TL38l9w0PmGrGkYlKHFXvncEKDSK9lqJa4ogU6BlpGbtlyk23ESyS
-         3CNMtDHQDZMdbD8NPw7YXz13bbvCH58JyMkxbDHoR55WAdWBgvCq5ZDUqQUb/l9dkp5P
-         OsOg==
-X-Gm-Message-State: AOAM532hysCZjcWUGVglrF9yxfkSdqkGE4D72fdxx1A1245qMtTBzZzm
-        iUm+MK0ho0144coeAPMNR+zyEr3XeSU/D+6mCJlmayJI5i1D
-X-Google-Smtp-Source: ABdhPJwiDZ5m2kBfl7tNv3jbfR1q82b6i15VD7p6BurmnmTaDg4W4iwGe9cNfOy66GUpVbRjXFu9HIC9+Sb688Us1P29KXFmBov9
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7HmAcc2+RoDxk7f9Rs3Ffi6CA3TIxfq1pKNEK2z9OK0=;
+        b=D9cyYsWMZdM+idNArKfrEA3u+9ilVxoG0P1W7SaQSsMrlKUXaxwalsr2Zezf0Y+Iee
+         IoHXXB3esLcfWfq/cpnP4fQtvOcS/eJ6hvE1IFHZjqYxAi5yb35flYcpXWzn56M5cmXx
+         ANs9yE6dtwJZq+BtjlCQORX4FestdgHz3HM5eFRXV5qlieVtIgVt3GV+kPImoitbJzk2
+         MI+GTJVnIkUjB4W4uunUF3EjpGEjTkqI5S8PPRer6HrhYv3ihQbDnWoA1N0guM2hobN4
+         YDi85R1yAm6B5TgCw+K7UYqc2yvxxtUSnH34ejg7iQJVWAfkG2Ar4NFXoK7E6mjoaZH/
+         tAZQ==
+X-Gm-Message-State: AOAM533OSfNuBo2ChbSZ5CpK5guBpjCysyB5V7utpGAbNVoetWciDZwZ
+        1edsEcaRqeGkuC8Wi5JABMLkgoXDivAkKu6OBvdb0A==
+X-Google-Smtp-Source: ABdhPJz78nI+FW/CTAVVqaxYOkz7qz3GR5ULi/3muQQSNvfryRhsl0pm7omddjpYTnsFAzY8ssAubxbDMwYzEhZLjFU=
+X-Received: by 2002:a05:6638:411f:b0:32e:a114:54e with SMTP id
+ ay31-20020a056638411f00b0032ea114054emr7095723jab.82.1654305149395; Fri, 03
+ Jun 2022 18:12:29 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:154a:b0:2d1:d151:3c26 with SMTP id
- j10-20020a056e02154a00b002d1d1513c26mr7030398ilu.24.1654304542187; Fri, 03
- Jun 2022 18:02:22 -0700 (PDT)
-Date:   Fri, 03 Jun 2022 18:02:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009667e705e094ca3c@google.com>
-Subject: [syzbot] kernel BUG in __skb_gso_segment
-From:   syzbot <syzbot+7160965e6a93d826048a@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, liuhangbin@gmail.com,
-        lixiaoyan@google.com, mst@redhat.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, steffen.klassert@secunet.com,
-        syzkaller-bugs@googlegroups.com, willemb@google.com
+References: <20220603151600.19cfa617@canb.auug.org.au> <CAF6AEGtYS1LYowjf-OiN-C1+4JFTWwOOpP__4iDLo-dFy0t0Tg@mail.gmail.com>
+ <20220604103757.29d0b048@canb.auug.org.au>
+In-Reply-To: <20220604103757.29d0b048@canb.auug.org.au>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Fri, 3 Jun 2022 18:12:33 -0700
+Message-ID: <CAJs_Fx6KMeKZhyFjfJgwDiJv5xHm-xxQ6YSMWNsaRZz=CQLrBQ@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the drm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rob Clark <robdclark@gmail.com>, Dave Airlie <airlied@linux.ie>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,106 +68,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 3, 2022 at 5:38 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Rob,
+>
+> On Fri, 3 Jun 2022 07:58:14 -0700 Rob Clark <robdclark@gmail.com> wrote:
+> >
+> > will the truncated subject confuse the scripts that look for patches
+> > to backport to stable, ie. do we *really* have to rewrite history to
+> > fix this?
+>
+> I don't know what scripts are being used and what they expect, but our
+> documentation says (Documentation/process/submitting-patches.rst):
+>
+>   If your patch fixes a bug in a specific commit, e.g. you found an issue using
+>   ``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
+>   the SHA-1 ID, and the one line summary.  Do not split the tag across multiple
+>   lines, tags are exempt from the "wrap at 75 columns" rule in order to simplify
+>   parsing scripts.
+>
+> But, that being said, doing the rewrite is up to the maintainer.  You
+> could just look at this as a learning experience and do better in the
+> future.
 
-syzbot found the following issue on:
+Ok, I'll leave it up to airlied
 
-HEAD commit:    2c5ca23f7414 Merge tag 'ovl-update-5.19' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11330935f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9b19cdd2d45cc221
-dashboard link: https://syzkaller.appspot.com/bug?extid=7160965e6a93d826048a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1724add5f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1324cbf9f00000
+If you don't mind sharing, what is the script you use?  We could
+perhaps add it to our WIP CI..  a script is much less likely to miss a
+check than a human, so I'm a fan of automating these sorts of checks
+whenever possible ;-)
 
-The issue was bisected to:
+BR,
+-R
 
-commit dfed913e8b55a0c2c4906f1242fd38fd9a116e49
-Author: Hangbin Liu <liuhangbin@gmail.com>
-Date:   Mon Apr 25 01:45:02 2022 +0000
-
-    net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=169079bdf00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=159079bdf00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=119079bdf00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7160965e6a93d826048a@syzkaller.appspotmail.com
-Fixes: dfed913e8b55 ("net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO")
-
-------------[ cut here ]------------
-kernel BUG at include/linux/skbuff.h:2699!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3601 Comm: syz-executor210 Not tainted 5.18.0-syzkaller-11338-g2c5ca23f7414 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__skb_pull include/linux/skbuff.h:2699 [inline]
-RIP: 0010:skb_mac_gso_segment+0x48f/0x530 net/core/gro.c:136
-Code: 00 48 c7 c7 00 96 d4 8a c6 05 cb d3 45 06 01 e8 26 bb d0 01 e9 2f fd ff ff 49 c7 c4 ea ff ff ff e9 f1 fe ff ff e8 91 84 19 fa <0f> 0b 48 89 df e8 97 44 66 fa e9 7f fd ff ff e8 ad 44 66 fa e9 48
-RSP: 0018:ffffc90002e2f4b8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000012 RCX: 0000000000000000
-RDX: ffff88805bb58000 RSI: ffffffff8760ed0f RDI: 0000000000000004
-RBP: 0000000000005dbc R08: 0000000000000004 R09: 0000000000000fe0
-R10: 0000000000000fe4 R11: 0000000000000000 R12: 0000000000000fe0
-R13: ffff88807194d780 R14: 1ffff920005c5e9b R15: 0000000000000012
-FS:  000055555730f300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200015c0 CR3: 0000000071ff8000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- __skb_gso_segment+0x327/0x6e0 net/core/dev.c:3411
- skb_gso_segment include/linux/netdevice.h:4749 [inline]
- validate_xmit_skb+0x6bc/0xf10 net/core/dev.c:3669
- validate_xmit_skb_list+0xbc/0x120 net/core/dev.c:3719
- sch_direct_xmit+0x3d1/0xbe0 net/sched/sch_generic.c:327
- __dev_xmit_skb net/core/dev.c:3815 [inline]
- __dev_queue_xmit+0x14a1/0x3a00 net/core/dev.c:4219
- packet_snd net/packet/af_packet.c:3071 [inline]
- packet_sendmsg+0x21cb/0x5550 net/packet/af_packet.c:3102
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
- __sys_sendmsg net/socket.c:2575 [inline]
- __do_sys_sendmsg net/socket.c:2584 [inline]
- __se_sys_sendmsg net/socket.c:2582 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f4b95da06c9
-Code: 28 c3 e8 4a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd7defc4c8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007ffd7defc4f0 RCX: 00007f4b95da06c9
-RDX: 0000000000000000 RSI: 0000000020000140 RDI: 0000000000000003
-RBP: 0000000000000003 R08: bb1414ac00000050 R09: bb1414ac00000050
-R10: 0000000000000004 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd7defc4e0 R14: 00007ffd7defc4d8 R15: 00007ffd7defc4d4
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__skb_pull include/linux/skbuff.h:2699 [inline]
-RIP: 0010:skb_mac_gso_segment+0x48f/0x530 net/core/gro.c:136
-Code: 00 48 c7 c7 00 96 d4 8a c6 05 cb d3 45 06 01 e8 26 bb d0 01 e9 2f fd ff ff 49 c7 c4 ea ff ff ff e9 f1 fe ff ff e8 91 84 19 fa <0f> 0b 48 89 df e8 97 44 66 fa e9 7f fd ff ff e8 ad 44 66 fa e9 48
-RSP: 0018:ffffc90002e2f4b8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000012 RCX: 0000000000000000
-RDX: ffff88805bb58000 RSI: ffffffff8760ed0f RDI: 0000000000000004
-RBP: 0000000000005dbc R08: 0000000000000004 R09: 0000000000000fe0
-R10: 0000000000000fe4 R11: 0000000000000000 R12: 0000000000000fe0
-R13: ffff88807194d780 R14: 1ffff920005c5e9b R15: 0000000000000012
-FS:  000055555730f300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200015c0 CR3: 0000000071ff8000 CR4: 0000000000350ee0
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> BTW, my script reacted to the missing closing quotes and parentheses,
+> which is more like to confuse any scripts that the actual truncation.
+> --
+> Cheers,
+> Stephen Rothwell

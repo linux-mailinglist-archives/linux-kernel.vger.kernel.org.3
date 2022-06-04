@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AF853D744
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 16:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6728453D745
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 16:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbiFDOho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 10:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S236956AbiFDOjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 10:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbiFDOhm (ORCPT
+        with ESMTP id S236840AbiFDOjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 10:37:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483971C124
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 07:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654353461; x=1685889461;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5O/XZex4hWTIl3kWl2+aVwPSjJtWZV8c2J6eJuTjE3c=;
-  b=K/R2j4cBoebfXmoU2wfqDpXqagK3LGrMTryzqfq0znPFDQZnA9ntZVg/
-   +1PBi1elTl/UzNpCohfSrTU+9yN+jENHQ+esCZgUjjdv9LE3P3xMUo8ad
-   uzQVug3nr4YMoWc8hg26kPXHgTS5WWu2QMDNpYVWGItm1EMIhWo6sGqbe
-   KxYVIn+3KpxCtBffRHoau7LRr4aepb3uq6M0PCL6woYogeTlfdkFA0Lrp
-   US4DsoN1KoB6O5xFN4DMUX0Vwmt0qrEBK3jlJlUHBJvF4sugAyoAFV2bm
-   8zSsUwz5kvjHopGEblYKqu0X+DwFpWwV9NIhM4W/3u7lhBa2JQBB4ZGO4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339515314"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="339515314"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 07:37:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="613665843"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2022 07:37:39 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxUuJ-000Awr-5n;
-        Sat, 04 Jun 2022 14:37:39 +0000
-Date:   Sat, 4 Jun 2022 22:36:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eric Bernstein <eric.bernstein@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 44/63]
- drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:180:6: warning:
- no previous prototype for 'dccg32_set_valid_pixel_rate'
-Message-ID: <202206042226.yKcIBQny-lkp@intel.com>
+        Sat, 4 Jun 2022 10:39:22 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31E123BEC
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 07:39:16 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1654353546tmw8q82q
+Received: from localhost.localdomain ( [111.9.5.115])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 04 Jun 2022 22:38:59 +0800 (CST)
+X-QQ-SSF: 01000000002000B0G000B00A0000000
+X-QQ-FEAT: kMnkUN8kF5Aw1fdYl8bO2SctWGVn3lAaViFNbKb4L1kEM8augPuNjK7fE8FmL
+        KEBU8+NmQvvK4+Q5yxLqa8qO5lyvdK5MdU4knqfwVV0PL/1AcAOv9VFu5Q9b6D+i6gOt0S4
+        rfKXM02c+qymhaRQnV4qVaVDTGn1BG1jEEc59sSp4ZOMneJh4q+MaDwuY5w+Rje526HV1tb
+        Pg3VCVR0Y3Y3fZmotq8S9itxEeCXFVEfftSP82GqBGwuYyo0+QIjlYqip0KHvAJ0YkqPHw5
+        3zGAiamm6naeUQ8+PA8B7D7jMDj2kp09bIFrE35NAWxjdoLmjZQ6Xi+vAh6y/2wEPBOEY78
+        7D1xg9Q0QHaaQGECHs=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     mst@redhat.com
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] vdpa/mlx5: Fix syntax errors in comments
+Date:   Sat,  4 Jun 2022 22:38:58 +0800
+Message-Id: <20220604143858.16073-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,72 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   0401cdad37f8a62e64363b2a6fc16c7fafba66e2
-commit: 0fa8930c48889344f93251e749deb8fa0257532d [44/63] drm/amd/display: Use DTBCLK for valid pixel clock
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220604/202206042226.yKcIBQny-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 0fa8930c48889344f93251e749deb8fa0257532d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
+Delete the redundant word 'is'.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:136:6: warning: no previous prototype for 'dccg32_set_dtbclk_dto' [-Wmissing-prototypes]
-     136 | void dccg32_set_dtbclk_dto(
-         |      ^~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:180:6: warning: no previous prototype for 'dccg32_set_valid_pixel_rate' [-Wmissing-prototypes]
-     180 | void dccg32_set_valid_pixel_rate(
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:205:6: warning: no previous prototype for 'dccg32_set_dpstreamclk' [-Wmissing-prototypes]
-     205 | void dccg32_set_dpstreamclk(
-         |      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:241:6: warning: no previous prototype for 'dccg32_otg_add_pixel' [-Wmissing-prototypes]
-     241 | void dccg32_otg_add_pixel(struct dccg *dccg,
-         |      ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:250:6: warning: no previous prototype for 'dccg32_otg_drop_pixel' [-Wmissing-prototypes]
-     250 | void dccg32_otg_drop_pixel(struct dccg *dccg,
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/inc/core_types.h:32,
-                    from drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c:27:
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:133:22: warning: 'SYNAPTICS_DEVICE_ID' defined but not used [-Wunused-const-variable=]
-     133 | static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-         |                      ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:130:17: warning: 'DP_SINK_BRANCH_DEV_NAME_7580' defined but not used [-Wunused-const-variable=]
-     130 | static const u8 DP_SINK_BRANCH_DEV_NAME_7580[] = "7580\x80u";
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:128:22: warning: 'DP_SINK_DEVICE_STR_ID_2' defined but not used [-Wunused-const-variable=]
-     128 | static const uint8_t DP_SINK_DEVICE_STR_ID_2[] = {7, 1, 8, 7, 5, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../display/include/ddc_service_types.h:127:22: warning: 'DP_SINK_DEVICE_STR_ID_1' defined but not used [-Wunused-const-variable=]
-     127 | static const uint8_t DP_SINK_DEVICE_STR_ID_1[] = {7, 1, 8, 7, 3, 0};
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/dccg32_set_valid_pixel_rate +180 drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_dccg.c
-
-   179	
- > 180	void dccg32_set_valid_pixel_rate(
-   181			struct dccg *dccg,
-   182			int otg_inst,
-   183			int pixclk_khz)
-   184	{
-   185		struct dtbclk_dto_params dto_params = {0};
-   186	
-   187		dto_params.otg_inst = otg_inst;
-   188		dto_params.pixclk_khz = pixclk_khz;
-   189	
-   190		dccg32_set_dtbclk_dto(dccg, &dto_params);
-   191	}
-   192	
-
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index dcca782c698e..3569c782c8a0 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -105,7 +105,7 @@ struct mlx5_vdpa_virtqueue {
+ 
+ 	/* Resources for implementing the notification channel from the device
+ 	 * to the driver. fwqp is the firmware end of an RC connection; the
+-	 * other end is vqqp used by the driver. cq is is where completions are
++	 * other end is vqqp used by the driver. cq is where completions are
+ 	 * reported.
+ 	 */
+ 	struct mlx5_vdpa_cq cq;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

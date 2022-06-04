@@ -2,86 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBE453D658
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 12:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F6953D65D
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 12:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiFDKAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 06:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
+        id S234547AbiFDKKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 06:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiFDKAe (ORCPT
+        with ESMTP id S230482AbiFDKKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 06:00:34 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A92613C;
-        Sat,  4 Jun 2022 03:00:30 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 650075C0182;
-        Sat,  4 Jun 2022 06:00:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 04 Jun 2022 06:00:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654336827; x=1654423227; bh=bH1AVYCxSS
-        6C23tOBcztUST5We++a60WbF4bhknazcI=; b=OSSKb616WVnx2hBL6UP6QpBiRs
-        E/sD/ciPVSiJp9tmhuwEqIE1GY6cfjzJEBWkavQoLK0a8QOrg0KV2rj6Z5+l2/sm
-        0vkVC0ij4lP39cSsODqA7ZDXKigM/bj6PrxH96RH+tKDZs9CaUyL7sFM/TwSq3iK
-        DX0b/J6AgGxCe4OoK6pOJ+eqxNm41hPpxoIaUgA8xWQugO75AN7D3VpC0AybTVae
-        Ivc4H8Imbl8G7R1bhbEEM+HL87HGHGX3OpFz7PPW9J78bVkx91qXhrta8TM0luSZ
-        4NUuZyeI+VXWpQh0h6/KO/KOxwu5fCIbnlvt28UoWFyEqyeRRfEIXW2hmdlg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1654336827; x=1654423227; bh=bH1AVYCxSS6C23tOBcztUST5We++
-        a60WbF4bhknazcI=; b=n1AcBgOZA43Xxx5RWYBLicLSR5hhLxPjGJ+epU8MTkWg
-        2nz9kq68DvkmYgfp8sledmcX4axFifbl9Vog3JFoE1bDCb8sm49YJla6w+Yavgi5
-        w+xir/+xes6CmUScpLcHdNdZEGER9Cm0Tf/WxypuVBXC94+M7RXEfZclhSOguz4t
-        mjmUd3sHuu1WVyZk9oKTU/GmZ2iFTqeS+VJs1VkpRlb6eus3mqL9zyUN9pyYzIh/
-        VZYsVwKxDVHyzAxUv8ED3vezjW6gRtpwQKB8XZ18FSyK1dW3gXCZg04V4WgRxkdL
-        2tl6lkFyHuxmyblOdeZXOeiGWImf/8Kk4aEtdmRx0A==
-X-ME-Sender: <xms:Oi2bYojPbHNfgQ_R2PTW6XiKLaRSC2teRsJ_tAGVMIpnXeEyNH64uQ>
-    <xme:Oi2bYhCpHnGfeZVbBQtovbrvUKg3lZ6IgeFw1VS4uzTOM21fpfMNrFTIpah8wTu_B
-    lrlRX8ODljj3Q>
-X-ME-Received: <xmr:Oi2bYgG0EmhdwUxtpPmDDq-ug_C5DQxdFlAjI5X4Y45Fl-SSxtec0UyXHRGVC6PcU2l4-3hh2F1Z9uROKge6SFl25fgUeTEk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgddvvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:Oi2bYpT2fjExXfhGnBMM8_FOYa6ZL9UARcPT9aBLsBMcd2pMbvVXjg>
-    <xmx:Oi2bYly5SwnVDsfk5aIdCpi_oYHnemdiM3OPa2m_5av3LEOhZ8bZOw>
-    <xmx:Oi2bYn4wfSc2nwRESn6yAYmAi_O7fIaK9kIopiTK6n6jOTbd5Q5GFw>
-    <xmx:Oy2bYoqOMd36-74VBEg1oOjRyJ_2KzhhSvGTe8IOrsR81FvRJkS5kw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Jun 2022 06:00:25 -0400 (EDT)
-Date:   Sat, 4 Jun 2022 12:00:22 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the extcon tree with the usb tree
-Message-ID: <YpstNtMr6VwU51+a@kroah.com>
-References: <20220426152739.62f6836e@canb.auug.org.au>
- <20220523184254.4e657cd1@canb.auug.org.au>
- <20220604111841.3887bf65@canb.auug.org.au>
+        Sat, 4 Jun 2022 06:10:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1F617A9A
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 03:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654337431; x=1685873431;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5haCdPTsgeUARclowhw2ARAP4afuCarRczIaCvDSzTk=;
+  b=l/sxgh3M4UJOqHw0hNSJYNDOeoN04HKG6j4e8LnWKdn/fmZ9iVY8PdcG
+   o76i3FBYS1udfX3ETpYCHy+q1gYZ8Fse8DmY72qYGP9IGAaWJRmRORBjc
+   C2mL0aRmb4XqQncffUl7m1/ExyXDD2rWitgaT+lDB9xqjibl5YzPXGO+x
+   ZNfsB5hmY9lE6z+5HtXoPcK1PMCStwFLBuELloaZZfTtoV7um5YDaMVAJ
+   Kkqv/Zz8WFr+NPzn+n8OXeH7jbabJNwuXJGD+McE3oJzSEPXANnMwhJG5
+   XtXv0mz3ksdRH0N+ZYELIOf6QerhOucDUBzT2z7QRZ7EGRBHKle4bo8MP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="301796748"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="301796748"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 03:10:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="582917709"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Jun 2022 03:10:29 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxQjl-000AdY-6r;
+        Sat, 04 Jun 2022 10:10:29 +0000
+Date:   Sat, 4 Jun 2022 18:09:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keerthy <j-keerthy@ti.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: drivers/thermal/k3_j72xx_bandgap.c:532:36: sparse: sparse: symbol
+ 'k3_j72xx_bandgap_j721e_data' was not declared. Should it be static?
+Message-ID: <202206041824.svJIkOwb-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220604111841.3887bf65@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,76 +62,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 04, 2022 at 11:18:40AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 23 May 2022 18:42:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > On Tue, 26 Apr 2022 15:27:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > Today's linux-next merge of the extcon tree got a conflict in:
-> > > 
-> > >   drivers/usb/dwc3/drd.c
-> > > 
-> > > between commit:
-> > > 
-> > >   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
-> > > 
-> > > from the usb tree and commit:
-> > > 
-> > >   88490c7f43c4 ("extcon: Fix extcon_get_extcon_dev() error handling")  
-> > 
-> > This is now commit
-> > 
-> >   58e4a2d27d32 ("extcon: Fix extcon_get_extcon_dev() error handling")
-> > 
-> > > from the extcon tree.
-> > > 
-> > > I fixed it up (the former moved the code modified by the latter, so I
-> > > used the former version of this files and added the following merge fix
-> > > patch) and can carry the fix as necessary. This is now fixed as far as
-> > > linux-next is concerned, but any non trivial conflicts should be
-> > > mentioned to your upstream maintainer when your tree is submitted for
-> > > merging.  You may also want to consider cooperating with the maintainer
-> > > of the conflicting tree to minimise any particularly complex conflicts.
-> > > 
-> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Date: Tue, 26 Apr 2022 15:24:04 +1000
-> > > Subject: [PATCH] fixup for "usb: dwc3: Don't switch OTG -> peripheral if extcon is present"
-> > > 
-> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > ---
-> > >  drivers/usb/dwc3/core.c | 9 ++-------
-> > >  1 file changed, 2 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 2345a54b848b..950e238c65bf 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -1649,13 +1649,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
-> > >  	 * This device property is for kernel internal use only and
-> > >  	 * is expected to be set by the glue code.
-> > >  	 */
-> > > -	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-> > > -		edev = extcon_get_extcon_dev(name);
-> > > -		if (!edev)
-> > > -			return ERR_PTR(-EPROBE_DEFER);
-> > > -
-> > > -		return edev;
-> > > -	}
-> > > +	if (device_property_read_string(dev, "linux,extcon-name", &name) == 0)
-> > > +		return extcon_get_extcon_dev(name);
-> > >  
-> > >  	/*
-> > >  	 * Try to get an extcon device from the USB PHY controller's "port"
-> > > -- 
-> > > 2.35.1  
-> > 
-> > This is now a conflict between the char-misc tree and the usb tree.
-> 
-> This merge resolution seems to have been lost somewhere along the way
-> :-(
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
+commit: ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0 thermal: k3_j72xx_bandgap: Add the bandgap driver support
+date:   2 weeks ago
+config: powerpc64-randconfig-s031-20220603 (https://download.01.org/0day-ci/archive/20220604/202206041824.svJIkOwb-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/thermal/ kernel/debug/kdb/
 
-Sorry about that, I'll queue it up after -rc1 is out.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-greg k-h
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/thermal/k3_j72xx_bandgap.c:532:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j721e_data' was not declared. Should it be static?
+>> drivers/thermal/k3_j72xx_bandgap.c:536:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j7200_data' was not declared. Should it be static?
+
+vim +/k3_j72xx_bandgap_j721e_data +532 drivers/thermal/k3_j72xx_bandgap.c
+
+   531	
+ > 532	const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
+   533		.has_errata_i2128 = 1,
+   534	};
+   535	
+ > 536	const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
+   537		.has_errata_i2128 = 0,
+   538	};
+   539	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

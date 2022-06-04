@@ -2,212 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329D353D876
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7C853D874
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240898AbiFDToG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 15:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S240455AbiFDToA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 15:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbiFDTn4 (ORCPT
+        with ESMTP id S236079AbiFDTny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 15:43:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D102E2CC9C
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:43:54 -0700 (PDT)
+        Sat, 4 Jun 2022 15:43:54 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE662CDD4
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:43:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654371834; x=1685907834;
+  t=1654371833; x=1685907833;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FLI1+m3xfotkSnfI4GG7ZfArwo0hf/nqdT/fj0Gxlrk=;
-  b=JpG7oXoukj7RB4YVKpCbrEF7/AuUatOaDf35jsoX36o3blHssLcP1/Hr
-   xdnIYZQo2i2zZAwSJGwweM4loOldr5kSK15Adbipnsgw9kbAYnAXHJc3Q
-   3cRTGUjZP3RyHakmu/aR7siJf6cD9kuJiz9X/fwSJpUsgm+aQmOXjHYDc
-   qeU7sYNlFpUCj2vokUtasLTUXAq4okXt5I8mVsq8xTvRZ5qweoOS5RSRg
-   5fu6leTSOHwJa+BFFyOaf+Bzd8vaIRw2y4s9gQayyM1SkF5EtC0aVgc4P
-   BNhEquPtPPn/mwWD1U+E8IlMDdi1TG1BlFOMPivrsJbQw5x/2Bg0qrv9Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276536100"
+  bh=tOQ8VAJpzYvKga6lKE6bIur877r1cX9OMmJlMNQc8o8=;
+  b=YWKernko7gON+QoM6AC/cq7kXmP42AlRn+Ns1XQwQDw0EFOTBapyyc93
+   Ub7GnrznK5SrltTy9Crsh49oxP0gnS+w93ljobR4iocwb44EkKAcaJldy
+   +UmFXfb4zjHlyavF/y+sblVIUm9SRK+fzXHCZNsTeQo9MaA7U9gwQUzbS
+   NDt5ch84tX1Nmz9ZDELTOhPFTHbNDsXdJUoq25H5sv7nYUDyXSxH8IWIy
+   R2kkyerbBQ2824/WXR3+rEjpK19SxEL0tMnJFZDEMCDmN2v8vWG8193Ip
+   M/nAtA/BA66x8FFHMq2C2WU2q3DFpkMmq8lLNulUAG4u8mQqg7HVUpepC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276233512"
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="276536100"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 12:43:53 -0700
+   d="scan'208";a="276233512"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 12:43:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="553804742"
+   d="scan'208";a="613719284"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jun 2022 12:43:51 -0700
+  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2022 12:43:51 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nxZgc-000BA9-S5;
+        id 1nxZgc-000B9z-Nh;
         Sat, 04 Jun 2022 19:43:50 +0000
-Date:   Sun, 5 Jun 2022 03:43:02 +0800
+Date:   Sun, 5 Jun 2022 03:43:09 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: drivers/pci/controller/dwc/pcie-spear13xx.c:252:34: warning: unused
- variable 'spear13xx_pcie_of_match'
-Message-ID: <202206050312.ypRp8ryQ-lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-linked-list 58/59]
+ fs/netfs/buffered_flush.c:408:30: sparse: sparse: incompatible types in
+ comparison expression (different type sizes):
+Message-ID: <202206050354.7iGBqref-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: ea29b20a828511de3348334e529a3d046a180416 init/Kconfig: make COMPILE_TEST depend on HAS_IOMEM
-date:   1 year, 3 months ago
-config: s390-randconfig-c005-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050312.ypRp8ryQ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea29b20a828511de3348334e529a3d046a180416
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ea29b20a828511de3348334e529a3d046a180416
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-linked-list
+head:   22ecc2fcdab4616e624408911ec1d54644e82030
+commit: ff509dc49891f934a7a774e277b87729018db753 [58/59] netfs: Use flush from afs_writeback
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220605/202206050354.7iGBqref-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/ff509dc49891f934a7a774e277b87729018db753
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-linked-list
+        git checkout ff509dc49891f934a7a774e277b87729018db753
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/controller/dwc/
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:19:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:20:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |            \
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:21:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |            \
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:119:21: note: expanded from macro '__swab32'
-           ___constant_swab32(x) :                 \
-                              ^
-   include/uapi/linux/swab.h:22:12: note: expanded from macro '___constant_swab32'
-           (((__u32)(x) & (__u32)0xff000000UL) >> 24)))
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:120:12: note: expanded from macro '__swab32'
-           __fswab32(x))
-                     ^
-   In file included from drivers/pci/controller/dwc/pcie-spear13xx.c:17:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:80:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/pci/controller/dwc/pcie-spear13xx.c:252:34: warning: unused variable 'spear13xx_pcie_of_match' [-Wunused-const-variable]
-   static const struct of_device_id spear13xx_pcie_of_match[] = {
-                                    ^
-   21 warnings generated.
+sparse warnings: (new ones prefixed by >>)
+>> fs/netfs/buffered_flush.c:408:30: sparse: sparse: incompatible types in comparison expression (different type sizes):
+>> fs/netfs/buffered_flush.c:408:30: sparse:    unsigned int *
+>> fs/netfs/buffered_flush.c:408:30: sparse:    unsigned long *
+   fs/netfs/buffered_flush.c:411:30: sparse: sparse: incompatible types in comparison expression (different type sizes):
+   fs/netfs/buffered_flush.c:411:30: sparse:    unsigned int *
+   fs/netfs/buffered_flush.c:411:30: sparse:    unsigned long *
+   fs/netfs/buffered_flush.c:413:17: sparse: sparse: incompatible types in comparison expression (different type sizes):
+   fs/netfs/buffered_flush.c:413:17: sparse:    unsigned int *
+   fs/netfs/buffered_flush.c:413:17: sparse:    unsigned long *
 
+vim +408 fs/netfs/buffered_flush.c
 
-vim +/spear13xx_pcie_of_match +252 drivers/pci/controller/dwc/pcie-spear13xx.c
-
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  251  
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11 @252  static const struct of_device_id spear13xx_pcie_of_match[] = {
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  253  	{ .compatible = "st,spear1340-pcie", },
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  254  	{},
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  255  };
-51b66a6ce12570 drivers/pci/host/pcie-spear13xx.c Pratyush Anand 2014-02-11  256  
-
-:::::: The code at line 252 was first introduced by commit
-:::::: 51b66a6ce12570e5ee1a249c811f7f2d74814a43 PCI: spear: Add PCIe driver for ST Microelectronics SPEAr13xx
-
-:::::: TO: Pratyush Anand <pratyush.anand@st.com>
-:::::: CC: Viresh Kumar <viresh.kumar@linaro.org>
+   372	
+   373	/*
+   374	 * Extend the region to be written back to include subsequent contiguously
+   375	 * dirty pages if possible, but don't sleep while doing so.
+   376	 *
+   377	 * If this page holds new content, then we can include filler zeros in the
+   378	 * writeback.
+   379	 */
+   380	static void netfs_extend_writeback(struct netfs_io_request *wreq,
+   381					   struct writeback_control *wbc,
+   382					   struct netfs_i_context *ctx,
+   383					   struct netfs_dirty_region *region)
+   384	{
+   385		struct folio_batch fbatch;
+   386		struct folio *folio;
+   387		unsigned int i;
+   388		pgoff_t index = wreq->last + 1, stop_mask, stop_at, max_pages;
+   389		ssize_t max_size;
+   390		size_t align, hard_align;
+   391		bool stop = true, dirty;
+   392		int ret;
+   393	
+   394		XA_STATE(xas, &wreq->mapping->i_pages, index);
+   395	
+   396		_enter("%lx", index);
+   397	
+   398		/* We have a number of criteria by which we can decide where to stop
+   399		 * extension of this writeback:
+   400		 *
+   401		 *  1) The maximum I/O size (but wbacks can be subdivided)
+   402		 *  2) Boundaries within the filesystem (eg. ceph object size)
+   403		 *  3) Local boundaries (cache granules, VM radix node sizes)
+   404		 *  4) Content crypto/compression boundaries
+   405		 */
+   406		hard_align = PAGE_SIZE;
+   407		if (ctx->min_bshift || ctx->crypto_bshift)
+ > 408			hard_align = max(hard_align,
+   409					 1UL << max(ctx->min_bshift, ctx->crypto_bshift));
+   410		if (ctx->cache_order)
+   411			hard_align = max(hard_align, PAGE_SIZE << ctx->cache_order);
+   412	
+   413		align = min(hard_align, XA_CHUNK_SIZE * PAGE_SIZE);
+   414		if (wreq->alignment > align)
+   415			align = wreq->alignment;
+   416	
+   417		stop_mask = (align - 1) / PAGE_SIZE;
+   418	
+   419		max_size = XA_CHUNK_SIZE * PAGE_SIZE;
+   420		if (wreq->wsize > max_size)
+   421			max_size = roundup_pow_of_two(wreq->wsize);
+   422	
+   423		_debug("LIMITS al=%zx ha=%zx mx=%zx", align, hard_align, max_size);
+   424	
+   425		max_pages = max_size / PAGE_SIZE;
+   426		max_pages &= ~stop_mask;
+   427		_debug("MAX_PAGES %lx %lx", max_pages, stop_mask);
+   428		if (wreq->last - wreq->first + 1 >= max_pages) {
+   429			_leave(" [already hit wsize %lx %lx]",
+   430			       wreq->last - wreq->first + 1, max_pages);
+   431			return;
+   432		}
+   433	
+   434		stop_at = wreq->first + max_pages;
+   435		if (stop_at < wreq->first)
+   436			stop_at = ULONG_MAX;
+   437		else
+   438			stop_at = round_down(stop_at, align / PAGE_SIZE);
+   439		_debug("STOP_AT %lx (%lx %lx %lx)", stop_at, wreq->first, max_pages, align / PAGE_SIZE);
+   440	
+   441		if (index >= stop_at || wbc->nr_to_write <= 0 || wreq->len > max_size) {
+   442			_leave(" [prestop]");
+   443			return;
+   444		}
+   445	
+   446		do {
+   447			/* Firstly, we gather up a batch of contiguous dirty folios
+   448			 * under the RCU read lock - but we can't clear the dirty flags
+   449			 * there if any of those folios are mapped.
+   450			 */
+   451			folio_batch_init(&fbatch);
+   452			_debug("extend %lx %lx", index, xas.xa_index);
+   453			rcu_read_lock();
+   454	
+   455			xas_for_each(&xas, folio, ULONG_MAX) {
+   456				stop = true;
+   457				if (xas_retry(&xas, folio))
+   458					continue;
+   459				if (xa_is_value(folio))
+   460					break;
+   461				if (folio_index(folio) != index)
+   462					break;
+   463	
+   464				if (!folio_try_get_rcu(folio)) {
+   465					xas_reset(&xas);
+   466					continue;
+   467				}
+   468	
+   469				/* Has the folio moved or been split? */
+   470				if (unlikely(folio != xas_reload(&xas))) {
+   471					folio_put(folio);
+   472					break;
+   473				}
+   474	
+   475				if (!folio_trylock(folio)) {
+   476					folio_put(folio);
+   477					break;
+   478				}
+   479				if (!folio_test_dirty(folio) ||
+   480				    folio_test_writeback(folio)) {
+   481					folio_unlock(folio);
+   482					folio_put(folio);
+   483					break;
+   484				}
+   485	
+   486				wreq->len += folio_size(folio);
+   487				index += folio_nr_pages(folio);
+   488				stop = index >= stop_at || wbc->nr_to_write <= 0;
+   489	
+   490				if (!folio_batch_add(&fbatch, folio))
+   491					break;
+   492				if (stop)
+   493					break;
+   494			}
+   495	
+   496			if (!stop)
+   497				xas_pause(&xas);
+   498			rcu_read_unlock();
+   499	
+   500			/* Now, if we obtained any pages, we can shift them to being
+   501			 * writable and mark them for caching.
+   502			 */
+   503			if (!folio_batch_count(&fbatch))
+   504				break;
+   505	
+   506			for (i = 0; i < folio_batch_count(&fbatch); i++) {
+   507				folio = fbatch.folios[i];
+   508				//_debug("found [%x] %lx", i, folio->index);
+   509				trace_netfs_folio_dirty(wreq->mapping, folio,
+   510							netfs_folio_trace_store_ex);
+   511	
+   512				dirty = folio_clear_dirty_for_io(folio);
+   513				if (folio_start_writeback(folio)) {
+   514					_debug("! no wb");
+   515					goto nomem_redirty;
+   516				}
+   517	
+   518				ret = netfs_xa_store_and_mark(&wreq->buffer, folio->index, folio,
+   519							      true, true, dirty, GFP_NOFS);
+   520				if (ret < 0) {
+   521					_debug("! no buffer");
+   522					goto nomem_cancel_wb;
+   523				}
+   524				wbc->nr_to_write -= folio_nr_pages(folio);
+   525				index = folio_next_index(folio);
+   526				wreq->last = index - 1;
+   527				folio_unlock(folio);
+   528			}
+   529	
+   530			cond_resched();
+   531		} while (!stop);
+   532	
+   533		_leave(" ok [%zx]", wreq->last);
+   534		return;
+   535	
+   536	nomem_cancel_wb:
+   537		folio_end_writeback(folio);
+   538	nomem_redirty:
+   539		if (dirty)
+   540			folio_redirty_for_writepage(wbc, folio);
+   541		for (; i < folio_batch_count(&fbatch); i++) {
+   542			folio_unlock(folio);
+   543			folio_put(folio);
+   544		}
+   545		_leave(" cancel [%zx]", wreq->last);
+   546	}
+   547	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8CC53D773
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 17:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0932653D775
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 17:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237651AbiFDPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 11:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S237661AbiFDPUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 11:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237603AbiFDPTF (ORCPT
+        with ESMTP id S234064AbiFDPUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 11:19:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B275636B49
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 08:19:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nxVYM-0005PH-1N; Sat, 04 Jun 2022 17:19:02 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A557A8C3D6;
-        Sat,  4 Jun 2022 15:19:00 +0000 (UTC)
-Date:   Sat, 4 Jun 2022 17:18:59 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
-Message-ID: <20220604151859.hyywffrni4vo6gdl@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
- <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
- <CAMZ6RqJpJCAudv89YqFFQH80ei7WiAshyk1RtbEv=aXSyxo3hQ@mail.gmail.com>
- <20220604135541.2ki2eskyc7gsmrlu@pengutronix.de>
- <CAMZ6RqJ7qvXyxNVUK-=oJnK_oq7N94WABOb3pqeYf9Fw3G6J9A@mail.gmail.com>
+        Sat, 4 Jun 2022 11:20:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6239938BFB
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 08:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654356043; x=1685892043;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3UQHi9s/Mb4hUv0hjwovhOXp771ivsYDkdrEEQElHqU=;
+  b=GRB6YajK7B+KDUrpsUf85oOX54jzk28Fo00E2UhkGRobStIDBlbrfRas
+   MK4CSXNRZ6gW15yA46jDGSXwSMTCGPexoxhbyP31QNMTwhGt9GlXQNCIy
+   vCD3jOn4p70Lq04z9BrD5Fix6hdJxj2E7DLZWW1SKFxiG/7wOkKW2b4rY
+   vsMkivQuTXS1G5bYd7ne4LooTQmqGBBY28knquVWB4y/i21ZGo4H+CFwc
+   WYylMpZfaPntf5/eMoUipZdwi72RGdisD7thYpa48BIXzO/r2b94QwcNO
+   OQnpCHj9N+wi+JY6OvVmCr5CF4oTWeUAXPI547m6NqmaMYkQhZrYgZMGd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276211339"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="276211339"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 08:20:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="613674934"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2022 08:20:41 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxVZw-000Azr-Ox;
+        Sat, 04 Jun 2022 15:20:40 +0000
+Date:   Sat, 4 Jun 2022 23:20:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Julien Grall <julien.grall@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Subject: arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
+Message-ID: <202206042312.ffdERGjt-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yvdsjjm7x6ounrj4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJ7qvXyxNVUK-=oJnK_oq7N94WABOb3pqeYf9Fw3G6J9A@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Julien,
 
---yvdsjjm7x6ounrj4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+First bad commit (maybe != root cause):
 
-On 04.06.2022 23:59:48, Vincent MAILHOL wrote:
-> > > Fine, but I need a bit of guidance here. To provide a tag, I need to
-> > > have my own git repository hosted online, right?
-> >
-> > That is one option.
->=20
-> This suggests that there are other options? What would be those other
-> options?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
+commit: 3248136b3637e1671e4fa46e32e2122f9ec4bc3d KVM: arm64: Align the VMID allocation with the arm64 ASID
+date:   4 months ago
+config: arm64-randconfig-m031-20220530 (https://download.01.org/0day-ci/archive/20220604/202206042312.ffdERGjt-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
 
-2. git.kernel.org (most preferred)
-3. github.com (have to ask Davem/Jakub)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > Is GitHub OK or should I create one on https://git.kernel.org/?
-> >
-> > Some maintainers don't like github, let's wait what Davem and Jakub say.
-> > I think for git.kernel.org you need a GPG key with signatures of 3 users
-> > of git.kernel.org.
->=20
-> Personally, I would also prefer getting my own git.kernel.org account.
+smatch warnings:
+arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
 
-See https://korg.docs.kernel.org/accounts.html
+vim +62 arch/arm64/kvm/vmid.c
 
-> It has infinitely more swag than GitHub.
+417838392f2e65 Shameer Kolothum 2021-11-22  34  
+417838392f2e65 Shameer Kolothum 2021-11-22  35  #define vmid_gen_match(vmid) \
+417838392f2e65 Shameer Kolothum 2021-11-22  36  	(!(((vmid) ^ atomic64_read(&vmid_generation)) >> kvm_arm_vmid_bits))
+417838392f2e65 Shameer Kolothum 2021-11-22  37  
+417838392f2e65 Shameer Kolothum 2021-11-22  38  static void flush_context(void)
+417838392f2e65 Shameer Kolothum 2021-11-22  39  {
+417838392f2e65 Shameer Kolothum 2021-11-22  40  	int cpu;
+417838392f2e65 Shameer Kolothum 2021-11-22  41  	u64 vmid;
+417838392f2e65 Shameer Kolothum 2021-11-22  42  
+417838392f2e65 Shameer Kolothum 2021-11-22  43  	bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
+417838392f2e65 Shameer Kolothum 2021-11-22  44  
+417838392f2e65 Shameer Kolothum 2021-11-22  45  	for_each_possible_cpu(cpu) {
+417838392f2e65 Shameer Kolothum 2021-11-22  46  		vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
+417838392f2e65 Shameer Kolothum 2021-11-22  47  
+417838392f2e65 Shameer Kolothum 2021-11-22  48  		/* Preserve reserved VMID */
+417838392f2e65 Shameer Kolothum 2021-11-22  49  		if (vmid == 0)
+417838392f2e65 Shameer Kolothum 2021-11-22  50  			vmid = per_cpu(reserved_vmids, cpu);
+417838392f2e65 Shameer Kolothum 2021-11-22  51  		__set_bit(vmid2idx(vmid), vmid_map);
+417838392f2e65 Shameer Kolothum 2021-11-22  52  		per_cpu(reserved_vmids, cpu) = vmid;
+417838392f2e65 Shameer Kolothum 2021-11-22  53  	}
+417838392f2e65 Shameer Kolothum 2021-11-22  54  
+417838392f2e65 Shameer Kolothum 2021-11-22  55  	/*
+417838392f2e65 Shameer Kolothum 2021-11-22  56  	 * Unlike ASID allocator, we expect less frequent rollover in
+417838392f2e65 Shameer Kolothum 2021-11-22  57  	 * case of VMIDs. Hence, instead of marking the CPU as
+417838392f2e65 Shameer Kolothum 2021-11-22  58  	 * flush_pending and issuing a local context invalidation on
+417838392f2e65 Shameer Kolothum 2021-11-22  59  	 * the next context-switch, we broadcast TLB flush + I-cache
+417838392f2e65 Shameer Kolothum 2021-11-22  60  	 * invalidation over the inner shareable domain on rollover.
+417838392f2e65 Shameer Kolothum 2021-11-22  61  	 */
+417838392f2e65 Shameer Kolothum 2021-11-22 @62  	 kvm_call_hyp(__kvm_flush_vm_context);
+417838392f2e65 Shameer Kolothum 2021-11-22  63  }
+417838392f2e65 Shameer Kolothum 2021-11-22  64  
 
-Definitively!
+:::::: The code at line 62 was first introduced by commit
+:::::: 417838392f2e657ee25cc30e373ff4c35a0faa90 KVM: arm64: Introduce a new VMID allocator for KVM
 
-> But my religion does not forbid me from using GitHub :)
+:::::: TO: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+:::::: CC: Marc Zyngier <maz@kernel.org>
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---yvdsjjm7x6ounrj4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbd+EACgkQrX5LkNig
-0109qggAk9nG3MlGY5XBeC/p+q1J00klbo5dWJ+lsLjiXMB6jjhS7x30hMg3PZ3b
-9P/ozQI1bgVM5l/tWLRJ4FWnZRubJn16lhdLtj1X1nswhEH+sxFtZYi+vY/qsWtm
-sMHmqZYdQIdMbW8uCmHWYzBgD3S+2cdoETwprx8uWZcGOSb61qRDDIZrvyVL8Do3
-PBv5Dmrp5E5KA9QJGJ+LKQ02obWf3CZQNAdcrAAkrB9J3XVl1SZhnXmo2b+J1Jl/
-hEHYJJ6eVQVJwhIa3yyJ/+KKNFHPs7iaXFlj7JE9qZvcVn3HA9uWOGdClUn17HnW
-+UEvpaL+XTRKJ171OrDBDaZmCnh6BQ==
-=SktK
------END PGP SIGNATURE-----
-
---yvdsjjm7x6ounrj4--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

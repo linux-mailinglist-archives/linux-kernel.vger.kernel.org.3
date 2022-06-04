@@ -2,222 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B8553D7F2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 18:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3B853D7F9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 19:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238881AbiFDQrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 12:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S238962AbiFDRLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 13:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiFDQrA (ORCPT
+        with ESMTP id S238936AbiFDRLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 12:47:00 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E300F32;
-        Sat,  4 Jun 2022 09:46:59 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id v1so10671350ejg.13;
-        Sat, 04 Jun 2022 09:46:58 -0700 (PDT)
+        Sat, 4 Jun 2022 13:11:35 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B3213D26
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 10:11:34 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id e184so18816446ybf.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 10:11:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=avNh9h8+MOw7k99GPQLLRg6KWk1j4wFpZKYDx2QT8Qs=;
-        b=OTIMNzxmuar4680Fg5TNraZ4bHHfBXTi2Stw86M0kXpEVlDf7omD8rnb7e+8rofPLA
-         l+BSuJatsldU+dPBQn2s/7VB0NWxnTD3PfL0FklxHSApwb6kZBHAt4UUuPHV3lxH7FYH
-         XmMvnqIdJ8WSd98+646jkt7J1zqN2XH7wBG222nz+HBXeRDdkC3CFGlER7oFfb90dsU+
-         M0KdEI5OY93Ik4fwYc4MneqgjborlN7nZpDAw7tIE35pYBxBZfAFd87M/PPTg6fA9qDK
-         oIT+6G6Vs+Go19i45IiqFM7YKn8In6MBtnVrftzgQ3POTSxcd1KF84ZjxuEAa9LeWQA/
-         wCrw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pyZHwPc7YrU8dREd74Yltn1iWLZudPge1vYIfnUYTII=;
+        b=k9KDmA915yTehX1RPgUdARsjp1afpUljW4i58PPws5HkX9xid+jwYQxH8Zug1hXDG6
+         SzB2gdE7KlqR9zvmJ97XifjqG8w8kWYJtJdZ5ZH06DRW+gOSYIiomSSk9WaQpWoK2oQW
+         ghrUn+y9f2jX80TfywstExRAfjovPAV1U4LAt6yIzKj8/WEuHZAegEf9cnm4MLzuod84
+         OxMfJhMFXv4yVRsCFzS2gkEwSkZYdugU31TupuJkT/+gStu/jvnbeU7+4HFTAw0yCOg2
+         ItRtfSS5nSQi20FiNqBvpwgXrACcYvAadW/1TBQTAM+ReF8h/gJHRFmnTk2oZ/6oaT/v
+         iH1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=avNh9h8+MOw7k99GPQLLRg6KWk1j4wFpZKYDx2QT8Qs=;
-        b=Ry0mhjTAE6vY4qBAgKpM6lqxSGhWSxThvxPyAYDQkMayLklHdDIPh4FWzLM48LT7zN
-         hjx1LSzqv1BE01M2pAYm+7XzmvadH4RIKDlwrklvPMNbIV5ZJhmgF21Bp7yzs5373xX/
-         b6PXdDSIpZahyFc85ossMc1M9K5Ye78q3iLGn1/OKhFFIh5lIIENRD3uZd7SJIh3KHOi
-         hD1laptnat2AEowTEgjcKUo1k7J5T4PSsJeZ3Hcm3xCPuY/a2slv3zsTShO9vPqpSlC0
-         roFY2bW0yJX/QuK2OXgwTYxvGp7QzzixAvhnfhqgTOkquTd+UqvM/ZJ0ldjEyNrIWcHc
-         bcYQ==
-X-Gm-Message-State: AOAM533FgkO9syDH/gQgXzl/k4vkWKNrMjPBvIZE6VfnoaxjMKsDUc6h
-        PPDyWLdy/wbepn0ceduiTWU=
-X-Google-Smtp-Source: ABdhPJxErZXa+n/Q/YcKds8t0Fl6cPR0Bptfav5naEGXaAeHEH/13Sb4u/EaL9P4UGL+q+JN7mG9lQ==
-X-Received: by 2002:a17:907:6d1f:b0:6fe:e53b:7f53 with SMTP id sa31-20020a1709076d1f00b006fee53b7f53mr14016250ejc.375.1654361217403;
-        Sat, 04 Jun 2022 09:46:57 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-43.zg.cable.xnet.hr. [94.253.165.43])
-        by smtp.googlemail.com with ESMTPSA id gt43-20020a1709072dab00b0070f1b033de4sm1834454ejc.200.2022.06.04.09.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 09:46:56 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH] dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
-Date:   Sat,  4 Jun 2022 18:46:53 +0200
-Message-Id: <20220604164653.79284-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pyZHwPc7YrU8dREd74Yltn1iWLZudPge1vYIfnUYTII=;
+        b=QFfqJ+OHFin1YeYjKK1wfNBQSw40/19a91xcQztOuCKLPRYCSIA29lLaenE6UKOqzr
+         RmeJFUe0pEQspXZVBimOV12uhJDttC8zgup5K/AM1UbQWr+XEI3KBn6GOgolAQaeX3Rb
+         QHPdwrgYY75my+kGRbIc/e117stIfZBZjExZOQfl57oqN9WkLm1a7ectX1Bk60YvXJ7G
+         8TdsV1cnH+QS4GWLvJe0263+RdPpbdq36tJXeOLh1gi3y1sXJMlmKwC8Q6EVHhFDqRnQ
+         OKG723ithSPS7PYA9UxLRKoS2bCkADlQA35dDRjzIByZZFRSb/LKBQT1F2EzmDzLmQLR
+         fQCw==
+X-Gm-Message-State: AOAM533FJxPfFx9HqbGNQRfvZceGpkURPaZ7/e44QKp60ch5C+vVlrjO
+        iHuurxChhh4+J2WX+zstqlnRN3B7JzATiHbphvGFKQg+JzB5dg==
+X-Google-Smtp-Source: ABdhPJwS2ALavKiTl7PmoWl3wb6mBv3NQIFpEOu12J/H9NOsRdyOAgrQZ8njknEsKqVms/6SkM/+Vr1Zi6z/+YSNIH0=
+X-Received: by 2002:a25:4c2:0:b0:65b:a2f7:f39 with SMTP id 185-20020a2504c2000000b0065ba2f70f39mr17276476ybe.592.1654362693213;
+ Sat, 04 Jun 2022 10:11:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220603173820.663747061@linuxfoundation.org>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 4 Jun 2022 22:41:21 +0530
+Message-ID: <CA+G9fYv8AVoFcu9eg8soTEWu4GJPk=kQPRSNbP8iLvuL3vydmw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/66] 5.15.45-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert DT bindings for Qualcomm QUP I2C controller to DT schema format.
+On Fri, 3 Jun 2022 at 23:20, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.45 release.
+> There are 66 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.45-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Old text bindings were missing usage of DMA so that was documented, as
-well as the max clock-frequency.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- .../devicetree/bindings/i2c/qcom,i2c-qup.txt  | 40 ---------
- .../devicetree/bindings/i2c/qcom,i2c-qup.yaml | 83 +++++++++++++++++++
- 2 files changed, 83 insertions(+), 40 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt b/Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
-deleted file mode 100644
-index dc71754a56af..000000000000
---- a/Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
-+++ /dev/null
-@@ -1,40 +0,0 @@
--Qualcomm Universal Peripheral (QUP) I2C controller
--
--Required properties:
-- - compatible: Should be:
--   * "qcom,i2c-qup-v1.1.1" for 8660, 8960 and 8064.
--   * "qcom,i2c-qup-v2.1.1" for 8974 v1.
--   * "qcom,i2c-qup-v2.2.1" for 8974 v2 and later.
-- - reg: Should contain QUP register address and length.
-- - interrupts: Should contain I2C interrupt.
--
-- - clocks: A list of phandles + clock-specifiers, one for each entry in
--   clock-names.
-- - clock-names: Should contain:
--   * "core" for the core clock
--   * "iface" for the AHB clock
--
-- - #address-cells: Should be <1> Address cells for i2c device address
-- - #size-cells: Should be <0> as i2c addresses have no size component
--
--Optional properties:
-- - clock-frequency: Should specify the desired i2c bus clock frequency in Hz,
--                    defaults to 100kHz if omitted.
--
--Child nodes should conform to i2c bus binding.
--
--Example:
--
-- i2c@f9924000 {
-- 	compatible = "qcom,i2c-qup-v2.2.1";
-- 	reg = <0xf9924000 0x1000>;
-- 	interrupts = <0 96 0>;
--
-- 	clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>, <&gcc GCC_BLSP1_AHB_CLK>;
-- 	clock-names = "core", "iface";
--
-- 	clock-frequency = <355000>;
--
-- 	#address-cells = <1>;
-- 	#size-cells = <0>;
-- };
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
-new file mode 100644
-index 000000000000..097962a90e62
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/qcom,i2c-qup.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Universal Peripheral (QUP) I2C controller Device Tree Bindings
-+
-+maintainers:
-+  - Robert Marko <robimarko@gmail.com>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - qcom,i2c-qup-v1.1.1
-+          - qcom,i2c-qup-v2.1.1
-+          - qcom,i2c-qup-v2.2.1
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: QUP I2C core clock
-+      - description: AHB bus clock
-+
-+  clock-names:
-+    items:
-+      - const: core
-+      - const: iface
-+
-+  clock-frequency:
-+    default: 100000
-+    maximum: 1000000
-+    description: Desired i2c bus clock frequency in Hz, defaults to 100kHz if omitted.
-+
-+  dmas:
-+    items:
-+      - description: RX DMA Channel
-+      - description: TX DMA Channel
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+      - const: tx
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/qcom,gcc-ipq8074.h>
-+
-+    i2c@78ba000 {
-+      compatible = "qcom,i2c-qup-v2.2.1";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      reg = <0x078ba000 0x600>;
-+      interrupts = <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&gcc GCC_BLSP1_QUP6_I2C_APPS_CLK>,
-+               <&gcc GCC_BLSP1_AHB_CLK>;
-+      clock-names = "core", "iface";
-+      clock-frequency = <100000>;
-+      dmas = <&blsp_dma 23>, <&blsp_dma 22>;
-+      dma-names = "rx", "tx";
-+    };
-+...
--- 
-2.36.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.15.45-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: c5d3dc2dfc027824f60e0e6913265b16296eceec
+* git describe: v5.15.43-213-gc5d3dc2dfc02
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.43-213-gc5d3dc2dfc02
+
+## Test Regressions (compared to v5.15.43-146-g510d04da560c)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.43-146-g510d04da560c)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.43-146-g510d04da560c)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.43-146-g510d04da560c)
+No metric fixes found.
+
+## Test result summary
+total: 135772, pass: 123116, fail: 230, skip: 11846, xfail: 580
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

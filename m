@@ -2,110 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B6453D6D0
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E9A53D6D3
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242297AbiFDMlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 08:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S243393AbiFDMlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 08:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241004AbiFDMlG (ORCPT
+        with ESMTP id S232599AbiFDMlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 08:41:06 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879E31536;
-        Sat,  4 Jun 2022 05:41:05 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 7BA6132003AC;
-        Sat,  4 Jun 2022 08:41:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sat, 04 Jun 2022 08:41:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1654346464; x=1654432864; bh=Y8
-        5O8Dk7VWQXXoJvprtQ8Dh0VDIc6G4b2piXzVambvs=; b=QsI1Pc5GL0ftpGmkVM
-        4cS9+b1ukcVX5MX7Jw7pL29q/OOiJ3z41W9nxz6+Pu/yUCbbP0KqtMpTXSpoDSHw
-        Qc6SGVEctoGDGdQ5493R9q6GV2LS3/uKv6NKUYMV2zuDSLp+oVeV9NaThNARsEnA
-        c75eXmyYat1viqX7nukAL66Hjm8D0/ncwmE/lMZEpYOSfRTrKx40NzCfkFUBsMQa
-        xxEYMRslEwcTQ4qPlB2HtrOOkUJlV6chebdkoGdToj8yjB2DdDO/5Z+1j/oFgdpH
-        ax2lnYVKUJg+7WFf92QUTgndBotS9/tgP6onjvYHWXyZWBJuiNSUzvw1W58irngr
-        YIbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1654346464; x=1654432864; bh=Y85O8Dk7VWQXX
-        oJvprtQ8Dh0VDIc6G4b2piXzVambvs=; b=mrXA7BVV28fhRcI3UqKMl2/FKYrDw
-        LXmD5R8KfzOORUWGEH9xPeHMdJTBYTPPS0YJqAZrw1Ur5alOs7ehGgfIdN+c/KPw
-        W4Nss5nJ9b1ZE0uCp+MQ7+WjAJ8hPwqVpOEoI4BpjuaSxdaqPSETUznGIXdJpLfK
-        Ay8Hu7YvJkeCTJ/DGOZreUUwUI4nf3e0Ky6CO2SPqI4ccpNH+butX+jS7mUzXEfZ
-        UAvHgMiUhsIerfwKlKswhzZJIlL179TUPMFBo9a34VHVxBrqQ0MiMP11hbLkAFB7
-        BSkWRIIRcZndMSvMglbIxkSoXYtGC7/sruuDXUBQdeS5gcEF7xS7guNyg==
-X-ME-Sender: <xms:31KbYupkotXKY0oJS32FIqcNzw7_FlS3iz5usu_8QyWTlQqny3GdtA>
-    <xme:31KbYspPfRg3Pwv3lonnmAibyWiNteRWHh9BWQovhMoRGSdKY9k6cHCV-kT9jAafh
-    _BrY0AO7YTY7tqcYkA>
-X-ME-Received: <xmr:31KbYjPNorQf39HEau-bZ4TYm1FwwsQ2ZtUgdxiatf7SL_wIhdxrvwrhwEx22nRAy0cPv-FxPZ2u-LD4--Zp9n5x5x05veD5k6SLOpJAvxD3milCW50>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgdehgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefledufeehgedvuedvvd
-    egkefgvddttedtleeiiefhgeetudegkefhvdfhjeeftdenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihgh
-    horghtrdgtohhm
-X-ME-Proxy: <xmx:31KbYt6clNdOGMDrbXIumu3GRxrWvAPFUoXeE62M76D0DGgCCyDk9g>
-    <xmx:31KbYt4CIqx7sZWbzfymZseDnJwCO5qreY7zAjX7kZtPx0IzmmSZIA>
-    <xmx:31KbYthInYJlfjNkh32EdpZH3viQhgEE5KS4tFteplI6ofOoeuokhg>
-    <xmx:4FKbYg0mDb0X_V5XO_rxnMqAUnZJyvo4VJ02bSi3HUO5YYwtFYt5CQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 4 Jun 2022 08:41:01 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     chenhuacai@kernel.org
-Cc:     kernel@xen0n.name, maz@kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH for-5.19 2/2] loongarch: Mask out higher bits for get_csr_cpuid
-Date:   Sat,  4 Jun 2022 13:40:52 +0100
-Message-Id: <20220604124052.1550-2-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
-References: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+        Sat, 4 Jun 2022 08:41:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0341431907
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 05:41:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nxT65-0008AR-Cl; Sat, 04 Jun 2022 14:41:41 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4A9248C334;
+        Sat,  4 Jun 2022 12:41:40 +0000 (UTC)
+Date:   Sat, 4 Jun 2022 14:41:39 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v4 3/7] can: bittiming: move bittiming calculation
+ functions to calc_bittiming.c
+Message-ID: <20220604124139.pg2h33zanyqs54q5@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-4-mailhol.vincent@wanadoo.fr>
+ <20220604112538.p4hlzgqnodyvftsj@pengutronix.de>
+ <CAMZ6RqLg_Enyn1h+sn=o8rc8kkR6r=YaygLy40G9D4=Ug_KxOg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ora2vppsbqlisv3t"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqLg_Enyn1h+sn=o8rc8kkR6r=YaygLy40G9D4=Ug_KxOg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only low 9 bits of CPUID CSR represents coreid, higher bits
-are marked as reserved. In case Loongson may define higher
-bits in future, just mask them out for get_csr_cpuid.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/loongarch/include/asm/loongarch.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--ora2vppsbqlisv3t
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 3ba4f7e87cd2..7f3933f747f9 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -1200,7 +1200,7 @@ static inline u64 drdtime(void)
- 
- static inline unsigned int get_csr_cpuid(void)
- {
--	return csr_read32(LOONGARCH_CSR_CPUID);
-+	return csr_read32(LOONGARCH_CSR_CPUID) & CSR_CPUID_COREID;
- }
- 
- static inline void csr_any_send(unsigned int addr, unsigned int data,
--- 
-2.25.1
+On 04.06.2022 21:21:01, Vincent MAILHOL wrote:
+> On Sat. 4 June 2022 at 20:25, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
+e:
+> > On 03.06.2022 19:28:44, Vincent Mailhol wrote:
+> > > The canonical way to select or deselect an object during compilation
+> > > is to use this pattern in the relevant Makefile:
+> > >
+> > > bar-$(CONFIG_FOO) :=3D foo.o
+> > >
+> > > bittiming.c instead uses some #ifdef CONFIG_CAN_CALC_BITTIMG.
+> > >
+> > > Create a new file named calc_bittiming.c with all the functions which
+> > > are conditionally compiled with CONFIG_CAN_CALC_BITTIMG and modify the
+> > > Makefile according to above pattern.
+> > >
+> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > ---
+> > >  drivers/net/can/Kconfig              |   4 +
+> > >  drivers/net/can/dev/Makefile         |   2 +
+> > >  drivers/net/can/dev/bittiming.c      | 197 --------------------------
+> > >  drivers/net/can/dev/calc_bittiming.c | 202 +++++++++++++++++++++++++=
+++
+> > >  4 files changed, 208 insertions(+), 197 deletions(-)
+> > >  create mode 100644 drivers/net/can/dev/calc_bittiming.c
+> > >
+> > > diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> > > index b1e47f6c5586..8f3b97aea638 100644
+> > > --- a/drivers/net/can/Kconfig
+> > > +++ b/drivers/net/can/Kconfig
+> > > @@ -96,6 +96,10 @@ config CAN_CALC_BITTIMING
+> > >         source clock frequencies. Disabling saves some space, but the=
+n the
+> > >         bit-timing parameters must be specified directly using the Ne=
+tlink
+> > >         arguments "tq", "prop_seg", "phase_seg1", "phase_seg2" and "s=
+jw".
+> > > +
+> > > +       The additional features selected by this option will be added=
+ to the
+> > > +       can-dev module.
+> > > +
+> > >         If unsure, say Y.
+> > >
+> > >  config CAN_AT91
+> > > diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makef=
+ile
+> > > index 919f87e36eed..b8a55b1d90cd 100644
+> > > --- a/drivers/net/can/dev/Makefile
+> > > +++ b/drivers/net/can/dev/Makefile
+> > > @@ -9,3 +9,5 @@ can-dev-$(CONFIG_CAN_NETLINK) +=3D dev.o
+> > >  can-dev-$(CONFIG_CAN_NETLINK) +=3D length.o
+> > >  can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
+> > >  can-dev-$(CONFIG_CAN_NETLINK) +=3D rx-offload.o
+> > > +
+> > > +can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+> >
+> > Nitpick:
+> > Can we keep this list sorted?
+>=20
+> My idea was first to group per CONFIG symbol according to the
+> different levels: CAN_DEV first, then CAN_NETLINK and finally
+> CAN_CALC_BITTIMING and CAN_RX_OFFLOAD. And then only sort by
+> alphabetical order within each group.
 
+I was thinking to order by CONFIG symbol and put the objects without an
+additional symbol first
+
+> By sorting the list, do literally mean to sort each line like this:
+>=20
+> obj-$(CONFIG_CAN_DEV) +=3D can-dev.o
+> can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+> can-dev-$(CONFIG_CAN_DEV) +=3D skb.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D bittiming.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D dev.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D length.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
+> can-dev-$(CONFIG_CAN_RX_OFFLOAD) +=3D rx-offload.o
+
+=2E..which results in:
+
+obj-$(CONFIG_CAN_DEV) +=3D can-dev.o
+
+can-dev-y +=3D skb.o
+
+can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+can-dev-$(CONFIG_CAN_NETLINK) +=3D bittiming.o
+can-dev-$(CONFIG_CAN_NETLINK) +=3D dev.o
+can-dev-$(CONFIG_CAN_NETLINK) +=3D length.o
+can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
+can-dev-$(CONFIG_CAN_RX_OFFLOAD) +=3D rx-offload.o
+
+> or do you mean to sort by object name (ignoring the config symbol) like t=
+hat:
+>=20
+> obj-$(CONFIG_CAN_DEV) +=3D can-dev.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D bittiming.o
+> can-dev-$(CONFIG_CAN_CALC_BITTIMING) +=3D calc_bittiming.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D dev.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D length.o
+> can-dev-$(CONFIG_CAN_NETLINK) +=3D netlink.o
+> can-dev-$(CONFIG_CAN_RX_OFFLOAD) +=3D rx-offload.o
+> can-dev-$(CONFIG_CAN_DEV) +=3D skb.o
+>=20
+> ?
+>=20
+> (I honestly do not care so much how we sort the lines. My logic of
+> grouping first by CONFIG symbols seems more natural, but I am fine to
+> go with any other suggestion).
+
+I think this makes it clear where new files should be added.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ora2vppsbqlisv3t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbUwEACgkQrX5LkNig
+01144Af+LO3PBMYwZY4eASmWmqhkOrErkkDcY+BhhTS5F2Yi4HlyoMUJ7d8t4pOR
+WPN1TjHExVFZCjN6bRLmuEqntMtS+2b2v91f4vtoncPI6/ygQPEXIqVSGBcQGtuj
+zKryoPlqDJpF83LqiS9cE/RH+YjL3wkZB+Qvmsm1EAuInIiwHYphiOvILdeE6frh
+lDv3UL5+zfZ4fSY1TNio9yE6Vs1DoPFEXsg7V1xtaoI1Ou+nr3oFXQlkxHwS5c6c
+Vhicx/dUNpllJj558HPvLhxp24+/XCA+7xpUM/liaJgTwqs0Au41fxwx35iQZ2Bs
+FbpwIdN1vnTOY5htRYQnot3dJtQ72Q==
+=eyNK
+-----END PGP SIGNATURE-----
+
+--ora2vppsbqlisv3t--

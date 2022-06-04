@@ -2,123 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0932653D775
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 17:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D4E53D776
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 17:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237661AbiFDPUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 11:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S237688AbiFDPVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 11:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbiFDPUo (ORCPT
+        with ESMTP id S234064AbiFDPVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 11:20:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6239938BFB
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 08:20:43 -0700 (PDT)
+        Sat, 4 Jun 2022 11:21:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD4738BFB
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 08:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654356043; x=1685892043;
+  t=1654356103; x=1685892103;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3UQHi9s/Mb4hUv0hjwovhOXp771ivsYDkdrEEQElHqU=;
-  b=GRB6YajK7B+KDUrpsUf85oOX54jzk28Fo00E2UhkGRobStIDBlbrfRas
-   MK4CSXNRZ6gW15yA46jDGSXwSMTCGPexoxhbyP31QNMTwhGt9GlXQNCIy
-   vCD3jOn4p70Lq04z9BrD5Fix6hdJxj2E7DLZWW1SKFxiG/7wOkKW2b4rY
-   vsMkivQuTXS1G5bYd7ne4LooTQmqGBBY28knquVWB4y/i21ZGo4H+CFwc
-   WYylMpZfaPntf5/eMoUipZdwi72RGdisD7thYpa48BIXzO/r2b94QwcNO
-   OQnpCHj9N+wi+JY6OvVmCr5CF4oTWeUAXPI547m6NqmaMYkQhZrYgZMGd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276211339"
+  bh=b1NmwPYbmnZ7oSt7ka23Krkah2ZTY9LKm2fg5a7qsTs=;
+  b=gDyIYxi64FRDgFW3pfpETqisSInHr0o6NhRMT5sRlTU+PGIoicrJEKs+
+   PIIxyl7ZMfRtWz9Uk9i7l2bWxOkMDpbmWhWxeSpWorSk8KoNFsrAwB1od
+   uVRXzx1qs7YlZz8pvTsdoa3a6GXQLTdV8ZrmjJpycNTYWZ/Mambnz8qwf
+   OEszGj9yipByEA72h4AncK4T+jr1BlXOuQHMR+XCu4sEG0bOh128q3GU+
+   FLDyv3q573dR6X7CU5FsDoGFZ9puHswU8Tddht8PC0JqCFsEKDCUUOXKK
+   r2umbbld3CXRjufnoQEjGtPIQSyQoxxOBO8xTUq3rzn+Bk5SLzNYOkWo6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="339519109"
 X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="276211339"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 08:20:43 -0700
+   d="scan'208";a="339519109"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 08:21:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="613674934"
+   d="scan'208";a="582986399"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Jun 2022 08:20:41 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 04 Jun 2022 08:21:41 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nxVZw-000Azr-Ox;
-        Sat, 04 Jun 2022 15:20:40 +0000
-Date:   Sat, 4 Jun 2022 23:20:39 +0800
+        id 1nxVau-000Azv-Pn;
+        Sat, 04 Jun 2022 15:21:40 +0000
+Date:   Sat, 4 Jun 2022 23:20:40 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Julien Grall <julien.grall@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-Subject: arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
-Message-ID: <202206042312.ffdERGjt-lkp@intel.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: drivers/dma/dw/rzn1-dmamux.c:105:34: warning: unused variable
+ 'rzn1_dmac_match'
+Message-ID: <202206042329.O1C6vwtx-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Julien,
-
-First bad commit (maybe != root cause):
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: 3248136b3637e1671e4fa46e32e2122f9ec4bc3d KVM: arm64: Align the VMID allocation with the arm64 ASID
-date:   4 months ago
-config: arm64-randconfig-m031-20220530 (https://download.01.org/0day-ci/archive/20220604/202206042312.ffdERGjt-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
+commit: 134d9c52fca26d2d199516e915da00f0cc6adc73 dmaengine: dw: dmamux: Introduce RZN1 DMA router support
+date:   2 weeks ago
+config: s390-randconfig-r007-20220604 (https://download.01.org/0day-ci/archive/20220604/202206042329.O1C6vwtx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=134d9c52fca26d2d199516e915da00f0cc6adc73
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 134d9c52fca26d2d199516e915da00f0cc6adc73
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/dma/dw/ lib/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-smatch warnings:
-arch/arm64/kvm/vmid.c:62 flush_context() warn: inconsistent indenting
+All warnings (new ones prefixed by >>):
 
-vim +62 arch/arm64/kvm/vmid.c
+   In file included from drivers/dma/dw/rzn1-dmamux.c:9:
+   In file included from include/linux/of_dma.h:14:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/dma/dw/rzn1-dmamux.c:9:
+   In file included from include/linux/of_dma.h:14:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/dma/dw/rzn1-dmamux.c:9:
+   In file included from include/linux/of_dma.h:14:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/dma/dw/rzn1-dmamux.c:105:34: warning: unused variable 'rzn1_dmac_match' [-Wunused-const-variable]
+   static const struct of_device_id rzn1_dmac_match[] = {
+                                    ^
+   13 warnings generated.
 
-417838392f2e65 Shameer Kolothum 2021-11-22  34  
-417838392f2e65 Shameer Kolothum 2021-11-22  35  #define vmid_gen_match(vmid) \
-417838392f2e65 Shameer Kolothum 2021-11-22  36  	(!(((vmid) ^ atomic64_read(&vmid_generation)) >> kvm_arm_vmid_bits))
-417838392f2e65 Shameer Kolothum 2021-11-22  37  
-417838392f2e65 Shameer Kolothum 2021-11-22  38  static void flush_context(void)
-417838392f2e65 Shameer Kolothum 2021-11-22  39  {
-417838392f2e65 Shameer Kolothum 2021-11-22  40  	int cpu;
-417838392f2e65 Shameer Kolothum 2021-11-22  41  	u64 vmid;
-417838392f2e65 Shameer Kolothum 2021-11-22  42  
-417838392f2e65 Shameer Kolothum 2021-11-22  43  	bitmap_clear(vmid_map, 0, NUM_USER_VMIDS);
-417838392f2e65 Shameer Kolothum 2021-11-22  44  
-417838392f2e65 Shameer Kolothum 2021-11-22  45  	for_each_possible_cpu(cpu) {
-417838392f2e65 Shameer Kolothum 2021-11-22  46  		vmid = atomic64_xchg_relaxed(&per_cpu(active_vmids, cpu), 0);
-417838392f2e65 Shameer Kolothum 2021-11-22  47  
-417838392f2e65 Shameer Kolothum 2021-11-22  48  		/* Preserve reserved VMID */
-417838392f2e65 Shameer Kolothum 2021-11-22  49  		if (vmid == 0)
-417838392f2e65 Shameer Kolothum 2021-11-22  50  			vmid = per_cpu(reserved_vmids, cpu);
-417838392f2e65 Shameer Kolothum 2021-11-22  51  		__set_bit(vmid2idx(vmid), vmid_map);
-417838392f2e65 Shameer Kolothum 2021-11-22  52  		per_cpu(reserved_vmids, cpu) = vmid;
-417838392f2e65 Shameer Kolothum 2021-11-22  53  	}
-417838392f2e65 Shameer Kolothum 2021-11-22  54  
-417838392f2e65 Shameer Kolothum 2021-11-22  55  	/*
-417838392f2e65 Shameer Kolothum 2021-11-22  56  	 * Unlike ASID allocator, we expect less frequent rollover in
-417838392f2e65 Shameer Kolothum 2021-11-22  57  	 * case of VMIDs. Hence, instead of marking the CPU as
-417838392f2e65 Shameer Kolothum 2021-11-22  58  	 * flush_pending and issuing a local context invalidation on
-417838392f2e65 Shameer Kolothum 2021-11-22  59  	 * the next context-switch, we broadcast TLB flush + I-cache
-417838392f2e65 Shameer Kolothum 2021-11-22  60  	 * invalidation over the inner shareable domain on rollover.
-417838392f2e65 Shameer Kolothum 2021-11-22  61  	 */
-417838392f2e65 Shameer Kolothum 2021-11-22 @62  	 kvm_call_hyp(__kvm_flush_vm_context);
-417838392f2e65 Shameer Kolothum 2021-11-22  63  }
-417838392f2e65 Shameer Kolothum 2021-11-22  64  
 
-:::::: The code at line 62 was first introduced by commit
-:::::: 417838392f2e657ee25cc30e373ff4c35a0faa90 KVM: arm64: Introduce a new VMID allocator for KVM
+vim +/rzn1_dmac_match +105 drivers/dma/dw/rzn1-dmamux.c
 
-:::::: TO: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-:::::: CC: Marc Zyngier <maz@kernel.org>
+   104	
+ > 105	static const struct of_device_id rzn1_dmac_match[] = {
+   106		{ .compatible = "renesas,rzn1-dma" },
+   107		{}
+   108	};
+   109	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03DD53D467
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2398953D49B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350343AbiFDBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S1350593AbiFDB1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 21:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350219AbiFDBYK (ORCPT
+        with ESMTP id S1350522AbiFDB05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:24:10 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DB4313BB
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:22:27 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id ob5-20020a17090b390500b001e2f03294a7so8044634pjb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:22:27 -0700 (PDT)
+        Fri, 3 Jun 2022 21:26:57 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB185EDF5
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:25:10 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y189so8327319pfy.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=JhO3Pfqpfwvl6Pg5WoaBIuDDbRoUFFPm/3/rKP0GHj0=;
-        b=Ewgk0zIl2X4eFMXV19jbpEsGXZP6HUvKFsmTBBQURf4xxkDLnN3y+nfGhL8TD5/HUm
-         Z9kQt98CuGzfgi0a52OIbLPgGgaZRKA4UdBv2Z/wpLG0/IapWCZwvP+O7qYR0QtHiVsr
-         z7WYayl9SH5XEg9H08w+ffaOlTTG4acKKbVF+vQFcS9ITPDPWJ/k9o8CPS1N3oTe/NtN
-         ns80BNtrZ4ZZ4jgyB43xntta8rLLHJnN3DftjSIvxTvnrJJxyZEalysDaneEUG/xN1fe
-         MBEvRkLJTrW/bHL5G7Gqb4dapyfW9j+ivFUsPKPVzm8HBVWMdw5+8ORfLlHwEMXQBL+D
-         IrZw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=H5GzO1GVZTXiX6PTnZ0maVWHXWhxKwJkxQUe242iFjg=;
+        b=IhocYC3qHy8EUVb5O0v/ELOjI6SsqyJxjKf/Vu8dLAiHITnBEkWby7B4+ZNGaEqDjZ
+         e/DBzSAm/IFgW10mDHfNUIwmrHI8YTpXqXdqGwbC32iHYtxJ4/0rn+5m8mzQ4vFbaBAw
+         oPGAiSYv+WCSjvluB4FT0nP11wfPhnUdLvrHu2zXZ3ohwNKcr4OljPj7JqbJFZe/okca
+         6FogBD7fWTBSaA1+Ld4DfHeJ1j1ald9nZ++kKpSSvAh0vIoYZ82LduuKRiCtLHM/Mb5/
+         R8sINUYQkO9mK/H10qcDYXe+OWlB5JHIDPkwrlNgeDNFhz0yjincgxl0VJMvJLh2QwjE
+         wiCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=JhO3Pfqpfwvl6Pg5WoaBIuDDbRoUFFPm/3/rKP0GHj0=;
-        b=KDuUyjTy7xH1bB8HlPEf+CUWRFwviI45bDokysWia/8Eg8Ri7MSAamwN2dLQm3o+rY
-         SMMFALGbDBgfcxHll8VmABOLSbitxHYTWxcaNEsERXjEzmjbwwQ/lpWNKfas75s5mUf/
-         P+xW6ZZOk5GF5GX9AwE5du1ClfEjU9H8Q1kc3ZZvWQRt1ov2cQr+VlmgGu6VSbpHBQ3Q
-         24cslMdm9IxVEYGIoAHW+pHx31e+ZZPwxa8cWCk6Z81BnZ59chWorQ3/2xYoPDDYQT+7
-         fhrxLTJ7ObBRtXIIX3mqmYeqHz+0tb4/zcu3TNhADwokdF+SVTSLsUA2xjGtGkypCNZN
-         3K4A==
-X-Gm-Message-State: AOAM531k1CBrTVGVqlHiTMJQon4IZaNpL/OIJdCPI7znpr75v0uGfPqY
-        cxqU5628BYTRZBBVrMbW3b/fNsu1E1Q=
-X-Google-Smtp-Source: ABdhPJxS2lZ7pIC8pnehjqv4quML9zflFji8IUQ+8TSateGizJ9gQSh2GlujdB+K0SgqNrmR1qE6j/TO4Gw=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:a517:b0:161:e5f2:9a26 with SMTP id
- s23-20020a170902a51700b00161e5f29a26mr12797900plq.132.1654305734883; Fri, 03
- Jun 2022 18:22:14 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  4 Jun 2022 01:20:58 +0000
-In-Reply-To: <20220604012058.1972195-1-seanjc@google.com>
-Message-Id: <20220604012058.1972195-43-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220604012058.1972195-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH 42/42] KVM: selftests: Drop unused SVM_CPUID_FUNC macro
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H5GzO1GVZTXiX6PTnZ0maVWHXWhxKwJkxQUe242iFjg=;
+        b=i2EFoyTjaXQzT58mat64FuvWUNdoR1yxnbxMw5rdmIDmVwx8xXo3grHnHZOGEh2WZZ
+         JXvjW7tWnEtVA+sMenhJs646JTc7VN+ubRI3HSEXSQxrRIZJkWg3/iVUP5bLJdGZmbEh
+         IpIB8ax9mHoEDqpfwbJwNdXBQsObsswpH7B30IxtN21ZIRhjFTTjDx31fhwn65nZsS24
+         WgGmYN7VMqTdkFlT3ouR2yoMlrJ9O0ucdY0oun3quSJ01sA/5nUCaJivXLcxvwzJaOvN
+         FBOm1GJjA/yAETT1I7UIQflY+OkxECE7Dna4dQ3xZ8FPzDuEnzSe/uz+QKMcGP9U+jTW
+         ZX9g==
+X-Gm-Message-State: AOAM532DqhWNpJVwW2ftpwHxv+p9V5DbiI9RFCplKCWYExRGyQtrALCM
+        C2bXCnsMiQmhuNSAcuV5c3S5Ig==
+X-Google-Smtp-Source: ABdhPJx1//CyJ20BJCZkSYLm20hSsC3pDU2Dr4uzutt5qYu615ZOTb8FPdNEj/A4wW+9CG7lFUBURw==
+X-Received: by 2002:a65:4bc5:0:b0:3da:ec0c:c5f2 with SMTP id p5-20020a654bc5000000b003daec0cc5f2mr11018632pgr.221.1654305884726;
+        Fri, 03 Jun 2022 18:24:44 -0700 (PDT)
+Received: from [10.4.187.25] ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id p17-20020a17090adf9100b001df2f8f0a45sm5983115pjv.1.2022.06.03.18.24.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jun 2022 18:24:44 -0700 (PDT)
+Message-ID: <68433856-6b7b-2e9e-6e86-77293da7453b@bytedance.com>
+Date:   Sat, 4 Jun 2022 09:24:38 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH] mm: memcontrol: separate {pgscan,pgsteal}_{kswapd,direct}
+ items in memory.stat of cgroup v2
+Content-Language: en-US
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20220603070423.10025-1-zhengqi.arch@bytedance.com>
+ <CALvZod6s8ss0Doe9y+X=3ZHvw0Ove9Lw3MdfKekXr0gVnJwA4w@mail.gmail.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CALvZod6s8ss0Doe9y+X=3ZHvw0Ove9Lw3MdfKekXr0gVnJwA4w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop SVM_CPUID_FUNC to reduce the probability of tests open coding CPUID
-checks instead of using kvm_cpu_has() or this_cpu_has().
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/include/x86_64/svm.h | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm.h b/tools/testing/selftests/kvm/include/x86_64/svm.h
-index 2225e5077350..c8343ff84f7f 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm.h
-@@ -218,8 +218,6 @@ struct __attribute__ ((__packed__)) vmcb {
- 	struct vmcb_save_area save;
- };
- 
--#define SVM_CPUID_FUNC 0x8000000a
--
- #define SVM_VM_CR_SVM_DISABLE 4
- 
- #define SVM_SELECTOR_S_SHIFT 4
--- 
-2.36.1.255.ge46751e96f-goog
+On 2022/6/4 8:47 AM, Shakeel Butt wrote:
+> On Fri, Jun 3, 2022 at 12:06 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>
+> [...]
+>>
+>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+>> index 176298f2f4de..0b9ca7e7df34 100644
+>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>> @@ -1442,11 +1442,17 @@ PAGE_SIZE multiple when read back.
+>>            pgrefill (npn)
+>>                  Amount of scanned pages (in an active LRU list)
+>>
+>> -         pgscan (npn)
+>> -               Amount of scanned pages (in an inactive LRU list)
+>> +         pgscan_kswapd (npn)
+>> +               Amount of scanned pages by kswapd (in an inactive LRU list)
+>>
+>> -         pgsteal (npn)
+>> -               Amount of reclaimed pages
+>> +         pgscan_direct (npn)
+>> +               Amount of scanned pages directly  (in an inactive LRU list)
+>> +
+>> +         pgsteal_kswapd (npn)
+>> +               Amount of reclaimed pages by kswapd
+>> +
+>> +         pgsteal_direct (npn)
+>> +               Amount of reclaimed pages directly
+> 
+> No objection to adding new fields but removing 'pgsteal' and 'pgscan'
+> from the user visible API might break some applications.
 
+Oh, got it. So do we need to keep pgscan and pgsteal fields? If it is, I
+can add it back in patch v2.
+
+Thanks,
+Qi

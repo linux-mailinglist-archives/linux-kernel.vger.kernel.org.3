@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3D653D45C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB07253D487
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350273AbiFDBXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S1350246AbiFDBX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 21:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350143AbiFDBWU (ORCPT
+        with ESMTP id S1346233AbiFDBWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:22:20 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8310FE94
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:21:51 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id e19-20020aa79813000000b0051bba91468eso4107507pfl.14
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:21:51 -0700 (PDT)
+        Fri, 3 Jun 2022 21:22:33 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC46B1C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:21:53 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id q13-20020a65624d000000b003fa74c57243so4559900pgv.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=J6Ssq79acMaaHSiEP1fKlZ6/Du4B3+2P34aFf+DVOyk=;
-        b=eup/4YoWpFBQgsbyvL1RBm8gYMRPBqN+mF0/+t4VR2laZgangtnClvcdqtTRowypVr
-         5c3cbSP2WyGJywo2s+yVZuxL3L91zt5jXe+LXYYy2Yowe0ecDXX8BywnX7AVtRbscRyG
-         n4hqpT3RHXllPMeQA00uprQ6g6Hrc95RgIqnLsAGEVMBBG06DRH0xApUNuhiK5sLB/Mi
-         PylsbDEA9MvzZXrb1yud6cW9BoRILBQLWD28SDXb1aOEo5ibwTexiY/zpkkt9xE/vKj/
-         F5JSg859sheEtk1OwrJiFn1FwXqgd20bkMCB9kKLqQ+12lJid+ts0lx94jRTV6i/BC4D
-         a4Tw==
+        bh=fEtaJeNPMLGJ/eGkpGlOpofTkW2QGNDDuGU/ZlXwm9s=;
+        b=PWUuQyFQ0cb3xfkqq4zlJ7Oad3BKjmzjKlg31Ey4NS/AnNeLSb3E8qehZAMYcH7XCY
+         74xj8JWZPd0FH4w+79Mxohjo9stx9NZNG9QDok8L7RpnBOS0wBks6cEkHCNIflkEB6+4
+         82DfnKCLW490G/Gk9UAE0spgsnxs0vfNZ2QxUF5UfGMUUTxMxigCTC6rx2xbrgchNkN6
+         rM1GkVmZKVUQ5/nQCXKLQ+OhgSCHschbjC+BZ2O8YQDn4dhv6guu/DxjZsFIY+MDgF0L
+         liIOYoHqZC+fDXAUcC3xGQaQTemTWN7IgS9Vj1i4+05psSeGqAymYJG2329//7OTh0EO
+         QOgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=J6Ssq79acMaaHSiEP1fKlZ6/Du4B3+2P34aFf+DVOyk=;
-        b=SWIdYPEkm0LJ6AZBfxbGxBJ63AT364a6lWGLRWriOMNnpDgetE001qnT78pToBywkk
-         fJpaZnZ6YFaffDQkxKQzDDxJ9oDf7bE4uYNgKoC+OspfCN0/qy9mo0JElVjuImgCloDd
-         zVGre2VVG1GyiczdytVVQWVMxJ72Nsm22upvS+++0BnNBAnX639naEw/MOI37FJ9r68M
-         xVL5sLdc1hOMlTbG6gR2EP8iW4PwJRw5cA4TQXkHHXcSlfvRWMb2CvSmPTKvptlfW/rO
-         ky+rJ1jLO/zgmKQ10X94qUdwVPttM9xVkmm+iAGb44WskSq3wemyfJq1h8edGTYeU/+A
-         qA0Q==
-X-Gm-Message-State: AOAM531EAkflQz4931UJR1QXZs35CRnfAHbYKCXIKt0DRX4Qrn58mR1t
-        GbQ1Y8Pnj1nS6oi5s5AF+lwfDJcBIoM=
-X-Google-Smtp-Source: ABdhPJzzsQjp/JmEChEQM0LBdDCcCp5vkf2dT8tnLgc2Dk3PG4pSi3SprpNSLj/fr4U88iACAb5HqK4LwQQ=
+        bh=fEtaJeNPMLGJ/eGkpGlOpofTkW2QGNDDuGU/ZlXwm9s=;
+        b=r/ExJcjxu8zm+0AP1TgqL0D7srFFVapX1fBozGm4ekcWpXJsl2aXtrA15SDSWxyKN+
+         OwNwyGM7+RAB1WDuZKSyDAn1VW1y3VQe6/V0T+f7TZZtHq+o6LIal8h/yAKKVhaBtuPD
+         gIH5avs7mJZ/nQy0u4WFHOw3Y9mUjlZiSBcTvknEBK437qhpinyUg2m5C+pSVwog6te1
+         u8csvSk2kVvmkgkGsk7LzbnlpgJtiH43t3GfXWvxk73+XBmK0lRTLaBpOyGLM/N5RXgk
+         cDsgauy81gN75Il/XTft81+HrubtPnMqCsSo+Q81HX/CguBuoQVrW4GuXgM6qEBRf8AK
+         IlGw==
+X-Gm-Message-State: AOAM531A04lfL71P4GDbYFc4o83HJ4A5XBRP9Gvpg7jZ2FXnV9XUP3q+
+        eDlHMhZfuIju6RbOH3tXf3iZTZIm9vU=
+X-Google-Smtp-Source: ABdhPJw7a5VWey3nupaM34wl9wZIoJpZ3nkG6SpJ2KXXyR7kAHtXZyRbej3UxyVdSXlQ3l687VNltPilckU=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:319b:b0:51b:c5ec:62ba with SMTP id
- bj27-20020a056a00319b00b0051bc5ec62bamr11398270pfb.1.1654305698761; Fri, 03
- Jun 2022 18:21:38 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:b58c:b0:163:920c:6164 with SMTP id
+ a12-20020a170902b58c00b00163920c6164mr12927685pls.58.1654305700533; Fri, 03
+ Jun 2022 18:21:40 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  4 Jun 2022 01:20:38 +0000
+Date:   Sat,  4 Jun 2022 01:20:39 +0000
 In-Reply-To: <20220604012058.1972195-1-seanjc@google.com>
-Message-Id: <20220604012058.1972195-23-seanjc@google.com>
+Message-Id: <20220604012058.1972195-24-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220604012058.1972195-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH 22/42] KVM: selftests: Add helpers to get and modify a vCPU's
- CPUID entries
+Subject: [PATCH 23/42] KVM: selftests: Use vm->pa_bits to generate reserved PA bits
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -71,95 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add helpers to get a specific CPUID entry for a given vCPU, and to toggle
-a specific CPUID-based feature for a vCPU.  The helpers will reduce the
-amount of boilerplate code needed to tweak a vCPU's CPUID model, improve
-code clarity, and most importantly move tests away from modifying the
-static "cpuid" returned by kvm_get_supported_cpuid().
+Use vm->pa_bits to generate the mask of physical address bits that are
+reserved in page table entries.  vm->pa_bits is set when the VM is
+created, i.e. it's guaranteed to be valid when populating page tables.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  | 30 +++++++++++++++++++
- .../selftests/kvm/lib/x86_64/processor.c      | 18 +++++++++++
- 2 files changed, 48 insertions(+)
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e43a1d2fd112..61b8047243e0 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -620,6 +620,19 @@ struct kvm_cpuid_entry2 *get_cpuid_entry(struct kvm_cpuid2 *cpuid,
- 					 uint32_t function, uint32_t index);
- void vcpu_init_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid);
- 
-+static inline struct kvm_cpuid_entry2 *__vcpu_get_cpuid_entry(struct kvm_vcpu *vcpu,
-+							      uint32_t function,
-+							      uint32_t index)
-+{
-+	return get_cpuid_entry(vcpu->cpuid, function, index);
-+}
-+
-+static inline struct kvm_cpuid_entry2 *vcpu_get_cpuid_entry(struct kvm_vcpu *vcpu,
-+							    uint32_t function)
-+{
-+	return __vcpu_get_cpuid_entry(vcpu, function, 0);
-+}
-+
- static inline int __vcpu_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	int r;
-@@ -643,6 +656,23 @@ static inline void vcpu_set_cpuid(struct kvm_vcpu *vcpu)
- 	vcpu_ioctl(vcpu, KVM_GET_CPUID2, vcpu->cpuid);
- }
- 
-+void vcpu_set_or_clear_cpuid_feature(struct kvm_vcpu *vcpu,
-+				     struct kvm_x86_cpu_feature feature,
-+				     bool set);
-+
-+static inline void vcpu_set_cpuid_feature(struct kvm_vcpu *vcpu,
-+					  struct kvm_x86_cpu_feature feature)
-+{
-+	vcpu_set_or_clear_cpuid_feature(vcpu, feature, true);
-+
-+}
-+
-+static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
-+					    struct kvm_x86_cpu_feature feature)
-+{
-+	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
-+}
-+
- static inline struct kvm_cpuid_entry2 *kvm_get_supported_cpuid_index(uint32_t function,
- 								     uint32_t index)
- {
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index a835a63a6924..6c21893f5038 100644
+index 6c21893f5038..5383ccdeb8e2 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -767,6 +767,24 @@ void vcpu_init_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid)
- 	vcpu_set_cpuid(vcpu);
- }
+@@ -222,16 +222,12 @@ static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm,
+ 	uint16_t index[4];
+ 	uint64_t *pml4e, *pdpe, *pde;
+ 	uint64_t *pte;
+-	struct kvm_cpuid_entry2 *entry;
+ 	struct kvm_sregs sregs;
+-	int max_phy_addr;
+ 	uint64_t rsvd_mask = 0;
  
-+void vcpu_set_or_clear_cpuid_feature(struct kvm_vcpu *vcpu,
-+				     struct kvm_x86_cpu_feature feature,
-+				     bool set)
-+{
-+	struct kvm_cpuid_entry2 *entry;
-+	u32 *reg;
-+
-+	entry = __vcpu_get_cpuid_entry(vcpu, feature.function, feature.index);
-+	reg = (&entry->eax) + feature.reg;
-+
-+	if (set)
-+		*reg |= BIT(feature.bit);
-+	else
-+		*reg &= ~BIT(feature.bit);
-+
-+	vcpu_set_cpuid(vcpu);
-+}
-+
- uint64_t vcpu_get_msr(struct kvm_vcpu *vcpu, uint64_t msr_index)
- {
- 	struct {
+-	entry = kvm_get_supported_cpuid_index(0x80000008, 0);
+-	max_phy_addr = entry->eax & 0x000000ff;
+ 	/* Set the high bits in the reserved mask. */
+-	if (max_phy_addr < 52)
+-		rsvd_mask = GENMASK_ULL(51, max_phy_addr);
++	if (vm->pa_bits < 52)
++		rsvd_mask = GENMASK_ULL(51, vm->pa_bits);
+ 
+ 	/*
+ 	 * SDM vol 3, fig 4-11 "Formats of CR3 and Paging-Structure Entries
 -- 
 2.36.1.255.ge46751e96f-goog
 

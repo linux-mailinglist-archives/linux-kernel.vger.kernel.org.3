@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2D853D6D6
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E9953D6D9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242066AbiFDMnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 08:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S1343670AbiFDMse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 08:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiFDMnK (ORCPT
+        with ESMTP id S241052AbiFDMsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 08:43:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E42733A0B
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 05:43:07 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nxT7R-0008Cq-IP; Sat, 04 Jun 2022 14:43:05 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AED6B8C339;
-        Sat,  4 Jun 2022 12:43:04 +0000 (UTC)
-Date:   Sat, 4 Jun 2022 14:43:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v4 2/7] can: Kconfig: turn menu "CAN Device Drivers" into
- a menuconfig using CAN_DEV
-Message-ID: <20220604124304.ds5eyjnxxvcl543l@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-3-mailhol.vincent@wanadoo.fr>
- <20220604112707.z4zjdjydqy5rkyfe@pengutronix.de>
- <CAMZ6RqLRf=oyo0HXDSBAMD=Ce-RxtgO=TrhT5Xf1sqR6jWDoCQ@mail.gmail.com>
+        Sat, 4 Jun 2022 08:48:32 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAEE13E26;
+        Sat,  4 Jun 2022 05:48:30 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id h62-20020a1c2141000000b0039aa4d054e2so7641306wmh.1;
+        Sat, 04 Jun 2022 05:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FT4Cd+a8+jP/EJNQPVo+DOM5srAD8mdWD/mrdPcxuWw=;
+        b=N40RpNarN4+k4sSIW0/MdCWbXVPlm+gn0+cgl1X6Mz7LS/KhV/i4iiOsj8WxtcfJZh
+         o5QMLWy2CitCm2mpHYPdkHwVUgExJcgIlLibaXfrVnv/7DONVzXtmBaCuZSMdvqevud2
+         go/DX4ogPs6vf9gtjg65llaIJ/1YhM0CC1T1ntcWhnGA2O9ercjQaSel2gtAmBuc6oQ2
+         MBs1vMQmdiiiKEUHP+j3u1jiGKcOd1BQDX72qM5q8zAU+P/63BCIxJdOWYt3ZB2UposL
+         G6DVdyPRmZJlbRShpFlgYZNcfq/h2M94jsQjWxigniUjeiCPbQPn4oBWYGERR3n6sxgZ
+         AJQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FT4Cd+a8+jP/EJNQPVo+DOM5srAD8mdWD/mrdPcxuWw=;
+        b=jUEo63AuvimaCn+mrdqVrHdzyZsin7xTi5HPRmQBbvSob9+hPKMquBHXTeeaACYfz3
+         c4DTDce0KcnTzlCRzlA45mYL1ZXH0bTQ/8nNgVs6CQZYm1dlwFUr9dmvYSf62nuccB12
+         6ED1+fIr+37cpwGPIE/bZaCCJdKGC0vkMl2l8r3tlSdI9gdrL+ODy3GK7sYXTaORZbvt
+         iHwruaQSoOzHkdPnXcTja0P5ELLLXH2nXCRAxHgL4dxRvzUnGKd9WNWO/ZYNzVXgdjUf
+         RVL9sL5ouRLOpvIgsYDqBTrfbeNTKWObkL/Sma7it0HRoLEBdMBnjVT4X7aXB/eXryZK
+         OHUg==
+X-Gm-Message-State: AOAM533lhb7+LlKGIZkS4XY6/yQGi4ADWLg8J3G0sVudqOFuDdLZUZvQ
+        tahFVFxelMFi7WDDVFYwjU0=
+X-Google-Smtp-Source: ABdhPJzXVJcRvW5y1lNkSG5jGEJNzbExZGAM4//1B5UTs4FTmuaJGt39nKaXCWgTOyKEDAjBIrtcUA==
+X-Received: by 2002:a05:600c:3c91:b0:39b:6b:d5de with SMTP id bg17-20020a05600c3c9100b0039b006bd5demr31170539wmb.132.1654346909166;
+        Sat, 04 Jun 2022 05:48:29 -0700 (PDT)
+Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
+        by smtp.gmail.com with ESMTPSA id l2-20020a05600c4f0200b0039c46fed88dsm1862639wmq.16.2022.06.04.05.48.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 05:48:28 -0700 (PDT)
+Date:   Sat, 4 Jun 2022 13:48:26 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 00/75] 5.17.13-rc1 review
+Message-ID: <YptUmswlsSZirDv6@debian>
+References: <20220603173821.749019262@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kiq4zve2baid4qzh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLRf=oyo0HXDSBAMD=Ce-RxtgO=TrhT5Xf1sqR6jWDoCQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
---kiq4zve2baid4qzh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jun 03, 2022 at 07:42:44PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.13 release.
+> There are 75 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
 
-On 04.06.2022 21:30:57, Vincent MAILHOL wrote:
-> > > diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makef=
-ile
-> > > index 5b4c813c6222..919f87e36eed 100644
-> > > --- a/drivers/net/can/dev/Makefile
-> > > +++ b/drivers/net/can/dev/Makefile
-> > > @@ -1,9 +1,11 @@
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > >
-> > > -obj-$(CONFIG_CAN_NETLINK) +=3D can-dev.o
-> > > +obj-$(CONFIG_CAN_DEV) +=3D can-dev.o
-> >        ^^^^^^^^^^^^^^^^^^^^^
-> >
-> > Nitpick: I think you can directly use "y" here.
->=20
-> I see. So the idea would be that if we deselect CONFIG_CAN_DEV, then
-> despite of can-dev.o being always "yes", it would be empty and thus
-> ignored.
+Build test:
+mips (gcc version 11.3.1 20220531): 60 configs -> no failure
+arm (gcc version 11.3.1 20220531): 99 configs -> no failure
+arm64 (gcc version 11.3.1 20220531): 3 configs -> no failure
+x86_64 (gcc version 11.3.1 20220531): 4 configs -> no failure
 
-ACK
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
-Marc
+[1]. https://openqa.qa.codethink.co.uk/tests/1263
+[2]. https://openqa.qa.codethink.co.uk/tests/1272
+[3]. https://openqa.qa.codethink.co.uk/tests/1270
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
---kiq4zve2baid4qzh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbU1UACgkQrX5LkNig
-012j/gf9H0jLCIOgNudqg9EpeJUg9kt6kqe7g1xpRxAmbPs8FgERZXZrf4cvRKao
-cYepV5pZX9vy4+sH/EoAjzmJLz9Z5Undty0301Ejetfjqv5C6C7h2vVOpBism5t5
-ZvTneDkQaGdL3roPHEvrgPUhprfhMP7VqMx7uRTGBykBmdvko6xWiXDm8U97MbML
-+dfSfFdxC/pI7RBnebeLSiiq3GAOr5ueXpqBBjtkjQFzweHhsLDRnoOsolUMqwkW
-sWFC4I7UIds8iUyJRb2eM0uOvyMEVmuo/x4SKr0jLCpwcBOaUwRPYoMeEdpmUvaM
-a5r5QbscSEDe4v6gnp8KCZzLwjiTew==
-=Mc5r
------END PGP SIGNATURE-----
-
---kiq4zve2baid4qzh--
+--
+Regards
+Sudip

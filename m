@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4F553D894
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 22:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EB753D890
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 22:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241693AbiFDU7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 16:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S241548AbiFDU5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 16:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241736AbiFDU7H (ORCPT
+        with ESMTP id S231502AbiFDU5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 16:59:07 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BDD2DD7D
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 13:59:06 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id me5so21516185ejb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 13:59:05 -0700 (PDT)
+        Sat, 4 Jun 2022 16:57:46 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C711408B;
+        Sat,  4 Jun 2022 13:57:44 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id y29so11922053ljd.7;
+        Sat, 04 Jun 2022 13:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cbrEQUB+Zyw7O+8amBfM3+EQ1xFJmvp6idV/N1yDO5Q=;
-        b=DR6JLQBUlW6TeFrHbPNTHjl/bNSSCqd/TvAHeTrBSGSTdjt2PGWP1jVWpZeyjx8cfd
-         AkBcoT49q87tGoi2VkRcbKs4iL+cRMb0cleRuWrgkIJ+RWSaC3CouP74nuwQa9OsPW4P
-         OoLeajQHAxqfI4yromeBb40f78dyRk+QlG4Ak=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=Mjaa1gmx+OGviIUuZZFZ8twv+6L+3H6yheyEOcviWp4=;
+        b=NCONz+xeNP9xsKjr6JeYhXC+M/FcZ/aCzBLntTyLtwpdKBrweqrDS51emhQX1shQKA
+         0E8kkKJRjyxOXmGrkLTdXwynpI4aNrEmhSMvqEEg/T4bflHAu4zpdwGap3wPBBX3GCwg
+         nPCssSi/bfiOpk8FURXhBV/w6tvQkHh+XA+YAZB2rR0zeT6dBVveyc8k7M97Kkzdvsbw
+         dqGgoXoovhPU+QCutNaJtdxFMYtjE0tVcEUUATRiK5SzTpNTbBSREOxbvOJt+JEi7FkF
+         gV+NuQx8/TxprQyLMi3kW83Sm1o/2JbQNr6pxCIbq0noTP/Z0UOIdQ0lEky1va8RDoPU
+         IjAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cbrEQUB+Zyw7O+8amBfM3+EQ1xFJmvp6idV/N1yDO5Q=;
-        b=3A7uZojVZuA9Buf/lqCexagYD8nWVwp7Y5W90muR1Yink/u80ng9XrJCXwTJlqR25M
-         gbaJIGDQv5dW/6cZB59rGCwNIi13ubUP5KvUqBWZp8dmzFGFP6mqjqt5aZnW1DDQGlSz
-         97gnlkoEb8aLgb1oQALXGHvzy9fUdbFFFWSdOpQpxTuAgrDmQnnazw/iD9nuAgIKNl/t
-         P4BzaGtMuuu7csHdvbq42cnHmRKH9ykZGJ2kiSvOdveZZUlewyzfZzNNjx9VwoDpra2r
-         8bsiIEEtv/WaHat+VxqX6d5WYgJ5SEKoOfB423u3fZqK0mxr/xjpQil1E/lq86BndZBI
-         twoA==
-X-Gm-Message-State: AOAM533+xXNBODtrf9thDZUISwjmK1dslmwK5Ti58gu4il8yWMbrdHAE
-        rs9dfJzkgc5SadRwvNJddBzGlIcSXAMZJpEj
-X-Google-Smtp-Source: ABdhPJxFBq9zGOHbeS0dc7fnfmz68PEQO+rIb0Fy/lgIZWmIPlqrjss7s6nZgk1vGhNbrXWhHOQQUQ==
-X-Received: by 2002:a17:907:1b07:b0:6fe:2cbc:15c5 with SMTP id mp7-20020a1709071b0700b006fe2cbc15c5mr14492275ejc.677.1654376344135;
-        Sat, 04 Jun 2022 13:59:04 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id d7-20020a056402400700b0042e15364d14sm4163757eda.8.2022.06.04.13.59.03
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Mjaa1gmx+OGviIUuZZFZ8twv+6L+3H6yheyEOcviWp4=;
+        b=Y2AuxQJEqTEn1iQ4TXaGl1fKH6YJ6QPmPziAUVdH3iXGihx5LUVs7d6t2UQ1JrPQag
+         20XFSzm28iVLIdOJmaFqQv99H9JDl+9fGLvGV/a2xveNhxUdyjJe9YMpdHR6mjYoiqcl
+         q1iF7xlZfjsmpzliUtW5t9pT9Gg8cmJ2Grg+qdxyLbO4VDJwRXYC3u+Bt7D1xCWrxGje
+         t3bSf0co77BlA/XG92Xi/5eDZvPy8V8sDaiuQZoahfuSiJSO9XdvMpVfvrFRI3yuVJaK
+         aR/xvUvh1OFy9OUQAta6CsBLMfNEE6S3JMBhITyh82lm7lTUZGxImp5aMyBc+6ZDgO5v
+         Eaww==
+X-Gm-Message-State: AOAM5303HFz363o5oDQvxzltyU9PFwSjwcEJMvmcav5FXV4MXu4HSkyU
+        YqK5GCa/y7lWWbYnwP3OqDU=
+X-Google-Smtp-Source: ABdhPJw3/kwLRVwOi4fb5ytfXb6Nt+ODldVUt3ffDj0jfNdYm9CGAy5xJ61snt90MKXBO04UoYDUTw==
+X-Received: by 2002:a2e:8081:0:b0:253:ce61:3c66 with SMTP id i1-20020a2e8081000000b00253ce613c66mr48707841ljg.98.1654376263155;
+        Sat, 04 Jun 2022 13:57:43 -0700 (PDT)
+Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
+        by smtp.gmail.com with ESMTPSA id k18-20020a192d12000000b0047920d89606sm614250lfj.187.2022.06.04.13.57.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Jun 2022 13:59:03 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id u3so14727133wrg.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 13:59:03 -0700 (PDT)
-X-Received: by 2002:a5d:6da6:0:b0:20f:bc8a:9400 with SMTP id
- u6-20020a5d6da6000000b0020fbc8a9400mr13992817wrs.274.1654376342801; Sat, 04
- Jun 2022 13:59:02 -0700 (PDT)
+        Sat, 04 Jun 2022 13:57:42 -0700 (PDT)
+Message-ID: <a3a99b6a-70c7-5b6b-718f-44c4d957cdda@gmail.com>
+Date:   Sat, 4 Jun 2022 23:59:02 +0300
 MIME-Version: 1.0
-References: <Ypt1N+GyXEMfAxR6@p100>
-In-Reply-To: <Ypt1N+GyXEMfAxR6@p100>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 4 Jun 2022 13:58:46 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wihXTsW_gkx=OdZf38MynCrmpe1P1EBnACH9PK7ggrdBg@mail.gmail.com>
-Message-ID: <CAHk-=wihXTsW_gkx=OdZf38MynCrmpe1P1EBnACH9PK7ggrdBg@mail.gmail.com>
-Subject: Re: [GIT PULL] more parisc architecture fixes/updates for v5.19-rc1
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>,
-        Mikulas Patocka <mpatocka@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>, dave.jiang@intel.com,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220601110013.55366-1-linmq006@gmail.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH v2] dmaengine: ti: Add missing put_device in
+ ti_dra7_xbar_route_allocate
+In-Reply-To: <20220601110013.55366-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 4, 2022 at 8:07 AM Helge Deller <deller@gmx.de> wrote:
->
-> Mikulas noticed that his C8000 workstation hangs at bootup with v5.18 if
-> CONFIG_SCHED_MC is enabled.  His fix rearranges the topology setup and thus
-> prevents the problem.
->
-> The other two patches enhance the info from the STI (text) console driver and
-> add the missing fb_is_primary_device() function which helps the framebuffer
-> driver to detect the primary STIfb framebuffer.
 
-Sorry I messed up - I ended up taking only your abbreviated
-explanation from the tag for the merge commit message, not this
-extended explanation in the pull request email.
 
-Normally I notice and fix this up, but this time I only noticed after
-I had already pushed out the end result.
+On 01/06/2022 14:00, Miaoqian Lin wrote:
+> of_find_device_by_node() takes reference, we should use put_device()
+> to release it when not need anymore.
 
-So now my merge has a correct message, but not as complete as it
-should have been.
+adding a new label and using goto would be another option or even better?
 
-            Linus
+> Fixes: a074ae38f859 ("dmaengine: Add driver for TI DMA crossbar on DRA7x")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+> changes in v2:
+> - split v1 into two patches.
+> v1 link:
+> https://lore.kernel.org/r/20220512051815.11946-1-linmq006@gmail.com
+> ---
+>  drivers/dma/ti/dma-crossbar.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/dma/ti/dma-crossbar.c b/drivers/dma/ti/dma-crossbar.c
+> index 71d24fc07c00..06da13b18a7b 100644
+> --- a/drivers/dma/ti/dma-crossbar.c
+> +++ b/drivers/dma/ti/dma-crossbar.c
+> @@ -245,6 +245,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+>  	if (dma_spec->args[0] >= xbar->xbar_requests) {
+>  		dev_err(&pdev->dev, "Invalid XBAR request number: %d\n",
+>  			dma_spec->args[0]);
+> +		put_device(&pdev->dev);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> @@ -252,12 +253,14 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+>  	dma_spec->np = of_parse_phandle(ofdma->of_node, "dma-masters", 0);
+>  	if (!dma_spec->np) {
+>  		dev_err(&pdev->dev, "Can't get DMA master\n");
+> +		put_device(&pdev->dev);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	map = kzalloc(sizeof(*map), GFP_KERNEL);
+>  	if (!map) {
+>  		of_node_put(dma_spec->np);
+> +		put_device(&pdev->dev);
+>  		return ERR_PTR(-ENOMEM);
+>  	}
+>  
+> @@ -268,6 +271,7 @@ static void *ti_dra7_xbar_route_allocate(struct of_phandle_args *dma_spec,
+>  		mutex_unlock(&xbar->mutex);
+>  		dev_err(&pdev->dev, "Run out of free DMA requests\n");
+>  		kfree(map);
+> +		put_device(&pdev->dev);
+
+this will not apply with the other patch going separately...
+Can you send a two patch series?
+While there, I would check if labels+goto would look better?
+
+Thanks for finding these and fixing it!
+
+>  		return ERR_PTR(-ENOMEM);
+>  	}
+>  	set_bit(map->xbar_out, xbar->dma_inuse);
+
+-- 
+Péter

@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A4D53D8A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46EE53D8A4
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242038AbiFDVfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 17:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
+        id S242061AbiFDVkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 17:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239132AbiFDVe5 (ORCPT
+        with ESMTP id S232340AbiFDVkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 17:34:57 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038E7193CA;
-        Sat,  4 Jun 2022 14:34:55 -0700 (PDT)
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 254LYYqu008895;
-        Sun, 5 Jun 2022 06:34:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 254LYYqu008895
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654378475;
-        bh=IpVg/6Qws8WGuU81larsHNdjCKY06mUkL/iICPp7YQk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AAosMuX15O0jCfMFAPDbwmsmq6M6A5TcYTPjiQVqVET4fppFS+FCvVIsuaYk7oGiR
-         BY6EuwGEbxLTbF2UFZILII0+jguDw+9iU/TgsJbMaR/9eGkefuCoFOC60Hxv1ZwtFF
-         NyOv107qT5FqFBwvi6EPU+BL1mjyW7iaSG8WPMxh4dYQ3/0XdjTRFavuNWNhxtaqQo
-         j6sia3X4keFDKnDfITI5U9q2SbTZ4d1rwUL2yk2VFBz4lQE7Aosy9LSMa0DWaSbAyv
-         hCUWCElvIG/Te15FOvImtVjq51JrY8FISsoEfjxJmxbOCUvmFmRIImlKxSw0LDohVs
-         dWuChmeso5icQ==
-X-Nifty-SrcIP: [209.85.216.41]
-Received: by mail-pj1-f41.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so14775305pjl.4;
-        Sat, 04 Jun 2022 14:34:34 -0700 (PDT)
-X-Gm-Message-State: AOAM531zPxBV3lpP2hgBMs8nyDi8H7tYHOH2n3XR4vHtscZg5CnQkvQA
-        DTQX/1ZekmujMjYhSQg5GltHyuJKpAwkwx/qg7g=
-X-Google-Smtp-Source: ABdhPJx8iNilm38SygiNhAU8B7xrjDK8QNC/9WFnm618RkCoBkgLxcGXizJBXyUCTbzyPYtRAFsv8hjFkBrFW95BEY4=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr16529178plh.99.1654378474015; Sat, 04
- Jun 2022 14:34:34 -0700 (PDT)
+        Sat, 4 Jun 2022 17:40:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728EA22292;
+        Sat,  4 Jun 2022 14:40:07 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8416F6D4;
+        Sat,  4 Jun 2022 23:40:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1654378804;
+        bh=u2g4RQI6otMc6+/Eb8lBzry0VC0TwPROt30ekEuQdK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z4zYNyqFWG8xiseIfzX0ccj7usIKSimNwggl78cF6emCiSFrR8t2I+s37+Rae2ieT
+         b3y11nYKrP1N7TRJyjbVXWIzM73nPHQdU8L/EWqsQO+es3ur3ZPnLcZxsgNb7Mg7GP
+         gx5SMKxY6VICwQc1FuOQ9+x/+d54gu8L42iyplGw=
+Date:   Sun, 5 Jun 2022 00:39:59 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, abel.vesa@nxp.com,
+        abailon@baylibre.com, l.stach@pengutronix.de, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 1/8] dt-bindings: soc: imx: add interconnect property for
+ i.MX8MP media blk ctrl
+Message-ID: <YpvRL4d2Sh9hvVMl@pendragon.ideasonboard.com>
+References: <20220601094537.3390127-1-peng.fan@oss.nxp.com>
+ <20220601094537.3390127-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-References: <CAK7LNATHyNjCaK+agk=DOTR8sPaOP9kBvS_xYaBUHfF+5Fzftg@mail.gmail.com>
- <CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 5 Jun 2022 06:33:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATmd0bigp7HQ4fTzHw5ugZMkSb3UXG7L4fxpGbqkRKESA@mail.gmail.com>
-Message-ID: <CAK7LNATmd0bigp7HQ4fTzHw5ugZMkSb3UXG7L4fxpGbqkRKESA@mail.gmail.com>
-Subject: Re: [GIT PULL] More Kbuild updates for v5.19-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220601094537.3390127-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 5:25 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Jun 3, 2022 at 9:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> >  - Fix modpost to detect EXPORT_SYMBOL marked as __init or__exit
-> >    (This uncovered a couple of potential issues of exported symbols)
->
-> I pulled, and then unpulled again, since this introduces new warnings.
->
-> If you introduce new checks, you fix what it checks.
->
-> And if the warnings didn't get sorted out, then it wasn't ready to be merged.
->
-> There's a  good *reason* I require a clean build: non-clean builds
-> just mean that people will ignore new warnings because they think they
-> are the old ones that they have already seen.
->
-> So no, it is *NOT* ok to introduce new warnings and think "people will
-> fix these up because now there are warnings about it".
->
-> Quite the reverse. People not only *won't* fix things up, and it will
-> just hide new warnings from *other* things instead.
->
->                    Linus
+Hi Peng,
 
+Thank you for the patch.
 
-OK, I will drop the offending commit
-and send v2.
+On Wed, Jun 01, 2022 at 05:45:30PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add interconnect property for i.MX8MP mediamix blk ctrl
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml         | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yaml
+> index 21d3ee486295..706bef39b87e 100644
+> --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yaml
+> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-media-blk-ctrl.yaml
+> @@ -64,6 +64,20 @@ properties:
+>        - const: isp
+>        - const: phy
+>  
+> +  interconnects:
+> +    maxItems: 8
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: lcdif-rd
+> +      - const: lcdif-wr
+> +      - const: isi0
+> +      - const: isi1
+> +      - const: isi2
 
+If I understand correctly, these are for the 1x RD and 2x WR channels of
+the ISI. Would it make sense to name thim accordingly, maybe isi-rd,
+isi-wr0 and isi-wr1 ? I'm not sure about the order though.
+
+> +      - const: isp0
+> +      - const: isp1
+> +      - const: dwe
+> +
+>  required:
+>    - compatible
+>    - reg
 
 -- 
-Best Regards
-Masahiro Yamada
+Regards,
+
+Laurent Pinchart

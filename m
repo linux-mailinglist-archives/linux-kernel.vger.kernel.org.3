@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C169653D8A0
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A4D53D8A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241990AbiFDVaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 17:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S242038AbiFDVfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 17:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239132AbiFDV34 (ORCPT
+        with ESMTP id S239132AbiFDVe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 17:29:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF48D10D
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 14:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654378195; x=1685914195;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gFNxvLYNZl1TZ2AZycae92kk6hqpmzLDuFh7sQB7liU=;
-  b=MsUSTn5O8sJHG4KifG/TcvAJAMx3Fngh+N7637NYjL6DKF9khNMKYYQp
-   V49LXmBysYvgTrZFVKDft7TKFef3TGM0oA4GQKnM6iDpOWZd+YZ411hWl
-   z44oFYDa2O0xiU4kE0NSfjXzJpk7rvVKj+vFz/iW7lNDz/knOZHv34zOF
-   XjndYVarAEiMoTtl8OyGTPNHX7QUsulGwQcA1pzckI3r9rxBzkzDhx679
-   d+F8R6/UVXbm94coqPtG58AmHSf2lxuRdHxiaYyUusRS1z3zfJB6ZDlSd
-   tEHJ+33YXB/OdFtBnL7eQmZKHlU6Ecq+PJ492dtUlAeMyxKkGXnePN+Ss
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="337163273"
-X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="337163273"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 14:29:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="564293386"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 04 Jun 2022 14:29:53 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxbLE-000BDt-Qt;
-        Sat, 04 Jun 2022 21:29:52 +0000
-Date:   Sun, 5 Jun 2022 05:29:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>
-Subject: ld.lld: error: undefined symbol: machine_kexec
-Message-ID: <202206050554.XnCXKQwp-lkp@intel.com>
+        Sat, 4 Jun 2022 17:34:57 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038E7193CA;
+        Sat,  4 Jun 2022 14:34:55 -0700 (PDT)
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 254LYYqu008895;
+        Sun, 5 Jun 2022 06:34:35 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 254LYYqu008895
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654378475;
+        bh=IpVg/6Qws8WGuU81larsHNdjCKY06mUkL/iICPp7YQk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AAosMuX15O0jCfMFAPDbwmsmq6M6A5TcYTPjiQVqVET4fppFS+FCvVIsuaYk7oGiR
+         BY6EuwGEbxLTbF2UFZILII0+jguDw+9iU/TgsJbMaR/9eGkefuCoFOC60Hxv1ZwtFF
+         NyOv107qT5FqFBwvi6EPU+BL1mjyW7iaSG8WPMxh4dYQ3/0XdjTRFavuNWNhxtaqQo
+         j6sia3X4keFDKnDfITI5U9q2SbTZ4d1rwUL2yk2VFBz4lQE7Aosy9LSMa0DWaSbAyv
+         hCUWCElvIG/Te15FOvImtVjq51JrY8FISsoEfjxJmxbOCUvmFmRIImlKxSw0LDohVs
+         dWuChmeso5icQ==
+X-Nifty-SrcIP: [209.85.216.41]
+Received: by mail-pj1-f41.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so14775305pjl.4;
+        Sat, 04 Jun 2022 14:34:34 -0700 (PDT)
+X-Gm-Message-State: AOAM531zPxBV3lpP2hgBMs8nyDi8H7tYHOH2n3XR4vHtscZg5CnQkvQA
+        DTQX/1ZekmujMjYhSQg5GltHyuJKpAwkwx/qg7g=
+X-Google-Smtp-Source: ABdhPJx8iNilm38SygiNhAU8B7xrjDK8QNC/9WFnm618RkCoBkgLxcGXizJBXyUCTbzyPYtRAFsv8hjFkBrFW95BEY4=
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
+ l5-20020a170903120500b0015e8cbcfd2bmr16529178plh.99.1654378474015; Sat, 04
+ Jun 2022 14:34:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAK7LNATHyNjCaK+agk=DOTR8sPaOP9kBvS_xYaBUHfF+5Fzftg@mail.gmail.com>
+ <CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wg-mH-_GYpkhz_psjBWG6ZcjKnPo83fg7YMj_by+-LRTQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 5 Jun 2022 06:33:56 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATmd0bigp7HQ4fTzHw5ugZMkSb3UXG7L4fxpGbqkRKESA@mail.gmail.com>
+Message-ID: <CAK7LNATmd0bigp7HQ4fTzHw5ugZMkSb3UXG7L4fxpGbqkRKESA@mail.gmail.com>
+Subject: Re: [GIT PULL] More Kbuild updates for v5.19-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: 6261586e0c91db14c34f894f4bc48f2300cff1d4 RISC-V: Add kexec_file support
-date:   2 weeks ago
-config: riscv-randconfig-r012-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050554.XnCXKQwp-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6261586e0c91db14c34f894f4bc48f2300cff1d4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6261586e0c91db14c34f894f4bc48f2300cff1d4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Sun, Jun 5, 2022 at 5:25 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Jun 3, 2022 at 9:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> >  - Fix modpost to detect EXPORT_SYMBOL marked as __init or__exit
+> >    (This uncovered a couple of potential issues of exported symbols)
+>
+> I pulled, and then unpulled again, since this introduces new warnings.
+>
+> If you introduce new checks, you fix what it checks.
+>
+> And if the warnings didn't get sorted out, then it wasn't ready to be merged.
+>
+> There's a  good *reason* I require a clean build: non-clean builds
+> just mean that people will ignore new warnings because they think they
+> are the old ones that they have already seen.
+>
+> So no, it is *NOT* ok to introduce new warnings and think "people will
+> fix these up because now there are warnings about it".
+>
+> Quite the reverse. People not only *won't* fix things up, and it will
+> just hide new warnings from *other* things instead.
+>
+>                    Linus
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+OK, I will drop the offending commit
+and send v2.
 
->> ld.lld: error: undefined symbol: machine_kexec_cleanup
-   >>> referenced by kexec_core.c
-   >>> kexec_core.o:(kimage_free) in archive kernel/built-in.a
---
->> ld.lld: error: undefined symbol: riscv_crash_save_regs
-   >>> referenced by kexec_core.c
-   >>> kexec_core.o:(__crash_kexec) in archive kernel/built-in.a
---
->> ld.lld: error: undefined symbol: machine_crash_shutdown
-   >>> referenced by kexec_core.c
-   >>> kexec_core.o:(__crash_kexec) in archive kernel/built-in.a
---
->> ld.lld: error: undefined symbol: machine_kexec
-   >>> referenced by kexec_core.c
-   >>> kexec_core.o:(__crash_kexec) in archive kernel/built-in.a
-   >>> referenced by kexec_core.c
-   >>> kexec_core.o:(kernel_kexec) in archive kernel/built-in.a
---
->> ld.lld: error: undefined symbol: machine_shutdown
-   >>> referenced by kexec_core.c
-   >>> kexec_core.o:(kernel_kexec) in archive kernel/built-in.a
---
->> ld.lld: error: undefined symbol: machine_kexec_prepare
-   >>> referenced by kexec_file.c
-   >>> kexec_file.o:(__se_sys_kexec_file_load) in archive kernel/built-in.a
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada

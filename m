@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5318353D4CB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 04:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21B353D4CE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 04:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350056AbiFDCHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 22:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S1350138AbiFDCJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 22:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345631AbiFDCHa (ORCPT
+        with ESMTP id S1345631AbiFDCJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 22:07:30 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6175313A9
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 19:07:29 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id s14so7981981plk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 19:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ff/IhfCPH41H+OZSAXWB83B0oZdz+7dYMwu9KM64DQw=;
-        b=ceZCdMwmQ+8G45eBMa/Yfy/rn6hFeHi7miTK9GBzQM0Na2P3sRiZNS33cnb4VAtjzP
-         xIpg/TbOxpvQU/7irs6zU/aADpLUMdiGcQuFjUY0HLgYoj7I+paYvpkMvb7JSG3i2WpV
-         RB8AiOpYfqRJRSM4j0uvO4NbwE9/vuMq0OlCVqFoOQHHwqw4R9zb8HRu2UuGSjQZsrn5
-         0EEgLpQGwmi/WtYD9zaJaTOKpJs2zCUM8plapvqlq9jp9BW/VOdPPOytPkt47MuYdQMS
-         UFeOSwXlBTOJgPu/GNZtGFNvWsU8Iqyc0140qnFy6XAmSJh4ocbn1O4jSoIEvdIQ8n1u
-         5jig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ff/IhfCPH41H+OZSAXWB83B0oZdz+7dYMwu9KM64DQw=;
-        b=H5tmO47Hfw4MsT2SXEKqiV+QF7BTYrCdOQ+w8GJRZGW7IR67xz2We/sBrxZAaX3p9r
-         LcxxUJkSH9udbEjd9xLuqt+Ed3gRmNMRjmrH6vJFBFtfbvLUbRVIDdIxz2rI/nt31d0p
-         qnVUoOfIUGFY7WXOxBMNJzw2GktNQvi31ZQpiuSWVYZfKbxyXwhzoi7m/XhCQqe0qISq
-         rmIpbK9gDplDU8mI7G7SITRdvriF7fBMzHbM2eJIIuNR1jbjtzAKdh6YCCgqaqZnbSfh
-         7PP9GxPtkuYUYiGhEUmwYsIHVc2S5gs5t1d4uC/l6O9ayl1CrKx+LjuJVNvd5dy7/2pC
-         hKRA==
-X-Gm-Message-State: AOAM532utFGR4tz8ah5FOmVns14eHSv4jR86dAyx6v0oGNuWuu9ZZnL1
-        HnYyhXie6WH69/dKKE6ozYopSA==
-X-Google-Smtp-Source: ABdhPJyciJHiB4w7inpufhaHNS4EDndG3bC1pR3Eg/dKEgOX/M3M4LpojRWlNirzvjbZq8/I9eLCCA==
-X-Received: by 2002:a17:90b:4c8c:b0:1e8:5607:7ec0 with SMTP id my12-20020a17090b4c8c00b001e856077ec0mr523504pjb.36.1654308449330;
-        Fri, 03 Jun 2022 19:07:29 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (ec2-54-67-95-58.us-west-1.compute.amazonaws.com. [54.67.95.58])
-        by smtp.gmail.com with ESMTPSA id f17-20020a170902f39100b00163fd24ca8csm6079468ple.119.2022.06.03.19.07.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 19:07:28 -0700 (PDT)
-Date:   Sat, 4 Jun 2022 10:07:21 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, broonie@kernel.org,
-        acme@kernel.org, german.gomez@arm.com, mathieu.poirier@linaro.org,
-        john.garry@huawei.com, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] perf: arm64: Kernel support for Dwarf unwinding
- through SVE functions
-Message-ID: <20220604020721.GB53464@leoy-ThinkPad-X240s>
-References: <20220517100743.3020667-1-james.clark@arm.com>
+        Fri, 3 Jun 2022 22:09:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E42335DD7
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 19:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654308544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wz/tZ37kUmFWQ6HkHJXHebNCC4sxDl8GdAywmW5KYk4=;
+        b=f87OvUldwo4EX7wQHCBzoj1QbXaOH09NifyelFNSyf83rM34xbr5iJRX/YaGUe0ZhiYlYe
+        bGFDzbht1BB7H6DzL8kPDcR9wVcW+KVsUVJw4q1ejUkureyOHvAQL6dodLXTjUD+0Z+BZA
+        mlrA5ZLGo+/kNcNBtF+tX8Q0iU2I7ik=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-50-AGSMn1-FMN2cGsQOaJpppg-1; Fri, 03 Jun 2022 22:08:58 -0400
+X-MC-Unique: AGSMn1-FMN2cGsQOaJpppg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C57431C0513E;
+        Sat,  4 Jun 2022 02:08:57 +0000 (UTC)
+Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9D3E02166B26;
+        Sat,  4 Jun 2022 02:08:53 +0000 (UTC)
+Date:   Sat, 4 Jun 2022 10:08:48 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] blk-cgroup: Correctly free percpu iostat_cpu in
+ blkg on error exit
+Message-ID: <Ypq+sPnh6J14PvIZ@T590>
+References: <20220602192020.166940-1-longman@redhat.com>
+ <20220602192020.166940-2-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517100743.3020667-1-james.clark@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220602192020.166940-2-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +63,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:07:41AM +0100, James Clark wrote:
-> Changes since v1:
+On Thu, Jun 02, 2022 at 03:20:18PM -0400, Waiman Long wrote:
+> Commit f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup
+> rstat") changes block cgroup IO stats to use the rstat APIs. It added
+> a new percpu iostat_cpu field into blkg. The blkg_alloc() was modified
+> to allocate the new percpu iostat_cpu but didn't free it when an error
+> happened. Fix this by freeing the percpu iostat_cpu on error exit.
 > 
->   * Add Mark's review tag
->   * Clarify in docs that it's the SVE register length
->   * Split patchset into kernel side and Perf tool changes
+> Fixes: f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup rstat")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> ---
+>  block/blk-cgroup.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> When SVE registers are pushed onto the stack the VG register is required to
-> unwind because the stack offsets would vary by the SVE register width at the
-> time when the sample was taken.
-> 
-> These first two patches add support for sampling the VG register to the kernel
-> and the docs. There is another patchset to add support to userspace perf.
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index 40161a3f68d0..acd9b0aa8dc8 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -219,11 +219,11 @@ static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct request_queue *q,
+>  		return NULL;
+>  
+>  	if (percpu_ref_init(&blkg->refcnt, blkg_release, 0, gfp_mask))
+> -		goto err_free;
+> +		goto err_free_blkg;
+>  
+>  	blkg->iostat_cpu = alloc_percpu_gfp(struct blkg_iostat_set, gfp_mask);
+>  	if (!blkg->iostat_cpu)
+> -		goto err_free;
+> +		goto err_free_blkg;
+>  
+>  	if (!blk_get_queue(q))
+>  		goto err_free;
+> @@ -259,6 +259,9 @@ static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct request_queue *q,
+>  	return blkg;
+>  
+>  err_free:
+> +	free_percpu(blkg->iostat_cpu);
+> +
+> +err_free_blkg:
+>  	blkg_free(blkg);
 
-Hi Catalin, Will,
+Hi Waiman,
 
-Since James is on vacation, just want to ping if you could pick up
-this two patches?  Mark.B has given review tags for this patch set.
+But blkg_free() frees blkg->iostat_cpu via blkg_free_workfn(), so I am
+confused where the leak is in failure path?
 
-I did this is because there has another patch set in perf tool to
-enable SVE registsers [1], which is dependent on this patch set's
-merging.
 
-Thanks,
-Leo
+Thanks
+Ming
 
-[1] https://lore.kernel.org/lkml/20220525154114.718321-1-james.clark@arm.com/

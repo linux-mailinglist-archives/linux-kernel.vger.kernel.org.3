@@ -2,170 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DC553D41F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E8453D421
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349831AbiFDAnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 20:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S1349839AbiFDAr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 20:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiFDAna (ORCPT
+        with ESMTP id S231961AbiFDAr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 20:43:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7287B222AD;
-        Fri,  3 Jun 2022 17:43:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A56D60F1B;
-        Sat,  4 Jun 2022 00:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C97C385A9;
-        Sat,  4 Jun 2022 00:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654303407;
-        bh=F/7tG3AfY4gxUo4vwXg4EDogcdpmyXjXiWT5c2u2dCA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CkP/EXTojeoZMqUP6WS+EqxSwP421kb1mEWFdRdtFY2YiO+Z3Y9PB9iv/BSG6uqXP
-         XeX9ykb+5vSSHtXDft9wqrvw6J2VRURyYBTrGX95ONov5u4cisLmkL5yhjOts4OgGL
-         8XfnNjiVYzbc9Vgee84VdumklF557aJXEFm0npkDPlDNoMcQkf0sbTlBxil23swsyT
-         78jF/HURa7NouGjM5LQapF7NQYdS3e/BJIEcXd+NGL+4JW0xzywakfGtTsBACjE27n
-         Ld1LJYK8UmzrM3DtBUVv7jy/kZ/F6QkpO3oBuH8UUbMlJ+k3P0TYQbsO+7yaztFLI2
-         iIjS+cE5D2n+w==
-Date:   Sat, 4 Jun 2022 01:43:17 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Vegard Nossum <vegard.nossum@oracle.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Solar Designer <solar@openwall.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>
-Subject: Re: [PATCH] Documentation/security-bugs: overhaul
-Message-ID: <20220604014317.79eb23db@sal.lan>
-In-Reply-To: <87fsko48xh.fsf@meer.lwn.net>
-References: <20220531230309.9290-1-vegard.nossum@oracle.com>
-        <87fsko48xh.fsf@meer.lwn.net>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Fri, 3 Jun 2022 20:47:27 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917D1FCCF
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 17:47:26 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id b135so8293022pfb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 17:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jdDGlC0lns52Uw6ScJUD6BF1PLqziLviHb7d6w1wTpY=;
+        b=a1Zr2vgNvc3YZOeZA/WXKlisS5gVf19VLX5J0A4ciKLN+8Pm1fQhX+nIecPcWwXdWp
+         hAL9Odinf0A8wu0W9tTPISn9n0/y4NlhTgE1wKRLDFQSyxusv54Aq5Q8BB3vYydv4np6
+         fKbJgW9ijRf6W3+v2BDRE/KaP9xPKSNRb50bjwbLNUc1KmWevMv2H1orcSIGQ39I1mgc
+         ntJK7CxT+W66XgRSN/HtGl5p+PaJrdL15mZJITgd5S2g6B4x3S315kxB6XzTV5cX+ozI
+         LN2ZBtwrGzfwjvjk5l6d7jZawaIObnefzF147DnanowtkHUp3LkSWDM78JziRD0HvMKh
+         yRRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jdDGlC0lns52Uw6ScJUD6BF1PLqziLviHb7d6w1wTpY=;
+        b=V8aAhYiBmjpoc++KwhrjLHRO05CvMMdEGEu5+9tUpWTl+QPzC4vcTMrIij6OaTa0/G
+         XjQgfPzF6eO4ocCMpkm2r2WATQqkT+k+LPTjCdSdCa8GxvUz4gvdBA88ScG01vFOw6so
+         HZ5dw+rbgoNkPpLToyv9XYmtrR/x3sQYEyWofx0nUnePvpAzFSMnCo1ggzSlUlDt/Twn
+         BBzAqL+Ab2+fAs4dYxsi5e5+qo9lV8mTJSX6nKuidA58h9ZMahFWA/IrmbwB5VRBNgnH
+         sZxF7PWXrDiEN0SYRkosKye1/wpMgjIfVhxxBs7LSIjhBxc4CXs+U6L55dmtOCIKzkbX
+         Redw==
+X-Gm-Message-State: AOAM533c3+qZgNiJQFY7XGLamfktfUMAIz6TLeS3YZP/BZNoEIvGgIFk
+        UI063yby962pKwY35DBEy6o/yu82yvflYAo7LLN1LQ==
+X-Google-Smtp-Source: ABdhPJxDRGhEU8WNQRV9k+Q2YB3N3a9jW6NdWqcj3PP7qytCALiKQ4FiP7Hhr752nEOx7LkZYmS7a6QJywBNM3tYDvo=
+X-Received: by 2002:a65:61a8:0:b0:3fa:95b8:66c4 with SMTP id
+ i8-20020a6561a8000000b003fa95b866c4mr10961843pgv.166.1654303645308; Fri, 03
+ Jun 2022 17:47:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220603070423.10025-1-zhengqi.arch@bytedance.com>
+In-Reply-To: <20220603070423.10025-1-zhengqi.arch@bytedance.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 3 Jun 2022 17:47:14 -0700
+Message-ID: <CALvZod6s8ss0Doe9y+X=3ZHvw0Ove9Lw3MdfKekXr0gVnJwA4w@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcontrol: separate {pgscan,pgsteal}_{kswapd,direct}
+ items in memory.stat of cgroup v2
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, 01 Jun 2022 10:58:50 -0600
-Jonathan Corbet <corbet@lwn.net> escreveu:
+On Fri, Jun 3, 2022 at 12:06 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>
+[...]
+>
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 176298f2f4de..0b9ca7e7df34 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1442,11 +1442,17 @@ PAGE_SIZE multiple when read back.
+>           pgrefill (npn)
+>                 Amount of scanned pages (in an active LRU list)
+>
+> -         pgscan (npn)
+> -               Amount of scanned pages (in an inactive LRU list)
+> +         pgscan_kswapd (npn)
+> +               Amount of scanned pages by kswapd (in an inactive LRU list)
+>
+> -         pgsteal (npn)
+> -               Amount of reclaimed pages
+> +         pgscan_direct (npn)
+> +               Amount of scanned pages directly  (in an inactive LRU list)
+> +
+> +         pgsteal_kswapd (npn)
+> +               Amount of reclaimed pages by kswapd
+> +
+> +         pgsteal_direct (npn)
+> +               Amount of reclaimed pages directly
 
-> Vegard Nossum <vegard.nossum@oracle.com> writes:
-> 
-> > The current instructions for reporting security vulnerabilities in the
-> > kernel are not clear enough, in particular the process of disclosure
-> > and requesting CVEs, and what the roles of the different lists are and
-> > how exactly to report to each of them.
-> >
-> > Let's give this document an overhaul. Goals are stated as a comment at
-> > the top of the document itself (these will not appear in the rendered
-> > document).  
-> 
-> OK, some other thoughts...
-> 
-> [...]
-> 
-> > +Linux kernel security team at security@kernel.org, henceforth "the
-> > +security list". This is a closed list of trusted developers who will
-> > +help verify the bug report and develop a patch.
-> > +
-> > +While the security list is closed, the security team may bring in
-> > +extra help from the relevant maintainers to understand and fix the
-> > +security vulnerability.
-> > +
-> > +Note that the main interest of the kernel security list is in getting
-> > +bugs fixed; CVE assignment, disclosure to distributions, and public
-> > +disclosure happens on different lists with different people.  
-> 
-> Adding "as described below" or some such might be helpful for readers
-> who are mostly interested in those things.  
-> 
-> > +Here is a quick overview of the various lists:
-> > +
-> > +.. list-table::
-> > +   :widths: 35 10 20 35
-> > +   :header-rows: 1
-> > +
-> > +   * - List address
-> > +     - Open?
-> > +     - Purpose
-> > +     - Members
-> > +   * - security@kernel.org
-> > +     - Closed
-> > +     - Reporting; patch development
-> > +     - Trusted kernel developers
-> > +   * - linux-distros@vs.openwall.org
-> > +     - Closed
-> > +     - Coordination; CVE assignment; patch development, testing, and backporting
-> > +     - Linux distribution representatives
-> > +   * - oss-security@lists.openwall.com
-> > +     - Public
-> > +     - Disclosure
-> > +     - General public  
-> 
-> Please don't use list-table, that's totally unreadable in the plain-text
-> format.  How about something like:
-> 
->  =============================== ===== ================= ===============
->  List address                    Open? Purpose           Members
->  =============================== ===== ================= ===============
->  security@kernel.org                no Reporting         Trusted kernel
->                                                          developers
->                                        Patch development
->  linux-distros@vs.openwall.org      no Coordination      Distribution 
->                                                          representatives
->                                        CVE assignment
->                                        Patch development
->                                        Testing
->                                        Backporting
->  oss-security@lists.openwall.com   yes Disclosure        General public
->  =============================== ===== ================= ===============
-> 
-> (Note I haven't tried to format this, there's probably an error in there
-> somewhere). 
-
-Yeah, I guess the right syntax is something like:
-
-  =============================== ===== ================= ===============
-  List address                    Open? Purpose           Members
-  ------------------------------- ----- ----------------- ---------------
-  security@kernel.org                no Reporting         Trusted kernel
-                                                          developers
-                                        Patch development
-  linux-distros@vs.openwall.org      no Coordination      Distribution 
-                                                          representatives
-                                        CVE assignment
-
-                                        Patch development
-
-                                        Testing
-
-                                        Backporting
-  oss-security@lists.openwall.com   yes Disclosure        General public
-  =============================== ===== ================= ===============
-
-Regards,
-Mauro
+No objection to adding new fields but removing 'pgsteal' and 'pgscan'
+from the user visible API might break some applications.

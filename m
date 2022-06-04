@@ -2,113 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E475C53D633
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 11:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C507053D637
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 11:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbiFDJKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 05:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S233889AbiFDJR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 05:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiFDJKa (ORCPT
+        with ESMTP id S233875AbiFDJRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 05:10:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D43632EE1
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 02:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654333829; x=1685869829;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ArDUs+VY4m6+3YIbtca6Fc+W4gg9QXBnrvPNisPEYOw=;
-  b=eymP10bDXEMsYxxY+EoApStJFLiC4tY8b4oH9FvjIds7Ov3uNxn9fpGO
-   ScGES1pXmmBUHVbud2yNk5+LDB6GZ9xhwpT5JY6wGg9+L1R/z4mOQqCbu
-   TNae3oH/kNVzCbjIActqZW9jRJ8aSrSctybNs+D5mVaSpyIwAdILiag9/
-   zJyowdTwKZpdt2TzxtHAEP/kugGF1a44JgY1vPH4fMfmAELVj7ACob7r/
-   ILafbL788ACq9tE7gQ/wOVqhDC1ty2qixlSoGI0V0gqVXbh5GuYipFtYp
-   cSdh4SJ5TF/OJ8Q8lEulDypUK6Lj6Lp/wfKV+1ENnHJaaj7B26mQhWGFm
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="275215931"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="275215931"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 02:10:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="708375606"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2022 02:10:27 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxPne-000AYw-Nu;
-        Sat, 04 Jun 2022 09:10:26 +0000
-Date:   Sat, 4 Jun 2022 17:09:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: drivers/vhost/vringh.c:586:18: sparse: sparse: restricted __virtio16
- degrades to integer
-Message-ID: <202206041728.NyW4skUB-lkp@intel.com>
-MIME-Version: 1.0
+        Sat, 4 Jun 2022 05:17:23 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2111.outbound.protection.outlook.com [40.107.220.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9197C18363;
+        Sat,  4 Jun 2022 02:17:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NLj4MoolHyOBui6m1DN/S7jm8qqyyEHSNOaKyEDtzO8Xz/+MpmHRT8ZA78wsAo8FIH+bvnpSvhqPG6Rv3zVZobPhyQhwMVHib5Ig/OiCSyrMdZTIUHCEcIwIBr7XSDay2n5msuWTEJ+n0cZ5sQaB+eF8Zdu0ODjahiPNF3gFF4C1u1lE9VAuX0RgctbbDyrY7vssDSCc5lFWMe5b2p7gxKDK97m5mYN/rNElK7JDwJzYRQ4Eiur1U473l9fG16M3y2wHLaBdyuyi+uA3yQ0UVvEfH+UB8P+HnkE82EvOdsR9DWCdqtYAEwf8Ird823Of9LeBL9sOWy5qgVXVQvJVcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QANfk8E8Q2x/7l0kNoC9tECn80DI3jMegtQ2NfrdXVs=;
+ b=fZuS67bGsFbnt3mVXMvCRIF1vz6X5XTOYPWJlhtbIkmnnwaPsvKZvncnaUtglsnhT1TLqdvK30XR0d6shzfyfthNxqhBQf1+cBDS32Qf3XynpYHMeX2c+zHU/a6oyfvDr38p4oZJPpWfhLDbjYaIQvWzEDk6HLXLjRMso8qk0rFWlTZzINUj8lQK1QsS72wd00EMF4UMQGmR3XnG+2Et1J7g4Lhs+CTIWuEKHL0cziZEFKz30WaBH5rvQm5vXD3POpew1EkH2Pm2TkbrLAISpCdJ4aIblmP+uH59rL106eCu/7gczidkNM60uQBftvTtkkrGll3csdACsmG8tMID9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QANfk8E8Q2x/7l0kNoC9tECn80DI3jMegtQ2NfrdXVs=;
+ b=kODU5thUkFEiYgeXIyY58Zn4xgtlOxr5oW7/8A2DNgXReeb2xBndUk8aAtgLo5yXt3NWmi2zuK93hzgzv5QRDNJrhkSuP72foiUGKZohFImBB8ct3DqVJsZHFXK7TaHlVP/KvBzJykMMaLR+PEnD7WA1Yi1hXzqCCKkuIWeLa0w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM5PR1301MB1915.namprd13.prod.outlook.com (2603:10b6:4:36::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Sat, 4 Jun
+ 2022 09:17:17 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::b18b:5e90:6805:a8fa]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::b18b:5e90:6805:a8fa%8]) with mapi id 15.20.5332.006; Sat, 4 Jun 2022
+ 09:17:17 +0000
+Date:   Sat, 4 Jun 2022 11:17:11 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, oss-drivers@corigine.com,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] nfp: Remove kernel.h when not needed
+Message-ID: <YpsjFwNv5s14sdhD@corigine.com>
+References: <e9bafd799489215710f7880214b58d6487407248.1654320767.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e9bafd799489215710f7880214b58d6487407248.1654320767.git.christophe.jaillet@wanadoo.fr>
+X-ClientProxiedBy: AM9P195CA0010.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21f::15) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5da09924-d7b1-4f53-ee87-08da460b0541
+X-MS-TrafficTypeDiagnostic: DM5PR1301MB1915:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1301MB19156ABD69D44927FD6DB1EDE8A09@DM5PR1301MB1915.namprd13.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pOemFl57D1GEyBwmzCWtf3GthcbLHaXf+Q38qGlcihPfaf3HtHekwNKuCFb/+YpJh0MDnojcYocEsswQnb66JRIw3mKZjwaefxIljXMKv+Iojoz5bZ+iS31r7yNhZVHVEuRYB3NapuyaycMR2LdD0mEBbM4VzjVwNaI5xJ8Ct9I8zOlY6bP0aed+qa9XQK2wevE7+xaOghekuRAtqPKdKsN17cz0pdCY4/iq83PmQpXc6kZJgom38gATzh/qhc6QIfGRSmjgU9eBTykqBv4dwUjZXZpVeT4/N99eMX7XMOvhBFjSsxL+C3iSHV2iS9rKUp0yWKRyuiJLyHmILtjzRQ75/ajGrIXCqXxO559pS8g6QGod/+SKsmrXhOcxJNanu40CgVy1jCcKgD1WhqafkflDX6BXmpE8hcu1S2u81x52rV8Q7z3kMA/HbqqWBphCz/qk8L6Q7Zhuf6psF3Od9tNtIzeAgv5mFoz+HxrKWBeCO0bqDpSeWhnQhvTuyxHhPJY6TKCehqtRoOLTMeFC17nb5MjLa7hYadAmEAOdRyA4jDwa3bVAcY0kmJ6HwcWVJhbnFJ5GM4bHQgJWBF+qxAcDD92ssfLjRfD7xZD6Kfp39w3WlNbfnmhZ5PdrpZ/+dNnUk61an1tgkAa6uGkmJX0P3oie/9zGkvrArc+A9UE4FKXUMZxVpVz6nuMeFh4u
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(346002)(366004)(136003)(396003)(39830400003)(52116002)(2906002)(316002)(38100700002)(8676002)(44832011)(6506007)(5660300002)(6486002)(6916009)(4744005)(86362001)(66476007)(54906003)(36756003)(6666004)(66946007)(4326008)(6512007)(8936002)(2616005)(508600001)(41300700001)(186003)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iEcyKQGQYrvOSh9r1yE23782+1ZJ5DkvNZ7qq2NJe+ZQKoKvrguEELl1PFRI?=
+ =?us-ascii?Q?+JVo5c6j5KV5VqnjIMorX9pqtqXufb4TwhABFCM4EG5Hgd3JMlv6KrYHFSqV?=
+ =?us-ascii?Q?AdbnMCGEsQNfxVc3cJgmJMAcAnBjoZDBEQuDe9FE8HoVU2zhdyBhma7HVm5p?=
+ =?us-ascii?Q?EfJs3DNfG/7g7HZt5a7ENUeWn8Y9XtYub4zIlPCQMJTqDqN0EhEqUJ12SAQI?=
+ =?us-ascii?Q?RdmetLNKsRC4OMAJ+mfC5OX5eEWiMfllEi5RZ1BvmVi/I9MclFtaDBIFQsJK?=
+ =?us-ascii?Q?RJeJWcYh19eA4y1H4+K78VAhUmPfJZpWH/VuWc5j28bOEK5a/aK6V+Zh71Kx?=
+ =?us-ascii?Q?J3n+KoBllqgWdv9IJ6bzR8L2qNp+nY1KxA8dhlUh8sDNnl38mD5aXDYLyXXN?=
+ =?us-ascii?Q?L0wHaewIqGbd55/M7rfHxA9aTJjR+G4P7HjpRB/bMdun45LPikOi9YjprWPn?=
+ =?us-ascii?Q?/EqkN/i6XzH9vMntbBok7+h+q0n/ETxP8ZMC34jTvlgXwJNEPJ1/QtwnhbWY?=
+ =?us-ascii?Q?Lcco8mL4/tqvLN8CpzhaHrI8e4JoNUOVsHU72aVs4urpaYP7OsW8VH8UfoM2?=
+ =?us-ascii?Q?yhsqrPZ0HEN7aCbOjwnHvwDqbjSwGgfeMDUYxKaBr+7fvVY+ptsaP3kbaikU?=
+ =?us-ascii?Q?xfD4EiMIVhkowg3wdMRIBTBMy2wfdten0jxLtG3U/rYu/YrArnYgH8Aa7u51?=
+ =?us-ascii?Q?3i58q2b4im42Z7lS62+Odu03g85gHR6Oz8rHnFmo3IRh0ubNAhwwJg+Gr69/?=
+ =?us-ascii?Q?SsedeLezOaFoz9J0HWf/44ywqqNIvXhFZLmuoo/aObwEdhEmn9C1aWGJw36J?=
+ =?us-ascii?Q?vbLylCO7UUYMSfgtNl9qvriyhbDuvue3awRd8UH76m95Qmqep8vomwDqESl+?=
+ =?us-ascii?Q?B+YjoCS+4wegrM+S1mChD0F8eHeDdWtMlzgF3Qkbk2YrB8+M6hLEiSi/LSlp?=
+ =?us-ascii?Q?z2UpXjSnNcwlXgyyaD0sQvk/pCaMRjgR0M4Qj3SQF0tsStyBbMMGcWGOtW7a?=
+ =?us-ascii?Q?Fz+WEEQ9A4bBghoqWUMqbGLd3tfYAGlW4XBVvMEm+/G5VwVwlZIiwLSEAVUH?=
+ =?us-ascii?Q?ZbF7eEyKkqlaCe23V1LDEMl7PPgHQuSX1migj1b0ql7UdrtiAJNHsLeka02v?=
+ =?us-ascii?Q?JeEXTsng3shzj9yBUF5QbJH/ArOkSPzulHnFWEeElleQZEg/nI1Z8uRPjFrL?=
+ =?us-ascii?Q?BCKi9cIRoZODUGJI3KR4yY1DtlrImb6mkQmkO1PhyT93Dy8RtYEbZAAKqOZd?=
+ =?us-ascii?Q?p/LfxmhnwQuorNFb9rTFqot0/bhzAw/SuK4Wgm5UGwZmP6PMgE12SkhgUqCy?=
+ =?us-ascii?Q?G63SJB/D/IBBOFY3v/sN9wKoj6k84B/TeMPaNKySa5qUzSMrFcfHFB7VBGlS?=
+ =?us-ascii?Q?ekqVitKCbmwYuFPKWHg86Vhp9BSBhXUtgjfmhIkb7KtlvPehmrR32U/c1x5J?=
+ =?us-ascii?Q?6S6yVNQnVM/zriwja6bbWp1tB1J2fb6MxRW+JuW91z9kN4uK3mUlHvJQ1RwY?=
+ =?us-ascii?Q?vfbbfjJXf+UgRHDfnrMRiy4Ze6ZVSXfnOqWaIzY+mwpdERcOUn0CkuJDWgEF?=
+ =?us-ascii?Q?jd/Wi2MR37z5WQqYNIcvfImidlDPzdT0h1FeB9s2PlkCQ+5F6kPHkKbf9K4p?=
+ =?us-ascii?Q?iWULUauzIeZukl0rSzWotsJcKbu0sABGGiqJFht/jQyYp8Ya/IBqVv/8blWe?=
+ =?us-ascii?Q?b4NipMCe0G2NRE08hzdMyDFwYqeDNXTMxBnEzos80dRaKsP4EMBf1KIZQHu4?=
+ =?us-ascii?Q?mxCyv2j4HKRCR9ZvItJGQGi/d8A+0bLytPTwnu/2OnwHJWxTsf5Xu8d1q4Z3?=
+X-MS-Exchange-AntiSpam-MessageData-1: 8r7Z9EY5orquUsb/EqtGCuWHslCzhbhS6m0=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5da09924-d7b1-4f53-ee87-08da460b0541
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2022 09:17:17.4387
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jtWeeEYHpTYg176AOoTviP1mSPqGgeFfV4FBHQtzEHpiHKJ47VcVkrpfHLpjmecHR/9yhaDZkAu27OK3fssWByB8rm71WSuo607gJz5ApQY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1301MB1915
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: a97b693c3712f040c5802f32b2d685352e08cefa uaccess: fix nios2 and microblaze get_user_8()
-date:   3 months ago
-config: microblaze-randconfig-s031-20220603 (https://download.01.org/0day-ci/archive/20220604/202206041728.NyW4skUB-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-18-g56afb504-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a97b693c3712f040c5802f32b2d685352e08cefa
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a97b693c3712f040c5802f32b2d685352e08cefa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/vhost/
+On Sat, Jun 04, 2022 at 07:33:00AM +0200, Christophe JAILLET wrote:
+> When kernel.h is used in the headers it adds a lot into dependency hell,
+> especially when there are circular dependencies are involved.
+> 
+> Remove kernel.h when it is not needed.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for improving the NFP driver.
 
+I think the contents of this patch looks good.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/vhost/vringh.c:586:18: sparse: sparse: restricted __virtio16 degrades to integer
->> drivers/vhost/vringh.c:586:18: sparse: sparse: restricted __virtio16 degrades to integer
-   drivers/vhost/vringh.c:586:18: sparse: sparse: cast to restricted __virtio16
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-vim +586 drivers/vhost/vringh.c
+I also think this patch is appropriate for net-next
+("[PATCH net-next] ..." in subject) and should thus be re-submitted
+once net-next re-opens for the v5.20 development cycle, which I would
+expect to happen in the coming days, after v5.19-rc1 has been released.
 
-f87d0fbb579818 Rusty Russell      2013-03-20  581  
-f87d0fbb579818 Rusty Russell      2013-03-20  582  /* Userspace access helpers: in this case, addresses are really userspace. */
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  583  static inline int getu16_user(const struct vringh *vrh, u16 *val, const __virtio16 *p)
-f87d0fbb579818 Rusty Russell      2013-03-20  584  {
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  585  	__virtio16 v = 0;
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12 @586  	int rc = get_user(v, (__force __virtio16 __user *)p);
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  587  	*val = vringh16_to_cpu(vrh, v);
-b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  588  	return rc;
-f87d0fbb579818 Rusty Russell      2013-03-20  589  }
-f87d0fbb579818 Rusty Russell      2013-03-20  590  
-
-:::::: The code at line 586 was first introduced by commit
-:::::: b9f7ac8c72894c19bf258a54ecaa708df4ffbe80 vringh: update for virtio 1.0 APIs
-
-:::::: TO: Michael S. Tsirkin <mst@redhat.com>
-:::::: CC: Michael S. Tsirkin <mst@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I'm happy to handle re-submitting it if you prefer.

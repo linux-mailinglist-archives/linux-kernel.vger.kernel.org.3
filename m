@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2544353D6CB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1749B53D6D1
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236131AbiFDMhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 08:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S240036AbiFDMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 08:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235386AbiFDMhu (ORCPT
+        with ESMTP id S233159AbiFDMlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 08:37:50 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD142CE11;
-        Sat,  4 Jun 2022 05:37:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id w27so13232178edl.7;
-        Sat, 04 Jun 2022 05:37:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/hAGMdhjThodGoSt1OTNT3sOvlzaiIFoqWEAAbUn3yM=;
-        b=kbcUHAtvLUkX2+hSNR6mP4i1xLJQkUpXfBjsBZA4wdb19hlxkJox7+tq1aFmmFuaLH
-         GA4IxnK5MPR1FMYhnMOHSdCNK8lU0+mOYfcVr7H/nl1sVtCH7c4sM3yU1H+Rv9uQAFPo
-         RdRLsr2LNnWeKM+hFa1Bu4StIQovKLhiPz80a7FrztJW2kfsaXqphNIOu5PSmXWKZyu3
-         3nGBs9Il2m6+7GXfA6s+QeNrMD9u8yFnK+dC4aLXtrWi91GCLWQlHTI5t+Pf3m4TUG3h
-         c/KX2r8ZQHbLQ3ldDp29UGmd4/fD/EhXor5dtySotmD6EJEfKaTuW7fNL6XJxcBbm+CI
-         QPzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/hAGMdhjThodGoSt1OTNT3sOvlzaiIFoqWEAAbUn3yM=;
-        b=fL2C8zdN2M0OE14i/Hm46srfzYzOahpIq3+fx/RYT+1xoK8mYxHCma2ztPbdIKqVcF
-         88FkQ7fTF+qRZ9AwLpfQZZq4lBEDod4iUVLPpxyxYGdOhGV9sr4W9AecOZMMoJGMeyO+
-         ldgrB7BVqIdEGY1k3uvQq1Zcsla3ax/zUcZS8lA4Gcipu2w5b6+h90h09Y3lrzFsYKM/
-         GhYlC7UC9lol4e8NVcAyqGPai9kqjkwxHtTkSj7VlA4ZWShA42DEPzVmChBtxx+h1qTw
-         Idhzmx+PzrwgMRE6ORiBDf6358b2S8OSoXIFwNVMJV/nNJ63ut+w4Ny3h9ukF2toJCSv
-         cSag==
-X-Gm-Message-State: AOAM530JNj3UA3FHPObtn6eA2/nXAZChZRfFpoUrwXytPkK2MGE4gAtS
-        O7CL5b9C4EcMPm9hwacilZE=
-X-Google-Smtp-Source: ABdhPJy4ab1s+W8S1Tno2KdWvmIzxVarRex31psNeYm/egj6ZQcvgzhfpuDAZp9aga4Vysv57LFOLg==
-X-Received: by 2002:a05:6402:2815:b0:420:c32e:ebe2 with SMTP id h21-20020a056402281500b00420c32eebe2mr16395645ede.1.1654346266060;
-        Sat, 04 Jun 2022 05:37:46 -0700 (PDT)
-Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906310400b00705976bcd01sm3930358ejx.206.2022.06.04.05.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 05:37:45 -0700 (PDT)
-Date:   Sat, 4 Jun 2022 13:37:42 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/66] 5.15.45-rc1 review
-Message-ID: <YptSFvJyra42Tcy7@debian>
-References: <20220603173820.663747061@linuxfoundation.org>
+        Sat, 4 Jun 2022 08:41:04 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1311531536;
+        Sat,  4 Jun 2022 05:41:03 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 354F53200344;
+        Sat,  4 Jun 2022 08:41:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 04 Jun 2022 08:41:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1654346459; x=1654432859; bh=lVC02QK4SHsr+00py+U1MSnZZ
+        Egh3HHWEX2YPoM+RBo=; b=4hiQqR26na7FmbxhQbKOst12IMMuhyNU9p9p5LDCc
+        gfwoi2N72pxgcVOoOB4G0174YDXLpZZ03hx9KYUxTuBk6DB67KU6BBq5ZzQjB8eg
+        gZ61ae9f8u/JghYAXe4XaLB7clcWpSdab8MDmgl2SBLD1EGT4Kew6flvher+Pl0q
+        bGzSvqV9cVlHktd4wIFf6a9gxoLR4wdDpbi44Q6v1pvr1A9kZ/l2S9RjYLpN4Fl1
+        W5BnCQapr6D+vniBN4RuseIZnKCt2TuvLXLF0jtBoCTENxAC6rPScx1bkmhjj9vc
+        C71AM6OQEh0uiWbp+FfXntZUJteaAcp9+bPXSNp2fbBYQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1654346459; x=1654432859; bh=lVC02QK4SHsr+00py+U1MSnZZEgh3HHWEX2
+        YPoM+RBo=; b=FrbJDl6fBu/000qV/LpbkIRjm9EonOFBHRAzIvRFPf2/NjH410F
+        akKPp9xHyX8qLugC4CkJlIvVOkcHmjg+f/Q5G6Z2UM3W2sgeN0lYXYDaMHGgFMqc
+        5GMQXwA9bEpSOqMs3UntXuLKsZ5SeOpZaEpAJGtFSRElCriWJkOH5UFiiWZiAc/Q
+        JpA9vKHxJkpetlREqO9yjjpfB+Q/vta2/k2+Yj5//Oh+UsUXm1KLRS8Bit4EBE2n
+        UUlGUf8d/DX7TwRiMe1BA8arkJz5Iyo5sFE3BXihSrvNBC4jCjnSJQLhVsi5juqB
+        NHtYLTGbZph1xYaoOw4CmK2Jv405wWilkRA==
+X-ME-Sender: <xms:21KbYvPWgLfBLTf1GF3O6NfksTBFqB7kkhXEbZAB_Xlsv9P-ej18qg>
+    <xme:21KbYp_z8wzO415KJnTQ_xNZIvqlCZUozj8CeBP-p5c_NO-2FrRKamqa5cps5GD98
+    WA34rJgOKooZpxFCuo>
+X-ME-Received: <xmr:21KbYuTssyDfHboQjeR8TCo2TKpsjnqMGcNYPh0_0CX7gTX5eZRvXMCd_MHhjCxf-SNp7eSFMXKlQFa1Sf6BgHEXDrsIkpyxcoLYUnq701zUIQW7ogc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrleekgdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekredtre
+    dttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpefhtedutdduveeileejjeetff
+    ehueejudehgfffjeduhfeuleeludfffefgffevkeenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorg
+    htrdgtohhm
+X-ME-Proxy: <xmx:21KbYjshhPIPM8vji13fTVEGoKAjFXMb3deaI__bjM6vlPkYt1lp0w>
+    <xmx:21KbYnfsxADlr27Zt3YpW3_Hp2cfFBgFvGgYwojeT1bNXkUQ2Qg7Jg>
+    <xmx:21KbYv005vDYJhlGfw7P9HdcO-UGc4dtZiOW2a8c8A9WK_OvqKm8BQ>
+    <xmx:21KbYu4GzPz-OIWMaxUnCpTR9TcjrcD5hapo1DBn1BKONFAb0kPQsw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 4 Jun 2022 08:40:57 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     chenhuacai@kernel.org
+Cc:     kernel@xen0n.name, maz@kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH for-5.19 1/2] irqchip/loongson-liointc: Use architecture register to get coreid
+Date:   Sat,  4 Jun 2022 13:40:51 +0100
+Message-Id: <20220604124052.1550-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for
+LoongArch") replaced get_ebase_cpunum with physical processor
+id from SMP facilities. However that breaks MIPS non-SMP build
+and makes booting from other cores inpossible on non-SMP kernel.
 
-On Fri, Jun 03, 2022 at 07:42:40PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.45 release.
-> There are 66 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
+Thus we revert get_ebase_cpunum back and use get_csr_cpuid for
+LoongArch.
 
-Build test:
-mips (gcc version 11.3.1 20220531): 62 configs -> no failure
-arm (gcc version 11.3.1 20220531): 99 configs -> no failure
-arm64 (gcc version 11.3.1 20220531): 3 configs -> no failure
-x86_64 (gcc version 11.3.1 20220531): 4 configs -> no failure
+Fixes: fa84f89395e0 ("irqchip/loongson-liointc: Fix build error for LoongArch")
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ drivers/irqchip/irq-loongson-liointc.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index aed88857d90f..c11cf97bcd1a 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -39,6 +39,14 @@
+ 
+ #define LIOINTC_ERRATA_IRQ	10
+ 
++#if defined(CONFIG_MIPS)
++#define liointc_core_id get_ebase_cpunum()
++#elif defined(CONFIG_LOONGARCH)
++#define liointc_core_id get_csr_cpuid()
++#else
++#define liointc_core_id 0
++#endif
++
+ struct liointc_handler_data {
+ 	struct liointc_priv	*priv;
+ 	u32			parent_int_map;
+@@ -57,7 +65,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+ 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct irq_chip_generic *gc = handler->priv->gc;
+-	int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
++	int core = liointc_core_id % LIOINTC_NUM_CORES;
+ 	u32 pending;
+ 
+ 	chained_irq_enter(chip, desc);
+-- 
+2.25.1
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1262
-[2]. https://openqa.qa.codethink.co.uk/tests/1268
-[3]. https://openqa.qa.codethink.co.uk/tests/1269
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

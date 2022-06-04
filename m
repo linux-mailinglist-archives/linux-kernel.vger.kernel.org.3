@@ -2,111 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADB553D419
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DC553D41F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349817AbiFDAiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 20:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S1349831AbiFDAnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 20:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiFDAiH (ORCPT
+        with ESMTP id S231961AbiFDAna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 20:38:07 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869AC24F2E;
-        Fri,  3 Jun 2022 17:38:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 3 Jun 2022 20:43:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7287B222AD;
+        Fri,  3 Jun 2022 17:43:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LFLSl07YHz4xXF;
-        Sat,  4 Jun 2022 10:37:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654303081;
-        bh=tbCrXUpHfvEvlqq1o1SG9c0DMviyBQ3CvzOvpIIJroA=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A56D60F1B;
+        Sat,  4 Jun 2022 00:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C97C385A9;
+        Sat,  4 Jun 2022 00:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654303407;
+        bh=F/7tG3AfY4gxUo4vwXg4EDogcdpmyXjXiWT5c2u2dCA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o2aebxC5KKbEl3eRFLExapin+TqKAQ6gVn0z+BIcp3vyBgXvkre0izG23ktawWal2
-         UxShhH1J0CmoEJUPVOoAvAAQzYJA+jGiqyB1AgWm5LXAkECy33ImX2N3qeY/8d+Gnk
-         0oGbRvzy1Mdlpfzemo9f11lDEbFZPjaQdZIlAV018iQp6OZfvuxvQMTolxZ/mMRl9b
-         dxZe+BENNPHaKoRgbVs+8HYcDQxMdYMnIOChYzjU+oBdv5xRYNpukvhVc1oL1msPKK
-         XYwvm5wty3Mne6Pnvz90wMgrdfbVybmeoGKl3BUXMllG1z/T/lKVZ7lpdvRot01GNN
-         8//t1keP9y75g==
-Date:   Sat, 4 Jun 2022 10:37:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>
-Subject: Re: linux-next: Fixes tag needs some work in the drm tree
-Message-ID: <20220604103757.29d0b048@canb.auug.org.au>
-In-Reply-To: <CAF6AEGtYS1LYowjf-OiN-C1+4JFTWwOOpP__4iDLo-dFy0t0Tg@mail.gmail.com>
-References: <20220603151600.19cfa617@canb.auug.org.au>
-        <CAF6AEGtYS1LYowjf-OiN-C1+4JFTWwOOpP__4iDLo-dFy0t0Tg@mail.gmail.com>
+        b=CkP/EXTojeoZMqUP6WS+EqxSwP421kb1mEWFdRdtFY2YiO+Z3Y9PB9iv/BSG6uqXP
+         XeX9ykb+5vSSHtXDft9wqrvw6J2VRURyYBTrGX95ONov5u4cisLmkL5yhjOts4OgGL
+         8XfnNjiVYzbc9Vgee84VdumklF557aJXEFm0npkDPlDNoMcQkf0sbTlBxil23swsyT
+         78jF/HURa7NouGjM5LQapF7NQYdS3e/BJIEcXd+NGL+4JW0xzywakfGtTsBACjE27n
+         Ld1LJYK8UmzrM3DtBUVv7jy/kZ/F6QkpO3oBuH8UUbMlJ+k3P0TYQbsO+7yaztFLI2
+         iIjS+cE5D2n+w==
+Date:   Sat, 4 Jun 2022 01:43:17 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Vegard Nossum <vegard.nossum@oracle.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Shah <aams@amazon.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Solar Designer <solar@openwall.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>
+Subject: Re: [PATCH] Documentation/security-bugs: overhaul
+Message-ID: <20220604014317.79eb23db@sal.lan>
+In-Reply-To: <87fsko48xh.fsf@meer.lwn.net>
+References: <20220531230309.9290-1-vegard.nossum@oracle.com>
+        <87fsko48xh.fsf@meer.lwn.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e_YH8od_GObSxcrR9wOXMw+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/e_YH8od_GObSxcrR9wOXMw+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Em Wed, 01 Jun 2022 10:58:50 -0600
+Jonathan Corbet <corbet@lwn.net> escreveu:
 
-Hi Rob,
+> Vegard Nossum <vegard.nossum@oracle.com> writes:
+> 
+> > The current instructions for reporting security vulnerabilities in the
+> > kernel are not clear enough, in particular the process of disclosure
+> > and requesting CVEs, and what the roles of the different lists are and
+> > how exactly to report to each of them.
+> >
+> > Let's give this document an overhaul. Goals are stated as a comment at
+> > the top of the document itself (these will not appear in the rendered
+> > document).  
+> 
+> OK, some other thoughts...
+> 
+> [...]
+> 
+> > +Linux kernel security team at security@kernel.org, henceforth "the
+> > +security list". This is a closed list of trusted developers who will
+> > +help verify the bug report and develop a patch.
+> > +
+> > +While the security list is closed, the security team may bring in
+> > +extra help from the relevant maintainers to understand and fix the
+> > +security vulnerability.
+> > +
+> > +Note that the main interest of the kernel security list is in getting
+> > +bugs fixed; CVE assignment, disclosure to distributions, and public
+> > +disclosure happens on different lists with different people.  
+> 
+> Adding "as described below" or some such might be helpful for readers
+> who are mostly interested in those things.  
+> 
+> > +Here is a quick overview of the various lists:
+> > +
+> > +.. list-table::
+> > +   :widths: 35 10 20 35
+> > +   :header-rows: 1
+> > +
+> > +   * - List address
+> > +     - Open?
+> > +     - Purpose
+> > +     - Members
+> > +   * - security@kernel.org
+> > +     - Closed
+> > +     - Reporting; patch development
+> > +     - Trusted kernel developers
+> > +   * - linux-distros@vs.openwall.org
+> > +     - Closed
+> > +     - Coordination; CVE assignment; patch development, testing, and backporting
+> > +     - Linux distribution representatives
+> > +   * - oss-security@lists.openwall.com
+> > +     - Public
+> > +     - Disclosure
+> > +     - General public  
+> 
+> Please don't use list-table, that's totally unreadable in the plain-text
+> format.  How about something like:
+> 
+>  =============================== ===== ================= ===============
+>  List address                    Open? Purpose           Members
+>  =============================== ===== ================= ===============
+>  security@kernel.org                no Reporting         Trusted kernel
+>                                                          developers
+>                                        Patch development
+>  linux-distros@vs.openwall.org      no Coordination      Distribution 
+>                                                          representatives
+>                                        CVE assignment
+>                                        Patch development
+>                                        Testing
+>                                        Backporting
+>  oss-security@lists.openwall.com   yes Disclosure        General public
+>  =============================== ===== ================= ===============
+> 
+> (Note I haven't tried to format this, there's probably an error in there
+> somewhere). 
 
-On Fri, 3 Jun 2022 07:58:14 -0700 Rob Clark <robdclark@gmail.com> wrote:
->
-> will the truncated subject confuse the scripts that look for patches
-> to backport to stable, ie. do we *really* have to rewrite history to
-> fix this?
+Yeah, I guess the right syntax is something like:
 
-I don't know what scripts are being used and what they expect, but our
-documentation says (Documentation/process/submitting-patches.rst):
+  =============================== ===== ================= ===============
+  List address                    Open? Purpose           Members
+  ------------------------------- ----- ----------------- ---------------
+  security@kernel.org                no Reporting         Trusted kernel
+                                                          developers
+                                        Patch development
+  linux-distros@vs.openwall.org      no Coordination      Distribution 
+                                                          representatives
+                                        CVE assignment
 
-  If your patch fixes a bug in a specific commit, e.g. you found an issue u=
-sing
-  ``git bisect``, please use the 'Fixes:' tag with the first 12 characters =
-of
-  the SHA-1 ID, and the one line summary.  Do not split the tag across mult=
-iple
-  lines, tags are exempt from the "wrap at 75 columns" rule in order to sim=
-plify
-  parsing scripts.
+                                        Patch development
 
-But, that being said, doing the rewrite is up to the maintainer.  You
-could just look at this as a learning experience and do better in the
-future.
+                                        Testing
 
-BTW, my script reacted to the missing closing quotes and parentheses,
-which is more like to confuse any scripts that the actual truncation.
---=20
-Cheers,
-Stephen Rothwell
+                                        Backporting
+  oss-security@lists.openwall.com   yes Disclosure        General public
+  =============================== ===== ================= ===============
 
---Sig_/e_YH8od_GObSxcrR9wOXMw+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKaqWUACgkQAVBC80lX
-0Gw5mAf/TwvrqpX9h9B2646RLernspdTcY3nPmjQD/BqjNYThjAPEBDx3+3ICluT
-xTeWaSdhKu4B9HBu889ZKRXYLUcllNsaCE3rmIeXZFgZyEZzDKrTGznJ0LKGMRf0
-GdH2pWQon6W49mXV5Lq2BRsEegUV7lDrZ2GhsdvgbRqXQyU/QxcVDIafE5xXVAIH
-ogLV03FBWzD1nCiJPYa0P//J6R4fImN61nYR3w/c3kXuhHmbcmiNelgoeZnwwifO
-Ucj3gGhn6ihl7WsGGmF/oa5agoN3XvAhTBjFTX9HFbZtJQJOpUUboWKAA6th+O2N
-0a5Z1svKJBQhTiiFCxHplUmtWA6ttg==
-=AZ0f
------END PGP SIGNATURE-----
-
---Sig_/e_YH8od_GObSxcrR9wOXMw+--
+Regards,
+Mauro

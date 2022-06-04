@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245B353D7EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 18:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EB553D7EE
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 18:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238763AbiFDQlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 12:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S238833AbiFDQpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 12:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiFDQlF (ORCPT
+        with ESMTP id S238785AbiFDQpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 12:41:05 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E045E4F9EF
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 09:41:00 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f83983782fso108849917b3.6
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 09:41:00 -0700 (PDT)
+        Sat, 4 Jun 2022 12:45:31 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FBEBE23
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 09:45:28 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f83983782fso108903467b3.6
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 09:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=W34zkTcAGXMCI+JYzK3DXat6suzXaOqaAFFGw9mj4EI=;
-        b=zhtV/uN5ODIHUpVFbr2+YjzGJPKoATO59r27UZFDVstqIYGhKQMrtx2+gCsTUlVSr/
-         /y7R6Fyy33eFPz8AqsYWkNiV3PTb/NV3dYznmpuK9gqSUzzCWBWF51GKMWKKGvjRChUX
-         qLzM/rwQfkU6riBCC4n4120f34pjVQnKU/1V6Y7A9IRBmHAPnaJBwpZ7ockeF29gX3Ou
-         Vv6xmX1McEUbGFePYajUCCiaEspFpR8cHW2PqU4X2Qq4Apll4Htqg0OR1Jko6cLSrXv/
-         mUnqM9lS2LG9TwMTtm215Du5VRBU1I7Yk00cHWyDRQPhPvGp4J9UCs4i65RhcvnG/3d0
-         syeA==
+        bh=U0qwO/5RprU3Fxj4TQpkXAVK+0NlaHVF2GigE5WcPeQ=;
+        b=MU24J+I84fiGjUY/ZdEMEqhjb5Apx8zdDSo+zCbyHmo05+ck8mobRMROr6tX8S+tdu
+         RsS+lB5EmPOiqk0BV0avfSbUEVoCc0B2JD42g5siR6fjuxlPQdj82R095qz246FTKocu
+         m2/MIX0nIqwwHaUWV61riH+gQXrYi503myTf0J/08XTjCOplvpOsOw5BbBgcONrk0tTC
+         d2C5CWcPcjUEGykM0PRnmW9Peplw/iTaGiPfi7361BQA8ypeISDn0koFyfpl8r4zqlg4
+         Xsy+cmSP81Ijpk3MyKeSbeihKjvqpVNyqxHpby0GcM0d3Mz0cCm/8lDembON7qqTmTdP
+         F8MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W34zkTcAGXMCI+JYzK3DXat6suzXaOqaAFFGw9mj4EI=;
-        b=SLB2gyApf8RQr2Tynh+gY6yDTaS7OjLFGwYuR67BOFZnb5Rf5gg7+8DRXVeI4U5+0U
-         hGQQRvdB1f1swoc5d5e0jTBBVr6/bmmmqB89Blkx4XjDcotTNjpWz1yome3te7yw/qBK
-         YyfHBF0LLuxJIIVjDIpqPVrjGwmI8h4miGi8PvcVu9Fm1UNqfc8qcd5/+PXJ81P5ZLRP
-         Qd3xACiHBACjAVUw/TxbTQcAaI1Ov4ApEAF3O5bh1st0FOVauxx+aW91QGr4KTMJMYR7
-         xzMX/3qqUd+eAgwJ202VJ4sEc+JWk+RbZRvqhf+IWkIeb7BTDmLgMMeQnIErvIDf36C2
-         4sUw==
-X-Gm-Message-State: AOAM532Q68qt0ENycGiyJro4HS64c75Yh0zvBspXjrsnpPJ0sdjubQZ5
-        QZdE2JSgsoZFB6BC52FbIhmFrx0f/nXoHTthNkMNTQ==
-X-Google-Smtp-Source: ABdhPJyEp6zlhFtYLvUw8xR94hLkxEz9OazTl40HzB2Aw544cSnfZXqh1Q4u4Z3i5daY9y0zrI6Wf9VGmIjw46c7Rj0=
-X-Received: by 2002:a81:1a43:0:b0:30c:78b1:f23d with SMTP id
- a64-20020a811a43000000b0030c78b1f23dmr17352064ywa.166.1654360859976; Sat, 04
- Jun 2022 09:40:59 -0700 (PDT)
+        bh=U0qwO/5RprU3Fxj4TQpkXAVK+0NlaHVF2GigE5WcPeQ=;
+        b=Tvoaf6v9A7YHQeVMTdmUhX0w6r3yfj5wi38qZj7pfJU/bxu4Z/TseOoQpJuTR7tbi+
+         9aeuTtWO/qqSwY+S/+X9642dnpki9bRbIgKNLuSsCzlKvT/41T4LN7yXgF88+2jBvfZm
+         R+uf98kh6lzcZf59l2zE0MW4jCYwfgqeeviDvLbYmALLwxlfOE2gpj+ho3q98UXN0h4h
+         SbsJReVSOdQmb5cnWgkxfyQrTZ9A8M3RPgwyBU9+SmmLyQB2/vu8LrhD/6isRSYq7Ots
+         Ag9TTZArb+xgmOkT5TbFq/LKjiu/iIf7czqCgNaRLOTms5DuDH+Wo243zEMTtzK/zAIX
+         60Zg==
+X-Gm-Message-State: AOAM532simVhHGCJ9goDVaMDH/LENgDMzg/OcJH0rnpbEQbmDqfAgPyp
+        f/Ddhn0Gw7alfrA//YAVAphMY1PcbZCZPpVbC3PxEw==
+X-Google-Smtp-Source: ABdhPJxshDtlaeVVnmpjUpmce0jsCL3P/y9FYUMU+kxVMn8FJTEzWdsTAsf7GFP4LD4DT4ohTi/YGExC3u1O6QpUS/o=
+X-Received: by 2002:a81:b343:0:b0:300:4822:e12 with SMTP id
+ r64-20020a81b343000000b0030048220e12mr17638910ywh.376.1654361127256; Sat, 04
+ Jun 2022 09:45:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220603173821.749019262@linuxfoundation.org>
-In-Reply-To: <20220603173821.749019262@linuxfoundation.org>
+References: <20220603173820.731531504@linuxfoundation.org>
+In-Reply-To: <20220603173820.731531504@linuxfoundation.org>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 4 Jun 2022 22:10:48 +0530
-Message-ID: <CA+G9fYvFvMZvogpf6WwKA0Eb-4y2x7wwJ72=5pVsSDTFu8xiXQ@mail.gmail.com>
-Subject: Re: [PATCH 5.17 00/75] 5.17.13-rc1 review
+Date:   Sat, 4 Jun 2022 22:15:16 +0530
+Message-ID: <CA+G9fYsQ5732BSH83s=KcfNYooqSAV82BoUS9CYg5P2CSc+DMg@mail.gmail.com>
+Subject: Re: [PATCH 5.18 00/67] 5.18.2-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
         torvalds@linux-foundation.org, akpm@linux-foundation.org,
@@ -71,11 +71,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 at 23:23, Greg Kroah-Hartman
+On Fri, 3 Jun 2022 at 23:26, Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> This is the start of the stable review cycle for the 5.17.13 release.
-> There are 75 patches in this series, all will be posted as a response
+> This is the start of the stable review cycle for the 5.18.2 release.
+> There are 67 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 >
@@ -84,10 +84,10 @@ On Fri, 3 Jun 2022 at 23:23, Greg Kroah-Hartman
 >
 > The whole patch series can be found in one patch at:
 >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.13-rc1.gz
+5.18.2-rc1.gz
 > or in the git tree and branch at:
 >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
+-rc.git linux-5.18.y
 > and the diffstat can be found below.
 >
 > thanks,
@@ -100,47 +100,97 @@ No regressions on arm64, arm, x86_64, and i386.
 Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 ## Build
-* kernel: 5.17.13-rc1
+* kernel: 5.18.2-rc1
 * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.17.y
-* git commit: 30200667e823559c51baeb2bd95c14b144cd8e5c
-* git describe: v5.17.11-188-g30200667e823
+* git branch: linux-5.18.y
+* git commit: 20fa00749a26c2347ca02a2eb231d61ecd877c90
+* git describe: v5.18-116-g20fa00749a26
 * test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
-.11-188-g30200667e823
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18=
+-116-g20fa00749a26
 
-## Test Regressions (compared to v5.17.11-112-g118948632858)
+## Test Regressions (compared to v5.18-48-g10e6e3d47333)
 No test regressions found.
 
-## Metric Regressions (compared to v5.17.11-112-g118948632858)
+## Metric Regressions (compared to v5.18-48-g10e6e3d47333)
 No metric regressions found.
 
-## Test Fixes (compared to v5.17.11-112-g118948632858)
+## Test Fixes (compared to v5.18-48-g10e6e3d47333)
 No test fixes found.
 
-## Metric Fixes (compared to v5.17.11-112-g118948632858)
+## Metric Fixes (compared to v5.18-48-g10e6e3d47333)
 No metric fixes found.
 
 ## Test result summary
-total: 135943, pass: 122628, fail: 435, skip: 12050, xfail: 830
+total: 132732, pass: 121296, fail: 1353, skip: 10083, xfail: 0
 
 ## Build Summary
 * arc: 10 total, 10 passed, 0 failed
-* arm: 314 total, 314 passed, 0 failed
+* arm: 313 total, 313 passed, 0 failed
 * arm64: 58 total, 58 passed, 0 failed
 * i386: 52 total, 49 passed, 3 failed
 * mips: 37 total, 37 passed, 0 failed
 * parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 18 total, 18 passed, 0 failed
 * sh: 24 total, 24 passed, 0 failed
 * sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
+* x86_64: 56 total, 54 passed, 2 failed
 
 ## Test suites summary
 * fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
 * kunit
+* kunit/15
+* kunit/261
+* kunit/3
+* kunit/427
+* kunit/90
 * kvm-unit-tests
 * libgpiod
 * libhugetlbfs

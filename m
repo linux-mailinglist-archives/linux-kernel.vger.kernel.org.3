@@ -2,152 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03B353D77E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 17:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FB453D780
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 17:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237765AbiFDPaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 11:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S237826AbiFDPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 11:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233426AbiFDPaK (ORCPT
+        with ESMTP id S233426AbiFDPcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 11:30:10 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4650473;
-        Sat,  4 Jun 2022 08:30:07 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n10so21160004ejk.5;
-        Sat, 04 Jun 2022 08:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3bk7baS2SNynPNN4B6G8lp7hpcyD8ZFLbXx8vqds4tM=;
-        b=QVHu+WBPZB67UwBQxVrKxY+BylBP8feaLPaDi0O5fCJuLupUHPjv41RD9TA/ljh/UI
-         3OJHeY6K5MdvviD1q1q+HqWrMDh8WL9k5gy1h5AQth72cWe+2kPQRvA6+XgMilKWTHuQ
-         bI+wRFGvmAaBJKCLFRyeMl3Qoac/Gx1TNDxdn5Dkd9cToXVAXsGlb4dmsNk2MPyMR8lX
-         6JUITLd5W6pQHscw3dxfwKqWNB9WCaDa9dhNjf74vKQv9oRQCxULGSlxJU5OViRiU/UB
-         aJbWHVHQgyLAPC/Oi5zyO3A5R2+bnNeLZD7fIlR2Rt3Uw1GNyq8UJVzhjzfKVWf7YabA
-         klPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3bk7baS2SNynPNN4B6G8lp7hpcyD8ZFLbXx8vqds4tM=;
-        b=jggchCeZCt4sL61X/XIAtR4NHofE2kgoW4PEqN1rJ6Wf/4M6ccaftMMHXb/uK+rxVM
-         +Bf2MjILtOakpTxddn+NBN6pI8g4/52ZIDNzLYuzb8KbzgXDkqZ4iO3ArsBJVEayY57U
-         LiwX+tnhBhKGk1Rz72zW3rlgFNptLOOIrSQcAeyL5oTw/Ey5ywByCqinSyVH03a3W7iX
-         80ZrpxA0UQITRA+AY0Usb9vJ9PaRrpuaF70UNA+uUTzMTq5jl6oKAFMlZZEJoetaPGj0
-         m5mklltpdHLbiwWfwRz5xQzpynFFmXowQ83iatFpmjSR9yHcM480B6qj2IxeUw7h/XZa
-         iEPg==
-X-Gm-Message-State: AOAM533bhJE2j/k4qFDQDO8MhAZ1ZvuT8vXOTOfpBMsb1wiUohOdgejN
-        ErcmlEp62On86/niV9B4Og4=
-X-Google-Smtp-Source: ABdhPJzCyjjZCIsbjsxVOA5l13Qm04uEQWHvW8LtSgGavAFKukbQEvvnWXzh3QUYeNqsht4LsLtF6Q==
-X-Received: by 2002:a17:906:ae57:b0:70b:e847:271b with SMTP id lf23-20020a170906ae5700b0070be847271bmr11034710ejb.700.1654356606421;
-        Sat, 04 Jun 2022 08:30:06 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-43.zg.cable.xnet.hr. [94.253.165.43])
-        by smtp.googlemail.com with ESMTPSA id hz10-20020a1709072cea00b0070e01426360sm2069250ejc.91.2022.06.04.08.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 08:30:05 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH] arm64: dts: qcom: ipq6018: correct QUP peripheral labels
-Date:   Sat,  4 Jun 2022 17:30:03 +0200
-Message-Id: <20220604153003.55172-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 4 Jun 2022 11:32:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FDADE90;
+        Sat,  4 Jun 2022 08:32:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7D9760E15;
+        Sat,  4 Jun 2022 15:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329A8C385B8;
+        Sat,  4 Jun 2022 15:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654356735;
+        bh=I/KOyvcu86ggV1KEPPLSwAcYPtcaFXtjkuLlNLAcvhU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XYIsGtBp8NVSroxPqW6PozRXsMSYNi4I+rD1xoW858sAW/HqRu+6O2HFu3n0oHUKE
+         VMsrqU94H0NV4xXECIbs59GDWXhn3+el6qv1gV1s5DRTZaRx04D+8Mkw/+TFiNlVgs
+         E574BrVFncSv2+I22SVuQj0VB93u9N2QxjjHiDJXz5Ea6iZIKLHIUXq3u6F4idTkSl
+         4ii39bU+L/h3aZXDrckaRObm+uF8p9h6lGj3ZeLhOFVSSQ8pMh1C6tLNU1efgt4HRK
+         vZ7MZQlwy4QCOYnpII8WWhf/fS6BMUXn9Cet43IHgXr0PeJtGErh4Z2UYq/CZAo/so
+         RRoyd5+b3ld7Q==
+Date:   Sat, 4 Jun 2022 16:41:13 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH 04/49] iio: fix opencoded for_each_set_bit()
+Message-ID: <20220604164113.2ed4f681@jic23-huawei>
+In-Reply-To: <2d5e9096-e40d-13af-234a-539108df1c50@wanadoo.fr>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+        <20220210224933.379149-5-yury.norov@gmail.com>
+        <2d5e9096-e40d-13af-234a-539108df1c50@wanadoo.fr>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current QUP peripheral labels like spi_0 and i2c_0 dont really tell what is
-the exact QUP HW being used as there are actually 6 identical QUP HW blocks
-for UART, SPI and I2C.
-For example current i2c_0 label actually points to the QUP2 I2C HW.
+On Fri, 11 Feb 2022 18:17:37 +0100
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 
-This style of labeling does not follow what the rest of Qualcomm SoC-s use,
-for example IPQ8074 which has the identical QUP blocks.
-It also makes it really hard to add the missing QUP DT nodes as there are
-multiple missing.
+> Le 10/02/2022 =C3=A0 23:48, Yury Norov a =C3=A9crit=C2=A0:
+> > iio_simple_dummy_trigger_h() is mostly an opencoded for_each_set_bit().
+> > Using for_each_set_bit() make code much cleaner, and more effective.
+> >=20
+> > Signed-off-by: Yury Norov <yury.norov-Re5JQEeQqe8AvxtiuMwx3w@public.gma=
+ne.org>
+> > ---
+> >   drivers/iio/dummy/iio_simple_dummy_buffer.c | 48 ++++++++-------------
+> >   1 file changed, 19 insertions(+), 29 deletions(-)
+> >=20
+> > diff --git a/drivers/iio/dummy/iio_simple_dummy_buffer.c b/drivers/iio/=
+dummy/iio_simple_dummy_buffer.c
+> > index d81c2b2dad82..3bc1b7529e2a 100644
+> > --- a/drivers/iio/dummy/iio_simple_dummy_buffer.c
+> > +++ b/drivers/iio/dummy/iio_simple_dummy_buffer.c
+> > @@ -45,41 +45,31 @@ static irqreturn_t iio_simple_dummy_trigger_h(int i=
+rq, void *p)
+> >   {
+> >   	struct iio_poll_func *pf =3D p;
+> >   	struct iio_dev *indio_dev =3D pf->indio_dev;
+> > +	int i =3D 0, j;
+> >   	u16 *data;
+> >  =20
+> >   	data =3D kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
+> >   	if (!data)
+> >   		goto done;
+> >  =20
+> > -	if (!bitmap_empty(indio_dev->active_scan_mask, indio_dev->masklength)=
+) {
+> > -		/*
+> > -		 * Three common options here:
+> > -		 * hardware scans: certain combinations of channels make
+> > -		 *   up a fast read.  The capture will consist of all of them.
+> > -		 *   Hence we just call the grab data function and fill the
+> > -		 *   buffer without processing.
+> > -		 * software scans: can be considered to be random access
+> > -		 *   so efficient reading is just a case of minimal bus
+> > -		 *   transactions.
+> > -		 * software culled hardware scans:
+> > -		 *   occasionally a driver may process the nearest hardware
+> > -		 *   scan to avoid storing elements that are not desired. This
+> > -		 *   is the fiddliest option by far.
+> > -		 * Here let's pretend we have random access. And the values are
+> > -		 * in the constant table fakedata.
+> > -		 */
+> > -		int i, j;
+> > -
+> > -		for (i =3D 0, j =3D 0;
+> > -		     i < bitmap_weight(indio_dev->active_scan_mask,
+> > -				       indio_dev->masklength);
+> > -		     i++, j++) {
+> > -			j =3D find_next_bit(indio_dev->active_scan_mask,
+> > -					  indio_dev->masklength, j);
+> > -			/* random access read from the 'device' */
+> > -			data[i] =3D fakedata[j];
+> > -		}
+> > -	}
+> > +	/*
+> > +	 * Three common options here:
+> > +	 * hardware scans: certain combinations of channels make
+> > +	 *   up a fast read.  The capture will consist of all of them.
+> > +	 *   Hence we just call the grab data function and fill the
+> > +	 *   buffer without processing.
+> > +	 * software scans: can be considered to be random access
+> > +	 *   so efficient reading is just a case of minimal bus
+> > +	 *   transactions.
+> > +	 * software culled hardware scans:
+> > +	 *   occasionally a driver may process the nearest hardware
+> > +	 *   scan to avoid storing elements that are not desired. This
+> > +	 *   is the fiddliest option by far.
+> > +	 * Here let's pretend we have random access. And the values are
+> > +	 * in the constant table fakedata.
+> > +	 */ =20
+>=20
+> Nitpicking: you could take advantage of the tab you save to use the full=
+=20
+> width of the line and save some lines of code.
 
-So utilize the same style as other Qualcomm SoC-s are using and update the
-CP01 DTS as its the current sole user of them.
+Tweaked whilst applying.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts | 4 ++--
- arch/arm64/boot/dts/qcom/ipq6018.dtsi        | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Sorry this one took so long. I marked it as a patch that I'd revisit if and
+tidy up if there was no v2 sent, but then managed to forget about it until
+I came to do a clean out of patchwork today.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts b/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts
-index 5aec18308712..b603961c5831 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq6018-cp01-c1.dts
-@@ -29,13 +29,13 @@ &blsp1_uart3 {
- 	status = "okay";
- };
- 
--&i2c_1 {
-+&blsp1_i2c3 {
- 	pinctrl-0 = <&i2c_1_pins>;
- 	pinctrl-names = "default";
- 	status = "okay";
- };
- 
--&spi_0 {
-+&blsp1_spi1 {
- 	cs-select = <0>;
- 	status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index aac56575e30d..1c3f3d521715 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -282,7 +282,7 @@ blsp1_uart3: serial@78b1000 {
- 			status = "disabled";
- 		};
- 
--		spi_0: spi@78b5000 {
-+		blsp1_spi1: spi@78b5000 {
- 			compatible = "qcom,spi-qup-v2.2.1";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -297,7 +297,7 @@ spi_0: spi@78b5000 {
- 			status = "disabled";
- 		};
- 
--		spi_1: spi@78b6000 {
-+		blsp1_spi2: spi@78b6000 {
- 			compatible = "qcom,spi-qup-v2.2.1";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -312,7 +312,7 @@ spi_1: spi@78b6000 {
- 			status = "disabled";
- 		};
- 
--		i2c_0: i2c@78b6000 {
-+		blsp1_i2c2: i2c@78b6000 {
- 			compatible = "qcom,i2c-qup-v2.2.1";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -327,7 +327,7 @@ i2c_0: i2c@78b6000 {
- 			status = "disabled";
- 		};
- 
--		i2c_1: i2c@78b7000 { /* BLSP1 QUP2 */
-+		blsp1_i2c3: i2c@78b7000 {
- 			compatible = "qcom,i2c-qup-v2.2.1";
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.36.1
+Anyhow, now applied to the togreg branch of iio.git - initially pushed out
+as testing for 0-day to see if we missed anything.
+
+Thanks,
+
+Jonathan
+
+>=20
+> Just my 2c.
+>=20
+> CJ
+>=20
+>=20
+> > +	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklengt=
+h)
+> > +		data[i++] =3D fakedata[j];
+> >  =20
+> >   	iio_push_to_buffers_with_timestamp(indio_dev, data,
+> >   					   iio_get_time_ns(indio_dev)); =20
+>=20
 

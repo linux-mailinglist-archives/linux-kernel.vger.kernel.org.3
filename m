@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA32753D4BE
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D96553D4C9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 04:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348648AbiFDB5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S1349936AbiFDCH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 22:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiFDB5u (ORCPT
+        with ESMTP id S1345631AbiFDCHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:57:50 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FBC20F70;
-        Fri,  3 Jun 2022 18:57:49 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso8374029pjg.0;
-        Fri, 03 Jun 2022 18:57:49 -0700 (PDT)
+        Fri, 3 Jun 2022 22:07:24 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E973313A9;
+        Fri,  3 Jun 2022 19:07:21 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so8367752pjs.1;
+        Fri, 03 Jun 2022 19:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=o5hGdIU3RTq9rNarbSsXAVqYEW+DV77xSmfZJg12PYQ=;
-        b=EPjhqUYh4/vtYhYTO99L50D61QACPFudZTbqJcy6ykzVGGMsI6T+HnfatT+lKWMEh0
-         pj9NkXC8IqsgqGjG2wVkJtTAUDVck8mpCYF2tO5PsZ/0NeH/0Q/MxVaxRFtFeVep7CPp
-         OvKCULTVQLctzg04rNjzQDascX8W5RpRrnM1tcnRPgHyQPDVyny+HMtoTFgUpZhZhG4l
-         J4iIwC9DndxgK8E+a10mb4JY3ym8iaOqcVLYkmXwgdJkt7ZpH7ljIcfaAe/XVktXmzcQ
-         pxaMYC4oTBaJHhz/gciL7SemoeRI9XGVvTeVqiiQzFOWxtQAZPb/mqo7URPAGLJiFJD8
-         Voiw==
+        bh=vW/f8cKMH2tXPP5DERsOqeGBmSRqfZgMJ/o7YW6aZaA=;
+        b=O89rwX5Clw1y6HYOM9jUXOMzKZti5N0Bp8oLKBxvrTRsZr8SCMU6D50/Xw5iIbmGGM
+         Ea1Xvv8gSwcK2e3gcOVQKcmLIziYTVY+JelcKmeawLFWcsPQTFWu9K/Kp/Y2hu0wSTgL
+         vjmyus7ON2X6+em9CTi1xkd2xgqigHbYUOZLP/Wjv4XHPIZ8IJ5xBnUqX/Ubjmcps0FV
+         2PDoqXnen7va3NM6AB91gGtCr5ripbP7MeEgLab71Y8nUb+P3UY1GbTylYrGtetRLUA1
+         rdagm+MXQhnMSacHYAcsBDXcq9hOKumDJgyyVVre5UCzBsN1keZVZLFE1SGKyHU7uwwD
+         KV5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=o5hGdIU3RTq9rNarbSsXAVqYEW+DV77xSmfZJg12PYQ=;
-        b=38Ow+uint+M7Ah6CE5YAfc6pF8GencfcOm7drZAbIjlLFeD3Db/JdJo8aDSeXQmG0l
-         PjJwlbUnilS0l+nkKhQweGWZZAnyPYM7pmsjhpLLy5gyv4FnXQcaZgCdqh9j0Q/kTniY
-         4Pf97/I0rBtWvqbHHnErbnxy2qFB98M4iVGNtWLqQXDqLRLrOeSsBKOHphh4WDxUQl7s
-         GzqIh68C3bjjcsleIANfb7aicfIrscTtWUVqoke+ECfjxFltP+Vl0Xw693qDBkX1uwup
-         8AcxKWjafinT2gOfVEQv4vcWKyVhFpnZn7Rizifcg/xUafLffEuDGyWecZCx4ND1dEuI
-         Q54Q==
-X-Gm-Message-State: AOAM532aWkCoUpYt2n5sVB66JBDL3rn7hDiHMFyDO643Cuf1Of7MOOEr
-        7m9T2dgkQmdIBK6+U73w+hsr27aAU/U=
-X-Google-Smtp-Source: ABdhPJz2TwV5LhKdZz+uWbYPjCf2IZSysv/0di1ulfqoBm7BJc4ngnlPE31btPUgnPQvEQssdi6KKg==
-X-Received: by 2002:a17:90b:1646:b0:1e3:15ef:2871 with SMTP id il6-20020a17090b164600b001e315ef2871mr28504519pjb.105.1654307868626;
-        Fri, 03 Jun 2022 18:57:48 -0700 (PDT)
+        bh=vW/f8cKMH2tXPP5DERsOqeGBmSRqfZgMJ/o7YW6aZaA=;
+        b=g2r5dEETsmLvuCKz3ogkoSssMxbIRcvbuFtpvzttVz4qdm8+ITXg67MJe1D4wL4gnt
+         XCC9H0zjkMG93bqVWUdjimhtNPs8LNjNtSXd2mbP7zP5IOmcZd3JbxGiR3IcvsCS1JTE
+         T2t09pg0iixhJjZPzvVVX1PsTY3HeF1MWSTx315n7pu+S/DZNxG6GCiGeSwI1TdjYAmw
+         iGhxmVE3hqGRuCY2Ssm+tRenUX6C/qZSYJVw/VtTeUepl0gEWhKBZE+zfRL+5wzBog9k
+         tNobfhwx2V3ynuU0gqWxNxUQOt8tScz6PqhBqOWRurxB9gEQQ66lgn3K6WUgXzdPPG4N
+         rA8A==
+X-Gm-Message-State: AOAM531MLZnRReOV1mxPhUk5hurQyYM0w8ub78jNAd4TD4BLuIMW9Gpf
+        +ydnZ/DkfSO51QeTL+igGzKiMwSdMf8=
+X-Google-Smtp-Source: ABdhPJy4Nue4jpg7LM+nr0HISR1+I5KCAXBSSOv4nxRiYB063+TcRbZ2N6mlkGz2ch+16XRWjLUgLA==
+X-Received: by 2002:a17:902:6b42:b0:15d:3603:6873 with SMTP id g2-20020a1709026b4200b0015d36036873mr12838922plt.30.1654308440641;
+        Fri, 03 Jun 2022 19:07:20 -0700 (PDT)
 Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
-        by smtp.gmail.com with ESMTPSA id k38-20020a635a66000000b003f667cb15d6sm5973257pgm.37.2022.06.03.18.57.45
+        by smtp.gmail.com with ESMTPSA id c14-20020a170902c2ce00b0015e8d4eb207sm6060553pla.81.2022.06.03.19.07.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 18:57:47 -0700 (PDT)
+        Fri, 03 Jun 2022 19:07:19 -0700 (PDT)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] leds: Add leds-qcom-lpg entry to documentation table of contents
-Date:   Sat,  4 Jun 2022 08:57:35 +0700
-Message-Id: <20220604015735.249707-1-bagasdotme@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Nikolai Kondrashov <spbnick@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        llvm@lists.linux.dev, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] HID: uclogic: properly format kernel-doc comment for hid_dbg() wrappers
+Date:   Sat,  4 Jun 2022 09:07:11 +0700
+Message-Id: <20220604020711.252312-1-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,48 +77,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After merging linux-leds tree to the mainline [1], htmldocs build produces
-a new warning:
+Running kernel-doc script on drivers/hid/hid-uclogic-params.c, it found
+6 warnings for hid_dbg() wrapper functions below:
 
-checking consistency... /home/bagas/repo/linux-stable/Documentation/leds/leds-qcom-lpg.rst: WARNING: document isn't included in any toctree
+drivers/hid/hid-uclogic-params.c:48: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+drivers/hid/hid-uclogic-params.c:48: warning: missing initial short description on line:
+ * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+drivers/hid/hid-uclogic-params.c:48: info: Scanning doc for function Dump
+drivers/hid/hid-uclogic-params.c:80: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Dump tablet interface frame parameters with hid_dbg(), indented with two
+drivers/hid/hid-uclogic-params.c:80: warning: missing initial short description on line:
+ * Dump tablet interface frame parameters with hid_dbg(), indented with two
+drivers/hid/hid-uclogic-params.c:80: info: Scanning doc for function Dump
+drivers/hid/hid-uclogic-params.c:105: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Dump tablet interface parameters with hid_dbg().
+drivers/hid/hid-uclogic-params.c:105: warning: missing initial short description on line:
+ * Dump tablet interface parameters with hid_dbg().
 
-The warning above is because leds-qcom-lpg.rst is missing in the table of
-contents.
+One of them is reported by kernel test robot.
 
-Add the missing entry.
+Fix these warnings by properly format kernel-doc comment for these
+functions.
 
-[1]: https://lore.kernel.org/all/20220531200619.GA8906@duo.ucw.cz/
-
-Fixes: 24e2d05d1b6898 ("leds: Add driver for Qualcomm LPG")
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>
-Cc: linux-leds@vger.kernel.org
+Link: https://lore.kernel.org/linux-doc/202205272033.XFYlYj8k-lkp@intel.com/
+Fixes: a228809fa6f39c ("HID: uclogic: Move param printing to a function")
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: José Expósito <jose.exposito89@gmail.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Nikolai Kondrashov <spbnick@gmail.com>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: llvm@lists.linux.dev
+Cc: linux-input@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Changes since v1 [1]:
-   - Correct commit pointed by Fixes: tag (suggested by Jonathan Corbet)
-   - Collect Acked-by: from Pavel Machek
+ Changes since v3 [1]:
+   - Drom stable ML from CC list (in response to Greg KH reply)
 
- [1]: https://lore.kernel.org/linux-doc/20220603025735.17953-1-bagasdotme@gmail.com/
+ [1]: https://lore.kernel.org/linux-doc/20220602082321.313143-1-bagasdotme@gmail.com/
+
+ drivers/hid/hid-uclogic-params.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+index db838f16282d64..e5e65d849faa97 100644
+--- a/drivers/hid/hid-uclogic-params.c
++++ b/drivers/hid/hid-uclogic-params.c
+@@ -23,11 +23,11 @@
+ /**
+  * uclogic_params_pen_inrange_to_str() - Convert a pen in-range reporting type
+  *                                       to a string.
+- *
+  * @inrange:	The in-range reporting type to convert.
+  *
+- * Returns:
+- *	The string representing the type, or NULL if the type is unknown.
++ * Return:
++ * * The string representing the type, or
++ * * %NULL if the type is unknown.
+  */
+ static const char *uclogic_params_pen_inrange_to_str(
+ 				enum uclogic_params_pen_inrange inrange)
+@@ -45,10 +45,12 @@ static const char *uclogic_params_pen_inrange_to_str(
+ }
  
- Documentation/leds/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+ /**
+- * Dump tablet interface pen parameters with hid_dbg(), indented with one tab.
+- *
++ * uclogic_params_pen_hid_dbg() - Dump tablet interface pen parameters
+  * @hdev:	The HID device the pen parameters describe.
+  * @pen:	The pen parameters to dump.
++ *
++ * Dump tablet interface pen parameters with hid_dbg(). The dump is indented
++ * with a tab.
+  */
+ static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
+ 					const struct uclogic_params_pen *pen)
+@@ -77,11 +79,12 @@ static void uclogic_params_pen_hid_dbg(const struct hid_device *hdev,
+ }
+ 
+ /**
+- * Dump tablet interface frame parameters with hid_dbg(), indented with two
+- * tabs.
+- *
++ * uclogic_params_frame_hid_dbg() - Dump tablet interface frame parameters
+  * @hdev:	The HID device the pen parameters describe.
+  * @frame:	The frame parameters to dump.
++ *
++ * Dump tablet interface frame parameters with hid_dbg(). The dump is
++ * indented with two tabs.
+  */
+ static void uclogic_params_frame_hid_dbg(
+ 				const struct hid_device *hdev,
+@@ -102,10 +105,11 @@ static void uclogic_params_frame_hid_dbg(
+ }
+ 
+ /**
+- * Dump tablet interface parameters with hid_dbg().
+- *
++ * uclogic_params_hid_dbg() - Dump tablet interface parameters
+  * @hdev:	The HID device the parameters describe.
+  * @params:	The parameters to dump.
++ *
++ * Dump tablet interface parameters with hid_dbg().
+  */
+ void uclogic_params_hid_dbg(const struct hid_device *hdev,
+ 				const struct uclogic_params *params)
 
-diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
-index e5d63b9400459c..014e009b076159 100644
---- a/Documentation/leds/index.rst
-+++ b/Documentation/leds/index.rst
-@@ -25,4 +25,5 @@ LEDs
-    leds-lp5562
-    leds-lp55xx
-    leds-mlxcpld
-+   leds-qcom-lpg
-    leds-sc27xx
-
-base-commit: 50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc
+base-commit: 1f952675835bfe18d6ae494a5581724d68c52352
 -- 
 An old man doll... just what I always wanted! - Clara
 

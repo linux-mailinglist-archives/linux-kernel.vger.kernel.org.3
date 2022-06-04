@@ -2,89 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECFE53D4F9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 05:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E2E53D4FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 05:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350293AbiFDDB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 23:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S1350299AbiFDDDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 23:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbiFDDBZ (ORCPT
+        with ESMTP id S230414AbiFDDDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 23:01:25 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD49227FCE
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 20:01:24 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id e184so16777746ybf.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 20:01:24 -0700 (PDT)
+        Fri, 3 Jun 2022 23:03:13 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F24E1F639
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 20:03:12 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id az35so190533qkb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 20:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ewMgCGOsQ1FxmxdvCIZNwEIAt8nDNWHxM1ob+w0hhVs=;
-        b=X/im8WVlax5+ol2CNNKIThbSUjdi+Vh3Pe4wnsHRp6FqgXQqkqAHmxeHE4USsFm5bo
-         Oh/okEljdH9Buv+zXhNaElVDP7ZaLZre77qUze/UQyoSMeMS241Q62yhnmMwuB7vEEp8
-         0Du/7RDOfoJG5cHQDbYLIfAdGdfqI1QBVUiawvrVSeOrCXVTbbG7p5Ab7ylHVDgfWAtj
-         px7Z+CXBBwTZ/7Gr48hGtpYLvMnnMGTYkwXI6/hcsVDY4RJK00IQ7Vg7MoZFWCbMYuGi
-         3TV68Sdj/k1ou6etrYtQl1+QCCIZWh0wWGVGAiGKjUFkyhPM+lIIlyTRkf3De8Fg3pVx
-         B45w==
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LsfZ82PdOPICg3ihOidrmbQM4Kx+GZgOc28RlAEoupY=;
+        b=kUbvaz0O2SDRUAO2RX5cvc3zRaR+X0Vijo2W9/iKMlewn7tnAKXhPRLddAVXqktGmX
+         r6tmhXr8Eny7pmO8gzcTXj/3hHqfob7UYrrm0wakgGb8Oa14LfVtCtna3Z5oFtZuAw+r
+         cDreEQOOTxdd/VPfuXnxZ3IHN62qAKq0ItkvU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ewMgCGOsQ1FxmxdvCIZNwEIAt8nDNWHxM1ob+w0hhVs=;
-        b=LV37CAZoSBxulSjTmTVhVFRcYGz2umJfd/n6u8LHB1R7otuNnZmxJKjl8So4UHuc8u
-         94YSKH2k4BVWywoTNfIYOaWh32sp5fgVp5JkFxAcNkxtaO9KszEvDGnI9+Uu0MGxS0nO
-         SV/Y4D1oUeSMhnWG3lGPFxllwRHloSo48NzybzmZlk37MiZaEMI8ibx6yZbEAEJ2Ibqu
-         hrhYeBVLhcbU/vs28wA1LygK6roLWqbPQ/wHCh2qf6x8EcGImrHwHL3cDMLEWLDynhKN
-         joH2QXdx6UzTb06+zIQGKy5qI2K+7Ej915YEz5P48XfqQ6c4SRO3U68ZZM9ZvnqP6Lb/
-         eCjQ==
-X-Gm-Message-State: AOAM532rvQDNxDzuBRhPg1GvM3agS0h0ujzhjtXKy36Z/DClQUQB9qV6
-        KMn5o23zCfS+tDW0JCuwOJT3Wgf1JpPJlFz9Iyo=
-X-Google-Smtp-Source: ABdhPJwcUFG66mxqZltFJCzIPadd+i0ZcbH9bRlYrjHajqkO7z1c3HPjm4MGxY2WP2kd0Rl6FNIxiXJatWytpcohhdc=
-X-Received: by 2002:a5b:20b:0:b0:65c:a0cf:812b with SMTP id
- z11-20020a5b020b000000b0065ca0cf812bmr14027400ybl.48.1654311684032; Fri, 03
- Jun 2022 20:01:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LsfZ82PdOPICg3ihOidrmbQM4Kx+GZgOc28RlAEoupY=;
+        b=kKswfq1gFKyUKMIYifGl9CqTF4A0atAnHFcctzQ6RLT2hqed4+WekgjC0fCpUPpNew
+         h51Tp4hptbnCJtqAlBKaISUKI60IRHwPZHjLsMB7vpfUzmGjmQa2WjVWH7F4EUxkRJvE
+         zP8nzUGgYoekgtpqiOlnPCySK9XcPmEvPPt3+DV6wUfcN6Lo0Vwdfj2x4Qg+0JBOkzjT
+         SNEF/VQydcfAoGm3aEUZD2/Fisz4iZPgHMxyT6wgiItvz7Xeqe3M1ElTlJe/DVozdkAH
+         tTvVt4K3UdMYNn4vbMnBQahB5JaGrP1kqpTjKrTG68mSQ93ve29LH9uLvCsANXGF2ERA
+         PkzQ==
+X-Gm-Message-State: AOAM532AdRy8fCeOG7oI1Z5n65FcupdBOANkvLyX3DayuPRb/SCjxJAZ
+        WqXbijTbcOQzwkmxw6LgFJIDmg==
+X-Google-Smtp-Source: ABdhPJy/0mDJfNuLLNZUcHBjp83BmcsFrBFT5Df5tL7JehfM1AIMdGKvXeLHfOiqe0gRDOxTmdHgNg==
+X-Received: by 2002:a05:620a:4453:b0:6a0:3fa3:eb41 with SMTP id w19-20020a05620a445300b006a03fa3eb41mr8780132qkp.309.1654311791232;
+        Fri, 03 Jun 2022 20:03:11 -0700 (PDT)
+Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006a6a6f148e6sm1605779qkl.17.2022.06.03.20.03.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 20:03:10 -0700 (PDT)
+Date:   Sat, 4 Jun 2022 03:03:10 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 2/2] rcu/kvfree: Introduce KFREE_DRAIN_JIFFIES_[MAX/MIN]
+ interval
+Message-ID: <YprLbpCyLUCVAwg5@google.com>
+References: <20220602080644.432156-1-urezki@gmail.com>
+ <20220602080644.432156-2-urezki@gmail.com>
+ <YplIh8BoYXc8X77q@google.com>
+ <Ypnafl/65x4jHnfv@pc638.lan>
 MIME-Version: 1.0
-References: <20220603035415.1243913-1-patrick.wang.shcn@gmail.com> <YpnqDlI0nRJA0gtg@arm.com>
-In-Reply-To: <YpnqDlI0nRJA0gtg@arm.com>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Sat, 4 Jun 2022 11:01:13 +0800
-Message-ID: <CAGcnep9v=DEZ-ENa9UqrFnnD72Qd-UJyY0boCxFGJMaJe4nzqQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] mm: kmemleak: store objects allocated with
- physical address separately and check when scan
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, Yee Lee <yee.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ypnafl/65x4jHnfv@pc638.lan>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 7:01 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Fri, Jun 03, 2022 at 11:54:11AM +0800, Patrick Wang wrote:
-> > Patrick Wang (4):
-> >   mm: kmemleak: add OBJECT_PHYS flag for objects allocated with physical
-> >     address
-> >   mm: kmemleak: add rbtree for objects allocated with physical address
-> >   mm: kmemleak: handle address stored in object based on its type
-> >   mm: kmemleak: kmemleak_*_phys() set address type and check PA when
-> >     scan
->
-> This looks fine at a very quick look but I'll do a in-depth review next
-> week. One more thing needed is to remove the min_count argument to
-> kmemleak_alloc_phys() and assume it's always 0. After this series we
-> can't track them for leaking anyway.
+On Fri, Jun 03, 2022 at 11:55:10AM +0200, Uladzislau Rezki wrote:
+> On Thu, Jun 02, 2022 at 11:32:23PM +0000, Joel Fernandes wrote:
+> > On Thu, Jun 02, 2022 at 10:06:44AM +0200, Uladzislau Rezki (Sony) wrote:
+> > > Currently the monitor work is scheduled with a fixed interval that
+> > > is HZ/20 or each 50 milliseconds. The drawback of such approach is
+> > > a low utilization of page slot in some scenarios. The page can store
+> > > up to 512 records. For example on Android system it can look like:
+> > > 
+> > > <snip>
+> > >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
+> > >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> > >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> > >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
+> > >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
+> > >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
+> > >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> > >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> > >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
+> > >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
+> > >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
+> > >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
+> > >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
+> > >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
+> > >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
+> > > <snip>
+> > > 
+> > > where a page only carries few records to reclaim a memory. In order to
+> > > improve batching and make utilization more efficient the patch introduces
+> > > a drain interval that can be set either to KFREE_DRAIN_JIFFIES_MAX or
+> > > KFREE_DRAIN_JIFFIES_MIN. It is adjusted if a flood is detected, in this
+> > > case a memory reclaim occurs more often whereas in mostly idle cases the
+> > > interval is set to its maximum timeout that improves the utilization of
+> > > page slots.
+> > > 
+> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > 
+> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > 
+> Thanks!
+> 
+> This patch makes the interval hard-coded in some sense so you can not change
+> it in runtime, only recompilation. If there is a need or request we can make
+> both as module_param().
 
-Will do in the next version.
+Yes, this seems a good first step.
 
-Thanks,
-Patrick
+> If we are to do that we can just add one extra patch on top of it.
+
+Yes.
+
+thanks,
+
+ - Joel
+

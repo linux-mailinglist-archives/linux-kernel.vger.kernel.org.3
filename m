@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC15653D612
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 10:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DE153D618
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 10:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiFDIQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 04:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S232479AbiFDIXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 04:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbiFDIQ1 (ORCPT
+        with ESMTP id S231295AbiFDIXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 04:16:27 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BB79FD9
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 01:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654330586; x=1685866586;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sKvv2rSh1byY2alcOt60uMDMNg+RbXaffQMP88UhYZc=;
-  b=eu9aFgbEfd0DMJ5TfvT1TI0u1ShS/IBZLn44XjHJexaRz0WIoWc9VoUX
-   HkbuA4iwa/FbJRn1s5RnMiRNX/03jL7eCGh/i26xKmHiCKBAKVG0KZo3j
-   b3jJxSvbmR4PRET9G/o/cEpLmpOpnqUYCfXSIHEbIpr3ZOf2qBoE4UaS1
-   Ku37kfYMK9EU4AM5epLjFBdTR+MGBKLd892sch3yHfGpA/JhzWp9vKm8K
-   jgKk+pWPutjIabJx3Sy1hhAUDoGKWJzv0spr8IuCX1nrZyrcrZN8y5mAD
-   cTniJQ+OiSl8lB7UpAxrAFDRYWwGByGuiuYdrjq4s2knIWBobDatIVAgE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="264086271"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="264086271"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 01:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="668775391"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Jun 2022 01:16:24 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxOxL-000AUJ-B9;
-        Sat, 04 Jun 2022 08:16:23 +0000
-Date:   Sat, 4 Jun 2022 16:15:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jcmvbkbc-xtensa:xtensa-5.18-esp32 42/45]
- drivers/tty/serial/esp32_uart.c:33:6: warning: no previous prototype for
- 'dbg_echo'
-Message-ID: <202206041621.cmMY1siz-lkp@intel.com>
+        Sat, 4 Jun 2022 04:23:46 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5715001F
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 01:23:44 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w3so8363250plp.13
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 01:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gVc2ROt3VZJaSei4lEakeeGLJbG5uUXJbLzBy9ooOuk=;
+        b=1JSd9GB7wEj4YKQ0rpe41OxZqDdS40H/4SV2jgE4Vl1ERlQlPgGGjAV8NepqObc7Xi
+         e6yhC/6o/ZKW2llrn3SG5GvqzIxAxrODbKBA+p7QAX5snJIMZoxg+g9xzQTOIexWMnwx
+         7dbe1QHZLv8oBAjLErl++bSFB88xx225Lhg4lq7ce6V5RNwBu1PQQUxWZmoGcVfJJ0kO
+         aIeQx88qY9SHhuCIh0VyPpqb072Z4/8q63MGTPlsGJ6b6sjmNBc19sFhJTi5YK44l29J
+         q8zApnVczbRpzygGPkmbyYZX7qmLY5u8DhnH7jClu3WDC6ow6FXomGawqLpefomNdPZv
+         TroQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gVc2ROt3VZJaSei4lEakeeGLJbG5uUXJbLzBy9ooOuk=;
+        b=L0GpM1ZR0nSjTqC4igbPeEBw6JHyKa64vHnqJxEigvEl5bOA8xPD4wxqWztwUwqe/E
+         zrxvbqtrgdn4m2j1/RgjjXMZ9Po6IxZLXkP/40rAAE6KMfjhhWNTsSIdCNhUhbwDF0Fr
+         SGE9IFl8af6G9SrsCEKeX4y0meybBiLBap/UE3wKR/tkXQknEe95EJTBq2R7Spf2jDO2
+         sMq89I94Sb+wvEzxh3utmVwWEoonNr4z/wd9Yvptwc+BLahRbonLvAaCBprWDX8gMK1B
+         WuTH4mdZ6ob9v7YRMId+7zd43Dy3mMvyjKCofxSZwqpymhmD9MixvUEPy9vCJ/hCTkTL
+         BOAw==
+X-Gm-Message-State: AOAM532VxjfsVtZRxoFYZ4RbWBBTH7LKOJ5voXnEeAUFBD7f1IdufkND
+        XAF2smoJNTtdgB61Uint/l8QbB9qZChvAA==
+X-Google-Smtp-Source: ABdhPJznFObdaOP6dvRZZ53//CjHni+jtI87ASFORabOzFgN6puW1ce3WyaRaM2ue6sqx0jY622Rdg==
+X-Received: by 2002:a17:90a:930b:b0:1d5:684b:8e13 with SMTP id p11-20020a17090a930b00b001d5684b8e13mr15032020pjo.153.1654331024388;
+        Sat, 04 Jun 2022 01:23:44 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.224])
+        by smtp.gmail.com with ESMTPSA id k5-20020a170902760500b0015e8d4eb2b8sm6646378pll.258.2022.06.04.01.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 01:23:43 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     hannes@cmpxchg.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        songmuchun@bytedance.com, mhocko@kernel.org,
+        akpm@linux-foundation.org, corbet@lwn.net
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH v2] mm: memcontrol: add {pgscan,pgsteal}_{kswapd,direct} items in memory.stat of cgroup v2
+Date:   Sat,  4 Jun 2022 16:22:09 +0800
+Message-Id: <20220604082209.55174-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,69 +69,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-5.18-esp32
-head:   137adeae90088411fe27a1be624afd8336542302
-commit: 4475ad0ed7f7654f6cbc879814c0a2bad8274db4 [42/45] WIP: drivers/tty/serial: add driver for ESP32 UART
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220604/202206041621.cmMY1siz-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jcmvbkbc/linux-xtensa/commit/4475ad0ed7f7654f6cbc879814c0a2bad8274db4
-        git remote add jcmvbkbc-xtensa https://github.com/jcmvbkbc/linux-xtensa
-        git fetch --no-tags jcmvbkbc-xtensa xtensa-5.18-esp32
-        git checkout 4475ad0ed7f7654f6cbc879814c0a2bad8274db4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/tty/serial/
+There are already statistics of {pgscan,pgsteal}_kswapd and
+{pgscan,pgsteal}_direct of memcg event here, but now only the
+sum of the two is displayed in memory.stat of cgroup v2.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+In order to obtain more accurate information during monitoring
+and debugging, and to align with the display in /proc/vmstat,
+it better to display {pgscan,pgsteal}_kswapd and
+{pgscan,pgsteal}_direct separately.
 
-All warnings (new ones prefixed by >>):
+Also, for forward compatibility, we still display pgscan and
+pgsteal items so that it won't break existing applications.
 
->> drivers/tty/serial/esp32_uart.c:33:6: warning: no previous prototype for 'dbg_echo' [-Wmissing-prototypes]
-      33 | void dbg_echo(const char *s)
-         |      ^~~~~~~~
->> drivers/tty/serial/esp32_uart.c:48:6: warning: no previous prototype for 'dbg_printf' [-Wmissing-prototypes]
-      48 | void dbg_printf(const char *fmt, ...)
-         |      ^~~~~~~~~~
-   drivers/tty/serial/esp32_uart.c: In function 'dbg_printf':
->> drivers/tty/serial/esp32_uart.c:54:9: warning: function 'dbg_printf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      54 |         vsnprintf(buf, sizeof(buf), fmt, ap);
-         |         ^~~~~~~~~
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+---
+Changelog in v1 -> v2:
+ - keep pgscan and pgsteal items for forward compatibility, thanks to Shakeel
+ - update commit log
+ - collect Acked-bys
 
+ Documentation/admin-guide/cgroup-v2.rst | 12 ++++++
+ mm/memcontrol.c                         | 54 ++++++++++++-------------
+ 2 files changed, 38 insertions(+), 28 deletions(-)
 
-vim +/dbg_echo +33 drivers/tty/serial/esp32_uart.c
-
-    32	
-  > 33	void dbg_echo(const char *s)
-    34	{
-    35		volatile void __iomem *base = (volatile void __iomem *)0x3ff40000;
-    36	
-    37		while ((readl(base + UART_STATUS_REG) & UART_TXFIFO_CNT_MASK) != 0)
-    38			;
-    39	
-    40		while (*s) {
-    41			if (*s == '\n')
-    42				writel('\r', base + UART_FIFO_REG);
-    43			writel(*s, base + UART_FIFO_REG);
-    44			++s;
-    45		}
-    46	}
-    47	
-  > 48	void dbg_printf(const char *fmt, ...)
-    49	{
-    50		va_list ap;
-    51		char buf[256];
-    52	
-    53		va_start(ap, fmt);
-  > 54		vsnprintf(buf, sizeof(buf), fmt, ap);
-    55		va_end(ap);
-    56		dbg_echo(buf);
-    57	}
-    58	
-
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 176298f2f4de..b2b55e7360d8 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1445,9 +1445,21 @@ PAGE_SIZE multiple when read back.
+ 	  pgscan (npn)
+ 		Amount of scanned pages (in an inactive LRU list)
+ 
++	  pgscan_kswapd (npn)
++		Amount of scanned pages by kswapd (in an inactive LRU list)
++
++	  pgscan_direct (npn)
++		Amount of scanned pages directly  (in an inactive LRU list)
++
+ 	  pgsteal (npn)
+ 		Amount of reclaimed pages
+ 
++	  pgsteal_kswapd (npn)
++		Amount of reclaimed pages by kswapd
++
++	  pgsteal_direct (npn)
++		Amount of reclaimed pages directly
++
+ 	  pgactivate (npn)
+ 		Amount of pages moved to the active LRU list
+ 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 0d3fe0a0c75a..fd78c4d6bbc7 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1460,6 +1460,28 @@ static inline unsigned long memcg_page_state_output(struct mem_cgroup *memcg,
+ 	return memcg_page_state(memcg, item) * memcg_page_state_unit(item);
+ }
+ 
++static const unsigned int memcg_vm_event_stat[] = {
++	PGSCAN_KSWAPD,
++	PGSCAN_DIRECT,
++	PGSTEAL_KSWAPD,
++	PGSTEAL_DIRECT,
++	PGFAULT,
++	PGMAJFAULT,
++	PGREFILL,
++	PGACTIVATE,
++	PGDEACTIVATE,
++	PGLAZYFREE,
++	PGLAZYFREED,
++#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
++	ZSWPIN,
++	ZSWPOUT,
++#endif
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	THP_FAULT_ALLOC,
++	THP_COLLAPSE_ALLOC,
++#endif
++};
++
+ static char *memory_stat_format(struct mem_cgroup *memcg)
+ {
+ 	struct seq_buf s;
+@@ -1495,41 +1517,17 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
+ 	}
+ 
+ 	/* Accumulated memory events */
+-
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
+-		       memcg_events(memcg, PGFAULT));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
+-		       memcg_events(memcg, PGMAJFAULT));
+-	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
+-		       memcg_events(memcg, PGREFILL));
+ 	seq_buf_printf(&s, "pgscan %lu\n",
+ 		       memcg_events(memcg, PGSCAN_KSWAPD) +
+ 		       memcg_events(memcg, PGSCAN_DIRECT));
+ 	seq_buf_printf(&s, "pgsteal %lu\n",
+ 		       memcg_events(memcg, PGSTEAL_KSWAPD) +
+ 		       memcg_events(memcg, PGSTEAL_DIRECT));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
+-		       memcg_events(memcg, PGACTIVATE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
+-		       memcg_events(memcg, PGDEACTIVATE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
+-		       memcg_events(memcg, PGLAZYFREE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
+-		       memcg_events(memcg, PGLAZYFREED));
+-
+-#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPIN),
+-		       memcg_events(memcg, ZSWPIN));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPOUT),
+-		       memcg_events(memcg, ZSWPOUT));
+-#endif
+ 
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
+-		       memcg_events(memcg, THP_FAULT_ALLOC));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
+-		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
+-#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
++	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
++		seq_buf_printf(&s, "%s %lu\n",
++			       vm_event_name(memcg_vm_event_stat[i]),
++			       memcg_events(memcg, memcg_vm_event_stat[i]));
+ 
+ 	/* The above should easily fit into one page */
+ 	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.20.1
+

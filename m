@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2610253D47E
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840D153D466
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 03:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350358AbiFDBXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 21:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S1350264AbiFDBYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 21:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349745AbiFDBWy (ORCPT
+        with ESMTP id S1350146AbiFDBXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 21:22:54 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3973220C6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:22:03 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id mh12-20020a17090b4acc00b001e32eb45751so8040140pjb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:22:03 -0700 (PDT)
+        Fri, 3 Jun 2022 21:23:04 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4198D25EAC
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 18:22:07 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id e18-20020a656492000000b003fa4033f9a7so4564118pgv.17
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Jun 2022 18:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=ZEoywqRe2jN83WxMzYeUPBo0DWYGkrwKbHoYsiazcV8=;
-        b=JskoIuph7Jqycq6MAN52MeAe6aR/QuA9Xl8V1F4UOWPpX7IsnjaYtMYkj4GRBZ6yBZ
-         j9b68ad+sTaT0tI7pY6ZvLWAlkX/ljRKlPQFaTGh8o1UGf977Lo8pfijykmMct0o7ZsI
-         pPofcVyuN9bvwuSdz8g1kzP6oyBJETOMnAGPmiMrDRSIrDS9DW7xIBTDUbYMtpJOJ/wK
-         Dv/b1AvkhsFeBj5dskON6W+CMqhlTrL7k55VwRLvRl7/9uVLiGHqTVHcUpD44uJIETlQ
-         7rRRwg7vBbTm3/SpZ5m4t3exMn34aQTU+AwffDSsvEc6X4NPW5R+ngjS/5vSwCbKpN3a
-         jftQ==
+        bh=fAl1+AuHRM9inCO8bRlxx9BHvcQGIGb60nHLb6rOfdI=;
+        b=G1C+j7bRUj2zJxrGM0uz9nSZIJwVQUZJ2ZreDG6HFN1c50gYaREsj+ZgmmvuJjZKvO
+         /2AFssTQ8QdzVP10q3z8X/jNeZAqEt/c+zCI61LcB3Hb4FYuur0QD3ZEYXntFBuTH+Wz
+         B6scCPE7L/Q9zl9U8eRrhJubx/wiWaYKs4Sj9IblKZIvhjQxUThCELe1suaCxqAdqWt8
+         5miF88IXno9bvSZwjvz2RfmAP5FraDQ7OFu/lkjXJ5d2QvQvs+KWd7o2XZYFZUM+ocnn
+         xeb8VBDnQCX2vGtoW4GFLAceWSRpBDV4AZ9q7QzSITPBqYpiQhLpMetbAD3eyA6u8rcA
+         Pq0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=ZEoywqRe2jN83WxMzYeUPBo0DWYGkrwKbHoYsiazcV8=;
-        b=7UMwBJ98NZaag9/cedOHhWjqNa1ERy8BkRvJv4Z/DiujdDvsEG5/3KSSsC1Vl+gxbY
-         fUnMYnxZQM1ql/siCLkaSgryNJee3i9Gobsw47CazaWDOavu2MI1JE22jI+BBlfYjXk+
-         42wmcKiY9bb5QGJbCmez/UZ78VwsK1XPaJXiYdaAfkUgWUDqadiPzDJUGMzGuS5SHwOI
-         9sgwdJ96sOJnRtv51+D4JBvkXEpIMBn3z6FzgdDe4MzppiQgQV8x8/GsY/xzlVHnzZ+M
-         YjoMUtBGCM1J695yfx/uGriqDpFdA7T/DzsIbcU/6fZmlQtEOjZDHPaChj1h0ZGHWC0k
-         o3iw==
-X-Gm-Message-State: AOAM531EPVwPzZqTiaP2x0R4P8vI9Zd7GWrHLBHfR/tnZVL7bjiQAYPh
-        ZRWLE2D9wnRs0+iKC04tSSzrW619xnM=
-X-Google-Smtp-Source: ABdhPJxBIAnhE84vnj3pmf7obhkXbiQgzGN6yzsHkN4FaCI2JiDwne0lN5S53YNIBOnUgnsYiUb33xBlzVs=
+        bh=fAl1+AuHRM9inCO8bRlxx9BHvcQGIGb60nHLb6rOfdI=;
+        b=dZ7JNLTRIJuwKpMyOdoQKs+j3R6xdux3SsRSjTH91CrVSctL6DIXo2sZF3w2iR133f
+         f5arxYZGab813cjmXNHJiZj6GTcSoT8tjcZZvj7JtdAYrgISFbYImnM32P+jv2ZKQJ9p
+         Ng76ulBtbKBvAxxPkjlKSwf9hc1IELXHPyugjqTSd1o/nAU8VpY9pum4EeE3mW5jRELx
+         +TgbBArHlJGXiEvws/Ss9keqbjaIq/9cLNSFC++2pwalwaNI86as1wHyZmCiOLC75EFM
+         yt6Aowuin/pNVocfuVOuhrHwEcRU4XPVLW891eelW5b4ow04oOdl8y8k25xpzgXVaVAD
+         TcxA==
+X-Gm-Message-State: AOAM532zPAJCod3p6L8c086ds9r/AstU8WtCgr2ZwfA3NLYAKDOnrsjg
+        ADmNb/mbVOJSAkyMKJYsFHH+zaS1sVM=
+X-Google-Smtp-Source: ABdhPJy0AA4cGpnkOR3s7vtIiLqzfou/9QDn663AHoOR2ivfp3NvHHxbzwhcTkdih4e+DXXcNRXmZJrZACE=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:d491:b0:164:d43:1a23 with SMTP id
- c17-20020a170902d49100b001640d431a23mr12888255plg.155.1654305709778; Fri, 03
- Jun 2022 18:21:49 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:114b:b0:4f7:915:3ec3 with SMTP id
+ b11-20020a056a00114b00b004f709153ec3mr12963470pfm.8.1654305711604; Fri, 03
+ Jun 2022 18:21:51 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat,  4 Jun 2022 01:20:44 +0000
+Date:   Sat,  4 Jun 2022 01:20:45 +0000
 In-Reply-To: <20220604012058.1972195-1-seanjc@google.com>
-Message-Id: <20220604012058.1972195-29-seanjc@google.com>
+Message-Id: <20220604012058.1972195-30-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220604012058.1972195-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH 28/42] KVM: selftests: Use vcpu_{set,clear}_cpuid_feature() in
- nVMX state test
+Subject: [PATCH 29/42] KVM: selftests: Use vcpu_clear_cpuid_feature() to clear x2APIC
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -71,73 +70,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use vcpu_{set,clear}_cpuid_feature() to toggle nested VMX support in the
-vCPU CPUID module in the nVMX state test.  Drop CPUID_VMX as there are
-no longer any users.
+Add X86_FEATURE_X2APIC and use vcpu_clear_cpuid_feature() to clear x2APIC
+support in the xAPIC state test.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  |  1 -
- .../kvm/x86_64/vmx_set_nested_state_test.c    | 20 ++-----------------
- 2 files changed, 2 insertions(+), 19 deletions(-)
+ tools/testing/selftests/kvm/include/x86_64/processor.h |  1 +
+ tools/testing/selftests/kvm/x86_64/xapic_state_test.c  | 10 +---------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index b9b3a19895aa..a1cac0b7d8b2 100644
+index a1cac0b7d8b2..c2e3ea55b697 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -158,7 +158,6 @@ struct kvm_x86_cpu_feature {
- #define X86_FEATURE_KVM_MIGRATION_CONTROL	KVM_X86_CPU_FEATURE(0x40000001, 0, EAX, 17)
- 
- /* CPUID.1.ECX */
--#define CPUID_VMX		(1ul << 5)
- #define CPUID_XSAVE		(1ul << 26)
- #define CPUID_OSXSAVE		(1ul << 27)
- 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-index 1cf78ec007f2..41ea7028a1f8 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-@@ -121,7 +121,7 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
- 	test_nested_state(vcpu, state);
- 
- 	/* Enable VMX in the guest CPUID. */
--	vcpu_set_cpuid(vcpu);
-+	vcpu_set_cpuid_feature(vcpu, X86_FEATURE_VMX);
- 
- 	/*
- 	 * Setting vmxon_pa == -1ull and vmcs_pa == -1ull exits early without
-@@ -243,22 +243,6 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
- 	free(state);
- }
- 
--void disable_vmx(struct kvm_vcpu *vcpu)
--{
--	struct kvm_cpuid2 *cpuid = vcpu->cpuid;
--	int i;
--
--	for (i = 0; i < cpuid->nent; ++i)
--		if (cpuid->entries[i].function == 1 &&
--		    cpuid->entries[i].index == 0)
--			break;
--	TEST_ASSERT(i != cpuid->nent, "CPUID function 1 not found");
--
--	cpuid->entries[i].ecx &= ~CPUID_VMX;
--	vcpu_set_cpuid(vcpu);
--	cpuid->entries[i].ecx |= CPUID_VMX;
--}
--
- int main(int argc, char *argv[])
- {
+@@ -81,6 +81,7 @@ struct kvm_x86_cpu_feature {
+ #define	X86_FEATURE_SMX			KVM_X86_CPU_FEATURE(0x1, 0, ECX, 6)
+ #define	X86_FEATURE_PDCM		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 15)
+ #define	X86_FEATURE_PCID		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 17)
++#define X86_FEATURE_X2APIC		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 21)
+ #define	X86_FEATURE_MOVBE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 22)
+ #define	X86_FEATURE_TSC_DEADLINE_TIMER	KVM_X86_CPU_FEATURE(0x1, 0, ECX, 24)
+ #define	X86_FEATURE_XSAVE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 26)
+diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+index 7728730c2dda..1bc091f3b58b 100644
+--- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+@@ -122,9 +122,7 @@ int main(int argc, char *argv[])
+ 		.vcpu = NULL,
+ 		.is_x2apic = true,
+ 	};
+-	struct kvm_cpuid2 *cpuid;
  	struct kvm_vm *vm;
-@@ -280,7 +264,7 @@ int main(int argc, char *argv[])
- 	/*
- 	 * First run tests with VMX disabled to check error handling.
- 	 */
--	disable_vmx(vcpu);
-+	vcpu_clear_cpuid_feature(vcpu, X86_FEATURE_VMX);
+-	int i;
  
- 	/* Passing a NULL kvm_nested_state causes a EFAULT. */
- 	test_nested_state_expect_efault(vcpu, NULL);
+ 	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
+ 	test_icr(&x);
+@@ -138,13 +136,7 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_with_one_vcpu(&x.vcpu, xapic_guest_code);
+ 	x.is_x2apic = false;
+ 
+-	cpuid = x.vcpu->cpuid;
+-	for (i = 0; i < cpuid->nent; i++) {
+-		if (cpuid->entries[i].function == 1)
+-			break;
+-	}
+-	cpuid->entries[i].ecx &= ~BIT(21);
+-	vcpu_set_cpuid(x.vcpu);
++	vcpu_clear_cpuid_feature(x.vcpu, X86_FEATURE_X2APIC);
+ 
+ 	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
+ 	test_icr(&x);
 -- 
 2.36.1.255.ge46751e96f-goog
 

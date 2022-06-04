@@ -2,135 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4903653D896
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C21753D89A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbiFDU7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 16:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S241904AbiFDVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 17:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241691AbiFDU7w (ORCPT
+        with ESMTP id S241962AbiFDVT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 16:59:52 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC0C2EA02;
-        Sat,  4 Jun 2022 13:59:51 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id m82so14718677oif.13;
-        Sat, 04 Jun 2022 13:59:51 -0700 (PDT)
+        Sat, 4 Jun 2022 17:19:59 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7523D4D61C;
+        Sat,  4 Jun 2022 14:19:57 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e656032735so14843591fac.0;
+        Sat, 04 Jun 2022 14:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KI6RGgIhUb5YBMG55dVRTWwDyzqgJYFjmLT32LzTyec=;
-        b=RiacRFTuIoy4aVBfEZrTyG66uLRmj9OfCmEl/WuQwTeFWFmZ4Mxro4WNyWuLyV2EPx
-         S75BJVmJqFX8ukcsTmAoWQt90Z/50rhY3/nlbHq6pGx6qmE0uL71WOpZCV3irLXgwIKN
-         55bq0njQaVnM8q6/Kao0GedXeCqtyHm19X842+J+ExQJpLQZcab2tRB9iNfJ2PeDMB+0
-         fzY4Uzp27QUefOdaGCOscgnKEzFGzj8c/JO+7v9ARQGTtzKd5Ixpccnrn3vbb+f2ODOd
-         KA3VEqwrOg2ZSMHPhLWuKzikO/boV8bJOuZxoAw8lTUgO/zK3C852XwfSVoU01JLjTHH
-         EeVA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K2R5nf9O6AXprXYtmFMJmMfna4dlV7oqPr6ZCw0TaSM=;
+        b=Mr2vutiv5X3Uqb/yPEUs+327z19fq38IV3IhPA2fuBuPaiQ36mMBs2FQCtbNhRh6Pp
+         WLRDwyMxgYWBGf6MLFnhUKPez6h5VAuWU0pz1gEDtpE/1Plad+V+F/T5gpnVBSL9z0DE
+         igOBECG1EXpTxN8oDCbVpzr7Rptin9icrl6p7ggrjSrNMsQTEdeunJFauHLoheUHUzhW
+         7e0cRtNYFPoCusfynYimsvOP0xbQXeDPxTCaRjYJgEzZR5dijrIlrlk38Z3JdoGxTJ5D
+         wYGwiRGE3GXBcu/QQ04nV9zg94UDMx9WU1svOTx+bIUbUrFHGqNCA6C8qyr4mXo/2ok1
+         XafQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KI6RGgIhUb5YBMG55dVRTWwDyzqgJYFjmLT32LzTyec=;
-        b=u2MSxJvZRFcWfzXnZgnGcljLRXqCYrlmVZcmPhr73viKAot3BhZa46Yudngl8VQ3Td
-         qjqTqg7sAgzKvVF/uiejniEXjbeeLZzoqQNRSPl33nIiiRaoGJZeo94SQz3tL1DQIG2D
-         jfUNqbDd+ZeQEYjcVlqx2yRscOqNDbUzJsBsCkEiLZm5B2q2mEhPi0m7j5HcUIfnE6mp
-         96HGc2hZGf50rAaPg6Cegj8pPt+hNQyCHFHPhJGasniWP8YaaVzjZBvDFn+5gpFewOVM
-         DKEEndvK4Pg/tR3xy2J6MjMlosSUMacsHaDWGvR0nivSh/Z6o2b6Ps1MCduIl3lKlZ37
-         wLwA==
-X-Gm-Message-State: AOAM530timdxC7TybJ4crnk+oyxK3efJl4XeXv8U2dCoIjgHuz9i78v5
-        Kxplmvi13tkjBGHUtyckdfd3IRa7OMLYgliZ1Iw=
-X-Google-Smtp-Source: ABdhPJyS9SfYWhqaqd9DsHNCl2ttCA2tBW6F6m6Ie8I696MCMDnp3HkpP5GVvz/LETbkY4wRdLJz3WN+i/XBOxt6ywU=
-X-Received: by 2002:a54:4688:0:b0:325:9a36:ecfe with SMTP id
- k8-20020a544688000000b003259a36ecfemr9982724oic.96.1654376390812; Sat, 04 Jun
- 2022 13:59:50 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=K2R5nf9O6AXprXYtmFMJmMfna4dlV7oqPr6ZCw0TaSM=;
+        b=tCfCj0Cp4YRbWjDa1cz2n1JwnlGeo0xfE6uKO/BoYt8Jo3L5YjO4smxE/l77STHmFT
+         TcyC4M0CZc0/a7Wyfb5cA30A0AtU61WbKb7G06enimwResMJ8kvI2P4YjNdWwS6Ikk2M
+         daK6p/HWeLwN/XGENGbrk38Rw3syv80nDoixfRvapzquLiC0S9Ev4eUb8PgfQZEYeiKz
+         VF4RJ+wcoYlwdvKnveea9ZYtzgs0s3Z+GcqK//vS5lVyhlXwRRH/xdKlSeSzD6DNQgpc
+         fySsaF4/YP1UIhWqlAbkna80FrcphKa2s70rvWCEZGoLKbRHxajeK7cW+ttMjFGwPmH5
+         J/3w==
+X-Gm-Message-State: AOAM53172nk7nMkmiEmRDqurUkXAz7YqzM7S1w4anVFIYvpHIb6q5R6a
+        F4w+Fas+f+3z+QjIARHoV4I=
+X-Google-Smtp-Source: ABdhPJwYEaG9q9x4p0Kd0sEYx8WTM1dFHp/XBRnjlJ58/Y4KLNuaufFeXR99f7Co6LhD60kSbPKQTQ==
+X-Received: by 2002:a05:6870:b292:b0:f5:da78:c444 with SMTP id c18-20020a056870b29200b000f5da78c444mr13453322oao.214.1654377596779;
+        Sat, 04 Jun 2022 14:19:56 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m11-20020a4aedcb000000b00415a9971cfcsm5731100ooh.38.2022.06.04.14.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 14:19:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 4 Jun 2022 14:19:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 00/66] 5.15.45-rc1 review
+Message-ID: <20220604211954.GA4026952@roeck-us.net>
+References: <20220603173820.663747061@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220528224423.7017-1-jim2101024@gmail.com> <20220528224423.7017-2-jim2101024@gmail.com>
- <20220529011526.4lzuvkv5zclwntce@mraw.org> <d7a5a0d8-5d27-548f-bc94-0e7d116cc3f2@i2se.com>
- <20220602191757.pqictbfarmvlf72f@mraw.org>
-In-Reply-To: <20220602191757.pqictbfarmvlf72f@mraw.org>
-From:   Jim Quinlan <jim2101024@gmail.com>
-Date:   Sat, 4 Jun 2022 16:59:39 -0400
-Message-ID: <CANCKTBvvm-1TOKh1akzAYoiOeu5cTKLXyy6PPRkWbOAOtpjARA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] PCI: brcmstb: Fix regression regarding missing
- PCIe linkup
-To:     Cyril Brulebois <kibi@debian.org>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        James Dutton <james.dutton@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 3:18 PM Cyril Brulebois <kibi@debian.org> wrote:
->stm32mp157c-ev1.dts
-> Hi Stefan,
->
-> Stefan Wahren <stefan.wahren@i2se.com> (2022-05-30):
-> > i think we should better trust the results based on the v5.18 tag. During
-> > the merge window, regressions from other subsystems are possible.
->
-> Alright, that looks like a great plan.
->
-> Before getting your answer, I had tried taking the reboot part out of
-> the equation, but I found out that even cold boots might fail with the
-> mmc storage.
+On Fri, Jun 03, 2022 at 07:42:40PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.45 release.
+> There are 66 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
+> 
 
-Hi Cyril,
+Build results:
+	total: 157 pass: 157 fail: 0
+Qemu test results:
+	total: 488 pass: 488 fail: 0
 
-FWIW, I can deliberately reproduce the errors you observed by using an
-incorrect "interrupts" property for
-the sdhci device's DT node.  It can also be triggered by removing its
-"clocks" property.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-However, if I do one of the above,  the error will occur on every
-boot, but in your case (I think) you are seeing it
-sporadically.  So that is peculiar.  I've looked at the recent
-upstream commits for changes in the  sdhci driver
-and also the relevant DT node and do not see anything obvious that
-might cause this.
-
-BTW,  when you observe this error, can you please do a  "cat
-/proc/interrupts" and post the results?
-
-Thanks & regards,
-Jim Quinlan
-Broadcom STB
-
-
->
-> I haven't been able to conduct a systematic testing of the patch on top sdhci driver or the relevant
-DT node
-> of the v5.18 tag yet (say, 10 or 20 cold boots, and the same with
-> reboots) due to strong work constraints these past few days, but that's
-> definitely still on my short term todo list (hopefully before the end of
-> the week).
->
-> Sorry I didn't manage to get that lined up before Bjorn's pull request.
->
->
-> Cheers,
-> --
-> Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-> D-I release manager -- Release team member -- Freelance Consultant
+Guenter

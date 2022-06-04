@@ -2,108 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8954053D6C6
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4B253D6C8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 14:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236095AbiFDMbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 08:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S239620AbiFDMdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 08:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiFDMbK (ORCPT
+        with ESMTP id S235668AbiFDMdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 08:31:10 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E16C1D0F3;
-        Sat,  4 Jun 2022 05:31:09 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id t31so18112378ybi.2;
-        Sat, 04 Jun 2022 05:31:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d/g5lCDspNEJNwMa9vfrlOAoLRDCzZro+20EzHFIRrs=;
-        b=VdrgQFqRNsafn5SeUv4fg9FUvI/ctbDh2ur1uLBD38NLcobVi2NZ76HU35EsBz/D95
-         X3wMwXoGC20JDw2813wvcoT61+R/Tz+XW8gvwJZo8kPctm20rnGWYDcv7Lp6jnRCOf34
-         gH756xBQGJ5lZed+IxvOWZXAIItxAZr1wNusWZW8DKxW4c/gypDlak7Mqm6lVduTotA9
-         uqDQbxSxHPFNGwu84bEEa9cCkphuYD9EjkJMVmzqc3aFitcBxQ4BYPUvTRqbfxNOcejA
-         ShMjxa23ZNjE1nvX1Cae8kwQMHlN6fSuVSQApey11PW4SJwbnCCvxZ+D0NN9jc1c5Zrt
-         74VA==
-X-Gm-Message-State: AOAM531Z61LMGqpA0rRZAIGHiUJSDXZ6UXDxZUkgkS2AZpL8oo3qjq3e
-        qG5IkD5L6YwsuFI3+AZbQNPkCxWe4M4mmxNtUAgEdCj0oYWSUQ==
-X-Google-Smtp-Source: ABdhPJxJ9jeexrd0GvwtC7TFbcHQlIFTeplVhdQS4cY9QnLt3D8uzOrdbCmi13haETGdoCTwrWNLg8E5C0K8RFWxEIs=
-X-Received: by 2002:a25:4542:0:b0:660:6b9e:62b8 with SMTP id
- s63-20020a254542000000b006606b9e62b8mr11616534yba.423.1654345868578; Sat, 04
- Jun 2022 05:31:08 -0700 (PDT)
+        Sat, 4 Jun 2022 08:33:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19F42B270
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 05:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654346017; x=1685882017;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+rk2cRR+kcOZuDTya3QiG3U0ssEto1rwgo1C3YemPuw=;
+  b=bWJbM/E3OtBkSIuPxZVY/TgjLjlzl8TltbyhnyYBC16r4TXk2OM7RLK1
+   JIIHLVIgtTzotV0fDwKQOewMY2IdS9wg+IZKtuF6cCbLjv++DRAgMNGuW
+   6OpBEEPzlv1INsJMgtWZ/5onHOouS+54WexHSiQmnGIX6svMDsNBuHbQY
+   cMsbozFYauJNhUw3OvDfYPnEpqqvoh05TST6Fp/B2E097tL5n+ghCXMW9
+   pJjv7tvgG2sp3f4FKSfOFzOs8+SG9Wl7heIFIOkzm1IgiYSDG3R1gDxWF
+   iMAWoDUSc9QQZs2qtO/fG7R7CIFHe2r6K97+k2HtwE7U+6+tWTzOYUdWN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="273991567"
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="273991567"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 05:33:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
+   d="scan'208";a="668825198"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Jun 2022 05:33:36 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxSyF-000Apo-F8;
+        Sat, 04 Jun 2022 12:33:35 +0000
+Date:   Sat, 4 Jun 2022 20:33:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: [akpm-mm:mm-unstable 179/180] fs/xfs/xfs_file.c:1273:1: warning: no
+ previous prototype for 'xfs_dax_fault'
+Message-ID: <202206042008.WcIK2oVM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220603102848.17907-3-mailhol.vincent@wanadoo.fr>
- <20220604112707.z4zjdjydqy5rkyfe@pengutronix.de>
-In-Reply-To: <20220604112707.z4zjdjydqy5rkyfe@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 4 Jun 2022 21:30:57 +0900
-Message-ID: <CAMZ6RqLRf=oyo0HXDSBAMD=Ce-RxtgO=TrhT5Xf1sqR6jWDoCQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] can: Kconfig: turn menu "CAN Device Drivers" into
- a menuconfig using CAN_DEV
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat. 4 juin 2022 at 20:27, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 03.06.2022 19:28:43, Vincent Mailhol wrote:
-> > In the next patches, the software/virtual drivers (slcan, v(x)can)
-> > will depend on drivers/net/can/dev/skb.o.
-> >
-> > This patch changes the scope of the can-dev module to include the
-> > above mentioned drivers.
-> >
-> > To do so, we reuse the menu "CAN Device Drivers" and turn it into a
-> > configmenu using the config symbol CAN_DEV (which we released in
-> > previous patch). Also, add a description to this new CAN_DEV
-> > menuconfig.
-> >
-> > The symbol CAN_DEV now only triggers the build of skb.o. For this
-> > reasons, all the macros from linux/module.h are deported from
-> > drivers/net/can/dev/dev.c to drivers/net/can/dev/skb.c.
-> >
-> > Finally, drivers/net/can/dev/Makefile is adjusted accordingly.
-> >
-> > Suggested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  drivers/net/can/Kconfig      | 29 ++++++++++++++++++++++++++---
-> >  drivers/net/can/dev/Makefile | 16 +++++++++-------
-> >  drivers/net/can/dev/dev.c    |  9 +--------
-> >  drivers/net/can/dev/skb.c    |  7 +++++++
-> >  4 files changed, 43 insertions(+), 18 deletions(-)
-> >
->
-> > diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
-> > index 5b4c813c6222..919f87e36eed 100644
-> > --- a/drivers/net/can/dev/Makefile
-> > +++ b/drivers/net/can/dev/Makefile
-> > @@ -1,9 +1,11 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >
-> > -obj-$(CONFIG_CAN_NETLINK) += can-dev.o
-> > +obj-$(CONFIG_CAN_DEV) += can-dev.o
->        ^^^^^^^^^^^^^^^^^^^^^
->
-> Nitpick: I think you can directly use "y" here.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   f06e3c5104126b9a6660b58f29619b53bfa33b2b
+commit: d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c [179/180] xfs: support CoW in fsdax mode
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220604/202206042008.WcIK2oVM-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch --no-tags akpm-mm mm-unstable
+        git checkout d5f5b32dee7c09e3152cbbce45c73f0b1ea7d94c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/xfs/
 
-I see. So the idea would be that if we deselect CONFIG_CAN_DEV, then
-despite of can-dev.o being always "yes", it would be empty and thus
-ignored. I just didn't know this trick.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I will do as suggested.
+All warnings (new ones prefixed by >>):
+
+>> fs/xfs/xfs_file.c:1273:1: warning: no previous prototype for 'xfs_dax_fault' [-Wmissing-prototypes]
+    1273 | xfs_dax_fault(
+         | ^~~~~~~~~~~~~
+
+
+vim +/xfs_dax_fault +1273 fs/xfs/xfs_file.c
+
+  1257	
+  1258	#ifdef CONFIG_FS_DAX
+  1259	int
+  1260	xfs_dax_fault(
+  1261		struct vm_fault		*vmf,
+  1262		enum page_entry_size	pe_size,
+  1263		bool			write_fault,
+  1264		pfn_t			*pfn)
+  1265	{
+  1266		return dax_iomap_fault(vmf, pe_size, pfn, NULL,
+  1267				(write_fault && !vmf->cow_page) ?
+  1268					&xfs_dax_write_iomap_ops :
+  1269					&xfs_read_iomap_ops);
+  1270	}
+  1271	#else
+  1272	int
+> 1273	xfs_dax_fault(
+  1274		struct vm_fault		*vmf,
+  1275		enum page_entry_size	pe_size,
+  1276		bool			write_fault,
+  1277		pfn_t			*pfn)
+  1278	{
+  1279		return 0;
+  1280	}
+  1281	#endif
+  1282	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

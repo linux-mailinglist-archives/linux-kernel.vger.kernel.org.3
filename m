@@ -2,174 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0C153D63F
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 11:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CBF53D643
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 11:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbiFDJaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 05:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S234035AbiFDJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 05:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiFDJae (ORCPT
+        with ESMTP id S230351AbiFDJca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 05:30:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1453B47041
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 02:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654335031; x=1685871031;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7D/JN/ROWJ9twwK6JkBF+MV5+tuj333vB5gdjZTQwCs=;
-  b=N7658E1BneRi+YFDdYfOdF1fxewPY0Xhrq+DWDSUyFcPgtv9bbK4f1Uo
-   XUmWcuVkDDPxkUmyp557Bnys1BHTFUp0cNgE5ehgOyq+NW1JLuaaEM0ln
-   28W/ZJ8enKY8uL46Wt3VD1/Z+tI1pCCV7F1ZvDE26jEVS6x/638Bymmua
-   AK6f/wmMomHkK8mx3JM/FGCCY95BSAkrxkBMQXTUKFpt4ZntdX7fUBuwm
-   vSJ0aMvcgYVgzAOlKjlPPu6WfBNTcvZ4q2Y8/KKgiVTd9z4AWO5Ky2I/8
-   Wq2nEzofwR9Xy9qZpgHid5uL5xvOrKTRD/ysEEqD+sGuO70/Caf12LEEz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="362780865"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="362780865"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 02:30:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="578386760"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 04 Jun 2022 02:30:28 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxQ71-000AaN-FH;
-        Sat, 04 Jun 2022 09:30:27 +0000
-Date:   Sat, 4 Jun 2022 17:30:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.10.y 499/6004]
- arch/powerpc/kernel/smp.c:1380:14: error: variable 'ret' set but not used
-Message-ID: <202206041715.9pPofOTR-lkp@intel.com>
+        Sat, 4 Jun 2022 05:32:30 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1886C26124;
+        Sat,  4 Jun 2022 02:32:29 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id q21so20131063ejm.1;
+        Sat, 04 Jun 2022 02:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kEnlhjDu0FbGaaiDuZ0pof8c2vlmdAC3/VHnhWFqmg4=;
+        b=PnimOz8UTsnQrP+tEBJhi00bkQm619fcXVGRSpNRTJK4BE0FZCxeOMZ4tv3bK3fTQe
+         2VBpDrqigAmGMAgDTdPCoyUvjLVSBMLn3lNa52v+PG8+ODbpszGfmBc98L7MaP/Y2SCq
+         N5jAsIquHzKMtbi+8tjg1RkholuN6cahghqBcdKW4Vo8NUP1zO8nLOXiwKF6q0FuiE55
+         +KH9++ROi2nHfYjxrAR12tn52UFbbiXLiJCt2qJB4zlQL+2qJuTKc4JJvatCF/kLIPYd
+         +vF6sn8DssyO8XjdU19Y7jBHzks4YzZzauxaAd/udeWawZphiIZ9C4I+RPasgyVuyWAd
+         pguA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kEnlhjDu0FbGaaiDuZ0pof8c2vlmdAC3/VHnhWFqmg4=;
+        b=SDCJG++6NlxUWbCBqMvQhp5toJGDxG0BLAEF00nFnoLUKxhMkFe19S2WwIsuey1uUk
+         iWwczzPlQ8bBOjt69cAbvicl/HjDRfGE6XI208HvmQkj4MeRnKzTfF1wS3j3+UBwiLTN
+         Mkb/Ja2v1nf5POi06E4RC7HQsSUR6t09hpqr4A3SDWqbdN5xyDuGvHBlLh14LXYACvcq
+         wcguKkPmdZXi1qQng+pgqrhJbEms5SiqzlXxh46lEK8ZJLUpVXOij7+TKJ+/SXPZM0NE
+         Liqi3sDs0KugViTxxp0CkEz+ECAf0Sm4+deF+0QQUMn2lqs6vVL75aEYQau0CE4oAuTK
+         H7Tw==
+X-Gm-Message-State: AOAM531xPd/fsXfqpVu8DaAZdSOU+6cS3iy2I6yO4tHkMCrOFMQ4Trwy
+        VH0sqSqFoG+PlTtqgTYTZDS7zdpUHy2DTmfVOLw=
+X-Google-Smtp-Source: ABdhPJzPjZrJ4eJvtFdkY3qOCuyVx7FzZONcP1b+1P5BVkPY2ID46v7ARm3OX9d9GsOfOQFTiXP0iWZFxzGOBMajY6E=
+X-Received: by 2002:a17:907:72c1:b0:6ff:c5f:6b7d with SMTP id
+ du1-20020a17090772c100b006ff0c5f6b7dmr12395793ejc.676.1654335147423; Sat, 04
+ Jun 2022 02:32:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220525132115.896698-1-roberto.sassu@huawei.com>
+ <20220525132115.896698-2-roberto.sassu@huawei.com> <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
+ <89db5543066f4dccbfebd78ed3c025e7@huawei.com> <CACYkzJ4uD_k6sDktVaxkE_1QtSphZm+Rhjk4wrMm71LcmWRJ0w@mail.gmail.com>
+ <cfaafb3af5be40ec80f14e134a5702cf@huawei.com>
+In-Reply-To: <cfaafb3af5be40ec80f14e134a5702cf@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 4 Jun 2022 11:32:15 +0200
+Message-ID: <CAADnVQ+QL+rewHZ-Q=0W9o7VXKPvwHm=rmdGFKTqQBUxZhsnuQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
+ verification on map values
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     KP Singh <kpsingh@kernel.org>, "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srikar,
+On Fri, Jun 3, 2022 at 5:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+> >
+> > Your bpf_map_verify_value_sig hard codes the type of signature
+> > (bpf_map_verify_value_sig as verify_pkcs7_signature)
+> > its implementation. This is not extensible.
+>
+> It is hardcoded now, but it wouldn't if there are more verification
+> functions. For example, if 'id_type' of module_signature is set
+> to PKEY_ID_PGP, bpf_map_verify_value_sig() would call
+> verify_pgp_signature() (assuming that support for PGP keys and
+> signatures is added to the kernel).
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-head:   22be67db7d5387c15529c9ea2b258d9ef440f324
-commit: e91077cf1780108dc586cedf1d19f65b44fa3870 [499/6004] powerpc/smp: Update cpu_core_map on all PowerPc systems
-config: powerpc-randconfig-r006-20220603 (https://download.01.org/0day-ci/archive/20220604/202206041715.9pPofOTR-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e91077cf1780108dc586cedf1d19f65b44fa3870
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.10.y
-        git checkout e91077cf1780108dc586cedf1d19f65b44fa3870
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/powerpc/kernel/smp.c:551:6: error: no previous prototype for 'tick_broadcast' [-Werror=missing-prototypes]
-     551 | void tick_broadcast(const struct cpumask *mask)
-         |      ^~~~~~~~~~~~~~
-   arch/powerpc/kernel/smp.c:561:6: error: no previous prototype for 'debugger_ipi_callback' [-Werror=missing-prototypes]
-     561 | void debugger_ipi_callback(struct pt_regs *regs)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/kernel/smp.c: In function 'add_cpu_to_masks':
->> arch/powerpc/kernel/smp.c:1380:14: error: variable 'ret' set but not used [-Werror=unused-but-set-variable]
-    1380 |         bool ret;
-         |              ^~~
-   arch/powerpc/kernel/smp.c: At top level:
-   arch/powerpc/kernel/smp.c:1491:5: error: no previous prototype for 'setup_profiling_timer' [-Werror=missing-prototypes]
-    1491 | int setup_profiling_timer(unsigned int multiplier)
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/ret +1380 arch/powerpc/kernel/smp.c
-
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1373  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1374  static void add_cpu_to_masks(int cpu)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1375  {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1376  	struct cpumask *(*submask_fn)(int) = cpu_sibling_mask;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1377  	int first_thread = cpu_first_thread_sibling(cpu);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1378  	int chip_id = cpu_to_chip_id(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1379  	cpumask_var_t mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15 @1380  	bool ret;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1381  	int i;
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1382  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1383  	/*
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1384  	 * This CPU will not be in the online mask yet so we need to manually
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1385  	 * add it to it's own thread sibling mask.
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1386  	 */
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1387  	cpumask_set_cpu(cpu, cpu_sibling_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1388  	cpumask_set_cpu(cpu, cpu_core_mask(cpu));
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1389  
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1390  	for (i = first_thread; i < first_thread + threads_per_core; i++)
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1391  		if (cpu_online(i))
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1392  			set_cpus_related(i, cpu, cpu_sibling_mask);
-df52f6714071c4 Oliver O'Halloran 2017-06-29  1393  
-425752c63b6f3f Gautham R. Shenoy 2018-10-11  1394  	add_cpu_to_smallcore_masks(cpu);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1395  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1396  	/* In CPU-hotplug path, hence use GFP_ATOMIC */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1397  	ret = alloc_cpumask_var_node(&mask, GFP_ATOMIC, cpu_to_node(cpu));
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1398  	update_mask_by_l2(cpu, &mask);
-2a636a56d2d396 Oliver O'Halloran 2017-06-29  1399  
-b8a97cb4599cda Srikar Dronamraju 2020-09-21  1400  	if (has_coregroup_support())
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1401  		update_coregroup_mask(cpu, &mask);
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1402  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1403  	if (shared_caches)
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1404  		submask_fn = cpu_l2_cache_mask;
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1405  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1406  	/* Update core_mask with all the CPUs that are part of submask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1407  	or_cpumasks_related(cpu, cpu, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1408  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1409  	/* Skip all CPUs already part of current CPU core mask */
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1410  	cpumask_andnot(mask, cpu_online_mask, cpu_core_mask(cpu));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1411  
-e91077cf178010 Srikar Dronamraju 2021-08-26  1412  	/* If chip_id is -1; limit the cpu_core_mask to within DIE*/
-e91077cf178010 Srikar Dronamraju 2021-08-26  1413  	if (chip_id == -1)
-e91077cf178010 Srikar Dronamraju 2021-08-26  1414  		cpumask_and(mask, mask, cpu_cpu_mask(cpu));
-e91077cf178010 Srikar Dronamraju 2021-08-26  1415  
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1416  	for_each_cpu(i, mask) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1417  		if (chip_id == cpu_to_chip_id(i)) {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1418  			or_cpumasks_related(cpu, i, submask_fn, cpu_core_mask);
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1419  			cpumask_andnot(mask, mask, submask_fn(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1420  		} else {
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1421  			cpumask_andnot(mask, mask, cpu_core_mask(i));
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1422  		}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1423  	}
-bf6476152a0a08 Srikar Dronamraju 2021-04-15  1424  
-84dbf66c634720 Srikar Dronamraju 2020-10-19  1425  	free_cpumask_var(mask);
-a8a5356cd511db Paul Mackerras    2013-08-12  1426  }
-a8a5356cd511db Paul Mackerras    2013-08-12  1427  
-
-:::::: The code at line 1380 was first introduced by commit
-:::::: bf6476152a0a084038b12b9d770e32717f54a6ab powerpc/smp: Reintroduce cpu_core_mask
-
-:::::: TO: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I agree with KP. All hard coded things are hurting extensibility.
+we just need a helper that calls verify_pkcs7_signature
+where prog will specify len, keyring, etc.

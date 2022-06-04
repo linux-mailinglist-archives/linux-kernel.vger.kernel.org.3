@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B229253D853
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9DA53D861
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 21:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241146AbiFDTc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 15:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
+        id S241207AbiFDTdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 15:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240824AbiFDTbn (ORCPT
+        with ESMTP id S240532AbiFDTbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 15:31:43 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4509550054
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:31:26 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id u8so7808560qvj.2
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 12:31:26 -0700 (PDT)
+        Sat, 4 Jun 2022 15:31:44 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20A95005F
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 12:31:28 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id l1so7812454qvh.1
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 12:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=twQ/l/SSVqpaC5DgYCH7VSwC9ALcVhz/FUNTup042zw=;
-        b=Pq1aVOpBoqOFqZVHk+9X2Ha0pzyJLlZ0SJ56FoTjDlD//Vt+ICDz0Pc7OfLeYV9d+i
-         WNDXN+/eGNFSnDey1xe/IV5JnlIlEFAUfbhMSDLdUvYio64ZtgOUEaTdejLNYwbGlJIc
-         ihy3R5Kh9Mpb1lpdZfoP069T8mfl7/0p8LlZNmRhDzJQy7VeKb5cHt3VegvSfxfI68cF
-         124mPZILgRqzpA4EqRg9yeAdAoxAqZ1K50Oqkdhx5oIvgqDgjd38t7US4e87rTDbkHRJ
-         obX1iOirBb0tph2oARKt3XDDZIdJBpXVT2XN7aNVAavRGAnKi5VVxOlv2PhP1mDeEsat
-         f29w==
+        bh=uTBJQxxOq1+B+oEKPtyj8xG9RwTxPKpWggt48cPFUTs=;
+        b=qF8hvl7FRdivZqjRtJV3KC4IjPjSaOkQ//qhUAMMund+hkAvcmgC8hOVy9dqOmOhHE
+         SnAvDDqrFCTK2834+EwTE5QW2BvZ1djniF6FLRndwBhml8CZKkNNipJHa2t/3sKTg9Z/
+         CArej/tQ/ZK2Mni6YKXY6SwGB0SzCRgPID+7Oqd010mBCTipJZ3nG02+u3nulBzqjDEo
+         hm2Vw4CVdR40mQG4ycSi5J3BVJN0GfEInoz2uFU7nYhs9BpqvVy0k6nPucgq51DTa+rk
+         XrNeRFuHL15ytdaiRkSvvNKggJ+CA86Z605rPC3azKAb5pyMWZgBX8/WudQ5B78kNqXX
+         2h1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=twQ/l/SSVqpaC5DgYCH7VSwC9ALcVhz/FUNTup042zw=;
-        b=HyBValA0IF8kdwVR3rV5e7Gr0cwzBhGG1ZffdKaG1dJUL8e3+ane1Oemf9N3tf4mQ4
-         QY4kW6YSlu265AHY+QF0uj4J2whCSo82UR60kNTqGEhMqpwHhTc4pGU4a6pzd6i7CL2U
-         wspk9GpeLWGq3qulwEkDs8iVg9XzF8ZUDr1zyj6cdj1P4vonLXJpo89QwIsBbOt+GZIU
-         wmdoPk4DRHaVL2EJ04N6tPKeL1V6JUhgeP+52Q0o2JC8v+4V0yZImaNvyBLNGYzuAo1X
-         lRkBcSpHsSH+f5Vj8Xl/t+ycuX4ADU0EL1ME9cTU5QdciMDKsrHnACdXcsDFgswC1Y8X
-         7ZxQ==
-X-Gm-Message-State: AOAM5331K0OU+BzbDhyXcH9+WVfgaQMCyFoz7mHkB7FT678mNm+QIAvs
-        jqE8KZR4472zZUQKMy3/0wuQzKFtxomv
-X-Google-Smtp-Source: ABdhPJzfXdmtWyzWeixbaNma8wEgUblOis9qeSNZ6Bqys/lu8X8bd4LkFPW8KHMjxZT5Jv3UwOCTcQ==
-X-Received: by 2002:a0c:e790:0:b0:46a:916:32c5 with SMTP id x16-20020a0ce790000000b0046a091632c5mr5533882qvn.129.1654371084778;
-        Sat, 04 Jun 2022 12:31:24 -0700 (PDT)
+        bh=uTBJQxxOq1+B+oEKPtyj8xG9RwTxPKpWggt48cPFUTs=;
+        b=LGP7lbwoaQjOTtBPbe0wCr8sIrBCSBrCwabcb0Cov7PMlFWaI6OnP+dMGRES82Gjuy
+         9TXJ9E3V+4R4l9KcH8LwiRy7BWz7coVmZUDFWfdN+0HmWjLbCCIpZnrRWl+bUbK4ed5T
+         uoG0UFadIvVdpkw3FHf1843DlffhXyR1f79v5xXHDhuCkpTyChC2iWVu1MPNS+iEPA3c
+         lp4Np/amABKupa94BUJRtQu1VGdrVYH2UIS4JB6rZXAtRhLnIzp5LY3Pr5Rsc+IDKZwJ
+         opFzGDDE4iD/cpP5N9nzvRhPAbh+CtKDazVaceahNPmmGMUneI+4MIVNM6OAs7hHuivn
+         BqFA==
+X-Gm-Message-State: AOAM530fDyk9H9YaIB/iwksZDOh0ftsrSVJDfxcOoISazld2CMnzzalH
+        WOgZlyxVTcd+uRcVDR5rA1joJioFeHoe
+X-Google-Smtp-Source: ABdhPJyup4DVXawsaJXGhDU1HMeqJkb2a5r+HIeWjsqJ7vBBtcWqrYj0+HHTr/GSS/jvqIzsiZu2jQ==
+X-Received: by 2002:a05:6214:5097:b0:466:c160:e585 with SMTP id kk23-20020a056214509700b00466c160e585mr12929848qvb.54.1654371086393;
+        Sat, 04 Jun 2022 12:31:26 -0700 (PDT)
 Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id o17-20020ac84291000000b00304defdb1b3sm3537426qtl.85.2022.06.04.12.31.23
+        by smtp.gmail.com with ESMTPSA id o17-20020ac84291000000b00304defdb1b3sm3537426qtl.85.2022.06.04.12.31.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 12:31:24 -0700 (PDT)
+        Sat, 04 Jun 2022 12:31:25 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>, pmladek@suse.com,
         rostedt@goodmis.org
-Subject: [PATCH v3 23/33] Input/joystick/analog: Convert from seq_buf -> printbuf
-Date:   Sat,  4 Jun 2022 15:30:32 -0400
-Message-Id: <20220604193042.1674951-24-kent.overstreet@gmail.com>
+Subject: [PATCH v3 24/33] mm/memcontrol.c: Convert to printbuf
+Date:   Sat,  4 Jun 2022 15:30:33 -0400
+Message-Id: <20220604193042.1674951-25-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220604193042.1674951-1-kent.overstreet@gmail.com>
 References: <20220604193042.1674951-1-kent.overstreet@gmail.com>
@@ -70,60 +70,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-seq_buf is being deprecated, this converts to printbuf.
+This converts memory_stat_format() from seq_buf to printbuf. Printbuf is
+simalar to seq_buf except that it heap allocates the string buffer:
+here, we were already heap allocating the buffer with kmalloc() so the
+conversion is trivial.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- drivers/input/joystick/analog.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+ mm/memcontrol.c | 68 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 33 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/input/joystick/analog.c b/drivers/input/joystick/analog.c
-index 3088c5b829..a8c5f90e82 100644
---- a/drivers/input/joystick/analog.c
-+++ b/drivers/input/joystick/analog.c
-@@ -19,7 +19,7 @@
- #include <linux/input.h>
- #include <linux/gameport.h>
- #include <linux/jiffies.h>
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 598fece89e..57861dc9fe 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -62,7 +62,7 @@
+ #include <linux/file.h>
+ #include <linux/resume_user_mode.h>
+ #include <linux/psi.h>
 -#include <linux/seq_buf.h>
 +#include <linux/printbuf.h>
- #include <linux/timex.h>
- #include <linux/timekeeping.h>
+ #include "internal.h"
+ #include <net/sock.h>
+ #include <net/ip.h>
+@@ -1461,13 +1461,9 @@ static inline unsigned long memcg_page_state_output(struct mem_cgroup *memcg,
  
-@@ -339,24 +339,21 @@ static void analog_calibrate_timer(struct analog_port *port)
- 
- static void analog_name(struct analog *analog)
+ static char *memory_stat_format(struct mem_cgroup *memcg)
  {
 -	struct seq_buf s;
-+	struct printbuf buf = PRINTBUF_EXTERN(analog->name, sizeof(analog->name));
++	struct printbuf buf = PRINTBUF;
+ 	int i;
  
--	seq_buf_init(&s, analog->name, sizeof(analog->name));
--	seq_buf_printf(&s, "Analog %d-axis %d-button",
--		 hweight8(analog->mask & ANALOG_AXES_STD),
--		 hweight8(analog->mask & ANALOG_BTNS_STD) + !!(analog->mask & ANALOG_BTNS_CHF) * 2 +
--		 hweight16(analog->mask & ANALOG_BTNS_GAMEPAD) + !!(analog->mask & ANALOG_HBTN_CHF) * 4);
-+	prt_printf(&buf, "Analog %d-axis %d-button",
-+	       hweight8(analog->mask & ANALOG_AXES_STD),
-+	       hweight8(analog->mask & ANALOG_BTNS_STD) + !!(analog->mask & ANALOG_BTNS_CHF) * 2 +
-+	       hweight16(analog->mask & ANALOG_BTNS_GAMEPAD) + !!(analog->mask & ANALOG_HBTN_CHF) * 4);
- 
- 	if (analog->mask & ANALOG_HATS_ALL)
--		seq_buf_printf(&s, " %d-hat",
--			       hweight16(analog->mask & ANALOG_HATS_ALL));
+-	seq_buf_init(&s, kmalloc(PAGE_SIZE, GFP_KERNEL), PAGE_SIZE);
+-	if (!s.buffer)
+-		return NULL;
 -
-+		prt_printf(&buf, " %d-hat", hweight16(analog->mask & ANALOG_HATS_ALL));
- 	if (analog->mask & ANALOG_HAT_FCS)
--		seq_buf_printf(&s, " FCS");
-+		prt_printf(&buf, " FCS");
- 	if (analog->mask & ANALOG_ANY_CHF)
--		seq_buf_printf(&s, (analog->mask & ANALOG_SAITEK) ? " Saitek" : " CHF");
-+		prt_printf(&buf, (analog->mask & ANALOG_SAITEK) ? " Saitek" : " CHF");
+ 	/*
+ 	 * Provide statistics on the state of the memory subsystem as
+ 	 * well as cumulative event counters that show past behavior.
+@@ -1484,49 +1480,51 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
+ 		u64 size;
  
--	seq_buf_printf(&s, (analog->mask & ANALOG_GAMEPAD) ? " gamepad" : " joystick");
-+	prt_printf(&buf, (analog->mask & ANALOG_GAMEPAD) ? " gamepad" : " joystick");
+ 		size = memcg_page_state_output(memcg, memory_stats[i].idx);
+-		seq_buf_printf(&s, "%s %llu\n", memory_stats[i].name, size);
++		prt_printf(&buf, "%s %llu\n", memory_stats[i].name, size);
+ 
+ 		if (unlikely(memory_stats[i].idx == NR_SLAB_UNRECLAIMABLE_B)) {
+ 			size += memcg_page_state_output(memcg,
+ 							NR_SLAB_RECLAIMABLE_B);
+-			seq_buf_printf(&s, "slab %llu\n", size);
++			prt_printf(&buf, "slab %llu\n", size);
+ 		}
+ 	}
+ 
+ 	/* Accumulated memory events */
+ 
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
+-		       memcg_events(memcg, PGFAULT));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
+-		       memcg_events(memcg, PGMAJFAULT));
+-	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
+-		       memcg_events(memcg, PGREFILL));
+-	seq_buf_printf(&s, "pgscan %lu\n",
+-		       memcg_events(memcg, PGSCAN_KSWAPD) +
+-		       memcg_events(memcg, PGSCAN_DIRECT));
+-	seq_buf_printf(&s, "pgsteal %lu\n",
+-		       memcg_events(memcg, PGSTEAL_KSWAPD) +
+-		       memcg_events(memcg, PGSTEAL_DIRECT));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
+-		       memcg_events(memcg, PGACTIVATE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
+-		       memcg_events(memcg, PGDEACTIVATE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
+-		       memcg_events(memcg, PGLAZYFREE));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
+-		       memcg_events(memcg, PGLAZYFREED));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(PGFAULT),
++	       memcg_events(memcg, PGFAULT));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(PGMAJFAULT),
++	       memcg_events(memcg, PGMAJFAULT));
++	prt_printf(&buf, "%s %lu\n",  vm_event_name(PGREFILL),
++	       memcg_events(memcg, PGREFILL));
++	prt_printf(&buf, "pgscan %lu\n",
++	       memcg_events(memcg, PGSCAN_KSWAPD) +
++	       memcg_events(memcg, PGSCAN_DIRECT));
++	prt_printf(&buf, "pgsteal %lu\n",
++	       memcg_events(memcg, PGSTEAL_KSWAPD) +
++	       memcg_events(memcg, PGSTEAL_DIRECT));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(PGACTIVATE),
++	       memcg_events(memcg, PGACTIVATE));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(PGDEACTIVATE),
++	       memcg_events(memcg, PGDEACTIVATE));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(PGLAZYFREE),
++	       memcg_events(memcg, PGLAZYFREE));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(PGLAZYFREED),
++	       memcg_events(memcg, PGLAZYFREED));
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
+-		       memcg_events(memcg, THP_FAULT_ALLOC));
+-	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
+-		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
++	       memcg_events(memcg, THP_FAULT_ALLOC));
++	prt_printf(&buf, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
++	       memcg_events(memcg, THP_COLLAPSE_ALLOC));
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
+-	/* The above should easily fit into one page */
+-	WARN_ON_ONCE(seq_buf_has_overflowed(&s));
++	if (buf.allocation_failure) {
++		printbuf_exit(&buf);
++		return NULL;
++	}
+ 
+-	return s.buffer;
++	return buf.buf;
  }
  
- /*
+ #define K(x) ((x) << (PAGE_SHIFT-10))
 -- 
 2.36.0
 

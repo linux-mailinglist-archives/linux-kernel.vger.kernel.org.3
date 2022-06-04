@@ -2,126 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF9253D884
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 22:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932F853D886
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 22:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241049AbiFDUag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 16:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S241102AbiFDUsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 16:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240924AbiFDUad (ORCPT
+        with ESMTP id S234974AbiFDUr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 16:30:33 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F831222AA
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 13:30:29 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so14699887pjl.4
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 13:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/HBb0ZDkKChS7u7W92q6z+RJ56Q8ZTddXO5nLVdm7Ds=;
-        b=P9CwzByv7YgasmohkFwhBdbjzvwEj+asz8ddZId+WOAo1rW80xt71SlfNQjChfKryA
-         wsOQcEWIagvMoLVuqx/Wl04bzWcJiucwtVHxpf+pl+ZTjtZY57pdASshNB27LMmG+Zjx
-         uWQ1GkoBKbMEn58u3OWvQ2kPRb7gAZzYQXH8Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/HBb0ZDkKChS7u7W92q6z+RJ56Q8ZTddXO5nLVdm7Ds=;
-        b=BRYsviIaB0gBdSGJqHimS+bjbgjrDESSj0z5jBdq5mlY1FxyKiJ8gwwOZtnvFwKMUM
-         Zaqqa4DR/la/PqZAuOu9tl8f7fL19tr2D7zigZcpfZizywCKWBOfh/xfVwHjt+g9XDj9
-         SdOkQAZAP2YeeUf1acf5WM5lB312dI/NpVk1W2T/f53FoJ7a1m2v1O3KuAAISOmj1kth
-         dG4LQ4JMJHISSj4cp//VqBZVx5BBtowQ1pvj1XLTY/R32Q7KTVH9rYQXBarNeJd6v+7i
-         ZNBuZSSDr4XzB1dcUJBJjeY9u2djh3psdgMBJLw+zrJ00T/dlBjvQ2UWt6gSaeoqAyRc
-         WDKg==
-X-Gm-Message-State: AOAM532h4tEiFJX4LHzlHMvOC+ZtswmqUpuT1BmjCRpWImLp91g9aIhv
-        xmSltSP5JANTKakk1GhUBxiRkg==
-X-Google-Smtp-Source: ABdhPJwtXs6I68jQqRzep0xqec3GlALJ3iL77SWf2Owq4SCVbCGHKE8Dm7lcxheeLXbH6VLIAOVrIw==
-X-Received: by 2002:a17:902:eccc:b0:167:5c6e:31e4 with SMTP id a12-20020a170902eccc00b001675c6e31e4mr5543306plh.90.1654374628607;
-        Sat, 04 Jun 2022 13:30:28 -0700 (PDT)
-Received: from irdv-mkhalfella.dev.purestorage.com ([208.88.158.128])
-        by smtp.googlemail.com with ESMTPSA id l63-20020a638842000000b003f61c311e79sm6530196pgd.56.2022.06.04.13.30.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 04 Jun 2022 13:30:27 -0700 (PDT)
-From:   Mohamed Khalfella <mkhalfella@purestorage.com>
-To:     helgaas@kernel.org
-Cc:     bhelgaas@google.com, ebadger@purestorage.com,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mkhalfella@purestorage.com,
-        msaggi@purestorage.com, oohall@gmail.com, rajatja@google.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] PCI/AER: Iterate over error counters instead of error
-Date:   Sat,  4 Jun 2022 20:30:21 +0000
-Message-Id: <20220604203021.10663-1-mkhalfella@purestorage.com>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20220603235856.GA117911@bhelgaas>
-References: <20220603235856.GA117911@bhelgaas>
+        Sat, 4 Jun 2022 16:47:58 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A78026547
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 13:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654375674; x=1685911674;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=p1Hzk3F3uuqm5NfqizxDeJYiY2e+z6CPo2P14nYuS84=;
+  b=bwc0oCc4C9WVAIrrTDFmqd95YjD6fTQ2Qj2zDZxSBCuL2qitciyzOL4H
+   mTGxQ/Lx4roUH7x7eOy8H366KcIFJrz7uOINt+oEyQecQ8NWhks6smvqj
+   HZd5Wu2TzufGfZ+yPrK47N1vgbO7XLHvKuFI28hMrouZdC4uyTTbFpSAD
+   oDMkTrGg+0vtki2p9T+jG5cRBvHZ1ZBzBZTT3of6opJqO2vFJ1aToAH6Q
+   e7t215zmNICHu5p3UyeNoPcUhpAFOaGk9tO7aiUseMX17n3NGFhEf+9HX
+   6Tm8fRbjIfpqzw5LQzpHlTdFekeEGbo4VkMASuw7YuZ7L0paHqgCgnzYN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276237814"
+X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
+   d="scan'208";a="276237814"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 13:47:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
+   d="scan'208";a="583048838"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Jun 2022 13:47:52 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxaga-000BCV-5S;
+        Sat, 04 Jun 2022 20:47:52 +0000
+Date:   Sun, 5 Jun 2022 04:47:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: [djwong-xfs:vectorized-scrub 59/401] fs/xfs/xfs_mount.c:1395:1:
+ sparse: sparse: symbol 'xfs_drain_waiter_hook' was not declared. Should it
+ be static?
+Message-ID: <202206050410.XuV4Iw7k-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 16:58, Bjorn Helgaas wrote:
-> On Fri, Jun 03, 2022 at 10:12:47PM +0000, Mohamed Khalfella wrote:
->> Is there any chance for this to land in 5.19?
->
-> Too late for v5.19, since the merge window will end in a couple days.
-> Remind me again if you don't see it in -next by v5.20-rc5 or so.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
+head:   1fcd9cea011a657d62ee332d161966c1ec92ffd5
+commit: 3af08f1b3aa1b9abb663bf030786a97d41f9081f [59/401] xfs: use per-cpu counters to implement intent draining
+config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220605/202206050410.XuV4Iw7k-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=3af08f1b3aa1b9abb663bf030786a97d41f9081f
+        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
+        git fetch --no-tags djwong-xfs vectorized-scrub
+        git checkout 3af08f1b3aa1b9abb663bf030786a97d41f9081f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/xfs/
 
-Thank you. I will keep an eye on -next.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->> On 5/10/22 14:17, Mohamed Khalfella wrote:
->>>> Thanks for catching this; it definitely looks like a real issue!  I
->>>> guess you're probably seeing junk in the sysfs files?
->>>
->>> That is correct. The initial report was seeing junk when reading sysfs
->>> files. As descibed, this is happening because we reading data past the
->>> end of the stats counters array.
->>>
->>>
->>>> I think maybe we should populate the currently NULL entries in the
->>>> string[] arrays and simplify the code here, e.g.,
->>>>
->>>> static const char *aer_correctable_error_string[] = {
->>>>        "RxErr",                        /* Bit Position 0       */
->>>>        "dev_cor_errs_bit[1]",
->>>> 	...
->>>>
->>>>  if (stats[i])
->>>>    len += sysfs_emit_at(buf, len, "%s %llu\n", strings_array[i], stats[i]);
->>>
->>> Doing it this way will change the output format. In this case we will show
->>> stats only if their value is greater than zero. The current code shows all the
->>> stats those have names (regardless of their value) plus those have non-zero
->>> values.
->>>
->>>>> @@ -1342,6 +1342,11 @@ static int aer_probe(struct pcie_device *dev)
->>>>>  	struct device *device = &dev->device;
->>>>>  	struct pci_dev *port = dev->port;
->>>>>
->>>>> +	BUILD_BUG_ON(ARRAY_SIZE(aer_correctable_error_string) <
->>>>> +		     AER_MAX_TYPEOF_COR_ERRS);
->>>>> +	BUILD_BUG_ON(ARRAY_SIZE(aer_uncorrectable_error_string) <
->>>>> +		     AER_MAX_TYPEOF_UNCOR_ERRS);
->>>>
->>>> And make these check for "!=" instead of "<".
->>
->> I am happy to remove these BUILD_BUG_ON() if you think it is a good
->> idea to do so.
->
-> I think it's good to enforce correctness there somehow, so let's leave
-> them there unless somebody has a better idea.
->
->>> This will require unnecessarily extending stats arrays to have 32 entries
->>> in order to match names arrays. If you don't feel strogly about changing
->>> "<" to "!=", I prefer to keep the code as it is. 
+
+sparse warnings: (new ones prefixed by >>)
+>> fs/xfs/xfs_mount.c:1395:1: sparse: sparse: symbol 'xfs_drain_waiter_hook' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

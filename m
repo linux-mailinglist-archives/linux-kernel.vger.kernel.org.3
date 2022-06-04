@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E85B553D40C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA7953D417
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 02:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349808AbiFDAS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Jun 2022 20:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S1349810AbiFDAeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Jun 2022 20:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiFDASy (ORCPT
+        with ESMTP id S231961AbiFDAeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Jun 2022 20:18:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B195932C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Jun 2022 17:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654301933; x=1685837933;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lQ5vnFYTCwqGsOTSjrRG39am4oz9xfPDPHb7zVZqTQo=;
-  b=LYtIUuxLeAP94JOLGK5V6WMIUoTiwvrn7GbScfngwF11QbRRa6MEUNnP
-   YeO/673M+43/4dxH5jWQgQa43OVlye+Pcpp0xI2lAVGvahtF9/jNODfCk
-   URTOn6QM+j6UiYqD6Yc4mP6hCg+md6VenKhsvPksAOz3JbxxdpTSMfdDQ
-   9d2+bGYs0oCOrVQ5j8hXoNs58eZH0z4ogA8u4i8wo7tz91rNB1Gl0erH3
-   SiBlj3lTjlYNzO8iyXWhYJ8nnmDXgF9jb4N/DnCboUVwMJyT3jVQ7Pzq3
-   InP4Atx3mX8ZxstVSYtZ7ockAves+GZyRh5AvI//K+kYMXBXcu4jHfoIZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10367"; a="362740002"
-X-IronPort-AV: E=Sophos;i="5.91,276,1647327600"; 
-   d="scan'208";a="362740002"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 17:18:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,276,1647327600"; 
-   d="scan'208";a="582804510"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Jun 2022 17:18:52 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxHVD-0009fb-LX;
-        Sat, 04 Jun 2022 00:18:51 +0000
-Date:   Sat, 4 Jun 2022 08:18:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: arch/powerpc/kvm/book3s_hv_rm_xics.c:482:15: error: no previous
- prototype for 'xics_rm_h_xirr_x'
-Message-ID: <202206040816.UN8BBdUf-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 3 Jun 2022 20:34:08 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259C91EAF0;
+        Fri,  3 Jun 2022 17:34:07 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so1933281pjb.1;
+        Fri, 03 Jun 2022 17:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=4J9r/ADMHRa2VWDoRZONcQ79oJ/Zv5AbYRMCT0dxcKI=;
+        b=oBQYyoGuhqud0Uo0G9jJEbWL5XGDdvkOHkOkYNwfynRVfc7bZyiw6hhKcqFaubd12F
+         V4W7qwRClvOhDersC3MwfuLq3wY/CB1FVW2JulQBNEJr8gQe5F2BTZZ0g5L7vIdEDWl9
+         i9CRo/2wGAPZXVDhlGmwoL/g1fWE13+d/plvJI0C1PDHaMGtzzlAj+dr863IbJh3VaNW
+         gq/iqFRpg5xHHPbav7GA2L5tvmuhoIAH3THW8Il7Bw33My/NjSvbk4/j5FTV/afF/jNg
+         2dm0IbTZQ08joDiVD5EjrdA66/tJd9kZJXtVVaS9iV1k/bIvxtq9pk15N/2JXAtdkHgt
+         USFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=4J9r/ADMHRa2VWDoRZONcQ79oJ/Zv5AbYRMCT0dxcKI=;
+        b=uj0owmH0reYiH36UeKUnbIikBFsbcguIRaIS3RIQ6EHZ67MRgtye18+i32vhAijRzY
+         em5eCLhY7auP6TOd74nFkj/MbMY3U9F3h/u8wzi/+7eRSfH37MLmMqm6tmJAPj07yNxo
+         sicXrcHznkQY4F5z7EqKuTULRSCAYlWE7mP6fDFaGfXM8CzX/V+IxYgaE7tQte3NynBh
+         VYtFJk4MFDMDggwpNPb5x8xh3RKPXNCLi2ZMo3UYDvWz+4QbkR8d0W9/lQB/JoP2oVRm
+         9YMf9u1N7roQB6Rf+XwY74ptDUUqHnfwRXGyfx/Cu9Og+c6vK/lMP0ajfEumQ0+IaU6x
+         DWHA==
+X-Gm-Message-State: AOAM532kNXb95e+uDjM/pds0kztSIvk/zNYSWNMK2GAhpK+8bjK+YtIs
+        2VFkM3Ql5CZiGQWAnJFSytzcRw/nl0lYpL8wRS8=
+X-Google-Smtp-Source: ABdhPJwz+zcP/jbpD3OdNjr4zcbZupr8epwyWSV1FBCKIIbIFaUGIVFkSI++OIwAgcIi48bKhE4nww==
+X-Received: by 2002:a17:90b:1c8e:b0:1bf:364c:dd7a with SMTP id oo14-20020a17090b1c8e00b001bf364cdd7amr13224332pjb.103.1654302846284;
+        Fri, 03 Jun 2022 17:34:06 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id j17-20020aa78d11000000b0051bbb683cc4sm5212195pfe.165.2022.06.03.17.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 17:34:05 -0700 (PDT)
+Message-ID: <629aa87d.1c69fb81.5d845.beae@mx.google.com>
+Date:   Fri, 03 Jun 2022 17:34:05 -0700 (PDT)
+X-Google-Original-Date: Sat, 04 Jun 2022 00:34:04 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 00/66] 5.15.45-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   744983d8784214c4f184be7448efb216315b48ae
-commit: b22af9041927075b82bcaf4b6c7a354688198d47 KVM: PPC: Book3s: Remove real mode interrupt controller hcalls handlers
-date:   2 weeks ago
-config: powerpc64-defconfig (https://download.01.org/0day-ci/archive/20220604/202206040816.UN8BBdUf-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b22af9041927075b82bcaf4b6c7a354688198d47
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b22af9041927075b82bcaf4b6c7a354688198d47
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+On Fri,  3 Jun 2022 19:42:40 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.45 release.
+> There are 66 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.45-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+5.15.45-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/kvm/book3s_hv_rm_xics.c:482:15: error: no previous prototype for 'xics_rm_h_xirr_x' [-Werror=missing-prototypes]
-     482 | unsigned long xics_rm_h_xirr_x(struct kvm_vcpu *vcpu)
-         |               ^~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/xics_rm_h_xirr_x +482 arch/powerpc/kvm/book3s_hv_rm_xics.c
-
-   481	
- > 482	unsigned long xics_rm_h_xirr_x(struct kvm_vcpu *vcpu)
-   483	{
-   484		vcpu->arch.regs.gpr[5] = get_tb();
-   485		return xics_rm_h_xirr(vcpu);
-   486	}
-   487	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

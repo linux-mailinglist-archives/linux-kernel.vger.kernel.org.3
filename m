@@ -2,95 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C21753D89A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4EA53D89B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241904AbiFDVUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 17:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S241840AbiFDVUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 17:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241962AbiFDVT7 (ORCPT
+        with ESMTP id S241966AbiFDVUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 17:19:59 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7523D4D61C;
-        Sat,  4 Jun 2022 14:19:57 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e656032735so14843591fac.0;
-        Sat, 04 Jun 2022 14:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K2R5nf9O6AXprXYtmFMJmMfna4dlV7oqPr6ZCw0TaSM=;
-        b=Mr2vutiv5X3Uqb/yPEUs+327z19fq38IV3IhPA2fuBuPaiQ36mMBs2FQCtbNhRh6Pp
-         WLRDwyMxgYWBGf6MLFnhUKPez6h5VAuWU0pz1gEDtpE/1Plad+V+F/T5gpnVBSL9z0DE
-         igOBECG1EXpTxN8oDCbVpzr7Rptin9icrl6p7ggrjSrNMsQTEdeunJFauHLoheUHUzhW
-         7e0cRtNYFPoCusfynYimsvOP0xbQXeDPxTCaRjYJgEzZR5dijrIlrlk38Z3JdoGxTJ5D
-         wYGwiRGE3GXBcu/QQ04nV9zg94UDMx9WU1svOTx+bIUbUrFHGqNCA6C8qyr4mXo/2ok1
-         XafQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=K2R5nf9O6AXprXYtmFMJmMfna4dlV7oqPr6ZCw0TaSM=;
-        b=tCfCj0Cp4YRbWjDa1cz2n1JwnlGeo0xfE6uKO/BoYt8Jo3L5YjO4smxE/l77STHmFT
-         TcyC4M0CZc0/a7Wyfb5cA30A0AtU61WbKb7G06enimwResMJ8kvI2P4YjNdWwS6Ikk2M
-         daK6p/HWeLwN/XGENGbrk38Rw3syv80nDoixfRvapzquLiC0S9Ev4eUb8PgfQZEYeiKz
-         VF4RJ+wcoYlwdvKnveea9ZYtzgs0s3Z+GcqK//vS5lVyhlXwRRH/xdKlSeSzD6DNQgpc
-         fySsaF4/YP1UIhWqlAbkna80FrcphKa2s70rvWCEZGoLKbRHxajeK7cW+ttMjFGwPmH5
-         J/3w==
-X-Gm-Message-State: AOAM53172nk7nMkmiEmRDqurUkXAz7YqzM7S1w4anVFIYvpHIb6q5R6a
-        F4w+Fas+f+3z+QjIARHoV4I=
-X-Google-Smtp-Source: ABdhPJwYEaG9q9x4p0Kd0sEYx8WTM1dFHp/XBRnjlJ58/Y4KLNuaufFeXR99f7Co6LhD60kSbPKQTQ==
-X-Received: by 2002:a05:6870:b292:b0:f5:da78:c444 with SMTP id c18-20020a056870b29200b000f5da78c444mr13453322oao.214.1654377596779;
-        Sat, 04 Jun 2022 14:19:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m11-20020a4aedcb000000b00415a9971cfcsm5731100ooh.38.2022.06.04.14.19.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 14:19:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 4 Jun 2022 14:19:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/66] 5.15.45-rc1 review
-Message-ID: <20220604211954.GA4026952@roeck-us.net>
-References: <20220603173820.663747061@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sat, 4 Jun 2022 17:20:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38B54D61C
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 14:20:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67DEEB803F6
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 21:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 24100C385B8;
+        Sat,  4 Jun 2022 21:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654377609;
+        bh=+nTlPlfH3rEya5YlWPmNahFTP52wZZf4MtWI9B2+xjY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=pS7W4O1ueAmB9KWGg+jKigrW4F29ji1K72iHRD9ytbShUVbikgzLy0YhTPC40lUtR
+         N7pneiOrWpuwTLmakcsNMYp2t11aIu4iSV4cNN564J8EXDWm1FO1m8fO3qFD6wBqNH
+         wjHoboShRifj7kDRdcddO2NGz2UY6zSfIKdHUv52c7dDx3rh4DuoxMlQ4459lYA4UD
+         Z/UO/O3hFJha3uQ3GkKD2onKnGgIwFWxQpUx4qLOp2cJoJ8OH4c7W5/vXnSydWVjKP
+         blDMWj5HSxW6bPlnH584iFtMiViSqs7o+PWH+O7duM7fR4VKvgnGol7PT9WgCbVlJL
+         /yAImBvTeK1nw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0FA7FF03875;
+        Sat,  4 Jun 2022 21:20:09 +0000 (UTC)
+Subject: Re: [GIT PULL] Bitmap patches for v5.19-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yppk/mN+KYTDkvz3@yury-laptop>
+References: <Yppk/mN+KYTDkvz3@yury-laptop>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yppk/mN+KYTDkvz3@yury-laptop>
+X-PR-Tracked-Remote: git@github.com:/norov/linux.git tags/bitmap-for-5.19-rc1
+X-PR-Tracked-Commit-Id: 0dfe54071d7c828a02917b595456bfde1afdddc9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d0e60d46bc03252b8d4ffaaaa0b371970ac16cda
+Message-Id: <165437760905.4820.4833739686139165244.pr-tracker-bot@kernel.org>
+Date:   Sat, 04 Jun 2022 21:20:09 +0000
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 07:42:40PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.45 release.
-> There are 66 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
-> 
+The pull request you sent on Fri, 3 Jun 2022 12:46:06 -0700:
 
-Build results:
-	total: 157 pass: 157 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
+> git@github.com:/norov/linux.git tags/bitmap-for-5.19-rc1
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d0e60d46bc03252b8d4ffaaaa0b371970ac16cda
 
-Guenter
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

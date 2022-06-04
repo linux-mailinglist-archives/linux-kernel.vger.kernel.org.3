@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AA553D8AB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 23:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF8253D8AF
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 00:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242158AbiFDVt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 17:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
+        id S242189AbiFDWCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 18:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiFDVt5 (ORCPT
+        with ESMTP id S234967AbiFDWCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 17:49:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09A21114A
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 14:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654379395; x=1685915395;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wUm9xelcIQqhoopPywKR+bku9RE4WkYy+McCJUpUrAw=;
-  b=aFlaGGwkQc2TbjquRlae3OrCYw3Q9ojFpEvq0zfW2CTv9HrCvbK35/Yj
-   A0H1QUSSJH2q4UmCILfV8sTtZ11IDqrwYLJUQ4J56BPTDHm0vcoCRRoFQ
-   R6VDA7Ulhk7z9HrnL/xs2dzx4cejLKtNrXA03KIdznHPRsCjtuKz1Krco
-   kd92mMvg0InYOqd+sf9AIZ6m5NvLA0ZSGNv3sjgt49nDH8JlJ6F4Al+jm
-   Bra3XTX/kadqJVunA3bVDD65GwGJ9I3OCs+kbiEr1C3LewfV2yTp4YFYe
-   j/olwwOsa5TAN9TdsCSzsqCdM9eqsszwaNo+m+ogdGV45yi72A2Grs5Pf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="275281255"
-X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="275281255"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 14:49:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="531483557"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Jun 2022 14:49:54 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxbeb-000BEj-9I;
-        Sat, 04 Jun 2022 21:49:53 +0000
-Date:   Sun, 5 Jun 2022 05:49:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [frederic-dynticks:rcu/context-tracking-v4 9/20]
- kernel/softirq.c:610: undefined reference to `ct_irq_enter'
-Message-ID: <202206050548.DSjyYju7-lkp@intel.com>
+        Sat, 4 Jun 2022 18:02:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E86C2CC86;
+        Sat,  4 Jun 2022 15:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654380129;
+        bh=44yWatpj6wF86Z5uuPLeaz6RdApHV2+/i3FmWQnXmvI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=G+kIX1qWg/0AX2kkQvT7kvb0wtWTuks1zLYqyQKLjPBB5zwvUfmDTlbtaHZIG6xF8
+         0D+byMfqolnAVXf1pjKvvkvB3Hyg7k0TY3zLOkeKcimV+FkP2fp0r6mYSudGofoVSJ
+         IXDC2m8QiasQpXFXcSnoVYK9pRpbJyZ7NIcmbpeo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1Md6R1-1nNRsg0gFv-00aACb; Sun, 05 Jun 2022 00:02:09 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (sch56xx-common) Add DMI override table
+Date:   Sun,  5 Jun 2022 00:02:00 +0200
+Message-Id: <20220604220200.2567-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:DP0Yr2k96AiTqZa/hhjr79M75ptPoiB0bWzo8EKAoGumkIjVrUB
+ yQDYeSZENXdRH5kQZ4h4DpQu3d2yD6IiUMu0+Ue2TlXyvw11yu1U0Q6OegTfYlFqgC9CalE
+ h+/bsFQlVBdToR3rQl12mah2JrPz3JdYdzVZdQMBo0ZbLUzqIRRhY49TP+O69Hcr75+jRsN
+ HKWKlDbjzZvcKBwrD99QA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yXcKc3RzeoA=:kHm0lGvUkrH9CFOUS6FRz6
+ dSOu/ZDI+10/Kuri0ftZnOjsBe8NsmQXzC7kEjIBrYbY/a43NfyfEHiEtZsGOUVggNLqgXrBk
+ WpT++gnsW/jLSBQCfNA/4PhlJNwCgxTLErBrbVmuanTeJLmHNOiO1e4A45eZ3pwIQEuYacbio
+ i+9cRX8jFZDCJKdoJQlPIXhpDaAmu3VbDv1dPJzxEqEQcIDahLdUftnVqyxZBsr77ORW5P+Ct
+ O61e7APVCIzl6rrp5EI5hPJ3RkfR/L7NcrR4SkxAQ4xIYsVvGAIfCkmGZrnosB+pZVNfJzljQ
+ rb9jlHaeCe3M++W0lSrgBs0Bwb1rkcOOpeACLlmz2XiYWqSBOlVzMEKKXvjhxyWbdJzqFOavx
+ ca4/KcdFgc6Deu1GQhn7t+QB4qJnRij/2DaUx9+Tl7ZqVcybkeBjwTXhX/ey4iLD5xPb1IKEq
+ bkZqvd5kAuBbWEaQDGkFqiaOzC9m65qc6e+u8kuqYoJdU7x9VD+ppaoKjxtBGn1ZWxwTqZ7Za
+ j9ybpZc+MVDglF06U856d+LqOp8iCo7fpjsxUboqVAuN1GeEVg/LUH+0Kqab7FTkNzI7FGVXb
+ P6YdfgNiwa9AICvBYnIaCOltegyTCncJABKtJmmyhqUuiIhOd54mzmgrzMo8Arq/WRDzB65f0
+ 6UA+FEmCKg5SrKeSx1AfA2EzV+kbhoPh7q26E6Bqh/PWT3AhQsjTJoit04QWZxxYI8TB4z+aJ
+ ZYpUvAzfBfWogOC1upm6eL3mG5jG+pXsxno4eanF+HJ38gL+3OkzTh+moXGKBf47Q2yQrOvEZ
+ 9+UyCTUmRMkwFrRjexnKaNZ/r+LYtSLLerhTxXrBIq8Wfzw0CS0WrVSSc0tEK7u5FU8A/VW8c
+ XncYVPgWYKWWpY5b+77dph0fvjv4OJfF+P8mcMGAMvbpr2nXlaLFcRvYv0d2V/T4t7zyVJvtI
+ OYbYbx0iaDBlvwGAOJvhh1mEg74GljvhZlm3mYQy37zZJW79Yw25lehyUwi9CBlma439mwUoH
+ vuMkKkzqkXlRrwqXqYpSjUYOcM902IVKqmd6mECEhFdUfc525utxHlMXdH3nLf308h1N3EzPL
+ eUiyUNrWUT70JxLZYuP7V9nkzm1XyxhZjG+OW+vqpqbYC0SeWN8uaLsEw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,125 +67,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking-v4
-head:   77493b1db618c61dec140cbab830832f77203d69
-commit: ede17b80373d0c3e886b3b4d9533f6c12cf1e799 [9/20] context_tracking: Take IRQ eqs entrypoints over RCU
-config: x86_64-randconfig-a008 (https://download.01.org/0day-ci/archive/20220605/202206050548.DSjyYju7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=ede17b80373d0c3e886b3b4d9533f6c12cf1e799
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks rcu/context-tracking-v4
-        git checkout ede17b80373d0c3e886b3b4d9533f6c12cf1e799
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Some devices like the Fujitsu Celsius W380 do contain
+a working sch56xx hardware monitoring device, but do
+not contain the necessary DMI onboard device.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Do not check for the presence of an suitable onboard device
+on these machines. The list of affected machines was created
+using data collected by the Linux Hardware Project.
 
-All errors (new ones prefixed by >>):
+Tested on a Fujitsu Esprimo P720, but sadly not on a affected
+machine.
 
-   vmlinux.o: warning: objtool: pvh_start_xen()+0x0: unreachable instruction
-   ld: vmlinux.o: in function `irq_enter':
->> kernel/softirq.c:610: undefined reference to `ct_irq_enter'
-   ld: vmlinux.o: in function `irq_exit':
->> kernel/softirq.c:662: undefined reference to `ct_irq_exit'
-   ld: vmlinux.o: in function `trace_console_rcuidle':
->> include/trace/events/printk.h:10: undefined reference to `ct_irq_enter_irqson'
->> ld: include/trace/events/printk.h:10: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `bc_set_next':
->> kernel/time/tick-broadcast-hrtimer.c:64: undefined reference to `ct_irq_enter_irqson'
->> ld: kernel/time/tick-broadcast-hrtimer.c:64: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_irq_disable_rcuidle':
->> include/trace/events/preemptirq.h:36: undefined reference to `ct_irq_enter_irqson'
->> ld: include/trace/events/preemptirq.h:36: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_irq_enable_rcuidle':
-   include/trace/events/preemptirq.h:40: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/preemptirq.h:40: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_disable_rcuidle':
->> include/trace/events/clk.h:46: undefined reference to `ct_irq_enter_irqson'
->> ld: include/trace/events/clk.h:46: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_disable_complete_rcuidle':
-   include/trace/events/clk.h:53: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:53: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_enable_rcuidle':
-   include/trace/events/clk.h:32: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:32: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `trace_clk_enable_complete_rcuidle':
-   include/trace/events/clk.h:39: undefined reference to `ct_irq_enter_irqson'
-   ld: include/trace/events/clk.h:39: undefined reference to `ct_irq_exit_irqson'
-   ld: vmlinux.o: in function `irqentry_exit':
->> kernel/entry/common.c:421: undefined reference to `ct_irq_exit'
->> ld: kernel/entry/common.c:439: undefined reference to `ct_irq_exit'
+Fixes: 393935baa45e (hwmon: (sch56xx-common) Add automatic module loading =
+on supported devices)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++--------
+ 1 file changed, 34 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
+.c
+index 3ece53adabd6..de3a0886c2f7 100644
+=2D-- a/drivers/hwmon/sch56xx-common.c
++++ b/drivers/hwmon/sch56xx-common.c
+@@ -523,6 +523,28 @@ static int __init sch56xx_device_add(int address, con=
+st char *name)
+ 	return PTR_ERR_OR_ZERO(sch56xx_pdev);
+ }
 
-vim +610 kernel/softirq.c
++static const struct dmi_system_id sch56xx_dmi_override_table[] __initcons=
+t =3D {
++	{
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "CELSIUS W380"),
++		},
++	},
++	{
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO P710"),
++		},
++	},
++	{
++		.matches =3D {
++			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO E9900"),
++		},
++	},
++	{ }
++};
++
+ /* For autoloading only */
+ static const struct dmi_system_id sch56xx_dmi_table[] __initconst =3D {
+ 	{
+@@ -543,16 +565,18 @@ static int __init sch56xx_init(void)
+ 		if (!dmi_check_system(sch56xx_dmi_table))
+ 			return -ENODEV;
 
-   604	
-   605	/**
-   606	 * irq_enter - Enter an interrupt context including RCU update
-   607	 */
-   608	void irq_enter(void)
-   609	{
- > 610		ct_irq_enter();
-   611		irq_enter_rcu();
-   612	}
-   613	
-   614	static inline void tick_irq_exit(void)
-   615	{
-   616	#ifdef CONFIG_NO_HZ_COMMON
-   617		int cpu = smp_processor_id();
-   618	
-   619		/* Make sure that timer wheel updates are propagated */
-   620		if ((idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
-   621			if (!in_hardirq())
-   622				tick_nohz_irq_exit();
-   623		}
-   624	#endif
-   625	}
-   626	
-   627	static inline void __irq_exit_rcu(void)
-   628	{
-   629	#ifndef __ARCH_IRQ_EXIT_IRQS_DISABLED
-   630		local_irq_disable();
-   631	#else
-   632		lockdep_assert_irqs_disabled();
-   633	#endif
-   634		account_hardirq_exit(current);
-   635		preempt_count_sub(HARDIRQ_OFFSET);
-   636		if (!in_interrupt() && local_softirq_pending())
-   637			invoke_softirq();
-   638	
-   639		tick_irq_exit();
-   640	}
-   641	
-   642	/**
-   643	 * irq_exit_rcu() - Exit an interrupt context without updating RCU
-   644	 *
-   645	 * Also processes softirqs if needed and possible.
-   646	 */
-   647	void irq_exit_rcu(void)
-   648	{
-   649		__irq_exit_rcu();
-   650		 /* must be last! */
-   651		lockdep_hardirq_exit();
-   652	}
-   653	
-   654	/**
-   655	 * irq_exit - Exit an interrupt context, update RCU and lockdep
-   656	 *
-   657	 * Also processes softirqs if needed and possible.
-   658	 */
-   659	void irq_exit(void)
-   660	{
-   661		__irq_exit_rcu();
- > 662		ct_irq_exit();
-   663		 /* must be last! */
-   664		lockdep_hardirq_exit();
-   665	}
-   666	
+-		/*
+-		 * Some machines like the Esprimo P720 and Esprimo C700 have
+-		 * onboard devices named " Antiope"/" Theseus" instead of
+-		 * "Antiope"/"Theseus", so we need to check for both.
+-		 */
+-		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
+-		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
+-		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
+-		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
+-			return -ENODEV;
++		if (!dmi_check_system(sch56xx_dmi_override_table)) {
++			/*
++			 * Some machines like the Esprimo P720 and Esprimo C700 have
++			 * onboard devices named " Antiope"/" Theseus" instead of
++			 * "Antiope"/"Theseus", so we need to check for both.
++			 */
++			if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
++			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
++			    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
++			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
++				return -ENODEV;
++		}
+ 	}
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ 	/*
+=2D-
+2.30.2
+

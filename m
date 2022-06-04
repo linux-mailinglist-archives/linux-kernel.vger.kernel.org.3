@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B1753D703
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 15:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F1D53D70B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Jun 2022 15:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbiFDNZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 09:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        id S236361AbiFDNqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 09:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiFDNZk (ORCPT
+        with ESMTP id S231572AbiFDNqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 09:25:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6781C138
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 06:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654349139; x=1685885139;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6s8Z8C91QPPbCucJPa8iFjLLhwuVNRUPeXapcesFNwo=;
-  b=b1m4r0YRKNMy5w9zc3yS3sjogm7mL9mMVYXPUwvLsAiJz8fcV0Y4ML04
-   PNoOIjcEnWO1NhTp2JIYorW4T3X/I/Ttz4a8oAoyOyvCPWBqEA9PeiIRj
-   kLtsGKdqpcqUoyzePtILfP32mPoc9UeDEwRANhCnerOFNlw4NKmHjDJ+x
-   BRnC0vS+yTBAUg3PvsFAtGOFApGPI9Ogszybu+SJgAYKoZpba/HRLRD9T
-   mtmjFM76l7uKaM51zNPGjHrAd2rHiGyjCCVhB8qXFb2kdtRv5XR8BtQmY
-   tE2ZZriGokUwAZFy7GtT44iE1UO29W7P3hzSbUVOz/p5DpcrqAw4xCpT9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="276499133"
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="276499133"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 06:25:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,277,1647327600"; 
-   d="scan'208";a="722135650"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Jun 2022 06:25:38 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxTmb-000AuR-JC;
-        Sat, 04 Jun 2022 13:25:37 +0000
-Date:   Sat, 4 Jun 2022 21:25:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-fbdev:sti-fixes 1/3] drivers/video/console/sticore.c:1132:5:
- error: redefinition of 'fb_is_primary_device'
-Message-ID: <202206042154.K6D7MXNw-lkp@intel.com>
+        Sat, 4 Jun 2022 09:46:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C402BB23
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 06:46:20 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nxU6c-00055f-B1; Sat, 04 Jun 2022 15:46:18 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 96BE98C377;
+        Sat,  4 Jun 2022 13:46:16 +0000 (UTC)
+Date:   Sat, 4 Jun 2022 15:46:15 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v4 2/7] can: Kconfig: turn menu "CAN Device Drivers" into
+ a menuconfig using CAN_DEV
+Message-ID: <20220604134615.l7qtyam6kmqboujo@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-3-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pvkdbv5sicbki4qw"
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220603102848.17907-3-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,56 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git sti-fixes
-head:   8f37351b420207e71968a48f12dfd7502b0ccb04
-commit: 5e57f5568087c724e2cdaf3e38a96d109f40235b [1/3] parisc/stifb: Implement fb_is_primary_device()
-config: parisc-buildonly-randconfig-r005-20220531 (https://download.01.org/0day-ci/archive/20220604/202206042154.K6D7MXNw-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/commit/?id=5e57f5568087c724e2cdaf3e38a96d109f40235b
-        git remote add deller-fbdev git://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git
-        git fetch --no-tags deller-fbdev sti-fixes
-        git checkout 5e57f5568087c724e2cdaf3e38a96d109f40235b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/video/console/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--pvkdbv5sicbki4qw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+My previous mail on this was wrong (as you noticed).... so here's the
+corrected one (hopefully).
 
->> drivers/video/console/sticore.c:1132:5: error: redefinition of 'fb_is_primary_device'
-    1132 | int fb_is_primary_device(struct fb_info *info)
-         |     ^~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/video/console/sticore.c:33:
-   arch/parisc/include/asm/fb.h:18:19: note: previous definition of 'fb_is_primary_device' with type 'int(struct fb_info *)'
-      18 | static inline int fb_is_primary_device(struct fb_info *info)
-         |                   ^~~~~~~~~~~~~~~~~~~~
+On 03.06.2022 19:28:43, Vincent Mailhol wrote:
+> diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+> index 5b4c813c6222..919f87e36eed 100644
+> --- a/drivers/net/can/dev/Makefile
+> +++ b/drivers/net/can/dev/Makefile
+> @@ -1,9 +1,11 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> =20
+> -obj-$(CONFIG_CAN_NETLINK) +=3D can-dev.o
+> -can-dev-y                    +=3D bittiming.o
+> -can-dev-y                    +=3D dev.o
+> -can-dev-y                    +=3D length.o
+> -can-dev-y                    +=3D netlink.o
+> -can-dev-y                    +=3D rx-offload.o
+> -can-dev-y                       +=3D skb.o
+> +obj-$(CONFIG_CAN_DEV) +=3D can-dev.o
+> +
+> +can-dev-$(CONFIG_CAN_DEV) +=3D skb.o
+           ^^^^^^^^^^^^^^^^
 
+As "skb.o" is always part of "can-dev.o" (if build at all), you can use
+"can-dev-y" here.
 
-vim +/fb_is_primary_device +1132 drivers/video/console/sticore.c
+Marc
 
-  1130	
-  1131	/* check if given fb_info is the primary device */
-> 1132	int fb_is_primary_device(struct fb_info *info)
-  1133	{
-  1134		struct sti_struct *sti;
-  1135	
-  1136		sti = sti_get_rom(0);
-  1137	
-  1138		/* if no built-in graphics card found, allow any fb driver as default */
-  1139		if (!sti)
-  1140			return true;
-  1141	
-  1142		/* return true if it's the default built-in framebuffer driver */
-  1143		return (sti->info == info);
-  1144	}
-  1145	EXPORT_SYMBOL(fb_is_primary_device);
-  1146	
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--pvkdbv5sicbki4qw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbYiQACgkQrX5LkNig
+012l2gf/YsNjl48yYp2YEyLJmGsd69HaA37eYqom1L74OW9JPO9Gx2alg4uULFXL
+Y2pcFSHVqKAWefFuIh5MeE3b5+ARJkwEdqggBPSy1Z88LqW+zNp/oA7gIIHtgjGC
+AzyEEj8FyHFFAk2lqzGgMenGYxzVxFyba6NtXGWzc/aTT7ltWwFUaKPOSBkInvmf
+Y0hAQmOggGxuMKES7H+JBXTYCoewgn2dOkazxBn/8Xllg4porzsCGCBOTijEbYr0
+/YHerEoOBecHcf5SsoG1QmLdfBEI7VpqjicPQ1arODIR84j+GvfFym+7TjjtJJfy
+ji0E0hivJG2/HzmzsjKrXKZAQDekrw==
+=iouw
+-----END PGP SIGNATURE-----
+
+--pvkdbv5sicbki4qw--

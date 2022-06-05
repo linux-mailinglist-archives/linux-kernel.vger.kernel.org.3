@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A66E53DC10
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 15:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACEA53DC1C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 16:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350800AbiFEN60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 09:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
+        id S240566AbiFEOCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 10:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351134AbiFEN5J (ORCPT
+        with ESMTP id S1351113AbiFEN7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 09:57:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D30F58C;
-        Sun,  5 Jun 2022 06:55:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D116B80D6B;
-        Sun,  5 Jun 2022 13:55:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BB5C3411D;
-        Sun,  5 Jun 2022 13:55:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654437353;
-        bh=lorOceNkztaPBM5EySEUGVpa7jze3krlhXG5VMX5yno=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AyQXHFSdrAElpoY8rzCF9vbaW3bfJPOc/Mvd9uFRm/Bda45a0BKjXLo8PxvshOS/B
-         4B4YR6+lt4HE0+kB3pX+UkmxUkI5Avh+cIL+J9UdS4ORR/xMIledvhXtCG4dDYh1Ji
-         Fb4t2zjkKS0jhizaVQ8SqBrf2FLTM4Pz3q51gWv5+ggGfXmE/1FC0N6eZikp4CwubS
-         fQmgLMHbpCa7UsBEBXMw3ZxyfmicyXHZF0owbE6aOedF6QXMZ62KYrQBnNDQMsWzss
-         hYKFrjXfa40p2YD3IyqRjhNHV4xcHlfN8Y4BlSq3Bri2fcfYu0CalyfrTO8NPeU/g1
-         XmIAy2OuqwYtg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sasha Levin <sashal@kernel.org>, bhelgaas@google.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, linux-pci@vger.kernel.org
-Subject: [PATCH MANUALSEL 4.9 3/3] x86/PCI: Add PIRQ routing table range checks
-Date:   Sun,  5 Jun 2022 09:55:45 -0400
-Message-Id: <20220605135547.61902-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220605135547.61902-1-sashal@kernel.org>
-References: <20220605135547.61902-1-sashal@kernel.org>
+        Sun, 5 Jun 2022 09:59:32 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C78BC90;
+        Sun,  5 Jun 2022 06:57:15 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id g24so1154407ybe.9;
+        Sun, 05 Jun 2022 06:57:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4GY0BloMw09FbZ8FykETwDy9g2/m4JZ+8VicGnsv2IY=;
+        b=KFgMJdZEzTxtZqW60pgwOdShowrcMNTzFVIx7A9WyMXd08rdhutT5Ja06Ch1stRuUg
+         q2E7NNJtP20B3i2Z8PgIBT/58ce2/I3QFYHvaotlqkZkcnesononHTclg6EhMIIQ5ZR3
+         /0AlRtgFO5WTyS6w9vQKppAVPFPqnFHs5LnrXk8Bb+PN3ILIH3yYSjRbht/UnKzWc1cG
+         zsXgNuxZV4BK3TmeC7jC+fo2cE4dI+jptuesJrkM4d61hkuELPoscCzJU502Codo7q+F
+         579PfOlFkqC/gAhBurop3ble2A501BF4E85tb5zVrWhZwX72wPs9wXJMiOHcdicBZ0Ne
+         ZFGw==
+X-Gm-Message-State: AOAM533KmlCOyVn/2rfg3A5u9AxtioAlLgH3adHOg19xHJyOXWyIp6Gp
+        axVknne1QZqltOCl/oxlWYUS3rqu9EraW9UZEDE=
+X-Google-Smtp-Source: ABdhPJxVm/HIlx4E5bICJq+vrL0X+/qbuU/ravo1RAyves82+K7SSWiS70+0dOakalbz/rGgxDp+Qt+2gnstkFqgCkI=
+X-Received: by 2002:a25:6588:0:b0:65d:57b9:c470 with SMTP id
+ z130-20020a256588000000b0065d57b9c470mr20564533ybb.142.1654437434856; Sun, 05
+ Jun 2022 06:57:14 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
+ <CAMZ6RqJpJCAudv89YqFFQH80ei7WiAshyk1RtbEv=aXSyxo3hQ@mail.gmail.com>
+ <20220604135541.2ki2eskyc7gsmrlu@pengutronix.de> <CAMZ6RqJ7qvXyxNVUK-=oJnK_oq7N94WABOb3pqeYf9Fw3G6J9A@mail.gmail.com>
+ <20220604151859.hyywffrni4vo6gdl@pengutronix.de> <CAMZ6RqK45r-cqXvorUzRV-LA_C+mk6hNSA1b+0kLs7C-oTcDCA@mail.gmail.com>
+ <20220605103909.5on3ep7lzorc35th@pengutronix.de>
+In-Reply-To: <20220605103909.5on3ep7lzorc35th@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 5 Jun 2022 22:57:03 +0900
+Message-ID: <CAMZ6RqLfJ8v+=HcSU8yprXeR8q8aSOsg4i379D9rZgE9ZmC=fg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+On Sun. 5 juin 2022 at 19:39, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 05.06.2022 01:32:15, Vincent MAILHOL wrote:
+> > On Sun. 5 juin 2022 at 00:18, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > > On 04.06.2022 23:59:48, Vincent MAILHOL wrote:
+> > > > > > Fine, but I need a bit of guidance here. To provide a tag, I need to
+> > > > > > have my own git repository hosted online, right?
+> > > > >
+> > > > > That is one option.
+> > > >
+> > > > This suggests that there are other options? What would be those other
+> > > > options?
+> > >
+> > > 2. git.kernel.org (most preferred)
+> > > 3. github.com (have to ask Davem/Jakub)
+> > >
+> > > > > > Is GitHub OK or should I create one on https://git.kernel.org/?
+> > > > >
+> > > > > Some maintainers don't like github, let's wait what Davem and Jakub say.
+> > > > > I think for git.kernel.org you need a GPG key with signatures of 3 users
+> > > > > of git.kernel.org.
+> > > >
+> > > > Personally, I would also prefer getting my own git.kernel.org account.
+> > >
+> > > See https://korg.docs.kernel.org/accounts.html
+> >
+> > Thanks for the link. I will have a look at it tomorrow (or the day
+> > after tomorrow in the worst case).
+> >
+> > Meanwhile, I will send the v5 which should address all your comments.
+>
+> /me just realized that merged are independent of pull requests. I can
+> create a local branch and merge it, as Davem and Jakub do it. I've added
+> your v5 to can-next/master as a merge and I'll include this in my next
+> PR to net-next if Davem and Jakub are OK with merges in my branch.
 
-[ Upstream commit 5d64089aa4a5bd3d7e00e3d6ddf4943dd34627b3 ]
+So my dreams of getting my kernel.org account swag just evaporated
+(just kidding :))
+I think I will prepare a GPG key just to be ready in the opportunity
+to get it signed pop-up one day.
 
-Verify that the PCI IRQ Routing Table header as well as individual slot
-entries are all wholly contained within the BIOS memory area.  Do not
-even call the checksum calculator if the header would overrun the area
-and then bail out early if any slot would.
+Happy to see that this is reaching an end. Honestly speaking, the
+menuconfig cleanup was not my most exciting contribution (euphemism)
+but was still a necessity. Glad that this is nearly over after more
+than 80 messages in the full thread (including all five versions). If
+I recall correctly, this is the longest thread we had in the last two
+years. And thanks again to Max, Oliver and you for animating the
+debate!
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203301735510.22465@angie.orcam.me.uk
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/x86/pci/irq.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index 5f0e596b0519..9921e33111bf 100644
---- a/arch/x86/pci/irq.c
-+++ b/arch/x86/pci/irq.c
-@@ -61,7 +61,8 @@ void (*pcibios_disable_irq)(struct pci_dev *dev) = pirq_disable_irq;
-  *  and perform checksum verification.
-  */
- 
--static inline struct irq_routing_table *pirq_check_routing_table(u8 *addr)
-+static inline struct irq_routing_table *pirq_check_routing_table(u8 *addr,
-+								 u8 *limit)
- {
- 	struct irq_routing_table *rt;
- 	int i;
-@@ -71,7 +72,8 @@ static inline struct irq_routing_table *pirq_check_routing_table(u8 *addr)
- 	if (rt->signature != PIRQ_SIGNATURE ||
- 	    rt->version != PIRQ_VERSION ||
- 	    rt->size % 16 ||
--	    rt->size < sizeof(struct irq_routing_table))
-+	    rt->size < sizeof(struct irq_routing_table) ||
-+	    (limit && rt->size > limit - addr))
- 		return NULL;
- 	sum = 0;
- 	for (i = 0; i < rt->size; i++)
-@@ -92,17 +94,22 @@ static inline struct irq_routing_table *pirq_check_routing_table(u8 *addr)
- 
- static struct irq_routing_table * __init pirq_find_routing_table(void)
- {
-+	u8 * const bios_start = (u8 *)__va(0xf0000);
-+	u8 * const bios_end = (u8 *)__va(0x100000);
- 	u8 *addr;
- 	struct irq_routing_table *rt;
- 
- 	if (pirq_table_addr) {
--		rt = pirq_check_routing_table((u8 *) __va(pirq_table_addr));
-+		rt = pirq_check_routing_table((u8 *)__va(pirq_table_addr),
-+					      NULL);
- 		if (rt)
- 			return rt;
- 		printk(KERN_WARNING "PCI: PIRQ table NOT found at pirqaddr\n");
- 	}
--	for (addr = (u8 *) __va(0xf0000); addr < (u8 *) __va(0x100000); addr += 16) {
--		rt = pirq_check_routing_table(addr);
-+	for (addr = bios_start;
-+	     addr < bios_end - sizeof(struct irq_routing_table);
-+	     addr += 16) {
-+		rt = pirq_check_routing_table(addr, bios_end);
- 		if (rt)
- 			return rt;
- 	}
--- 
-2.35.1
-
+Yours sincerely,
+Vincent Mailhol

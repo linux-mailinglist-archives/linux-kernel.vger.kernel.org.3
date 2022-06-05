@@ -2,169 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1209453DEF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 01:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C169253DEF6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 01:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351808AbiFEXdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 19:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S1351825AbiFEXdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 19:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242272AbiFEXdN (ORCPT
+        with ESMTP id S1351819AbiFEXdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 19:33:13 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A191A26AD9;
-        Sun,  5 Jun 2022 16:33:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LGXwv5WLRz4xD8;
-        Mon,  6 Jun 2022 09:33:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654471984;
-        bh=JPHMTeH21eKoR6W4I7iPxQFNUAWKvjAR0yL1d7vOOzE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BLYut8s6Ay2afK9HjI3jMOJoi8G7H6A/e4GZLwnFwJ10qGpchdtkW2PTUmdld6tv2
-         jpDlZrCvHR5VIUuFiBCMhDi/NERnXPZxdxlOsIrwUFLaqGsy8nwriO3iSMaLMmozCI
-         +uQpZcsUD+1YlC9Sni8S+A9y43OZI+VoRlNG3QF+sgUWb0D/5MvETPml1PHqqha38V
-         NaIPUmqgE5hXtbg4WlGKE10Usy4wwMKv8yDPAAto8yzEwlr/sECt0+AoIINupN7zJC
-         qqVLYn3KZRrn84Kl9CxU347+VlsFjAlt19ZY+MxCCZEtBPhtoJnUeCPfyHBD6WRw/3
-         dHvsW+9Y5DTEg==
-Date:   Mon, 6 Jun 2022 09:33:02 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pinctrl tree
-Message-ID: <20220606093302.21febee3@canb.auug.org.au>
-In-Reply-To: <20220318183101.16b8d056@canb.auug.org.au>
-References: <20211027220118.71a229ab@canb.auug.org.au>
-        <874k92bu4q.wl-maz@kernel.org>
-        <20211028080331.6d199082@sal.lan>
-        <20220120142539.6d1fac12@canb.auug.org.au>
-        <20220318183101.16b8d056@canb.auug.org.au>
+        Sun, 5 Jun 2022 19:33:31 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C0926AE4
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 16:33:29 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id h5so17740968wrb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 16:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
+        b=kYqyTELNv74MY0+Xtsf1lfj7zVGpOEbEQXrg+C/90Mms9oiDDoR1tAGfsH8wjin1au
+         YgEibdYFsC3ZX5fD3ZTrbFmbUnOpr2QIubv1+FRg642AmsgEU7LFuDOzvCU8SrQo9uVc
+         ANsX9cHR3AzEewxi1sIvXUoaPTeYqv+2Rr+WwQ4SIg93A7YMlS/dL93POpl3GQL8wbq0
+         PYcTfhT2s+YV+U+JG3Ased41N76s52gmJ8jiCBg7Ax2sUve8NNNgMFY+pegOkd1ur6+T
+         LdPia7q6wNFPzAz/tX5zACpBCXsVxa66UTUf4H0pWTFHakZKiEbv0L32pINnRW88WSQ1
+         6gmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
+        b=YoDx+kqHWhZJxM6+Qm/07BOJqJSKR0ap4j0NSr0tALf85RNZTpHVWfU89pEijE4GaR
+         MpJXZNFvTZUjVVTJ40A1J9zrIGM4w5JuZk05ch1XM/zcJw8a+dw5dMFPJxz0X63SavkE
+         nxp6iz5GMG2CWeMCVy50b5bpnfBft4GuzXHzcNueWZgpnI0fsDMMlClbY+PGuIf5zCku
+         ZSlkvVq5igzKl2r1mGwqa9O3QYVKK1X8bIqk1xACZ2OovoFt+pYK0rCEVgXnYM1qyz1h
+         Gz8HL2JMznVtwt1ffRKmcV0vs12S7HLsN3DmaOXtXhqpoo9d+wYzlrY0EKUCqeSujyf3
+         i/wA==
+X-Gm-Message-State: AOAM532vuygZYbTE4nIHF+sibNAVvEpgdEFddIwTQuqHfmDkzRaEbV8g
+        /J1SiO42AiG8WmCiamWZ5vUhGgvuMOlerCkMys8=
+X-Google-Smtp-Source: ABdhPJx05vkg/25slKFEQFCOcyfbvjg4JjNZFII0Ku3f/Gnu+Tw5+Fxv0/0emaesTDl49gfm20FsSYTWpw96OZmltzk=
+X-Received: by 2002:adf:dd52:0:b0:213:bb11:2fde with SMTP id
+ u18-20020adfdd52000000b00213bb112fdemr14778741wrm.467.1654472008195; Sun, 05
+ Jun 2022 16:33:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j/Z+F3kNQCDQiZbzMTn7/sf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6020:5b8d:b0:19a:1ddd:b4f with HTTP; Sun, 5 Jun 2022
+ 16:33:27 -0700 (PDT)
+Reply-To: mrmichaeldoku@hotmail.com
+From:   mr michael <md22334d@gmail.com>
+Date:   Sun, 5 Jun 2022 23:33:27 +0000
+Message-ID: <CA+6A211ud5NH2G_+uu26KkANKe6w8HCvQ+uyrrd45zBvifEkSA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:444 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5148]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [md22334d[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/j/Z+F3kNQCDQiZbzMTn7/sf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Greetings,
 
-Hi all,
+With due respect to your person, I need your cooperation in
+transferring the sum of $11.3million to your private account where
+this money can be shared between us. The money has been here in our
+bank lying dormant for years without anybody coming for the claim.
 
-On Fri, 18 Mar 2022 18:31:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Thu, 20 Jan 2022 14:25:39 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Thu, 28 Oct 2021 08:03:31 +0100 Mauro Carvalho Chehab <mchehab@kerne=
-l.org> wrote: =20
-> > >
-> > > Em Wed, 27 Oct 2021 12:10:45 +0100
-> > > Marc Zyngier <maz@kernel.org> escreveu:
-> > >    =20
-> > > > On Wed, 27 Oct 2021 12:01:18 +0100, Stephen Rothwell <sfr@canb.auug=
-.org.au> wrote:     =20
-> > > > >=20
-> > > > > After merging the pinctrl tree, today's linux-next build (htmldoc=
-s)
-> > > > > produced this warning:
-> > > > >=20
-> > > > > include/linux/gpio/driver.h:284: warning: Function parameter or m=
-ember 'parent_handler_data_array' not described in 'gpio_irq_chip'
-> > > > >=20
-> > > > > Introduced by commit
-> > > > >=20
-> > > > >   cfe6807d82e9 ("gpio: Allow per-parent interrupt data")
-> > > > >=20
-> > > > > But may actually be a problem with the tool :-(       =20
-> > > >=20
-> > > > I guess the tool doesn't like having two fields that are part of a
-> > > > union documented together... Happy to tweak it if someone tells me =
-how
-> > > > this should be written.     =20
-> > >=20
-> > > Yes, that's the case. See, when you do:
-> > >=20
-> > > 	/**
-> > > 	 * @parent_handler_data:
-> > > 	 * @parent_handler_data_array:
-> > > 	 *
-> > > 	 * Data associated, and passed to, the handler for the parent
-> > > 	 * interrupt. Can either be a single pointer if @per_parent_data
-> > > 	 * is false, or an array of @num_parents pointers otherwise.  If
-> > > 	 * @per_parent_data is true, @parent_handler_data_array cannot be
-> > > 	 * NULL.
-> > > 	 */
-> > > 	union {
-> > > 		void *parent_handler_data;
-> > > 		void **parent_handler_data_array;
-> > > 	};
-> > >=20
-> > > The tool will understand it as an undocumented "parent_handler_data" =
-and
-> > > a documented "parent_handler_data_array".
-> > >=20
-> > > It has to do that, as otherwise it won't get cases where people just =
-adds a
-> > > @foo: as a template but actually forgets to fill it.
-> > >=20
-> > > The solution would be to add a description for both, e. g. something
-> > > similar to:
-> > >=20
-> > > 	/**
-> > > 	 * @parent_handler_data:
-> > > 	 *
-> > > 	 * If @per_parent_data is false, contains a single pointer=20
-> > > 	 * with the data associated, and passed to, the handler for the=20
-> > > 	 * parent interrupt.
-> > > 	 *
-> > > 	 * @parent_handler_data_array:
-> > > 	 *
-> > > 	 * If @per_parent_data is true, it should contain an array of=20
-> > > 	 * @num_parents pointers with the data associated, and passed to,
-> > > 	 * the handler for the parent interrupt. Cannot be NULL.
-> > > 	 */   =20
-> >=20
-> > I am still getting this warning. =20
->=20
-> I am still getting this warning.
+By indicating your interest I will send you the full details on how
+the business will be executed.
 
-I am still getting this warning.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/j/Z+F3kNQCDQiZbzMTn7/sf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKdPS4ACgkQAVBC80lX
-0GwGjQf/Wpxw16OGellQTN1Pi7+LZv4dT0ZGhL2c5FwQJxKYcGMyrljxCvU5pWot
-xzunVUcaed1twyrAZw6hEmWPobS1tBuXcSwGUZAKQmH/zS5obZZ9B534qHTXkSDg
-mIvx/xi9EW//ZG51tzbE214iSnD9S01ZJQw5PRm5s621/QAfPGFyHmEskAAx5S0p
-xohvRT3l1Q35PJLeFHovPFIQSmbTCV6SObtUWxAJNpnh+x94uI2nCq1z2CXWtB2p
-2rUmyCB7XLSsr5LI9pLu8dVpeCGfrnaakKploIhymAsQ07ZDSv7ZwoWu/Ig8/NHa
-d6UKuIDmpHzxowhNHlBP+GfOs1xu/g==
-=9smW
------END PGP SIGNATURE-----
-
---Sig_/j/Z+F3kNQCDQiZbzMTn7/sf--
+Best regards,
+Mr. Michael Doku.

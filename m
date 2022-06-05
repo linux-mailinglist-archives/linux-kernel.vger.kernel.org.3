@@ -2,160 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C733853DC9F
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 17:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2E853DCA2
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 17:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345676AbiFEPmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 11:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        id S1345686AbiFEPsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 11:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345656AbiFEPm2 (ORCPT
+        with ESMTP id S243141AbiFEPsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 11:42:28 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4130B3BF8D
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 08:42:26 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x5so10728473edi.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 08:42:26 -0700 (PDT)
+        Sun, 5 Jun 2022 11:48:33 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B77120B5
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 08:48:31 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id y19so24668605ejq.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 08:48:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9B1ls8yxGR8zR2l3YzKPbZsH4BwBWVg6R1Ggw6EpK00=;
-        b=hhjQr19dkEE4mggA5808Y6fgDAQLq+ga1n1mUxAle2NCtJU+zF8H7tAm46apPYHIzR
-         Hd8o6Q2m+p4m/msMntyB9mvrlG8Xkm4PO5q6bdnyHQDSyKUHkaGrb8qbFUFLXaLgeZwO
-         3NIZHxf1oJVF7navow3Ho6LMu9IjX7JA/38i7sjMDcP2vVOJwnkyccDxgTpN9SW7IvAJ
-         VqL8XqQ/3aFT3EqAq4MTnIrSeQbKA0T+a2iSUxnrpRwytydFJg4PA0o69hEQnx2UGk2g
-         csWnTlMPAu56EPLxquaefKiZ98/6yvJCp5g3ffeD2cFLYN3qIaARIKYZ693hULjmdeNN
-         EX4g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gSYeiZ7oUoMxWDDyeJI1yXrT7W0Sy61MVFDPsaXV1bw=;
+        b=WOYvsyocINozIHqGcfRiCpnuqcO4IrGyPzXIEjOe29K935TN4PJbwbDyoTUny9WQNQ
+         RUWn5k0OHVPlgc992Cpzpl/gY0yIi0g8DJJZDwK8NK/5Bv6Pt6jrnlR7PTDrEpKU7964
+         FA2bfzY4YtAXFUElGKZCogRhqQblkOhzz+iAJf3P1zfYmniTa8XTJDV1UEJ7EsWcP+2c
+         2WhZXCQo7rJ7/UzNeE2xCP+kk57+BwRW6XITzWGxorfiha4lNPtIEp5QUQj5C040yX7w
+         SkbngIF9Lcdj6n0UtEwcfab39l9n0sOabxeSy2IyL00bdzBV5L68pShN/lrcYqTzfhoI
+         FPfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=9B1ls8yxGR8zR2l3YzKPbZsH4BwBWVg6R1Ggw6EpK00=;
-        b=AQDqaR5f0Bz5U41VLlwu4AKpOP+PHX9M1Tcph0xsa+Wvs1l3ZZVM8kTdOJ/cJHC//N
-         lu0xYEljL9bWkdJbEbrxFFYnPkB4V3QMBmBRX8eRNQv23nK8gh8Ht4ptR3fjW8prxTCa
-         RSSq+Kqo84OIWcAQD/vXajPXTDrAYhTBVjnQ+5RpVDtjAYnn6XvWz8tR/2YGXcUr016b
-         8LLBsG/Qyctx9wVdXLfIBFEEjU2yrfhXplUuMc8+WxHfN4l4YrXzUuv8XIU5qdfB1xaT
-         4TR62DS03heLY+/chlAWt10KTKtMmoS1zMJEU5LWLOoVfsZq/itsQYuNIlAa3M7uyvLr
-         o4Bg==
-X-Gm-Message-State: AOAM5308kPgL0bvlncbCcQA9obfiLM92aGkq2SKWtStGmE2TxjXUj/Vn
-        G4bTdy5BU6rOfl4v7ZLULslBvg==
-X-Google-Smtp-Source: ABdhPJzYrCBob8WbVSGFXb2ZMYIBWQaNFllwDiFYYSjxcPKr8Kh4AZkpqz5U6Q0GOAn/Gyv0D0dynQ==
-X-Received: by 2002:a05:6402:1341:b0:42a:f7cb:44dc with SMTP id y1-20020a056402134100b0042af7cb44dcmr22194785edw.165.1654443744851;
-        Sun, 05 Jun 2022 08:42:24 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id hz10-20020a1709072cea00b0070e01426360sm3252319ejc.91.2022.06.05.08.42.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 08:42:24 -0700 (PDT)
-Message-ID: <ea5ffada-c3be-885d-6b10-30ac027a4d6f@linaro.org>
-Date:   Sun, 5 Jun 2022 17:42:23 +0200
+        bh=gSYeiZ7oUoMxWDDyeJI1yXrT7W0Sy61MVFDPsaXV1bw=;
+        b=NIyQt0PaRxAI39zwlVaGb8b039Y2S2sgR+TjrLQC1ULmhbHw1juYKRqRW9muiX6zsH
+         cq9jsEPpaO2KsPSzpzJm9hlILnmIdeKC1809SQVtF6OyuWV7rhqtOJFxS0M0HdRi4xKr
+         Yhw4AHkeWhPALE8185RjESSHoXp7JfTs6sAMePqmXcZCYQtalpeLE4hyNu/QS72mYOkN
+         7AhIKWKJHGeq0fGoMRtTrBPwDBJhtoQjKBsY1a05ivkZ2tVq/OHgAGXkqS7joRHh/xu7
+         biFZfUB1xib2WtAP01l0xV5oM2y8aRAW4X4Ec+cy6iSEY6FvGP1ua8WN/7onfqJ+kQdg
+         IZ9g==
+X-Gm-Message-State: AOAM531RhSgXCZrO0R8jSnpqWBM+KKsiWHcjwZUmHTPbvG/xUYPd2w00
+        6a6ryuGxlMybOtVtEa/kxE8=
+X-Google-Smtp-Source: ABdhPJyvaw+jUONXuZAqYG6ccuSBvU2Jo+1Jj8wzG47cJpWoDIljKct9zXPGtXnTQqA2gDZU9TFoIg==
+X-Received: by 2002:a17:907:3d8a:b0:710:c2e8:79f2 with SMTP id he10-20020a1709073d8a00b00710c2e879f2mr7042974ejc.577.1654444109397;
+        Sun, 05 Jun 2022 08:48:29 -0700 (PDT)
+Received: from orangepi3.mydomain.example ([195.234.74.2])
+        by smtp.gmail.com with ESMTPSA id y24-20020a170906071800b006feed200464sm5329004ejb.131.2022.06.05.08.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 08:48:28 -0700 (PDT)
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+X-Google-Original-From: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+To:     mripard@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Cc:     Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+Subject: [PATCH] drm/sun4i: sun8i: Add support for pixel blend mode property
+Date:   Sun,  5 Jun 2022 15:47:31 +0000
+Message-Id: <20220605154731.17362-1-roman.o.stratiienko@globallogic.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sdm845-oneplus: split qcom,board-id
- into tuples
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Caleb Connolly <caleb@connolly.tech>
-References: <20220529202629.47588-1-krzysztof.kozlowski@linaro.org>
- <20220529202629.47588-5-krzysztof.kozlowski@linaro.org>
- <Yppatj7KuQLPdDW1@gerhold.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yppatj7KuQLPdDW1@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 21:02, Stephan Gerhold wrote:
-> +Cc Caleb Connolly <caleb@connolly.tech>
-> 
-> On Sun, May 29, 2022 at 10:26:29PM +0200, Krzysztof Kozlowski wrote:
->> The qcom,board-id is an uint32 matrix, so a list of tuples.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts | 2 +-
->>  arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts    | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
->> index bf2cf92e8976..8897a2f4cfe3 100644
->> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
->> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dts
->> @@ -12,7 +12,7 @@ / {
->>  	compatible = "oneplus,enchilada", "qcom,sdm845";
->>  	chassis-type = "handset";
->>  	qcom,msm-id = <0x141 0x20001>;
->> -	qcom,board-id = <8 0 17819 22>;
->> +	qcom,board-id = <8 0>, <17819 22>;
-> 
-> FWIW: While it's just a cosmetic change this is a bit misleading in my
-> opinion. Having two tuples suggests this should be interpreted as:
-> 
-> "This device tree is suitable for two different boards:
->  board-id = <8 0> (aka sdm845-mtp, a standard qcom reference board)
->  OR, alternatively: board-id = <17819 22>"
-> 
-> Since this device tree is clearly not meant for sdm845-mtp one could now
-> argue that the <8 0> could be removed, and only the second tuple covers
-> the actual device. It might be worth a try (maybe Caleb can try?), but
-> I suspect the bootloader will not accept that...
-> 
-> I think the bootloader from OPPO/OnePlus is actually looking for
-> quadruples instead of tuples on this board. I have seen similar hacks on
-> several other OPPO devices as well. They usually add their project ID
-> (here: 17819) somewhere and look for that in the bootloader.
-> 
-> In this case maybe adding a short comment would be sufficient, just to
-> make it more obvious that this doesn't actually follow the binding
-> documentation.
+Allwinner DE2 and DE3 hardware support 3 pixel blend modes:
+"None", "Pre-multiplied", "Coverage"
 
-Thanks for bringing up this topic. I think we should include this
-quadruple-set in the DT schema.
+Add the blend mode property and route it to the appropriate registers.
 
-> But this kind of brings up the question if it's worth making any
-> constraints in the DT schema at all, if some of the device trees
-> can not follow it.
-> 
-> For example, older OPPO bootloaders actually look for triples instead,
-> e.g.: (This is from a real device!)
-> 	qcom,board-id = <8 0 15009>;
-> 
-> So maybe it's just a matter of time until someone tries to add a DT
-> with a format that cannot be changed cosmetically to fit the DT schema...
+Note:
+"force_premulti" parameter was added to handle multi-overlay channel
+cases in future changes. It must be set to true for cases when more
+than 1 overlay layer is used within a channel and at least one of the
+overlay layers within a group uses premultiplied blending mode.
 
-Generic answer is: yes, we want constraints because we want to define
-interface which is followed by bootloader. Following up answer is - in
-practice this might not be possible...
+Test:
+Manually tested all the modes using kmsxx python wrapper with and
+without 'force_premulti' flag enabled.
 
-I wish I could say that DTS abusing bindings will not be accepted, but
-unfortunately vendor (OnePlus or whoever) simply does not care at all,
-so this would affect only the community. Therefore rejecting such DTS is
-not a viable option which leads me to first option - try to describe it
-in schema, as much as possible.
+Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+---
+ drivers/gpu/drm/sun4i/sun8i_mixer.h    |  2 ++
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 48 ++++++++++++++++++++-----
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.h |  5 +++
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 49 ++++++++++++++++++++++----
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.h |  5 +++
+ 5 files changed, 94 insertions(+), 15 deletions(-)
 
-Even if it means some "oneOf:" set for different vendors.
+diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+index ebfc276b2464..5c05907e26fb 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
++++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+@@ -65,6 +65,8 @@
+ #define SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(n)	(0xf << ((n) << 2))
+ #define SUN8I_MIXER_BLEND_ROUTE_PIPE_SHIFT(n)	((n) << 2)
+ 
++#define SUN8I_MIXER_BLEND_PREMULTIPLY_EN(pipe)	BIT(pipe)
++
+ #define SUN8I_MIXER_BLEND_OUTCTL_INTERLACED	BIT(1)
+ 
+ #define SUN50I_MIXER_BLEND_CSC_CTL_EN(ch)	BIT(ch)
+diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+index 6ccbbca3176d..29c0d9cca19a 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+@@ -58,24 +58,46 @@ static void sun8i_ui_layer_enable(struct sun8i_mixer *mixer, int channel,
+ }
+ 
+ static void sun8i_ui_layer_update_alpha(struct sun8i_mixer *mixer, int channel,
+-					int overlay, struct drm_plane *plane)
++					int overlay, struct drm_plane *plane,
++					unsigned int zpos, bool force_premulti)
+ {
+-	u32 mask, val, ch_base;
++	u32 mask, val, ch_base, bld_base;
++	bool in_premulti, out_premulti;
+ 
++	bld_base = sun8i_blender_base(mixer);
+ 	ch_base = sun8i_channel_base(mixer, channel);
+ 
++	in_premulti = plane->state->pixel_blend_mode == DRM_MODE_BLEND_PREMULTI;
++	out_premulti = force_premulti || in_premulti;
++
+ 	mask = SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_MASK |
+-		SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MASK;
++	       SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MASK |
++	       SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_MASK;
+ 
+ 	val = SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA(plane->state->alpha >> 8);
+ 
+-	val |= (plane->state->alpha == DRM_BLEND_ALPHA_OPAQUE) ?
+-		SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_PIXEL :
+-		SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_COMBINED;
++	if (plane->state->pixel_blend_mode == DRM_MODE_BLEND_PIXEL_NONE) {
++		val |= SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_LAYER;
++	} else {
++		val |= (plane->state->alpha == DRM_BLEND_ALPHA_OPAQUE) ?
++			       SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_PIXEL :
++			       SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_COMBINED;
++
++		if (in_premulti)
++			val |= SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_PREMULTI;
++	}
++
++	if (!in_premulti && out_premulti)
++		val |= SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_COV2PREM;
+ 
+ 	regmap_update_bits(mixer->engine.regs,
+ 			   SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base, overlay),
+ 			   mask, val);
++
++	regmap_update_bits(
++		mixer->engine.regs, SUN8I_MIXER_BLEND_PREMULTIPLY(bld_base),
++		SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos),
++		out_premulti ? SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos) : 0);
+ }
+ 
+ static int sun8i_ui_layer_update_coord(struct sun8i_mixer *mixer, int channel,
+@@ -274,7 +296,7 @@ static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+ 	sun8i_ui_layer_update_coord(mixer, layer->channel,
+ 				    layer->overlay, plane, zpos);
+ 	sun8i_ui_layer_update_alpha(mixer, layer->channel,
+-				    layer->overlay, plane);
++				    layer->overlay, plane, zpos, false);
+ 	sun8i_ui_layer_update_formats(mixer, layer->channel,
+ 				      layer->overlay, plane);
+ 	sun8i_ui_layer_update_buffer(mixer, layer->channel,
+@@ -332,8 +354,8 @@ struct sun8i_ui_layer *sun8i_ui_layer_init_one(struct drm_device *drm,
+ {
+ 	enum drm_plane_type type = DRM_PLANE_TYPE_OVERLAY;
+ 	int channel = mixer->cfg->vi_num + index;
++	unsigned int plane_cnt, blend_modes;
+ 	struct sun8i_ui_layer *layer;
+-	unsigned int plane_cnt;
+ 	int ret;
+ 
+ 	layer = devm_kzalloc(drm->dev, sizeof(*layer), GFP_KERNEL);
+@@ -362,6 +384,16 @@ struct sun8i_ui_layer *sun8i_ui_layer_init_one(struct drm_device *drm,
+ 		return ERR_PTR(ret);
+ 	}
+ 
++	blend_modes = BIT(DRM_MODE_BLEND_PREMULTI) |
++		      BIT(DRM_MODE_BLEND_COVERAGE) |
++		      BIT(DRM_MODE_BLEND_PIXEL_NONE);
++
++	ret = drm_plane_create_blend_mode_property(&layer->plane, blend_modes);
++	if (ret) {
++		dev_err(drm->dev, "Couldn't add blend mode property\n");
++		return ERR_PTR(ret);
++	}
++
+ 	ret = drm_plane_create_zpos_property(&layer->plane, channel,
+ 					     0, plane_cnt - 1);
+ 	if (ret) {
+diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.h b/drivers/gpu/drm/sun4i/sun8i_ui_layer.h
+index 43c48cf7bc51..bd3c30e8058d 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.h
++++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.h
+@@ -46,6 +46,11 @@
+ #define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_LAYER		((1) << 1)
+ #define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_COMBINED	((2) << 1)
+ 
++#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_MASK	GENMASK(17, 16)
++#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_COVERAGE	((0) << 16)
++#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_COV2PREM	((1) << 16)
++#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_PREMULTI	((2) << 16)
++
+ struct sun8i_mixer;
+ 
+ struct sun8i_ui_layer {
+diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+index 662ba1018cc4..6581fc7d9668 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+@@ -52,21 +52,38 @@ static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int channel,
+ }
+ 
+ static void sun8i_vi_layer_update_alpha(struct sun8i_mixer *mixer, int channel,
+-					int overlay, struct drm_plane *plane)
++					int overlay, struct drm_plane *plane,
++					unsigned int zpos, bool force_premulti)
+ {
+-	u32 mask, val, ch_base;
++	u32 mask, val, ch_base, bld_base;
++	bool in_premulti = false, out_premulti = false;
+ 
+ 	ch_base = sun8i_channel_base(mixer, channel);
++	bld_base = sun8i_blender_base(mixer);
+ 
+ 	if (mixer->cfg->is_de3) {
++		in_premulti = plane->state->pixel_blend_mode == DRM_MODE_BLEND_PREMULTI;
++		out_premulti = force_premulti || in_premulti;
++
+ 		mask = SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MASK |
+-		       SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_MASK;
++		       SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_MASK |
++		       SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_MASK;
+ 		val = SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA
+ 			(plane->state->alpha >> 8);
+ 
+-		val |= (plane->state->alpha == DRM_BLEND_ALPHA_OPAQUE) ?
+-			SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_PIXEL :
+-			SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_COMBINED;
++		if (plane->state->pixel_blend_mode == DRM_MODE_BLEND_PIXEL_NONE) {
++			val |= SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_LAYER;
++		} else {
++			val |= (plane->state->alpha == DRM_BLEND_ALPHA_OPAQUE) ?
++				       SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_PIXEL :
++				       SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_COMBINED;
++
++			if (in_premulti)
++				val |= SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_PREMULTI;
++		}
++
++		if (!in_premulti && out_premulti)
++			val |= SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_COV2PREM;
+ 
+ 		regmap_update_bits(mixer->engine.regs,
+ 				   SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base,
+@@ -79,6 +96,11 @@ static void sun8i_vi_layer_update_alpha(struct sun8i_mixer *mixer, int channel,
+ 				   SUN8I_MIXER_FCC_GLOBAL_ALPHA
+ 					(plane->state->alpha >> 8));
+ 	}
++
++	regmap_update_bits(
++		mixer->engine.regs, SUN8I_MIXER_BLEND_PREMULTIPLY(bld_base),
++		SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos),
++		out_premulti ? SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos) : 0);
+ }
+ 
+ static int sun8i_vi_layer_update_coord(struct sun8i_mixer *mixer, int channel,
+@@ -408,7 +430,7 @@ static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+ 	sun8i_vi_layer_update_coord(mixer, layer->channel,
+ 				    layer->overlay, plane, zpos);
+ 	sun8i_vi_layer_update_alpha(mixer, layer->channel,
+-				    layer->overlay, plane);
++				    layer->overlay, plane, zpos, false);
+ 	sun8i_vi_layer_update_formats(mixer, layer->channel,
+ 				      layer->overlay, plane);
+ 	sun8i_vi_layer_update_buffer(mixer, layer->channel,
+@@ -563,6 +585,19 @@ struct sun8i_vi_layer *sun8i_vi_layer_init_one(struct drm_device *drm,
+ 		}
+ 	}
+ 
++	if (mixer->cfg->is_de3) {
++		unsigned int blend_modes = BIT(DRM_MODE_BLEND_PREMULTI) |
++					   BIT(DRM_MODE_BLEND_COVERAGE) |
++					   BIT(DRM_MODE_BLEND_PIXEL_NONE);
++
++		ret = drm_plane_create_blend_mode_property(&layer->plane,
++							   blend_modes);
++		if (ret) {
++			dev_err(drm->dev, "Couldn't add blend mode property\n");
++			return ERR_PTR(ret);
++		}
++	}
++
+ 	ret = drm_plane_create_zpos_property(&layer->plane, index,
+ 					     0, plane_cnt - 1);
+ 	if (ret) {
+diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.h b/drivers/gpu/drm/sun4i/sun8i_vi_layer.h
+index 9939a4cc7a52..ccf91f09f1fe 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.h
++++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.h
+@@ -44,6 +44,11 @@
+ #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MASK	GENMASK(31, 24)
+ #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA(x)	((x) << 24)
+ 
++#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_MASK	GENMASK(17, 16)
++#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_COVERAGE	((0) << 16)
++#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_COV2PREM	((1) << 16)
++#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_PREMULTI	((2) << 16)
++
+ #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_PIXEL	((0) << 1)
+ #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_LAYER	((1) << 1)
+ #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_COMBINED	((2) << 1)
+-- 
+2.30.2
 
-
-Best regards,
-Krzysztof

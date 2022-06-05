@@ -2,79 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB8553DC7D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 17:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCD153DC7E
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 17:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349557AbiFEPMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 11:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
+        id S1349579AbiFEPOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 11:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349763AbiFEPMv (ORCPT
+        with ESMTP id S231318AbiFEPOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 11:12:51 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33581570B
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 08:12:45 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id x62so15753366ede.10
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 08:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x+fdYMlfBqjJsfTMeBXwmbk6chP7/1R1+jVisQRo6VE=;
-        b=Y1Dch9GREjMHFir6ioGvURLkQcuw1g/GFu4AvifmbQxrXTFtiEQQQwOnIa1DupKNs8
-         LFmAJFhsUYiH18tTruEBMCG2jUj/pYHTjOxm9t3f/o1LVjRzYdE4i8srROR12Bi/Rf34
-         Z+BDwI09IuDxRGyOcGLNNh8D8cGSNMue7TpiVtw0lTI9BAovmCEqhgeqwQutCJQoGrmy
-         DKgX5V7hA/FsrlpDmH0LFzjtso0R02MT3VCy569uPDn6Gc7s9q32MwAtkE+iYMYBJj64
-         rOG9eB9wJ/ttxnw0dk2/p1LGwy0OA8MZVOSb/6AmJ70Vvx4qyf9raZcGkfG9mkVHdK3g
-         lWrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x+fdYMlfBqjJsfTMeBXwmbk6chP7/1R1+jVisQRo6VE=;
-        b=X6IMFdHF++2o8WLjKQy3qOQwN6Ixh219+g28Bb2gQQFfLCUN9rL5LmWvvt3rZP6IXy
-         d3DZ+81kVZgl0G8+jWIlCRp7Z37Tc/t4cHyxelsdYkQPJ0Dy7M4WkF75a/jkjV65tupp
-         SjomwUH4LML0rIZhpn7UgLhHB73WDZ0OBTXutjQwkMxiAOj3SDMXWdh1zueVB/giTGBN
-         jZHVUYJQOGHE6OgBqNfr4DgaKqK258widLJmEdLpxi7enHAGufyvufQkAmfdHSpRr6l2
-         lHJMfuTaXLGfBvDT0fm2gciXkqlaaMfeUsgkuP9u49AfxWbtVFNz/WB59/Ak5eJvlKMG
-         MVkA==
-X-Gm-Message-State: AOAM533BHV4KcuraiqoqbAM0QxLRvLo52c0c80YAVvjCq3Jxe5/Pod9i
-        WZaIiovbW0G7dDxiYEOCzT7wmRkjRtQ/ww==
-X-Google-Smtp-Source: ABdhPJwIRqpcVDFlSRzOMhcXpNy5cRM9nogH70w6WrtmyUcI5vpHYq4qgXyi/wc8+zavNqoYDH36ng==
-X-Received: by 2002:a05:6402:c08:b0:42d:d005:13c1 with SMTP id co8-20020a0564020c0800b0042dd00513c1mr21453363edb.187.1654441964278;
-        Sun, 05 Jun 2022 08:12:44 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id r25-20020aa7cb99000000b0042a5a39ba7esm6892714edt.25.2022.06.05.08.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 08:12:43 -0700 (PDT)
-Message-ID: <fd5833ac-2f8c-98ce-a9bd-188c90cda6f5@linaro.org>
-Date:   Sun, 5 Jun 2022 17:12:42 +0200
+        Sun, 5 Jun 2022 11:14:49 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA92D4D245
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 08:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654442088; x=1685978088;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EKzCYUB+G5H6J3yL+rPO13Jwi1/ubXh6rP67lI562yo=;
+  b=b+jMCiYAdZ9yjjaz11pfOvfGisfDACqQTCEhcY6bPCzXgDO35z/VdFxH
+   xNll6xECvgRAgQwFmGSI4IfkXIwp/hgv+P6JGerbL7+u7o+4sS98btwrQ
+   F0nAy28aisWGNcHFkzZoZgk2hMJov5sxyqaI5MNL41Qrk9tXmQc/gIgx6
+   1yaWduseMhFXwklEOAxRw2n7Ss43n9+xNy6me+O8J1IkeA6YZgQ9GICEe
+   rp6GcR/dpbTVQp8zxia5QIVy78nZ7P5hP1gGKmtEKF4diCNZe9nrk8ghe
+   t+YQBTERKcQnQJnmkqGxP5xP6tYst6+HbTg0gjc8tzit4JLXRw72Bs2aC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276625876"
+X-IronPort-AV: E=Sophos;i="5.91,279,1647327600"; 
+   d="scan'208";a="276625876"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 08:14:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,279,1647327600"; 
+   d="scan'208";a="758170331"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2022 08:14:47 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxrxm-000C0l-Mk;
+        Sun, 05 Jun 2022 15:14:46 +0000
+Date:   Sun, 5 Jun 2022 23:13:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:sched/idle 27/33] include/linux/sched/idle.h:28:9:
+ error: implicit declaration of function 'arch_set_bit'; did you mean
+ 'arch_test_bit'?
+Message-ID: <202206052314.vgAUvUv3-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH 1/2] dt-bindings: input: gpio-keys: enforce node names
- to match all properties
-Content-Language: en-US
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>
-References: <20220603101601.542054-1-krzysztof.kozlowski@linaro.org>
- <20220603101601.542054-2-krzysztof.kozlowski@linaro.org>
- <20220604030455.GA12308@nixie71>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220604030455.GA12308@nixie71>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,26 +62,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/06/2022 05:04, Jeff LaBundy wrote:
->> -      dependencies:
->> -        wakeup-event-action: [ wakeup-source ]
->> -        linux,input-value: [ gpios ]
->> -
->> -      unevaluatedProperties: false
->> +  "^(key|key-[a-z0-9-]+|[a-z0-9-]+-key)$":
-> 
-> Maybe this would be better as:
-> 
-> "^((key|switch|axis)|(key|switch|axis)-[a-z0-9-]+|[a-z0-9-]+-(key|switch|axis))$":
-> 
-> ...or perhaps a more efficient version of my counter-proposal.
-> 
-> The reason is because it is confusing to see a lid or dock switch named
-> as "key-lid", etc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+head:   5aca393851ce7ebb9a3405bb4ffd4f38d96949e4
+commit: bb0533e97a1f03b96874efacec607cffb5fa7a3a [27/33] cpuidle,sched: Remove annotations from TIF_{POLLING_NRFLAG,NEED_RESCHED}
+config: sh-buildonly-randconfig-r006-20220605 (https://download.01.org/0day-ci/archive/20220605/202206052314.vgAUvUv3-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=bb0533e97a1f03b96874efacec607cffb5fa7a3a
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue sched/idle
+        git checkout bb0533e97a1f03b96874efacec607cffb5fa7a3a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh prepare
 
-Nice point. "switch" I understand, but can you really have "axis" on
-GPIO keys? I had impression axis is related to joysticks.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/sched/topology.h:7,
+                    from include/linux/energy_model.h:10,
+                    from include/linux/device.h:16,
+                    from include/linux/blk_types.h:11,
+                    from include/linux/writeback.h:13,
+                    from include/linux/memcontrol.h:22,
+                    from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from arch/sh/kernel/asm-offsets.c:16:
+   include/linux/sched/idle.h: In function '__current_set_polling':
+>> include/linux/sched/idle.h:28:9: error: implicit declaration of function 'arch_set_bit'; did you mean 'arch_test_bit'? [-Werror=implicit-function-declaration]
+      28 |         arch_set_bit(TIF_POLLING_NRFLAG,
+         |         ^~~~~~~~~~~~
+         |         arch_test_bit
+   include/linux/sched/idle.h: In function '__current_clr_polling':
+>> include/linux/sched/idle.h:47:9: error: implicit declaration of function 'arch_clear_bit'; did you mean 'arch___clear_bit'? [-Werror=implicit-function-declaration]
+      47 |         arch_clear_bit(TIF_POLLING_NRFLAG,
+         |         ^~~~~~~~~~~~~~
+         |         arch___clear_bit
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:121: arch/sh/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1196: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-Best regards,
-Krzysztof
+vim +28 include/linux/sched/idle.h
+
+    25	
+    26	static __always_inline void __current_set_polling(void)
+    27	{
+  > 28		arch_set_bit(TIF_POLLING_NRFLAG,
+    29			     (unsigned long *)(&current_thread_info()->flags));
+    30	}
+    31	
+    32	static __always_inline bool __must_check current_set_polling_and_test(void)
+    33	{
+    34		__current_set_polling();
+    35	
+    36		/*
+    37		 * Polling state must be visible before we test NEED_RESCHED,
+    38		 * paired by resched_curr()
+    39		 */
+    40		smp_mb__after_atomic();
+    41	
+    42		return unlikely(tif_need_resched());
+    43	}
+    44	
+    45	static __always_inline void __current_clr_polling(void)
+    46	{
+  > 47		arch_clear_bit(TIF_POLLING_NRFLAG,
+    48			       (unsigned long *)(&current_thread_info()->flags));
+    49	}
+    50	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

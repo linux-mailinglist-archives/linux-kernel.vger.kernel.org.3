@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E754853DAD7
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D7D53DAD8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbiFEI2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 04:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
+        id S244782AbiFEIdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 04:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240098AbiFEI2S (ORCPT
+        with ESMTP id S236304AbiFEIdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 04:28:18 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99158286C5
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 01:28:16 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d22so9924069plr.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 01:28:16 -0700 (PDT)
+        Sun, 5 Jun 2022 04:33:44 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0398377E1;
+        Sun,  5 Jun 2022 01:33:42 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id w3so9917230plp.13;
+        Sun, 05 Jun 2022 01:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5BhKZd1ZztUFuFtohu4ix955CtOvlBJ4OzYqsyB12K8=;
-        b=doejqQpfz9ht/RQ+t1MfOyTZgVOi5NUVQwtmSNk3icJY41qCkgzM3wefT3Y0hwCIGs
-         6Go7a8QuyARo4srDXXsx824/KaEqFHz5CC2FQsOscnOpJZQ7LdwAVw9GYtldLunGpmQf
-         nNP8EJkJUVNH5jhFO3GGZGkwVti36ZHnvmc1SYT4YOaF/QYAL+tL/5NYSc8qNrR44xZh
-         KvU7474brhY19TEcrDdQ4SK04ewQ5SC7+SNtXm/TOh9qUlhXZz9FheHmuJb8+tB4m9/N
-         HwGWG6f/aynWlwD5KdiF2pWS6AkaPtt4cxc0ME3KOTuzTtf+g0O9gN/3eSNaDWrwFz5k
-         NDdw==
+        bh=1XynJUO5aAAYX/xCNCu1+sq4mTp/XcAazdfl0dSPwkE=;
+        b=HJRR11UTNvFUTyNZaNrqwzGJuWtUZ4I2ZKI1ZFLnjeyvqyfb0Vg3z4/q5K+4PXYkW6
+         NEZ+Gz2epzUZ/2gl5jPCffWL4olKfliCaXcAbVlQ9bcLlkujBWo4665rfhi6NaeINY1j
+         mwXO5DlPxuQf0gS1O1lAgO7euB8YbvPR35geAUiZ8AMoeNj7Sb3wlTxrCkKiAtV2hzmH
+         20JqdS9UTF4FzDBd7iC+llUCcHlIHfsT0jHyPW46/eW8OHuL+O97jpVbaC/mZDmWE9nY
+         +0ataNa+VAjlKtbh3zyQTQaQBNjzjW/WBPDxtTpFnVzOQIXkTHNxcfsleMzV8A+Wvy2+
+         rkxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5BhKZd1ZztUFuFtohu4ix955CtOvlBJ4OzYqsyB12K8=;
-        b=cUXQdEPC8LuGalXNSAYiS5iXbqrENAq1MHyscXXVJx35nED0VvHFg4/s+qvv6QlpO6
-         onI8LkZj5P2SoMkhohJk5DINpPYqFUbdwriBpX9agKYCwFJ/FQ4yOnp3j9DWD1EJdiIc
-         uoQYjVnk0Vft22F9YNcK4vnTcK+e5x4Gl8IuPlK+avN9bRKw2Y8qUl2NNOUginMlvSHG
-         4xHckjmQdwkEEbcNqZd3bfOp3tz0yfEKLTrUsa5ZAxR7ZtzA9uS8zM18i4dGmriMzCgA
-         LN9QGqDBy5qKirbBoG95n27zvvKuh/3VMRD88/o9M5Zgx6/886+TGoD+1h9ea8NpYqO0
-         6s2w==
-X-Gm-Message-State: AOAM531S4Drdqp+Ia6bW0ay14lV1AkzLW38YGcpFx8Mhw9VgcuZnzzAI
-        icCF4EuuV0rYVRk0H220B4JLA6Oa/Lbrc9SL
-X-Google-Smtp-Source: ABdhPJz+77+w83gRA+JN7McpWBC+snx4VxJBfmCdhMazKDR29ry7zs/XkwDU9P9w8263YLVuHf7r+g==
-X-Received: by 2002:a17:902:e5ca:b0:164:1958:c84a with SMTP id u10-20020a170902e5ca00b001641958c84amr18409178plf.72.1654417696119;
-        Sun, 05 Jun 2022 01:28:16 -0700 (PDT)
+        bh=1XynJUO5aAAYX/xCNCu1+sq4mTp/XcAazdfl0dSPwkE=;
+        b=aXYxWnRCqx0NlunV0JKmw4v/uOGhrytnHEe8pq3jFL0z2YS7NXuO2aG/QaIiWWS4kM
+         NDZ+RPu5LTZPI6QUkSlKXBulf6+DNdvH84fB7aYquqbyjbvknc9g4iPR7YPGyYxMQ59I
+         quKhcNpra6HLRGHNxOiMvVd9Yb8/TR+sVL35uEJi4ZXqp/VkFY0vy0SDtm3pKPSo6k2n
+         njY0abDaAkNYanBN3oX/l36+XZZGKWb7JjrZi6STNjJKxsJXvdYOsM8343hxS+jF+5Dy
+         tBxXhYKE6m9jdJwcniJ3tu8IhYc+uBTTuOXfnVxd0CJ6FNejNr2ctpiybCPeiXk52ZBi
+         AyFw==
+X-Gm-Message-State: AOAM531KXvTk7yV6O56q2lHrdE4a3QY6cWcWEEB8vusVXnhIht8PRz77
+        MUuBNvnsJ27hC0RgE4uf5d4=
+X-Google-Smtp-Source: ABdhPJyZ+37YegClUoL+IO6Krkp0Vi3gUJ/RpM3fh+GWzhWBlqmsVOnAg9cEKB+068RGiqSDQmudtg==
+X-Received: by 2002:a17:902:d4c2:b0:166:46c9:577b with SMTP id o2-20020a170902d4c200b0016646c9577bmr15187821plg.66.1654418022259;
+        Sun, 05 Jun 2022 01:33:42 -0700 (PDT)
 Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id l24-20020a17090ac59800b001e25e3ba05csm12820399pjt.2.2022.06.05.01.28.12
+        by smtp.googlemail.com with ESMTPSA id w8-20020a1709029a8800b0016405375132sm4232935plp.25.2022.06.05.01.33.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 01:28:15 -0700 (PDT)
+        Sun, 05 Jun 2022 01:33:41 -0700 (PDT)
 From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suman Anna <s-anna@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH] cpufreq: zynq: Fix refcount leak in zynq_get_revision
-Date:   Sun,  5 Jun 2022 12:28:07 +0400
-Message-Id: <20220605082807.21526-1-linmq006@gmail.com>
+Subject: [PATCH] remoteproc: k3-r5: Fix refcount leak in k3_r5_cluster_of_init
+Date:   Sun,  5 Jun 2022 12:33:34 +0400
+Message-Id: <20220605083334.23942-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,28 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+Every iteration of for_each_available_child_of_node() decrements
+the reference count of the previous node.
+When breaking early from a for_each_available_child_of_node() loop,
+we need to explicitly call of_node_put() on the child node.
 Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 00f7dc636366 ("ARM: zynq: Add support for SOC_BUS")
+Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- arch/arm/mach-zynq/common.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/remoteproc/ti_k3_r5_remoteproc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/mach-zynq/common.c b/arch/arm/mach-zynq/common.c
-index e1ca6a5732d2..15e8a321a713 100644
---- a/arch/arm/mach-zynq/common.c
-+++ b/arch/arm/mach-zynq/common.c
-@@ -77,6 +77,7 @@ static int __init zynq_get_revision(void)
- 	}
+diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+index 4840ad906018..0481926c6975 100644
+--- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
++++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+@@ -1655,6 +1655,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
+ 		if (!cpdev) {
+ 			ret = -ENODEV;
+ 			dev_err(dev, "could not get R5 core platform device\n");
++			of_node_put(child);
+ 			goto fail;
+ 		}
  
- 	zynq_devcfg_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	if (!zynq_devcfg_base) {
- 		pr_err("%s: Unable to map I/O memory\n", __func__);
- 		return -1;
+@@ -1663,6 +1664,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
+ 			dev_err(dev, "k3_r5_core_of_init failed, ret = %d\n",
+ 				ret);
+ 			put_device(&cpdev->dev);
++			of_node_put(child);
+ 			goto fail;
+ 		}
+ 
 -- 
 2.25.1
 

@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3439353DE59
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7676753DE5C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347609AbiFEVWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 17:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S1347674AbiFEVYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 17:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347602AbiFEVWF (ORCPT
+        with ESMTP id S1347602AbiFEVYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 17:22:05 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39929D63;
-        Sun,  5 Jun 2022 14:22:04 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id x16so5985563qtw.12;
-        Sun, 05 Jun 2022 14:22:04 -0700 (PDT)
+        Sun, 5 Jun 2022 17:24:10 -0400
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA012AC43;
+        Sun,  5 Jun 2022 14:24:09 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id br33so8011538qkb.0;
+        Sun, 05 Jun 2022 14:24:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Nef1Ozun/+sIAQcPo6GXHDjM+cslc5L3dWpOX/Hb0jk=;
-        b=obMrBJhpBWkztEnk6dzBjCvUFfWnp9a5HuaKWMTOCNlbMqnJWPir6AREUWGYyuMEM7
-         ZVW9x5MwyCV+wsH61KBAfimXVJLeBeNbbTFyWU6buFlBKABTnrI0dbvO2XAplS3c02sP
-         0YvFBRUDzKw19Xmvy4dILVlV7YM4W8vgaYhHlwcFy8mmniVQSa0Z0lhqxKtkHNHqtqRf
-         k7ST4hz8noCkw5fe8o0Fx6rLSqxutKwx6p2OPraQ99hlNVzM1m6KB4cJINECoRKHsh4w
-         W/TdZUfwkma3CgK+o9Epb61/S9iEYh3K5+Q/PN+b0gl7PlHQtSwaSfdnUazM/gSdiFgt
-         J2tg==
-X-Gm-Message-State: AOAM533YyXnSkJOo/SQDtJ1NLjVGxJzuBXRIceO9/z9ZayC04rZ65/NS
-        lgrKB1zntXJpjfxncg+jcA==
-X-Google-Smtp-Source: ABdhPJyyhAPumG/SLys5NhI3H6wf7GTwYLJHiQCyC3p9H5iHOwhSEbNiPoiqL01xXencWPz3nSHjrw==
-X-Received: by 2002:a05:622a:40b:b0:304:e4be:65a with SMTP id n11-20020a05622a040b00b00304e4be065amr7023694qtx.309.1654464123277;
-        Sun, 05 Jun 2022 14:22:03 -0700 (PDT)
+        bh=Ba3lRMDd+3WFaPX0DEx2In5z5tlRJ5r1CBO5vDDJqPU=;
+        b=resLYfLc5klTD0OE0yyERtkAPIsIIa3PmceYjgKUhtA4ssGH9Pxv7PRczdKXI7h6zX
+         FunFTVULAV+ctI0eYT8147/S5h+N2uCZUFfwnBQh8jd1YwqSbmGAGgl8Oh6Mk5zuHYTr
+         veQnBqrrkD8Ndvlk/o0b8DK0NBaE+XxJZIxzpg92sjSMbcqnFhuL4+lt/wn+M/Y7a/6U
+         q8H0h69br+f5FucNfIIpms4scHqxOHHuCrLDn8oCzHoT2YN5eiabiu9SKqDX3LYp9j5o
+         bEp+J6zpRukc6RxJP3/S7NzLuCoq68IHxL6fsCsYhno63mx2KU3R2iB80ek9GTPY1iLE
+         zEMA==
+X-Gm-Message-State: AOAM531Gpetm/pa3giNJpo81lQju8JX1lifDgIKN16jTqPmrDW7Q/Muj
+        nxtAuz6y0DM/1/+8x1Uh2w==
+X-Google-Smtp-Source: ABdhPJwHbigpNJ9BBh5xlV+1WffvJHwsucDLYpw50sQP6yiATxNp3EPoyBlRK/22F5prFaST/c/qmw==
+X-Received: by 2002:ae9:e8c4:0:b0:6a6:ab86:47ac with SMTP id a187-20020ae9e8c4000000b006a6ab8647acmr6261971qkg.48.1654464248936;
+        Sun, 05 Jun 2022 14:24:08 -0700 (PDT)
 Received: from robh.at.kernel.org ([2607:fb90:ac97:ac63:b5fd:aa9:8d74:9989])
-        by smtp.gmail.com with ESMTPSA id q6-20020a05620a0d8600b006a693e46d5csm7278738qkl.11.2022.06.05.14.22.01
+        by smtp.gmail.com with ESMTPSA id m16-20020a05620a291000b006a6bb044740sm1381308qkp.66.2022.06.05.14.24.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 14:22:02 -0700 (PDT)
-Received: (nullmailer pid 3539659 invoked by uid 1000);
-        Sun, 05 Jun 2022 21:22:00 -0000
-Date:   Sun, 5 Jun 2022 16:22:00 -0500
+        Sun, 05 Jun 2022 14:24:08 -0700 (PDT)
+Received: (nullmailer pid 3542674 invoked by uid 1000);
+        Sun, 05 Jun 2022 21:24:05 -0000
+Date:   Sun, 5 Jun 2022 16:24:05 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/4] dt-bindings: power: Add MT8365 power domains
-Message-ID: <20220605212200.GA3539140-robh@kernel.org>
-References: <20220530204214.913251-1-fparent@baylibre.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>, devicetree@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-sunxi@lists.linux.dev, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH 3/3] dt-bindings: arm: Remove obsolete CPU enable methods
+Message-ID: <20220605212405.GA3542627-robh@kernel.org>
+References: <20220531045038.42230-1-samuel@sholland.org>
+ <20220531045038.42230-4-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220530204214.913251-1-fparent@baylibre.com>
+In-Reply-To: <20220531045038.42230-4-samuel@sholland.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -67,44 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 10:42:11PM +0200, Fabien Parent wrote:
-> Add power domains dt-bindings for MT8365.
+On Mon, 30 May 2022 23:50:38 -0500, Samuel Holland wrote:
+> U-Boot has provided PSCI on Allwinner A31 and A23/A33 since May 2015,
+> commit 014414f53695 ("ARM: sunxi: Enable PSCI for sun8i"). Since we can
+> assume PSCI is available on these platforms, they no longer need custom
+> CPU enable methods.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
->  .../power/mediatek,power-controller.yaml      |  2 ++
->  include/dt-bindings/power/mt8365-power.h      | 19 +++++++++++++++++++
->  2 files changed, 21 insertions(+)
->  create mode 100644 include/dt-bindings/power/mt8365-power.h
 > 
-> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> index 135c6f722091..2c6d3e4246b2 100644
-> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
-> @@ -29,6 +29,7 @@ properties:
->        - mediatek,mt8186-power-controller
->        - mediatek,mt8192-power-controller
->        - mediatek,mt8195-power-controller
-> +      - mediatek,mt8365-power-controller
->  
->    '#power-domain-cells':
->      const: 1
-> @@ -67,6 +68,7 @@ patternProperties:
->                "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
->                "include/dt-bindings/power/mt8192-power.h" - for MT8192 type power domain.
->                "include/dt-bindings/power/mt8195-power.h" - for MT8195 type power domain.
-> +              "include/dt-bindings/power/mt8365-power.h" - for MT8365 type power domain.
->          maxItems: 1
->  
->        clocks:
-> diff --git a/include/dt-bindings/power/mt8365-power.h b/include/dt-bindings/power/mt8365-power.h
-> new file mode 100644
-> index 000000000000..4f50997a13b4
-> --- /dev/null
-> +++ b/include/dt-bindings/power/mt8365-power.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+>  Documentation/devicetree/bindings/arm/cpus.yaml | 2 --
+>  1 file changed, 2 deletions(-)
+> 
 
-Dual license please.
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>

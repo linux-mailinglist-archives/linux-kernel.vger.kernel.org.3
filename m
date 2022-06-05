@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACEA53DC1C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 16:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC3E53DC30
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 16:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240566AbiFEOCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 10:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S1344905AbiFEOMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 10:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351113AbiFEN7c (ORCPT
+        with ESMTP id S242532AbiFEOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 09:59:32 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C78BC90;
-        Sun,  5 Jun 2022 06:57:15 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id g24so1154407ybe.9;
-        Sun, 05 Jun 2022 06:57:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4GY0BloMw09FbZ8FykETwDy9g2/m4JZ+8VicGnsv2IY=;
-        b=KFgMJdZEzTxtZqW60pgwOdShowrcMNTzFVIx7A9WyMXd08rdhutT5Ja06Ch1stRuUg
-         q2E7NNJtP20B3i2Z8PgIBT/58ce2/I3QFYHvaotlqkZkcnesononHTclg6EhMIIQ5ZR3
-         /0AlRtgFO5WTyS6w9vQKppAVPFPqnFHs5LnrXk8Bb+PN3ILIH3yYSjRbht/UnKzWc1cG
-         zsXgNuxZV4BK3TmeC7jC+fo2cE4dI+jptuesJrkM4d61hkuELPoscCzJU502Codo7q+F
-         579PfOlFkqC/gAhBurop3ble2A501BF4E85tb5zVrWhZwX72wPs9wXJMiOHcdicBZ0Ne
-         ZFGw==
-X-Gm-Message-State: AOAM533KmlCOyVn/2rfg3A5u9AxtioAlLgH3adHOg19xHJyOXWyIp6Gp
-        axVknne1QZqltOCl/oxlWYUS3rqu9EraW9UZEDE=
-X-Google-Smtp-Source: ABdhPJxVm/HIlx4E5bICJq+vrL0X+/qbuU/ravo1RAyves82+K7SSWiS70+0dOakalbz/rGgxDp+Qt+2gnstkFqgCkI=
-X-Received: by 2002:a25:6588:0:b0:65d:57b9:c470 with SMTP id
- z130-20020a256588000000b0065d57b9c470mr20564533ybb.142.1654437434856; Sun, 05
- Jun 2022 06:57:14 -0700 (PDT)
+        Sun, 5 Jun 2022 10:12:36 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Jun 2022 07:12:32 PDT
+Received: from mailg210.ethz.ch (mailg210.ethz.ch [IPv6:2001:67c:10ec:5606::21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2241920F58
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 07:12:31 -0700 (PDT)
+Received: from mailm214.d.ethz.ch (2001:67c:10ec:5603::28) by mailg210.ethz.ch
+ (2001:67c:10ec:5606::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Sun, 5 Jun 2022
+ 15:57:11 +0200
+Received: from student.ethz.ch (92.107.246.40) by mailm214.d.ethz.ch
+ (2001:67c:10ec:5603::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Sun, 5 Jun 2022
+ 15:57:24 +0200
+Date:   Sun, 5 Jun 2022 15:57:16 +0200
+From:   Andrea Paris <aparis@ethz.ch>
+To:     <Larry.Finger@lwfinger.net>, <phil@philpotter.co.uk>,
+        <gregkh@linuxfoundation.org>, <linux-staging@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] Fixed 3 warnings about missing blank line after declaration
+Message-ID: <20220605135716.GA11092@student.ethz.ch>
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
- <CAMZ6RqJpJCAudv89YqFFQH80ei7WiAshyk1RtbEv=aXSyxo3hQ@mail.gmail.com>
- <20220604135541.2ki2eskyc7gsmrlu@pengutronix.de> <CAMZ6RqJ7qvXyxNVUK-=oJnK_oq7N94WABOb3pqeYf9Fw3G6J9A@mail.gmail.com>
- <20220604151859.hyywffrni4vo6gdl@pengutronix.de> <CAMZ6RqK45r-cqXvorUzRV-LA_C+mk6hNSA1b+0kLs7C-oTcDCA@mail.gmail.com>
- <20220605103909.5on3ep7lzorc35th@pengutronix.de>
-In-Reply-To: <20220605103909.5on3ep7lzorc35th@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 5 Jun 2022 22:57:03 +0900
-Message-ID: <CAMZ6RqLfJ8v+=HcSU8yprXeR8q8aSOsg4i379D9rZgE9ZmC=fg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-Originating-IP: [92.107.246.40]
+X-ClientProxiedBy: mailm211.d.ethz.ch (2001:67c:10ec:5603::25) To
+ mailm214.d.ethz.ch (2001:67c:10ec:5603::28)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun. 5 juin 2022 at 19:39, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 05.06.2022 01:32:15, Vincent MAILHOL wrote:
-> > On Sun. 5 juin 2022 at 00:18, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > > On 04.06.2022 23:59:48, Vincent MAILHOL wrote:
-> > > > > > Fine, but I need a bit of guidance here. To provide a tag, I need to
-> > > > > > have my own git repository hosted online, right?
-> > > > >
-> > > > > That is one option.
-> > > >
-> > > > This suggests that there are other options? What would be those other
-> > > > options?
-> > >
-> > > 2. git.kernel.org (most preferred)
-> > > 3. github.com (have to ask Davem/Jakub)
-> > >
-> > > > > > Is GitHub OK or should I create one on https://git.kernel.org/?
-> > > > >
-> > > > > Some maintainers don't like github, let's wait what Davem and Jakub say.
-> > > > > I think for git.kernel.org you need a GPG key with signatures of 3 users
-> > > > > of git.kernel.org.
-> > > >
-> > > > Personally, I would also prefer getting my own git.kernel.org account.
-> > >
-> > > See https://korg.docs.kernel.org/accounts.html
-> >
-> > Thanks for the link. I will have a look at it tomorrow (or the day
-> > after tomorrow in the worst case).
-> >
-> > Meanwhile, I will send the v5 which should address all your comments.
->
-> /me just realized that merged are independent of pull requests. I can
-> create a local branch and merge it, as Davem and Jakub do it. I've added
-> your v5 to can-next/master as a merge and I'll include this in my next
-> PR to net-next if Davem and Jakub are OK with merges in my branch.
+Fixed three checkpatch.pl warnings about missing blank lines after
+declaration
 
-So my dreams of getting my kernel.org account swag just evaporated
-(just kidding :))
-I think I will prepare a GPG key just to be ready in the opportunity
-to get it signed pop-up one day.
+Signed-off-by: Andrea Paris <aparis@ethz.ch>
+---
+ drivers/staging/r8188eu/core/rtw_cmd.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Happy to see that this is reaching an end. Honestly speaking, the
-menuconfig cleanup was not my most exciting contribution (euphemism)
-but was still a necessity. Glad that this is nearly over after more
-than 80 messages in the full thread (including all five versions). If
-I recall correctly, this is the longest thread we had in the last two
-years. And thanks again to Max, Oliver and you for animating the
-debate!
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index 06523d91939a..92d5e4534087 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -25,6 +25,7 @@ void rtw_free_evt_priv(struct	evt_priv *pevtpriv)
 
+ 	while (!rtw_cbuf_empty(pevtpriv->c2h_queue)) {
+ 		void *c2h = rtw_cbuf_pop(pevtpriv->c2h_queue);
++
+ 		if (c2h && c2h != (void *)pevtpriv)
+ 			kfree(c2h);
+ 	}
+@@ -323,6 +324,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+ 	/* prepare ssid list */
+ 	if (ssid) {
+ 		int i;
++
+ 		for (i = 0; i < ssid_num && i < RTW_SSID_SCAN_AMOUNT; i++) {
+ 			if (ssid[i].SsidLength) {
+ 				memcpy(&psurveyPara->ssid[i], &ssid[i], sizeof(struct ndis_802_11_ssid));
+@@ -334,6 +336,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+ 	/* prepare channel list */
+ 	if (ch) {
+ 		int i;
++
+ 		for (i = 0; i < ch_num && i < RTW_CHANNEL_SCAN_AMOUNT; i++) {
+ 			if (ch[i].hw_value && !(ch[i].flags & RTW_IEEE80211_CHAN_DISABLED)) {
+ 				memcpy(&psurveyPara->ch[i], &ch[i], sizeof(struct rtw_ieee80211_channel));
+--
+2.25.1
 
-Yours sincerely,
-Vincent Mailhol

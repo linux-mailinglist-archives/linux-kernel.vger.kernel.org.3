@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0208153DD7D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 20:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356B953DD88
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 20:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349408AbiFESDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 14:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
+        id S1346679AbiFESGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 14:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351468AbiFESDS (ORCPT
+        with ESMTP id S234573AbiFESGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 14:03:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1F6F5B4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 11:03:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFDB161186
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 18:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37D27C341C7;
-        Sun,  5 Jun 2022 18:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654452196;
-        bh=lQqW/A9JQiJ1th7Em22sDi9sYIyP2y/h/qqGcQsdE+Y=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=oAXh+3NuAySScSX41Fq/4WPjwYY7lyeBEV33ApcV8/Ie9ZmJWM0lp3o6iFR/08Dp0
-         aK1cMngjBKbMui37vgc/WLMB401zhT2r3y0EFubcAmjIp7VLjjofmO3IULYoR6BzW5
-         LhPZL3LHkbj6jDbKN51ivpUEkoM+i1gneDgXtLlgmxwFl38qSEcd3Q7c6M0b2p1LJg
-         XIUqnTJJaZXbh7TKZKfeBTBqUGJvBtRY9nv6dXSOGv5TL7DukzhXXfQoLzdp835XCJ
-         ZCFyTmnHWPDUn5nbSJxASkNpiSMuVHTNEV81zhVa5RTV8dtaYjtWvwpbqNczWO+Sid
-         QgwDp92SJjCBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2538CF03875;
-        Sun,  5 Jun 2022 18:03:16 +0000 (UTC)
-Subject: Re: [GIT pull] x86/cleanups for v5.19-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <165442137838.152751.6839806816555222572.tglx@xen13>
-References: <165442136963.152751.14259048792272164569.tglx@xen13> <165442137838.152751.6839806816555222572.tglx@xen13>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <165442137838.152751.6839806816555222572.tglx@xen13>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-cleanups-2022-06-05
-X-PR-Tracked-Commit-Id: f7081834b2d5bbc77d67073d8ab490bfeaf3c13b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a925128092d8dd5c2ea8644e1dddd510b7ebc9c7
-Message-Id: <165445219614.28605.1336867964675721284.pr-tracker-bot@kernel.org>
-Date:   Sun, 05 Jun 2022 18:03:16 +0000
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Sun, 5 Jun 2022 14:06:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077684CD53
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 11:06:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nxueB-00018P-KT; Sun, 05 Jun 2022 20:06:43 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2C6138C90E;
+        Sun,  5 Jun 2022 18:06:42 +0000 (UTC)
+Date:   Sun, 5 Jun 2022 20:06:41 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
+Message-ID: <20220605180641.tfqyxhkkauzoz2z4@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+ <20220605192347.518c4b3c.max@enpas.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uzvth7z5c2f7sh7z"
+Content-Disposition: inline
+In-Reply-To: <20220605192347.518c4b3c.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,15 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun,  5 Jun 2022 11:30:59 +0200 (CEST):
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-cleanups-2022-06-05
+--uzvth7z5c2f7sh7z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a925128092d8dd5c2ea8644e1dddd510b7ebc9c7
+On 05.06.2022 19:23:47, Max Staudt wrote:
+> Thanks Vincent for this cleanup!
+>=20
+> Since I am upstreaming a driver that may (?) not fit the proposed
+> structure, one question below.
+>=20
+>=20
+> On Sun,  5 Jun 2022 01:29:53 +0900
+> Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
+>=20
+> > * menu after this series *
+> >=20
+> > Network device support
+> >   symbol: CONFIG_NETDEVICES
+> >   |
+> >   +-> CAN Device Drivers
+> >       symbol: CONFIG_CAN_DEV
+> >       |
+> >       +-> software/virtual CAN device drivers
+> >       |   (at time of writing: slcan, vcan, vxcan)
+> >       |
+> >       +-> CAN device drivers with Netlink support
+> >           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+> >           |
+> >           +-> CAN bit-timing calculation (optional for all drivers)
+> >           |   symbol: CONFIG_CAN_BITTIMING
+> >           |
+> >           +-> All other CAN devices not relying on RX offload
+> >           |
+> >           +-> CAN rx offload
+> >               symbol: CONFIG_CAN_RX_OFFLOAD
+> >               |
+> >               +-> CAN devices relying on rx offload
+> >                   (at time of writing: flexcan, m_can, mcp251xfd and
+> > ti_hecc)
+>=20
+> This seemingly splits drivers into "things that speak to hardware" and
+> "things that don't". Except... slcan really does speak to hardware. It
+> just so happens to not use any of BITTIMING or RX_OFFLOAD. However, my
+> can327 (formerly elmcan) driver, which is an ldisc just like slcan,
+> *does* use RX_OFFLOAD, so where to I put it? Next to flexcan, m_can,
+> mcp251xfd and ti_hecc?
+>=20
+> Is it really just a split by features used in drivers, and no longer a
+> split by virtual/real?
 
-Thank you!
+We can move RX_OFFLOAD out of the "if CAN_NETLINK". Who wants to create
+an incremental patch against can-next/master?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--uzvth7z5c2f7sh7z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKc8K4ACgkQrX5LkNig
+012CLwgArYkdw9iflio4maZcQK4hFlv7Ivz74f9VLG6EKcFAjUUUjPYCS8jGoL1/
+B/WtwP9Oy+FrzAzrHUcFB+6GN2A7DB2DGlXQ62ifwY3Z3yVKUtLiZCaHn/NZFxbG
+0KoCqIux1q/GOA94BMI3BoMMXa5XEwwVma75mbAHUcCxcGEDQ0VU89TBu2WBMkLR
+Vwf4QoT6LixRPUGlsJugv/+zsyNJXeKr/vt82ubGdaT7Jm9+YyMKjWqFDU/004uq
+G4BLohfyCGv82srT8XOxy5HMBbmMpQM7V1Xm0BeSyyFJ5xeU3yH4WGkS4qZ9X7Gc
+yeZjEonu1yDGcS0MtQ3ljcsrfHgmmw==
+=4/r5
+-----END PGP SIGNATURE-----
+
+--uzvth7z5c2f7sh7z--

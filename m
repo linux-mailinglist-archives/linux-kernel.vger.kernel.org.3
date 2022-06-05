@@ -2,81 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D1153DCFC
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9299F53DD00
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351227AbiFEQZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
+        id S1351231AbiFEQ1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243238AbiFEQZo (ORCPT
+        with ESMTP id S243238AbiFEQ10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:25:44 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526614B1D7;
-        Sun,  5 Jun 2022 09:25:41 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id x75so6040407qkb.12;
-        Sun, 05 Jun 2022 09:25:41 -0700 (PDT)
+        Sun, 5 Jun 2022 12:27:26 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A42BCA5;
+        Sun,  5 Jun 2022 09:27:24 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id a10so3940470wmj.5;
+        Sun, 05 Jun 2022 09:27:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jzeOZTwN2f/J/OJcQ9lpgGCRe+zk8pQI2TCaiI73TRE=;
-        b=VESAxWS8qarvWfNFu+/pNRu1oyDb4QAYE20AGmuwGmmwtvgDBIRdINCzScuCqhrQEP
-         nbSG/eWvfIV5IwD2Q6ELfgUbJ/QwBpMevOuJcrn2Tngbym4mYmsGCZTLJ3LY57euVqhz
-         BNV/sUJ3z6FfgMKAUKKs6Zve6jpr7mwQZ/1faxmZN7hTQBmvONTBwrpz0r2l/DwQF5kL
-         eSg4WAvBUJ8smR1gnsbOLCG0J2qQ2XNlhflL1x6qhXBeaCyDbq0JO4fPIpUEpg64L13Q
-         VQc9SsexygxMUL6+inGUiJlHsPRdMR3VouzVHHG1VZJqh0y/2yySFMlDkxK8bSjos+N8
-         mCVQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BlhDqnXIWmz99mOmaitwKvZoXf00bis6sm2lmF5SdE0=;
+        b=mV9dqH2HnBmPIO1d5I4EKXR8iPDfSXlcAvbfJljUN3vbziKUintaochodqEZVkB4Xj
+         AJ2PxMd2+h7Yzr6hT6yfbKL0vq7x5MF8VYjlz4ugAh9S48aOV7K5zrnHYMrVJnKTngSm
+         VURI5b2HlrgCziXUFK8h9F13e6jzQiJZEyqur3x6C8fLsd2oPwzEtotCIniPDWFPnuP+
+         ixsuLzAy8+5N3Gf2vs78cdMVSEF0Uasi6P7VPjIlgtYhI5+jgALwlIgdjeXwJtDz8Mzf
+         sL4R98ifWXgZAXb3dcx6tSPJvPvXxPNMOIk7IANBzClStx/THKXPJ3SklvDg6nBzDkee
+         Nclw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jzeOZTwN2f/J/OJcQ9lpgGCRe+zk8pQI2TCaiI73TRE=;
-        b=HMRH90a9gBVoXPEAMB47m5ZpZeDS/R/t7nE1uEYTCUojDlEr8nEQAVaTLjtQObV6Ub
-         nbnV2arqv5q709H9O1Np+5+Y9osZ+v0rezP0KdLzWvjyJp0XDkW0XskD7XnDOYeDh0kX
-         /oaBAJaESkFQVlJu9a/9k/lLfahpWjMVTBOza2KIZz4JTaQDt2qX8gLBnS6lm7YUrfGc
-         fTq9w4y/897OhgkqRTgG8qnNmq+0ABniob1mdUU6wfs13SiIMOM6Us5CNOn+76vghh4u
-         WjJJ8wjkzkzfkjrJ17zggjaH/57rGVdvnXl+mX4MeKNXX4sseh06fLK7QVXxC89GYiou
-         Reug==
-X-Gm-Message-State: AOAM530Dvgh5iXzwH+k59wbYVoV+UhhaeISGrcAaadFcbwAnCUDNzC9V
-        mnQ0M+xHSzfsez3onox3WjE=
-X-Google-Smtp-Source: ABdhPJwCwdzIOy3Bqh7K3E9XuHVpb5kIfVWzXT4od4LeMn8TqqOzG0zxkJg3OHcxYC2bclNuuBBwQg==
-X-Received: by 2002:a37:742:0:b0:6a6:9ed5:14ee with SMTP id 63-20020a370742000000b006a69ed514eemr8450287qkh.124.1654446340313;
-        Sun, 05 Jun 2022 09:25:40 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id 21-20020ac84e95000000b002f90a33c78csm9341222qtp.67.2022.06.05.09.25.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BlhDqnXIWmz99mOmaitwKvZoXf00bis6sm2lmF5SdE0=;
+        b=4C+5HDLu2E2WEtXExTAJ2wiqB7h+/ZrvNtcUdfgu68ToaLU3BScdakfOWWXCd61/vz
+         8g7R5hcxPyYIis5HNuMCRC1m3TSHIVPSNZr/u9X3SqDiOZ0382XVPt97phRj4CkE8ptw
+         HxW4PDSY8WQYzItSrVc18FUGXBhG5QKmod92rhKcvWenCNG3KSNXEhk/MjRaj8CtpXiS
+         +h30CghWSr7Ltlp02rRLSudy925usY4+c1b69uWDT2tON4NcofgDc0kRoGF2yPrpUCJ8
+         bNHU6yp2Up6BBsUZt3HvkK5BYiGx8rkdm0xhlj51lbMKThtePZmk9PdTNi6A+UrGS1G6
+         E8HA==
+X-Gm-Message-State: AOAM533NmT7WNSGC1cvqo1xWt9sF50W7Mg1acwT8QvGse+kQnK10cJTv
+        cJXb40U7ck2UAUdDDQr4aZs=
+X-Google-Smtp-Source: ABdhPJwITz7ZAWATmsKnFtjy9MAofwUv8X6uuBWL4APFcRGthr9LBgQNsnsaE0oRuFfQQvwgashNAQ==
+X-Received: by 2002:a05:600c:4f90:b0:394:970a:71bd with SMTP id n16-20020a05600c4f9000b00394970a71bdmr18960996wmq.158.1654446443345;
+        Sun, 05 Jun 2022 09:27:23 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id n3-20020a1c2703000000b0039c4b518df4sm3130796wmn.5.2022.06.05.09.27.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 09:25:39 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sun, 05 Jun 2022 09:27:22 -0700 (PDT)
+Date:   Sun, 5 Jun 2022 18:27:20 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        torvalds@linux-foundation.org
-Subject: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
-Date:   Sun,  5 Jun 2022 09:25:37 -0700
-Message-Id: <20220605162537.1604762-1-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        "Saha, Tamal" <tamal.saha@intel.com>, bala.senthil@intel.com
+Subject: Re: [GIT PULL] hte: New subsystem for v5.19-rc1
+Message-ID: <YpzZaJtgXbY0W4Ji@orome>
+References: <20220603113908.78777-1-thierry.reding@gmail.com>
+ <CAHk-=wiVxF5VLFSuet3OrC7u1Gfb-ZyMs4W-KXAc42rXPRWmhA@mail.gmail.com>
+ <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="EFh38D72SJj7BkNR"
+Content-Disposition: inline
+In-Reply-To: <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
+User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -87,120 +81,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 0a97953fd221 ("lib: add bitmap_{from,to}_arr64") changed
-implementation of bitmap_from_u64(), so that it doesn't typecast
-argument to u64, and actually dereferences memory.
 
-With that change, compiler spotted few places in bluetooth code
-where bitmap_from_u64 is called for 32-bit variable.
+--EFh38D72SJj7BkNR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As reported by Sudip Mukherjee:
+On Sat, Jun 04, 2022 at 10:11:17AM +0200, Linus Walleij wrote:
+> On Sat, Jun 4, 2022 at 6:38 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> > On Fri, Jun 3, 2022 at 4:39 AM Thierry Reding <thierry.reding@gmail.com=
+> wrote:
+> > >
+> > > Note that this currently supports only one provider, but there seems =
+to
+> > > be enough interest in this functionality and we expect to see more
+> > > drivers added once this is merged.
+> >
+> > So the "one provider" worries me, but the part that really doesn't
+> > make me all warm and fuzzy is how this came in at the end of the merge
+> > window.
+>=20
+> Another provider did come up, and were requested (by me) to work with
+> Dipen on the subsystem in august last year, that was the Intel PMC in the
+> Elkhart and Tiger Lake platforms and forward:
+> https://patchwork.ozlabs.org/project/linux-gpio/cover/20210824164801.2889=
+6-1-lakshmi.sowjanya.d@intel.com/#2766453
+>=20
+> [I added the other Intel people on that submission to CC]
+>=20
+> Intel wanted to put this into the GPIO subsystem and what I saw as mainta=
+iner
+> was that this is a general problem and general purpose (binary) I/O just =
+isn't
+> going to be the only thing they timestamp. Other events will be for IIO a=
+nd
+> hwmon or whatever. They have been
+> requested to contribute to Dipens work the recent 9 months ... so... well=
+ I
+> understand people can get other priorities and stuff.
+>=20
+> Dipen did the right thing and created a separate subsystem that is a prov=
+ider
+> to GPIO and can be a provider to things like IIO as well, which is what
+> it needs to be because for things like sensor fusion and industrial contr=
+ol
+> systems in general precise timestamps are
+> of uttermost importance. And IIO handle a lot of sensors.
+>=20
+> > The DT bindings got the comment "why call it 'hardware timestamp'"
+> > when no other case seems sane.
+>=20
+> Intel is talking about "input timestamping", admittedly it is done in har=
+dware
+> but the point is to timestamp input I/O events.
+>=20
+> > So the DT bindings got renamed. So now part of the code calls it "hte"
+> > (which nobody understands outside of the hte community that is
+> > apparently one single device: Tegra) and part of the code calls it
+> > "timestamp".
+>=20
+> HTE is "hardware timestamping engine", we have hwmon, hwspinlock,
+> hwtracing so maybe hwstamping would be a more natural name then?
 
-"arm allmodconfig" fails with the error:
+Another alternative would be just drivers/timestamp since pretty much
+anything in drivers/ is for "hw".
 
-In file included from ./include/linux/string.h:253,
-                 from ./include/linux/bitmap.h:11,
-                 from ./include/linux/cpumask.h:12,
-                 from ./include/linux/smp.h:13,
-                 from ./include/linux/lockdep.h:14,
-                 from ./include/linux/mutex.h:17,
-                 from ./include/linux/rfkill.h:35,
-                 from net/bluetooth/hci_core.c:29:
-In function 'fortify_memcpy_chk',
-    inlined from 'bitmap_copy' at ./include/linux/bitmap.h:254:2,
-    inlined from 'bitmap_copy_clear_tail' at ./include/linux/bitmap.h:263:2,
-    inlined from 'bitmap_from_u64' at ./include/linux/bitmap.h:540:2,
-    inlined from 'hci_bdaddr_list_add_with_flags' at net/bluetooth/hci_core.c:2156:2:
-./include/linux/fortify-string.h:344:25: error: call to '__write_overflow_field' declared with attribute warning:
-+detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-  344 |                         __write_overflow_field(p_size_field, size);
+Thierry
 
-And, "csky allmodconfig" fails with the error:
+--EFh38D72SJj7BkNR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In file included from ./include/linux/cpumask.h:12,
-                 from ./include/linux/mm_types_task.h:14,
-                 from ./include/linux/mm_types.h:5,
-                 from ./include/linux/buildid.h:5,
-                 from ./include/linux/module.h:14,
-                 from net/bluetooth/mgmt.c:27:
-In function 'bitmap_copy',
-    inlined from 'bitmap_copy_clear_tail' at ./include/linux/bitmap.h:263:2,
-    inlined from 'bitmap_from_u64' at ./include/linux/bitmap.h:540:2,
-    inlined from 'set_device_flags' at net/bluetooth/mgmt.c:4534:4:
-./include/linux/bitmap.h:254:9: error: 'memcpy' forming offset [4, 7] is out of the bounds [0, 4] of object 'flags'
-+with type 'long unsigned int[1]' [-Werror=array-bounds]
-  254 |         memcpy(dst, src, len);
-      |         ^~~~~~~~~~~~~~~~~~~~~
-In file included from ./include/linux/kasan-checks.h:5,
-                 from ./include/asm-generic/rwonce.h:26,
-                 from ./arch/csky/include/generated/asm/rwonce.h:1,
-                 from ./include/linux/compiler.h:248,
-                 from ./include/linux/build_bug.h:5,
-                 from ./include/linux/container_of.h:5,
-                 from ./include/linux/list.h:5,
-                 from ./include/linux/module.h:12,
-                 from net/bluetooth/mgmt.c:27:
-net/bluetooth/mgmt.c: In function 'set_device_flags':
-net/bluetooth/mgmt.c:4532:40: note: 'flags' declared here
- 4532 |                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
-      |                                        ^~~~~
-./include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
-   11 |         unsigned long name[BITS_TO_LONGS(bits)]
+-----BEGIN PGP SIGNATURE-----
 
-Fix it by replacing bitmap_from_u64 with bitmap_from_arr32.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmKc2WgACgkQ3SOs138+
+s6FILQ//bhu038q6SHXjBrxVGvixZRnnAgI4bdwZ/iOBzpfXqnFFaXePFtz2DnXG
+MhVKixiQnNN9t+bevpQZ+MZbJ/NBs6BaWv224S9qjGFPXPZEKwJSCaT7XoldRFxN
+Tbk4b27Igpe1gPSd+ApBhM6je7gQf0xNFPr73HdrzUqUO17I68reSDLA2BwUpHjP
+I9YopQ6ZfPF7ZxAMZ39TiMhIcrH+dzP+r9yy5PZX1gdVoXjM+0Bfc3eGvCTnY8FL
+ZoEnKYBu9Ztibr13DsOXV41Pckzxo6XJh46NZD7BRQmPVTbH+QvBSY2ggYocjGe8
+Eo6Y8wm9EoznjmIsp93YbZsv77FXd6DmW8nZKgle3YnDCvWaIS+7h7Mx1Yx4oGIk
+DrTLwVMk2ls9n1Len8xXhXOf2cXKDiNmUnpE2QWm57KMpQT/MLht4aUcptYYV/Sc
+WEoJZZ0gnnzp1LS9xOAXnSqnA36PGtWHXqbX6qJLPep1n8Dxm6ODWuDXY/f0TM/h
+4OgpZWwPpKau1AO2dIGMrQreu57eFttnS2/zXVyPWO7fHCxkbSg4PqEpM2Ajg7JQ
+A9PqLmxjQpUPvMx6+ra1VZgHhBya8vZ6bcZKbVepbtx9/msJiB1CYJOo6preY7qK
+W7Y+UkO16AfIEyR4csivfr1Kwb0ftaVaVeoK3lptbmrW1AqMxmQ=
+=Jzkq
+-----END PGP SIGNATURE-----
 
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- net/bluetooth/hci_core.c | 2 +-
- net/bluetooth/mgmt.c     | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 5abb2ca5b129..2de7e1ec4035 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -2153,7 +2153,7 @@ int hci_bdaddr_list_add_with_flags(struct list_head *list, bdaddr_t *bdaddr,
- 
- 	bacpy(&entry->bdaddr, bdaddr);
- 	entry->bdaddr_type = type;
--	bitmap_from_u64(entry->flags, flags);
-+	bitmap_from_arr32(entry->flags, &flags, 32);
- 
- 	list_add(&entry->list, list);
- 
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 74937a834648..b63025c70c2c 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -4519,7 +4519,8 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 							      cp->addr.type);
- 
- 		if (br_params) {
--			bitmap_from_u64(br_params->flags, current_flags);
-+			bitmap_from_arr32(br_params->flags, &current_flags,
-+					  __HCI_CONN_NUM_FLAGS);
- 			status = MGMT_STATUS_SUCCESS;
- 		} else {
- 			bt_dev_warn(hdev, "No such BR/EDR device %pMR (0x%x)",
-@@ -4531,7 +4532,7 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 		if (params) {
- 			DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
- 
--			bitmap_from_u64(flags, current_flags);
-+			bitmap_from_arr32(flags, &current_flags, __HCI_CONN_NUM_FLAGS);
- 
- 			/* Devices using RPAs can only be programmed in the
- 			 * acceptlist LL Privacy has been enable otherwise they
-@@ -4546,7 +4547,7 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 				goto unlock;
- 			}
- 
--			bitmap_from_u64(params->flags, current_flags);
-+			bitmap_from_arr32(params->flags, &current_flags, __HCI_CONN_NUM_FLAGS);
- 			status = MGMT_STATUS_SUCCESS;
- 
- 			/* Update passive scan if HCI_CONN_FLAG_DEVICE_PRIVACY
--- 
-2.32.0
-
+--EFh38D72SJj7BkNR--

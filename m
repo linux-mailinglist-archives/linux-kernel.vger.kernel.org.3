@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9889253DCC9
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D253153DCC8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351146AbiFEQGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
+        id S1351113AbiFEQGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345954AbiFEQFi (ORCPT
+        with ESMTP id S1350993AbiFEQFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Jun 2022 12:05:38 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FFB4DF53
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:05:34 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id u12so24727015eja.8
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:05:34 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D904DF5A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:05:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id n10so24741097ejk.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5tWwxJzn2yH78biWqXwadWWd5pjAI0E9L48ilmZjn+o=;
-        b=lEnxmG4PK+6MSiOl3DGcBNMtfoA2OmdEaREl5eX1EUog1Xq8dH3BJq5eCWYPDPhKT0
-         zjv029NCpL9cCw1J8ghtlScdxhZYIqP8rFBv2FHlzS4G4NTCbnvXttZVFqtA7Otw/fuR
-         sFtkaxLgOjsJjRzuKpJsG1yZ5bgoEDIDgFn8PcCOhXlV0vCjUv0VzJGyJLdGHj0wiT8C
-         3CphQLkS/j2Ttox158vS2610cb8441b3ZGmO9bC9kcKbAT/MzbOOQBWa+6vhJ55Z+3Pg
-         48eHdXN6E8gb0vzBgUenCD29du5jzgQDRH1gbIKzR0viHKz0ZilFNs3izBNoabRmaeHW
-         HYdg==
+        bh=uNqgaebxE59a2xpXGgkpfpc65G6fkCReKHmHzYMPGcA=;
+        b=EJmJTWZ/TZD/mv61lnGe5gafSPLr5OaV+l4dc7rj1YuHedcFYzAIqNgZB5JkA5FGtJ
+         CAJIuki4a0NglCzD5hXyUYGlYAeGNFXd+dJtpB0UdQWC6WY+n6SBHp1FISYUFcCWoo+J
+         DBlo/nsTd0a4Ique5Xpd0DqDKZ09hxnm3H2iExlJ/hickjfKJGUtx8ZTINo9XpzM7ziw
+         blqIMFvtCgibEBdj0noItO6+DJZUJb8sEImfVwGV0J3YnLE4+tEXJW/tl1QzS/PBSBvs
+         hJ+sl3yZsMSVYjXAukLiNJmX8VVRaSHodlfKJ9+cbmn5VaQP1dWmr3N+rrkSkLzEPcIq
+         D8Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5tWwxJzn2yH78biWqXwadWWd5pjAI0E9L48ilmZjn+o=;
-        b=WGFr+a52lh7MH2GeGzrOSDGnzOwJyTnblMJvJuSzejVjnMGNHoHZFetYVHkwwVQs1F
-         +ctDZ5lZJHpZV+8IoOyh4gR1CJ6U8HewzKYvwSLgNog3u4VuVSTj3BqCewLnlmRDBB2e
-         Eb45tS3erThJKDZVBd9fFrihRORkTjMiefK4fgFOOC1XRDWEH/3y9a3+XYdn13vud9RB
-         hHYtNmDoaZdcVYdVXH1GvSb7qBFH0ThwZ6IJnkud6Dt7pJjtakERmfMX7yYIKD+vkBfU
-         wcp2UEZQ+HitaKt573wmcmKjOihiS+jEzpuehR829ZL3LRQ219acGctxS8oOU3ynym6W
-         7l3A==
-X-Gm-Message-State: AOAM532pg736DBi3aJ4fzE+EwyF66fHMnFow/8L6G7bsFxCr7V5yJd8k
-        +fTLKXaL2Pz2k/i6mkh8pcWyqg==
-X-Google-Smtp-Source: ABdhPJycPnDVLUAGeX1gnsMgLI7BRaJNnkKdHgBsB16LcFV7xRBWpE4GKKr4f0j9HikE7eKBGR0K+Q==
-X-Received: by 2002:a17:907:7fa9:b0:706:e7c6:b0b1 with SMTP id qk41-20020a1709077fa900b00706e7c6b0b1mr17343551ejc.163.1654445132626;
-        Sun, 05 Jun 2022 09:05:32 -0700 (PDT)
+        bh=uNqgaebxE59a2xpXGgkpfpc65G6fkCReKHmHzYMPGcA=;
+        b=NHR6fWKcAxFh0h3o1LKFekUXcyNaf3UOGEBMK6GODLC8M0KH6vHQwIa5TvbU7GpKyo
+         a4WzQapkwIBmPeYQaN/Oko95tOppkhgqNs4z458//QZXUo0M9FysmUrZ7bpLtBJ7S1TU
+         7iTlu/iQ0stsk6C1MAimTLCfOsQAn6wg51orYtioDaoT7y29J4RGKhz9ldVNS0Qbm22P
+         V6tAfqRIo2RR5bT7sQleQeqzYr20NQqAkLECNzMC0F2bW52cO+ygSaLxdzmmtxqNZc7M
+         AMj43AzivWNNy0GwwHIRKBkoDVvFDud9mFAumgWxMgiNRMDAM1l8tS5zgP4nYPLmvMnx
+         bBdA==
+X-Gm-Message-State: AOAM531/2Yjyo+MTcQsvHKGrKMJ4TzlcVj77r52Tclnx2aST6BUSpqQy
+        KPA9wo2ciSNfUQvkpbd7n/yyaA==
+X-Google-Smtp-Source: ABdhPJw6/qp9FGlzSQo4wMiMASHWdeVH9xL3mwpxk8gC8nP1EII0Q5WCeLN6SBC9ZygEpcbunwWSZw==
+X-Received: by 2002:a17:907:c29:b0:704:fbb:1943 with SMTP id ga41-20020a1709070c2900b007040fbb1943mr17690903ejc.486.1654445133707;
+        Sun, 05 Jun 2022 09:05:33 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id x18-20020a170906805200b0070b7875aa6asm3969963ejw.166.2022.06.05.09.05.31
+        by smtp.gmail.com with ESMTPSA id x18-20020a170906805200b0070b7875aa6asm3969963ejw.166.2022.06.05.09.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 09:05:32 -0700 (PDT)
+        Sun, 05 Jun 2022 09:05:33 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-gpio@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Chanho Park <chanho61.park@samsung.com>
-Subject: [PATCH v3 6/8] arm64: dts: fsd: use local header for pinctrl register values
-Date:   Sun,  5 Jun 2022 18:05:06 +0200
-Message-Id: <20220605160508.134075-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 7/8] pinctrl: samsung: do not use bindings header with constants
+Date:   Sun,  5 Jun 2022 18:05:07 +0200
+Message-Id: <20220605160508.134075-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220605160508.134075-1-krzysztof.kozlowski@linaro.org>
 References: <20220605160508.134075-1-krzysztof.kozlowski@linaro.org>
@@ -78,232 +78,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DTS uses hardware register values directly in pin controller pin
-configuration.  These are not some IDs or other abstraction layer but
-raw numbers used in the registers.
+The Samsung SoC pin controller driver uses only three defines from the
+bindings header with pin configuration register values, which proves
+the point that this header is not a proper bindings-type abstraction
+layer with IDs.
 
-These numbers were previously put in the bindings header to avoid code
-duplication and to provide some context meaning (name), but they do not
-fit the purpose of bindings.  It is also quite confusing to use
-constants prefixed with Exynos for other SoC, because there is actually
-nothing here in common, except the actual value.
-
-Store the constants in a header next to DTS and use them instead of
-bindings.
+Define the needed register values directly in the driver and stop using
+the bindings header.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 ---
- arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi | 92 +++++++++++-----------
- arch/arm64/boot/dts/tesla/fsd-pinctrl.h    | 33 ++++++++
- 2 files changed, 79 insertions(+), 46 deletions(-)
- create mode 100644 arch/arm64/boot/dts/tesla/fsd-pinctrl.h
+ drivers/pinctrl/samsung/pinctrl-exynos.c  | 6 ++----
+ drivers/pinctrl/samsung/pinctrl-exynos.h  | 3 +++
+ drivers/pinctrl/samsung/pinctrl-samsung.c | 4 +---
+ drivers/pinctrl/samsung/pinctrl-samsung.h | 8 ++++++++
+ 4 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-index d4d0cb005712..257e1d3efcb6 100644
---- a/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.dtsi
-@@ -8,7 +8,7 @@
-  *		https://www.tesla.com
-  */
+diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
+index 6d7ca1758292..a8212fc126bf 100644
+--- a/drivers/pinctrl/samsung/pinctrl-exynos.c
++++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
+@@ -27,8 +27,6 @@
+ #include <linux/soc/samsung/exynos-pmu.h>
+ #include <linux/soc/samsung/exynos-regs-pmu.h>
  
 -#include <dt-bindings/pinctrl/samsung.h>
-+#include "fsd-pinctrl.h"
+-
+ #include "pinctrl-samsung.h"
+ #include "pinctrl-exynos.h"
  
- &pinctrl_fsys0 {
- 	gpf0: gpf0-gpio-bank {
-@@ -223,107 +223,107 @@ gpg7: gpg7-gpio-bank {
+@@ -173,7 +171,7 @@ static int exynos_irq_request_resources(struct irq_data *irqd)
  
- 	pwm0_out: pwm0-out-pins {
- 		samsung,pins = "gpb6-1";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
- 	};
+ 	con = readl(bank->pctl_base + reg_con);
+ 	con &= ~(mask << shift);
+-	con |= EXYNOS_PIN_FUNC_EINT << shift;
++	con |= EXYNOS_PIN_CON_FUNC_EINT << shift;
+ 	writel(con, bank->pctl_base + reg_con);
  
- 	pwm1_out: pwm1-out-pins {
- 		samsung,pins = "gpb6-5";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV2>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV2>;
- 	};
+ 	raw_spin_unlock_irqrestore(&bank->slock, flags);
+@@ -196,7 +194,7 @@ static void exynos_irq_release_resources(struct irq_data *irqd)
  
- 	hs_i2c0_bus: hs-i2c0-bus-pins {
- 		samsung,pins = "gpb0-0", "gpb0-1";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
+ 	con = readl(bank->pctl_base + reg_con);
+ 	con &= ~(mask << shift);
+-	con |= EXYNOS_PIN_FUNC_INPUT << shift;
++	con |= PIN_CON_FUNC_INPUT << shift;
+ 	writel(con, bank->pctl_base + reg_con);
  
- 	hs_i2c1_bus: hs-i2c1-bus-pins {
- 		samsung,pins = "gpb0-2", "gpb0-3";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
+ 	raw_spin_unlock_irqrestore(&bank->slock, flags);
+diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
+index bfad1ced8017..7bd6d82c9f36 100644
+--- a/drivers/pinctrl/samsung/pinctrl-exynos.h
++++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
+@@ -16,6 +16,9 @@
+ #ifndef __PINCTRL_SAMSUNG_EXYNOS_H
+ #define __PINCTRL_SAMSUNG_EXYNOS_H
  
- 	hs_i2c2_bus: hs-i2c2-bus-pins {
- 		samsung,pins = "gpb0-4", "gpb0-5";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
++/* Values for the pin CON register */
++#define EXYNOS_PIN_CON_FUNC_EINT	0xf
++
+ /* External GPIO and wakeup interrupt related definitions */
+ #define EXYNOS_GPIO_ECON_OFFSET		0x700
+ #define EXYNOS_GPIO_EFLTCON_OFFSET	0x800
+diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
+index 26d309d2516d..4837bceb767b 100644
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.c
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+@@ -26,8 +26,6 @@
+ #include <linux/of_device.h>
+ #include <linux/spinlock.h>
  
- 	hs_i2c3_bus: hs-i2c3-bus-pins {
- 		samsung,pins = "gpb0-6", "gpb0-7";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
+-#include <dt-bindings/pinctrl/samsung.h>
+-
+ #include "../core.h"
+ #include "pinctrl-samsung.h"
  
- 	hs_i2c4_bus: hs-i2c4-bus-pins {
- 		samsung,pins = "gpb1-0", "gpb1-1";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
+@@ -614,7 +612,7 @@ static int samsung_gpio_set_direction(struct gpio_chip *gc,
+ 	data = readl(reg);
+ 	data &= ~(mask << shift);
+ 	if (!input)
+-		data |= EXYNOS_PIN_FUNC_OUTPUT << shift;
++		data |= PIN_CON_FUNC_OUTPUT << shift;
+ 	writel(data, reg);
  
- 	hs_i2c5_bus: hs-i2c5-bus-pins {
- 		samsung,pins = "gpb1-2", "gpb1-3";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	hs_i2c6_bus: hs-i2c6-bus-pins {
- 		samsung,pins = "gpb1-4", "gpb1-5";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	hs_i2c7_bus: hs-i2c7-bus-pins {
- 		samsung,pins = "gpb1-6", "gpb1-7";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	uart0_data: uart0-data-pins {
- 		samsung,pins = "gpb7-0", "gpb7-1";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	uart1_data: uart1-data-pins {
- 		samsung,pins = "gpb7-4", "gpb7-5";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_NONE>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	spi0_bus: spi0-bus-pins {
- 		samsung,pins = "gpb4-0", "gpb4-2", "gpb4-3";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	spi1_bus: spi1-bus-pins {
- 		samsung,pins = "gpb4-4", "gpb4-6", "gpb4-7";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- 
- 	spi2_bus: spi2-bus-pins {
- 		samsung,pins = "gpb5-0", "gpb5-2", "gpb5-3";
--		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
--		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
--		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
-+		samsung,pin-function = <FSD_PIN_FUNC_2>;
-+		samsung,pin-pud = <FSD_PIN_PULL_UP>;
-+		samsung,pin-drv = <FSD_PIN_DRV_LV1>;
- 	};
- };
- 
-diff --git a/arch/arm64/boot/dts/tesla/fsd-pinctrl.h b/arch/arm64/boot/dts/tesla/fsd-pinctrl.h
-new file mode 100644
-index 000000000000..6ffbda362493
---- /dev/null
-+++ b/arch/arm64/boot/dts/tesla/fsd-pinctrl.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+ 	return 0;
+diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.h b/drivers/pinctrl/samsung/pinctrl-samsung.h
+index fc6f5199c548..9af93e3d8d9f 100644
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.h
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.h
+@@ -53,6 +53,14 @@ enum pincfg_type {
+ #define PINCFG_UNPACK_TYPE(cfg)		((cfg) & PINCFG_TYPE_MASK)
+ #define PINCFG_UNPACK_VALUE(cfg)	(((cfg) & PINCFG_VALUE_MASK) >> \
+ 						PINCFG_VALUE_SHIFT)
 +/*
-+ * Tesla FSD DTS pinctrl constants
-+ *
-+ * Copyright (c) 2016 Samsung Electronics Co., Ltd.
-+ *		http://www.samsung.com
-+ * Copyright (c) 2022 Linaro Ltd
-+ * Author: Krzysztof Kozlowski <krzk@kernel.org>
++ * Values for the pin CON register, choosing pin function.
++ * The basic set (input and output) are same between: S3C24xx, S3C64xx, S5PV210,
++ * Exynos ARMv7, Exynos ARMv8, Tesla FSD.
 + */
++#define PIN_CON_FUNC_INPUT		0x0
++#define PIN_CON_FUNC_OUTPUT		0x1
 +
-+#ifndef __DTS_ARM64_TESLA_FSD_PINCTRL_H__
-+#define __DTS_ARM64_TESLA_FSD_PINCTRL_H__
-+
-+#define FSD_PIN_PULL_NONE		0
-+#define FSD_PIN_PULL_DOWN		1
-+#define FSD_PIN_PULL_UP			3
-+
-+#define FSD_PIN_DRV_LV1			0
-+#define FSD_PIN_DRV_LV2			2
-+#define FSD_PIN_DRV_LV3			1
-+#define FSD_PIN_DRV_LV4			3
-+
-+#define FSD_PIN_FUNC_INPUT		0
-+#define FSD_PIN_FUNC_OUTPUT		1
-+#define FSD_PIN_FUNC_2			2
-+#define FSD_PIN_FUNC_3			3
-+#define FSD_PIN_FUNC_4			4
-+#define FSD_PIN_FUNC_5			5
-+#define FSD_PIN_FUNC_6			6
-+#define FSD_PIN_FUNC_EINT		0xf
-+#define FSD_PIN_FUNC_F			FSD_PIN_FUNC_EINT
-+
-+#endif /* __DTS_ARM64_TESLA_FSD_PINCTRL_H__ */
+ /**
+  * enum eint_type - possible external interrupt types.
+  * @EINT_TYPE_NONE: bank does not support external interrupts
 -- 
 2.34.1
 

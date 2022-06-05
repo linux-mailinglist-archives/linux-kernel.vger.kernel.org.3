@@ -2,130 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153DC53DE94
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305CD53DE99
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351661AbiFEWOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        id S1348346AbiFEW0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245368AbiFEWOD (ORCPT
+        with ESMTP id S1348226AbiFEW0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:14:03 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C1A4A3C9
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 15:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654467242; x=1686003242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OqAu0TIQgKHqhNgNYHS6ymIPIAjfxpIImb7kHTeFIag=;
-  b=RC4Wh/1QUHtUzN5ho7pIZg2msKrh6OfBYO2LCLQKo7EAvqwmZaFpaXNJ
-   OAdyc4EB2Bjl2QW6uBS9KLLGuscDsWpEGsLglEMylUAZWviVB0dEk8UtA
-   TAkgwBQTjakvvDTly2SsEzmyB2RnaLlVEEOdbKQ8+JTjS/H0l/8ZuedIL
-   FsfVrTPO/FiUqKMLori/G3bOqr6LJfI5ncJz6nPHUCB8yjUkgDa/LCQWT
-   3SjsWiOdZ+EIQDKSEk9DSaN1n+6xdq7JcLN9gtew7SD9T3AmLagoLGW1e
-   pe2w2GBO6AKpPM1VZH1eaHE9XQr4NUxIDxmcgIJFnGE7lwO7OwjZtWgg1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="258741655"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="258741655"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 15:14:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="758314031"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2022 15:13:59 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxyVS-000CI3-CX;
-        Sun, 05 Jun 2022 22:13:58 +0000
-Date:   Mon, 6 Jun 2022 06:13:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v1 1/1] kernel.h: Move sysfs related macro to sysfs.h
-Message-ID: <202206060647.TvX3UWaq-lkp@intel.com>
-References: <20220603172101.49950-1-andriy.shevchenko@linux.intel.com>
+        Sun, 5 Jun 2022 18:26:11 -0400
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449974A3D2;
+        Sun,  5 Jun 2022 15:26:06 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id w3so10750265plp.13;
+        Sun, 05 Jun 2022 15:26:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A0xX55WDVN2TCBKlHQmNwVNo2vSS6BCodfPPsBHk1V8=;
+        b=pOHSlMeoXObLSs14T8eS2ESAikuV1yRl6rcOcp7FZ3Tf9zECFwyFjrOLBq2yUFzuvO
+         +3KWEDffqi1cE4BqHp08DPdMA5ASUOQlcjl5Xw4v7L89jYEk6BWJxfxBVnySkIzlCF0u
+         +tFz7b+aBLjGYp3WmWuYErTK0CsqgxnOn5OgULJYBeMUwi/iBd/6xg9sl2S6+whxKVIj
+         deYaahREVrqLB0z6X6BHhRh0S9qGGW4j4gQZ6JI9oKVcZU77Z0RTSbi6znOVuXhR7Ikb
+         Fd/REpgf88cXDhCg4cApMaU6ELfK1UoajQj20RWh6fxvcEzxYdyUtW7TwsNV0St+ljsb
+         pDZA==
+X-Gm-Message-State: AOAM530AhXiHh5DGR7LL4hFU9M+SyqagoIreHKCn93IZokLIR68ytHXM
+        MgHxGOM7FtvtNHxpAmjXWQ==
+X-Google-Smtp-Source: ABdhPJw4V7dBUOt5lYHG6MqKgO39dhWg60CiTCaUsqPrNWOOr+u0cpP6Sp4aX1nJL4oUxR4SRX6E+g==
+X-Received: by 2002:a17:90a:e642:b0:1e3:524e:4cb with SMTP id ep2-20020a17090ae64200b001e3524e04cbmr23034096pjb.114.1654467965532;
+        Sun, 05 Jun 2022 15:26:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:27d2:a39a:a9b9:e8bc:8bee:41d7])
+        by smtp.gmail.com with ESMTPSA id t19-20020a170902e1d300b00163d76696e1sm9050269pla.102.2022.06.05.15.26.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 15:26:05 -0700 (PDT)
+Received: (nullmailer pid 3638748 invoked by uid 1000);
+        Sun, 05 Jun 2022 22:26:03 -0000
+Date:   Sun, 5 Jun 2022 17:26:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/4] dt-bindings: power: supply: qcom,pm8941: document
+ usb-charge-current-limit
+Message-ID: <20220605222603.GA3638715-robh@kernel.org>
+References: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
+ <20220601071911.6435-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220603172101.49950-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220601071911.6435-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Wed, 01 Jun 2022 09:19:10 +0200, Krzysztof Kozlowski wrote:
+> Document already used (in DTS and by driver) 'usb-charge-current-limit'
+> property:
+> 
+>   arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dtb:
+>     charger@1000: 'usb-charge-current-limit' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/power/supply/qcom,pm8941-charger.yaml         | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v5.18 next-20220603]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/kernel-h-Move-sysfs-related-macro-to-sysfs-h/20220606-004344
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: arm-pcm027_defconfig (https://download.01.org/0day-ci/archive/20220606/202206060647.TvX3UWaq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 416a5080d89066029f9889dc23f94de47c2fa895)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/0fad3ce70c6f6736d3913e3238642a056f70b123
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/kernel-h-Move-sysfs-related-macro-to-sysfs-h/20220606-004344
-        git checkout 0fad3ce70c6f6736d3913e3238642a056f70b123
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/arm/mm/alignment.c:87:1: error: call to undeclared function 'VERIFY_OCTAL_PERMISSIONS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   core_param(alignment, ai_usermode, int, 0600);
-   ^
-   include/linux/moduleparam.h:330:2: note: expanded from macro 'core_param'
-           __module_param_call("", name, &param_ops_##type, &var, perm, -1, 0)
-           ^
-   include/linux/moduleparam.h:294:6: note: expanded from macro '__module_param_call'
-               VERIFY_OCTAL_PERMISSIONS(perm), level, flags, { arg } }
-               ^
->> arch/arm/mm/alignment.c:87:1: error: initializer element is not a compile-time constant
-   core_param(alignment, ai_usermode, int, 0600);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/moduleparam.h:330:2: note: expanded from macro 'core_param'
-           __module_param_call("", name, &param_ops_##type, &var, perm, -1, 0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/moduleparam.h:294:6: note: expanded from macro '__module_param_call'
-               VERIFY_OCTAL_PERMISSIONS(perm), level, flags, { arg } }
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/VERIFY_OCTAL_PERMISSIONS +87 arch/arm/mm/alignment.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  86  
-d944d549aa86e0 Russell King   2010-02-20 @87  core_param(alignment, ai_usermode, int, 0600);
-d944d549aa86e0 Russell King   2010-02-20  88  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Rob Herring <robh@kernel.org>

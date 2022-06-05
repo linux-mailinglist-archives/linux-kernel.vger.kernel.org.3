@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95CC53DB08
+	by mail.lfdr.de (Postfix) with ESMTP id 8D63553DB07
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 11:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351021AbiFEJbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 05:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S1351029AbiFEJbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 05:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350951AbiFEJbD (ORCPT
+        with ESMTP id S1350969AbiFEJbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 05:31:03 -0400
+        Sun, 5 Jun 2022 05:31:10 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B938B4D9C6
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 02:31:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D064DF74
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 02:31:03 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1654421460;
+        s=2020; t=1654421462;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=bLMt0Z3mozn69YUyEEwHHpPCZnBs1iTJtrnfvk1DGXw=;
-        b=WofOs0/R61RLeGSC4/qMbH+30ejgaiNZ463EzuiaPX6ihvoI0Pcp+LZje78ykrzUlo8+dk
-        qOlxZ8JnywrSq32zR23tURlmMGFCuaQUs2K7J1t5JXitqksM94A08GYe+IG2b/J2I6Md5L
-        z/v79O3TP5zR8bsa//RS4Z3Cc/9gH/953yVBmt6wF93hbjOkXd5dtwr7u1mpxzUCm1FR81
-        KFcX6TCAw7hAhX0RJD0J3qIC0DwT/7o3nRiGl1KlIypfGbONbr+Ypf+ghCxfbtDfh3HW2D
-        BPdmo6/4D+ur36JSyuKVFvlLtaEzOcITPSZLAe8rYiR/oLXWlz6sGW5R6PTsxQ==
+        bh=oAlJjxoBptySWNVe/XYcpfjssL2B4XydOblVlpkAz/g=;
+        b=MGX2aZ2/vb3Qz3nwFSO6ARJY/nxgeHF1qcPhSxefC4MQvRBv+tGr+/4w38BWTlZTkuhWFz
+        mQhUMlq3F2OoM1YQtwrG9++gVuq+LbiGNRONIq23IEc0E4TuZeWTlNHqlUFvJuaQ8fEonY
+        fKYG5lvMxxUEl4bSw11qSWzbQrYArTQAlmXVoaptfYnxHkc2059ah7a+ZrmfqSVzKZJ9Qj
+        IkKZ1oXuRsy70IxtvgwyTEWyXs4UJ56sG3khw0BWoFCCtHQBzaoie2NNCrZC6qTwZOwEbD
+        ubzv092scZm23jmdY1kOCpFesI+FTUJAOxzgng78KEi0978Ji4w29+XjCAmb5w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1654421460;
+        s=2020e; t=1654421462;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:  references:references;
-        bh=bLMt0Z3mozn69YUyEEwHHpPCZnBs1iTJtrnfvk1DGXw=;
-        b=THi5GXtrfNVjFiU+eX+0KDuKm5PpjNicPBbuRpxhwPV+c0ZXTPnabQ95Kt9VBLvAdlhKBE
-        ucEcPsAsmMPQ9RDQ==
+        bh=oAlJjxoBptySWNVe/XYcpfjssL2B4XydOblVlpkAz/g=;
+        b=+Je8cjdipGevZVj7xckhsouId7jape5po3OH8+gobwUrdEQKVaPuuFgV5RBifaup5Are/U
+        eZXGusvEJtFE5OCg==
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] x86/cleanups for v5.19-rc1
+Subject: [GIT pull] x86/microcode for v5.19-rc1
 References: <165442136963.152751.14259048792272164569.tglx@xen13>
-Message-ID: <165442137838.152751.6839806816555222572.tglx@xen13>
+Message-ID: <165442137983.152751.6786767046026742462.tglx@xen13>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Date:   Sun,  5 Jun 2022 11:30:59 +0200 (CEST)
+Date:   Sun,  5 Jun 2022 11:31:01 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -56,372 +56,281 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Linus,
 
-please pull the latest x86/cleanups branch from:
+please pull the latest x86/microcode branch from:
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-cleanups-202=
-2-06-05
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-microcode-20=
+22-06-05
 
-up to:  f7081834b2d5: x86: Fix all occurences of the "the the" typo
+up to:  0c0fe08c7648: x86/microcode: Remove unnecessary perf callback
 
 
-A set of small x86 cleanups:
+X86 microcode updates:
 
-  - Remove unused headers in the IDT code
- =20
-  - Kconfig indendation and comment fixes
+  - Disable late microcode loading by default. Unless the HW people get
+    their act together and provide a required minimum version in the
+    microcode header for making a halfways informed decision its just
+    lottery and broken.
 
-  - Fix all 'the the' typos in one go instead of waiting for bots to fix
-    one at a time.
+  - Warn and taint the kernel when microcode is loaded late
+
+  - Remove the old unused microcode loader interface
+
+  - Remove a redundant perf callback from the microcode loader
 
 Thanks,
 
 	tglx
 
 ------------------>
-Bo Liu (1):
-      x86: Fix all occurences of the "the the" typo
-
-Juerg Haefliger (2):
-      x86/Kconfig: Fix indentation and add endif comments to arch/x86/Kconfig
-      x86/Kconfig: Fix indentation of arch/x86/Kconfig.debug
-
-sunliming (1):
-      x86/idt: Remove unused headers
+Borislav Petkov (4):
+      x86/microcode: Rip out the OLD_INTERFACE
+      x86/microcode: Default-disable late loading
+      x86/microcode: Taint and warn on late loading
+      x86/microcode: Remove unnecessary perf callback
 
 
- arch/x86/Kconfig                     | 101 +++++++++++++++++----------------=
+ arch/x86/Kconfig                     |  15 +++--
+ arch/x86/kernel/cpu/common.c         |   2 +
+ arch/x86/kernel/cpu/microcode/core.c | 115 ++++-----------------------------=
 --
- arch/x86/Kconfig.debug               |  29 +++++-----
- arch/x86/kernel/tracepoint.c         |   3 --
- arch/x86/kvm/vmx/vmx.c               |   2 +-
- arch/x86/kvm/x86.c                   |   2 +-
- arch/x86/platform/efi/efi_thunk_64.S |   2 +-
- 6 files changed, 66 insertions(+), 73 deletions(-)
+ 3 files changed, 20 insertions(+), 112 deletions(-)
 
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 762a0b6ab8b6..4d610ae216ce 100644
+index 762a0b6ab8b6..976309d57a58 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -41,11 +41,11 @@ config FORCE_DYNAMIC_FTRACE
- 	depends on FUNCTION_TRACER
- 	select DYNAMIC_FTRACE
+@@ -1350,17 +1350,16 @@ config MICROCODE_AMD
+ 	  If you select this option, microcode patch loading support for AMD
+ 	  processors will be enabled.
+=20
+-config MICROCODE_OLD_INTERFACE
+-	bool "Ancient loading interface (DEPRECATED)"
++config MICROCODE_LATE_LOADING
++	bool "Late microcode loading (DANGEROUS)"
+ 	default n
+ 	depends on MICROCODE
  	help
--	 We keep the static function tracing (!DYNAMIC_FTRACE) around
--	 in order to test the non static function tracing in the
--	 generic code, as other architectures still use it. But we
--	 only need to keep it around for x86_64. No need to keep it
--	 for x86_32. For x86_32, force DYNAMIC_FTRACE.=20
-+	  We keep the static function tracing (!DYNAMIC_FTRACE) around
-+	  in order to test the non static function tracing in the
-+	  generic code, as other architectures still use it. But we
-+	  only need to keep it around for x86_64. No need to keep it
-+	  for x86_32. For x86_32, force DYNAMIC_FTRACE.
- #
- # Arch settings
- #
-@@ -392,9 +392,9 @@ config CC_HAS_SANE_STACKPROTECTOR
- 	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC=
-)) if 64BIT
- 	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC=
-))
- 	help
--	   We have to make sure stack protector is unconditionally disabled if
--	   the compiler produces broken code or if it does not let us control
--	   the segment on 32-bit kernels.
-+	  We have to make sure stack protector is unconditionally disabled if
-+	  the compiler produces broken code or if it does not let us control
-+	  the segment on 32-bit kernels.
+-	  DO NOT USE THIS! This is the ancient /dev/cpu/microcode interface
+-	  which was used by userspace tools like iucode_tool and microcode.ctl.
+-	  It is inadequate because it runs too late to be able to properly
+-	  load microcode on a machine and it needs special tools. Instead, you
+-	  should've switched to the early loading method with the initrd or
+-	  builtin microcode by now: Documentation/x86/microcode.rst
++	  Loading microcode late, when the system is up and executing instructions
++	  is a tricky business and should be avoided if possible. Just the sequence
++	  of synchronizing all cores and SMT threads is one fragile dance which does
++	  not guarantee that cores might not softlock after the loading. Therefore,
++	  use this at your own risk. Late loading taints the kernel too.
 =20
- menu "Processor type and features"
+ config X86_MSR
+ 	tristate "/dev/cpu/*/msr - Model-specific register support"
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 2e9142797c99..c296cb1c0113 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -2222,6 +2222,7 @@ void cpu_init_secondary(void)
+ }
+ #endif
 =20
-@@ -530,7 +530,7 @@ config X86_EXTENDED_PLATFORM
++#ifdef CONFIG_MICROCODE_LATE_LOADING
+ /*
+  * The microcode loader calls this upon late microcode load to recheck featu=
+res,
+  * only when microcode has been updated. Caller holds microcode_mutex and CPU
+@@ -2251,6 +2252,7 @@ void microcode_check(void)
+ 	pr_warn("x86/CPU: CPU features have changed after loading microcode, but mi=
+ght not take effect.\n");
+ 	pr_warn("x86/CPU: Please consider either early loading through initrd/built=
+-in or a potential BIOS update.\n");
+ }
++#endif
 =20
- 	  If you have one of these systems, or if you want to build a
- 	  generic distribution kernel, say Y here - otherwise say N.
--endif
-+endif # X86_32
+ /*
+  * Invoked from core CPU hotplug code after hotplug operations
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/micro=
+code/core.c
+index 239ff5fcec6a..ad57e0e4d674 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -373,101 +373,10 @@ static int apply_microcode_on_target(int cpu)
+ 	return ret;
+ }
 =20
- if X86_64
- config X86_EXTENDED_PLATFORM
-@@ -549,7 +549,7 @@ config X86_EXTENDED_PLATFORM
-=20
- 	  If you have one of these systems, or if you want to build a
- 	  generic distribution kernel, say Y here - otherwise say N.
--endif
-+endif # X86_64
- # This is an alphabetically sorted list of 64 bit extended platforms
- # Please maintain the alphabetic order if and when there are additions
- config X86_NUMACHIP
-@@ -597,9 +597,9 @@ config X86_GOLDFISH
- 	bool "Goldfish (Virtual Platform)"
- 	depends on X86_EXTENDED_PLATFORM
- 	help
--	 Enable support for the Goldfish virtual platform used primarily
--	 for Android development. Unless you are building for the Android
--	 Goldfish emulator say N here.
-+	  Enable support for the Goldfish virtual platform used primarily
-+	  for Android development. Unless you are building for the Android
-+	  Goldfish emulator say N here.
-=20
- config X86_INTEL_CE
- 	bool "CE4100 TV platform"
-@@ -898,7 +898,7 @@ config INTEL_TDX_GUEST
- 	  memory contents and CPU state. TDX guests are protected from
- 	  some attacks from the VMM.
-=20
--endif #HYPERVISOR_GUEST
-+endif # HYPERVISOR_GUEST
-=20
- source "arch/x86/Kconfig.cpu"
-=20
-@@ -1159,16 +1159,16 @@ config X86_MCE_INTEL
- 	prompt "Intel MCE features"
- 	depends on X86_MCE && X86_LOCAL_APIC
- 	help
--	   Additional support for intel specific MCE features such as
--	   the thermal monitor.
-+	  Additional support for intel specific MCE features such as
-+	  the thermal monitor.
-=20
- config X86_MCE_AMD
- 	def_bool y
- 	prompt "AMD MCE features"
- 	depends on X86_MCE && X86_LOCAL_APIC && AMD_NB
- 	help
--	   Additional support for AMD specific MCE features such as
--	   the DRAM Error Threshold.
-+	  Additional support for AMD specific MCE features such as
-+	  the DRAM Error Threshold.
-=20
- config X86_ANCIENT_MCE
- 	bool "Support for old Pentium 5 / WinChip machine checks"
-@@ -1246,18 +1246,18 @@ config X86_VSYSCALL_EMULATION
- 	default y
- 	depends on X86_64
- 	help
--	 This enables emulation of the legacy vsyscall page.  Disabling
--	 it is roughly equivalent to booting with vsyscall=3Dnone, except
--	 that it will also disable the helpful warning if a program
--	 tries to use a vsyscall.  With this option set to N, offending
--	 programs will just segfault, citing addresses of the form
--	 0xffffffffff600?00.
-+	  This enables emulation of the legacy vsyscall page.  Disabling
-+	  it is roughly equivalent to booting with vsyscall=3Dnone, except
-+	  that it will also disable the helpful warning if a program
-+	  tries to use a vsyscall.  With this option set to N, offending
-+	  programs will just segfault, citing addresses of the form
-+	  0xffffffffff600?00.
-=20
--	 This option is required by many programs built before 2013, and
--	 care should be used even with newer programs if set to N.
-+	  This option is required by many programs built before 2013, and
-+	  care should be used even with newer programs if set to N.
-=20
--	 Disabling this option saves about 7K of kernel size and
--	 possibly 4K of additional runtime pagetable memory.
-+	  Disabling this option saves about 7K of kernel size and
-+	  possibly 4K of additional runtime pagetable memory.
-=20
- config X86_IOPL_IOPERM
- 	bool "IOPERM and IOPL Emulation"
-@@ -1994,15 +1994,15 @@ config EFI_MIXED
- 	bool "EFI mixed-mode support"
- 	depends on EFI_STUB && X86_64
- 	help
--	   Enabling this feature allows a 64-bit kernel to be booted
--	   on a 32-bit firmware, provided that your CPU supports 64-bit
--	   mode.
-+	  Enabling this feature allows a 64-bit kernel to be booted
-+	  on a 32-bit firmware, provided that your CPU supports 64-bit
-+	  mode.
-=20
--	   Note that it is not possible to boot a mixed-mode enabled
--	   kernel via the EFI boot stub - a bootloader that supports
--	   the EFI handover protocol must be used.
-+	  Note that it is not possible to boot a mixed-mode enabled
-+	  kernel via the EFI boot stub - a bootloader that supports
-+	  the EFI handover protocol must be used.
-=20
--	   If unsure, say N.
-+	  If unsure, say N.
-=20
- source "kernel/Kconfig.hz"
-=20
-@@ -2227,16 +2227,16 @@ config RANDOMIZE_MEMORY
- 	select DYNAMIC_MEMORY_LAYOUT
- 	default RANDOMIZE_BASE
- 	help
--	   Randomizes the base virtual address of kernel memory sections
--	   (physical memory mapping, vmalloc & vmemmap). This security feature
--	   makes exploits relying on predictable memory locations less reliable.
-+	  Randomizes the base virtual address of kernel memory sections
-+	  (physical memory mapping, vmalloc & vmemmap). This security feature
-+	  makes exploits relying on predictable memory locations less reliable.
-=20
--	   The order of allocations remains unchanged. Entropy is generated in
--	   the same way as RANDOMIZE_BASE. Current implementation in the optimal
--	   configuration have in average 30,000 different possible virtual
--	   addresses for each memory section.
-+	  The order of allocations remains unchanged. Entropy is generated in
-+	  the same way as RANDOMIZE_BASE. Current implementation in the optimal
-+	  configuration have in average 30,000 different possible virtual
-+	  addresses for each memory section.
-=20
--	   If unsure, say Y.
-+	  If unsure, say Y.
-=20
- config RANDOMIZE_MEMORY_PHYSICAL_PADDING
- 	hex "Physical memory mapping padding" if EXPERT
-@@ -2246,12 +2246,12 @@ config RANDOMIZE_MEMORY_PHYSICAL_PADDING
- 	range 0x1 0x40 if MEMORY_HOTPLUG
- 	range 0x0 0x40
- 	help
--	   Define the padding in terabytes added to the existing physical
--	   memory size during kernel memory randomization. It is useful
--	   for memory hotplug support but reduces the entropy available for
--	   address randomization.
-+	  Define the padding in terabytes added to the existing physical
-+	  memory size during kernel memory randomization. It is useful
-+	  for memory hotplug support but reduces the entropy available for
-+	  address randomization.
-=20
--	   If unsure, leave at the default value.
-+	  If unsure, leave at the default value.
-=20
- config HOTPLUG_CPU
- 	def_bool y
-@@ -2598,7 +2598,6 @@ source "drivers/idle/Kconfig"
-=20
- endmenu
-=20
+-#ifdef CONFIG_MICROCODE_OLD_INTERFACE
+-static int do_microcode_update(const void __user *buf, size_t size)
+-{
+-	int error =3D 0;
+-	int cpu;
 -
- menu "Bus options (PCI etc.)"
-=20
- choice
-@@ -2822,7 +2821,6 @@ config AMD_NB
-=20
- endmenu
-=20
+-	for_each_online_cpu(cpu) {
+-		struct ucode_cpu_info *uci =3D ucode_cpu_info + cpu;
+-		enum ucode_state ustate;
 -
- menu "Binary Emulations"
-=20
- config IA32_EMULATION
-@@ -2867,11 +2865,10 @@ config COMPAT_FOR_U64_ALIGNMENT
- config SYSVIPC_COMPAT
- 	def_bool y
- 	depends on SYSVIPC
--endif
-+endif # COMPAT
-=20
- endmenu
-=20
+-		if (!uci->valid)
+-			continue;
 -
- config HAVE_ATOMIC_IOMAP
- 	def_bool y
- 	depends on X86_32
-diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
-index d872a7522e55..340399f69954 100644
---- a/arch/x86/Kconfig.debug
-+++ b/arch/x86/Kconfig.debug
-@@ -73,20 +73,19 @@ config DEBUG_TLBFLUSH
- 	bool "Set upper limit of TLB entries to flush one-by-one"
- 	depends on DEBUG_KERNEL
- 	help
-+	  X86-only for now.
-=20
--	X86-only for now.
-+	  This option allows the user to tune the amount of TLB entries the
-+	  kernel flushes one-by-one instead of doing a full TLB flush. In
-+	  certain situations, the former is cheaper. This is controlled by the
-+	  tlb_flushall_shift knob under /sys/kernel/debug/x86. If you set it
-+	  to -1, the code flushes the whole TLB unconditionally. Otherwise,
-+	  for positive values of it, the kernel will use single TLB entry
-+	  invalidating instructions according to the following formula:
-=20
--	This option allows the user to tune the amount of TLB entries the
--	kernel flushes one-by-one instead of doing a full TLB flush. In
--	certain situations, the former is cheaper. This is controlled by the
--	tlb_flushall_shift knob under /sys/kernel/debug/x86. If you set it
--	to -1, the code flushes the whole TLB unconditionally. Otherwise,
--	for positive values of it, the kernel will use single TLB entry
--	invalidating instructions according to the following formula:
-+	  flush_entries <=3D active_tlb_entries / 2^tlb_flushall_shift
-=20
--	flush_entries <=3D active_tlb_entries / 2^tlb_flushall_shift
+-		ustate =3D microcode_ops->request_microcode_user(cpu, buf, size);
+-		if (ustate =3D=3D UCODE_ERROR) {
+-			error =3D -1;
+-			break;
+-		} else if (ustate =3D=3D UCODE_NEW) {
+-			apply_microcode_on_target(cpu);
+-		}
+-	}
 -
--	If in doubt, say "N".
-+	  If in doubt, say "N".
+-	return error;
+-}
+-
+-static int microcode_open(struct inode *inode, struct file *file)
+-{
+-	return capable(CAP_SYS_RAWIO) ? stream_open(inode, file) : -EPERM;
+-}
+-
+-static ssize_t microcode_write(struct file *file, const char __user *buf,
+-			       size_t len, loff_t *ppos)
+-{
+-	ssize_t ret =3D -EINVAL;
+-	unsigned long nr_pages =3D totalram_pages();
+-
+-	if ((len >> PAGE_SHIFT) > nr_pages) {
+-		pr_err("too much data (max %ld pages)\n", nr_pages);
+-		return ret;
+-	}
+-
+-	cpus_read_lock();
+-	mutex_lock(&microcode_mutex);
+-
+-	if (do_microcode_update(buf, len) =3D=3D 0)
+-		ret =3D (ssize_t)len;
+-
+-	if (ret > 0)
+-		perf_check_microcode();
+-
+-	mutex_unlock(&microcode_mutex);
+-	cpus_read_unlock();
+-
+-	return ret;
+-}
+-
+-static const struct file_operations microcode_fops =3D {
+-	.owner			=3D THIS_MODULE,
+-	.write			=3D microcode_write,
+-	.open			=3D microcode_open,
+-	.llseek		=3D no_llseek,
+-};
+-
+-static struct miscdevice microcode_dev =3D {
+-	.minor			=3D MICROCODE_MINOR,
+-	.name			=3D "microcode",
+-	.nodename		=3D "cpu/microcode",
+-	.fops			=3D &microcode_fops,
+-};
+-
+-static int __init microcode_dev_init(void)
+-{
+-	int error;
+-
+-	error =3D misc_register(&microcode_dev);
+-	if (error) {
+-		pr_err("can't misc_register on minor=3D%d\n", MICROCODE_MINOR);
+-		return error;
+-	}
+-
+-	return 0;
+-}
+-
+-static void __exit microcode_dev_exit(void)
+-{
+-	misc_deregister(&microcode_dev);
+-}
+-#else
+-#define microcode_dev_init()	0
+-#define microcode_dev_exit()	do { } while (0)
+-#endif
+-
+ /* fake device for request_firmware */
+ static struct platform_device	*microcode_pdev;
 =20
- config IOMMU_DEBUG
- 	bool "Enable IOMMU debugging"
-@@ -119,10 +118,10 @@ config X86_DECODER_SELFTEST
- 	depends on DEBUG_KERNEL && INSTRUCTION_DECODER
- 	depends on !COMPILE_TEST
- 	help
--	 Perform x86 instruction decoder selftests at build time.
--	 This option is useful for checking the sanity of x86 instruction
--	 decoder code.
--	 If unsure, say "N".
-+	  Perform x86 instruction decoder selftests at build time.
-+	  This option is useful for checking the sanity of x86 instruction
-+	  decoder code.
-+	  If unsure, say "N".
-=20
- choice
- 	prompt "IO delay type"
-diff --git a/arch/x86/kernel/tracepoint.c b/arch/x86/kernel/tracepoint.c
-index fcfc077afe2d..f39aad69fb64 100644
---- a/arch/x86/kernel/tracepoint.c
-+++ b/arch/x86/kernel/tracepoint.c
-@@ -8,10 +8,7 @@
- #include <linux/jump_label.h>
- #include <linux/atomic.h>
-=20
--#include <asm/hw_irq.h>
--#include <asm/desc.h>
- #include <asm/trace/exceptions.h>
--#include <asm/trace/irq_vectors.h>
-=20
- DEFINE_STATIC_KEY_FALSE(trace_pagefault_key);
-=20
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 610355b9ccce..2a67350d93d2 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6221,7 +6221,7 @@ static noinstr void vmx_l1d_flush(struct kvm_vcpu *vcpu)
- 	int size =3D PAGE_SIZE << L1D_CACHE_ORDER;
-=20
- 	/*
--	 * This code is only executed when the the flush mode is 'cond' or
-+	 * This code is only executed when the flush mode is 'cond' or
- 	 * 'always'
- 	 */
- 	if (static_branch_likely(&vmx_l1d_flush_cond)) {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4790f0d7d40b..5f11d7bc6ef4 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11855,7 +11855,7 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
- 	if (current->mm =3D=3D kvm->mm) {
- 		/*
- 		 * Free memory regions allocated on behalf of userspace,
--		 * unless the the memory map has changed due to process exit
-+		 * unless the memory map has changed due to process exit
- 		 * or fd copying.
- 		 */
- 		mutex_lock(&kvm->slots_lock);
-diff --git a/arch/x86/platform/efi/efi_thunk_64.S b/arch/x86/platform/efi/efi=
-_thunk_64.S
-index 854dd81804b7..9ffe2bad27d5 100644
---- a/arch/x86/platform/efi/efi_thunk_64.S
-+++ b/arch/x86/platform/efi/efi_thunk_64.S
-@@ -8,7 +8,7 @@
-  * The below thunking functions are only used after ExitBootServices()
-  * has been called. This simplifies things considerably as compared with
-  * the early EFI thunking because we can leave all the kernel state
-- * intact (GDT, IDT, etc) and simply invoke the the 32-bit EFI runtime
-+ * intact (GDT, IDT, etc) and simply invoke the 32-bit EFI runtime
-  * services from __KERNEL32_CS. This means we can continue to service
-  * interrupts across an EFI mixed mode call.
++#ifdef CONFIG_MICROCODE_LATE_LOADING
+ /*
+  * Late loading dance. Why the heavy-handed stomp_machine effort?
   *
+@@ -584,6 +493,9 @@ static int microcode_reload_late(void)
+ {
+ 	int ret;
+=20
++	pr_err("Attempting late microcode loading - it is dangerous and taints the =
+kernel.\n");
++	pr_err("You should switch to early loading, if possible.\n");
++
+ 	atomic_set(&late_cpus_in,  0);
+ 	atomic_set(&late_cpus_out, 0);
+=20
+@@ -632,9 +544,14 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret =3D=3D 0)
+ 		ret =3D size;
+=20
++	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++
+ 	return ret;
+ }
+=20
++static DEVICE_ATTR_WO(reload);
++#endif
++
+ static ssize_t version_show(struct device *dev,
+ 			struct device_attribute *attr, char *buf)
+ {
+@@ -651,7 +568,6 @@ static ssize_t pf_show(struct device *dev,
+ 	return sprintf(buf, "0x%x\n", uci->cpu_sig.pf);
+ }
+=20
+-static DEVICE_ATTR_WO(reload);
+ static DEVICE_ATTR(version, 0444, version_show, NULL);
+ static DEVICE_ATTR(processor_flags, 0444, pf_show, NULL);
+=20
+@@ -804,7 +720,9 @@ static int mc_cpu_down_prep(unsigned int cpu)
+ }
+=20
+ static struct attribute *cpu_root_microcode_attrs[] =3D {
++#ifdef CONFIG_MICROCODE_LATE_LOADING
+ 	&dev_attr_reload.attr,
++#endif
+ 	NULL
+ };
+=20
+@@ -838,10 +756,7 @@ static int __init microcode_init(void)
+=20
+ 	cpus_read_lock();
+ 	mutex_lock(&microcode_mutex);
+-
+ 	error =3D subsys_interface_register(&mc_cpu_interface);
+-	if (!error)
+-		perf_check_microcode();
+ 	mutex_unlock(&microcode_mutex);
+ 	cpus_read_unlock();
+=20
+@@ -856,10 +771,6 @@ static int __init microcode_init(void)
+ 		goto out_driver;
+ 	}
+=20
+-	error =3D microcode_dev_init();
+-	if (error)
+-		goto out_ucode_group;
+-
+ 	register_syscore_ops(&mc_syscore_ops);
+ 	cpuhp_setup_state_nocalls(CPUHP_AP_MICROCODE_LOADER, "x86/microcode:startin=
+g",
+ 				  mc_cpu_starting, NULL);
+@@ -870,10 +781,6 @@ static int __init microcode_init(void)
+=20
+ 	return 0;
+=20
+- out_ucode_group:
+-	sysfs_remove_group(&cpu_subsys.dev_root->kobj,
+-			   &cpu_root_microcode_group);
+-
+  out_driver:
+ 	cpus_read_lock();
+ 	mutex_lock(&microcode_mutex);
 

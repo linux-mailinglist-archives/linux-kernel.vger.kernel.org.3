@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8E853DA4E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 07:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1CD53DA55
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 08:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244049AbiFEFvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 01:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S1349199AbiFEGAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 02:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiFEFvm (ORCPT
+        with ESMTP id S244081AbiFEGAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 01:51:42 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C986620F5F;
-        Sat,  4 Jun 2022 22:51:41 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id bo5so10300246pfb.4;
-        Sat, 04 Jun 2022 22:51:41 -0700 (PDT)
+        Sun, 5 Jun 2022 02:00:48 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF24C20F6D
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 23:00:47 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id o17so9813121pla.6
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 23:00:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xvSt0AKHTEKrJ0jlJnO67OfEugds1dmz8a43+lRd6EA=;
-        b=ldRwqD9PV/gagyZd0fUfRP37tUfOfD0L/Dg87ohbmuwNSDfPFAXhji1LAJSMypxlMD
-         0ASo53zaJ/GxC8pLYV7muYNsnhXxu8xdPt39wFIujRIuae+nWT//CS/iMbSzjNIx8exS
-         Jowq9CIF35yK+JUb2ftbj0IeyyAyIOji7nJACK6dGXTykpA50j6o7cM8OsrjzTSWZo7r
-         QOEWiYC7WMaTik8u4aw4oO2E3ZrUcX6yStjHnDpgtbfzhq+YaduZuB+BgGGIYJAQ2rMk
-         jJrFbzkIg3+DHVbYfupitcH9TpkAYRugEoSbrC7A5+/BJpJWMtSTA+LBEQK87Ei2kmuw
-         gznw==
+        bh=ysE83jJ6Rj+KdZGwx/lN3TOtV5szciIQ5SeiJ9lm3xA=;
+        b=joXN6VFa/zS212kRkOBaaslZIZEQNAfdrdmvPnu+pzGUBcrZpZuD06kbp6765/EtU9
+         EoaVxbNVy4GA+ThTyiF4OryCeG8K9CFVSJrndLz+aG9hmXCxsaZGS/ZFQo8lN3Vvey5B
+         jObFZluzuTcxUcNaoSIbJGLe3HAdzqjCzCqExCv6QghAeUxWCKhK8HxMGixvX3p6QWSY
+         2gH56QB6cqxbjreb5BdAjGDsWaUfvh9wHHWK8/fIHTKLH7kIc1a9nAvp4j8vXuadrkKp
+         ALwEe2roz4Lf9CdKjwVyGtPKuCVwjS6P1gw4QFWthyXHI2jS0TPT7BKAdzE9MtAFaWrK
+         nUCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xvSt0AKHTEKrJ0jlJnO67OfEugds1dmz8a43+lRd6EA=;
-        b=twr9HXqFELF2hpST2doVlwZgIjOOd0fMxvoNYhh6j2eKqmtEg5ZsZW1E2SGoiZ7ne9
-         Vwdx/9K3P+ZOKZVtMS34nmTPV1fpqVg2GrFCD+qAF9Rb2Czh8pvmHacTRDgAHMNlqOVC
-         mdY6N7KGHOYFtYXMb4Wu3znc5/Qc3DHz8wmjZUGyv6r0N639xD8f4hEOxnyO9qweOgGJ
-         Ffxwsb5ONFlqLKBu2aesNQhNxLc6gIIwh3nytOZxXjae3yYL4EUvSW/UFSDZQ2Xwt+Nv
-         2GIHg5ix3p5Og3VOyZQkibcxkQua0+ZJaz8gjba8clGdo32PsCr+cDGNsb5Ehue7khQu
-         EKMA==
-X-Gm-Message-State: AOAM533zvJUOti6udAtMT4iSAkJPusxc5jk3hOkzEmoplBFOdTxhRl5c
-        iwb8CI5Mt2AW3BT/dQ7cNXZJ/tJHaEhThW4a
-X-Google-Smtp-Source: ABdhPJxaB243sNnKHjxSjb5LVQPz6UCeFE8rsCRlktjT3gE7xBxb28KZlKrHyxew/xfQRoOjgbS+mg==
-X-Received: by 2002:a05:6a00:1805:b0:51c:3a7:54dc with SMTP id y5-20020a056a00180500b0051c03a754dcmr3134938pfa.15.1654408301252;
-        Sat, 04 Jun 2022 22:51:41 -0700 (PDT)
+        bh=ysE83jJ6Rj+KdZGwx/lN3TOtV5szciIQ5SeiJ9lm3xA=;
+        b=4LrtieG8n1quRgzXby8vLVs9yct6RVMRlIP3jp+TXb9CjRQDgyT99Zxfe9NDEi7A6b
+         UrUEqVSeLWvTGnPkpeK4kFgJgQ0rfSrmSyHk6z0M54zKNANAFDc58Y+DHuBE6LANuvq3
+         D373uRoBqIGNGfDP18X8qOZc4JBKtlhlbvH0cNoUeewar5rUodlNF7ecLjEdspndsbee
+         mGXLNk0OflkHehZYxfjVZua/oKfyz3gUacwKUfpH5Vldrv9TNWjribze0BTfzq70RvNb
+         SYInHUdz+VngPgOVOJitK8RMFQ9oAco7yC1YyzjDEm3bWDQUKJFrr4J/9spe4KHQc68H
+         Dl2w==
+X-Gm-Message-State: AOAM532DHN3x/7Ra3Y0OoFaGTIBwrq7pSy8k4aktI60P7qkxnt9AEIOT
+        APtJh5zPWfesPE2qkjfoUIQ=
+X-Google-Smtp-Source: ABdhPJzSRKj0blBkRBlUSCMYcB5IWuG6qNWQy7Pw40C6ZLjK3F/KhvGCZsmWFO9s6iL2JV3BzxFJ6w==
+X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id l5-20020a170903120500b0015e8cbcfd2bmr18105312plh.99.1654408847301;
+        Sat, 04 Jun 2022 23:00:47 -0700 (PDT)
 Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id dw15-20020a17090b094f00b001e0b971196csm10161239pjb.57.2022.06.04.22.51.37
+        by smtp.googlemail.com with ESMTPSA id k189-20020a6384c6000000b003fcde69fea5sm6261014pgd.81.2022.06.04.23.00.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 22:51:40 -0700 (PDT)
+        Sat, 04 Jun 2022 23:00:46 -0700 (PDT)
 From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Lombard <clombard@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH] PCI: microchip: Fix refcount leak in mc_pcie_init_irq_domains
-Date:   Sun,  5 Jun 2022 09:51:23 +0400
-Message-Id: <20220605055123.59127-1-linmq006@gmail.com>
+Subject: [PATCH] cxl: Fix refcount leak in cxl_calc_capp_routing
+Date:   Sun,  5 Jun 2022 10:00:38 +0400
+Message-Id: <20220605060038.62217-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,36 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_next_child() returns a node pointer with refcount incremented,
+of_get_next_parent() returns a node pointer with refcount incremented,
 we should use of_node_put() on it when not need anymore.
-This function only call of_node_put() in normal path,
-missing it in some error paths.
+This function only calls of_node_put() in normal path,
+missing it in the error path.
 Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 6f15a9c9f941 ("PCI: microchip: Add Microchip PolarFire PCIe controller driver")
+Fixes: f24be42aab37 ("cxl: Add psl9 specific code")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/pci/controller/pcie-microchip-host.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/misc/cxl/pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/controller/pcie-microchip-host.c
-index dd5dba419047..7263d175b5ad 100644
---- a/drivers/pci/controller/pcie-microchip-host.c
-+++ b/drivers/pci/controller/pcie-microchip-host.c
-@@ -904,6 +904,7 @@ static int mc_pcie_init_irq_domains(struct mc_pcie *port)
- 						   &event_domain_ops, port);
- 	if (!port->event_domain) {
- 		dev_err(dev, "failed to get event domain\n");
-+		of_node_put(pcie_intc_node);
- 		return -ENOMEM;
- 	}
- 
-@@ -913,6 +914,7 @@ static int mc_pcie_init_irq_domains(struct mc_pcie *port)
- 						  &intx_domain_ops, port);
- 	if (!port->intx_domain) {
- 		dev_err(dev, "failed to get an INTx IRQ domain\n");
-+		of_node_put(pcie_intc_node);
- 		return -ENOMEM;
+diff --git a/drivers/misc/cxl/pci.c b/drivers/misc/cxl/pci.c
+index 3de0aea62ade..62385a529d86 100644
+--- a/drivers/misc/cxl/pci.c
++++ b/drivers/misc/cxl/pci.c
+@@ -387,6 +387,7 @@ int cxl_calc_capp_routing(struct pci_dev *dev, u64 *chipid,
+ 	rc = get_phb_index(np, phb_index);
+ 	if (rc) {
+ 		pr_err("cxl: invalid phb index\n");
++		of_node_put(np);
+ 		return rc;
  	}
  
 -- 

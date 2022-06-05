@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E259053DEA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A9F53DEA7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351698AbiFEWdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
+        id S1348403AbiFEWii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244959AbiFEWdF (ORCPT
+        with ESMTP id S244959AbiFEWif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:33:05 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F682B187;
-        Sun,  5 Jun 2022 15:33:04 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id j8so6561758qtn.13;
-        Sun, 05 Jun 2022 15:33:04 -0700 (PDT)
+        Sun, 5 Jun 2022 18:38:35 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B799A2C12F;
+        Sun,  5 Jun 2022 15:38:34 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id x16so6054645qtw.12;
+        Sun, 05 Jun 2022 15:38:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=W5FUZEWgXid+UZNLuv9VmImCB9UvWlmhwwsZUeJ7GNY=;
-        b=nwPsOTiK9KTL+060k68UeuOwvQV621w7cfxtDD8xa879cBLHwWbJlXnbzyChkTK2oZ
-         qcoCewDO1uqlPM44rXVTCBDRe9XfJKfYJBnLbE30B9kvZSiMAXQWLCUiGcaeI98Fv/PL
-         4L3DWjfqxo2ycSaHsX7XkditnOKjuWx2UHsD38pen0ft3aEHrvDpLoByJTopQDPiS07O
-         eavRRu3ehx9ij8l3W1u9GS30wBLGD9YX1k0ySUiOrzAiTS/zv8wfDdvDtrKdji+PIx5w
-         QhyciIrvA415wcFjqO2kNLODk1y47vtdLZ8ekOi/OGPdSMMRvzERLHKtA6IR7bp5Asif
-         6M3w==
-X-Gm-Message-State: AOAM530tyiNLVcYj4+0FPmPv/OYzWGnAV/tFIkHKU5BXGxCrbeQJOKDy
-        IJKmLJ47mbLZKo5K/43iAQ==
-X-Google-Smtp-Source: ABdhPJyf/HnFKPiL1MDwfz7fZQGkf6Qkiq528FYnixbNgRMJrs7mUo0ftMLRcq395U6d8NnXC+KWeQ==
-X-Received: by 2002:a05:622a:13c7:b0:2f3:aff5:f58c with SMTP id p7-20020a05622a13c700b002f3aff5f58cmr16203033qtk.511.1654468383642;
-        Sun, 05 Jun 2022 15:33:03 -0700 (PDT)
+        bh=2o4Si/ESwdinfrZMz9nTD0LmxXF7OLAHry8I5SkRmG4=;
+        b=ijt0QmnS78dPHQE8IYbojVcDJNBQBVSEgVBkxH9/J51mtI4fVcXF+KW51DkiST+jBU
+         /7wSiLSsSdbkeDdHEY4ZCgeNj5nqqUKDBlcMz7vvJ1lOBKl+brz3gIy1s7ypKl9JalXs
+         rECMmCVyOS7GVE9/ixmiyDyLQ66dzzLFA3/kVurzKJy9/CevCybfCpMd5StJuHEn2nLS
+         dC/ShF1BRdaJrsfRMPTIwfzMxoAZG+EF3rv05bLdlNfvqno+FTb0CKsj9TrfSmRqMs12
+         bRg1QapUOG81M3By53RLEseDAexmq8Ondgy9XEARdFmKvE5MiKUnQ3hR/+GMNzkEg4Ss
+         g6TQ==
+X-Gm-Message-State: AOAM533dPs6noLuNmOqX69dseiIb0S6knZcK4LGa0g0yciYClQDRP/Ve
+        uD2PtYVQ4U7wKJpJPmQ0Gg==
+X-Google-Smtp-Source: ABdhPJzSKRDnrny8BKo9He5QTFTcAXpqrnhpYOyi4zRLtD4q9a2RlGz5Mr2RHgWmvJf67C+lU0kTdg==
+X-Received: by 2002:ac8:7d49:0:b0:304:e4ce:3345 with SMTP id h9-20020ac87d49000000b00304e4ce3345mr7305436qtb.508.1654468713846;
+        Sun, 05 Jun 2022 15:38:33 -0700 (PDT)
 Received: from robh.at.kernel.org ([2607:fb90:1bdb:2e61:f12:452:5315:9c7e])
-        by smtp.gmail.com with ESMTPSA id u3-20020a372e03000000b006a323e60e29sm9944425qkh.135.2022.06.05.15.33.02
+        by smtp.gmail.com with ESMTPSA id w184-20020a3794c1000000b006a098381abcsm10168131qkd.114.2022.06.05.15.38.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 15:33:03 -0700 (PDT)
-Received: (nullmailer pid 3649150 invoked by uid 1000);
-        Sun, 05 Jun 2022 22:33:01 -0000
-Date:   Sun, 5 Jun 2022 17:33:01 -0500
+        Sun, 05 Jun 2022 15:38:33 -0700 (PDT)
+Received: (nullmailer pid 3657152 invoked by uid 1000);
+        Sun, 05 Jun 2022 22:38:30 -0000
+Date:   Sun, 5 Jun 2022 17:38:30 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+To:     Krishna <quic_mkrishn@quicinc.com>
+Cc:     devicetree@vger.kernel.org, quic_kalyant@quicinc.com,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: vendor-prefixes: document deprecated
- Atheros
-Message-ID: <20220605223301.GA3649070-robh@kernel.org>
-References: <20220601135222.205035-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v1] dt-bindings: msm: update maintainers list with proper
+ id
+Message-ID: <20220605223830.GA3657088-robh@kernel.org>
+References: <1654166998-14907-1-git-send-email-quic_mkrishn@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601135222.205035-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1654166998-14907-1-git-send-email-quic_mkrishn@quicinc.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,21 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Jun 2022 15:52:22 +0200, Krzysztof Kozlowski wrote:
-> Two old boards use "atheros" prefix instead of already documented "qca".
-> Document it as deprecated to fix warnings like:
+On Thu, 02 Jun 2022 16:19:58 +0530, Krishna wrote:
+> From: Krishna Manikandan <quic_mkrishn@quicinc.com>
 > 
->   at91-gatwick.dtb: atheros@0: 'atheros,board-id' does not match any of the regexes
+> Use quic id instead of codeaurora id in maintainers list
+> for display devicetree bindings.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+> Signed-off-by: Krishna Manikandan <quic_mkrishn@quicinc.com>
 > ---
-> 
-> Changes since v1:
-> 1. Rebase on Rob's dt/next branch.
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml          | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml          | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml          | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml        | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml        | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-20nm.yaml        | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml        | 2 +-
+>  Documentation/devicetree/bindings/display/msm/dsi-phy-common.yaml      | 2 +-
+>  9 files changed, 9 insertions(+), 9 deletions(-)
 > 
 
 Applied, thanks!

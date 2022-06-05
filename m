@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F78153DB33
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDE653DB35
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244316AbiFEKHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 06:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S245312AbiFEKKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 06:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237325AbiFEKHN (ORCPT
+        with ESMTP id S237325AbiFEKKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 06:07:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAA15FAD
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 03:07:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2653260EEC
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:07:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AE7C3411E
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:07:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654423629;
-        bh=ClDK8782jY9SXch9/nyH9tnpj6Ro9WPrcn8dDhjremU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZP+U9V/KeOiwrTdGVqsw+FGbKLYJimnD7LuvtKgH5xSmT0VRzn1nZXZxaQgD+4mP7
-         Vq9mkN7jbfQqE1GeLSiLENbYNrvUs35c1ptvtujeeXgm1s/VZE/0h38o0dhCLX9t0j
-         2EKAwM16iyEVCPFGnn7C2fYr6K4ICBy2R3EybRWBB/yLxKIxKPIRRp6EYz4gv1ixJ7
-         15b9Q24URIPErMqHbh3tLuRX5YbG7far6q7TsIZRgRE4bHz4bvigB1c8CX2zdLI8fo
-         fNiOehGWQnfR6E6/z5Z90WWHzaoagf5zREm53Z5cU5Ov5s96HYDm9v62y3YYEDSFBd
-         DuWDFZGhx3hOA==
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f83983782fso118866607b3.6
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 03:07:09 -0700 (PDT)
-X-Gm-Message-State: AOAM533nZ5nLTjSro114nOTfaQqsSU2GKMTMDpBaCIUFbUL0OE1rKbKJ
-        mgcEjVd2z0Z7gpo97G2Pmh0sg1sjHlylZ1pwSoY=
-X-Google-Smtp-Source: ABdhPJxpQl8PzINQwhvhllNaZ67Overstnq0FM09HFOlnuaHvNGim/VqGoRXfyRRzLcZtmj2LhABSMKktYdRlSDjpTk=
-X-Received: by 2002:a0d:f8c6:0:b0:2fe:ca9c:f937 with SMTP id
- i189-20020a0df8c6000000b002feca9cf937mr20855647ywf.62.1654423628632; Sun, 05
- Jun 2022 03:07:08 -0700 (PDT)
+        Sun, 5 Jun 2022 06:10:22 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA5B4664D;
+        Sun,  5 Jun 2022 03:10:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b8so15200731edf.11;
+        Sun, 05 Jun 2022 03:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=QmfLcAbHryy1IIAetYAoGcOfIXsKgWBW6y02L6ugeGg=;
+        b=qrflZFjk4SIwu4KFvRYQar/ZyKEsx6E+7C2J5p1wMoRQPvNGd6QaWt25q6izabVts6
+         eGnPM8+4keZhThLhHLV1vBs07tbXASxT0aOkhaFtbSobiaubZ4scWrotz71v3YCNnnGL
+         DA1NUE6QUTDDE2AGBFDYEsK4K5rgGREFtfc+o040TINXpgqG/7H/eiVgmsLEwg+HVu6G
+         AM1pMokTHyJibw/W/VYDJNHjPID0P1HBRjECCwu0K1Te8Uv6eEGMD81ZkU01JeC6/ZHu
+         ExGXQ+Xjh2EsM+yOFypCbYRjNGaKQjK7KsOq8VywvGDRZxTLDAdGGJlNB3rCSfFeQd/J
+         oZtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QmfLcAbHryy1IIAetYAoGcOfIXsKgWBW6y02L6ugeGg=;
+        b=AK/dHDEkNmUZxu6Wmh5Wavk560PcWbxZJMSgV57Zj2wKs+8BC+7Mb+UTHorBrF6gPq
+         OOKhJLaoITOPbOM/28fh5LM/jkgS/QTAjJVVmgfpMNxAB2rqrIFz56UOVhxUELFCM8XF
+         2q4MbYpX47qg8BR1GIHxh2Y7brs66uE1VO0P77o20Bqz8y/mF2B0zs8xdtdIssPyqfVX
+         8ss9NmDuZ06RuPSKo+RsakUnlkpK8oSglL5ihRPsIKg6nf5TjZJo8KHiRCbDjTREK1IY
+         i81U+jqTV+5oCIDiv+0/OjyH8dGHarBDvXNflD/KmKDmlDEbjdpbXyLD0UPQC6M4hCkO
+         OjIg==
+X-Gm-Message-State: AOAM533C5mhS6Ifh+UEj448AvFIFQNANFZmWBzeNZS2B32hv3Rk/r8/E
+        OWCnDZtGHcB9m46agnZfRXCX/2kROXU=
+X-Google-Smtp-Source: ABdhPJx4TyNHg+Dg3Z8vekoPEFjbwiNqG+9BWbHG9O4PBvtmEpiQDBoXvNAzJcm3Ofuon0iEnHjFMg==
+X-Received: by 2002:a05:6402:1f8c:b0:42d:c3a9:5beb with SMTP id c12-20020a0564021f8c00b0042dc3a95bebmr20396106edc.160.1654423818984;
+        Sun, 05 Jun 2022 03:10:18 -0700 (PDT)
+Received: from [192.168.0.104] (p5b3f6ffe.dip0.t-ipconnect.de. [91.63.111.254])
+        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b0070e1adff390sm2958588ejb.34.2022.06.05.03.10.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 03:10:18 -0700 (PDT)
+Message-ID: <afbec770-437d-0304-1ea8-637b613bc053@gmail.com>
+Date:   Sun, 5 Jun 2022 12:10:17 +0200
 MIME-Version: 1.0
-References: <20220602035827.18012-1-jiapeng.chong@linux.alibaba.com> <20220602035827.18012-2-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220602035827.18012-2-jiapeng.chong@linux.alibaba.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Sun, 5 Jun 2022 13:06:41 +0300
-X-Gmail-Original-Message-ID: <CAFCwf10dzga7D0KiSyat-B36xDbVssmukuHW0WUNvZ0RWmAjbg@mail.gmail.com>
-Message-ID: <CAFCwf10dzga7D0KiSyat-B36xDbVssmukuHW0WUNvZ0RWmAjbg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] habanalabs: Fix kernel-doc
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/4] regulator: mp5416: use OF match data
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220604145816.47576-1-robimarko@gmail.com>
+ <20220604145816.47576-3-robimarko@gmail.com>
+From:   saravanan sekar <sravanhome@gmail.com>
+In-Reply-To: <20220604145816.47576-3-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 6:58 AM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Fix the following W=1 kernel warnings:
->
-> drivers/misc/habanalabs/common/mmu/mmu_v1.c:425: warning: expecting
-> prototype for hl_mmu_fini(). Prototype was for hl_mmu_v1_fini() instead.
->
-> drivers/misc/habanalabs/common/mmu/mmu_v1.c:449: warning: expecting
-> prototype for hl_mmu_ctx_init(). Prototype was for hl_mmu_v1_ctx_init()
-> instead.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On 04/06/22 16:58, Robert Marko wrote:
+> In preparation for adding support for MP5496 which slightly differs from
+> MP5416 convert the driver to use OF match data instead of always using the
+> MP5416 regulator_desc for regulator registration.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->  drivers/misc/habanalabs/common/mmu/mmu_v1.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> index e2d91a69acc2..ad4b49281cd7 100644
-> --- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> +++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
-> @@ -412,7 +412,7 @@ static int hl_mmu_v1_init(struct hl_device *hdev)
->  }
->
->  /**
-> - * hl_mmu_fini() - release the MMU module.
-> + * hl_mmu_v1_fini() - release the MMU module.
->   * @hdev: habanalabs device structure.
->   *
->   * This function does the following:
-> @@ -438,7 +438,7 @@ static void hl_mmu_v1_fini(struct hl_device *hdev)
->  }
->
->  /**
-> - * hl_mmu_ctx_init() - initialize a context for using the MMU module.
-> + * hl_mmu_v1_ctx_init() - initialize a context for using the MMU module.
->   * @ctx: pointer to the context structure to initialize.
->   *
->   * Initialize a mutex to protect the concurrent mapping flow, a hash to hold all
-> --
-> 2.20.1.7.g153144c
->
+>   drivers/regulator/mp5416.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/regulator/mp5416.c b/drivers/regulator/mp5416.c
+> index d8245080df03..011a825570ea 100644
+> --- a/drivers/regulator/mp5416.c
+> +++ b/drivers/regulator/mp5416.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/init.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+> +#include <linux/of_device.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/regmap.h>
+>   #include <linux/regulator/driver.h>
+> @@ -178,6 +179,7 @@ static int mp5416_i2c_probe(struct i2c_client *client)
+>   {
+>   	struct device *dev = &client->dev;
+>   	struct regulator_config config = { NULL, };
+> +	static const struct regulator_desc *desc;
+>   	struct regulator_dev *rdev;
+>   	struct regmap *regmap;
+>   	int i;
+> @@ -188,12 +190,16 @@ static int mp5416_i2c_probe(struct i2c_client *client)
+>   		return PTR_ERR(regmap);
+>   	}
+>   
+> +	desc = of_device_get_match_data(dev);
+> +	if (!desc)
+> +		return -ENODEV;
+> +
+>   	config.dev = dev;
+>   	config.regmap = regmap;
+>   
+>   	for (i = 0; i < MP5416_MAX_REGULATORS; i++) {
+>   		rdev = devm_regulator_register(dev,
+> -					       &mp5416_regulators_desc[i],
+> +					       &desc[i],
+>   					       &config);
+>   		if (IS_ERR(rdev)) {
+>   			dev_err(dev, "Failed to register regulator!\n");
+> @@ -205,7 +211,7 @@ static int mp5416_i2c_probe(struct i2c_client *client)
+>   }
+>   
+>   static const struct of_device_id mp5416_of_match[] = {
+> -	{ .compatible = "mps,mp5416" },
+> +	{ .compatible = "mps,mp5416", .data = &mp5416_regulators_desc },
+>   	{},
+>   };
+>   MODULE_DEVICE_TABLE(of, mp5416_of_match);
 
-Both patches are
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-
-Applied to -next.
-Thanks,
-Oded
+Acked-by: Saravanan Sekar <sravanhome@gmail.com>

@@ -2,89 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BE653DE70
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C15653DE73
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347870AbiFEVqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 17:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
+        id S1348049AbiFEVrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 17:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345809AbiFEVqu (ORCPT
+        with ESMTP id S1347933AbiFEVrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 17:46:50 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEC144762;
-        Sun,  5 Jun 2022 14:46:49 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id h23so14521485ejj.12;
-        Sun, 05 Jun 2022 14:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZEUtBzgO4NZOQwhouRlnr+KmdLlgAtaO1quMCtr8kN0=;
-        b=EzNZbIqzqAxHvlOfdJQ4Q4/+Bz6oT6H3mPwe1M2NMDVkrm7+FuCtLHzzlYlpZnxF43
-         7N7AwmxZEGSG+u1bGnwd4lusykPGVHLesUaxGiH1VOLojeaVTIvw8fQN4tYBtMRlis2O
-         qNCjFANiUanA18+qqgGU+0ewDk8Ze/0Aw69lszx0KeGMHsccYc2L2cAE36jZINAgVxcz
-         QZ9y4mAhJTVi865OgpSrPBszI8M2KdgpsIsmzEXmax4INKVJLZbRYPZqxC/CcMMvqGg+
-         ImdX4Mcqo8V0Wy1x/6icRPuHqswrluFbOEX1w0FjNaEeznLR0eS1DGLlOoGPqLaZQ60x
-         kktQ==
+        Sun, 5 Jun 2022 17:47:10 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFD110FA;
+        Sun,  5 Jun 2022 14:47:05 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id a184so6197908qkg.5;
+        Sun, 05 Jun 2022 14:47:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZEUtBzgO4NZOQwhouRlnr+KmdLlgAtaO1quMCtr8kN0=;
-        b=a9ip7c09MOFNmBuLKDlhMKyZTP/skKMe2a9oiV+luIjg6ysbwKJt1vArCBvlmuRU6K
-         QwlwgcFGEGt5adj6FZ/tFCazJKK4Vj8K46uJFfL/iZNvV+XPF4NK7cvX34GO7e+xFguj
-         Qmcepa4z6CEKNP27stVp4s7m5+4OfbkLXl9ImetQlTHn/bL4K+idMsp7OC6/1QLeID6x
-         ibuO4MtYjp1B5Qg1ohlUGFZFzji+k45kaKQ9C0PdQ4ucBSMXYqcGVRf1g+kWfOMx2JpL
-         CGzjQ1NQ+4MvX5w4wEzJKJKnz+UitvdK2s7Blcz129JcX82mrMdyGLK2/+wDRg19RAlW
-         KowA==
-X-Gm-Message-State: AOAM532b0NcHEFqoTVVX9gcD3G+HC/QBRrZf5tNlHkb2t20ExcGdRODq
-        i1vFsaIO1FulS2DQN+lttPTiYoBIDOu+2kJHnQs=
-X-Google-Smtp-Source: ABdhPJw4MafiBKxna9+gCyvTQb5jcAjT9aT9fXw1fhtlbfQJhud3ireSbEz74FWDSxvgX3qA6LoS8DFqFY8L0qleilY=
-X-Received: by 2002:a17:907:7246:b0:6ff:241f:200a with SMTP id
- ds6-20020a170907724600b006ff241f200amr18547956ejc.543.1654465608121; Sun, 05
- Jun 2022 14:46:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eEvBqpfDNp1gDkv6Nzdk7QI2mfC3GLl4R5QP+lrMbvA=;
+        b=BK+Dz9K9PX7OOh5HU+9u3ENGR+uIEOx0rSMGqOxtIXtt/wqgjiPJ8K73j3Ga/XoDji
+         feCVVgEAZ3DIXmygMg3AE3j+z6lVL+zq4oSaeImbKCNsK3kh8retiKHglyUxiz9Bu6n9
+         sca42g3DeI5hKXdGAd7hhrbp/VIVJvR1dfdh4A+HTewpKSwr8u+5o2Emw94dZFTke4on
+         lv2RKHUi96TgfEPmbJdRAfQhrtPo6c+fi1aJoolnWKYqXymaRXZ5qlaOkTCce5QXpvpl
+         qDz011Eej1i2MBsr1mdwfXyWntU2e1UWBuH0hR2NIOBjGv3gqE4su1r+chSxNZ7DrLTk
+         mL/A==
+X-Gm-Message-State: AOAM531OsWhlWqkUpPzIcKJVGnDHCq69Ppv14NUz2D3PTEOCfbX9t9mA
+        w5dBI4Xk+dViEeKUd+kqhTqmNCjVDg==
+X-Google-Smtp-Source: ABdhPJyC7nsRGp7r9R2CQWA/Cgx5aIH6CBASg7KC9/6/3ZpnQ/Ef21Dng8wLb0+nHlIU5qgGVTTGBQ==
+X-Received: by 2002:a37:315:0:b0:6a6:a90c:9072 with SMTP id 21-20020a370315000000b006a6a90c9072mr6703509qkd.256.1654465624964;
+        Sun, 05 Jun 2022 14:47:04 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:ac97:ac63:b5fd:aa9:8d74:9989])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05620a455000b006a6b1c11235sm3207461qkp.84.2022.06.05.14.47.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 14:47:04 -0700 (PDT)
+Received: (nullmailer pid 3577933 invoked by uid 1000);
+        Sun, 05 Jun 2022 21:47:00 -0000
+Date:   Sun, 5 Jun 2022 16:47:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Rayn Chen <rayn_chen@aspeedtech.com>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: aspeed-i2c: add properties for
+ manual clock setting
+Message-ID: <20220605214700.GA3558088-robh@kernel.org>
+References: <20220601041512.21484-1-potin.lai.pt@gmail.com>
+ <20220601041512.21484-3-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
-References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 5 Jun 2022 23:46:37 +0200
-Message-ID: <CAFBinCDe=k+4YcSUqz5dpAtJ3NTqsHe9Krt0O1pAS=L=rVKCrA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] iio: adc: meson_saradc: Don't attach managed
- resource to IIO device object
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601041512.21484-3-potin.lai.pt@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 3, 2022 at 12:00 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> It feels wrong and actually inconsistent to attach managed resources
-> to the IIO device object, which is child of the physical device object.
-> The rest of the ->probe() calls do that against physical device.
->
-> Resolve this by reassigning managed resources to the physical device object.
->
-> Fixes: 3adbf3427330 ("iio: adc: add a driver for the SAR ADC found in Amlogic Meson SoCs")
-> Suggested-by: Lars-Peter Clausen <lars@metafoo.de>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Wed, Jun 01, 2022 at 12:15:12PM +0800, Potin Lai wrote:
+> Add following properties for manual tuning clock divisor and cycle of
+> hign/low pulse witdh.
+> 
+> * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setting
+> * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
+> * aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
+> * aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
+> 
+> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> ---
+>  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+> index ea643e6c3ef5..e2f67fe2aa0c 100644
+> --- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
+> @@ -12,6 +12,28 @@ maintainers:
+>  allOf:
+>    - $ref: /schemas/i2c/i2c-controller.yaml#
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: st,stm32-uart
 
-I am also fine if the Fixes tag is being dropped - please keep my
-Reviewed-by in that case.
+stm32 uart?
+
+> +
+> +    then:
+> +      properties:
+> +        aspeed,i2c-clk-high-cycle:
+> +          maximum: 8
+> +        aspeed,i2c-clk-low-cycle:
+> +          maximum: 8
+> +
+> +  - if:
+> +      required:
+> +        - aspeed,i2c-manual-clk
+> +
+> +    then:
+> +      required:
+> +        - aspeed,i2c-base-clk-div
+> +        - aspeed,i2c-clk-high-cycle
+> +        - aspeed,i2c-clk-low-cycle
+
+'dependencies' can better express this than an if/then.
+
+However, I think this should all be done in a common way.
+
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -49,6 +71,28 @@ properties:
+>      description:
+>        states that there is another master active on this bus
+>  
+> +  aspeed,i2c-manual-clk:
+> +    type: boolean
+> +    description: enable manual clock setting
+
+No need for this as presence of the other properties can determine this.
+
+> +
+> +  aspeed,i2c-base-clk-div:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192,
+> +           16384, 32768]
+> +    description: base clock divisor
+
+Specify the i2c bus frequency and calculate the divider.
+
+> +
+> +  aspeed,i2c-clk-high-cycle:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 16
+> +    description: cycles of master clock-high pulse width
+> +
+> +  aspeed,i2c-clk-low-cycle:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 1
+> +    maximum: 16
+> +    description: cycles of master clock-low pulse width
+
+These 2 should be common. I think you just need a single property 
+expressing duty cycle.
+
+Rob

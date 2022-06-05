@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D81B53D8DC
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 02:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09A153D8E9
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 02:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242517AbiFEANX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 20:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S242239AbiFEAr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 20:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiFEANV (ORCPT
+        with ESMTP id S233798AbiFEAr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 20:13:21 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3614D605
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 17:13:19 -0700 (PDT)
+        Sat, 4 Jun 2022 20:47:27 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FE22314D
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 17:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654387999; x=1685923999;
+  t=1654390043; x=1685926043;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tjCLWlnDd1xOelaMV0Mv+df88jS7FOL8Fp/HZ2+wZzY=;
-  b=erO7fR4cj7sms+VCCClDLhBkk4bwKd2A4b5QyYKAn8ulYJPNO4/T8RMi
-   PR+fmKdlwWmKhFS6J6kpL1ehX5T4poNh04cfpddxXqpjluy9ukSX23W9X
-   Y/W7JdKl58dYiZdKDjvVps15EpsXQv7AgmvlyZ4yjHC1lYE7YSifbNzMV
-   oHiNodrTO6brXx8Oawqe+Lz+53fTpq7zxFGlAromIaek+9SoTg9r/CP3g
-   SPp4+EZ5UvmoBKOXSdHswgOpeUl8lWp1gVt6yFJWiYbhV5axSjKrE9YDa
-   oLDSrL7gmGCLX0mCGWoYesS6pnDgYNgiMOYmRN4C2jdZuo1Qih2fVEnK7
+  bh=fnbcv66SeQAd1at2MtK+QImZYF52AxEOjsIR5CMdfUA=;
+  b=ngkmGMttTIXDbdMWE+s0ePBju1jmuOvWCPHoXrckX+Dk+PtLLvsjzY5h
+   UPC6XHBbdbF+0p/5/vgwkdcV1m0hrORW+lBxph/kNMOlW+wIPbA868iwB
+   9jXPYZw9UuEE81hveIjOTOjhNfCi5eUagp8T+OhtVfbA7P+/rL0R4zq0c
+   q7lm6H7R+F0XgyATz6h13URJ9BLWmUskWezx6Nouh9gIUMpSRa1J+Du4u
+   KFguozKE79MbGQyIGChvQNmGjIHwmfmNbcsbmD0bmeB6Blwf7a+g5zxxL
+   8v69x8hRnOfvtGqeQBMiiEv6zQpxEGkEetaG/ff/TGPfJ9VC4ok4x/HMS
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="256966880"
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="256359814"
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="256966880"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 17:13:19 -0700
+   d="scan'208";a="256359814"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2022 17:47:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,278,1647327600"; 
-   d="scan'208";a="906001734"
+   d="scan'208";a="757983683"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Jun 2022 17:13:18 -0700
+  by orsmga005.jf.intel.com with ESMTP; 04 Jun 2022 17:47:18 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nxdtN-000BIk-Es;
-        Sun, 05 Jun 2022 00:13:17 +0000
-Date:   Sun, 5 Jun 2022 08:12:21 +0800
+        id 1nxeQH-000BJR-Q2;
+        Sun, 05 Jun 2022 00:47:17 +0000
+Date:   Sun, 5 Jun 2022 08:46:32 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-omap2/board-generic.c:44:6: warning: no previous
- prototype for function 'tick_broadcast'
-Message-ID: <202206050825.OuexWb2X-lkp@intel.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Brian Vazquez <brianvv@google.com>
+Subject: net/core/dev.c:10290:18: sparse: sparse: cast removes address space
+ '__percpu' of expression
+Message-ID: <202206050845.IJUsAUy8-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,55 +64,59 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   032dcf09e2bf7c822be25b4abef7a6c913870d98
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   9 weeks ago
-config: arm-randconfig-r002-20220605 (https://download.01.org/0day-ci/archive/20220605/202206050825.OuexWb2X-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0a90b72c432d70aae035727ece4ba80ce820f381)
-reproduce (this is a W=1 build):
+head:   d0e60d46bc03252b8d4ffaaaa0b371970ac16cda
+commit: 625788b5844511cf4c30cffa7fa0bc3a69cebc82 net: add per-cpu storage and net->core_stats
+date:   3 months ago
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220605/202206050845.IJUsAUy8-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # apt-get install sparse
+        # sparse version: v0.6.4-18-g56afb504-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=625788b5844511cf4c30cffa7fa0bc3a69cebc82
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        git checkout 625788b5844511cf4c30cffa7fa0bc3a69cebc82
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-omap2/board-generic.c:44:6: warning: no previous prototype for function 'tick_broadcast' [-Wmissing-prototypes]
-   void tick_broadcast(const struct cpumask *mask)
-        ^
-   arch/arm/mach-omap2/board-generic.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tick_broadcast(const struct cpumask *mask)
-   ^
-   static 
-   1 warning generated.
+sparse warnings: (new ones prefixed by >>)
+   net/core/dev.c:3254:23: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int @@
+   net/core/dev.c:3254:23: sparse:     expected restricted __wsum [usertype] csum
+   net/core/dev.c:3254:23: sparse:     got unsigned int
+   net/core/dev.c:3254:23: sparse: sparse: cast from restricted __wsum
+>> net/core/dev.c:10290:18: sparse: sparse: cast removes address space '__percpu' of expression
+   net/core/dev.c:3759:17: sparse: sparse: context imbalance in '__dev_queue_xmit' - different lock contexts for basic block
+   net/core/dev.c:4961:17: sparse: sparse: context imbalance in 'net_tx_action' - different lock contexts for basic block
 
+vim +/__percpu +10290 net/core/dev.c
 
-vim +/tick_broadcast +44 arch/arm/mach-omap2/board-generic.c
-
-e69b4e1a7577c1 Tony Lindgren 2020-05-07  41  
-d86ad463d6706d Tony Lindgren 2020-05-28  42  /* Used by am437x for ARM timer in non-SMP configurations */
-d86ad463d6706d Tony Lindgren 2020-05-28  43  #if !defined(CONFIG_SMP) && defined(CONFIG_GENERIC_CLOCKEVENTS_BROADCAST)
-d86ad463d6706d Tony Lindgren 2020-05-28 @44  void tick_broadcast(const struct cpumask *mask)
-d86ad463d6706d Tony Lindgren 2020-05-28  45  {
-d86ad463d6706d Tony Lindgren 2020-05-28  46  }
-d86ad463d6706d Tony Lindgren 2020-05-28  47  #endif
-d86ad463d6706d Tony Lindgren 2020-05-28  48  
-
-:::::: The code at line 44 was first introduced by commit
-:::::: d86ad463d6706d35167418660ae3293207ee9d1c ARM: OMAP2+: Fix regression for using local timer on non-SMP SoCs
-
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+ 10282	
+ 10283	struct net_device_core_stats *netdev_core_stats_alloc(struct net_device *dev)
+ 10284	{
+ 10285		struct net_device_core_stats __percpu *p;
+ 10286	
+ 10287		p = alloc_percpu_gfp(struct net_device_core_stats,
+ 10288				     GFP_ATOMIC | __GFP_NOWARN);
+ 10289	
+ 10290		if (p && cmpxchg(&dev->core_stats, NULL, p))
+ 10291			free_percpu(p);
+ 10292	
+ 10293		/* This READ_ONCE() pairs with the cmpxchg() above */
+ 10294		p = READ_ONCE(dev->core_stats);
+ 10295		if (!p)
+ 10296			return NULL;
+ 10297	
+ 10298		return this_cpu_ptr(p);
+ 10299	}
+ 10300	EXPORT_SYMBOL(netdev_core_stats_alloc);
+ 10301	
 
 -- 
 0-DAY CI Kernel Test Service

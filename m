@@ -2,137 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA5A53DAF4
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 11:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6689A53DAF6
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 11:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245173AbiFEJKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 05:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S231216AbiFEJNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 05:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiFEJKi (ORCPT
+        with ESMTP id S229816AbiFEJNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 05:10:38 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3484DF5D;
-        Sun,  5 Jun 2022 02:10:36 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t25so19018989lfg.7;
-        Sun, 05 Jun 2022 02:10:35 -0700 (PDT)
+        Sun, 5 Jun 2022 05:13:45 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9998518377
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 02:13:44 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id w21so10547186pfc.0
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 02:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Iz2VX+xfg1+Kh5wYZuNwYsoBuDh5afS5kt7JhTZR9tY=;
-        b=CkV5W4uF4902RhBO2hXrFGVs1T0lI3R+ViUOJFG4qQC5RbgFH8Jtv1UgjROB0aTzlj
-         L3mNziphJuKoAi8OzGx2aDh1jrPmN/kY/PfwklkMP4KMBbL4bQQGC0k2n/vR1vVndrF1
-         S+VmVvQz9B563rz1oYDOAeiWZx+7+Bba/rLvvSZqK4Hx4655v57Hw6mg3yQwurClgQbc
-         FSU9/cyrTSy/rGWCm0r5+tmCsmgDZZFz24fjfQoLCgVc/SBjScTqhGceYRbr/zjcbYz+
-         UlUdl6L9dp0TSM7WKWlPYiPjAuwNcfUc1GEVUmTU12jNHqX5/NounKifhwDQhVVX6h1F
-         ydMQ==
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=t40w8M/0e+7jzPaXKU8sHRs+0HYfLIpNt+JXgYblSMg=;
+        b=ocyh0GC00EAoaldlX1NjY7vXM7LbDtFDCA/7kXfCx1Ot+WKDvRO2xAoQE4IatRDfQE
+         iggeZJFMvcTXFNuSAHi269fFf0Y7FYT/7p7FgnjfU/0uYk4Y3dcrKAX1+i2bUYqFHOSa
+         nx9ZzclCH+yphK8vDpAp1cpBhgTl+ZyCbBuFE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Iz2VX+xfg1+Kh5wYZuNwYsoBuDh5afS5kt7JhTZR9tY=;
-        b=dCR8fAiJufakgRXlSWFN7IU3jmGeoX0FzNmemddfvBbQAQPAhG1hjyi+PJN+MJ2SUB
-         vu6Fi++o0tK8xBrL928n27mfKX3WupLodo3RUi2mznKzIrjfpTN6ThTkudmzCC9XigNh
-         ecBf7eW5G96JnkfkigPHQ3YIVhxwA0zwTMvBI170HVlOX6xfxT8tRuj+CUEl8juQAyFW
-         qRQw12yPB9rfmBqZtpdoTihSS+F6rnL8SxrIRCmslH/XEp6VgHBCdiJYJmKRMjbyk2Yf
-         v5J/KFYRNR090LeH0Q+stY9THl5hjKrEsFYWHB4X7YX/87Q/4QBlitVwBblVhaVIJYmW
-         eU/w==
-X-Gm-Message-State: AOAM531dJZD9DAXnRfRTJ0bT2ytk+Om5rrsyFvdkdUZDwCquw+iEOFYK
-        akt/jAgJnO/BEpnV6NKiFi8JLKb/X+kXvQ==
-X-Google-Smtp-Source: ABdhPJz7jQ6wMB/0+iYOaVN9AlPYWNTrvfvl4BhqgpvtwQ8HZtUTqXesQq+kXH8Xub9koe+VfegL0A==
-X-Received: by 2002:a05:6512:32c5:b0:473:cc6d:9eaf with SMTP id f5-20020a05651232c500b00473cc6d9eafmr12331539lfg.90.1654420234123;
-        Sun, 05 Jun 2022 02:10:34 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id bi25-20020a0565120e9900b0047255d211fdsm2396598lfb.300.2022.06.05.02.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 02:10:33 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Sun, 5 Jun 2022 11:10:31 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 2/2] rcu/kvfree: Introduce KFREE_DRAIN_JIFFIES_[MAX/MIN]
- interval
-Message-ID: <YpxzB3/HRN/EEHa8@pc638.lan>
-References: <20220602080644.432156-1-urezki@gmail.com>
- <20220602080644.432156-2-urezki@gmail.com>
- <20220604155108.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=t40w8M/0e+7jzPaXKU8sHRs+0HYfLIpNt+JXgYblSMg=;
+        b=hEunNdHkQzHb/XeU/zHxLyfA3ZqDseGWQXAFS/RRiGsOa3tjn48GACz/VrqRVOxziU
+         VYlV0zqh/z8HYxCRc/jn0t+aWDplTVDRZOIzXmBMPPNp2TXGQMNmfBPJYi4cWHCcm6+r
+         8fP7hLKwuwQZbpb8wujNfiXTSqzN3aN8Uje6XqTsgt6+TrKhMwsU0s5pCLAQbDOsd4ku
+         OWcbV1tmJAXy5Z1EMRUNsO+9GNRY5+ug+oejozj2v3g2muPVNrkQ6sO1bOeuOPQp6Y3+
+         2/ewU5tuPnKdN5GJtopxCcGhCujTCOI3EH7or5vah24y8GIQYGLVza8ACqd8DJtjbyAG
+         W2XQ==
+X-Gm-Message-State: AOAM531xNyNP4hgjViUCYbZIWRsfXUP+9AtX2YFO4fEXZcFvkNsoyE4u
+        6tiEf/6NjTyMDGuhL1P/RmWGOOLz9hyOnq59y5oJwg==
+X-Google-Smtp-Source: ABdhPJyfM9d7kMlMNvdUeRn2dk39OQ/Usv5Q6CYgHbkGf9STAOM6qa29oOgODMY+MUkxTGzGNRvQeI1jGiWN9/fZwuA=
+X-Received: by 2002:a05:6a00:2402:b0:4e1:3df2:5373 with SMTP id
+ z2-20020a056a00240200b004e13df25373mr85499945pfh.40.1654420423926; Sun, 05
+ Jun 2022 02:13:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220604155108.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+References: <20220604183905.1025201-1-michael@amarulasolutions.com>
+In-Reply-To: <20220604183905.1025201-1-michael@amarulasolutions.com>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Sun, 5 Jun 2022 11:13:31 +0200
+Message-ID: <CAOf5uwm=TTZSevG7GtYzB9x0kk4f+DMeJMrTvzrogPwqe9utZA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mn-bsh-smm-s2/pro: Add pmic clock connection
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Jun 02, 2022 at 10:06:44AM +0200, Uladzislau Rezki (Sony) wrote:
-> > Currently the monitor work is scheduled with a fixed interval that
-> > is HZ/20 or each 50 milliseconds. The drawback of such approach is
-> > a low utilization of page slot in some scenarios. The page can store
-> > up to 512 records. For example on Android system it can look like:
-> > 
-> > <snip>
-> >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
-> >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
-> >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
-> >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
-> >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
-> >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
-> >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
-> >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
-> >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
-> >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
-> >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
-> >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
-> >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
-> >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
-> >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
-> > <snip>
-> > 
-> > where a page only carries few records to reclaim a memory. In order to
-> > improve batching and make utilization more efficient the patch introduces
-> > a drain interval that can be set either to KFREE_DRAIN_JIFFIES_MAX or
-> > KFREE_DRAIN_JIFFIES_MIN. It is adjusted if a flood is detected, in this
-> > case a memory reclaim occurs more often whereas in mostly idle cases the
-> > interval is set to its maximum timeout that improves the utilization of
-> > page slots.
-> > 
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> 
-> That does look like a problem well worth solving!
->
-Agree, better ideas make better final solution :)
+Hi
 
-> 
-> But I am missing one thing. If we are having a callback flood, why do we
-> need a shorter timeout?
->
-To offload faster, because otherwise we run into classical issue, it is a low
-memory condition state resulting in OOM.
+I have some problems here. Open to suggestion:
 
+On Sat, Jun 4, 2022 at 8:39 PM Michael Trimarchi
+<michael@amarulasolutions.com> wrote:
 >
-> Wouldn't a check on the number of blocks queued be simpler, more direct,
-> and provide faster response to the start of a callback flood?
+> pmic clock is connected to svns_rtc using RTC_XTALI pin,
+> and wifi/bluetooth chipset
 >
-I rely on krcp->count because not always we can store the pointer in the page
-slots. We can not allocate a page in the caller context thus we use page-cache
-worker that fills the cache in normal context. While it populates the cache, 
-pointers temporary are queued to the linked-list.
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+>  .../boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi     | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
+> index c11895d9d582..a21ec0d1d003 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2-common.dtsi
+> @@ -28,6 +28,8 @@ usdhc2_pwrseq: usdhc2-pwrseq {
+>                 pinctrl-names = "default";
+>                 pinctrl-0 = <&pinctrl_usdhc2_pwrseq>;
+>                 reset-gpios = <&gpio4 27 GPIO_ACTIVE_LOW>;
+> +               clocks = <&bd71847>;
+> +               clock-names = "ext_clock";
+>         };
+>  };
+>
+> @@ -214,6 +216,11 @@ &i2c4 {
+>         status = "okay";
+>  };
+>
+> +&snvs_rtc {
+> +       clocks = <&bd71847>;
+> +       clock-names = "snvs-rtc";
+> +};
+> +
+>  &uart2 {
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&pinctrl_uart2>;
+> @@ -235,6 +242,8 @@ bluetooth {
+>                 shutdown-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+>                 device-wakeup-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
+>                 host-wakeup-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+> +               clocks = <&bd71847>;
+> +               clock-names = "lpo";
+>                 max-speed = <3000000>;
+>         };
+>  };
 
-Any thoughts?
+I've done more testing in suspend/resume and it can not work. I have
+modelled differently and extended the svns block to receive an
+external clock and make it always enabled. The problem here is the cpu
+takes the clock from the pmic that is enabled by default and the pmic
+clock even wifi and bluetooth. If I want to register the driver I
+would like to connect all of them but it seems that osc_32k is the
+basic clock of the cpu and can be modelled using pmic easily. Even I
+have created the ext clock on the snvs block so  should be always
+enabled suspend/resume. The device can not resume from suspend.
 
---
-Uladzislau Rezki
+Michael
+
+> --
+> 2.25.1
+>
+
+
+-- 
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com

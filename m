@@ -2,74 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9C253DD54
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 19:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DFD53DD5A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 19:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351496AbiFERQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 13:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S1346315AbiFERXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 13:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351419AbiFERQY (ORCPT
+        with ESMTP id S232266AbiFERXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 13:16:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702504EA0C
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:16:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23D04B80DB0
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 17:16:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DF576C3411D;
-        Sun,  5 Jun 2022 17:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654449380;
-        bh=gtfTjE2G5QCOXUJN0JF2bESA9NEERHvQCR0TgsXRPo8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=KBF3B9RwmP451Q38kpaNMUT2K1X1jmVfMgbWHYCvliLex62UjpQrZoaO2xFmmudBT
-         9oTJQnSA47s608ZtAqsSpmIUZcoTiZ9d6PIv3JGLuXmKp4/pFPLHpwfXRQqZumwsNA
-         Q1N2CSNjVqqERXBqNCEtq/Lt2lUMUAZNwSadzroC0t4GxLoyS9Rt9ZuX12L0pd+MR8
-         4cAf4bYLBWLNKselXX0SzReVG5SJV71lQUFsFwogS9IsM6YQqMtEyxFWomOakGbCYK
-         zCHdeL/tdWYt4zl0ygzRLIdZ+7B8HlhHyb6oO/cXcxzP4hAYolNkJ9ajHPLlXFaHA3
-         +FWuK4isX4y1g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C00E5F03875;
-        Sun,  5 Jun 2022 17:16:20 +0000 (UTC)
-Subject: Re: [GIT pull] objtool/urgent for v5.19-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <165442136963.152751.14259048792272164569.tglx@xen13>
-References: <165442136963.152751.14259048792272164569.tglx@xen13>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <165442136963.152751.14259048792272164569.tglx@xen13>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool-urgent-2022-06-05
-X-PR-Tracked-Commit-Id: 2028a255f4df3af9e759f01f958d3237f825f256
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 44688ffd111af31984237f0cba05f2e201eac530
-Message-Id: <165444938077.7539.7958098958836789558.pr-tracker-bot@kernel.org>
-Date:   Sun, 05 Jun 2022 17:16:20 +0000
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 5 Jun 2022 13:23:52 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61AE818344;
+        Sun,  5 Jun 2022 10:23:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 6102B10002E;
+        Sun,  5 Jun 2022 17:23:49 +0000 (UTC)
+Date:   Sun, 5 Jun 2022 19:23:47 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
+Message-ID: <20220605192347.518c4b3c.max@enpas.org>
+In-Reply-To: <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun,  5 Jun 2022 11:30:50 +0200 (CEST):
+Thanks Vincent for this cleanup!
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool-urgent-2022-06-05
+Since I am upstreaming a driver that may (?) not fit the proposed
+structure, one question below.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/44688ffd111af31984237f0cba05f2e201eac530
 
-Thank you!
+On Sun,  5 Jun 2022 01:29:53 +0900
+Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> * menu after this series *
+> 
+> Network device support
+>   symbol: CONFIG_NETDEVICES
+>   |
+>   +-> CAN Device Drivers
+>       symbol: CONFIG_CAN_DEV
+>       |
+>       +-> software/virtual CAN device drivers
+>       |   (at time of writing: slcan, vcan, vxcan)
+>       |
+>       +-> CAN device drivers with Netlink support
+>           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+>           |
+>           +-> CAN bit-timing calculation (optional for all drivers)
+>           |   symbol: CONFIG_CAN_BITTIMING
+>           |
+>           +-> All other CAN devices not relying on RX offload
+>           |
+>           +-> CAN rx offload
+>               symbol: CONFIG_CAN_RX_OFFLOAD
+>               |
+>               +-> CAN devices relying on rx offload
+>                   (at time of writing: flexcan, m_can, mcp251xfd and
+> ti_hecc)
+
+
+This seemingly splits drivers into "things that speak to hardware" and
+"things that don't". Except... slcan really does speak to hardware. It
+just so happens to not use any of BITTIMING or RX_OFFLOAD. However, my
+can327 (formerly elmcan) driver, which is an ldisc just like slcan,
+*does* use RX_OFFLOAD, so where to I put it? Next to flexcan, m_can,
+mcp251xfd and ti_hecc?
+
+Is it really just a split by features used in drivers, and no longer a
+split by virtual/real?
+
+
+Max

@@ -2,178 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D054053DBBF
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 15:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FDB53DBCE
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 15:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344090AbiFENtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 09:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S1344216AbiFENxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 09:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiFENtI (ORCPT
+        with ESMTP id S240021AbiFENx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 09:49:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B49F19007
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 06:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654436947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRPkzB0Obt6oYcl++dMZO0Ti3gSuzY9Z9516AYxuh28=;
-        b=NQIHWyANsbR/yZp+uSnTNzuq6Zd5QHetFIompkpd6VWkauhfvL/SUTMcbYnPIkMIfFh9xA
-        WxaI1LkOcT09RZnHz1s7oGzAomw1phXy8S8eoJeDab49Q/2g4SrPDUdm8X8DjY/Eb89b8o
-        5IKKE9rC5C0GUGl4RFXbeSvpET0Iw8k=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-3r0nnc_oOSCa_x-RrqMf0Q-1; Sun, 05 Jun 2022 09:49:03 -0400
-X-MC-Unique: 3r0nnc_oOSCa_x-RrqMf0Q-1
-Received: by mail-ed1-f71.google.com with SMTP id f9-20020a056402354900b0042ded146259so8758664edd.20
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 06:49:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BRPkzB0Obt6oYcl++dMZO0Ti3gSuzY9Z9516AYxuh28=;
-        b=uxzt8GFBhECIb/x/miTvO0TVszsuiiBYHouM/NH8qCR8BQOPZYa6qoUG7pntKoC9AB
-         VRsx3CugnDSZD+l4+K0UDvj6MDbtki0xypY+xG6KWybBvg7CWKB2tuGe72paQ/gYcGVx
-         DL60U6r6ySHeW/zRi59qayQz93kLnQpj1ooP2ev1B0muKHSHCaoRXMFKkBgVWh7KECcQ
-         Lj4T91oCbJPWBQh7dFALxL3TQqmp6WWSFaTaYqzPaie2SYY4LzlzUrUPentLE+8971ax
-         r/4E5HSVRFN/vVm906dD+727UllRXGn0SXBcgJZDK7BmlwlccfOgE2JH1EIwAbieSIwH
-         UNFQ==
-X-Gm-Message-State: AOAM530osM2dXk6K78sJDF5PTfeo70qyvqAfbfLQTMYq3AbzWVeBtUFu
-        v09TsmeXf/YvatcetyqYx0TJU+lQSE77rsSR/Z4hNVZc5ZCLSSRSEU50NrPLl7GOZTpnnGYker7
-        FELZV8KeRo8PfMrjiLX7EgFE+
-X-Received: by 2002:a17:907:3fa4:b0:6fe:b83b:d667 with SMTP id hr36-20020a1709073fa400b006feb83bd667mr17092620ejc.481.1654436942637;
-        Sun, 05 Jun 2022 06:49:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwWFfGXlzscREcCMsyioSn2fmCXwK2n/wGKr/8cR3r52Gskf6dMa5m3+foLX/QTDCr1pd//kQ==
-X-Received: by 2002:a17:907:3fa4:b0:6fe:b83b:d667 with SMTP id hr36-20020a1709073fa400b006feb83bd667mr17092601ejc.481.1654436942399;
-        Sun, 05 Jun 2022 06:49:02 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id h14-20020aa7c94e000000b0042e03eed448sm5734417edt.20.2022.06.05.06.49.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 06:49:01 -0700 (PDT)
-Message-ID: <f50994ad-0682-960a-a566-6e143f81e258@redhat.com>
-Date:   Sun, 5 Jun 2022 15:49:01 +0200
+        Sun, 5 Jun 2022 09:53:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B23270E;
+        Sun,  5 Jun 2022 06:53:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E792160F9C;
+        Sun,  5 Jun 2022 13:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012DDC385A5;
+        Sun,  5 Jun 2022 13:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654437203;
+        bh=d065B4B8fmBHR6fCIbMdjWQL/kEBny/spn97THCJiJI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=czfnQQAVUWMFM0b8cPW8zsa8xQ6Gu0FVqivM4bvy871WDOCChGWaccXQy82LJaZcv
+         3R9jbORCqrK8EZVy1qYYuyACyJNzMRFEG3Dtw7w/ZB3RXc2L8V+slD8isK0iPWoo2s
+         iowPZT0f44i4zKipelr+hYA0rt0pGMIupH+JR0NgRYv14B0KSG8crAmKDY/du3AZg3
+         3UyJ6GZnwEsSzaC+s/XoJz7C/GuLSilUGVDTI72s2amG1igBtbSOqLtj7Rabx8RS/t
+         SUgPVdsojVugnwbUiwLLgFdpeDP4dn/GQ438Aklm12c+OwB25hPwgkbcySBxthajOa
+         E4ObZzAA5Em2A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, jkosina@suse.cz, peterz@infradead.org
+Subject: [PATCH MANUALSEL 5.18 1/7] x86/nmi: Make register_nmi_handler() more robust
+Date:   Sun,  5 Jun 2022 09:53:09 -0400
+Message-Id: <20220605135320.61247-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] hwmon: (sch56xx-common) Add DMI override table
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220604220200.2567-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220604220200.2567-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Thomas Gleixner <tglx@linutronix.de>
 
-On 6/5/22 00:02, Armin Wolf wrote:
-> Some devices like the Fujitsu Celsius W380 do contain
-> a working sch56xx hardware monitoring device, but do
-> not contain the necessary DMI onboard device.
-> 
-> Do not check for the presence of an suitable onboard device
-> on these machines. The list of affected machines was created
-> using data collected by the Linux Hardware Project.
-> 
-> Tested on a Fujitsu Esprimo P720, but sadly not on a affected
-> machine.
-> 
-> Fixes: 393935baa45e (hwmon: (sch56xx-common) Add automatic module loading on supported devices)
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+[ Upstream commit a7fed5c0431dbfa707037848830f980e0f93cfb3 ]
 
-Thanks, patch looks good to me:
+register_nmi_handler() has no sanity check whether a handler has been
+registered already. Such an unintended double-add leads to list corruption
+and hard to diagnose problems during the next NMI handling.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Init the list head in the static NMI action struct and check it for being
+empty in register_nmi_handler().
 
-Regards,
+  [ bp: Fixups. ]
 
-Hans
+Reported-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/lkml/20220511234332.3654455-1-seanjc@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/include/asm/nmi.h |  1 +
+ arch/x86/kernel/nmi.c      | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-
-> ---
->  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++--------
->  1 file changed, 34 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-> index 3ece53adabd6..de3a0886c2f7 100644
-> --- a/drivers/hwmon/sch56xx-common.c
-> +++ b/drivers/hwmon/sch56xx-common.c
-> @@ -523,6 +523,28 @@ static int __init sch56xx_device_add(int address, const char *name)
->  	return PTR_ERR_OR_ZERO(sch56xx_pdev);
->  }
-> 
-> +static const struct dmi_system_id sch56xx_dmi_override_table[] __initconst = {
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "CELSIUS W380"),
-> +		},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO P710"),
-> +		},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO E9900"),
-> +		},
-> +	},
-> +	{ }
-> +};
-> +
->  /* For autoloading only */
->  static const struct dmi_system_id sch56xx_dmi_table[] __initconst = {
->  	{
-> @@ -543,16 +565,18 @@ static int __init sch56xx_init(void)
->  		if (!dmi_check_system(sch56xx_dmi_table))
->  			return -ENODEV;
-> 
-> -		/*
-> -		 * Some machines like the Esprimo P720 and Esprimo C700 have
-> -		 * onboard devices named " Antiope"/" Theseus" instead of
-> -		 * "Antiope"/"Theseus", so we need to check for both.
-> -		 */
-> -		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-> -			return -ENODEV;
-> +		if (!dmi_check_system(sch56xx_dmi_override_table)) {
-> +			/*
-> +			 * Some machines like the Esprimo P720 and Esprimo C700 have
-> +			 * onboard devices named " Antiope"/" Theseus" instead of
-> +			 * "Antiope"/"Theseus", so we need to check for both.
-> +			 */
-> +			if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-> +				return -ENODEV;
-> +		}
->  	}
-> 
->  	/*
-> --
-> 2.30.2
-> 
+diff --git a/arch/x86/include/asm/nmi.h b/arch/x86/include/asm/nmi.h
+index 1cb9c17a4cb4..5c5f1e56c404 100644
+--- a/arch/x86/include/asm/nmi.h
++++ b/arch/x86/include/asm/nmi.h
+@@ -47,6 +47,7 @@ struct nmiaction {
+ #define register_nmi_handler(t, fn, fg, n, init...)	\
+ ({							\
+ 	static struct nmiaction init fn##_na = {	\
++		.list = LIST_HEAD_INIT(fn##_na.list),	\
+ 		.handler = (fn),			\
+ 		.name = (n),				\
+ 		.flags = (fg),				\
+diff --git a/arch/x86/kernel/nmi.c b/arch/x86/kernel/nmi.c
+index e73f7df362f5..cec0bfa3bc04 100644
+--- a/arch/x86/kernel/nmi.c
++++ b/arch/x86/kernel/nmi.c
+@@ -157,7 +157,7 @@ int __register_nmi_handler(unsigned int type, struct nmiaction *action)
+ 	struct nmi_desc *desc = nmi_to_desc(type);
+ 	unsigned long flags;
+ 
+-	if (!action->handler)
++	if (WARN_ON_ONCE(!action->handler || !list_empty(&action->list)))
+ 		return -EINVAL;
+ 
+ 	raw_spin_lock_irqsave(&desc->lock, flags);
+@@ -177,7 +177,7 @@ int __register_nmi_handler(unsigned int type, struct nmiaction *action)
+ 		list_add_rcu(&action->list, &desc->head);
+ 	else
+ 		list_add_tail_rcu(&action->list, &desc->head);
+-	
++
+ 	raw_spin_unlock_irqrestore(&desc->lock, flags);
+ 	return 0;
+ }
+@@ -186,7 +186,7 @@ EXPORT_SYMBOL(__register_nmi_handler);
+ void unregister_nmi_handler(unsigned int type, const char *name)
+ {
+ 	struct nmi_desc *desc = nmi_to_desc(type);
+-	struct nmiaction *n;
++	struct nmiaction *n, *found = NULL;
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&desc->lock, flags);
+@@ -200,12 +200,16 @@ void unregister_nmi_handler(unsigned int type, const char *name)
+ 			WARN(in_nmi(),
+ 				"Trying to free NMI (%s) from NMI context!\n", n->name);
+ 			list_del_rcu(&n->list);
++			found = n;
+ 			break;
+ 		}
+ 	}
+ 
+ 	raw_spin_unlock_irqrestore(&desc->lock, flags);
+-	synchronize_rcu();
++	if (found) {
++		synchronize_rcu();
++		INIT_LIST_HEAD(&found->list);
++	}
+ }
+ EXPORT_SYMBOL_GPL(unregister_nmi_handler);
+ 
+-- 
+2.35.1
 

@@ -2,132 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284BD53DD06
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16D153DD0A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351251AbiFEQcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S1346158AbiFEQfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239638AbiFEQcR (ORCPT
+        with ESMTP id S1351253AbiFEQe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:32:17 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C0E12D15;
-        Sun,  5 Jun 2022 09:32:15 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id q15so8705182wrc.11;
-        Sun, 05 Jun 2022 09:32:15 -0700 (PDT)
+        Sun, 5 Jun 2022 12:34:57 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34294D274
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:34:56 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id bg6so4961149ejb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tzGs2OWippNwMA+vRDm0hQE0BwkypdQBXCE4ZyaN0tI=;
-        b=C7yYOx09xfL0nVPpNI7jFWYb3ZiGhGhywh67zbWNRguU4sC6Aadh0jmh4MZEfy7Zms
-         BKMseVYsrNKSfmHhklYxJJiYIn59THv6ICfzLLKJUKjBpefOhyIn3sdaFHDJNUyOKWkt
-         oDjxbGsumpG3kq0CYVqZXjbhOaj5uH7gqR/4svRkV23Hm9ZFD+BFSq8F1BQe8Gqxp876
-         j6HygN5V0mfyixgQ5bl00HPSuCB+Wq81n1WejZH5vB91ybYMWOAWLhWvAS71tqGxr2dm
-         oZD+BhcuNLe5aghHpZMHrsl/Up16UDkfr5xN2ZvXkQTPU2tEGR4FpWE2b1BhgVMZ5PB2
-         W8qA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jdIVKFSk2eIbeHqEWdMi4/8HFEkUDh1Z4gYM7GW4sa0=;
+        b=QiWi8O0uBmOcDTjvLLtS7RJP75oD8QAMzCNIR6xgGGo8LMbdoFvr7/kDyWQLXQ55uU
+         K+AiabjxiAwoJ89j+dYMVQGZfwFWy22kGZQb4YLQYDlhkEVn7n7dby8AaXnObgdo72fN
+         GZwRjklJ0BMY1TqUhjMmtDoTtyK0M+bX7NU3c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tzGs2OWippNwMA+vRDm0hQE0BwkypdQBXCE4ZyaN0tI=;
-        b=ryIw9YN936j/7aB9N9HCypc7JOgPUWSMrsUl47mT2Y9yJ1Y9cSEY3VNm0N3NH0oLC/
-         1lL2Ic4zk1UZMMP1Z4OONieuJSqR5CCdXI3U6xeF93bOLkmbALdokkOtTmoLHSdXJpCJ
-         QOU3festKkCwSvG4EPvF0Bgr8k2Lja44MoflunN8r45ZXjJB+S6TmKNTAq5if0kgHqkw
-         WIMFUkbrne4eEHjyVEpT+9Dkku/RWZ54ysS4jMMBOVwAp3z15XySpBORQjl7FjVXcEaf
-         bSKhjUcsBTK/q5FO2PtnXQTd7DtHCIY0B1nFFB+hhQlFAs90ORwvyKh/xs8A9BfS7cSa
-         KXRQ==
-X-Gm-Message-State: AOAM5302kcL3Qs8vStQRuKGDxM5i+t92/vmPzl5yhDIErRkYuMZ9hZio
-        RuabJBcO1nOmwIl987RNULiCdenXLt0=
-X-Google-Smtp-Source: ABdhPJwnQyMI7/dxg3Pi+qG9/8l/5gMtx09RlRydLB/iLvLcFN9Ivlwn4SXSqFFr+ePfC9zNMGNzQQ==
-X-Received: by 2002:a05:6000:1565:b0:217:b627:e3d4 with SMTP id 5-20020a056000156500b00217b627e3d4mr3145289wrz.500.1654446734225;
-        Sun, 05 Jun 2022 09:32:14 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id l65-20020a1c2544000000b00397393419e3sm18118874wml.28.2022.06.05.09.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 09:32:13 -0700 (PDT)
-Date:   Sun, 5 Jun 2022 18:32:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Saha, Tamal" <tamal.saha@intel.com>, bala.senthil@intel.com
-Subject: Re: [GIT PULL] hte: New subsystem for v5.19-rc1
-Message-ID: <Ypzai+P9BIVhHT7t@orome>
-References: <20220603113908.78777-1-thierry.reding@gmail.com>
- <CAHk-=wiVxF5VLFSuet3OrC7u1Gfb-ZyMs4W-KXAc42rXPRWmhA@mail.gmail.com>
- <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
- <CAHk-=wirNAe3ApyCWMAyz-QFaNX_oNCzc8SSX7a52pV=+OQ6Qg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jdIVKFSk2eIbeHqEWdMi4/8HFEkUDh1Z4gYM7GW4sa0=;
+        b=cNIdgGyLcQnNdxbnagOpBwjInSlUFKWVYRGMpp98pOcuPtOKiAU4E/qyaC3y1whcHs
+         Y9WHB9+l8w/8FCIvM/1IPBnafeXl/X4dAO+9Gx8TJTF2opL7sBGaqpp3schYocUI+OSa
+         +aB+MmSYKxDsNGocs6UCI7hsspOK5RVih+tGGuRCp4z3NNlHR6NMS9GJR6lx3i6lgSv6
+         PPg4kUfjHiGH37YN2NaT0hV5Yw9gxPypNGRNj7I+A8WZYOyoc8YzvYuZFPhnIu20Rs49
+         zCcVJ3Ai8n9ctrs4Vsxpz+1lI85D5XdGD/tSmpB12vr3okt6ksqScdf0VAL98NpssGcw
+         105Q==
+X-Gm-Message-State: AOAM533qSbRSoOlMeGRViDK8kkV45o4p08Zs6dQNgz1lFBjcWkCg1mLC
+        Otc3S8MeJOwbqCDg03fjcPHEJp7ZPY+GH30Y
+X-Google-Smtp-Source: ABdhPJyXnfKJdz+KrWN8KX/InK4YHUQCnpTr0vt8jIgjbg4O5L1Yq9DREXiJajwqTlKuwvnbvYFQOA==
+X-Received: by 2002:a17:906:19d8:b0:70b:2ef8:e563 with SMTP id h24-20020a17090619d800b0070b2ef8e563mr15976795ejd.536.1654446895147;
+        Sun, 05 Jun 2022 09:34:55 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906310400b00705976bcd01sm5322126ejx.206.2022.06.05.09.34.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 09:34:53 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id x17so16755103wrg.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:34:53 -0700 (PDT)
+X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
+ h4-20020a05600016c400b0020fcd5d4797mr17796010wrf.193.1654446893075; Sun, 05
+ Jun 2022 09:34:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gBHY2RA1fzKSPkQj"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wirNAe3ApyCWMAyz-QFaNX_oNCzc8SSX7a52pV=+OQ6Qg@mail.gmail.com>
-User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <20220605162537.1604762-1-yury.norov@gmail.com>
+In-Reply-To: <20220605162537.1604762-1-yury.norov@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 5 Jun 2022 09:34:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
+Message-ID: <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
+Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 5, 2022 at 9:25 AM Yury Norov <yury.norov@gmail.com> wrote:
+>
+> The commit 0a97953fd221 ("lib: add bitmap_{from,to}_arr64") changed
+> implementation of bitmap_from_u64(), so that it doesn't typecast
+> argument to u64, and actually dereferences memory.
 
---gBHY2RA1fzKSPkQj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Gaah.
 
-On Sun, Jun 05, 2022 at 09:16:21AM -0700, Linus Torvalds wrote:
-> On Sat, Jun 4, 2022 at 1:11 AM Linus Walleij <linus.walleij@linaro.org> w=
-rote:
-> >
-> > Another provider did come up, and were requested (by me) to work with
-> > Dipen on the subsystem in august last year, that was the Intel PMC in t=
-he
-> > Elkhart and Tiger Lake platforms and forward
->=20
-> Ok, I've pulled this now, even if I don't love the "hte" name. I
-> despise specialized TLA's that aren't some obvious "if you're a kernel
-> developer, you know what this means".
+That code shouldn't use DECLARE_BITMAP() at all, it should just use
 
-Thanks. If you prefer we could follow up with a rename for v5.20 and
-name this similar to the device tree bindings. There are other cases
-where the device tree bindings are named differently from the Linux
-subsystem and/or driver directories, but admittedly it'd be easy to
-make them match in this case. Given how little this is exposed at
-this point, renaming should be fairly unintrusive.
+    struct bdaddr_list_with_flags {
+            ..
+            unsigned long flags;
+    };
 
-Thierry
+and then use '&br_params->flags' when it nneds the actual atomic
+'set_bit()' things and friends, and then when it copies the flags
+around it should just use 'flags' as an integer value.
 
---gBHY2RA1fzKSPkQj
-Content-Type: application/pgp-signature; name="signature.asc"
+The bitmap functions are literally defined to work as "bit N in a set
+of 'unsigned long'" exactly so that you can do that mixing of values
+and bit operations, and not have to worry about insane architectures
+that do big-endian bit ordering or things like that.
 
------BEGIN PGP SIGNATURE-----
+Using a 'bitmap' as if it's some bigger or potentially variable-sized
+thing for this kind of flags usage is crazy, when the code already
+does
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmKc2osACgkQ3SOs138+
-s6F4OA//VIWWjlB9I33qZjE32PBLrwy3vrM31STPK+oIur9pdcAZiVW7F6nF3tLp
-7ci/TPLPRFCYJ6AcxchTp3nNT66cN/MCo11WroT0NZ8wBg/3WhqtGgXedyBTq8TM
-t/u1sH2/AIkXaUByOcJH85DbdUBV57aoiYkKUSdqTGLLV02bU6Kkp7zgddrONa9N
-bTh70bJRlRbMFQ35Z5xH872nctksgdtjuOx9cVwBn2m2WyHGKhN0/mONq2mzgQLi
-VgMyH1Dg5XAKof99jUmWKi+uFK6JrQTpJjPK6pAQNKM9W0xY/WCLowNV1juOQ06d
-SNgpO6dM85KFYqE0U6iwMz+c6ELaFrhQ1d5BXgVAaLiGfrxa8jTFPbZA/jlmXywd
-Wkwpzu+cGWCDT79bzH5NV8zsin2HB/zvyViMpQOYsbG2ss9ePgRvQO3b2F7Emt9/
-WzimrAMelV1EYBoRnMbMlL0oYQOLC9QR4c7hGslJ0J7s746hdX3QN71ohjEIaTZX
-K5N3lEtFPao9hc5OCdAGt4Htl30ZRG0X8Pe+uy9EdvBskTF2NP+g6zXcgrCzKJqf
-YzjIMWAlUtfpsn0k2pBeO2Cb3LdwsaZWn1wrgOEv53D7dPYJG3FFvIlMtSilTVgG
-qXt0hpfwhH+KHMWiAcpuL/ud9cVERwXyD3suiKRY8uu6Rj8+pbU=
-=MFlN
------END PGP SIGNATURE-----
+  /* Make sure number of flags doesn't exceed sizeof(current_flags) */
+  static_assert(__HCI_CONN_NUM_FLAGS < 32);
 
---gBHY2RA1fzKSPkQj--
+because other parts are limited to 32 bits.
+
+I wonder how painful it would be to just fix that odd type mistake.
+
+                  Linus

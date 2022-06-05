@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04BA53DADE
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087C553DAE1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350834AbiFEIkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 04:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
+        id S1350856AbiFEImB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 04:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiFEIks (ORCPT
+        with ESMTP id S231216AbiFEIl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 04:40:48 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5682FE7D
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 01:40:47 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id b135so10440919pfb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 01:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQpfNS+r3gvm5vQLoUP5fF1DHiiFVqBEBMp9DZpwHMg=;
-        b=ByZRoM3j4iaoXqTKvHAn7fzsSjnQ8NhbYHK516s5FZMfOfWFv/TV0PfKtxGmIonTwB
-         lTW2yqOaYYmzt0mgGeOiFrCczqJ7lPYyM4mQGCdE6r7bT0GjYrJiVDbOt4USH51kSu3Q
-         shiGoqzAZ2wUOxdOSDY37JVQNRfrAkEQ0pkZO30C+4V9Kt4h4bJPDBAnvGXeCTTGeRYo
-         q2qO5Ru+m4jav/aDxTUxiOXQg9eRGVcRuOw32UHyCOiKI/6eJQ0KkZJQlNmoxT6cQ92J
-         390OTsj2DFvHPznpgkBQk6b9FHUuCBr57ihuSojNrEXmFJGBJ+emd4eLLrfiQ/TFr62v
-         z2Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aQpfNS+r3gvm5vQLoUP5fF1DHiiFVqBEBMp9DZpwHMg=;
-        b=ownqso0msvfjh6nL7NaiSP58apDzFq5hAYdhY4DsA/vNN8/7dAByEI3L1hGbqsLii6
-         EsVpiXAvDlt9jdJi0iOyrR2N7DJZB80gUAWd3DhuyRxvm8274/3nIKnLSuNnwaQQKNbI
-         YtqphKyU9omyGIvyeYanOffqXzmDGWbcipFDs3TBB8qfHoLgmHf/aOObqPKNo84HOOyd
-         tar9KEyQmfnLWDAEAtzI2usJfFbb3LbVLy2RW5yFnaUGxGtE5sA7YDz6fnqhBtcBP3Eh
-         9ZJvZ8teD9XTw9zlX4EZkjhv1w0wWRVL2S47GLmdMfFKM22kPEAxCPGJeuYksdPEwo37
-         eZ2Q==
-X-Gm-Message-State: AOAM531uWA6dP5XCKYkkQcS4+PkcrZfFe+Vz2hSd+VkQYhkVFuymm3KA
-        Cve2TA5yl7tuz9Px71lOkbc=
-X-Google-Smtp-Source: ABdhPJyblrAIpv56unO0ayEauib56A4SYuOB+hS7iEOJLLwveL/Fh3rQs1ouywo/o0gJirukRa6p+A==
-X-Received: by 2002:a62:de84:0:b0:51b:e34b:ed2e with SMTP id h126-20020a62de84000000b0051be34bed2emr10837648pfg.86.1654418446975;
-        Sun, 05 Jun 2022 01:40:46 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id d15-20020aa797af000000b0051bbc198f3fsm7756810pfq.13.2022.06.05.01.40.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 01:40:46 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Mihai Sain <mihai.sain@microchip.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: soc: atmel: Fix refcount leak in atmel_soc_device_init
-Date:   Sun,  5 Jun 2022 12:40:32 +0400
-Message-Id: <20220605084035.27127-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 5 Jun 2022 04:41:59 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EA8F22F
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 01:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dgTai
+        pyhTS3VeOs8/cT4Gxe8QzvPZ0lNBUbKXaDbHyE=; b=hlgcnbMUxsoXXj7mMaeE9
+        5VHFi7IOEdNLeFs5Tc51rmDZLREulvQJ+g7GtHKk53Qikxl6C4+oaZxD1ZBTr88O
+        IgOkG3Z+koj51nb2PRGOu2lX8g9jy7gqz3zw3jUTcvxKH7e5RolDkeTIxOaXuTI/
+        7nLOh71N+EnSX+UI4tFAUI=
+Received: from localhost.localdomain (unknown [1.203.64.79])
+        by smtp7 (Coremail) with SMTP id C8CowABXxZUcbJxirFxWGQ--.2150S4;
+        Sun, 05 Jun 2022 16:41:18 +0800 (CST)
+From:   jingyuwang <jingyuwang_vip@163.com>
+To:     pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, jingyuwang <jingyuwang_vip@163.com>
+Subject: [PATCH] printk: change type of cpu_possible_bits to __cpu_possible_mask
+Date:   Sun,  5 Jun 2022 16:40:58 +0800
+Message-Id: <20220605084058.17708-1-jingyuwang_vip@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: C8CowABXxZUcbJxirFxWGQ--.2150S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZF43trWUJrWkKw15KrWxJFb_yoWfCFbEvF
+        9avrnrKF17G3s2gr17AF43Jr9xta97JFn7K3sakF9Iyr1DJr13tanrJFnxZrn5GrZagFy8
+        ZFW3uw1qkFsxWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRZGYl3UUUUU==
+X-Originating-IP: [1.203.64.79]
+X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbCbgYXF2BbENzw1wAAs4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_node_by_path() returns a node pointer with refcount incremented,
-we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+1.type of cpu_possible_bits is changed,refer to commit c4c54dd1caf1
+ ("kernel/cpu.c: change type of cpu_possible_bits and friends").
+2.set_cpu_possible() before setup_arch().
 
-Fixes: 960ddf70cc11 ("drivers: soc: atmel: Avoid calling at91_soc_init on non AT91 SoCs")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: jingyuwang <jingyuwang_vip@163.com>
 ---
- drivers/soc/atmel/soc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/printk/printk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/atmel/soc.c b/drivers/soc/atmel/soc.c
-index b2d365ae0282..46dfa24c52fb 100644
---- a/drivers/soc/atmel/soc.c
-+++ b/drivers/soc/atmel/soc.c
-@@ -369,10 +369,13 @@ static int __init atmel_soc_device_init(void)
- {
- 	struct device_node *np = of_find_node_by_path("/");
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index ea3dd55709e7..25670186d12e 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -1144,8 +1144,8 @@ static void __init log_buf_add_cpu(void)
+ 	unsigned int cpu_extra;
  
--	if (!of_match_node(at91_soc_allowed_list, np))
-+	if (!of_match_node(at91_soc_allowed_list, np)) {
-+		of_node_put(np);
- 		return 0;
-+	}
- 
- 	at91_soc_init(socs);
-+	of_node_put(np);
- 
- 	return 0;
- }
+ 	/*
+-	 * archs should set up cpu_possible_bits properly with
+-	 * set_cpu_possible() after setup_arch() but just in
++	 * archs should set up __cpu_possible_mask properly with
++	 * set_cpu_possible() before setup_arch() but just in
+ 	 * case lets ensure this is valid.
+ 	 */
+ 	if (num_possible_cpus() == 1)
 -- 
-2.25.1
+2.34.1
 

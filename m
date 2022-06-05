@@ -2,83 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A42B53DB6A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 14:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3240F53DB6D
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 14:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343625AbiFEMir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 08:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S1343662AbiFEMn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 08:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiFEMip (ORCPT
+        with ESMTP id S231252AbiFEMnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 08:38:45 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDA931344
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 05:38:43 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id w2so21351354ybi.7
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 05:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oPBRQZit+frysiswJmW7l8KQz4Nt3cvgksLt6M1PHGc=;
-        b=OfloKZSq4RGAqyqHoHtzPuMCmuMdR/0id7xESYd99+YAW4Yo3oFsR/tzwQyUcAtVTt
-         WDrgm3PGPU4HKwlAEVwaw+pQmabbVMiuCSUsI0gGffI8euanbS461OW0K/2zoUVXN/4f
-         gMrnBEYEV4WVf4I3+YlFsk/ANKarOMLQytzacUBvdr2r8zPPicLwXpSDvDj/IGBHggOS
-         PL5Itsp1X13ZXXR0IEAmODVgZxl+cSPfnIR1d1AQggFhaVqmweuZva7F2iC7gEGffX6C
-         BzRqJT6zYvqqwJlGdD//8HezsM7bpJqqcRRHN4dOxVE/iywTwYfYBPGuxo4ZLLr6K6kD
-         oFJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oPBRQZit+frysiswJmW7l8KQz4Nt3cvgksLt6M1PHGc=;
-        b=T+IzEWT/ZBMHqs1qpcnKB1o7zsdoSoggcRnbALK7/+I7B9B8LEQZVCwzyumKFqd2Sm
-         F6M/PWXSZhwolI2nhYNO51yHKeSn9ttfCPhqVkQvCuK4ejE77UuXKajj2QDcXNDGOhUL
-         N5pxvnm9l9Pa/0NtHUU4vd8Dkn+627BJPUZnKQ68ljhL7wGFgMsPfD1Hv8i0E1z/IPIy
-         5gKWUbTU97BtRkiI8DXYD9TIFtYAyxp3pnQ8fRDKQMSXcaDvb5pR/2AJvoQm78AxDrZj
-         hwaD2KB5RZVQphm99njdh1J3SNxR0Q5Z5CxJCHsIhzvu3Zt0Lrv6A8R957SPzj/QcJZN
-         9LuA==
-X-Gm-Message-State: AOAM532wT2jrqBzDYFNPR/mjVorWNcjpF21PbytVwQxGqKngJE5+xYDV
-        Fymw27j/q/s+4a+1S9+Hv+4YtU8PejsWyH3HBVEKkg==
-X-Google-Smtp-Source: ABdhPJxBGQnupilQOyf9rrlU6c3WeJG8AAQAuDN8QRcjRs1QutMeyOSeLU0F84axDRQozVZa301nvX7xFaI8KUqhmWw=
-X-Received: by 2002:a5b:691:0:b0:64d:ab44:f12e with SMTP id
- j17-20020a5b0691000000b0064dab44f12emr19698207ybq.533.1654432722820; Sun, 05
- Jun 2022 05:38:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220605065614.1332-1-linmq006@gmail.com>
-In-Reply-To: <20220605065614.1332-1-linmq006@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 5 Jun 2022 14:38:31 +0200
-Message-ID: <CACRpkdZ_9c44Vwg+1tbnnjgT_fr6A=GviKPVNanYm25yscsB5g@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: btbcm: Fix refcount leak in btbcm_get_board_name
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 5 Jun 2022 08:43:55 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B548B248C2
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 05:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=KPfJ09WlgY2YQKDQ1L
+        P6rJs+yK3vnrBlKY9+sJDfkL8=; b=hBFm+bdxMgHn4j3r4/fpQ921uOhFhNhr3i
+        VUlLx0R8mr4KIdRMY0bczv7ioxXyK8ao5g9yL/b88sT2Q5qR00TQlov/fCXXedVo
+        s80b7WSFflCAVe1biqMOVvGnDB5tWnOocwbvIlqidxPIWOeONQ/FXGMNaIeqTn+7
+        6ccGnnGqA=
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp12 (Coremail) with SMTP id EMCowAAHpmrspJxilcQtAA--.6005S4;
+        Sun, 05 Jun 2022 20:43:35 +0800 (CST)
+From:   Xiaohui Zhang <ruc_zhangxiaohui@163.com>
+To:     Xiaohui Zhang <ruc_zhangxiaohui@163.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] comedi: ni_usb6501: fix transfer-buffer overflows
+Date:   Sun,  5 Jun 2022 20:43:22 +0800
+Message-Id: <20220605124322.33148-1-ruc_zhangxiaohui@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: EMCowAAHpmrspJxilcQtAA--.6005S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFWDKFy3tFW7uFW7WFW8tFb_yoW8WF4rpF
+        4ruFy0kr45J3yIk3WDJwnrAF15Wa12qFW7KFWUuwnxZF43Awnakr1rtFyrtF95AF1SqF40
+        vwnrZFy5uF15AaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRKii-UUUUU=
+X-Originating-IP: [202.112.113.212]
+X-CM-SenderInfo: puxfs6pkdqw5xldrx3rl6rljoofrz/1tbipRcXMFUMkGia3AAAsy
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 8:56 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+From: xiaohuizhang98 <ruc_zhangxiaohui@163.com>
 
-> of_find_node_by_path() returns a node pointer with refcount incremented,
-> we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() in the error path to avoid refcount leak.
->
-> Fixes: 63fac3343b99 ("Bluetooth: btbcm: Support per-board firmware variants")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+We detected a suspected bug with our code clone detection tool.
 
-Oops thanks!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Similar to the handling of vmk80xx_alloc_usb_buffers in commit
+a23461c47482("comedi: vmk80xx: fix transfer-buffer overflows"),
+we thought a patch might be needed here as well.
 
-Yours,
-Linus Walleij
+The driver uses endpoint-sized USB transfer buffers but up until
+recently had no sanity checks on the sizes.
+
+Signed-off-by: xiaohuizhang98 <ruc_zhangxiaohui@163.com>
+---
+ drivers/comedi/drivers/ni_usb6501.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/comedi/drivers/ni_usb6501.c b/drivers/comedi/drivers/ni_usb6501.c
+index 0dd9edf7bced..3e2b9f4d840b 100644
+--- a/drivers/comedi/drivers/ni_usb6501.c
++++ b/drivers/comedi/drivers/ni_usb6501.c
+@@ -90,6 +90,7 @@
+ #include <linux/comedi/comedi_usb.h>
+ 
+ #define	NI6501_TIMEOUT	1000
++#define MIN_BUF_SIZE	64
+ 
+ /* Port request packets */
+ static const u8 READ_PORT_REQUEST[]	= {0x00, 0x01, 0x00, 0x10,
+@@ -459,12 +460,12 @@ static int ni6501_alloc_usb_buffers(struct comedi_device *dev)
+ 	struct ni6501_private *devpriv = dev->private;
+ 	size_t size;
+ 
+-	size = usb_endpoint_maxp(devpriv->ep_rx);
++	size = max(usb_endpoint_maxp(devpriv->ep_rx), MIN_BUF_SIZE);
+ 	devpriv->usb_rx_buf = kzalloc(size, GFP_KERNEL);
+ 	if (!devpriv->usb_rx_buf)
+ 		return -ENOMEM;
+ 
+-	size = usb_endpoint_maxp(devpriv->ep_tx);
++	size = max(usb_endpoint_maxp(devpriv->ep_rx), MIN_BUF_SIZE);
+ 	devpriv->usb_tx_buf = kzalloc(size, GFP_KERNEL);
+ 	if (!devpriv->usb_tx_buf)
+ 		return -ENOMEM;
+-- 
+2.17.1
+

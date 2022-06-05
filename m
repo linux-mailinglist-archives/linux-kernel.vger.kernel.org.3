@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C3753DE4F
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811C553DE54
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344975AbiFEVNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 17:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S1347524AbiFEVVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 17:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiFEVNd (ORCPT
+        with ESMTP id S236184AbiFEVVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 17:13:33 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39F626ACB;
-        Sun,  5 Jun 2022 14:13:30 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id bi27so3159718qkb.10;
-        Sun, 05 Jun 2022 14:13:30 -0700 (PDT)
+        Sun, 5 Jun 2022 17:21:20 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454C393F1;
+        Sun,  5 Jun 2022 14:21:18 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id k6so6684601qkf.4;
+        Sun, 05 Jun 2022 14:21:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KpfFSC1M5yGrSdZeqGTbFQEXLC9iY/J8j0nw6v1d9eA=;
-        b=gQd16NOtxpBCu4nmbZtPFAGFhsvDrKvLNehq1FmbPx87arWNBQ2fd7MM9CsuctjMU0
-         blTN1UraSKDGd/kxRkuEbY4avXjoe5fxON5FQwjeq7aU/UiVBko9fS3KGMXeuuQafA5m
-         W8aZsdh1Oo0ivDVzQzMpQr04i2AnkbhWdj72r9ZpMLH66/BC5PXorGhNPMYsSBuH6Jxt
-         lkxDii/yWLBZ6x2vwB6+3TNuvS/D1NPERyZhZAwEaEtbM5p+DqzhR2mNfEf04uACQ6f8
-         IdFfh7RFNL+8tN14t1hMTAdDE9UdR6Ew3+V2iEKoLAcCoK2xnfAZjAAHclJ1GZ6bF6yv
-         QTpQ==
-X-Gm-Message-State: AOAM53266m5zaroi+sE12/XxLJha1IwXAohHSv9WrOGfzrVd04HLSyWN
-        O+B7d77CrHMeyb7Oo+9YLRNRXN7t1w==
-X-Google-Smtp-Source: ABdhPJxj+kVxZu2//p08PSHYzTQNamVKMAVwaHKls0V8bl/cpaDKySLz6Jed2QcRGNYVSKQw1ooWIA==
-X-Received: by 2002:a37:97c5:0:b0:6a6:8d77:1b5f with SMTP id z188-20020a3797c5000000b006a68d771b5fmr11485785qkd.216.1654463609916;
-        Sun, 05 Jun 2022 14:13:29 -0700 (PDT)
+        bh=uD2FXQUAnfQEohjyaZNlJQS/Q4WvFjoFs1LjbbNDzRQ=;
+        b=31nskr9Soe0iuTR+/fPkW7xynILICuUkOSYcxypo48v/1UdoS5ARaqpmqsMv5LbbAr
+         Wyj/qB/K4MDO5RB7ldUW7DQmiPzFk0qjH622Hy8hLCMFDX5wAzAkhluZQoA+erEuY9br
+         cA6kDkKSvlHbKR4ZKG+PVB2GAIG7S7oWp9u/sW9lucIQHMFAQxdE5jdTbEdbYWKCmLYw
+         TAtrV95jrlQzNbOBNJ2CaMWeij56bgqGoXYNddCRDVNqFhrzKiVoZeca+EPdoPQMv/LG
+         pMgXCGh98bXE7BMa9fOMCUaPbqIMWD1vL1CBRuIufywVzFhrNFyqIwYEoGT2GWWsAGRf
+         9vQA==
+X-Gm-Message-State: AOAM533whHHXPNd+4SRmqvjiwUxZS5Co1m51y03EF3PGXc53hO7ntNer
+        Kcw/LOQnHWyhxer7OaD7gA==
+X-Google-Smtp-Source: ABdhPJyLEqAuMCay8xL9vGuZW1MrAQDWoCsfSOcxo2YtGomAaqJ23hZt9Cth7nv86v86G2h8D3cN4Q==
+X-Received: by 2002:a05:620a:4553:b0:6a0:5280:defd with SMTP id u19-20020a05620a455300b006a05280defdmr13566534qkp.165.1654464077801;
+        Sun, 05 Jun 2022 14:21:17 -0700 (PDT)
 Received: from robh.at.kernel.org ([2607:fb90:ac97:ac63:b5fd:aa9:8d74:9989])
-        by smtp.gmail.com with ESMTPSA id w15-20020a05620a424f00b006a69d7f390csm6411744qko.103.2022.06.05.14.13.27
+        by smtp.gmail.com with ESMTPSA id l22-20020a05620a28d600b006a5bc8e956esm10638778qkp.133.2022.06.05.14.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 14:13:29 -0700 (PDT)
-Received: (nullmailer pid 3527763 invoked by uid 1000);
-        Sun, 05 Jun 2022 21:13:26 -0000
-Date:   Sun, 5 Jun 2022 16:13:26 -0500
+        Sun, 05 Jun 2022 14:21:17 -0700 (PDT)
+Received: (nullmailer pid 3538420 invoked by uid 1000);
+        Sun, 05 Jun 2022 21:21:14 -0000
+Date:   Sun, 5 Jun 2022 16:21:14 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Fabien Parent <fparent@baylibre.com>
-Cc:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/3] dt-bindings: iommu: mediatek: add binding
- documentation for MT8365 SoC
-Message-ID: <20220605211326.GA3525347-robh@kernel.org>
-References: <20220530180328.845692-1-fparent@baylibre.com>
+To:     Vabhav Sharma <vabhav.sharma@nxp.com>
+Cc:     horia.geanta@nxp.com, gaurav.jain@nxp.com, pankaj.gupta@nxp.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        shawnguo@kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        silvano.dininno@nxp.com, V.Sethi@nxp.com
+Subject: Re: [PATCH 1/3] dt-bindings: crypto: fsl: add entropy delay property
+Message-ID: <20220605212114.GA3528129-robh@kernel.org>
+References: <20220530180924.1792399-1-vabhav.sharma@nxp.com>
+ <20220530180924.1792399-2-vabhav.sharma@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220530180328.845692-1-fparent@baylibre.com>
+In-Reply-To: <20220530180924.1792399-2-vabhav.sharma@nxp.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,44 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 08:03:26PM +0200, Fabien Parent wrote:
-> Add IOMMU binding documentation for the MT8365 SoC.
+On Mon, May 30, 2022 at 11:39:22PM +0530, Vabhav Sharma wrote:
+> Add entropy delay property which defines the length (in system clocks) of
+> each Entropy sample taken for TRNG configuration.
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Vabhav Sharma <vabhav.sharma@nxp.com>
+> Reviewed-by: Horia Geanta <horia.geanta@nxp.com>
+> Reviewed-by: Varun Sethi <v.sethi@nxp.com>
 > ---
->  .../bindings/iommu/mediatek,iommu.yaml        |  2 +
->  include/dt-bindings/memory/mt8365-larb-port.h | 96 +++++++++++++++++++
->  2 files changed, 98 insertions(+)
->  create mode 100644 include/dt-bindings/memory/mt8365-larb-port.h
+>  Documentation/devicetree/bindings/crypto/fsl-sec4.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> index 97e8c471a5e8..5ba688365da5 100644
-> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> @@ -77,6 +77,7 @@ properties:
->            - mediatek,mt8173-m4u  # generation two
->            - mediatek,mt8183-m4u  # generation two
->            - mediatek,mt8192-m4u  # generation two
-> +          - mediatek,mt8365-m4u  # generation two
+> diff --git a/Documentation/devicetree/bindings/crypto/fsl-sec4.txt b/Documentation/devicetree/bindings/crypto/fsl-sec4.txt
+> index 8f359f473ada..1477294eda38 100644
+> --- a/Documentation/devicetree/bindings/crypto/fsl-sec4.txt
+> +++ b/Documentation/devicetree/bindings/crypto/fsl-sec4.txt
+> @@ -62,6 +62,12 @@ PROPERTIES
+>        Definition: A standard property. Define the 'ERA' of the SEC
+>            device.
 >  
->        - description: mt7623 generation one
->          items:
-> @@ -120,6 +121,7 @@ properties:
->        dt-binding/memory/mt8173-larb-port.h for mt8173,
->        dt-binding/memory/mt8183-larb-port.h for mt8183,
->        dt-binding/memory/mt8192-larb-port.h for mt8192.
-> +      dt-binding/memory/mt8365-larb-port.h for mt8365.
->  
->    power-domains:
->      maxItems: 1
-> diff --git a/include/dt-bindings/memory/mt8365-larb-port.h b/include/dt-bindings/memory/mt8365-larb-port.h
-> new file mode 100644
-> index 000000000000..e7d5637aa38e
-> --- /dev/null
-> +++ b/include/dt-bindings/memory/mt8365-larb-port.h
-> @@ -0,0 +1,96 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> +   - entropy-delay
+> +      Usage: optional
+> +      Value type: <u32>
+> +      Definition: A property which specifies the length (in system clocks)
+> +          of each Entropy sample taken.
+> +
 
-Dual license please.
+Seems like this could be common, but should be a time value (with unit 
+suffix) rather than clocks. If not common, then needs a vendor prefix. 
+Is this time to read a value or time between values produced? Not really 
+clear from the description.
 
 Rob

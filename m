@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E41753DAB7
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 09:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7FD53DABE
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 09:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350812AbiFEHdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 03:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
+        id S244485AbiFEHhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 03:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiFEHdI (ORCPT
+        with ESMTP id S231497AbiFEHhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 03:33:08 -0400
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E730F289AB
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 00:33:06 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id xkkpnsBMh0JImxkkpnSyhV; Sun, 05 Jun 2022 09:33:03 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 05 Jun 2022 09:33:03 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH] crypto: x86/camellia - Replace kernel.h with the necessary inclusions
-Date:   Sun,  5 Jun 2022 09:32:53 +0200
-Message-Id: <65634fb748cc0ce2cc5bafaf904cb5f76bd4edc4.1654414362.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 5 Jun 2022 03:37:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5325D5F4B;
+        Sun,  5 Jun 2022 00:37:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 845B7B80AE0;
+        Sun,  5 Jun 2022 07:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9D2C385A5;
+        Sun,  5 Jun 2022 07:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654414648;
+        bh=BlHOdUUFu9ARO6Hrbt/vvzWUROrjNL6rVvx1mwyku9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hu2QmpbrutMFqqlp9pCtR64kbJzb4P1B+q3DeYiWWUEW29YzrFjUgPMt5oPDT2FrH
+         1JuNjfrkBJXxJfXbwCRSIbgBvRnkICOX8BSv69Cbid2VZwAk1xHCxT2XhpTABZ8/pX
+         LlCp/7QWZh7ginlvjKsjuo7Vh29lhrV+Zykp+ekI=
+Date:   Sun, 5 Jun 2022 09:38:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Ferenc Havasi <havasi@inf.u-szeged.hu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 5.18 00/67] 5.18.2-rc1 review
+Message-ID: <YpxdZnfOuTybBeOi@kroah.com>
+References: <20220603173820.731531504@linuxfoundation.org>
+ <YpxU/bVogip64iQF@debian.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpxU/bVogip64iQF@debian.me>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When kernel.h is used in the headers it adds a lot into dependency hell,
-especially when there are circular dependencies are involved.
+On Sun, Jun 05, 2022 at 02:02:21PM +0700, Bagas Sanjaya wrote:
+> On Fri, Jun 03, 2022 at 07:43:01PM +0200, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.18.2 release.
+> > There are 67 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> 
+> 
+> Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0, neon
+> FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+> 
+> On arm64 build, I found partly outside array bounds warning:
 
-Replace kernel.h inclusion with the list of what is really being used.
+The kernel does not build cleanly on gcc12 just yet, so it will be a
+while before stuff like this goes away.  Please submit patches to the
+proper subsystem developers to help resolve this.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- arch/x86/crypto/camellia.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
-diff --git a/arch/x86/crypto/camellia.h b/arch/x86/crypto/camellia.h
-index 1dcea79e8f8e..547fb7e30928 100644
---- a/arch/x86/crypto/camellia.h
-+++ b/arch/x86/crypto/camellia.h
-@@ -4,7 +4,7 @@
- 
- #include <crypto/b128ops.h>
- #include <linux/crypto.h>
--#include <linux/kernel.h>
-+#include <linux/types.h>
- 
- #define CAMELLIA_MIN_KEY_SIZE	16
- #define CAMELLIA_MAX_KEY_SIZE	32
--- 
-2.34.1
-
+greg k-h

@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFFA53DAA7
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 09:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8919653DAA8
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 09:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244414AbiFEHFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 03:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S1348617AbiFEHHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 03:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350772AbiFEHFP (ORCPT
+        with ESMTP id S242615AbiFEHHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 03:05:15 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB211479
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 00:05:13 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so12210011pjm.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 00:05:13 -0700 (PDT)
+        Sun, 5 Jun 2022 03:07:36 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DAF1BEAD
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 00:07:34 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id w3so9839306plp.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 00:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QI71ASgHrH+xXBDqvl4/z0d7wX86KydJWhZhtOf7+s8=;
-        b=hjCPrftMwZz7tPzPMmyaoQIMbhhvFyTpqdG73CkJFmPSSnenqOPIhLrvna4ocmSQkI
-         OkWJiIOVGjdEOXi7Muns+4StR/b9INtt51NmGm0fNIf/hnXRjcn7HU8cSR+3UZz6g1Yb
-         YtKWhJ2ySst5PFYVqXGCMjl09K544KbbElnHGlheJPe8grHqmNbPMIOq8MP/JZb3fDs/
-         7aMbvVwOdvEQiuFEpsZKM0K2JzTgbG0sqoucZyDSgepMDYjbUkKi5FOPH3rbzyE73rUQ
-         Dr9Acq+mttFYO/clykkuFPzEtmKjI2hdDtxs0ZfkuivtbUyL9+ShGTlToHX3alY3dLCB
-         roWA==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IXhtIIwrHhpC545+iRgGHYieqqcWvvqmIcwI7xt4Nsk=;
+        b=iR5Gf7A2/kjLk8Exxps3G0dFRVC1OZjJzS+j2VngWMWquMTrT0tMlu+kwyY+F7EMMI
+         lGoZzbndHfDZ4cObymGJCKclk4t2eUSMdCQReDhUxzX4pRTRhUECii4OdVqCZo7/MLRv
+         syITFdMzOJw61554abpUPmNjaYgNN1bo4ZoAP1ymyoWSietZE/1pr3cfS252SQh558kG
+         qEFZLPguUBe4DBV/fZx4ZTTdbY5aE4vCY3KgmuQJB+9LM1igdu3RLOoRkqSbocJiCNdC
+         b7+HeRs4HzS5LATNdkmXyFN/8d0xEiEYUFaV1hSLyycfFxdH5gv+B3pf1d5C3OcMs9YS
+         PU2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QI71ASgHrH+xXBDqvl4/z0d7wX86KydJWhZhtOf7+s8=;
-        b=p9ts/6pW8Z/TxB0z5uwb7amzDdI2v++GpYeuZd5U52OIR1e4BqCEL+njC6D2izVFsN
-         nmA1V9N7iAA3siO4klNF2HbB5RL4fDos13/W0HRKSnIIocaF2RJPAcMwBA+luOoK5z+B
-         iHLYD2KefePQjDNrASxgfhDUwc9Msd4hC7T0ptf8Zhu7rXjkbWaTgoi1EGg4ZGMvL8jG
-         zErkDrrfu4PV2wTF3euqWin28ddLh6P8aFNCX9h+PwoAaBEvuY2dOv6PuhWAQDBA2mNT
-         qj9dfpEchiX406XHFgAKt4DlqFX6Hn5gkQodZmVLf8Qqfz2Zd4s3dTQyVkozTO+ybcdp
-         gz7Q==
-X-Gm-Message-State: AOAM532NZmmYPLjxsmrgenMG/MpGt2O+7myOpfhNuECcT/IudrA4PE/q
-        i6HDwTDJvC/j7+ctbxBD6y7Z1kurUH7kb9fvbh4=
-X-Google-Smtp-Source: ABdhPJzj+sKYJR4wvxS1V3YubQ8xaEs4HOXSB9v3jUv5Yc4rFP1Lx912AbuXy3hpx2Eb1Pw3058rUhjBxAA6yASQERk=
-X-Received: by 2002:a17:90b:1194:b0:1e2:d261:202b with SMTP id
- gk20-20020a17090b119400b001e2d261202bmr40852106pjb.25.1654412713030; Sun, 05
- Jun 2022 00:05:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IXhtIIwrHhpC545+iRgGHYieqqcWvvqmIcwI7xt4Nsk=;
+        b=dnypJ6mixn/0uPa+NTnlgoqZxdDfO2IdYAiedkzUexqnpBbU3hUTggbX33KZjbIVNT
+         tc67bdGmWtG0XoOgfxEDuwwBu52m3iaV004hS++7c9IFj5R0r2q+cBcWtKsgwqHUSPku
+         fMA4SNFAw/adH4sXeDzol62T8EPui1h1RsngseHkCxnsCRZKtoreMmejt/Jfdudl8+nq
+         z/wOQsMf3BoElD2Vb5uMEBe1pg1GTArD8i2hGIG/RGAe1RMnTF3KfHMNVEGW+mBEw+bg
+         lxOPL8+Ix8iaTk5tdgNcJ7DKQY/ueCrr4jYXqBs+BeKJImfYLUXFAUU4b7LsOcP652sa
+         DXyw==
+X-Gm-Message-State: AOAM532Z+TtCaxuVbzMyjyiiKfNFIaaiyjzykNUubhUTV5B4KAMcRwSk
+        nROxH7tUfg/xFzIVejTm0wo=
+X-Google-Smtp-Source: ABdhPJyMTGLeCNNm+FCrSgXi3l1iw0Qz5IzzU1+Oa/PBBWrms0PoJZlcnhW8wVTcnShhAvR8SNJp+Q==
+X-Received: by 2002:a17:903:210a:b0:167:78c0:dd70 with SMTP id o10-20020a170903210a00b0016778c0dd70mr700900ple.157.1654412854448;
+        Sun, 05 Jun 2022 00:07:34 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id x28-20020aa78f1c000000b0050dc7628196sm442504pfr.112.2022.06.05.00.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 00:07:33 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mtd: parsers: ofpart: Fix refcount leak in bcm4908_partitions_fw_offset
+Date:   Sun,  5 Jun 2022 11:07:23 +0400
+Message-Id: <20220605070726.5979-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220603143555.41914-1-sxwjean@me.com> <YpspHqZM27DeEhNR@n2.us-central1-a.c.spheric-algebra-350919.internal>
-In-Reply-To: <YpspHqZM27DeEhNR@n2.us-central1-a.c.spheric-algebra-350919.internal>
-From:   Xiongwei Song <sxwjean@gmail.com>
-Date:   Sun, 5 Jun 2022 15:04:44 +0800
-Message-ID: <CAEVVKH_WM321zQPC-xjchqjySi4kngo6CFz-A6HY2tCjNCZ3SA@mail.gmail.com>
-Subject: Re: [PATCH v2] mm/slub: Simplify __kmem_cache_alias()
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Xiongwei Song <sxwjean@me.com>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xiongwei Song <xiongwei.song@windriver.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 4, 2022 at 5:43 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->
-> On Fri, Jun 03, 2022 at 10:35:55PM +0800, sxwjean@me.com wrote:
-> > From: Xiongwei Song <xiongwei.song@windriver.com>
-> >
-> > There is no need to do anything if sysfs_slab_alias() return nonzero
-> > value after getting a mergeable cache.
-> >
-> > Signed-off-by: Xiongwei Song <xiongwei.song@windriver.com>
-> > Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> > v2: Collect Reviewed-by tag from Muchun.
-> > ---
-> >  mm/slub.c | 8 +++-----
-> >  1 file changed, 3 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/mm/slub.c b/mm/slub.c
-> > index d8d5abf49f5f..9444277d669a 100644
-> > --- a/mm/slub.c
-> > +++ b/mm/slub.c
-> > @@ -4861,6 +4861,9 @@ __kmem_cache_alias(const char *name, unsigned int size, unsigned int align,
-> >
-> >       s = find_mergeable(size, align, flags, name, ctor);
-> >       if (s) {
-> > +             if (sysfs_slab_alias(s, name))
-> > +                     return NULL;
-> > +
-> >               s->refcount++;
-> >
->
-> I think we should not expose sysfs attributes before initializing
-> what can be read via sysfs attribute (object_size).
->
-> >               /*
-> > @@ -4869,11 +4872,6 @@ __kmem_cache_alias(const char *name, unsigned int size, unsigned int align,
-> >                */
-> >               s->object_size = max(s->object_size, size);
->
-> this calculation should be done before sysfs_slab_alias().
+of_find_node_by_path() returns a node pointer with refcount incremented,
+we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Yeah, understood. Should we restore s->object_size and s->inuse if
-sysfs_slab_alias() returns non zero value?
+Fixes: bb17230c61a6 ("mtd: parsers: ofpart: support BCM4908 fixed partitions")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/mtd/parsers/ofpart_bcm4908.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
-Xiongwwei
+diff --git a/drivers/mtd/parsers/ofpart_bcm4908.c b/drivers/mtd/parsers/ofpart_bcm4908.c
+index 0eddef4c198e..bb072a0940e4 100644
+--- a/drivers/mtd/parsers/ofpart_bcm4908.c
++++ b/drivers/mtd/parsers/ofpart_bcm4908.c
+@@ -35,12 +35,15 @@ static long long bcm4908_partitions_fw_offset(void)
+ 		err = kstrtoul(s + len + 1, 0, &offset);
+ 		if (err) {
+ 			pr_err("failed to parse %s\n", s + len + 1);
++			of_node_put(root);
+ 			return err;
+ 		}
+ 
++		of_node_put(root);
+ 		return offset << 10;
+ 	}
+ 
++	of_node_put(root);
+ 	return -ENOENT;
+ }
+ 
+-- 
+2.25.1
 
->
-> Thanks,
-> Hyeonggon
->
-> >               s->inuse = max(s->inuse, ALIGN(size, sizeof(void *)));
-> > -
-> > -             if (sysfs_slab_alias(s, name)) {
-> > -                     s->refcount--;
-> > -                     s = NULL;
-> > -             }
-> >       }
-> >
-> >       return s;
-> > --
-> > 2.30.2
-> >
->

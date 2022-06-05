@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DD053DC1E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 16:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEF553DC25
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 16:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240521AbiFEOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 10:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S1344295AbiFEOHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 10:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbiFEOEN (ORCPT
+        with ESMTP id S232620AbiFEOHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 10:04:13 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E3ADE97
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 07:04:11 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id n12-20020a92260c000000b002d3c9fc68d6so10076187ile.19
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 07:04:11 -0700 (PDT)
+        Sun, 5 Jun 2022 10:07:49 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86F711C20;
+        Sun,  5 Jun 2022 07:07:48 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id l81so1132829oif.9;
+        Sun, 05 Jun 2022 07:07:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=4D4EPvBGgDbUWnPc5BEACuk6+5YNX+C0cKGERi/DBJ8=;
-        b=mMdHsQmkp+zUcUeJH14BPekLeA4ztWvpOgBhRM0fQ2y0/bHO26Cre6eVWwinplHSR0
-         kvN4GgNSCH1VnhWzA1TBPQrd7Fq9/7SH+flcKPSTmAuq1wK2QtjSi6vjBDGVWu9qGGf4
-         f0wu3PZPapwuDSiSAS2XKwH1nKhvqz7vLYl2nlc/UCY1SHAQdgqW4N+xjrhwmtlCALr5
-         Di6PvKScys//UNI+4M+QZJ6Tm2UFqXtt87fwW6TbLTxybkuwL3NoPvFy+wSfd4udIPbZ
-         ribiyYXh9PZV+xQxFJPxiXsbIavx95YzepvJaMRTEO77ImbPejQDQuRtxuG2XcQ9XMUU
-         02wA==
-X-Gm-Message-State: AOAM530VS/Xe9BL0VMTxTOlvkzXc5bZuJiOrwWQQMbZ6DTN94Qpri13e
-        Q6FOIrFAiC/vqpQOn56S3gx+Hy/Mme4rCWcRdjJztLUFHnTy
-X-Google-Smtp-Source: ABdhPJw5RtAjJ9sH9FoXUF1lunz8h/glEZDtAHgB703YQ4wP1RQFdYHVIOF7ajjSeAi+NBHPw38zIhXd/rAHATUj+4708B4jtkFf
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oJ7ks90HcU/OcpWfL85BQOKA+f8sVJfLNmPUt93F2Rk=;
+        b=bbVEdwmCgd+qFk1tN5zoEPtC6unce8upxojBQus0omAEDobpIJqS/ezgVdQKD1m7mH
+         Rd4xc0EZIR4GaXctATzIbD8PNuOAu8MCnQOWSzvTdtklXUctN1066ppqcPGXKoS2gNE1
+         OSUygg3Teqm5RW++Q6uW0fnJLiijXfSNN2hB6Qm1IAyott27kJ5JUlvrJ9FhNCKXSr5N
+         D6KISYYV2J5LFH7xCgYiUTu/ochMYv14qmy6/q0oZSzkfFYpkXkjVpZGOL9D9iV3oZSU
+         LwMC4mv3U1PIReWtsc/87s7GtaJJ7KKhllrZEu6JWS7F4/mHHvdhA+E6Wzn4xJ1LG5E2
+         iJ6Q==
+X-Gm-Message-State: AOAM533QuhYsJgJnaKJurAZNF/wCC2s17Ubn7/27vcyINncJQ+JAyL6k
+        JJ5egQltOcIAZq61lu2dL/nFFBSjZQ==
+X-Google-Smtp-Source: ABdhPJyPTp6ALHoagqZq3P3vIRSTm+NfA4hUpoCAYc5YYjMkWQYj9w/6S9aoRfKe77v9qpgKj4CAHg==
+X-Received: by 2002:a05:6808:2010:b0:32b:17fa:a7e9 with SMTP id q16-20020a056808201000b0032b17faa7e9mr11090598oiw.173.1654438068047;
+        Sun, 05 Jun 2022 07:07:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([172.58.99.0])
+        by smtp.gmail.com with ESMTPSA id gz9-20020a056870280900b000e686d1386dsm5601419oab.7.2022.06.05.07.07.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 07:07:47 -0700 (PDT)
+Received: (nullmailer pid 3419293 invoked by uid 1000);
+        Sun, 05 Jun 2022 14:07:44 -0000
+Date:   Sun, 5 Jun 2022 09:07:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
+Message-ID: <20220605140744.GA3416078-robh@kernel.org>
+References: <20220604164653.79284-1-robimarko@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2d13:b0:665:6e8b:7d84 with SMTP id
- c19-20020a0566022d1300b006656e8b7d84mr8694210iow.133.1654437850502; Sun, 05
- Jun 2022 07:04:10 -0700 (PDT)
-Date:   Sun, 05 Jun 2022 07:04:10 -0700
-In-Reply-To: <000000000000fd54f805e0351875@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000061dcef05e0b3d4e3@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in filp_close
-From:   syzbot <syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com>
-To:     arve@android.com, asml.silence@gmail.com, axboe@kernel.dk,
-        brauner@kernel.org, gregkh@linuxfoundation.org, hdanton@sina.com,
-        hridya@google.com, io-uring@vger.kernel.org,
-        joel@joelfernandes.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maco@android.com, surenb@google.com,
-        syzkaller-bugs@googlegroups.com, tkjos@android.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220604164653.79284-1-robimarko@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,25 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On Sat, Jun 04, 2022 at 06:46:53PM +0200, Robert Marko wrote:
+> Convert DT bindings for Qualcomm QUP I2C controller to DT schema format.
+> 
+> Old text bindings were missing usage of DMA so that was documented, as
+> well as the max clock-frequency.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  .../devicetree/bindings/i2c/qcom,i2c-qup.txt  | 40 ---------
+>  .../devicetree/bindings/i2c/qcom,i2c-qup.yaml | 83 +++++++++++++++++++
+>  2 files changed, 83 insertions(+), 40 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
 
-commit 6319194ec57b0452dcda4589d24c4e7db299c5bf
-Author: Al Viro <viro@zeniv.linux.org.uk>
-Date:   Thu May 12 21:08:03 2022 +0000
+This one is already done.
 
-    Unify the primitives for file descriptor closing
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=134cbe4ff00000
-start commit:   952923ddc011 Merge tag 'pull-18-rc1-work.namei' of git://g..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10ccbe4ff00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=174cbe4ff00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3096247591885bfa
-dashboard link: https://syzkaller.appspot.com/bug?extid=47dd250f527cb7bebf24
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114f7bcdf00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1659a94ff00000
-
-Reported-by: syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com
-Fixes: 6319194ec57b ("Unify the primitives for file descriptor closing")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Rob

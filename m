@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BD453DB45
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB5353DB44
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351054AbiFEKdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 06:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S1351028AbiFEKd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 06:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348259AbiFEKdb (ORCPT
+        with ESMTP id S1351000AbiFEKde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 06:33:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F1920BFE
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 03:33:29 -0700 (PDT)
+        Sun, 5 Jun 2022 06:33:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B402C20F42
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 03:33:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61BC660EFE
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2DAEC3411C;
-        Sun,  5 Jun 2022 10:33:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64944B80B83
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:33:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A533C3411D;
+        Sun,  5 Jun 2022 10:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654425208;
-        bh=gUF0BvUbkpuae9WJ80GO/5Sy6X5SQaf38gV0CMUM2Lg=;
+        s=k20201202; t=1654425210;
+        bh=43pfI2fNX/XgWaeoltvFW8Xa5vnSwG3DklBikTc57BE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCLMvJTIYTwtjDRKhIRHOZGrDsXI1xKQFaZ6N1+FV5WbVK1Nj4t/UlQNqRPrPfD8q
-         HdoFbkEZvvMivcQ9QomGBD0WziZOR4pa6NUowdpPasSnD0JpXNYn6UGEoAk6AxWKOW
-         esAJbGC8hunHpCQZqbi2/luYC2fu7erEdknhTN0qIsN2nw+3yqxiuHRjX1YMuSh1d8
-         lJ09yxgArAhgA1b453pBYZ/xEz3FN4oG93rUlPparQl4VszxDW9UlSM/BLOBlCsrRl
-         Gw8rL3MXCsQIDjH0Gt8IVkfjYoBEj0LmN5sSpGy5VaV+kbj8W3Z9GWRBvstASrZze6
-         PiKTpr0vGHcGA==
+        b=BzpOpu58PgtpvF1il+3NLB+nAI2st8KBxlcQJAxZYfRxwD+GYRaezDMb2kGgqcQkc
+         Of/DhQsAw2jETux98lWRMm6wRH1G3oXCfxD+K9hTdbwrWxBRNvB8A4CrACRAZ/RbYM
+         b8iI9o2CtXhsvXKJIzfOM8xdyvo+1sBKYg+ZrcBal21Xd5BailZ3b07CktfDt45/bz
+         Fo92lnMvP4x1vu5EHxZ58mWaUyXf1tr7szrD0dbjS/EFxb5Eu09MjE45PdTy5CBvW4
+         KxB7zieX/Ri+TpyEpcq3uIUcEGU2NzF7tQatTFPqDbKBnBD9SarbE1Hnjg1/RFF+6C
+         ftA0cBg6fRpww==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Yuri Nudelman <ynudelman@habana.ai>
-Subject: [PATCH 6/7] habanalabs: keep a record of completed CS outcomes
-Date:   Sun,  5 Jun 2022 13:33:15 +0300
-Message-Id: <20220605103316.3414541-6-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 7/7] habanalabs: fix race between hl_get_compute_ctx() and hl_ctx_put()
+Date:   Sun,  5 Jun 2022 13:33:16 +0300
+Message-Id: <20220605103316.3414541-7-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220605103316.3414541-1-ogabbay@kernel.org>
 References: <20220605103316.3414541-1-ogabbay@kernel.org>
@@ -53,291 +53,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuri Nudelman <ynudelman@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-Often, the user is not interested in the completion timestamp of all
-command submissions.
-A common situation is, for example, when the user submits a burst of,
-possibly, several thousands of commands, then request the completion
-timestamp of only couple of specific key commands from all the burst.
-The problem is that currently, the outcome of the early commands may be
-lost, due to a large amount of later commands, that the user does not
-really care about.
+hl_get_compute_ctx() is used to get the pointer to the compute context
+from the hpriv object.
+The function is called in code paths that are not necessarily initiated
+by user, so it is possible that a context release process will happen in
+parallel.
+This can lead to a race condition in which hl_get_compute_ctx()
+retrieves the context pointer, and just before it increments the context
+refcount, the context object is released and a freed memory is accessed.
 
-This patch creates a separate store with the outcomes of commands the
-user has mark explicitly as interested in. This store does not mix the
-marked commands with the unmarked ones, hence the data there will
-survive for much longer.
+To avoid this race, add a mutex to protect the context pointer in hpriv.
+With this lock, hl_get_compute_ctx() will be able to detect if the
+context has been released or is about to be released.
 
-Signed-off-by: Yuri Nudelman <ynudelman@habana.ai>
+struct hl_ctx_mgr has a mutex for contexts IDR with a similar "ctx_lock"
+name, so rename it to just "lock" to avoid a confusion with the new
+lock.
+
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../habanalabs/common/command_submission.c    | 113 ++++++++++++++++--
- drivers/misc/habanalabs/common/context.c      |   9 +-
- drivers/misc/habanalabs/common/habanalabs.h   |  37 ++++++
- 3 files changed, 147 insertions(+), 12 deletions(-)
+ drivers/misc/habanalabs/common/context.c      | 58 ++++++++++++-------
+ drivers/misc/habanalabs/common/device.c       |  1 +
+ drivers/misc/habanalabs/common/habanalabs.h   | 11 ++--
+ .../misc/habanalabs/common/habanalabs_drv.c   |  2 +
+ 4 files changed, 47 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
-index 22109be06139..47b49cbf67ab 100644
---- a/drivers/misc/habanalabs/common/command_submission.c
-+++ b/drivers/misc/habanalabs/common/command_submission.c
-@@ -34,6 +34,84 @@ static int _hl_cs_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
- 				enum hl_cs_wait_status *status, s64 *timestamp);
- static void cs_do_release(struct kref *ref);
- 
-+static void hl_push_cs_outcome(struct hl_device *hdev,
-+			       struct hl_cs_outcome_store *outcome_store,
-+			       u64 seq, ktime_t ts, int error)
-+{
-+	struct hl_cs_outcome *node;
-+	unsigned long flags;
-+
-+	/*
-+	 * CS outcome store supports the following operations:
-+	 * push outcome - store a recent CS outcome in the store
-+	 * pop outcome - retrieve a SPECIFIC (by seq) CS outcome from the store
-+	 * It uses 2 lists: used list and free list.
-+	 * It has a pre-allocated amount of nodes, each node stores
-+	 * a single CS outcome.
-+	 * Initially, all the nodes are in the free list.
-+	 * On push outcome, a node (any) is taken from the free list, its
-+	 * information is filled in, and the node is moved to the used list.
-+	 * It is possible, that there are no nodes left in the free list.
-+	 * In this case, we will lose some information about old outcomes. We
-+	 * will pop the OLDEST node from the used list, and make it free.
-+	 * On pop, the node is searched for in the used list (using a search
-+	 * index).
-+	 * If found, the node is then removed from the used list, and moved
-+	 * back to the free list. The outcome data that the node contained is
-+	 * returned back to the user.
-+	 */
-+
-+	spin_lock_irqsave(&outcome_store->db_lock, flags);
-+
-+	if (list_empty(&outcome_store->free_list)) {
-+		node = list_last_entry(&outcome_store->used_list,
-+				       struct hl_cs_outcome, list_link);
-+		hash_del(&node->map_link);
-+		dev_dbg(hdev->dev, "CS %llu outcome was lost\n", node->seq);
-+	} else {
-+		node = list_last_entry(&outcome_store->free_list,
-+				       struct hl_cs_outcome, list_link);
-+	}
-+
-+	list_del_init(&node->list_link);
-+
-+	node->seq = seq;
-+	node->ts = ts;
-+	node->error = error;
-+
-+	list_add(&node->list_link, &outcome_store->used_list);
-+	hash_add(outcome_store->outcome_map, &node->map_link, node->seq);
-+
-+	spin_unlock_irqrestore(&outcome_store->db_lock, flags);
-+}
-+
-+static bool hl_pop_cs_outcome(struct hl_cs_outcome_store *outcome_store,
-+			       u64 seq, ktime_t *ts, int *error)
-+{
-+	struct hl_cs_outcome *node;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&outcome_store->db_lock, flags);
-+
-+	hash_for_each_possible(outcome_store->outcome_map, node, map_link, seq)
-+		if (node->seq == seq) {
-+			*ts = node->ts;
-+			*error = node->error;
-+
-+			hash_del(&node->map_link);
-+			list_del_init(&node->list_link);
-+			list_add(&node->list_link, &outcome_store->free_list);
-+
-+			spin_unlock_irqrestore(&outcome_store->db_lock, flags);
-+
-+			return true;
-+		}
-+
-+	spin_unlock_irqrestore(&outcome_store->db_lock, flags);
-+
-+	return false;
-+}
-+
- static void hl_sob_reset(struct kref *ref)
- {
- 	struct hl_hw_sob *hw_sob = container_of(ref, struct hl_hw_sob,
-@@ -678,7 +756,6 @@ static void cs_do_release(struct kref *ref)
- 	 */
- 	hl_debugfs_remove_cs(cs);
- 
--	hl_ctx_put(cs->ctx);
- 
- 	/* We need to mark an error for not submitted because in that case
- 	 * the hl fence release flow is different. Mainly, we don't need
-@@ -698,8 +775,14 @@ static void cs_do_release(struct kref *ref)
- 			div_u64(jiffies - cs->submission_time_jiffies, HZ));
- 	}
- 
--	if (cs->timestamp)
-+	if (cs->timestamp) {
- 		cs->fence->timestamp = ktime_get();
-+		hl_push_cs_outcome(hdev, &cs->ctx->outcome_store, cs->sequence,
-+				   cs->fence->timestamp, cs->fence->error);
-+	}
-+
-+	hl_ctx_put(cs->ctx);
-+
- 	complete_all(&cs->fence->completion);
- 	complete_multi_cs(hdev, cs);
- 
-@@ -2325,8 +2408,9 @@ static int hl_wait_for_fence(struct hl_ctx *ctx, u64 seq, struct hl_fence *fence
- 				s64 *timestamp)
- {
- 	struct hl_device *hdev = ctx->hdev;
-+	ktime_t timestamp_kt;
- 	long completion_rc;
--	int rc = 0;
-+	int rc = 0, error;
- 
- 	if (IS_ERR(fence)) {
- 		rc = PTR_ERR(fence);
-@@ -2338,12 +2422,17 @@ static int hl_wait_for_fence(struct hl_ctx *ctx, u64 seq, struct hl_fence *fence
- 	}
- 
- 	if (!fence) {
--		dev_dbg(hdev->dev,
-+		if (!hl_pop_cs_outcome(&ctx->outcome_store, seq, &timestamp_kt, &error)) {
-+			dev_dbg(hdev->dev,
- 			"Can't wait on seq %llu because current CS is at seq %llu (Fence is gone)\n",
- 				seq, ctx->cs_sequence);
- 
--		*status = CS_WAIT_STATUS_GONE;
--		return 0;
-+			*status = CS_WAIT_STATUS_GONE;
-+			return 0;
-+		}
-+
-+		completion_rc = 1;
-+		goto report_results;
- 	}
- 
- 	if (!timeout_us) {
-@@ -2358,18 +2447,20 @@ static int hl_wait_for_fence(struct hl_ctx *ctx, u64 seq, struct hl_fence *fence
- 				&fence->completion, timeout);
- 	}
- 
-+	error = fence->error;
-+	timestamp_kt = fence->timestamp;
-+
-+report_results:
- 	if (completion_rc > 0) {
- 		*status = CS_WAIT_STATUS_COMPLETED;
- 		if (timestamp)
--			*timestamp = ktime_to_ns(fence->timestamp);
-+			*timestamp = ktime_to_ns(timestamp_kt);
- 	} else {
- 		*status = CS_WAIT_STATUS_BUSY;
- 	}
- 
--	if (fence->error == -ETIMEDOUT)
--		rc = -ETIMEDOUT;
--	else if (fence->error == -EIO)
--		rc = -EIO;
-+	if (error == -ETIMEDOUT || error == -EIO)
-+		rc = error;
- 
- 	return rc;
- }
 diff --git a/drivers/misc/habanalabs/common/context.c b/drivers/misc/habanalabs/common/context.c
-index ed2cfd0c6e99..6d033aecc8fc 100644
+index 6d033aecc8fc..64ac65d9268b 100644
 --- a/drivers/misc/habanalabs/common/context.c
 +++ b/drivers/misc/habanalabs/common/context.c
-@@ -181,7 +181,7 @@ int hl_ctx_create(struct hl_device *hdev, struct hl_fpriv *hpriv)
+@@ -125,15 +125,22 @@ void hl_ctx_do_release(struct kref *ref)
  
- int hl_ctx_init(struct hl_device *hdev, struct hl_ctx *ctx, bool is_kernel_ctx)
- {
--	int rc = 0;
-+	int rc = 0, i;
+ 	hl_ctx_fini(ctx);
  
- 	ctx->hdev = hdev;
- 
-@@ -197,6 +197,13 @@ int hl_ctx_init(struct hl_device *hdev, struct hl_ctx *ctx, bool is_kernel_ctx)
- 	if (!ctx->cs_pending)
- 		return -ENOMEM;
- 
-+	INIT_LIST_HEAD(&ctx->outcome_store.used_list);
-+	INIT_LIST_HEAD(&ctx->outcome_store.free_list);
-+	hash_init(ctx->outcome_store.outcome_map);
-+	for (i = 0; i < ARRAY_SIZE(ctx->outcome_store.nodes_pool); ++i)
-+		list_add(&ctx->outcome_store.nodes_pool[i].list_link,
-+			 &ctx->outcome_store.free_list);
+-	if (ctx->hpriv)
+-		hl_hpriv_put(ctx->hpriv);
++	if (ctx->hpriv) {
++		struct hl_fpriv *hpriv = ctx->hpriv;
 +
- 	hl_hw_block_mem_init(ctx);
++		mutex_lock(&hpriv->ctx_lock);
++		hpriv->ctx = NULL;
++		mutex_unlock(&hpriv->ctx_lock);
++
++		hl_hpriv_put(hpriv);
++	}
  
- 	if (is_kernel_ctx) {
+ 	kfree(ctx);
+ }
+ 
+ int hl_ctx_create(struct hl_device *hdev, struct hl_fpriv *hpriv)
+ {
+-	struct hl_ctx_mgr *mgr = &hpriv->ctx_mgr;
++	struct hl_ctx_mgr *ctx_mgr = &hpriv->ctx_mgr;
+ 	struct hl_ctx *ctx;
+ 	int rc;
+ 
+@@ -143,9 +150,9 @@ int hl_ctx_create(struct hl_device *hdev, struct hl_fpriv *hpriv)
+ 		goto out_err;
+ 	}
+ 
+-	mutex_lock(&mgr->ctx_lock);
+-	rc = idr_alloc(&mgr->ctx_handles, ctx, 1, 0, GFP_KERNEL);
+-	mutex_unlock(&mgr->ctx_lock);
++	mutex_lock(&ctx_mgr->lock);
++	rc = idr_alloc(&ctx_mgr->handles, ctx, 1, 0, GFP_KERNEL);
++	mutex_unlock(&ctx_mgr->lock);
+ 
+ 	if (rc < 0) {
+ 		dev_err(hdev->dev, "Failed to allocate IDR for a new CTX\n");
+@@ -170,9 +177,9 @@ int hl_ctx_create(struct hl_device *hdev, struct hl_fpriv *hpriv)
+ 	return 0;
+ 
+ remove_from_idr:
+-	mutex_lock(&mgr->ctx_lock);
+-	idr_remove(&mgr->ctx_handles, ctx->handle);
+-	mutex_unlock(&mgr->ctx_lock);
++	mutex_lock(&ctx_mgr->lock);
++	idr_remove(&ctx_mgr->handles, ctx->handle);
++	mutex_unlock(&ctx_mgr->lock);
+ free_ctx:
+ 	kfree(ctx);
+ out_err:
+@@ -269,6 +276,11 @@ int hl_ctx_init(struct hl_device *hdev, struct hl_ctx *ctx, bool is_kernel_ctx)
+ 	return rc;
+ }
+ 
++static int hl_ctx_get_unless_zero(struct hl_ctx *ctx)
++{
++	return kref_get_unless_zero(&ctx->refcount);
++}
++
+ void hl_ctx_get(struct hl_ctx *ctx)
+ {
+ 	kref_get(&ctx->refcount);
+@@ -287,11 +299,15 @@ struct hl_ctx *hl_get_compute_ctx(struct hl_device *hdev)
+ 	mutex_lock(&hdev->fpriv_list_lock);
+ 
+ 	list_for_each_entry(hpriv, &hdev->fpriv_list, dev_node) {
++		mutex_lock(&hpriv->ctx_lock);
++		ctx = hpriv->ctx;
++		if (ctx && !hl_ctx_get_unless_zero(ctx))
++			ctx = NULL;
++		mutex_unlock(&hpriv->ctx_lock);
++
+ 		/* There can only be a single user which has opened the compute device, so exit
+-		 * immediately once we find him
++		 * immediately once we find its context or if we see that it has been released
+ 		 */
+-		ctx = hpriv->ctx;
+-		hl_ctx_get(ctx);
+ 		break;
+ 	}
+ 
+@@ -383,37 +399,37 @@ int hl_ctx_get_fences(struct hl_ctx *ctx, u64 *seq_arr,
+ /*
+  * hl_ctx_mgr_init - initialize the context manager
+  *
+- * @mgr: pointer to context manager structure
++ * @ctx_mgr: pointer to context manager structure
+  *
+  * This manager is an object inside the hpriv object of the user process.
+  * The function is called when a user process opens the FD.
+  */
+-void hl_ctx_mgr_init(struct hl_ctx_mgr *mgr)
++void hl_ctx_mgr_init(struct hl_ctx_mgr *ctx_mgr)
+ {
+-	mutex_init(&mgr->ctx_lock);
+-	idr_init(&mgr->ctx_handles);
++	mutex_init(&ctx_mgr->lock);
++	idr_init(&ctx_mgr->handles);
+ }
+ 
+ /*
+  * hl_ctx_mgr_fini - finalize the context manager
+  *
+  * @hdev: pointer to device structure
+- * @mgr: pointer to context manager structure
++ * @ctx_mgr: pointer to context manager structure
+  *
+  * This function goes over all the contexts in the manager and frees them.
+  * It is called when a process closes the FD.
+  */
+-void hl_ctx_mgr_fini(struct hl_device *hdev, struct hl_ctx_mgr *mgr)
++void hl_ctx_mgr_fini(struct hl_device *hdev, struct hl_ctx_mgr *ctx_mgr)
+ {
+ 	struct hl_ctx *ctx;
+ 	struct idr *idp;
+ 	u32 id;
+ 
+-	idp = &mgr->ctx_handles;
++	idp = &ctx_mgr->handles;
+ 
+ 	idr_for_each_entry(idp, ctx, id)
+ 		kref_put(&ctx->refcount, hl_ctx_do_release);
+ 
+-	idr_destroy(&mgr->ctx_handles);
+-	mutex_destroy(&mgr->ctx_lock);
++	idr_destroy(&ctx_mgr->handles);
++	mutex_destroy(&ctx_mgr->lock);
+ }
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index b4f14c6d3970..38e1ad432e51 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -245,6 +245,7 @@ static void hpriv_release(struct kref *ref)
+ 
+ 	hl_debugfs_remove_file(hpriv);
+ 
++	mutex_destroy(&hpriv->ctx_lock);
+ 	mutex_destroy(&hpriv->restore_phase_mutex);
+ 
+ 	if ((!hdev->pldm) && (hdev->pdev) &&
 diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 7a46f36518fe..3023ecfc19c9 100644
+index 3023ecfc19c9..1ab64e8a05c6 100644
 --- a/drivers/misc/habanalabs/common/habanalabs.h
 +++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -1535,6 +1535,40 @@ struct hl_dmabuf_priv {
- 	uint64_t			device_address;
+@@ -1638,12 +1638,12 @@ struct hl_ctx {
+ 
+ /**
+  * struct hl_ctx_mgr - for handling multiple contexts.
+- * @ctx_lock: protects ctx_handles.
+- * @ctx_handles: idr to hold all ctx handles.
++ * @lock: protects ctx_handles.
++ * @handles: idr to hold all ctx handles.
+  */
+ struct hl_ctx_mgr {
+-	struct mutex		ctx_lock;
+-	struct idr		ctx_handles;
++	struct mutex	lock;
++	struct idr	handles;
  };
  
-+#define HL_CS_OUTCOME_HISTORY_LEN 256
-+
-+/**
-+ * struct hl_cs_outcome - represents a single completed CS outcome
-+ * @list_link: link to either container's used list or free list
-+ * @map_link: list to the container hash map
-+ * @ts: completion ts
-+ * @seq: the original cs sequence
-+ * @error: error code cs completed with, if any
-+ */
-+struct hl_cs_outcome {
-+	struct list_head list_link;
-+	struct hlist_node map_link;
-+	ktime_t ts;
-+	u64 seq;
-+	int error;
-+};
-+
-+/**
-+ * struct hl_cs_outcome_store - represents a limited store of completed CS outcomes
-+ * @outcome_map: index of completed CS searcheable by sequence number
-+ * @used_list: list of outcome objects currently in use
-+ * @free_list: list of outcome objects currently not in use
-+ * @nodes_pool: a static pool of preallocated outcome objects
-+ * @db_lock: any operation on the store must take this lock
-+ */
-+struct hl_cs_outcome_store {
-+	DECLARE_HASHTABLE(outcome_map, 8);
-+	struct list_head used_list;
-+	struct list_head free_list;
-+	struct hl_cs_outcome nodes_pool[HL_CS_OUTCOME_HISTORY_LEN];
-+	spinlock_t db_lock;
-+};
-+
- /**
-  * struct hl_ctx - user/kernel context.
-  * @mem_hash: holds mapping from virtual address to virtual memory area
-@@ -1545,6 +1579,8 @@ struct hl_dmabuf_priv {
-  * @refcount: reference counter for the context. Context is released only when
-  *		this hits 0l. It is incremented on CS and CS_WAIT.
-  * @cs_pending: array of hl fence objects representing pending CS.
-+ * @outcome_store: storage data structure used to remember ouitcomes of completed
-+ *                 command submissions for a long time after CS id wraparound.
-  * @va_range: holds available virtual addresses for host and dram mappings.
-  * @mem_hash_lock: protects the mem_hash.
-  * @mmu_lock: protects the MMU page tables. Any change to the PGT, modifying the
-@@ -1580,6 +1616,7 @@ struct hl_ctx {
+ 
+@@ -1998,6 +1998,8 @@ struct hl_notifier_event {
+  * @dev_node: node in the device list of file private data
+  * @refcount: number of related contexts.
+  * @restore_phase_mutex: lock for context switch and restore phase.
++ * @ctx_lock: protects the pointer to current executing context pointer. TODO: remove for multiple
++ *            ctx per process.
+  */
+ struct hl_fpriv {
  	struct hl_device		*hdev;
+@@ -2011,6 +2013,7 @@ struct hl_fpriv {
+ 	struct list_head		dev_node;
  	struct kref			refcount;
- 	struct hl_fence			**cs_pending;
-+	struct hl_cs_outcome_store	outcome_store;
- 	struct hl_va_range		*va_range[HL_VA_RANGE_TYPE_MAX];
- 	struct mutex			mem_hash_lock;
- 	struct mutex			mmu_lock;
+ 	struct mutex			restore_phase_mutex;
++	struct mutex			ctx_lock;
+ };
+ 
+ 
+diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
+index e182637c2d93..e617cc394ff7 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_drv.c
++++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
+@@ -137,6 +137,7 @@ int hl_device_open(struct inode *inode, struct file *filp)
+ 
+ 	mutex_init(&hpriv->notifier_event.lock);
+ 	mutex_init(&hpriv->restore_phase_mutex);
++	mutex_init(&hpriv->ctx_lock);
+ 	kref_init(&hpriv->refcount);
+ 	nonseekable_open(inode, filp);
+ 
+@@ -209,6 +210,7 @@ int hl_device_open(struct inode *inode, struct file *filp)
+ 	hl_mem_mgr_fini(&hpriv->mem_mgr);
+ 	hl_ctx_mgr_fini(hpriv->hdev, &hpriv->ctx_mgr);
+ 	filp->private_data = NULL;
++	mutex_destroy(&hpriv->ctx_lock);
+ 	mutex_destroy(&hpriv->restore_phase_mutex);
+ 	mutex_destroy(&hpriv->notifier_event.lock);
+ 	put_pid(hpriv->taskpid);
 -- 
 2.25.1
 

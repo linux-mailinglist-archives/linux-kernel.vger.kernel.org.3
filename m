@@ -2,182 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4704453DB22
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 11:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7600753DB2B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 11:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348945AbiFEJvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 05:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S1350992AbiFEJ6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 05:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235001AbiFEJu5 (ORCPT
+        with ESMTP id S1350975AbiFEJ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 05:50:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DD254D636;
-        Sun,  5 Jun 2022 02:50:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AEC0D6E;
-        Sun,  5 Jun 2022 02:50:56 -0700 (PDT)
-Received: from [10.163.37.253] (unknown [10.163.37.253])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BD7E3F73D;
-        Sun,  5 Jun 2022 02:50:47 -0700 (PDT)
-Message-ID: <03fb0343-25ec-0356-211f-edbea7541429@arm.com>
-Date:   Sun, 5 Jun 2022 15:20:47 +0530
+        Sun, 5 Jun 2022 05:58:46 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D41412AE6;
+        Sun,  5 Jun 2022 02:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654423124; x=1685959124;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CHtMVrgGKAU2RSmUy/mOnpfdRd709kBQ96y+3DfCz/o=;
+  b=J+3R3JZPHRDT/W1udugebkjMFRzDRJt0j9oNslm5ceZER5QAbej1SwOF
+   okog7slQ1qJBgMPymiXVSEPSZZLxpteYd4jO8uf0qBfXTB5E1Q4Ef7yQV
+   sFjnt6+l9ss7jVj9lOvbI/bqhV+5QME7D9VZT3lGfXs7yQDsyxOVESM5E
+   +kmvqmUsQ3GZK1sD68E0uhQkk4OyZHM3lIQ/+/hziVPgIZUIrl8ZQcC7c
+   TCOgM0RtJJU6TAg9ZR39NLbzImsak00ZveoR9AHxrUsQHO7cZSS9yxOSb
+   o4dcIedGOpxtQXGJio/2wbfgYqgUAYIwHPiRmQD/dNYct+lm3dosT89T2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10368"; a="275344913"
+X-IronPort-AV: E=Sophos;i="5.91,279,1647327600"; 
+   d="scan'208";a="275344913"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 02:58:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,279,1647327600"; 
+   d="scan'208";a="708634502"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 05 Jun 2022 02:58:42 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nxn1t-000BrZ-K1;
+        Sun, 05 Jun 2022 09:58:41 +0000
+Date:   Sun, 5 Jun 2022 17:57:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning:
+ unused variable 'microchip_xisc_of_match'
+Message-ID: <202206051703.38nNx3IB-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/6] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-csky@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220603101411.488970-1-anshuman.khandual@arm.com>
- <20220603101411.488970-5-anshuman.khandual@arm.com>
- <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAJF2gTQOKUfCyaU7gqkejvoJWeSnqc5QyyzWQCw1RJ8PEB2zKg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Eugen,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   952923ddc01120190dcf671e7b354364ce1d1362
+commit: c9aa973884a163ecb6d5d4d3be9137058adcaf8c media: atmel: atmel-isc: add microchip-xisc driver
+date:   12 months ago
+config: hexagon-buildonly-randconfig-r002-20220605 (https://download.01.org/0day-ci/archive/20220605/202206051703.38nNx3IB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 416a5080d89066029f9889dc23f94de47c2fa895)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c9aa973884a163ecb6d5d4d3be9137058adcaf8c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c9aa973884a163ecb6d5d4d3be9137058adcaf8c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/atmel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
+   static const struct of_device_id microchip_xisc_of_match[] = {
+                                    ^
+   1 warning generated.
 
 
-On 6/4/22 17:43, Guo Ren wrote:
-> Acked-by: Guo Ren <guoren@kernel.org>
+vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
 
-I will resend this series with suggested changes.
+   609	
+ > 610	static const struct of_device_id microchip_xisc_of_match[] = {
+   611		{ .compatible = "microchip,sama7g5-isc" },
+   612		{ }
+   613	};
+   614	MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
+   615	
 
-> 
-> On Fri, Jun 3, 2022 at 6:15 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->>
->> This defines and exports a platform specific custom vm_get_page_prot() via
->> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->> macros can be dropped which are no longer needed.
->>
->> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->> Cc: linux-csky@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Acked-by: Guo Ren <guoren@kernel.org>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  arch/csky/Kconfig               |  1 +
->>  arch/csky/include/asm/pgtable.h | 18 ------------------
->>  arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
->>  3 files changed, 33 insertions(+), 18 deletions(-)
->>
->> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
->> index 21d72b078eef..588b8a9c68ed 100644
->> --- a/arch/csky/Kconfig
->> +++ b/arch/csky/Kconfig
->> @@ -6,6 +6,7 @@ config CSKY
->>         select ARCH_HAS_GCOV_PROFILE_ALL
->>         select ARCH_HAS_SYNC_DMA_FOR_CPU
->>         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->> +       select ARCH_HAS_VM_GET_PAGE_PROT
->>         select ARCH_USE_BUILTIN_BSWAP
->>         select ARCH_USE_QUEUED_RWLOCKS
->>         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
->> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
->> index bbe245117777..229a5f4ad7fc 100644
->> --- a/arch/csky/include/asm/pgtable.h
->> +++ b/arch/csky/include/asm/pgtable.h
->> @@ -77,24 +77,6 @@
->>  #define MAX_SWAPFILES_CHECK() \
->>                 BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
->>
->> -#define __P000 PAGE_NONE
->> -#define __P001 PAGE_READ
->> -#define __P010 PAGE_READ
->> -#define __P011 PAGE_READ
->> -#define __P100 PAGE_READ
->> -#define __P101 PAGE_READ
->> -#define __P110 PAGE_READ
->> -#define __P111 PAGE_READ
->> -
->> -#define __S000 PAGE_NONE
->> -#define __S001 PAGE_READ
->> -#define __S010 PAGE_WRITE
->> -#define __S011 PAGE_WRITE
->> -#define __S100 PAGE_READ
->> -#define __S101 PAGE_READ
->> -#define __S110 PAGE_WRITE
->> -#define __S111 PAGE_WRITE
->> -
->>  extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->>  #define ZERO_PAGE(vaddr)       (virt_to_page(empty_zero_page))
->>
->> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
->> index bf2004aa811a..f9babbed17d4 100644
->> --- a/arch/csky/mm/init.c
->> +++ b/arch/csky/mm/init.c
->> @@ -197,3 +197,35 @@ void __init fixaddr_init(void)
->>         vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
->>         fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
->>  }
->> +
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->> +       case VM_NONE:
->> +               return PAGE_NONE;
->> +       case VM_READ:
->> +       case VM_WRITE:
->> +       case VM_WRITE | VM_READ:
->> +       case VM_EXEC:
->> +       case VM_EXEC | VM_READ:
->> +       case VM_EXEC | VM_WRITE:
->> +       case VM_EXEC | VM_WRITE | VM_READ:
->> +               return PAGE_READ;
->> +       case VM_SHARED:
->> +               return PAGE_NONE;
->> +       case VM_SHARED | VM_READ:
->> +               return PAGE_READ;
->> +       case VM_SHARED | VM_WRITE:
->> +       case VM_SHARED | VM_WRITE | VM_READ:
->> +               return PAGE_WRITE;
->> +       case VM_SHARED | VM_EXEC:
->> +       case VM_SHARED | VM_EXEC | VM_READ:
->> +               return PAGE_READ;
->> +       case VM_SHARED | VM_EXEC | VM_WRITE:
->> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->> +               return PAGE_WRITE;
->> +       default:
->> +               BUILD_BUG();
->> +       }
->> +}
->> +EXPORT_SYMBOL(vm_get_page_prot);
->> --
->> 2.25.1
->>
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

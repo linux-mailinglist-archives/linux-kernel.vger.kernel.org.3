@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F4E53DAE3
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF9F53DAE4
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349800AbiFEIpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 04:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S1350867AbiFEItF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 04:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiFEIpQ (ORCPT
+        with ESMTP id S231216AbiFEItE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 04:45:16 -0400
-Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D952188;
-        Sun,  5 Jun 2022 01:45:11 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1654418637tb7nap4v
-Received: from localhost.localdomain ( [111.9.5.115])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 05 Jun 2022 16:43:43 +0800 (CST)
-X-QQ-SSF: 01000000002000C0G000B00A0000000
-X-QQ-FEAT: 3uawQE1sH+3FUqPkLPowtOQBuTZOvH5lvJD0mEeglnetACa1xLaHyTppTRY5+
-        7YyGFrySZNzQuDxCb1jwDaHHkNUT4cQY/mgTiKXMGrJxeCAOLSghvEbAu0j+kH1SDnjUytv
-        x/16oLI+0WISLmgZLybfrTo5rBK3PXKG9UMA5QKfhv/mo7gnsS2p897lDmLwF3qsRljEhOO
-        /7vTSXHbKn8JFo5QATHH2rQ1W/agpeUZAATu4UIpcKR1OwMmaNy0xKmsBBMidbxWA+2Y7Ht
-        PZ7zay6RK9OIjjh1uXBw0BaOp/W4hoMDHpb6NNqJtt2bq71u/PekI1CoXaAxBTOONw91+7r
-        92ReYfRI7LpCaZBQsQ=
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, lains@riseup.net,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] HID: logitech-hidpp: Fix syntax errors in comments
-Date:   Sun,  5 Jun 2022 16:43:43 +0800
-Message-Id: <20220605084343.10514-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 5 Jun 2022 04:49:04 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283332CC9A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 01:49:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so10332725pjs.1
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 01:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f2zpvH+KVD/8jHsV0ASeB9VNDeynxoyrvxGNU6QM330=;
+        b=eg+LMOs8KRy3SKWUqYqmF3UmIcozRovoZonPV3hqBETWIWunZJOM6IvuWQIndQO2Ha
+         XZOFkRzp+HbcJd6H6vu+JYmnAw9PchYBWA0nVZWdTan05OGTWYxZYv8sXz0IEA9Yz1Dl
+         3x6futirJa+lG7de+zUXeAunI1zClMmuvg/u4C2BgE5fshGq+WxQBHI6E6bWlqDQhm+B
+         GLPs71TLsoihULrY5CrEPNNwYsK6dtmNksLjT3plRDgw+xtLtNQyonNXCDDKhIkarfsS
+         x8GH7ryQz9n337B7dUPzFzFUWGIUEL8iw8d1LCSq0OLv97raR0c9GjqInI2HoFpDAqfo
+         hi7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f2zpvH+KVD/8jHsV0ASeB9VNDeynxoyrvxGNU6QM330=;
+        b=eAcIWPPb5CNhfGo5zIR527OlZIg+f54Vsd7a0CyGoa/fuGrg6E5U9Jly+Bqh0OoiFF
+         3WDycegzZ+r4RSJ0c6sN4Xq2QhpFgsbL4dmWeO6Ofdp84xtYUOJzhDrWR4YWS4cJpSi3
+         Uof3qFem7Rs1XT1BXfZUSn9CoEMYPPP/m9Z/gsfxyTOQSL1K5EzD+L3g5Q7jgvgxvB6y
+         QRfD/csig7jkrSW0C4/frgWvQFBSshp8iq9tq1hET8zAw/RCC7vzXjCl1Hakwrxsz4Ba
+         jWbMrlgQdBErsgKFn87JkQdfI+S2+jhbCblR7u4d34XNrRt9w2M3iKFdLWnzmqYV7NUW
+         0VJw==
+X-Gm-Message-State: AOAM5319fuML6ZUT2AFRFf5pRBOfIyFBOcLzHVgtxFFypv1beX/R6hax
+        GHPtWtEnFTItfzoEtjaAWSs=
+X-Google-Smtp-Source: ABdhPJy1zI5Cef0GS97dq7Q+aUXs+4F80remtmuxSShzQbOqk2+Dvm2wCo2XpimuxEfS3BRHmDALow==
+X-Received: by 2002:a17:90a:c202:b0:1e2:e772:5f0a with SMTP id e2-20020a17090ac20200b001e2e7725f0amr20144538pjt.109.1654418942672;
+        Sun, 05 Jun 2022 01:49:02 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id y188-20020a6232c5000000b0051bb79437f7sm8271867pfy.37.2022.06.05.01.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 01:49:02 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ARM: versatile: Fix refcount leak in ap_init_of
+Date:   Sun,  5 Jun 2022 12:48:54 +0400
+Message-Id: <20220605084854.29659-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'in'.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+Fixes: e67ae6be734d ("ARM: integrator: hook the AP into the SoC bus")
+Fixes: df36680f1a71 ("ARM: integrator: core module registers from compatible strings")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/hid/hid-logitech-hidpp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-versatile/integrator_ap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 81de88ab2ecc..68f9e9d207f4 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -1694,7 +1694,7 @@ static int hidpp_battery_get_property(struct power_supply *psy,
- 			val->strval = hidpp->hid_dev->uniq;
- 			break;
- 		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
--			/* hardware reports voltage in in mV. sysfs expects uV */
-+			/* hardware reports voltage in mV. sysfs expects uV */
- 			val->intval = hidpp->battery.voltage * 1000;
- 			break;
- 		case POWER_SUPPLY_PROP_CHARGE_TYPE:
+diff --git a/arch/arm/mach-versatile/integrator_ap.c b/arch/arm/mach-versatile/integrator_ap.c
+index e216fac917d0..6b2a69acc6b0 100644
+--- a/arch/arm/mach-versatile/integrator_ap.c
++++ b/arch/arm/mach-versatile/integrator_ap.c
+@@ -175,6 +175,7 @@ static void __init ap_init_of(void)
+ 	if (!syscon)
+ 		return;
+ 	ap_syscon_map = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(ap_syscon_map)) {
+ 		pr_crit("could not find Integrator/AP system controller\n");
+ 		return;
 -- 
-2.36.1
+2.25.1
 

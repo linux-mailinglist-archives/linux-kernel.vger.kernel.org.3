@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6C553DE84
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E09B53DE8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351566AbiFEWCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
+        id S1351595AbiFEWGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbiFEWCw (ORCPT
+        with ESMTP id S238038AbiFEWGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:02:52 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D0DD95
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 15:02:49 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id q1so25646799ejz.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 15:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zt9GSJY6oHFpCzwgjAcBrGgFRTLh7TnEuClTteoy+qI=;
-        b=fD8XxZY1UodhyOBn79r1tZ+Q0MT0UQOxYmKuwWu9STl2WERhDyPRlrW76bSrHbR0p8
-         h2jIOQMEfKo943/CfW+W7qD3jgv8tlDwjC38Z1qyfiROdPyldOBURnJyTjq+0wFyEQOv
-         ZOymioOaqVofr8QXjy5bYg0FEnQs8GYNYYIlsIkqVeYAUXLIRFsmX/DXdu41cZy60tvx
-         nqI9VHkEHq1z4KTzZ8pKcWGAa8ctpadE/cjcK3VZSw2YGKVjZAmRhoRlQ4FjZNlRYuq5
-         1WxPCDQd8EDwxH/hZFWu2q0o7VouN3IK6vpONMII7jLb5dcT+6YyJJVv/6F5DKewRHt0
-         GFEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zt9GSJY6oHFpCzwgjAcBrGgFRTLh7TnEuClTteoy+qI=;
-        b=aYErGC1OZcMb+rIJPdlDtKNs0kusfb/ehRw8b/IdInsa+ZhbV0IVcP8rz5cMnbFrvt
-         ZQ1dO5iQ5EXdZirK0AzQTn6U9m060CvaBdxOTErwGNlALsuGY3c9kWrWAywbVo3MY8x1
-         SsC4nwsYk9uFKgWlojJhxhLsmQxP1ibaQrmukHCfwvBchJZ01bV2THo8BDGkjT3/YoUX
-         8bPmoM6yOzKAFBDA56aIu/gloLrcdbT6/im3u53gNyo3J+Cs+rqzy+01/7tHhZql5pH8
-         y6xrHXldoTnEUVKeMG9XIY0eztdkgw+Wx2YL7S1qaFI1nQAEL4emKML91wiizqkr5e3+
-         eKPQ==
-X-Gm-Message-State: AOAM533com5b44h8+NtBNAxTE8weaYJqV5MKC137/RqB83D8rad9IjLV
-        Y0po273cK9DIlEGjz4MVf6lpP2V/tnRgtW3ehfE=
-X-Google-Smtp-Source: ABdhPJwPw8jFhUlGOroYyzAMGOrWBCkJypBlZn//O+7ZtQdDWM0D6LpkEi2VMyUEjPbLEZCd+AQhTQeVLI3Q18ByDY0=
-X-Received: by 2002:a17:906:b18e:b0:710:26db:7a53 with SMTP id
- w14-20020a170906b18e00b0071026db7a53mr10185146ejy.290.1654466568353; Sun, 05
- Jun 2022 15:02:48 -0700 (PDT)
+        Sun, 5 Jun 2022 18:06:25 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307DA17043
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 15:06:23 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 93A3820569;
+        Mon,  6 Jun 2022 00:06:19 +0200 (CEST)
+Date:   Mon, 6 Jun 2022 00:06:18 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        jamipkettunen@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] iommu/qcom: Write TCR before TTBRs to fix ASID
+ access behavior
+Message-ID: <20220605220618.n6rkb6cfdzzgst3j@SoMainline.org>
+References: <20220527212901.29268-1-konrad.dybcio@somainline.org>
+ <20220527212901.29268-3-konrad.dybcio@somainline.org>
+ <20220531155559.GB25502@willie-the-truck>
 MIME-Version: 1.0
-References: <20220601033927.47814-1-linmq006@gmail.com> <20220601033927.47814-2-linmq006@gmail.com>
-In-Reply-To: <20220601033927.47814-2-linmq006@gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 6 Jun 2022 00:02:37 +0200
-Message-ID: <CAFBinCAkdRrk+EcZvFFiGEU3r9QtKfxYEPgpkn-HtRmBdwRSmA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] drm/meson: encoder_cvbs: Fix refcount leak in meson_encoder_cvbs_init
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220531155559.GB25502@willie-the-truck>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022-05-31 16:55:59, Will Deacon wrote:
+> On Fri, May 27, 2022 at 11:28:57PM +0200, Konrad Dybcio wrote:
+> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > 
+> > As also stated in the arm-smmu driver, we must write the TCR before
+> > writing the TTBRs, since the TCR determines the access behavior of
+> > some fields.
+> 
+> Where is this stated in the arm-smmu driver?
+> 
+> > 
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > ---
+> >  drivers/iommu/arm/arm-smmu/qcom_iommu.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+> > index 1728d4d7fe25..75f353866c40 100644
+> > --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+> > +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+> > @@ -273,18 +273,18 @@ static int qcom_iommu_init_domain(struct iommu_domain *domain,
+> >  			ctx->secure_init = true;
+> >  		}
+> >  
+> > -		/* TTBRs */
+> > -		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+> > -				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+> > -				FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
+> > -		iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
+> > -
+> >  		/* TCR */
+> >  		iommu_writel(ctx, ARM_SMMU_CB_TCR2,
+> >  				arm_smmu_lpae_tcr2(&pgtbl_cfg));
+> >  		iommu_writel(ctx, ARM_SMMU_CB_TCR,
+> >  			     arm_smmu_lpae_tcr(&pgtbl_cfg) | ARM_SMMU_TCR_EAE);
+> >  
+> > +		/* TTBRs */
+> > +		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+> > +				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+> > +				FIELD_PREP(ARM_SMMU_TTBRn_ASID, ctx->asid));
+> > +		iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
+> 
+> I'd have thought that SCTLR.M would be clear here, so it shouldn't matter
+> what order we write these in.
 
-thank you for your patch!
+Having tested the series without this particular patch on 8976 (Sony
+Loire Suzu), it doesn't seem to matter indeed.  I'll ask around if this
+"access behaviour" was observed on a different board/platform.
 
-On Wed, Jun 1, 2022 at 5:39 AM Miaoqian Lin <linmq006@gmail.com> wrote:
->
-> of_graph_get_remote_node() returns remote device nodepointer with
-> refcount incremented, we should use of_node_put() on it when done.
-> Add missing of_node_put() to avoid refcount leak.
->
-> Fixes: 318ba02cd8a8 ("drm/meson: encoder_cvbs: switch to bridge with ATTACH_NO_CONNECTOR")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-As far as I can tell this patch is identical to the one from v1.
-Please keep my Reviewed-by from the previous version in case nothing
-has changed for this specific patch:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-
-
-Best regards,
-Martin
+- Marijn

@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A5853DD41
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 19:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24B653DD42
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 19:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351344AbiFERCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 13:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        id S1351360AbiFERC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 13:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbiFERCO (ORCPT
+        with ESMTP id S1351354AbiFERCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 13:02:14 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D271CFD1
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:02:13 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id g186so2265584pgc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 10:02:13 -0700 (PDT)
+        Sun, 5 Jun 2022 13:02:19 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F74525EAA
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:02:18 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id j6so10961476pfe.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 10:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
         bh=f/UilSAxG+uYZGr2O0WgxBidGfjIL+/pLfI/yMfN0No=;
-        b=DvIH7AOZWh8wjT7RLecBKIEa04kyL/a2Hkj5zaIQ/gzGkyBeqd+wzo0PVpoWSD5BJu
-         09H5cQpccXCs+JPo2EeYUlI7y9b3eENiVGpQp3hcES/kOT5jkVjprF3RyF7JKD5gI1lw
-         oT6FFATWzBPYS2IzdAkzCi4jccRJkq/KWRi9gjGLZABLitO2KdMV1XtOiYb8LfXrwobk
-         /aGQhB20O+s8QVYm2kwf9LqiXmszJ988sAWc4rJDU77v5gyrdzWRvclQwbibI6FxdjiQ
-         99aujoFgora1NFL5miBMXrpn3y93LZxUKja+cpP1vvtHHrD44uPh8b3CAwQl2wbtFexF
-         bDZg==
+        b=RKlGjv7qg8n3QsL/a1ILA3Jp/2K1dgp9hRNn9u4HaSqesZOX+uCiwV9BD1Lyf7JxKO
+         CChZzr5owIyJ6QbOWEjaafGxti/96FD9imZV8PlO09+IAUSXFMhmLGLxtkEJ3BK2QQot
+         w/IxwqBrHqg2/nFn/adg+cCxgcfSZ7MZpNdTtNLdZBx9YGoO1KDW6x7LvVdlNtv917d/
+         W3596ocXt2M/EGagsi2Pf9p9zDa/0bxDkW1YJshBukDwbHNRtjS5deMLwUUKxvhT0ae8
+         KWJExTg89yoNDxaZbJZ3KnIJag5sgli0WPuC/3TlronLipM9GDx8WYCBT61QLFJmqRur
+         5Qiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
         bh=f/UilSAxG+uYZGr2O0WgxBidGfjIL+/pLfI/yMfN0No=;
-        b=RzrEYVM5xLvO+XWT3OAEB9Osv8XNDBNrXT/2Gn2P1qrMq1DriS4TZ8LPL/9vgcqXJM
-         gHCkwK5RfSYO6YWbPooTYHyJTgta6Z7YfkrAFy6onZgx+BJHHZGcbbeycYZq9dgAg2Gm
-         dQ+Hb9fJDrYhjbybiAdoBkcRfBGl7pZk2nllh91VMOdFRzqxjBQ4xSiygLMhqnPjDtRK
-         K/9DB9eusFtZYtMyET3BxPJaRKZNXXgt5Or6+KwbXG8uBawDsHAy4ViCtAmn/H8xlyV4
-         5jG7d/dN1X0RVtziT7au3qH22kXryJ7J1/Uet03QrosPL/NayFkpRLTseym781PO/D7L
-         Vvwg==
-X-Gm-Message-State: AOAM530IwrE3FtGB6k1na23AGEAWPuS8ageXbZ988PC3YBJlZz+OfbRf
-        S4CpELlIWPYBBfqWbOzmtStVO2ffM7VP3I/f7PM=
-X-Google-Smtp-Source: ABdhPJyVoR6+uLJZo5rRvm+4Xf4jMlSxiMczXFAHRxbkNcHoEVkc5eU+Sl6VNbD649Q9VuU52dL9t+aXwZZsciZvuHY=
-X-Received: by 2002:a65:6552:0:b0:3db:772a:2465 with SMTP id
- a18-20020a656552000000b003db772a2465mr17681998pgw.225.1654448532873; Sun, 05
- Jun 2022 10:02:12 -0700 (PDT)
+        b=ue5A8Zp4RH+Y9ymh4JlEihsaqQYIexCsfM95ArwzTZvi4/r7WN9OszvEphZo+BX89m
+         B2p0SMlV5SEI3Gp3CZfw0B3uyHHz66lKMk/+SKYcq2UgSJaw8ZgXJkiYt82h5v8KY4qD
+         QsOzLHw55rDlNBblZnWQ12Hzcxub1eaVnWcrXbbumGkYHH9oXGi+dAhE5QGnebWcT3+H
+         Qo+5W7Wu536uBxi2PufuAMwyM1jXwHw51SEGtdfR6dLeCMwULsRk5yBTn65xyPGabHbe
+         ylYyLEwy9QO7D6z77r+cGW4L1cQUoUvqnjXMwp85dkaxSfZhUnmv3vkB/9B2k7J2MYCz
+         BaSQ==
+X-Gm-Message-State: AOAM530IrepnsVve3HkzD1K/mzrMg6dd1fmk0wpri0ZeqIDq3Us+qbSi
+        7xjMVtFe7T3Hrz+AqwpsanApkeTxW3tXakqm/IA=
+X-Google-Smtp-Source: ABdhPJyenrExVqL+cI48tgM63PSps/WYde/OAakvaXakG1DSTL4Y1rEs7Z0lUfhGi7AezcBsgbYGtQ7HynYiDi32Bi8=
+X-Received: by 2002:a63:788:0:b0:3fc:6922:704 with SMTP id 130-20020a630788000000b003fc69220704mr17560703pgh.6.1654448537865;
+ Sun, 05 Jun 2022 10:02:17 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:90a:a082:0:0:0:0 with HTTP; Sun, 5 Jun 2022 10:02:12
+Received: by 2002:a17:90a:a082:0:0:0:0 with HTTP; Sun, 5 Jun 2022 10:02:17
  -0700 (PDT)
 Reply-To: profdorothyinvestment@gmail.com
 From:   "Hon. Francisco " <franciscojinvestmentss@gmail.com>
-Date:   Sun, 5 Jun 2022 10:02:12 -0700
-Message-ID: <CALMQtE-ra8WZgYu6cJpNBHk7YD8QQ3OoL9fJNDso3n-MuZU4_g@mail.gmail.com>
-Subject: 
+Date:   Sun, 5 Jun 2022 10:02:17 -0700
+Message-ID: <CALMQtE-QmiNxPagtGETymiptUBZ=KEL-d3E-NQ4+HM7kPPpdWg@mail.gmail.com>
+Subject: HELLO
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
@@ -61,7 +60,7 @@ X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         autolearn_force=no version=3.4.6
 X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:542 listed in]
+        *      [2607:f8b0:4864:20:0:0:0:442 listed in]
         [list.dnswl.org]
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
         *      [score: 0.5000]

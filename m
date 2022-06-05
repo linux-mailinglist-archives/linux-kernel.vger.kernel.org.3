@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C15653DE73
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD98B53DE88
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348049AbiFEVrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 17:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S1348294AbiFEWFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347933AbiFEVrK (ORCPT
+        with ESMTP id S1348227AbiFEWFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 17:47:10 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFD110FA;
-        Sun,  5 Jun 2022 14:47:05 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id a184so6197908qkg.5;
-        Sun, 05 Jun 2022 14:47:05 -0700 (PDT)
+        Sun, 5 Jun 2022 18:05:32 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0353B3DD;
+        Sun,  5 Jun 2022 15:05:27 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id x65so9785990qke.2;
+        Sun, 05 Jun 2022 15:05:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=eEvBqpfDNp1gDkv6Nzdk7QI2mfC3GLl4R5QP+lrMbvA=;
-        b=BK+Dz9K9PX7OOh5HU+9u3ENGR+uIEOx0rSMGqOxtIXtt/wqgjiPJ8K73j3Ga/XoDji
-         feCVVgEAZ3DIXmygMg3AE3j+z6lVL+zq4oSaeImbKCNsK3kh8retiKHglyUxiz9Bu6n9
-         sca42g3DeI5hKXdGAd7hhrbp/VIVJvR1dfdh4A+HTewpKSwr8u+5o2Emw94dZFTke4on
-         lv2RKHUi96TgfEPmbJdRAfQhrtPo6c+fi1aJoolnWKYqXymaRXZ5qlaOkTCce5QXpvpl
-         qDz011Eej1i2MBsr1mdwfXyWntU2e1UWBuH0hR2NIOBjGv3gqE4su1r+chSxNZ7DrLTk
-         mL/A==
-X-Gm-Message-State: AOAM531OsWhlWqkUpPzIcKJVGnDHCq69Ppv14NUz2D3PTEOCfbX9t9mA
-        w5dBI4Xk+dViEeKUd+kqhTqmNCjVDg==
-X-Google-Smtp-Source: ABdhPJyC7nsRGp7r9R2CQWA/Cgx5aIH6CBASg7KC9/6/3ZpnQ/Ef21Dng8wLb0+nHlIU5qgGVTTGBQ==
-X-Received: by 2002:a37:315:0:b0:6a6:a90c:9072 with SMTP id 21-20020a370315000000b006a6a90c9072mr6703509qkd.256.1654465624964;
-        Sun, 05 Jun 2022 14:47:04 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:ac97:ac63:b5fd:aa9:8d74:9989])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05620a455000b006a6b1c11235sm3207461qkp.84.2022.06.05.14.47.01
+        bh=Rg3RgKIBXamNR9v7mxieWFauvb14cauJ3M376uS4CVo=;
+        b=ZmT/6OKhxCSWhGu1sCjxi+52ZLup2fs24jz4gbNHFX19VVO1aEBNEz8aOszOIfDLQZ
+         41/8IhNgZMdmbNWGme+2ZE26nGyAMAvsWghsFx5CqFp3pFJzP/6qvl42DBxb9yvzQ8Zo
+         Om8mlld0xN+C9j6FEzDeXge/cziEQDwqvO1rn+DvTYHMisbawkmPfUUveHcZ2L+yu6MO
+         O6qSRaxVg39JyYqi3/7uFluFwQ5aFUhZVNcE02XflxAyBhziI3+Xw0WJL2Tye19yRQsN
+         Kv2WIn/MfJnuW6flsRagbX4NOR1/voxFqplitgge5XPt7JzW0mRoiAOFI9bA6abvXBNx
+         L0pg==
+X-Gm-Message-State: AOAM5302xzhmiZpy2t3EG5WLBdpgSuRsuflN7G8NWYTccyHii5TY40Ev
+        oMsykG9svcpfNg+ia6am4A==
+X-Google-Smtp-Source: ABdhPJxw4Q7xRoj+FRRLau1BUn28VPlMUykk9chhacog0H3umTnuHtNBiI15cyz0mNtGuZOr7R7nUw==
+X-Received: by 2002:a05:620a:c52:b0:6a6:6b8f:eac2 with SMTP id u18-20020a05620a0c5200b006a66b8feac2mr13950454qki.643.1654466726041;
+        Sun, 05 Jun 2022 15:05:26 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:1bd0:10c3:c77a:8738:16cb:8d08])
+        by smtp.gmail.com with ESMTPSA id bl8-20020a05622a244800b00304e3c85b3dsm4320647qtb.93.2022.06.05.15.05.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 14:47:04 -0700 (PDT)
-Received: (nullmailer pid 3577933 invoked by uid 1000);
-        Sun, 05 Jun 2022 21:47:00 -0000
-Date:   Sun, 5 Jun 2022 16:47:00 -0500
+        Sun, 05 Jun 2022 15:05:25 -0700 (PDT)
+Received: (nullmailer pid 3580163 invoked by uid 1000);
+        Sun, 05 Jun 2022 21:48:26 -0000
+Date:   Sun, 5 Jun 2022 16:48:26 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Potin Lai <potin.lai.pt@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rayn Chen <rayn_chen@aspeedtech.com>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: aspeed-i2c: add properties for
- manual clock setting
-Message-ID: <20220605214700.GA3558088-robh@kernel.org>
-References: <20220601041512.21484-1-potin.lai.pt@gmail.com>
- <20220601041512.21484-3-potin.lai.pt@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        David Heidelberg <david@ixit.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: power: supply: bq24190: use regulator
+ schema for child node
+Message-ID: <20220605214826.GA3580104-robh@kernel.org>
+References: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601041512.21484-3-potin.lai.pt@gmail.com>
+In-Reply-To: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -71,94 +67,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 12:15:12PM +0800, Potin Lai wrote:
-> Add following properties for manual tuning clock divisor and cycle of
-> hign/low pulse witdh.
+On Wed, 01 Jun 2022 09:19:08 +0200, Krzysztof Kozlowski wrote:
+> The 'usb-otg-vbus' child node is a regulator so reference the regulator
+> schema for proper evaluation.
 > 
-> * aspeed,i2c-manual-clk: Enable aspeed i2c clock manual setting
-> * aspeed,i2c-base-clk-div: Base Clock divisor (tBaseClk)
-> * aspeed,i2c-clk-high-cycle: Cycles of clock-high pulse (tClkHigh)
-> * aspeed,i2c-clk-low-cycle: Cycles of clock-low pulse (tClkLow)
-> 
-> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/i2c/aspeed,i2c.yaml   | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
+>  Documentation/devicetree/bindings/power/supply/bq24190.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> index ea643e6c3ef5..e2f67fe2aa0c 100644
-> --- a/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/aspeed,i2c.yaml
-> @@ -12,6 +12,28 @@ maintainers:
->  allOf:
->    - $ref: /schemas/i2c/i2c-controller.yaml#
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: st,stm32-uart
 
-stm32 uart?
-
-> +
-> +    then:
-> +      properties:
-> +        aspeed,i2c-clk-high-cycle:
-> +          maximum: 8
-> +        aspeed,i2c-clk-low-cycle:
-> +          maximum: 8
-> +
-> +  - if:
-> +      required:
-> +        - aspeed,i2c-manual-clk
-> +
-> +    then:
-> +      required:
-> +        - aspeed,i2c-base-clk-div
-> +        - aspeed,i2c-clk-high-cycle
-> +        - aspeed,i2c-clk-low-cycle
-
-'dependencies' can better express this than an if/then.
-
-However, I think this should all be done in a common way.
-
-> +
->  properties:
->    compatible:
->      enum:
-> @@ -49,6 +71,28 @@ properties:
->      description:
->        states that there is another master active on this bus
->  
-> +  aspeed,i2c-manual-clk:
-> +    type: boolean
-> +    description: enable manual clock setting
-
-No need for this as presence of the other properties can determine this.
-
-> +
-> +  aspeed,i2c-base-clk-div:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192,
-> +           16384, 32768]
-> +    description: base clock divisor
-
-Specify the i2c bus frequency and calculate the divider.
-
-> +
-> +  aspeed,i2c-clk-high-cycle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 16
-> +    description: cycles of master clock-high pulse width
-> +
-> +  aspeed,i2c-clk-low-cycle:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 1
-> +    maximum: 16
-> +    description: cycles of master clock-low pulse width
-
-These 2 should be common. I think you just need a single property 
-expressing duty cycle.
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>

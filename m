@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482FA53DEB6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84CF53DEBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351725AbiFEWpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S1351730AbiFEWtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbiFEWpi (ORCPT
+        with ESMTP id S240474AbiFEWtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:45:38 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2C44E3B1;
-        Sun,  5 Jun 2022 15:45:37 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id h18so9236124qvj.11;
-        Sun, 05 Jun 2022 15:45:37 -0700 (PDT)
+        Sun, 5 Jun 2022 18:49:03 -0400
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC422FFCE;
+        Sun,  5 Jun 2022 15:49:03 -0700 (PDT)
+Received: by mail-qk1-f182.google.com with SMTP id n197so2752053qke.1;
+        Sun, 05 Jun 2022 15:49:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=uDzznG00WmBRTYCBcArlD1mf1zVfk2p9nd9xHJn3CVw=;
-        b=QLyZgAZNPM+rWgMRlc+DXzdYgBh9Ra7qyZeFJTNP28/zf3I61wuWo/962L1eLwfoG/
-         UkHve7OM1ZNRY8Ff6rAlsDo5ibsayReFl0nw99WkjCd+hhgRpA9hC7y87zrKh+Q9r1Ir
-         0HEyiMBBKDOds7sQSqMFekEooHi04wIyaQsu5S+UpzAY2G+SQ/c82n7UjQNk+XMpPL0q
-         uwEOKjms5mUvOi67wduCpTaKYixVA4QZIKZR1xeoHOlnw1uknSDxlZMXi4Gdu7EV8SUG
-         LUZs0JjZacoqV3BR3h8cO/UIhXC5Q58XYn62r0Q2QSAu/Gct2czhtHwnhWCdfsu21c6V
-         102A==
-X-Gm-Message-State: AOAM532tws8z8BEu6Clcy25iWx0PYsAOmib6lkDDAuO5pwpXu2urD34i
-        GPI2ouj+1HamC5HUz+Vx+9qzobtLgg==
-X-Google-Smtp-Source: ABdhPJwmsDYIVR7qLkG6UWB/x8H/AgliTU6o4B+wWC9F21jxx0e09sjuNDCoG74Zm/3g90Nz9x+0LQ==
-X-Received: by 2002:ad4:5447:0:b0:461:d7a7:f0ec with SMTP id h7-20020ad45447000000b00461d7a7f0ecmr70549704qvt.21.1654469136911;
-        Sun, 05 Jun 2022 15:45:36 -0700 (PDT)
+        bh=cFQv2TrAmUdwhDKidl65ILu68jId00HPH3oLSQ72B5o=;
+        b=2H1hgGqearhmwqlyKzscm/iTpnjGO9ixXdXzknomE0VpGF9nY3AGhc4Ci7/C6ZQCV9
+         KjLB2B0FVx2cmIoTXv2SLYbWax97uo9hgwlSRbZ8zoEaeTF4GUOIWZT+Y0S1+sP2vUkv
+         A8yaUWqbRO3JP4rBeD1VPx2Ej8O0mwhaK1X7FZLfl69oKZ/q+0cbGbyc+z2eyxK6S3o5
+         RheYqtdyjiR4EGQVXRA7VHRkZ93tE/Qo5HhO93C3iPGdplD80OkYuESR95IytwnGRknD
+         O/vlnRtrt894X7c8jvJEEMQakJozOJ4OSQNU7cx8UcN1zWjWDIO7OS2gW1oXVP7RW5Bj
+         CFwg==
+X-Gm-Message-State: AOAM5320gCSSMXPHYel8WEe/0nB5Q9JI3tW63sm+ITiIHu0A6hrJDUIL
+        xb7HfsnReGHseZV2ycWv5A==
+X-Google-Smtp-Source: ABdhPJxJPLZPo26sTSCa9JYf+TTBlOyo7cPD042GPk7h8wYbwewlEFr2v0vnS1Xb/N/q+TJ0KnMy4w==
+X-Received: by 2002:a05:620a:404d:b0:6a4:f5b0:d8ca with SMTP id i13-20020a05620a404d00b006a4f5b0d8camr13825512qko.506.1654469342227;
+        Sun, 05 Jun 2022 15:49:02 -0700 (PDT)
 Received: from robh.at.kernel.org ([2607:fb90:1bdb:2e61:f12:452:5315:9c7e])
-        by smtp.gmail.com with ESMTPSA id v128-20020a37dc86000000b0069fc13ce244sm10341437qki.117.2022.06.05.15.45.34
+        by smtp.gmail.com with ESMTPSA id x23-20020ac86b57000000b002f93760e4cfsm8714685qts.26.2022.06.05.15.48.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 15:45:36 -0700 (PDT)
-Received: (nullmailer pid 3667844 invoked by uid 1000);
-        Sun, 05 Jun 2022 22:45:33 -0000
-Date:   Sun, 5 Jun 2022 17:45:33 -0500
+        Sun, 05 Jun 2022 15:49:01 -0700 (PDT)
+Received: (nullmailer pid 3673195 invoked by uid 1000);
+        Sun, 05 Jun 2022 22:48:58 -0000
+Date:   Sun, 5 Jun 2022 17:48:58 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        Joerg Roedel <joro@8bytes.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Julien Grall <julien@xen.org>, xen-devel@lists.xenproject.org,
-        devicetree@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Juergen Gross <jgross@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH V4 5/8] dt-bindings: Add xen,grant-dma IOMMU description
- for xen-grant DMA ops
-Message-ID: <20220605224533.GA3667788-robh@kernel.org>
-References: <1654197833-25362-1-git-send-email-olekstysh@gmail.com>
- <1654197833-25362-6-git-send-email-olekstysh@gmail.com>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     rogerq@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        s-anna@ti.com, kishon@ti.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        nm@ti.com, ssantosh@kernel.org, linux-kernel@vger.kernel.org,
+        vigneshr@ti.com, grygorii.strashko@ti.com
+Subject: Re: [PATCH v4 1/6] dt-bindings: remoteproc: Add PRU consumer bindings
+Message-ID: <20220605224858.GA3673137-robh@kernel.org>
+References: <20220603121520.13730-1-p-mohan@ti.com>
+ <20220603121520.13730-2-p-mohan@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1654197833-25362-6-git-send-email-olekstysh@gmail.com>
+In-Reply-To: <20220603121520.13730-2-p-mohan@ti.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -74,55 +67,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 02 Jun 2022 22:23:50 +0300, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+On Fri, 03 Jun 2022 17:45:15 +0530, Puranjay Mohan wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> The main purpose of this binding is to communicate Xen specific
-> information using generic IOMMU device tree bindings (which is
-> a good fit here) rather than introducing a custom property.
+> Add a YAML binding document for PRU consumers. The binding includes
+> all the common properties that can be used by different PRU consumer
+> or application nodes and supported by the PRU remoteproc driver.
+> These are used to configure the PRU hardware for specific user
+> applications.
 > 
-> Introduce Xen specific IOMMU for the virtualized device (e.g. virtio)
-> to be used by Xen grant DMA-mapping layer in the subsequent commit.
+> The application nodes themselves should define their own bindings.
 > 
-> The reference to Xen specific IOMMU node using "iommus" property
-> indicates that Xen grant mappings need to be enabled for the device,
-> and it specifies the ID of the domain where the corresponding backend
-> resides. The domid (domain ID) is used as an argument to the Xen grant
-> mapping APIs.
-> 
-> This is needed for the option to restrict memory access using Xen grant
-> mappings to work which primary goal is to enable using virtio devices
-> in Xen guests.
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+> Co-developed-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
 > ---
-> Changes RFC -> V1:
->    - update commit subject/description and text in description
->    - move to devicetree/bindings/arm/
-> 
-> Changes V1 -> V2:
->    - update text in description
->    - change the maintainer of the binding
->    - fix validation issue
->    - reference xen,dev-domid.yaml schema from virtio/mmio.yaml
-> 
-> Change V2 -> V3:
->    - Stefano already gave his Reviewed-by, I dropped it due to the changes (significant)
->    - use generic IOMMU device tree bindings instead of custom property
->      "xen,dev-domid"
->    - change commit subject and description, was
->      "dt-bindings: Add xen,dev-domid property description for xen-grant DMA ops"
-> 
-> Changes V3 -> V4:
->    - add Stefano's R-b
->    - remove underscore in iommu node name
->    - remove consumer example virtio@3000
->    - update text for two descriptions
+> V3->V4:
+> * Addressed Rob's comments regarding max and min Items.
+> * removed the dependencies tag as it was redundant.
 > ---
->  .../devicetree/bindings/iommu/xen,grant-dma.yaml   | 39 ++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iommu/xen,grant-dma.yaml
+> .../bindings/remoteproc/ti,pru-consumer.yaml  | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,171 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A313053DC6A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 17:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904CC53DC6E
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 17:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349051AbiFEPCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 11:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S1345071AbiFEPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 11:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237838AbiFEPCI (ORCPT
+        with ESMTP id S232100AbiFEPHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 11:02:08 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04706270D
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 08:02:07 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id u8so8827759qvj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 08:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kcporvhqgValB24OgXM6V2a1HlQmkTeEazpU5LPxfg8=;
-        b=YXw2x5GIeDonUvhgeSCC/3qbBKZTYOKxWtx6i/izuwzkQWdGc3w1xwBr4iCL8GYoiH
-         6oJY6FPfRmD4p6N9VhfYopyuLFtfR5PQKQ2z5uciZ5ZTUOSsGyfomSv1DwaHyacUXcr0
-         VskP2OtVN8nNi9APsTWp6TNvr6kdoJiQ3qMmr0JE8VoU7KSi8Vhv1I15pWthLvZK8XKY
-         XoAeJ9OMYg2Ui7C3XRND5jSzanwxM91csirwHMLplV/fxDpxVTz7sUtUHwG778lUqDOw
-         fbx0atX+lRL+ALNwI2GKni6MGB9ABSo9F2CehF1q5ulAiLqcPMO7b/WfnqFuE8s/u7mm
-         xggA==
+        Sun, 5 Jun 2022 11:07:51 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3224314080;
+        Sun,  5 Jun 2022 08:07:50 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id p129so12049113oig.3;
+        Sun, 05 Jun 2022 08:07:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kcporvhqgValB24OgXM6V2a1HlQmkTeEazpU5LPxfg8=;
-        b=avD8l4VFIMdT70vByputH2kjKkNxX+0BxoKLBKCN0UELTI3WeFswlFXzBsiG/nMhjo
-         sXhUXjGbQLupeTGCdmZNIHO92ZvxEQ6LudDok4Ey9vkZHjIjeSLkKfFVpTT1xPNKoK8p
-         tGdivIqOo9uD1d4PHcIpkQl4otWwYh2w8818COMD3KotJxyou+1zFJWv6PR5Gz4rj7x1
-         GqyXq+brAwqNUXrLEsvTxSOygbOZc5Y01dg2AVlvILpf1o2LpLMwgL8JVOyLSIRj6GkA
-         MiRaJ280BZfZDW3OA2jrEFq+Ju+zwyGBLFYc7I43tvMdZ+DdgUtMAlEXkL7DrmRg4PQ4
-         w/Ww==
-X-Gm-Message-State: AOAM531Mj/Y4cUKq4mxC5eO84TSZuhoSjCYHP02gZS4+7aLgdqQ83FfA
-        gc9TD26/jkHvboZNdiY31Uw=
-X-Google-Smtp-Source: ABdhPJx0iFE4AFFNRXtdR/CtcZ4neVA6woiJIV19pZMyklMpx95XtfuLRFBgWA04vjSIWY9TfQ56Qg==
-X-Received: by 2002:a05:6214:194f:b0:461:b6e5:79b6 with SMTP id q15-20020a056214194f00b00461b6e579b6mr68968620qvk.60.1654441325930;
-        Sun, 05 Jun 2022 08:02:05 -0700 (PDT)
-Received: from localhost (c-69-254-185-160.hsd1.ar.comcast.net. [69.254.185.160])
-        by smtp.gmail.com with ESMTPSA id o21-20020a05620a15d500b0069fc13ce216sm9084996qkm.71.2022.06.05.08.02.04
+        bh=Eud9kg/6OFIqnqYrPe3oEwQGSlqs1McYY85aMizcgo0=;
+        b=YXfajtCQLNHIkypQ5n0dwnAdRdEubsDdFuNwV+v4qvlKwYt3ihZTsN2seKbnVL0Un2
+         yThIPlCGQdoMIp9zDsY+uZ3p0hf3U/POJr0ynGfsI7tOoSp8neX4WBucem6NWTVntgcw
+         NI+x/SK4xMTMHViN+a8jRiY9Zakyk32PpaZGh7NA8VLrhKA+8eulyWSr4rxwF/HUNsWi
+         vc7wNs3Rar3J72vEdwe9eng3qQb6Pqcsq6UV51d9EIvAlG0NTfCGwZScCI2TlvfioeKJ
+         H+Y2H8YcmmXsvScN0r1J6mfOF4tkC1BiGydvrGiWffKEJulF+Hl2fHq88+Pq0i8++Vfr
+         agow==
+X-Gm-Message-State: AOAM533mUoQJ+KwHQBg8+JfktZNAYtVbZdZ6A+TjF0luITxJ1F3rHmRm
+        sOd0g1BgWh/Zve+7IlXKQQ==
+X-Google-Smtp-Source: ABdhPJz00ge01uJT59XtkxX6M/a3OhPGU/9wzEOHC1jW9OSL85nx3nlhfnsOhpmql6+2MPxju5SuxA==
+X-Received: by 2002:a05:6808:bd5:b0:32b:ac3a:73e1 with SMTP id o21-20020a0568080bd500b0032bac3a73e1mr26500521oik.54.1654441669478;
+        Sun, 05 Jun 2022 08:07:49 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:20d2:7c7e:bed3:ffa4:df1c:4ad2])
+        by smtp.gmail.com with ESMTPSA id z6-20020a9d71c6000000b0060affecb2a5sm6628284otj.17.2022.06.05.08.07.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 08:02:05 -0700 (PDT)
-Date:   Sun, 5 Jun 2022 08:01:59 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
-Subject: Re: mainline build failure due to 0a97953fd221 ("lib: add
- bitmap_{from,to}_arr64")
-Message-ID: <YpzFZ/hUqg3VmLmw@yury-laptop>
-References: <YpyJ9qTNHJzz0FHY@debian>
+        Sun, 05 Jun 2022 08:07:49 -0700 (PDT)
+Received: (nullmailer pid 3507843 invoked by uid 1000);
+        Sun, 05 Jun 2022 15:07:47 -0000
+Date:   Sun, 5 Jun 2022 10:07:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Kumar Gala <galak@codeaurora.org>
+Subject: Re: [PATCH 1/4] dt-bindings: arm: qcom: document qcom,msm-id and
+ qcom,board-id
+Message-ID: <20220605150747.GA3465286-robh@kernel.org>
+References: <20220529202629.47588-1-krzysztof.kozlowski@linaro.org>
+ <20220529202629.47588-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YpyJ9qTNHJzz0FHY@debian>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220529202629.47588-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 11:48:22AM +0100, Sudip Mukherjee wrote:
-> Hi All,
+On Sun, May 29, 2022 at 10:26:26PM +0200, Krzysztof Kozlowski wrote:
+> The top level qcom,msm-id and qcom,board-id properties are utilized by
+> bootloaders on Qualcomm MSM platforms to determine which device tree
+> should be used and passed to the kernel.
 > 
-> The latest mainline kernel branch fails to build for "arm allmodconfig"
-> and "csky allmodconfig".
+> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
+> compatible format") from 2015 was a consensus during discussion about
+> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
+> problems with that consensus:
+> 1. It was reached 7 years ago but it turned out its implementation did
+>    not reach all possible products.
 > 
-> "arm allmodconfig" fails with the error:
+> 2. Initially additional tool (dtbTool) was needed for parsing these
+>    fields to create a QCDT image consisting of multiple DTBs, later the
+>    bootloaders were improved and they use these qcom,msm-id and
+>    qcom,board-id properties directly.
 > 
-> In file included from ./include/linux/string.h:253,
->                  from ./include/linux/bitmap.h:11,
->                  from ./include/linux/cpumask.h:12,
->                  from ./include/linux/smp.h:13,
->                  from ./include/linux/lockdep.h:14,
->                  from ./include/linux/mutex.h:17,
->                  from ./include/linux/rfkill.h:35,
->                  from net/bluetooth/hci_core.c:29:
-> In function 'fortify_memcpy_chk',
->     inlined from 'bitmap_copy' at ./include/linux/bitmap.h:254:2,
->     inlined from 'bitmap_copy_clear_tail' at ./include/linux/bitmap.h:263:2,
->     inlined from 'bitmap_from_u64' at ./include/linux/bitmap.h:540:2,
->     inlined from 'hci_bdaddr_list_add_with_flags' at net/bluetooth/hci_core.c:2156:2:
-> ./include/linux/fortify-string.h:344:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   344 |                         __write_overflow_field(p_size_field, size);
+> 3. Extracting relevant information from the board compatible requires
+>    this additional tool (dtbTool), which makes the build process more
+>    complicated and not easily reproducible (DTBs are modified after the
+>    kernel build).
 > 
+> 4. Some versions of Qualcomm bootloaders expect these properties even
+>    when booting with a single DTB.  The community is stuck with these
+>    bootloaders thus they require properties in the DTBs.
 > 
-> And, "csky allmodconfig" fails with the error:
-> 
-> In file included from ./include/linux/cpumask.h:12,
->                  from ./include/linux/mm_types_task.h:14,
->                  from ./include/linux/mm_types.h:5,
->                  from ./include/linux/buildid.h:5,
->                  from ./include/linux/module.h:14,
->                  from net/bluetooth/mgmt.c:27:
-> In function 'bitmap_copy',
->     inlined from 'bitmap_copy_clear_tail' at ./include/linux/bitmap.h:263:2,
->     inlined from 'bitmap_from_u64' at ./include/linux/bitmap.h:540:2,
->     inlined from 'set_device_flags' at net/bluetooth/mgmt.c:4534:4:
-> ./include/linux/bitmap.h:254:9: error: 'memcpy' forming offset [4, 7] is out of the bounds [0, 4] of object 'flags' with type 'long unsigned int[1]' [-Werror=array-bounds]
->   254 |         memcpy(dst, src, len);
->       |         ^~~~~~~~~~~~~~~~~~~~~
-> In file included from ./include/linux/kasan-checks.h:5,
->                  from ./include/asm-generic/rwonce.h:26,
->                  from ./arch/csky/include/generated/asm/rwonce.h:1,
->                  from ./include/linux/compiler.h:248,
->                  from ./include/linux/build_bug.h:5,
->                  from ./include/linux/container_of.h:5,
->                  from ./include/linux/list.h:5,
->                  from ./include/linux/module.h:12,
->                  from net/bluetooth/mgmt.c:27:
-> net/bluetooth/mgmt.c: In function 'set_device_flags':
-> net/bluetooth/mgmt.c:4532:40: note: 'flags' declared here
->  4532 |                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
->       |                                        ^~~~~
-> ./include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
->    11 |         unsigned long name[BITS_TO_LONGS(bits)]
-> 
-> 
-> For both the failures, git bisect points to:
-> 0a97953fd221 ("lib: add bitmap_{from,to}_arr64")
-> 
-> 
-> And, reverting it on top of mainline branch has fixed both the build failures.
+> Since several upstreamed Qualcomm SoC-based boards require these
+> properties to properly boot and the properties are reportedly used by
+> bootloaders, document them.
 
-Hi Sudip,
+My primary issue here is accepting this will be an endorsement for 
+other vendors doing something similar. I'm not against an ID 
+property(ies) in the root node, but would rather see something common 
+if we do anything.
 
-Thanks for pointing at this.
-
-In the patch you mentioned, silent typecasting from to u64 has been
-replaced with explicit memory dereference, and it spotted -Warray-bounds:
-
- static inline void bitmap_from_u64(unsigned long *dst, u64 mask)
- {
--       dst[0] = mask & ULONG_MAX;
--
--       if (sizeof(mask) > sizeof(unsigned long))
--               dst[1] = mask >> 32;
-+       bitmap_from_arr64(dst, &mask, 64);
- }
-
-The problem is that bluetooth code declares current_flags as u32, and 
-later applies 64-bit function to convert it to bitmap.
-
-In the bluetooth code, using bitmap_from_u64 is incorrect because of
-that, and because the length of bitmap in that case is __HCI_CONN_NUM_FLAGS,
-which is 2, not 64. The simplest fix is to switch to bitmap_from_arr32.
-
-I'll send a fix shortly.
-
-Thanks,
-Yury
+Rob

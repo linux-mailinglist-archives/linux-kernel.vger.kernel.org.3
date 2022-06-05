@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087C553DAE1
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F4E53DAE3
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 10:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350856AbiFEImB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 04:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S1349800AbiFEIpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 04:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiFEIl7 (ORCPT
+        with ESMTP id S231216AbiFEIpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 04:41:59 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EA8F22F
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 01:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dgTai
-        pyhTS3VeOs8/cT4Gxe8QzvPZ0lNBUbKXaDbHyE=; b=hlgcnbMUxsoXXj7mMaeE9
-        5VHFi7IOEdNLeFs5Tc51rmDZLREulvQJ+g7GtHKk53Qikxl6C4+oaZxD1ZBTr88O
-        IgOkG3Z+koj51nb2PRGOu2lX8g9jy7gqz3zw3jUTcvxKH7e5RolDkeTIxOaXuTI/
-        7nLOh71N+EnSX+UI4tFAUI=
-Received: from localhost.localdomain (unknown [1.203.64.79])
-        by smtp7 (Coremail) with SMTP id C8CowABXxZUcbJxirFxWGQ--.2150S4;
-        Sun, 05 Jun 2022 16:41:18 +0800 (CST)
-From:   jingyuwang <jingyuwang_vip@163.com>
-To:     pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, jingyuwang <jingyuwang_vip@163.com>
-Subject: [PATCH] printk: change type of cpu_possible_bits to __cpu_possible_mask
-Date:   Sun,  5 Jun 2022 16:40:58 +0800
-Message-Id: <20220605084058.17708-1-jingyuwang_vip@163.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 5 Jun 2022 04:45:16 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D952188;
+        Sun,  5 Jun 2022 01:45:11 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1654418637tb7nap4v
+Received: from localhost.localdomain ( [111.9.5.115])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 05 Jun 2022 16:43:43 +0800 (CST)
+X-QQ-SSF: 01000000002000C0G000B00A0000000
+X-QQ-FEAT: 3uawQE1sH+3FUqPkLPowtOQBuTZOvH5lvJD0mEeglnetACa1xLaHyTppTRY5+
+        7YyGFrySZNzQuDxCb1jwDaHHkNUT4cQY/mgTiKXMGrJxeCAOLSghvEbAu0j+kH1SDnjUytv
+        x/16oLI+0WISLmgZLybfrTo5rBK3PXKG9UMA5QKfhv/mo7gnsS2p897lDmLwF3qsRljEhOO
+        /7vTSXHbKn8JFo5QATHH2rQ1W/agpeUZAATu4UIpcKR1OwMmaNy0xKmsBBMidbxWA+2Y7Ht
+        PZ7zay6RK9OIjjh1uXBw0BaOp/W4hoMDHpb6NNqJtt2bq71u/PekI1CoXaAxBTOONw91+7r
+        92ReYfRI7LpCaZBQsQ=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, lains@riseup.net,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] HID: logitech-hidpp: Fix syntax errors in comments
+Date:   Sun,  5 Jun 2022 16:43:43 +0800
+Message-Id: <20220605084343.10514-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowABXxZUcbJxirFxWGQ--.2150S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF43trWUJrWkKw15KrWxJFb_yoWfCFbEvF
-        9avrnrKF17G3s2gr17AF43Jr9xta97JFn7K3sakF9Iyr1DJr13tanrJFnxZrn5GrZagFy8
-        ZFW3uw1qkFsxWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRZGYl3UUUUU==
-X-Originating-IP: [1.203.64.79]
-X-CM-SenderInfo: 5mlqw5xxzd0whbyl1qqrwthudrp/xtbCbgYXF2BbENzw1wAAs4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1.type of cpu_possible_bits is changed,refer to commit c4c54dd1caf1
- ("kernel/cpu.c: change type of cpu_possible_bits and friends").
-2.set_cpu_possible() before setup_arch().
+Delete the redundant word 'in'.
 
-Signed-off-by: jingyuwang <jingyuwang_vip@163.com>
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 ---
- kernel/printk/printk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hid/hid-logitech-hidpp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index ea3dd55709e7..25670186d12e 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -1144,8 +1144,8 @@ static void __init log_buf_add_cpu(void)
- 	unsigned int cpu_extra;
- 
- 	/*
--	 * archs should set up cpu_possible_bits properly with
--	 * set_cpu_possible() after setup_arch() but just in
-+	 * archs should set up __cpu_possible_mask properly with
-+	 * set_cpu_possible() before setup_arch() but just in
- 	 * case lets ensure this is valid.
- 	 */
- 	if (num_possible_cpus() == 1)
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 81de88ab2ecc..68f9e9d207f4 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -1694,7 +1694,7 @@ static int hidpp_battery_get_property(struct power_supply *psy,
+ 			val->strval = hidpp->hid_dev->uniq;
+ 			break;
+ 		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+-			/* hardware reports voltage in in mV. sysfs expects uV */
++			/* hardware reports voltage in mV. sysfs expects uV */
+ 			val->intval = hidpp->battery.voltage * 1000;
+ 			break;
+ 		case POWER_SUPPLY_PROP_CHARGE_TYPE:
 -- 
-2.34.1
+2.36.1
 

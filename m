@@ -2,132 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59E553DB48
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777F253DB4A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351036AbiFEKjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 06:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        id S1351056AbiFEKsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 06:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243307AbiFEKjQ (ORCPT
+        with ESMTP id S239923AbiFEKs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 06:39:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0D520F66
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 03:39:14 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nxnf5-00017S-Im; Sun, 05 Jun 2022 12:39:11 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8C80D8C79B;
-        Sun,  5 Jun 2022 10:39:09 +0000 (UTC)
-Date:   Sun, 5 Jun 2022 12:39:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
-Message-ID: <20220605103909.5on3ep7lzorc35th@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
- <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
- <CAMZ6RqJpJCAudv89YqFFQH80ei7WiAshyk1RtbEv=aXSyxo3hQ@mail.gmail.com>
- <20220604135541.2ki2eskyc7gsmrlu@pengutronix.de>
- <CAMZ6RqJ7qvXyxNVUK-=oJnK_oq7N94WABOb3pqeYf9Fw3G6J9A@mail.gmail.com>
- <20220604151859.hyywffrni4vo6gdl@pengutronix.de>
- <CAMZ6RqK45r-cqXvorUzRV-LA_C+mk6hNSA1b+0kLs7C-oTcDCA@mail.gmail.com>
+        Sun, 5 Jun 2022 06:48:27 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4175F33E36
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 03:48:26 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v4-20020a1cac04000000b00397001398c0so8566948wme.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 03:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=r9Y8kA9BOTqjotDV2mNar1zuSb0A2ydZEGgDX9CPjEM=;
+        b=FLZNJToxPY/fFrCcKkWe23DlLTfvRfGg7qo6aLPcrKe//3rcwNFjRaUtPByggwBX8k
+         rAMWAkjRKNL8HAqv1+rE3QKX2FYW1V1YQiMTpB1iudiM1PXQe2/LLXuSm6IY/N3wFpnl
+         hSFm1t88mzm71f52MCrh+iNqHVJ4NKtonu3HobN6ics8RHh/3ueGy6rS+iB/vpgNuCaj
+         r0rxQTb/p6l82eRP7hd1PLpUsFoUKbnz3wPzpE78HXIEYe7CKqd5drF4zTS4uu3qCsCb
+         YeLS30mHS2OVncn6hqpfv+6QryISSYYf9j/dYxg5NsaMFyW89SUH4KK6SG1uquR85xt8
+         Lb7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=r9Y8kA9BOTqjotDV2mNar1zuSb0A2ydZEGgDX9CPjEM=;
+        b=ignV2hf4mvQ697pXrNuewiDSe76LM60Nuk0ajJNYbzhERzC2s6MLrHncC6+A+wP3Tt
+         YEJf/FKFR+YBt9JdFkAOtb96FJewjOZNLIMG3SZ4qYY8pcUQm8T4WexGf3MkbpAH4Rw3
+         MD0FvGXSTYoR74A0h0CmHrSVhn61Xl6VtXsu65sTes1OI0IGCsdNd2Mnd56uwytQsTtp
+         JsV1M9QuvPLQa1C948/yDezkDwjbzREb69iy57YyVzmj+Ft+g1FmmPIvP/2mp8VM2v7a
+         eLyPQf3p9E5BDL1hU8loRAd5Zi2PDhznZSjco+5e961dHG/yVZR/YaEzFLvvWHv21nbD
+         mxZw==
+X-Gm-Message-State: AOAM533HTz/l7INMoqwGftpx7raejU1NRwD9GjnuH7XP/+Ce1YrDprLL
+        b0Y4gLICCVKKxKfPHXAambZc73KGISM=
+X-Google-Smtp-Source: ABdhPJzsFGXyoQ8jgcQ/TOR3exxPM8FPT8amyEewO3ixyF9Ra3Evd7iYel0KocWlekBdVuAVyeXhnA==
+X-Received: by 2002:a1c:4484:0:b0:39c:4597:1f74 with SMTP id r126-20020a1c4484000000b0039c45971f74mr7222774wma.13.1654426104651;
+        Sun, 05 Jun 2022 03:48:24 -0700 (PDT)
+Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003973c54bd69sm21120580wmq.1.2022.06.05.03.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 03:48:24 -0700 (PDT)
+Date:   Sun, 5 Jun 2022 11:48:22 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
+Subject: mainline build failure due to 0a97953fd221 ("lib: add
+ bitmap_{from,to}_arr64")
+Message-ID: <YpyJ9qTNHJzz0FHY@debian>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6hnz6wqmawmym7kp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqK45r-cqXvorUzRV-LA_C+mk6hNSA1b+0kLs7C-oTcDCA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi All,
 
---6hnz6wqmawmym7kp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The latest mainline kernel branch fails to build for "arm allmodconfig"
+and "csky allmodconfig".
 
-On 05.06.2022 01:32:15, Vincent MAILHOL wrote:
-> On Sun. 5 juin 2022 at 00:18, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
-e:
-> > On 04.06.2022 23:59:48, Vincent MAILHOL wrote:
-> > > > > Fine, but I need a bit of guidance here. To provide a tag, I need=
- to
-> > > > > have my own git repository hosted online, right?
-> > > >
-> > > > That is one option.
-> > >
-> > > This suggests that there are other options? What would be those other
-> > > options?
-> >
-> > 2. git.kernel.org (most preferred)
-> > 3. github.com (have to ask Davem/Jakub)
-> >
-> > > > > Is GitHub OK or should I create one on https://git.kernel.org/?
-> > > >
-> > > > Some maintainers don't like github, let's wait what Davem and Jakub=
- say.
-> > > > I think for git.kernel.org you need a GPG key with signatures of 3 =
-users
-> > > > of git.kernel.org.
-> > >
-> > > Personally, I would also prefer getting my own git.kernel.org account.
-> >
-> > See https://korg.docs.kernel.org/accounts.html
->=20
-> Thanks for the link. I will have a look at it tomorrow (or the day
-> after tomorrow in the worst case).
->=20
-> Meanwhile, I will send the v5 which should address all your comments.
+"arm allmodconfig" fails with the error:
 
-/me just realized that merged are independent of pull requests. I can
-create a local branch and merge it, as Davem and Jakub do it. I've added
-your v5 to can-next/master as a merge and I'll include this in my next
-PR to net-next if Davem and Jakub are OK with merges in my branch.
+In file included from ./include/linux/string.h:253,
+                 from ./include/linux/bitmap.h:11,
+                 from ./include/linux/cpumask.h:12,
+                 from ./include/linux/smp.h:13,
+                 from ./include/linux/lockdep.h:14,
+                 from ./include/linux/mutex.h:17,
+                 from ./include/linux/rfkill.h:35,
+                 from net/bluetooth/hci_core.c:29:
+In function 'fortify_memcpy_chk',
+    inlined from 'bitmap_copy' at ./include/linux/bitmap.h:254:2,
+    inlined from 'bitmap_copy_clear_tail' at ./include/linux/bitmap.h:263:2,
+    inlined from 'bitmap_from_u64' at ./include/linux/bitmap.h:540:2,
+    inlined from 'hci_bdaddr_list_add_with_flags' at net/bluetooth/hci_core.c:2156:2:
+./include/linux/fortify-string.h:344:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+  344 |                         __write_overflow_field(p_size_field, size);
 
-regards,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+And, "csky allmodconfig" fails with the error:
 
---6hnz6wqmawmym7kp
-Content-Type: application/pgp-signature; name="signature.asc"
+In file included from ./include/linux/cpumask.h:12,
+                 from ./include/linux/mm_types_task.h:14,
+                 from ./include/linux/mm_types.h:5,
+                 from ./include/linux/buildid.h:5,
+                 from ./include/linux/module.h:14,
+                 from net/bluetooth/mgmt.c:27:
+In function 'bitmap_copy',
+    inlined from 'bitmap_copy_clear_tail' at ./include/linux/bitmap.h:263:2,
+    inlined from 'bitmap_from_u64' at ./include/linux/bitmap.h:540:2,
+    inlined from 'set_device_flags' at net/bluetooth/mgmt.c:4534:4:
+./include/linux/bitmap.h:254:9: error: 'memcpy' forming offset [4, 7] is out of the bounds [0, 4] of object 'flags' with type 'long unsigned int[1]' [-Werror=array-bounds]
+  254 |         memcpy(dst, src, len);
+      |         ^~~~~~~~~~~~~~~~~~~~~
+In file included from ./include/linux/kasan-checks.h:5,
+                 from ./include/asm-generic/rwonce.h:26,
+                 from ./arch/csky/include/generated/asm/rwonce.h:1,
+                 from ./include/linux/compiler.h:248,
+                 from ./include/linux/build_bug.h:5,
+                 from ./include/linux/container_of.h:5,
+                 from ./include/linux/list.h:5,
+                 from ./include/linux/module.h:12,
+                 from net/bluetooth/mgmt.c:27:
+net/bluetooth/mgmt.c: In function 'set_device_flags':
+net/bluetooth/mgmt.c:4532:40: note: 'flags' declared here
+ 4532 |                         DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
+      |                                        ^~~~~
+./include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
+   11 |         unsigned long name[BITS_TO_LONGS(bits)]
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKch8oACgkQrX5LkNig
-012XGggAqD1LicAikRC3JMuxfXUK3p7048Ew7fkyIXL9bCcTwyPl6HSIfZocNtBt
-utW+h3IxWv1/fKBnHiMZC1RF8x+CcWp2IZxqIDDx53ERZL3MUUTBuqG/tdUGzVHo
-mBDRlEohb1K2RBrQggmuKQfAuZZ5+P3OD/F/X1tyBbnffyvJgiAkM0xa2EScP8Kh
-13bQrHT/xZR4oPHDTFEpK1SF8SCtuRCIer99cRHAapbcdRHqVl+txsSk90fkQsxR
-cQkReSm7R+c4EACo8u723jce4LAPlJL7PoAsux3YVEcZ/ZCRJLHnqxr7QbiiwcSE
-3KL0opkdhjvnlIPRk2su5ZclADj/og==
-=I4dL
------END PGP SIGNATURE-----
+For both the failures, git bisect points to:
+0a97953fd221 ("lib: add bitmap_{from,to}_arr64")
 
---6hnz6wqmawmym7kp--
+
+And, reverting it on top of mainline branch has fixed both the build failures.
+
+
+--
+Regards
+Sudip

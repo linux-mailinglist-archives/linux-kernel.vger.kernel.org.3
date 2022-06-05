@@ -2,195 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E6153DB29
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 11:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D3F53DB2F
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350972AbiFEJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 05:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S1350998AbiFEKAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 06:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiFEJ6T (ORCPT
+        with ESMTP id S1348259AbiFEKAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 05:58:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A0242BD0;
-        Sun,  5 Jun 2022 02:58:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9300D6E;
-        Sun,  5 Jun 2022 02:58:17 -0700 (PDT)
-Received: from [10.163.37.253] (unknown [10.163.37.253])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FB513F66F;
-        Sun,  5 Jun 2022 02:58:08 -0700 (PDT)
-Message-ID: <53c7da54-e106-0161-a128-4f0cfe92d7e4@arm.com>
-Date:   Sun, 5 Jun 2022 15:28:08 +0530
+        Sun, 5 Jun 2022 06:00:16 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ECD35853;
+        Sun,  5 Jun 2022 03:00:13 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id u12so23781060eja.8;
+        Sun, 05 Jun 2022 03:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0uaKvjKGbSmoQ07fEbmYnQns3tYMzfecUZ60MURH83M=;
+        b=T4n/1EMFUZrSx7UxlniheEPsyK0J/HcMJjg13Hltuxx4q7BvxDJFYs7PqoK540wgYz
+         CwTCD/BT9RZRUkDZMUMDSLLKLnLG7lyP8mqi/NwQHg3VY35R+tUskyAkinKmnXQn0faw
+         FutBJ3V2YYnl8yZjCOzcKgG1OmW1KIILuAWijJO3Sg6iirKKDO2183orcKiVdEBvTnYB
+         5+KyWCT0uVJXW9h77qnAST5l97vbG6UoZ2iX/7g2snKRokoTTn+kqT6ofN+rYlmU2JXh
+         z+pqpnGZR7UDSHqDeyrIX6cKPaAPMIsADLUwDh6sWtj9Yita5EfIO2AQc57dKmVdaXl9
+         kzMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=0uaKvjKGbSmoQ07fEbmYnQns3tYMzfecUZ60MURH83M=;
+        b=bmwlRu0Ns4na+d1kozahmwCFal1J4077jCXbfcHgPxxKFsE8z6S1ZaAJWhTakEmFK0
+         /pE3M04mzJaEz4R5Cnte9iITRVhgzRY/rA9HBwFuJ1wJTGOG5qEj0/NIRM6hqwdQsuu5
+         09uDBmes0jKa+HakPZHo4cua7H4rMnfBLim7mCtfyQHiLnv4YrJHb5LpeqC5vpIJZgD2
+         ZrEs2m1WM9C1efJs2OcCU9Pm0isziRHRB0OCOsT17qIAFGrFL1PavF9MqxMzPRV4K7FD
+         PFUfOW9du4Jig9S+7EnlN4ELrHLC99DT9fPFelL+3cI+B/sfjLZFj3z6OGulJB1DVoxM
+         2VaA==
+X-Gm-Message-State: AOAM530F7ssqp71+CowEPmZ70BXUKqNiGs/iYzbmF3IVC13RbHQj4K/O
+        Ut2eQdQRp4TSesMeoR3p1E8FCAO1NSI0pA==
+X-Google-Smtp-Source: ABdhPJxPBfpf52tfa2nmI8jF5dDin8Ok7G/xwoQpEd6mGK/fqo93X5hcpnNcPpVc93WogzRON1kApw==
+X-Received: by 2002:a17:907:3f04:b0:6e8:4b0e:438d with SMTP id hq4-20020a1709073f0400b006e84b0e438dmr16534088ejc.391.1654423212035;
+        Sun, 05 Jun 2022 03:00:12 -0700 (PDT)
+Received: from eldamar (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id me3-20020a170906aec300b006ff01fbb7ccsm4989986ejb.40.2022.06.05.03.00.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 03:00:11 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Date:   Sun, 5 Jun 2022 12:00:10 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Michael Schaller <misch@google.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: New partition on loop device doesn't appear in /dev anymore with
+ kernel 5.17.0 and newer (repro script included)
+Message-ID: <Ypx+qusVyLJEEb/r@eldamar.lan>
+References: <CALt099+y4-kJ0OqVeKaAjAbs4inOkR-WE0FmyiJRDc1-Ev9UKw@mail.gmail.com>
+ <20220603124956.GA18365@lst.de>
+ <CALt099JqRXwsGnq_DmHmnwPyB0K9Y+-BZUG_YoGxOg7G7ZZh9w@mail.gmail.com>
+ <20220603132313.GA20886@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/6] s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Will Deacon <will@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220603101411.488970-1-anshuman.khandual@arm.com>
- <20220603101411.488970-3-anshuman.khandual@arm.com>
- <a97cba97-73f0-e8c2-6445-1f314eb27d87@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <a97cba97-73f0-e8c2-6445-1f314eb27d87@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603132313.GA20886@lst.de>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 6/3/22 17:55, Christophe Leroy wrote:
+On Fri, Jun 03, 2022 at 03:23:13PM +0200, Christoph Hellwig wrote:
+> On Fri, Jun 03, 2022 at 03:21:28PM +0200, Michael Schaller wrote:
+> > Thank you, Christoph! <3
+> > 
+> > Patch https://lore.kernel.org/all/20220527055806.1972352-1-hch@lst.de/
+> > does indeed fix the issue.
+> > 
+> > Could this patch also be backported to 5.17 and 5.18?
 > 
-> 
-> Le 03/06/2022 à 12:14, Anshuman Khandual a écrit :
->> This defines and exports a platform specific custom vm_get_page_prot() via
->> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->> macros can be dropped which are no longer needed.
->>
->> Cc: Heiko Carstens <hca@linux.ibm.com>
->> Cc: Vasily Gorbik <gor@linux.ibm.com>
->> Cc: linux-s390@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Acked-by: Sven Schnelle <svens@linux.ibm.com>
->> Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   arch/s390/Kconfig               |  1 +
->>   arch/s390/include/asm/pgtable.h | 17 -----------------
->>   arch/s390/mm/mmap.c             | 33 +++++++++++++++++++++++++++++++++
->>   3 files changed, 34 insertions(+), 17 deletions(-)
->>
->> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
->> index b17239ae7bd4..cdcf678deab1 100644
->> --- a/arch/s390/Kconfig
->> +++ b/arch/s390/Kconfig
->> @@ -81,6 +81,7 @@ config S390
->>   	select ARCH_HAS_SYSCALL_WRAPPER
->>   	select ARCH_HAS_UBSAN_SANITIZE_ALL
->>   	select ARCH_HAS_VDSO_DATA
->> +	select ARCH_HAS_VM_GET_PAGE_PROT
->>   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
->>   	select ARCH_INLINE_READ_LOCK
->>   	select ARCH_INLINE_READ_LOCK_BH
->> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
->> index a397b072a580..c63a05b5368a 100644
->> --- a/arch/s390/include/asm/pgtable.h
->> +++ b/arch/s390/include/asm/pgtable.h
->> @@ -424,23 +424,6 @@ static inline int is_module_addr(void *addr)
->>    * implies read permission.
->>    */
->>            /*xwr*/
->> -#define __P000	PAGE_NONE
->> -#define __P001	PAGE_RO
->> -#define __P010	PAGE_RO
->> -#define __P011	PAGE_RO
->> -#define __P100	PAGE_RX
->> -#define __P101	PAGE_RX
->> -#define __P110	PAGE_RX
->> -#define __P111	PAGE_RX
->> -
->> -#define __S000	PAGE_NONE
->> -#define __S001	PAGE_RO
->> -#define __S010	PAGE_RW
->> -#define __S011	PAGE_RW
->> -#define __S100	PAGE_RX
->> -#define __S101	PAGE_RX
->> -#define __S110	PAGE_RWX
->> -#define __S111	PAGE_RWX
->>   
->>   /*
->>    * Segment entry (large page) protection definitions.
->> diff --git a/arch/s390/mm/mmap.c b/arch/s390/mm/mmap.c
->> index d545f5c39f7e..11d75b8d5ec0 100644
->> --- a/arch/s390/mm/mmap.c
->> +++ b/arch/s390/mm/mmap.c
->> @@ -188,3 +188,36 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
->>   		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
->>   	}
->>   }
->> +
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->> +	case VM_NONE:
->> +		return PAGE_NONE;
->> +	case VM_READ:
->> +	case VM_WRITE:
->> +	case VM_WRITE | VM_READ:
->> +		return PAGE_RO;
->> +	case VM_EXEC:
->> +	case VM_EXEC | VM_READ:
->> +	case VM_EXEC | VM_WRITE:
->> +	case VM_EXEC | VM_WRITE | VM_READ:
->> +		return PAGE_RX;
->> +	case VM_SHARED:
->> +		return PAGE_NONE;
->> +	case VM_SHARED | VM_READ:
->> +		return PAGE_RO;
->> +	case VM_SHARED | VM_WRITE:
->> +	case VM_SHARED | VM_WRITE | VM_READ:
->> +		return PAGE_RW;
->> +	case VM_SHARED | VM_EXEC:
->> +	case VM_SHARED | VM_EXEC | VM_READ:
->> +		return PAGE_RX;
->> +	case VM_SHARED | VM_EXEC | VM_WRITE:
->> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->> +		return PAGE_RWX;
->> +	default:
->> +		BUILD_BUG();
->> +	}
->> +}
->> +EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> Wasn't it demonstrated in previous discussions that a switch/case is 
-> suboptimal compared to a table cell read ?
+> It should get picked up automatically based on the fixes tag as soon
+> as it hits mainline.
 
-Right but all these platform patches here were acked from respective
-platform folks. I assumed that they might have valued the simplicity
-in switch case statements, while also dropping off the __SXXX/__PXXX
-macros, which is the final objective. Looks like that assumption was
-not accurate.
+As it does not apply cleanly to older versions, this probably will
+need a sperate turnaround, but AFAICS it's just because of
+a0e286b6a5b6 ("loop: remove lo_refcount and avoid lo_mutex in ->open /
+->release") changing context of the fourth hunk in
+drivers/block/loop.c .
 
-> 
-> In order to get rid of the _Sxxx/_Pxxx macros, my preference would go to 
-> having architectures provide their own protection_map[] table, and keep 
-> the generic vm_get_page_prot() for the architectures would don't need a 
-> specific version of it.
-
-I will try and rework the patches as suggested.
-
-> 
-> This comment applies to all following patches as well.
+Regards,
+Salvatore

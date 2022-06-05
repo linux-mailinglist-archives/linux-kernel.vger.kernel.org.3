@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C6B53DE1C
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 21:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F47953DE22
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 21:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243403AbiFETw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 15:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S1347062AbiFET6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 15:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiFETwY (ORCPT
+        with ESMTP id S1344478AbiFET6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 15:52:24 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038EAE032
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 12:52:23 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id q1so25312909ejz.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 12:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GC11sRAMV84GQweZr/T4nr/Uv9RvS1mCN24/5JobQVQ=;
-        b=p8O5V9smB/8DJp9PUPDL216uqbHqB5nnGzb8A4iJZwvNZyKEFdLKb+U1bXnaO5yJCz
-         7G6H45gFhZnfoKBIfHr5IC3XZF/z/yLdMWGjAnfp6Oxxkmzx9S6CGAETiAuvzJajMHxl
-         OPjccKsR81usJYeKYiRMGIR8Kocz70X3ddn14=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GC11sRAMV84GQweZr/T4nr/Uv9RvS1mCN24/5JobQVQ=;
-        b=ht36zQ9Rfs5ZeKxOBFuLige/9+gNAsuO7kLVzDdEE/Vxh/rPLXbOheozVQqSHGlb/S
-         S8WWYtzS3a6FOwZunV837Uqxhns+eh49Ahv0bXU4gvwM4DXxpIBgF4E4Pc14hyYHDHMl
-         PFEZ8KUtMjpErNV0/HL31OJJ9g6aLvgPG5+f97gC1EOnmmRU4dcHnf7JCpqnF7mkbi+I
-         glzk56k1V04EHRzuUdEMgZnMqYB6CGc1LJkHhJmz54SoGWKRYyZgImGxkDeAtryivMl8
-         Xgde49YLeLA9q3h0Q/FTb/BqqQl3WrId+CAbXTCHzD701v/waxam7Qw/ZxkYkhy/1GxF
-         w3aQ==
-X-Gm-Message-State: AOAM532DGAJ8B44qhJtS16ljs7rR8kHHEg7UX/GTAkDt1ZID9awmj1gi
-        vak/ZhqBv/LEwrwel2fwKSK8FA==
-X-Google-Smtp-Source: ABdhPJxu7x/WVlwGxllTKrNw7LvGgPRtnkI3CZoj+i8lFDDyfzAQiqlNmWgEgtoCqH2BwHv9uwwvyg==
-X-Received: by 2002:a17:907:60cf:b0:6ff:1ba7:aa26 with SMTP id hv15-20020a17090760cf00b006ff1ba7aa26mr18229565ejc.667.1654458741526;
-        Sun, 05 Jun 2022 12:52:21 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-2-39-143-183.cust.vodafonedsl.it. [2.39.143.183])
-        by smtp.gmail.com with ESMTPSA id kq15-20020a170906abcf00b0070cac22060esm3861892ejb.95.2022.06.05.12.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 12:52:20 -0700 (PDT)
-Date:   Sun, 5 Jun 2022 21:52:18 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 3/3] arm64: defconfig: enable i.MX93 clk & pinctrl
-Message-ID: <20220605195218.GA194223@tom-ThinkPad-T14s-Gen-2i>
-References: <20220425110330.1630984-1-peng.fan@oss.nxp.com>
- <20220425110330.1630984-4-peng.fan@oss.nxp.com>
+        Sun, 5 Jun 2022 15:58:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694C449687;
+        Sun,  5 Jun 2022 12:58:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA1ECB80DAE;
+        Sun,  5 Jun 2022 19:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F14C385A5;
+        Sun,  5 Jun 2022 19:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654459105;
+        bh=66jU7St7J/rQkWEC+xtYa4b2N3D8EzKe3flOReZVLn8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BC1wbJ2wvSSXy/eC676d4HdHWx8nmKxbPExDrb/vQHSVp5GJTaUAxDCb8lovxEAP4
+         vU/JiuaF6m6cBrqgFMdmwR0c7XIjsMrG/xHYLa5GEoZ3FddCusZpuKfv/xPo7aMvc1
+         IZ5LmWcU5+dAy+iQFeDzVLP7heYTnBy4vOPNcErbj5X0SVS5lKT4hM3N7PNATvbVDX
+         aXUN1q0r7d7wVNgpQ+QtOKCdhKOiDp3MBCWfoByYjQ0RN7LVjgYhyVYLcDUoISgyCi
+         Pgf/ikulSSl95wy7PNnvyyvIvA8CStcsjOg2dkgo8gQf8wDA5mcuwcao87jfx/5YxQ
+         sJAkZb5FRBJCQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3B5FC5C0514; Sun,  5 Jun 2022 12:58:25 -0700 (PDT)
+Date:   Sun, 5 Jun 2022 12:58:25 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH] ia64: fix sparse warnings with cmpxchg() & xchg()
+Message-ID: <20220605195825.GW1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <87h7547k8c.fsf@toke.dk>
+ <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220425110330.1630984-4-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +62,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 07:03:30PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Sun, Jun 05, 2022 at 06:07:38PM +0200, Luc Van Oostenryck wrote:
+> On IA64, new sparse's warnings where issued after fixing
+> some __rcu annotations in kernel/bpf/.
 > 
-> Enable i.MX93 clk and pinctrl driver for booting the system
+> These new warnings are false positives and appear on IA64 because
+> on this architecture, the macros for cmpxchg() and xchg() make
+> casts that ignore sparse annotations.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> This patch contains the minimal patch to fix this issue:
+> adding a missing cast and some missing '__force'.
+> 
+> Link: https://lore.kernel.org/r/20220601120013.bq5a3ynbkc3hngm5@mail
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Toke Høiland-Jørgensen <toke@redhat.com>
+> Signed-off-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+
+Looks good to me!
+
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+
 > ---
->  arch/arm64/configs/defconfig | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 6906b83f5e45..8205f9ffa200 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -525,6 +525,7 @@ CONFIG_PINCTRL_IMX8QM=y
->  CONFIG_PINCTRL_IMX8QXP=y
->  CONFIG_PINCTRL_IMX8DXL=y
->  CONFIG_PINCTRL_IMX8ULP=y
-> +CONFIG_PINCTRL_IMX93=y
->  CONFIG_PINCTRL_MSM=y
->  CONFIG_PINCTRL_IPQ8074=y
->  CONFIG_PINCTRL_IPQ6018=y
-> @@ -1017,6 +1018,7 @@ CONFIG_CLK_IMX8MP=y
->  CONFIG_CLK_IMX8MQ=y
->  CONFIG_CLK_IMX8QXP=y
->  CONFIG_CLK_IMX8ULP=y
-> +CONFIG_CLK_IMX93=y
->  CONFIG_TI_SCI_CLK=y
->  CONFIG_COMMON_CLK_QCOM=y
->  CONFIG_QCOM_A53PLL=y
+> Note: This patch is only compile tested on defconfig. The corresponding
+>       binary is unchanged (except some .rodata with the kernel version)
+>       as it should be.
+> 
+>  arch/ia64/include/uapi/asm/cmpxchg.h | 28 ++++++++++++++--------------
+>  1 file changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/ia64/include/uapi/asm/cmpxchg.h b/arch/ia64/include/uapi/asm/cmpxchg.h
+> index 2c2f3cfeaa77..ca2e02685343 100644
+> --- a/arch/ia64/include/uapi/asm/cmpxchg.h
+> +++ b/arch/ia64/include/uapi/asm/cmpxchg.h
+> @@ -33,24 +33,24 @@ extern void ia64_xchg_called_with_bad_pointer(void);
+>  									\
+>  	switch (size) {							\
+>  	case 1:								\
+> -		__xchg_result = ia64_xchg1((__u8 *)ptr, x);		\
+> +		__xchg_result = ia64_xchg1((__u8 __force *)ptr, x);	\
+>  		break;							\
+>  									\
+>  	case 2:								\
+> -		__xchg_result = ia64_xchg2((__u16 *)ptr, x);		\
+> +		__xchg_result = ia64_xchg2((__u16 __force *)ptr, x);	\
+>  		break;							\
+>  									\
+>  	case 4:								\
+> -		__xchg_result = ia64_xchg4((__u32 *)ptr, x);		\
+> +		__xchg_result = ia64_xchg4((__u32 __force *)ptr, x);	\
+>  		break;							\
+>  									\
+>  	case 8:								\
+> -		__xchg_result = ia64_xchg8((__u64 *)ptr, x);		\
+> +		__xchg_result = ia64_xchg8((__u64 __force *)ptr, x);	\
+>  		break;							\
+>  	default:							\
+>  		ia64_xchg_called_with_bad_pointer();			\
+>  	}								\
+> -	__xchg_result;							\
+> +	(__typeof__ (*(ptr)) __force) __xchg_result;			\
+>  })
+>  
+>  #ifndef __KERNEL__
+> @@ -76,42 +76,42 @@ extern long ia64_cmpxchg_called_with_bad_pointer(void);
+>  									\
+>  	switch (size) {							\
+>  	case 1:								\
+> -		_o_ = (__u8) (long) (old);				\
+> +		_o_ = (__u8) (long __force) (old);			\
+>  		break;							\
+>  	case 2:								\
+> -		_o_ = (__u16) (long) (old);				\
+> +		_o_ = (__u16) (long __force) (old);			\
+>  		break;							\
+>  	case 4:								\
+> -		_o_ = (__u32) (long) (old);				\
+> +		_o_ = (__u32) (long __force) (old);			\
+>  		break;							\
+>  	case 8:								\
+> -		_o_ = (__u64) (long) (old);				\
+> +		_o_ = (__u64) (long __force) (old);			\
+>  		break;							\
+>  	default:							\
+>  		break;							\
+>  	}								\
+>  	switch (size) {							\
+>  	case 1:								\
+> -		_r_ = ia64_cmpxchg1_##sem((__u8 *) ptr, new, _o_);	\
+> +		_r_ = ia64_cmpxchg1_##sem((__u8 __force *) ptr, new, _o_);	\
+>  		break;							\
+>  									\
+>  	case 2:								\
+> -		_r_ = ia64_cmpxchg2_##sem((__u16 *) ptr, new, _o_);	\
+> +		_r_ = ia64_cmpxchg2_##sem((__u16 __force *) ptr, new, _o_);	\
+>  		break;							\
+>  									\
+>  	case 4:								\
+> -		_r_ = ia64_cmpxchg4_##sem((__u32 *) ptr, new, _o_);	\
+> +		_r_ = ia64_cmpxchg4_##sem((__u32 __force *) ptr, new, _o_);	\
+>  		break;							\
+>  									\
+>  	case 8:								\
+> -		_r_ = ia64_cmpxchg8_##sem((__u64 *) ptr, new, _o_);	\
+> +		_r_ = ia64_cmpxchg8_##sem((__u64 __force *) ptr, new, _o_);	\
+>  		break;							\
+>  									\
+>  	default:							\
+>  		_r_ = ia64_cmpxchg_called_with_bad_pointer();		\
+>  		break;							\
+>  	}								\
+> -	(__typeof__(old)) _r_;						\
+> +	(__typeof__(old) __force) _r_;					\
+>  })
+>  
+>  #define cmpxchg_acq(ptr, o, n)	\
 > -- 
-> 2.25.1
+> 2.36.1
 > 
-
-Hi Peng,
-Looks good to me.
-
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-
-Thanks,
-Tommaso
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com

@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16D153DD0A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6A953DD12
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346158AbiFEQfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
+        id S1351275AbiFEQhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351253AbiFEQe5 (ORCPT
+        with ESMTP id S1348285AbiFEQhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:34:57 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34294D274
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:34:56 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bg6so4961149ejb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:34:56 -0700 (PDT)
+        Sun, 5 Jun 2022 12:37:20 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3C911C0A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:37:16 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id n10so24827549ejk.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jdIVKFSk2eIbeHqEWdMi4/8HFEkUDh1Z4gYM7GW4sa0=;
-        b=QiWi8O0uBmOcDTjvLLtS7RJP75oD8QAMzCNIR6xgGGo8LMbdoFvr7/kDyWQLXQ55uU
-         K+AiabjxiAwoJ89j+dYMVQGZfwFWy22kGZQb4YLQYDlhkEVn7n7dby8AaXnObgdo72fN
-         GZwRjklJ0BMY1TqUhjMmtDoTtyK0M+bX7NU3c=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1Y+9d1+OO9cS6GSXXKsYHP0IPTFCyxWK3UPU27LfYvY=;
+        b=krGDWQbU8FlEbUNByXNyqn1DUlVJRdUW+YI61vu8d4lPd76fIBVxV6C1rdvEIWyZI5
+         4cHK0DOIqfzv/XvvnJcqB6gKn6MC2vuuIdl9HK5Arq1M3fTCfthhtcRjan2D/fW4KWHh
+         UQHiXLE5erUGkwRQ4Q715vzurGBh8gWH+OrGc+Ve8pd9+UgGA/Xbxk0zEsDHhrjRzWkP
+         B3Tn3xjHe7O3GqQclBiE9Yx6hH3PXtVrVXQWl93JEnG/qyFhpKEkREYT2KB9PIkNgey0
+         wQLqn7zxdCQEsb/GEQijdpnkQbzG8LCEG/3ktS6ozHgkqjivO2qEyfZlxyyWzDq1FEkA
+         Breg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jdIVKFSk2eIbeHqEWdMi4/8HFEkUDh1Z4gYM7GW4sa0=;
-        b=cNIdgGyLcQnNdxbnagOpBwjInSlUFKWVYRGMpp98pOcuPtOKiAU4E/qyaC3y1whcHs
-         Y9WHB9+l8w/8FCIvM/1IPBnafeXl/X4dAO+9Gx8TJTF2opL7sBGaqpp3schYocUI+OSa
-         +aB+MmSYKxDsNGocs6UCI7hsspOK5RVih+tGGuRCp4z3NNlHR6NMS9GJR6lx3i6lgSv6
-         PPg4kUfjHiGH37YN2NaT0hV5Yw9gxPypNGRNj7I+A8WZYOyoc8YzvYuZFPhnIu20Rs49
-         zCcVJ3Ai8n9ctrs4Vsxpz+1lI85D5XdGD/tSmpB12vr3okt6ksqScdf0VAL98NpssGcw
-         105Q==
-X-Gm-Message-State: AOAM533qSbRSoOlMeGRViDK8kkV45o4p08Zs6dQNgz1lFBjcWkCg1mLC
-        Otc3S8MeJOwbqCDg03fjcPHEJp7ZPY+GH30Y
-X-Google-Smtp-Source: ABdhPJyXnfKJdz+KrWN8KX/InK4YHUQCnpTr0vt8jIgjbg4O5L1Yq9DREXiJajwqTlKuwvnbvYFQOA==
-X-Received: by 2002:a17:906:19d8:b0:70b:2ef8:e563 with SMTP id h24-20020a17090619d800b0070b2ef8e563mr15976795ejd.536.1654446895147;
-        Sun, 05 Jun 2022 09:34:55 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906310400b00705976bcd01sm5322126ejx.206.2022.06.05.09.34.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 09:34:53 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id x17so16755103wrg.6
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:34:53 -0700 (PDT)
-X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
- h4-20020a05600016c400b0020fcd5d4797mr17796010wrf.193.1654446893075; Sun, 05
- Jun 2022 09:34:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1Y+9d1+OO9cS6GSXXKsYHP0IPTFCyxWK3UPU27LfYvY=;
+        b=EqXGHNli1t7u+pBcuLLLOS5f8YuARGl2kVrHtu3z8xLy9LYrKWBMbnq+kXDj1Ceuce
+         wDmx+CtduuplcRFRMVfk08RDK2F3M06dj3w7djaUElTDDkUJti6P0WNAjZJFn51p+Wjz
+         LSfueEC8nRD3sD/Vpsmhb+pKgi/9CgzuCgEaqNd7uvhsyC1mLL7Z3LsLAhGXdgIalCX6
+         ukPesXweI27i+E1CTY6qjWvsHdeDQKv+m+jKfsquHi+PSzuguCtEZG0vznFPB2Nui138
+         JS2Dzewg3oTuAhoqw3Yzxl3gej4V/xSpFkvm9TugrSMdPpg39n1fq1gYgkdtNOqGWQ4l
+         y2XA==
+X-Gm-Message-State: AOAM530usRSQqSy0JuIosnUaOZWxYDBIGe1nbE7xSZ03UsZMdhGb57Ev
+        0CFxvwaQGIjWjTrRw6/kFb9AXUeYa6hntg==
+X-Google-Smtp-Source: ABdhPJz5PVIbveEyD/s2fmUpKmKTuS4EOwTP0W93iIA1qKtSRsivtTlk2Zv212mb6+qiZYy0hllPcQ==
+X-Received: by 2002:a17:907:d1d:b0:6fe:f789:31e with SMTP id gn29-20020a1709070d1d00b006fef789031emr17561851ejc.697.1654447035096;
+        Sun, 05 Jun 2022 09:37:15 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id w3-20020a1709064a0300b006ff0b457cdasm5346770eju.53.2022.06.05.09.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 09:37:14 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/4] mmc: samsung,exynos-dw-mshc: convert to dtschema
+Date:   Sun,  5 Jun 2022 18:37:06 +0200
+Message-Id: <20220605163710.144210-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220605162537.1604762-1-yury.norov@gmail.com>
-In-Reply-To: <20220605162537.1604762-1-yury.norov@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 5 Jun 2022 09:34:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
-Message-ID: <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
-Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 9:25 AM Yury Norov <yury.norov@gmail.com> wrote:
->
-> The commit 0a97953fd221 ("lib: add bitmap_{from,to}_arr64") changed
-> implementation of bitmap_from_u64(), so that it doesn't typecast
-> argument to u64, and actually dereferences memory.
+Hi,
 
-Gaah.
+I will take the DTS patches via Samsung SoC.  The MMC dt-bindings patch
+probably via MMC or Rob's tree.
 
-That code shouldn't use DECLARE_BITMAP() at all, it should just use
+Changes since v1
+================
+1. Add patch #4 documenting missing compatible.
+2. Add Rb tags.
 
-    struct bdaddr_list_with_flags {
-            ..
-            unsigned long flags;
-    };
+Best regards,
+Krzysztof
 
-and then use '&br_params->flags' when it nneds the actual atomic
-'set_bit()' things and friends, and then when it copies the flags
-around it should just use 'flags' as an integer value.
+Krzysztof Kozlowski (4):
+  ARM: dts: exynos: align MMC node name with dtschema
+  arm64: dts: exynos: align MMC node name with dtschema
+  dt-bindings: mmc: samsung,exynos-dw-mshc: convert to dtschema
+  dt-bindings: mmc: samsung,exynos-dw-mshc: document Exynos5420 SMU
 
-The bitmap functions are literally defined to work as "bit N in a set
-of 'unsigned long'" exactly so that you can do that mixing of values
-and bit operations, and not have to worry about insane architectures
-that do big-endian bit ordering or things like that.
+ .../bindings/mmc/exynos-dw-mshc.txt           |  94 ----------
+ .../bindings/mmc/samsung,exynos-dw-mshc.yaml  | 160 ++++++++++++++++++
+ arch/arm/boot/dts/exynos3250.dtsi             |   6 +-
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi    |   6 +-
+ 4 files changed, 166 insertions(+), 100 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mmc/exynos-dw-mshc.txt
+ create mode 100644 Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
 
-Using a 'bitmap' as if it's some bigger or potentially variable-sized
-thing for this kind of flags usage is crazy, when the code already
-does
+-- 
+2.34.1
 
-  /* Make sure number of flags doesn't exceed sizeof(current_flags) */
-  static_assert(__HCI_CONN_NUM_FLAGS < 32);
-
-because other parts are limited to 32 bits.
-
-I wonder how painful it would be to just fix that odd type mistake.
-
-                  Linus

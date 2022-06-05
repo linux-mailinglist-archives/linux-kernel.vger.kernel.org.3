@@ -1,121 +1,158 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3868253D9A3
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 06:16:03 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id C130053D9E2
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 06:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348703AbiFEEP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 00:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        id S1348805AbiFEE2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 00:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243725AbiFEEPz (ORCPT
+        with ESMTP id S233427AbiFEE22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 00:15:55 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C40A4EF40
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 21:15:54 -0700 (PDT)
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 6A4A3802DAEA
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 04:15:53 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 6383C10048143
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 04:15:52 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id xhg7n0myaj8kTxhg8n2iZG; Sun, 05 Jun 2022 04:15:52 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=MbSpB7zf c=1 sm=1 tr=0 ts=629c2df8
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=JPEYwPQDsx4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=iS1ThwYjwVSwqAqFUSHazr4dOTsLSobJ2vX2doG2si0=; b=y/y5xGfr737f6pZeGa72+sYOlj
-        /dgPMHssjRmRVtD53rugdW8G8iTc07EXuPRfWBQbgR67Vb9AoqCpdKOfYLfTno49rzqNKcK7Q/1PG
-        /8lNkvcIGr+AvEjSLZsPhbTDon8re1LnFqB6FgPURJPdN+ly/pppkrd8Uh0sMyBUKERkPjkmnoGw+
-        Obb2gv93szN+FBvxXjy9ovldFRFJgCKy/z/0BXX0iRuFme4JflNLAdsv/o7uDcnP5APlLdctGo3Uf
-        0efL7u+hibZwMQgmd0Fd59ZPeKH2cdEAMgInlHCk7SVCZAoO+Mmd4ZGBR63nD3EzOlKHiYvgAHU2p
-        JfUc6Olg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53508 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1nxhg6-002EHA-W5;
-        Sat, 04 Jun 2022 22:15:51 -0600
-Subject: Re: [PATCH 5.15 00/66] 5.15.45-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220603173820.663747061@linuxfoundation.org>
-In-Reply-To: <20220603173820.663747061@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <eedbfe54-a05e-44d3-1833-a3743f8fca0f@w6rz.net>
-Date:   Sat, 4 Jun 2022 21:15:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sun, 5 Jun 2022 00:28:28 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9881958B
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 21:28:26 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so10074075pjb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 21:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cwL2wHcA34X3qXSJRLp9vC/RDXcQCiZVTt+d5U9lstk=;
+        b=2VOwiJZp5DrIJXyOlgpB6VfK40D/XqlM2qapqxtFAZMjZMOMHTJFFkULcMMCP6JArV
+         87gJxVxrXOesZpMAzFjvBoZNfijEo6hJbiWSYNwhTxcfUJF4V3dVGMaKax7nChHJabyX
+         UMUYGw90KXmANZKYS886MNSWBEJPgITEhpSgfiVKJ5NqSzto8yjP0IwUSTYz0OohkL88
+         BMWiGS3MYCEoAKKMAt+edZZJlkOX9PoMuP12bSKAEDeIk6r5TwF4RK/mC4P8jRPThBIm
+         E0TkMyZpGS1/e76IsxNQ1A6tCp7MMhyU/lp6xThIH8z7iv3HJCmmDq0l+G2PwjmWEnqx
+         SnGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cwL2wHcA34X3qXSJRLp9vC/RDXcQCiZVTt+d5U9lstk=;
+        b=Ab2criPKiATQrPYzx/9H9iYLQAEIBB7OiZek2FCc8VXNCxjdV7kPGn476Q81KHirOD
+         zXdhGbgEx81e0O0kkpiAN2RQyY+2LcKnVJh0m8rvoOyi7D1wvyqeqSXR1tqV9T/SLSFA
+         ejlYKr/irDKesVpxmeTueTt2XUnXmdcBENXCrrBOlARupI0P3A359o8AuLRuLB2Xd/RG
+         MJVORrItRKmXGCtN4jGz1NJ8r/tNWwykg2f3jTWd8S+xom4rbI+p9mqxnafd0pHxlvmQ
+         GBcx8fwUvzqLt0V5Vo1LvYzb7NPTe9xU+KdfT/Fxzr3pRyZGSZKt7VcPQTEZbllYQN6u
+         PjSw==
+X-Gm-Message-State: AOAM533SLN5hbmu9jF14S6hrpDrIXTlGQfiQtqVWTVAP0fOAE5PGAZA4
+        tV6PINGcF6SYwMEGR9FU5wVBVU8wOvsSWQ==
+X-Google-Smtp-Source: ABdhPJwwme7JJVfs5BR6bWdb7PU9V2aWDGFRO/Qd+1CJvHyMOMIPgOQ5SnHjMPt2rjR5Fm2enliMHA==
+X-Received: by 2002:a17:90a:17c9:b0:1e8:5e58:f658 with SMTP id q67-20020a17090a17c900b001e85e58f658mr4940749pja.239.1654403306417;
+        Sat, 04 Jun 2022 21:28:26 -0700 (PDT)
+Received: from [10.255.89.136] ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c20d00b0015e8d4eb2adsm7927589pll.247.2022.06.04.21.28.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Jun 2022 21:28:25 -0700 (PDT)
+Message-ID: <584eedd3-9369-9df1-39e2-62e331abdcc0@bytedance.com>
+Date:   Sun, 5 Jun 2022 12:24:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Re: [PATCH] mm/memory-failure: don't allow to unpoison hw
+ corrupted page
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nxhg6-002EHA-W5
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:53508
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Wu Fengguang <fengguang.wu@intel.com>
+References: <20220604103229.3378591-1-pizhenwei@bytedance.com>
+ <20220604115616.b7d5912ac5a37db608f67b78@linux-foundation.org>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20220604115616.b7d5912ac5a37db608f67b78@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 10:42 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.45 release.
-> There are 66 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.45-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Tested-by: Ron Economos <re@w6rz.net>
+On 6/5/22 02:56, Andrew Morton wrote:
+> On Sat,  4 Jun 2022 18:32:29 +0800 zhenwei pi <pizhenwei@bytedance.com> wrote:
+> 
+>> Currently unpoison_memory(unsigned long pfn) is designed for soft
+>> poison(hwpoison-inject) only. Unpoisoning a hardware corrupted page
+>> puts page back buddy only, this leads BUG during accessing on the
+>> corrupted KPTE.
+>>
+>> Do not allow to unpoison hardware corrupted page in unpoison_memory()
+>> to avoid BUG like this:
+>>
+>>   Unpoison: Software-unpoisoned page 0x61234
+>>   BUG: unable to handle page fault for address: ffff888061234000
+> 
+> Thanks.
+> 
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -2090,6 +2090,7 @@ int unpoison_memory(unsigned long pfn)
+>>   {
+>>   	struct page *page;
+>>   	struct page *p;
+>> +	pte_t *kpte;
+>>   	int ret = -EBUSY;
+>>   	int freeit = 0;
+>>   	static DEFINE_RATELIMIT_STATE(unpoison_rs, DEFAULT_RATELIMIT_INTERVAL,
+>> @@ -2101,6 +2102,13 @@ int unpoison_memory(unsigned long pfn)
+>>   	p = pfn_to_page(pfn);
+>>   	page = compound_head(p);
+>>   
+>> +	kpte = virt_to_kpte((unsigned long)page_to_virt(p));
+>> +	if (kpte && !pte_present(*kpte)) {
+>> +		unpoison_pr_info("Unpoison: Page was hardware poisoned %#lx\n",
+>> +				 pfn, &unpoison_rs);
+>> +		return -EPERM;
+>> +	}
+>> +
+>>   	mutex_lock(&mf_mutex);
+>>   
+>>   	if (!PageHWPoison(p)) {
+> 
+> I guess we don't want to let fault injection crash the kernel, so a
+> cc:stable seems appropriate here.
+> 
+> Can we think up a suitable Fixes: commit?  I'm suspecting this bug has
+> been there for a long time?
+> 
 
+Sure!
+
+2009-Dec-16, hwpoison_unpoison() was introduced into linux in commit:
+847ce401df392("HWPOISON: Add unpoisoning support")
+...
+There is no hardware level unpoisioning, so this cannot be used for real 
+memory errors, only for software injected errors.
+...
+
+We can find that this function should be used for software level 
+unpoisoning only in both commit log and comment in source code. 
+unfortunately there is no check in function hwpoison_unpoison().
+
+
+2020-May-20, 17fae1294ad9d("x86/{mce,mm}: Unmap the entire page if the 
+whole page is affected and poisoned")
+
+This clears KPTE, and leads BUG(described in this patch) during 
+unpoisoning the hardware corrupted page.
+
+
+Fixes: 847ce401df392("HWPOISON: Add unpoisoning support")
+Fixes: 17fae1294ad9d("x86/{mce,mm}: Unmap the entire page if the whole 
+page is affected and poisoned")
+
+Cc: Wu Fengguang <fengguang.wu@intel.com>
+Cc: Tony Luck <tony.luck@intel.com>.
+
+-- 
+zhenwei pi

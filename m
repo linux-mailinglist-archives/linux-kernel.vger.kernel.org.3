@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D478053DE86
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C1353DE78
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348210AbiFEWFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S1348016AbiFEVwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 17:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbiFEWFW (ORCPT
+        with ESMTP id S233452AbiFEVww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:05:22 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7B717043;
-        Sun,  5 Jun 2022 15:05:21 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id j2so9213667qvp.9;
-        Sun, 05 Jun 2022 15:05:21 -0700 (PDT)
+        Sun, 5 Jun 2022 17:52:52 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DA72657;
+        Sun,  5 Jun 2022 14:52:51 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id fu3so24124682ejc.7;
+        Sun, 05 Jun 2022 14:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jqTk340kUGoNwvIFE+KUlemPpmjVQ4n06NM+Fh67geI=;
+        b=S7PqYSet+vFl8kirvv4A6Qj3FyqLfBo228GfA3RfabMvlQmLo/s3OVoof1ooAGwJ3O
+         unGBnwV4EiXcgJxpynVgRcp4PSZjjn8j13ixj5R9mEka6MDWqepLy8A66iXeuAPsufwX
+         mHoP0ZSAxQv7Ge2g52W057FMKljiqg3+xVVN1IUAqd49D+Owx1ee/15lRWRnoU8r07l/
+         d5nFwzYjK+kq4TI7akEb9KUteEikzmQBEaKkJH0Tdwr6/4MI79G4E1mp9xlNHBMz9q94
+         SU4L30TKJX19OYFXv+UXJT0ADC9gpd/Dos+m6tZk+X778Ca+QMozAZhDGC232x3Z1qQZ
+         pnXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P3bPg0KW9PvQYNVEoLUIocfEIaf0HS8LyiwM6NAwqzg=;
-        b=g7SZNAT5t+uxPQ+9kIFEFN3iI2t4aHm+pcpaGM+h+NDwKVIejfuhGjV/678EVm4vg9
-         RWRciVBZlz/0F8r9y02gAUqRcWPgjArJ+MbeqkLlBD153N99dyvlgA5pGKGPpPhwx7+3
-         abTE2h2pHls/7jGce6qLQ3etHiP7WB7RJJI841dZOQy1Tw8PJk1eK59+FQrEsFSIs1c4
-         E73/TRG6LFpYLY/RTbsUgoKwZHa6T7jivW8EvfjXh2gKDR8z73dYp+o+nuJnBig3MKJP
-         vvwF3KqNvK9f6SRbQeCFfSudSMVlUKDBzxdNXc7L3wKW7az+8jzqKBR8EreSSKuRTs1U
-         WkCg==
-X-Gm-Message-State: AOAM532Dv+mOmCIabDxsYzMACKPaG/+s9sUUC1EQ0JpqgL2btZW+bxX8
-        0dTXRJywiZWwaSgJFYb5L8FB4iIcDUWd
-X-Google-Smtp-Source: ABdhPJz0pF/epzY1hiDNQ1p10GomzFboMavq8/cjl04wD3ozc/XRlD4fWVIt2PhDbFbOiXhaUuRDMA==
-X-Received: by 2002:a05:6214:802:b0:462:4eb0:1ec2 with SMTP id df2-20020a056214080200b004624eb01ec2mr15099625qvb.92.1654466720227;
-        Sun, 05 Jun 2022 15:05:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:1bd0:10c3:c77a:8738:16cb:8d08])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05620a414b00b0069fc13ce235sm2049656qko.102.2022.06.05.15.05.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 15:05:19 -0700 (PDT)
-Received: (nullmailer pid 3580457 invoked by uid 1000);
-        Sun, 05 Jun 2022 21:48:35 -0000
-Date:   Sun, 5 Jun 2022 16:48:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        David Heidelberg <david@ixit.cz>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/4] dt-bindings: power: supply: qcom,pm8941: use
- regulator schema for child node
-Message-ID: <20220605214835.GA3580411-robh@kernel.org>
-References: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
- <20220601071911.6435-2-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jqTk340kUGoNwvIFE+KUlemPpmjVQ4n06NM+Fh67geI=;
+        b=e20e9pYEk+4LpTLL/PdpIJhbwhqCvWcn4/sbsP5hyp8mSbEV6vuV2Ru9eiCQcv2vk1
+         QMB2mtiMzTsaFGI6tPD+uudShMe9H2FGQ208yAnXYAUe7pe0YNLAEBAQbgsBF6hcAToj
+         eDsqlIWpm2kmGXKoqvMM3olLi8w8pE5KVFOV2t39UQ5atR40uoMvMPZ5u3nWMohUTzJd
+         Oe6Kwo71pdSBFV8CpX6CAx1WRs+1dh/ySJ4cpHUihD0ZS6G3MWmUjKUoX1wGngBCqI2w
+         HM+7ApCKyB/WtElJ+tA0TP9G8qFLjvvOcEBrQ59nK6FTaKQOxd00V7sNQ6y5+B/U1qnv
+         WkEQ==
+X-Gm-Message-State: AOAM530/2h1PqZ2h5WfrrFvV6dv/CBSRsMJDGNHZCMTzcF2+H6N8JZnT
+        XHGPlxK08yZZclq6KmFNPBo5qtaZvd0bQaNZSsU=
+X-Google-Smtp-Source: ABdhPJyajjoGEdHfoyCFfJ5xd/VGskW7hkoSyT1FnOhazKlHAmOLujiBhmJOBWa5cnZ57m/vRbQEmQ7U9GhZYiWGRT0=
+X-Received: by 2002:a17:907:7f21:b0:6ff:10b:9cee with SMTP id
+ qf33-20020a1709077f2100b006ff010b9ceemr18748924ejc.302.1654465970323; Sun, 05
+ Jun 2022 14:52:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601071911.6435-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com> <20220603100004.70336-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220603100004.70336-2-andriy.shevchenko@linux.intel.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 5 Jun 2022 23:52:39 +0200
+Message-ID: <CAFBinCDJm=hvbE3gy0H-3rQvnxOO6bnQe-5yir9=aMG1BiXVuw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] iio: adc: meson_saradc: Align messages to be with
+ physical device prefix
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Jun 2022 09:19:09 +0200, Krzysztof Kozlowski wrote:
-> The 'usb-otg-vbus' child node is a regulator so reference the regulator
-> schema for proper evaluation.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/power/supply/qcom,pm8941-charger.yaml   | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
+On Fri, Jun 3, 2022 at 12:00 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Align messages to be printed with the physical device prefix as it's done
+> everywhere else in this driver.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>

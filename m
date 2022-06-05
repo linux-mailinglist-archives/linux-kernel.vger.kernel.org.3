@@ -2,181 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F47953DE22
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 21:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F92453DE2D
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 22:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347062AbiFET6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 15:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
+        id S1346210AbiFEUXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 16:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344478AbiFET6b (ORCPT
+        with ESMTP id S233179AbiFEUXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 15:58:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694C449687;
-        Sun,  5 Jun 2022 12:58:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA1ECB80DAE;
-        Sun,  5 Jun 2022 19:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F14C385A5;
-        Sun,  5 Jun 2022 19:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654459105;
-        bh=66jU7St7J/rQkWEC+xtYa4b2N3D8EzKe3flOReZVLn8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=BC1wbJ2wvSSXy/eC676d4HdHWx8nmKxbPExDrb/vQHSVp5GJTaUAxDCb8lovxEAP4
-         vU/JiuaF6m6cBrqgFMdmwR0c7XIjsMrG/xHYLa5GEoZ3FddCusZpuKfv/xPo7aMvc1
-         IZ5LmWcU5+dAy+iQFeDzVLP7heYTnBy4vOPNcErbj5X0SVS5lKT4hM3N7PNATvbVDX
-         aXUN1q0r7d7wVNgpQ+QtOKCdhKOiDp3MBCWfoByYjQ0RN7LVjgYhyVYLcDUoISgyCi
-         Pgf/ikulSSl95wy7PNnvyyvIvA8CStcsjOg2dkgo8gQf8wDA5mcuwcao87jfx/5YxQ
-         sJAkZb5FRBJCQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3B5FC5C0514; Sun,  5 Jun 2022 12:58:25 -0700 (PDT)
-Date:   Sun, 5 Jun 2022 12:58:25 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCH] ia64: fix sparse warnings with cmpxchg() & xchg()
-Message-ID: <20220605195825.GW1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <87h7547k8c.fsf@toke.dk>
- <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
+        Sun, 5 Jun 2022 16:23:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDD72FE73
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 13:23:21 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id h23so14309619ejj.12
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 13:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=syDJi88yIFylEVum47mqcHZv+RTHJr0HACQpGPz7nFg=;
+        b=UkdnJF7U/pehTnhldJ0iRVMzejB11Pwz4Nh6FtdzdqI7LZG4RriamDrXXxtEvidn4P
+         RTY9zO7h022njdZW8eeUj0iinKe/b/CgKrWUQG3GegxQh2P9ZeqbM7W+B0XECBxhmWtQ
+         aBNOkDMyKXYqYuWvAtcb2G1ciFjjdavXh3Ll6PV3Rns/37mLuoIne9Jp8TbGEWOJTlfx
+         H+9T0HErvS9klcadxd2WMlR1/TI3gM0hr7gtZRLzyRC/5wyKhyDD3osNCeayoJKPijCI
+         kK8sHqqdZTeIhqM5DsCL6vk0Er6Ntcp7e487O7BmZth3c0ITx3qhJ758UeLk/pav265k
+         U69g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=syDJi88yIFylEVum47mqcHZv+RTHJr0HACQpGPz7nFg=;
+        b=MjZ+nLNwLjSrKn885W/v+SMR1cuSK9CVBdWQk7h7nLk6QDapPMfhGMXnGVIsoHya/j
+         HwTZSOy3/74uV17zEzogKUKTvx7OONAKbq8/fYQdfv82NgyBhOVWVJV360U0F6nS0WkI
+         gn/yWbyuUPl+ux9dCVZkuCNs0xTjf+b1GyLTkl2FZqG3EOXVchWWQJxAEVDY9bPhu2KT
+         nEwjq1lknsznjhI8Sieb1hr797ubKsDol/mf1d51ooN0mlARwqQQh8BFw+u9TqxUI1GR
+         8XLn2vTkArSAQp+Yd4d+oazy11TdPeFb5v+hFwQ2UsUdI0INHDIR+LN94OpDi0j3bHAj
+         li2w==
+X-Gm-Message-State: AOAM533/FP/30cIFvdJ8OvLIk2ljXo6Vp/sgpYGy2JirVGGAeTCPmDJ4
+        /Adk4FSjbPZZyaq1aYFt4ts=
+X-Google-Smtp-Source: ABdhPJx3SAJQ47i6a+JSGjvv9dNZLjFQAuaIZnoyyym7cAW0Id1txRWDbdUrlqHzWh9rkQnzTDpv2A==
+X-Received: by 2002:a17:906:3ed5:b0:6f5:108c:a45 with SMTP id d21-20020a1709063ed500b006f5108c0a45mr18253665ejj.623.1654460600393;
+        Sun, 05 Jun 2022 13:23:20 -0700 (PDT)
+Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id a22-20020aa7d916000000b0042dd4f9c464sm7226427edr.84.2022.06.05.13.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 13:23:19 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, wens@csie.org, airlied@linux.ie,
+        daniel@ffwll.ch, samuel@sholland.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz,
+        Roman Stratiienko <r.stratiienko@gmail.com>
+Cc:     Roman Stratiienko <r.stratiienko@gmail.com>
+Subject: Re: [PATCH v2] drm/sun4i: Enable output signal premultiplication for DE2/DE3
+Date:   Sun, 05 Jun 2022 22:23:18 +0200
+Message-ID: <5826286.lOV4Wx5bFT@jernej-laptop>
+In-Reply-To: <20220605094018.9782-1-r.stratiienko@gmail.com>
+References: <20220605094018.9782-1-r.stratiienko@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 06:07:38PM +0200, Luc Van Oostenryck wrote:
-> On IA64, new sparse's warnings where issued after fixing
-> some __rcu annotations in kernel/bpf/.
+Dne nedelja, 05. junij 2022 ob 11:40:18 CEST je Roman Stratiienko napisal(a):
+> Otherwise alpha value is discarded, resulting incorrect pixel
+> apperance on the display.
 > 
-> These new warnings are false positives and appear on IA64 because
-> on this architecture, the macros for cmpxchg() and xchg() make
-> casts that ignore sparse annotations.
+> This also fixes missing transparency for the most bottom layer.
+
+Can you explain that a bit more? Also, BSP driver never enables this bit. What 
+are we doing differently?
+
 > 
-> This patch contains the minimal patch to fix this issue:
-> adding a missing cast and some missing '__force'.
+> Test applications and videos w/ w/o this patch are available at [1].
 > 
-> Link: https://lore.kernel.org/r/20220601120013.bq5a3ynbkc3hngm5@mail
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-> Signed-off-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+> [1]: https://github.com/GloDroid/glodroid_tests/issues/1
 
-Looks good to me!
+As stated in other emails, commit messages should not contain external links 
+(per patch rules).
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Best regards,
+Jernej
 
+> Signed-off-by: Roman Stratiienko <r.stratiienko@gmail.com>
+> 
 > ---
+> Changelog:
 > 
-> Note: This patch is only compile tested on defconfig. The corresponding
->       binary is unchanged (except some .rodata with the kernel version)
->       as it should be.
+> V2: Added code hunk missing in v1
+> ---
+>  drivers/gpu/drm/sun4i/sun8i_mixer.c | 5 +++--
+>  drivers/gpu/drm/sun4i/sun8i_mixer.h | 1 +
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
->  arch/ia64/include/uapi/asm/cmpxchg.h | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> b/drivers/gpu/drm/sun4i/sun8i_mixer.c index 6b1711a9a71f..ba2932aaed08
+> 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> @@ -320,8 +320,9 @@ static void sun8i_mixer_mode_set(struct sunxi_engine
+> *engine, else
+>  		val = 0;
 > 
-> diff --git a/arch/ia64/include/uapi/asm/cmpxchg.h b/arch/ia64/include/uapi/asm/cmpxchg.h
-> index 2c2f3cfeaa77..ca2e02685343 100644
-> --- a/arch/ia64/include/uapi/asm/cmpxchg.h
-> +++ b/arch/ia64/include/uapi/asm/cmpxchg.h
-> @@ -33,24 +33,24 @@ extern void ia64_xchg_called_with_bad_pointer(void);
->  									\
->  	switch (size) {							\
->  	case 1:								\
-> -		__xchg_result = ia64_xchg1((__u8 *)ptr, x);		\
-> +		__xchg_result = ia64_xchg1((__u8 __force *)ptr, x);	\
->  		break;							\
->  									\
->  	case 2:								\
-> -		__xchg_result = ia64_xchg2((__u16 *)ptr, x);		\
-> +		__xchg_result = ia64_xchg2((__u16 __force *)ptr, x);	\
->  		break;							\
->  									\
->  	case 4:								\
-> -		__xchg_result = ia64_xchg4((__u32 *)ptr, x);		\
-> +		__xchg_result = ia64_xchg4((__u32 __force *)ptr, x);	\
->  		break;							\
->  									\
->  	case 8:								\
-> -		__xchg_result = ia64_xchg8((__u64 *)ptr, x);		\
-> +		__xchg_result = ia64_xchg8((__u64 __force *)ptr, x);	\
->  		break;							\
->  	default:							\
->  		ia64_xchg_called_with_bad_pointer();			\
->  	}								\
-> -	__xchg_result;							\
-> +	(__typeof__ (*(ptr)) __force) __xchg_result;			\
->  })
->  
->  #ifndef __KERNEL__
-> @@ -76,42 +76,42 @@ extern long ia64_cmpxchg_called_with_bad_pointer(void);
->  									\
->  	switch (size) {							\
->  	case 1:								\
-> -		_o_ = (__u8) (long) (old);				\
-> +		_o_ = (__u8) (long __force) (old);			\
->  		break;							\
->  	case 2:								\
-> -		_o_ = (__u16) (long) (old);				\
-> +		_o_ = (__u16) (long __force) (old);			\
->  		break;							\
->  	case 4:								\
-> -		_o_ = (__u32) (long) (old);				\
-> +		_o_ = (__u32) (long __force) (old);			\
->  		break;							\
->  	case 8:								\
-> -		_o_ = (__u64) (long) (old);				\
-> +		_o_ = (__u64) (long __force) (old);			\
->  		break;							\
->  	default:							\
->  		break;							\
->  	}								\
->  	switch (size) {							\
->  	case 1:								\
-> -		_r_ = ia64_cmpxchg1_##sem((__u8 *) ptr, new, _o_);	\
-> +		_r_ = ia64_cmpxchg1_##sem((__u8 __force *) ptr, new, _o_);	\
->  		break;							\
->  									\
->  	case 2:								\
-> -		_r_ = ia64_cmpxchg2_##sem((__u16 *) ptr, new, _o_);	\
-> +		_r_ = ia64_cmpxchg2_##sem((__u16 __force *) ptr, new, _o_);	\
->  		break;							\
->  									\
->  	case 4:								\
-> -		_r_ = ia64_cmpxchg4_##sem((__u32 *) ptr, new, _o_);	\
-> +		_r_ = ia64_cmpxchg4_##sem((__u32 __force *) ptr, new, _o_);	\
->  		break;							\
->  									\
->  	case 8:								\
-> -		_r_ = ia64_cmpxchg8_##sem((__u64 *) ptr, new, _o_);	\
-> +		_r_ = ia64_cmpxchg8_##sem((__u64 __force *) ptr, new, _o_);	\
->  		break;							\
->  									\
->  	default:							\
->  		_r_ = ia64_cmpxchg_called_with_bad_pointer();		\
->  		break;							\
->  	}								\
-> -	(__typeof__(old)) _r_;						\
-> +	(__typeof__(old) __force) _r_;					\
->  })
->  
->  #define cmpxchg_acq(ptr, o, n)	\
-> -- 
-> 2.36.1
+> -	regmap_update_bits(engine->regs, 
+SUN8I_MIXER_BLEND_OUTCTL(bld_base),
+> -			   SUN8I_MIXER_BLEND_OUTCTL_INTERLACED, 
+val);
+> +	val |= SUN8I_MIXER_BLEND_OUTCTL_PREMULTIPLY;
+> +
+> +	regmap_write(engine->regs, SUN8I_MIXER_BLEND_OUTCTL(bld_base), 
+val);
 > 
+>  	DRM_DEBUG_DRIVER("Switching display mixer interlaced mode %s\n",
+>  			 interlaced ? "on" : "off");
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h
+> b/drivers/gpu/drm/sun4i/sun8i_mixer.h index ebfc276b2464..bc12c95af6f3
+> 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
+> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+> @@ -65,6 +65,7 @@
+>  #define SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(n)	(0xf << ((n) << 2))
+>  #define SUN8I_MIXER_BLEND_ROUTE_PIPE_SHIFT(n)	((n) << 2)
+> 
+> +#define SUN8I_MIXER_BLEND_OUTCTL_PREMULTIPLY	BIT(0)
+>  #define SUN8I_MIXER_BLEND_OUTCTL_INTERLACED	BIT(1)
+> 
+>  #define SUN50I_MIXER_BLEND_CSC_CTL_EN(ch)	BIT(ch)
+
+
+
+

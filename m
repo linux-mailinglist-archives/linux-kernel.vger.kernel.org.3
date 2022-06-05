@@ -2,93 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70D953DCEE
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D545C53DCF2
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351211AbiFEQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S1346037AbiFEQVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351208AbiFEQQm (ORCPT
+        with ESMTP id S238762AbiFEQVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:16:42 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1124DF46
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:16:41 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gl15so10877955ejb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DOd91IrpVsMvaCem3N2Wlo4e4L7ezusJLGgTEZxYBBA=;
-        b=gM5L49Q5RNeeLmx4jz/0qVJoD+bjMCPlzbAXCJbNiWO9sHNBhK0oC+q5dS9DI0hDF9
-         aB88gWRVtT/asQV44soIAqkaWx/vgut/QdrGnnJ3lmg5okT37PQPXX7ZVKAR7WmBVVPZ
-         kc7/YY3mLvNZdYMjYfi9IB27m25VBDCVJkLyQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DOd91IrpVsMvaCem3N2Wlo4e4L7ezusJLGgTEZxYBBA=;
-        b=XZW2wOTolWYKkFJ6dosPBTPOeDK0X+AT/Ayl2oaVLmf1kv8KgyazN+zYar89TOGX/O
-         +wmeqG0e50iwSsgIpJVLQmYDxia62Hx0DapM2p1k3uLZ862VYAe9QI/P43TT11wzF2Z7
-         ZbVQQHfKRVMUMtxJ764sf7bP58mTYNIJSYSjwQFRHlw9/CF71Pi/ixqfQfdpoqKg5+4m
-         posoKPWW/1z+NAGsWBjTvm7SgygkwjLjobwL/orIcE3+iNTfLw/r7wEPZ5BZAkio+0cd
-         RLmzbiC4pPdJUg7AUyOl7k5lOOOOittaM2r4qya+nJc3SWWNtO0SdzEpPwERH8bUXMjm
-         73Ug==
-X-Gm-Message-State: AOAM530tcn8AFmUwrjGUOxIDrrvs/iJvWZDLJs98z3RkGzKR2fQkEXdv
-        ePICDUgt7xB9MJRpnFwaiqSuNgI6M5xuj5Fe
-X-Google-Smtp-Source: ABdhPJzrMtcCidyYds2KmxGpFX5JAowZE34TwkzowUeCUZ3QqoBftZ0o2XzRY4BjY50UMjuootqxug==
-X-Received: by 2002:a17:907:7f03:b0:6ff:4721:3c75 with SMTP id qf3-20020a1709077f0300b006ff47213c75mr17694576ejc.508.1654445799706;
-        Sun, 05 Jun 2022 09:16:39 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id u21-20020a1709064ad500b006f3ef214e14sm5196889ejt.122.2022.06.05.09.16.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 09:16:38 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so6728968wmz.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:16:38 -0700 (PDT)
-X-Received: by 2002:a05:600c:4982:b0:39c:3c0d:437c with SMTP id
- h2-20020a05600c498200b0039c3c0d437cmr13980053wmp.38.1654445797876; Sun, 05
- Jun 2022 09:16:37 -0700 (PDT)
+        Sun, 5 Jun 2022 12:21:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6857F220D4
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:21:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26B2F6109A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 16:21:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E3BC385A5;
+        Sun,  5 Jun 2022 16:21:11 +0000 (UTC)
+Date:   Sun, 5 Jun 2022 12:21:10 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com
+Subject: Re: [PATCH v3 00/33] Printbufs
+Message-ID: <20220605122110.22176bd9@rorschach.local.home>
+In-Reply-To: <20220604193042.1674951-1-kent.overstreet@gmail.com>
+References: <20220604193042.1674951-1-kent.overstreet@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220603113908.78777-1-thierry.reding@gmail.com>
- <CAHk-=wiVxF5VLFSuet3OrC7u1Gfb-ZyMs4W-KXAc42rXPRWmhA@mail.gmail.com> <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
-In-Reply-To: <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 5 Jun 2022 09:16:21 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wirNAe3ApyCWMAyz-QFaNX_oNCzc8SSX7a52pV=+OQ6Qg@mail.gmail.com>
-Message-ID: <CAHk-=wirNAe3ApyCWMAyz-QFaNX_oNCzc8SSX7a52pV=+OQ6Qg@mail.gmail.com>
-Subject: Re: [GIT PULL] hte: New subsystem for v5.19-rc1
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Saha, Tamal" <tamal.saha@intel.com>, bala.senthil@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 4, 2022 at 1:11 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> Another provider did come up, and were requested (by me) to work with
-> Dipen on the subsystem in august last year, that was the Intel PMC in the
-> Elkhart and Tiger Lake platforms and forward
+On Sat,  4 Jun 2022 15:30:09 -0400
+Kent Overstreet <kent.overstreet@gmail.com> wrote:
 
-Ok, I've pulled this now, even if I don't love the "hte" name. I
-despise specialized TLA's that aren't some obvious "if you're a kernel
-developer, you know what this means".
+> Printbufs, your new data structure for all your string-building and outputting
+> needs!
+> 
+> git repo: https://evilpiepirate.org/git/bcachefs.git/log/?h=printbuf_v3
 
-                       Linus
+Hi Kent,
+
+Just wanted to let you know that I want to review this and I'm not
+ignoring it. But there's a still quite a bit in my queue that I must
+review before I get to this, so it may still be a while. :-/
+
+-- Steve

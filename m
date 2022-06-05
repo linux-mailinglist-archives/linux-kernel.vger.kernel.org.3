@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C973453DED1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7EC53DED4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351763AbiFEWzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
+        id S1351768AbiFEW4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbiFEWzM (ORCPT
+        with ESMTP id S234832AbiFEW4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:55:12 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A52F4EDD9;
-        Sun,  5 Jun 2022 15:55:08 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id br33so8097392qkb.0;
-        Sun, 05 Jun 2022 15:55:08 -0700 (PDT)
+        Sun, 5 Jun 2022 18:56:15 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D154EDD8;
+        Sun,  5 Jun 2022 15:56:13 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id m82so17575047oif.13;
+        Sun, 05 Jun 2022 15:56:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=JDlnU81AiM8Gn0ExLEpLMPSw6ZZMLCrZp3X9UqZjqro=;
-        b=hYQkiSQEkQvDNyN7l2GczVC2nNjKF9wca34kLTdExr4w3IMAOYi7BzqrHdXSJpGwWU
-         vCmp7VvJKBJnq+syWWO1jbxTobp/64+mnIteclU05tAICL+Dx7iJ+PfytNFuMKZSL96g
-         ThCWquMK4jMQTcTnkWEdFJUdxn8Ey/aIhkf2Z8NBKp/c6072dZPBkLmM2yTAdXkktffq
-         4hptSX+AyPoucmsva9PXFIfGdxx5+VHwJUQn9BlaMk3+0l5o4rIYs5bJ3AKoKmZhWjMG
-         9s7BXpYrm8eFFFeSQhh7+UCcm2M+uHzr+qs8GcvCZg1wRH1A953rbP/RH/RDngAoO1+/
-         eJoA==
-X-Gm-Message-State: AOAM532mb0HGuFEa43yHK+eOMDouWN2BdsOSOWeMVXQ6DcdvEJYjAri0
-        P69GvY4gCYCOPfMlPJDTKQ==
-X-Google-Smtp-Source: ABdhPJxhOTbHhJKechkHtyNPX6o7qRMCIqbh9d8lKz+uJmQcV5Y4H4GAHqF0tyDtjHw7nRY8SPNZIw==
-X-Received: by 2002:a05:620a:29c1:b0:6a5:aa9b:d13e with SMTP id s1-20020a05620a29c100b006a5aa9bd13emr13581579qkp.629.1654469707606;
-        Sun, 05 Jun 2022 15:55:07 -0700 (PDT)
+        bh=UMKvzwbSRd/rxKXUR0P8o5zGehpsLdw9MafSGqZvJfc=;
+        b=jnbpGnYwx3ZwtZJSuO8kr2KPQxRGZd6UOhaOXSZu8rnHaupM3rWnCpn1Fwht8D4sZ+
+         lDXbdZURQ24PsI0IjxoBlLiHIP49atVLGR25MsiAjUqfD3K9MkiQivu4RCKZmnUBG+OP
+         QVPU7G5iQ5jlF7032+EoEAAwv6QVRX28Ixs+OgOlQDCppqbs2BjqBw3VH+81a0W5eOs7
+         0ucrgkTcKKcRY7+p5z6Fp896JtDnvR9eRXpwoYSY2htU5vspCk/cY5wuJ3lzjmWRoGJg
+         VDWjfJATBlJ4ngOa6cBmwGIF306Sa2rIeKyLRtxR/J5nwmApJ46tNXNT7P+FkOYqPVl/
+         Zb7w==
+X-Gm-Message-State: AOAM531Q2rra1t8NRDdcPHYSqDRREzkMb7bILjujFUH0oeYdGBv0kwJ9
+        xcQB3/GIVI4/yh9dDhI9yg==
+X-Google-Smtp-Source: ABdhPJzIJCQ60tCHqJkUEoNcacGJSr/mA7PifTVKaaxmt4fCRG0dXXuznS0bPqDG5Fo/G+UqVWVb0w==
+X-Received: by 2002:a05:6808:140f:b0:32b:ce0f:2002 with SMTP id w15-20020a056808140f00b0032bce0f2002mr25942550oiv.288.1654469772993;
+        Sun, 05 Jun 2022 15:56:12 -0700 (PDT)
 Received: from robh.at.kernel.org ([2607:fb90:1bdb:2e61:f12:452:5315:9c7e])
-        by smtp.gmail.com with ESMTPSA id s13-20020a05622a1a8d00b002f39b99f6a4sm9591309qtc.62.2022.06.05.15.55.05
+        by smtp.gmail.com with ESMTPSA id l14-20020a056870d3ce00b000f333ac991fsm6038058oag.27.2022.06.05.15.56.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 15:55:07 -0700 (PDT)
-Received: (nullmailer pid 3681998 invoked by uid 1000);
-        Sun, 05 Jun 2022 22:55:04 -0000
-Date:   Sun, 5 Jun 2022 17:55:04 -0500
+        Sun, 05 Jun 2022 15:56:12 -0700 (PDT)
+Received: (nullmailer pid 3683501 invoked by uid 1000);
+        Sun, 05 Jun 2022 22:56:10 -0000
+Date:   Sun, 5 Jun 2022 17:56:10 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/10] dt-bindings: gpio: Add AXP192 GPIO bindings
-Message-ID: <20220605225504.GA3678983-robh@kernel.org>
-References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
- <20220603135714.12007-6-aidanmacdonald.0x0@gmail.com>
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc:     jarkko@kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, devicetree@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: trivial-devices: Add two I2C TPM
+ devices
+Message-ID: <20220605225610.GA3682221-robh@kernel.org>
+References: <20220603143532.8202-1-Alexander.Steffen@infineon.com>
+ <20220603143532.8202-2-Alexander.Steffen@infineon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220603135714.12007-6-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220603143532.8202-2-Alexander.Steffen@infineon.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -68,91 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 02:57:09PM +0100, Aidan MacDonald wrote:
-> The AXP192 PMIC is different enough from the PMICs supported by
-> the AXP20x GPIO driver to warrant a separate driver. The AXP192
-> driver also supports interrupts and pinconf settings.
+On Fri, Jun 03, 2022 at 04:35:30PM +0200, Alexander Steffen wrote:
+> Both are supported by the upcoming tpm_tis_i2c driver.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Change-Id: I4750e39274038715d568d711cde1dc3d8595ba1b
 > ---
->  .../bindings/gpio/x-powers,axp192-gpio.yaml   | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
-> new file mode 100644
-> index 000000000000..7a985640ade8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/gpio/x-powers,axp192-gpio.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: X-Powers AXP192 GPIO Device Tree Bindings
-> +
-> +maintainers:
-> +  - Chen-Yu Tsai <wens@csie.org>
-> +
-> +properties:
-> +  "#gpio-cells":
-> +    const: 2
-> +    description: >
-> +      The first cell is the pin number and the second is the GPIO flags.
-> +
-> +  compatible:
-> +    oneOf:
-> +      - enum:
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index 6aafa71806a3..92aae2a805f7 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -139,6 +139,8 @@ properties:
+>            - infineon,slb9635tt
+>              # Infineon SLB9645 I2C TPM (new protocol, max 400khz)
+>            - infineon,slb9645tt
+> +            # Infineon SLB9673 I2C TPM 2.0
+> +          - infineon,slb9673
+>              # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
+>            - infineon,tlv493d-a1b6
+>              # Infineon Multi-phase Digital VR Controller xdpe11280
+> @@ -333,6 +335,8 @@ properties:
+>            - st,24c256
+>              # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+>            - taos,tsl2550
+> +            # TCG TIS-compliant TPM with I2C interface
+> +          - tcg,tpm-tis-i2c
 
-No need for 'oneOf' with only 1 entry.
+Again, not a trivial device.
 
-> +          - x-powers,axp192-gpio
-> +
-> +  gpio-controller: true
-> +
-> +patternProperties:
-> +  "^.*-pins?$":
-
-You can omit '^.*'
-
-Why does 's' need to be optional?
-
-> +    $ref: /schemas/pinctrl/pinmux-node.yaml#
-> +
-> +    properties:
-> +      pins:
-> +        items:
-> +          enum:
-> +            - GPIO0
-> +            - GPIO1
-> +            - GPIO2
-> +            - GPIO3
-> +            - GPIO4
-> +            - N_RSTO
-> +
-> +      function:
-> +        enum:
-> +          - output
-> +          - input
-> +          - ldo
-> +          - pwm
-> +          - adc
-> +          - low_output
-> +          - floating
-> +          - ext_chg_ctl
-> +          - ldo_status
-> +
-> +required:
-> +  - compatible
-> +  - "#gpio-cells"
-> +  - gpio-controller
-> +
-> +additionalProperties: false
-> +
-> +...
+>              # Temperature Monitoring and Fan Control
+>            - ti,amc6821
+>              # Temperature and humidity sensor with i2c interface
 > -- 
-> 2.35.1
+> 2.25.1
 > 
 > 

@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC2653DA3F
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 07:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049BE53DA45
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 07:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243959AbiFEFZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 01:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S1349057AbiFEF34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 01:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiFEFZJ (ORCPT
+        with ESMTP id S229987AbiFEF3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 01:25:09 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6562E1403F;
-        Sat,  4 Jun 2022 22:25:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VFM728m_1654406700;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VFM728m_1654406700)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 05 Jun 2022 13:25:01 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH] proc: export page young and skip_kasan_poison flag via
- kpageflags
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     sashal@kernel.org, akpm@linux-foundation.org, adobriyan@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220602154302.12634-1-xhao@linux.alibaba.com>
- <YpkBQTWWUuOzagvd@casper.infradead.org>
- <55263fe2-f8ae-f681-69fd-1064a74f2bb6@linux.alibaba.com>
- <Ypt1eFD5QDteH1RS@casper.infradead.org>
-Message-ID: <a64d6c6b-ae07-ed49-8185-0381b6e2d37b@linux.alibaba.com>
-Date:   Sun, 5 Jun 2022 13:25:00 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Sun, 5 Jun 2022 01:29:54 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FAB29800;
+        Sat,  4 Jun 2022 22:29:52 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id a10so10367020pju.3;
+        Sat, 04 Jun 2022 22:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=deKD5cIzgMgXwTOxKyXzSLAtYTvZcYkskErHRMjrma8=;
+        b=Ryc8e11Wrd/p/oVJLbGDaBDyZ6iRSpYfKpbvBF6Tjf3Vyg7ewvMQmL7Kk6i5+4ifuW
+         hz9K205bbgJ0lReKqyaIpOBZa6MYsA7GkpA8lkGIOLCt/KxaDhurOmbxXRTLbbpZDw6r
+         YYCvjEY+nRz+hX+CAqeec9NyEfwlhbuy2C70NgSW4ZML25NoFZXWXbnTi2z7zibe/fQQ
+         35f13qHV+5zu+jgEO3EdDCCEDEzeTyZAAU82Kag9nfrLUaCzR1ftA3MGaVDmvwtPpG+Z
+         v323VRa8/RMS8SdqW5jsx5gDPvCBtdvkSQ7UAhO5zZY5kOExwYEIrgEw7lfDBDmQQl1J
+         UJyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=deKD5cIzgMgXwTOxKyXzSLAtYTvZcYkskErHRMjrma8=;
+        b=pg5suUmZ7GbDFG+KL/IU81vlevYXBRAFdMJK4lt6xyNotUao2EobBIP99z/kpIbFxC
+         y5WRdgc0cm28/eOJmxeZ/m+jVQNih7htbIu1WjIoxBKouBLVZh4J8r3rX+RQU7ixZAKB
+         ygONRqMemLGALLbracWEatedl5zsT19q6LbIC7yi8Mf8VAX/7S188zCgTO4FfrvVyH2J
+         MnuXstJQ2jmTJxIR0Bsg7TY5qwWA5JMbMfOwOSKaEoaYcM7ZJEmPNHdlYLsjaD9aQ69u
+         pOlY8QN65Uan6QbLamlRYaPX/nUhYxkxv1sYaEGxQ8lpDJSvhKPtR+h2aMSEFtHWu9s6
+         v5zg==
+X-Gm-Message-State: AOAM533knjJBvGL7X3PyTVngEfGasouu4tTggbUgsa9jDXXXGUGTldYj
+        jEWsC9Cd7ZjhlKBPVwFwy94=
+X-Google-Smtp-Source: ABdhPJwzNGg6hHL1PSAE9VxopSHwc3gRfl4jKAtdKxaZN7lj5p0penl/d6LsR3/tK5SasQaNih3eaA==
+X-Received: by 2002:a17:902:d643:b0:161:f4c2:fae with SMTP id y3-20020a170902d64300b00161f4c20faemr18302383plh.123.1654406991836;
+        Sat, 04 Jun 2022 22:29:51 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id 12-20020a170902c10c00b001621c48d6c2sm939792pli.221.2022.06.04.22.29.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jun 2022 22:29:51 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Daniel Hellstrom <daniel@gaisler.com>,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sparc32,leon: Fix reference leak in leon_ipi_init
+Date:   Sun,  5 Jun 2022 09:29:41 +0400
+Message-Id: <20220605052943.54265-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <Ypt1eFD5QDteH1RS@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Matthew:
+of_find_node_by_path() returns a node pointer with
+refcount incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-On 6/4/22 11:08 PM, Matthew Wilcox wrote:
-> On Sat, Jun 04, 2022 at 05:50:31PM +0800, Xin Hao wrote:
->> On 6/3/22 2:28 AM, Matthew Wilcox wrote:
->>> On Thu, Jun 02, 2022 at 11:43:02PM +0800, Xin Hao wrote:
->>>> Now the young and skip_kasan_poison flag are supported in
->>> Why do we want userspace to know about whether skip_kasan_poison is set?
->>> That seems like a kernel-internal detail to me.
->> the  skip_kasan_poison also a page flags, we use page_types tool to display
->> them not only include user-internal,
->>
->> but also  kernel-internal, add them, the page-types tool can more detail
->> display the kernel-internal page flags,
->>
->> just in case we don't miss some page flags when check the whole memory.
-> So you're just being completist?  You don't have a reason to expose this
-> information?
+Fixes: 1ca0c808c60f ("sparc32,leon: Implemented SMP IPIs for LEON CPU")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ arch/sparc/kernel/leon_smp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yes, about the skip_kasan_poison, i just want the kpageflags to support 
-it,  i think it should be included,
-
-the mainly  region is i want get the page node info from the kpageflags 
-in my next patch,  when i check these
-
-codes,  i see there lost some info about the skip_kasan_poison and young 
-flags,  the page_types tool also check
-
-the kasan pages, so i think it should be included.
-
-Thanks.
-
+diff --git a/arch/sparc/kernel/leon_smp.c b/arch/sparc/kernel/leon_smp.c
+index 1eed26d423fb..85b22669c002 100644
+--- a/arch/sparc/kernel/leon_smp.c
++++ b/arch/sparc/kernel/leon_smp.c
+@@ -284,6 +284,7 @@ static void __init leon_ipi_init(void)
+ 		pp = of_find_property(rootnp, "ipi_num", &len);
+ 		if (pp && (*(int *)pp->value))
+ 			leon_ipi_irq = *(int *)pp->value;
++		of_node_put(rootnp);
+ 	}
+ 	printk(KERN_INFO "leon: SMP IPIs at IRQ %d\n", leon_ipi_irq);
+ 
 -- 
-Best Regards!
-Xin Hao
+2.25.1
 

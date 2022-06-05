@@ -2,175 +2,540 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9E953DCF5
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35E253DCF6
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351151AbiFEQXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S1351224AbiFEQYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238762AbiFEQX0 (ORCPT
+        with ESMTP id S1346048AbiFEQYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:23:26 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2073.outbound.protection.outlook.com [40.107.21.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE441473B8;
-        Sun,  5 Jun 2022 09:23:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EROrj6cBAywr0SD5fVM9+EwPOtamarlQJT8jv+hRPG7/9Rmt+ukZbQC5fwcfkzm2YEPBIlsmDUbX67EvrCwMX/cTxff6iaesGv/+Yl5eON/1BPMyJcWX2XX5OXL6HIQNfd+cWQvIIHKe3tcnq3te1SHLaN7cXU0ayWRwJgqCdbzQ4liQYC2qnp+3hCqOk2ze1O2lgbDxa0y/EdKaWnwMfQEih4w7cNJmX1IWS/3/c8A67z+mAxt3xjwIRTKQBb6o/TndR8tbL+Oh0vdqusVnx7s3qVKODqbem8AK3bdst99LueioVAvTqy3Uq+ndvMyRKWU4RQ5ywHASd5QNv3GjCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O7M3h/s79MfEgDeRtIetRMeoeAiN0vVCqW7jZ88/5Js=;
- b=mxh0tM64j9ppi177QFHyA+fHKTu8QsNIZ1FYmawKA0LfCWk2N/ZkuFJOG9fBjxbUvuPGFtAsjUUtkJryunjttIlxyunn7Iz6G/R7cZCch9BsmEEcjVrf8hc02lbhacxbsfstdZo8m6bX8ZhhDeE4wlb3H6ZQ5lHSsi7fcX2nidSdI5PTLeXCXKqg/M877tLns7Tc3BA7GXow105Yn3ufIjuGIKWvYDtapHVdXVs3Z7FwjWUW5iV4XQnd2o6fUh42g4/Ii7iKLNbNs+aE1K4w7OtW8ytyVV4HVgDIOSNEaRI0U5iwfWvCD0Czo2EJFteYlHFo3ySiSeOVMVjYSY0i2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O7M3h/s79MfEgDeRtIetRMeoeAiN0vVCqW7jZ88/5Js=;
- b=V6NCJrX/X42HFsy1DPGPr2MaBYwfG9PfMVG5cgReF8vVebK9z77IU8pWAaRrI4jT2d/88byRVOLdWMdI7gJ4PtdnQ3Ay3sTraMNdykiC6FakjeJvVJiBMMJN0++6BFE29PAYGW2aAVIeQhKvYS6srrnMcNS5LnzBdjAbgREaau8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AS4PR04MB9244.eurprd04.prod.outlook.com (2603:10a6:20b:4e3::9)
- by AM6PR04MB6104.eurprd04.prod.outlook.com (2603:10a6:20b:bd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Sun, 5 Jun
- 2022 16:23:21 +0000
-Received: from AS4PR04MB9244.eurprd04.prod.outlook.com
- ([fe80::60ed:7367:9545:512f]) by AS4PR04MB9244.eurprd04.prod.outlook.com
- ([fe80::60ed:7367:9545:512f%8]) with mapi id 15.20.5314.015; Sun, 5 Jun 2022
- 16:23:21 +0000
-Message-ID: <7ba5f29f-4454-f2e1-c4bb-329fc3f11516@oss.nxp.com>
-Date:   Sun, 5 Jun 2022 19:23:17 +0300
+        Sun, 5 Jun 2022 12:24:50 -0400
+Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CDB4AE3C
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:24:48 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id xt3OnV5YAE80Kxt3OnoLAV; Sun, 05 Jun 2022 18:24:45 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 05 Jun 2022 18:24:45 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <3874cac9-cf3c-aa31-ecba-e2ae33935286@wanadoo.fr>
+Date:   Sun, 5 Jun 2022 18:24:37 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2] media: imx-jpeg: Correct some definition according
- specification
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220530074731.14252-1-ming.qian@nxp.com>
-From:   "mirela.rabulea@oss.nxp.com" <mirela.rabulea@oss.nxp.com>
-In-Reply-To: <20220530074731.14252-1-ming.qian@nxp.com>
+Subject: Re: [PATCH v2 2/2] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Content-Language: fr
+To:     p-mohan@ti.com
+Cc:     afd@ti.com, andrew@lunn.ch, davem@davemloft.net,
+        devicetree@vger.kernel.org, edumazet@google.com,
+        grygorii.strashko@ti.com, kishon@ti.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, nm@ti.com, robh+dt@kernel.org,
+        rogerq@kernel.org, s-anna@ti.com, ssantosh@kernel.org,
+        vigneshr@ti.com
+References: <20220531095108.21757-1-p-mohan@ti.com>
+ <20220531095108.21757-3-p-mohan@ti.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220531095108.21757-3-p-mohan@ti.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR05CA0052.eurprd05.prod.outlook.com
- (2603:10a6:20b:489::10) To AS4PR04MB9244.eurprd04.prod.outlook.com
- (2603:10a6:20b:4e3::9)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca645600-4fa4-4664-fee3-08da470fb496
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6104:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM6PR04MB6104CD9CC858A2100768955BCEA39@AM6PR04MB6104.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xycwGDXbzmK2o4Kb6GEgOeFLkFzcZGs8mXznBAv+ajeO0AiY/SOH4Wwz7hmG6v5vhcAmABy5zrj/JRWNRYJQrQvlWx47AKXiGet86Nd2EaehI76WSYViw7Wk+e1JPFpoQ6XIbcuRkXwE4S22csUXanVKTwLkyJ6SmaOEKIvB2tA7vWdMC+nYKr2qDTmClPDKd8M1tISU1LXi4+Bla5TpQkpAfJ/MOcARbO/P+1IFb62R4pdZB4t01abEeZVCbHfdoolAQYzXOevusxu+mVHi9JCIWLQ+4nVo7r4Uq+Buwkf0Z/ruuNwFznzI+tvtL8CKaktSvpxsHniJBRmqcBL6ya/lYHkDjmCMZfZVS33Z5VKpwCo+PwSmCmmP/KTriG1VSl56CXDMUmyoV++7sLqT033sk6nCWnB0HicuKevp6l3h2C0bTsyfqb+8dlSCmmqYkf+CPjfF25VwMjnhr733qi325nCPaH935mL8jDmUVeQdwO9ImBY/QyIMRqlZGLop9iUrcqJMffIN7eh3ktZ7OozCH3r06KyMgwRpeVaRhseT84fG/jop7lajorZJsLhEAirycWCOuUfXUANNSHfXCU8nXhwZdGt8nhfSrKXuAI886SX3GIchzQaxSV6Sg9z2O+qDOfkBuQ3rVRpKZPXTTnDPgw9RTyzAcPUvMQbnYzupTq6jqO4oKL0ib+PwPMkpnfF4TY1FHST4x2u82T+qX0UwwAuMa8nEwhNTNRDedEq8EGC/nvuFioavs1DKExTuXHBdWETcv278UY0YJEj+UA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9244.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(6486002)(31696002)(7416002)(5660300002)(38100700002)(38350700002)(2616005)(53546011)(86362001)(186003)(2906002)(6506007)(83380400001)(8936002)(8676002)(4326008)(66476007)(66556008)(31686004)(66946007)(6666004)(508600001)(52116002)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RXZtT1M5SWtGT3E4RkthbWdYSDIvOHp5d0JGbFdQdDZ2L2I4Mm5TQ3M3dFlo?=
- =?utf-8?B?QmtGek1hMEpFbzRNTTFQSDJPWFQ3MVJpQ3UyM2dPTkl3VzVhd3g2a21uaS9h?=
- =?utf-8?B?ZFBYeTJiMUpHamFaNWhDN1I3NGFheFRoN1JRdmxiMW9aenlpeWg2TVdXcmo2?=
- =?utf-8?B?anhrdXBsUXBDRW5OTVdZSkJvZi9Mc3NhY05PNGQvT242OVBhOHRKYnBkM3JJ?=
- =?utf-8?B?K2hXaWNlQkVvSmt5aEhEb2xPdzVSZmIxRWgvamxNSGM2OVVRd042UHNlQlBO?=
- =?utf-8?B?bzM5R3MzMDJKbTVrUGVpVlBEdkFhSEs4dFJCSHdwMUNmK0d6VUJ2azFYTEZF?=
- =?utf-8?B?UkZxVktqQllRdlJSOVdITFU0QWZRZ045RTJ6a3JLemhVUUtCcXh6Y0c0d1ZX?=
- =?utf-8?B?UXI4ZHhzUDErMVA4UFJjdmNvRU81NUhIejhyMkxVL3RmRkRnWVdNQXlrTnlu?=
- =?utf-8?B?Nks5blo5SXRsUHlnQ09RNWtzd1E0WEtaU3lycXhtQ2lTMnFkeGtlWUtGdFps?=
- =?utf-8?B?eDFwSTYreEM3cWV0Tml1ek9xclJuMm9raHkxa2pyWWVqRTB4QjlRMGdyNkY5?=
- =?utf-8?B?aklicmNneWRMeEN5b2oybE03WXNvS0xoZ1RqODJiNnFTMTFMOVIzVSt6UVlp?=
- =?utf-8?B?dmRYeDBHVUJMV09GZG9wNm04U1orT0tsM1dkNFcxRllLTm9KVElMdlV0MFBv?=
- =?utf-8?B?M1NYSXF4SFpNbU9OaDZSMmRWNlJYTm9DaUdyMk01QjRHU0NjZ1NrUUE1SWNT?=
- =?utf-8?B?Y0Rob1BwcE41NjNZZmNCdlVVTk5YbUYwbG9TK2VZQ0kxWmxtYjllMVNWL3R3?=
- =?utf-8?B?NUpCaHVEMEdBNnJUNTlUaktKeTdQRjJLWVBkYnhoVC8rMWtaVWVQaThaMVVv?=
- =?utf-8?B?b1cxdSt0d3VKNy9pZDRrMHlwdEFiYTZnc0hWZldRb0tDcHdjanhHdWdYUGRU?=
- =?utf-8?B?VXZSaEN1eUx4Z3ljZUJnaGtKTTlUQml1VWsveUhPalUrOEo2VVZ4d05mMCtK?=
- =?utf-8?B?eVZrQk82T2NhME5ZQmVKNVplbVFOTlpjZXM0Z0J0amhidEpxaHRad3dxeG53?=
- =?utf-8?B?T01yOUtuNGJNT1dtNVpiTXBCdUIvT0pLY3dLMTRLdTJHNWtUTVdsbC9rN1Yv?=
- =?utf-8?B?bWNwbFQ4UjhGWHRWVnM4RFJwYzNHV1dzTUxBYW9zOWZOeGVncDhqZUpaYlU2?=
- =?utf-8?B?ZzNtOS81OU1rcy9FL21SSHI0clgrK0VBaHllb1k0aVJpaXhvUlZaYzdvZVh2?=
- =?utf-8?B?ajYzU1NrWU1aYllaaXpYeFhIeWxVZXpWT1krWXZjV21PeEc4bmU3RUxiODFU?=
- =?utf-8?B?YU1DMHVjMXkxVTVRb0FrMHBIUjNQaE0zR2prZDFQMmdzNTllOHYycGlENWlY?=
- =?utf-8?B?Yys2ODVmQzFlSnVXK1FPV010dGE2V2hBYWxrOHJQQkhUUlhEN3dLdWJ4T0Q4?=
- =?utf-8?B?NWxxNXJVSklMWW1CcmIrQlBTYnhkTHRtVnBmYThBNm9RWGxuZnVjS1FKcW5L?=
- =?utf-8?B?OEY5UDBJWTV5anpiZ3NXSE5sVVpNbFhHektCV0dDc21GMkJIMGFnYUlVU24w?=
- =?utf-8?B?Tm0rUldCaVpya1FvT25zUFFNZWdOcGFqN2dGQVVCelpyL0hLSWptQ2M3Uy9M?=
- =?utf-8?B?YmhqelhFS2VRQTFmdVpNVGtZMExZY1I3VncxMiszckJGalozTjBTdjVVbjBo?=
- =?utf-8?B?OXp0NkNVWlN6bjY1QlNDM2hldHAwWGF3djNCQXo1MnRBZ2tmWUdzYTNsL1Ex?=
- =?utf-8?B?VWpvRWtTTjI2SkhqTmZXYjdEVzB3ejhwRmpydGd4K0IzSmlmdzB5S29nTStG?=
- =?utf-8?B?d2p5N201ZDMrKzIwbXpFblY0VG1pYnRvV2hrK3hsL0dncU45NXlGZUk2NWhY?=
- =?utf-8?B?Ky91WFA0Y2pCU2VDcGg5OFpGaTFQMkF4NzVBRWZBY2tQUkI4TWtlOHlLVUh5?=
- =?utf-8?B?QWpBbS8yRHZQdVhNWkt4SXBtRWR0V2RoaW42QXFvVSs0dUtaMkNzUEg2Zi9K?=
- =?utf-8?B?eU9lWTJsZENCQTlFZm9yKzRiMnhNRjVXWWdpaEJIRGNaRnluV0k5VGFoSU9o?=
- =?utf-8?B?c2gxZGFPNGZVS0tLYnRsVGgyVm9WSy9oL1d3YVdaRmNSeXRrV050dUY3RHI4?=
- =?utf-8?B?QWVSSGZCL2dqbi9MYkdIUjR3QWl0OXJjOEc3S3JZWVNuTk5tS2FadzU0SGY4?=
- =?utf-8?B?TjF3bG11VXJHTlVVUmZmK1A5WWp0VEJMeHBRVlNERTJZZC9XbDQzRFg0Ylo2?=
- =?utf-8?B?cWVGK2NxSVhFMldTUkJ1MDY0Wko3N2EraHRzWG9sdE5IZ0F2OVVhTGh5UXlm?=
- =?utf-8?B?Q2Y5WFQ1RUIxeEpWUG4wWkkvbXE4ME5tcWtDTTl0VHFPYW1YQ2lWOWZHNHNP?=
- =?utf-8?Q?1rtQJtL9Ovf4QeBA=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca645600-4fa4-4664-fee3-08da470fb496
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9244.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2022 16:23:20.9503
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P2578kMC/QO5Q5LXHC76WmhMK7e/+QOAwUOLyWlJdmFt+vMVyJ8qmT6x57x29FfE/K3wm9AEsFxIYU8glUTmhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6104
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+Just a few comments below, for what they worth.
 
-On 30.05.2022 10:47, Ming Qian wrote:
-> the register CAST_NOMFRSIZE_LO should be equal to CAST_STATUS16
-> the register CAST_NOMFRSIZE_HI should be equal to CAST_STATUS17
-> the register CAST_OFBSIZE_LO should be equal to CAST_STATUS18
-> the register CAST_OFBSIZE_HI should be equal to CAST_STATUS19
+Le 31/05/2022 à 11:51, Puranjay Mohan a écrit :
+> From: Roger Quadros <rogerq-l0cyMroinI0@public.gmane.org>
 > 
-> Fixes: 2db16c6ed72ce ("media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder")
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-
-Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-
-> ---
-> v2
-> - add Fixes tag
->   drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+> This is the Ethernet driver for TI AM654 Silicon rev. 2
+> with the ICSSG PRU Sub-system running dual-EMAC firmware.
 > 
-> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
-> index e7e8954754b1..07655502f4bd 100644
-> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
-> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
-> @@ -53,10 +53,10 @@
->   #define CAST_REC_REGS_SEL		CAST_STATUS4
->   #define CAST_LUMTH			CAST_STATUS5
->   #define CAST_CHRTH			CAST_STATUS6
-> -#define CAST_NOMFRSIZE_LO		CAST_STATUS7
-> -#define CAST_NOMFRSIZE_HI		CAST_STATUS8
-> -#define CAST_OFBSIZE_LO			CAST_STATUS9
-> -#define CAST_OFBSIZE_HI			CAST_STATUS10
-> +#define CAST_NOMFRSIZE_LO		CAST_STATUS16
-> +#define CAST_NOMFRSIZE_HI		CAST_STATUS17
-> +#define CAST_OFBSIZE_LO			CAST_STATUS18
-> +#define CAST_OFBSIZE_HI			CAST_STATUS19
->   
->   #define MXC_MAX_SLOTS	1 /* TODO use all 4 slots*/
->   /* JPEG-Decoder Wrapper Slot Registers 0..3 */
+
+[...]
+
+> +static int prueth_netdev_init(struct prueth *prueth,
+> +			      struct device_node *eth_node)
+> +{
+> +	int ret, num_tx_chn = PRUETH_MAX_TX_QUEUES;
+> +	struct prueth_emac *emac;
+> +	struct net_device *ndev;
+> +	enum prueth_port port;
+> +	enum prueth_mac mac;
+> +
+> +	port = prueth_node_port(eth_node);
+> +	if (port < 0)
+> +		return -EINVAL;
+> +
+> +	mac = prueth_node_mac(eth_node);
+> +	if (mac < 0)
+> +		return -EINVAL;
+> +
+> +	ndev = alloc_etherdev_mq(sizeof(*emac), num_tx_chn);
+> +	if (!ndev)
+> +		return -ENOMEM;
+> +
+> +	emac = netdev_priv(ndev);
+> +	prueth->emac[mac] = emac;
+> +	emac->prueth = prueth;
+> +	emac->ndev = ndev;
+> +	emac->port_id = port;
+> +	emac->cmd_wq = create_singlethread_workqueue("icssg_cmd_wq");
+> +	if (!emac->cmd_wq) {
+> +		ret = -ENOMEM;
+> +		goto free_ndev;
+> +	}
+> +	INIT_WORK(&emac->rx_mode_work, emac_ndo_set_rx_mode_work);
+> +
+> +	ret = pruss_request_mem_region(prueth->pruss,
+> +				       port == PRUETH_PORT_MII0 ?
+> +				       PRUSS_MEM_DRAM0 : PRUSS_MEM_DRAM1,
+> +				       &emac->dram);
+> +	if (ret) {
+> +		dev_err(prueth->dev, "unable to get DRAM: %d\n", ret);
+> +		return -ENOMEM;
+
+goto free_wq; ?
+
+> +	}
+> +
+> +	emac->tx_ch_num = 1;
+> +
+> +	SET_NETDEV_DEV(ndev, prueth->dev);
+> +	spin_lock_init(&emac->lock);
+> +	mutex_init(&emac->cmd_lock);
+> +
+> +	emac->phy_node = of_parse_phandle(eth_node, "phy-handle", 0);
+> +	if (!emac->phy_node && !of_phy_is_fixed_link(eth_node)) {
+> +		dev_err(prueth->dev, "couldn't find phy-handle\n");
+> +		ret = -ENODEV;
+> +		goto free;
+> +	} else if (of_phy_is_fixed_link(eth_node)) {
+> +		ret = of_phy_register_fixed_link(eth_node);
+> +		if (ret) {
+> +			ret = dev_err_probe(prueth->dev, ret,
+> +					    "failed to register fixed-link phy\n");
+> +			goto free;
+> +		}
+> +
+> +		emac->phy_node = eth_node;
+> +	}
+> +
+> +	ret = of_get_phy_mode(eth_node, &emac->phy_if);
+> +	if (ret) {
+> +		dev_err(prueth->dev, "could not get phy-mode property\n");
+> +		goto free;
+> +	}
+> +
+> +	if (emac->phy_if != PHY_INTERFACE_MODE_MII &&
+> +	    !phy_interface_mode_is_rgmii(emac->phy_if)) {
+> +		dev_err(prueth->dev, "PHY mode unsupported %s\n", phy_modes(emac->phy_if));
+> +		goto free;
+> +	}
+> +
+> +	ret = prueth_config_rgmiidelay(prueth, eth_node, emac->phy_if);
+> +	if (ret)
+> +		goto free;
+> +
+> +	/* get mac address from DT and set private and netdev addr */
+> +	ret = of_get_ethdev_address(eth_node, ndev);
+> +	if (!is_valid_ether_addr(ndev->dev_addr)) {
+> +		eth_hw_addr_random(ndev);
+> +		dev_warn(prueth->dev, "port %d: using random MAC addr: %pM\n",
+> +			 port, ndev->dev_addr);
+> +	}
+> +	ether_addr_copy(emac->mac_addr, ndev->dev_addr);
+> +
+> +	ndev->netdev_ops = &emac_netdev_ops;
+> +	ndev->ethtool_ops = &icssg_ethtool_ops;
+> +	ndev->hw_features = NETIF_F_SG;
+> +	ndev->features = ndev->hw_features;
+> +
+> +	netif_napi_add(ndev, &emac->napi_rx,
+> +		       emac_napi_rx_poll, NAPI_POLL_WEIGHT);
+> +
+> +	return 0;
+> +
+> +free:
+> +	pruss_release_mem_region(prueth->pruss, &emac->dram);
+
+free_wq:
+
+> +	destroy_workqueue(emac->cmd_wq);
+> +free_ndev:
+> +	free_netdev(ndev);
+> +	prueth->emac[mac] = NULL;
+> +
+> +	return ret;
+> +}
+> +
+> +static void prueth_netdev_exit(struct prueth *prueth,
+> +			       struct device_node *eth_node)
+> +{
+> +	struct prueth_emac *emac;
+> +	enum prueth_mac mac;
+> +
+> +	mac = prueth_node_mac(eth_node);
+> +	if (mac < 0)
+> +		return;
+> +
+> +	emac = prueth->emac[mac];
+> +	if (!emac)
+> +		return;
+> +
+> +	if (of_phy_is_fixed_link(emac->phy_node))
+> +		of_phy_deregister_fixed_link(emac->phy_node);
+> +
+> +	netif_napi_del(&emac->napi_rx);
+> +
+> +	pruss_release_mem_region(prueth->pruss, &emac->dram);
+> +	destroy_workqueue(emac->cmd_wq);
+> +	free_netdev(emac->ndev);
+> +	prueth->emac[mac] = NULL;
+> +}
+> +
+> +static int prueth_get_cores(struct prueth *prueth, int slice)
+> +{
+> +	enum pruss_pru_id pruss_id;
+> +	struct device *dev = prueth->dev;
+> +	struct device_node *np = dev->of_node;
+> +	int idx = -1, ret;
+> +
+> +	switch (slice) {
+> +	case ICSS_SLICE0:
+> +		idx = 0;
+> +		break;
+> +	case ICSS_SLICE1:
+> +		idx = 3;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	prueth->pru[slice] = pru_rproc_get(np, idx, &pruss_id);
+> +	if (IS_ERR(prueth->pru[slice])) {
+> +		ret = PTR_ERR(prueth->pru[slice]);
+> +		prueth->pru[slice] = NULL;
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "unable to get PRU%d: %d\n", slice, ret);
+
+return dev_err_probe()?
+
+> +		return ret;
+> +	}
+> +	prueth->pru_id[slice] = pruss_id;
+> +
+> +	idx++;
+> +	prueth->rtu[slice] = pru_rproc_get(np, idx, NULL);
+> +	if (IS_ERR(prueth->rtu[slice])) {
+> +		ret = PTR_ERR(prueth->rtu[slice]);
+> +		prueth->rtu[slice] = NULL;
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "unable to get RTU%d: %d\n", slice, ret);
+
+Same.
+
+> +		return ret;
+> +	}
+> +
+> +	idx++;
+> +	prueth->txpru[slice] = pru_rproc_get(np, idx, NULL);
+> +	if (IS_ERR(prueth->txpru[slice])) {
+> +		ret = PTR_ERR(prueth->txpru[slice]);
+> +		prueth->txpru[slice] = NULL;
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "unable to get TX_PRU%d: %d\n",
+> +				slice, ret);
+
+Same.
+
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void prueth_put_cores(struct prueth *prueth, int slice)
+> +{
+> +	if (prueth->txpru[slice])
+> +		pru_rproc_put(prueth->txpru[slice]);
+> +
+> +	if (prueth->rtu[slice])
+> +		pru_rproc_put(prueth->rtu[slice]);
+> +
+> +	if (prueth->pru[slice])
+> +		pru_rproc_put(prueth->pru[slice]);
+> +}
+> +
+> +static const struct of_device_id prueth_dt_match[];
+> +
+> +static int prueth_probe(struct platform_device *pdev)
+> +{
+> +	struct prueth *prueth;
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct device_node *eth_ports_node;
+> +	struct device_node *eth_node;
+> +	struct device_node *eth0_node, *eth1_node;
+> +	const struct of_device_id *match;
+> +	struct pruss *pruss;
+> +	int i, ret;
+> +	u32 msmc_ram_size;
+> +	struct genpool_data_align gp_data = {
+> +		.align = SZ_64K,
+> +	};
+> +
+> +	match = of_match_device(prueth_dt_match, dev);
+> +	if (!match)
+> +		return -ENODEV;
+> +
+> +	prueth = devm_kzalloc(dev, sizeof(*prueth), GFP_KERNEL);
+> +	if (!prueth)
+> +		return -ENOMEM;
+> +
+> +	dev_set_drvdata(dev, prueth);
+> +	prueth->pdev = pdev;
+> +	prueth->pdata = *(const struct prueth_pdata *)match->data;
+> +
+> +	prueth->dev = dev;
+> +	eth_ports_node = of_get_child_by_name(np, "ethernet-ports");
+> +	if (!eth_ports_node)
+> +		return -ENOENT;
+> +
+> +	for_each_child_of_node(eth_ports_node, eth_node) {
+> +		u32 reg;
+> +
+> +		if (strcmp(eth_node->name, "port"))
+> +			continue;
+> +		ret = of_property_read_u32(eth_node, "reg", &reg);
+> +		if (ret < 0) {
+> +			dev_err(dev, "%pOF error reading port_id %d\n",
+> +				eth_node, ret);
+> +		}
+> +
+> +		of_node_get(eth_node);
+> +
+> +		if (reg == 0)
+> +			eth0_node = eth_node;
+> +		else if (reg == 1)
+> +			eth1_node = eth_node;
+> +		else
+> +			dev_err(dev, "port reg should be 0 or 1\n");
+> +	}
+> +
+> +	of_node_put(eth_ports_node);
+> +
+> +	/* At least one node must be present and available else we fail */
+> +	if (!eth0_node && !eth1_node) {
+> +		dev_err(dev, "neither port0 nor port1 node available\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (eth0_node == eth1_node) {
+> +		dev_err(dev, "port0 and port1 can't have same reg\n");
+> +		of_node_put(eth0_node);
+> +		return -ENODEV;
+> +	}
+> +
+> +	prueth->eth_node[PRUETH_MAC0] = eth0_node;
+> +	prueth->eth_node[PRUETH_MAC1] = eth1_node;
+> +
+> +	prueth->miig_rt = syscon_regmap_lookup_by_phandle(np, "ti,mii-g-rt");
+> +	if (IS_ERR(prueth->miig_rt)) {
+> +		dev_err(dev, "couldn't get ti,mii-g-rt syscon regmap\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	prueth->mii_rt = syscon_regmap_lookup_by_phandle(np, "ti,mii-rt");
+> +	if (IS_ERR(prueth->mii_rt)) {
+> +		dev_err(dev, "couldn't get ti,mii-rt syscon regmap\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (eth0_node) {
+> +		ret = prueth_get_cores(prueth, ICSS_SLICE0);
+> +		if (ret)
+> +			goto put_cores;
+> +	}
+> +
+> +	if (eth1_node) {
+> +		ret = prueth_get_cores(prueth, ICSS_SLICE1);
+> +		if (ret)
+> +			goto put_cores;
+> +	}
+> +
+> +	pruss = pruss_get(eth0_node ?
+> +			  prueth->pru[ICSS_SLICE0] : prueth->pru[ICSS_SLICE1]);
+> +	if (IS_ERR(pruss)) {
+> +		ret = PTR_ERR(pruss);
+> +		dev_err(dev, "unable to get pruss handle\n");
+> +		goto put_cores;
+> +	}
+> +
+> +	prueth->pruss = pruss;
+> +
+> +	ret = pruss_request_mem_region(pruss, PRUSS_MEM_SHRD_RAM2,
+> +				       &prueth->shram);
+> +	if (ret) {
+> +		dev_err(dev, "unable to get PRUSS SHRD RAM2: %d\n", ret);
+> +		goto put_mem;
+
+Is it safe to call pruss_release_mem_region() if 
+pruss_request_mem_region() has failed?
+
+The other place where it is called it is not done the same way.
+
+> +	}
+> +
+> +	prueth->sram_pool = of_gen_pool_get(np, "sram", 0);
+> +	if (!prueth->sram_pool) {
+> +		dev_err(dev, "unable to get SRAM pool\n");
+> +		ret = -ENODEV;
+> +
+> +		goto put_mem;
+> +	}
+> +
+> +	msmc_ram_size = MSMC_RAM_SIZE;
+> +
+> +	/* NOTE: FW bug needs buffer base to be 64KB aligned */
+> +	prueth->msmcram.va =
+> +		(void __iomem *)gen_pool_alloc_algo(prueth->sram_pool,
+> +						    msmc_ram_size,
+> +						    gen_pool_first_fit_align,
+> +						    &gp_data);
+> +
+> +	if (!prueth->msmcram.va) {
+> +		ret = -ENOMEM;
+> +		dev_err(dev, "unable to allocate MSMC resource\n");
+> +		goto put_mem;
+> +	}
+> +	prueth->msmcram.pa = gen_pool_virt_to_phys(prueth->sram_pool,
+> +						   (unsigned long)prueth->msmcram.va);
+> +	prueth->msmcram.size = msmc_ram_size;
+> +	memset(prueth->msmcram.va, 0, msmc_ram_size);
+> +	dev_dbg(dev, "sram: pa %llx va %p size %zx\n", prueth->msmcram.pa,
+> +		prueth->msmcram.va, prueth->msmcram.size);
+> +
+> +	/* setup netdev interfaces */
+> +	if (eth0_node) {
+> +		ret = prueth_netdev_init(prueth, eth0_node);
+> +		if (ret) {
+> +			if (ret != -EPROBE_DEFER) {
+> +				dev_err(dev, "netdev init %s failed: %d\n",
+> +					eth0_node->name, ret);
+
+dev_err_probe()?
+
+> +			}
+> +			goto netdev_exit;
+> +		}
+> +	}
+> +
+> +	if (eth1_node) {
+> +		ret = prueth_netdev_init(prueth, eth1_node);
+> +		if (ret) {
+> +			if (ret != -EPROBE_DEFER) {
+> +				dev_err(dev, "netdev init %s failed: %d\n",
+> +					eth1_node->name, ret);
+
+dev_err_probe()?
+
+> +			}
+> +			goto netdev_exit;
+> +		}
+> +	}
+> +
+> +	/* register the network devices */
+> +	if (eth0_node) {
+> +		ret = register_netdev(prueth->emac[PRUETH_MAC0]->ndev);
+> +		if (ret) {
+> +			dev_err(dev, "can't register netdev for port MII0");
+> +			goto netdev_exit;
+> +		}
+> +
+> +		prueth->registered_netdevs[PRUETH_MAC0] = prueth->emac[PRUETH_MAC0]->ndev;
+> +
+> +		emac_phy_connect(prueth->emac[PRUETH_MAC0]);
+> +		phy_attached_info(prueth->emac[PRUETH_MAC0]->ndev->phydev);
+> +	}
+> +
+> +	if (eth1_node) {
+> +		ret = register_netdev(prueth->emac[PRUETH_MAC1]->ndev);
+> +		if (ret) {
+> +			dev_err(dev, "can't register netdev for port MII1");
+> +			goto netdev_unregister;
+> +		}
+> +
+> +		prueth->registered_netdevs[PRUETH_MAC1] = prueth->emac[PRUETH_MAC1]->ndev;
+> +		emac_phy_connect(prueth->emac[PRUETH_MAC1]);
+> +		phy_attached_info(prueth->emac[PRUETH_MAC1]->ndev->phydev);
+> +	}
+> +
+> +	dev_info(dev, "TI PRU ethernet driver initialized: %s EMAC mode\n",
+> +		 (!eth0_node || !eth1_node) ? "single" : "dual");
+> +
+> +	if (eth1_node)
+> +		of_node_put(eth1_node);
+> +	if (eth0_node)
+> +		of_node_put(eth0_node);
+> +	return 0;
+> +
+> +netdev_unregister:
+> +	for (i = 0; i < PRUETH_NUM_MACS; i++) {
+> +		if (!prueth->registered_netdevs[i])
+> +			continue;
+> +		if (prueth->emac[i]->ndev->phydev) {
+> +			phy_disconnect(prueth->emac[i]->ndev->phydev);
+> +			prueth->emac[i]->ndev->phydev = NULL;
+> +		}
+> +		unregister_netdev(prueth->registered_netdevs[i]);
+> +	}
+> +
+> +netdev_exit:
+> +	for (i = 0; i < PRUETH_NUM_MACS; i++) {
+> +		struct device_node *eth_node;
+> +
+> +		eth_node = prueth->eth_node[i];
+> +		if (!eth_node)
+> +			continue;
+> +
+> +		prueth_netdev_exit(prueth, eth_node);
+> +	}
+> +
+> +gen_pool_free(prueth->sram_pool,
+
+1 tab missing.
+
+> +	      (unsigned long)prueth->msmcram.va, msmc_ram_size);
+> +
+> +put_mem:
+> +	pruss_release_mem_region(prueth->pruss, &prueth->shram);
+> +	pruss_put(prueth->pruss);
+> +
+> +put_cores:
+> +	if (eth1_node) {
+> +		prueth_put_cores(prueth, ICSS_SLICE1);
+> +		of_node_put(eth1_node);
+> +	}
+> +
+> +	if (eth0_node) {
+> +		prueth_put_cores(prueth, ICSS_SLICE0);
+> +		of_node_put(eth0_node);
+> +	}
+> +
+> +	return ret;
+> +}
+
+[...]

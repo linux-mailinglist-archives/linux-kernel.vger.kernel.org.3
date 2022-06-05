@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE5953DB32
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F78153DB33
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 12:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245280AbiFEKGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 06:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S244316AbiFEKHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 06:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiFEKGI (ORCPT
+        with ESMTP id S237325AbiFEKHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 06:06:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98E3443EB;
-        Sun,  5 Jun 2022 03:06:04 -0700 (PDT)
+        Sun, 5 Jun 2022 06:07:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAA15FAD
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 03:07:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DCCDB80C94;
-        Sun,  5 Jun 2022 10:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF7AC385A5;
-        Sun,  5 Jun 2022 10:06:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2653260EEC
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AE7C3411E
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 10:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654423562;
-        bh=UkhK0iXmipOKdrh664jQXMz5mV/hcSj5hRpVu1jSBfw=;
+        s=k20201202; t=1654423629;
+        bh=ClDK8782jY9SXch9/nyH9tnpj6Ro9WPrcn8dDhjremU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k4Mfn/8QAnGV2O6X6jv2u4l1y+rYDmyzCwa1D/UI0PNyWd2UCZMaDCrehF9YZIv/O
-         OWsvUw6kTYR6zB1CoS9JgKqzox2KMf3r7jVf/VTZ6XWtwOCMdENBzK4jmsOtvmxjzS
-         CDyWCPNdt8mT7etbrkSQVZ66U+SE1C46ntkO7E2B5kd/R5i9AeL1EdKcva4qhtvJeH
-         CVWQomn4DbnO1gA5iWP2fVwX7axawIXOpPkR4Akzva2F9qXHpdtBj/DD4Fotxhfwh2
-         83z8tKgsvzdLNG+AXJR2dJJ7/QsVhfXe1qQefbcGHkWvANEEPVY/4IiMIyjkUp3OUj
-         /Qa6Wskn3bJTw==
-Received: by mail-yb1-f170.google.com with SMTP id a30so2265888ybj.3;
-        Sun, 05 Jun 2022 03:06:01 -0700 (PDT)
-X-Gm-Message-State: AOAM533sIpkutbhKsPHh+HUfQ2GWYaEWVIxYX0A9owlvp5Wh/Isy6mvK
-        D/doEVq6mRn5OfH6e38SoBO7nKj3Z4hW5D4VxMU=
-X-Google-Smtp-Source: ABdhPJw3j6eaxny1petObshdCU3O7C4LdZnpOgx/3q928/0gteNHzH6VQv4VdRzBF2oStDnzp8/BKitGQSxu3iaGd7s=
-X-Received: by 2002:a05:6902:514:b0:65c:b28c:f9f8 with SMTP id
- x20-20020a056902051400b0065cb28cf9f8mr18935548ybs.403.1654423561012; Sun, 05
- Jun 2022 03:06:01 -0700 (PDT)
+        b=ZP+U9V/KeOiwrTdGVqsw+FGbKLYJimnD7LuvtKgH5xSmT0VRzn1nZXZxaQgD+4mP7
+         Vq9mkN7jbfQqE1GeLSiLENbYNrvUs35c1ptvtujeeXgm1s/VZE/0h38o0dhCLX9t0j
+         2EKAwM16iyEVCPFGnn7C2fYr6K4ICBy2R3EybRWBB/yLxKIxKPIRRp6EYz4gv1ixJ7
+         15b9Q24URIPErMqHbh3tLuRX5YbG7far6q7TsIZRgRE4bHz4bvigB1c8CX2zdLI8fo
+         fNiOehGWQnfR6E6/z5Z90WWHzaoagf5zREm53Z5cU5Ov5s96HYDm9v62y3YYEDSFBd
+         DuWDFZGhx3hOA==
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f83983782fso118866607b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 03:07:09 -0700 (PDT)
+X-Gm-Message-State: AOAM533nZ5nLTjSro114nOTfaQqsSU2GKMTMDpBaCIUFbUL0OE1rKbKJ
+        mgcEjVd2z0Z7gpo97G2Pmh0sg1sjHlylZ1pwSoY=
+X-Google-Smtp-Source: ABdhPJxpQl8PzINQwhvhllNaZ67Overstnq0FM09HFOlnuaHvNGim/VqGoRXfyRRzLcZtmj2LhABSMKktYdRlSDjpTk=
+X-Received: by 2002:a0d:f8c6:0:b0:2fe:ca9c:f937 with SMTP id
+ i189-20020a0df8c6000000b002feca9cf937mr20855647ywf.62.1654423628632; Sun, 05
+ Jun 2022 03:07:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yo4gIobpIlRmxqtH@kili>
-In-Reply-To: <Yo4gIobpIlRmxqtH@kili>
+References: <20220602035827.18012-1-jiapeng.chong@linux.alibaba.com> <20220602035827.18012-2-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220602035827.18012-2-jiapeng.chong@linux.alibaba.com>
 From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Sun, 5 Jun 2022 13:05:33 +0300
-X-Gmail-Original-Message-ID: <CAFCwf12QOxB4HJJAjJLknsEBiSAbaDgbna5L3JFhCcr36Rqc9w@mail.gmail.com>
-Message-ID: <CAFCwf12QOxB4HJJAjJLknsEBiSAbaDgbna5L3JFhCcr36Rqc9w@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: fix double unlock on error in map_device_va()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Ohad Sharabi <osharabi@habana.ai>, Arnd Bergmann <arnd@arndb.de>,
+Date:   Sun, 5 Jun 2022 13:06:41 +0300
+X-Gmail-Original-Message-ID: <CAFCwf10dzga7D0KiSyat-B36xDbVssmukuHW0WUNvZ0RWmAjbg@mail.gmail.com>
+Message-ID: <CAFCwf10dzga7D0KiSyat-B36xDbVssmukuHW0WUNvZ0RWmAjbg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] habanalabs: Fix kernel-doc
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yuri Nudelman <ynudelman@habana.ai>,
-        Ofir Bitton <obitton@habana.ai>,
-        farah kassabri <fkassabri@habana.ai>,
-        Tomer Tayar <ttayar@habana.ai>,
         "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+        Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -68,54 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 3:25 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Thu, Jun 2, 2022 at 6:58 AM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> If hl_mmu_prefetch_cache_range() fails then this code calls
-> mutex_unlock(&ctx->mmu_lock) when it's no longer holding the mutex.
+> Fix the following W=1 kernel warnings:
 >
-> Fixes: 9e495e24003e ("habanalabs: do MMU prefetch as deferred work")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> drivers/misc/habanalabs/common/mmu/mmu_v1.c:425: warning: expecting
+> prototype for hl_mmu_fini(). Prototype was for hl_mmu_v1_fini() instead.
+>
+> drivers/misc/habanalabs/common/mmu/mmu_v1.c:449: warning: expecting
+> prototype for hl_mmu_ctx_init(). Prototype was for hl_mmu_v1_ctx_init()
+> instead.
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
->  drivers/misc/habanalabs/common/memory.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  drivers/misc/habanalabs/common/mmu/mmu_v1.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-> index 663dd7e589d4..d5e6500f8a1f 100644
-> --- a/drivers/misc/habanalabs/common/memory.c
-> +++ b/drivers/misc/habanalabs/common/memory.c
-> @@ -1245,16 +1245,16 @@ static int map_device_va(struct hl_ctx *ctx, struct hl_mem_in *args, u64 *device
->         rc = map_phys_pg_pack(ctx, ret_vaddr, phys_pg_pack);
->         if (rc) {
->                 dev_err(hdev->dev, "mapping page pack failed for handle %u\n", handle);
-> +               mutex_unlock(&ctx->mmu_lock);
->                 goto map_err;
->         }
+> diff --git a/drivers/misc/habanalabs/common/mmu/mmu_v1.c b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+> index e2d91a69acc2..ad4b49281cd7 100644
+> --- a/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+> +++ b/drivers/misc/habanalabs/common/mmu/mmu_v1.c
+> @@ -412,7 +412,7 @@ static int hl_mmu_v1_init(struct hl_device *hdev)
+>  }
 >
->         rc = hl_mmu_invalidate_cache_range(hdev, false, *vm_type | MMU_OP_SKIP_LOW_CACHE_INV,
->                                 ctx->asid, ret_vaddr, phys_pg_pack->total_size);
-> +       mutex_unlock(&ctx->mmu_lock);
->         if (rc)
->                 goto map_err;
+>  /**
+> - * hl_mmu_fini() - release the MMU module.
+> + * hl_mmu_v1_fini() - release the MMU module.
+>   * @hdev: habanalabs device structure.
+>   *
+>   * This function does the following:
+> @@ -438,7 +438,7 @@ static void hl_mmu_v1_fini(struct hl_device *hdev)
+>  }
 >
-> -       mutex_unlock(&ctx->mmu_lock);
-> -
->         /*
->          * prefetch is done upon user's request. it is performed in WQ as and so can
->          * be outside the MMU lock. the operation itself is already protected by the mmu lock
-> @@ -1283,8 +1283,6 @@ static int map_device_va(struct hl_ctx *ctx, struct hl_mem_in *args, u64 *device
->         return rc;
->
->  map_err:
-> -       mutex_unlock(&ctx->mmu_lock);
-> -
->         if (add_va_block(hdev, va_range, ret_vaddr,
->                                 ret_vaddr + phys_pg_pack->total_size - 1))
->                 dev_warn(hdev->dev,
+>  /**
+> - * hl_mmu_ctx_init() - initialize a context for using the MMU module.
+> + * hl_mmu_v1_ctx_init() - initialize a context for using the MMU module.
+>   * @ctx: pointer to the context structure to initialize.
+>   *
+>   * Initialize a mutex to protect the concurrent mapping flow, a hash to hold all
 > --
-> 2.35.1
+> 2.20.1.7.g153144c
 >
 
+Both patches are
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+
 Applied to -next.
 Thanks,
 Oded

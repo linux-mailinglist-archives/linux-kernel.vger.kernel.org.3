@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A919A53DB99
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 15:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AF353DBA1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 15:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243886AbiFENdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 09:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S1343918AbiFENd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 09:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244173AbiFENdU (ORCPT
+        with ESMTP id S244177AbiFENdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Jun 2022 09:33:20 -0400
 Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A9338BC4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 06:33:16 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso709719wms.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 06:33:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D15738BC9
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 06:33:18 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso762752wml.1
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 06:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NbA7wh6jY57A81MjAXEOdG7Q5joLo5XSqFmERYe0yms=;
-        b=KUt8AZOzNgbQqIXStUVCuFGSgDZ2GjKz/m7+3s++R2lHfDBG9uRWnD4abumwN/BtDD
-         sm+WhmB6LHlbFKIIMVxc/XdGG9t5tPqKMQfHhVQNCHaM+x+ztHA09HkGuQikZ7z5PR2I
-         j9FsPbeVBsRZ6Zf6MpPv0sbilYeqPuyR627Bhupbrkjl87E/h19SDQD25s1DZbv8HcgA
-         qhm2RsHyaapoLYtz8k4VipUibyDnHbDUGuGglW7lu6aPe1w5oIU7ce1mWQtkwZQqXlIZ
-         ZtOtz7LczF/LuLJkCgyOjiMvxH9QpzXQxCS6XmDRURKG5EqgkoMY4Qc4RTINiNl1JGDd
-         fnYg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sUOXdPn8EOhhxjnRiVLAO3H3BCAF6yuCXw9gRZytXYg=;
+        b=QbfCFTgGtKcOwqGaMRbSa4+e5jEOcoDFjkrwWtgr0Ba+3+ET2GgN/pBwxBChBpH+K4
+         mslWlLN+4mvQ/xPTjuKA9cMbRJzlGk7Q+6yzWEH3nKf3lnhLw63P1Ma/J3M3Qds26qUZ
+         E5GOB8GGFbkv267JW7aQ8nDPn5RTeQcIvFdP4IjiVkLfULVj6Zd4P+8yHHxu9PC8nk8U
+         cq5am9mlaxp1hiATSpxf1R/MN44PvTA2FvoairCpnSbXL53rKAQi1uURBTLMO3vEuDFu
+         5WX9pm7xmSm03dEgyUFX/i4ejnGaDn+qgrPsW/FZdt4RGjoDaIE54Vo6kg5dQeKympMB
+         Bs9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NbA7wh6jY57A81MjAXEOdG7Q5joLo5XSqFmERYe0yms=;
-        b=Mcjr/l7UYmYUPFEK/sbKpLlSSEOqrttf6AGlQL9Q8KMl/etZ6H1DcoVHzYKNxb+yWI
-         vChRY5GpIRqOgH8xOBg+TVmlZCn7uVg11X1tlvX4v7hXuGDAB+1VRvopwABt3kkL7Gwz
-         16Nj9pCb11lTebfLHj9TYx91Yw8JJm0mNPbcTP4QYWEon2UR6EkUPPxH/373yE04pAf4
-         DS2aHUMQI+uGyMPmPBt/0FAStdUnCEcm83iVJ2KoFSVgp456krdF3YW4NQv8xKYpIMs4
-         SN4dl2VPmCR6CZm/CQIZKsqysvHaHpHCaR7wwqyat2V4QA76qOWC8nlrvGRWdolcHT55
-         hK3g==
-X-Gm-Message-State: AOAM530kHG+p4QO7ENKqU1i4ZsX//m4IFWvZnCWKLhnZPqMgStf55A4M
-        O2i4Wyxtab/Qol7IMXoFueHMMg==
-X-Google-Smtp-Source: ABdhPJw10bY4o1/w1XS51daNaShBW8xHRcfsZfqKIJEbYDaIL1gaYDHaYsbiQI0FgXSBT2fsoaPqMw==
-X-Received: by 2002:a05:600c:19cc:b0:39c:3022:1b23 with SMTP id u12-20020a05600c19cc00b0039c30221b23mr16534325wmq.106.1654435995365;
-        Sun, 05 Jun 2022 06:33:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sUOXdPn8EOhhxjnRiVLAO3H3BCAF6yuCXw9gRZytXYg=;
+        b=WY9yKR/4uMDkcLPHK0/VN5NBz90JQDL3KAEyJMJjDcD9TMSYkm0RAeRMvwOrupC+zn
+         jXhddoU51LNxGg/rY0RC2NJJVfBK78kGC1uYDV53gOcwO7Eix0FDOZLKzC8aM/WGOnkD
+         BGxOISTUajUO3BKcNIsYfQfQa2ywhiA6BzEHM5eqcBpQuyMS+WHjzpb5saxGVrhozmx0
+         C6CJzqYVxQ4Y0o4fUHO5X9hHe3Gt6eX1+Zul/7KRvG8++LNE99pyv9wvMpOIteFRgtcX
+         wFWd0U9X15xUvksOGwTubbbVHOSoCNzSNhIS1o2XQS/vS5pCNpuh7Oqm1tJjTHKlJ9Cb
+         58wg==
+X-Gm-Message-State: AOAM531pamuV7rvc3YFuDVDUhOzOCn0hnH1HJv28W4sh5osn6i12rhbv
+        BE7zliclvPOS0LJEDD5NX6wbuw==
+X-Google-Smtp-Source: ABdhPJxdcDTuUEHAQfxai+GQ5ckF1kK/+szwHFOLq1NgQVHxO1mPiMYwRbihKTJxK1quAmahfHVidQ==
+X-Received: by 2002:a05:600c:601b:b0:39c:4194:e4f with SMTP id az27-20020a05600c601b00b0039c41940e4fmr11009634wmb.105.1654435996727;
+        Sun, 05 Jun 2022 06:33:16 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id n187-20020a1c27c4000000b0039c151298b7sm18217076wmn.10.2022.06.05.06.33.14
+        by smtp.gmail.com with ESMTPSA id n187-20020a1c27c4000000b0039c151298b7sm18217076wmn.10.2022.06.05.06.33.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 06:33:14 -0700 (PDT)
+        Sun, 05 Jun 2022 06:33:16 -0700 (PDT)
 From:   mail@conchuod.ie
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,10 +64,12 @@ Cc:     Conor Dooley <conor.dooley@microchip.com>,
         linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Atul Khare <atulkhare@rivosinc.com>
-Subject: [PATCH v1 0/6] clear riscv dtbs_check errors
-Date:   Sun,  5 Jun 2022 14:32:55 +0100
-Message-Id: <20220605133300.376161-1-mail@conchuod.ie>
+Subject: [PATCH v1 1/6] dt-bindings: mmc: convert mmc-spi-slot to yaml
+Date:   Sun,  5 Jun 2022 14:32:56 +0100
+Message-Id: <20220605133300.376161-2-mail@conchuod.ie>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220605133300.376161-1-mail@conchuod.ie>
+References: <20220605133300.376161-1-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,46 +84,135 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Hey,
-Couple conversions from txt to yaml here with the intent of fixing the
-the dtbs_check warnings for riscv. Atul Khare already sent patches for
-the gpio-line-names & cache-sets (which went awol) and will clear the
-remaining two errors.
+Convert the mmc-spi-slot text based binding doc to yaml,
+with the side effect of cleaning up some of the riscv
+dtbs_check warnings.
 
-Rob/Krzysztof:
-Have I correctly expressed the mutually exclusive properties?
-I had a look around, but wasn't able to find an obvious binding to ape.
-
-Wasn't sure if a txt -> yaml conversion's MAINTAINERS update was meant
-to be in the same patch or not, so feel free to squash.
-Thanks,
-Conor.
-
-Conor Dooley (6):
-  dt-bindings: mmc: convert mmc-spi-slot to yaml
-  dt-bindings: i2c: convert ocores binding to yaml
-  MAINTAINERS: convert ocores i2c dt-binding to yaml
-  dt-bindings: mfd: convert da9063 to yaml
-  MAINTAINERS: convert da9063 to yaml
-  riscv: dts: sifive: "fix" pmic watchdog node name
-
- .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 -----------
- .../devicetree/bindings/i2c/i2c-ocores.yaml   | 132 ++++++++++++++++++
- .../devicetree/bindings/mfd/da9063.txt        | 111 ---------------
- .../devicetree/bindings/mfd/da9063.yaml       | 123 ++++++++++++++++
- .../devicetree/bindings/mmc/mmc-spi-slot.txt  |  29 ----
- .../devicetree/bindings/mmc/mmc-spi-slot.yaml |  76 ++++++++++
- .../devicetree/bindings/trivial-devices.yaml  |   2 -
- MAINTAINERS                                   |   3 +-
- .../boot/dts/sifive/hifive-unmatched-a00.dts  |   2 +-
- 9 files changed, 334 insertions(+), 222 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../devicetree/bindings/mmc/mmc-spi-slot.txt  | 29 -------
+ .../devicetree/bindings/mmc/mmc-spi-slot.yaml | 76 +++++++++++++++++++
+ 2 files changed, 76 insertions(+), 29 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
  create mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
 
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+deleted file mode 100644
+index 5e74db69f581..000000000000
+--- a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
++++ /dev/null
+@@ -1,29 +0,0 @@
+-MMC/SD/SDIO slot directly connected to a SPI bus
+-
+-This file documents differences between the core properties described
+-by mmc.txt and the properties used by the mmc_spi driver.
+-
+-Required properties:
+-- spi-max-frequency : maximum frequency for this device (Hz).
+-
+-Optional properties:
+-- voltage-ranges : two cells are required, first cell specifies minimum
+-  slot voltage (mV), second cell specifies maximum slot voltage (mV).
+-  Several ranges could be specified. If not provided, 3.2v..3.4v is assumed.
+-- gpios : may specify GPIOs in this order: Card-Detect GPIO,
+-  Write-Protect GPIO. Note that this does not follow the
+-  binding from mmc.txt, for historical reasons.
+-
+-Example:
+-
+-	mmc-slot@0 {
+-		compatible = "fsl,mpc8323rdb-mmc-slot",
+-			     "mmc-spi-slot";
+-		reg = <0>;
+-		gpios = <&qe_pio_d 14 1
+-			 &qe_pio_d 15 0>;
+-		voltage-ranges = <3300 3300>;
+-		spi-max-frequency = <50000000>;
+-		interrupts = <42>;
+-		interrupt-parent = <&PIC>;
+-	};
+diff --git a/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+new file mode 100644
+index 000000000000..a5fd723140c9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/mmc-spi-slot.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MMC/SD/SDIO slot directly connected to a SPI bus
++
++maintainers:
++  - Ulf Hansson <ulf.hansson@linaro.org>
++
++allOf:
++  - $ref: "mmc-controller.yaml"
++
++description: |
++  The extra properties used by an mmc connected via spi.
++
++properties:
++  compatible:
++    const: "mmc-spi-slot"
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency: true
++
++  interrupts:
++    maxItems: 1
++
++  voltage-ranges:
++    $ref: '/schemas/types.yaml#/definitions/uint32-matrix'
++    description: |
++      Two cells are required, first cell specifies minimum slot voltage (mV),
++      second cell specifies maximum slot voltage (mV).
++    items:
++      items:
++        - description: |
++            value for minimum slot voltage
++          default: 3200
++        - description: |
++            value for maximum slot voltage
++          default: 3400
++    maxItems: 1
++
++  gpios:
++    description: |
++      For historical reasons, this does not follow the generic mmc-controller binding.
++    minItems: 1
++    items:
++      - description: Card-Detect GPIO
++      - description: Write-Protect GPIO
++
++required:
++  - compatible
++  - reg
++  - spi-max-frequency
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      mmc@0 {
++        compatible = "mmc-spi-slot";
++        reg = <0>;
++        gpios = <&qe_pio_d 14 1>, <&qe_pio_d 15 0>;
++        voltage-ranges = <3300 3300>;
++        spi-max-frequency = <50000000>;
++        interrupts = <42>;
++        interrupt-parent = <&PIC>;
++      };
++    };
++
++...
 -- 
 2.36.1
 

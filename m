@@ -2,1122 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC50153DDBD
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 20:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8731553DDC4
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 20:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347057AbiFESpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 14:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S1347019AbiFESwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 14:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234938AbiFESpe (ORCPT
+        with ESMTP id S234938AbiFESwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 14:45:34 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9242C4A3EC
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 11:45:29 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f2e0a41009so16831475fac.6
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 11:45:29 -0700 (PDT)
+        Sun, 5 Jun 2022 14:52:10 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1527B1FA
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 11:52:07 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id h23so14066303ejj.12
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 11:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RTuoGqz0Ti9HTKcUOilJWLR1sRJfo0rMsOsSDeUnAgY=;
-        b=Ms98BwJRyFHTj5e9JyQZMXvAr0YuX29ySfIdBgbEuiSpmF8aogqvakxUkJPzXwStFL
-         wNAE7mJxaX0es62x5Sk/yw2RPDqWRLgCgq+khf5OorGBQVgjNDvmkQccHcRUBacAyXEw
-         QdfQP8AdCchDeR44e/UJ78/fN2RRaj3omIg2w=
+        bh=1qGM9AfAz5/n6lUTPqObNtC7EoqDOUU+o+Il+9aE+Ec=;
+        b=RbHJpKTI4tdZdCKyqIEmQjSimK3Lnp2hoKxfw8BKwTEpHHGfIEBF2uEYgPKXwzKi2N
+         UeJLSeio74InV/7ZcxVz1DWTKbgJJgXEruPB4JDVGhUbdgsjq/On3na2seTmH9z12CPW
+         NepnbS1bArWiIf0ek4joVzL6SMaAZjNe7Q9D0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RTuoGqz0Ti9HTKcUOilJWLR1sRJfo0rMsOsSDeUnAgY=;
-        b=P4Ov6Ew5RHiJec+aX44FyVnPAuiEHtVQudvi69NrzsOPHiXfQJLWODeXI+PSSueRVz
-         +EKDBzDjTI58rBIKRQr3kZqiPdsG10c5EMMGKwKGegeE04B2b7Ablpea7isSlUzvWra7
-         oVpBIzUqcAQKAw28JwaoEspRC+ieQcLJorPL/LX5RZdoHFLiostSRnz6UsRUvOdp8p3V
-         SsI4S3eLMK/JeR7z+NavMewnkqmRuiEPTwzOuynwKRaa6cO8aKG0nm2KNr1+MSy4JdG7
-         kXZGw9LkNOHU5H/KtzAqggbKnx9eraCcmAdNc+actIMv8kw+b/dtACFBiprIFJApzSfQ
-         JaLw==
-X-Gm-Message-State: AOAM532RRZqMEGcgitT+olb8fYkS58T3AzEz8cFMcwChWnQ7Awk8ll5j
-        qjyuPYr1SYYN7pS8daXYtjZzoTm9izGBJYUUmbMcIg==
-X-Google-Smtp-Source: ABdhPJyQsZMCA/1r+UniIVNZ7C5GzpHQZrgFThben9DIiOe3k0VbdT6lK2Qy27glOhEPozH5OzA7Rpi1ML5tygh2DT4=
-X-Received: by 2002:a05:6870:3053:b0:f3:2997:659a with SMTP id
- u19-20020a056870305300b000f32997659amr11565703oau.7.1654454728576; Sun, 05
- Jun 2022 11:45:28 -0700 (PDT)
+        bh=1qGM9AfAz5/n6lUTPqObNtC7EoqDOUU+o+Il+9aE+Ec=;
+        b=ct/Od6USeRO6nP6K2+l/Uf7M5FiZiu/2Dso1M4XF5s0IA0N8efD95nlK/iEb/58xsP
+         TzKgZxvHqqEzmqvp9MNGwnK0KCVmdS8AxQikIgnb793/lTycrhWHKcg0R/ErVTO/XB21
+         WT4APPBZ7gpLSxBcuDoByB4rwSo5dQW5PoidS0dOe8vseV4fxREzMflfrZb1jlqybjcT
+         gKOJsI+Su07F6WwKtxDvanm0Y4wq1IbkPMTRuehUcgRYTg98iSoDl7Le6CqlCfJWuKZJ
+         pUN3xdXZk3NyryNQ8V0jRlfM/lZUqDdgSDY18OEo1WKMqSfXCLNKn3KJkhAcTMiKIxfB
+         4fpA==
+X-Gm-Message-State: AOAM530ljI5CRRwNvlsYUJmsFb/GT6O8aFPKw8sJWeGMwexZwsYQQR2E
+        m3wT7Ml4CgBVh6Wt2nb1sl9MOu0PyPULK1AIMjc=
+X-Google-Smtp-Source: ABdhPJw80r9hy1bKl89knyTCcFUjC8pFigNWi+CHCt95BQSYmQI6qmqLcrvLM3KRmHb+ndmjX9VN0g==
+X-Received: by 2002:a17:906:3bd9:b0:6ff:4b5:4a8f with SMTP id v25-20020a1709063bd900b006ff04b54a8fmr11540698ejf.139.1654455126169;
+        Sun, 05 Jun 2022 11:52:06 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906058a00b007101f6f0720sm2612326ejn.120.2022.06.05.11.52.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 11:52:06 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso9011721wma.0
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 11:52:05 -0700 (PDT)
+X-Received: by 2002:a05:600c:2e07:b0:39c:37df:2c40 with SMTP id
+ o7-20020a05600c2e0700b0039c37df2c40mr15221042wmf.154.1654455125158; Sun, 05
+ Jun 2022 11:52:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
- <20220526235040.678984-18-dmitry.osipenko@collabora.com> <CAKMK7uHQ+iMkXtrsCWiJL9X1AM9Xkq-wNmj=hhfnenf0r9717g@mail.gmail.com>
- <CAF6AEGtVGW8FTuFV0Gt9jx33My3ebdbUAcYQwVGvevzByCpecw@mail.gmail.com>
-In-Reply-To: <CAF6AEGtVGW8FTuFV0Gt9jx33My3ebdbUAcYQwVGvevzByCpecw@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Sun, 5 Jun 2022 20:45:17 +0200
-Message-ID: <CAKMK7uFnChxNsN=tBjy=0JA-DxtsXgju8fc1U0-sJU2BE41caw@mail.gmail.com>
-Subject: Re: [PATCH v6 17/22] drm/shmem-helper: Add generic memory shrinker
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, kernel@collabora.com,
-        Rob Clark <robdclark@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220605162537.1604762-1-yury.norov@gmail.com> <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
+In-Reply-To: <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 5 Jun 2022 11:51:48 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
+Message-ID: <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
+Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: multipart/mixed; boundary="00000000000008827805e0b7da33"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Jun 2022 at 20:32, Rob Clark <robdclark@gmail.com> wrote:
->
-> On Sun, Jun 5, 2022 at 9:47 AM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > On Fri, 27 May 2022 at 01:55, Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> > >
-> > > Introduce a common DRM SHMEM shrinker framework that allows to reduce
-> > > code duplication among DRM drivers by replacing theirs custom shrinker
-> > > implementations with the generic shrinker.
-> > >
-> > > In order to start using DRM SHMEM shrinker drivers should:
-> > >
-> > > 1. Implement new evict() shmem object callback.
-> > > 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
-> > > 3. Use drm_gem_shmem_set_purgeable(shmem) and alike API functions to
-> > >    activate shrinking of shmem GEMs.
-> > >
-> > > This patch is based on a ideas borrowed from Rob's Clark MSM shrinker,
-> > > Thomas' Zimmermann variant of SHMEM shrinker and Intel's i915 shrinker.
-> > >
-> > > Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
-> > > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> >
-> > So I guess I get a price for being blind since forever, because this
-> > thing existed since at least 2013. I just stumbled over
-> > llist_lru.[hc], a purpose built list helper for shrinkers. I think we
-> > should try to adopt that so that our gpu shrinkers look more like
-> > shrinkers for everything else.
->
-> followup from a bit of irc discussion w/ danvet about list_lru:
->
-> * It seems to be missing a way to bail out of iteration before
->   nr_to_scan is hit.. which is going to be inconvenient if you
->   want to allow active bos on the LRU but bail scanning once
->   you encounter the first one.
->
-> * Not sure if the numa node awareness is super useful for GEM
->   bos
->
-> First issue is perhaps not too hard to fix.  But maybe a better
-> idea is a drm_gem_lru helper type thing which is more tailored
-> to GEM buffers?
+--00000000000008827805e0b7da33
+Content-Type: text/plain; charset="UTF-8"
 
-Yeah I guess reusing list_lru isn't that good idea. So just
-open-coding it for now, and then drm_gem_bo_lru or so if we need to
-share it separately from shmem helpers with other drivers. Maybe will
-be needed for ttm or so.
--Daniel
-
+On Sun, Jun 5, 2022 at 9:34 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> BR,
-> -R
+> That code shouldn't use DECLARE_BITMAP() at all, it should just use
 >
-> > Apologies for this, since I fear this might cause a bit of churn.
-> > Hopefully it's all contained to the list manipulation code in shmem
-> > helpers, I don't think this should leak any further.
-> > -Daniel
-> >
-> > > ---
-> > >  drivers/gpu/drm/drm_gem_shmem_helper.c        | 540 ++++++++++++++++--
-> > >  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   9 +-
-> > >  drivers/gpu/drm/virtio/virtgpu_drv.h          |   3 +
-> > >  include/drm/drm_device.h                      |   4 +
-> > >  include/drm/drm_gem_shmem_helper.h            |  87 ++-
-> > >  5 files changed, 594 insertions(+), 49 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > > index 555fe212bd98..4cd0b5913492 100644
-> > > --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > > +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > > @@ -126,6 +126,42 @@ struct drm_gem_shmem_object *drm_gem_shmem_create(struct drm_device *dev, size_t
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(drm_gem_shmem_create);
-> > >
-> > > +static bool drm_gem_shmem_is_evictable(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       return (shmem->madv >= 0) && shmem->evict &&
-> > > +               shmem->eviction_enabled && shmem->pages_use_count &&
-> > > +               !shmem->pages_pin_count && !shmem->base.dma_buf &&
-> > > +               !shmem->base.import_attach && shmem->sgt && !shmem->evicted;
-> > > +}
-> > > +
-> > > +static void
-> > > +drm_gem_shmem_update_pages_state(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       struct drm_gem_object *obj = &shmem->base;
-> > > +       struct drm_gem_shmem_shrinker *gem_shrinker = obj->dev->shmem_shrinker;
-> > > +
-> > > +       dma_resv_assert_held(shmem->base.resv);
-> > > +
-> > > +       if (!gem_shrinker || obj->import_attach)
-> > > +               return;
-> > > +
-> > > +       mutex_lock(&gem_shrinker->lock);
-> > > +
-> > > +       if (drm_gem_shmem_is_evictable(shmem) ||
-> > > +           drm_gem_shmem_is_purgeable(shmem))
-> > > +               list_move_tail(&shmem->madv_list, &gem_shrinker->lru_evictable);
-> > > +       else if (shmem->madv < 0)
-> > > +               list_del_init(&shmem->madv_list);
-> > > +       else if (shmem->evicted)
-> > > +               list_move_tail(&shmem->madv_list, &gem_shrinker->lru_evicted);
-> > > +       else if (!shmem->pages)
-> > > +               list_del_init(&shmem->madv_list);
-> > > +       else
-> > > +               list_move_tail(&shmem->madv_list, &gem_shrinker->lru_pinned);
-> > > +
-> > > +       mutex_unlock(&gem_shrinker->lock);
-> > > +}
-> > > +
-> > >  /**
-> > >   * drm_gem_shmem_free - Free resources associated with a shmem GEM object
-> > >   * @shmem: shmem GEM object to free
-> > > @@ -142,6 +178,9 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
-> > >         } else {
-> > >                 dma_resv_lock(shmem->base.resv, NULL);
-> > >
-> > > +               /* take out shmem GEM object from the memory shrinker */
-> > > +               drm_gem_shmem_madvise(shmem, -1);
-> > > +
-> > >                 WARN_ON(shmem->vmap_use_count);
-> > >
-> > >                 if (shmem->sgt) {
-> > > @@ -150,7 +189,7 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
-> > >                         sg_free_table(shmem->sgt);
-> > >                         kfree(shmem->sgt);
-> > >                 }
-> > > -               if (shmem->pages)
-> > > +               if (shmem->pages_use_count)
-> > >                         drm_gem_shmem_put_pages(shmem);
-> > >
-> > >                 WARN_ON(shmem->pages_use_count);
-> > > @@ -163,18 +202,82 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(drm_gem_shmem_free);
-> > >
-> > > -static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
-> > > +/**
-> > > + * drm_gem_shmem_set_evictable() - Make GEM evictable by memory shrinker
-> > > + * @shmem: shmem GEM object
-> > > + *
-> > > + * Tell memory shrinker that this GEM can be evicted. Initially eviction is
-> > > + * disabled for all GEMs. If GEM was purged, then -ENOMEM is returned.
-> > > + *
-> > > + * Returns:
-> > > + * 0 on success or a negative error code on failure.
-> > > + */
-> > > +int drm_gem_shmem_set_evictable(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       dma_resv_lock(shmem->base.resv, NULL);
-> > > +
-> > > +       if (shmem->madv < 0)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       shmem->eviction_enabled = true;
-> > > +
-> > > +       dma_resv_unlock(shmem->base.resv);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_set_evictable);
-> > > +
-> > > +/**
-> > > + * drm_gem_shmem_set_purgeable() - Make GEM purgeable by memory shrinker
-> > > + * @shmem: shmem GEM object
-> > > + *
-> > > + * Tell memory shrinker that this GEM can be purged. Initially purging is
-> > > + * disabled for all GEMs. If GEM was purged, then -ENOMEM is returned.
-> > > + *
-> > > + * Returns:
-> > > + * 0 on success or a negative error code on failure.
-> > > + */
-> > > +int drm_gem_shmem_set_purgeable(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       dma_resv_lock(shmem->base.resv, NULL);
-> > > +
-> > > +       if (shmem->madv < 0)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       shmem->purge_enabled = true;
-> > > +
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > > +
-> > > +       dma_resv_unlock(shmem->base.resv);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_set_purgeable);
-> > > +
-> > > +static int
-> > > +drm_gem_shmem_acquire_pages(struct drm_gem_shmem_object *shmem)
-> > >  {
-> > >         struct drm_gem_object *obj = &shmem->base;
-> > >         struct page **pages;
-> > >
-> > > -       if (shmem->pages_use_count++ > 0)
-> > > +       dma_resv_assert_held(shmem->base.resv);
-> > > +
-> > > +       if (shmem->madv < 0) {
-> > > +               WARN_ON(shmem->pages);
-> > > +               return -ENOMEM;
-> > > +       }
-> > > +
-> > > +       if (shmem->pages) {
-> > > +               WARN_ON(!shmem->evicted);
-> > >                 return 0;
-> > > +       }
-> > > +
-> > > +       if (WARN_ON(!shmem->pages_use_count))
-> > > +               return -EINVAL;
-> > >
-> > >         pages = drm_gem_get_pages(obj);
-> > >         if (IS_ERR(pages)) {
-> > >                 DRM_DEBUG_KMS("Failed to get pages (%ld)\n", PTR_ERR(pages));
-> > > -               shmem->pages_use_count = 0;
-> > >                 return PTR_ERR(pages);
-> > >         }
-> > >
-> > > @@ -193,6 +296,58 @@ static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
-> > >         return 0;
-> > >  }
-> > >
-> > > +static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       int err;
-> > > +
-> > > +       dma_resv_assert_held(shmem->base.resv);
-> > > +
-> > > +       if (shmem->madv < 0)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       if (shmem->pages_use_count++ > 0) {
-> > > +               err = drm_gem_shmem_swap_in(shmem);
-> > > +               if (err)
-> > > +                       goto err_zero_use;
-> > > +
-> > > +               return 0;
-> > > +       }
-> > > +
-> > > +       err = drm_gem_shmem_acquire_pages(shmem);
-> > > +       if (err)
-> > > +               goto err_zero_use;
-> > > +
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > > +
-> > > +       return 0;
-> > > +
-> > > +err_zero_use:
-> > > +       shmem->pages_use_count = 0;
-> > > +
-> > > +       return err;
-> > > +}
-> > > +
-> > > +static void
-> > > +drm_gem_shmem_release_pages(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       struct drm_gem_object *obj = &shmem->base;
-> > > +
-> > > +       if (!shmem->pages) {
-> > > +               WARN_ON(!shmem->evicted && shmem->madv >= 0);
-> > > +               return;
-> > > +       }
-> > > +
-> > > +#ifdef CONFIG_X86
-> > > +       if (shmem->map_wc)
-> > > +               set_pages_array_wb(shmem->pages, obj->size >> PAGE_SHIFT);
-> > > +#endif
-> > > +
-> > > +       drm_gem_put_pages(obj, shmem->pages,
-> > > +                         shmem->pages_mark_dirty_on_put,
-> > > +                         shmem->pages_mark_accessed_on_put);
-> > > +       shmem->pages = NULL;
-> > > +}
-> > > +
-> > >  /*
-> > >   * drm_gem_shmem_put_pages - Decrease use count on the backing pages for a shmem GEM object
-> > >   * @shmem: shmem GEM object
-> > > @@ -201,8 +356,6 @@ static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
-> > >   */
-> > >  void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
-> > >  {
-> > > -       struct drm_gem_object *obj = &shmem->base;
-> > > -
-> > >         dma_resv_assert_held(shmem->base.resv);
-> > >
-> > >         if (WARN_ON_ONCE(!shmem->pages_use_count))
-> > > @@ -211,15 +364,9 @@ void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
-> > >         if (--shmem->pages_use_count > 0)
-> > >                 return;
-> > >
-> > > -#ifdef CONFIG_X86
-> > > -       if (shmem->map_wc)
-> > > -               set_pages_array_wb(shmem->pages, obj->size >> PAGE_SHIFT);
-> > > -#endif
-> > > +       drm_gem_shmem_release_pages(shmem);
-> > >
-> > > -       drm_gem_put_pages(obj, shmem->pages,
-> > > -                         shmem->pages_mark_dirty_on_put,
-> > > -                         shmem->pages_mark_accessed_on_put);
-> > > -       shmem->pages = NULL;
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > >  }
-> > >  EXPORT_SYMBOL(drm_gem_shmem_put_pages);
-> > >
-> > > @@ -235,11 +382,17 @@ EXPORT_SYMBOL(drm_gem_shmem_put_pages);
-> > >   */
-> > >  int drm_gem_shmem_pin(struct drm_gem_shmem_object *shmem)
-> > >  {
-> > > +       int ret;
-> > > +
-> > >         dma_resv_assert_held(shmem->base.resv);
-> > >
-> > >         WARN_ON(shmem->base.import_attach);
-> > >
-> > > -       return drm_gem_shmem_get_pages(shmem);
-> > > +       ret = drm_gem_shmem_get_pages(shmem);
-> > > +       if (!ret)
-> > > +               shmem->pages_pin_count++;
-> > > +
-> > > +       return ret;
-> > >  }
-> > >  EXPORT_SYMBOL(drm_gem_shmem_pin);
-> > >
-> > > @@ -257,6 +410,8 @@ void drm_gem_shmem_unpin(struct drm_gem_shmem_object *shmem)
-> > >         WARN_ON(shmem->base.import_attach);
-> > >
-> > >         drm_gem_shmem_put_pages(shmem);
-> > > +
-> > > +       shmem->pages_pin_count--;
-> > >  }
-> > >  EXPORT_SYMBOL(drm_gem_shmem_unpin);
-> > >
-> > > @@ -299,7 +454,7 @@ int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
-> > >                         return 0;
-> > >                 }
-> > >
-> > > -               ret = drm_gem_shmem_get_pages(shmem);
-> > > +               ret = drm_gem_shmem_pin(shmem);
-> > >                 if (ret)
-> > >                         goto err_zero_use;
-> > >
-> > > @@ -322,7 +477,7 @@ int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
-> > >
-> > >  err_put_pages:
-> > >         if (!obj->import_attach)
-> > > -               drm_gem_shmem_put_pages(shmem);
-> > > +               drm_gem_shmem_unpin(shmem);
-> > >  err_zero_use:
-> > >         shmem->vmap_use_count = 0;
-> > >
-> > > @@ -359,7 +514,7 @@ void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
-> > >                         return;
-> > >
-> > >                 vunmap(shmem->vaddr);
-> > > -               drm_gem_shmem_put_pages(shmem);
-> > > +               drm_gem_shmem_unpin(shmem);
-> > >         }
-> > >
-> > >         shmem->vaddr = NULL;
-> > > @@ -403,41 +558,77 @@ int drm_gem_shmem_madvise(struct drm_gem_shmem_object *shmem, int madv)
-> > >
-> > >         madv = shmem->madv;
-> > >
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > > +
-> > >         return (madv >= 0);
-> > >  }
-> > >  EXPORT_SYMBOL(drm_gem_shmem_madvise);
-> > >
-> > > -void drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem)
-> > > +/**
-> > > + * drm_gem_shmem_swap_in() - Moves shmem GEM back to memory and enables
-> > > + *                           hardware access to the memory.
-> > > + * @shmem: shmem GEM object
-> > > + *
-> > > + * This function moves shmem GEM back to memory if it was previously evicted
-> > > + * by the memory shrinker. The GEM is ready to use on success.
-> > > + *
-> > > + * Returns:
-> > > + * 0 on success or a negative error code on failure.
-> > > + */
-> > > +int drm_gem_shmem_swap_in(struct drm_gem_shmem_object *shmem)
-> > >  {
-> > >         struct drm_gem_object *obj = &shmem->base;
-> > > -       struct drm_device *dev = obj->dev;
-> > > +       struct sg_table *sgt;
-> > > +       int err;
-> > >
-> > >         dma_resv_assert_held(shmem->base.resv);
-> > >
-> > > -       WARN_ON(!drm_gem_shmem_is_purgeable(shmem));
-> > > +       if (shmem->evicted) {
-> > > +               err = drm_gem_shmem_acquire_pages(shmem);
-> > > +               if (err)
-> > > +                       return err;
-> > > +
-> > > +               sgt = drm_gem_shmem_get_sg_table(shmem);
-> > > +               if (IS_ERR(sgt))
-> > > +                       return PTR_ERR(sgt);
-> > > +
-> > > +               err = dma_map_sgtable(obj->dev->dev, sgt,
-> > > +                                     DMA_BIDIRECTIONAL, 0);
-> > > +               if (err) {
-> > > +                       sg_free_table(sgt);
-> > > +                       kfree(sgt);
-> > > +                       return err;
-> > > +               }
-> > >
-> > > -       dma_unmap_sgtable(dev->dev, shmem->sgt, DMA_BIDIRECTIONAL, 0);
-> > > -       sg_free_table(shmem->sgt);
-> > > -       kfree(shmem->sgt);
-> > > -       shmem->sgt = NULL;
-> > > +               shmem->sgt = sgt;
-> > > +               shmem->evicted = false;
-> > >
-> > > -       drm_gem_shmem_put_pages(shmem);
-> > > +               drm_gem_shmem_update_pages_state(shmem);
-> > > +       }
-> > >
-> > > -       shmem->madv = -1;
-> > > +       if (!shmem->pages)
-> > > +               return -ENOMEM;
-> > >
-> > > -       drm_vma_node_unmap(&obj->vma_node, dev->anon_inode->i_mapping);
-> > > -       drm_gem_free_mmap_offset(obj);
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_swap_in);
-> > >
-> > > -       /* Our goal here is to return as much of the memory as
-> > > -        * is possible back to the system as we are called from OOM.
-> > > -        * To do this we must instruct the shmfs to drop all of its
-> > > -        * backing pages, *now*.
-> > > -        */
-> > > -       shmem_truncate_range(file_inode(obj->filp), 0, (loff_t)-1);
-> > > +static void drm_gem_shmem_unpin_pages(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       struct drm_gem_object *obj = &shmem->base;
-> > > +       struct drm_device *dev = obj->dev;
-> > >
-> > > -       invalidate_mapping_pages(file_inode(obj->filp)->i_mapping, 0, (loff_t)-1);
-> > > +       if (shmem->evicted)
-> > > +               return;
-> > > +
-> > > +       dma_unmap_sgtable(dev->dev, shmem->sgt, DMA_BIDIRECTIONAL, 0);
-> > > +       drm_gem_shmem_release_pages(shmem);
-> > > +       drm_vma_node_unmap(&obj->vma_node, dev->anon_inode->i_mapping);
-> > > +
-> > > +       sg_free_table(shmem->sgt);
-> > > +       kfree(shmem->sgt);
-> > > +       shmem->sgt = NULL;
-> > >  }
-> > > -EXPORT_SYMBOL(drm_gem_shmem_purge);
-> > >
-> > >  /**
-> > >   * drm_gem_shmem_dumb_create - Create a dumb shmem buffer object
-> > > @@ -488,22 +679,33 @@ static vm_fault_t drm_gem_shmem_fault(struct vm_fault *vmf)
-> > >         vm_fault_t ret;
-> > >         struct page *page;
-> > >         pgoff_t page_offset;
-> > > +       bool pages_unpinned;
-> > > +       int err;
-> > >
-> > >         /* We don't use vmf->pgoff since that has the fake offset */
-> > >         page_offset = (vmf->address - vma->vm_start) >> PAGE_SHIFT;
-> > >
-> > >         dma_resv_lock(shmem->base.resv, NULL);
-> > >
-> > > -       if (page_offset >= num_pages ||
-> > > -           WARN_ON_ONCE(!shmem->pages) ||
-> > > -           shmem->madv < 0) {
-> > > +       /* Sanity-check that we have the pages pointer when it should present */
-> > > +       pages_unpinned = (shmem->evicted || shmem->madv < 0 || !shmem->pages_use_count);
-> > > +       WARN_ON_ONCE(!shmem->pages ^ pages_unpinned);
-> > > +
-> > > +       if (page_offset >= num_pages || (!shmem->pages && !shmem->evicted)) {
-> > >                 ret = VM_FAULT_SIGBUS;
-> > >         } else {
-> > > +               err = drm_gem_shmem_swap_in(shmem);
-> > > +               if (err) {
-> > > +                       ret = VM_FAULT_OOM;
-> > > +                       goto unlock;
-> > > +               }
-> > > +
-> > >                 page = shmem->pages[page_offset];
-> > >
-> > >                 ret = vmf_insert_pfn(vma, vmf->address, page_to_pfn(page));
-> > >         }
-> > >
-> > > +unlock:
-> > >         dma_resv_unlock(shmem->base.resv);
-> > >
-> > >         return ret;
-> > > @@ -513,13 +715,15 @@ static void drm_gem_shmem_vm_open(struct vm_area_struct *vma)
-> > >  {
-> > >         struct drm_gem_object *obj = vma->vm_private_data;
-> > >         struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
-> > > -       int ret;
-> > >
-> > >         WARN_ON(shmem->base.import_attach);
-> > >
-> > >         dma_resv_lock(shmem->base.resv, NULL);
-> > > -       ret = drm_gem_shmem_get_pages(shmem);
-> > > -       WARN_ON_ONCE(ret != 0);
-> > > +
-> > > +       if (drm_gem_shmem_get_pages(shmem))
-> > > +               shmem->pages_use_count++;
-> > > +
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > >         dma_resv_unlock(shmem->base.resv);
-> > >
-> > >         drm_gem_vm_open(vma);
-> > > @@ -583,6 +787,8 @@ EXPORT_SYMBOL_GPL(drm_gem_shmem_mmap);
-> > >  void drm_gem_shmem_print_info(const struct drm_gem_shmem_object *shmem,
-> > >                               struct drm_printer *p, unsigned int indent)
-> > >  {
-> > > +       drm_printf_indent(p, indent, "eviction_enabled=%d\n", shmem->eviction_enabled);
-> > > +       drm_printf_indent(p, indent, "purge_enabled=%d\n", shmem->purge_enabled);
-> > >         drm_printf_indent(p, indent, "pages_use_count=%u\n", shmem->pages_use_count);
-> > >
-> > >         if (shmem->base.import_attach)
-> > > @@ -592,7 +798,9 @@ void drm_gem_shmem_print_info(const struct drm_gem_shmem_object *shmem,
-> > >                 drm_printf_indent(p, indent, "vmap_use_count=%u\n",
-> > >                                   shmem->vmap_use_count);
-> > >
-> > > +       drm_printf_indent(p, indent, "evicted=%d\n", shmem->evicted);
-> > >         drm_printf_indent(p, indent, "vaddr=%p\n", shmem->vaddr);
-> > > +       drm_printf_indent(p, indent, "madv=%d\n", shmem->madv);
-> > >  }
-> > >  EXPORT_SYMBOL(drm_gem_shmem_print_info);
-> > >
-> > > @@ -667,6 +875,8 @@ struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
-> > >
-> > >         shmem->sgt = sgt;
-> > >
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > > +
-> > >         dma_resv_unlock(shmem->base.resv);
-> > >
-> > >         return sgt;
-> > > @@ -717,6 +927,250 @@ drm_gem_shmem_prime_import_sg_table(struct drm_device *dev,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(drm_gem_shmem_prime_import_sg_table);
-> > >
-> > > +static struct drm_gem_shmem_shrinker *
-> > > +to_drm_shrinker(struct shrinker *shrinker)
-> > > +{
-> > > +       return container_of(shrinker, struct drm_gem_shmem_shrinker, base);
-> > > +}
-> > > +
-> > > +static unsigned long
-> > > +drm_gem_shmem_shrinker_count_objects(struct shrinker *shrinker,
-> > > +                                    struct shrink_control *sc)
-> > > +{
-> > > +       struct drm_gem_shmem_shrinker *gem_shrinker = to_drm_shrinker(shrinker);
-> > > +       struct drm_gem_shmem_object *shmem;
-> > > +       unsigned long count = 0;
-> > > +
-> > > +       if (!mutex_trylock(&gem_shrinker->lock))
-> > > +               return 0;
-> > > +
-> > > +       list_for_each_entry(shmem, &gem_shrinker->lru_evictable, madv_list) {
-> > > +               count += shmem->base.size;
-> > > +
-> > > +               if (count >= SHRINK_EMPTY)
-> > > +                       break;
-> > > +       }
-> > > +
-> > > +       mutex_unlock(&gem_shrinker->lock);
-> > > +
-> > > +       if (count >= SHRINK_EMPTY)
-> > > +               return SHRINK_EMPTY - 1;
-> > > +
-> > > +       return count ?: SHRINK_EMPTY;
-> > > +}
-> > > +
-> > > +int drm_gem_shmem_evict(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       WARN_ON(!drm_gem_shmem_is_evictable(shmem));
-> > > +       WARN_ON(shmem->evicted);
-> > > +
-> > > +       drm_gem_shmem_unpin_pages(shmem);
-> > > +
-> > > +       shmem->evicted = true;
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_evict);
-> > > +
-> > > +int drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       struct drm_gem_object *obj = &shmem->base;
-> > > +
-> > > +       WARN_ON(!drm_gem_shmem_is_purgeable(shmem));
-> > > +
-> > > +       drm_gem_shmem_unpin_pages(shmem);
-> > > +       drm_gem_free_mmap_offset(obj);
-> > > +
-> > > +       /* Our goal here is to return as much of the memory as
-> > > +        * is possible back to the system as we are called from OOM.
-> > > +        * To do this we must instruct the shmfs to drop all of its
-> > > +        * backing pages, *now*.
-> > > +        */
-> > > +       shmem_truncate_range(file_inode(obj->filp), 0, (loff_t)-1);
-> > > +
-> > > +       invalidate_mapping_pages(file_inode(obj->filp)->i_mapping, 0, (loff_t)-1);
-> > > +
-> > > +       shmem->madv = -1;
-> > > +       shmem->evicted = false;
-> > > +       drm_gem_shmem_update_pages_state(shmem);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_purge);
-> > > +
-> > > +static unsigned long
-> > > +drm_gem_shmem_shrinker_run_objects_scan(struct shrinker *shrinker,
-> > > +                                       unsigned long nr_to_scan,
-> > > +                                       bool *lock_contention,
-> > > +                                       bool evict)
-> > > +{
-> > > +       struct drm_gem_shmem_shrinker *gem_shrinker = to_drm_shrinker(shrinker);
-> > > +       struct drm_gem_shmem_object *shmem;
-> > > +       struct list_head still_in_list;
-> > > +       struct drm_gem_object *obj;
-> > > +       unsigned long freed = 0;
-> > > +       size_t page_count;
-> > > +       int err;
-> > > +
-> > > +       INIT_LIST_HEAD(&still_in_list);
-> > > +
-> > > +       mutex_lock(&gem_shrinker->lock);
-> > > +
-> > > +       while (freed < nr_to_scan) {
-> > > +               shmem = list_first_entry_or_null(&gem_shrinker->lru_evictable,
-> > > +                                                typeof(*shmem), madv_list);
-> > > +               if (!shmem)
-> > > +                       break;
-> > > +
-> > > +               obj = &shmem->base;
-> > > +               page_count = obj->size >> PAGE_SHIFT;
-> > > +               list_move_tail(&shmem->madv_list, &still_in_list);
-> > > +
-> > > +               if (evict) {
-> > > +                       if (!drm_gem_shmem_is_evictable(shmem) ||
-> > > +                           get_nr_swap_pages() < page_count)
-> > > +                               continue;
-> > > +               } else {
-> > > +                       if (!drm_gem_shmem_is_purgeable(shmem))
-> > > +                               continue;
-> > > +               }
-> > > +
-> > > +               /*
-> > > +                * If it's in the process of being freed, gem_object->free()
-> > > +                * may be blocked on lock waiting to remove it.  So just
-> > > +                * skip it.
-> > > +                */
-> > > +               if (!kref_get_unless_zero(&obj->refcount))
-> > > +                       continue;
-> > > +
-> > > +               mutex_unlock(&gem_shrinker->lock);
-> > > +
-> > > +               /* prevent racing with job-submission code paths */
-> > > +               if (!dma_resv_trylock(obj->resv)) {
-> > > +                       *lock_contention |= true;
-> > > +                       goto shrinker_lock;
-> > > +               }
-> > > +
-> > > +               /* prevent racing with the dma-buf importing/exporting */
-> > > +               if (!mutex_trylock(&gem_shrinker->dev->object_name_lock)) {
-> > > +                       *lock_contention |= true;
-> > > +                       goto resv_unlock;
-> > > +               }
-> > > +
-> > > +               /* check whether h/w uses this object */
-> > > +               if (!dma_resv_test_signaled(obj->resv, DMA_RESV_USAGE_WRITE))
-> > > +                       goto object_name_unlock;
-> > > +
-> > > +               /* re-check whether eviction status hasn't changed */
-> > > +               if (!drm_gem_shmem_is_evictable(shmem) &&
-> > > +                   !drm_gem_shmem_is_purgeable(shmem))
-> > > +                       goto object_name_unlock;
-> > > +
-> > > +               err = shmem->evict(shmem);
-> > > +               if (!err)
-> > > +                       freed += obj->size >> PAGE_SHIFT;
-> > > +
-> > > +object_name_unlock:
-> > > +               mutex_unlock(&gem_shrinker->dev->object_name_lock);
-> > > +resv_unlock:
-> > > +               dma_resv_unlock(obj->resv);
-> > > +shrinker_lock:
-> > > +               drm_gem_object_put(&shmem->base);
-> > > +               mutex_lock(&gem_shrinker->lock);
-> > > +       }
-> > > +
-> > > +       list_splice_tail(&still_in_list, &gem_shrinker->lru_evictable);
-> > > +
-> > > +       mutex_unlock(&gem_shrinker->lock);
-> > > +
-> > > +       return freed;
-> > > +}
-> > > +
-> > > +static unsigned long
-> > > +drm_gem_shmem_shrinker_scan_objects(struct shrinker *shrinker,
-> > > +                                   struct shrink_control *sc)
-> > > +{
-> > > +       unsigned long nr_to_scan = sc->nr_to_scan;
-> > > +       bool lock_contention = false;
-> > > +       unsigned long freed;
-> > > +
-> > > +       /* purge as many objects as we can */
-> > > +       freed = drm_gem_shmem_shrinker_run_objects_scan(shrinker, nr_to_scan,
-> > > +                                                       &lock_contention, false);
-> > > +
-> > > +       /* evict as many objects as we can */
-> > > +       if (freed < nr_to_scan)
-> > > +               freed += drm_gem_shmem_shrinker_run_objects_scan(shrinker,
-> > > +                                                                nr_to_scan - freed,
-> > > +                                                                &lock_contention,
-> > > +                                                                true);
-> > > +
-> > > +       return (!freed && !lock_contention) ? SHRINK_STOP : freed;
-> > > +}
-> > > +
-> > > +/**
-> > > + * drm_gem_shmem_shrinker_register() - Register shmem shrinker
-> > > + * @dev: DRM device
-> > > + *
-> > > + * Returns:
-> > > + * 0 on success or a negative error code on failure.
-> > > + */
-> > > +int drm_gem_shmem_shrinker_register(struct drm_device *dev)
-> > > +{
-> > > +       struct drm_gem_shmem_shrinker *gem_shrinker;
-> > > +       int err;
-> > > +
-> > > +       if (WARN_ON(dev->shmem_shrinker))
-> > > +               return -EBUSY;
-> > > +
-> > > +       gem_shrinker = kzalloc(sizeof(*gem_shrinker), GFP_KERNEL);
-> > > +       if (!gem_shrinker)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       gem_shrinker->base.count_objects = drm_gem_shmem_shrinker_count_objects;
-> > > +       gem_shrinker->base.scan_objects = drm_gem_shmem_shrinker_scan_objects;
-> > > +       gem_shrinker->base.seeks = DEFAULT_SEEKS;
-> > > +       gem_shrinker->dev = dev;
-> > > +
-> > > +       INIT_LIST_HEAD(&gem_shrinker->lru_evictable);
-> > > +       INIT_LIST_HEAD(&gem_shrinker->lru_evicted);
-> > > +       INIT_LIST_HEAD(&gem_shrinker->lru_pinned);
-> > > +       mutex_init(&gem_shrinker->lock);
-> > > +
-> > > +       dev->shmem_shrinker = gem_shrinker;
-> > > +
-> > > +       err = register_shrinker(&gem_shrinker->base);
-> > > +       if (err) {
-> > > +               dev->shmem_shrinker = NULL;
-> > > +               kfree(gem_shrinker);
-> > > +               return err;
-> > > +       }
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_shrinker_register);
-> > > +
-> > > +/**
-> > > + * drm_gem_shmem_shrinker_unregister() - Unregister shmem shrinker
-> > > + * @dev: DRM device
-> > > + */
-> > > +void drm_gem_shmem_shrinker_unregister(struct drm_device *dev)
-> > > +{
-> > > +       struct drm_gem_shmem_shrinker *gem_shrinker = dev->shmem_shrinker;
-> > > +
-> > > +       if (gem_shrinker) {
-> > > +               unregister_shrinker(&gem_shrinker->base);
-> > > +               WARN_ON(!list_empty(&gem_shrinker->lru_evictable));
-> > > +               WARN_ON(!list_empty(&gem_shrinker->lru_evicted));
-> > > +               WARN_ON(!list_empty(&gem_shrinker->lru_pinned));
-> > > +               mutex_destroy(&gem_shrinker->lock);
-> > > +               dev->shmem_shrinker = NULL;
-> > > +               kfree(gem_shrinker);
-> > > +       }
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(drm_gem_shmem_shrinker_unregister);
-> > > +
-> > >  MODULE_DESCRIPTION("DRM SHMEM memory-management helpers");
-> > >  MODULE_IMPORT_NS(DMA_BUF);
-> > >  MODULE_LICENSE("GPL v2");
-> > > diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> > > index a4bedfeb2ec4..7cc32556f908 100644
-> > > --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> > > +++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> > > @@ -15,6 +15,13 @@
-> > >  #include "panfrost_gem.h"
-> > >  #include "panfrost_mmu.h"
-> > >
-> > > +static bool panfrost_gem_shmem_is_purgeable(struct drm_gem_shmem_object *shmem)
-> > > +{
-> > > +       return (shmem->madv > 0) &&
-> > > +               !shmem->pages_pin_count && shmem->sgt &&
-> > > +               !shmem->base.dma_buf && !shmem->base.import_attach;
-> > > +}
-> > > +
-> > >  static unsigned long
-> > >  panfrost_gem_shrinker_count(struct shrinker *shrinker, struct shrink_control *sc)
-> > >  {
-> > > @@ -27,7 +34,7 @@ panfrost_gem_shrinker_count(struct shrinker *shrinker, struct shrink_control *sc
-> > >                 return 0;
-> > >
-> > >         list_for_each_entry(shmem, &pfdev->shrinker_list, madv_list) {
-> > > -               if (drm_gem_shmem_is_purgeable(shmem))
-> > > +               if (panfrost_gem_shmem_is_purgeable(shmem))
-> > >                         count += shmem->base.size >> PAGE_SHIFT;
-> > >         }
-> > >
-> > > diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
-> > > index b2d93cb12ebf..81bacc7e1873 100644
-> > > --- a/drivers/gpu/drm/virtio/virtgpu_drv.h
-> > > +++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
-> > > @@ -89,6 +89,7 @@ struct virtio_gpu_object {
-> > >         uint32_t hw_res_handle;
-> > >         bool dumb;
-> > >         bool created;
-> > > +       bool detached;
-> > >         bool host3d_blob, guest_blob;
-> > >         uint32_t blob_mem, blob_flags;
-> > >
-> > > @@ -453,6 +454,8 @@ int virtio_gpu_object_create(struct virtio_gpu_device *vgdev,
-> > >
-> > >  bool virtio_gpu_is_shmem(struct virtio_gpu_object *bo);
-> > >
-> > > +int virtio_gpu_reattach_shmem_object(struct virtio_gpu_object *bo);
-> > > +
-> > >  int virtio_gpu_resource_id_get(struct virtio_gpu_device *vgdev,
-> > >                                uint32_t *resid);
-> > >  /* virtgpu_prime.c */
-> > > diff --git a/include/drm/drm_device.h b/include/drm/drm_device.h
-> > > index 9923c7a6885e..929546cad894 100644
-> > > --- a/include/drm/drm_device.h
-> > > +++ b/include/drm/drm_device.h
-> > > @@ -16,6 +16,7 @@ struct drm_vblank_crtc;
-> > >  struct drm_vma_offset_manager;
-> > >  struct drm_vram_mm;
-> > >  struct drm_fb_helper;
-> > > +struct drm_gem_shmem_shrinker;
-> > >
-> > >  struct inode;
-> > >
-> > > @@ -277,6 +278,9 @@ struct drm_device {
-> > >         /** @vram_mm: VRAM MM memory manager */
-> > >         struct drm_vram_mm *vram_mm;
-> > >
-> > > +       /** @shmem_shrinker: SHMEM GEM memory shrinker */
-> > > +       struct drm_gem_shmem_shrinker *shmem_shrinker;
-> > > +
-> > >         /**
-> > >          * @switch_power_state:
-> > >          *
-> > > diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
-> > > index 9a8983ee8abe..62c640678a91 100644
-> > > --- a/include/drm/drm_gem_shmem_helper.h
-> > > +++ b/include/drm/drm_gem_shmem_helper.h
-> > > @@ -6,6 +6,7 @@
-> > >  #include <linux/fs.h>
-> > >  #include <linux/mm.h>
-> > >  #include <linux/mutex.h>
-> > > +#include <linux/shrinker.h>
-> > >
-> > >  #include <drm/drm_file.h>
-> > >  #include <drm/drm_gem.h>
-> > > @@ -15,6 +16,7 @@
-> > >  struct dma_buf_attachment;
-> > >  struct drm_mode_create_dumb;
-> > >  struct drm_printer;
-> > > +struct drm_device;
-> > >  struct sg_table;
-> > >
-> > >  /**
-> > > @@ -39,12 +41,21 @@ struct drm_gem_shmem_object {
-> > >          */
-> > >         unsigned int pages_use_count;
-> > >
-> > > +       /**
-> > > +        * @pages_pin_count:
-> > > +        *
-> > > +        * Reference count on the pinned pages table.
-> > > +        * The pages can be evicted by memory shrinker
-> > > +        * when the count reaches zero.
-> > > +        */
-> > > +       unsigned int pages_pin_count;
-> > > +
-> > >         /**
-> > >          * @madv: State for madvise
-> > >          *
-> > >          * 0 is active/inuse.
-> > > +        * 1 is not-needed/can-be-purged
-> > >          * A negative value is the object is purged.
-> > > -        * Positive values are driver specific and not used by the helpers.
-> > >          */
-> > >         int madv;
-> > >
-> > > @@ -91,6 +102,39 @@ struct drm_gem_shmem_object {
-> > >          * @map_wc: map object write-combined (instead of using shmem defaults).
-> > >          */
-> > >         bool map_wc;
-> > > +
-> > > +       /**
-> > > +        * @eviction_enabled:
-> > > +        *
-> > > +        * The shmem pages can be evicted only if @eviction_enabled is set to true.
-> > > +        * Used internally by memory shrinker.
-> > > +        */
-> > > +       bool eviction_enabled;
-> > > +
-> > > +       /**
-> > > +        * @purge_enabled:
-> > > +        *
-> > > +        * The shmem pages can be purged only if @purge_enabled is set to true.
-> > > +        * Used internally by memory shrinker.
-> > > +        */
-> > > +       bool purge_enabled;
-> > > +
-> > > +       /**
-> > > +        * @evicted: True if shmem pages are evicted by the memory shrinker.
-> > > +        * Used internally by memory shrinker.
-> > > +        */
-> > > +       bool evicted;
-> > > +
-> > > +       /**
-> > > +        * @evict:
-> > > +        *
-> > > +        * Invoked by shmem shrinker before evicting shmem GEM from memory.
-> > > +        * GEM's DMA reservation is kept locked by the shrinker. This is
-> > > +        * optional callback that should be specified by drivers.
-> > > +        *
-> > > +        * Returns 0 on success, or -errno on error.
-> > > +        */
-> > > +       int (*evict)(struct drm_gem_shmem_object *shmem);
-> > >  };
-> > >
-> > >  #define to_drm_gem_shmem_obj(obj) \
-> > > @@ -110,14 +154,21 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
-> > >
-> > >  int drm_gem_shmem_madvise(struct drm_gem_shmem_object *shmem, int madv);
-> > >
-> > > +int drm_gem_shmem_set_purgeable(struct drm_gem_shmem_object *shmem);
-> > > +int drm_gem_shmem_set_evictable(struct drm_gem_shmem_object *shmem);
-> > > +
-> > >  static inline bool drm_gem_shmem_is_purgeable(struct drm_gem_shmem_object *shmem)
-> > >  {
-> > > -       return (shmem->madv > 0) &&
-> > > -               !shmem->vmap_use_count && shmem->sgt &&
-> > > -               !shmem->base.dma_buf && !shmem->base.import_attach;
-> > > +       return (shmem->madv > 0) && shmem->evict &&
-> > > +               shmem->purge_enabled && shmem->pages_use_count &&
-> > > +               !shmem->pages_pin_count && !shmem->base.dma_buf &&
-> > > +               !shmem->base.import_attach && (shmem->sgt || shmem->evicted);
-> > >  }
-> > >
-> > > -void drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem);
-> > > +int drm_gem_shmem_swap_in(struct drm_gem_shmem_object *shmem);
-> > > +
-> > > +int drm_gem_shmem_evict(struct drm_gem_shmem_object *shmem);
-> > > +int drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem);
-> > >
-> > >  struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem);
-> > >  struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem);
-> > > @@ -260,6 +311,32 @@ static inline int drm_gem_shmem_object_mmap(struct drm_gem_object *obj, struct v
-> > >         return drm_gem_shmem_mmap(shmem, vma);
-> > >  }
-> > >
-> > > +/**
-> > > + * struct drm_gem_shmem_shrinker - Generic memory shrinker for shmem GEMs
-> > > + */
-> > > +struct drm_gem_shmem_shrinker {
-> > > +       /** @base: Shrinker for purging shmem GEM objects */
-> > > +       struct shrinker base;
-> > > +
-> > > +       /** @lock: Protects @lru_* */
-> > > +       struct mutex lock;
-> > > +
-> > > +       /** @lru_pinned: List of pinned shmem GEM objects */
-> > > +       struct list_head lru_pinned;
-> > > +
-> > > +       /** @lru_evictable: List of shmem GEM objects to be evicted */
-> > > +       struct list_head lru_evictable;
-> > > +
-> > > +       /** @lru_evicted: List of evicted shmem GEM objects */
-> > > +       struct list_head lru_evicted;
-> > > +
-> > > +       /** @dev: DRM device that uses this shrinker */
-> > > +       struct drm_device *dev;
-> > > +};
-> > > +
-> > > +int drm_gem_shmem_shrinker_register(struct drm_device *dev);
-> > > +void drm_gem_shmem_shrinker_unregister(struct drm_device *dev);
-> > > +
-> > >  /*
-> > >   * Driver ops
-> > >   */
-> > > --
-> > > 2.35.3
-> > >
-> >
-> >
-> > --
-> > Daniel Vetter
-> > Software Engineer, Intel Corporation
-> > http://blog.ffwll.ch
+>     struct bdaddr_list_with_flags {
+>             ..
+>             unsigned long flags;
+>     };
+>
+> and then use '&br_params->flags' when it needs the actual atomic
+> 'set_bit()' things and friends,
 
+Actually, I'm not convinced those things should be atomic at all.
 
+*Most* of the accesses to those connection flags seem to be with
+hci_dev_lock() held, and the ones that aren't can't possibly depend on
+atomicity since those things are currently copied around with random
+other "copy bitmaps" functions.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+So I think the bluetooth code would actually be much better off with
+something like
+
+    /* Bitmask of connection flags */
+    enum hci_conn_flags {
+        HCI_CONN_FLAG_REMOTE_WAKEUP = 1,
+        HCI_CONN_FLAG_DEVICE_PRIVACY = 2,
+    };
+    typedef u8 hci_conn_flags_t;
+
+instead of playing games with DECLARE_BITMAP() and then using a mix of
+atomic set_bit/clear_bit() and random non-atomic "copy bitmap values
+around".
+
+This attached patch builds cleanly for me, doing the above. But see a
+few comments about those atomicity issues...
+
+And no, it doesn't really need that new "hci_conn_flags_t", and it
+could just use "u32" (which is what "current_flags" and
+"supported_flags" use in the code), but those structures that contain
+those connection flags do seem to have various other byte fields and
+it would appear to pack better using just that simple one-byte type.
+
+It *literally* just uses two bits in it, after all, and as mentioned,
+the whole atomicity situation right now is very very dubious, so it
+seems to make sense to do something like this.
+
+Reactions?
+
+                 Linus
+
+--00000000000008827805e0b7da33
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l41nsbq30>
+X-Attachment-Id: f_l41nsbq30
+
+IGluY2x1ZGUvbmV0L2JsdWV0b290aC9oY2lfY29yZS5oIHwgMTcgKysrKysrKy0tLS0tLS0tLS0K
+IG5ldC9ibHVldG9vdGgvaGNpX2NvcmUuYyAgICAgICAgIHwgIDQgKystLQogbmV0L2JsdWV0b290
+aC9oY2lfcmVxdWVzdC5jICAgICAgfCAgMiArLQogbmV0L2JsdWV0b290aC9oY2lfc3luYy5jICAg
+ICAgICAgfCAgNiArKystLS0KIG5ldC9ibHVldG9vdGgvbWdtdC5jICAgICAgICAgICAgIHwgMzcg
+KysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogNSBmaWxlcyBjaGFuZ2VkLCAy
+NyBpbnNlcnRpb25zKCspLCAzOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL25l
+dC9ibHVldG9vdGgvaGNpX2NvcmUuaCBiL2luY2x1ZGUvbmV0L2JsdWV0b290aC9oY2lfY29yZS5o
+CmluZGV4IDVhNTJhMjAxOGI1Ni4uYzBlYTJhNDg5MmIxIDEwMDY0NAotLS0gYS9pbmNsdWRlL25l
+dC9ibHVldG9vdGgvaGNpX2NvcmUuaAorKysgYi9pbmNsdWRlL25ldC9ibHVldG9vdGgvaGNpX2Nv
+cmUuaApAQCAtMTU1LDIxICsxNTUsMTggQEAgc3RydWN0IGJkYWRkcl9saXN0X3dpdGhfaXJrIHsK
+IAl1OCBsb2NhbF9pcmtbMTZdOwogfTsKIAorLyogQml0bWFzayBvZiBjb25uZWN0aW9uIGZsYWdz
+ICovCiBlbnVtIGhjaV9jb25uX2ZsYWdzIHsKLQlIQ0lfQ09OTl9GTEFHX1JFTU9URV9XQUtFVVAs
+Ci0JSENJX0NPTk5fRkxBR19ERVZJQ0VfUFJJVkFDWSwKLQotCV9fSENJX0NPTk5fTlVNX0ZMQUdT
+LAorCUhDSV9DT05OX0ZMQUdfUkVNT1RFX1dBS0VVUCA9IDEsCisJSENJX0NPTk5fRkxBR19ERVZJ
+Q0VfUFJJVkFDWSA9IDIsCiB9OwotCi0vKiBNYWtlIHN1cmUgbnVtYmVyIG9mIGZsYWdzIGRvZXNu
+J3QgZXhjZWVkIHNpemVvZihjdXJyZW50X2ZsYWdzKSAqLwotc3RhdGljX2Fzc2VydChfX0hDSV9D
+T05OX05VTV9GTEFHUyA8IDMyKTsKK3R5cGVkZWYgdTggaGNpX2Nvbm5fZmxhZ3NfdDsKIAogc3Ry
+dWN0IGJkYWRkcl9saXN0X3dpdGhfZmxhZ3MgewogCXN0cnVjdCBsaXN0X2hlYWQgbGlzdDsKIAli
+ZGFkZHJfdCBiZGFkZHI7CiAJdTggYmRhZGRyX3R5cGU7Ci0JREVDTEFSRV9CSVRNQVAoZmxhZ3Ms
+IF9fSENJX0NPTk5fTlVNX0ZMQUdTKTsKKwloY2lfY29ubl9mbGFnc190IGZsYWdzOwogfTsKIAog
+c3RydWN0IGJ0X3V1aWQgewpAQCAtNTc2LDcgKzU3Myw3IEBAIHN0cnVjdCBoY2lfZGV2IHsKIAlz
+dHJ1Y3QgcmZraWxsCQkqcmZraWxsOwogCiAJREVDTEFSRV9CSVRNQVAoZGV2X2ZsYWdzLCBfX0hD
+SV9OVU1fRkxBR1MpOwotCURFQ0xBUkVfQklUTUFQKGNvbm5fZmxhZ3MsIF9fSENJX0NPTk5fTlVN
+X0ZMQUdTKTsKKwloY2lfY29ubl9mbGFnc190CWNvbm5fZmxhZ3M7CiAKIAlfX3M4CQkJYWR2X3R4
+X3Bvd2VyOwogCV9fdTgJCQlhZHZfZGF0YVtIQ0lfTUFYX0VYVF9BRF9MRU5HVEhdOwpAQCAtNzc1
+LDcgKzc3Miw3IEBAIHN0cnVjdCBoY2lfY29ubl9wYXJhbXMgewogCiAJc3RydWN0IGhjaV9jb25u
+ICpjb25uOwogCWJvb2wgZXhwbGljaXRfY29ubmVjdDsKLQlERUNMQVJFX0JJVE1BUChmbGFncywg
+X19IQ0lfQ09OTl9OVU1fRkxBR1MpOworCWhjaV9jb25uX2ZsYWdzX3QgZmxhZ3M7CiAJdTggIHBy
+aXZhY3lfbW9kZTsKIH07CiAKZGlmZiAtLWdpdCBhL25ldC9ibHVldG9vdGgvaGNpX2NvcmUuYyBi
+L25ldC9ibHVldG9vdGgvaGNpX2NvcmUuYwppbmRleCA1YWJiMmNhNWIxMjkuLjU5YTVjMTM0MWMy
+NiAxMDA2NDQKLS0tIGEvbmV0L2JsdWV0b290aC9oY2lfY29yZS5jCisrKyBiL25ldC9ibHVldG9v
+dGgvaGNpX2NvcmUuYwpAQCAtMjE1Myw3ICsyMTUzLDcgQEAgaW50IGhjaV9iZGFkZHJfbGlzdF9h
+ZGRfd2l0aF9mbGFncyhzdHJ1Y3QgbGlzdF9oZWFkICpsaXN0LCBiZGFkZHJfdCAqYmRhZGRyLAog
+CiAJYmFjcHkoJmVudHJ5LT5iZGFkZHIsIGJkYWRkcik7CiAJZW50cnktPmJkYWRkcl90eXBlID0g
+dHlwZTsKLQliaXRtYXBfZnJvbV91NjQoZW50cnktPmZsYWdzLCBmbGFncyk7CisJZW50cnktPmZs
+YWdzID0gZmxhZ3M7CiAKIAlsaXN0X2FkZCgmZW50cnktPmxpc3QsIGxpc3QpOwogCkBAIC0yNjM0
+LDcgKzI2MzQsNyBAQCBpbnQgaGNpX3JlZ2lzdGVyX2RldihzdHJ1Y3QgaGNpX2RldiAqaGRldikK
+IAkgKiBjYWxsYmFjay4KIAkgKi8KIAlpZiAoaGRldi0+d2FrZXVwKQotCQlzZXRfYml0KEhDSV9D
+T05OX0ZMQUdfUkVNT1RFX1dBS0VVUCwgaGRldi0+Y29ubl9mbGFncyk7CisJCWhkZXYtPmNvbm5f
+ZmxhZ3MgfD0gSENJX0NPTk5fRkxBR19SRU1PVEVfV0FLRVVQOwogCiAJaGNpX3NvY2tfZGV2X2V2
+ZW50KGhkZXYsIEhDSV9ERVZfUkVHKTsKIAloY2lfZGV2X2hvbGQoaGRldik7CmRpZmYgLS1naXQg
+YS9uZXQvYmx1ZXRvb3RoL2hjaV9yZXF1ZXN0LmMgYi9uZXQvYmx1ZXRvb3RoL2hjaV9yZXF1ZXN0
+LmMKaW5kZXggNjM1Y2M1ZmI0NTFlLi4zOGVjYWY5MjY0ZWUgMTAwNjQ0Ci0tLSBhL25ldC9ibHVl
+dG9vdGgvaGNpX3JlcXVlc3QuYworKysgYi9uZXQvYmx1ZXRvb3RoL2hjaV9yZXF1ZXN0LmMKQEAg
+LTQ4Miw3ICs0ODIsNyBAQCBzdGF0aWMgaW50IGFkZF90b19hY2NlcHRfbGlzdChzdHJ1Y3QgaGNp
+X3JlcXVlc3QgKnJlcSwKIAogCS8qIER1cmluZyBzdXNwZW5kLCBvbmx5IHdha2VhYmxlIGRldmlj
+ZXMgY2FuIGJlIGluIGFjY2VwdCBsaXN0ICovCiAJaWYgKGhkZXYtPnN1c3BlbmRlZCAmJgotCSAg
+ICAhdGVzdF9iaXQoSENJX0NPTk5fRkxBR19SRU1PVEVfV0FLRVVQLCBwYXJhbXMtPmZsYWdzKSkK
+KwkgICAgIShwYXJhbXMtPmZsYWdzICYgSENJX0NPTk5fRkxBR19SRU1PVEVfV0FLRVVQKSkKIAkJ
+cmV0dXJuIDA7CiAKIAkqbnVtX2VudHJpZXMgKz0gMTsKZGlmZiAtLWdpdCBhL25ldC9ibHVldG9v
+dGgvaGNpX3N5bmMuYyBiL25ldC9ibHVldG9vdGgvaGNpX3N5bmMuYwppbmRleCA0ZDIyMDNjNWYx
+YmIuLjI4NmQ2NzY3ZjAxNyAxMDA2NDQKLS0tIGEvbmV0L2JsdWV0b290aC9oY2lfc3luYy5jCisr
+KyBiL25ldC9ibHVldG9vdGgvaGNpX3N5bmMuYwpAQCAtMTYzNyw3ICsxNjM3LDcgQEAgc3RhdGlj
+IGludCBoY2lfbGVfc2V0X3ByaXZhY3lfbW9kZV9zeW5jKHN0cnVjdCBoY2lfZGV2ICpoZGV2LAog
+CSAqIGluZGljYXRlcyB0aGF0IExMIFByaXZhY3kgaGFzIGJlZW4gZW5hYmxlZCBhbmQKIAkgKiBI
+Q0lfT1BfTEVfU0VUX1BSSVZBQ1lfTU9ERSBpcyBzdXBwb3J0ZWQuCiAJICovCi0JaWYgKCF0ZXN0
+X2JpdChIQ0lfQ09OTl9GTEFHX0RFVklDRV9QUklWQUNZLCBwYXJhbXMtPmZsYWdzKSkKKwlpZiAo
+IShwYXJhbXMtPmZsYWdzICYgSENJX0NPTk5fRkxBR19ERVZJQ0VfUFJJVkFDWSkpCiAJCXJldHVy
+biAwOwogCiAJaXJrID0gaGNpX2ZpbmRfaXJrX2J5X2FkZHIoaGRldiwgJnBhcmFtcy0+YWRkciwg
+cGFyYW1zLT5hZGRyX3R5cGUpOwpAQCAtMTY2Niw3ICsxNjY2LDcgQEAgc3RhdGljIGludCBoY2lf
+bGVfYWRkX2FjY2VwdF9saXN0X3N5bmMoc3RydWN0IGhjaV9kZXYgKmhkZXYsCiAKIAkvKiBEdXJp
+bmcgc3VzcGVuZCwgb25seSB3YWtlYWJsZSBkZXZpY2VzIGNhbiBiZSBpbiBhY2NlcHRsaXN0ICov
+CiAJaWYgKGhkZXYtPnN1c3BlbmRlZCAmJgotCSAgICAhdGVzdF9iaXQoSENJX0NPTk5fRkxBR19S
+RU1PVEVfV0FLRVVQLCBwYXJhbXMtPmZsYWdzKSkKKwkgICAgIShwYXJhbXMtPmZsYWdzICYgSENJ
+X0NPTk5fRkxBR19SRU1PVEVfV0FLRVVQKSkKIAkJcmV0dXJuIDA7CiAKIAkvKiBTZWxlY3QgZmls
+dGVyIHBvbGljeSB0byBhY2NlcHQgYWxsIGFkdmVydGlzaW5nICovCkBAIC00ODg4LDcgKzQ4ODgs
+NyBAQCBzdGF0aWMgaW50IGhjaV91cGRhdGVfZXZlbnRfZmlsdGVyX3N5bmMoc3RydWN0IGhjaV9k
+ZXYgKmhkZXYpCiAJaGNpX2NsZWFyX2V2ZW50X2ZpbHRlcl9zeW5jKGhkZXYpOwogCiAJbGlzdF9m
+b3JfZWFjaF9lbnRyeShiLCAmaGRldi0+YWNjZXB0X2xpc3QsIGxpc3QpIHsKLQkJaWYgKCF0ZXN0
+X2JpdChIQ0lfQ09OTl9GTEFHX1JFTU9URV9XQUtFVVAsIGItPmZsYWdzKSkKKwkJaWYgKCEoYi0+
+ZmxhZ3MgJiBIQ0lfQ09OTl9GTEFHX1JFTU9URV9XQUtFVVApKQogCQkJY29udGludWU7CiAKIAkJ
+YnRfZGV2X2RiZyhoZGV2LCAiQWRkaW5nIGV2ZW50IGZpbHRlcnMgZm9yICVwTVIiLCAmYi0+YmRh
+ZGRyKTsKZGlmZiAtLWdpdCBhL25ldC9ibHVldG9vdGgvbWdtdC5jIGIvbmV0L2JsdWV0b290aC9t
+Z210LmMKaW5kZXggNzQ5MzdhODM0NjQ4Li5hZTc1OGFiMWI1NTggMTAwNjQ0Ci0tLSBhL25ldC9i
+bHVldG9vdGgvbWdtdC5jCisrKyBiL25ldC9ibHVldG9vdGgvbWdtdC5jCkBAIC00MDEzLDEwICs0
+MDEzLDExIEBAIHN0YXRpYyBpbnQgZXhwX2xsX3ByaXZhY3lfZmVhdHVyZV9jaGFuZ2VkKGJvb2wg
+ZW5hYmxlZCwgc3RydWN0IGhjaV9kZXYgKmhkZXYsCiAJbWVtY3B5KGV2LnV1aWQsIHJwYV9yZXNv
+bHV0aW9uX3V1aWQsIDE2KTsKIAlldi5mbGFncyA9IGNwdV90b19sZTMyKChlbmFibGVkID8gQklU
+KDApIDogMCkgfCBCSVQoMSkpOwogCisJLy8gRG8gd2UgbmVlZCB0byBiZSBhdG9taWMgd2l0aCB0
+aGUgY29ubl9mbGFncz8KIAlpZiAoZW5hYmxlZCAmJiBwcml2YWN5X21vZGVfY2FwYWJsZShoZGV2
+KSkKLQkJc2V0X2JpdChIQ0lfQ09OTl9GTEFHX0RFVklDRV9QUklWQUNZLCBoZGV2LT5jb25uX2Zs
+YWdzKTsKKwkJaGRldi0+Y29ubl9mbGFncyB8PSBIQ0lfQ09OTl9GTEFHX0RFVklDRV9QUklWQUNZ
+OwogCWVsc2UKLQkJY2xlYXJfYml0KEhDSV9DT05OX0ZMQUdfREVWSUNFX1BSSVZBQ1ksIGhkZXYt
+PmNvbm5fZmxhZ3MpOworCQloZGV2LT5jb25uX2ZsYWdzICY9IH5IQ0lfQ09OTl9GTEFHX0RFVklD
+RV9QUklWQUNZOwogCiAJcmV0dXJuIG1nbXRfbGltaXRlZF9ldmVudChNR01UX0VWX0VYUF9GRUFU
+VVJFX0NIQU5HRUQsIGhkZXYsCiAJCQkJICAmZXYsIHNpemVvZihldiksCkBAIC00NDM1LDggKzQ0
+MzYsNyBAQCBzdGF0aWMgaW50IGdldF9kZXZpY2VfZmxhZ3Moc3RydWN0IHNvY2sgKnNrLCBzdHJ1
+Y3QgaGNpX2RldiAqaGRldiwgdm9pZCAqZGF0YSwKIAogCWhjaV9kZXZfbG9jayhoZGV2KTsKIAot
+CWJpdG1hcF90b19hcnIzMigmc3VwcG9ydGVkX2ZsYWdzLCBoZGV2LT5jb25uX2ZsYWdzLAotCQkJ
+X19IQ0lfQ09OTl9OVU1fRkxBR1MpOworCXN1cHBvcnRlZF9mbGFncyA9IGhkZXYtPmNvbm5fZmxh
+Z3M7CiAKIAltZW1zZXQoJnJwLCAwLCBzaXplb2YocnApKTsKIApAQCAtNDQ0Nyw4ICs0NDQ3LDcg
+QEAgc3RhdGljIGludCBnZXRfZGV2aWNlX2ZsYWdzKHN0cnVjdCBzb2NrICpzaywgc3RydWN0IGhj
+aV9kZXYgKmhkZXYsIHZvaWQgKmRhdGEsCiAJCWlmICghYnJfcGFyYW1zKQogCQkJZ290byBkb25l
+OwogCi0JCWJpdG1hcF90b19hcnIzMigmY3VycmVudF9mbGFncywgYnJfcGFyYW1zLT5mbGFncywK
+LQkJCQlfX0hDSV9DT05OX05VTV9GTEFHUyk7CisJCWN1cnJlbnRfZmxhZ3MgPSBicl9wYXJhbXMt
+PmZsYWdzOwogCX0gZWxzZSB7CiAJCXBhcmFtcyA9IGhjaV9jb25uX3BhcmFtc19sb29rdXAoaGRl
+diwgJmNwLT5hZGRyLmJkYWRkciwKIAkJCQkJCWxlX2FkZHJfdHlwZShjcC0+YWRkci50eXBlKSk7
+CkBAIC00NDU2LDggKzQ0NTUsNyBAQCBzdGF0aWMgaW50IGdldF9kZXZpY2VfZmxhZ3Moc3RydWN0
+IHNvY2sgKnNrLCBzdHJ1Y3QgaGNpX2RldiAqaGRldiwgdm9pZCAqZGF0YSwKIAkJaWYgKCFwYXJh
+bXMpCiAJCQlnb3RvIGRvbmU7CiAKLQkJYml0bWFwX3RvX2FycjMyKCZjdXJyZW50X2ZsYWdzLCBw
+YXJhbXMtPmZsYWdzLAotCQkJCV9fSENJX0NPTk5fTlVNX0ZMQUdTKTsKKwkJY3VycmVudF9mbGFn
+cyA9IHBhcmFtcy0+ZmxhZ3M7CiAJfQogCiAJYmFjcHkoJnJwLmFkZHIuYmRhZGRyLCAmY3AtPmFk
+ZHIuYmRhZGRyKTsKQEAgLTQ1MDIsOCArNDUwMCw4IEBAIHN0YXRpYyBpbnQgc2V0X2RldmljZV9m
+bGFncyhzdHJ1Y3Qgc29jayAqc2ssIHN0cnVjdCBoY2lfZGV2ICpoZGV2LCB2b2lkICpkYXRhLAog
+CQkgICAmY3AtPmFkZHIuYmRhZGRyLCBjcC0+YWRkci50eXBlLAogCQkgICBfX2xlMzJfdG9fY3B1
+KGN1cnJlbnRfZmxhZ3MpKTsKIAotCWJpdG1hcF90b19hcnIzMigmc3VwcG9ydGVkX2ZsYWdzLCBo
+ZGV2LT5jb25uX2ZsYWdzLAotCQkJX19IQ0lfQ09OTl9OVU1fRkxBR1MpOworCS8vIFdlIHNob3Vs
+ZCB0YWtlIGhjaV9kZXZfbG9jaygpIGVhcmx5LCBJIHRoaW5rLi4gY29ubl9mbGFncyBjYW4gY2hh
+bmdlCisJc3VwcG9ydGVkX2ZsYWdzID0gaGRldi0+Y29ubl9mbGFnczsKIAogCWlmICgoc3VwcG9y
+dGVkX2ZsYWdzIHwgY3VycmVudF9mbGFncykgIT0gc3VwcG9ydGVkX2ZsYWdzKSB7CiAJCWJ0X2Rl
+dl93YXJuKGhkZXYsICJCYWQgZmxhZyBnaXZlbiAoMHgleCkgdnMgc3VwcG9ydGVkICgweCUweCki
+LApAQCAtNDUxOSw3ICs0NTE3LDcgQEAgc3RhdGljIGludCBzZXRfZGV2aWNlX2ZsYWdzKHN0cnVj
+dCBzb2NrICpzaywgc3RydWN0IGhjaV9kZXYgKmhkZXYsIHZvaWQgKmRhdGEsCiAJCQkJCQkJICAg
+ICAgY3AtPmFkZHIudHlwZSk7CiAKIAkJaWYgKGJyX3BhcmFtcykgewotCQkJYml0bWFwX2Zyb21f
+dTY0KGJyX3BhcmFtcy0+ZmxhZ3MsIGN1cnJlbnRfZmxhZ3MpOworCQkJYnJfcGFyYW1zLT5mbGFn
+cyA9IGN1cnJlbnRfZmxhZ3M7CiAJCQlzdGF0dXMgPSBNR01UX1NUQVRVU19TVUNDRVNTOwogCQl9
+IGVsc2UgewogCQkJYnRfZGV2X3dhcm4oaGRldiwgIk5vIHN1Y2ggQlIvRURSIGRldmljZSAlcE1S
+ICgweCV4KSIsCkBAIC00NTI5LDE1ICs0NTI3LDExIEBAIHN0YXRpYyBpbnQgc2V0X2RldmljZV9m
+bGFncyhzdHJ1Y3Qgc29jayAqc2ssIHN0cnVjdCBoY2lfZGV2ICpoZGV2LCB2b2lkICpkYXRhLAog
+CQlwYXJhbXMgPSBoY2lfY29ubl9wYXJhbXNfbG9va3VwKGhkZXYsICZjcC0+YWRkci5iZGFkZHIs
+CiAJCQkJCQlsZV9hZGRyX3R5cGUoY3AtPmFkZHIudHlwZSkpOwogCQlpZiAocGFyYW1zKSB7Ci0J
+CQlERUNMQVJFX0JJVE1BUChmbGFncywgX19IQ0lfQ09OTl9OVU1fRkxBR1MpOwotCi0JCQliaXRt
+YXBfZnJvbV91NjQoZmxhZ3MsIGN1cnJlbnRfZmxhZ3MpOwotCiAJCQkvKiBEZXZpY2VzIHVzaW5n
+IFJQQXMgY2FuIG9ubHkgYmUgcHJvZ3JhbW1lZCBpbiB0aGUKIAkJCSAqIGFjY2VwdGxpc3QgTEwg
+UHJpdmFjeSBoYXMgYmVlbiBlbmFibGUgb3RoZXJ3aXNlIHRoZXkKIAkJCSAqIGNhbm5vdCBtYXJr
+IEhDSV9DT05OX0ZMQUdfUkVNT1RFX1dBS0VVUC4KIAkJCSAqLwotCQkJaWYgKHRlc3RfYml0KEhD
+SV9DT05OX0ZMQUdfUkVNT1RFX1dBS0VVUCwgZmxhZ3MpICYmCisJCQlpZiAoKGN1cnJlbnRfZmxh
+Z3MgJiBIQ0lfQ09OTl9GTEFHX1JFTU9URV9XQUtFVVApICYmCiAJCQkgICAgIXVzZV9sbF9wcml2
+YWN5KGhkZXYpICYmCiAJCQkgICAgaGNpX2ZpbmRfaXJrX2J5X2FkZHIoaGRldiwgJnBhcmFtcy0+
+YWRkciwKIAkJCQkJCSBwYXJhbXMtPmFkZHJfdHlwZSkpIHsKQEAgLTQ1NDYsMTQgKzQ1NDAsMTMg
+QEAgc3RhdGljIGludCBzZXRfZGV2aWNlX2ZsYWdzKHN0cnVjdCBzb2NrICpzaywgc3RydWN0IGhj
+aV9kZXYgKmhkZXYsIHZvaWQgKmRhdGEsCiAJCQkJZ290byB1bmxvY2s7CiAJCQl9CiAKLQkJCWJp
+dG1hcF9mcm9tX3U2NChwYXJhbXMtPmZsYWdzLCBjdXJyZW50X2ZsYWdzKTsKKwkJCXBhcmFtcy0+
+ZmxhZ3MgPSBjdXJyZW50X2ZsYWdzOwogCQkJc3RhdHVzID0gTUdNVF9TVEFUVVNfU1VDQ0VTUzsK
+IAogCQkJLyogVXBkYXRlIHBhc3NpdmUgc2NhbiBpZiBIQ0lfQ09OTl9GTEFHX0RFVklDRV9QUklW
+QUNZCiAJCQkgKiBoYXMgYmVlbiBzZXQuCiAJCQkgKi8KLQkJCWlmICh0ZXN0X2JpdChIQ0lfQ09O
+Tl9GTEFHX0RFVklDRV9QUklWQUNZLAotCQkJCSAgICAgcGFyYW1zLT5mbGFncykpCisJCQlpZiAo
+cGFyYW1zLT5mbGFncyAmIEhDSV9DT05OX0ZMQUdfREVWSUNFX1BSSVZBQ1kpCiAJCQkJaGNpX3Vw
+ZGF0ZV9wYXNzaXZlX3NjYW4oaGRldik7CiAJCX0gZWxzZSB7CiAJCQlidF9kZXZfd2FybihoZGV2
+LCAiTm8gc3VjaCBMRSBkZXZpY2UgJXBNUiAoMHgleCkiLApAQCAtNzE1NCw4ICs3MTQ3LDcgQEAg
+c3RhdGljIGludCBhZGRfZGV2aWNlKHN0cnVjdCBzb2NrICpzaywgc3RydWN0IGhjaV9kZXYgKmhk
+ZXYsCiAJCXBhcmFtcyA9IGhjaV9jb25uX3BhcmFtc19sb29rdXAoaGRldiwgJmNwLT5hZGRyLmJk
+YWRkciwKIAkJCQkJCWFkZHJfdHlwZSk7CiAJCWlmIChwYXJhbXMpCi0JCQliaXRtYXBfdG9fYXJy
+MzIoJmN1cnJlbnRfZmxhZ3MsIHBhcmFtcy0+ZmxhZ3MsCi0JCQkJCV9fSENJX0NPTk5fTlVNX0ZM
+QUdTKTsKKwkJCWN1cnJlbnRfZmxhZ3MgPSBwYXJhbXMtPmZsYWdzOwogCX0KIAogCWVyciA9IGhj
+aV9jbWRfc3luY19xdWV1ZShoZGV2LCBhZGRfZGV2aWNlX3N5bmMsIE5VTEwsIE5VTEwpOwpAQCAt
+NzE2NCw4ICs3MTU2LDcgQEAgc3RhdGljIGludCBhZGRfZGV2aWNlKHN0cnVjdCBzb2NrICpzaywg
+c3RydWN0IGhjaV9kZXYgKmhkZXYsCiAKIGFkZGVkOgogCWRldmljZV9hZGRlZChzaywgaGRldiwg
+JmNwLT5hZGRyLmJkYWRkciwgY3AtPmFkZHIudHlwZSwgY3AtPmFjdGlvbik7Ci0JYml0bWFwX3Rv
+X2FycjMyKCZzdXBwb3J0ZWRfZmxhZ3MsIGhkZXYtPmNvbm5fZmxhZ3MsCi0JCQlfX0hDSV9DT05O
+X05VTV9GTEFHUyk7CisJc3VwcG9ydGVkX2ZsYWdzID0gaGRldi0+Y29ubl9mbGFnczsKIAlkZXZp
+Y2VfZmxhZ3NfY2hhbmdlZChOVUxMLCBoZGV2LCAmY3AtPmFkZHIuYmRhZGRyLCBjcC0+YWRkci50
+eXBlLAogCQkJICAgICBzdXBwb3J0ZWRfZmxhZ3MsIGN1cnJlbnRfZmxhZ3MpOwogCg==
+--00000000000008827805e0b7da33--

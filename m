@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424E253D953
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 05:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3175753D956
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 05:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243538AbiFEDD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 23:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S243581AbiFEDOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 23:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235270AbiFEDDY (ORCPT
+        with ESMTP id S235270AbiFEDOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 23:03:24 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60167393EA;
-        Sat,  4 Jun 2022 20:03:21 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id b17so5615386ilh.6;
-        Sat, 04 Jun 2022 20:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=QW2mNsv+N8owCdPUNlE7uQX4EDUVw57AHy4UPadNzOE=;
-        b=eO2E+ixJYPTyfg0G3tkTGS885Ngol6i2AJRBJi84MUbUD8HEtYzF/HpSl9IyMj5QZk
-         Sq5IGZmFKdYo77+WDCeRwZY3tUF5pHfIGjUr+8am9fZwquvErOMcj0BLhnz1UNyIKxm/
-         50cv9GseKkH1/BosnmZJbMoEIgSFd45U25aXJewSDEvgcZXOU93i9KAKxbY8aQzTscD4
-         WB1S8LRtjdKd1K6sz3IQ+DPmSfa+QrWVmW4VmVT1X+Qewsu4C6uAmLHNmlQ8mYbHM+Sn
-         /DjbaLZ6O6IPVjXO6W7nTWsfJjs7+yAtO2GareMXY6R/b9fTcqlOgQIKyhzJZbfYzzjh
-         ozXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=QW2mNsv+N8owCdPUNlE7uQX4EDUVw57AHy4UPadNzOE=;
-        b=sldKMUEruKovvy8CtIkF/DcGLPUTYe1ewK4gIUyGmffWDsJyAH9wQkCU6axGqFvFIa
-         2o00FqlqmTRxnlbUv878Dbek5XLGFK8OL3hMDrGnk6MulFaShJk3pByMoHeenDE+pgpb
-         PqFnKnPQrsGW2ztI0C0V3V6bWkSSw0rhuFmtF/dHbf8bGc22lDNNJQ8Xt3rn5tmt237K
-         0/0dXTCTN89/kbaiWvORZNZE7CY3osVDg8hAK56m+bhyfEN2fiM2a3LfQ5p2hj9Ae01D
-         a004jz/xERjA08Cx+p7aLsECR7WWOF+7+g0wB+JhoUOlTakerb6pO4QgqiKAwwBX5mNT
-         vopw==
-X-Gm-Message-State: AOAM530awkN4czKFIGxMcjPad2KmjXYqrc6MGt0KJZL4IKNiprXQk1Pu
-        M62JJ6DjQDbVGCrYUDQpCDLa2SAYKTBRLO0ZZO8=
-X-Google-Smtp-Source: ABdhPJy0is8aeCRAAON5p7AE+1eUq9z4Wiwcvr1Q3byfQpyTir1nczSsHbuqMDbEWgZLMEFwX7CwxA==
-X-Received: by 2002:a92:ddc7:0:b0:2c2:91f5:146b with SMTP id d7-20020a92ddc7000000b002c291f5146bmr10373121ilr.21.1654398200330;
-        Sat, 04 Jun 2022 20:03:20 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id g10-20020a02a08a000000b0032e7456da06sm4297417jah.15.2022.06.04.20.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 20:03:19 -0700 (PDT)
-Message-ID: <629c1cf7.1c69fb81.911b8.9ef7@mx.google.com>
-Date:   Sat, 04 Jun 2022 20:03:19 -0700 (PDT)
-X-Google-Original-Date: Sun, 05 Jun 2022 03:03:18 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220603173818.716010877@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 00/53] 5.10.120-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 4 Jun 2022 23:14:37 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2FB54ECFB;
+        Sat,  4 Jun 2022 20:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=TUBfwF53I+2MtjAGYa
+        pwu8YmcHWT7Pc/VRs7clOHSnE=; b=ZCqQKZAt5oWK5y3REdGO4gj2itwrzw0hCp
+        vjMDwzhzbFIT+CNKCu6HyYEssriY+d9ejF2H3ppC1IHy8KIChiT5uOskW1sxTL7Y
+        /TqK7b4EcM+LTy6o4+T4PPcBkXg2Syn8Au7RU4wqpEvEi3rE+VIVEMvK4rRxhqMy
+        lMYqZo8zU=
+Received: from localhost.localdomain (unknown [171.221.147.121])
+        by smtp8 (Coremail) with SMTP id DMCowADHgyE4H5xi7gqqGA--.22831S2;
+        Sun, 05 Jun 2022 11:13:01 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     nbd@nbd.name, alexander.duyck@gmail.com
+Cc:     john@phrozen.org, sean.wang@mediatek.com, Mark-MC.Lee@mediatek.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, matthias.bgg@gmail.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chen Lin <chen45464546@163.com>
+Subject: [PATCH v3] net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+Date:   Sun,  5 Jun 2022 11:12:37 +0800
+Message-Id: <1654398757-2937-1-git-send-email-chen45464546@163.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <CAKgT0UdR-bdiZXsV_=8yJUS8zjoO6jeBS5bKNWAyxwLCiOP8ZQ@mail.gmail.com>
+References: <CAKgT0UdR-bdiZXsV_=8yJUS8zjoO6jeBS5bKNWAyxwLCiOP8ZQ@mail.gmail.com>
+X-CM-TRANSID: DMCowADHgyE4H5xi7gqqGA--.22831S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyfKF4rCw15Jw1UJF1DZFb_yoW8AFWrpr
+        4Yya43ZFyxAr4DG395Aa1UZFs8Aw4xKryUKry3Z34fZwn8tFWrKFyktFW5uryakrWvkFyS
+        yrs0vr9I9Fn5Kw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi22NAUUUUU=
+X-Originating-IP: [171.221.147.121]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbB2A0XnmBHK0PEJgAAsx
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Jun 2022 19:42:45 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.120 release.
-> There are 53 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 05 Jun 2022 17:38:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.120-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+When rx_flag == MTK_RX_FLAGS_HWLRO, 
+rx_data_len = MTK_MAX_LRO_RX_LENGTH(4096 * 3) > PAGE_SIZE.
+netdev_alloc_frag is for alloction of page fragment only.
+Reference to other drivers and Documentation/vm/page_frags.rst
 
-5.10.120-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Branch to use __get_free_pages when ring->frag_size > PAGE_SIZE.
+
+Signed-off-by: Chen Lin <chen45464546@163.com>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c |   16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index b3b3c07..ba9259a 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1467,7 +1467,13 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 			goto release_desc;
+ 
+ 		/* alloc new buffer */
+-		new_data = napi_alloc_frag(ring->frag_size);
++		if (ring->frag_size <= PAGE_SIZE)
++			new_data = napi_alloc_frag(ring->frag_size);
++		else
++			new_data = (void *)__get_free_pages(GFP_ATOMIC |
++			  __GFP_COMP | __GFP_NOWARN,
++			  get_order(mtk_max_frag_size(MTK_MAX_LRO_RX_LENGTH)));
++
+ 		if (unlikely(!new_data)) {
+ 			netdev->stats.rx_dropped++;
+ 			goto release_desc;
+@@ -1914,7 +1920,13 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < rx_dma_size; i++) {
+-		ring->data[i] = netdev_alloc_frag(ring->frag_size);
++		if (ring->frag_size <= PAGE_SIZE)
++			ring->data[i] = netdev_alloc_frag(ring->frag_size);
++		else
++			ring->data[i] = (void *)__get_free_pages(GFP_KERNEL |
++			  __GFP_COMP | __GFP_NOWARN,
++			  get_order(mtk_max_frag_size(MTK_MAX_LRO_RX_LENGTH)));
++
+ 		if (!ring->data[i])
+ 			return -ENOMEM;
+ 	}
+-- 
+1.7.9.5
 

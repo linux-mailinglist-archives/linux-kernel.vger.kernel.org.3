@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C3553DD66
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 19:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA4053DD6A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 19:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346558AbiFERmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 13:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S1346608AbiFERna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 13:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbiFERmc (ORCPT
+        with ESMTP id S231337AbiFERn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 13:42:32 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2707021272;
-        Sun,  5 Jun 2022 10:42:31 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id a21-20020a9d4715000000b0060bfaac6899so488361otf.12;
-        Sun, 05 Jun 2022 10:42:31 -0700 (PDT)
+        Sun, 5 Jun 2022 13:43:29 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D43024F20;
+        Sun,  5 Jun 2022 10:43:29 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id p129so12354603oig.3;
+        Sun, 05 Jun 2022 10:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=M83SyTxPwptuBRI/TcXfSCy3PAtbpLoDDYJMUpnbI+Q=;
-        b=LPpPGRLnb2kknlOrlPzdjsP6EoUVAGCPS7515uGwBb0yBK2tDV4uX9gWs2P2BoFDIi
-         8RF6vTw+H/lO9/xloKrAIpTuv2PduWYtgWEeiCXmYbP6NrQa/b9IQLI+zQuA78LaXVwG
-         6/BMH5BbqSCc/ZXDc5LUjYxygYBQesyg8gVpNn6Z/YBvxTCo839IhlqQPr6sgceYx18k
-         J20A7+BNyFfsKZuiGRk50wupfILTfh0ULtWXYCb+uIb9vKMBlI/NhyF6NW/C9NaKezPm
-         vM7wBtbkQ/IH4AXz5kE5WlehvJEVaEIk14YuWAUwA6jv7czd67jbzmzwNi8TGHepVjHh
-         hrmg==
+        bh=syz+aq4yQ+d29HeNVzlXwYRjc0RSf1w//KCrHFy1UjI=;
+        b=HKd6XhDFPatoPUjbIKd0NbbWS1cAIibhPK8VWoKf684+ughd317JXWN2kkUr11y4B/
+         cNqeL0S5FbwNQRWZWec5AqILzz3hBOW84Voi0F3OW/P/jUHx8+xp1Fgat9c/U9352KVD
+         qU8qgVe8dtwY4si9yfE7o/2KqGMIebAEGmjgFsmFNgKoGkn0d8eihrn75cXPLZ95C9C4
+         V8UMqNvixUJOxSzKWhiCARZYbFvx/jgq8EsO1nKWTY6jqZye+h1xUaNsxAqEpcKWUlCJ
+         E3NzTiUQ+T6XulEQvObcx37+OGxONgiauvN3MbolMYhspOEFb8ioWD0vi5y4Chxs7wGu
+         fgmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=M83SyTxPwptuBRI/TcXfSCy3PAtbpLoDDYJMUpnbI+Q=;
-        b=rGFbE4LAtcGmFD2+NtbMW+FHjE7LF5OX9OaOnDuiSm9hhoRVlv8pnKsKRd6Lh/6SKl
-         xDCfntIWlPAuP07hG4pf64D9jO9J7awXB8UihyczUgyxyTSNXSJUuix/kK0poXTuPHkK
-         USuFCQ/kudWVMT7OnwwH7W8PFK97tj7zUAZztlGqt50e/a8iJxhiqrLKA2oTnLDyzsBQ
-         uEVCue54o5I71+GH8IaPuNTcfHWBfDwdbhM+sN2Bj6FHL/vaFIhOyIwYl65sRFJsM04v
-         wJi7QmaqejKdlMvEGPW4M/wTbpbw3gkIQa+fKGi5908TNAVu4DIxqWp9+AQOoyPEmwsD
-         hjBw==
-X-Gm-Message-State: AOAM533B2Yh4NpuKRjjOYVmOBgGCsphiRyc++dQvVqtgdJUtDADKrhrJ
-        D818YV+pMbtY6HVAb79klM+uq9FUZto=
-X-Google-Smtp-Source: ABdhPJy21cidTd6EOnNTgbpC66oAN9uXiF9AuLkdDjfS207bFqXnMPZNkHy4QTPHTjlT8UHvdYgvSQ==
-X-Received: by 2002:a05:6830:2002:b0:60a:df8c:18f8 with SMTP id e2-20020a056830200200b0060adf8c18f8mr8216871otp.184.1654450950472;
-        Sun, 05 Jun 2022 10:42:30 -0700 (PDT)
+        bh=syz+aq4yQ+d29HeNVzlXwYRjc0RSf1w//KCrHFy1UjI=;
+        b=K7VKETSJ1nw/Boo1POwMgoJAVm4VT1eD7qfBtB5RsyK567On3Caz+sxeyTaWHUSMA2
+         TFaEJAYbkKhKN6K7KCHhojrJeVWgcKyfBWUO7+pXCghSixGQOtZ61jCejMGK0hoT4JZp
+         Bg1I3Kb90ug9gztHNWQgEfY7BQ/i6WfnbQ+Cbbky8nke+vsIidY3QfUQJZVdFSHqK5bH
+         lU3bF99z+9H6l++JEpJhLU0Qgs2YZSHH6H4oP3spCztV74qZRut0k35sV11V++2u782X
+         Vp/QaJRF54BxG7Sa3bhOzDU8MUmrPRWBJyUonB7AV3Q1ST/trMvKN7zI8q7F6DJqWptm
+         dznQ==
+X-Gm-Message-State: AOAM532JhFIYlbRxpbkSfcy+nsFnUdrfnZvyqURxhcMn3mzzzCZ1VbzZ
+        4jcE+c2z/+gTQxADXsspu14=
+X-Google-Smtp-Source: ABdhPJwP1nsRbiB0ogi7pXgVYCtRkB3jEbilYUZHM5g8g8oe1K684F01JBpMxdO04dKrrB3HsJcAKw==
+X-Received: by 2002:a05:6808:23c8:b0:32e:53b0:56a0 with SMTP id bq8-20020a05680823c800b0032e53b056a0mr7513732oib.99.1654451008398;
+        Sun, 05 Jun 2022 10:43:28 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o15-20020a4a84cf000000b0035eb4e5a6cesm6614459oog.36.2022.06.05.10.42.29
+        by smtp.gmail.com with ESMTPSA id m34-20020a056870562200b000f33624baa4sm6000285oao.18.2022.06.05.10.43.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 10:42:29 -0700 (PDT)
+        Sun, 05 Jun 2022 10:43:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 5 Jun 2022 10:42:28 -0700
+Date:   Sun, 5 Jun 2022 10:43:26 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     hdegoede@redhat.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (sch56xx-common) Add DMI override table
-Message-ID: <20220605174228.GA3144764@roeck-us.net>
-References: <20220604220200.2567-1-W_Armin@gmx.de>
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Shady Nawara <shady.nawara@outlook.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add support for Strix Z690-a D4
+Message-ID: <20220605174326.GA3144889@roeck-us.net>
+References: <20220603122758.1561064-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220604220200.2567-1-W_Armin@gmx.de>
+In-Reply-To: <20220603122758.1561064-1-eugene.shalygin@gmail.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -72,21 +74,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 12:02:00AM +0200, Armin Wolf wrote:
-> Some devices like the Fujitsu Celsius W380 do contain
-> a working sch56xx hardware monitoring device, but do
-> not contain the necessary DMI onboard device.
+On Fri, Jun 03, 2022 at 02:27:58PM +0200, Eugene Shalygin wrote:
+> From: Shady Nawara <shady.nawara@outlook.com>
 > 
-> Do not check for the presence of an suitable onboard device
-> on these machines. The list of affected machines was created
-> using data collected by the Linux Hardware Project.
+> adds T_Sensor and VRM Temp sensors for the Asus Strix z690-a D4 motherboard
 > 
-> Tested on a Fujitsu Esprimo P720, but sadly not on a affected
-> machine.
-> 
-> Fixes: 393935baa45e (hwmon: (sch56xx-common) Add automatic module loading on supported devices)
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Shady Nawara <shady.nawara@outlook.com>
+> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 
 Applied to hwmon-next.
 
@@ -94,71 +88,76 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/sch56xx-common.c | 44 ++++++++++++++++++++++++++--------
->  1 file changed, 34 insertions(+), 10 deletions(-)
+>  Documentation/hwmon/asus_ec_sensors.rst |  1 +
+>  drivers/hwmon/asus-ec-sensors.c         | 18 ++++++++++++++++++
+>  2 files changed, 19 insertions(+)
 > 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-> index 3ece53adabd6..de3a0886c2f7 100644
-> --- a/drivers/hwmon/sch56xx-common.c
-> +++ b/drivers/hwmon/sch56xx-common.c
-> @@ -523,6 +523,28 @@ static int __init sch56xx_device_add(int address, const char *name)
->  	return PTR_ERR_OR_ZERO(sch56xx_pdev);
->  }
-> 
-> +static const struct dmi_system_id sch56xx_dmi_override_table[] __initconst = {
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "CELSIUS W380"),
-> +		},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO P710"),
-> +		},
-> +	},
-> +	{
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "ESPRIMO E9900"),
-> +		},
-> +	},
-> +	{ }
+> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
+> index 78ca69eda877..00d8c46ef9e0 100644
+> --- a/Documentation/hwmon/asus_ec_sensors.rst
+> +++ b/Documentation/hwmon/asus_ec_sensors.rst
+> @@ -19,6 +19,7 @@ Supported boards:
+>   * ROG STRIX X570-E GAMING WIFI II
+>   * ROG STRIX X570-F GAMING
+>   * ROG STRIX X570-I GAMING
+> + * ROG STRIX Z690-A GAMING WIFI D4
+>  
+>  Authors:
+>      - Eugene Shalygin <eugene.shalygin@gmail.com>
+> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+> index 57e11b2bab74..886a71b4c64e 100644
+> --- a/drivers/hwmon/asus-ec-sensors.c
+> +++ b/drivers/hwmon/asus-ec-sensors.c
+> @@ -54,6 +54,8 @@ static char *mutex_path_override;
+>  /* ACPI mutex for locking access to the EC for the firmware */
+>  #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
+>  
+> +#define ASUS_HW_ACCESS_MUTEX_RMTW_ASMX	"\\RMTW.ASMX"
+> +
+>  #define MAX_IDENTICAL_BOARD_VARIATIONS	3
+>  
+>  /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
+> @@ -139,6 +141,7 @@ enum board_family {
+>  	family_unknown,
+>  	family_amd_400_series,
+>  	family_amd_500_series,
+> +	family_intel_600_series
+>  };
+>  
+>  /* All the known sensors for ASUS EC controllers */
+> @@ -197,6 +200,12 @@ static const struct ec_sensor_info sensors_family_amd_500[] = {
+>  		EC_SENSOR("Water_Out", hwmon_temp, 1, 0x01, 0x01),
+>  };
+>  
+> +static const struct ec_sensor_info sensors_family_intel_600[] = {
+> +	[ec_sensor_temp_t_sensor] =
+> +		EC_SENSOR("T_Sensor", hwmon_temp, 1, 0x00, 0x3d),
+> +	[ec_sensor_temp_vrm] = EC_SENSOR("VRM", hwmon_temp, 1, 0x00, 0x3e),
 > +};
 > +
->  /* For autoloading only */
->  static const struct dmi_system_id sch56xx_dmi_table[] __initconst = {
->  	{
-> @@ -543,16 +565,18 @@ static int __init sch56xx_init(void)
->  		if (!dmi_check_system(sch56xx_dmi_table))
->  			return -ENODEV;
-> 
-> -		/*
-> -		 * Some machines like the Esprimo P720 and Esprimo C700 have
-> -		 * onboard devices named " Antiope"/" Theseus" instead of
-> -		 * "Antiope"/"Theseus", so we need to check for both.
-> -		 */
-> -		if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-> -		    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-> -			return -ENODEV;
-> +		if (!dmi_check_system(sch56xx_dmi_override_table)) {
-> +			/*
-> +			 * Some machines like the Esprimo P720 and Esprimo C700 have
-> +			 * onboard devices named " Antiope"/" Theseus" instead of
-> +			 * "Antiope"/"Theseus", so we need to check for both.
-> +			 */
-> +			if (!dmi_find_device(DMI_DEV_TYPE_OTHER, "Antiope", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Antiope", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, "Theseus", NULL) &&
-> +			    !dmi_find_device(DMI_DEV_TYPE_OTHER, " Theseus", NULL))
-> +				return -ENODEV;
-> +		}
->  	}
-> 
->  	/*
+>  /* Shortcuts for common combinations */
+>  #define SENSOR_SET_TEMP_CHIPSET_CPU_MB                                         \
+>  	(SENSOR_TEMP_CHIPSET | SENSOR_TEMP_CPU | SENSOR_TEMP_MB)
+> @@ -330,6 +339,12 @@ static const struct ec_board_info board_info[] = {
+>  		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
+>  		.family = family_amd_500_series,
+>  	},
+> +	{
+> +		.board_names = {"ROG STRIX Z690-A GAMING WIFI D4"},
+> +		.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
+> +		.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
+> +		.family = family_intel_600_series,
+> +	},
+>  	{}
+>  };
+>  
+> @@ -799,6 +814,9 @@ static int __init asus_ec_probe(struct platform_device *pdev)
+>  	case family_amd_500_series:
+>  		ec_data->sensors_info = sensors_family_amd_500;
+>  		break;
+> +	case family_intel_600_series:
+> +		ec_data->sensors_info = sensors_family_intel_600;
+> +		break;
+>  	default:
+>  		dev_err(dev, "Unknown board family: %d",
+>  			ec_data->board_info->family);

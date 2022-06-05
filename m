@@ -2,181 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C1053DEFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 01:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A433553DF02
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 01:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351830AbiFEXqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 19:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S1351831AbiFEX5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 19:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348637AbiFEXqR (ORCPT
+        with ESMTP id S1348738AbiFEX46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 19:46:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F230366A4;
-        Sun,  5 Jun 2022 16:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654472776; x=1686008776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n/CPBD9mjhSpvD3GBbfLc0rRsVqgVN0gzOX/Kll/qEY=;
-  b=eRWxWNvkaF1pH+sGl9Czd0YYP5vjbZis9HvbxQS5GHsslKsN9/o5QV42
-   Ibeii5ZyLqlYk1HF0gq1OrGVBrlWdUcBUt6Ewt5MMrXPljIwqmxIjTHNV
-   BObSGTpnDntxcIvahw19h43TCdQA6miVy6Xzi688VrGdk8rrcl6UmMuWD
-   QRe524RKkl89N4VBwvWqx2qIRA6LtZbLZCwVmNvbI86zXR8L9qz7iUwsb
-   J0YDxoLjFXGv1mgI4JtknW/IZn9fS82sDcgDpzyhG5xWhD+4VXkxP+yJv
-   CYobkZ7ieTwyWMLLsZC3SfDtUKV1D59jAenmBKO6OYFvn9PTyvzPvCK5B
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276642302"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="276642302"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 16:46:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="708839521"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jun 2022 16:46:01 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nxzwW-000CKp-IR;
-        Sun, 05 Jun 2022 23:46:00 +0000
-Date:   Mon, 6 Jun 2022 07:45:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>, mani@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        quic_srichara@quicinc.com, quic_mdalam@quicinc.com
-Subject: Re: [PATCH] mtd: rawnand: qcom: Implement exec_op()
-Message-ID: <202206060716.xdJ89V2D-lkp@intel.com>
-References: <1654273498-31998-1-git-send-email-quic_mdalam@quicinc.com>
+        Sun, 5 Jun 2022 19:56:58 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9DB3B3EB
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 16:56:56 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id me5so25400846ejb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 16:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iRX+dAaHFYHOMUkkn7e8l97Dwcch2sYAXae8M4f8XjE=;
+        b=B+w0Y6o1NT9jGOE9kjSjrSBAJ9eA6U+dI1XGTGNKFUSIW1CGxv58Uvz8TroRpXFL1I
+         jOVUYOxXT6wmSLmfjsCY84xZJczlEuYLR0s8LaRgKZd9k2S+h1lWW2reAZZdqlSLPNu4
+         ZeJUTW8DlEBxbtUxbl/awnYiB+zDYOwZ9VUro=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iRX+dAaHFYHOMUkkn7e8l97Dwcch2sYAXae8M4f8XjE=;
+        b=s4ytOV8LF/wmxXVSXlxV6DfGt+lixV4G4KXRORUmOD18toznsgvGmuiRu+1aJUa3Mz
+         jRonHhfh5o4bjdnEoj2bGZRWGC12S0vytgQyDPOul3m5/KfwTgIWBZuGgiYkXJESYyFT
+         VJlruu/H9J+0qVl6dNTtd0pJGs1jR86tgteCpIdz7HbEAD21nBkNuSdJ87G2OLcEr+ON
+         v7Qk8QKbfTIQHuc9CuV/Oyotp6scMcxR4/PbDXsOguyue/QEWBuMhK9L5d7RMDY/0m/C
+         qCmjkteIixnhYtBrYtdwjL5mXpoWQUl8JXXBpSdrJlg44M1DBE/YtjW8BU0EXvP3AugU
+         XuOA==
+X-Gm-Message-State: AOAM533cI4xEUI5hA07LWqD3IptfF24K7k/DdSbMy+gPnvJYnudGZ6Ik
+        4ejGAXWMEqXLhOLdw/UnxZwKlVP9rY31r5DW528=
+X-Google-Smtp-Source: ABdhPJyi+zLpVeuf7BaUT7coRoRikZd4VZaWgP7K4Y2M9SLmWYKGyvjHih6eNm9SMKgJ5bs1/eNsNA==
+X-Received: by 2002:a17:907:9483:b0:6ff:b1:467a with SMTP id dm3-20020a170907948300b006ff00b1467amr19101069ejc.683.1654473415292;
+        Sun, 05 Jun 2022 16:56:55 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id jg36-20020a170907972400b00701eb600df8sm5886394ejc.169.2022.06.05.16.56.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 16:56:53 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id k16so17737798wrg.7
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 16:56:53 -0700 (PDT)
+X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
+ f15-20020a0560001b0f00b00210313aef2amr18555328wrz.281.1654473412987; Sun, 05
+ Jun 2022 16:56:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1654273498-31998-1-git-send-email-quic_mdalam@quicinc.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220605162537.1604762-1-yury.norov@gmail.com>
+ <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com> <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 5 Jun 2022 16:56:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com>
+Message-ID: <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com>
+Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Md,
+On Sun, Jun 5, 2022 at 11:51 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> *Most* of the accesses to those connection flags seem to be with
+> hci_dev_lock() held, and the ones that aren't can't possibly depend on
+> atomicity since those things are currently copied around with random
+> other "copy bitmaps" functions.
 
-Thank you for the patch! Perhaps something to improve:
+I've committed that patch as commit e1cff7002b71 ("bluetooth: don't
+use bitmaps for random flag accesses").
 
-[auto build test WARNING on mtd/nand/next]
-[also build test WARNING on v5.18 next-20220603]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+That basically ends up reverting
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/mtd-rawnand-qcom-Implement-exec_op/20220605-235824
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-config: arm64-randconfig-r021-20220605 (https://download.01.org/0day-ci/archive/20220606/202206060716.xdJ89V2D-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 416a5080d89066029f9889dc23f94de47c2fa895)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/5ab4409034966f5503f62ef2df59408762a9e872
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Md-Sadre-Alam/mtd-rawnand-qcom-Implement-exec_op/20220605-235824
-        git checkout 5ab4409034966f5503f62ef2df59408762a9e872
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mtd/nand/raw/ drivers/nfc/nfcmrvl/
+  a9a347655d22 ("Bluetooth: MGMT: Add conditions for setting
+HCI_CONN_FLAG_REMOTE_WAKEUP")
+  6126ffabba6b ("Bluetooth: Introduce HCI_CONN_FLAG_DEVICE_PRIVACY device flag")
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+which did horrible things, and would end up overwriting the end of the
+bitmap allocation on 32-bit architectures.
 
-All warnings (new ones prefixed by >>):
+Luiz, if the reason for the change to use a bitmap type was because of
+some atomicity concerns, then you can do that by
 
->> drivers/mtd/nand/raw/qcom_nandc.c:2727:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-           default:
-           ^
-   drivers/mtd/nand/raw/qcom_nandc.c:2727:2: note: insert 'break;' to avoid fall-through
-           default:
-           ^
-           break; 
-   1 warning generated.
+ (a) change 'hci_conn_flags_t' to be an 'atomic_t' instead of a 'u8'
 
+ (b) change the regular accesses to it to use 'atomic_read/write()'
 
-vim +2727 drivers/mtd/nand/raw/qcom_nandc.c
+ (c) change the "bitfield" operations to use 'atomic_or/andnot()'
 
-  2691	
-  2692	static int qcom_nand_exec_instr(struct nand_chip *chip,
-  2693					const struct nand_op_instr *instr)
-  2694	{
-  2695		struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
-  2696		struct qcom_nand_host *host = to_qcom_nand_host(chip);
-  2697		u32 status;
-  2698		int ret = 0;
-  2699		bool wait = false;
-  2700		static int opcode;
-  2701	
-  2702		switch (instr->type) {
-  2703		case NAND_OP_CMD_INSTR:
-  2704			ret = qcom_nand_send_command(chip, instr->ctx.cmd.opcode);
-  2705			if (instr->ctx.cmd.opcode == NAND_CMD_RESET)
-  2706				wait = true;
-  2707			opcode = instr->ctx.cmd.opcode;
-  2708			break;
-  2709		case NAND_OP_ADDR_INSTR:
-  2710			qcom_nand_send_address(chip, instr, opcode);
-  2711			if (opcode != NAND_CMD_READ0 && opcode != NAND_CMD_READSTART &&
-  2712			    opcode != NAND_CMD_PARAM && opcode != NAND_CMD_SEQIN)
-  2713				wait = true;
-  2714			break;
-  2715		case NAND_OP_DATA_IN_INSTR:
-  2716			qcom_nand_read_buf(chip, instr->ctx.data.buf.in, instr->ctx.data.len);
-  2717			break;
-  2718		case NAND_OP_DATA_OUT_INSTR:
-  2719			wait = false;
-  2720			break;
-  2721		case NAND_OP_WAITRDY_INSTR:
-  2722			ret = readl_poll_timeout(nandc->base + NAND_FLASH_STATUS, status,
-  2723						 (status & FS_READY_BSY_N), 20,
-  2724						 instr->ctx.waitrdy.timeout_ms * 1000);
-  2725			if (opcode == NAND_CMD_PARAM)
-  2726				wait = true;
-> 2727		default:
-  2728			break;
-  2729		}
-  2730	
-  2731		if (wait) {
-  2732			if (opcode != NAND_CMD_PARAM)
-  2733				write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-  2734	
-  2735			if (opcode == NAND_CMD_READID)
-  2736				read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
-  2737	
-  2738			if (opcode == NAND_CMD_ERASE1) {
-  2739				read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
-  2740				write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
-  2741				write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
-  2742			}
-  2743	
-  2744			ret = submit_descs(nandc);
-  2745			if (ret)
-  2746				dev_err(nandc->dev, "failure submitting descs for command 0x%02x\n",
-  2747					opcode);
-  2748	
-  2749			free_descs(nandc);
-  2750			post_command(host, opcode);
-  2751		}
-  2752	
-  2753		return ret;
-  2754	}
-  2755	
+but honestly, when it used to mix atomic ops
+(set_bit/clear_bit/test_bit) with random non-atomic users
+(bitmap_from_u64(), bitmap_to_arr32() etc) it was never atomic to
+begin with.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regardless, trying to use bitmaps for this was absolutely not the
+right thing to ever do. It looks like gcc randomly started complaining
+when 'bitmap_from_u64()' was changed, but it was buggy before that
+too.
+
+                 Linus

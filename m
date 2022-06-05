@@ -2,109 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7536F53DCD0
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D63153DCD2
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351162AbiFEQHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S1351160AbiFEQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351095AbiFEQHJ (ORCPT
+        with ESMTP id S241758AbiFEQIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:07:09 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23194BE4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:07:07 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id q1so24720018ejz.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:07:07 -0700 (PDT)
+        Sun, 5 Jun 2022 12:08:18 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E14D64FD;
+        Sun,  5 Jun 2022 09:08:17 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kq6so11702498ejb.11;
+        Sun, 05 Jun 2022 09:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xCX7O8NhzvosQ50yk3GTkKJIoOozPRyC9OGxboOSoUY=;
-        b=XRB/B2HvcnHjpSY8mhPrsMez/FqrID+PhNvQkXoB5lRndHTYAU1PBfj7pM/igUW7tc
-         L1z9Z8yFXxAYjUeWmDalrSqltwk+GC+RfdUPdqnQ/e/XxW6A2t/oap45lGOJ/R/pc29U
-         OUXNgoiA5adWZxC69J5vl0X4j+1jgrDrXfxuKWL4TAPiObXDElGXbZy4eWoltwIYxKby
-         LtB2vcKbt4On/6Rko4XecEdJPKfmqOAVUdJcjtOjskWUhKkzCbnzlaG8is/yXk40xSr4
-         ndlPxW0t6ksAdvFda9e8NIV/IoT1tTPq5tHOiQL+OaLUdYyt6p0+w2obfSHXx8q0+UnM
-         NNIg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ixPNpJXNxCrkH6m95bjklRlhnWHapvw1lTyCnMl6Iq0=;
+        b=YuECi+VeLtzEzHynphVhiRdt2h+Qv9lB4MNEgjeCnoWBmZKhoxaS+aj0WFoFqlTU2L
+         mPGXhTFSARG9ocIKefhlHDIn+NAMjMQUzgkYYjwGepsirFG0b9BCaqiH4CwGFIQb95Q/
+         wiUbxAQj/8WFG+RAT4dN1lENTq11F2EAs0MNbgxJI4qu14Z4KenniYy9fQnq4YoYGArj
+         U/xtUfAEBxZbwGoHbhxZgf0+IWsHPSrJVogzMGsxsNGDOliPeDKprDnuzBr7wi8C723k
+         vRBo47cX+SRb4Lf1RurN2uXfdvT+xjoBhtRTOJa8snOu/yqk0Ho62bkT6m+5oLAn65t2
+         R40w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xCX7O8NhzvosQ50yk3GTkKJIoOozPRyC9OGxboOSoUY=;
-        b=YinvwZNlq+2auowiMZk/VFzCsMu6FGmVsW3DqMA71xteOXk6unVnPyMfVMpI6z60d7
-         2BQuV9mbgVcgTI47nun7ULDREhBDLZge5UieMjXRo6KwDlk37AngFYBHtUSjwO8rekKQ
-         no+6AOVZPWktWSVgLK7YPLiQYtZ5wNMvSENDlNdkMdAFoOjxma8ZIgyQJOASZo+8OW5S
-         CUN3PMD2lD156cLpUn03pn4GhKjxZlHMGeiyWO8gB2jzYDBEKEA//pFryhm+Hscc9jBN
-         ++QNS4R/PNM3Qvl3nUcGPCFoAu2T9uuhUM5ZO2hqcvv9IsJZOt2betotghpjzzS5YiMf
-         On0g==
-X-Gm-Message-State: AOAM531o9k2bE8tCqCKHmD3cknTW5292K4JX4Vfvudnv855E8mp1EQET
-        7oF8alxdFcil7PL9rOi6pVwM/Q==
-X-Google-Smtp-Source: ABdhPJzyB4vzVySmjCZzv2QY4cQpaKl2NPICl1GkzNdQ+5tqZ247Q0nUN0lnrmIliVTKFleNxN6Kpg==
-X-Received: by 2002:a17:907:7f0b:b0:6ff:4502:9c2f with SMTP id qf11-20020a1709077f0b00b006ff45029c2fmr18228155ejc.532.1654445225579;
-        Sun, 05 Jun 2022 09:07:05 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id lk24-20020a170906cb1800b006fa84a0af2asm5394921ejb.16.2022.06.05.09.07.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 09:07:05 -0700 (PDT)
-Message-ID: <6ac8c5c7-8d53-7bdb-2a1f-b49f95231c73@linaro.org>
-Date:   Sun, 5 Jun 2022 18:07:03 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ixPNpJXNxCrkH6m95bjklRlhnWHapvw1lTyCnMl6Iq0=;
+        b=zSAwQs0L+gdTH/8mCv6RpP/v8xl1/oo/Q8+M7Om/zk5hJjxX2AqGVZaJKHKby3o9n6
+         ZynTPfgtqvm6SPy9Cmc2bb9BVY4sf66s4USDO0V47yuJmKXWcbA64lNS6emJYW8d440o
+         xft6YeTMfeRWu164aqcU7aAjjvv25gLFnpYOTjCfuDck1wdfg3zooF70VQ1UNa0tn11I
+         TXodAPRGwkh8Ovid9S2pK2fEn7V7ZlMjHN8O5//1G674TxSs40qnmcWugc0+7DU+iH5X
+         wg0YjPR73kL9bgLAhkZywRTVhC0DX8BoVaNUIU9+A7eHHDXZM3q3xycecOUYyO2ifogT
+         cVSQ==
+X-Gm-Message-State: AOAM53095iw7uMZEmIwTjxBv+LbzIM8/0nkV0PP/TDpXaplWJgUqa6GW
+        LvWrpDjjC0r22d4ohtnmsXU=
+X-Google-Smtp-Source: ABdhPJy2BImOXcanYZF8iu5ps21IUE5ngzF2qvl41n7fSdnapoWccPwSFSffG4PFxKwSG6NpG/zvjw==
+X-Received: by 2002:a17:907:1c2a:b0:6ff:4275:1e54 with SMTP id nc42-20020a1709071c2a00b006ff42751e54mr18111035ejc.138.1654445295762;
+        Sun, 05 Jun 2022 09:08:15 -0700 (PDT)
+Received: from localhost.localdomain (239.125-180-91.adsl-dyn.isp.belgacom.be. [91.180.125.239])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170906050300b006fed99e1143sm5242240eja.61.2022.06.05.09.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 09:07:58 -0700 (PDT)
+From:   Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [PATCH] ia64: fix sparse warnings with cmpxchg() & xchg()
+Date:   Sun,  5 Jun 2022 18:07:38 +0200
+Message-Id: <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <87h7547k8c.fsf@toke.dk>
+References: <87h7547k8c.fsf@toke.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 8/8] dt-bindings: pinctrl: samsung: deprecate header
- with register constants
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Chanho Park <chanho61.park@samsung.com>,
-        Linus Walleij <linus.wallej@linaro.org>
-References: <20220605160508.134075-1-krzysztof.kozlowski@linaro.org>
- <20220605160508.134075-9-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220605160508.134075-9-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2022 18:05, Krzysztof Kozlowski wrote:
-> For convenience (less code duplication, some meaning added to raw
-> number), the pin controller pin configuration register values
-> were defined in the bindings header.  These are not some IDs or other
-> abstraction layer but raw numbers used in the registers
-> 
-> These constants do not fit the purpose of bindings.  They do not provide
-> any abstraction, any hardware and driver independent ID.  With minor
-> exceptions, the Linux drivers actually do not use the bindings header at
-> all.
-> 
-> All of the constants were moved already to headers local to DTS
-> (residing in DTS directory) and to Samsung pinctrl driver (where
-> applicable), so remove any references to the bindings header and add a
-> warning tha tit is deprecated.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
-> Reviewed-by: Linus Walleij <linus.wallej@linaro.org>
+On IA64, new sparse's warnings where issued after fixing
+some __rcu annotations in kernel/bpf/.
 
-This needs fixup in address             ^^^^.
+These new warnings are false positives and appear on IA64 because
+on this architecture, the macros for cmpxchg() and xchg() make
+casts that ignore sparse annotations.
 
-Best regards,
-Krzysztof
+This patch contains the minimal patch to fix this issue:
+adding a missing cast and some missing '__force'.
+
+Link: https://lore.kernel.org/r/20220601120013.bq5a3ynbkc3hngm5@mail
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+---
+
+Note: This patch is only compile tested on defconfig. The corresponding
+      binary is unchanged (except some .rodata with the kernel version)
+      as it should be.
+
+ arch/ia64/include/uapi/asm/cmpxchg.h | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/arch/ia64/include/uapi/asm/cmpxchg.h b/arch/ia64/include/uapi/asm/cmpxchg.h
+index 2c2f3cfeaa77..ca2e02685343 100644
+--- a/arch/ia64/include/uapi/asm/cmpxchg.h
++++ b/arch/ia64/include/uapi/asm/cmpxchg.h
+@@ -33,24 +33,24 @@ extern void ia64_xchg_called_with_bad_pointer(void);
+ 									\
+ 	switch (size) {							\
+ 	case 1:								\
+-		__xchg_result = ia64_xchg1((__u8 *)ptr, x);		\
++		__xchg_result = ia64_xchg1((__u8 __force *)ptr, x);	\
+ 		break;							\
+ 									\
+ 	case 2:								\
+-		__xchg_result = ia64_xchg2((__u16 *)ptr, x);		\
++		__xchg_result = ia64_xchg2((__u16 __force *)ptr, x);	\
+ 		break;							\
+ 									\
+ 	case 4:								\
+-		__xchg_result = ia64_xchg4((__u32 *)ptr, x);		\
++		__xchg_result = ia64_xchg4((__u32 __force *)ptr, x);	\
+ 		break;							\
+ 									\
+ 	case 8:								\
+-		__xchg_result = ia64_xchg8((__u64 *)ptr, x);		\
++		__xchg_result = ia64_xchg8((__u64 __force *)ptr, x);	\
+ 		break;							\
+ 	default:							\
+ 		ia64_xchg_called_with_bad_pointer();			\
+ 	}								\
+-	__xchg_result;							\
++	(__typeof__ (*(ptr)) __force) __xchg_result;			\
+ })
+ 
+ #ifndef __KERNEL__
+@@ -76,42 +76,42 @@ extern long ia64_cmpxchg_called_with_bad_pointer(void);
+ 									\
+ 	switch (size) {							\
+ 	case 1:								\
+-		_o_ = (__u8) (long) (old);				\
++		_o_ = (__u8) (long __force) (old);			\
+ 		break;							\
+ 	case 2:								\
+-		_o_ = (__u16) (long) (old);				\
++		_o_ = (__u16) (long __force) (old);			\
+ 		break;							\
+ 	case 4:								\
+-		_o_ = (__u32) (long) (old);				\
++		_o_ = (__u32) (long __force) (old);			\
+ 		break;							\
+ 	case 8:								\
+-		_o_ = (__u64) (long) (old);				\
++		_o_ = (__u64) (long __force) (old);			\
+ 		break;							\
+ 	default:							\
+ 		break;							\
+ 	}								\
+ 	switch (size) {							\
+ 	case 1:								\
+-		_r_ = ia64_cmpxchg1_##sem((__u8 *) ptr, new, _o_);	\
++		_r_ = ia64_cmpxchg1_##sem((__u8 __force *) ptr, new, _o_);	\
+ 		break;							\
+ 									\
+ 	case 2:								\
+-		_r_ = ia64_cmpxchg2_##sem((__u16 *) ptr, new, _o_);	\
++		_r_ = ia64_cmpxchg2_##sem((__u16 __force *) ptr, new, _o_);	\
+ 		break;							\
+ 									\
+ 	case 4:								\
+-		_r_ = ia64_cmpxchg4_##sem((__u32 *) ptr, new, _o_);	\
++		_r_ = ia64_cmpxchg4_##sem((__u32 __force *) ptr, new, _o_);	\
+ 		break;							\
+ 									\
+ 	case 8:								\
+-		_r_ = ia64_cmpxchg8_##sem((__u64 *) ptr, new, _o_);	\
++		_r_ = ia64_cmpxchg8_##sem((__u64 __force *) ptr, new, _o_);	\
+ 		break;							\
+ 									\
+ 	default:							\
+ 		_r_ = ia64_cmpxchg_called_with_bad_pointer();		\
+ 		break;							\
+ 	}								\
+-	(__typeof__(old)) _r_;						\
++	(__typeof__(old) __force) _r_;					\
+ })
+ 
+ #define cmpxchg_acq(ptr, o, n)	\
+-- 
+2.36.1
+

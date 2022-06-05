@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E331553DE91
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B3753DE92
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 00:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348249AbiFEWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 18:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S1348268AbiFEWLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 18:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238038AbiFEWHO (ORCPT
+        with ESMTP id S238038AbiFEWLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 18:07:14 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813B02AF4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 15:07:12 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id me5so25134552ejb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 15:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EvdrzNnwpDnDn9YN3OQw+McxNhWHrslS9QPN5TMLp4w=;
-        b=jvBhc6+k40HESfBa2/kHjiPXNsmhn9RWusQQuekRCoRpZQxLjI+/bUUbQl40oGkXNZ
-         DDlDD3Kts3OXg3AmYrDeujl79CfM+aMVcarycdisbklXcuz9M6WyPexFrr+ZQMwsJ7fn
-         dYHoHaT6aA2SCKYliWMEXzOsKPHOWWDi99Y6hRp5dv1oHYwcBWUEXQlnm+bbcGdQQLZH
-         LV2qZDFjXplNKazciGbp3xseWSxXEVDm6+uGpG8oJEcAMulX+6vxNeX0qqBb+3f0vEKP
-         okp7x7oGotXEuPMC3aAd5a+4/PqZ12tcenMvg6drAosssBmSjmuhpmp/86uuoPdeDk2c
-         QyMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EvdrzNnwpDnDn9YN3OQw+McxNhWHrslS9QPN5TMLp4w=;
-        b=NiRwjn7IfPLul1E/b0U+EKYTM+Z7uK2H4NolP4xn0WWjJwkdqSJ/DDjZRLnl0eE75i
-         LyXxAvb1EpG9Yy7vDtPh41kf9EPnKiOEbbilD7ye1j/5PLnfyrErgxdOfh5rLKRq5A6r
-         AX75DJFduOHDg97stub/RWGzq1YAvABXZiMuxFDDgTjEZRQ8lHIjVgYStnMLqcn5fet7
-         xR9CsYkugVlNUXm+bQfII0ziYA+KqpzZUC/hZDk0n3Kr+RQBMQ0bfubBT0wYtTqUdUtZ
-         akJoFLzRL7CaS02ArmhcG86bK1eJdic88ZWsN9d/2UFA7B0gt9XNNyDJzF5lIuqGnRRW
-         iNTA==
-X-Gm-Message-State: AOAM532xEgaP/4TuV86wRNxhgRMJmiE/kSwf4HUV+OyHcyqDm1rX5cME
-        0UmC5RqJNuawOut3ltkTzKCPAX115cUHXuVSleA=
-X-Google-Smtp-Source: ABdhPJyum2q6NTjWpptCxZaYoHpCsIXUQommOK3UQGv2TUoY11eOyZCV12TIf8OGUqFO9UJM26QCVQsp7K7VJczHj2I=
-X-Received: by 2002:a17:907:1b19:b0:6f0:1022:1430 with SMTP id
- mp25-20020a1709071b1900b006f010221430mr19174262ejc.13.1654466831106; Sun, 05
- Jun 2022 15:07:11 -0700 (PDT)
+        Sun, 5 Jun 2022 18:11:35 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBAB4DF7F
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 15:11:34 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:37948)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nxyT6-00C2pP-7e; Sun, 05 Jun 2022 16:11:32 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41754 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nxyT5-004SZw-BA; Sun, 05 Jun 2022 16:11:31 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Linux Containers <containers@lists.linux.dev>
+References: <875ylh8xxx.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wh0ZYiQuCJmohyYpk99mch=Nb+_m4DWxBX03DQWnsvCZA@mail.gmail.com>
+Date:   Sun, 05 Jun 2022 17:11:07 -0500
+In-Reply-To: <CAHk-=wh0ZYiQuCJmohyYpk99mch=Nb+_m4DWxBX03DQWnsvCZA@mail.gmail.com>
+        (Linus Torvalds's message of "Fri, 3 Jun 2022 15:59:33 -0700")
+Message-ID: <87tu8y69s4.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220601033927.47814-1-linmq006@gmail.com> <20220601033927.47814-3-linmq006@gmail.com>
-In-Reply-To: <20220601033927.47814-3-linmq006@gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 6 Jun 2022 00:07:00 +0200
-Message-ID: <CAFBinCCS2ypuv8jWCyhTVruGJTUfq394CySDDaXExHq4R526rQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] drm/meson: encoder_hdmi: Fix refcount leak in meson_encoder_hdmi_init
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nxyT5-004SZw-BA;;;mid=<87tu8y69s4.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/IcMM5ic1t771lZP5L72ecB8LyxksRPPU=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 270 ms - load_scoreonly_sql: 0.09 (0.0%),
+        signal_user_changed: 11 (4.1%), b_tie_ro: 9 (3.4%), parse: 1.18 (0.4%),
+         extract_message_metadata: 17 (6.3%), get_uri_detail_list: 1.37 (0.5%),
+         tests_pri_-1000: 16 (5.8%), tests_pri_-950: 1.37 (0.5%),
+        tests_pri_-900: 1.04 (0.4%), tests_pri_-90: 48 (17.7%), check_bayes:
+        46 (17.2%), b_tokenize: 4.9 (1.8%), b_tok_get_all: 5 (2.0%),
+        b_comp_prob: 1.91 (0.7%), b_tok_touch_all: 31 (11.4%), b_finish: 0.90
+        (0.3%), tests_pri_0: 146 (53.9%), check_dkim_signature: 0.56 (0.2%),
+        check_dkim_adsp: 3.2 (1.2%), poll_dns_idle: 0.89 (0.3%), tests_pri_10:
+        2.9 (1.1%), tests_pri_500: 23 (8.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [GIT PULL] ipc: per namespace ipc sysctl changes for v5.19
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-thank you for working on this!
-
-On Wed, Jun 1, 2022 at 5:40 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+> On Fri, Jun 3, 2022 at 10:21 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>
+>> These changes were sent for v5.18[1] but were dropped because some
+>> additional cleanups were requested.  Linus has given his nod[2] to the
+>> cleanups so I hope enough cleanups are present this time.
 >
-> of_graph_get_remote_node() returns remote device nodepointer with
-> refcount incremented, we should use of_node_put() on it when done.
-> Add missing of_node_put() to avoid refcount leak.
+> Well, I'll be happier still when the next set of cleanups hits:
 >
-> Fixes: e67f6037ae1b ("drm/meson: split out encoder from meson_dw_hdmi")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>    https://lore.kernel.org/all/CAHk-=wjJ2CP0ugbOnwAd-=Cw0i-q_xC1PbJ-_1jrvR-aisiAAA@mail.gmail.com/
+>
+> but yeah, that further cleanup series clearly wasn't quite ready yet.
 
-Note to self: at first I thought the following code needs to be changed as well:
-  notifier = cec_notifier_conn_register(&pdev->dev, NULL, &conn_info);
-  if (!notifier)
-    return -ENOMEM;
-But a few lines before this we already have:
-of_node_put(remote);
-Meaning: this patch is fine as is.
+Yes.  It came in during the merge window.  I have been keeping a weather
+eye on it but I really haven't had a chance to look yet.
 
-
-Best regards,
-Martin
+Eric

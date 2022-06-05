@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB7D53DE62
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D44F53DE68
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 23:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347761AbiFEV0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 17:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S1347792AbiFEVaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 17:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241991AbiFEV0B (ORCPT
+        with ESMTP id S1347849AbiFEV35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 17:26:01 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C5D4D24D;
-        Sun,  5 Jun 2022 14:26:00 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id 68so1287669qkk.9;
-        Sun, 05 Jun 2022 14:26:00 -0700 (PDT)
+        Sun, 5 Jun 2022 17:29:57 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0BF4CD58;
+        Sun,  5 Jun 2022 14:29:56 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id k4so2668385qth.8;
+        Sun, 05 Jun 2022 14:29:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=/UK9ijdy96x8DCtDL8y2FIG0/CEGyl91Wy+VkB6R2So=;
-        b=xwybu9uHDMp3touf1aI1AS0AbpgJmUaZHl9gNxZe29g5OAPRKpbiyzq0QsSAJO3Yq9
-         YDXVaITlusxEmcZmpoigvApIY1wRbmwnpUt/RvnMm5cPxHXLU42hnyBfn5RvhQggnMNi
-         KjXulKFhO7Vs9w3zg27nny+g8zBkKun1G/X8tkL7QhZCivGMYMdEQPJUsCr9gY9tkDYF
-         DyXnTrwOJd2sFFHsH3rBq6VCH+kEwWNOFwAtcAh7ZcOyv2BAjt08gqPsLmXAmtPjE0LM
-         QYeTXozg4oMLg+JycF2qDAYUySXokWvOidHLTVlWhuNpJcJc7iEK9VhD8iI7HshlMDmd
-         gmoA==
-X-Gm-Message-State: AOAM531/PYiAGZ2UJMXA6PoSSrxJrJU+KQGYhakq94TtWFW2ju2BhYgM
-        0Bn+314jAs4pfPcCd6h9lg==
-X-Google-Smtp-Source: ABdhPJyEop9w4xBaCYIjf/DVQB28Y/OqN0tkJGt+4cQZQiepHy5gy4KhZBhLpI9CNR+b7AQev6vAyg==
-X-Received: by 2002:a37:e202:0:b0:6a6:ab87:113d with SMTP id g2-20020a37e202000000b006a6ab87113dmr6241549qki.605.1654464359603;
-        Sun, 05 Jun 2022 14:25:59 -0700 (PDT)
+        bh=6WJ/cPPuCGEcGJe5vuLwdlkfztZsLYNQcfy21FejcMY=;
+        b=V7HPbeWM1splsWssW1lc7BuZxXyuYYS1Xx4XRd6tuO7IfDbTf5HeXyaiMEHjP1cNt/
+         zr98v+AG68H0L2zD/TJmcG/18qST/+bh0RWoPf5Ae0z8ETO4k3EE/iXCldPL+8yQMa6A
+         Z4MrRHcc7RBK3pxeN1rbyIATORcHuC8iP4jg7zri+XBOTuQyDupKCgutfT9M/imma1Md
+         P36xdgikxCCe9QyzDk09rQ899daqABCciRY+R7UXgXANA3yIDCsAB8aIoQ4qUdRxKQSf
+         YEY/+ckPyYNlTgfgF/qaFXkRaTkxL6LAhWmu9J7cQ11xlmYYbzuIqVPoDe0O6M1M/GRw
+         1vqg==
+X-Gm-Message-State: AOAM531/pIFvwCXKMP820H/gcrz4W3oaOJU6XyvnS72VoeUzpZ6QNvgX
+        Dndmx9gVvJmTknzykePDbG8v9LVqCA==
+X-Google-Smtp-Source: ABdhPJyHi6eBGQ+GxgFnFyx3TIgsB59Q5okv0AgtRq4h1nbNXXkD4Zyg153WflRQW6zPHqhaFp001w==
+X-Received: by 2002:a05:622a:1820:b0:303:b8ef:b564 with SMTP id t32-20020a05622a182000b00303b8efb564mr16441196qtc.319.1654464595562;
+        Sun, 05 Jun 2022 14:29:55 -0700 (PDT)
 Received: from robh.at.kernel.org ([2607:fb90:ac97:ac63:b5fd:aa9:8d74:9989])
-        by smtp.gmail.com with ESMTPSA id d19-20020a05620a241300b006a6c230f5e0sm388127qkn.31.2022.06.05.14.25.57
+        by smtp.gmail.com with ESMTPSA id c15-20020a05620a268f00b006a3af1bd183sm9008320qkp.127.2022.06.05.14.29.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 14:25:59 -0700 (PDT)
-Received: (nullmailer pid 3545686 invoked by uid 1000);
-        Sun, 05 Jun 2022 21:25:56 -0000
-Date:   Sun, 5 Jun 2022 16:25:56 -0500
+        Sun, 05 Jun 2022 14:29:55 -0700 (PDT)
+Received: (nullmailer pid 3551819 invoked by uid 1000);
+        Sun, 05 Jun 2022 21:29:52 -0000
+Date:   Sun, 5 Jun 2022 16:29:52 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-sunxi@lists.linux.dev,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
+        linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        Chen-Yu Tsai <wens@csie.org>
-Subject: Re: [PATCH 3/3] dt-bindings: pinctrl: sunxi: Disallow the resets
- property
-Message-ID: <20220605212556.GA3545625-robh@kernel.org>
-References: <20220531053623.43851-1-samuel@sholland.org>
- <20220531053623.43851-4-samuel@sholland.org>
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: pwm: mediatek: add pwm binding for
+ MT8195
+Message-ID: <20220605212952.GA3551762-robh@kernel.org>
+References: <20220531114544.144785-1-fparent@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220531053623.43851-4-samuel@sholland.org>
+In-Reply-To: <20220531114544.144785-1-fparent@baylibre.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -73,18 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 May 2022 00:36:23 -0500, Samuel Holland wrote:
-> None of the sunxi pin controllers have a module reset line. This is
-> confirmed by documentation (A80) as well as experimentation (A33).
+On Tue, 31 May 2022 13:45:43 +0200, Fabien Parent wrote:
+> MT8195's PWM IP is compatible with the MT8183 PWM IP.
 > 
-> Since the property is not applicable to any variant of the hardware,
-> let's remove it from the binding.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > ---
-> 
->  .../bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml          | 3 ---
->  1 file changed, 3 deletions(-)
+>  Documentation/devicetree/bindings/pwm/pwm-mediatek.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

@@ -2,140 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585DA53DCEC
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70D953DCEE
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 18:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351203AbiFEQQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 12:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
+        id S1351211AbiFEQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 12:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345605AbiFEQQQ (ORCPT
+        with ESMTP id S1351208AbiFEQQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 12:16:16 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44EE4D9F1;
-        Sun,  5 Jun 2022 09:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=k0GdkbNDkasejj3kFBrsT8Gqu51kpsqMIcWZEZu6ukg=; b=nmfeBVtpMsoJcxuqepI3QEi1JJ
-        zH2x0OL0814+dLD0PfySc77wJNU3QK7ZjuetHTPRmCQnLCPtruWd3jj1/QvwJBTMQS9CQwwEvR9/x
-        MdBjDrj7SOGxE2XFnxEu+LYWQETJY333TVYZRdRyEtY6qNSM28sxPoafPyMwLVeZuAa4660BTZU3z
-        EwXbxFDOh6V41lf9ljFZaBietjmwREAmDLwWBlGKINaVS2bQV2lYPQeYNrmm4nSWEGDb/qCXrsAq0
-        dx33q6jE6zFo4sXThCrkEwtdXtFQ1wzmj6vLUJ9lqCQUP/ygEfTapGECjKxeyMY33WoqCoNqc+CSx
-        NmpUn9Fg==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nxsv0-003ooh-Vh; Sun, 05 Jun 2022 16:15:59 +0000
-Date:   Sun, 5 Jun 2022 16:15:58 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     syzbot <syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com>
-Cc:     arve@android.com, asml.silence@gmail.com, axboe@kernel.dk,
-        brauner@kernel.org, gregkh@linuxfoundation.org, hdanton@sina.com,
-        hridya@google.com, io-uring@vger.kernel.org,
-        joel@joelfernandes.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maco@android.com, surenb@google.com,
-        syzkaller-bugs@googlegroups.com, tkjos@android.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in filp_close
-Message-ID: <YpzWvkNcq0llgdkW@zeniv-ca.linux.org.uk>
-References: <000000000000fd54f805e0351875@google.com>
- <00000000000061dcef05e0b3d4e3@google.com>
+        Sun, 5 Jun 2022 12:16:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1124DF46
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 09:16:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gl15so10877955ejb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DOd91IrpVsMvaCem3N2Wlo4e4L7ezusJLGgTEZxYBBA=;
+        b=gM5L49Q5RNeeLmx4jz/0qVJoD+bjMCPlzbAXCJbNiWO9sHNBhK0oC+q5dS9DI0hDF9
+         aB88gWRVtT/asQV44soIAqkaWx/vgut/QdrGnnJ3lmg5okT37PQPXX7ZVKAR7WmBVVPZ
+         kc7/YY3mLvNZdYMjYfi9IB27m25VBDCVJkLyQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DOd91IrpVsMvaCem3N2Wlo4e4L7ezusJLGgTEZxYBBA=;
+        b=XZW2wOTolWYKkFJ6dosPBTPOeDK0X+AT/Ayl2oaVLmf1kv8KgyazN+zYar89TOGX/O
+         +wmeqG0e50iwSsgIpJVLQmYDxia62Hx0DapM2p1k3uLZ862VYAe9QI/P43TT11wzF2Z7
+         ZbVQQHfKRVMUMtxJ764sf7bP58mTYNIJSYSjwQFRHlw9/CF71Pi/ixqfQfdpoqKg5+4m
+         posoKPWW/1z+NAGsWBjTvm7SgygkwjLjobwL/orIcE3+iNTfLw/r7wEPZ5BZAkio+0cd
+         RLmzbiC4pPdJUg7AUyOl7k5lOOOOittaM2r4qya+nJc3SWWNtO0SdzEpPwERH8bUXMjm
+         73Ug==
+X-Gm-Message-State: AOAM530tcn8AFmUwrjGUOxIDrrvs/iJvWZDLJs98z3RkGzKR2fQkEXdv
+        ePICDUgt7xB9MJRpnFwaiqSuNgI6M5xuj5Fe
+X-Google-Smtp-Source: ABdhPJzrMtcCidyYds2KmxGpFX5JAowZE34TwkzowUeCUZ3QqoBftZ0o2XzRY4BjY50UMjuootqxug==
+X-Received: by 2002:a17:907:7f03:b0:6ff:4721:3c75 with SMTP id qf3-20020a1709077f0300b006ff47213c75mr17694576ejc.508.1654445799706;
+        Sun, 05 Jun 2022 09:16:39 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id u21-20020a1709064ad500b006f3ef214e14sm5196889ejt.122.2022.06.05.09.16.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 09:16:38 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so6728968wmz.2
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 09:16:38 -0700 (PDT)
+X-Received: by 2002:a05:600c:4982:b0:39c:3c0d:437c with SMTP id
+ h2-20020a05600c498200b0039c3c0d437cmr13980053wmp.38.1654445797876; Sun, 05
+ Jun 2022 09:16:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000061dcef05e0b3d4e3@google.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20220603113908.78777-1-thierry.reding@gmail.com>
+ <CAHk-=wiVxF5VLFSuet3OrC7u1Gfb-ZyMs4W-KXAc42rXPRWmhA@mail.gmail.com> <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
+In-Reply-To: <CACRpkda0KiyjV27WEP_MYpvWXyG787L9PJZaP_hnXh_DFpSj5Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 5 Jun 2022 09:16:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wirNAe3ApyCWMAyz-QFaNX_oNCzc8SSX7a52pV=+OQ6Qg@mail.gmail.com>
+Message-ID: <CAHk-=wirNAe3ApyCWMAyz-QFaNX_oNCzc8SSX7a52pV=+OQ6Qg@mail.gmail.com>
+Subject: Re: [GIT PULL] hte: New subsystem for v5.19-rc1
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Saha, Tamal" <tamal.saha@intel.com>, bala.senthil@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 07:04:10AM -0700, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit 6319194ec57b0452dcda4589d24c4e7db299c5bf
-> Author: Al Viro <viro@zeniv.linux.org.uk>
-> Date:   Thu May 12 21:08:03 2022 +0000
-> 
->     Unify the primitives for file descriptor closing
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=134cbe4ff00000
-> start commit:   952923ddc011 Merge tag 'pull-18-rc1-work.namei' of git://g..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=10ccbe4ff00000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=174cbe4ff00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3096247591885bfa
-> dashboard link: https://syzkaller.appspot.com/bug?extid=47dd250f527cb7bebf24
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114f7bcdf00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1659a94ff00000
-> 
-> Reported-by: syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com
-> Fixes: 6319194ec57b ("Unify the primitives for file descriptor closing")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Sat, Jun 4, 2022 at 1:11 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> Another provider did come up, and were requested (by me) to work with
+> Dipen on the subsystem in august last year, that was the Intel PMC in the
+> Elkhart and Tiger Lake platforms and forward
 
-Argh...  I see what's going on.  Check if the following fixes the problem,
-please.
+Ok, I've pulled this now, even if I don't love the "hte" name. I
+despise specialized TLA's that aren't some obvious "if you're a kernel
+developer, you know what this means".
 
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 27c9b004823a..73beea5dc18c 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -1857,6 +1857,8 @@ static void binder_deferred_fd_close(int fd)
- 	init_task_work(&twcb->twork, binder_do_fd_close);
- 	twcb->file = close_fd_get_file(fd);
- 	if (twcb->file) {
-+		// pin it until binder_do_fd_close(); see comments there
-+		get_file(twcb->file);
- 		filp_close(twcb->file, current->files);
- 		task_work_add(current, &twcb->twork, TWA_RESUME);
- 	} else {
-diff --git a/fs/file.c b/fs/file.c
-index dd6692048f4f..3bcc1ecc314a 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -800,8 +800,7 @@ struct file *__close_fd_get_file(unsigned int fd)
- 
- /*
-  * variant of close_fd that gets a ref on the file for later fput.
-- * The caller must ensure that filp_close() called on the file, and then
-- * an fput().
-+ * The caller must ensure that filp_close() called on the file.
-  */
- struct file *close_fd_get_file(unsigned int fd)
- {
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 7257b0870353..33da5116cc38 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5110,7 +5110,7 @@ static int io_close(struct io_kiocb *req, unsigned int issue_flags)
- 	struct files_struct *files = current->files;
- 	struct io_close *close = &req->close;
- 	struct fdtable *fdt;
--	struct file *file = NULL;
-+	struct file *file;
- 	int ret = -EBADF;
- 
- 	if (req->close.file_slot) {
-@@ -5127,7 +5127,6 @@ static int io_close(struct io_kiocb *req, unsigned int issue_flags)
- 	file = fdt->fd[close->fd];
- 	if (!file || file->f_op == &io_uring_fops) {
- 		spin_unlock(&files->file_lock);
--		file = NULL;
- 		goto err;
- 	}
- 
-@@ -5147,8 +5146,6 @@ static int io_close(struct io_kiocb *req, unsigned int issue_flags)
- err:
- 	if (ret < 0)
- 		req_set_fail(req);
--	if (file)
--		fput(file);
- 	__io_req_complete(req, issue_flags, ret, 0);
- 	return 0;
- }
+                       Linus

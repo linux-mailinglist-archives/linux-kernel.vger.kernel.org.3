@@ -2,57 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811BF53DDA4
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 20:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F5453DDAB
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 20:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346870AbiFES3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 14:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S1351472AbiFESbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 14:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiFES3K (ORCPT
+        with ESMTP id S236164AbiFESb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 14:29:10 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611A612ADF
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 11:29:09 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id a3-20020a924443000000b002d1bc79da14so10395777ilm.15
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 11:29:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=cOxqeJ/JYbi6sFMPo1alnVEMhCg5I3K/OxKpxuWXTYI=;
-        b=cBDs6/I+E2JolHdzCw6skB34t9VmYGsCu8LqG3Xp1SYp0ujH8aBilRxGzoGg7yjD8d
-         b3pMIcvz01S5BYDcXer1Ah+rUtFvxipaHP6yMoc6evutle/PyK9OKa1Z/eSpbrGY5wC1
-         5wGZoJKF3RM/13rJuvI1JWEu/M0Cc5W6r21q2WWyGXIeROQbQSWTzE3OxGFuDsXsScsl
-         XDw/4Kj6f8Pv3T0TICIj1aJ8/Uh80aHr0hTX9dHIPfmgwlad5GTtmGnsIJYeSCwZGjwt
-         sCWS6+JP5fSvEQRLy3c29R1jy9FXiBUc6d0DdwqtPzxI9T8btkYVQU1VMvs1ks7h9y2d
-         XzWg==
-X-Gm-Message-State: AOAM530a+AfP5kAnOjSRs8XD2gmHIVENfJ3u4s1tNSCI5zw4dElpiH8X
-        dURHbBY7HS4jW2F1k94WZjTGpCDjVh+J9NhI+hFBu71s+vu3
-X-Google-Smtp-Source: ABdhPJyq9YrZ+fId6i8Q08L+Nm7sWYRLuY83ASTXFEaAfmlxLjokGP1QyIr4HShjlItpecypP1C3Nd3mZ90/8AIoQlqzT3E5roFs
+        Sun, 5 Jun 2022 14:31:28 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CF912AAF;
+        Sun,  5 Jun 2022 11:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1654453887; x=1685989887;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xHQW/DoGQUs+0ZrxEQ1m+x/wIrTBq1nQRjID76ZhMk0=;
+  b=iP16Cec5Ggg8tQj2jV8ZTfhHF8beWLBfHGque7rJlCjdOiQy1vDcmoAK
+   3IfN+x3U7nXqYB1yt57/oQPJf7yKRqG8mHLybokVtsfy6kQlvy0yxEsZd
+   V6nrQ881AfLWpCPoR5E/f8cZYFSI45pupsYgzsqLhbzKVNcM1N4dlgnOC
+   U=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jun 2022 11:31:26 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 11:31:26 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 5 Jun 2022 11:31:26 -0700
+Received: from [10.216.59.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 5 Jun 2022
+ 11:31:22 -0700
+Message-ID: <62c0b6ac-240c-e581-7bc3-9357dc619d4c@quicinc.com>
+Date:   Mon, 6 Jun 2022 00:01:19 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3792:b0:331:884c:d9af with SMTP id
- w18-20020a056638379200b00331884cd9afmr5005004jal.257.1654453748639; Sun, 05
- Jun 2022 11:29:08 -0700 (PDT)
-Date:   Sun, 05 Jun 2022 11:29:08 -0700
-In-Reply-To: <YpzxhRLKyETOtUeH@zeniv-ca.linux.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fc2dfb05e0b7873b@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in filp_close
-From:   syzbot <syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com>
-To:     arve@android.com, asml.silence@gmail.com, axboe@kernel.dk,
-        brauner@kernel.org, gregkh@linuxfoundation.org, hdanton@sina.com,
-        hridya@google.com, io-uring@vger.kernel.org,
-        joel@joelfernandes.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maco@android.com, surenb@google.com,
-        syzkaller-bugs@googlegroups.com, tkjos@android.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC v2 1/2] dt-bindings: usb: dwc3: Add support for multiport
+ related properties
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <quic_pkondeti@quicinc.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <quic_ppratap@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com>
+ <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
+ <1653568833.732260.3797150.nullmailer@robh.at.kernel.org>
+ <33ce11bd-abc4-0e59-4637-e8133818e0f6@quicinc.com>
+ <20220531201050.GD1808817-robh@kernel.org>
+From:   Harsh Agarwal <quic_harshq@quicinc.com>
+In-Reply-To: <20220531201050.GD1808817-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,19 +78,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         6dda6985 fix the breakage in close_fd_get_file() calli..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.fd
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d4042ecb71632a26
-dashboard link: https://syzkaller.appspot.com/bug?extid=47dd250f527cb7bebf24
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+On 6/1/2022 1:40 AM, Rob Herring wrote:
+> On Fri, May 27, 2022 at 04:30:34PM +0530, Harsh Agarwal wrote:
+>> On 5/26/2022 6:10 PM, Rob Herring wrote:
+>>> On Thu, 26 May 2022 15:43:48 +0530, Harsh Agarwal wrote:
+>>>> Added support for multiport, mport, num-ssphy and num-hsphy
+>>>> properties. These properties are used to support devices having
+>>>> a multiport controller.
+>>>>
+>>>> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+>>>> ---
+>>>>    .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+>>>>    1 file changed, 55 insertions(+)
+>>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>> ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+>>> ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
+>>> ./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
+>>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
+>>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
+>>> Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
+>>> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
+>>> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>>
+>>> doc reference errors (make refcheckdocs):
+>>>
+>>> See https://patchwork.ozlabs.org/patch/
+>>>
+>>> This check can fail if there are any dependencies. The base for a patch
+>>> series is generally the most recent rc1.
+>>>
+>>> If you already ran 'make dt_binding_check' and didn't see the above
+>>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+>>> date:
+>>>
+>>> pip3 install dtschema --upgrade
+>>>
+>>> Please check and re-submit.
+>> Indentation error I have rectified in my RFC v2.
+>> Regarding below warnings
+>>
+>> "Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property"
+>> Here the mport expects no "reg" or ranges" property as of now. Only thing that is mandated is either the USB-PHY phandles using "usb-phy" or the Generic PHY declaration using "phy" and "phy-names"
+>> Can you please suggest to mask these warnings or do I need to add something else ?
+> A unit-address requires 'reg' or 'ranges' and vice-versa. So you need
+> 'reg'.
+>
+> However, usb-hcd.yaml already defines what child nodes are for USB
+> hosts. Whatever you do here needs to be compatible with that.
+Thanks for the info.
+"@" is not actually a requirement for mport.
+We can name them as "mport1" instead of "mport@1".
+Now I do not see this reg, ranges warnings in latest PS v2
+>
+> Rob

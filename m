@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AB553D943
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 04:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCE053D921
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Jun 2022 03:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243457AbiFEC1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Jun 2022 22:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
+        id S243313AbiFEB7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Jun 2022 21:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbiFEC0z (ORCPT
+        with ESMTP id S243198AbiFEB7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Jun 2022 22:26:55 -0400
-X-Greylist: delayed 2278 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 04 Jun 2022 19:26:53 PDT
-Received: from baldur.buserror.net (baldur.buserror.net [165.227.176.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A96BBC
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 19:26:52 -0700 (PDT)
-Received: from [2601:449:8480:af0::de51]
-        by baldur.buserror.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <oss@buserror.net>)
-        id 1nxfJ4-00D9V8-IG; Sat, 04 Jun 2022 20:43:54 -0500
-Message-ID: <198e1080c142048ce6c8705a569fe0a0461e3682.camel@buserror.net>
-From:   Scott Wood <oss@buserror.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Diana Craciun <diana.craciun@nxp.com>,
-        Frank Rowand <frank.rowand@sony.com>,
-        Jason Yan <yanaijie@huawei.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 04 Jun 2022 20:43:53 -0500
-In-Reply-To: <20220604085050.4078927-1-masahiroy@kernel.org>
-References: <20220604085050.4078927-1-masahiroy@kernel.org>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 4 Jun 2022 21:59:00 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F5D2CE1E
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Jun 2022 18:58:57 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e184so20022294ybf.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Jun 2022 18:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sLlIiVjOIj+IrlayL6I/MZBzwRGIE1mUMEt33xJvxRY=;
+        b=VrXTauZcG2ZxwBFo5wG3mGng0I+REWSJoYjeIjBMVS1zD1AKTagmktMv3g8f3jRjEJ
+         SZ00RFrhWLA4EAVOgU6zWCp0qxRkf7uoxhtbWj3N/rehz8LJiJlzB4Az6dOuTXZPs1Bn
+         DiHQOuagF540epTqYE6F/JpNBfCyvMbV8Ke3xaHjRaEB3qnevkXVU9hsU2XWfuiBGDr/
+         e3RCUg3bkcep3KXpAvQitLwWz1f1eSdrnqCc96xfbp7+hBd33uSbEs47twmyKV4epfnp
+         33tb2a8aS8naNSqztxvTXCRZNVDehTpvJRf3c17tRgxwu0YXRhrzQAuKSVWcXKS3icwN
+         PUhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=sLlIiVjOIj+IrlayL6I/MZBzwRGIE1mUMEt33xJvxRY=;
+        b=CoVouwkkK3UMmP3x3KMh6u9fKnlDtGzTjNAfYl2xg1uTDXNKiVGRoRijdKXzixGykX
+         r3GCgseq6X9AvrRsF0wHNCJFIRRnWwPPqvforXJLmkQ7L6foJGbWZd9kgbSmrks/gfH0
+         3yCSAyhn8zlbE/GILSXoSYVy10LjL/mAcdpSZ1wC2IFNVhqKT5TfHqYgQzHhHeBcHUPl
+         ZTdI7sx9FgPxJXrQluzAS9XjG3w4suPyanuUNZ6zD++ZNVuR6Tok2Jec8ybYSecHD4/V
+         lbhXPamSDgP/qM17mkFNqEFxs2GAUJoAvIhSl9v71+aEwoZKkViEbHTuwYjZt/AYQQ1l
+         X5ow==
+X-Gm-Message-State: AOAM531f7F32qUszmtGeKKK2tEFiLo5Vmbuebcw7gfxuQtn2wUKNvcSw
+        nXR9CTfr8BY71djZita4wWNJzPWaU7+YZDsez5c=
+X-Google-Smtp-Source: ABdhPJxrggaEFhLzcFaHvKCF+5+Dc20iDCUL0rcMV2WFM2tYeUAy4E4UqEC7ZXjqjSFaeZhA1Ma0KV8Venc2A4H5qbU=
+X-Received: by 2002:a25:dc92:0:b0:659:fcb9:4ab4 with SMTP id
+ y140-20020a25dc92000000b00659fcb94ab4mr18391285ybe.320.1654394336514; Sat, 04
+ Jun 2022 18:58:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2601:449:8480:af0::de51
-X-SA-Exim-Rcpt-To: masahiroy@kernel.org, mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, benh@kernel.crashing.org, paulus@samba.org, christophe.leroy@csgroup.eu, diana.craciun@nxp.com, frank.rowand@sony.com, yanaijie@huawei.com, robh@kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: oss@buserror.net
+Sender: drfranksaxxxx2@gmail.com
+Received: by 2002:a05:7108:298d:0:0:0:0 with HTTP; Sat, 4 Jun 2022 18:58:56
+ -0700 (PDT)
+From:   MRS HANNAH VANDRAD <h.vandrad@gmail.com>
+Date:   Sat, 4 Jun 2022 18:58:56 -0700
+X-Google-Sender-Auth: P9upt7AOMkTpweaHFS0KZC55RlQ
+Message-ID: <CAGnkwZ5CF++sK1Ti8bzvUe1JP0LS0yksfbJ0=U2xPj5MFO6qxw@mail.gmail.com>
+Subject: Greetings dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.9 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH] powerpc: get rid of #include <generated/compile.h>
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on baldur.buserror.net)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-06-04 at 17:50 +0900, Masahiro Yamada wrote:
-> You cannot include <generated/compile.h> here because it is generated
-> in init/Makefile but there is no guarantee that it happens before
-> arch/powerpc/mm/nohash/kaslr_booke.c is compiled for parallel builds.
-> 
-> The places where you can reliably include <generated/compile.h> are:
-> 
->   - init/          (because init/Makefile can specify the dependency)
->   - arch/*/boot/   (because it is compiled after vmlinux)
-> 
-> Commit f231e4333312 ("hexagon: get rid of #include <generated/compile.h>")
-> fixed the last breakage at that time, but powerpc re-added this.
-> 
-> <genearated/compile.h> was unneeded because 'build_str' is almost the
-> same as 'linux_banner' defined in init/version.c
-> 
-> Let's copy the solution from MIPS.
-> (get_random_boot() in arch/mips/kernel/relocate.c)
-> 
-> Fixes: 6a38ea1d7b94 ("powerpc/fsl_booke/32: randomize the kernel image
-> offset")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
-> If this gets into the mainline before -rc2 or -rc3,
-> I will base my kbuild work on top of this.
-> 
-> 
->  arch/powerpc/mm/nohash/kaslr_booke.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-
-Acked-by: Scott Wood <oss@buserror.net>
-
--Scott
+Greetings dear
 
 
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs.Hannah
+Vandrad, a widow suffering from a long time illness. I have some
+funds I inherited from my late husband, the sum of ($11,000,000.00,)
+my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest and God fearing person who can claim this
+money and use it for Charity works, for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of god
+and the effort that the house of god is maintained.
+
+ I do not want a situation where this money will be used in an ungodly
+manner. That's why I'm taking this decision. I'm not afraid of death,
+so I know where I'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincere and urgent answer to know if you will be able to execute
+this project, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of god be with you and all those that you
+love and  care for.
+
+I am waiting for your reply.
+
+May God Bless you,
+
+ Mrs. Hannah Vandrad

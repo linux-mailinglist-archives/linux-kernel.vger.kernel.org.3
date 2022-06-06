@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D8D53EA9C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E1553E7FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241316AbiFFQGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S241360AbiFFQG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241168AbiFFQGn (ORCPT
+        with ESMTP id S241348AbiFFQGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:06:43 -0400
+        Mon, 6 Jun 2022 12:06:49 -0400
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F1F1A44B4;
-        Mon,  6 Jun 2022 09:06:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD258E52A7;
+        Mon,  6 Jun 2022 09:06:47 -0700 (PDT)
 Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 783DECCE35;
-        Mon,  6 Jun 2022 16:06:09 +0000 (UTC)
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 89D28CD361;
+        Mon,  6 Jun 2022 16:06:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1654531569; bh=FDmhzeRJXLln4Tsh/IURDfuOWharrgHiMsf+T6eZVRk=;
-        h=From:To:Cc:Subject:Date;
-        b=kIXuQ34jpxSgTAlu5WQwYutKhQUg6+TwsdaWr3k9kvYEfI5uyWrGa6TrRcvbiAWxJ
-         EPWQrlhfOVl/5YFwN7isG+qeC3a53HRBmMX+fMvvPOlOTjXqe7oSBMpTFt+5GJABhQ
-         /m4BrcW7yN/T/rIKEVaEQfyDVZrFkCKa/mewNKD0=
+        t=1654531576; bh=o9eixXtP/Xx2M72rr+rsSeCZivwh5KMZsFPSUC13lhk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=p2lrpkAjAckkN/gcgXfr6BiCj7ajAkXyu3tfJ2Z0ipTkPVvszYVyHnsVdoVuQaAsH
+         8ewkiYQch+POrrxMXT3j8Mimt59m6Q9GFDe9FMTZo7hCbHu6J/IalpnMJ6RLKROYFU
+         pz+K3O9Gbf/0dDFIZBA+ILvwG/lKw4hXQM2TaRPg=
 From:   Luca Weiss <luca@z3ntu.xyz>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -33,126 +33,105 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] ARM: dts: qcom: msm8974: re-add missing pinctrl
-Date:   Mon,  6 Jun 2022 18:04:21 +0200
-Message-Id: <20220606160421.1641778-1-luca@z3ntu.xyz>
+Subject: [PATCH 2/2] ARM: dts: qcom: msm8974-*: re-add remoteproc supplies
+Date:   Mon,  6 Jun 2022 18:04:23 +0200
+Message-Id: <20220606160421.1641778-2-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220606160421.1641778-1-luca@z3ntu.xyz>
+References: <20220606160421.1641778-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of a recent cleanup commit, the pinctrl for a few uart and i2c
-nodes was removed. Adjust the names and/or add it back and assign it to
-the uart and i2c nodes.
+As part of a recent cleanup commit, the remoteproc supplies for adsp and
+modem were removed from msm8974.dtsi and now need to be set in the
+device dts. Do so.
 
-Fixes: 1dfe967ec7cf ("ARM: dts: qcom-msm8974*: Consolidate I2C/UART/SDHCI")
+Fixes: f300826d27be ("ARM: dts: qcom-msm8974: Sort and clean up nodes")
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
 Bjorn, could you please pick this up for -fixes so it lands in an
 upcoming 5.19-rc?
 
- arch/arm/boot/dts/qcom-msm8974.dtsi | 30 +++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ .../boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts   | 11 +++++++++++
+ arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi | 11 +++++++++++
+ .../qcom-msm8974pro-sony-xperia-shinano-castor.dts    | 11 +++++++++++
+ 3 files changed, 33 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 814ad0b46232..c3b8a6d63027 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -506,6 +506,8 @@ blsp1_uart2: serial@f991e000 {
- 			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&gcc GCC_BLSP1_UART2_APPS_CLK>, <&gcc GCC_BLSP1_AHB_CLK>;
- 			clock-names = "core", "iface";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&blsp1_uart2_default>;
- 			status = "disabled";
- 		};
+diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+index 9493886a5c0d..2d699de713ce 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
++++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+@@ -313,6 +313,17 @@ otg {
+ 	};
+ };
  
-@@ -581,6 +583,9 @@ blsp2_uart1: serial@f995d000 {
- 			interrupts = <GIC_SPI 113 IRQ_TYPE_NONE>;
- 			clocks = <&gcc GCC_BLSP2_UART1_APPS_CLK>, <&gcc GCC_BLSP2_AHB_CLK>;
- 			clock-names = "core", "iface";
-+			pinctrl-names = "default", "sleep";
-+			pinctrl-0 = <&blsp2_uart1_default>;
-+			pinctrl-1 = <&blsp2_uart1_sleep>;
- 			status = "disabled";
- 		};
- 
-@@ -599,6 +604,8 @@ blsp2_uart4: serial@f9960000 {
- 			interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&gcc GCC_BLSP2_UART4_APPS_CLK>, <&gcc GCC_BLSP2_AHB_CLK>;
- 			clock-names = "core", "iface";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&blsp2_uart4_default>;
- 			status = "disabled";
- 		};
- 
-@@ -639,6 +646,9 @@ blsp2_i2c6: i2c@f9968000 {
- 			interrupts = <0 106 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&gcc GCC_BLSP2_QUP6_I2C_APPS_CLK>, <&gcc GCC_BLSP2_AHB_CLK>;
- 			clock-names = "core", "iface";
-+			pinctrl-names = "default", "sleep";
-+			pinctrl-0 = <&blsp2_i2c6_default>;
-+			pinctrl-1 = <&blsp2_i2c6_sleep>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 		};
-@@ -1256,7 +1266,7 @@ cd {
- 				};
- 			};
- 
--			blsp1_uart2_active: blsp1-uart2-active {
-+			blsp1_uart2_default: blsp1-uart2-default {
- 				rx {
- 					pins = "gpio5";
- 					function = "blsp_uart2";
-@@ -1272,7 +1282,7 @@ tx {
- 				};
- 			};
- 
--			blsp2_uart1_active: blsp2-uart1-active {
-+			blsp2_uart1_default: blsp2-uart1-default {
- 				tx-rts {
- 					pins = "gpio41", "gpio44";
- 					function = "blsp_uart7";
-@@ -1295,7 +1305,7 @@ blsp2_uart1_sleep: blsp2-uart1-sleep {
- 				bias-pull-down;
- 			};
- 
--			blsp2_uart4_active: blsp2-uart4-active {
-+			blsp2_uart4_default: blsp2-uart4-default {
- 				tx-rts {
- 					pins = "gpio53", "gpio56";
- 					function = "blsp_uart10";
-@@ -1406,7 +1416,19 @@ blsp2_i2c5_sleep: blsp2-i2c5-sleep {
- 				bias-pull-up;
- 			};
- 
--			/* BLSP2_I2C6 info is missing - nobody uses it though? */
-+			blsp2_i2c6_default: blsp2-i2c6-default {
-+				pins = "gpio87", "gpio88";
-+				function = "blsp_i2c12";
-+				drive-strength = <2>;
-+				bias-disable;
-+			};
++&remoteproc_adsp {
++	cx-supply = <&pm8841_s2>;
++};
 +
-+			blsp2_i2c6_sleep: blsp2-i2c6-sleep {
-+				pins = "gpio87", "gpio88";
-+				function = "blsp_i2c12";
-+				drive-strength = <2>;
-+				bias-pull-up;
-+			};
++&remoteproc_mss {
++	cx-supply = <&pm8841_s2>;
++	mss-supply = <&pm8841_s3>;
++	mx-supply = <&pm8841_s1>;
++	pll-supply = <&pm8941_l12>;
++};
++
+ &rpm_requests {
+ 	pm8841-regulators {
+ 		compatible = "qcom,rpm-pm8841-regulators";
+diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
+index 1d21de46f85c..60bf96304687 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
+@@ -183,6 +183,17 @@ &pm8941_wled {
+ 	qcom,num-strings = <2>;
+ };
  
- 			spi8_default: spi8_default {
- 				mosi {
++&remoteproc_adsp {
++	cx-supply = <&pm8841_s2>;
++};
++
++&remoteproc_mss {
++	cx-supply = <&pm8841_s2>;
++	mss-supply = <&pm8841_s3>;
++	mx-supply = <&pm8841_s1>;
++	pll-supply = <&pm8941_l12>;
++};
++
+ &rpm_requests {
+ 	pm8841-regulators {
+ 		compatible = "qcom,rpm-pm8841-regulators";
+diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+index 9bd8faea61a5..48f0c47a45ef 100644
+--- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
++++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+@@ -288,6 +288,17 @@ lcd_dcdc_en_pin_a: lcd-dcdc-en-active {
+ 
+ };
+ 
++&remoteproc_adsp {
++	cx-supply = <&pm8841_s2>;
++};
++
++&remoteproc_mss {
++	cx-supply = <&pm8841_s2>;
++	mss-supply = <&pm8841_s3>;
++	mx-supply = <&pm8841_s1>;
++	pll-supply = <&pm8941_l12>;
++};
++
+ &rpm_requests {
+ 	pm8941-regulators {
+ 		compatible = "qcom,rpm-pm8941-regulators";
 -- 
 2.36.1
 

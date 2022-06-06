@@ -2,72 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1A953E9EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C745253E96B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239692AbiFFOTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S239755AbiFFOTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239488AbiFFOTS (ORCPT
+        with ESMTP id S239672AbiFFOTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:19:18 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CA95EDD0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:19:16 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id x62so19023184ede.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:19:16 -0700 (PDT)
+        Mon, 6 Jun 2022 10:19:22 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934B369CEC;
+        Mon,  6 Jun 2022 07:19:21 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id y69so6050400oia.7;
+        Mon, 06 Jun 2022 07:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=DBXVr+2yQA4Yc+mJwCPapHs1PcqJSd/+SbzdjhsE7eQ=;
-        b=JSP3Nyto88U/eqZE0wozz+0CwwhWvr/JhHHcvKOPgH5lfy6fZOeid6Jr65t//arUyg
-         j4nYw7TaLqhLepSygyUN9zLJ7vPyin77QUbKWmDOrY4BMH5VhAMxlleIh8c8/Zvk3ScE
-         YvL/v6Ga52yX+m7ezHGsZIEsPsPr3F4Zz/Tq6x1BAME7L1gtT9LbOKUIeG5+2z6kkO7X
-         ovEF/H9Vj2AbsD5MIwFaBcP8OQVBB9vgP6ZqvyezGEbUTtCiC081RIdbJbtE/6g41MvS
-         2VPUxLU/BvlZbhANsOKjPdvmuMX18WpGu04yZcL0gqhmxSYitaYxNFWM8Fhh0KKuXqa3
-         ApCg==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=yxqyZ8yixmu1+DZ929D04d1QQALsRCYwyUVuVfKay8c=;
+        b=g96pMmdBLJ92I1YvWrCJUUzDj/TLj3jIshQjRbceVvTxzSE4T16TMe7lRXAdqIFPxB
+         dsHy9kXX7CKGsO7wBAaWiORozC/g7oCm1Q5p512vWZQ8sgXxkcBBRq/bo3qbLU8zHl8Z
+         DBXOgLUqNyswY644L94LqxlGXjdrI6q5FYLuQ/k3WdwRhBavpbKy3c1kXSjCyTZSbD8b
+         RVw8D2hy6zzWnByYruW3qUoEfrxYcL8tSTeI3Ya6DcW0xr0wY3meP80UD8b1oOa7sm5A
+         SX/jMibC2DLQbNLJkKHdbp8NolbDh4gLBUZKRKnY/9juZ60d8t6nQ32o1HUBTc3exyv6
+         sgKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=DBXVr+2yQA4Yc+mJwCPapHs1PcqJSd/+SbzdjhsE7eQ=;
-        b=YmJX7huX/q1y8l9NiPlKp/ls+2JSCH4MtUyLn2+rYpLWfCUyWvLHPmAyCsY2/UKcW8
-         nu9OWSRRcZNxXt4WHZAwgSodGN4z53TrdgApbpRvZtJ7juf9GaLa2PNUh80eHw68PinJ
-         XP3Zs4wJBKG8akeebbmzOwWx/NRMjlU+FwDQZobuzZFdyTbFfgZrQN07EBu25MOl2MSC
-         18MkPLEKnQ3G1DE21LI4O7aEh7WXaAypzNUbGz2zNa15TjIje5tcGziyZdPRn0zg81pM
-         REn6l4Kq3vKtgDDK/E2s3GY/h01YI+z8LeGZURaXSl3+KtO6nYxepzJs8HEpZxHzR44J
-         HxiQ==
-X-Gm-Message-State: AOAM531pA+1JN5B7K6NBKR2WPDjU1zh2eNSg7CwpnfwVnwqYMOeUnwZs
-        hcPg7SP9SN1R2g00YmKfXhRSu1GMBG0z/QJDtEY=
-X-Google-Smtp-Source: ABdhPJykT/UyGI86dL7L9Klc3DHGi07zmieX2PLBv1ozkQXCNdoMH/OWNoD3WIiTvsl4A+KqYLkPObcPND4ZoWN4wJQ=
-X-Received: by 2002:a05:6402:195:b0:431:5499:35eb with SMTP id
- r21-20020a056402019500b00431549935ebmr7802915edv.346.1654525155357; Mon, 06
- Jun 2022 07:19:15 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=yxqyZ8yixmu1+DZ929D04d1QQALsRCYwyUVuVfKay8c=;
+        b=ZSucAk2gE7O/YRBeHK6eIY2tvW5vHCCfkAttgRXUHu9bBc7AB10uueNPyJufOOlk6D
+         9bVPF1oJOPHKuGAB6V61SYcj6ilLSk9lCLSdAtDFrs5ZBL/dJou3xAoalpwKypMlLpWs
+         /SnTKnPR/zem9Iq9DpsjFPa+Ai22VV39THT1hYvo82nCNZ72W7eAOBiDb7IBAyvK+qU8
+         oJrcC1b0xT3yPtzC09nI11J1phkL2XCzxlxZS93QPX8QeBa45YD72hguXMYD69w2cxOW
+         pRpiFMAK5vv/U/BZA3C9rOl9xUKIiIiEsrGr++z5aNnv35gDNWLRPxgpUUCEMZYgJvCr
+         Va6g==
+X-Gm-Message-State: AOAM530eYJ8m+kKOOh0EZlgDPrCYYInvt4i3dinJbt/lMBQLlgmKBXfm
+        lPem1b80BIBBTSkdZy0iljWUh7tzhgc=
+X-Google-Smtp-Source: ABdhPJzZ7NP5aaCxbfTMHn0rWYPbFnDJzmUAaoaw4M2ZgD5NhCtc+5SBzMo6Cyu19yask3Y+I/iNKA==
+X-Received: by 2002:a05:6808:18a5:b0:32e:9741:15b with SMTP id bi37-20020a05680818a500b0032e9741015bmr2655071oib.113.1654525160774;
+        Mon, 06 Jun 2022 07:19:20 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id lx15-20020a0568704b8f00b000f5e89a9c60sm6631471oab.3.2022.06.06.07.19.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 07:19:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 6 Jun 2022 07:19:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     jdelvare@suse.com, eajames@linux.ibm.com, joel@jms.id.au,
+        penberg@kernel.org, akpm@linux-foundation.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (occ) Delete unnecessary NULL check
+Message-ID: <20220606141918.GA3747239@roeck-us.net>
 MIME-Version: 1.0
-Sender: barr.chrisdickson@gmail.com
-Received: by 2002:a54:2448:0:0:0:0:0 with HTTP; Mon, 6 Jun 2022 07:19:14 -0700 (PDT)
-From:   Chevronoil Corporation <corporationchevronoil@gmail.com>
-Date:   Mon, 6 Jun 2022 15:19:14 +0100
-X-Google-Sender-Auth: NiKF2NWLeHfo9H7_vDj4j058vV4
-Message-ID: <CAKzjU5YiNAW48-Au4uAyRf_nDknnXSvp2TLnU1C+DiNmqStBrA@mail.gmail.com>
-Subject: inform if interested
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BEWARE, Real company doesn't ask for money, Chevron Oil and Gas United
-States is employing now free flight ticket, if you are interested
-reply with your Resume/CV.
+On Mon, Jun 06, 2022 at 09:14:01PM +0800, Ziyang Xuan wrote:
+> kvfree(NULL) is safe. NULL check before kvfree() is not needed.
+> Delete them to simplify the code.
+> 
+> Generated by coccinelle script:
+> 	scripts/coccinelle/free/ifnullfree.cocci
+> 
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-Regards,
-Mr Jack McDonald.
-Chevron Corporation United USA.
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/occ/p9_sbe.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 42fc7b97bb34..01405ae2f9bd 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+>  	mutex_lock(&ctx->sbe_error_lock);
+>  	if (!ctx->sbe_error) {
+>  		if (resp_len > ctx->ffdc_size) {
+> -			if (ctx->ffdc)
+> -				kvfree(ctx->ffdc);
+> +			kvfree(ctx->ffdc);
+>  			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+>  			if (!ctx->ffdc) {
+>  				ctx->ffdc_len = 0;
+> @@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>  	ctx->sbe = NULL;
+>  	occ_shutdown(occ);
+>  
+> -	if (ctx->ffdc)
+> -		kvfree(ctx->ffdc);
+> +	kvfree(ctx->ffdc);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.25.1
+> 

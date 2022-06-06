@@ -2,37 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF64453E998
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFE253E6BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237311AbiFFMiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S237336AbiFFMiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237300AbiFFMh6 (ORCPT
+        with ESMTP id S237329AbiFFMiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:37:58 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DA299687
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:37:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VFYRvQg_1654519072;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VFYRvQg_1654519072)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 06 Jun 2022 20:37:53 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, wangkefeng.wang@huawei.com,
-        philipp.tomsich@vrull.eu, ebiederm@xmission.com, heiko@sntech.de,
-        vitaly.wool@konsulko.com, tongtiangen@huawei.com, guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH v3] RISC-V: Add fixup to support fast call of crash_kexec()
-Date:   Mon,  6 Jun 2022 20:37:50 +0800
-Message-Id: <20220606123750.2884245-1-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Mon, 6 Jun 2022 08:38:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96955A5FE8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:38:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20035611B8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045BDC3411C;
+        Mon,  6 Jun 2022 12:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654519093;
+        bh=LHCT0MVuCWKJIHCjZdFCmlTd+JmsLHutx4baX8nUikQ=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=AlwNeBSlk9KylwFTPfiSs0wIuQi7c8M/GqQvt0KNkr85qthmz7w3yKMy+mgGlQiIz
+         jjAJlMuY00OXT9DxeFAMwEZ5VbeZJLtNQ3/zTZYVe7D+Zuz4KVziNnIXO2q9K5ZHqI
+         bITBC/Pa8HvKeHlmMqmmDDL3pxmL3G6s0j0Ho2iKh/Hw8ac48Z85i6Ja/CSWUiji8k
+         PE8J2CutOOUKzioRuKjMSJFydJqW3Etcqa7S+BJsws8dpyEtKxzmBuqbnbxY7BV68G
+         +MngPM5fcUjfeJnGTf4YLjATyvaCmx/PhBwjPe10RriwgwPRPMgqg1nq6aNpM3SERF
+         9O0SFFTiYHwDQ==
+Message-ID: <d17777de-13ab-5dcc-e2e7-c8bf1caedbfa@kernel.org>
+Date:   Mon, 6 Jun 2022 20:38:09 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] MAINTAINERS: erofs: add myself as reviewer
+Content-Language: en-US
+To:     Yue Hu <huyue2@coolpad.com>, xiang@kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        zhangwen@coolpad.com, shaojunjun@coolpad.com,
+        Jeffle Xu <jefflexu@linux.alibaba.com>
+References: <20220605070133.4280-1-huyue2@coolpad.com>
+ <Ypxl/MsOGQ6W4Rlf@debian>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Ypxl/MsOGQ6W4Rlf@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,69 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, almost all archs (x86, arm64, mips...) support fast call
-of crash_kexec() when "regs && kexec_should_crash()" is true. But
-RISC-V not, it can only enter crash system via panic(). However panic()
-doesn't pass the regs of the real accident scene to crash_kexec(),
-it caused we can't get accurate backtrace via gdb,
-	$ riscv64-linux-gnu-gdb vmlinux vmcore
-	Reading symbols from vmlinux...
-	[New LWP 95]
-	#0  console_unlock () at kernel/printk/printk.c:2557
-	2557                    if (do_cond_resched)
-	(gdb) bt
-	#0  console_unlock () at kernel/printk/printk.c:2557
-	#1  0x0000000000000000 in ?? ()
+On 2022/6/5 16:14, Gao Xiang wrote:
+> Hi Yue,
+> 
+> On Sun, Jun 05, 2022 at 03:02:04PM +0800, Yue Hu wrote:
+>> I have been doing some erofs patches. Now I have the time and would like
+>> to help with the reviews.
+>>
+>> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> 
+> Thanks for working on EROFS these months! Hopefully EROFS could have
+> a healthier development then...
+> 
+> Acked-by: Gao Xiang <xiang@kernel.org>
 
-With the patch we can get the accurate backtrace,
-	$ riscv64-linux-gnu-gdb vmlinux vmcore
-	Reading symbols from vmlinux...
-	[New LWP 95]
-	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/test_crash.c:81
-	81             *(int *)p = 0xdead;
-	(gdb)
-	(gdb) bt
-	#0  0xffffffe00064d5c0 in test_thread (data=<optimized out>) at drivers/test_crash.c:81
-	#1  0x0000000000000000 in ?? ()
+Acked-by: Chao Yu <chao@kernel.org>
 
-Test code to produce NULL address dereference in test_crash.c,
-	void *p = NULL;
-	*(int *)p = 0xdead;
+Thanks,
 
-Fixes: 76d2a0493a17 ("RISC-V: Init and Halt Code")
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
----
-Changes from v1:
-- simplify the commit message
-Changes from v2:
-- add fixup in title
----
- arch/riscv/kernel/traps.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index b40426509244..39d0f8bba4b4 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -16,6 +16,7 @@
- #include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/irq.h>
-+#include <linux/kexec.h>
- 
- #include <asm/asm-prototypes.h>
- #include <asm/bug.h>
-@@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
- 
- 	ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
- 
-+	if (regs && kexec_should_crash(current))
-+		crash_kexec(regs);
-+
- 	bust_spinlocks(0);
- 	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
- 	spin_unlock_irq(&die_lock);
--- 
-2.17.1
-
+> 
+> 
+> + Jeffle Xu
+> 
+> (BTW, I'd like to request Jeffle as a EROFS reviewer too due to
+>   the fscache feature. Not sure if he's interested in it...)
+> 
+> Thanks,
+> Gao Xiang
+> 
+>> ---
+>>   MAINTAINERS | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index d2691d8a219f..2d0e28d7773b 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7308,6 +7308,7 @@ F:	include/video/s1d13xxxfb.h
+>>   EROFS FILE SYSTEM
+>>   M:	Gao Xiang <xiang@kernel.org>
+>>   M:	Chao Yu <chao@kernel.org>
+>> +R:	Yue Hu <huyue2@coolpad.com>
+>>   L:	linux-erofs@lists.ozlabs.org
+>>   S:	Maintained
+>>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git
+>> -- 
+>> 2.17.1

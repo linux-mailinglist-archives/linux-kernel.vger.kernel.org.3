@@ -2,52 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D42A53E253
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75A553E26C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiFFGFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 02:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S229769AbiFFGJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 02:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiFFGFV (ORCPT
+        with ESMTP id S229685AbiFFGJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 02:05:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684211CB10
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 23:05:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14EA5B81088
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D351C385A9;
-        Mon,  6 Jun 2022 06:05:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654495516;
-        bh=zwJfnS/wE1sDCszcl+CSabMelPPt/DfmOcBmAm19SNo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IBfBqXmjcvTVkXHY4YUlGomdCIbCsWjiXKhvfIPP4l0umm3z4dhXYaw9aXEllFyBM
-         gHgkIKo642jP5ZmpGHm1qff5FpLMqEYamCzxmKIEDG+s6ifgK9HMIlxyDl4bhP63VJ
-         sswFJC9/J3HQUiDlsP5t2GD08acfEjgdb9Ii6CgU=
-Date:   Mon, 6 Jun 2022 08:05:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: r8188eu: remove rtw_usleep_os
-Message-ID: <Yp2ZGp1JUSWaSzFI@kroah.com>
-References: <20220602194807.281115-1-martin@kaiser.cx>
- <20220602194807.281115-3-martin@kaiser.cx>
+        Mon, 6 Jun 2022 02:09:11 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B5140F1
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 23:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654495750; x=1686031750;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xIVdycnCP3O5522nSyL8XFF/gIjyhnKfHb6iFznAe+I=;
+  b=CR5UgGx3LNe8YcVyZFhbb42LOtQWkVAOLzGouOObVjkBCkFOC3jPUTxe
+   RkEh1uV4YaP2HP89gAiuHkwMUARIy/bChI44ETHPmVMRMuUlyFUjKRLSF
+   wFVxuP8TW8gv5b0vA8a9Hj6o4pPqJmq6I/NdYNJqska/xuoFV/GREFG2d
+   YfwpmJFRzFOlfPlAoR394yCC2uui2ATpaenfCpKI3XEBaYumRdoV7MRVg
+   lAzd7IZEKljsFj/kdonaVKPNoe49giRvDB/cqcKFzhFIl+eBPhGGA2E9B
+   CaHdGQRMXUH+aQq6Td3bI4qDDGa2mtmT7FR8yKaFj5Jbojcw3a7ZeNjqB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="256465436"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="256465436"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 23:09:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="647346201"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2022 23:09:08 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ny5vI-000CXl-40;
+        Mon, 06 Jun 2022 06:09:08 +0000
+Date:   Mon, 6 Jun 2022 14:08:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aurabindo Pillai <aurabindo.pillai@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [agd5f:drm-next 36/63] powerpc64-linux-gcc: error: unrecognized
+ command-line option '-msse'
+Message-ID: <202206061319.9h4BFbCh-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602194807.281115-3-martin@kaiser.cx>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,55 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 09:48:06PM +0200, Martin Kaiser wrote:
-> Remove the rtw_usleep_os helper function. There are only two callers, both
-> of which call rtw_usleep_os(100).
-> 
-> The original code would translate rtw_usleep_os(100) into msleep(1). Using
-> msleep for < 20ms is not recommended. Replace the msleep calls with
-> usleep_range, based on the explanations in
-> Documentation/timers/timers-howto.rst.
-> 
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->  drivers/staging/r8188eu/core/rtw_pwrctrl.c      | 2 +-
->  drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
->  drivers/staging/r8188eu/include/osdep_service.h | 2 --
->  drivers/staging/r8188eu/os_dep/osdep_service.c  | 8 --------
->  4 files changed, 2 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-> index 7b816b824947..11fd05633529 100644
-> --- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-> +++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-> @@ -266,7 +266,7 @@ static s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
->  			err = -1;
->  			break;
->  		}
-> -		rtw_usleep_os(100);
-> +		usleep_range(1000, 1200);
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   0401cdad37f8a62e64363b2a6fc16c7fafba66e2
+commit: 9b0e0d433f743790e4afde2b81fc30d8f8beb7d7 [36/63] drm/amd/display: Add dependant changes for DCN32/321
+config: powerpc64-buildonly-randconfig-r002-20220605 (https://download.01.org/0day-ci/archive/20220606/202206061319.9h4BFbCh-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
+        git fetch --no-tags agd5f drm-next
+        git checkout 9b0e0d433f743790e4afde2b81fc30d8f8beb7d7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-How do you know this is the proper range?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->  	}
->  
->  	return err;
-> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> index e17375a74f17..1aa7d01b67b1 100644
-> --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> @@ -208,7 +208,7 @@ static void efuse_read_phymap_from_txpktbuf(
->  		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
->  		timeout = jiffies + msecs_to_jiffies(1000);
->  		while (!rtw_read8(adapter, REG_TXPKTBUF_DBG) && time_before(jiffies, timeout))
-> -			rtw_usleep_os(100);
-> +			usleep_range(1000, 1200);
+All errors (new ones prefixed by >>):
 
-Same here, how do you know this is the correct range?
+>> powerpc64-linux-gcc: error: unrecognized command-line option '-msse'
+>> powerpc64-linux-gcc: error: unrecognized command-line option '-msse2'
 
-I would just use msleep as needed and later change to a range if you
-have figured out that is allowed.
-
-thanks,
-
-greg k-h
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

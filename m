@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B331F53E207
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B4E53E376
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiFFGvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 02:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
+        id S230234AbiFFGvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 02:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiFFGuv (ORCPT
+        with ESMTP id S230148AbiFFGuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 02:50:51 -0400
+        Mon, 6 Jun 2022 02:50:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABAE12614;
-        Sun,  5 Jun 2022 23:50:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5C163C4;
+        Sun,  5 Jun 2022 23:50:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF89F61050;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 180AF610E8;
+        Mon,  6 Jun 2022 06:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2B1C341C0;
         Mon,  6 Jun 2022 06:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90288C34119;
-        Mon,  6 Jun 2022 06:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654498250;
-        bh=kjV7iH8LLW0fzkWI4gSY8izHXCD/1Hhaux027BrGEkc=;
+        s=k20201202; t=1654498253;
+        bh=Qk9/ffEjmSeLWVANW6nMVZzHlvbbvnY1jfXwQOlyMTA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HD95N3RmEdQDj0uDaoD4XdFeit+4pTIBlNvWgl8I178st0N4pSrxF9/VDJbhEcPxc
-         7TJ34+AavRvS36dTQl6UR5Nnoo1zsQj6HI8bwMbIQ0KJlZLSRiqNpd2lBO/vCQ4huY
-         ovJtWPC7ZfPA2yrQ5R//at3iXEvAeHn0pSUco2n5WJsMPv/jIooH6ncbJg8QYusKv2
-         wieARe2Ug/p0da0Zufr8dT+LCPU5uGLHoe4D2gekdYjuG1afyHOc4WxD+AJUAX0VQE
-         V590vConWR9D0YJ0wT1USuDbJBXCRG8kLzgE2G+k4xqC3c5ib3Q9Hl5Jy9BGkWXkMG
-         YgsLWunVRizXg==
+        b=oB4A9SxEKzpeXcxXXB4jEzKPCpORgKx5WVhH6mfDFuLlxkjlv/oxzhovULD7gkBOD
+         vykxFuBGZ8/27/S0Q7V8twyIODH0p29g3XPbNFhk3zqT5aLWvZjrge9ftUrCaz5W5F
+         cMDgctVyIR860mOtnWwA1TuPiEg1Zx3zQeTrTGqHWYTWIxjRO5T2vIsctR2gYDt+cN
+         C7JBfROjF3LBW9KHv4/sOX2YivREjYqA6RwmF+dF0w2AQU9zjbRAhoaWwdAFXN+rnS
+         InNHYvo/xbTwi16+1i+Iq5OHUexQqWPi5whMlArs/34aogzqWc4QM3GIZQ7ytCGsbz
+         M6WA+y3XFAuxA==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
@@ -40,9 +40,9 @@ Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/3] arm64: dts: qcom: sm8350: Move qup-opp-tables out of soc node
-Date:   Mon,  6 Jun 2022 12:20:34 +0530
-Message-Id: <20220606065035.553533-3-vkoul@kernel.org>
+Subject: [PATCH v3 3/3] arm64: dts: qcom: sm8250: Move qup-opp-table out of soc node
+Date:   Mon,  6 Jun 2022 12:20:35 +0530
+Message-Id: <20220606065035.553533-4-vkoul@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220606065035.553533-1-vkoul@kernel.org>
 References: <20220606065035.553533-1-vkoul@kernel.org>
@@ -59,51 +59,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The soc node expects all the nodes to have unit addresses. The
-qup-opp-tables do not have that which causes warnings:
+qup-opp-table does not have that which causes warnings:
 
-arch/arm64/boot/dts/qcom/sm8350.dtsi:640.46-657.5:
-	Warning (simple_bus_reg): /soc@0/qup-100mhz-opp-table:
-	missing or empty reg/ranges property
-arch/arm64/boot/dts/qcom/sm8350.dtsi:659.46-676.5:
-	Warning (simple_bus_reg): /soc@0/qup-120mhz-opp-table:
+arch/arm64/boot/dts/qcom/sm8250.dtsi:916.32-933.5:
+	Warning (simple_bus_reg): /soc@0/qup-opp-table:
 	missing or empty reg/ranges property
 
-Move the qup-opp-tables out of soc node to fix these warnings
+Move the qup-opp-table out of soc node to fix these warnings
 
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 76 ++++++++++++++--------------
- 1 file changed, 38 insertions(+), 38 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 38 ++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 743cba9b683c..310c97323dfc 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -341,6 +341,44 @@ CLUSTER_PD: cpu-cluster0 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index cf0c97bd5ad3..6fd30064ea74 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -702,6 +702,25 @@ CLUSTER_PD: cpu-cluster0 {
  		};
  	};
  
-+	qup_opp_table_100mhz: qup-100mhz-opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-50000000 {
-+			opp-hz = /bits/ 64 <50000000>;
-+			required-opps = <&rpmhpd_opp_min_svs>;
-+		};
-+
-+		opp-75000000 {
-+			opp-hz = /bits/ 64 <75000000>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+		};
-+
-+		opp-100000000 {
-+			opp-hz = /bits/ 64 <100000000>;
-+			required-opps = <&rpmhpd_opp_svs>;
-+		};
-+	};
-+
-+	qup_opp_table_120mhz: qup-120mhz-opp-table {
++	qup_opp_table: qup-opp-table {
 +		compatible = "operating-points-v2";
 +
 +		opp-50000000 {
@@ -122,33 +100,14 @@ index 743cba9b683c..310c97323dfc 100644
 +		};
 +	};
 +
- 	reserved_memory: reserved-memory {
+ 	reserved-memory {
  		#address-cells = <2>;
  		#size-cells = <2>;
-@@ -638,44 +676,6 @@ ipcc: mailbox@408000 {
- 			#mbox-cells = <2>;
+@@ -914,25 +933,6 @@ rng: rng@793000 {
+ 			clock-names = "core";
  		};
  
--		qup_opp_table_100mhz: qup-100mhz-opp-table {
--			compatible = "operating-points-v2";
--
--			opp-50000000 {
--				opp-hz = /bits/ 64 <50000000>;
--				required-opps = <&rpmhpd_opp_min_svs>;
--			};
--
--			opp-75000000 {
--				opp-hz = /bits/ 64 <75000000>;
--				required-opps = <&rpmhpd_opp_low_svs>;
--			};
--
--			opp-100000000 {
--				opp-hz = /bits/ 64 <100000000>;
--				required-opps = <&rpmhpd_opp_svs>;
--			};
--		};
--
--		qup_opp_table_120mhz: qup-120mhz-opp-table {
+-		qup_opp_table: qup-opp-table {
 -			compatible = "operating-points-v2";
 -
 -			opp-50000000 {
@@ -168,8 +127,8 @@ index 743cba9b683c..310c97323dfc 100644
 -		};
 -
  		gpi_dma2: dma-controller@800000 {
- 			compatible = "qcom,sm8350-gpi-dma";
- 			reg = <0 0x00800000 0 0x60000>;
+ 			compatible = "qcom,sm8250-gpi-dma";
+ 			reg = <0 0x00800000 0 0x70000>;
 -- 
 2.34.1
 

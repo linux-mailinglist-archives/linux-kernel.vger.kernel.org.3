@@ -2,117 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E71453E95F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D2453EC8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239843AbiFFO31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S239964AbiFFOaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239713AbiFFO3X (ORCPT
+        with ESMTP id S239943AbiFFO36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:29:23 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9EC7E3A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:29:22 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i1so12237983plg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:29:22 -0700 (PDT)
+        Mon, 6 Jun 2022 10:29:58 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDE8CBD74
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:29:57 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id i29so6822853lfp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:29:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=TFLEIjRx+aSYvMhZeHjAivjN2q9x2X4PUbVTc44Yjww=;
-        b=KpSIkmnv1ezDYRrt9QuA0WGeAgeyMDBnkOrR5VLDMDybyQH5r/Pc7Xm/1q2PjQPyNR
-         YFO8GcikzzBOVGkI2D8LqeMyDliFqjnxL+I+VRn/LvhnzrOJuGHWX6UBvBsbogKgpzkQ
-         Ey2YW8or0Qnvtuuk3uk+bxROgvwAoJunx5ilC61bKNaZBMdElKVD54xJ4XoReMB8D79K
-         XiRCcMQ7WZNIn8kSizWaHDwjha+d21KmKmzzXPScRzcxyUN+SFHMeT9fMV85Bs2/A6s4
-         a48mwBDtd9c6DvAYlGO5+WQFvqrFjMkc4E+su9RZHlCI33FAJaettKb0w9jQxJzrEjkd
-         pPAQ==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=FY8+/CY/lpu4ZH1JCYbLKweKDg/03oKNg++dw+3w6+KgEDBzV6Mon+9IJSldws5w4A
+         pDAoOpi9cJ9EXR8S0qoSmvJMEYAopQv7XIl4dpEKqvXNF00wUXm4tyyLSiOEDmDLDvPR
+         aEzUyAlsKNAOVN0pC3+FcWHR9cnAWFHpz+iNZ+TDjlmWJfSfMriCu4Quf6wQNPpkS6LA
+         8SUSccgA8FUu7zDhtkqE7OCRwAhnPw+VNQOe+wIRcPjycI/MJxmT3Pa0zvTim+cnk7/l
+         YUZuRNbj6c3+1LfeODwTVcCVgI5wV4hAOKIvdND9bRiMHdKK37k24oGZC66FCZEXSgGU
+         YcOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=TFLEIjRx+aSYvMhZeHjAivjN2q9x2X4PUbVTc44Yjww=;
-        b=dDiglPpRdut9px4VGdA+C3WGKpawgugnmuzSc6Za2iVwXpA9Y5IqGZ9yZR9msCVVOY
-         hKDToASSCY9h5OxJj2rW6jY/BI6bFOQaIq0Kuy4lTl+YW402YFIwt7BTjT0bUosJ7NN2
-         jNG2Mwe7wu7qQylz0s1EnxKxZHXUMIalYeUzSYp8Dws42K+84HK3KcMg8wjF05urkc4I
-         7dYyPIcr6k3u7BySnIUn1Zz1wj9JxYWadvMV7ohzZDbQdRWYFt1fhrVmBsq41m3h3WJS
-         VV5+BakULjXsLdK5pQnMxnbUu3fbQVO8xgfzycK82got8hQbOrKnywWTVdvsKQ/Ej5j3
-         QXVg==
-X-Gm-Message-State: AOAM531u+w28W4fOvy/Xw7a6G8jXJJ1lPQOh+zASHYojBWWaTm5qyuO9
-        jm7poLZlCdYRNcpCbB48Kfc=
-X-Google-Smtp-Source: ABdhPJw+JhxDzx1oc/r32eWMwHM+WKNYE+9IOZc5mNyQ51ypFIOWJNDZ0mVGpdxwA5h8Zm9NT+01bw==
-X-Received: by 2002:a17:90b:180e:b0:1e8:3023:eeb9 with SMTP id lw14-20020a17090b180e00b001e83023eeb9mr19301337pjb.55.1654525761401;
-        Mon, 06 Jun 2022 07:29:21 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id a3-20020a170903100300b0015ea4173bd6sm10497475plb.195.2022.06.06.07.29.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:29:20 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] x86/mm/tlb: avoid reading mm_tlb_gen when possible
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220328103551.GY8939@worktop.programming.kicks-ass.net>
-Date:   Mon, 6 Jun 2022 07:29:17 -0700
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>, X86 ML <x86@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Transfer-Encoding: 7bit
-Message-Id: <8F17ACF3-D1AC-4330-9E44-B718F598CD6E@gmail.com>
-References: <20220322220757.8607-1-namit@vmware.com>
- <20220328103551.GY8939@worktop.programming.kicks-ass.net>
-To:     Thomas Gleixner <tglx@linutronix.de>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=PDgMf5/8+mjEkyPuFzs1M/vXTTsrpFBdNnLNAa6ACHEwhP57LLv5yUVj3d45uQOmBA
+         3wDmFMaLpL+3ELWAt1VbRohu9fw2C7p1px/lKZHjn71iwSmeFJLEoUwdh/llZ2kLrtnM
+         hcSfO+B+/MAW4dAeYa3p08ELqzMx27v0a0ma1wuSq1tfyJ0u1c3OcsqYi07NEBXe/aea
+         TMCtUs5AilsGrkYpEcdaJv73BGIzbgpbsg2uvE133Mvh0hTTvjKj9Oj/i7ogt8rTGIq6
+         T5VDx4KrAGKI90sXJcZYnoXMpOgjrRdOxbwtzQIVHdpKrbBRnFkZK5MVrvBjfS3jwxay
+         n+Ng==
+X-Gm-Message-State: AOAM533/tpa5u4oO5s2CGXO4GCoFL9ays6HtJj4Z4QklRnYZ+tJ7/6rv
+        dgjlq8jsMXIxexYZFCe/4IaL+3NOB9OPGK9p1oU=
+X-Google-Smtp-Source: ABdhPJxbfZfH1Zd/tFc4qcdtfOnlbJCRpqvwGZBCV4x+iIkV6A4BhsKK7dIaI6pHZLkkailq5po9rfn/fXnGj56pa5I=
+X-Received: by 2002:a05:6512:33cf:b0:478:ff22:edef with SMTP id
+ d15-20020a05651233cf00b00478ff22edefmr15721034lfg.430.1654525795553; Mon, 06
+ Jun 2022 07:29:55 -0700 (PDT)
+MIME-Version: 1.0
+Sender: bossmouba9@gmail.com
+Received: by 2002:a05:651c:1a29:0:0:0:0 with HTTP; Mon, 6 Jun 2022 07:29:54
+ -0700 (PDT)
+From:   Ahil Lia <mrsliaahil070@gmail.com>
+Date:   Mon, 6 Jun 2022 14:29:54 +0000
+X-Google-Sender-Auth: gnL4SXA2P-YPhvj6iuX_TwN-0D8
+Message-ID: <CAGE14-B1RPge9tF8Y3hkiJHT7tBTFvxc7yqPNy6qGLKbmUg2pw@mail.gmail.com>
+Subject: Hello, I need your assistance in this very matter
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mar 28, 2022, at 3:35 AM, Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Tue, Mar 22, 2022 at 10:07:57PM +0000, Nadav Amit wrote:
->> From: Nadav Amit <namit@vmware.com>
->> 
->> On extreme TLB shootdown storms, the mm's tlb_gen cacheline is highly
->> contended and reading it should (arguably) be avoided as much as
->> possible.
->> 
->> Currently, flush_tlb_func() reads the mm's tlb_gen unconditionally,
->> even when it is not necessary (e.g., the mm was already switched).
->> This is wasteful.
->> 
->> Moreover, one of the existing optimizations is to read mm's tlb_gen to
->> see if there are additional in-flight TLB invalidations and flush the
->> entire TLB in such a case. However, if the request's tlb_gen was already
->> flushed, the benefit of checking the mm's tlb_gen is likely to be offset
->> by the overhead of the check itself.
->> 
->> Running will-it-scale with tlb_flush1_threads show a considerable
->> benefit on 56-core Skylake (up to +24%):
->> 
->> threads		Baseline (v5.17+)	+Patch
->> 1		159960			160202
->> 5		310808			308378 (-0.7%)
->> 10		479110			490728
->> 15		526771			562528
->> 20		534495			587316
->> 25		547462			628296
->> 30		579616			666313
->> 35		594134			701814
->> 40		612288			732967
->> 45		617517			749727
->> 50		637476			735497
->> 55		614363			778913 (+24%)
-> 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-Ping?
 

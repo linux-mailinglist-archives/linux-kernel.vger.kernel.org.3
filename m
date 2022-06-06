@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270DC53E0E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E753453E0D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiFFFs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 01:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S229729AbiFFFtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiFFFs4 (ORCPT
+        with ESMTP id S229720AbiFFFtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 01:48:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9852CCB7
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 22:48:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Jun 2022 01:49:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42A22CE02;
+        Sun,  5 Jun 2022 22:49:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B2A460F95
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:48:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414E3C341CA;
-        Mon,  6 Jun 2022 05:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654494532;
-        bh=Dvz2wGZ0SUD3hGXKJv7F+hdhAS0fs0Hbg/vlNnnbu04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m+z3WMkQml0kACZBfXKVHiwEluGjiPMXHHkh1Xsjlju7rllZb+S/QgR2iofAO3pkk
-         FZ8Pw6HwSSXZsb0Y5vzhy27dNt8fR2BWo4+mMVsZat2i3t2QNjsk5uDCxyu2vzsvL0
-         mCf/j5jWCzNrqIRGwJ3k3c8HnXP9ta2KQycdobsU=
-Date:   Mon, 6 Jun 2022 07:48:49 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        straube.linux@gmail.com, dan.carpenter@oracle.com,
-        fmdefrancesco@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2 2/4] staging: r8188eu: add error handling of rtw_read16
-Message-ID: <Yp2VQU9G1xVw9lHE@kroah.com>
-References: <cover.1652994483.git.paskripkin@gmail.com>
- <fd10125ab8f4a64572742ec01d3202af2a79b1d0.1652994483.git.paskripkin@gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LGjGd6VBbz4xXg;
+        Mon,  6 Jun 2022 15:48:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654494539;
+        bh=CPBKHzFDCKd53m27AvAECAMd2sdqPutUmjqhp7KG9bI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IFweyYUIwvAkZnMkehnkfoif9wvOuCeXNIHleZUfiqOPZfKIThbnzZZOm/fKU1Mqd
+         +Og2OoQk4nJs6Zy5iy6Q3ir+RstQws3zok6zXGtjRJB0nie1irnHYoohlmXrS+Wsx9
+         gpiFbH1BHz1TCgvCp3xddkGrF4RB4v0sQZUou2gUSwvLEzt74QWn+dSCNAgaXlbMyL
+         jx7/1fRCkdhhUhTCfze6KF7GhRVScDdsSs4ilvUkCWEGTE+098gFi9VwMnmQElhkqL
+         DeNl1KO1mGClcIWEb4nc89y1euc/kh4pOC25q/AXC9b3YQyANhjDlx3bLTY6ODEj3C
+         k6GORb4heslPg==
+Date:   Mon, 6 Jun 2022 15:48:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
+Message-ID: <20220606154854.653c08ee@canb.auug.org.au>
+In-Reply-To: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
+References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd10125ab8f4a64572742ec01d3202af2a79b1d0.1652994483.git.paskripkin@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/OxU+zvSxT+aW_NkUeZrEfx2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022 at 12:09:55AM +0300, Pavel Skripkin wrote:
-> rtw_read16() reads data from device via USB API which may fail. In case
-> of any failure previous code returned stack data to callers, which is
-> wrong.
-> 
-> Fix it by changing rtw_read16() prototype and prevent caller from
-> touching random stack data
-> 
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+--Sig_/OxU+zvSxT+aW_NkUeZrEfx2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Akira,
+
+On Mon, 6 Jun 2022 13:44:24 +0900 Akira Yokosawa <akiyks@gmail.com> wrote:
+>
+> Commit 48ec13d36d3f ("gpio: Properly document parent data union")
+> is supposed to have fixed a warning from "make htmldocs" regarding
+> kernel-doc comments to union members.  However, the same warning
+> still remains [1].
+>=20
+> Fix the issue by following the example found in section "Nested
+> structs/unions" of Documentation/doc-guide/kernel-doc.rst.
+>=20
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
+> Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/=
+ [1]
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
 > ---
-> 
-> Changes since v1:
-> 	- Fixed style issue
-> 
-> ---
->  .../staging/r8188eu/hal/rtl8188e_hal_init.c   | 21 ++++++++++++---
->  drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |  8 ++++--
->  drivers/staging/r8188eu/hal/usb_halinit.c     | 27 ++++++++++++++++---
->  drivers/staging/r8188eu/hal/usb_ops_linux.c   | 13 ++++++---
->  drivers/staging/r8188eu/include/rtw_io.h      |  2 +-
->  drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  9 ++++---
->  drivers/staging/r8188eu/os_dep/os_intfs.c     |  6 ++++-
->  7 files changed, 67 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> index e67ecbd1ba79..6662ebc30f7b 100644
-> --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-> @@ -249,11 +249,14 @@ static void efuse_read_phymap_from_txpktbuf(
->  		hi32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H));
->  
->  		if (i == 0) {
-> +			u16 reg;
-> +
->  			/* Although lenc is only used in a debug statement,
->  			 * do not remove it as the rtw_read16() call consumes
->  			 * 2 bytes from the EEPROM source.
->  			 */
-> -			rtw_read16(adapter, REG_PKTBUF_DBG_DATA_L);
-> +			res = rtw_read16(adapter, REG_PKTBUF_DBG_DATA_L, &reg);
-> +			(void)res;
+>  include/linux/gpio/driver.h | 29 ++++++++++++++++-------------
+>  1 file changed, 16 insertions(+), 13 deletions(-)
 
-Same here, that line isn't ok.
+Looks good, thanks.
 
-thanks,
+Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-greg k-h
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OxU+zvSxT+aW_NkUeZrEfx2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKdlUYACgkQAVBC80lX
+0GzMeQgAmySfWjcyc+xFr/XHVcCpHvT2l98zbkfuyMs8Bu2vsutDKzizn/+T7hof
+2k5YYIAsxJSGd7bcKKyW6WuuCYILScEKiD2Lmh0RdDMMg6gOCdsoYA7VfYUhplvw
+qyCOx9xlE2Zlcjgu3K0XJEXDqKM9j4/CCbqWxlZLfJjEoWJyBhWjYv/Q7w/ZyqFV
+tI7suLKwiC0QXSWpKdP/m1xE8r92CdNsALaL1pN8uWureqDNDZfIFRxGxf4yZTAE
+lJjGvuxhfO7JYsaepVKmDNmNsYrSQbOkHT8lCx+ZFGzbgHTWgyEJNNs+zJ30SDrx
+5y4ZlcwFKNQeU7ZF/dx8CkFERNv/SA==
+=KKQb
+-----END PGP SIGNATURE-----
+
+--Sig_/OxU+zvSxT+aW_NkUeZrEfx2--

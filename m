@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B06353EBFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B4F53EBD2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiFFKOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S233659AbiFFKOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbiFFKOK (ORCPT
+        with ESMTP id S233839AbiFFKOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:14:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0393A14916F;
-        Mon,  6 Jun 2022 03:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654510268; x=1686046268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gZSzdjIX2BvSWabQuJE5Re9N3GWxjm5jrXSz5gYEGxg=;
-  b=Zwfyzh/T/yhXsyFOn6JB9NXLQAywJF5oZTITpCrfr5si3w5SVjoutPAV
-   omgXqm4l90KZw+Xe6lmeVD10up3AbTIe11Md8X12TfFztxVjC3rcW4tkc
-   cF2jaM2JoTf6DaNsZvextQiahkVJZhDQxycpPHr5nOH/m0XM9Si56Z25v
-   9W//CnTf2jhkwxJ2WdjfsU8DOwIPtfkunne8l0tUi1M+HpBlyKM5G//BK
-   EolscztBam/3HOK2RTOy2DozprCku7RQ0w6f1/kfF/a4xRb9L66zhLM8n
-   S3LFiwwrU9YsSCyHG/ZsrnVbKwIyO97dQUAFYs3k49BQxAmRR2O0iQBCH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276877483"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="276877483"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:10:51 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="722737822"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:10:48 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ny9h7-000UXR-Gu;
-        Mon, 06 Jun 2022 13:10:45 +0300
-Date:   Mon, 6 Jun 2022 13:10:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: [RFC PATCH v3 6/6] iio: adc: meson_saradc: Use
- regmap_read_poll_timeout() for busy wait
-Message-ID: <Yp3SpRIUFBBbNOQn@smile.fi.intel.com>
-References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
- <20220603100004.70336-6-andriy.shevchenko@linux.intel.com>
- <CAFBinCD1cn19uf0pyUF-Af7_thP81Ehih+X4F9+rO8tzeUm+Ow@mail.gmail.com>
+        Mon, 6 Jun 2022 06:14:20 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09521498C6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:11:35 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id d14so10175137wra.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SKMeYqCcEfGfSDa+Q181OzEqniNNtYhyJ3KyTSBEY4Y=;
+        b=mlMaVVVH5V5IY6V+cat825TU8tvhR1u2cHimuFiap7iVJSe+XE7uHWFrzj6EnLuQK3
+         mp5evB7Qw3HfmlN8DiU25Fwjf8mORJShAPBg2F8fezIWajhtssceeO53VhlUFNdkmS2U
+         hF/W87/wUfMFCih1tfMiT2RyxlbdwYxdrP9vsKV2QH8fayGpS4/N3h2Y0FF0ORFnFXFd
+         pkdQuCpbMoeY7NTPdPdZgmdF27l9Gm+VSf9fs+hMCjI+oshigc7CoNLaKrYWYvK3x7CK
+         3+fu0fkhw/OmjX9A+TC+O975l7FA3Jz1KvzbcUpkxolykDnEfdH0Y4vvBv5/NPhXnD6X
+         tuzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SKMeYqCcEfGfSDa+Q181OzEqniNNtYhyJ3KyTSBEY4Y=;
+        b=v0NfHYPtZ8e0w7SIOHfH7FXzpL/5M8q4QXT7KgE3iK3UNMWGVhOptPFYiOUvIDpe3X
+         oUfhjtVhgiVIiOIFLqjZvf9bxikC+GkzB5wCVNycPdq4DAK0a1ivIa8LG9nkqE+ATnV9
+         sUoq8+BtW47TX4n0+yaEnrfsJOLLnY8CosjfUKE+CALE7GxVC6HFL0vRFaw5fCSyDVK1
+         JzlJmJqT06Zq318/Gw1jUAZ+CsbDvtAxk9qM4KEXh6yaKT82eHPFxZGSBruW7iLCUPRy
+         G1rDaOj4x9pIcEbXhPnMN58eGXAdr3kj4PSfVa9SjT8mbvw/euCFfg3vnNCdbK+aMUaK
+         xBGg==
+X-Gm-Message-State: AOAM533rzEGBKxPtkE8eLC1TdPyandaoLgPjFd+eM/RaFUqlIipfLMwG
+        DEvfIVi09JRT97v4SUYAtXcSCw==
+X-Google-Smtp-Source: ABdhPJzuTMoyD/Jp/baSYmSwhReRg4JOV5WbVbl4L+tU9o+doSR2QFiSxN2MEG6WtjZLPQNyUse1ng==
+X-Received: by 2002:a05:6000:1a88:b0:20e:6eb4:124e with SMTP id f8-20020a0560001a8800b0020e6eb4124emr21566830wry.8.1654510294109;
+        Mon, 06 Jun 2022 03:11:34 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id 186-20020a1c19c3000000b0039c4ec6fdacsm3027736wmz.40.2022.06.06.03.11.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 03:11:33 -0700 (PDT)
+Message-ID: <a8fdaff6-396c-5450-74a8-65acb660de5d@linaro.org>
+Date:   Mon, 6 Jun 2022 11:11:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFBinCD1cn19uf0pyUF-Af7_thP81Ehih+X4F9+rO8tzeUm+Ow@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] slimbus: messaging: fix typos in comments
+Content-Language: en-US
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220521111145.81697-88-Julia.Lawall@inria.fr>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220521111145.81697-88-Julia.Lawall@inria.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 11:59:53PM +0200, Martin Blumenstingl wrote:
-> On Fri, Jun 3, 2022 at 12:00 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Simplify busy wait stages by using regmap_read_poll_timeout().
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+
+
+On 21/05/2022 12:11, Julia Lawall wrote:
+> Spelling mistakes (triple letters) in comments.
+> Detected with the help of Coccinelle.
 > 
-> > v3: new patch, but RFC, not always the read_poll_timeout() can be used, would
-> >     be nice to have it tested.
-> and also:
-> Tested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> # GXM VIM2
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
 
-Thanks for testing!
+Applied thanks,
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--srini
+> ---
+>   drivers/slimbus/messaging.c |    4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/slimbus/messaging.c b/drivers/slimbus/messaging.c
+> index e5ae26227bdb..4ce0cb61e481 100644
+> --- a/drivers/slimbus/messaging.c
+> +++ b/drivers/slimbus/messaging.c
+> @@ -79,7 +79,7 @@ int slim_alloc_txn_tid(struct slim_controller *ctrl, struct slim_msg_txn *txn)
+>   EXPORT_SYMBOL_GPL(slim_alloc_txn_tid);
+>   
+>   /**
+> - * slim_free_txn_tid() - Freee tid of txn
+> + * slim_free_txn_tid() - Free tid of txn
+>    *
+>    * @ctrl: Controller handle
+>    * @txn: transaction whose tid should be freed
+> @@ -101,7 +101,7 @@ EXPORT_SYMBOL_GPL(slim_free_txn_tid);
+>    * @txn: Transaction to be sent over SLIMbus
+>    *
+>    * Called by controller to transmit messaging transactions not dealing with
+> - * Interface/Value elements. (e.g. transmittting a message to assign logical
+> + * Interface/Value elements. (e.g. transmitting a message to assign logical
+>    * address to a slave device
+>    *
+>    * Return: -ETIMEDOUT: If transmission of this message timed out
+> 

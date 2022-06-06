@@ -2,269 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6132453E9E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4766653E882
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241456AbiFFQRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S241495AbiFFQRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241417AbiFFQRH (ORCPT
+        with ESMTP id S241542AbiFFQRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:17:07 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCCA1A43D0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:17:05 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id m20so29877109ejj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3tAzwPSe0Ztlxd1XqVYMDYMyDZ1/mepH2mr3JHF5Ji8=;
-        b=OTfKsUGbsbJeV39+/nlkujt9ehBA9RXJ2USQ0kZ3I/uqrz6V6SpnjcXFF76649atqL
-         cc0S7Acb5CV5bs8vAuXkRmhlYOKk8QBEisztUU0jZ97Val0n0J8+hYEveuYGduR4aVn6
-         V+LzB10u/zEa78Z2k4XpqdFwALYt/Yi3MTwEBl9Xq4pdInHJaOQBq0pIe4SpPMez91Fh
-         1pnnizQcIo+WN+lIEWaDPoPsAgPDUsRejiV9td+TL2pZ0GxIy3B9yFIp3a+LQ9dW6ANk
-         QmDugrmq0SMAI6pp/M1byDvisA3plW1fDvGy6Vlai94Y7HyHSknz3lG7FdGTbhU+00Zp
-         WdVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3tAzwPSe0Ztlxd1XqVYMDYMyDZ1/mepH2mr3JHF5Ji8=;
-        b=1LykNWo8FbZmPVNrLtgnVdudQbKT30AWO/fLeUvkXU8hy264CBlEYkEAHwoP3jSlI9
-         6zgLOb5ywLvM43fQxuei0CTYUiaPRcLAi/5wzuHAlfpiv7cGRG96qNLH9GYT0F2IW4zX
-         gh8GOvrz5bTkR25wf1S7llHAUJEaDdIMy1WvMBeAIDP9EzO22Jc78v3QZsZrmdWBdfsk
-         aWPzduQMN6WZT+uV32hUhlJe1UN0pN/inbt7KtrhX2yXXoh4g5oO4gPHXhY+ay/aN7rE
-         3zBqCLpVi66Q2vbBVM7HFb0RmO8RO5w59Dll33Dk1/iJW9rTIAjpEEJCxmzQIHzIGMUs
-         Zz1Q==
-X-Gm-Message-State: AOAM532JSa+V9JhwJa6kmiFr7wrKWuXLS3buLRenA0/6qMgSrEfYVzlc
-        38MFxMR67kX7+TeiiZURxsiwMTHuQzi9qDjTjowIww==
-X-Google-Smtp-Source: ABdhPJz3/J0M2Qr1PRrc3I8fIyptWURl/dc9cFFDruwiysSJtFHCKZ0cXPj+xmBN1OnJjteQBkDP0YYqG0GoAHP9HSI=
-X-Received: by 2002:a17:906:4d50:b0:70d:afd4:1e63 with SMTP id
- b16-20020a1709064d5000b0070dafd41e63mr17709889ejv.618.1654532224225; Mon, 06
- Jun 2022 09:17:04 -0700 (PDT)
+        Mon, 6 Jun 2022 12:17:41 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5E20BEC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:17:34 -0700 (PDT)
+Received: from ktm (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id A8732805FE;
+        Mon,  6 Jun 2022 18:17:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1654532252;
+        bh=eP279UjGMMblW/RjkeTp8zITZb3eYCq6RyDyFwrQ+7A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NiP6Zi5TLlJAUa34eeVil1qNPMOCzpnJ2vi3EUZ02x+nNIN/wC1eswPRa5LWX82gW
+         xQsAbGE/b5fXwDTAe8gPQkVcLuwqjW9Gu2+njDvtRixFig1jguRVHf2HZer71OcUCm
+         1mU0ZDBn35HZ0l5fbV4fRuhg+05hRjLKPqYs/RSE5AyyxXDl2PM6ZUE5IO2obcmome
+         6j1BD5H6cQ7KTSGxiKQNxDUIuYRrvBxmhoX4UWFONLR7cY7kIyI417gU6YVK2B7UQG
+         5rebzhBycZjddEqwOc5g/y3VcrB4HjpiPN67tizBDgf1F4Td+vzVRPPRIv7rAq9vxC
+         IrUOLctsGkBIg==
+Date:   Mon, 6 Jun 2022 18:17:31 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH 1/3] ASoC: wm8940: Remove warning when no plat data
+Message-ID: <20220606181731.04b6f771@ktm>
+In-Reply-To: <Yp4iGvGFD9jo4WUP@sirena.org.uk>
+References: <20220606154441.20848-1-lukma@denx.de>
+        <Yp4iGvGFD9jo4WUP@sirena.org.uk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-12-tzungbi@kernel.org>
-In-Reply-To: <20220606141051.285823-12-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 6 Jun 2022 09:16:53 -0700
-Message-ID: <CABXOdTe+cZ9ouzjqNKGp5TmCrbfFH9hmpnmbBOGoCv3a1VCBhQ@mail.gmail.com>
-Subject: Re: [PATCH 11/13] platform/chrome: cros_ec_proto: fix
- get_host_command_version_mask() returns
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/3EtfwSfo=U0Fi_=NClQYqiP"; protocol="application/pgp-signature"
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> `mask` of get_host_command_version_mask() is valid only if it returns
-> positive number (i.e. sizeof(struct ec_response_get_cmd_versions)).
->
-> - Remove the unneeded `ver_mask` initialization.
->
-> - Update callers of get_host_command_version_mask() for checking correct
->   return values.
->
+--Sig_/3EtfwSfo=U0Fi_=NClQYqiP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think it would be better to have the function return a negative
-error value instead of 0 if returning 0 is indeed an error. I also
-wonder if the caller ever uses a return value > 0, or if the function
-should just return 0 if there was no error.
+Hi Mark,
 
-Thanks,
-Guenter
+> On Mon, Jun 06, 2022 at 05:44:39PM +0200, Lukasz Majewski wrote:
+> > The lack of platform data in the contemporary Linux
+> > shall not be the reason to display warnings to the
+> > kernel logs.
+> >=20
+> > Signed-off-by: Lukasz Majewski <lukma@denx.de> =20
+>=20
+> Given that the device requires configuration and doesn't appear to
+> have any other firmware interface support that's rather a strong
+> statement...
 
-> - Add a Kunit test: `ver_mask` has some garbage bytes from
->   previous EC_CMD_GET_NEXT_EVENT but there is no host sleep.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->  drivers/platform/chrome/cros_ec_proto.c      |   8 +-
->  drivers/platform/chrome/cros_ec_proto_test.c | 109 +++++++++++++++++++
->  2 files changed, 113 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 07b57ea105b6..91c945c9911f 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -409,7 +409,7 @@ static int fill_protocol_info_legacy(struct cros_ec_device *ec_dev)
->   * @cmd: command to get the version of.
->   * @mask: result when function returns 0.
->   *
-> - * @return 0 on success, error code otherwise
-> + * @return >0 on success, error code otherwise
->   *
->   * LOCKING:
->   * the caller has ec_dev->lock mutex or the caller knows there is
-> @@ -454,7 +454,7 @@ static int get_host_command_version_mask(struct cros_ec_device *ec_dev, u16 cmd,
->  int cros_ec_query_all(struct cros_ec_device *ec_dev)
->  {
->         struct device *dev = ec_dev->dev;
-> -       u32 ver_mask = 0;
-> +       u32 ver_mask;
->         int ret;
->
->         /* First try sending with proto v3. */
-> @@ -486,7 +486,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->
->         /* Probe if MKBP event is supported */
->         ret = get_host_command_version_mask(ec_dev, EC_CMD_GET_NEXT_EVENT, &ver_mask);
-> -       if (ret < 0 || ver_mask == 0) {
-> +       if (ret <= 0 || ver_mask == 0) {
->                 ec_dev->mkbp_event_supported = 0;
->         } else {
->                 ec_dev->mkbp_event_supported = fls(ver_mask);
-> @@ -495,7 +495,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->
->         /* Probe if host sleep v1 is supported for S0ix failure detection. */
->         ret = get_host_command_version_mask(ec_dev, EC_CMD_HOST_SLEEP_EVENT, &ver_mask);
-> -       ec_dev->host_sleep_v1 = (ret >= 0 && (ver_mask & EC_VER_MASK(1)));
-> +       ec_dev->host_sleep_v1 = (ret > 0 && (ver_mask & EC_VER_MASK(1)));
->
->         /* Get host event wake mask. */
->         ret = cros_ec_get_host_event_wake_mask(ec_dev, &ec_dev->host_event_wake_mask);
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index e2c369765612..7d73aeb99d1d 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -760,6 +760,114 @@ static void cros_ec_proto_test_query_all_no_host_sleep(struct kunit *test)
->         }
->  }
->
-> +static void cros_ec_proto_test_query_all_no_host_sleep2(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct ec_xfer_mock *mock;
-> +       int ret;
-> +
-> +       /* Set some garbage bytes. */
-> +       ec_dev->host_sleep_v1 = true;
-> +
-> +       /* For fill_protocol_info() without passthru. */
-> +       {
-> +               struct ec_response_get_protocol_info *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +
-> +               /*
-> +                * Although it doesn't check the value, provides valid sizes so that
-> +                * cros_ec_query_all() allocates din and dout correctly.
-> +                */
-> +               data = (struct ec_response_get_protocol_info *)mock->o_data;
-> +               data->max_request_packet_size = 0xbe;
-> +               data->max_response_packet_size = 0xef;
-> +       }
-> +
-> +       /* For fill_protocol_info() with passthru. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND,
-> +                                                   sizeof(struct ec_response_get_protocol_info));
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       /* For get_host_command_version_mask() for MKBP. */
-> +       {
-> +               struct ec_response_get_cmd_versions *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +
-> +               /* In order to pollute next get_host_command_version_mask(). */
-> +               data = (struct ec_response_get_cmd_versions *)mock->o_data;
-> +               data->version_mask = 0xbeef;
-> +       }
-> +
-> +       /* For get_host_command_version_mask() for host sleep v1. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       cros_ec_proto_test_query_all_pretest(test);
-> +       ret = cros_ec_query_all(ec_dev);
-> +       KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +       /* For fill_protocol_info() without passthru. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_protocol_info));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-> +       }
-> +
-> +       /* For fill_protocol_info() with passthru. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command,
-> +                               EC_CMD_PASSTHRU_OFFSET(CROS_EC_DEV_PD_INDEX) |
-> +                               EC_CMD_GET_PROTOCOL_INFO);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_protocol_info));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-> +       }
-> +
-> +       /* For get_host_command_version_mask() for MKBP. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_CMD_VERSIONS);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_cmd_versions));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
-> +       }
-> +
-> +       /* For get_host_command_version_mask() for host sleep v1. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_CMD_VERSIONS);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_cmd_versions));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
-> +
-> +               KUNIT_EXPECT_FALSE(test, ec_dev->host_sleep_v1);
-> +       }
-> +}
-> +
->  static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
->  {
->         struct cros_ec_proto_test_priv *priv = test->priv;
-> @@ -941,6 +1049,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
->         KUNIT_CASE(cros_ec_proto_test_query_all_no_mkbp),
->         KUNIT_CASE(cros_ec_proto_test_query_all_no_mkbp2),
->         KUNIT_CASE(cros_ec_proto_test_query_all_no_host_sleep),
-> +       KUNIT_CASE(cros_ec_proto_test_query_all_no_host_sleep2),
->         KUNIT_CASE(cros_ec_proto_test_query_all_default_wake_mask),
->         {}
->  };
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+Thanks for the comment :-)
+
+My point is that - similar codec - wm8974 don't display such warnings.
+(this code was not updated/refactored for a quite long time).
+
+Best regards,
+
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/3EtfwSfo=U0Fi_=NClQYqiP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmKeKJsACgkQAR8vZIA0
+zr2YUgf/WLcHyS0nmSaNYGAiWqnLDVVXJzE7LDBHx5qszYi5HnaSvEoULIBRkLln
+AbuRhbSM2WaBP2yqDQcm9YXg59zQM9WhCpuw4/Ai5G+8s9yw0vJhw54t+FCK0bqg
+WvtYhHFY7VjdqkzQ7MrnoMLiG7Cjv/ZAy2l7Ba6Fmte/VL6ycMtqGtfz4ZUv0HbU
++YZ9w59YqnD4Uh5RdU47ZtNbTDgnRXilhEUSu6mMGsgeQJoNRYqtfxRva/9hGCgv
+R/IYjUEBFA94mkMMD9NWQ/QteAAyclqrCxnpEFYcfPuR1Y944do5c7eOywep0J+n
+tolWcSNafAhy+/+WL/n2to+BWduxZQ==
+=WLzo
+-----END PGP SIGNATURE-----
+
+--Sig_/3EtfwSfo=U0Fi_=NClQYqiP--

@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C79B53EC51
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FBD53E9F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240859AbiFFP3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S240915AbiFFPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240813AbiFFP1c (ORCPT
+        with ESMTP id S241232AbiFFPfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:27:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78999646C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654529243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+hANCxUkjtJekam2HLSgzp8bKfmmuJSpp+YeIM4LYb4=;
-        b=LP6zas/zUl80uedikXfB3MrVyvDEx5A08xTax46joCX5rzoyikPrXGX3DW4/pPYluoFuOv
-        NOIvf/WZpsLcvvULoOlocifCRV4wlvhZxQjTxDGEjABPk9KOsaB9hsV24LKitoF/xL19YE
-        mJDgyhBRxSSjkL5KBawghsMOrwP7aSo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-488-dqgEHCpIPrSZASKGAJipqA-1; Mon, 06 Jun 2022 11:27:18 -0400
-X-MC-Unique: dqgEHCpIPrSZASKGAJipqA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19FE329ABA31;
-        Mon,  6 Jun 2022 15:27:18 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.34.167])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AA66F82882;
-        Mon,  6 Jun 2022 15:27:17 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     jtoppins@redhat.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [net-next 2/2] bonding: cleanup bond_create
-Date:   Mon,  6 Jun 2022 11:26:53 -0400
-Message-Id: <3f69118ff14ac0608810dac8dc1493559cf81640.1654528729.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1654528729.git.jtoppins@redhat.com>
-References: <cover.1654528729.git.jtoppins@redhat.com>
+        Mon, 6 Jun 2022 11:35:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA57E4D60C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654529742; x=1686065742;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aHejLT/VRnChfDayBY6M2GyE/IJnjWN0cBFMUZHN78I=;
+  b=lYWsdoE9shJD1ZmnO4O6JEp0P/3ATOQ+n/WOmub9G/p5oe+RSEGery7o
+   8gfMyLZfw741f48hhdQ0B2Apno0YcpWDNl3CzRsnJyLT5pBPO2zgawTj6
+   IqqCKI700uLa9S9AWeZUGmEHPpGJQ+6bAgZrnWt6bPpLFJvjrQpz1vkTu
+   4Ih6mGf3DeHZGx8E0ytV1tf51nQL7E7xncz6ZcloBNVOiOzQ9x8xCpkzS
+   6RcPLCg3/v+D0qAicNFvovaYmkOpWlSjR/EwE80neCDvI9RfYOWfD+qpE
+   qrbZE0QxCj6CCw/t3gLM/bI1uJhAoG1AvVac1CgoP9nw/Vt0cyKP6EjQ3
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="259045606"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="259045606"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 08:29:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="825876855"
+Received: from kplovato-mobl1.amr.corp.intel.com (HELO [10.212.186.68]) ([10.212.186.68])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 08:29:50 -0700
+Message-ID: <84dc784b-10c9-9ade-7a20-97fe0c32f2ff@intel.com>
+Date:   Mon, 6 Jun 2022 08:29:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] x86/mm/tlb: avoid reading mm_tlb_gen when possible
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+References: <20220322220757.8607-1-namit@vmware.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220322220757.8607-1-namit@vmware.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,73 +66,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting RLB_NULL_INDEX is not needed as this is done in bond_alb_initialize
-which is called by bond_open.
+On 3/22/22 15:07, Nadav Amit wrote:
+> +	if (f->new_tlb_gen <= local_tlb_gen) {
+> +		/*
+> +		 * We are already up to date in respect to f->new_tlb_gen.
+> +		 * While the core might be still behind mm_tlb_gen, checking
+> +		 * mm_tlb_gen unnecessarily would have negative caching effects
+> +		 * so avoid it.
+> +		 */
+> +		return;
+> +	}
+> +
 
-Also reduce the number of rtnl_unlock calls by just using the standard
-goto cleanup path.
-
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
- drivers/net/bonding/bond_main.c | 24 ++++++------------------
- 1 file changed, 6 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index f85372adf042..3d427183ec8e 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -6218,45 +6218,33 @@ int bond_create(struct net *net, const char *name)
- {
- 	struct net_device *bond_dev;
- 	struct bonding *bond;
--	struct alb_bond_info *bond_info;
--	int res;
-+	int res = -ENOMEM;
- 
- 	rtnl_lock();
- 
- 	bond_dev = alloc_netdev_mq(sizeof(struct bonding),
- 				   name ? name : "bond%d", NET_NAME_UNKNOWN,
- 				   bond_setup, tx_queues);
--	if (!bond_dev) {
--		pr_err("%s: eek! can't alloc netdev!\n", name);
--		rtnl_unlock();
--		return -ENOMEM;
--	}
-+	if (!bond_dev)
-+		goto out;
- 
--	/*
--	 * Initialize rx_hashtbl_used_head to RLB_NULL_INDEX.
--	 * It is set to 0 by default which is wrong.
--	 */
- 	bond = netdev_priv(bond_dev);
--	bond_info = &(BOND_ALB_INFO(bond));
--	bond_info->rx_hashtbl_used_head = RLB_NULL_INDEX;
--
- 	dev_net_set(bond_dev, net);
- 	bond_dev->rtnl_link_ops = &bond_link_ops;
- 
- 	res = register_netdevice(bond_dev);
- 	if (res < 0) {
- 		free_netdev(bond_dev);
--		rtnl_unlock();
--
--		return res;
-+		goto out;
- 	}
- 
- 	netif_carrier_off(bond_dev);
- 
- 	bond_work_init_all(bond);
- 
-+out:
- 	rtnl_unlock();
--	return 0;
-+	return res;
- }
- 
- static int __net_init bond_net_init(struct net *net)
--- 
-2.27.0
-
+Nit: There's at least one "we" in here that needs to get fixed up.  I'll
+plan to do that when I apply it, but a v2 with that fixed and Peter's
+ack added might save me five minutes.

@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFE053DFE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 05:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A0653DFEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 05:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352260AbiFFDMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 23:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S1352271AbiFFDM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 23:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349220AbiFFDMM (ORCPT
+        with ESMTP id S1349220AbiFFDMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 23:12:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CC019FB9
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 20:12:10 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LGdmd3vfHzjXQ0;
-        Mon,  6 Jun 2022 11:11:13 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 11:12:08 +0800
-Subject: Re: [PATCH v1] mm,hwpoison: set PG_hwpoison for busy hugetlb pages
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        zhenwei pi <pizhenwei@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220511151955.3951352-1-naoya.horiguchi@linux.dev>
- <f0da4fcf-a4af-ccaa-32ce-55d9fda72203@oracle.com>
- <20220512043253.GA242760@hori.linux.bs1.fc.nec.co.jp>
- <7395dbe7-7be6-6ef7-7728-a118471caa5a@huawei.com>
- <20220602061203.GB1172281@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <95a3c6d3-ae33-580b-9448-bb5d5c356cec@huawei.com>
-Date:   Mon, 6 Jun 2022 11:12:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 5 Jun 2022 23:12:55 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3CF4F46D;
+        Sun,  5 Jun 2022 20:12:53 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id m26so6640735wrb.4;
+        Sun, 05 Jun 2022 20:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xQwH03eUdhwmKSD3Wqpf/OXltVtDgOmzI8xFQdlkuAU=;
+        b=o3BPeuKWpskf/nmERSRQZ7mKyW5ObyOUwafZVED4ziKHTp27U2firE+Lg3HG/d0zCy
+         r1m+1Ka74YCvs/5iQS83SYRUAJeAHpJ6bLu6gbpJrkAgmn2ohmO/oIOhH1FTh15pxvav
+         gruahLTIMRuBYIV9t/04c51vxOxOMIp7KXUJ2tpsIvc1gL8yQyWlGDMJ5OMHnGdTapXX
+         kwjNDeeuwr8oTsjgiOgtWIk5Ki91cmRaN0nwFXMbcJNKmxXueoijYJndXK2mDxYr/iTR
+         IHCgRDmrqjIoVVNdb5iYKDtkxlVLIFIKuvyR0UGXt1/utBzMJByVGN3Bdlvp/weR028I
+         2MnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xQwH03eUdhwmKSD3Wqpf/OXltVtDgOmzI8xFQdlkuAU=;
+        b=4tx7Nuu5ClkcDMsTtpOY6ZHC4IpioTPdFooOqneYBxitvX3gsvwvtydi11i5TuhLOI
+         2ujy+aZBDRaMXkv1tsqrORc3lTSO39EeLLUpdr8WIN6kgdDZJFbL9LT+60rCTVIVta6l
+         WcOoeb5VMNkUtxn0Az1P0rsY18rucsrbLWS+mDDfkHqzWMtuZtMppYkZDKHLPHzQ0c2V
+         ofVdQtMlkIXUOLg8XsDTjGPYUfPWeMEYngeK/5cG63o0wSlI47Zt7UQNZKKIigk2IOyN
+         Xh2RDrFmUaEXUozxbG/8JHsLrMtDhdqjJ2gRJBvvI6ajA9m8F87iZRmajDW+zzvTPq3X
+         nq7Q==
+X-Gm-Message-State: AOAM5313crh4r02Ex1xrfJXD3wU689zhW05+AZFdcU9kFACJIep2+SS1
+        eZs8JNvxfc3MOhHzy6ZktC5hBxlaFrdPO4BhZKI=
+X-Google-Smtp-Source: ABdhPJxBUbYw3U2MPjpvu/zULIajZwXsBNlyGnAUBi30WP//50Wrff8qMrY9wz1OYUHmTjLMMwBueHpZKS6TTbPiW9M=
+X-Received: by 2002:a5d:4302:0:b0:20e:66db:b8f5 with SMTP id
+ h2-20020a5d4302000000b0020e66dbb8f5mr18692708wrq.320.1654485171681; Sun, 05
+ Jun 2022 20:12:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220602061203.GB1172281@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220530180910.2533-1-andriy.shevchenko@linux.intel.com> <20220603180347.2b0d0f08@jic23-huawei>
+In-Reply-To: <20220603180347.2b0d0f08@jic23-huawei>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Mon, 6 Jun 2022 11:12:15 +0800
+Message-ID: <CAF12kFueRHQJy2t6xitqfYwsY0kPagDSH289QKp0y0W0HzsshA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] iio: adc: sc27xx_adc: Re-use generic struct u32_fract
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Cixi Geng <cixi.geng1@unisoc.com>, linux-iio@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,120 +73,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/2 14:12, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Thu, May 12, 2022 at 07:18:51PM +0800, Miaohe Lin wrote:
->> On 2022/5/12 12:32, HORIGUCHI NAOYA(堀口 直也) wrote:
->>> On Wed, May 11, 2022 at 11:35:55AM -0700, Mike Kravetz wrote:
->>>> On 5/11/22 08:19, Naoya Horiguchi wrote:
->>>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
->>>>>
->>>>> If memory_failure() fails to grab page refcount on a hugetlb page
->>>>> because it's busy, it returns without setting PG_hwpoison on it.
->>>>> This not only loses a chance of error containment, but breaks the rule
->>>>> that action_result() should be called only when memory_failure() do
->>>>> any of handling work (even if that's just setting PG_hwpoison).
->>>>> This inconsistency could harm code maintainability.
->>>>>
->>>>> So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
->>>>>
->>>>> Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
->>>>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
->>>>> ---
->>>>>  include/linux/mm.h  | 1 +
->>>>>  mm/memory-failure.c | 8 ++++----
->>>>>  2 files changed, 5 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>>>> index d446e834a3e5..04de0c3e4f9f 100644
->>>>> --- a/include/linux/mm.h
->>>>> +++ b/include/linux/mm.h
->>>>> @@ -3187,6 +3187,7 @@ enum mf_flags {
->>>>>  	MF_MUST_KILL = 1 << 2,
->>>>>  	MF_SOFT_OFFLINE = 1 << 3,
->>>>>  	MF_UNPOISON = 1 << 4,
->>>>> +	MF_NO_RETRY = 1 << 5,
->>>>>  };
->>>>>  extern int memory_failure(unsigned long pfn, int flags);
->>>>>  extern void memory_failure_queue(unsigned long pfn, int flags);
->>>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->>>>> index 6a28d020a4da..e3269b991016 100644
->>>>> --- a/mm/memory-failure.c
->>>>> +++ b/mm/memory-failure.c
->>>>> @@ -1526,7 +1526,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
->>>>>  			count_increased = true;
->>>>>  	} else {
->>>>>  		ret = -EBUSY;
->>>>> -		goto out;
->>>>> +		if (!(flags & MF_NO_RETRY))
->>>>> +			goto out;
->>>>>  	}
->>>>
->>>> Hi Naoya,
->>>>
->>>> We are in the else block because !HPageFreed() and !HPageMigratable().
->>>> IIUC, this likely means the page is isolated.  One common reason for isolation
->>>> is migration.  So, the page could be isolated and on a list for migration.
->>>
->>> Yes, and I also detected this issue by testing race between hugepage allocation
->>> and memory_failure(). 
->>>
->>>>
->>>> I took a quick look at the hugetlb migration code and did not see any checks
->>>> for PageHWPoison after a hugetlb page is isolated.  I could have missed
->>>> something?  If there are no checks, we will read the PageHWPoison page
->>>> in kernel mode while copying to the migration target.
->>>
->>> Yes, that could happen.  This patch does not affect ongoing hugepage migration.
->>> But after the migration source hugepage is freed, the PG_hwpoison should work
->>> to prevent reusing.
->>>
->>>>
->>>> Is this an issue?  Is is something we need to be concerned with?  Memory
->>>> errors can happen at any time, and gracefully handling them is best effort.
->>>
->>> Right, so doing nothing for this case could be OK if doing something causes
->>> some issues or makes code too complicated.  The motivation of this patch is
->>> that now I think memory_failure() should do something (at least setting
->>> PG_hwpoison) unless the page is already hwpoisoned or rejected by
->>> hwpoison_filter(), because of the effect after free as mentioned above.
->>>
->>> This is also expected in other case too. For example, slab is a unhandlable
->>> type of page, but we do set PG_hwpoison.  This flag should not affect any of
->>> ongoing slab-related process, but that's OK because it becomes effective
->>> after the slab page is freed.
->>>
->>> So this patch is intended to align to the behavior.  Allowing hugepage
->>> migration to do something good using PG_hwpoison seems to me an unsolved
->>> separate issue.
->>
->> I tend to agree with Naoya. And could we try to do it better? IMHO, we could do a
->> get_page_unless_zero here to ensure that hugetlb page migration will fail due to
->> this extra page reference and thus preventing the page content from being accessed.
->> Does this work? Or am I miss something?
-> 
-> Sorry for my missing to answering the question,
-
-Never mind. I almost forget it too. ;)
-
-> 
-> Taking page refcount to prevent page migration could work.  One concern is
-> how we can distinguish hugepages under migration and those under allocation
-> from buddy.  Maybe this was also mentioned in discussion over 
-> https://github.com/torvalds/linux/commit/405ce051236cc65b30bbfe490b28ce60ae6aed85
-> , there's a small window where an allocating compound page is refcounted and
-> hugepage (having deconstructor COMPOUND_PAGE_DTOR), and not protected by
-> hugetlb_lock, so simply get_page_unless_zero() might not work (might break
-> allocation code).
-> If we have more reliable indicator to ensure that a hugepage is under migration,
-> that would be helpful.
-
-Yes, I agree with you. If we have more reliable indicator to ensure that a hugepage
-is under migration, we could try to do this then. :)
-
-> 
+Jonathan Cameron <jic23@kernel.org> =E4=BA=8E2022=E5=B9=B46=E6=9C=884=E6=97=
+=A5=E5=91=A8=E5=85=AD 01:44=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, 30 May 2022 21:09:10 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+>
+> > Instead of custom data type re-use generic struct u32_fract.
+>
+> There isn't a custom data type  - I'll reword this whilst applying
+> if there is no reason for a v2.
+>
+> > No changes intended.
+>
+> functional changes
+>
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Given they have been active recently I'd ideally like Cixi Geng
+> to take a quick glance at this before I apply it.
+Acked-by: Cixi Geng <cixi.geng1@unisoc.com>
+>
 > Thanks,
-> Naoya Horiguchi
-
-Many thanks for reply!
-
-> 
+>
+> Jonathan
+>
+> > ---
+> >  drivers/iio/adc/sc27xx_adc.c | 15 +++++++--------
+> >  1 file changed, 7 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.=
+c
+> > index e9ff2d6a8a57..f8421cbba8fa 100644
+> > --- a/drivers/iio/adc/sc27xx_adc.c
+> > +++ b/drivers/iio/adc/sc27xx_adc.c
+> > @@ -579,15 +579,14 @@ static int sc27xx_adc_read(struct sc27xx_adc_data=
+ *data, int channel,
+> >       return ret;
+> >  }
+> >
+> > -static void sc27xx_adc_volt_ratio(struct sc27xx_adc_data *data,
+> > -                               int channel, int scale,
+> > -                               u32 *div_numerator, u32 *div_denominato=
+r)
+> > +static void sc27xx_adc_volt_ratio(struct sc27xx_adc_data *data, int ch=
+annel, int scale,
+> > +                               struct u32_fract *fract)
+> >  {
+> >       u32 ratio;
+> >
+> >       ratio =3D data->var_data->get_ratio(channel, scale);
+> > -     *div_numerator =3D ratio >> SC27XX_RATIO_NUMERATOR_OFFSET;
+> > -     *div_denominator =3D ratio & SC27XX_RATIO_DENOMINATOR_MASK;
+> > +     fract->numerator =3D ratio >> SC27XX_RATIO_NUMERATOR_OFFSET;
+> > +     fract->denominator =3D ratio & SC27XX_RATIO_DENOMINATOR_MASK;
+> >  }
+> >
+> >  static int adc_to_volt(struct sc27xx_adc_linear_graph *graph,
+> > @@ -615,7 +614,7 @@ static int sc27xx_adc_to_volt(struct sc27xx_adc_lin=
+ear_graph *graph,
+> >  static int sc27xx_adc_convert_volt(struct sc27xx_adc_data *data, int c=
+hannel,
+> >                                  int scale, int raw_adc)
+> >  {
+> > -     u32 numerator, denominator;
+> > +     struct u32_fract fract;
+> >       u32 volt;
+> >
+> >       /*
+> > @@ -637,9 +636,9 @@ static int sc27xx_adc_convert_volt(struct sc27xx_ad=
+c_data *data, int channel,
+> >               break;
+> >       }
+> >
+> > -     sc27xx_adc_volt_ratio(data, channel, scale, &numerator, &denomina=
+tor);
+> > +     sc27xx_adc_volt_ratio(data, channel, scale, &fract);
+> >
+> > -     return DIV_ROUND_CLOSEST(volt * denominator, numerator);
+> > +     return DIV_ROUND_CLOSEST(volt * fract.denominator, fract.numerato=
+r);
+> >  }
+> >
+> >  static int sc27xx_adc_read_processed(struct sc27xx_adc_data *data,
+>

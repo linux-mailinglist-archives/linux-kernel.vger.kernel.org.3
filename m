@@ -2,135 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202C653E327
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9973B53E246
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiFFIwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 04:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S231690AbiFFIWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 04:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiFFIv0 (ORCPT
+        with ESMTP id S231653AbiFFIWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 04:51:26 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA77043EEA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 01:49:20 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:4ddc:2f16:838f:9c0c])
-        by albert.telenet-ops.be with bizsmtp
-        id fkpH2700B4e6eDr06kpHCe; Mon, 06 Jun 2022 10:49:17 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ny8QG-002uaW-Vp
-        for linux-kernel@vger.kernel.org; Mon, 06 Jun 2022 10:49:16 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ny7zt-00BiOa-VI
-        for linux-kernel@vger.kernel.org; Mon, 06 Jun 2022 10:22:01 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v5.19-rc1
-Date:   Mon,  6 Jun 2022 10:22:01 +0200
-Message-Id: <20220606082201.2792145-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAHk-=wgZt-YDSKfdyES2p6A_KJoG8DwQ0mb9CeS8jZYp+0Y2Rw@mail.gmail.com>
-References: <CAHk-=wgZt-YDSKfdyES2p6A_KJoG8DwQ0mb9CeS8jZYp+0Y2Rw@mail.gmail.com>
+        Mon, 6 Jun 2022 04:22:51 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26F6CC4;
+        Mon,  6 Jun 2022 01:22:48 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id q26so8431891wra.1;
+        Mon, 06 Jun 2022 01:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=oKiwtYWwJ/ZAYTG8vdYuhRqG3yc8krk/ZBTNC2MOyng=;
+        b=gM8wZ/Jx8lrC6fmxR/XpEfarEEJJz9uExyTwyh9muHTRApq5hOGMFrj88oPbNqF3iC
+         60paYjYKRrLSiyckRcOsuxrsTRE/wNkcWlUsZMqRH3zEvh9i0dxMTSGLoDRTKavBADLH
+         ZXw6OCXI8UmfWx78iS5dFmwHY5CKXWlAT3c4H3aEwasPFnsnspzUqibg/fiKHAbG3HaL
+         /3o2rDM+OjpPOvSYFeU2irp+ETdvmomGGpJHXjbqTU+Fmcr+kM3jemaA8xMuVHho49lw
+         Vupf/aoNKgVD1uzHD+OZXJ7X9kCdzafFKp9oK4Dh1iBSgvpimNCfkYHvt5roDcq6Fqqq
+         6vQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=oKiwtYWwJ/ZAYTG8vdYuhRqG3yc8krk/ZBTNC2MOyng=;
+        b=Wpu/xj91CEkJHTnT8eMQRi+BopLdzcHlAV7zgVrdhIpQKlQoyADvGOCAjj9HPztS6S
+         NdHvNwF1mt8Kch8goLU4q8FQM8vP3m38tq+a4Ofd0Aq1GKCUFOBA9NXumD0CYLI94d8U
+         J6UY7idqhLhewxlvBg9UQeOjAgvzr0b5o/FJAqDYouVJ2WZJdKEW6lz7GGupky+QUkKn
+         KcTNkrT4nI6OCtAts3nCOlcTHjruGZ5Nbef78YWG6fE4dy/1o3H4zlgB3k9bd5RJAQS1
+         YIgYyKxItCOpNrhhMZJ4sxkBsEaDSSK2omqYQfhY713G60RCree4ulkuiTChQVynIsBY
+         RdIg==
+X-Gm-Message-State: AOAM533ZfJw8txhk3XXxTELXgfJ5GSFMrl1J8Z5DBdHa8uSPoicZn0Bv
+        UPPQtDK7Jpk1bXHO13G79tc=
+X-Google-Smtp-Source: ABdhPJz7JciclJBrOqf8JtfMLxlNu71DjfTpAykx1io2ek9vepBw+TG/Dtn+BMR5meU5xE3utuCgKg==
+X-Received: by 2002:adf:eb11:0:b0:213:19dd:e1aa with SMTP id s17-20020adfeb11000000b0021319dde1aamr19393403wrn.324.1654503767336;
+        Mon, 06 Jun 2022 01:22:47 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id j22-20020a5d4536000000b0021108003596sm14062329wra.10.2022.06.06.01.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 01:22:46 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 10:22:41 +0200
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/5] crypto: aspeed: Add HACE hash driver
+Message-ID: <Yp25UVBCNHzeiQOn@Red>
+References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
+ <20220601054204.1522976-2-neal_liu@aspeedtech.com>
+ <YpcYLiJfC6tgP2Nj@Red>
+ <HK0PR06MB320263939B2E388481DE2A0A80DF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <HK0PR06MB320263939B2E388481DE2A0A80DF9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v5.19-rc1[1] compared to v5.18[2].
+Le Wed, Jun 01, 2022 at 08:38:51AM +0000, Neal Liu a écrit :
+> > Le Wed, Jun 01, 2022 at 01:42:00PM +0800, Neal Liu a écrit :
+> > > Hash and Crypto Engine (HACE) is designed to accelerate the throughput
+> > > of hash data digest, encryption, and decryption.
+> > >
+> > > Basically, HACE can be divided into two independently engines
+> > > - Hash Engine and Crypto Engine. This patch aims to add HACE hash
+> > > engine driver for hash accelerator.
+> > >
+> > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> > > Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+> > 
+> > Hello
+> > 
+> > Did you test with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y (you should
+> > said it in cover letter).
+> > There are several easy style fixes to do (please run checkpatch --strict) Did you
+> > test your driver with both little and big endian mode ?
+> > 
+> 
+> Yes, I also test it with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y. I'll describe it in cover letter as you suggested.
+> And the style problem would be fixed, thanks for your suggestion.
+> 
+> How to test it with both little and big endian mode? It would be appreciated if you give me some clue.
+> 
 
-Summarized:
-  - build errors: +9/-10
-  - build warnings: +3/-24
+Hello
 
-Note that there may be false regressions, as some logs are incomplete.
-Still, they're build errors/warnings.
+Sorry for the delayed answer.
 
-Happy fixing! ;-)
+You should try compiling and booting with CONFIG_CPU_BIG_ENDIAN=y
 
-Thanks to the linux-next team for providing the build service.
+> > Also please see my comment below.
+> > 
+> > [...]
+> > > +/* Initialization Vectors for SHA-family */ static const u32
+> > > +sha1_iv[8] = {
+> > > +	0x01234567UL, 0x89abcdefUL, 0xfedcba98UL, 0x76543210UL,
+> > > +	0xf0e1d2c3UL, 0, 0, 0
+> > > +};
+> > > +
+> > > +static const u32 sha224_iv[8] = {
+> > > +	0xd89e05c1UL, 0x07d57c36UL, 0x17dd7030UL, 0x39590ef7UL,
+> > > +	0x310bc0ffUL, 0x11155868UL, 0xa78ff964UL, 0xa44ffabeUL };
+> > > +
+> > > +static const u32 sha256_iv[8] = {
+> > > +	0x67e6096aUL, 0x85ae67bbUL, 0x72f36e3cUL, 0x3af54fa5UL,
+> > > +	0x7f520e51UL, 0x8c68059bUL, 0xabd9831fUL, 0x19cde05bUL };
+> > > +
+> > > +static const u32 sha384_iv[16] = {
+> > > +	0x5d9dbbcbUL, 0xd89e05c1UL, 0x2a299a62UL, 0x07d57c36UL,
+> > > +	0x5a015991UL, 0x17dd7030UL, 0xd8ec2f15UL, 0x39590ef7UL,
+> > > +	0x67263367UL, 0x310bc0ffUL, 0x874ab48eUL, 0x11155868UL,
+> > > +	0x0d2e0cdbUL, 0xa78ff964UL, 0x1d48b547UL, 0xa44ffabeUL };
+> > > +
+> > > +static const u32 sha512_iv[16] = {
+> > > +	0x67e6096aUL, 0x08c9bcf3UL, 0x85ae67bbUL, 0x3ba7ca84UL,
+> > > +	0x72f36e3cUL, 0x2bf894feUL, 0x3af54fa5UL, 0xf1361d5fUL,
+> > > +	0x7f520e51UL, 0xd182e6adUL, 0x8c68059bUL, 0x1f6c3e2bUL,
+> > > +	0xabd9831fUL, 0x6bbd41fbUL, 0x19cde05bUL, 0x79217e13UL };
+> > > +
+> > > +static const u32 sha512_224_iv[16] = {
+> > > +	0xC8373D8CUL, 0xA24D5419UL, 0x6699E173UL, 0xD6D4DC89UL,
+> > > +	0xAEB7FA1DUL, 0x829CFF32UL, 0x14D59D67UL, 0xCF9F2F58UL,
+> > > +	0x692B6D0FUL, 0xA84DD47BUL, 0x736FE377UL, 0x4289C404UL,
+> > > +	0xA8859D3FUL, 0xC8361D6AUL, 0xADE61211UL, 0xA192D691UL };
+> > > +
+> > > +static const u32 sha512_256_iv[16] = {
+> > > +	0x94213122UL, 0x2CF72BFCUL, 0xA35F559FUL, 0xC2644CC8UL,
+> > > +	0x6BB89323UL, 0x51B1536FUL, 0x19773896UL, 0xBDEA4059UL,
+> > > +	0xE23E2896UL, 0xE3FF8EA8UL, 0x251E5EBEUL, 0x92398653UL,
+> > > +	0xFC99012BUL, 0xAAB8852CUL, 0xDC2DB70EUL, 0xA22CC581UL };
+> > 
+> > Thoses IV already exists as define in linux headers (SHA1_H0 for example) But I
+> > am puzzled on why you invert them.
+> > 
+> 
+> This is Aspeed hardware limitation.
 
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/f2906aa863381afb0015a9eb7fefad885d4e5a56/ (all 135 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4b0986a3613c92f4ec1bdc7f60ec66fea135991f/ (131 out of 135 configs)
+The limitation is that hardware does not know theses IV ?
+Having them inverted seems to proof that you have some endianness issue.
 
+> > 
+> > Why didnt you use the crypto_engine API instead of rewriting it.
+> 
+> Any common crypto_engine API can be used? I did not find any, Maybe I miss something.
+> It would be appreciated if you give me some clue.
+> 
 
-*** ERRORS ***
+Please check crypto/crypto_engine.c.
+You could take crypto/omap and allwinner/sun8i-ce as example of usage.
 
-9 error regressions:
-  + /kisskb/src/arch/um/include/asm/page.h: error: too few arguments to function 'to_phys':  => 105:20
-  + /kisskb/src/arch/xtensa/kernel/entry.S: Error: unknown pseudo-op: `.bss':  => 2176
-  + /kisskb/src/drivers/nvdimm/pmem.c: error: conflicting types for 'to_phys':  => 48:20
-  + /kisskb/src/drivers/nvdimm/pmem.c: error: control reaches end of non-void function [-Werror=return-type]:  => 324:1
-  + /kisskb/src/drivers/tty/serial/sh-sci.c: error: unused variable 'sport' [-Werror=unused-variable]:  => 2655:26
-  + /kisskb/src/include/linux/fortify-string.h: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]:  => 344:25
-  + /kisskb/src/include/ufs/ufshci.h: error: initializer element is not constant:  => 245:36
-  + error: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100), (.head.text+0x5040)
-  + error: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
-
-10 error improvements:
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
-  - /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant: 4917:4 => 
-  - /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant: 1983:2 => 
-  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text': (.head.text+0x5100), (.head.text+0x5040) => 
-  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o: (.init.text+0xa4) => 
-
-
-*** WARNINGS ***
-
-3 warning regressions:
-  + .config: warning: override: ARCH_RV32I changes choice state:  => 3860
-  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 61
-  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 37
-
-24 warning improvements:
-  - .config: warning: override: reassigning to symbol GCC_PLUGIN_RANDSTRUCT: 12475, 12253 => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14410): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14428): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14440): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14458): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14470): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14488): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144f0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14508): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14520): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14538): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14550): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14568): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14580): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14598): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4790): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47a8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47d8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4808): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4820): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45d4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+Regards

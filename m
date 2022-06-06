@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A25153EF46
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4060553EF52
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbiFFUMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
+        id S233160AbiFFUOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbiFFUMH (ORCPT
+        with ESMTP id S233149AbiFFUOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:12:07 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055C7108F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:12:03 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id me5so30557105ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:12:02 -0700 (PDT)
+        Mon, 6 Jun 2022 16:14:05 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02E771D8D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:14:03 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id x17so21288562wrg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:14:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HCWIcD+SfRMw/M9RRt+jg58AphPseq4gfsJ1F6OVZZU=;
-        b=L64JkmvDNh1FIACsNToXduJszZ5RYI3mnVnXlEJgBMBcVUIJznBmtDp/P0EKumXSX/
-         zad6k3tZainA3cYz+aKtsb03+xotN0Og3MtfFmorTrxvRWwPwuEKwx8H4Vj5ghwhAf3G
-         CWzDhBbC4GdfPTWfSGrqktycegGjlYT4PyutU=
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BI7QjWVmpuIIWqYE8RAGE9+KBCb5m1yaNT/iNRoF5ZQ=;
+        b=CurdJRrwRpbC0c4Itoz9kpdvNjjrqwG0W4Bxx7JyZo7MHvXz6QE91X5Do/ZmFIibkB
+         YT4ptws23TVyHtMEK2dfTg51Wdm9O0VoEXQtId9PMthGhtUcAFUhRQwkiiN4KGw6iQFS
+         g5kwKs6MTUAvWSGdpghRjR++l8WmEA4NOMDiJt9B/dEQh1IBmDN5JF9JyNDj7jQDgpDl
+         tfyb6FEpySUePsx3ZFl8a10KI9x6dc9sCYtQbwfubvyUk1OpdMngAYhgHkaW4wKDT404
+         X9QryiFgRhIq2iu2Lndy2/BwW2FPv9gdbcG96G3K/gYrOxokyN5wGRW+nKKqor7EXwT3
+         B8jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HCWIcD+SfRMw/M9RRt+jg58AphPseq4gfsJ1F6OVZZU=;
-        b=H4vtqqT0dSobNmRxor8HINObXpnonUADc9XcKjcB96E5SjUT0qwXzmts+U1qTaoZmM
-         Tn5+Kcy0ifDSVwNO8dGhnc3zk4jKNE8nyB58Un2rBXlRaoHhKB2dECyKOFSrUgBlsP+6
-         nlwtXs3rKgiQ8tenUh55fPB/dyjAGMahxj5ioYie5qPj0rGOGd9Ow6ObmEe5bWs0u4F5
-         UWsoCKBtpAiCl+i3yYE3KdDk6T8L/WFxf0mQ/hQxfym3YBurSJt6JM9ZhlGioKgS8j07
-         D+Hn+mt83sOg3vANZL6CIs+IqKIZyKWgxhW0qF/CbXPzM/U4FHJ0e1uFA8FivfgNwxtt
-         IzMQ==
-X-Gm-Message-State: AOAM532p4w6V5fBmcWQzkiiPNlCqt0ZLzQezWJf+koRCwpTjA4WR4uOa
-        ENJAICq++FLc/+dv1nppWqhyjOBub1XeFdARJ/Q=
-X-Google-Smtp-Source: ABdhPJz1sUPxvwLE3fVYK8J0eBSzuVP/zqcXtfeyOP7OAwr6mjNj3QaHJh/k1S8c429ct8Ki9uyQfw==
-X-Received: by 2002:a17:907:7294:b0:6ff:200e:8d62 with SMTP id dt20-20020a170907729400b006ff200e8d62mr23124456ejc.719.1654546320956;
-        Mon, 06 Jun 2022 13:12:00 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id be5-20020a0564021a2500b0042e09f44f81sm7845341edb.38.2022.06.06.13.11.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 13:12:00 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso8440583wmr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:11:59 -0700 (PDT)
-X-Received: by 2002:a05:600c:591:b0:39c:4544:b814 with SMTP id
- o17-20020a05600c059100b0039c4544b814mr14648542wmd.118.1654546319242; Mon, 06
- Jun 2022 13:11:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BI7QjWVmpuIIWqYE8RAGE9+KBCb5m1yaNT/iNRoF5ZQ=;
+        b=5AwaGVOpIUiVHw6dGoLyz/ErknF2T184elyHnbnEruerURKlRgl0X8HM8rH6FGjqG1
+         OWTsUPpHBWidYoTiYk/9ZZPK+X5a9tJLTITiOQ4pqluFuTa1Oavpp7Tavt+8yK9RDzHu
+         eMliRd3EAu5djhuBbZRd1peZzH8HKeBuB0XzPbtyd3yFWDj+cSQB4H31bVKrbE5Yfsz3
+         qFE9pG6TYnsZhfbLKa7whaHHhq3M0aJYAUbmEuwdj5J0z2sWO1hvh1N5HUvY1+ES386F
+         Awvk3mro4tI81qy0965/5nuZrxQh7i32gTcYxAB+LtmKy8eAQXTa3TppKdecQWy1054Z
+         PFaQ==
+X-Gm-Message-State: AOAM533shOcQsXhxH4EvNxe9lecWKj5oS1jJ5OqL2GU9KtMZ0o6J+a03
+        Gb/9sqyVXlT71JgbS4I42lQpuQ==
+X-Google-Smtp-Source: ABdhPJx4Tj3fXU8Oa81ZJEnl1+5UHUvX/FBSXyCX7Oaw5uHbxBpQhAWUOZNwRRlTlfhdRjet9ZyAFg==
+X-Received: by 2002:a5d:4087:0:b0:213:983f:2198 with SMTP id o7-20020a5d4087000000b00213983f2198mr21509092wrp.399.1654546442102;
+        Mon, 06 Jun 2022 13:14:02 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id p9-20020a5d4589000000b0020fcf070f61sm16038489wrq.59.2022.06.06.13.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 13:14:01 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Steve Twiss <stwiss.opensource@diasemi.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Atul Khare <atulkhare@rivosinc.com>
+Subject: [PATCH v3 0/4] clear riscv dtbs_check errors
+Date:   Mon,  6 Jun 2022 21:13:40 +0100
+Message-Id: <20220606201343.514391-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220601112302.v4.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
-In-Reply-To: <20220601112302.v4.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 6 Jun 2022 13:11:47 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VKWNeXzDZ=DdXi=U218xghLJAeAQah_uFOjM9WrGZ5sQ@mail.gmail.com>
-Message-ID: <CAD=FV=VKWNeXzDZ=DdXi=U218xghLJAeAQah_uFOjM9WrGZ5sQ@mail.gmail.com>
-Subject: Re: [PATCH v4] drm/probe-helper: Default to 640x480 if no EDID on DP
-To:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,70 +80,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-On Wed, Jun 1, 2022 at 11:23 AM Douglas Anderson <dianders@chromium.org> wrote:
->
-> If we're unable to read the EDID for a display because it's corrupt /
-> bogus / invalid then we'll add a set of standard modes for the
-> display. Since we have no true information about the connected
-> display, these modes are essentially guesses but better than nothing.
-> At the moment, none of the modes returned is marked as preferred, but
-> the modes are sorted such that the higher resolution modes are listed
-> first.
->
-> When userspace sees these modes presented by the kernel it needs to
-> figure out which one to pick. At least one userspace, ChromeOS [1]
-> seems to use the rules (which seem pretty reasonable):
-> 1. Try to pick the first mode marked as preferred.
-> 2. Try to pick the mode which matches the first detailed timing
->    descriptor in the EDID.
-> 3. If no modes were marked as preferred then pick the first mode.
->
-> Unfortunately, userspace's rules combined with what the kernel is
-> doing causes us to fail section 4.2.2.6 (EDID Corruption Detection) of
-> the DP 1.4a Link CTS. That test case says that, while it's OK to allow
-> some implementation-specific fall-back modes if the EDID is bad that
-> userspace should _default_ to 640x480.
->
-> Let's fix this by marking 640x480 as default for DP in the no-EDID
-> case.
->
-> NOTES:
-> - In the discussion around v3 of this patch [2] there was talk about
->   solving this in userspace and I even implemented a patch that would
->   have solved this for ChromeOS, but then the discussion turned back
->   to solving this in the kernel.
-> - Also in the discussion of v3 [2] it was requested to limit this
-> 83;40900;0c  change to just DP since folks were worried that it would break some
->   subtle corner case on VGA or HDMI.
->
-> [1] https://source.chromium.org/chromium/chromium/src/+/a051f741d0a15caff2251301efe081c30e0f4a96:ui/ozone/platform/drm/common/drm_util.cc;l=488
-> [2] https://lore.kernel.org/r/20220513130533.v3.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
-> I put Abhinav's Reviewed-by tag from v2 here since this is nearly the
-> same as v2. Hope this is OK.
->
-> Changes in v4:
-> - Code is back to v2, but limit to just DP.
-> - Beefed up the commit message.
->
-> Changes in v3:
-> - Don't set preferred, just disable the sort.
->
-> Changes in v2:
-> - Don't modify drm_add_modes_noedid() 'cause that'll break others
-> - Set 640x480 as preferred in drm_helper_probe_single_connector_modes()
->
->  drivers/gpu/drm/drm_probe_helper.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+Hey,
+Couple conversions from txt to yaml here with the intent of fixing the
+the dtbs_check warnings for riscv when building with "defconfig".
+Atul Khare already sent patches for the gpio-line-names & cache-sets
+(which went awol) and will clear the remaining two errors.
 
-Pushed to drm-misc-next after cleaning up the turd that I somehow left
-in the commit message.
+Apologies for sending v3 so quick on the heels of v2, but I realised
+I screwed up copy paste in the i2c clock-frequency description & wanted
+to rectify that.
 
-fae7d186403e drm/probe-helper: Default to 640x480 if no EDID on DP
+Thanks,
+Conor.
 
--Doug
+Changes from v2:
+- ocores: remove part of clock-frequency description that was added by accident
+  while copy pasting as a template...
+- ocores: remove the enum (added in v2) for clock-frequency since that
+  limitation was incorrectly copy pasted
+- ocores: drop #{size,address}-cells
+- mmc-spi-slot: use an array rather than a matrix for voltage-ranges
+
+Changes from v1:
+- squashed the maintainers changes
+- dlg: added da9063 changes that landed in 5.19 (dlg,use-sw-pm)
+- dlg: use absolute paths to schemas & unevaluatedProperties: false
+- dlg: added vendor prefix to filename
+- ocores: dropped "dummy" devices
+- ocores: added vendor name to filename
+- ocores: use enum for compatibles
+- ocores: add enum for clock-frequency
+- ocores: add reg-shift default
+- ocores: reorder properties in examples
+- mmc-spi-slot: use common gpio defines
+- mmc-spi-slot: add ref to peripherl schema
+- mmc-spi-slot: removed unneeded quotes, fixed a line length & s/spi/SPI
+
+Conor Dooley (4):
+  dt-bindings: mmc: convert mmc-spi-slot to yaml
+  dt-bindings: i2c: convert ocores binding to yaml
+  dt-bindings: mfd: convert da9063 to yaml
+  riscv: dts: sifive: "fix" pmic watchdog node name
+
+ .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 -----------
+ .../bindings/i2c/opencores,i2c-ocores.yaml    | 113 +++++++++++++++
+ .../devicetree/bindings/mfd/da9063.txt        | 114 ---------------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 132 ++++++++++++++++++
+ .../devicetree/bindings/mmc/mmc-spi-slot.txt  |  29 ----
+ .../devicetree/bindings/mmc/mmc-spi-slot.yaml |  77 ++++++++++
+ .../devicetree/bindings/trivial-devices.yaml  |   2 -
+ MAINTAINERS                                   |   3 +-
+ .../boot/dts/sifive/hifive-unmatched-a00.dts  |   2 +-
+ 9 files changed, 325 insertions(+), 225 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.txt
+ create mode 100644 Documentation/devicetree/bindings/mmc/mmc-spi-slot.yaml
+
+
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.36.1
+

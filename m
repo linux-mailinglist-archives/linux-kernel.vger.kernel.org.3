@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6927653EF82
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2CA53EF85
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiFFUWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        id S233702AbiFFUW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbiFFUWc (ORCPT
+        with ESMTP id S233572AbiFFUWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:22:32 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE886543
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:22:30 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id o10so20299740edi.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:22:30 -0700 (PDT)
+        Mon, 6 Jun 2022 16:22:33 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DF19FE5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:22:31 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id y19so31131765ejq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:22:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ramRhPzzIanDTBc4YnvbtflH7YCV/CY9bbWKmWrFq+o=;
-        b=N3f1F70RSHOFUi0/95Am3KcViH7CUmDqqDllaG1ylIXteKA1EkETYVMSFYjiwpGrET
-         FTO+f+0s394CngQLk3wD/L9VwZlk2ds+xfL8yntxprVroIHL62K0VSmvfj7krHr0YTKX
-         IxtUuaGyebDJuwxo+20qpc7cj9dFUlOmSGZ/8=
+        bh=cmCUkZyYqf+fSr+qmDna92LF/wD5Dj/Ah1fbqp/t9Fc=;
+        b=X1/fjuqL6gfslDXWoRX9h2iUMDP2o8h40GZNbgq4k2cPA/WIpPN/LIgiyPkBen6+T+
+         ik/ftNMZIdrs+WRaYig6cWAECSG9pNA0q6S54xIM+PMpKpS+7Oe7HLk4Y9JHTB8KpdT6
+         TS/RlSX6kawniKhAbMEivgVRmpyGX+Npd9HUc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ramRhPzzIanDTBc4YnvbtflH7YCV/CY9bbWKmWrFq+o=;
-        b=DcuOi8deeMZLVCPy2htixJBLtvsqNgfwFhuRlduKExDvCRusY3xf90MTefI4F035im
-         D46/GT/0105kCvl1AOKLb/iBwVxvrxsK08L9bVAWabzHPXkd31ivFQXSTh9FM1+3eLgE
-         DKczVvYTkPg7radga2Yz8E33/JgbmJE1rAJX6MSwmsaNQPxa9rPrF7sqrYlR3Rk5BRUr
-         c4ERqETydMqXHrNILc84r6dkTk+eXCS/OFV0VZHmit2ZWf7ysOUFMUnDlWg+cQzvmhgY
-         /Wa8HWUv8+PQ3PjE9FhTkZTS1X6qO8vOpa+11ZpRntj3sAeeXFE1Hj2q2VydpjgeSaLI
-         J+rw==
-X-Gm-Message-State: AOAM532wUBQJkbQnE14O0hSNyWvPsLaQSLBgh1xdK4vBz8dQcXiaFHJC
-        P8osyPBN4TwEgvgjBwGx+ZQzCg==
-X-Google-Smtp-Source: ABdhPJxf90ydtFhUbmr0z/WGR2mG8fWABtzc4aXbMKhN9fZFmMOgy+j8tmFnkR00S/KUbHBjbVI/6Q==
-X-Received: by 2002:a05:6402:358a:b0:431:20d5:f4ad with SMTP id y10-20020a056402358a00b0043120d5f4admr15251525edc.375.1654546949175;
-        Mon, 06 Jun 2022 13:22:29 -0700 (PDT)
+        bh=cmCUkZyYqf+fSr+qmDna92LF/wD5Dj/Ah1fbqp/t9Fc=;
+        b=yojfqL5GmmVO0itmnXBjcvsmJN+Bz8nAH/sh40d5HHPkwPnADNx52BDfhjxJ4rvl+P
+         n9NdxdouzPo5LQvHsseu4gq8wEogkcEt80yE1xR8jpJELLRasnmDwqPecfqGf0CzCN7j
+         6qhpt/2UVFLHfPW0QAyG702CSnWjWh915y6xsjH+4lWr4WRL7HnfN38abg0T1sKdDH1a
+         leUCSLh108jNyl5H+/3YtM1JRmZiNjXczOivzex8YRsoQCGLkQnEM/G81wXnW9IfftiV
+         hcI8rKaU7ZjEz/LT7Vjt9mCzvbpuayNMCP2/cNN9dPeWVBj0igBtyVFwvIP35oQ6cv2c
+         tcYw==
+X-Gm-Message-State: AOAM533vRyDn5EhJthEIqHUDpEUX2lcLio05Xtz4XoaEcaOO6bGeSwTl
+        iDa8uPCIng5y4N79CImwhbI7HmvgVjMOPw==
+X-Google-Smtp-Source: ABdhPJyB6ulO52fBmOqz/f6uv8gPY4QaiOeSAQEKRaPOA9PwbUcbRDC6JJFKBVnfBl8X5S7F0Tw6xg==
+X-Received: by 2002:a17:906:37c6:b0:70c:f9f:f0c5 with SMTP id o6-20020a17090637c600b0070c0f9ff0c5mr19313158ejc.743.1654546950375;
+        Mon, 06 Jun 2022 13:22:30 -0700 (PDT)
 Received: from prevas-ravi.tritech.se ([80.208.64.233])
-        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b0042dd4ccccf5sm9043789edv.82.2022.06.06.13.22.27
+        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b0042dd4ccccf5sm9043789edv.82.2022.06.06.13.22.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 13:22:28 -0700 (PDT)
+        Mon, 06 Jun 2022 13:22:30 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
         Heiner Kallweit <hkallweit1@gmail.com>,
@@ -55,9 +55,9 @@ Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Dan Murphy <dmurphy@ti.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 1/3] dt-bindings: dp83867: add binding for io_impedance_ctrl nvmem cell
-Date:   Mon,  6 Jun 2022 22:22:18 +0200
-Message-Id: <20220606202220.1670714-2-linux@rasmusvillemoes.dk>
+Subject: [PATCH net-next 2/3] linux/phy.h: add phydev_err_probe() wrapper for dev_err_probe()
+Date:   Mon,  6 Jun 2022 22:22:19 +0200
+Message-Id: <20220606202220.1670714-3-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220606202220.1670714-1-linux@rasmusvillemoes.dk>
 References: <20220606202220.1670714-1-linux@rasmusvillemoes.dk>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,58 +73,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a board where measurements indicate that the current three
-options - leaving IO_IMPEDANCE_CTRL at the (factory calibrated) reset
-value or using one of the two boolean properties to set it to the
-min/max value - are too coarse.
-
-There is no documented mapping from the 32 possible values of the
-IO_IMPEDANCE_CTRL field to values in the range 35-70 ohms, and the
-exact mapping is likely to vary from chip to chip. So add a DT binding
-for an nvmem cell which can be populated during production with a
-value suitable for each specific board.
+The dev_err_probe() function is quite useful to avoid boilerplate
+related to -EPROBE_DEFER handling. Add a phydev_err_probe() helper to
+simplify making use of that from phy drivers which otherwise use the
+phydev_* helpers.
 
 Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- .../devicetree/bindings/net/ti,dp83867.yaml    | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ include/linux/phy.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/net/ti,dp83867.yaml b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-index 047d757e8d82..76ff08a477ba 100644
---- a/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-@@ -31,6 +31,16 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index 508f1149665b..bed9a347481b 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -1539,6 +1539,9 @@ static inline void phy_device_reset(struct phy_device *phydev, int value)
+ #define phydev_err(_phydev, format, args...)	\
+ 	dev_err(&_phydev->mdio.dev, format, ##args)
  
-+  nvmem-cells:
-+    maxItems: 1
-+    description:
-+      Nvmem data cell containing the value to write to the
-+      IO_IMPEDANCE_CTRL field of the IO_MUX_CFG register.
++#define phydev_err_probe(_phydev, err, format, args...)	\
++	dev_err_probe(&_phydev->mdio.dev, err, format, ##args)
 +
-+  nvmem-cell-names:
-+    items:
-+      - const: io_impedance_ctrl
-+
-   ti,min-output-impedance:
-     type: boolean
-     description: |
-@@ -42,9 +52,11 @@ properties:
-     description: |
-       MAC Interface Impedance control to set the programmable output impedance
-       to a maximum value (70 ohms).
--      Note: ti,min-output-impedance and ti,max-output-impedance are mutually
--        exclusive. When both properties are present ti,max-output-impedance
--        takes precedence.
-+      Note: Specifying an io_impedance_ctrl nvmem cell or one of the
-+        ti,min-output-impedance, ti,max-output-impedance properties
-+        are mutually exclusive. If more than one is present, an nvmem
-+        cell takes precedence over ti,max-output-impedance, which in
-+        turn takes precedence over ti,min-output-impedance.
+ #define phydev_info(_phydev, format, args...)	\
+ 	dev_info(&_phydev->mdio.dev, format, ##args)
  
-   tx-fifo-depth:
-     $ref: /schemas/types.yaml#/definitions/uint32
 -- 
 2.31.1
 

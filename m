@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1507C53E9E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432FC53EAAF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbiFFK7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S234657AbiFFLBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 07:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbiFFK7V (ORCPT
+        with ESMTP id S234658AbiFFLBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:59:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDA82F3A6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654513161; x=1686049161;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KhwvXW6zUbWEM0qHgxCwwh/Nc3q2WDbYu9UOf1uGJ0U=;
-  b=El7kvfdoGMzcL74YKFySuM35m5axI/NrS/Adj2lTHPM6dfhcJx+NBy7e
-   MP0IKSPayLbYSPknY9er62Gexvyar+IhQ+hl5BXwo4Rs1QiLdh6zrPmGw
-   vOnkH+TZrDiHDS3FeEy1Kwz2VWNmoI6qC59xp+IukT/yn6H3I7t4X5Ion
-   4wkgRIyVp7fC9KjAZtBQyFGD4R/smknQcaiFCDxoZnaGn7CE687ZmU3up
-   5iu1bnFGtpW0XausotNCM3lBqYzFa8ExjxIAbKGdNCrLLKNIi+dGTqTaH
-   ggNVmjbGdEJfuPWS5K63spOqYRjs8XQGoBVzWQK7iVcoe700O49pSIhYO
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="337528360"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="337528360"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:59:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="758512805"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 06 Jun 2022 03:59:17 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 256AxGlq023997;
-        Mon, 6 Jun 2022 11:59:16 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Mon, 6 Jun 2022 07:01:08 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ABE16BE0C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 04:01:00 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.84.0) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 6 Jun 2022
+ 14:00:56 +0300
+Subject: Re: [PATCH v2 2/3] usb: phy: Add devm_of_usb_get_phy_by_phandle
+To:     Harsh Agarwal <quic_harshq@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel test robot <lkp@intel.com>, Tom Rix <trix@redhat.com>,
-        Ricky WU <ricky_wu@realtek.com>
-Subject: Re: [PATCH] misc: rtsx: Fix clang -Wsometimes-uninitialized in rts5261_init_from_hw()
-Date:   Mon,  6 Jun 2022 12:58:19 +0200
-Message-Id: <20220606105819.349320-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220523150521.2947108-1-nathan@kernel.org>
-References: <20220523150521.2947108-1-nathan@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <ahalaney@redhat.com>
+References: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com>
+ <1654276362-28930-3-git-send-email-quic_harshq@quicinc.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <c52d93db-e89a-24ba-725c-420641bd43af@omp.ru>
+Date:   Mon, 6 Jun 2022 14:00:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1654276362-28930-3-git-send-email-quic_harshq@quicinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.84.0]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/06/2022 10:38:49
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 170918 [Jun 06 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 482 482 6622156fb2e4848883fa5c715ac8f6ff125fd631
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.84.0:7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.0
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/06/2022 10:41:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/6/2022 9:18:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,54 +83,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 23 May 2022 08:05:22 -0700
+Hello!
 
-> Clang warns:
-> 
->   drivers/misc/cardreader/rts5261.c:406:13: error: variable 'setting_reg2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           } else if (efuse_valid == 0) {
->                      ^~~~~~~~~~~~~~~~
->   drivers/misc/cardreader/rts5261.c:412:30: note: uninitialized use occurs here
->           pci_read_config_dword(pdev, setting_reg2, &lval2);
->                                       ^~~~~~~~~~~~
-> 
-> efuse_valid == 1 is not a valid value so just return early from the
-> function to avoid using setting_reg2 uninitialized.
-> 
-> Fixes: b1c5f3085149 ("misc: rtsx: add rts5261 efuse function")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Tom Rix <trix@redhat.com>
-> Suggested-by: Ricky WU <ricky_wu@realtek.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On 6/3/22 8:12 PM, Harsh Agarwal wrote:
 
-Ping? Mainline 5.19-rc1 is now broken due to this.
-
-> ---
+> Adding support for devm_of_usb_get_phy_by_phandle which allows
+> us to get PHY phandles of a device declared inside lookup_node.
 > 
-> This is basically a v2 of https://lore.kernel.org/20220516130047.3887590-1-trix@redhat.com/.
-> 
->  drivers/misc/cardreader/rts5261.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-> index 749cc5a46d13..b1e76030cafd 100644
-> --- a/drivers/misc/cardreader/rts5261.c
-> +++ b/drivers/misc/cardreader/rts5261.c
-> @@ -407,6 +407,8 @@ static void rts5261_init_from_hw(struct rtsx_pcr *pcr)
->  		// default
->  		setting_reg1 = PCR_SETTING_REG1;
->  		setting_reg2 = PCR_SETTING_REG2;
-> +	} else {
-> +		return;
->  	}
+> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+[...]
+> diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+> index e4de6bc..2581c72 100644
+> --- a/include/linux/usb/phy.h
+> +++ b/include/linux/usb/phy.h
+[...]
+> @@ -249,6 +251,12 @@ static inline struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
+>  	return ERR_PTR(-ENXIO);
+>  }
 >  
->  	pci_read_config_dword(pdev, setting_reg2, &lval2);
-> 
-> base-commit: 90de6805267f8c79cd2b1a36805071e257c39b5c
-> -- 
-> 2.36.1
+> +extern inline struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
 
-Thanks,
-Al
+   *extern inline*? :-O
+   Shouldn't it be *static*?
+ 
+> +	const char *phandle, u8 index, struct device_node *lookup_node)
+> +{
+> +	return ERR_PTR(-ENXIO);
+> +}
+> +
+>  static inline struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
+>  	struct device_node *node, struct notifier_block *nb)
+>  {
+
+MBR, Sergey

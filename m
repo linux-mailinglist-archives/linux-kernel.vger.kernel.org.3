@@ -2,111 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB0953E83C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C7E53E663
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240818AbiFFP2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        id S240808AbiFFP24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240741AbiFFP0X (ORCPT
+        with ESMTP id S240714AbiFFP1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:26:23 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A5B328EE2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:26:16 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h5so20385294wrb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gKndGtfRMJoB9VZHAXJ3155b6Ocgr/Z/0m5W/nSp3fk=;
-        b=aJEoKakPceXnbp1/ZlShcjfkeytqJDUAJr7R96RlUzYUysC5vsKDlaQOFn4CuEJOqt
-         6lhIxLXlNtmdxeKHk4mesWxv20OXnO5LbD8vF2oZLoegnB2ohozQL4HS3QodkbprZN68
-         eZcOZoVKCoZSg2pDCktQ/G5fQsz3dGyKfF1I4rfJgO3VIn0v3Koz48s/4rtU2+lGkcU0
-         WMCWFmkoNYTPPCClc4bd6usX25oVt+CHu+IA7WfdTxpBR3jb8GhFQ9pkmZFKu133Y/Oc
-         CCPs1nMC/CN2VyBK7h9NZBeAIn3I9T082Zz3ShRxaViE3KN9EEM053orGKLOrGpV8TXL
-         DWeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gKndGtfRMJoB9VZHAXJ3155b6Ocgr/Z/0m5W/nSp3fk=;
-        b=qOhBspoaR4ipD9hLzMDQqd0uvTao8IytkbgbUNam8NDwo+OIEBjrFUng4yCWanL0UQ
-         G8LdnlzaKnkW12rJHHM+7JPGsQ0bzfFq2oboQKOkZf2QxSlZl0soXyR5KJLuz6GTX1Mb
-         C3dRCW01La3wOoXZS5/DKeLY7IvMBwLve/N0nHBqV9rl+28Q35UKyqW/iba4lPiQElvA
-         QPYmYXqxZ33eG4KOG8v2uerxEKrtsNxleOLLFUUXbpVLgH7zyy5hOQZrIXW5p2rqS/jx
-         Z3iW/Feq7KrS0eTxcnGsOFYpOXLwVffBT7H3vpLU9gxb4vnjO/7z9QAwvxdRJoQ/ayEb
-         XiXA==
-X-Gm-Message-State: AOAM532C5bOQ6nr/cdIRjBNKwrQXizaJUz6NzPWq3uwfngjSFxhdjzP/
-        VjnBswXIDCjzYSBsZO7HdCeGvg==
-X-Google-Smtp-Source: ABdhPJxv5R9KdhXC8FcRfcFRcCDgFBV2z1vjprwaGxWfFLbq88Rm1mz3L9kBxgErlQ4yXKLde/16gA==
-X-Received: by 2002:a5d:5142:0:b0:212:af29:530 with SMTP id u2-20020a5d5142000000b00212af290530mr22119805wrt.444.1654529174889;
-        Mon, 06 Jun 2022 08:26:14 -0700 (PDT)
-Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id h1-20020adffd41000000b002103aebe8absm15623944wrs.93.2022.06.06.08.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 08:26:14 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Steve Twiss <stwiss.opensource@diasemi.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Atul Khare <atulkhare@rivosinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/4] riscv: dts: sifive: "fix" pmic watchdog node name
-Date:   Mon,  6 Jun 2022 16:25:58 +0100
-Message-Id: <20220606152557.438771-5-mail@conchuod.ie>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220606152557.438771-1-mail@conchuod.ie>
-References: <20220606152557.438771-1-mail@conchuod.ie>
+        Mon, 6 Jun 2022 11:27:14 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BE813D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:27:10 -0700 (PDT)
+Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 256FQsii022668;
+        Tue, 7 Jun 2022 00:26:54 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
+ Tue, 07 Jun 2022 00:26:54 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 256FQrta022664
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 7 Jun 2022 00:26:54 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
+Date:   Tue, 7 Jun 2022 00:26:51 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: [PATCH] kbuild: fix build failure by scripts/check-local-export
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
+In-Reply-To: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+scripts/check-local-export fails with some versions of bash.
 
-After converting the pmic watchdog binding to yaml, dtbs_check complains
-that the node name doesn't match the binding. "Fix" it.
+    CC      scripts/mod/empty.o
+  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
+  make[2]: *** [scripts/mod/empty.o] Error 127
+  make[2]: *** Deleting file `scripts/mod/empty.o'
+  make[1]: *** [prepare0] Error 2
+  make: *** [__sub-make] Error 2
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Avoid use of bash's built-in wait command, by saving the output from
+nm command into a temporary variable.
+
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: 31cb50b5590fe911 ("kbuild: check static EXPORT_SYMBOL* by script instead of modpost")
 ---
- arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/check-local-export | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-index c4ed9efdff03..1f386b07a832 100644
---- a/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-+++ b/arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts
-@@ -90,7 +90,7 @@ rtc {
- 			compatible = "dlg,da9063-rtc";
- 		};
+diff --git a/scripts/check-local-export b/scripts/check-local-export
+index da745e2743b7..5e46bc37a635 100755
+--- a/scripts/check-local-export
++++ b/scripts/check-local-export
+@@ -11,9 +11,20 @@ set -e
+ declare -A symbol_types
+ declare -a export_symbols
  
--		wdt {
-+		watchdog {
- 			compatible = "dlg,da9063-watchdog";
- 		};
++function die
++{
++    echo "$1" >&2
++    exit 1
++}
++
+ exit_code=0
  
+-while read value type name
++# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
++# shows 'no symbols' diagnostic and exits with 0. Saving such line into
++# symbol_types is fine because export_symbols will remain empty.
++result=$(${NM} -- ${1} 2>&1) || die "${result}"
++
++echo "${result}" | while read value type name
+ do
+ 	# Skip the line if the number of fields is less than 3.
+ 	#
+@@ -37,21 +48,7 @@ do
+ 	if [[ ${name} == __ksymtab_* ]]; then
+ 		export_symbols+=(${name#__ksymtab_})
+ 	fi
+-
+-	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
+-	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
+-	# hidden by '2>/dev/null'. However, it suppresses real error messages
+-	# as well. Add a hand-crafted error message here.
+-	#
+-	# Use --quiet instead of 2>/dev/null when we upgrade the minimum version
+-	# of binutils to 2.37, llvm to 13.0.0.
+-	#
+-	# Then, the following line will be really simple:
+-	#   done < <(${NM} --quiet ${1})
+-done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
+-
+-# Catch error in the process substitution
+-wait $!
++done
+ 
+ for name in "${export_symbols[@]}"
+ do
 -- 
-2.36.1
+2.18.4
 

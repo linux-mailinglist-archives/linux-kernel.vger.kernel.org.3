@@ -2,118 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C36453EBF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738F353E966
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239507AbiFFOQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S239623AbiFFOQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbiFFOPu (ORCPT
+        with ESMTP id S239607AbiFFOQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:15:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E282D1F6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:15:44 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id v25so19029907eda.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:15:44 -0700 (PDT)
+        Mon, 6 Jun 2022 10:16:12 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B912CDED
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:16:11 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id p130so7972569iod.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:16:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6rWhlveeN1TxX4QHQ5iFPAm0c2ZnKQvWl2EyCos39TM=;
-        b=ZZfEZRiLhkBMeDoURpm3uOeoX3BbxCOg5m6ukqdT3N+bgCa4cZY0UYuPiz01bJni7w
-         S1I42czSmWZjgAA1z/SkChFOB6tDovtRLJNjtkkzrh5nc6nHkiznCGu0UW9TaQMBcIuk
-         6EXpAnWy8RQiXzcN+99s5NHDgVVnhAabieMYeM1CZErYqV50/sUKaRK1MgvYgkH7G80F
-         rD9tONFaF0ii9fiSsHQDUrujVUAEJ+iXbIGKazHiDF4i7YHQJ78rZ6DXnn2FQRKK9RvB
-         CuA3ImFDY7FgaXH8s5Rbcs/lVqNxFB1Q9QDyXkHbFXC4dc5H0fdfJ4fL2ixyeQaakbCI
-         32Cg==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=8+4bnTKYSEomgov0fN4WSzB8Yls69bRxwVLBV1+X8+k=;
+        b=AxxqEHs4lysBpxL8/oesB4vW3/a+Zr057P6NazPrbgQP5HsmJgEs8GvtVFN9zQjLsZ
+         lJUfJIJUug9ekGnWe3iwTySEHVrmddBtyZFMXlEAuVQJsB+QKsOq1f+LA7HbArv/cvyO
+         WrE8sEmpunUpvnMSGQLxjqkO0KA7cgVXyDd5lbtB1uK5kNBYE6vslSAGGMH2PDcPVA/w
+         XNRqiZ6KLeDrv667Fnw22BARQuIRe2Vgb45ZDwoe6/Cowanj7pqeum+bRiqFvYf1Ka9+
+         uk7CKz8N9PDoPbjgMpMvJzZqE9TVkv0oZsOMwKy7KCgPx8GaqmFAszpUZEBIVRd7Imjt
+         jGmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6rWhlveeN1TxX4QHQ5iFPAm0c2ZnKQvWl2EyCos39TM=;
-        b=69PKp9oRoExuHlk2JooWFh615ghg/UwVKTXVqwv/58vcdHnIVpKmc2aRdpZfd7+6MR
-         oycpsNV5u4I8S9svd7jKglFs+eYeTW1iQplxLWkTBb0g1bz1HC6cEMPTIFbYjDZUUW6U
-         gUlgGmWgvsGnR+jyClxEw3phkV1Pu+6mIbGDjJ4H3d3FXgk8wA2kVakqnljGLjsvHD6I
-         uWoGCduXHurCkCoCOj6UrUzwwoATIBvsmHtmRmHo/n8wpb0Kn5Q4Z9WGRpSQSm9Z6n6h
-         c6q8qYN98QAvCusVfi4m1VbWQsLZME9d55mfJ9IIaaPecF16I9E3mJxyI5exM1wnYhcg
-         WNSw==
-X-Gm-Message-State: AOAM531II5Iw3kjFPtru+3SKTzqvLeFyHJId6QF9MkcYyMb+TM2qxhpP
-        FOiGjfvcTS9i2OF8GuxOtaQ=
-X-Google-Smtp-Source: ABdhPJwvLpggZGcluym7wsFNn4RHXYfzHTkwCPuZ2jBlXQZYtAudkyn7Br+hRBOtcpK/6Voy+abcZg==
-X-Received: by 2002:a05:6402:430f:b0:42e:2a86:abaf with SMTP id m15-20020a056402430f00b0042e2a86abafmr20795604edc.194.1654524942790;
-        Mon, 06 Jun 2022 07:15:42 -0700 (PDT)
-Received: from localhost.localdomain (host-79-13-108-3.retail.telecomitalia.it. [79.13.108.3])
-        by smtp.gmail.com with ESMTPSA id y21-20020a056402135500b0042aa5a74598sm9069837edw.52.2022.06.06.07.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 07:15:41 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] mm/highmem: Delete memmove_page()
-Date:   Mon,  6 Jun 2022 16:15:33 +0200
-Message-Id: <20220606141533.555-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=8+4bnTKYSEomgov0fN4WSzB8Yls69bRxwVLBV1+X8+k=;
+        b=ofN2zjizcs2ei+iEA+wB97ybK32U1Q6WsGL5PV9iGi7F7Ug7v2sa3ccWB0N93h0nOl
+         XIhEf89SuDoZsyXUzl2e5RCkWJKb3G5vJgKjmFIpXyj2BmjpIqxmBsrsyogn/vEEgQg8
+         jqmP/3aWDfQ3NGGpuBCUtw4HsguZZg4v3MoIeFOtkccetbQNW8h0yU9wdNdL94+nQ3SD
+         lKnx9mNxXibF11tbOlvyKseSpa4EScwdaHTEdCPLNiZFkzPj5+NBgZsknwA3laDkaXX1
+         h6sFSmO22kEz72EkQE/7XeBXRzbyhZXo8+URal1XjXsixbURgo/YAcYLtZEuU7xjqJCc
+         +2LQ==
+X-Gm-Message-State: AOAM533sASdOpZMKKpzhxHtW2vrokqINNwmqQtXv+vADeiTXiVs2Q0qk
+        ATvSwnaO7XCdO51wAnLWKfUEFSeitM8zgKzQocA=
+X-Google-Smtp-Source: ABdhPJyBnj2t6bHhIPWxvY1ZdzgtR9h6Ju8aNdCwgnD3w4MhMv8YRHnrQx/FJp4Pj9K/Fh1wmNr3fWZmWUfy+c+cHqE=
+X-Received: by 2002:a5d:94c2:0:b0:60b:bd34:bb6f with SMTP id
+ y2-20020a5d94c2000000b0060bbd34bb6fmr11177294ior.32.1654524970602; Mon, 06
+ Jun 2022 07:16:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a4f:c41b:0:0:0:0:0 with HTTP; Mon, 6 Jun 2022 07:16:10 -0700 (PDT)
+From:   Ulrica Mica <ulricamica323@gmail.com>
+Date:   Mon, 6 Jun 2022 07:16:10 -0700
+Message-ID: <CAOL=-jZJ79M7GPNF7H1s0ECxNvaZduOSuS-iksPrfaPoyh_=Yw@mail.gmail.com>
+Subject: good morning
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox reported that, while he was looking at memmove_page(), he
-realized that it can't actually work.
-
-The reasons are hidden in its implementation, which makes use of
-memmove() on logical addresses provided by kmap_local_page(). memmove()
-does the wrong thing when it tests "if (dest <= src)".
-
-Therefore, delete memmove_page().
-
-No need to change any other code because we have no call sites of
-memmove_page() across the whole kernel.
-
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- include/linux/highmem.h | 13 -------------
- 1 file changed, 13 deletions(-)
-
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 3af34de54330..fee9835e3793 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -336,19 +336,6 @@ static inline void memcpy_page(struct page *dst_page, size_t dst_off,
- 	kunmap_local(dst);
- }
- 
--static inline void memmove_page(struct page *dst_page, size_t dst_off,
--			       struct page *src_page, size_t src_off,
--			       size_t len)
--{
--	char *dst = kmap_local_page(dst_page);
--	char *src = kmap_local_page(src_page);
--
--	VM_BUG_ON(dst_off + len > PAGE_SIZE || src_off + len > PAGE_SIZE);
--	memmove(dst + dst_off, src + src_off, len);
--	kunmap_local(src);
--	kunmap_local(dst);
--}
--
- static inline void memset_page(struct page *page, size_t offset, int val,
- 			       size_t len)
- {
 -- 
-2.36.1
-
+Hello dear
+Can i talk to you please?
+Ulrica

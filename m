@@ -2,196 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4361E53E227
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9338653E2D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiFFGVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 02:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S229835AbiFFGVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 02:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiFFGUe (ORCPT
+        with ESMTP id S229890AbiFFGVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 02:20:34 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796622B3A
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 23:20:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fu3so25444138ejc.7
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 23:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=F/BITtmLWc1VtxM65EqQjDPMCYQMAuoqz8dLA7WWjls=;
-        b=S7fiGYjkD4hCmOxEBPhVlPYrksvpFVRkVWt7637cDHckBJf5TCtLnmB9UkOmZKTIKF
-         ZLq2E6ClOr44GI0ySPWu8fcv61ODO7R7TZkolOKRsI5miFRej3Sk0Ez3u9iUUrvcJ5sD
-         cAe8JXXs9pMWUQrp3HLptyxSBK/Dp/Kxb5sEbCn1ddt6aBXwzyPUPn7+QvK0OpZFNJ1S
-         3g3yffxJw5Emt0ODfIJsXbgP0bmEDOP7Bw2xD88HDF2FIF6NYDreWrcOhAPuEekY79bd
-         EbakCJ2/E0EsEoUb9/nLOZLwS+QfCORF4eCHplr5b7slcx0Fg9kERBNrirNO5aeJAadX
-         ZL5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=F/BITtmLWc1VtxM65EqQjDPMCYQMAuoqz8dLA7WWjls=;
-        b=4wvMvPuY3W5jgcnd1PvEUuQpzQ9R0r1f+ocCxENcpxiefnsU246vkiMa/RkKavxg0u
-         lx4ZqusrDxV2+uhatiBefcPr0TbQsRngslkHG2ShDeLTObm5uJEseGMDOrlxFoPMJ7YZ
-         rTHqWzt33fGxWWNk0xj5SGPtIt4FoRDQzZa6T/OrPKeNevt7UPCVDkRXTTAp0phDx8Ep
-         6ZOKD0XAWLaOI8tkdp06+qNEXj5kdOFG5SPNYoJlESlOyQySs5LcBjw+upKic/nrXJ1F
-         52rCp7sc1nYFtlOTqgWZjKWTivYDMn/Yo/kOG4mNUWTBhhq3g6RY25JRFTly1qu6SMAH
-         KmuQ==
-X-Gm-Message-State: AOAM5303q/V6A0talQPCPu9EDkI/YcmatH7gyOmcYHXj7dZgS4YSlUEQ
-        cgbn/vWC1Cpp8qORikUpBh/qeg==
-X-Google-Smtp-Source: ABdhPJzAfxWKgaolZMJ1kBvo3MGRFufwf7UUXNcLCeJtJs0PDGTLYJF6eHuRcJkYjoAgJxuWKltYiw==
-X-Received: by 2002:a17:906:4fce:b0:6f4:f41c:3233 with SMTP id i14-20020a1709064fce00b006f4f41c3233mr19013888ejw.117.1654496423905;
-        Sun, 05 Jun 2022 23:20:23 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05640205d300b0042de8155fa1sm8150758edx.0.2022.06.05.23.20.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 23:20:23 -0700 (PDT)
-Message-ID: <5af6d6ff-c5e3-f764-fa9c-a2c3d7365082@linaro.org>
-Date:   Mon, 6 Jun 2022 08:20:22 +0200
+        Mon, 6 Jun 2022 02:21:37 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AE0248DA;
+        Sun,  5 Jun 2022 23:21:32 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2566L4TF023770;
+        Mon, 6 Jun 2022 01:21:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654496464;
+        bh=AnqTbDFVrqwHXrTGY/Z2NcAhGEYdlgEfr1d6CtHEp2k=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=v2fBUMtKP12il550wFLHUC/bzjyQDakjroSiiLhQ5o+cALXTxC9zq1MTrK5QLFNVu
+         Fjk6N9hs4aoOra0bXkRNPBolerMJXB6iVa7CvlDdoMkCGYcNkpJTc1AoLggh40OGLO
+         NMMuTn7+tx0VKorUcQfjfGrqmOpZhJbCbFzWsTSU=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2566L4Jg019207
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Jun 2022 01:21:04 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
+ Jun 2022 01:21:03 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 6 Jun 2022 01:21:03 -0500
+Received: from [172.24.222.108] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2566KvXG003420;
+        Mon, 6 Jun 2022 01:20:58 -0500
+Message-ID: <2c72a658-9427-b7ab-08ef-b78f51cd151b@ti.com>
+Date:   Mon, 6 Jun 2022 11:50:56 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: backlight: rt4831: Add the new property
- for ocp level selection
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
 Content-Language: en-US
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Helge Deller <deller@gmx.de>, cy_huang <cy_huang@richtek.com>,
-        lucas_tsai@richtek.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <1653534995-30794-1-git-send-email-u0084500@gmail.com>
- <1653534995-30794-2-git-send-email-u0084500@gmail.com>
- <1c7ab94c-a736-c629-bd8c-8a974803e2b9@linaro.org>
- <CADiBU39jZ6TdYZoH80m4R-X2_fUXZOvDA4yUd_TQdPzBJLE+JA@mail.gmail.com>
- <076d53d3-6062-686f-8e45-14c5f936bbf6@linaro.org>
- <20220602135604.GA2194286-robh@kernel.org>
- <e3aa9c7e-bf2d-dd55-8b3f-ca51f569771d@linaro.org>
- <CADiBU3-dN0vtQBEqvVLFCUp4-MkhLbQRkOiCet+fO8WfkEW4MQ@mail.gmail.com>
- <12096a2c-98c3-9e77-785f-808cc3e1a0e4@linaro.org>
- <CADiBU3_REqNRb4UtT5OrVBKuhYL0NPAALisHTM76SrFCHUYMuA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CADiBU3_REqNRb4UtT5OrVBKuhYL0NPAALisHTM76SrFCHUYMuA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Rob Herring <robh@kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux@armlinux.org.uk>, <vladimir.oltean@nxp.com>,
+        <grygorii.strashko@ti.com>, <vigneshr@ti.com>, <nsekhar@ti.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>
+References: <20220602114558.6204-1-s-vadapalli@ti.com>
+ <20220602114558.6204-2-s-vadapalli@ti.com>
+ <20220605224343.GA3657277-robh@kernel.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20220605224343.GA3657277-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 03:39, ChiYuan Huang wrote:
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年6月6日 週一 上午12:11寫道：
+Hello Rob,
+
+On 06/06/22 04:13, Rob Herring wrote:
+> On Thu, Jun 02, 2022 at 05:15:56PM +0530, Siddharth Vadapalli wrote:
+>> Update bindings for TI K3 J7200 SoC which contains 5 ports (4 external
+>> ports) CPSW5G module and add compatible for it.
 >>
->> On 02/06/2022 17:31, ChiYuan Huang wrote:
->>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年6月2日 週四 下午9:58寫道：
->>>>
->>>> On 02/06/2022 15:56, Rob Herring wrote:
->>>>> On Thu, May 26, 2022 at 12:32:12PM +0200, Krzysztof Kozlowski wrote:
->>>>>> On 26/05/2022 10:13, ChiYuan Huang wrote:
->>>>>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年5月26日 週四 下午4:06寫道：
->>>>>>>>
->>>>>>>> On 26/05/2022 05:16, cy_huang wrote:
->>>>>>>>> From: ChiYuan Huang <cy_huang@richtek.com>
->>>>>>>>>
->>>>>>>>> Add the new property for ocp level selection.
->>>>>>>>>
->>>>>>>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
->>>>>>>>> ---
->>>>>>>>>  .../bindings/leds/backlight/richtek,rt4831-backlight.yaml         | 8 ++++++++
->>>>>>>>>  include/dt-bindings/leds/rt4831-backlight.h                       | 5 +++++
->>>>>>>>>  2 files changed, 13 insertions(+)
->>>>>>>>>
->>>>>>>>> diff --git a/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml
->>>>>>>>> index e0ac686..c1c59de 100644
->>>>>>>>> --- a/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml
->>>>>>>>> +++ b/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml
->>>>>>>>> @@ -47,6 +47,14 @@ properties:
->>>>>>>>>      minimum: 0
->>>>>>>>>      maximum: 3
->>>>>>>>>
->>>>>>>>> +  richtek,bled-ocp-sel:
->>>>>>>>
->>>>>>>> Skip "sel" as it is a shortcut of selection. Name instead:
->>>>>>>> "richtek,backlight-ocp"
->>>>>>>>
->>>>>>> OK, if so, do I need to rename all properties from 'bled' to 'backlight' ?
->>>>>>> If  only this property is naming as 'backlight'. it may conflict with
->>>>>>> the others like as "richtek,bled-ovp-sel".
->>>>>>
->>>>>> Ah, no, no need.
->>>>>>
->>>>>>>>
->>>>>>>>> +    description: |
->>>>>>>>> +      Backlight OCP level selection, currently support 0.9A/1.2A/1.5A/1.8A
->>>>>>>>
->>>>>>>> Could you explain here what is OCP (unfold the acronym)?
->>>>>>> Yes. And the full name is 'over current protection'.
->>>>>>
->>>>>> Thanks and this leads to second thing - you encode register value
->>>>>> instead of logical value. This must be a logical value in mA, so
->>>>>> "richtek,bled-ocp-microamp".
->>>>>
->>>>> We already have common properties for setting current of LEDs. We should
->>>>> use that here I think.
->>>>
->>>> It might not be exactly the same. We have "led-max-microamp" which is
->>>> the maximum allowed current. I guess over-current protection level  is
->>>> slightly higher (e.g. led-max-microamp + 1). IOW, led-max-microamp is
->>>> something which still can be set and used by system/hardware. OCP should
->>>> not.
->>>>
->>> Yap, you're right.
+>> Changes made:
+>>     - Add new compatible ti,j7200-cpswxg-nuss for CPSW5G.
+>>     - Extend pattern properties for new compatible.
+>>     - Change maximum number of CPSW ports to 4 for new compatible.
 >>
->> So I am right or Rob?
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>  .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 140 ++++++++++++------
+>>  1 file changed, 98 insertions(+), 42 deletions(-)
 >>
-> As I know, both are incorrect.
->>> From the modern backlight IC design, it uses the boost converter architecture.
->>> This OCP level is to limit the inductor current when the internal MOS
->>> switch turn on.
->>> Details can refer to the below wiki link
->>> https://en.wikipedia.org/wiki/Boost_converter
->>>
->>> And based on it, OVP is used to limit the inductor output voltage.
->>> Each channel maximum current is based on the IC affordable limit.
->>> It is more like as what you said 'led-max-microamp'.
->>>
->>> So boost voltage level may depend on the LED VF.
->>> The different series of LED may cause different boost voltage.
->>>
->>> RT4831's OVP/OCP is not just the protection, more like as the limit.
->>
->> This suggests Rob is right, so let's use led-max-microamp property?
->>
-> No, the meaning is different. 'led-max-microamp' always means the
-> channel output current.
-> It already can be adjusted by backlight brightness node.
+>> diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>> index b8281d8be940..ec57bde7ac26 100644
+>> --- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>> +++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+>> @@ -57,6 +57,7 @@ properties:
+>>        - ti,am654-cpsw-nuss
+>>        - ti,j721e-cpsw-nuss
+>>        - ti,am642-cpsw-nuss
+>> +      - ti,j7200-cpswxg-nuss
+>>  
+>>    reg:
+>>      maxItems: 1
+>> @@ -108,48 +109,103 @@ properties:
+>>          const: 1
+>>        '#size-cells':
+>>          const: 0
+>> -
+>> -    patternProperties:
+>> -      port@[1-2]:
+>> -        type: object
+>> -        description: CPSWxG NUSS external ports
+>> -
+>> -        $ref: ethernet-controller.yaml#
+>> -
+>> -        properties:
+>> -          reg:
+>> -            minimum: 1
+>> -            maximum: 2
+>> -            description: CPSW port number
+>> -
+>> -          phys:
+>> -            maxItems: 1
+>> -            description: phandle on phy-gmii-sel PHY
+>> -
+>> -          label:
+>> -            description: label associated with this port
+>> -
+>> -          ti,mac-only:
+>> -            $ref: /schemas/types.yaml#/definitions/flag
+>> -            description:
+>> -              Specifies the port works in mac-only mode.
+>> -
+>> -          ti,syscon-efuse:
+>> -            $ref: /schemas/types.yaml#/definitions/phandle-array
+>> -            items:
+>> -              - items:
+>> -                  - description: Phandle to the system control device node which
+>> -                      provides access to efuse
+>> -                  - description: offset to efuse registers???
+>> -            description:
+>> -              Phandle to the system control device node which provides access
+>> -              to efuse IO range with MAC addresses
+>> -
+>> -        required:
+>> -          - reg
+>> -          - phys
+>> -
+>> -    additionalProperties: false
+>> +    allOf:
+>> +      - if:
+>> +          properties:
+>> +            compatible:
+>> +              contains:
+>> +                enum:
+>> +                  - ti,am654-cpsw-nuss
+>> +                  - ti,j721e-cpsw-nuss
+>> +                  - ti,am642-cpsw-nuss
+>> +        then:
+>> +          patternProperties:
+>> +            port@[1-2]:
+>> +              type: object
+>> +              description: CPSWxG NUSS external ports
+>> +
+>> +              $ref: ethernet-controller.yaml#
+>> +
+>> +              properties:
+>> +                reg:
+>> +                  minimum: 1
+>> +                  maximum: 2
+>> +                  description: CPSW port number
+>> +
+>> +                phys:
+>> +                  maxItems: 1
+>> +                  description: phandle on phy-gmii-sel PHY
+>> +
+>> +                label:
+>> +                  description: label associated with this port
+>> +
+>> +                ti,mac-only:
+>> +                  $ref: /schemas/types.yaml#/definitions/flag
+>> +                  description:
+>> +                    Specifies the port works in mac-only mode.
+>> +
+>> +                ti,syscon-efuse:
+>> +                  $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +                  items:
+>> +                    - items:
+>> +                        - description: Phandle to the system control device node which
+>> +                            provides access to efuse
+>> +                        - description: offset to efuse registers???
+>> +                  description:
+>> +                    Phandle to the system control device node which provides access
+>> +                    to efuse IO range with MAC addresses
+>> +
+>> +              required:
+>> +                - reg
+>> +                - phys
+>> +      - if:
+>> +          properties:
+>> +            compatible:
+>> +              contains:
+>> +                enum:
+>> +                  - ti,j7200-cpswxg-nuss
+>> +        then:
+>> +          patternProperties:
+>> +            port@[1-4]:
+>> +              type: object
+>> +              description: CPSWxG NUSS external ports
+>> +
+>> +              $ref: ethernet-controller.yaml#
+>> +
+>> +              properties:
+>> +                reg:
+>> +                  minimum: 1
+>> +                  maximum: 4
+>> +                  description: CPSW port number
+>> +
+>> +                phys:
+>> +                  maxItems: 1
+>> +                  description: phandle on phy-gmii-sel PHY
+>> +
+>> +                label:
+>> +                  description: label associated with this port
+>> +
+>> +                ti,mac-only:
+>> +                  $ref: /schemas/types.yaml#/definitions/flag
+>> +                  description:
+>> +                    Specifies the port works in mac-only mode.
+>> +
+>> +                ti,syscon-efuse:
+>> +                  $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +                  items:
+>> +                    - items:
+>> +                        - description: Phandle to the system control device node which
+>> +                            provides access to efuse
+>> +                        - description: offset to efuse registers???
+>> +                  description:
+>> +                    Phandle to the system control device node which provides access
+>> +                    to efuse IO range with MAC addresses
+>> +
+>> +              required:
+>> +                - reg
+>> +                - phys
 > 
-> For example
-> low voltage side (3.3~4.4V) to generate the boost voltage to 16~17V,
-> even 20V for BLED Vout.
-> This OCP is to limit the input current of low voltage side.
-> 
-> After the explanation, do you still think it's the same thing?
+> You are now defining the same properties twice. Don't do that. Just add 
+> an if/then schema restrict port nodes.
 
-This sounds differently so I propose to use this dedicated property with
-the changes I asked for.
+Thank you for reviewing the patch. I will fix this and send v3 for this series.
 
-
-Best regards,
-Krzysztof
+Thanks,
+Siddharth.

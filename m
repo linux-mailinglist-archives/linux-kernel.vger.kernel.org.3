@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BEE53E983
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D65553E997
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239759AbiFFOUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
+        id S239545AbiFFOVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239793AbiFFOUF (ORCPT
+        with ESMTP id S239441AbiFFOVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:20:05 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D43D7733
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:20:04 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id m20so29211554ejj.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+zeR4exPLerrOWbFqJdvC1kGSPV0cQ3LiC/P/8HiMc8=;
-        b=PonbL/t/3A7d5fxWp714fQaE0asV5scUDmSWkPDH/8ppJ3ACkjD7EQxVjGPRTczbAV
-         +ZhuqpjDO9slqOB13l23ZRAGbkF7eFZeKZm7Cu+8FA5rhbqpcoQ+NVZTycnhk3HUoB9F
-         jmHkHnS82cP/zG/7a9T1ujSZRRldb5j5Kvc91nEc49qIKGZu5hFv7znxKPK8Xd+Ex8fg
-         kDTOkJT1V8c7b91pZjT2ER8nRbYddJvXY7rqbHYtkepKifmL3A/zeDvO0eXoF23oCIUx
-         MeD2T/s68EQSuRUjvGt5kc9ECHPodgpZAF470X92i6sC3hSVrYjROw4y0r/c65V2F5JG
-         Tc9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+zeR4exPLerrOWbFqJdvC1kGSPV0cQ3LiC/P/8HiMc8=;
-        b=qaEiHPcocXLsw8c0qs58ZE5c8ENcE75L886ceAwYWDmFB8mVlIyMhpxHOat/UkQVJF
-         4lG0HZ7fg+T2EmVtpEmXE/ET8BKIYJWHcIYAdkhwW+c6OY/cFKl8h6ZkYKQogRV/34fL
-         BjzdpYkObW4FWz2UIk5IkOrRJxNDO6d2m54iYVQH0GxY1FRSFSIiG9oGGwmPbB6rFDpi
-         AWuaQ8iW+OaP1tjxNEkBg7VW4ZSyel1IodVwT1ZS88TFNLEHTQOrHj30skwRQmqhFf76
-         /6lu3qAzEQLQtmixYiqpjtzpaLXTaOiBOhZIUL4W8zLqWKpjE3okxA72azTJnK1uAOy2
-         n78g==
-X-Gm-Message-State: AOAM530CIL2aOylWqteleo8Q8VosimnwaSWt40y/wcmlb/cwP2Tt0dXg
-        b2rDzgYg+suoJdAKcx79xtTjltR8LhrJzj/DI51YSw==
-X-Google-Smtp-Source: ABdhPJxDecYJ9aEv69zBvu7MNAmQYz5Y28J8OShJ+zypoo94WzMWVcetkjW5fUL/4qVdb/vHqRg5X8tnlC42fQjH8DA=
-X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
- nc6-20020a1709071c0600b006dfb257cbb3mr21651391ejc.631.1654525202555; Mon, 06
- Jun 2022 07:20:02 -0700 (PDT)
+        Mon, 6 Jun 2022 10:21:11 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6620ED78;
+        Mon,  6 Jun 2022 07:21:02 -0700 (PDT)
+X-UUID: cd0c6cd876844e8d97b4e853391e9f5d-20220606
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:9841e478-dbdc-4782-bd99-691bf31b0423,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:18e3c6ad-3171-4dd4-a2d9-73b846daf167,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: cd0c6cd876844e8d97b4e853391e9f5d-20220606
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <mengqi.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1901588414; Mon, 06 Jun 2022 22:20:57 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 6 Jun 2022 22:20:55 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 6 Jun 2022 22:20:55 +0800
+From:   Mengqi Zhang <mengqi.zhang@mediatek.com>
+To:     <chaotian.jing@mediatek.com>, <ulf.hansson@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-mmc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Mengqi Zhang" <mengqi.zhang@mediatek.com>
+Subject: [PATCH] mmc: mediatek: wait dma stop bit reset to 0
+Date:   Mon, 6 Jun 2022 22:20:51 +0800
+Message-ID: <20220606142051.20350-1-mengqi.zhang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220606095516.938934-1-jose.exposito89@gmail.com>
- <20220606095516.938934-2-jose.exposito89@gmail.com> <20220606134242.h6kuqn4zbpmc2rql@houat>
- <576ed6ef-b961-9214-2c9b-56cb5b493b4e@redhat.com> <20220606135219.nwhp4fdawg2qjeam@houat>
- <78c1eb65-ea78-8744-5382-ea86a56a66f4@redhat.com>
-In-Reply-To: <78c1eb65-ea78-8744-5382-ea86a56a66f4@redhat.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 6 Jun 2022 07:19:51 -0700
-Message-ID: <CAGS_qxrPKJrXufMKOCO3eCEpq-Udq6uy32x6aneSPRnm=1O4HQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        davidgow@google.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 6:57 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
+MediaTek IP requires that after dma stop, it need to wait this dma stop
+bit auto-reset to 0. When bus is in high loading state, it will take a
+while for the dma stop complete. If there is no waiting operation here,
+when program runs to clear fifo and reset, bus will hang.
 
-<snip>
+In addition, there should be no return in msdc_data_xfer_next, because no
+matter what error occurs here, it should continue to excute to the
+following mmc_request_done. Otherwise the core layer may wait complete
+forever.
 
-> >>>>  $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm \
-> >>>>          --kconfig_add CONFIG_VIRTIO_UML=y \
-> >>>>          --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> >>>
-> >>> It's not clear to me why you would need VIRTIO here? The Kunit config
-> >>> file should be enough to run the tests properly
-> >>>
-> >>
-> >> It's needed or otherwise KUnit will complain with:
-> >>
-> >> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/.kunitconfig
-> >> [15:47:31] Configuring KUnit Kernel ...
-> >> Regenerating .config ...
-> >> Populating config with:
-> >> $ make ARCH=um O=.kunit olddefconfig
-> >> ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> >> This is probably due to unsatisfied dependencies.
-> >> Missing: CONFIG_DRM=y, CONFIG_DRM_KUNIT_TEST=y
-> >> Note: many Kconfig options aren't available on UML. You can try running on a different architecture with something like "--arch=x86_64".
-> >>
-> >> The following works correctly but it won't use User Mode Linux:
-> >>
-> >> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/.kunitconfig --arch=x86_64
-> >
-> > But then, can't we add them to .kunitconfig?
-> >
->
-> That's what I asked in the previous RFC too. Daniel mentioned that it shouldn't
-> go there because is platform specific (AFAIU, one might want to test it on x86,
+Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
+---
+ drivers/mmc/host/mtk-sd.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Slight correction, it was David who explicitly suggested it shouldn't
-go in there.
-https://lists.freedesktop.org/archives/dri-devel/2022-June/357611.html
+diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+index 195dc897188b..c925f45786c2 100644
+--- a/drivers/mmc/host/mtk-sd.c
++++ b/drivers/mmc/host/mtk-sd.c
+@@ -1385,12 +1385,15 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+ 		sdr_set_field(host->base + MSDC_DMA_CTRL, MSDC_DMA_CTRL_STOP,
+ 				1);
+ 
++		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CTRL, val,
++						!(val & MSDC_DMA_CTRL_STOP), 1, 20000);
++		if (ret)
++			dev_dbg(host->dev, "DMA stop timed out\n");
++
+ 		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CFG, val,
+ 						!(val & MSDC_DMA_CFG_STS), 1, 20000);
+-		if (ret) {
+-			dev_dbg(host->dev, "DMA stop timed out\n");
+-			return false;
+-		}
++		if (ret)
++			dev_dbg(host->dev, "DMA inactive timed out\n");
+ 
+ 		sdr_clr_bits(host->base + MSDC_INTEN, data_ints_mask);
+ 		dev_dbg(host->dev, "DMA stop\n");
+@@ -2416,6 +2419,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+ 	if (recovery) {
+ 		sdr_set_field(host->base + MSDC_DMA_CTRL,
+ 			      MSDC_DMA_CTRL_STOP, 1);
++		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
++			!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
++			return;
+ 		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
+ 			!(val & MSDC_DMA_CFG_STS), 1, 3000)))
+ 			return;
+-- 
+2.25.1
 
-> aarch64, etc) but then I asked why we couldn't have a arch/um/.kunitconfig.
->
-> The answer was that's not that simple and some agreement on how to do it is needed:
-
-I'm a bit more in favor of having UML-specific options in the drm
-.kunitconfig file, but I agree it's a bit unclear.
-If people want to easily run with --arch=x86_64 or others, then
-they're indeed a liability.
-
-Another option is to perhaps explicitly name the .kunitconfig file
-something like drm/uml.kunitconfig, which doesn't solve the problem
-but makes it less of a footgun.
-
-Stepping back, I feel like perhaps a cleaner answer lies in adding a
-new Kconfig option that selects CONFIG_UML_PCI_OVER_VIRTIO under UML
-and just CONFIG_PCI otherwise.
-But that's a bigger discussion still.
-
-Daniel

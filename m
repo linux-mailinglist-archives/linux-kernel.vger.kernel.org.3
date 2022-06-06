@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EC753F29B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E618853F2AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbiFFXfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 19:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S235307AbiFFXlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 19:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235302AbiFFXfO (ORCPT
+        with ESMTP id S235302AbiFFXlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 19:35:14 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227214D622
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:35:12 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 16:35:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654558510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gt4DBYgcXVKDG81Upnb2aG0Q8F7JkfTTCfOh0AVQT9U=;
-        b=Oh/h0HqfGHO/3nl2vC7PhrBmFqKhuAGU0yX+COkhggj2alXkzkm+Lo2CQE/18WE9Rt4XaT
-        7elTH9cN9HLQ1lmmyi1wPVxpXhw/5FP07hvUZeQjbkRRS+4eQQ6ZaPzpSUYGK3IH8FXthp
-        clLs7WO3Zt6ZdlyB0wIM7Rlt1MKdBaE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     syzbot <syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [syzbot] WARNING in register_shrinker_prepared
-Message-ID: <Yp6PKQ5bPmwu9b2E@carbon>
-References: <000000000000db448c05e0caa5ba@google.com>
- <20220606122302.dc265509ca896073e98049a3@linux-foundation.org>
- <Yp5y7NoNP9WF6vCS@sol.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yp5y7NoNP9WF6vCS@sol.localdomain>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Jun 2022 19:41:19 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EF47B5257;
+        Mon,  6 Jun 2022 16:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=W2pGeBJj/dLqJYD8kB
+        9C4khRrBNd4zxXRj9ATg2uzBY=; b=Goj6AceCMxqUO8j9t4MO6BV6oHOeJ2PM1W
+        34uvRHBYiiilbIxy+8LBhoMZamvh1Q2OHsOcW+yC0qrM9rUauLYapZfT7n6NTbAA
+        zVVR80LNDZ/Jwa5bh6jnFxqLe9Y51bINkg1JJht4SIvF0EVxZkelkRbxCPb8TDNR
+        4x0tg7hu8=
+Received: from localhost.localdomain (unknown [171.221.147.121])
+        by smtp13 (Coremail) with SMTP id EcCowABHYpM1kJ5iHCCHGg--.35368S2;
+        Tue, 07 Jun 2022 07:39:43 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     kuba@kernel.org
+Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
+        Mark-MC.Lee@mediatek.com, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, matthias.bgg@gmail.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alexander.duyck@gmail.com, Chen Lin <chen45464546@163.com>
+Subject: [PATCH v4] net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+Date:   Tue,  7 Jun 2022 07:39:11 +0800
+Message-Id: <1654558751-3702-1-git-send-email-chen45464546@163.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <20220606143437.25397f08@kernel.org>
+References: <20220606143437.25397f08@kernel.org>
+X-CM-TRANSID: EcCowABHYpM1kJ5iHCCHGg--.35368S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyfKF13AF45WF4kJFyxZrb_yoW8ur18pr
+        4UtFy3AF4UJr47G395Aa1DZa1Yyw4IgrWUKFy3Z34fZ345tFWrtFyktFWUWrySkrWqkF1S
+        yFs8Zr9I9FnIkw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi2g43UUUUU=
+X-Originating-IP: [171.221.147.121]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbB2AcYnmBHK2EpqgAAs3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 02:34:36PM -0700, Eric Biggers wrote:
-> On Mon, Jun 06, 2022 at 12:23:02PM -0700, Andrew Morton wrote:
-> > (cc Roman)
-> > 
-> > On Mon, 06 Jun 2022 10:17:34 -0700 syzbot <syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com> wrote:
-> > 
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    1cfd968b58a1 Add linux-next specific files for 20220603
-> > > git tree:       linux-next
-> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=12f7b6b3f00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7da8386e3742814f
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=300d27c79fe6d4cbcc39
-> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103e5177f00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13545057f00000
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com
-> > > 
-> > > loop0: detected capacity change from 0 to 20
-> > > ------------[ cut here ]------------
-> > > WARNING: CPU: 0 PID: 3694 at mm/vmscan.c:681 register_shrinker_prepared+0x119/0x150 mm/vmscan.c:681
-> > 
-> > That's
-> > 
-> > 	WARN_ON_ONCE(shrinker_debugfs_add(shrinker));
-> > 
-> > I assume that debugfs_create_dir() failed.  Please see the NOTE: in
-> > that function's kerneldoc.
-> > 
-> 
-> The call to ida_alloc() can fail too.
-> 
-> register_shrinker_prepared() is not allowed to fail; anything that can fail must
-> happen in prealloc_shrinker().  So either this new debugfs registration code
-> needs to be moved to prealloc_shrinker(), or errors from it need to be ignored
-> (which might be appropriate since it is just debugfs).
+When rx_flag == MTK_RX_FLAGS_HWLRO,
+rx_data_len = MTK_MAX_LRO_RX_LENGTH(4096 * 3) > PAGE_SIZE.
+netdev_alloc_frag is for alloction of page fragment only.
+Reference to other drivers and Documentation/vm/page_frags.rst
 
-I don't think we want to panic or fail to mount filesystems because of it,
-so I agree, ignoring is the best option.
+Branch to use __get_free_pages when ring->frag_size > PAGE_SIZE.
+
+Signed-off-by: Chen Lin <chen45464546@163.com>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c |   21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index b3b3c07..3da162e 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -899,6 +899,17 @@ static bool mtk_rx_get_desc(struct mtk_eth *eth, struct mtk_rx_dma_v2 *rxd,
+ 	return true;
+ }
+ 
++static inline void *mtk_max_lro_buf_alloc(gfp_t gfp_mask)
++{
++	void *data;
++
++	data = (void *)__get_free_pages(gfp_mask |
++			  __GFP_COMP | __GFP_NOWARN,
++			  get_order(mtk_max_frag_size(MTK_MAX_LRO_RX_LENGTH)));
++
++	return data;
++}
++
+ /* the qdma core needs scratch memory to be setup */
+ static int mtk_init_fq_dma(struct mtk_eth *eth)
+ {
+@@ -1467,7 +1478,10 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 			goto release_desc;
+ 
+ 		/* alloc new buffer */
+-		new_data = napi_alloc_frag(ring->frag_size);
++		if (ring->frag_size <= PAGE_SIZE)
++			new_data = napi_alloc_frag(ring->frag_size);
++		else
++			new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
+ 		if (unlikely(!new_data)) {
+ 			netdev->stats.rx_dropped++;
+ 			goto release_desc;
+@@ -1914,7 +1928,10 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < rx_dma_size; i++) {
+-		ring->data[i] = netdev_alloc_frag(ring->frag_size);
++		if (ring->frag_size <= PAGE_SIZE)
++			ring->data[i] = netdev_alloc_frag(ring->frag_size);
++		else
++			ring->data[i] = mtk_max_lro_buf_alloc(GFP_KERNEL);
+ 		if (!ring->data[i])
+ 			return -ENOMEM;
+ 	}
+-- 
+1.7.9.5
+

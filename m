@@ -2,315 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8946C53DFC5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B5453DFC8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352223AbiFFCmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S1349730AbiFFCpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352206AbiFFCmd (ORCPT
+        with ESMTP id S238762AbiFFCpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:42:33 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903AB95B7;
-        Sun,  5 Jun 2022 19:42:28 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bg6so6505313ejb.0;
-        Sun, 05 Jun 2022 19:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1N3UQUBc3SITykVwo1DI11Mg5L1Q2wcvd0ubz4CZVpI=;
-        b=QR1BrIRVMMEg2pgbBohP2/arDirkXnP+tL4I5QMLHUWjiYDbuH6aIrxuPPxCPrWBpx
-         E7AeY+OCPrIOCSFxXu6077V46+Bknu5f1NrpoPF4TXfMtH+KH/ypkYQ9d3ME2aeDANp/
-         b3+bimiNl8MpeSYkBDFlBYwV0AQX3bB2Rd1WAT3/PB3IEBfpVaWO0HXtUsL80NX/V0r9
-         3YC26wLFLQHE1W8LV4p4sx00MCYjzwbdkBOq2YsZlKFZMHlEACQ8CcaAGLVWh/kQIlGU
-         g72pssLvO4y/Iwr9EgKi5wtbfPb5mxpRE7TeZ+NuXc0bq716HTfN7raiAr1TeA/4F3wx
-         DbMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1N3UQUBc3SITykVwo1DI11Mg5L1Q2wcvd0ubz4CZVpI=;
-        b=pTEQMQVCnYcEbjE+kyEXsNjAhXVs0F7oXsbFN3UI6Ql38i9pyDY/PvkSYGHnuWWhmc
-         nHnWANtii74/hI+S4a5su10ni2PmKlpIh2Cbi89I/eOWX2yr1BaPW5Hn5g5pxnH3Bv28
-         fh2OhpfIG9IAW5So0iTDEOIVvSQo9ctcG45Cpz0T24QgyLHXZykO2pnDUfT8UHVuWNHt
-         nKIJF/kc0jLu81I9NJX4J22Le8qRVrM8ePGVcuLyVjSzpopCut/lrdMlS5maRblgycB8
-         XsI4KrawPokx2JyZyue4P2I4Y3g+10gZA9Epd1l7cfNmmK0L8OaQsS9zRP02/50yALHW
-         S+Aw==
-X-Gm-Message-State: AOAM530EgC7wilYlK0glWcixPSG7XCv9A+6YNjJezCMPCo1hAp9HjSh5
-        W/IgV9Ip/iNZl0KZ7CHi7fY5pRbktjuopTCDD8yp1PVdMbU=
-X-Google-Smtp-Source: ABdhPJxkVMadKzZkp4603xDlsiXx/Hb59+1zjauQ6/hsxzM25KnSP9koqlSzgftzD42Y0SBSjP9JmAjC536SXaDMa24=
-X-Received: by 2002:a17:906:b294:b0:6fe:fdb9:5fb4 with SMTP id
- q20-20020a170906b29400b006fefdb95fb4mr19414342ejz.179.1654483346371; Sun, 05
- Jun 2022 19:42:26 -0700 (PDT)
+        Sun, 5 Jun 2022 22:45:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E49C4C425
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654483524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aNDoMccQ7mEW7iwCLiSB8XQaZrFaD9G9J8zeTIHHoD4=;
+        b=WsJznzY9StKhP6vq62G6EZRpA7jIBkGqYRyywvbq2eq1PmSJKzRPlr1dvNtM4vZw1bYTmX
+        chPxHGAlhbzeI7dLhV5R0vB3EII4JIWFMErY9QJK2GH2hzWAZwklZAzX+NAdXIUTnz+nBr
+        xJ79I2f4VigSx+XlIf2qF5D/SCBnF8Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-88-AOWKI5UJNA2j7AViM93Ciw-1; Sun, 05 Jun 2022 22:45:21 -0400
+X-MC-Unique: AOWKI5UJNA2j7AViM93Ciw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8325E801228;
+        Mon,  6 Jun 2022 02:45:20 +0000 (UTC)
+Received: from localhost (ovpn-12-209.pek2.redhat.com [10.72.12.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4A8BE2166B26;
+        Mon,  6 Jun 2022 02:45:18 +0000 (UTC)
+Date:   Mon, 6 Jun 2022 10:45:15 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     sashal@kernel.org, ebiederm@xmission.com, rburanyi@google.com,
+        gthelen@google.com, viro@zeniv.linux.org.uk,
+        kexec@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] fs/kernel_read_file: Allow to read files up-to
+ ssize_t
+Message-ID: <Yp1qO70pdxLx4h1H@MiWiFi-R3L-srv>
+References: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
+ <20220527025535.3953665-2-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
-References: <20220513033450.7038-1-kflin@nuvoton.com> <20220513033450.7038-6-kflin@nuvoton.com>
- <b5361f08-f9eb-9384-f904-2625bae0fd9a@molgen.mpg.de> <CADnNmFqfxDE3UbNQiyhwkLBugfZ1fSZYDbGDQFnRZdD_4q58+A@mail.gmail.com>
-In-Reply-To: <CADnNmFqfxDE3UbNQiyhwkLBugfZ1fSZYDbGDQFnRZdD_4q58+A@mail.gmail.com>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Mon, 6 Jun 2022 10:42:39 +0800
-Message-ID: <CADnNmFqzAmyxgc0jbXFXUy8ueb=6-RxoWWHP4A=iRUO1fx4zRA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] drivers: media: platform: Add NPCM Video
- Capture/Encode Engine driver
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, CS20 KWLiu <kwliu@nuvoton.com>,
-        tmaimon77@gmail.com, avifishman70@gmail.com,
-        openbmc@lists.ozlabs.org, tali.perry1@gmail.com,
-        Marvin Lin <kflin@nuvoton.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527025535.3953665-2-pasha.tatashin@soleen.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul,
+On 05/27/22 at 02:55am, Pasha Tatashin wrote:
+> Currently, the maximum file size that is supported is 2G. This may be
+> too small in some cases. For example, kexec_file_load() system call
+> loads initramfs. In some netboot cases initramfs can be rather large.
+> 
+> Allow to use up-to ssize_t bytes. The callers still can limit the
+> maximum file size via buf_size.
 
-These problems have been addressed in the new patch.
-Could you please help to review the new patch v4? Thanks.
+If we really met initramfs bigger than 2G, it's reasonable to increase
+the limit. While wondering why we should take sszie_t, but not size_t.
 
-Regards,
-Marvin
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  fs/kernel_read_file.c            | 38 ++++++++++++++++----------------
+>  include/linux/kernel_read_file.h | 32 +++++++++++++--------------
+>  include/linux/limits.h           |  1 +
+>  3 files changed, 36 insertions(+), 35 deletions(-)
+> 
+> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
+> index 1b07550485b9..5d826274570c 100644
+> --- a/fs/kernel_read_file.c
+> +++ b/fs/kernel_read_file.c
+> @@ -29,15 +29,15 @@
+>   * change between calls to kernel_read_file().
+>   *
+>   * Returns number of bytes read (no single read will be bigger
+> - * than INT_MAX), or negative on error.
+> + * than SSIZE_MAX), or negative on error.
+>   *
+>   */
+> -int kernel_read_file(struct file *file, loff_t offset, void **buf,
+> -		     size_t buf_size, size_t *file_size,
+> -		     enum kernel_read_file_id id)
+> +ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
+> +			 size_t buf_size, size_t *file_size,
+> +			 enum kernel_read_file_id id)
+>  {
+>  	loff_t i_size, pos;
+> -	size_t copied;
+> +	ssize_t copied;
+>  	void *allocated = NULL;
+>  	bool whole_file;
+>  	int ret;
+> @@ -58,7 +58,7 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
+>  		goto out;
+>  	}
+>  	/* The file is too big for sane activities. */
+> -	if (i_size > INT_MAX) {
+> +	if (i_size > SSIZE_MAX) {
+>  		ret = -EFBIG;
+>  		goto out;
+>  	}
+> @@ -124,12 +124,12 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
+>  }
+>  EXPORT_SYMBOL_GPL(kernel_read_file);
+>  
+> -int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
+> -			       size_t buf_size, size_t *file_size,
+> -			       enum kernel_read_file_id id)
+> +ssize_t kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
+> +				   size_t buf_size, size_t *file_size,
+> +				   enum kernel_read_file_id id)
+>  {
+>  	struct file *file;
+> -	int ret;
+> +	ssize_t ret;
+>  
+>  	if (!path || !*path)
+>  		return -EINVAL;
+> @@ -144,14 +144,14 @@ int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
+>  }
+>  EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
+>  
+> -int kernel_read_file_from_path_initns(const char *path, loff_t offset,
+> -				      void **buf, size_t buf_size,
+> -				      size_t *file_size,
+> -				      enum kernel_read_file_id id)
+> +ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
+> +					  void **buf, size_t buf_size,
+> +					  size_t *file_size,
+> +					  enum kernel_read_file_id id)
+>  {
+>  	struct file *file;
+>  	struct path root;
+> -	int ret;
+> +	ssize_t ret;
+>  
+>  	if (!path || !*path)
+>  		return -EINVAL;
+> @@ -171,12 +171,12 @@ int kernel_read_file_from_path_initns(const char *path, loff_t offset,
+>  }
+>  EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
+>  
+> -int kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
+> -			     size_t buf_size, size_t *file_size,
+> -			     enum kernel_read_file_id id)
+> +ssize_t kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
+> +				 size_t buf_size, size_t *file_size,
+> +				 enum kernel_read_file_id id)
+>  {
+>  	struct fd f = fdget(fd);
+> -	int ret = -EBADF;
+> +	ssize_t ret = -EBADF;
+>  
+>  	if (!f.file || !(f.file->f_mode & FMODE_READ))
+>  		goto out;
+> diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
+> index 575ffa1031d3..90451e2e12bd 100644
+> --- a/include/linux/kernel_read_file.h
+> +++ b/include/linux/kernel_read_file.h
+> @@ -35,21 +35,21 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
+>  	return kernel_read_file_str[id];
+>  }
+>  
+> -int kernel_read_file(struct file *file, loff_t offset,
+> -		     void **buf, size_t buf_size,
+> -		     size_t *file_size,
+> -		     enum kernel_read_file_id id);
+> -int kernel_read_file_from_path(const char *path, loff_t offset,
+> -			       void **buf, size_t buf_size,
+> -			       size_t *file_size,
+> -			       enum kernel_read_file_id id);
+> -int kernel_read_file_from_path_initns(const char *path, loff_t offset,
+> -				      void **buf, size_t buf_size,
+> -				      size_t *file_size,
+> -				      enum kernel_read_file_id id);
+> -int kernel_read_file_from_fd(int fd, loff_t offset,
+> -			     void **buf, size_t buf_size,
+> -			     size_t *file_size,
+> -			     enum kernel_read_file_id id);
+> +ssize_t kernel_read_file(struct file *file, loff_t offset,
+> +			 void **buf, size_t buf_size,
+> +			 size_t *file_size,
+> +			 enum kernel_read_file_id id);
+> +ssize_t kernel_read_file_from_path(const char *path, loff_t offset,
+> +				   void **buf, size_t buf_size,
+> +				   size_t *file_size,
+> +				   enum kernel_read_file_id id);
+> +ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
+> +					  void **buf, size_t buf_size,
+> +					  size_t *file_size,
+> +					  enum kernel_read_file_id id);
+> +ssize_t kernel_read_file_from_fd(int fd, loff_t offset,
+> +				 void **buf, size_t buf_size,
+> +				 size_t *file_size,
+> +				 enum kernel_read_file_id id);
+>  
+>  #endif /* _LINUX_KERNEL_READ_FILE_H */
+> diff --git a/include/linux/limits.h b/include/linux/limits.h
+> index b568b9c30bbf..f6bcc9369010 100644
+> --- a/include/linux/limits.h
+> +++ b/include/linux/limits.h
+> @@ -7,6 +7,7 @@
+>  #include <vdso/limits.h>
+>  
+>  #define SIZE_MAX	(~(size_t)0)
+> +#define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
+>  #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
+>  
+>  #define U8_MAX		((u8)~0U)
+> -- 
+> 2.36.1.124.g0e6072fb45-goog
+> 
 
-Kun-Fa Lin <milkfafa@gmail.com> =E6=96=BC 2022=E5=B9=B45=E6=9C=8817=E6=97=
-=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8810:59=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Dear Paul,
->
-> Thanks for your review and comments.
->
-> > Please mention the datasheet name and revision used to implement this?
-> > How can your patch be tested?
-> >
-> > For a over 2000 line patch, I would expect a longer commit message with
-> > a summary of the hardware features, and implementation.
->
-> Okay, I'll add more information to the commit message, but it may not
-> be appropriate to add the datasheet name since it is not public.
-> And I tested with openbmc/obmc-ikvm (with patches to support Hextile
-> encoding that our driver used) and used VNC Viewer to verify the video
-> result.
->
-> >
-> > As the module author should you also be added to the file `MAINTAINERS`=
-?
-> > (Maybe even with a functional address <linux-npcm-video@nuvoton.com>?
-> >
-> > > Signed-off-by: Marvin Lin <kflin@nuvoton.com>
-> >
-> > Same comment as in 1/5 regarding the author email address.
->
-> I'll add a new entry in MAINTAINERS.
->
-> > > +++ b/drivers/media/platform/nuvoton/Kconfig
-> > > @@ -0,0 +1,12 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +comment "Nuvoton media platform drivers"
-> > > +
-> > > +config VIDEO_NUVOTON
-> >
-> > Is that driver going to support all Nuvoton devices or just NPCM? If
-> > only NPCM, that should be part of the Kconfig config name?
-> >
-> > > +     tristate "Nuvoton NPCM Video Capture/Encode Engine driver"
-> > > +     depends on V4L_PLATFORM_DRIVERS
-> > > +     depends on VIDEO_DEV
-> > > +     select VIDEOBUF2_DMA_CONTIG
-> > > +     help
-> > > +       Support for the Video Capture/Differentiation Engine (VCD) an=
-d
-> > > +       Encoding Compression Engine (ECE) present on Nuvoton NPCM SoC=
-s.
-> >
-> > Mention the module name?
-> >
-> >  > To compile this driver as a module, choose M here: the module will b=
-e
-> > called XXX.
->
-> The driver just supports NPCM. I'll change the config to
-> VIDEO_NUVOTON_NPCM_VCD_ECE.
->
-> > > +struct nuvoton_video_addr {
-> > > +     unsigned int size;
-> >
-> > size_t?
->
-> > > +struct rect_list_info {
-> > > +     struct rect_list *list;
-> > > +     struct rect_list *first;
-> > > +     struct list_head *head;
-> > > +     int index;
-> > > +     int tile_perline;
-> > > +     int tile_perrow;
-> > > +     int offset_perline;
-> > > +     int tile_size;
-> > > +     int tile_cnt;
-> >
-> > Can all of these be unsigned?
->
-> > > +     int frame_rate;
-> > > +     int vb_index;
-> >
-> > Unsigned?
-> >
->
-> They will be addressed in the next patch.
->
-> > > +     u32 bytesperline;
-> > > +     u8 bytesperpixel;
-> > > +     u32 rect_cnt;
-> > > +     u8 num_buffers;
-> > > +     struct list_head *list;
-> > > +     u32 *rect;
-> >
-> > I would not limit the size?
->
-> It's clearer to know that it stores u32 exactly.
->
-> > > +static u32 nuvoton_video_ece_get_ed_size(struct nuvoton_video *video=
-,
-> > > +                                      u32 offset, void *addr)
-> >
-> > Use unsigned int as return value?
->
-> Okay.
->
-> > > +static void nuvoton_video_ece_enc_rect(struct nuvoton_video *video, =
-u32 r_off_x,
-> > > +                                    u32 r_off_y, u32 r_w, u32 r_h)
-> > > +{
-> > > +     struct regmap *ece =3D video->ece.regmap;
-> > > +     u32 rect_offset =3D (r_off_y * video->bytesperline) + (r_off_x =
-* 2);
-> > > +     u32 temp;
-> > > +     u32 w_tile;
-> > > +     u32 h_tile;
-> > > +     u32 w_size =3D ECE_TILE_W;
-> > > +     u32 h_size =3D ECE_TILE_H;
-> >
-> > Any reason to fix the sizes?
->
-> A "Hextile" is fixed to 16x16 pixels size, which is defined in Remote
-> Framebuffer Protocol (RFC 6143, chapter 7.7.4 Hextile Encoding).
->
-> > > +static void nuvoton_video_ece_ip_reset(struct nuvoton_video *video)
-> > > +{
-> > > +     reset_control_assert(video->ece.reset);
-> > > +     msleep(100);
-> > > +     reset_control_deassert(video->ece.reset);
-> > > +     msleep(100);
-> >
-> > 100 ms is quite long. Please add a comment, where that is documented. I=
-s
-> > there a way to poll, if the device is done?
->
-> I'll add a comment. It should be reduced to ~10 us (suggested in
-> spec.) and there's no way to poll.
->
-> > > +
-> > > +static void nuvoton_video_free_diff_table(struct nuvoton_video *vide=
-o)
-> > > +{
-> > > +     struct list_head *head, *pos, *nx;
-> > > +     struct rect_list *tmp;
-> > > +     int i;
-> >
-> > unsigned?
-> >
->
-> > > +static int nuvoton_video_find_rect(struct nuvoton_video *video,
-> > > +                                struct rect_list_info *info, u32 off=
-set)
-> > > +{
-> > > +     int i =3D info->index;
-> > > +
-> > > +     if (offset < info->tile_perline) {
-> > > +             info->list =3D nuvoton_video_new_rect(video, offset, i)=
-;
-> >
-> > `i` is only used here, so use `info->index`?
-> >
->
-> > > +static int nuvoton_video_build_table(struct nuvoton_video *video,
-> > > +                                  struct rect_list_info *info)
-> > > +{
-> > > +     int i =3D info->index;
-> > > +     int j, ret, bit;
-> >
-> > Make `j` unsigned?
-> >
-> > > +     u32 value;
-> > > +     struct regmap *vcd =3D video->vcd_regmap;
-> > > +
-> > > +     for (j =3D 0; j < info->offset_perline; j +=3D 4) {
-> > > +             regmap_read(vcd, VCD_DIFF_TBL + (j + i), &value);
-> >
-> > `i` is only used here, so use `info->index`?
-> >
->
-> > > +static void nuvoton_video_vcd_ip_reset(struct nuvoton_video *video)
-> > > +{
-> > > +     reset_control_assert(video->reset);
-> > > +     msleep(100);
-> > > +     reset_control_deassert(video->reset);
-> > > +     msleep(100);
-> >
-> > 100 ms is quite long. Please add a comment, where that is documented. I=
-s
-> > there a way to poll, if the device is done?
-> >
->
-> > > +static int nuvoton_video_queue_setup(struct vb2_queue *q,
-> > > +                                  unsigned int *num_buffers,
-> > > +                                  unsigned int *num_planes,
-> > > +                                  unsigned int sizes[],
-> > > +                                  struct device *alloc_devs[])
-> > > +{
-> > > +     struct nuvoton_video *video =3D vb2_get_drv_priv(q);
-> > > +     int i;
-> >
-> > unsigned?
-> >
->
-> > > +static void nuvoton_video_buf_queue(struct vb2_buffer *vb)
-> > > +{
-> > > +     int empty;
-> > > +     struct nuvoton_video *video =3D vb2_get_drv_priv(vb->vb2_queue)=
-;
-> > > +     struct vb2_v4l2_buffer *vbuf =3D to_vb2_v4l2_buffer(vb);
-> > > +     struct nuvoton_video_buffer *nvb =3D to_nuvoton_video_buffer(vb=
-uf);
-> > > +     unsigned long flags;
-> > > +
-> > > +     dev_dbg(video->dev, "%s\n", __func__);
-> > > +
-> > > +     spin_lock_irqsave(&video->lock, flags);
-> > > +     empty =3D list_empty(&video->buffers);
-> >
-> > Where is empty read later?
-> >
->
-> > > +     regs =3D devm_platform_ioremap_resource_byname(pdev, VCD_MODULE=
-_NAME);
-> > > +     if (IS_ERR(regs)) {
-> > > +             dev_err(&pdev->dev, "Failed to get VCD regmap resource!=
-\n");
-> >
-> > Can you help the user more by saying what to fix like check devicetree
-> > or so?
-> >
->
-> Okay. All of them will be addressed in the next patch.
->
-> Regards,
-> Marvin

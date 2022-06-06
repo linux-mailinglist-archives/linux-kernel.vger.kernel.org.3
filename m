@@ -2,117 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006B253EF65
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0E753EF68
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiFFUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
+        id S233716AbiFFURA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233391AbiFFUQk (ORCPT
+        with ESMTP id S233411AbiFFUQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:16:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4556B13AF36
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654546592; x=1686082592;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jtrT9xol1zz8x3wq/vAV4b2zS4KUY7UQ5TB0I2JKtBk=;
-  b=keDBCFGSKiBK7UWUdfWZc++mJd1knIiTVh/tfgti6HQTe8fY9O6jU25W
-   fbCcvEV7P2v6LbBZHWxFs5YrY6HwqIaF7YiJes/WfZMxzUNU8aZpLtIb4
-   KTkUjh9F8bCyRitNNjlDFSabjco39+DNK/euycxe5S45Hs9PyPYEV6Kaq
-   0ZMJ5891/3Z4qS1B3nAPChkOvrH6VuqpaK3q9gnhGgjn/cjEtMGSvaQ9m
-   xLbH+sZ7D3P1sacQTUyEgvBma0aDcivnrntVlSzS/EZo5waF+eRN2kN3F
-   rnldSrT6+6f2jAtscc9Gh0563Z1nvmAu0caQ3v2rPL63sqFA1m6OQfbtP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="340144337"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="340144337"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 13:16:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="669651235"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2022 13:16:28 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyJ9H-000D1x-SJ;
-        Mon, 06 Jun 2022 20:16:27 +0000
-Date:   Tue, 7 Jun 2022 04:16:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH] kbuild: fix build failure by scripts/check-local-export
-Message-ID: <202206070434.3wvNWfJZ-lkp@intel.com>
-References: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
+        Mon, 6 Jun 2022 16:16:45 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A1D6FD13
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:16:36 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id h23so25063424lfe.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gvgkNt5AvonmRpEaW+kJLiTrofK1h4p2ZLrrpF3hb6g=;
+        b=WhNfhPUvNR4xNPpmPIjOZ33SDP8SNm1f2V4XQziGGsbFEtvGuEO+7kncu8CVybQwni
+         AMLGCqzs7wPsZyXipxxAwpUY/yl7XxFEL5XoitJLAncOtiDSdLJcHhE7FP/KDQSZlSXj
+         OkM0v+9UL4+z1yVDJoDbPydh4/vFaFxnleL43I4CVAl376fOD4K5ZhSspoxP6eRFVdKe
+         LPgZ1RzYk3AVRNPr7YLg2V8pT0sq/EHnrM4pbKL3A5EuWKJ+wRM+VYPPREfAXnoB163b
+         zBORHrb5Xncjv7rqstJhMH5ZcWINBCWncuVyK6oUlgMkBcBfmSU2cgqZ0I+bgQN5XY1e
+         K1DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gvgkNt5AvonmRpEaW+kJLiTrofK1h4p2ZLrrpF3hb6g=;
+        b=1AV+gEWCbRxAB9sQexY70dlbDr5xYFDGqnfjcgw1D+afAbfJZtBezMImsKmE9z/xTz
+         NEW4EPyEWINoTE6nB06m/rZnfK3dH+zw1S/72Izz61SW6id900zSpZ9zrE0LJO4/xFHr
+         5J4Mic9zM1rT0Vc/hH6zt1ZsrGTlOx8GIvTiPOvZtyguoBgjEZx4ijVqPGm+sHvBup+Q
+         7x8l//yuIAZ+IRswpUbI2os+1xgYKKwBuFgAWfjAqdU3FRGR0Z8DmKRckGAt5sINMcj7
+         Cb7xcEaQtoDfQKSZMFfIwFhNV9xWxSGElaoIirqi2pRKQIzUfJWO4l7r+8X++T/8cweZ
+         ctRA==
+X-Gm-Message-State: AOAM530H5QJcaDGblViTRlEgP6labKhP+lwWLwY6CyeZsDtPd+9eSXfl
+        w3rgvmUXb0xtQMg4954o/75Vh2I2K+CTWciPZIdybRlzkE4=
+X-Google-Smtp-Source: ABdhPJxTNHkrcmgcUtB/9S/c69fhktonAVfFFFI0WZphFUluFaXX3OOVp1GevheJd7U/W/TTo4Fmhkm5paB4lEM0+lw=
+X-Received: by 2002:a05:6512:3f1a:b0:477:8ecd:368c with SMTP id
+ y26-20020a0565123f1a00b004778ecd368cmr64495550lfa.403.1654546594123; Mon, 06
+ Jun 2022 13:16:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220530090139.3030866-1-masahiroy@kernel.org> <20220530090139.3030866-2-masahiroy@kernel.org>
+In-Reply-To: <20220530090139.3030866-2-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 6 Jun 2022 13:16:22 -0700
+Message-ID: <CAKwvOdn4hf1PHsj6MdN1ZeYSpBBBK=EixCSwn88bnPvhY_F0WA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] modpost: use fnmatch() to simplify match()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tetsuo,
+On Mon, May 30, 2022 at 2:03 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Replace the own implementation for wildcard (glob) matching with
+> a function call to the library function, fnmatch().
+>
+> Also, change the return type to 'bool'.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I love your patch! Yet something to improve:
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[auto build test ERROR on masahiroy-kbuild/for-next]
-[also build test ERROR on linus/master v5.19-rc1 next-20220606]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> ---
+>
+>  scripts/mod/modpost.c | 74 ++++++++-----------------------------------
+>  1 file changed, 13 insertions(+), 61 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index c1558bacf717..29d5a841e215 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -13,6 +13,7 @@
+>
+>  #define _GNU_SOURCE
+>  #include <elf.h>
+> +#include <fnmatch.h>
+>  #include <stdio.h>
+>  #include <ctype.h>
+>  #include <string.h>
+> @@ -710,29 +711,6 @@ static char *get_modinfo(struct elf_info *info, const char *tag)
+>         return get_next_modinfo(info, tag, NULL);
+>  }
+>
+> -/**
+> - * Test if string s ends in string sub
+> - * return 0 if match
+> - **/
+> -static int strrcmp(const char *s, const char *sub)
+> -{
+> -       int slen, sublen;
+> -
+> -       if (!s || !sub)
+> -               return 1;
+> -
+> -       slen = strlen(s);
+> -       sublen = strlen(sub);
+> -
+> -       if ((slen == 0) || (sublen == 0))
+> -               return 1;
+> -
+> -       if (sublen > slen)
+> -               return 1;
+> -
+> -       return memcmp(s + slen - sublen, sub, sublen);
+> -}
+> -
+>  static const char *sym_name(struct elf_info *elf, Elf_Sym *sym)
+>  {
+>         if (sym)
+> @@ -741,48 +719,22 @@ static const char *sym_name(struct elf_info *elf, Elf_Sym *sym)
+>                 return "(unknown)";
+>  }
+>
+> -/* The pattern is an array of simple patterns.
+> - * "foo" will match an exact string equal to "foo"
+> - * "*foo" will match a string that ends with "foo"
+> - * "foo*" will match a string that begins with "foo"
+> - * "*foo*" will match a string that contains "foo"
+> +/*
+> + * Check whether the 'string' argument matches one of the 'patterns',
+> + * an array of shell wildcard patterns (glob).
+> + *
+> + * Return true is there is a match.
+>   */
+> -static int match(const char *sym, const char * const pat[])
+> +static bool match(const char *string, const char *const patterns[])
+>  {
+> -       const char *p;
+> -       while (*pat) {
+> -               const char *endp;
+> -
+> -               p = *pat++;
+> -               endp = p + strlen(p) - 1;
+> +       const char *pattern;
+>
+> -               /* "*foo*" */
+> -               if (*p == '*' && *endp == '*') {
+> -                       char *bare = NOFAIL(strndup(p + 1, strlen(p) - 2));
+> -                       char *here = strstr(sym, bare);
+> -
+> -                       free(bare);
+> -                       if (here != NULL)
+> -                               return 1;
+> -               }
+> -               /* "*foo" */
+> -               else if (*p == '*') {
+> -                       if (strrcmp(sym, p + 1) == 0)
+> -                               return 1;
+> -               }
+> -               /* "foo*" */
+> -               else if (*endp == '*') {
+> -                       if (strncmp(sym, p, strlen(p) - 1) == 0)
+> -                               return 1;
+> -               }
+> -               /* no wildcards */
+> -               else {
+> -                       if (strcmp(p, sym) == 0)
+> -                               return 1;
+> -               }
+> +       while ((pattern = *patterns++)) {
+> +               if (!fnmatch(pattern, string, 0))
+> +                       return true;
+>         }
+> -       /* no match */
+> -       return 0;
+> +
+> +       return false;
+>  }
+>
+>  /* sections that we do not want to do full section mismatch check on */
+> --
+> 2.32.0
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tetsuo-Handa/kbuild-fix-build-failure-by-scripts-check-local-export/20220606-234446
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-config: arm-mxs_defconfig (https://download.01.org/0day-ci/archive/20220607/202206070434.3wvNWfJZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/7047234a52a99a58113ebe0502e1c227af2b6c61
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tetsuo-Handa/kbuild-fix-build-failure-by-scripts-check-local-export/20220606-234446
-        git checkout 7047234a52a99a58113ebe0502e1c227af2b6c61
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
->> llvm-nm: error: : unknown argument '--'
-   make[2]: *** [scripts/Makefile.build:249: scripts/mod/empty.o] Error 1
-   make[2]: *** Deleting file 'scripts/mod/empty.o'
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1195: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+~Nick Desaulniers

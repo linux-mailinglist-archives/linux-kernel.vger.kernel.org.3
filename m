@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9463553EA51
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8C353E610
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbiFFKLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S233607AbiFFKLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233656AbiFFKJo (ORCPT
+        with ESMTP id S233823AbiFFKKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:09:44 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C566B8E1A3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:07:43 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id v4-20020a1cac04000000b00397001398c0so9733838wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nOdX0D6gI2vCvbiULKuWgUb1+R1FUwAgBHWxoQ6Py84=;
-        b=guyZnUPLasgYuxVbgLOK9dpahGdVKH4NsfUbmPs/vb7FJJJj68IShyjYpn6sZyZJ0e
-         CJdMAENAxn4qYtdlkc9UXXnKyWJ0t1E3R7GYaFgTI8PaZmxcYOBGZZpcF2iw+WH7DmKg
-         mM8Y5sbIZlSXK/Nn0DOTfrI6HZxdAr4CgZW4PoiOnDDm154XAmGP+Tu90lnYsztVMii9
-         yGfhkljKx2jZ5+vxx0gkfBCjjbnG7A8Q5RVv4SDu4TtIRvik3u2R4lhOwM+zBkmkcc7G
-         oU/nrIgSUmiE5VechEJ/ececXdGNuWy96/NAMSHHO02pjOLPr21N2OpuCmZ7X0tDhz/8
-         YOtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nOdX0D6gI2vCvbiULKuWgUb1+R1FUwAgBHWxoQ6Py84=;
-        b=0skuNAihwNZEjp9+waOMXfLnG0iaYJNQO8P5+w54IzWpzTafcjXE0rshOPP36E2AVJ
-         enXsrc0+yMKPeTtGDcXNtJ2QgSKO5qOnBdSxu4pai9fbcfzEAqyN/kUj/rECfQ6d9fPV
-         6SzR+PquQ+pE9/b1jMN9zBc9TXhMi7NWW6mdGD88LfOzCdekYI23+zO07K2WyzroALBO
-         huEX/sh1a6uJQH0kC0xL+QH/7Xz5U+dYVE4ANpl3sUCJMM8gGZjWRE8L0gmsZQ29jz5R
-         FO+o5BaExuy2i6VKlZO0m01tQv6XHboL4/RNWXfAwFbH9e5bvjB3KZ8+RKolUWZRyQJt
-         nAaA==
-X-Gm-Message-State: AOAM531lgBw5s3R4c+e7yIiVtszNl8L0BUrj0PDVnj9osZX/GcB0Lzlm
-        DBcYhopz4w9FXDELUWnZpAqEsg==
-X-Google-Smtp-Source: ABdhPJy4egwo2K5fCw/QlI1TFJAwj0Zsy/iIpzW5zgtq0cHrBtthrjUvAfu4jigGx7vmLovqd/wOfQ==
-X-Received: by 2002:a05:600c:35d4:b0:39a:5b65:2b66 with SMTP id r20-20020a05600c35d400b0039a5b652b66mr41825733wmq.112.1654510061622;
-        Mon, 06 Jun 2022 03:07:41 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id h13-20020a05600c2cad00b00397623ff335sm18510131wmc.10.2022.06.06.03.07.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 03:07:40 -0700 (PDT)
-Message-ID: <090a5802-d2de-682f-4f12-f7a475ee9339@linaro.org>
-Date:   Mon, 6 Jun 2022 11:07:39 +0100
+        Mon, 6 Jun 2022 06:10:50 -0400
+X-Greylist: delayed 3169 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 03:08:29 PDT
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8941483DF;
+        Mon,  6 Jun 2022 03:08:27 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7E5046601E55;
+        Mon,  6 Jun 2022 11:08:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654510098;
+        bh=6Uvj8oSgSh3XaO2x3wCFADsMs6ooqEZD3nKhYNDXhaU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ddmp06anVxj0htfEdxrQB9l1y8xBbyqy8NggFB1A5XDgxBm7VWo6W7kkYG9k2S2hb
+         q9IT4CktJcVWrqVq6XkUuGcFoR+sSPhuUJaNewUwBNsk73dIZuMDMOqCj8oNuqc9jS
+         TzCR7/np/ULwlYCTf+77J6Rt6B0La/iLi1puO//xoS+VpHHRfDzITe+jqMs6ETSDCu
+         hUv0ETuyKgrVEyfk6QPgw4YLCqg8p8XaWMrGt7cV0iRPoMhgO0ifYdJjQ4ap3Ju79n
+         CaOQsSK2KjzcB9YJmeCPUwEeedRqRN8eTevRGLOAVKc8biC6FGnQJK8t1ZAX+1VKYE
+         1tIETrX9MCmNg==
+Message-ID: <4062e8be-3ac7-c6e5-dc15-bb11bd6051fc@collabora.com>
+Date:   Mon, 6 Jun 2022 12:08:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 0/2] nvmem: add Microchip OTP controller
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 05/15] remoteproc: mediatek: Add SCP core 1 driver for
+ dual-core scp
 Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220518115129.908787-1-claudiu.beznea@microchip.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220518115129.908787-1-claudiu.beznea@microchip.com>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        weishunc@google.com
+References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
+ <20220601112201.15510-6-tinghan.shen@mediatek.com>
+ <dd12145b-bbb3-b771-b8f7-075ea20bee17@collabora.com>
+ <fe9fae165443f0db55f2bac2bbe214f3b018052d.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <fe9fae165443f0db55f2bac2bbe214f3b018052d.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 06/06/22 11:52, Tinghan Shen ha scritto:
+> On Mon, 2022-06-06 at 11:15 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 01/06/22 13:21, Tinghan Shen ha scritto:
+>>> MT8195 SCP is a dual-core processor. The mtk_scp.c driver only controls
+>>> SCP core 0. This patch adds a basic driver to control the another core.
+>>>
+>>> Core 1 and core 0 of the SCP are housed in the same subsys.They see
+>>> registers and memory in the same way.
+>>>
+>>> Core 1 of the SCP features its own set of core configuration registers,
+>>> interrupt controller, timers, and DMAs. The rest of the peripherals
+>>> in this subsystem are shared by core 0 and core 1.
+>>>
+>>> As for memory, core 1 has its own cache memory, and the SCP SRAM is shared
+>>> by core 0 and core 1.
+>>>
+>>
+>> Hello Tinghan,
+>>
+>> checking all the patches that are introducing support for the secondary SCP core,
+>> it's clear that you're practically reusing *most of* mtk_scp in mtk_scp_dual.
+>>
+>> I don't think that adding a new configuration option for MTK_SCP_DUALCORE (nor a
+>> new file just for that) is a good idea... the code is "short enough" so you should
+>> really just add support for multi-core SCP in mtk_scp.c instead.
+>>
+>> After doing so, I have a hunch that we'll be able to reduce the size of this
+>> implementation even more, as I see literally too much common code :-)
+>>
+> 
+> Hi Angelo,
+> 
+> Thanks for your review.
+> 
+> This series has 2 new files, mtk_scp_dual.c and mtk_scp_subdev.c.
+> Is your advice to merge both files into mtk_scp.c,
+> or to merely merge mtk_scp_dual.c to mtk_scp.c?
+> 
+> Thanks,
+> TingHan
+> 
+> 
+> 
 
+I suggest to merge both into mtk_scp.c and commonize/generalize functions inside
+of there as much as possible... including the removal of #if IS_ENABLED(...)
+macro usages, as you can simply check that during runtime by setting a bool
+variable to true when it's dual-core.
 
-On 18/05/2022 12:51, Claudiu Beznea wrote:
-> Hi,
-> 
-> This series adds support for Microchip OTP controller available on
-> SAMA7G5. The driver gives access to a non-volatile memory which
-> keeps (at the moment) information like booting media and temperature
-> calibration data used for thermal measurements.
-> 
-> Thank you,
-> Claudiu Beznea
-> 
-> Changes in v3:
-> - fixed Documentation and binding files names
-> - used __maybe_unused for mchp_otpc_ids
-> 
-> Changes in v2:
-> - updated the bindings (patch 1/2) as follows:
-> 	- included the device name in files names and updated binding
-> 	  content accordingly
-> 	- updated the description
-> 	- removed address-cells, size-cells
-> 	- removed clock include
-> 	- use GPL-2.0 OR BSD-2-Clause license
-> 	- removed OTP_PKT_SAMA7G5_TEMP_CALIB_LEN and keep hardcoded
-> 	  value in examples
-> 	
-> - updated MAINTAINERS file with new naming of bindings
-> 
-> Claudiu Beznea (2):
->    dt-bindings: microchip-otpc: document Microchip OTPC
->    nvmem: microchip-otpc: add support
+Let's do this first step.
+I'll give you a more exhaustive review on v2, when this main step is done.
 
-Applied thanks,
-
---srini
-> 
->   .../nvmem/microchip,sama7g5-otpc.yaml         |  50 +++
->   MAINTAINERS                                   |   8 +
->   drivers/nvmem/Kconfig                         |   7 +
->   drivers/nvmem/Makefile                        |   2 +
->   drivers/nvmem/microchip-otpc.c                | 288 ++++++++++++++++++
->   .../nvmem/microchip,sama7g5-otpc.h            |  12 +
->   6 files changed, 367 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
->   create mode 100644 drivers/nvmem/microchip-otpc.c
->   create mode 040000 include/dt-bindings/nvmem
->   create mode 100644 include/dt-bindings/nvmem/microchip,sama7g5-otpc.h
-> 
+Cheers,
+Angelo

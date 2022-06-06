@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC65953E6DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6096653E601
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240247AbiFFPNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S240357AbiFFPOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbiFFPNO (ORCPT
+        with ESMTP id S240340AbiFFPOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:13:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B782B25A;
-        Mon,  6 Jun 2022 08:13:12 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LGxmK6K06z67PsD;
-        Mon,  6 Jun 2022 23:12:01 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 6 Jun 2022 17:13:10 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 6 Jun
- 2022 16:13:09 +0100
-Date:   Mon, 6 Jun 2022 16:13:02 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
- allocate() stage
-Message-ID: <20220606161302.000026ed@Huawei.com>
-In-Reply-To: <20220606113829.kmiudrofm2s6onpc@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
-        <20220604145955.2a1108ca@jic23-huawei>
-        <20220606113829.kmiudrofm2s6onpc@CAB-WSD-L081021.sigma.sbrf.ru>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 6 Jun 2022 11:14:42 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB51102753;
+        Mon,  6 Jun 2022 08:14:41 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kq6so16560459ejb.11;
+        Mon, 06 Jun 2022 08:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9WxVflAaLaQGVLZDTYjr1bfsD9KjPcYDpao0PwOqVUc=;
+        b=NX12efPEOw77FAgI0EpL6qcSUxPue8/LVvXK9QbgUpJVaK3qv88l6h2tQZVbnbB2yu
+         GkUeXNMCDyVgA20UpT/iVnJJh2DbilU2A4w0kZ/5TbMWW0dHYHtOE/+hf/TIyZtvkQvT
+         ZrNjULLfeEcahHtbhykUyy3jAshh3eZ5fvFT7Q5Zo6YvZtT2e+sYo6064RPK035zjsTP
+         fgggUgPCL2iVeSboRaM7hx1BUvODAzevS127njr+aQ38c/S5umEU7holMW9+LOuB2/o3
+         sFacaOC2y8MBEVOZKS/QDowghmgaZfRvZdvaS+F2dsJyzjwB4AmGiy3fGKC1atVySPLA
+         KTtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9WxVflAaLaQGVLZDTYjr1bfsD9KjPcYDpao0PwOqVUc=;
+        b=qbdX6IG0EEWU5yaGdPhUhQ7lCJAoGKhAp1OzUnqdCvG+W5wx9ANQ5A8zHhquUvDKQ2
+         7DiZ5CKUbirICIzisouqrXhC8LHDg7bnf16/vVB4gqVb5DkEwRBSHCSs3yzaiXrT5vu8
+         HPrmRLYkl84ZHv8f3Jgv7xcQLvb3/OZnN2f4mDcK0cInGmJtglKqxFfMiLMT2J6njUj+
+         pFYU7aNgIhWoVTllKOtN7/hJzEoeneT9Qfr9j9bKsN9BO7WSOeFqlL8STKkR7OIE+vx4
+         6Rvtsil9E/8vc2uj2SG0hdOEajCFFpL7wX37UVaXf32nX6psQ1HFE2FjIOYHflBml/qM
+         Vu5Q==
+X-Gm-Message-State: AOAM533IjENfQAuyBxFDsHAPeYZpFyl3A2W7Fba/yJfAVH708jqwNxYy
+        qjX+1VFuHH9ZteJ2jeUbYtE=
+X-Google-Smtp-Source: ABdhPJzC2ZhN+QbDcpWKYpFgwCGWZ7LbwPJodBLMvxR8aDpwq5PrY9LNFc4iVQOSLjC5nm14Djgxuw==
+X-Received: by 2002:a17:907:608f:b0:6f6:1155:99ab with SMTP id ht15-20020a170907608f00b006f6115599abmr21289023ejc.306.1654528479498;
+        Mon, 06 Jun 2022 08:14:39 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id be5-20020a0564021a2500b0042e09f44f81sm7494001edb.38.2022.06.06.08.14.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:14:38 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        =?UTF-8?q?=EF=BF=BDecki?= <rafal@milecki.pl>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] Add nvmem support for dynamic partitions
+Date:   Mon,  6 Jun 2022 17:14:14 +0200
+Message-Id: <20220606151417.19227-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,73 +77,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022 11:37:42 +0000
-Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+This very small series comes to fix the very annyoing problem of
+partitions declared by parser at runtime NOT supporting nvmem cells
+definition.
 
-> Hello Jonathan,
-> 
-> Thank you for comments. I have a several questions about the flow,
-> please find them below.
-> 
-> On Sat, Jun 04, 2022 at 02:59:55PM +0100, Jonathan Cameron wrote:
-> > On Wed, 1 Jun 2022 17:48:32 +0000
-> > Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-> >   
-> > > To provide a new IIO trigger to the IIO core, usually driver executes the
-> > > following pipeline: allocate()/register()/get(). Before, IIO core assigned
-> > > trig->owner as a pointer to the module which registered this trigger at
-> > > the register() stage. But actually the trigger object is owned by the
-> > > module earlier, on the allocate() stage, when trigger object is
-> > > successfully allocated for the driver.
-> > > 
-> > > This patch moves trig->owner initialization from register()
-> > > stage of trigger initialization pipeline to allocate() stage to
-> > > eliminate all misunderstandings and time gaps between trigger object
-> > > creation and owner acquiring.
-> > > 
-> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>  
-> > 
-> > Hi Dmitry,
-> > 
-> > I 'think' this is fine, but its in the high risk category that I'd like
-> > to keep it on list for a few weeks before applying.
-> >   
-> 
-> Could you please explain what it means? Do you have some testing branch
-> with such dangerous patches or do we need just to wait other developers
-> for more points of view? Thanks in advance.
+The current implementation is very generic. The idea is to provide an of
+node if defined for everyone and not strictly limit this to nvmem stuff.
+But still the actual change is done only for nvmem-cells mtd. (just to
+make sure) This can totally change by removing the compatible check.
 
-The second - so far I haven't applied it anywhere.
+The idea here is that a user can still use these dynamic parsers
+instead of declaring a fixed-partition and also declare how nvmem-cells
+are defined for the partition.
+This live with the assumption that dynamic partition have always the
+same name and they are known. (this is the case for smem-part partition
+that would require a bootloader reflash to change and for parsers like
+cmdlinepart where the name is always the same.)
+With this assumption, it's easy to fix this problem. Just introduce a
+new partition node that will declare just these special partition.
+Mtdcore then will check if these special declaration are present and
+connect the dynamic partition with the OF node present in the dts. Nvmem
+will automagically find the OF node and cells will be works based on the
+data provided by the parser.
 
-> 
-> > Note I'm still keen that in general we keep the flow such that
-> > we do allocate()/register()/get() as there is no guarantee that the get()
-> > will never do anything that requires the trigger to be registered, even
-> > though that is true today.  Which is another way of saying I'm still
-> > keen we fix up any cases that sneak in after your fix up set dealt with
-> > the current ones.  
-> 
-> I fully agree with you. I suppose to resolve such a problem we need to
-> have some indicators that the trigger is already registered or not.
-> From my point of view, trig->list entry fits well to answer this question.
-> Trigger is added to the global IIO triggers list during register()
-> execution, so we can just check that entry is not empty to make sure that
-> trigger is registered.
-> 
-> I've sent a v2 patch version, where I use trig->list entry empty status to
-> warn it:
-> 
-> https://lore.kernel.org/linux-iio/20220606111316.19265-1-ddrokosov@sberdevices.ru/
+The initial idea was to create a special nvmem driver with a special
+compatible where a user would declare the mtd partition name and this
+driver would search it and register the nvmem cells but that became
+difficult really fast, mtd notifier system is problematic for this kind
+of stuff. So here is the better implementation. A variant of this is
+already tested on openwrt where we have devices that use cmdlinepart.
+(that current variant have defined in the dts the exact copy of
+cmdlinepart in the fixed-partition scheme and we patched the cmdlinepart
+parser to scan this fixed-partition node (that is ignored as cmdlinepart
+have priority) and connect the dynamic partition with the dts node)
 
-Great!
+I provided an example of this in the documentation commit.
+In short it's needed to add to the partitions where the compatible parser
+is declared, a partition with just the label declared (instead of the reg).
+Then declare some nvmem-cells and it will all work at runtime.
+Mtdcore will check if a node with the same label is present and assign an
+OF node to the MTD.
 
-Jonathan
+I currently tested this on my device that have smem-part and the
+gmac driver use nvmem to get the mac-address. This works correctly and
+the same address is provided.
 
-> 
-> > 
-> > Thanks for following up on this!
-> > 
-> > Jonathan
-> >   
-> 
+v5:
+- Simplify Documentation and move it generic partition.yaml
+- Split commit and move smem example to dedicated commit.
+v4:
+- Make it simple. No suffix. Make label mandatory again.
+- Update Documentation with new implementation.
+- Rename files to a better and correct name
+v3:
+- Fix warning from bot (function not declared as static)
+- Updated code to support also node name
+- Made partition label optional
+v2:
+- Simplify this. Drop dynamic-partition
+- Fix problem with parser with ko
+- Do not pollude mtd_get_of_node
+- Fix problem with Documentation
+
+Ansuel Smith (3):
+  dt-bindings: mtd: partitions: Support label only partition
+  dt-bindings: mtd: partitions: add additional example for
+    qcom,smem-part
+  mtd: core: introduce of support for dynamic partitions
+
+ .../bindings/mtd/partitions/partition.yaml    | 16 +++++-
+ .../mtd/partitions/qcom,smem-part.yaml        | 27 ++++++++++
+ drivers/mtd/mtdcore.c                         | 49 +++++++++++++++++++
+ 3 files changed, 90 insertions(+), 2 deletions(-)
+
+-- 
+2.36.1
 

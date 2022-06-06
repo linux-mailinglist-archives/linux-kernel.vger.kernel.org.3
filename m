@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4028553E81A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34AB53E961
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbiFFKIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S233842AbiFFKKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiFFKGG (ORCPT
+        with ESMTP id S233603AbiFFKIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:06:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0511339C7;
-        Mon,  6 Jun 2022 03:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654509959; x=1686045959;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jfeo6+IyM07NX4hwT+xuXSfjRX2zx0+JnpASEafhZtY=;
-  b=lhq597q1q7hbwCXhViIRV3cIEV2TbM2uvdG5CDJG+9HRxs2n+VPCUYpP
-   4HeLIOu6Li9zXQYUBl3Gr/6RLrxvBALN0VfwR3z35FQrfaeqw5DYFwU6Q
-   LcWvdGslweQcfOw+9h/6x1b231uSoVZlVOMT/E93USyHVRsCQmkYLIaF0
-   btcWl8ZR/Gkqn0eqjv6V2haMyjpsJ0My3zzlh4RHwmnj/SCuzikRU1ntf
-   ltgpGaIPflhfg0ON5z08LFW3dKm9BC5fSlrF95Mm4qmxiaZ8onkrUjc2x
-   6BC+CEZ274MkeJVyFKd2Sb9R3Eyt/cqUG+NkCUj+59xutwVylIT/n1trc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="257086899"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="257086899"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:05:58 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="825745751"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:05:57 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ny9cQ-000UX5-8M;
-        Mon, 06 Jun 2022 13:05:54 +0300
-Date:   Mon, 6 Jun 2022 13:05:54 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 1/1] gpiolib: cdev: Fix kernel doc for struct line
-Message-ID: <Yp3Rgo4/09/bsvna@smile.fi.intel.com>
-References: <20220520164726.60638-1-andriy.shevchenko@linux.intel.com>
- <d796b54d-7559-f9ff-bb4b-4e75a707db2d@nvidia.com>
- <YppEqYTZyWaulKjI@smile.fi.intel.com>
- <YppEwbZSad/pRdUv@smile.fi.intel.com>
- <CA+PwDYdf7JEimfYG9ChTHp=Dds_Ljx1Y2KK-H5zfeu52=NxXFA@mail.gmail.com>
+        Mon, 6 Jun 2022 06:08:19 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420E587210
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:07:24 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id v19so18083391edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2uwcCEtSswrsSeV8Oe+2oTvOp0hok5ZHYDzpgWGeOlQ=;
+        b=DE69h8+Q3aglb3detW4jawOS1bRNj33jBRCuZvuuZpeknccYBlvm4xRpPjZqCT6xlC
+         9tO5iUZhxoO2ZJv9IkPSVwStFjoyrmQ12dGIfOazv5x4tkDRdqtx3Odupd6yfsdLYL02
+         9ZsU3L6IE2/ZPEDo9d54IFGjZLrLbHosPGwF4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2uwcCEtSswrsSeV8Oe+2oTvOp0hok5ZHYDzpgWGeOlQ=;
+        b=aB+5skh0IUhIbSQIqzdGAHlUHYpQlKU6KmYjq20jbxbSYrBO2KpMVQBqjT3osUUFW3
+         qy0DgbtPxXpVYM5eTaAHSTh79Q6cod5owkplsiyxxrOT53O9nnbSdjAeq8QqLPK8h3pc
+         V3WM32T4AyJcvmFgzmHOUcyB1rpnxDywEjv/Xx/agPPFZRxjs52JTYP/OIPeHopJ6oWi
+         wL8edwKrp23ryfoLSTcaer4hHSmxJQ7xqkyN+RXuUZj0mg5QOvfWRlhIh8a/gpYeDfOq
+         7F4V/LZoCxDjokui0+zhrygNq4Q2KahgSMTYsqunoWLI30ewp3+7VaW8n0gM58j2z/dz
+         p/Dw==
+X-Gm-Message-State: AOAM5334QPM3Wdl54w6NYhXAIZnKjOEg0zSGrEIuj/bu6vhZgYSEHNIP
+        kuC1AKAmHlz0ASQ9oa+4T+kNIhrdP0C6zhbTL4o/GA==
+X-Google-Smtp-Source: ABdhPJw0GXg99MvbQTKVkrNI4lLKZkQooYMuZvDOZ1tfUMZGtWWH5ppQgsFJTyLOn9eTLW43RxaLMTqeNMsUuS8GDAY=
+X-Received: by 2002:aa7:c84d:0:b0:431:4226:70c9 with SMTP id
+ g13-20020aa7c84d000000b00431422670c9mr9032595edt.51.1654510043095; Mon, 06
+ Jun 2022 03:07:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+PwDYdf7JEimfYG9ChTHp=Dds_Ljx1Y2KK-H5zfeu52=NxXFA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220527110036.8810-1-johnson.wang@mediatek.com>
+In-Reply-To: <20220527110036.8810-1-johnson.wang@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 6 Jun 2022 18:07:12 +0800
+Message-ID: <CAGXv+5FZ9DthNaZCgaO6ygO4cUD91Bw1uVYJq98SHUcoAmPoPQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] Introduce MediaTek CCI devfreq driver
+To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com
+Cc:     krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com,
+        khilman@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 01:11:54AM +0200, Thierry Reding wrote:
-> On Fri, 3 Jun 2022, 19:28 Andy Shevchenko, <
-> andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > On Fri, Jun 03, 2022 at 08:28:09PM +0300, Andy Shevchenko wrote:
-> > > On Fri, May 20, 2022 at 10:10:49AM -0700, Dipen Patel wrote:
-> > > > Acked-by: Dipen Patel <dipenp@nvidia.com>
-> > >
-> > > Thanks!
-> > >
-> > > Bart, this can be applied, I think.
-> >
-> > Or do you want it in my PR?
-> >
-> 
-> This would need to go in through the HTE tree.
-> 
-> I can pick it up, but it looks like Linus isn't happy with this yet anyway.
+On Fri, May 27, 2022 at 7:01 PM Johnson Wang <johnson.wang@mediatek.com> wrote:
+>
+> The Cache Coherent Interconnect (CCI) is the management of cache
+> coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+> scaling clock frequency and supply voltage of CCI. CCI uses the same
+> input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
+>
+> This series depends on:
+> Chanwoo's repo: kernel/git/chanwoo/linux.git
+> branch: devfreq-testing
+> [1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+> [2]: PM / devfreq: Add cpu based scaling support to passive governor
+> [3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+> [4]: PM / devfreq: passive: Update frequency when start governor
+>
+> Changes in v6:
+> - Remove unnecessary "goto" statement.
+>
+> Changes in v5:
+> - Modify some binding description.
+> - Remove pre_voltage member.
+> - Not to enable/disable intermediate clock.
+> - Not to "put" resources that using devm_ variants.
+>
+> Resend v4:
+> - CC interconnect maintainer.
+> - Change sign-off sequence in commit message.
+>
+> Changes in v4:
+> - Add a maintainer in the binding document.
+> - Modify clock description.
+> - Add binding document into MAINTAINERS.
+> - Replace format specifier %d with %ld.
+>
+> Changes in v3:
+> - Move binding document to 'interconnect' and rename it.
+> - Add COMPILE_TEST dependence symbol.
+> - Remove need_voltage_tracking variable.
+> - Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
+> - Add an interation limit in the while() loop.
+> - Replace 'cci_dev' with 'dev'
+> - Replace old_* with pre_*
+> - Remove of_match_ptr()
+> - Use module_platform_driver()
+>
+> Changes in v2:
+> - Take MT8183 as example in binding document.
+> - Use dev_err() instead of pr_err().
+> - Use 'goto' statement to handle error case.
+> - Clean up driver code.
+>
+> Johnson Wang (2):
+>   dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+>   PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
 
-It's merged as far as I can see. Feel free to pick it up, I'll drop it from my
-tree.
+FTR,
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>

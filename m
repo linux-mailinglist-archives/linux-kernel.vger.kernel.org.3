@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83F753DFA1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0C553DFA9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352104AbiFFCPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S1352131AbiFFC2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiFFCPm (ORCPT
+        with ESMTP id S238215AbiFFC2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:15:42 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2332D366A4;
-        Sun,  5 Jun 2022 19:15:39 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VFPsTeZ_1654481735;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VFPsTeZ_1654481735)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 06 Jun 2022 10:15:37 +0800
-Date:   Mon, 6 Jun 2022 10:15:35 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
-Message-ID: <Yp1jRw6kiUf5jCrW@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Ming Lei <ming.lei@redhat.com>,
-        Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220509092312.254354-1-ming.lei@redhat.com>
- <20220530070700.GF1363@bug>
- <YpgsTojc4mVKghZA@T590>
+        Sun, 5 Jun 2022 22:28:03 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948EA62EC
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:27:58 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1654482203tle0beb6
+Received: from localhost.localdomain ( [111.9.5.115])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 06 Jun 2022 10:23:15 +0800 (CST)
+X-QQ-SSF: 01000000000000C0G000000A0000000
+X-QQ-FEAT: +i7PuHLNsE4Ix5ht+UHC/ONIXXVUd/otf/Yv16mrkqnK+G62jVoXJSlWlJWhd
+        X1rykKVHwMQL0938fjtP1gXZXFmujcM7soXrJ1EInoHNI0wncGOCGpUYGtjar3npMEcfO4Q
+        XPnFX4vervgv95NsIb+AzH0PJH3Xz8DUG06XOiC+jP7nT8Ik5e+0B+RXblJMdNfcGYx0amf
+        jaseDKKDfPb/KLRHnd/dB6RrbwjEXEA0PzxW066cJYy7KbelysrvHUEGo24uDCECSu1ZoXO
+        CUDSIzGBd+bGnjVC3avnjpaj3C9IMCb2EANxMIHMAEaaqt3SQTPTd/pFN3ktFMt8EJLppVR
+        hmZznRoSgUXJjZAqrI=
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     bleung@chromium.org
+Cc:     groeck@chromium.org, gustavoars@kernel.org, dustin@howett.net,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] cros_ec_commands: Fix syntax errors in comments
+Date:   Mon,  6 Jun 2022 10:23:13 +0800
+Message-Id: <20220606022313.22912-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YpgsTojc4mVKghZA@T590>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 11:19:42AM +0800, Ming Lei wrote:
-> Hello Pavel,
-> 
-> On Mon, May 30, 2022 at 09:07:00AM +0200, Pavel Machek wrote:
-> > Hi!
-> > 
-> > > This is the driver part of userspace block driver(ubd driver), the other
-> > > part is userspace daemon part(ubdsrv)[1].
-> > 
-> > > @@ -0,0 +1,1193 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > +/*
-> > > + * Userspace block device - block device which IO is handled from userspace
-> > > + *
-> > > + * Take full use of io_uring passthrough command for communicating with
-> > > + * ubd userspace daemon(ubdsrvd) for handling basic IO request.
-> > 
-> > > +
-> > > +static inline unsigned int ubd_req_build_flags(struct request *req)
-> > > +{
-> > ...
-> > > +	if (req->cmd_flags & REQ_SWAP)
-> > > +		flags |= UBD_IO_F_SWAP;
-> > > +
-> > > +	return flags;
-> > > +}
-> > 
-> > Does it work? How do you guarantee operation will be deadlock-free with swapping and
-> > writebacks going on?
-> 
-> The above is just for providing command flags to user side, so that the
-> user side can understand/handle the request better.
-> 
-> prtrl(PR_SET_IO_FLUSHER) has been merged for avoiding the deadlock.
->
+Delete the redundant word 'using'.
 
-I've pointed out a case before that (I think) PR_SET_IO_FLUSHER doesn't work:
-https://lore.kernel.org/all/YhbYOeMUv5+U1XdQ@B-P7TQMD6M-0146.local
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ include/linux/platform_data/cros_ec_commands.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't think handling writeback in the userspace under the direct reclaim
-context is _safe_ honestly. Because userspace program can call any system
-call under direct reclaim, which can interconnect to another process context
-and wait for it. yet I don't look into ubd implementation.
+diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+index 8cfa8cfca77e..e59f51c41a1c 100644
+--- a/include/linux/platform_data/cros_ec_commands.h
++++ b/include/linux/platform_data/cros_ec_commands.h
+@@ -787,7 +787,7 @@ struct ec_host_response {
+  *
+  * Packets always start with a request or response header.  They are followed
+  * by data_len bytes of data.  If the data_crc_present flag is set, the data
+- * bytes are followed by a CRC-8 of that data, using using x^8 + x^2 + x + 1
++ * bytes are followed by a CRC-8 of that data, using x^8 + x^2 + x + 1
+  * polynomial.
+  *
+  * Host algorithm when sending a request q:
+-- 
+2.36.1
 
-Thanks,
-Gao Xiang
+

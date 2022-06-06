@@ -2,109 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6159453DFEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 05:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFE053DFE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 05:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349629AbiFFDLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 23:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S1352260AbiFFDMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 23:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiFFDLd (ORCPT
+        with ESMTP id S1349220AbiFFDMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 23:11:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31ED4F460
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 20:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654485091; x=1686021091;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I0QdHF0IW1vsI3ZsPfW1ZXjzy87HEMICXcGVm9Da8ds=;
-  b=YcGrJvhWHxe7TLmXKZ53x8003e4CGbBg/6rAlCaN4ahRSwv07A91n3Ty
-   KLcT9LsKRYZumz1csuAsyIHXamky2TlcYPKjTX5ENI5ZbM3xl09UAuhNF
-   Cwc7xNHNAVFC/B/BHS0zSCJFZ6CAu+bldTxpOlKO4F9F7286cf5Yu00J6
-   Dpx0Rttw8O6KTGHoj3XIT69vGycUayxGrYox5NZl0WwdsImkKREwweWzB
-   8TN8CEMLvCufNRFQ6lkwmDhfY+9LHlDCgW7j/EWoPcORwqTeBNOW5ARA4
-   9/rZ6Lp7gsapQ8NEAW+G8Bf1rwX2WIkEoZRbExWXgeTX+sgdsN6VlGvBn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="274153848"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="274153848"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 20:11:31 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635369779"
-Received: from xingguom-mobl.ccr.corp.intel.com ([10.254.213.116])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 20:11:26 -0700
-Message-ID: <6e94b7e2a6192e4cacba1db3676b5b5cf9b98eac.camel@intel.com>
-Subject: Re: [PATCH v5 9/9] mm/demotion: Update node_is_toptier to work with
- memory tiers
-From:   Ying Huang <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Mon, 06 Jun 2022 11:11:23 +0800
-In-Reply-To: <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
-         <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Sun, 5 Jun 2022 23:12:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CC019FB9
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 20:12:10 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LGdmd3vfHzjXQ0;
+        Mon,  6 Jun 2022 11:11:13 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 11:12:08 +0800
+Subject: Re: [PATCH v1] mm,hwpoison: set PG_hwpoison for busy hugetlb pages
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220511151955.3951352-1-naoya.horiguchi@linux.dev>
+ <f0da4fcf-a4af-ccaa-32ce-55d9fda72203@oracle.com>
+ <20220512043253.GA242760@hori.linux.bs1.fc.nec.co.jp>
+ <7395dbe7-7be6-6ef7-7728-a118471caa5a@huawei.com>
+ <20220602061203.GB1172281@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <95a3c6d3-ae33-580b-9448-bb5d5c356cec@huawei.com>
+Date:   Mon, 6 Jun 2022 11:12:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220602061203.GB1172281@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
-> With memory tiers support we can have memory on NUMA nodes
-> in the top tier from which we want to avoid promotion tracking NUMA
-> faults. Update node_is_toptier to work with memory tiers. To
-> avoid taking locks, a nodemask is maintained for all demotion
-> targets. All NUMA nodes are by default top tier nodes and as
-> we add new lower memory tiers NUMA nodes get added to the
-> demotion targets thereby moving them out of the top tier.
+On 2022/6/2 14:12, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Thu, May 12, 2022 at 07:18:51PM +0800, Miaohe Lin wrote:
+>> On 2022/5/12 12:32, HORIGUCHI NAOYA(堀口 直也) wrote:
+>>> On Wed, May 11, 2022 at 11:35:55AM -0700, Mike Kravetz wrote:
+>>>> On 5/11/22 08:19, Naoya Horiguchi wrote:
+>>>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>>>
+>>>>> If memory_failure() fails to grab page refcount on a hugetlb page
+>>>>> because it's busy, it returns without setting PG_hwpoison on it.
+>>>>> This not only loses a chance of error containment, but breaks the rule
+>>>>> that action_result() should be called only when memory_failure() do
+>>>>> any of handling work (even if that's just setting PG_hwpoison).
+>>>>> This inconsistency could harm code maintainability.
+>>>>>
+>>>>> So set PG_hwpoison and call hugetlb_set_page_hwpoison() for such a case.
+>>>>>
+>>>>> Fixes: 405ce051236c ("mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()")
+>>>>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>>> ---
+>>>>>  include/linux/mm.h  | 1 +
+>>>>>  mm/memory-failure.c | 8 ++++----
+>>>>>  2 files changed, 5 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>>>> index d446e834a3e5..04de0c3e4f9f 100644
+>>>>> --- a/include/linux/mm.h
+>>>>> +++ b/include/linux/mm.h
+>>>>> @@ -3187,6 +3187,7 @@ enum mf_flags {
+>>>>>  	MF_MUST_KILL = 1 << 2,
+>>>>>  	MF_SOFT_OFFLINE = 1 << 3,
+>>>>>  	MF_UNPOISON = 1 << 4,
+>>>>> +	MF_NO_RETRY = 1 << 5,
+>>>>>  };
+>>>>>  extern int memory_failure(unsigned long pfn, int flags);
+>>>>>  extern void memory_failure_queue(unsigned long pfn, int flags);
+>>>>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>>>> index 6a28d020a4da..e3269b991016 100644
+>>>>> --- a/mm/memory-failure.c
+>>>>> +++ b/mm/memory-failure.c
+>>>>> @@ -1526,7 +1526,8 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>>>>>  			count_increased = true;
+>>>>>  	} else {
+>>>>>  		ret = -EBUSY;
+>>>>> -		goto out;
+>>>>> +		if (!(flags & MF_NO_RETRY))
+>>>>> +			goto out;
+>>>>>  	}
+>>>>
+>>>> Hi Naoya,
+>>>>
+>>>> We are in the else block because !HPageFreed() and !HPageMigratable().
+>>>> IIUC, this likely means the page is isolated.  One common reason for isolation
+>>>> is migration.  So, the page could be isolated and on a list for migration.
+>>>
+>>> Yes, and I also detected this issue by testing race between hugepage allocation
+>>> and memory_failure(). 
+>>>
+>>>>
+>>>> I took a quick look at the hugetlb migration code and did not see any checks
+>>>> for PageHWPoison after a hugetlb page is isolated.  I could have missed
+>>>> something?  If there are no checks, we will read the PageHWPoison page
+>>>> in kernel mode while copying to the migration target.
+>>>
+>>> Yes, that could happen.  This patch does not affect ongoing hugepage migration.
+>>> But after the migration source hugepage is freed, the PG_hwpoison should work
+>>> to prevent reusing.
+>>>
+>>>>
+>>>> Is this an issue?  Is is something we need to be concerned with?  Memory
+>>>> errors can happen at any time, and gracefully handling them is best effort.
+>>>
+>>> Right, so doing nothing for this case could be OK if doing something causes
+>>> some issues or makes code too complicated.  The motivation of this patch is
+>>> that now I think memory_failure() should do something (at least setting
+>>> PG_hwpoison) unless the page is already hwpoisoned or rejected by
+>>> hwpoison_filter(), because of the effect after free as mentioned above.
+>>>
+>>> This is also expected in other case too. For example, slab is a unhandlable
+>>> type of page, but we do set PG_hwpoison.  This flag should not affect any of
+>>> ongoing slab-related process, but that's OK because it becomes effective
+>>> after the slab page is freed.
+>>>
+>>> So this patch is intended to align to the behavior.  Allowing hugepage
+>>> migration to do something good using PG_hwpoison seems to me an unsolved
+>>> separate issue.
+>>
+>> I tend to agree with Naoya. And could we try to do it better? IMHO, we could do a
+>> get_page_unless_zero here to ensure that hugetlb page migration will fail due to
+>> this extra page reference and thus preventing the page content from being accessed.
+>> Does this work? Or am I miss something?
+> 
+> Sorry for my missing to answering the question,
 
-Check the usage of node_is_toptier(),
+Never mind. I almost forget it too. ;)
 
-- migrate_misplaced_page()
-  node_is_toptier() is used to check whether migration is a promotion. 
-We can avoid to use it.  Just compare the rank of the nodes.
+> 
+> Taking page refcount to prevent page migration could work.  One concern is
+> how we can distinguish hugepages under migration and those under allocation
+> from buddy.  Maybe this was also mentioned in discussion over 
+> https://github.com/torvalds/linux/commit/405ce051236cc65b30bbfe490b28ce60ae6aed85
+> , there's a small window where an allocating compound page is refcounted and
+> hugepage (having deconstructor COMPOUND_PAGE_DTOR), and not protected by
+> hugetlb_lock, so simply get_page_unless_zero() might not work (might break
+> allocation code).
+> If we have more reliable indicator to ensure that a hugepage is under migration,
+> that would be helpful.
 
-- change_pte_range() and change_huge_pmd()
-  node_is_toptier() is used to avoid scanning fast memory (DRAM) pages
-for promotion.  So I think we should change the name to node_is_fast()
-as follows,
+Yes, I agree with you. If we have more reliable indicator to ensure that a hugepage
+is under migration, we could try to do this then. :)
 
-static inline bool node_is_fast(int node)
-{
-	return NODE_DATA(node)->mt_rank >= MEMORY_RANK_DRAM;
-}
+> 
+> Thanks,
+> Naoya Horiguchi
 
-And, as above, I suggest to add memory tier ID and rank to struct
-pglist_data directly.
+Many thanks for reply!
 
-Best Regards,
-Huang, Ying
-
+> 

@@ -2,153 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03BF53EC32
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F8053E8E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241639AbiFFQPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
+        id S241423AbiFFQQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241637AbiFFQPX (ORCPT
+        with ESMTP id S241363AbiFFQQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:15:23 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E21158F1D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:15:22 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h192so6493211pgc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Yc3d6f09An5Iup7HnFnq+YmtnLxXizu7JY/ZtB+fmYU=;
-        b=bgidypdYCXahlWg67Jnr4ubl4uJixk0PWYtjDwcs3u5xJE0nvwIFqj7aCjjwNOiMvz
-         9L9/vq/xwoEPAh3c1EVJpaJc3qB5EvVqnHlAqc+E1Pb4BoPVwJFeuuLsB8kL0Y5NYxY5
-         +u50F+KOlu6kucbAAaG1q3yMKz27idq5V/1qICzsTjPfWVZ7EgTcgipFTw+mjl3KFKq8
-         2b9wF1Fbx/jsinj/hE1XcHEW/SqkDw70ZLHnxeAdO5eDdR0DGd3QG5Fbou9J33AI8mrX
-         sDURBwJYta4klrPdDpA4c/LylywEHj9RIBnVv6TKLt4/rgbZq5Qbgx0ciWFgtDIW81D3
-         Ykrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yc3d6f09An5Iup7HnFnq+YmtnLxXizu7JY/ZtB+fmYU=;
-        b=doJr2DKCc51ESG0H6na7aTr+0D+Bf2jTUPtZSa42kIwW4L1YbqGnoAz+AHq++kwCiA
-         /lCEZgHvQgMT1YNiQqCIhEC8LcGWYmSqXooTOXc6q4nc3UHAcBQgVUDdi9ZqH1tXYUAz
-         RWkBGuMl/cT0scCJKbn3d2BxdrRUcFLMO/tP/PrvjGy9W2S6053eJ/DSsCFGkO4o3h2f
-         Crtj9p2/Hq1VxC6pPo8IGTmJCLtVVjtsP0Z60K6WH5zMwMxD21EkA3RFeflXtXYwFLtm
-         3Bz4KWxzTVcMj2PbPGFsnYTaMBBa5HVBR7D6wB2yeHFYlbu5kdTTHkNNdwaGUql+dxOY
-         H0IA==
-X-Gm-Message-State: AOAM531keouHtPmNZcXeC5ncHKwMxuTagDwlfGL5EvUjMa7LsoYbPY+b
-        nmv7I5ndE6XaZPPiTsyUpbBksg==
-X-Google-Smtp-Source: ABdhPJymBlKeJCj3tvmSxgMQ8W96PwRXnOWJMPIgOzJN40d5L4tl9aO20Ei3Hqzfn1EToQYphbdpOg==
-X-Received: by 2002:a63:e905:0:b0:3fa:ec8c:9013 with SMTP id i5-20020a63e905000000b003faec8c9013mr21525731pgh.599.1654532121881;
-        Mon, 06 Jun 2022 09:15:21 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id s4-20020aa78d44000000b0051c179895a0sm2547571pfe.212.2022.06.06.09.15.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 09:15:20 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 10:15:18 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Puranjay Mohan <p-mohan@ti.com>
-Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
-        linux-arm-kernel@lists.infradead.org, rogerq@kernel.org,
-        grygorii.strashko@ti.com, vigneshr@ti.com, kishon@ti.com,
-        robh@kernel.org
-Subject: Re: [PATCH v4 0/6] Introduce PRU remoteproc consumer API
-Message-ID: <20220606161518.GB809345@p14s>
-References: <20220603121520.13730-1-p-mohan@ti.com>
- <20220606155612.GA809345@p14s>
+        Mon, 6 Jun 2022 12:16:29 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798ED17CE45
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:16:27 -0700 (PDT)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LGz9J19Pyz6896B;
+        Tue,  7 Jun 2022 00:15:16 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 18:16:24 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 6 Jun
+ 2022 17:16:24 +0100
+Date:   Mon, 6 Jun 2022 17:16:22 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+CC:     <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
+ sysfs
+Message-ID: <20220606171622.000036ed@Huawei.com>
+In-Reply-To: <3a557f74-cc3a-c0ee-78e8-2cf50bee5f2d@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+        <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+        <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+        <20220527151531.00002a0c@Huawei.com>
+        <fbebbd2b-2ddb-bee6-5e12-67e3e18648ee@linux.ibm.com>
+        <20220606155920.00004ce9@Huawei.com>
+        <3a557f74-cc3a-c0ee-78e8-2cf50bee5f2d@linux.ibm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606155612.GA809345@p14s>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 09:56:12AM -0600, Mathieu Poirier wrote:
-> I have started to review this set, comments will come over the next few days.  I
-> will clearly inform you when I am done reviewing.
+On Mon, 6 Jun 2022 21:31:16 +0530
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> wrote:
 
-This patch is giving me several checkpatch warnings that should have been caught
-before sending the patches out to the mailing list.  As such I will not review
-this work and seriously considering adding your next revision at the very bottom
-of my queue.
+> On 6/6/22 8:29 PM, Jonathan Cameron wrote:
+> > On Fri, 3 Jun 2022 14:10:47 +0530
+> > Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> wrote:
+> >   
+> >> On 5/27/22 7:45 PM, Jonathan Cameron wrote:  
+> >>> On Fri, 27 May 2022 17:55:23 +0530
+> >>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
+> >>>      
+> >>>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+> >>>>
+> >>>> Add support to read/write the memory tierindex for a NUMA node.
+> >>>>
+> >>>> /sys/devices/system/node/nodeN/memtier
+> >>>>
+> >>>> where N = node id
+> >>>>
+> >>>> When read, It list the memory tier that the node belongs to.
+> >>>>
+> >>>> When written, the kernel moves the node into the specified
+> >>>> memory tier, the tier assignment of all other nodes are not
+> >>>> affected.
+> >>>>
+> >>>> If the memory tier does not exist, writing to the above file
+> >>>> create the tier and assign the NUMA node to that tier.  
+> >>> creates
+> >>>
+> >>> There was some discussion in v2 of Wei Xu's RFC that what matter
+> >>> for creation is the rank, not the tier number.
+> >>>
+> >>> My suggestion is move to an explicit creation file such as
+> >>> memtier/create_tier_from_rank
+> >>> to which writing the rank gives results in a new tier
+> >>> with the next device ID and requested rank.  
+> >>
+> >> I think the below workflow is much simpler.
+> >>
+> >> :/sys/devices/system# cat memtier/memtier1/nodelist
+> >> 1-3
+> >> :/sys/devices/system# cat node/node1/memtier
+> >> 1
+> >> :/sys/devices/system# ls memtier/memtier*
+> >> nodelist  power  rank  subsystem  uevent
+> >> /sys/devices/system# ls memtier/
+> >> default_rank  max_tier  memtier1  power  uevent
+> >> :/sys/devices/system# echo 2 > node/node1/memtier
+> >> :/sys/devices/system#
+> >>
+> >> :/sys/devices/system# ls memtier/
+> >> default_rank  max_tier  memtier1  memtier2  power  uevent
+> >> :/sys/devices/system# cat memtier/memtier1/nodelist
+> >> 2-3
+> >> :/sys/devices/system# cat memtier/memtier2/nodelist
+> >> 1
+> >> :/sys/devices/system#
+> >>
+> >> ie, to create a tier we just write the tier id/tier index to
+> >> node/nodeN/memtier file. That will create a new memory tier if needed
+> >> and add the node to that specific memory tier. Since for now we are
+> >> having 1:1 mapping between tier index to rank value, we can derive the
+> >> rank value from the memory tier index.
+> >>
+> >> For dynamic memory tier support, we can assign a rank value such that
+> >> new memory tiers are always created such that it comes last in the
+> >> demotion order.  
+> > 
+> > I'm not keen on having to pass through an intermediate state where
+> > the rank may well be wrong, but I guess it's not that harmful even
+> > if it feels wrong ;)
+> >   
+> 
+> Any new memory tier added can be of lowest rank (rank - 0) and hence 
+> will appear as the highest memory tier in demotion order. 
+
+Depends on driver interaction - if new memory is CXL attached or
+GPU attached, chances are the driver has an input on which tier
+it is put in by default.
+
+> User can then
+> assign the right rank value to the memory tier? Also the actual demotion 
+> target paths are built during memory block online which in most case 
+> would happen after we properly verify that the device got assigned to 
+> the right memory tier with correct rank value?
+
+Agreed, though that may change the model of how memory is brought online
+somewhat.
 
 > 
-> Thanks,
-> Mathieu
+> > Races are potentially a bit of a pain though depending on what we
+> > expect the usage model to be.
+> > 
+> > There are patterns (CXL regions for example) of guaranteeing the
+> > 'right' device is created by doing something like
+> > 
+> > cat create_tier > temp.txt
+> > #(temp gets 2 for example on first call then
+> > # next read of this file gets 3 etc)
+> > 
+> > cat temp.txt > create_tier
+> > # will fail if there hasn't been a read of the same value
+> > 
+> > Assuming all software keeps to the model, then there are no
+> > race conditions over creation.  Otherwise we have two new
+> > devices turn up very close to each other and userspace scripting
+> > tries to create two new tiers - if it races they may end up in
+> > the same tier when that wasn't the intent.  Then code to set
+> > the rank also races and we get two potentially very different
+> > memories in a tier with a randomly selected rank.
+> > 
+> > Fun and games...  And a fine illustration why sysfs based 'device'
+> > creation is tricky to get right (and lots of cases in the kernel
+> > don't).
+> >   
 > 
-> On Fri, Jun 03, 2022 at 05:45:14PM +0530, Puranjay Mohan wrote:
-> > This is the v4 of the patch series [1]. The v3 had some comments
-> > on the DT patch that have been addressed here. The 6th patch in this
-> > series was missed in the previous versions, so, it has been added now.
-> > 
-> > I have posted two more patch series that depend on this series, one to
-> > the soc tree and another to the networking tree. I had sent all the 3
-> > series, including this one as RFC [2] to get comments and to explain the
-> > dependencies.
-> > 
-> > The Programmable Real-Time Unit and Industrial Communication Subsystem
-> > (PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
-> > RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
-> > 
-> > There are 3 foundation components for PRUSS subsystem: the PRUSS platform
-> > driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
-> > already merged and can be found under:
-> > 1) drivers/soc/ti/pruss.c
-> >    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> > 2) drivers/irqchip/irq-pruss-intc.c
-> >    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
-> > 3) drivers/remoteproc/pru_rproc.c
-> >    Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
-> > 
-> > The programmable nature of the PRUs provide flexibility to implement custom
-> > peripheral interfaces, fast real-time responses, or specialized data handling.
-> > Example of a PRU consumer drivers will be:
-> >   - Software UART over PRUSS
-> >   - PRU-ICSS Ethernet EMAC
-> > 
-> > In order to make usage of common PRU resources and allow the consumer drivers to
-> > configure the PRU hardware for specific usage the PRU API is introduced.
-> > 
-> > [1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220418104118.12878-1-p-mohan@ti.com/
-> > [2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
-> > 
-> > Thanks and Regards,
-> > Puranjay Mohan
-> > 
-> > Roger Quadros (1):
-> >   remoteproc: pru: Add pru_rproc_set_ctable() function
-> > 
-> > Suman Anna (2):
-> >   dt-bindings: remoteproc: Add PRU consumer bindings
-> >   remoteproc: pru: Make sysfs entries read-only for PRU client driven
-> >     boots
-> > 
-> > Tero Kristo (3):
-> >   remoteproc: pru: Add APIs to get and put the PRU cores
-> >   remoteproc: pru: Configure firmware based on client setup
-> >   remoteproc: pru: add support for configuring GPMUX based on client
-> >     setup
-> > 
-> >  .../bindings/remoteproc/ti,pru-consumer.yaml  |  69 +++++
-> >  drivers/remoteproc/pru_rproc.c                | 254 +++++++++++++++++-
-> >  include/linux/pruss.h                         |  78 ++++++
-> >  3 files changed, 396 insertions(+), 5 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> >  create mode 100644 include/linux/pruss.h
-> > 
-> > -- 
-> > 2.17.1
-> > 
+> I would expect userspace to be careful and verify the memory tier and 
+> rank value before we online the memory blocks backed by the device. Even 
+> if we race, the result would be two device not intended to be part of 
+> the same memory tier appearing at the same tier. But then we won't be 
+> building demotion targets yet. So userspace could verify this, move the 
+> nodes out of the memory tier. Once it is verified, memory blocks can be 
+> onlined.
+
+The race is there and not avoidable as far as I can see. Two processes A and B.
+
+A checks for a spare tier number
+B checks for a spare tier number
+A tries to assign node 3 to new tier 2 (new tier created)
+B tries to assign node 4 to new tier 2 (accidentally hits existing tier - as this
+is the same method we'd use to put it in the existing tier we can't tell this
+write was meant to create a new tier).
+A writes rank 100 to tier 2
+A checks rank for tier 2 and finds it is 100 as expected.
+B write rank 200 to tier 2 (it could check if still default but even that is racy)
+B checks rank for tier 2 rank and finds it is 200 as expected.
+A onlines memory.
+B onlines memory.
+
+Both think they got what they wanted, but A definitely didn't.
+
+One work around is the read / write approach and create_tier.
+
+A reads create_tier - gets 2.
+B reads create_tier - gets 3.
+A writes 2 to create_tier as that's what it read.
+B writes 3 to create_tier as that's what it read.
+
+continue with created tiers.  Obviously can exhaust tiers, but if this is
+root only, could just create lots anyway so no worse off.
+ 
+> 
+> Having said that can you outline the usage of 
+> memtier/create_tier_from_rank ?
+
+There are corner cases to deal with...
+
+A writes 100 to create_tier_from_rank.
+A goes looking for matching tier - finds it: tier2
+B writes 200 to create_tier_from_rank
+B goes looking for matching tier - finds it: tier3
+
+rest is fine as operating on different tiers.
+
+Trickier is
+A writes 100 to create_tier_from_rank  - succeed.
+B writes 100 to create_tier_from_rank  - Could fail, or could just eat it?
+
+Logically this is same as separate create_tier and then a write
+of rank, but in one operation, but then you need to search
+for the right one.  As such, perhaps a create_tier
+that does the read/write pair as above is the best solution.
+
+Jonathan
+
+
+> 
+> -aneesh
+

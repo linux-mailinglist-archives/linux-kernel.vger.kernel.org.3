@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B74253E274
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382A453E2D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiFFIHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 04:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
+        id S231626AbiFFIJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 04:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbiFFIHb (ORCPT
+        with ESMTP id S231495AbiFFIJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 04:07:31 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6174DF35
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 01:07:25 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id me5so26842050ejb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 01:07:25 -0700 (PDT)
+        Mon, 6 Jun 2022 04:09:31 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B807D5EDEA;
+        Mon,  6 Jun 2022 01:09:29 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x17so18765833wrg.6;
+        Mon, 06 Jun 2022 01:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TGWju0tIPkfnzyMNfYLOgyyDjvrvrvL8dK2m1zYPwnE=;
-        b=dCCpRntKyQvzI3ixIO+EwDNQgCHC0bUE0MZzhV4q8NYiQ+Uhc/H5mZjI9F7GVI8wTq
-         aG9Cvs7j40Z9zWIKBIzm7Jz06BTcVCzcPHUWrKHz9hkqvLrkjmOFRuoXPNt0Uk99MG5t
-         yT8LzuAicyJyq78tRX6rUjgDTnWaFLEKJGE2ZPCCYw1WReweGp2bV3vknEMThMfjnjUT
-         RUC0KDphWSdc3BFJNlNp58vmxCwzIuiwSSP7QmJTt+LKJYzmkCbEwevpOZ1QMgTUcfLY
-         9VqlwD/nbhGWxnhvq6D7D0cdRWIYCkU3YkznntCgh3qBMqqiC8MaahiF4c6NhdU/kPNq
-         Enaw==
+        bh=55gnPINtsFPFd2IhvtfL5C51CaXoml0DfEKveP/xXyE=;
+        b=FY14aHG+M1ivaNxoVyt6bw617tg7SLpmHKJkKnw7ZiBFa5bcMH28PRhbF+5/CxEB4M
+         RWPw5VAU3V8FsqwgzENi2il9HokLiJ8/fX8mE8TDBR3hWvJkacNEF+ErJKm9tHl7RaB+
+         npldND8zTlpuqQsFRhYByq9G+D4Rnstqaxn3Bi56xRS2uT6Di07qbbS0s52dunRaqaCC
+         K7yISRTRLLu4/QXGVd+wO+NorRCg958iO5PSHn8wCNESTQTickgj7RU28Mtrdu/leXNh
+         0iOXFuJiyJ/CeYgIwRwkvOTKjJarPOO26jtKGRF4jZLOLnPHZx5wvC5WTL2AgPiWiwyK
+         0tUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TGWju0tIPkfnzyMNfYLOgyyDjvrvrvL8dK2m1zYPwnE=;
-        b=6HxNw0fDjg24TBa1oCPlJO/5TLTG5Dzg5qjqsix8kELIrjY738iM5ui8Y1uJjGQKcz
-         lRFdGvJaGDDf7VY9n2De3ZNUcYPWgz7lChPvDkDh9BJIHzSJPNG7OZOcnAh725X79Fl4
-         NOoN5TKSq4LP58++M2wYp51N+aMKXayZ6QQVy5a2h+dAyxU6JiSuWUsqTGY+dY3HQlXJ
-         SIcPZnL4gtRvrNfooq9HXuAc5KPwit3BYsER7/UTiVUOqQRB/MFT0BvtytPTy1Vfrjyg
-         wfyN+k+fLGCy2k/SDkMCwJ5BUudrkGV4NufX4oI3YQTGMo0b8hk6dKt7m2PmMXTzMYRJ
-         AWTw==
-X-Gm-Message-State: AOAM531clPvuQGZnxhXCcdbIGAmdfDspxUjBWa5EIjKUFnsZZRIK9+wj
-        AWBMliRqJWuKMU3x6i0U8vVOaw==
-X-Google-Smtp-Source: ABdhPJzbdodYa0NEHEGhpxHxSru/eoKMvM57JCkkhJ0mxJARezlwyh/UOZNTcO7zaYhj4H3gI0/IkA==
-X-Received: by 2002:a17:906:dc8b:b0:6fe:920b:61ff with SMTP id cs11-20020a170906dc8b00b006fe920b61ffmr20325733ejc.565.1654502843972;
-        Mon, 06 Jun 2022 01:07:23 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e2-20020a1709062d4200b006fec2097d53sm5990274eji.118.2022.06.06.01.07.22
+        bh=55gnPINtsFPFd2IhvtfL5C51CaXoml0DfEKveP/xXyE=;
+        b=fQas94U0twhcYI7nNfTl4cGk7kf6CuvIpQLcV2sY4i06feks2yTtZ8SGDyYPzkn6cC
+         m/eLgirnQhH2kjLwnwTjHMrd37P+WXC/wLzeaaBxvM8dy5W7XvUrQe+t7tF0wDbyenIK
+         nvabE3CxnRbb92aEF6lCLRiY0Az9TRkW0qkuEU0jCYQl/pqQh2BGq+IpVPO91AnQa+AZ
+         sEnLWV1lELBQrMH/bSEdBI5vE+9h3tGPke+4pQVWw51DGuKZUsl3fhi7b21R4jio5hg+
+         M78fDHhxTTuBEo6uwn76WmEPQy8MLuTiheFursTKubApKDCn5Nm2gTpzSY4zhVVGKr2N
+         cTWw==
+X-Gm-Message-State: AOAM533Dn0JcsKx+GZoPfqbCTINrDNA2pdxe6xNxvuirTzuq1JefPfh0
+        QeSQnfwcfvLFOVHgxHjXc7M=
+X-Google-Smtp-Source: ABdhPJxs7oVThXBAjBXXkUL5eYBbt54XbarGQN20qK31IXQ/6R4+6z2LD1zS/sezB+Av3llV24Ko0g==
+X-Received: by 2002:adf:ed41:0:b0:210:20a5:26c2 with SMTP id u1-20020adfed41000000b0021020a526c2mr19871874wro.603.1654502968088;
+        Mon, 06 Jun 2022 01:09:28 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:86cb:1c00:f508:89e3:8d18:b335? (2a01cb0586cb1c00f50889e38d18b335.ipv6.abo.wanadoo.fr. [2a01:cb05:86cb:1c00:f508:89e3:8d18:b335])
+        by smtp.gmail.com with ESMTPSA id y3-20020a7bcd83000000b0039747cf8354sm16206206wmj.39.2022.06.06.01.09.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 01:07:23 -0700 (PDT)
-Message-ID: <ba71d707-1d5c-7b31-3819-aec60b2c7365@linaro.org>
-Date:   Mon, 6 Jun 2022 10:07:22 +0200
+        Mon, 06 Jun 2022 01:09:27 -0700 (PDT)
+Message-ID: <53818857-18b8-c7d8-8003-43452c9aa003@gmail.com>
+Date:   Mon, 6 Jun 2022 10:09:25 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v1 6/6] riscv: dts: sifive: "fix" pmic watchdog node name
+Subject: Re: [PATCH 1/3] net: mdio: unexport __init-annotated mdio_bus_init()
 Content-Language: en-US
-To:     mail@conchuod.ie, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Andrew Lunn <andrew@lunn.ch>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Steve Twiss <stwiss.opensource@diasemi.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Atul Khare <atulkhare@rivosinc.com>
-References: <20220605133300.376161-1-mail@conchuod.ie>
- <20220605133300.376161-7-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220605133300.376161-7-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org
+References: <20220606045355.4160711-1-masahiroy@kernel.org>
+ <20220606045355.4160711-2-masahiroy@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220606045355.4160711-2-masahiroy@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2022 15:33, mail@conchuod.ie wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+
+
+On 6/6/2022 6:53 AM, Masahiro Yamada wrote:
+> EXPORT_SYMBOL and __init is a bad combination because the .init.text
+> section is freed up after the initialization. Hence, modules cannot
+> use symbols annotated __init. The access to a freed symbol may end up
+> with kernel panic.
 > 
-> After converting the pmic watchdog binding to yaml, dtbs_check complains
-> that the node name doesn't match the binding. "Fix" it.
+> modpost used to detect it, but it has been broken for a decade.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Recently, I fixed modpost so it started to warn it again, then this
+> showed up in linux-next builds.
 > 
+> There are two ways to fix it:
+> 
+>    - Remove __init
+>    - Remove EXPORT_SYMBOL
+> 
+> I chose the latter for this case because the only in-tree call-site,
+> drivers/net/phy/phy_device.c is never compiled as modular.
+> (CONFIG_PHYLIB is boolean)
+> 
+> Fixes: 90eff9096c01 ("net: phy: Allow splitting MDIO bus/device support from PHYs")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

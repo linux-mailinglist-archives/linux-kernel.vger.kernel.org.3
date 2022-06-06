@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09DF53EABC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B355453EB31
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240490AbiFFPYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S240504AbiFFPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240469AbiFFPYf (ORCPT
+        with ESMTP id S240488AbiFFPYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:24:35 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92332B4595
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:24:33 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id s12so22429582ejx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:24:33 -0700 (PDT)
+        Mon, 6 Jun 2022 11:24:38 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F328F2B7B43
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:24:37 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j7so13070947pjn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LkVR1NuQxjBXrvEq17FZVgpSOEkLzSQoABYmEhvkVmQ=;
-        b=CaTMDhM8HArxhiM8wuEqYHguZd+Ow22R1fzwTFrTbpk5PuHjMdCTcfeVrzdHIBRYSW
-         yQNBz17J5+HBN+JQkvdk3ejN61UBjSKi8HGWzdDLxf7gpdfUKwE+ucqdU6his7L0ZH2k
-         A21jL8g4RkA9McGN05TmIXlJWekmGVckhdO8Dw04vJtoZhmIuWa+pd+axtIYooJ68K2a
-         G9VYdMM/w9Uzgul5i1HfXU/AAHIbg4fhtv3hz55FfvkYzgRcJQ4FXjFmVwTDFOZjgSQS
-         Q3teYiu6BRLeqyvOE2ZQd6AsRq3y5OaXApsexu0doVKJNt3+VAU9BR5H05k0eEJuW6pQ
-         BXhQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nCKSgi5ghJh488few+daxz3n+frldGQMli1tF7tyziw=;
+        b=Ly/cjxqyjPT9IndQDQLYI+ZjtL8lWCrmZudRv3GvHr7KjYTv4MVJzC8F4KqzUH1WZI
+         ctE8rDupsFcURmpqMWiF944tW2wc65OHIXrkmqNN1RblfZ5SXZrHEPuXa7lrzgx0btu8
+         +bCBc0Pcrtiwv8frSSD330az/t2Dp7qQy0uMM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LkVR1NuQxjBXrvEq17FZVgpSOEkLzSQoABYmEhvkVmQ=;
-        b=OQEmeXGMgCw04nN0F2QNSzkD0ixwSKFcL3rN0lLl/iGogaX9c8+BF/MFOo2Kd3PqdY
-         VObxXlgAiSQynD39Ee4BNwduoYc9fvR6pK5Ycv61D93aAqWWIdTWjAnSRTqvWD/+7c+p
-         Ju0uBQg6JVaWimZgYdQ9UyRVHWXQcNfNT2TQ30AKxl6fHxLbUcwSS0cmXGLk1Bna0l2k
-         nWbikw4ViL4dR0vnlnmbnrAThKkMhzWBPUaGQVDxsVBgWWOvqvTnicorjvyeo7ChhxsE
-         kLO3ksD88AL4bP8+4E3vyP6yDOHUCZ1H09DX8qsJ8xNCub2k17T2CZbxkWzkfT7UWazV
-         TBFw==
-X-Gm-Message-State: AOAM532+VXS8weoJD604qjZKkG8PSXnvdoKy9Bg821aIuFUsgSxSTkW3
-        vbVDAV2fqGBb8HFInYsHnN5w8ZlHtCVUhp38C5moDa3ncLeVLg==
-X-Google-Smtp-Source: ABdhPJzahMapjCZ5wlUS2CyFN/NKvEDW1VCntlLo+6OrHYcPoPQkb3UsOtXoGGy5JESgoznkiN29l7/0VlFZ9Wk5PgY=
-X-Received: by 2002:a17:906:4d50:b0:70d:afd4:1e63 with SMTP id
- b16-20020a1709064d5000b0070dafd41e63mr17459197ejv.618.1654529071847; Mon, 06
- Jun 2022 08:24:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nCKSgi5ghJh488few+daxz3n+frldGQMli1tF7tyziw=;
+        b=W5J6ERyFfxqlHjwI01qG+HQKfsNpJHAo9AGdIUuLY4qK0XARMn8EmwPXHCj/Al8q20
+         nS/BwfrCb7PQU9cvA4wbrC+HQwi35AhnJOnLVVymUG1ahFvxft2ySQFBMrlKkzHSA29m
+         u5tq/hPbDEyI9IYkGsT1BP198mZNH9SeTYDyB5DqSLPNCXnKPjAv2Sdp3JPiYQ1w3yu7
+         cxyF7Grkb19ClcQnuA+cVpYu0dgS0fefLdJiVGK7LyXuha2w4uHHyppms2B0YV10H9Zu
+         Z1pG/iCS2DuIDH0AzM5RYROONCW4Vdge7bewchnx1WaZ0HwjeqlT0kpf3ToErakbXitz
+         CeoA==
+X-Gm-Message-State: AOAM53026xuLZ1VESxn0aUdE56YO1U1Zc7PxTqtlo/b3b1z754c/ViMn
+        Mmfp10ms/Nt/BVv8rHsb9rEJmw==
+X-Google-Smtp-Source: ABdhPJx/j2miMgCNt4Lz+zNAOBFsU+ps9maigyn2E1oMZ0cj6Y7pMkdlNEf4FN7+jd1e8jQNIgqnrw==
+X-Received: by 2002:a17:90b:33c4:b0:1e8:6e2f:97a2 with SMTP id lk4-20020a17090b33c400b001e86e2f97a2mr10110935pjb.165.1654529077457;
+        Mon, 06 Jun 2022 08:24:37 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:a0a:5e4:e24:c8c4])
+        by smtp.gmail.com with ESMTPSA id h1-20020a655181000000b003fbaae74971sm10749306pgq.72.2022.06.06.08.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:24:37 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/8] Add a panel API to return panel orientation
+Date:   Mon,  6 Jun 2022 23:24:23 +0800
+Message-Id: <20220606152431.1889185-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-5-tzungbi@kernel.org>
-In-Reply-To: <20220606141051.285823-5-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 6 Jun 2022 08:24:20 -0700
-Message-ID: <CABXOdTfoX+U=RWmnCha_9LuVcyhcz53MifuQwox8wQs6kangwg@mail.gmail.com>
-Subject: Re: [PATCH 04/13] platform/chrome: cros_ec_proto: assign buffer size
- from protocol info
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> `din_size` is calculated from `ec_dev->max_response`.
-> `ec_dev->max_response` is further calculated from the protocol info.
->
-> To make it clear, assign `din_size` and `dout_size` from protocol info
-> directly.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Panels usually call drm_connector_set_panel_orientation(), which is
+later than drm/kms driver calling drm_dev_register(). This leads to a
+WARN()[1].
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+The orientation property is known earlier. For example, some panels
+parse the property through device tree during probe.
 
-> ---
->  drivers/platform/chrome/cros_ec_proto.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 65191af5139c..629dce3e6ab3 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -449,12 +449,8 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->                         "using proto v%u\n",
->                         ec_dev->proto_version);
->
-> -               ec_dev->din_size = ec_dev->max_response +
-> -                       sizeof(struct ec_host_response) +
-> -                       EC_MAX_RESPONSE_OVERHEAD;
-> -               ec_dev->dout_size = ec_dev->max_request +
-> -                       sizeof(struct ec_host_request) +
-> -                       EC_MAX_REQUEST_OVERHEAD;
-> +               ec_dev->din_size = proto_info->max_response_packet_size + EC_MAX_RESPONSE_OVERHEAD;
-> +               ec_dev->dout_size = proto_info->max_request_packet_size + EC_MAX_REQUEST_OVERHEAD;
->
->                 /*
->                  * Check for PD
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+The series add a panel API drm_panel_get_orientation() for drm/kms
+drivers. The drivers can use the API to get panel's orientation, so they
+can call drm_connector_set_panel_orientation() before drm_dev_register().
+
+Panel needs to implement .get_orientation callback to return the property.
+
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220530081910.3947168-2-hsinyi@chromium.org/
+
+Hsin-Yi Wang (8):
+  drm/panel: Add an API drm_panel_get_orientation() to return panel
+    orientation
+  drm/panel: boe-tv101wum-nl6: Implement .get_orientation callback
+  drm/panel: panel-edp: Implement .get_orientation callback
+  drm/panel: lvds: Implement .get_orientation callback
+  drm/panel: panel-simple: Implement .get_orientation callback
+  drm/panel: ili9881c: Implement .get_orientation callback
+  drm/panel: elida-kd35t133: Implement .get_orientation callback
+  drm/mediatek: Config orientation property if panel provides it
+
+ drivers/gpu/drm/drm_panel.c                    |  9 +++++++++
+ drivers/gpu/drm/mediatek/mtk_dsi.c             | 10 ++++++++++
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-edp.c              | 15 ++++++++++++++-
+ drivers/gpu/drm/panel/panel-elida-kd35t133.c   | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-ilitek-ili9881c.c  | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-lvds.c             | 15 +++++++++++++++
+ drivers/gpu/drm/panel/panel-simple.c           | 16 +++++++++++++++-
+ include/drm/drm_panel.h                        | 10 ++++++++++
+ 9 files changed, 115 insertions(+), 2 deletions(-)
+
+-- 
+2.36.1.255.ge46751e96f-goog
+

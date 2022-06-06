@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE57653E712
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B6A53E857
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbiFFOd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S239825AbiFFOfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbiFFOd5 (ORCPT
+        with ESMTP id S239809AbiFFOe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:33:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5D0D2C13F;
-        Mon,  6 Jun 2022 07:33:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CACF15DB;
-        Mon,  6 Jun 2022 07:33:55 -0700 (PDT)
-Received: from [10.57.81.38] (unknown [10.57.81.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 555903F73B;
-        Mon,  6 Jun 2022 07:33:48 -0700 (PDT)
-Message-ID: <1e0e5403-1e65-db9a-c8e7-34e316bfda8e@arm.com>
-Date:   Mon, 6 Jun 2022 15:33:42 +0100
+        Mon, 6 Jun 2022 10:34:56 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0772E0AA;
+        Mon,  6 Jun 2022 07:34:55 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 25so18832420edw.8;
+        Mon, 06 Jun 2022 07:34:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UBnTnofx1egjVYMXsVKnzCrT8go4XNCwGGXlPsFzsQA=;
+        b=azV5GzMMa++q0Epo0MDaOVueIR/LwrW+VySLdOxKsvHyTQCveKvSoWdowrxeTsXPis
+         ADZ8YkUbT/PDj2crA7LNxwxdiS4cq4XsPY0uZpGm0x7jEeMaU0G9Bg8dYGf/jdzv+9we
+         s7/qhctFIOJmUnwcJ28H+yT9Z0eiiNnazOu6o9wBPLmMEDOpwJaKVbecD0UQjb+CarAh
+         al2usVJSQfVhO3neOz3ESYjQDU2csK5R1sE9uQDCdq42GlTX8ga3dBlZUTkocXYFkdsw
+         vQBstuts0wA5bVPDtO6XRccnYYhtA1Z2flHrqkLctTskaoeftkCx6/3ymFoBjYvv2JgR
+         fEng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UBnTnofx1egjVYMXsVKnzCrT8go4XNCwGGXlPsFzsQA=;
+        b=FVpPCIrF17M2MUwSlUoeSKr9D0U6vHkcGMF0SfqkQwd0XtaoXYSnbDLk8ZTfvLZg2u
+         yVJRBM917aN0Z7uVyuphpWDo5Vpgjvc3q7uOpowcM9y7j08XQPnwAHCm4VZAgpFhK7AS
+         wciabWMPOSCsqixUemh+cyOtEGsRbltJPE+yZfVuYCX4wFsbGQLOGitSBG+x6gMhrUdT
+         fjZW08/hKb88r+uUt/B0p8vw2n8ju1HQ1KohC2uXaWeW9Lb40C+iAfVkuRstvkJKz1R9
+         xcgtek9ZFDgyy84hXZpj8jDlr8foBcrLBjE77CFGL0USr2Bki/f+lOoEx/KmLRrJCcNx
+         /SXw==
+X-Gm-Message-State: AOAM531NGYlEJhnkIdm2+4e6vf9wGItGEpAajUhsVRzOaXIWgP0DIjmt
+        IeSJ3nP7gWGtZQux4/5+52PhhwzLOSIz89X73hE=
+X-Google-Smtp-Source: ABdhPJwfn4g/UnCK2hjftmJUfPtxQcX/+HyTUYgLkCK+SY1VM8dNkEyDTGXdKyzApGi+XESSlUkKXuaI9VnefDP+/SQ=
+X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
+ b1-20020aa7d481000000b0042dd5fdf963mr27412796edr.209.1654526094287; Mon, 06
+ Jun 2022 07:34:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/5] iommu: Ensure device has the same iommu_ops as the
- domain
-Content-Language: en-GB
-To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
-        joro@8bytes.org, will@kernel.org, marcan@marcan.st,
-        sven@svenpeter.dev, robdclark@gmail.com, m.szyprowski@samsung.com,
-        krzysztof.kozlowski@linaro.org, baolu.lu@linux.intel.com,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        matthias.bgg@gmail.com, heiko@sntech.de, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        jean-philippe@linaro.org, alex.williamson@redhat.com
-Cc:     suravee.suthikulpanit@amd.com, alyssa@rosenzweig.io,
-        alim.akhtar@samsung.com, dwmw2@infradead.org, yong.wu@mediatek.com,
-        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-        cohuck@redhat.com, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-References: <20220606061927.26049-1-nicolinc@nvidia.com>
- <20220606061927.26049-3-nicolinc@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220606061927.26049-3-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220605083825.9854-1-wangxiang@cdjrlc.com>
+In-Reply-To: <20220605083825.9854-1-wangxiang@cdjrlc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 6 Jun 2022 16:34:17 +0200
+Message-ID: <CAHp75VcXnKHnEkov0i-=D_qPsVCY_PjasJ9Dni99fj+uKpHjdQ@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250: 8250_omap: Fix syntax errors in comments
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,50 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-06 07:19, Nicolin Chen wrote:
-> The core code should not call an iommu driver op with a struct device
-> parameter unless it knows that the dev_iommu_priv_get() for that struct
-> device was setup by the same driver. Otherwise in a mixed driver system
-> the iommu_priv could be casted to the wrong type.
+On Mon, Jun 6, 2022 at 5:25 AM Xiang wangx <wangxiang@cdjrlc.com> wrote:
+>
+> Delete the redundant word 'have'.
 
-We don't have mixed-driver systems, and there are plenty more 
-significant problems than this one to solve before we can (but thanks 
-for pointing it out - I hadn't got as far as auditing the public 
-interfaces yet). Once domains are allocated via a particular device's 
-IOMMU instance in the first place, there will be ample opportunity for 
-the core to stash suitable identifying information in the domain for 
-itself. TBH even the current code could do it without needing the 
-weirdly invasive changes here.
+Not critical right now, but you may shorten the subject by dropping
+"8250:" part in the prefix, just leaving "serial: 8250_omap:" is
+enough.
 
-> Store the iommu_ops pointer in the iommu_domain and use it as a check to
-> validate that the struct device is correct before invoking any domain op
-> that accepts a struct device.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-In fact this even describes exactly that - "Store the iommu_ops pointer 
-in the iommu_domain", vs. the "Store the iommu_ops pointer in the 
-iommu_domain_ops" which the patch is actually doing :/
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+> ---
+>  drivers/tty/serial/8250/8250_omap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+> index ac8bfa042391..a7a95c013fe6 100644
+> --- a/drivers/tty/serial/8250/8250_omap.c
+> +++ b/drivers/tty/serial/8250/8250_omap.c
+> @@ -345,7 +345,7 @@ static void omap8250_restore_regs(struct uart_8250_port *up)
+>  }
+>
+>  /*
+> - * OMAP can use "CLK / (16 or 13) / div" for baud rate. And then we have have
+> + * OMAP can use "CLK / (16 or 13) / div" for baud rate. And then we have
+>   * some differences in how we want to handle flow control.
+>   */
+>  static void omap_8250_set_termios(struct uart_port *port,
+> --
+> 2.36.1
+>
 
-[...]
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 19cf28d40ebe..8a1f437a51f2 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -1963,6 +1963,10 @@ static int __iommu_attach_device(struct iommu_domain *domain,
->   {
->   	int ret;
->   
-> +	/* Ensure the device was probe'd onto the same driver as the domain */
-> +	if (dev->bus->iommu_ops != domain->ops->iommu_ops)
 
-Nope, dev_iommu_ops(dev) please. Furthermore I think the logical place 
-to put this is in iommu_group_do_attach_device(), since that's the 
-gateway for the public interfaces - we shouldn't need to second-guess 
-ourselves for internal default-domain-related calls.
-
-Thanks,
-Robin.
-
-> +		return -EMEDIUMTYPE;
-> +
->   	if (unlikely(domain->ops->attach_dev == NULL))
->   		return -ENODEV;
+-- 
+With Best Regards,
+Andy Shevchenko

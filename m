@@ -2,426 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2B053E2E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D74F53E2CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiFFGMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 02:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S229914AbiFFGU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 02:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiFFGMe (ORCPT
+        with ESMTP id S229890AbiFFGUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 02:12:34 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A8DAE54
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 23:12:30 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id r71so12160240pgr.0
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 23:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=I35U8IHwcGdbtuU8lL8a+fUizJTm97HsipGrlcfOkcs=;
-        b=lR6RkHqNoa9D3MbxwZhoP83tgZYi189zO6RSTfCijp++GA+cLfIHdYsxxYEDk1M4nv
-         1kH22kDUrdwheC7fuwd3dlo0/2a4kM7uqlk3SunaapMQqOn5y2cXAlEprryEpJsb9pp9
-         Ov9iDcyZRNFpepV7UOnBbo3rTKe9aVjJ2uCu97M+cJysi+PJdS9TL7OZ/gY+Kqk6c/ov
-         sx8bsqkWWZHCNX3jpxxzTScYeT+uAYa+UWwSKLfhqG2tdWI7uBqxTi70oR9Uk54PFCGx
-         yspBpPWPzZW0tZy/pbm90YXKah9JqQLj+I6H0j1bOqUoVCdVSnsAC6hSk8WAX9y2ocQC
-         U03A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I35U8IHwcGdbtuU8lL8a+fUizJTm97HsipGrlcfOkcs=;
-        b=K5nPcNt8OaJ40dskW/mQ5VpSC1026wEnnoNKCadZcovx9/KvbulpQrJqeYRteNfCEj
-         hHIjKqzgzv53+nOeXd4bo9KUX1EhNfiiN1aVWZbKra8vCq+4QyAyvADZ1ckApQrWvXYN
-         KHEkkDJz/7fZ7vEqXefdlMMc3lnCkBSxR72g0qLmGELMJ8OLBLoXTRvOOC7cTgsceRXV
-         6JXwbbdAiZPFSotsqxJnSpezZ7OxXi5MOdDs/S0G6J0U2eiPuMbHetM4a10trdaG3iKU
-         SAeONM501GAOPJjAETG5PR/tNbwzjOH9gEjrq/dwobEWqITrYgUAOv/JcvuXXpv3JW5q
-         wMSg==
-X-Gm-Message-State: AOAM532+VzcvPdCkUwn92UtAFF0rNQUknhFQ0EI6bzogenmCT+hjz+v8
-        8szn6DcZOQdReuzoZ6oUgTUnDg==
-X-Google-Smtp-Source: ABdhPJz5RmLQYLqzuaZtAtT5+rSs0hJtCHFTxV0RlOEQoCDagqY2ps+e6cljdFJVm+i2yZCctyltIg==
-X-Received: by 2002:aa7:85d1:0:b0:51b:f4b5:db7b with SMTP id z17-20020aa785d1000000b0051bf4b5db7bmr10688026pfn.41.1654495949649;
-        Sun, 05 Jun 2022 23:12:29 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id u188-20020a6279c5000000b0050dc76281aasm9887525pfc.132.2022.06.05.23.12.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 23:12:29 -0700 (PDT)
-Message-ID: <e0baaba8-9e7a-fc4e-c05b-56d552905127@bytedance.com>
-Date:   Mon, 6 Jun 2022 14:12:21 +0800
+        Mon, 6 Jun 2022 02:20:03 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDE121E0B;
+        Sun,  5 Jun 2022 23:19:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cndKJOiJd90tXzm/yOg6GgkNavKUiAMwfv6bOIysihopzc6Xshv8wMsgzqF6osS5xme/1+MVhBtlikayvzg59nZTWZsRp1s5vA8sC26PBKE2y/V68Sb58noh+YIO5DyS+qXeXk7BXOg/0qGxddOGR0i2FoJRa12+MbBCXYdlVyKZEyO22ITepK6UkpILoW0Ngau1fhLIdGM2dbCtwgxNn3uhZ5p76I/9DveLemrCyLjBLexgrKcs4kI89TNhjfR8A1AjU/SfX+Bwflor3TqyMsL6XXAWIsjV3QroTzhHxAlw//GVtz/S3NUJI3ProPlTUYIgWN+5+YcGoguDwM0tsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qt61BEzWAJnf/jjYQPs/mf5a7J0wxbd8tUu1/z9I+ro=;
+ b=Fhmg/hcS/GKTVHdJa67QBMwxlUs8EK1td39cjXNGOo5FTqwtB2SaSPYlZ1vehE9JaCe4eFRfEcmL7PrOizvqkbL25NCOHOh3i2Dc5qGOcaFSjYVzrOGQ6gvHXY25hygY/JGcZNjiQ0sPSDXirt5SP0iDkWZ8YxHiG9gAZmAHXKade9yfXPJyztfT0NTBFXhE5465t4VbBzP8B2kdpbttM2gaaCLQN0h0goqzDjntt9bOfSm9a68AzoEa8RORI7LMySH3X6hPG8/GE17wwNqOzslBX3qncp6LaTiTIXxDNvfMYWJf86NFE+LRHwfBUWttNy2Smz5n7MWaHBnui/TwhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=samsung.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qt61BEzWAJnf/jjYQPs/mf5a7J0wxbd8tUu1/z9I+ro=;
+ b=pZhCEki/WrrDNL6nzAhWkMes+eXnm7eBIhNmnUDuvd8VQ/Lwy7bvo21V8SnWQyH4Zu7dIGoeA2CGzq9jNc3OWhn824TDsFVDGWFUK76ylUq4aMYWZN5DAmWOBrh2335ZCzV3Iv+brkY0+2lolWQPCcAMgQgN5I+66IypBIHg2DYu1plzvA05XuYxI9dz7QLIVlKuiBipWVpb7CDyBjC4w9jstfdhwR/YZVyDR8tK1BWMK2mDhWhjYkTOcSRikSqNObdYZg5B131hHqVsf4SHVpH3yAXSo+ZV55wb9GXUxUFbRSyLs8hunfEBtXUjOnV3T13lJI2sk8pFwZv+Ds13Gg==
+Received: from MW4PR03CA0182.namprd03.prod.outlook.com (2603:10b6:303:b8::7)
+ by DM6PR12MB2890.namprd12.prod.outlook.com (2603:10b6:5:15e::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.18; Mon, 6 Jun
+ 2022 06:19:53 +0000
+Received: from CO1NAM11FT018.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b8:cafe::5a) by MW4PR03CA0182.outlook.office365.com
+ (2603:10b6:303:b8::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12 via Frontend
+ Transport; Mon, 6 Jun 2022 06:19:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT018.mail.protection.outlook.com (10.13.175.16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5314.12 via Frontend Transport; Mon, 6 Jun 2022 06:19:52 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 6 Jun
+ 2022 06:19:52 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 5 Jun 2022
+ 23:19:51 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Sun, 5 Jun 2022 23:19:49 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <jgg@nvidia.com>, <joro@8bytes.org>, <will@kernel.org>,
+        <marcan@marcan.st>, <sven@svenpeter.dev>, <robin.murphy@arm.com>,
+        <robdclark@gmail.com>, <m.szyprowski@samsung.com>,
+        <krzysztof.kozlowski@linaro.org>, <baolu.lu@linux.intel.com>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <matthias.bgg@gmail.com>, <heiko@sntech.de>, <orsonzhai@gmail.com>,
+        <baolin.wang7@gmail.com>, <zhang.lyra@gmail.com>, <wens@csie.org>,
+        <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <jean-philippe@linaro.org>, <alex.williamson@redhat.com>
+CC:     <suravee.suthikulpanit@amd.com>, <alyssa@rosenzweig.io>,
+        <alim.akhtar@samsung.com>, <dwmw2@infradead.org>,
+        <yong.wu@mediatek.com>, <mjrosato@linux.ibm.com>,
+        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
+        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Subject: [PATCH 0/5] Simplify vfio_iommu_type1 attach/detach routine
+Date:   Sun, 5 Jun 2022 23:19:22 -0700
+Message-ID: <20220606061927.26049-1-nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: Re: [PATCH v4 1/2] bpf: avoid grabbing spin_locks of all cpus
- when no free elems
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
- <20220601084149.13097-2-zhoufeng.zf@bytedance.com>
- <CAADnVQJcbDXtQsYNn=j0NzKx3SFSPE1YTwbmtkxkpzmFt-zh9Q@mail.gmail.com>
- <21ec90e3-2e89-09c1-fd22-de76e6794d68@bytedance.com>
- <CAADnVQKdU-3uBE9tKifChUunmr=c=32M4GwP8qG1-S=Atf7fvw@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQKdU-3uBE9tKifChUunmr=c=32M4GwP8qG1-S=Atf7fvw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 398b826b-ed06-426d-5c5f-08da47849165
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2890:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB2890C7DE246EECA45C210CC1ABA29@DM6PR12MB2890.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lxIvg2z2sn5/yqJNLZP0SOo/ZwR6vmGSXF4b/VrgDZUYpPYs7nwcT45mp7+AU2P52kLC3Ym/oYCD2pyGR7engcAwHD1PRhXFMg+NJ3yhaYTnKiREMZY2qUgp95goY4I/7ZoLrrwh5Gsl/A7VGm4FQJ7993ZrZHdQKOj9+wdTkqsdzMqKajX8CZv/OqVTvwMKN6zqQn9AbaXx5EY+ECXkn7c8/JyO3neqyoyUlkW41kB8E2bBeelwtvl9qk16UN7Csk784yZuf1lCYjUBaJwJR6jzOVknIVvO26orltaUeIBtm3SjcjZ/IkExoAMifcacxDGq1R/Rtu9+4UkOWL5ySBQcHtxSeZ4BvTNEfyDHC8EulLJFymDOxiM+aKTgrhRH5PBjiY5ZYBeAY47OQCcdWMYxfgWJfhpg+QrLJ15JTZ30oqBsbc2rra8FEvifAwOx6xMIS4aoppRmLpkqJzilbvg+KgQFBq7nvoif0pCtK2QzRFEqn/agh/7yMa1/dCVopyDWknn3jEXDnwAEELnfSUIAjZ1RI3CMG6b0FraBhoNPjir+/he0ADqQS1CiNFZSuVzpg6WVq9/Pl/lNxQkXBjDfFRlv9uFdDU74Y3rDRF52zuHXNL+dG0Fhers8QAsNUG18YWzLkcikOjFAsl/wj73n4jHGdTTINxM+8idC9b6UJi0M5fvfYcMVGft9olZ9Pxzw54B8o8OFpBErcCkHhTvlXmrW7DS4t/KYNo24tAaZNmuSw8JD6flulB4Gyyb9g7l8yYBBZ9YTpvoUkD2+RtxEYhYCs2de5SMu26+4UGmKnnXs/keUPIRVp6HXpycbXO0HqmEhG67GW1u+18lEFp2bnqV1S1SH/O0FX77UZMA=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(336012)(47076005)(1076003)(2616005)(426003)(36756003)(7416002)(6666004)(83380400001)(966005)(186003)(7696005)(36860700001)(26005)(81166007)(110136005)(40460700003)(8936002)(921005)(356005)(316002)(82310400005)(4326008)(508600001)(86362001)(8676002)(5660300002)(54906003)(70206006)(70586007)(2906002)(7406005)(83996005)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 06:19:52.5847
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 398b826b-ed06-426d-5c5f-08da47849165
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT018.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2890
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/1 下午7:35, Alexei Starovoitov 写道:
-> On Wed, Jun 1, 2022 at 1:11 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->> 在 2022/6/1 下午5:50, Alexei Starovoitov 写道:
->>> On Wed, Jun 1, 2022 at 10:42 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->>>>    static inline void ___pcpu_freelist_push(struct pcpu_freelist_head *head,
->>>> @@ -130,14 +134,19 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
->>>>           orig_cpu = cpu = raw_smp_processor_id();
->>>>           while (1) {
->>>>                   head = per_cpu_ptr(s->freelist, cpu);
->>>> +               if (READ_ONCE(head->is_empty))
->>>> +                       goto next_cpu;
->>>>                   raw_spin_lock(&head->lock);
->>>>                   node = head->first;
->>>>                   if (node) {
->>> extra bool is unnecessary.
->>> just READ_ONCE(head->first)
->> As for why to add is_empty instead of directly judging head->first, my
->> understanding is this, head->first is frequently modified during updating
->> map, which will lead to invalid other cpus's cache, and is_empty is after
->> freelist having no free elems will be changed, the performance will be
->> better.
-> maybe. pls benchmark it.
-> imo wasting a bool for the corner case is not a good trade off.
+This is a preparatory series for IOMMUFD v2 patches. It enforces error
+code -EMEDIUMTYPE in iommu_attach_device() and iommu_attach_group() when
+an IOMMU domain and a device/group are incompatible. It also moves the
+domain->ops check into __iommu_attach_device(). These allow VFIO iommu
+code to simplify its group attachment routine, by avoiding the extra
+IOMMU domain allocations and attach/detach sequences of the old code.
 
-before patch
-./map_perf_test 1
-35:hash_map_perf pre-alloc 1224983 events per sec
-38:hash_map_perf pre-alloc 1113232 events per sec
-27:hash_map_perf pre-alloc 1097989 events per sec
-19:hash_map_perf pre-alloc 1092061 events per sec
-21:hash_map_perf pre-alloc 1084639 events per sec
-29:hash_map_perf pre-alloc 1077162 events per sec
-4:hash_map_perf pre-alloc 1067511 events per sec
-9:hash_map_perf pre-alloc 1063166 events per sec
-33:hash_map_perf pre-alloc 1064487 events per sec
-8:hash_map_perf pre-alloc 1059271 events per sec
-32:hash_map_perf pre-alloc 1061351 events per sec
-1:hash_map_perf pre-alloc 1055527 events per sec
-15:hash_map_perf pre-alloc 1056587 events per sec
-2:hash_map_perf pre-alloc 1054106 events per sec
-13:hash_map_perf pre-alloc 1053028 events per sec
-25:hash_map_perf pre-alloc 1053575 events per sec
-26:hash_map_perf pre-alloc 1052503 events per sec
-7:hash_map_perf pre-alloc 1049950 events per sec
-39:hash_map_perf pre-alloc 1054421 events per sec
-28:hash_map_perf pre-alloc 1050109 events per sec
-6:hash_map_perf pre-alloc 1046496 events per sec
-44:hash_map_perf pre-alloc 1054757 events per sec
-34:hash_map_perf pre-alloc 1048549 events per sec
-31:hash_map_perf pre-alloc 1047911 events per sec
-18:hash_map_perf pre-alloc 1046435 events per sec
-41:hash_map_perf pre-alloc 1051626 events per sec
-0:hash_map_perf pre-alloc 1043397 events per sec
-10:hash_map_perf pre-alloc 1043903 events per sec
-20:hash_map_perf pre-alloc 1044380 events per sec
-24:hash_map_perf pre-alloc 1042957 events per sec
-47:hash_map_perf pre-alloc 1049337 events per sec
-17:hash_map_perf pre-alloc 1038108 events per sec
-42:hash_map_perf pre-alloc 1044159 events per sec
-45:hash_map_perf pre-alloc 1044698 events per sec
-37:hash_map_perf pre-alloc 1038156 events per sec
-46:hash_map_perf pre-alloc 1039755 events per sec
-22:hash_map_perf pre-alloc 1032287 events per sec
-14:hash_map_perf pre-alloc 1019353 events per sec
-30:hash_map_perf pre-alloc 1019358 events per sec
-43:hash_map_perf pre-alloc 1015956 events per sec
-36:hash_map_perf pre-alloc 997864 events per sec
-40:hash_map_perf pre-alloc 972771 events per sec
-12:hash_map_perf pre-alloc 891118 events per sec
-16:hash_map_perf pre-alloc 882166 events per sec
-23:hash_map_perf pre-alloc 882177 events per sec
-11:hash_map_perf pre-alloc 880153 events per sec
-3:hash_map_perf pre-alloc 843192 events per sec
-5:hash_map_perf pre-alloc 826944 events per sec
+Worths mentioning the exact match for enforce_cache_coherency is removed
+with this series, since there's very less value in doing that since KVM
+won't be able to take advantage of it -- this just wastes domain memory.
+Instead, we rely on Intel IOMMU driver taking care of that internally.
 
-./run_bench_bpf_hashmap_full_update.sh
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-1:hash_map_full_perf 15687 events per sec
-2:hash_map_full_perf 15760 events per sec
-3:hash_map_full_perf 15699 events per sec
-4:hash_map_full_perf 15732 events per sec
-5:hash_map_full_perf 15633 events per sec
-6:hash_map_full_perf 15623 events per sec
-7:hash_map_full_perf 15678 events per sec
-8:hash_map_full_perf 15661 events per sec
-9:hash_map_full_perf 15659 events per sec
-10:hash_map_full_perf 15653 events per sec
-11:hash_map_full_perf 15632 events per sec
-12:hash_map_full_perf 16059 events per sec
-13:hash_map_full_perf 16055 events per sec
-14:hash_map_full_perf 16093 events per sec
-15:hash_map_full_perf 16053 events per sec
-16:hash_map_full_perf 16096 events per sec
-17:hash_map_full_perf 15977 events per sec
-18:hash_map_full_perf 15986 events per sec
-19:hash_map_full_perf 16109 events per sec
-20:hash_map_full_perf 16025 events per sec
-21:hash_map_full_perf 16052 events per sec
-22:hash_map_full_perf 16023 events per sec
-23:hash_map_full_perf 16008 events per sec
-24:hash_map_full_perf 16484 events per sec
-25:hash_map_full_perf 15684 events per sec
-26:hash_map_full_perf 15749 events per sec
-27:hash_map_full_perf 15677 events per sec
-28:hash_map_full_perf 15699 events per sec
-29:hash_map_full_perf 15630 events per sec
-30:hash_map_full_perf 15603 events per sec
-31:hash_map_full_perf 15664 events per sec
-32:hash_map_full_perf 15645 events per sec
-33:hash_map_full_perf 15682 events per sec
-34:hash_map_full_perf 15636 events per sec
-35:hash_map_full_perf 15628 events per sec
-36:hash_map_full_perf 16068 events per sec
-37:hash_map_full_perf 16056 events per sec
-38:hash_map_full_perf 16105 events per sec
-39:hash_map_full_perf 16077 events per sec
-40:hash_map_full_perf 16060 events per sec
-41:hash_map_full_perf 15986 events per sec
-42:hash_map_full_perf 15962 events per sec
-43:hash_map_full_perf 16074 events per sec
-44:hash_map_full_perf 16040 events per sec
-45:hash_map_full_perf 16035 events per sec
-46:hash_map_full_perf 16017 events per sec
-47:hash_map_full_perf 15957 events per sec
+This is on github: https://github.com/nicolinc/iommufd/commits/vfio_iommu_attach
 
-after patch, use head->is_empty
-./map_perf_test 1
-6:hash_map_perf pre-alloc 1126051 events per sec
-34:hash_map_perf pre-alloc 1122413 events per sec
-42:hash_map_perf pre-alloc 1088827 events per sec
-39:hash_map_perf pre-alloc 1089041 events per sec
-2:hash_map_perf pre-alloc 1062943 events per sec
-33:hash_map_perf pre-alloc 1065414 events per sec
-4:hash_map_perf pre-alloc 1057170 events per sec
-3:hash_map_perf pre-alloc 1056752 events per sec
-7:hash_map_perf pre-alloc 1055573 events per sec
-1:hash_map_perf pre-alloc 1054998 events per sec
-27:hash_map_perf pre-alloc 1056539 events per sec
-28:hash_map_perf pre-alloc 1055846 events per sec
-14:hash_map_perf pre-alloc 1053706 events per sec
-25:hash_map_perf pre-alloc 1054690 events per sec
-31:hash_map_perf pre-alloc 1055151 events per sec
-13:hash_map_perf pre-alloc 1050262 events per sec
-38:hash_map_perf pre-alloc 1051390 events per sec
-37:hash_map_perf pre-alloc 1050348 events per sec
-44:hash_map_perf pre-alloc 1049442 events per sec
-45:hash_map_perf pre-alloc 1049346 events per sec
-5:hash_map_perf pre-alloc 1041591 events per sec
-16:hash_map_perf pre-alloc 1041668 events per sec
-22:hash_map_perf pre-alloc 1041963 events per sec
-23:hash_map_perf pre-alloc 1040848 events per sec
-11:hash_map_perf pre-alloc 1038474 events per sec
-0:hash_map_perf pre-alloc 1037474 events per sec
-29:hash_map_perf pre-alloc 1040162 events per sec
-12:hash_map_perf pre-alloc 1038138 events per sec
-24:hash_map_perf pre-alloc 1036339 events per sec
-36:hash_map_perf pre-alloc 1036703 events per sec
-35:hash_map_perf pre-alloc 1035780 events per sec
-46:hash_map_perf pre-alloc 1035651 events per sec
-47:hash_map_perf pre-alloc 1031633 events per sec
-26:hash_map_perf pre-alloc 1022568 events per sec
-9:hash_map_perf pre-alloc 1020232 events per sec
-21:hash_map_perf pre-alloc 1012416 events per sec
-20:hash_map_perf pre-alloc 1010835 events per sec
-15:hash_map_perf pre-alloc 998342 events per sec
-17:hash_map_perf pre-alloc 994979 events per sec
-43:hash_map_perf pre-alloc 995927 events per sec
-30:hash_map_perf pre-alloc 890710 events per sec
-10:hash_map_perf pre-alloc 886156 events per sec
-40:hash_map_perf pre-alloc 835611 events per sec
-18:hash_map_perf pre-alloc 826670 events per sec
-8:hash_map_perf pre-alloc 784346 events per sec
-41:hash_map_perf pre-alloc 781841 events per sec
-32:hash_map_perf pre-alloc 775770 events per sec
-19:hash_map_perf pre-alloc 774079 events per sec
+Jason Gunthorpe (1):
+  vfio/iommu_type1: Prefer to reuse domains vs match enforced cache
+    coherency
 
-./run_bench_bpf_hashmap_full_update.sh
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-1:hash_map_full_perf 607964 events per sec
-2:hash_map_full_perf 580060 events per sec
-3:hash_map_full_perf 617285 events per sec
-4:hash_map_full_perf 647106 events per sec
-5:hash_map_full_perf 578899 events per sec
-6:hash_map_full_perf 620514 events per sec
-7:hash_map_full_perf 601275 events per sec
-8:hash_map_full_perf 638629 events per sec
-9:hash_map_full_perf 587900 events per sec
-10:hash_map_full_perf 574542 events per sec
-11:hash_map_full_perf 575143 events per sec
-12:hash_map_full_perf 594191 events per sec
-13:hash_map_full_perf 587638 events per sec
-14:hash_map_full_perf 543425 events per sec
-15:hash_map_full_perf 566564 events per sec
-16:hash_map_full_perf 603950 events per sec
-17:hash_map_full_perf 567153 events per sec
-18:hash_map_full_perf 604260 events per sec
-19:hash_map_full_perf 581898 events per sec
-20:hash_map_full_perf 569864 events per sec
-21:hash_map_full_perf 307428 events per sec
-22:hash_map_full_perf 621568 events per sec
-23:hash_map_full_perf 568043 events per sec
-24:hash_map_full_perf 714765 events per sec
-25:hash_map_full_perf 613165 events per sec
-26:hash_map_full_perf 647286 events per sec
-27:hash_map_full_perf 610911 events per sec
-28:hash_map_full_perf 590805 events per sec
-29:hash_map_full_perf 621013 events per sec
-30:hash_map_full_perf 614053 events per sec
-31:hash_map_full_perf 618858 events per sec
-32:hash_map_full_perf 593847 events per sec
-33:hash_map_full_perf 648223 events per sec
-34:hash_map_full_perf 649868 events per sec
-35:hash_map_full_perf 657349 events per sec
-36:hash_map_full_perf 595112 events per sec
-37:hash_map_full_perf 595443 events per sec
-38:hash_map_full_perf 557591 events per sec
-39:hash_map_full_perf 591079 events per sec
-40:hash_map_full_perf 558251 events per sec
-41:hash_map_full_perf 572870 events per sec
-42:hash_map_full_perf 567184 events per sec
-43:hash_map_full_perf 604783 events per sec
-44:hash_map_full_perf 632444 events per sec
-45:hash_map_full_perf 307268 events per sec
-46:hash_map_full_perf 566827 events per sec
-47:hash_map_full_perf 626162 events per sec
+Nicolin Chen (4):
+  iommu: Return -EMEDIUMTYPE for incompatible domain and device/group
+  iommu: Ensure device has the same iommu_ops as the domain
+  vfio/iommu_type1: Clean up update_dirty_scope in detach_group()
+  vfio/iommu_type1: Simplify group attachment
 
-after patch, use head->first
-./map_perf_test 1
-45:hash_map_perf pre-alloc 1263804 events per sec
-4:hash_map_perf pre-alloc 1234841 events per sec
-6:hash_map_perf pre-alloc 1231915 events per sec
-11:hash_map_perf pre-alloc 1206927 events per sec
-20:hash_map_perf pre-alloc 1179066 events per sec
-32:hash_map_perf pre-alloc 1177190 events per sec
-23:hash_map_perf pre-alloc 1170498 events per sec
-12:hash_map_perf pre-alloc 1140194 events per sec
-37:hash_map_perf pre-alloc 1136824 events per sec
-9:hash_map_perf pre-alloc 1118735 events per sec
-39:hash_map_perf pre-alloc 1113166 events per sec
-3:hash_map_perf pre-alloc 1096464 events per sec
-19:hash_map_perf pre-alloc 1084696 events per sec
-43:hash_map_perf pre-alloc 1087715 events per sec
-14:hash_map_perf pre-alloc 1074943 events per sec
-38:hash_map_perf pre-alloc 1073905 events per sec
-2:hash_map_perf pre-alloc 1067794 events per sec
-17:hash_map_perf pre-alloc 1067320 events per sec
-26:hash_map_perf pre-alloc 1067185 events per sec
-41:hash_map_perf pre-alloc 1066780 events per sec
-15:hash_map_perf pre-alloc 1057620 events per sec
-0:hash_map_perf pre-alloc 1053298 events per sec
-10:hash_map_perf pre-alloc 1053699 events per sec
-24:hash_map_perf pre-alloc 1053075 events per sec
-34:hash_map_perf pre-alloc 1053347 events per sec
-18:hash_map_perf pre-alloc 1050559 events per sec
-42:hash_map_perf pre-alloc 1050033 events per sec
-33:hash_map_perf pre-alloc 1025317 events per sec
-29:hash_map_perf pre-alloc 1000465 events per sec
-28:hash_map_perf pre-alloc 975533 events per sec
-35:hash_map_perf pre-alloc 974307 events per sec
-44:hash_map_perf pre-alloc 966598 events per sec
-27:hash_map_perf pre-alloc 962746 events per sec
-36:hash_map_perf pre-alloc 945986 events per sec
-22:hash_map_perf pre-alloc 914717 events per sec
-13:hash_map_perf pre-alloc 901797 events per sec
-30:hash_map_perf pre-alloc 849463 events per sec
-5:hash_map_perf pre-alloc 842851 events per sec
-16:hash_map_perf pre-alloc 814149 events per sec
-1:hash_map_perf pre-alloc 798610 events per sec
-46:hash_map_perf pre-alloc 793487 events per sec
-40:hash_map_perf pre-alloc 772092 events per sec
-7:hash_map_perf pre-alloc 742190 events per sec
-21:hash_map_perf pre-alloc 714585 events per sec
-8:hash_map_perf pre-alloc 702297 events per sec
-31:hash_map_perf pre-alloc 700180 events per sec
-47:hash_map_perf pre-alloc 686786 events per sec
-25:hash_map_perf pre-alloc 655706 events per sec
+ drivers/iommu/amd/iommu.c                   |   3 +-
+ drivers/iommu/apple-dart.c                  |   5 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |   7 +-
+ drivers/iommu/arm/arm-smmu/arm-smmu.c       |   1 +
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c     |   3 +-
+ drivers/iommu/exynos-iommu.c                |   1 +
+ drivers/iommu/fsl_pamu_domain.c             |   1 +
+ drivers/iommu/intel/iommu.c                 |   5 +-
+ drivers/iommu/iommu.c                       |  26 ++
+ drivers/iommu/ipmmu-vmsa.c                  |   3 +-
+ drivers/iommu/msm_iommu.c                   |   1 +
+ drivers/iommu/mtk_iommu.c                   |   1 +
+ drivers/iommu/mtk_iommu_v1.c                |   1 +
+ drivers/iommu/omap-iommu.c                  |   3 +-
+ drivers/iommu/rockchip-iommu.c              |   1 +
+ drivers/iommu/s390-iommu.c                  |   1 +
+ drivers/iommu/sprd-iommu.c                  |   1 +
+ drivers/iommu/sun50i-iommu.c                |   1 +
+ drivers/iommu/tegra-gart.c                  |   1 +
+ drivers/iommu/tegra-smmu.c                  |   1 +
+ drivers/iommu/virtio-iommu.c                |   3 +-
+ drivers/vfio/vfio_iommu_type1.c             | 315 ++++++++++----------
+ include/linux/iommu.h                       |   2 +
+ 23 files changed, 223 insertions(+), 164 deletions(-)
 
-./run_bench_bpf_hashmap_full_update.sh
-Setting up benchmark 'bpf-hashmap-ful-update'...
-Benchmark 'bpf-hashmap-ful-update' started.
-1:hash_map_full_perf 555830 events per sec
-2:hash_map_full_perf 591009 events per sec
-3:hash_map_full_perf 585934 events per sec
-4:hash_map_full_perf 573066 events per sec
-5:hash_map_full_perf 586800 events per sec
-6:hash_map_full_perf 587997 events per sec
-7:hash_map_full_perf 610463 events per sec
-8:hash_map_full_perf 560239 events per sec
-9:hash_map_full_perf 612683 events per sec
-10:hash_map_full_perf 617636 events per sec
-11:hash_map_full_perf 558120 events per sec
-12:hash_map_full_perf 505507 events per sec
-13:hash_map_full_perf 509096 events per sec
-14:hash_map_full_perf 500372 events per sec
-15:hash_map_full_perf 495395 events per sec
-16:hash_map_full_perf 510147 events per sec
-17:hash_map_full_perf 511348 events per sec
-18:hash_map_full_perf 523750 events per sec
-19:hash_map_full_perf 508013 events per sec
-20:hash_map_full_perf 528064 events per sec
-21:hash_map_full_perf 543195 events per sec
-22:hash_map_full_perf 541737 events per sec
-23:hash_map_full_perf 528646 events per sec
-24:hash_map_full_perf 683963 events per sec
-25:hash_map_full_perf 598496 events per sec
-26:hash_map_full_perf 528436 events per sec
-27:hash_map_full_perf 576641 events per sec
-28:hash_map_full_perf 599424 events per sec
-29:hash_map_full_perf 575479 events per sec
-30:hash_map_full_perf 580070 events per sec
-31:hash_map_full_perf 563594 events per sec
-32:hash_map_full_perf 601996 events per sec
-33:hash_map_full_perf 548413 events per sec
-34:hash_map_full_perf 551068 events per sec
-35:hash_map_full_perf 605726 events per sec
-36:hash_map_full_perf 505460 events per sec
-37:hash_map_full_perf 519113 events per sec
-38:hash_map_full_perf 547602 events per sec
-39:hash_map_full_perf 547053 events per sec
-40:hash_map_full_perf 516993 events per sec
-41:hash_map_full_perf 506970 events per sec
-42:hash_map_full_perf 500630 events per sec
-43:hash_map_full_perf 553099 events per sec
-44:hash_map_full_perf 528657 events per sec
-45:hash_map_full_perf 517173 events per sec
-46:hash_map_full_perf 503649 events per sec
-47:hash_map_full_perf 527035 events per sec
-
- From the point of view of normal performance test, using head->first 
-and head->is_empty, compared
-with before patch, there is not much performance drop. In the worst 
-case, the comparison between
-head->first and head->is_empty is not much different as a whole.
+-- 
+2.17.1
 

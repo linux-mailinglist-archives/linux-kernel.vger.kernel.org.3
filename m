@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2EC53DFD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4710653DFDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349195AbiFFCwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
+        id S1352123AbiFFC4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbiFFCwJ (ORCPT
+        with ESMTP id S232695AbiFFC4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:52:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87630B2F;
-        Sun,  5 Jun 2022 19:52:02 -0700 (PDT)
-X-UUID: 22f519b0d8684bd48f0b24d3fe1e0c55-20220606
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:373d1128-b6ba-4757-9a25-544eeb922b03,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:78ed3e7e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 22f519b0d8684bd48f0b24d3fe1e0c55-20220606
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 864540654; Mon, 06 Jun 2022 10:51:57 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 6 Jun 2022 10:51:56 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 6 Jun 2022 10:51:56 +0800
-Message-ID: <fa71cdebe09b7939bccc3b4b4f40d62afdb09158.camel@mediatek.com>
-Subject: Re: [PATCH v1] dt-bindings: dsp: mediatek: add mt8186 dsp document
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 6 Jun 2022 10:51:56 +0800
-In-Reply-To: <2c610d82-65bf-60c8-05f3-434eaa1cfc8b@linaro.org>
-References: <20220422071534.15653-1-tinghan.shen@mediatek.com>
-         <c0a188e5-8a8c-d4a3-5a3d-9b9dd85d8f44@linaro.org>
-         <eb4deff1a01c09783518bbaff8fe4e4c4ca6fa5b.camel@mediatek.com>
-         <591767ee-e349-7a17-a9e9-b95d0500c7c1@linaro.org>
-         <774c075ca4ad815c88be755cfb51889a171e835d.camel@mediatek.com>
-         <9e3f5586-59fa-42cc-770c-b8694b4f2bf3@linaro.org>
-         <a1140bd47cbd68436d0b9e147c2d6d6327ac092e.camel@mediatek.com>
-         <2c610d82-65bf-60c8-05f3-434eaa1cfc8b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 5 Jun 2022 22:56:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 069FA4F9EF
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654484194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zEXtX0sGH9JESHp2vh7ZVWLUxp9Rfq4NGJnnAwZRSPw=;
+        b=NFrq/sk/ZrTOoYDKpdVgwc0M7btHjl/Ts0a82HoBc085bnQHBU5HBJClNJBC8HudQs4JUO
+        gACAO2REzi16+8bjoZhdJf6MLEjRqOc/eaDFapa59FtfyQkHpmq5ac6dzNIJAplQGmcs1P
+        qVlH5plfH2sRxKWsbPS/rUcysazRJSs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-_RCa0zPqOy6XrOVyXq6ZBA-1; Sun, 05 Jun 2022 22:56:31 -0400
+X-MC-Unique: _RCa0zPqOy6XrOVyXq6ZBA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DF6E801228;
+        Mon,  6 Jun 2022 02:56:30 +0000 (UTC)
+Received: from localhost (ovpn-12-209.pek2.redhat.com [10.72.12.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4EBCC1121314;
+        Mon,  6 Jun 2022 02:56:28 +0000 (UTC)
+Date:   Mon, 6 Jun 2022 10:56:25 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     sashal@kernel.org, ebiederm@xmission.com, rburanyi@google.com,
+        gthelen@google.com, viro@zeniv.linux.org.uk,
+        kexec@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] kexec_file: Increase maximum file size to 4G
+Message-ID: <Yp1s2c0hyYzM4hbz@MiWiFi-R3L-srv>
+References: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
+ <20220527025535.3953665-3-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527025535.3953665-3-pasha.tatashin@soleen.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,106 +63,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Thu, 2022-06-02 at 14:26 +0200, Krzysztof Kozlowski wrote:
-> On 02/06/2022 13:53, Tinghan Shen wrote:
-> > Hi Krzysztof,
-> > 
-> > On Thu, 2022-06-02 at 12:45 +0200, Krzysztof Kozlowski wrote:
-> > > On 02/06/2022 12:19, Tinghan Shen wrote:
-> > > > Hi Krzysztof,
-> > > > 
-> > > > On Thu, 2022-06-02 at 09:40 +0200, Krzysztof Kozlowski wrote:
-> > > > > On 02/06/2022 08:44, Tinghan Shen wrote:
-> > > > > > > > +  mbox-names:
-> > > > > > > > +    items:
-> > > > > > > > +      - const: mbox0
-> > > > > > > > +      - const: mbox1
-> > > > > > > 
-> > > > > > > These should be rather some meaningful names, e.g. "rx" and "tx".
-> > > > > > 
-> > > > > > The mbox name has to align with the adsp ipc driver.
-> > > > > > The adsp ipc driver is using 'mbox%d' for mailbox channels.
-> > > > > > 
-> > > > > > 
-> > > > > > 
-> > > > 
-> > > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git/commit/?id=9db69df4bdd37eb1f65b6931ee067fb15b9a4d5c__;!!CTRNKA9wMg0ARbw!1TmempNkQhC5QuLBhyfWo_AC97MoLuWipsGV-LPaW9RKNPheU7Bgc-eboNi1JA1nC5I$
-> > > > > >  
-> > > > > > 
-> > > > > > 	chan_name = kasprintf(GFP_KERNEL, "mbox%d", i);
-> > > > > > 
-> > > > > > 	/* ...snip... */
-> > > > > > 
-> > > > > > 	adsp_chan->ch = mbox_request_channel_byname(cl, chan_name);
-> > > > > > 
-> > > > > > Is it ok to continue using these names?
-> > > > > 
-> > > > > It is a bit confusing... how did that driver got merged recently without
-> > > > > bindings? Why bindings are separate?
-> > > > > 
-> > > > > The bindings always come together in one patchset with the driver
-> > > > > implementing them. Bindings are though a separate patch, yet still
-> > > > > followed by the driver which uses them.
-> > > > > 
-> > > > > I do not see any compatibles in that driver, which suggests there is no
-> > > > > other binding using it. If that's correct, then you need to change the
-> > > > > driver.
-> > > > > 
-> > > > 
-> > > > The mtk-adsp-ipc driver's sole function is to encapsulate the operations 
-> > > > of mailbox framework from adsp ipc users. The mtk-adsp-ipc is not defined 
-> > > > in the dts file and we don't need it to be defined. The creation of mtk-adsp-ipc 
-> > > > device is requested by adsp ipc users via the use of 'platform_device_register_data'[1].
-> > > > 
-> > > > the driver implemented the mailbox framework is 'mtk-adsp-mailbox'[2]. it has 
-> > > > corresponding hardwares and a yaml file[3] to describe it.
-> > > 
-> > > I don't understand how is this related. We talk here about the
-> > > mbox-names for this bindings file. You replied, that these bindings are
-> > > already used by something, but now you say that they are not? So why do
-> > > you need to change anything in any driver?
-> > > 
-> > > Simple question - do the bindings here "add mt8186 dsp document" are
-> > > used by any specific Linux driver already?
-> > 
-> > This bindings, 'add mt8186 dsp document', are used by the SOF sound driver of MT8186[1]. 
-> > 
-> > I'm sorry for miss leading you in previous reply. I was thought that you're 
-> > asking why the mtk-adsp-ipc driver got merged without bindings. So, I tried 
-> > to explain why mtk-adsp-ipc doesn't have bindings.
+On 05/27/22 at 02:55am, Pasha Tatashin wrote:
+> In some case initrd can be large. For example, it could be a netboot
+> image loaded by u-root, that is kexec'ing into it.
 > 
-> Then my question is kind of still valid:
-> How did "mt8186 SOF" driver got merged recently without bindings? Why
-> bindings are separate?
+> The maximum size of initrd is arbitrary set to 2G. Also, the limit is
+> not very obvious because it is hidden behind a generic INT_MAX macro.
 > 
-> You cannot just sneak in usage of bindings in a driver, then submit
-> bindings and say "we already have an user!". No, the bindings come with
-> the driver. Always.
+> Theoretically, we could make it LONG_MAX, but it is safer to keep it
+> sane, and just increase it to 4G.
+
+Do we need to care about 32bit system where initramfs could be larger
+than 2G? On 32bit system, SSIZE_MAX is still 2G, right?
+
+Another concern is if 2G is enough. If we can foresee it might need be
+enlarged again in a near future, LONG_MAX certainly is not a good
+value, but a little bigger multiple of 2G can be better?
+
 > 
-> Linked patch [1] brings undocumented compatible mediatek,mt8186-dsp, so
-> you should see big fat warning when running checkpatch. So this points
-> that you did not run checkpatch which is another not acceptable
-> submission. :(
+> Increase the size to 4G, and make it obvious by having a new macro
+> that specifies the maximum file size supported by kexec_file_load()
+> syscall: KEXEC_FILE_SIZE_MAX.
 > 
-> [1]
-> https://lore.kernel.org/all/20220422055659.8738-2-tinghan.shen@mediatek.com/
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  kernel/kexec_file.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
-
-I apologize for breaking the rules and sending inappropriate patches.
-
-I was thought that it was acceptable to send community reviewed patches in a series, 
-then followed the bindings at another patch. I was believed that separating un-reviewed
-binding patch from reviewed driver patches would aid in patch acceptance.
-Now, I see I make a big mistake. I'm sorry.
-
-Best regards,
-TingHan
-
-
-
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 8347fc158d2b..f00cf70d82b9 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -31,6 +31,9 @@
+>  
+>  static int kexec_calculate_store_digests(struct kimage *image);
+>  
+> +/* Maximum size in bytes for kernel/initrd files. */
+> +#define KEXEC_FILE_SIZE_MAX	min_t(s64, 4LL << 30, SSIZE_MAX)
+> +
+>  /*
+>   * Currently this is the only default function that is exported as some
+>   * architectures need it to do additional handlings.
+> @@ -223,11 +226,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+>  			     const char __user *cmdline_ptr,
+>  			     unsigned long cmdline_len, unsigned flags)
+>  {
+> -	int ret;
+> +	ssize_t ret;
+>  	void *ldata;
+>  
+>  	ret = kernel_read_file_from_fd(kernel_fd, 0, &image->kernel_buf,
+> -				       INT_MAX, NULL, READING_KEXEC_IMAGE);
+> +				       KEXEC_FILE_SIZE_MAX, NULL,
+> +				       READING_KEXEC_IMAGE);
+>  	if (ret < 0)
+>  		return ret;
+>  	image->kernel_buf_len = ret;
+> @@ -247,7 +251,7 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+>  	/* It is possible that there no initramfs is being loaded */
+>  	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
+>  		ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
+> -					       INT_MAX, NULL,
+> +					       KEXEC_FILE_SIZE_MAX, NULL,
+>  					       READING_KEXEC_INITRAMFS);
+>  		if (ret < 0)
+>  			goto out;
+> -- 
+> 2.36.1.124.g0e6072fb45-goog
+> 
 

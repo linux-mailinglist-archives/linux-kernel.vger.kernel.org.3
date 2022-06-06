@@ -2,107 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3578A53F28A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DF553F292
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiFFX3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 19:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
+        id S235255AbiFFXbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 19:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiFFX33 (ORCPT
+        with ESMTP id S229472AbiFFXbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 19:29:29 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FF2101DF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:29:26 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 16:29:19 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654558164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MPd50RzBLQnNTDWq5I+8g4Pd+wy9MD7JQRJ8I1ChLEo=;
-        b=hnk3yVbnmAnqrLvGXZCNRVup8nEcZBoUUZ75WLie78mhcJdNheAzU8yCgx3vrtmcmrGwoQ
-        GLi1/Iz/xZtbzmYHhnBct0XsEIIHIL4EUHdg5n7juir0+B9QXHDRxUt0ql/sz7d2MuwqK8
-        QKJ+jwMeCUeCIU1YLwSllf6AA6fudLk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in register_shrinker_prepared
-Message-ID: <Yp6Nz08Ae9ENfsSv@carbon>
-References: <000000000000db448c05e0caa5ba@google.com>
- <20220606122302.dc265509ca896073e98049a3@linux-foundation.org>
+        Mon, 6 Jun 2022 19:31:07 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCD2248CC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:31:05 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id h188so21810569oia.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 16:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=+R99sP1E+YJ8V/C7V8qm0/rICq7UmmvLlPBjsI3F3Ow=;
+        b=dKhMQYmUnygXdMLeEuMU0xGiJl9UgJwKjf8/RsmACBEtpyzET5tJxD7FaR+jKvOhYS
+         7GtNAnbdGyp6gzpJL9zuR8BnALu2GLbWpgz2wfzN3xXiKQ3a6cpenvYeusZyhAW3BN+R
+         HOBsN1VxX7pjzhyn70e7HrXjDp8GIPE1qQrlY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=+R99sP1E+YJ8V/C7V8qm0/rICq7UmmvLlPBjsI3F3Ow=;
+        b=FfjHIUlDToMvFpVWUTiwFik8eZ7TvSyaEUTtCWHD0cdeDzzNkl+21FReG1xAvfBr3Q
+         5wdoxespBo2uhwrdcDeksSscoKVRuXooRuWqLJ+qzzmslBQOivK1e8DXZYmPBqVJtAt4
+         ug/880dqLtv4K/sPZa6SlnnhH36LAelvSzG3udsuJn1ZjEb3bXkwVhChOpLg/pNioFg6
+         R3JpOcHpTko9Hqg3xU85U8HvqUcMSRB+TTwazuTj24VdbX1HxxCN2tCidx9holk4Y5sP
+         Qt8GGdiZX8Xq/IxDXSVlcVsRieiL+QUaVRhL42ErpZUUaXKQlJeaMprKskoOHTZO70um
+         HHIQ==
+X-Gm-Message-State: AOAM531lBTWsdwFLSUJjZG0mYDUiXx/h3B9Q3/rizzkXiY0TcjvtGKZk
+        +0lNEORwlcCMu3iAU5Td9NGFm7lElFgPRd50L41YTw==
+X-Google-Smtp-Source: ABdhPJzR5c8nv8+vHF7bA0iF44Ouo2hgGfY/3Fma+5GyZJXfDl7OqD4sgsm3BVVkVxAJA1OcF9ciIXiKVwihGwfaTyY=
+X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
+ k7-20020a0568080e8700b0032e47890d2cmr12356912oil.193.1654558264904; Mon, 06
+ Jun 2022 16:31:04 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 6 Jun 2022 16:31:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606122302.dc265509ca896073e98049a3@linux-foundation.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220606201825.763788-2-pmalani@chromium.org>
+References: <20220606201825.763788-1-pmalani@chromium.org> <20220606201825.763788-2-pmalani@chromium.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 6 Jun 2022 16:31:04 -0700
+Message-ID: <CAE-0n52hKCPwitrZNesh=NZKbXb76yR5xhAbyxh+5JaQAD3xZA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] regulator: cros-ec: Use common cros_ec_command()
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     bleung@chromium.org, chrome-platform@lists.linux.dev,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 12:23:02PM -0700, Andrew Morton wrote:
-> (cc Roman)
-> 
-> On Mon, 06 Jun 2022 10:17:34 -0700 syzbot <syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com> wrote:
-> 
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    1cfd968b58a1 Add linux-next specific files for 20220603
-> > git tree:       linux-next
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=12f7b6b3f00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=7da8386e3742814f
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=300d27c79fe6d4cbcc39
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103e5177f00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13545057f00000
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com
-> > 
-> > loop0: detected capacity change from 0 to 20
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 0 PID: 3694 at mm/vmscan.c:681 register_shrinker_prepared+0x119/0x150 mm/vmscan.c:681
-> 
-> That's
-> 
-> 	WARN_ON_ONCE(shrinker_debugfs_add(shrinker));
-> 
-> I assume that debugfs_create_dir() failed.  Please see the NOTE: in
-> that function's kerneldoc.
+Quoting Prashant Malani (2022-06-06 13:18:01)
+> Reduce code duplication by using the common cros_ec_command() function
+> instead of the locally defined variant.
+>
+> Cc: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
 
-
-I agree and we really need to just ignore it.
-
-If it happens because shrinker_debugfs is not initialized yet, there will be
-a second chance. Otherwise we can't do much anyway.
-
-Thank you!
-
---
-
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index fd8a472b6501..ab885561d3e5 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -682,7 +682,7 @@ void register_shrinker_prepared(struct shrinker *shrinker)
-        down_write(&shrinker_rwsem);
-        list_add_tail(&shrinker->list, &shrinker_list);
-        shrinker->flags |= SHRINKER_REGISTERED;
--       WARN_ON_ONCE(shrinker_debugfs_add(shrinker));
-+       shrinker_debugfs_add(shrinker);
-        up_write(&shrinker_rwsem);
- }
- 
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

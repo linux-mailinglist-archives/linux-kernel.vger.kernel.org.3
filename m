@@ -2,112 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A790E53E661
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F8153EC4A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240223AbiFFPBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S240238AbiFFPBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbiFFPAp (ORCPT
+        with ESMTP id S240149AbiFFPBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:00:45 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783D63202FB;
-        Mon,  6 Jun 2022 08:00:44 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LGxTy051sz68700;
-        Mon,  6 Jun 2022 22:59:34 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 17:00:42 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 6 Jun
- 2022 16:00:41 +0100
-Date:   Mon, 6 Jun 2022 16:00:40 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC 2/2] iio: accel: bma400: Add support for single and double
- tap events
-Message-ID: <20220606160040.000053f8@Huawei.com>
-In-Reply-To: <CAM+2EuLdTtXHGR5Oy6ay3yM__LK8Dea2rhXJMBNV35-S9HdmVg@mail.gmail.com>
-References: <20220529040153.4878-1-jagathjog1996@gmail.com>
-        <20220529040153.4878-3-jagathjog1996@gmail.com>
-        <20220604160153.504e96ae@jic23-huawei>
-        <CAM+2EuLdTtXHGR5Oy6ay3yM__LK8Dea2rhXJMBNV35-S9HdmVg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 6 Jun 2022 11:01:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF50A322C1C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:01:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33E15614BF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65CBDC34115;
+        Mon,  6 Jun 2022 15:01:26 +0000 (UTC)
+Date:   Mon, 6 Jun 2022 16:01:22 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Patrick Wang <patrick.wang.shcn@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, yee.lee@mediatek.com
+Subject: Re: [PATCH v2 3/4] mm: kmemleak: handle address stored in object
+ based on its type
+Message-ID: <Yp4Wwtg1uxZ9NLTw@arm.com>
+References: <20220603035415.1243913-1-patrick.wang.shcn@gmail.com>
+ <20220603035415.1243913-4-patrick.wang.shcn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603035415.1243913-4-patrick.wang.shcn@gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Jun 2022 10:38:10 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
-
-> Hi Jonathan and Andy.
+On Fri, Jun 03, 2022 at 11:54:14AM +0800, Patrick Wang wrote:
+> Treat the address stored in object in different way according
+> to its type:
 > 
-> On Sat, Jun 4, 2022 at 8:22 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> >
-> > On Sun, 29 May 2022 09:31:53 +0530
-> > Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >  
-> > > Add support for single and double tap events based on the tap threshold
-> > > value and minimum quite time value between the taps. INT1 pin is used to
-> > > interrupt and event is pushed to userspace.
-> > >
-> > > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>  
-> >
-> > Hi Jagath,
-> >
-> > A few comments inline.
-> >
-> > Thanks,
-> >
-> > Jonathan
-
-
-
-> > > +
-> > > +     /*
-> > > +      * acc_filt1 is the data source for the tap interrupt and it is
-> > > +      * operating on an input data rate of 200Hz.
-> > > +      */
-> > > +     if (!data->tap_event_en) {  
-> >
-> > Feels like checking the wrong thing.  If we need 200Hz, check if the
-> > data rate is at 200Hz rather than if the tap_event is not enabled.
-> > Obviously same result, but one seems more obvious.  
+> - Only use kasan_reset_tag for virtual address
+> - Only update min_addr and max_addr for virtual address
+> - Convert physical address to virtual address in scan_object
 > 
-> if (!data->tap_event_en)
-> This checking is to make sure not to execute
-> bma400_set_accel_output_data_rate() function while disabling the
-> tap event to avoid the negative (-EBUSY) return value from the
-> function bma400_set_accel_output_data_rate() when either of
-> the tap is enabled.
+> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+> ---
+>  mm/kmemleak.c | 34 ++++++++++++++++++++++++----------
+>  1 file changed, 24 insertions(+), 10 deletions(-)
+> 
+> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+> index 218144392446..246a70b7218f 100644
+> --- a/mm/kmemleak.c
+> +++ b/mm/kmemleak.c
+> @@ -297,7 +297,9 @@ static void hex_dump_object(struct seq_file *seq,
+>  	warn_or_seq_printf(seq, "  hex dump (first %zu bytes):\n", len);
+>  	kasan_disable_current();
+>  	warn_or_seq_hex_dump(seq, DUMP_PREFIX_NONE, HEX_ROW_SIZE,
+> -			     HEX_GROUP_SIZE, kasan_reset_tag((void *)ptr), len, HEX_ASCII);
+> +			     HEX_GROUP_SIZE, object->flags & OBJECT_PHYS ? ptr :
+> +			     kasan_reset_tag((void *)ptr),
+> +			     len, HEX_ASCII);
+>  	kasan_enable_current();
+>  }
 
-Ah. Fair enough. It's a little odd looking though. You could push
-the check out of bma400_set_accel_output_data_rate() and into
-write_raw though would need to be within the lock to avoid potential
-race conditions.  Perhaps just not worth the effort.
+This will go wrong since ptr is the actual physical address, it cannot
+be dereferenced. This should only be used on virtual pointers and this
+is the case already as we never print unreferenced objects from the phys
+tree. What we could do though is something like an early exit from this
+function (together with a comment that it doesn't support dumping such
+objects):
 
-Jonathan
+	if (WARN_ON_ONCE(object->flags & OBJECT_PHYS))
+		return;
 
+>  
+> @@ -389,14 +391,15 @@ static struct kmemleak_object *lookup_object(unsigned long ptr, int alias,
+>  {
+>  	struct rb_node *rb = is_phys ? object_phys_tree_root.rb_node :
+>  			     object_tree_root.rb_node;
+> -	unsigned long untagged_ptr = (unsigned long)kasan_reset_tag((void *)ptr);
+> +	unsigned long untagged_ptr = is_phys ? ptr : (unsigned long)kasan_reset_tag((void *)ptr);
+>  
+>  	while (rb) {
+>  		struct kmemleak_object *object;
+>  		unsigned long untagged_objp;
+>  
+>  		object = rb_entry(rb, struct kmemleak_object, rb_node);
+> -		untagged_objp = (unsigned long)kasan_reset_tag((void *)object->pointer);
+> +		untagged_objp = is_phys ? object->pointer :
+> +				(unsigned long)kasan_reset_tag((void *)object->pointer);
+>  
+>  		if (untagged_ptr < untagged_objp)
+>  			rb = object->rb_node.rb_left;
 
+You could leave this unchanged. A phys pointer is already untagged, so
+it wouldn't make any difference.
+
+> @@ -643,16 +646,19 @@ static struct kmemleak_object *create_object(unsigned long ptr, size_t size,
+>  
+>  	raw_spin_lock_irqsave(&kmemleak_lock, flags);
+>  
+> -	untagged_ptr = (unsigned long)kasan_reset_tag((void *)ptr);
+> -	min_addr = min(min_addr, untagged_ptr);
+> -	max_addr = max(max_addr, untagged_ptr + size);
+> +	untagged_ptr = is_phys ? ptr : (unsigned long)kasan_reset_tag((void *)ptr);
+
+Same here.
+
+> +	if (!is_phys) {
+> +		min_addr = min(min_addr, untagged_ptr);
+> +		max_addr = max(max_addr, untagged_ptr + size);
+> +	}
+>  	link = is_phys ? &object_phys_tree_root.rb_node :
+>  		&object_tree_root.rb_node;
+>  	rb_parent = NULL;
+>  	while (*link) {
+>  		rb_parent = *link;
+>  		parent = rb_entry(rb_parent, struct kmemleak_object, rb_node);
+> -		untagged_objp = (unsigned long)kasan_reset_tag((void *)parent->pointer);
+> +		untagged_objp = is_phys ? parent->pointer :
+> +				(unsigned long)kasan_reset_tag((void *)parent->pointer);
+
+And here.
+
+>  		if (untagged_ptr + size <= untagged_objp)
+>  			link = &parent->rb_node.rb_left;
+>  		else if (untagged_objp + parent->size <= untagged_ptr)
+> @@ -1202,7 +1208,9 @@ static bool update_checksum(struct kmemleak_object *object)
+>  
+>  	kasan_disable_current();
+>  	kcsan_disable_current();
+> -	object->checksum = crc32(0, kasan_reset_tag((void *)object->pointer), object->size);
+> +	object->checksum = crc32(0, object->flags & OBJECT_PHYS ? (void *)object->pointer :
+> +				    kasan_reset_tag((void *)object->pointer),
+> +				    object->size);
+
+Luckily that's never called on a phys object, otherwise *object->pointer
+would segfault. As for hex_dump, just return early with a warning if
+that's the case.
+
+>  	kasan_enable_current();
+>  	kcsan_enable_current();
+>  
+> @@ -1353,6 +1361,7 @@ static void scan_object(struct kmemleak_object *object)
+>  {
+>  	struct kmemleak_scan_area *area;
+>  	unsigned long flags;
+> +	void *obj_ptr;
+>  
+>  	/*
+>  	 * Once the object->lock is acquired, the corresponding memory block
+> @@ -1364,10 +1373,15 @@ static void scan_object(struct kmemleak_object *object)
+>  	if (!(object->flags & OBJECT_ALLOCATED))
+>  		/* already freed object */
+>  		goto out;
+> +
+> +	obj_ptr = object->flags & OBJECT_PHYS ?
+> +		  __va((void *)object->pointer) :
+> +		  (void *)object->pointer;
+> +
+>  	if (hlist_empty(&object->area_list) ||
+>  	    object->flags & OBJECT_FULL_SCAN) {
+> -		void *start = (void *)object->pointer;
+> -		void *end = (void *)(object->pointer + object->size);
+> +		void *start = obj_ptr;
+> +		void *end = obj_ptr + object->size;
+>  		void *next;
+>  
+>  		do {
+
+This looks fine, assuming that the following patch adds the checks for
+objects above max_low_pfn (I haven't got there yet).
+
+-- 
+Catalin

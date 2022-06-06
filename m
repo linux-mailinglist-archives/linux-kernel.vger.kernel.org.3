@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F5F53E827
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD7C53EB97
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241024AbiFFPlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S241028AbiFFPln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240989AbiFFPlM (ORCPT
+        with ESMTP id S241023AbiFFPlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:41:12 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E198562C5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:41:10 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id h23so18648991ejj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5bsP623yeVUhI4X2qyWKm7xhZAZBEQqTrR3MfihqiO0=;
-        b=pGV3u32GEBOhd7TPDnOWLKJ9oLJuUOxDipMCgJt3EuoZ1rarvWVYq8oK+EU5doKOjK
-         SjmxM35Rzb1UHksLLMUZC4DYfUe6w8HvXhq0YtIZ23J8rixxB6XuOgLghu9cBT3X7v+5
-         8CKA9/yAOJtmExGP8T4abFpaA3PaM3BnjfL2ukfBwdBbz7233FZ2pQAgim1oO1u4diFw
-         Dnf3lFRkKT93piQWB7AwqEXehvglKXOTwbtf2OtFQ4WNsFBDbscEbx8lE2uQE2D7ANLE
-         Aeq7piv2zqJSmwRp4PA+HAoVDcvxcdfbrtP0VaTbP7qHmqDopLuXdRpnHi+IPAgVaH8Y
-         Tqlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5bsP623yeVUhI4X2qyWKm7xhZAZBEQqTrR3MfihqiO0=;
-        b=L81RxI3HdZKDMNwa5NFw6z4M/+93HE6shtacn7ZP35OcXQbCca1ZDZTuFF8mUB6mqz
-         Aeal4LR3cJrtfhmQ2rrgM8zhdiXubzF5x4HBy1Rc3HpzmvBiEFDLVt6kfDy1heo9zifv
-         eQNhp3W5ZmlfVyvwIvvDdbgRCDVXF6H7UhxgWKjg+m7Txdbs1oxKRDgGDO4S35caC+co
-         CifY2yngzaD0METxT8mdvbGcYA4RNnPLe4FWfWOte+3i210rgdBwyKZ/mAy1NyOdSwLV
-         5P716C26aRQBfhX5TppN+XjT5LtyWOoBsfqBzEpAx7L7tPNzunez67iIgnTEYfTmscE0
-         g41A==
-X-Gm-Message-State: AOAM530xS+YedEjztxDxsxyCQm4COq0yhK5UQbAeACdfLvo/9Lx3A6Mn
-        em7qr8DFVGsmdVUYagYi5MqbZA==
-X-Google-Smtp-Source: ABdhPJxPmR5o/ptnO48/LLqqFHYgHv9f2kSvvBI4oOyV4SSHNtCri883LtJ4arOlCN8+RLxPMr+1YQ==
-X-Received: by 2002:a17:906:5959:b0:710:c2e8:79f3 with SMTP id g25-20020a170906595900b00710c2e879f3mr11652199ejr.489.1654530069008;
-        Mon, 06 Jun 2022 08:41:09 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n16-20020aa7c790000000b0042bced44061sm8728646eds.10.2022.06.06.08.41.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 08:41:08 -0700 (PDT)
-Message-ID: <5fe2246f-97db-e7b0-a72e-c8c5ff6b2abe@linaro.org>
-Date:   Mon, 6 Jun 2022 17:41:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 06/23] dt-bindings: mmc: exynos-dw-mshc: update
- samsung,pinctrl.yaml reference
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Mon, 6 Jun 2022 11:41:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA18856772;
+        Mon,  6 Jun 2022 08:41:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 159C0CE1715;
+        Mon,  6 Jun 2022 15:41:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544A0C34115;
+        Mon,  6 Jun 2022 15:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654530095;
+        bh=LMoX1OcQiR7IDT2C7EN5//xbFskMPn+ON5V9Ke6Ivno=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HlIzFg/OhGuQWx1ZqLx5fiR58C9tYsF1IXPSKIhLLspkIGEC8F5dqwX+lQsHVxQLs
+         JKibXvQ1cRBbkwhzLPw5HdqeoJgmb/y/f2zlu4PdtVmKBAqB4ymTrQh6VoV+1vW++Z
+         l84KI5xxpYUuxEqwKLOBeINckzdfyOKnEfXzuZjaglXT0A+ZXLEnI8AolAiRIyItiW
+         uTDtuDmGzu3LXjlbsqfHVMyhJRKafIx47YiM+uusvwwhZmDAtL6Hnag8BMpgZ+3gdc
+         X30q500cZGcu+yr0fIdd9te+pu/fCh0kiwb9FpheosVA3c199oPwEzaBtJgWGyi0Lq
+         ExwbvEtJgLIqQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyErE-00FwW9-TN; Mon, 06 Jun 2022 16:41:33 +0100
+Date:   Mon, 06 Jun 2022 16:41:32 +0100
+Message-ID: <87r1414x5f.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <cover.1654529011.git.mchehab@kernel.org>
- <5c937793dd7aec30da4964b39561072ae184f89b.1654529011.git.mchehab@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5c937793dd7aec30da4964b39561072ae184f89b.1654529011.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
+In-Reply-To: <CA+V-a8vfzsB55YdFmtx3eim617b=WCYJu+Tm3SO9c1QCB3i0Lw@mail.gmail.com>
+References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <CA+V-a8vfzsB55YdFmtx3eim617b=WCYJu+Tm3SO9c1QCB3i0Lw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, geert+renesas@glider.be, prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com, paul.walmsley@sifive.com, sagar.kadam@sifive.com, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,22 +80,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 17:25, Mauro Carvalho Chehab wrote:
-> Changeset af030d83da1d ("dt-bindings: pinctrl: samsung: convert to dtschema")
-> renamed: bindings/pinctrl/samsung-pinctrl.txt
-> to: bindings/pinctrl/samsung-pinctrl.yaml, splitting it into multiple
-> files.
+On Fri, 27 May 2022 12:05:38 +0100,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
 > 
-> Update exynos-dw-mshc.txt accordingly.
+> Hi,
 > 
-> Fixes: af030d83da1d ("dt-bindings: pinctrl: samsung: convert to dtschema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> On Tue, May 24, 2022 at 6:22 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> > edge until the previous completion message has been received and
+> > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> > interrupts if not acknowledged in time.
+> >
+> > So the workaround for edge-triggered interrupts to be handled correctly
+> > and without losing is that it needs to be acknowledged first and then
+> > handler must be run so that we don't miss on the next edge-triggered
+> > interrupt.
+> >
+> > This patch adds a new compatible string for Renesas RZ/Five SoC and adds
+> > support to change interrupt flow based on the interrupt type. It also
+> > implements irq_ack and irq_set_type callbacks.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  drivers/irqchip/Kconfig           |  1 +
+> >  drivers/irqchip/irq-sifive-plic.c | 71 ++++++++++++++++++++++++++++++-
+> >  2 files changed, 70 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > index f3d071422f3b..aea0e4e7e547 100644
+> > --- a/drivers/irqchip/Kconfig
+> > +++ b/drivers/irqchip/Kconfig
+> > @@ -537,6 +537,7 @@ config SIFIVE_PLIC
+> >         bool "SiFive Platform-Level Interrupt Controller"
+> >         depends on RISCV
+> >         select IRQ_DOMAIN_HIERARCHY
+> > +       select IRQ_FASTEOI_HIERARCHY_HANDLERS
+> >         help
+> >            This enables support for the PLIC chip found in SiFive (and
+> >            potentially other) RISC-V systems.  The PLIC controls devices
+> > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> > index bb87e4c3b88e..abffce48e69c 100644
+> > --- a/drivers/irqchip/irq-sifive-plic.c
+> > +++ b/drivers/irqchip/irq-sifive-plic.c
+> > @@ -60,10 +60,13 @@
+> >  #define        PLIC_DISABLE_THRESHOLD          0x7
+> >  #define        PLIC_ENABLE_THRESHOLD           0
+> >
+> > +#define RENESAS_R9A07G043_PLIC         1
+> > +
+> >  struct plic_priv {
+> >         struct cpumask lmask;
+> >         struct irq_domain *irqdomain;
+> >         void __iomem *regs;
+> > +       u8 of_data;
+> >  };
+> >
+> >  struct plic_handler {
+> > @@ -163,10 +166,31 @@ static int plic_set_affinity(struct irq_data *d,
+> >  }
+> >  #endif
+> >
+> > +static void plic_irq_ack(struct irq_data *d)
+> > +{
+> > +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> > +
+> > +       if (irqd_irq_masked(d)) {
+> > +               plic_irq_unmask(d);
+> > +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> > +               plic_irq_mask(d);
+> > +       } else {
+> > +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> > +       }
+> > +}
+> > +
+> I sometimes still see an interrupt miss!
+> 
+> As per [0], we first need to claim the interrupt by reading the claim
+> register which needs to be done in the ack callback (which should be
+> doable) for edge interrupts, but the problem arises in the chained
+> handler callback where it does claim the interrupt by reading the
+> claim register.
+> 
+> static void plic_handle_irq(struct irq_desc *desc)
+> {
+>     struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+>     struct irq_chip *chip = irq_desc_get_chip(desc);
+>     void __iomem *claim = handler->hart_base + CONTEXT_CLAIM;
+>     irq_hw_number_t hwirq;
+> 
+>     WARN_ON_ONCE(!handler->present);
+> 
+>     chained_irq_enter(chip, desc);
+> 
+>     while ((hwirq = readl(claim))) {
+>         int err = generic_handle_domain_irq(handler->priv->irqdomain,
+>                             hwirq);
+>         if (unlikely(err))
+>             pr_warn_ratelimited("can't find mapping for hwirq %lu\n",
+>                     hwirq);
+>     }
+> 
+>     chained_irq_exit(chip, desc);
+> }
+> 
+> I was thinking I would get around by getting the irqdata in
+> plic_handle_irq() callback using the irq_desc (struct irq_data *d =
+> &desc->irq_data;) and check the d->hwirq but this will be always 9.
+> 
+>         plic: interrupt-controller@12c00000 {
+>             compatible = "renesas-r9a07g043-plic";
+>             #interrupt-cells = <2>;
+>             #address-cells = <0>;
+>             riscv,ndev = <543>;
+>             interrupt-controller;
+>             reg = <0x0 0x12c00000 0 0x400000>;
+>             clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
+>             clock-names = "plic100ss";
+>             power-domains = <&cpg>;
+>             resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
+>             interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
+>         };
+> 
+> Any pointers on how this could be done sanely.
 
-Commit is okay, but you can also drop it entirely because entire part
-will be removed with:
-https://lore.kernel.org/all/20220605163710.144210-4-krzysztof.kozlowski@linaro.org/
+Why doesn't the chained interrupt also get the ack-aware irq_chip?
 
+	M.
 
-
-Best regards,
-Krzysztof
+-- 
+Without deviation from the norm, progress is not possible.

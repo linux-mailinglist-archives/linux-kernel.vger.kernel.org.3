@@ -2,188 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DDB53EDE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A97B53EDE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbiFFS2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S231796AbiFFS3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiFFS2p (ORCPT
+        with ESMTP id S231809AbiFFS3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:28:45 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F04E1AF6EB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 11:28:44 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fu3so29099827ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 11:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qXYqp07Gt1ZtS5TmqPmPcYjNyQa7EHn+PPqLupxduxE=;
-        b=e5deP955cqquSyg6oIIx3CAf8kgiTaqIY9bcnFfEj7ZLflDPPAW86Emcn95M8HZaCC
-         42qc7J70nZug2SNdJKjJgyCMPhAPg0LD/D4YMTCvWKzcs83etYmdBaLlq/Isztw3LXqz
-         giP1rEm6h5Y0md23q+Lg6Uqv0VYv58smLzap0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qXYqp07Gt1ZtS5TmqPmPcYjNyQa7EHn+PPqLupxduxE=;
-        b=vAoS3DiEJ8FDrEdY0yfVmsD6LOnxQdjNmrzHkvJxKpwWw9ZKv7VHQgEN1Fuh+xopX5
-         3YZLiFTeDVLA7Qnmjk/grXZkndpZCH39oCFDjW0HFL9nyExKvSTfFjAnJ7s3zk7Ea7ij
-         5xkXAjnmk5ggGc51s562F9r52qj1bo/gQ3DEaMRmpievOFdBw6U0TyTBRmUD1SanPpgV
-         /gy0zeuZZRuwKApKLl+NpV+3uORhfnEg9s9pilsVXzbwjlOwbv3zbgOvJGUY3aAG4P2R
-         tmcemwnhFJJp5eGuYBtqz0tAzi0EXjLiskHOwNQn+AcprHp/eJumLtlkWIp5qGx2DENP
-         mSJw==
-X-Gm-Message-State: AOAM5331y3ece+Hn/LBLNUuOXtWBojAQUTNxi5BinWj9nD+BUSmDkzRb
-        vx+eDuL2X2fifR5vr9TckvvXn8XH1GbRspgakjc=
-X-Google-Smtp-Source: ABdhPJzLxtMmic+oGS48hsazu5/UMXCzNEJZNQ0GIYqpXz1sshLG5cwM4c1ar7QKLegG5qCf8MU+mg==
-X-Received: by 2002:a17:907:96a0:b0:6fe:c2c7:5c66 with SMTP id hd32-20020a17090796a000b006fec2c75c66mr22855675ejc.756.1654540122687;
-        Mon, 06 Jun 2022 11:28:42 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id q24-20020aa7d458000000b0042aad9edc9bsm9142120edr.71.2022.06.06.11.28.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 11:28:41 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id d14so11968638wra.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 11:28:40 -0700 (PDT)
-X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
- f15-20020a0560001b0f00b00210313aef2amr22896573wrz.281.1654540120455; Mon, 06
- Jun 2022 11:28:40 -0700 (PDT)
+        Mon, 6 Jun 2022 14:29:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703A52FEB90;
+        Mon,  6 Jun 2022 11:28:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SkPJZS8D4PxHXGApgPBYiBnNPJfHlPlJi4eWirucM5pqpuvTHfItEHEl2vCMj1na/zIk8IkB5ZSpJHIq5YlxywMKdhISEu+/3/+N4L9sojJcTwbbBg4iUhJRyyeFJQcgfm3oTD7QTIw3M2vu/LyZw9NFgLoh4Gz3DRqSrZpTvyQ673t5yNqnPLlQ2T5DXQXu4UcWclcLw+QjPvzroVlok7w16fhehA+Ndo1hBC+TU3XPQS5X9GMj4dvOxDOxjg7r88J9KAXX5ju4sCRCM/nAZfqXybGxOWAI4/ymU19JpP2Fc2UTdXn/UUOJB+LeXipIO46nUsJ3bn/dAoNZdYXEOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nfc/V9PCZHj0Y6mh13cLOXjXZFmclYmZievYTqkDTi8=;
+ b=fkv961ryU1+DzxM7UQwTTqEOkqRg0qFK5bknipg1Rq26GYaoojev1un6s+44lhPyBHq2Hr9XMFXkU/xjhgBuqpcjhK7CfaHOsWzy8Yjqeh51zsIOqRPrpByQWPycCq/1vC9ji2Ibl57hfKqCldktyaWc4DRibbSDElojtfokcwazYvTicngxMUogd2DLpwF9ARo747fbWEvPcfObj0X82U/17RBWxwpT2xLST/VDvP5fFg9iHM6YgtMP8p4+yiLmgPqJnymmOfhz7YLvoFe9LqI031YDBHichLrp0UmAoQ+eZPy8jDX+YyGrtLOCzk413kdNVQsJ7FHmqZVLoPqRuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=samsung.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nfc/V9PCZHj0Y6mh13cLOXjXZFmclYmZievYTqkDTi8=;
+ b=QsY6HQAqcl4ULhNfJbtOvIOMXGValqqCOhdZ4buTAA8HhJUbZq/I/CKL9k4pgdq467qRdovFJkLQfxYtkzAksustKjQsMHVL3zd8pwYZfNxTR6bhaweQPUpO7yP2DViLPanvx53CwtWYeYoRV8sZeyKiBIMJaLtaCiVnxHxdq5K/X/J4uaeAER4ZL0UGkaygbFGSKxXcPCwrPDGJDT+AwKM+OEZVfn1GEBZhZn+0cch8/SmeYAT3m1lxdiIMtKOSisxbXTm4UvQBkDcBRdWsMWbWlpE+avWsfGJBqjUwP2ckSrwwvUrDLbSpbhaFTfU6eWiiXG6s0KKWCcwx2t+jDw==
+Received: from MWHPR02CA0004.namprd02.prod.outlook.com (2603:10b6:300:4b::14)
+ by BYAPR12MB2934.namprd12.prod.outlook.com (2603:10b6:a03:13b::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Mon, 6 Jun
+ 2022 18:28:53 +0000
+Received: from CO1NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:4b:cafe::86) by MWHPR02CA0004.outlook.office365.com
+ (2603:10b6:300:4b::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12 via Frontend
+ Transport; Mon, 6 Jun 2022 18:28:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.234) by
+ CO1NAM11FT017.mail.protection.outlook.com (10.13.175.108) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5314.12 via Frontend Transport; Mon, 6 Jun 2022 18:28:53 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Mon, 6 Jun 2022 18:28:52 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 6 Jun 2022 11:28:52 -0700
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
+ Transport; Mon, 6 Jun 2022 11:28:50 -0700
+Date:   Mon, 6 Jun 2022 11:28:49 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+CC:     <jgg@nvidia.com>, <joro@8bytes.org>, <will@kernel.org>,
+        <marcan@marcan.st>, <sven@svenpeter.dev>, <robdclark@gmail.com>,
+        <m.szyprowski@samsung.com>, <krzysztof.kozlowski@linaro.org>,
+        <baolu.lu@linux.intel.com>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <matthias.bgg@gmail.com>,
+        <heiko@sntech.de>, <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
+        <zhang.lyra@gmail.com>, <wens@csie.org>,
+        <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <jean-philippe@linaro.org>, <alex.williamson@redhat.com>,
+        <suravee.suthikulpanit@amd.com>, <alyssa@rosenzweig.io>,
+        <alim.akhtar@samsung.com>, <dwmw2@infradead.org>,
+        <yong.wu@mediatek.com>, <mjrosato@linux.ibm.com>,
+        <gerald.schaefer@linux.ibm.com>, <thierry.reding@gmail.com>,
+        <vdumpa@nvidia.com>, <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH 2/5] iommu: Ensure device has the same iommu_ops as the
+ domain
+Message-ID: <Yp5HYe51LSQke/GY@Asurada-Nvidia>
+References: <20220606061927.26049-1-nicolinc@nvidia.com>
+ <20220606061927.26049-3-nicolinc@nvidia.com>
+ <1e0e5403-1e65-db9a-c8e7-34e316bfda8e@arm.com>
+ <Yp4wiJZWxoCLY8tm@Asurada-Nvidia>
+ <6575de6d-94ba-c427-5b1e-967750ddff23@arm.com>
 MIME-Version: 1.0
-References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
- <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org> <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
- <87r1414y5v.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87r1414y5v.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Jun 2022 11:28:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wijAnOcC2qQEAvFtRD_xpPbG+aSUXkfM-nFTHuMmPbZGA@mail.gmail.com>
-Message-ID: <CAHk-=wijAnOcC2qQEAvFtRD_xpPbG+aSUXkfM-nFTHuMmPbZGA@mail.gmail.com>
-Subject: Re: Linux 5.18-rc4
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        "<linux-fsdevel@vger.kernel.org>" <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, gwml@vger.gnuweeb.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6575de6d-94ba-c427-5b1e-967750ddff23@arm.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 980ccc43-e5b0-4533-8799-08da47ea68be
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2934:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB29344A89140716ADEAB36765ABA29@BYAPR12MB2934.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZoD1K+A+yS9/bmz5k/eYnJXIukLCzXCYgZE44D4NKmf6OlYpVGzxnD8F/f8dXTrrS+7H5CrYQTvxXi0FeRDxdrvMYetHVk3TuF6uhphJxjkkGWDAmijAnTK8sC5g72X0UeRGWoFguLXlZJuCWNoOs8o+VKLCPXWtpM2gjGkG02mNaHnOgJY3IAq0CgplThIR7o07vDC91sujT7KARb9qYN+lt5GeVVJUshmV47tn23aEkK/7vDCO/m/8nMtakZ36jM/FfAHtgYgfWaIFzM+vhhWgER8Rv4uu7HNoqwxv7oKWhHXHeHjH7IkN6znXwSBnAcwCzGLJ09GhpPoISnx8dEbOEat/+pT9naR8ORtpq1qOJfCW5NIJ9tbsQxw6n0XgpHBUIAhAmBmTIGfn92HUWHIkNBUQb4KRvVncSYW/ohkXsA1TZtqnNoxBnbbiH9bHdtzOdfDi0p5IbcNERdcqag59RZeVAbXgOr4pIUengTFHgwpBMGUM4JcjOeecoxFRF6fUtxL50qQDp/YGG11WhQxzacw8qoJBNveKBJE1S8AZBf/Ufp8mQ5ClrYo2sreBipiejyZDC8r/zSYqgMlhakybA1VLZSyQ4pYztspGOT8/tUROYIuplE4WTO4owTs0NMEd+zbU8UGdCAiM9Tt3iXzt+DIYZq2qTw18TDw94lG4UybdzfV4lipc0g5mGBKYzRHpSBMrR3L1uhY5xJbm3Q==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(70206006)(5660300002)(2906002)(55016003)(33716001)(82310400005)(508600001)(8676002)(7416002)(70586007)(40460700003)(8936002)(186003)(26005)(316002)(7406005)(336012)(83380400001)(81166007)(356005)(9686003)(6916009)(426003)(54906003)(53546011)(47076005)(86362001)(4326008)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 18:28:53.0489
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 980ccc43-e5b0-4533-8799-08da47ea68be
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2934
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 8:19 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Has anyone looked into this lock ordering issues?
+On Mon, Jun 06, 2022 at 06:50:33PM +0100, Robin Murphy wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 2022-06-06 17:51, Nicolin Chen wrote:
+> > Hi Robin,
+> > 
+> > On Mon, Jun 06, 2022 at 03:33:42PM +0100, Robin Murphy wrote:
+> > > On 2022-06-06 07:19, Nicolin Chen wrote:
+> > > > The core code should not call an iommu driver op with a struct device
+> > > > parameter unless it knows that the dev_iommu_priv_get() for that struct
+> > > > device was setup by the same driver. Otherwise in a mixed driver system
+> > > > the iommu_priv could be casted to the wrong type.
+> > > 
+> > > We don't have mixed-driver systems, and there are plenty more
+> > > significant problems than this one to solve before we can (but thanks
+> > > for pointing it out - I hadn't got as far as auditing the public
+> > > interfaces yet). Once domains are allocated via a particular device's
+> > > IOMMU instance in the first place, there will be ample opportunity for
+> > > the core to stash suitable identifying information in the domain for
+> > > itself. TBH even the current code could do it without needing the
+> > > weirdly invasive changes here.
+> > 
+> > Do you have an alternative and less invasive solution in mind?
+> > 
+> > > > Store the iommu_ops pointer in the iommu_domain and use it as a check to
+> > > > validate that the struct device is correct before invoking any domain op
+> > > > that accepts a struct device.
+> > > 
+> > > In fact this even describes exactly that - "Store the iommu_ops pointer
+> > > in the iommu_domain", vs. the "Store the iommu_ops pointer in the
+> > > iommu_domain_ops" which the patch is actually doing :/
+> > 
+> > Will fix that.
+> 
+> Well, as before I'd prefer to make the code match the commit message -
+> if I really need to spell it out, see below - since I can't imagine that
+> we should ever have need to identify a set of iommu_domain_ops in
+> isolation, therefore I think it's considerably clearer to use the
+> iommu_domain itself. However, either way we really don't need this yet,
+> so we may as well just go ahead and remove the redundant test from VFIO
+> anyway, and I can add some form of this patch to my dev branch for now.
 
-The deadlock is
+I see. The version below is much cleaner. Yet, it'd become having a
+common pointer per iommu_domain vs. one pointer per driver. Jason
+pointed it out to me earlier that by doing so memory waste would be
+unnecessary on platforms that have considerable numbers of masters.
 
-> >> [78140.503821]        CPU0                    CPU1
-> >> [78140.503823]        ----                    ----
-> >> [78140.503824]   lock(&newf->file_lock);
-> >> [78140.503826]                                lock(&p->alloc_lock);
-> >> [78140.503828]                                lock(&newf->file_lock);
-> >> [78140.503830]   lock(&ctx->lock);
+Since we know that it'd be safe to exclude this single change from
+this series, I can drop it in next version, if you don't like the
+change.
 
-and the alloc_lock -> file_lock on CPU1 is trivial - it's seq_show()
-in fs/proc/fd.c:
+Thanks!
+Nic
 
-        task_lock(task);
-        files = task->files;
-        if (files) {
-                unsigned int fd = proc_fd(m->private);
-
-                spin_lock(&files->file_lock);
-
-and that looks all normal.
-
-But the other chains look painful.
-
-I do see the IPC code doing ugly things, in particular I detest this code:
-
-        task_lock(current);
-        list_add(&shp->shm_clist, &current->sysvshm.shm_clist);
-        task_unlock(current);
-
-where it is using the task lock to protect the shm_clist list. Nasty.
-
-And it's doing that inside the shm_ids.rwsem lock _and_ inside the
-shp->shm_perm.lock.
-
-So the IPC code has newseg() doing
-
-   shmget ->
-    ipcget():
-     down_write(ids->rwsem) ->
-       newseg():
-         ipc_addid gets perm->lock
-         task_lock(current)
-
-so you have
-
-  ids->rwsem -> perm->lock -> alloc_lock
-
-there.
-
-So now we have that
-
-   ids->rwsem -> ipcperm->lock -> alloc_lock -> file_lock
-
-when you put those sequences together.
-
-But I didn't figure out what the security subsystem angle is and how
-that then apparently mixes things up with execve.
-
-Yes, newseg() is doing that
-
-        error = security_shm_alloc(&shp->shm_perm);
-
-while holding rwsem, but I can't see how that matters. From the
-lockdep output, rwsem doesn't actually seem to be part of the whole
-sequence.
-
-It *looks* like we have
-
-   apparmour ctx->lock -->
-      radix_tree_preloads.lock -->
-         ipcperm->lock
-
-and apparently that's called under the file_lock somewhere, completing
-the circle.
-
-I guess the execve component is that
-
-  begin_new_exec ->
-    security_bprm_committing_creds ->
-      apparmor_bprm_committing_creds ->
-        aa_inherit_files ->
-          iterate_fd ->   *takes file_lock*
-            match_file ->
-              aa_file_perm ->
-                update_file_ctx *takes ctx->lock*
-
-so that's how you get file_lock -> ctx->lock.
-
-So you have:
-
- SHMGET:
-    ipcperm->lock -> alloc_lock
- /proc:
-    alloc_lock -> file_lock
- apparmor_bprm_committing_creds:
-    file_lock -> ctx->lock
-
-and then all you need is ctx->lock -> ipcperm->lock but I didn't find that part.
-
-I suspect that part is that both Apparmor and IPC use the idr local lock.
-
-               Linus
+> ----->8-----
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index cde2e1d6ab9b..72990edc9314 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -1902,6 +1902,7 @@ static struct iommu_domain
+> *__iommu_domain_alloc(struct device *dev,
+>        domain->type = type;
+>        /* Assume all sizes by default; the driver may override this later */
+>        domain->pgsize_bitmap = ops->pgsize_bitmap;
+> +       domain->owner = ops;
+>        if (!domain->ops)
+>                domain->ops = ops->default_domain_ops;
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 6f64cbbc6721..79e557207f53 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -89,6 +89,7 @@ struct iommu_domain_geometry {
+> 
+>  struct iommu_domain {
+>        unsigned type;
+> +       const struct iommu_ops *owner; /* Who allocated this domain */
+>        const struct iommu_domain_ops *ops;
+>        unsigned long pgsize_bitmap;    /* Bitmap of page sizes in use */
+>        iommu_fault_handler_t handler;

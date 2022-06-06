@@ -2,128 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332D953E04F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 06:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D62C53E056
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 06:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiFFD74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 23:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S229655AbiFFEHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 00:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiFFD7v (ORCPT
+        with ESMTP id S229568AbiFFEHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 23:59:51 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358691D303;
-        Sun,  5 Jun 2022 20:59:44 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o6so6088445plg.2;
-        Sun, 05 Jun 2022 20:59:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=F3dlgaXmkDpDEty0Y4DNCWJHlmIObEDWkeyV88bJ1Pg=;
-        b=BJBW1yOCWpOULW0xyTrerbG4y7zPYfn1I61YNgD7Y70F8Q1r8/DhnX8ELeAIikMmoJ
-         1H06V89YylT/lmz+v7kGZMokx4yYvi7KuCd1pDt5Y40Noi2+c7TUw3BkWmdFzXUQG51A
-         QN4+Vd8DTPCp8UYaqAUVXnQHlgojK8SufP8tdKga6bUuZKJGQg1ylbJIdt+LAvTSx3GR
-         ByuG3q2sjMJLEkYCtghZO2ndpj8NR7n/fR64SQA+FUbygh4oHy4nFvHjeeYYEa68cYJj
-         t5Dxl0vt7EJ01dSGs75qVqBGbcyiz6DOX+DKxCX5fiyQTQ6v9OphrCyKgwD/kiSFJCRU
-         ytJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=F3dlgaXmkDpDEty0Y4DNCWJHlmIObEDWkeyV88bJ1Pg=;
-        b=NRNnPS7i1A8TxdnNO9h9prBMqXhwVm4k+TRt79GhB2AIBrNwhM+m4JbqVBDp0Naknf
-         hJIrL1eEhR9kvOzRoMhdAkPeX5EX6uBAGsd4vMgt5nGuF1u0WuBdlpE6fwa2k41o6//F
-         dWVrxAyIoR5FN69evIXnPS4iPmJe2lwyuIn7vKsUACDGwlA9Xwq9NrKvUm/FRcKArRMD
-         w1n/pttJCLf+82kc4NBhXvpWEoSeZgPNeDHWar+OHm46w6w1SWw/uvLJR/TN2+aGA6Ow
-         HkmxEBq9djiucL840MJcfYK6HDDNQYBAWIetQhodVV6D/LrW4SywxYALhDqNrrhoXAv1
-         +FjQ==
-X-Gm-Message-State: AOAM530LIONgeuYXR0VWAR/VVrmPofaG7WmNM/V/Oqcblheq/8B3Lb1e
-        7FUAd3GCeT7EBAopiY9LilE=
-X-Google-Smtp-Source: ABdhPJz018j7KIAM1lyTIrFxMTwuSnzEkr87RwbyQbdQnw5vzBA49wIGQTCLtHW+Xps8wJVjcivrFQ==
-X-Received: by 2002:a17:90a:9914:b0:1db:d10f:1fcf with SMTP id b20-20020a17090a991400b001dbd10f1fcfmr59116261pjp.241.1654487984072;
-        Sun, 05 Jun 2022 20:59:44 -0700 (PDT)
-Received: from localhost (subs03-180-214-233-92.three.co.id. [180.214.233.92])
-        by smtp.gmail.com with ESMTPSA id bi16-20020a056a00311000b0050dc762815asm2798215pfb.52.2022.06.05.20.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 20:59:43 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 10:59:40 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-mtd@lists.infradead.org
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Howells <dhowells@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Baokun Li <libaokun1@huawei.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
-        hongnanli <hongnan.li@linux.alibaba.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: partly outside array bounds warning on fs/jffs2/summary.c, GCC 12.1.0
-Message-ID: <Yp17rHxRb6d5JrHd@debian.me>
+        Mon, 6 Jun 2022 00:07:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E72126154
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 21:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654488427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MuRk3Tab2Z4ZRUgMYXS0prZ+jhG+XkNVjb1ON2n0G3E=;
+        b=R0whKCNVb6pPgScWbGIzihmMJ5mZTSe0gSowNwiuBSHJGLZMI5CUE4XCof4deiKwApueQ9
+        acr5JjaNvDBQ189dgD55Jag1NP2xMZ3hov/KWpmRD8MBPGR2En7i9exrKafSbJxqJhmDMA
+        7HU8JmSn7a93PdSxcksUFaBgE769WiQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-9-f6LMyBluPuqPdnmQJ73N8A-1; Mon, 06 Jun 2022 00:06:58 -0400
+X-MC-Unique: f6LMyBluPuqPdnmQJ73N8A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4BADC811E83;
+        Mon,  6 Jun 2022 04:06:57 +0000 (UTC)
+Received: from localhost (ovpn-12-209.pek2.redhat.com [10.72.12.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D67A40E80E0;
+        Mon,  6 Jun 2022 04:06:55 +0000 (UTC)
+Date:   Mon, 6 Jun 2022 12:06:51 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Jonathan McDowell <noodles@fb.com>, Coiby Xu <coxu@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v4] x86/kexec: Carry forward IMA measurement log on kexec
+Message-ID: <Yp19W4/ZQm/8U+BG@MiWiFi-R3L-srv>
+References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
+ <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
+ <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
+ <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
+On 05/12/22 at 04:25pm, Jonathan McDowell wrote:
+> On kexec file load Integrity Measurement Architecture (IMA) subsystem
+> may verify the IMA signature of the kernel and initramfs, and measure
+> it. The command line parameters passed to the kernel in the kexec call
+> may also be measured by IMA. A remote attestation service can verify
+> a TPM quote based on the TPM event log, the IMA measurement list, and
+> the TPM PCR data. This can be achieved only if the IMA measurement log
+> is carried over from the current kernel to the next kernel across
+> the kexec call.
+> 
+> powerpc and ARM64 both achieve this using device tree with a
+> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
+> device tree, so use the setup_data mechanism to pass the IMA buffer to
+> the new kernel.
 
-When I build arm64 kernel with GCC 12.1.0 (bcm2711_defconfig), I get
-partly outside array bounds warning on fs/jffs2/summary.c:
+The entire looks good to me, other than a minor concern, please see the
+inline comment.
 
-  CC [M]  fs/jffs2/summary.o
-In file included from fs/jffs2/summary.c:23:
-In function 'jffs2_sum_add_mem',
-    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:130:9:
-fs/jffs2/nodelist.h:43:28: warning: array subscript 'union jffs2_sum_mem[0]' is partly outside array bounds of 'unsigned char[26]' [-Warray-bounds]
-   43 | #define je16_to_cpu(x) ((x).v16)
-      |                        ~~~~^~~~~
-fs/jffs2/summary.c:71:17: note: in expansion of macro 'je16_to_cpu'
-   71 |         switch (je16_to_cpu(item->u.nodetype)) {
-      |                 ^~~~~~~~~~~
-In file included from fs/jffs2/summary.c:17:
-In function 'kmalloc',
-    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:118:37:
-./include/linux/slab.h:600:24: note: object of size 26 allocated by 'kmem_cache_alloc_trace'
-  600 |                 return kmem_cache_alloc_trace(
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~
-  601 |                                 kmalloc_caches[kmalloc_type(flags)][index],
-      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  602 |                                 flags, size);
-      |                                 ~~~~~~~~~~~~
-In file included from fs/jffs2/nodelist.h:22:
-In function 'jffs2_sum_add_mem',
-    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:130:9:
-fs/jffs2/summary.c:79:73: warning: array subscript 'union jffs2_sum_mem[0]' is partly outside array bounds of 'unsigned char[26]' [-Warray-bounds]
-   79 |                         s->sum_size += JFFS2_SUMMARY_DIRENT_SIZE(item->d.nsize);
-fs/jffs2/summary.h:34:80: note: in definition of macro 'JFFS2_SUMMARY_DIRENT_SIZE'
-   34 | #define JFFS2_SUMMARY_DIRENT_SIZE(x) (sizeof(struct jffs2_sum_dirent_flash) + (x))
-      |                                                                                ^
-In function 'kmalloc',
-    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:118:37:
-./include/linux/slab.h:600:24: note: object of size 26 allocated by 'kmem_cache_alloc_trace'
-  600 |                 return kmem_cache_alloc_trace(
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~
-  601 |                                 kmalloc_caches[kmalloc_type(flags)][index],
-      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  602 |                                 flags, size);
-      |                                 ~~~~~~~~~~~~
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
-I first found these warnings when reviewing linux-5.18.y stable rc [1],
-for which Greg recommends me to contact JFFS subsystem developers.
+Hi Coiby,
 
-Thanks.
+You can check this patch, see if you can take the same way to solve the
+LUKS-encrypted disk issue by passing the key via setup_data.
 
-[1]: https://lore.kernel.org/stable/YpxU%2FbVogip64iQF@debian.me/ 
+> 
+> Signed-off-by: Jonathan McDowell <noodles@fb.com>
+> ---
+......snip...
 
--- 
-An old man doll... just what I always wanted! - Clara
+> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+> index 170d0fd68b1f..54bd4ce5f908 100644
+> --- a/arch/x86/kernel/kexec-bzimage64.c
+> +++ b/arch/x86/kernel/kexec-bzimage64.c
+> @@ -186,6 +186,33 @@ setup_efi_state(struct boot_params *params, unsigned long params_load_addr,
+>  }
+>  #endif /* CONFIG_EFI */
+>  
+> +static void
+> +setup_ima_state(const struct kimage *image, struct boot_params *params,
+> +		unsigned long params_load_addr,
+> +		unsigned int ima_setup_data_offset)
+> +{
+> +#ifdef CONFIG_IMA_KEXEC
+> +	struct setup_data *sd = (void *)params + ima_setup_data_offset;
+> +	unsigned long setup_data_phys;
+> +	struct ima_setup_data *ima;
+> +
+> +	if (!image->ima_buffer_size)
+> +		return;
+> +
+> +	sd->type = SETUP_IMA;
+> +	sd->len = sizeof(*ima);
+> +
+> +	ima = (void *)sd + sizeof(struct setup_data);
+> +	ima->addr = image->ima_buffer_addr;
+> +	ima->size = image->ima_buffer_size;
+> +
+> +	/* Add setup data */
+> +	setup_data_phys = params_load_addr + ima_setup_data_offset;
+> +	sd->next = params->hdr.setup_data;
+> +	params->hdr.setup_data = setup_data_phys;
+> +#endif /* CONFIG_IMA_KEXEC */
+> +}
+> +
+>  static int
+>  setup_boot_parameters(struct kimage *image, struct boot_params *params,
+>  		      unsigned long params_load_addr,
+> @@ -247,6 +274,13 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
+>  	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
+>  			efi_setup_data_offset);
+>  #endif
+> +
+> +	/* Setup IMA log buffer state */
+> +	setup_ima_state(image, params, params_load_addr,
+> +			efi_setup_data_offset +
+> +			sizeof(struct setup_data) +
+> +			sizeof(struct efi_setup_data));
+
+Is it a little better to update efi_setup_data_offset beforehand, or
+define a local variable?
+
+	efi_setup_data_offset += sizeof(struct setup_data) + sizeof(struct efi_setup_data));
+	setup_ima_state(image, params, params_load_addr,
+			efi_setup_data_offset));
+
+No strong opinion. If nobody has concern about it.
+
+> +
+>  	/* Setup EDD info */
+>  	memcpy(params->eddbuf, boot_params.eddbuf,
+>  				EDDMAXNR * sizeof(struct edd_info));
+

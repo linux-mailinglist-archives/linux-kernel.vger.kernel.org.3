@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025B253E202
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C24153E24F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiFFHxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
+        id S231578AbiFFHxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiFFHx3 (ORCPT
+        with ESMTP id S231577AbiFFHxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 03:53:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD2A12604;
-        Mon,  6 Jun 2022 00:53:28 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 744181F8E0;
-        Mon,  6 Jun 2022 07:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1654502007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 6 Jun 2022 03:53:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E8A912AB3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654502020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Plp7QO6DjeaVo4L0I7qwxoyinYY3rWjsTv20EHvALNA=;
-        b=xkJJo+6x3Rm2AGwodwh5qhNqYiKsw3yz+y7KihrmZJKlRoL41YisBx+ptT1lbRPiXeM56m
-        pWqQVj+dtdeQt6E/s0TnWPU23hZ6WJaLeEBGPr+BQsklecjnRx+aYkd2/ab6vw9ZYTWsmO
-        IIEeqEdkj9P+kpUrGkAaJZyazy03iCU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1654502007;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Plp7QO6DjeaVo4L0I7qwxoyinYY3rWjsTv20EHvALNA=;
-        b=gcNFNZIPGg36DWBeCGNRAoxXnHN5xZuR/D0JgX9C5U8A43Sa+2LOuXkvkDiFlhsgSGM3aG
-        Br7gxWcKCNw5+4CA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 640D02C142;
-        Mon,  6 Jun 2022 07:53:27 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D2B02A0633; Mon,  6 Jun 2022 09:53:26 +0200 (CEST)
-Date:   Mon, 6 Jun 2022 09:53:26 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Xiang wangx <wangxiang@cdjrlc.com>
-Cc:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: Fix syntax errors in comments
-Message-ID: <20220606075326.n2ji5jwwz7ch4ycw@quack3.lan>
-References: <20220605125509.14837-1-wangxiang@cdjrlc.com>
+        bh=5tAtC8sWEQaHDrdHg4P+GFrcy06HggAEGufwFvj0o6E=;
+        b=YhzPZ/yeC5BEPuhz0W18Gvm51PncqbTZQ/nYyP4uIPGBt/FCA5FphnLO8eIgY+olgOAYBx
+        4Oi16q9lEjdZbGL8+YRMNsEpy2WCRTPwAaKhGYiZBeHDSygfhwyiOqhEJCqz86qC8Fwr/e
+        YmAEuGrfYIwPaAuPwH+yh0q144YV5NQ=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-278-NoLWH7lPMFWie2M45C8Rog-1; Mon, 06 Jun 2022 03:53:38 -0400
+X-MC-Unique: NoLWH7lPMFWie2M45C8Rog-1
+Received: by mail-ej1-f72.google.com with SMTP id gh36-20020a1709073c2400b0070759e390fbso5660761ejc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 00:53:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=5tAtC8sWEQaHDrdHg4P+GFrcy06HggAEGufwFvj0o6E=;
+        b=GCpkrGKAKEpWD3HaH0QhoyI1KlicCAKBozc5hqxY9HGcEhyKnc7wloOm8Mn6Mqkgwu
+         /M7qGaBRhJPsZXQ003Zs3d5KOM1tOe7zGPJsfduSN+BwxGddNuQQ3ymBfuk7KtiaJwv7
+         LE9wQ5UEUCUSAH2I39Ma7L+Vw6yhrE0KDU/97ZU1T+Ir6Ry0v4PFRqaDJ0nUejyoMvVr
+         PtReS2jMp8CUh8EuQouQwvJxXc00W4MtIFIG1ao16gdkOm+7vSvx96hy3QrLiPFZ3FFT
+         KSB5fc1eRstCBpGkarCGixXMbu3Ac/1Eyo4y32eHACCPKKcEPq5iCwvNslXqHDqlPS7a
+         ifyw==
+X-Gm-Message-State: AOAM53271ui58Uhg0lRoZllzZJg03WWU7kqVbRJz40hVzP1ln7pIervN
+        jWt0vtq0g1vnLlwJyh3tRq70MNaUJgynNissY73Zds95zJCTmRAgXue05yCtmg6Ww3XRwHcxE7H
+        Pp2nXJKgBYdgDwMHGdoELl3DR
+X-Received: by 2002:a17:906:d54e:b0:6f6:3ea:8e7b with SMTP id cr14-20020a170906d54e00b006f603ea8e7bmr20495920ejc.292.1654502017680;
+        Mon, 06 Jun 2022 00:53:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxuLlvNrnpO67bvA3yDD6EgX1SApqQwL5qjFJPSpxYtyIiXQNA1ZhGKHu0cFcsiEyjLisdIrg==
+X-Received: by 2002:a17:906:d54e:b0:6f6:3ea:8e7b with SMTP id cr14-20020a170906d54e00b006f603ea8e7bmr20495905ejc.292.1654502017355;
+        Mon, 06 Jun 2022 00:53:37 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id k16-20020a1709061c1000b00705cdfec71esm5882371ejg.7.2022.06.06.00.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 00:53:36 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 4C41C4055A7; Mon,  6 Jun 2022 09:53:32 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ia64: fix sparse warnings with cmpxchg() & xchg()
+In-Reply-To: <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
+References: <87h7547k8c.fsf@toke.dk>
+ <20220605160738.79736-1-luc.vanoostenryck@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 06 Jun 2022 09:53:32 +0200
+Message-ID: <871qw2xm6b.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605125509.14837-1-wangxiang@cdjrlc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 05-06-22 20:55:09, Xiang wangx wrote:
-> Delete the redundant word 'not'.
-> 
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+Luc Van Oostenryck <luc.vanoostenryck@gmail.com> writes:
 
-Thanks! I've added the patch to my tree.
+> On IA64, new sparse's warnings where issued after fixing
+> some __rcu annotations in kernel/bpf/.
+>
+> These new warnings are false positives and appear on IA64 because
+> on this architecture, the macros for cmpxchg() and xchg() make
+> casts that ignore sparse annotations.
+>
+> This patch contains the minimal patch to fix this issue:
+> adding a missing cast and some missing '__force'.
+>
+> Link: https://lore.kernel.org/r/20220601120013.bq5a3ynbkc3hngm5@mail
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> Signed-off-by: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
 
-								Honza
+Ah, thank you for taking care of this! :)
 
-> ---
->  fs/ext2/inode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext2/inode.c b/fs/ext2/inode.c
-> index 360ce3604a2d..e6b932219803 100644
-> --- a/fs/ext2/inode.c
-> +++ b/fs/ext2/inode.c
-> @@ -1549,7 +1549,7 @@ static int __ext2_write_inode(struct inode *inode, int do_sync)
->  	if (IS_ERR(raw_inode))
->   		return -EIO;
->  
-> -	/* For fields not not tracking in the in-memory inode,
-> +	/* For fields not tracking in the in-memory inode,
->  	 * initialise them to zero for new inodes. */
->  	if (ei->i_state & EXT2_STATE_NEW)
->  		memset(raw_inode, 0, EXT2_SB(sb)->s_inode_size);
-> -- 
-> 2.36.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+

@@ -2,159 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E770453EC24
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C36453EBF1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239490AbiFFOPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S239507AbiFFOQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239467AbiFFOPg (ORCPT
+        with ESMTP id S239516AbiFFOPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:15:36 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116F92D1C3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:15:30 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id k4so3814611qth.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:15:30 -0700 (PDT)
+        Mon, 6 Jun 2022 10:15:50 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E282D1F6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:15:44 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id v25so19029907eda.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:15:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wh/GNYrTUWQwS2LY1J4/sKG7u3eGX16BxrYgrkihQrQ=;
-        b=QlWo3+198cSiHHs+hq+/W8YxainPD4zxjEMFT1ARc2tIYSNGvNt3Czp56VcDcE7xXE
-         Mg9hV9nupxeWMeN8L15uWBA49GKTqKuODxtAKZ8ls1sWXnw8gRfOijNfjGpikRw3zFG3
-         OtO3GEyuWJRJ0OZow3PTL5Icch4gcYIgkS7kagTPOxjkzm/c7tf++I7UrCKi0gxztNHd
-         uxToyHm2I2Olw6nL38SZkEMvRxaaWq9rxJkAQy29RlTRhsk9DKxdQI1YNqLC7tyxm8v2
-         9C3aQ3mf0EJr/U32mY9jmhbAWIEISh09sGC7+4Aso3hgirf3UcNkpZtUfttrrVvDyclv
-         hZCA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6rWhlveeN1TxX4QHQ5iFPAm0c2ZnKQvWl2EyCos39TM=;
+        b=ZZfEZRiLhkBMeDoURpm3uOeoX3BbxCOg5m6ukqdT3N+bgCa4cZY0UYuPiz01bJni7w
+         S1I42czSmWZjgAA1z/SkChFOB6tDovtRLJNjtkkzrh5nc6nHkiznCGu0UW9TaQMBcIuk
+         6EXpAnWy8RQiXzcN+99s5NHDgVVnhAabieMYeM1CZErYqV50/sUKaRK1MgvYgkH7G80F
+         rD9tONFaF0ii9fiSsHQDUrujVUAEJ+iXbIGKazHiDF4i7YHQJ78rZ6DXnn2FQRKK9RvB
+         CuA3ImFDY7FgaXH8s5Rbcs/lVqNxFB1Q9QDyXkHbFXC4dc5H0fdfJ4fL2ixyeQaakbCI
+         32Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wh/GNYrTUWQwS2LY1J4/sKG7u3eGX16BxrYgrkihQrQ=;
-        b=y1K93ksi2yoFwZbGWfZSyi+vftEhyvg9OL8JstMkX84B1E7MSaCAXsfhL4IivRqBKs
-         fHA2nT+iJuVfwbIgt0h1fjaFLETRMKkYYKXiY6bA+gUulPYivR1BEN1MIm7EtpOh2fKm
-         /tl9OTGlDbZSJ17h0ntae8K/A97GRW10lza/TK5zibivKoLvqbTNveJiwJQmSP9CsEx2
-         S47GtPQiW2ZRO0W7YrH/GXE4/8ONjX6ziEF49gmFMBP4WZEVB12w/4s3MNl51XCMUwkl
-         yFRnVZYJI9FmXEBDdghrmaEfNiTZc1+CqawzGFpgm2j9HTTJwxpPhkMCjuvxjHeJiQdd
-         Iepg==
-X-Gm-Message-State: AOAM531pHexa9+cmI5C6IGIIMIveGI9CD5Q2HguEDeOYU9LIu3O9siBE
-        YScNNr+YhnhAYluDFhogmpxiVg==
-X-Google-Smtp-Source: ABdhPJxQRDEeEokM9Fo2uYlhzVajgwwVOYqYmd5G8pZo9R7X+FPuurNmOePJdMhP9bv+SVtjr62Ymw==
-X-Received: by 2002:ac8:4e54:0:b0:304:bf64:1356 with SMTP id e20-20020ac84e54000000b00304bf641356mr18126504qtw.547.1654524929070;
-        Mon, 06 Jun 2022 07:15:29 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id c15-20020a05620a268f00b006a3af1bd183sm10335086qkp.127.2022.06.06.07.15.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6rWhlveeN1TxX4QHQ5iFPAm0c2ZnKQvWl2EyCos39TM=;
+        b=69PKp9oRoExuHlk2JooWFh615ghg/UwVKTXVqwv/58vcdHnIVpKmc2aRdpZfd7+6MR
+         oycpsNV5u4I8S9svd7jKglFs+eYeTW1iQplxLWkTBb0g1bz1HC6cEMPTIFbYjDZUUW6U
+         gUlgGmWgvsGnR+jyClxEw3phkV1Pu+6mIbGDjJ4H3d3FXgk8wA2kVakqnljGLjsvHD6I
+         uWoGCduXHurCkCoCOj6UrUzwwoATIBvsmHtmRmHo/n8wpb0Kn5Q4Z9WGRpSQSm9Z6n6h
+         c6q8qYN98QAvCusVfi4m1VbWQsLZME9d55mfJ9IIaaPecF16I9E3mJxyI5exM1wnYhcg
+         WNSw==
+X-Gm-Message-State: AOAM531II5Iw3kjFPtru+3SKTzqvLeFyHJId6QF9MkcYyMb+TM2qxhpP
+        FOiGjfvcTS9i2OF8GuxOtaQ=
+X-Google-Smtp-Source: ABdhPJwvLpggZGcluym7wsFNn4RHXYfzHTkwCPuZ2jBlXQZYtAudkyn7Br+hRBOtcpK/6Voy+abcZg==
+X-Received: by 2002:a05:6402:430f:b0:42e:2a86:abaf with SMTP id m15-20020a056402430f00b0042e2a86abafmr20795604edc.194.1654524942790;
+        Mon, 06 Jun 2022 07:15:42 -0700 (PDT)
+Received: from localhost.localdomain (host-79-13-108-3.retail.telecomitalia.it. [79.13.108.3])
+        by smtp.gmail.com with ESMTPSA id y21-20020a056402135500b0042aa5a74598sm9069837edw.52.2022.06.06.07.15.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 07:15:28 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     jic23@kernel.org
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        Mon, 06 Jun 2022 07:15:41 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH 2/2] iio: dac: cio-dac: Implement and utilize register structures
-Date:   Mon,  6 Jun 2022 10:15:18 -0400
-Message-Id: <44aec703753f930cceff448babd1c8e2959eebb0.1654118389.git.william.gray@linaro.org>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] mm/highmem: Delete memmove_page()
+Date:   Mon,  6 Jun 2022 16:15:33 +0200
+Message-Id: <20220606141533.555-1-fmdefrancesco@gmail.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1654118389.git.william.gray@linaro.org>
-References: <cover.1654118389.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce magic numbers and improve code readability by implementing and
-utilizing named register data structures.
+Matthew Wilcox reported that, while he was looking at memmove_page(), he
+realized that it can't actually work.
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+The reasons are hidden in its implementation, which makes use of
+memmove() on logical addresses provided by kmap_local_page(). memmove()
+does the wrong thing when it tests "if (dest <= src)".
+
+Therefore, delete memmove_page().
+
+No need to change any other code because we have no call sites of
+memmove_page() across the whole kernel.
+
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- drivers/iio/dac/cio-dac.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ include/linux/highmem.h | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
-index 8080984dcb03..7860450ceaf3 100644
---- a/drivers/iio/dac/cio-dac.c
-+++ b/drivers/iio/dac/cio-dac.c
-@@ -16,6 +16,7 @@
- #include <linux/isa.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-+#include <linux/types.h>
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index 3af34de54330..fee9835e3793 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -336,19 +336,6 @@ static inline void memcpy_page(struct page *dst_page, size_t dst_off,
+ 	kunmap_local(dst);
+ }
  
- #define CIO_DAC_NUM_CHAN 16
- 
-@@ -34,14 +35,22 @@ static unsigned int num_cio_dac;
- module_param_hw_array(base, uint, ioport, &num_cio_dac, 0);
- MODULE_PARM_DESC(base, "Measurement Computing CIO-DAC base addresses");
- 
-+/**
-+ * struct cio_dac_reg - device register structure
-+ * @da:	D/A data
-+ */
-+struct cio_dac_reg {
-+	u16 da[CIO_DAC_NUM_CHAN];
-+};
-+
- /**
-  * struct cio_dac_iio - IIO device private data structure
-  * @chan_out_states:	channels' output states
-- * @base:		base port address of the IIO device
-+ * @reg:		I/O address offset for the device registers
-  */
- struct cio_dac_iio {
- 	int chan_out_states[CIO_DAC_NUM_CHAN];
--	void __iomem *base;
-+	struct cio_dac_reg __iomem *reg;
- };
- 
- static int cio_dac_read_raw(struct iio_dev *indio_dev,
-@@ -61,7 +70,6 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
- 	struct iio_chan_spec const *chan, int val, int val2, long mask)
+-static inline void memmove_page(struct page *dst_page, size_t dst_off,
+-			       struct page *src_page, size_t src_off,
+-			       size_t len)
+-{
+-	char *dst = kmap_local_page(dst_page);
+-	char *src = kmap_local_page(src_page);
+-
+-	VM_BUG_ON(dst_off + len > PAGE_SIZE || src_off + len > PAGE_SIZE);
+-	memmove(dst + dst_off, src + src_off, len);
+-	kunmap_local(src);
+-	kunmap_local(dst);
+-}
+-
+ static inline void memset_page(struct page *page, size_t offset, int val,
+ 			       size_t len)
  {
- 	struct cio_dac_iio *const priv = iio_priv(indio_dev);
--	const unsigned int chan_addr_offset = 2 * chan->channel;
- 
- 	if (mask != IIO_CHAN_INFO_RAW)
- 		return -EINVAL;
-@@ -71,7 +79,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
- 		return -EINVAL;
- 
- 	priv->chan_out_states[chan->channel] = val;
--	iowrite16(val, priv->base + chan_addr_offset);
-+	iowrite16(val, priv->reg->da + chan->channel);
- 
- 	return 0;
- }
-@@ -106,8 +114,8 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
- 	}
- 
- 	priv = iio_priv(indio_dev);
--	priv->base = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
--	if (!priv->base)
-+	priv->reg = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
-+	if (!priv->reg)
- 		return -ENOMEM;
- 
- 	indio_dev->info = &cio_dac_info;
-@@ -117,8 +125,8 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
- 	indio_dev->name = dev_name(dev);
- 
- 	/* initialize DAC outputs to 0V */
--	for (i = 0; i < 32; i += 2)
--		iowrite16(0, priv->base + i);
-+	for (i = 0; i < CIO_DAC_NUM_CHAN; i++)
-+		iowrite16(0, priv->reg->da + i);
- 
- 	return devm_iio_device_register(dev, indio_dev);
- }
 -- 
 2.36.1
 

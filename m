@@ -2,45 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF83553EA13
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8806553E974
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiFFKDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S233385AbiFFKDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbiFFKDN (ORCPT
+        with ESMTP id S233374AbiFFKDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:03:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 783E29FF5;
-        Mon,  6 Jun 2022 03:03:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD96F15DB;
-        Mon,  6 Jun 2022 03:03:07 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AD163F66F;
-        Mon,  6 Jun 2022 03:03:05 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 7/7] powercap: arm_scmi: Add SCMI Powercap based driver
-Date:   Mon,  6 Jun 2022 11:02:30 +0100
-Message-Id: <20220606100230.3465828-8-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220606100230.3465828-1-cristian.marussi@arm.com>
-References: <20220606100230.3465828-1-cristian.marussi@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 6 Jun 2022 06:03:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99322629
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:02:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9CD961281
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:02:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0771C3411C;
+        Mon,  6 Jun 2022 10:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654509777;
+        bh=VIMr6EZ6uaNyIqN8/65VWECveYQWTgyU1T8AwlDnc9E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n5DnSfSo+f903mJNKZr/4LEuJl9Y16fBY1IoPenOQurUsW9qr+uCgpQHGOtERCM7j
+         LL6Cuu25pMG63cb8UbUHx1WRkxddOBjqxWgtf3BvBDsX2jJIrOgYoF2zqU146cyNdV
+         if2pb1pxgygQ5JQDeuLiLNIEwjOjdAAogm7bCLXxE25QoDPmJHIneJaw1OXRs7r+ub
+         HZKRhU2DlF5871YRM9ryCwQwaFozK2m5ZCRKxE0JvgVWwI8TTZgSIuzskBy5cyyiLg
+         tZ65gcikcfq325tAVChmy54eint2EGbkV1TcF0d97JKAZYieVmJa8wnbcMeHFGQnK9
+         NVQD3FW5rQ5Vw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ny9ZW-00FrXI-IG; Mon, 06 Jun 2022 11:02:54 +0100
+Date:   Mon, 06 Jun 2022 11:02:54 +0100
+Message-ID: <871qw25ctt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: Re: [PATCH RFC V2 02/10] irqchip: Add LoongArch CPU interrupt controller support
+In-Reply-To: <1c7b1ee5-3f1e-c090-fb2e-65741de76a9f@loongson.cn>
+References: <1653649335-11998-1-git-send-email-lvjianmin@loongson.cn>
+        <1653649335-11998-3-git-send-email-lvjianmin@loongson.cn>
+        <87bkvf56wg.wl-maz@kernel.org>
+        <64990891.8322.18119c6d212.Coremail.lvjianmin@loongson.cn>
+        <87a6ax6c0n.wl-maz@kernel.org>
+        <1c7b1ee5-3f1e-c090-fb2e-65741de76a9f@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn, guohanjun@huawei.com, lorenzo.pieralisi@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,602 +76,463 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-platform firmware for the list of existing Powercap domains, registers all
-of such discovered domains under the new 'arm-scmi' powercap control type.
++ Lorenzo and Hanjun who maintain the ACPI irq code
 
-A new simple powercap zone and constraint is registered for all the SCMI
-powercap zones that are found.
+On Thu, 02 Jun 2022 04:16:30 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>=20
+> >>>> +
+> >>>> +int acpi_gsi_to_irq(u32 gsi, unsigned int *irqp)
+> >>>> +{
+> >>>> +	if (irqp !=3D NULL)
+> >>>> +		*irqp =3D acpi_register_gsi(NULL, gsi, -1, -1);
+> >>>> +	return (*irqp >=3D 0) ? 0 : -EINVAL;
+> >>>> +}
+> >>>> +EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+> >>>> +
+> >>>> +int acpi_isa_irq_to_gsi(unsigned int isa_irq, u32 *gsi)
+> >>>> +{
+> >>>> +	if (gsi)
+> >>>> +		*gsi =3D isa_irq;
+> >>>> +	return 0;
+> >>>> +}
+> >>>> +
+> >>>> +/*
+> >>>> + * success: return IRQ number (>=3D0)
+> >>>> + * failure: return &lt; 0
+> >>>> + */
+> >>>> +int acpi_register_gsi(struct device *dev, u32 gsi, int trigger, int=
+ polarity)
+> >>>> +{
+> >>>> +	int id;
+> >>>> +	struct irq_fwspec fwspec;
+> >>>> +
+> >>>> +	switch (gsi) {
+> >>>> +	case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
+> >>>> +		fwspec.fwnode =3D liointc_domain->fwnode;
+> >>>> +		fwspec.param[0] =3D gsi - GSI_MIN_CPU_IRQ;
+> >>>> +		fwspec.param_count =3D 1;
+> >>>> +
+> >>>> +		return irq_create_fwspec_mapping(&amp;fwspec);
+> >>>> +
+> >>>> +	case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
+> >>>> +		if (!pch_lpc_domain)
+> >>>> +			return -EINVAL;
+> >>>> +
+> >>>> +		fwspec.fwnode =3D pch_lpc_domain->fwnode;
+> >>>> +		fwspec.param[0] =3D gsi - GSI_MIN_LPC_IRQ;
+> >>>> +		fwspec.param[1] =3D acpi_dev_get_irq_type(trigger, polarity);
+> >>>> +		fwspec.param_count =3D 2;
+> >>>> +
+> >>>> +		return irq_create_fwspec_mapping(&amp;fwspec);
+> >>>> +
+> >>>> +	case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
+> >>>> +		id =3D find_pch_pic(gsi);
+> >>>> +		if (id &lt; 0)
+> >>>> +			return -EINVAL;
+> >>>> +
+> >>>> +		fwspec.fwnode =3D pch_pic_domain[id]->fwnode;
+> >>>> +		fwspec.param[0] =3D gsi - acpi_pchpic[id]->gsi_base;
+> >>>> +		fwspec.param[1] =3D IRQ_TYPE_LEVEL_HIGH;
+> >>>> +		fwspec.param_count =3D 2;
+> >>>> +
+> >>>> +		return irq_create_fwspec_mapping(&amp;fwspec);
+> >>>> +	}
+> >>> So all the complexity here seems to stem from the fact that you deal
+> >>> with three ranges of interrupts, managed by three different pieces of
+> >>> code?
+> >>>=20
+> >> Yes.
+> >>=20
+> >>> Other architectures have similar requirements, and don't require to
+> >>> re-implement a private version of the ACPI API. Instead, they expose a
+> >>> single irqdomain, and deal with the various ranges internally.
+> >>>=20
+> >>> Clearly, not being able to reuse drivers/acpi/irq.c *is* an issue.
+> >>>=20
+> >> Thanks, I agree, that sounds a good and reasonable suggestion, and
+> >> I'll reserach it further and reuse code from drivers/acpi/irq.c as
+> >> can as possible.
+> >>=20
+> Hi, Marc, according to your suggestion, I carefully looked into gic
+> driver of ARM, and I found one possible gsi mapping path as following:
+>=20
+> acpi_register_gsi /* whatever the gsi is, gic domain for ARM is only
+> single domain to use.*/
+> =C2=A0->irq_create_fwspec_mapping
+> =C2=A0=C2=A0 ->irq_find_mapping /* return irq in the mapping of irqdomain=
+ with
+> fwnode_handle of acpi_gsi_domain_id if configured. */
+> =C2=A0=C2=A0 ->irq_domain_alloc_irqs /* if not configured and hierarchy d=
+omain */
+> =C2=A0=C2=A0=C2=A0=C2=A0 ->irq_domain_alloc_irqs_hierarchy
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ->domain->ops->alloc /* call gic_irq=
+_domain_alloc */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ->gic_irq_domain_map /* =
+handle different GSI range as
+> following code: */
+>=20
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 switch (__get_intid_range(hw))=
+ {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case SGI_RANGE:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case PPI_RANGE:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case EPPI_RANGE:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 irq_set_percpu_devid(irq);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 irq_domain_set_info(d, irq, hw, chip, d->host_data,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 handle_perc=
+pu_devid_irq, NULL, NULL);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 break;
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case SPI_RANGE:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case ESPI_RANGE:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 irq_domain_set_info(d, irq, hw, chip, d->host_data,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 handle_fast=
+eoi_irq, NULL, NULL);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 irq_set_probe(irq);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 irqd_set_single_target(irqd);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 break;
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case LPI_RANGE:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 if (!gic_dist_supports_lpis())
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -=
+EPERM;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 irq_domain_set_info(d, irq, hw, chip, d->host_data,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 handle_fast=
+eoi_irq, NULL, NULL);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 break;
+>=20
+> Yes, it's well for ARM by this way, and I found that only one
+> domain(specified by acpi_gsi_domain_id)is used.
+>=20
+> But for LoongArch, different GSI range have to be handled in different
+> domain(e.g. GSI for LIOINTC irqchip can be only mapped in LIOINTC
+> domain.). The hwirq->irq mapping of different GSI range is stored in
+> related separate domain. The reason leading to this is that an
+> interrupt source is hardcodingly to connected to an interrupt vector
+> for these irqchip(LIOINTC,LPC-PIC and PCH-PIC), and the interrupt
+> source of them need to be configured with GSI in DSDT or
+> FADT(e.g. SCI).
+>=20
+> If only exposing one domain for LoongArch, when calling
+> irq_find_mapping in acpi_register_gsi flow, the irq is returned only
+> from the domain specfied by acpi_gsi_domain_id, so I'm afraid it's
+> unsuitable to expose a single domain for acpi_register_gsi.
+>=20
+> I'm so sorry, I really don't find a way to reuse driver/acpi/irq.c
+> after my humble work.
 
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+I don't think reimplementing ACPI is the solution. What could be a
+reasonable approach is a way to overload the retrieval of the
+acpi_gsi_domain_id fwnode with a GSI parameter.
+
+I hacked the following patch, which will give you an idea of what I
+have in mind (only compile-tested).
+
+Thanks,
+
+	M.
+
+=46rom a3fdc06a53cbcc0e6b77863aae9a7b01a0848fd0 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 6 Jun 2022 10:49:14 +0100
+Subject: [PATCH] APCI: irq: Add support for multiple GSI domains
+
+In an unfortunate departure from the ACPI spec, the LoongArch
+architecture split its GSI space across multiple interrupt
+controllers.
+
+In order to be able to reuse sthe core code and prevent
+rachitectures from reinventing an already square wheel, offer
+the arch code the ability to register a dispatcher function
+that will return the domain fwnode for a given GSI.
+
+The ARM GIC drivers are updated to support this (with a single
+domain, as intended).
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Hanjun Guo <guohanjun@huawei.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 ---
-v1 --> v2
-- fix sparse warning about missing static on global  *scmi_top_pcntrl;
----
- drivers/powercap/Kconfig             |  13 +
- drivers/powercap/Makefile            |   1 +
- drivers/powercap/arm_scmi_powercap.c | 537 +++++++++++++++++++++++++++
- 3 files changed, 551 insertions(+)
- create mode 100644 drivers/powercap/arm_scmi_powercap.c
+ drivers/acpi/irq.c           | 41 +++++++++++++++++++++++-------------
+ drivers/irqchip/irq-gic-v3.c | 18 ++++++++++------
+ drivers/irqchip/irq-gic.c    | 18 ++++++++++------
+ include/linux/acpi.h         |  2 +-
+ 4 files changed, 51 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-index 515e3ceb3393..90d33cd1b670 100644
---- a/drivers/powercap/Kconfig
-+++ b/drivers/powercap/Kconfig
-@@ -44,6 +44,19 @@ config IDLE_INJECT
- 	  synchronously on a set of specified CPUs or alternatively
- 	  on a per CPU basis.
- 
-+config ARM_SCMI_POWERCAP
-+	tristate "ARM SCMI Powercap driver"
-+	depends on ARM_SCMI_PROTOCOL
-+	help
-+	  This enables support for the ARM Powercap based on ARM SCMI
-+	  Powercap protocol.
-+
-+	  ARM SCMI Powercap protocol allows power limits to be enforced
-+	  and monitored against the SCMI Powercap domains advertised as
-+	  available by the SCMI platform firmware.
-+
-+	  When compiled as module it will be called arm_scmi_powercap.ko.
-+
- config DTPM
- 	bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
- 	depends on OF
-diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-index 494617cdad88..4474201b4aa7 100644
---- a/drivers/powercap/Makefile
-+++ b/drivers/powercap/Makefile
-@@ -6,3 +6,4 @@ obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
- obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
- obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
- obj-$(CONFIG_IDLE_INJECT) += idle_inject.o
-+obj-$(CONFIG_ARM_SCMI_POWERCAP) += arm_scmi_powercap.o
-diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-new file mode 100644
-index 000000000000..36f6dc211fbb
---- /dev/null
-+++ b/drivers/powercap/arm_scmi_powercap.c
-@@ -0,0 +1,537 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI Powercap support.
-+ *
-+ * Copyright (C) 2022 ARM Ltd.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/math.h>
-+#include <linux/limits.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/powercap.h>
-+#include <linux/scmi_protocol.h>
-+
-+#define to_scmi_powercap_zone(z)		\
-+	container_of(z, struct scmi_powercap_zone, zone)
-+
-+static const struct scmi_powercap_proto_ops *powercap_ops;
-+
-+struct scmi_powercap_zone {
-+	unsigned int height;
-+	struct device *dev;
-+	struct scmi_protocol_handle *ph;
-+	const struct scmi_powercap_info *info;
-+	struct scmi_powercap_zone *spzones;
-+	struct powercap_zone zone;
-+	struct list_head node;
-+};
-+
-+struct scmi_powercap_root {
-+	unsigned int num_zones;
-+	struct scmi_powercap_zone *spzones;
-+	struct list_head *registered_zones;
-+};
-+
-+static struct powercap_control_type *scmi_top_pcntrl;
-+
-+static int scmi_powercap_zone_release(struct powercap_zone *pz)
-+{
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
-+						u64 *max_power_range_uw)
-+{
-+	*max_power_range_uw = (u64)U32_MAX;
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
-+				      u64 *power_uw)
-+{
-+	int ret;
-+	u32 avg_power, pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_monitoring)
-+		return -EINVAL;
-+
-+	ret = powercap_ops->measurements_get(spz->ph, spz->info->id, &avg_power,
-+					     &pai);
-+	if (ret)
-+		return ret;
-+
-+	if (spz->info->powercap_scale_mw)
-+		*power_uw = (u64)(avg_power * 1000);
-+	else
-+		*power_uw = (u64)avg_power;
-+
-+	return 0;
-+}
-+
-+static const struct powercap_zone_ops zone_ops = {
-+	.get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
-+	.get_power_uw = scmi_powercap_get_power_uw,
-+	.release = scmi_powercap_zone_release,
-+};
-+
-+static inline int
-+scmi_powercap_normalize_cap(const struct scmi_powercap_info *info,
-+			    u64 power_limit_uw, u32 *normalized)
-+{
-+	u64 req_power;
-+
-+	if (info->powercap_scale_mw)
-+		req_power = DIV_ROUND_UP_ULL(power_limit_uw, 1000);
-+	else
-+		req_power = power_limit_uw;
-+
-+	if (req_power > info->max_power_cap)
-+		*normalized = info->max_power_cap;
-+	else if (req_power < info->min_power_cap)
-+		*normalized = info->min_power_cap;
-+	else
-+		*normalized = (u32)req_power;
-+
-+	*normalized = rounddown(*normalized, info->power_cap_step);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_set_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 power_uw)
-+{
-+	int ret;
-+	u32 power;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_cap_config)
-+		return -EINVAL;
-+
-+	ret = scmi_powercap_normalize_cap(spz->info, power_uw, &power);
-+	if (ret)
-+		return ret;
-+
-+	return powercap_ops->cap_set(spz->ph, spz->info->id, power, false);
-+}
-+
-+static int scmi_powercap_get_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 *power_limit_uw)
-+{
-+	int ret;
-+	u32 power;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	ret = powercap_ops->cap_get(spz->ph, spz->info->id, &power);
-+	if (ret)
-+		return ret;
-+
-+	if (spz->info->powercap_scale_mw)
-+		*power_limit_uw = power * 1000;
-+	else
-+		*power_limit_uw = power;
-+
-+	return 0;
-+}
-+
-+static inline int
-+scmi_powercap_normalize_time(const struct scmi_powercap_info *info,
-+			     u64 time_us, u32 *normalized)
-+{
-+	if (time_us > info->max_pai)
-+		*normalized = info->max_pai;
-+	else if (time_us < info->min_pai)
-+		*normalized = info->min_pai;
-+	else
-+		*normalized = (u32)time_us;
-+
-+	*normalized = rounddown(*normalized, info->pai_step);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_set_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 time_window_us)
-+{
-+	int ret;
-+	u32 pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_pai_config)
-+		return -EINVAL;
-+
-+	ret = scmi_powercap_normalize_time(spz->info, time_window_us, &pai);
-+	if (ret)
-+		return ret;
-+
-+	return powercap_ops->pai_set(spz->ph, spz->info->id, pai);
-+}
-+
-+static int scmi_powercap_get_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 *time_window_us)
-+{
-+	int ret;
-+	u32 pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	ret = powercap_ops->pai_get(spz->ph, spz->info->id, &pai);
-+	if (ret)
-+		return ret;
-+
-+	*time_window_us = (u64)pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *max_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (spz->info->powercap_scale_uw)
-+		*max_power_uw = (u64)spz->info->max_power_cap;
-+	else
-+		*max_power_uw = (u64)(spz->info->max_power_cap * 1000);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *min_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (spz->info->powercap_scale_uw)
-+		*min_power_uw = (u64)spz->info->min_power_cap;
-+	else
-+		*min_power_uw = (u64)(spz->info->min_power_cap * 1000);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	*time_window_us = (u64)spz->info->max_pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	*time_window_us = (u64)spz->info->min_pai;
-+
-+	return 0;
-+}
-+
-+static const char *scmi_powercap_get_name(struct powercap_zone *pz, int cid)
-+{
-+	return "SCMI power-cap";
-+}
-+
-+static const struct powercap_zone_constraint_ops constraint_ops  = {
-+	.set_power_limit_uw = scmi_powercap_set_power_limit_uw,
-+	.get_power_limit_uw = scmi_powercap_get_power_limit_uw,
-+	.set_time_window_us = scmi_powercap_set_time_window_us,
-+	.get_time_window_us = scmi_powercap_get_time_window_us,
-+	.get_max_power_uw = scmi_powercap_get_max_power_uw,
-+	.get_min_power_uw = scmi_powercap_get_min_power_uw,
-+	.get_max_time_window_us = scmi_powercap_get_max_time_window_us,
-+	.get_min_time_window_us = scmi_powercap_get_min_time_window_us,
-+	.get_name = scmi_powercap_get_name,
-+};
-+
-+static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
-+{
-+	int i;
-+
-+	/* Un-register children zones first starting from the leaves */
-+	for (i = pr->num_zones - 1; i >= 0; i--) {
-+		if (!list_empty(&pr->registered_zones[i])) {
-+			struct scmi_powercap_zone *spz;
-+
-+			list_for_each_entry(spz, &pr->registered_zones[i], node)
-+				powercap_unregister_zone(scmi_top_pcntrl,
-+							 &spz->zone);
-+		}
-+	}
-+}
-+
-+static inline bool
-+scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
-+{
-+	return !list_empty(&spz->node);
-+}
-+
-+static inline unsigned int
-+scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return 0;
-+
-+	return spz->spzones[spz->info->parent_id].height + 1;
-+}
-+
-+static inline struct scmi_powercap_zone *
-+scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
+diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
+index c68e694fca26..6e1633ac1756 100644
+--- a/drivers/acpi/irq.c
++++ b/drivers/acpi/irq.c
+@@ -12,7 +12,7 @@
+=20
+ enum acpi_irq_model_id acpi_irq_model;
+=20
+-static struct fwnode_handle *acpi_gsi_domain_id;
++static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
+=20
+ /**
+  * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
+@@ -26,8 +26,10 @@ static struct fwnode_handle *acpi_gsi_domain_id;
+  */
+ int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+ {
+-	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_id,
+-							DOMAIN_BUS_ANY);
++	struct irq_domain *d;
++
++	d =3D irq_find_matching_fwnode(acpi_get_gsi_domain_id(gsi),
++				     DOMAIN_BUS_ANY);
+=20
+ 	*irq =3D irq_find_mapping(d, gsi);
+ 	/*
+@@ -53,12 +55,12 @@ int acpi_register_gsi(struct device *dev, u32 gsi, int =
+trigger,
+ {
+ 	struct irq_fwspec fwspec;
+=20
+-	if (WARN_ON(!acpi_gsi_domain_id)) {
++	fwspec.fwnode =3D acpi_get_gsi_domain_id(gsi);
++	if (WARN_ON(!fwspec.fwnode)) {
+ 		pr_warn("GSI: No registered irqchip, giving up\n");
+ 		return -EINVAL;
+ 	}
+=20
+-	fwspec.fwnode =3D acpi_gsi_domain_id;
+ 	fwspec.param[0] =3D gsi;
+ 	fwspec.param[1] =3D acpi_dev_get_irq_type(trigger, polarity);
+ 	fwspec.param_count =3D 2;
+@@ -73,13 +75,14 @@ EXPORT_SYMBOL_GPL(acpi_register_gsi);
+  */
+ void acpi_unregister_gsi(u32 gsi)
+ {
+-	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_id,
+-							DOMAIN_BUS_ANY);
++	struct irq_domain *d;
+ 	int irq;
+=20
+ 	if (WARN_ON(acpi_irq_model =3D=3D ACPI_IRQ_MODEL_GIC && gsi < 16))
+ 		return;
+=20
++	d =3D irq_find_matching_fwnode(acpi_get_gsi_domain_id(gsi),
++				     DOMAIN_BUS_ANY);
+ 	irq =3D irq_find_mapping(d, gsi);
+ 	irq_dispose_mapping(irq);
+ }
+@@ -97,7 +100,8 @@ EXPORT_SYMBOL_GPL(acpi_unregister_gsi);
+  * The referenced device fwhandle or NULL on failure
+  */
+ static struct fwnode_handle *
+-acpi_get_irq_source_fwhandle(const struct acpi_resource_source *source)
++acpi_get_irq_source_fwhandle(const struct acpi_resource_source *source,
++			     u32 gsi)
+ {
+ 	struct fwnode_handle *result;
+ 	struct acpi_device *device;
+@@ -105,7 +109,7 @@ acpi_get_irq_source_fwhandle(const struct acpi_resource=
+_source *source)
+ 	acpi_status status;
+=20
+ 	if (!source->string_length)
+-		return acpi_gsi_domain_id;
++		return acpi_get_gsi_domain_id(gsi);
+=20
+ 	status =3D acpi_get_handle(NULL, source->string_ptr, &handle);
+ 	if (WARN_ON(ACPI_FAILURE(status)))
+@@ -194,7 +198,7 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_re=
+source *ares,
+ 			ctx->index -=3D irq->interrupt_count;
+ 			return AE_OK;
+ 		}
+-		fwnode =3D acpi_gsi_domain_id;
++		fwnode =3D acpi_get_gsi_domain_id(ctx->index);
+ 		acpi_irq_parse_one_match(fwnode, irq->interrupts[ctx->index],
+ 					 irq->triggering, irq->polarity,
+ 					 irq->shareable, ctx);
+@@ -207,7 +211,8 @@ static acpi_status acpi_irq_parse_one_cb(struct acpi_re=
+source *ares,
+ 			ctx->index -=3D eirq->interrupt_count;
+ 			return AE_OK;
+ 		}
+-		fwnode =3D acpi_get_irq_source_fwhandle(&eirq->resource_source);
++		fwnode =3D acpi_get_irq_source_fwhandle(&eirq->resource_source,
++						      eirq->interrupts[ctx->index]);
+ 		acpi_irq_parse_one_match(fwnode, eirq->interrupts[ctx->index],
+ 					 eirq->triggering, eirq->polarity,
+ 					 eirq->shareable, ctx);
+@@ -291,10 +296,10 @@ EXPORT_SYMBOL_GPL(acpi_irq_get);
+  *          GSI interrupts
+  */
+ void __init acpi_set_irq_model(enum acpi_irq_model_id model,
+-			       struct fwnode_handle *fwnode)
++			       struct fwnode_handle *(*fn)(u32))
+ {
+ 	acpi_irq_model =3D model;
+-	acpi_gsi_domain_id =3D fwnode;
++	acpi_get_gsi_domain_id =3D fn;
+ }
+=20
+ /**
+@@ -312,8 +317,14 @@ struct irq_domain *acpi_irq_create_hierarchy(unsigned =
+int flags,
+ 					     const struct irq_domain_ops *ops,
+ 					     void *host_data)
+ {
+-	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_id,
+-							DOMAIN_BUS_ANY);
++	struct irq_domain *d;
++
++	/* This only works for the GIC model... */
++	if (acpi_irq_model !=3D ACPI_IRQ_MODEL_GIC)
 +		return NULL;
 +
-+	return &spz->spzones[spz->info->parent_id];
-+}
++	d =3D irq_find_matching_fwnode(acpi_get_gsi_domain_id(0),
++				     DOMAIN_BUS_ANY);
+=20
+ 	if (!d)
+ 		return NULL;
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 2be8dea6b6b0..87b1f53a65ec 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -2357,11 +2357,17 @@ static void __init gic_acpi_setup_kvm_info(void)
+ 	vgic_set_kvm_info(&gic_v3_kvm_info);
+ }
+=20
++static struct fwnode_handle *gsi_domain_handle;
 +
-+/**
-+ * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
-+ *
-+ * @pr: A reference to the root powercap zones descriptors
-+ * @spz: A reference to the SCMI powercap zone to register
-+ *
-+ * When registering SCMI powercap zones with the powercap framework we should
-+ * take care to always register zones starting from the root ones and to
-+ * deregister starting from the leaves.
-+ *
-+ * Unfortunately we cannot assume that the array of available SCMI powercap
-+ * zones provided by the SCMI platform firmware is built to comply with such
-+ * requirement.
-+ *
-+ * This function, given an SCMI powercap zone to register, takes care to walk
-+ * the SCMI powercap zones tree up to the root looking recursively for
-+ * unregistered parent zones before regsitering the provided zone; at the same
-+ * time each registered zone height in such a tree is accounted for and each
-+ * zone, once registered, is stored in the @registered_zones array that is
-+ * indexed by zone height: this way will be trivial, at unregister time, to walk
-+ * the @registered_zones array backward and unregister all the zones starting
-+ * from the leaves, removing children zones before parents.
-+ *
-+ * While doing this, we prune away any zone marked as invalid (like the ones
-+ * sporting an SCMI abstract power scale) as long as they are positioned as
-+ * leaves in the SCMI powercap zones hierarchy: any non-leaf invalid zone causes
-+ * the entire process to fail since we cannot assume the correctness of an SCMI
-+ * powercap zones hierarchy if some of the internal nodes are missing.
-+ *
-+ * Note that the array of SCMI powercap zones as returned by the SCMI platform
-+ * is known to be sane, i.e. zones relationships have been validated at the
-+ * protocol layer.
-+ *
-+ * Return: 0 on Success
-+ */
-+static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
-+				       struct scmi_powercap_zone *spz)
++static struct fwnode_handle *gic_v3_get_gsi_domain_id(u32 gsi)
 +{
-+	int ret = 0;
-+	struct scmi_powercap_zone *parent;
-+
-+	if (!spz->info)
-+		return ret;
-+
-+	parent = scmi_powercap_get_parent_zone(spz);
-+	if (parent && !scmi_powercap_is_zone_registered(parent)) {
-+		/*
-+		 * Bail out if a parent domain was marked as unsupported:
-+		 * only domains participating as leaves can be skipped.
-+		 */
-+		if (!parent->info)
-+			return -ENODEV;
-+
-+		ret = scmi_powercap_register_zone(pr, parent);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (!scmi_powercap_is_zone_registered(spz)) {
-+		struct powercap_zone *z;
-+
-+		z = powercap_register_zone(&spz->zone,
-+					   scmi_top_pcntrl,
-+					   spz->info->name,
-+					   parent ? &parent->zone : NULL,
-+					   &zone_ops, 1, &constraint_ops);
-+		if (!IS_ERR(z)) {
-+			spz->height = scmi_powercap_get_zone_height(spz);
-+			list_add(&spz->node,
-+				 &pr->registered_zones[spz->height]);
-+			dev_dbg(spz->dev,
-+				"Registered node %s - parent %s - height:%d\n",
-+				spz->info->name,
-+				parent ? parent->info->name : "ROOT",
-+				spz->height);
-+			ret = 0;
-+		} else {
-+			ret = PTR_ERR(z);
-+			dev_err(spz->dev,
-+				"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
-+				 spz->info->name,
-+				 parent ? parent->info->name : "ROOT",
-+				 spz->height, ret);
-+		}
-+	}
-+
-+	return ret;
++	return gsi_domain_handle;
 +}
 +
-+static int scmi_powercap_probe(struct scmi_device *sdev)
+ static int __init
+ gic_acpi_init(union acpi_subtable_headers *header, const unsigned long end)
+ {
+ 	struct acpi_madt_generic_distributor *dist;
+-	struct fwnode_handle *domain_handle;
+ 	size_t size;
+ 	int i, err;
+=20
+@@ -2393,18 +2399,18 @@ gic_acpi_init(union acpi_subtable_headers *header, =
+const unsigned long end)
+ 	if (err)
+ 		goto out_redist_unmap;
+=20
+-	domain_handle =3D irq_domain_alloc_fwnode(&dist->base_address);
+-	if (!domain_handle) {
++	gsi_domain_handle =3D irq_domain_alloc_fwnode(&dist->base_address);
++	if (!gsi_domain_handle) {
+ 		err =3D -ENOMEM;
+ 		goto out_redist_unmap;
+ 	}
+=20
+ 	err =3D gic_init_bases(acpi_data.dist_base, acpi_data.redist_regs,
+-			     acpi_data.nr_redist_regions, 0, domain_handle);
++			     acpi_data.nr_redist_regions, 0, gsi_domain_handle);
+ 	if (err)
+ 		goto out_fwhandle_free;
+=20
+-	acpi_set_irq_model(ACPI_IRQ_MODEL_GIC, domain_handle);
++	acpi_set_irq_model(ACPI_IRQ_MODEL_GIC, gic_v3_get_gsi_domain_id);
+=20
+ 	if (static_branch_likely(&supports_deactivate_key))
+ 		gic_acpi_setup_kvm_info();
+@@ -2412,7 +2418,7 @@ gic_acpi_init(union acpi_subtable_headers *header, co=
+nst unsigned long end)
+ 	return 0;
+=20
+ out_fwhandle_free:
+-	irq_domain_free_fwnode(domain_handle);
++	irq_domain_free_fwnode(gsi_domain_handle);
+ out_redist_unmap:
+ 	for (i =3D 0; i < acpi_data.nr_redist_regions; i++)
+ 		if (acpi_data.redist_regs[i].redist_base)
+diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
+index 820404cb56bc..4c7bae0ec8f9 100644
+--- a/drivers/irqchip/irq-gic.c
++++ b/drivers/irqchip/irq-gic.c
+@@ -1682,11 +1682,17 @@ static void __init gic_acpi_setup_kvm_info(void)
+ 	vgic_set_kvm_info(&gic_v2_kvm_info);
+ }
+=20
++static struct fwnode_handle *gsi_domain_handle;
++
++static struct fwnode_handle *gic_v2_get_gsi_domain_id(u32 gsi)
 +{
-+	int ret, i;
-+	struct scmi_powercap_root *pr;
-+	struct scmi_powercap_zone *spz;
-+	struct scmi_protocol_handle *ph;
-+	struct device *dev = &sdev->dev;
-+	const struct scmi_handle *handle = sdev->handle;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	powercap_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_POWERCAP,
-+						 &ph);
-+	if (IS_ERR(powercap_ops))
-+		return PTR_ERR(powercap_ops);
-+
-+	pr = devm_kzalloc(dev, sizeof(*pr), GFP_KERNEL);
-+	if (!pr)
-+		return -ENOMEM;
-+
-+	pr->num_zones = powercap_ops->num_domains_get(ph);
-+	if (pr->num_zones < 0) {
-+		dev_err(dev, "number of powercap domains not found\n");
-+		return pr->num_zones;
-+	}
-+
-+	pr->spzones = devm_kcalloc(dev, pr->num_zones,
-+				   sizeof(*pr->spzones), GFP_KERNEL);
-+	if (!pr->spzones)
-+		return -ENOMEM;
-+
-+	/* Allocate for worst possible scenario of maximum tree height. */
-+	pr->registered_zones = devm_kcalloc(dev, pr->num_zones,
-+					    sizeof(*pr->registered_zones),
-+					    GFP_KERNEL);
-+	if (!pr->registered_zones)
-+		return -ENOMEM;
-+
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		/*
-+		 * Powercap domains are validate by the protocol layer, i.e.
-+		 * when only non-NULL domains are returned here, whose
-+		 * parent_id is assured to point to another valid domain.
-+		 */
-+		spz->info = powercap_ops->info_get(ph, i);
-+
-+		spz->dev = dev;
-+		spz->ph = ph;
-+		spz->spzones = pr->spzones;
-+		INIT_LIST_HEAD(&spz->node);
-+		INIT_LIST_HEAD(&pr->registered_zones[i]);
-+
-+		/*
-+		 * Forcibly skip powercap domains using an abstract scale.
-+		 * Note that only leaves domains can be skipped, so this could
-+		 * lead later to a global failure.
-+		 */
-+		if (!spz->info->powercap_scale_uw &&
-+		    !spz->info->powercap_scale_mw) {
-+			dev_warn(dev,
-+				 "Abstract power scale not supported. Skip %s.\n",
-+				 spz->info->name);
-+			spz->info = NULL;
-+			continue;
-+		}
-+	}
-+
-+	/*
-+	 * Scan array of retrieved SCMI powercap domains and register them
-+	 * recursively starting from the root domains.
-+	 */
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		ret = scmi_powercap_register_zone(pr, spz);
-+		if (ret) {
-+			dev_err(dev,
-+				"Failed to register powercap zone %s - ret:%d\n",
-+				spz->info->name, ret);
-+			scmi_powercap_unregister_all_zones(pr);
-+			return ret;
-+		}
-+	}
-+
-+	dev_set_drvdata(dev, pr);
-+
-+	dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
-+
-+	return ret;
++	return gsi_domain_handle;
 +}
 +
-+static void scmi_powercap_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct scmi_powercap_root *pr = dev_get_drvdata(dev);
-+
-+	scmi_powercap_unregister_all_zones(pr);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_POWERCAP, "powercap" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static int scmi_powercap_setup(void)
-+{
-+	scmi_top_pcntrl = powercap_register_control_type(NULL, "arm-scmi", NULL);
-+	if (!scmi_top_pcntrl)
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+
-+static void scmi_powercap_teardown(void)
-+{
-+	powercap_unregister_control_type(scmi_top_pcntrl);
-+}
-+
-+static struct scmi_driver scmi_powercap_driver = {
-+	.name = "scmi-powercap",
-+	.setup = scmi_powercap_setup,
-+	.teardown = scmi_powercap_teardown,
-+	.probe = scmi_powercap_probe,
-+	.remove = scmi_powercap_remove,
-+	.id_table = scmi_id_table,
-+};
-+module_scmi_driver(scmi_powercap_driver);
-+
-+MODULE_AUTHOR("Cristian Marussi <cristian.marussi@arm.com>");
-+MODULE_DESCRIPTION("ARM SCMI Powercap driver");
-+MODULE_LICENSE("GPL");
--- 
-2.32.0
+ static int __init gic_v2_acpi_init(union acpi_subtable_headers *header,
+ 				   const unsigned long end)
+ {
+ 	struct acpi_madt_generic_distributor *dist;
+-	struct fwnode_handle *domain_handle;
+ 	struct gic_chip_data *gic =3D &gic_data[0];
+ 	int count, ret;
+=20
+@@ -1724,22 +1730,22 @@ static int __init gic_v2_acpi_init(union acpi_subta=
+ble_headers *header,
+ 	/*
+ 	 * Initialize GIC instance zero (no multi-GIC support).
+ 	 */
+-	domain_handle =3D irq_domain_alloc_fwnode(&dist->base_address);
+-	if (!domain_handle) {
++	gsi_domain_handle =3D irq_domain_alloc_fwnode(&dist->base_address);
++	if (!gsi_domain_handle) {
+ 		pr_err("Unable to allocate domain handle\n");
+ 		gic_teardown(gic);
+ 		return -ENOMEM;
+ 	}
+=20
+-	ret =3D __gic_init_bases(gic, domain_handle);
++	ret =3D __gic_init_bases(gic, gsi_domain_handle);
+ 	if (ret) {
+ 		pr_err("Failed to initialise GIC\n");
+-		irq_domain_free_fwnode(domain_handle);
++		irq_domain_free_fwnode(gsi_domain_handle);
+ 		gic_teardown(gic);
+ 		return ret;
+ 	}
+=20
+-	acpi_set_irq_model(ACPI_IRQ_MODEL_GIC, domain_handle);
++	acpi_set_irq_model(ACPI_IRQ_MODEL_GIC, gic_v2_get_gsi_domain_id);
+=20
+ 	if (IS_ENABLED(CONFIG_ARM_GIC_V2M))
+ 		gicv2m_init(NULL, gic_data[0].domain);
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 4f82a5bc6d98..957e23f727ea 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -356,7 +356,7 @@ int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
+ int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi);
+=20
+ void acpi_set_irq_model(enum acpi_irq_model_id model,
+-			struct fwnode_handle *fwnode);
++			struct fwnode_handle *(*)(u32));
+=20
+ struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
+ 					     unsigned int size,
+--=20
+2.34.1
 
+
+--=20
+Without deviation from the norm, progress is not possible.

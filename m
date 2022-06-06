@@ -2,90 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A682353EB75
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEEF53EA00
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241006AbiFFPt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S241265AbiFFPv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiFFPtx (ORCPT
+        with ESMTP id S241266AbiFFPvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:49:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B5F211A9A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:49:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA3B2608CD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:49:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E37C34115;
-        Mon,  6 Jun 2022 15:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654530591;
-        bh=vhd5my6p23hzPqpYXTafX+9Xs19bDMxSRZYPH7CeDlw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u1UwXXIe6PMVX+f1UufErS7LJbgs9RYdhUl4Is9wM3UnmxSAfwqgSLLa96U/2Mglb
-         g52qJI5Rn7mbjk2b7cBf/BlXDrBLa8/+wMo6H/ddwk5ByzUZthj1SVOUz01lkf6Qdj
-         FrJMyqa8noqzZhIiwRYTPuieKVnfp5d2Z+1vTtiXM7ErOsNVhxHZ1qQw81hwzmN/HZ
-         8q3U5HCcwHNU7szMY5MSLLUDPlD49MBtN+PlIZil2tIRojdjHbqtfxXAA9lws/sE/c
-         mzBTZiXCQXTQeg0gkoOocf21FZlSrYbUk5LeI0+MEQ85innUjvMaSDxgRN+SJDPZbN
-         3MS7FqGnH9aQg==
-Date:   Mon, 6 Jun 2022 16:49:46 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
-Subject: Re: [PATCH 1/3] ASoC: wm8940: Remove warning when no plat data
-Message-ID: <Yp4iGvGFD9jo4WUP@sirena.org.uk>
-References: <20220606154441.20848-1-lukma@denx.de>
+        Mon, 6 Jun 2022 11:51:53 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E837221684
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:51:52 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id i1so12424335plg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hc9viEeZffCjBHu/ML1+/iUUNsF5FvYmtO3dN3G4Vlw=;
+        b=kbPUnQSF99ZlyPwWnFMWPsmmeT5+u0GJl+ZGFTHeabKhMFFeDRnUeKGX3JhCSS+hY6
+         mMfS+PHJ9L5E095xRkAohdPXVJwDroRWIBlASitwNX9a3jAGrfYMSSDkqKcyUbDVXCul
+         ruha7NS+uXWnUloG+ofrs0oYPnaI0Fp6cI5tGm0Va2Uh4gfskz3KLuwZksl4j4bc1Zai
+         wppoYfumXRwL8ReXNQASidHso1uJrq1qx/g0f8or/mvDaG/HeoWDn4tbBUni0ZINeS3a
+         IuYpHsffUxWApkozUXTvNEmul9Mwkyx//djSdvkunrnGH+v4GAJzi2f2WuINB6WhIKZs
+         NydA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hc9viEeZffCjBHu/ML1+/iUUNsF5FvYmtO3dN3G4Vlw=;
+        b=7R49XxE3ieiHq74SvxMT69Nx8tfy7lRFwV9Df/5byvzqF4tf0h8He6WGVNqvfIumCN
+         lSY9JAROTp2Rw1e2XZWWe+/tsXzgGrTwr4Zcm5BqjxkS02xd6tsGXmCfJ/vfcSeBogiq
+         GsVsXvBlqi1SEHZFw3YR1fyK/zc1eMOOtxks0YBKY4wvubxsCUVuCYhV4mhckIfltnQa
+         Jr8/FNcu3A/HHf9XVLbqJPlCvY8qz3rk9oj2aG1n++fY8XKjIJK2p+tk3zbZ5+xjEcq3
+         u5jogtXX6XJINuCZ5Zu/P1r22ivqby6lvtc6GH54y3oOlMUkmI5Q52L1yRsWP5V+zuw7
+         y24g==
+X-Gm-Message-State: AOAM531s1kh7hAl6pP3YzVItx+ldQqnmcFZU4HmpCb/pFaZ95RykUJ9A
+        +RRA6hhELJZksoKioE7Uv6bvFQ==
+X-Google-Smtp-Source: ABdhPJz1bjjwn40bEHChJRrt6r9mbuu8qPVpXZuGa83rsIpPLR8CGwZz5sF5cZ4nz3eGwVRCnTDvrA==
+X-Received: by 2002:a17:902:b908:b0:163:e462:704c with SMTP id bf8-20020a170902b90800b00163e462704cmr24524551plb.145.1654530712020;
+        Mon, 06 Jun 2022 08:51:52 -0700 (PDT)
+Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id be3-20020a170902aa0300b001624b1e1a7bsm10941011plb.250.2022.06.06.08.51.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:51:51 -0700 (PDT)
+From:   Jinke Han <hanjinke.666@bytedance.com>
+X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lei.rao@intel.com, hanjinke <hanjinke.666@bytedance.com>
+Subject: [PATCH] ext4: reuse order and buddy in mb_mark_used when buddy split
+Date:   Mon,  6 Jun 2022 23:51:25 +0800
+Message-Id: <20220606155125.73990-1-hanjinke.666@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SMfXIdWXQXrCzSBB"
-Content-Disposition: inline
-In-Reply-To: <20220606154441.20848-1-lukma@denx.de>
-X-Cookie: Bedfellows make strange politicians.
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: hanjinke <hanjinke.666@bytedance.com>
 
---SMfXIdWXQXrCzSBB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+After each buddy split, mb_mark_used will search the proper order
+for the block which may consume some loop in mb_find_order_for_block.
+In fact, we can reuse the oder and buddy generated by the buddy split.
 
-On Mon, Jun 06, 2022 at 05:44:39PM +0200, Lukasz Majewski wrote:
-> The lack of platform data in the contemporary Linux
-> shall not be the reason to display warnings to the
-> kernel logs.
->=20
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+Reviewed by: lei.rao@intel.com
+Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+---
+ fs/ext4/mballoc.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Given that the device requires configuration and doesn't appear to have
-any other firmware interface support that's rather a strong statement...
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index 9f12f29bc346..c7ac6b269dd8 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -1933,6 +1933,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+ 	unsigned ret = 0;
+ 	int len0 = len;
+ 	void *buddy;
++	bool split = false;
+ 
+ 	BUG_ON(start + len > (e4b->bd_sb->s_blocksize << 3));
+ 	BUG_ON(e4b->bd_group != ex->fe_group);
+@@ -1957,12 +1958,16 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+ 
+ 	/* let's maintain buddy itself */
+ 	while (len) {
+-		ord = mb_find_order_for_block(e4b, start);
++		if (!split)
++			ord = mb_find_order_for_block(e4b, start);
+ 
+ 		if (((start >> ord) << ord) == start && len >= (1 << ord)) {
+ 			/* the whole chunk may be allocated at once! */
+ 			mlen = 1 << ord;
+-			buddy = mb_find_buddy(e4b, ord, &max);
++			if (!split)
++				buddy = mb_find_buddy(e4b, ord, &max);
++			else
++				split = false;
+ 			BUG_ON((start >> ord) >= max);
+ 			mb_set_bit(start >> ord, buddy);
+ 			e4b->bd_info->bb_counters[ord]--;
+@@ -1989,6 +1994,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+ 		mb_clear_bit(cur + 1, buddy);
+ 		e4b->bd_info->bb_counters[ord]++;
+ 		e4b->bd_info->bb_counters[ord]++;
++		split = true;
+ 	}
+ 	mb_set_largest_free_order(e4b->bd_sb, e4b->bd_info);
+ 
+-- 
+2.20.1
 
---SMfXIdWXQXrCzSBB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKeIhkACgkQJNaLcl1U
-h9CQawf+IvjMRjYTtlCxj94jZmQcyXcO4QjnvuR2CTFXHZXSO7Su/6NpQz+9eGpm
-D/dhru7Esj1HAPzHx+6XIcK1JauvrxbOfPH6Nrzu2ZgV30No/XI9s6/wO4wIwE3e
-McZ+A90coMQE5oNukg85LGp6B7xrzIuoAccZkw9EOR4N7LUkQBVJOjPMlqXW3moV
-uyAa+wWRFNBiNzPp+l07Tx6znMlzPunwa7FBMJdrsEn3RNCty3US0kE1LMuuxSLz
-3j3SvZSISWeckk/aMXvfxyWJtZWmNj1sZ8R06wjY62IbWAFxoxwZ/50jo0h6yunS
-n7tiOGDHYntybspAABL4q89tdQtXEg==
-=T/Bx
------END PGP SIGNATURE-----
-
---SMfXIdWXQXrCzSBB--

@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD09353E732
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B7C53EA3A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237737AbiFFMpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S237788AbiFFMtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237695AbiFFMpD (ORCPT
+        with ESMTP id S237786AbiFFMtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:45:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D0E0A7E3D;
-        Mon,  6 Jun 2022 05:45:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD3361042;
-        Mon,  6 Jun 2022 05:45:01 -0700 (PDT)
-Received: from FVFF77S0Q05N (FVFF77S0Q05N.cambridge.arm.com [10.1.36.139])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81E963F73B;
-        Mon,  6 Jun 2022 05:44:58 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 13:44:52 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] bitops: always define asm-generic non-atomic bitops
-Message-ID: <Yp32xDZ/qF8hM6p0@FVFF77S0Q05N>
-References: <20220606114908.962562-1-alexandr.lobakin@intel.com>
- <20220606114908.962562-3-alexandr.lobakin@intel.com>
+        Mon, 6 Jun 2022 08:49:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C7913324C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:49:33 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGtZQ127lzjXPS;
+        Mon,  6 Jun 2022 20:48:14 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 20:49:31 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 20:49:31 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+Subject: [PATCH] ARM: Mark the FDT_FIXED sections as shareable
+Date:   Mon, 6 Jun 2022 20:48:57 +0800
+Message-ID: <20220606124858.384-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606114908.962562-3-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,298 +55,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 01:49:03PM +0200, Alexander Lobakin wrote:
-> Move generic non-atomic bitops from the asm-generic header which
-> gets included only when there are no architecture-specific
-> alternatives, to a separate independent file to make them always
-> available.
-> 
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> ---
->  .../asm-generic/bitops/generic-non-atomic.h   | 124 ++++++++++++++++++
->  include/asm-generic/bitops/non-atomic.h       | 109 ++-------------
->  2 files changed, 132 insertions(+), 101 deletions(-)
->  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
-> 
-> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
-> new file mode 100644
-> index 000000000000..7a60adfa6e7d
-> --- /dev/null
-> +++ b/include/asm-generic/bitops/generic-non-atomic.h
-> @@ -0,0 +1,124 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H
-> +#define __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H
-> +
-> +#include <linux/bits.h>
-> +
-> +#ifndef _LINUX_BITOPS_H
-> +#error only <linux/bitops.h> can be included directly
-> +#endif
-> +
-> +/*
-> + * Generic definitions for bit operations, should not be used in regular code
-> + * directly.
-> + */
-> +
-> +/**
-> + * gen___set_bit - Set a bit in memory
-> + * @nr: the bit to set
-> + * @addr: the address to start counting from
-> + *
-> + * Unlike set_bit(), this function is non-atomic and may be reordered.
-> + * If it's called on the same region of memory simultaneously, the effect
-> + * may be that only one operation succeeds.
-> + */
-> +static __always_inline void
-> +gen___set_bit(unsigned int nr, volatile unsigned long *addr)
+commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
+region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
+which contains fdt. But it only reserves the exact physical memory that
+fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
+speculative read access can bring the RAM content from non-fdt zone into
+cache, PIPT makes it to be hit by subsequently read access through
+shareable mapping(such as linear mapping), and the cache consistency
+between cores is lost due to non-shareable property.
 
-Could we please use 'generic' rather than 'gen' as the prefix?
+|<---------FDT_FIXED_SIZE------>|
+|                               |
+ -------------------------------
+| <non-fdt> | <fdt> | <non-fdt> |
+ -------------------------------
 
-That'd match what we did for the generic atomic_*() and atomic64_*() functions
-in commits
+1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
+   into the cache.
+2. CoreB write <non-fdt> to update data through linear mapping. CoreA
+   received the notification to invalid the corresponding cachelines, but
+   the property non-shareable makes it to be ignored.
+3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
+   is read.
 
-* f8b6455a9d381fc5 ("locking/atomic: atomic: support ARCH_ATOMIC")
-* 1bdadf46eff6804a ("locking/atomic: atomic64: support ARCH_ATOMIC")
+To eliminate this risk, mark the MT_ROM sections as shareable.
 
-... and it avoids any potential confusion with 'gen' meaning 'generated' or
-similar.
+The other user of MT_ROM is XIP_KERNEL. XIP allows the kernel to run from
+flash to save RAM space. Not sure if anyone is still using XIP in order to
+save a little memory and not care about performance degradation. Add a new
+memory type MT_ROM_XIP to be compatible with it.
 
-Thanks,
-Mark.
+BTW: Another solution is to memblock_reserve() all the sections that fdt
+spans, but this will waste 2-4MiB memory.
 
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +
-> +	*p  |= mask;
-> +}
-> +
-> +static __always_inline void
-> +gen___clear_bit(unsigned int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +
-> +	*p &= ~mask;
-> +}
-> +
-> +/**
-> + * gen___change_bit - Toggle a bit in memory
-> + * @nr: the bit to change
-> + * @addr: the address to start counting from
-> + *
-> + * Unlike change_bit(), this function is non-atomic and may be reordered.
-> + * If it's called on the same region of memory simultaneously, the effect
-> + * may be that only one operation succeeds.
-> + */
-> +static __always_inline
-> +void gen___change_bit(unsigned int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +
-> +	*p ^= mask;
-> +}
-> +
-> +/**
-> + * gen___test_and_set_bit - Set a bit and return its old value
-> + * @nr: Bit to set
-> + * @addr: Address to count from
-> + *
-> + * This operation is non-atomic and can be reordered.
-> + * If two examples of this operation race, one can appear to succeed
-> + * but actually fail.  You must protect multiple accesses with a lock.
-> + */
-> +static __always_inline int
-> +gen___test_and_set_bit(unsigned int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +	unsigned long old = *p;
-> +
-> +	*p = old | mask;
-> +	return (old & mask) != 0;
-> +}
-> +
-> +/**
-> + * gen___test_and_clear_bit - Clear a bit and return its old value
-> + * @nr: Bit to clear
-> + * @addr: Address to count from
-> + *
-> + * This operation is non-atomic and can be reordered.
-> + * If two examples of this operation race, one can appear to succeed
-> + * but actually fail.  You must protect multiple accesses with a lock.
-> + */
-> +static __always_inline int
-> +gen___test_and_clear_bit(unsigned int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +	unsigned long old = *p;
-> +
-> +	*p = old & ~mask;
-> +	return (old & mask) != 0;
-> +}
-> +
-> +/* WARNING: non atomic and it can be reordered! */
-> +static __always_inline int
-> +gen___test_and_change_bit(unsigned int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +	unsigned long old = *p;
-> +
-> +	*p = old ^ mask;
-> +	return (old & mask) != 0;
-> +}
-> +
-> +/**
-> + * gen_test_bit - Determine whether a bit is set
-> + * @nr: bit number to test
-> + * @addr: Address to start counting from
-> + */
-> +static __always_inline int
-> +gen_test_bit(unsigned int nr, const volatile unsigned long *addr)
-> +{
-> +	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> +}
-> +
-> +#endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
-> diff --git a/include/asm-generic/bitops/non-atomic.h b/include/asm-generic/bitops/non-atomic.h
-> index 078cc68be2f1..7ce0ed22fb5f 100644
-> --- a/include/asm-generic/bitops/non-atomic.h
-> +++ b/include/asm-generic/bitops/non-atomic.h
-> @@ -2,121 +2,28 @@
->  #ifndef _ASM_GENERIC_BITOPS_NON_ATOMIC_H_
->  #define _ASM_GENERIC_BITOPS_NON_ATOMIC_H_
->  
-> +#include <asm-generic/bitops/generic-non-atomic.h>
->  #include <asm/types.h>
->  
-> -/**
-> - * arch___set_bit - Set a bit in memory
-> - * @nr: the bit to set
-> - * @addr: the address to start counting from
-> - *
-> - * Unlike set_bit(), this function is non-atomic and may be reordered.
-> - * If it's called on the same region of memory simultaneously, the effect
-> - * may be that only one operation succeeds.
-> - */
-> -static __always_inline void
-> -arch___set_bit(unsigned int nr, volatile unsigned long *addr)
-> -{
-> -	unsigned long mask = BIT_MASK(nr);
-> -	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> -
-> -	*p  |= mask;
-> -}
-> +#define arch___set_bit gen___set_bit
->  #define __set_bit arch___set_bit
->  
-> -static __always_inline void
-> -arch___clear_bit(unsigned int nr, volatile unsigned long *addr)
-> -{
-> -	unsigned long mask = BIT_MASK(nr);
-> -	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> -
-> -	*p &= ~mask;
-> -}
-> +#define arch___clear_bit gen___clear_bit
->  #define __clear_bit arch___clear_bit
->  
-> -/**
-> - * arch___change_bit - Toggle a bit in memory
-> - * @nr: the bit to change
-> - * @addr: the address to start counting from
-> - *
-> - * Unlike change_bit(), this function is non-atomic and may be reordered.
-> - * If it's called on the same region of memory simultaneously, the effect
-> - * may be that only one operation succeeds.
-> - */
-> -static __always_inline
-> -void arch___change_bit(unsigned int nr, volatile unsigned long *addr)
-> -{
-> -	unsigned long mask = BIT_MASK(nr);
-> -	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> -
-> -	*p ^= mask;
-> -}
-> +#define arch___change_bit gen___change_bit
->  #define __change_bit arch___change_bit
->  
-> -/**
-> - * arch___test_and_set_bit - Set a bit and return its old value
-> - * @nr: Bit to set
-> - * @addr: Address to count from
-> - *
-> - * This operation is non-atomic and can be reordered.
-> - * If two examples of this operation race, one can appear to succeed
-> - * but actually fail.  You must protect multiple accesses with a lock.
-> - */
-> -static __always_inline int
-> -arch___test_and_set_bit(unsigned int nr, volatile unsigned long *addr)
-> -{
-> -	unsigned long mask = BIT_MASK(nr);
-> -	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> -	unsigned long old = *p;
-> -
-> -	*p = old | mask;
-> -	return (old & mask) != 0;
-> -}
-> +#define arch___test_and_set_bit gen___test_and_set_bit
->  #define __test_and_set_bit arch___test_and_set_bit
->  
-> -/**
-> - * arch___test_and_clear_bit - Clear a bit and return its old value
-> - * @nr: Bit to clear
-> - * @addr: Address to count from
-> - *
-> - * This operation is non-atomic and can be reordered.
-> - * If two examples of this operation race, one can appear to succeed
-> - * but actually fail.  You must protect multiple accesses with a lock.
-> - */
-> -static __always_inline int
-> -arch___test_and_clear_bit(unsigned int nr, volatile unsigned long *addr)
-> -{
-> -	unsigned long mask = BIT_MASK(nr);
-> -	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> -	unsigned long old = *p;
-> -
-> -	*p = old & ~mask;
-> -	return (old & mask) != 0;
-> -}
-> +#define arch___test_and_clear_bit gen___test_and_clear_bit
->  #define __test_and_clear_bit arch___test_and_clear_bit
->  
-> -/* WARNING: non atomic and it can be reordered! */
-> -static __always_inline int
-> -arch___test_and_change_bit(unsigned int nr, volatile unsigned long *addr)
-> -{
-> -	unsigned long mask = BIT_MASK(nr);
-> -	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> -	unsigned long old = *p;
-> -
-> -	*p = old ^ mask;
-> -	return (old & mask) != 0;
-> -}
-> +#define arch___test_and_change_bit gen___test_and_change_bit
->  #define __test_and_change_bit arch___test_and_change_bit
->  
-> -/**
-> - * arch_test_bit - Determine whether a bit is set
-> - * @nr: bit number to test
-> - * @addr: Address to start counting from
-> - */
-> -static __always_inline int
-> -arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
-> -{
-> -	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> -}
-> +#define arch_test_bit gen_test_bit
->  #define test_bit arch_test_bit
->  
->  #endif /* _ASM_GENERIC_BITOPS_NON_ATOMIC_H_ */
-> -- 
-> 2.36.1
-> 
+Here's an example:
+  list_del corruption. prev->next should be c0ecbf74, but was c08410dc
+  kernel BUG at lib/list_debug.c:53!
+  ... ...
+  PC is at __list_del_entry_valid+0x58/0x98
+  LR is at __list_del_entry_valid+0x58/0x98
+  psr: 60000093
+  sp : c0ecbf30  ip : 00000000  fp : 00000001
+  r10: c08410d0  r9 : 00000001  r8 : c0825e0c
+  r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
+  r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
+  ... ...
+  Stack: (0xc0ecbf30 to 0xc0ecc000)
+  bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
+  bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
+  bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
+  ... ...                                           <  next     prev  >
+  (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
+  (__list_del_entry) from (finish_swait+0x60/0x7c)
+  (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
+  (rcu_gp_kthread) from (kthread+0x14c/0x15c)
+  (kthread) from (ret_from_fork+0x14/0x24)
+
+The faulty list node to be deleted is a local variable, its address is
+c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
+before lib/list_debug.c:53 is c08410dc. A large amount of printing results
+in swapping out the cacheline containing the old data(MT_ROM mapping is
+read only, so the cacheline cannot be dirty), and the subsequent dump
+operation obtains new data from the DDR.
+
+Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ arch/arm/include/asm/mach/map.h | 1 +
+ arch/arm/mm/mmu.c               | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
+index 92282558caf7cdb..0100f95c8104b3c 100644
+--- a/arch/arm/include/asm/mach/map.h
++++ b/arch/arm/include/asm/mach/map.h
+@@ -28,6 +28,7 @@ enum {
+ 	MT_MEMORY_RWX,
+ 	MT_MEMORY_RW,
+ 	MT_ROM,
++	MT_ROM_XIP,
+ 	MT_MEMORY_RWX_NONCACHED,
+ 	MT_MEMORY_RW_DTCM,
+ 	MT_MEMORY_RWX_ITCM,
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 5e2be37a198e29e..a707eac189b1d6d 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -300,6 +300,10 @@ static struct mem_type mem_types[] __ro_after_init = {
+ 		.prot_sect = PMD_TYPE_SECT,
+ 		.domain    = DOMAIN_KERNEL,
+ 	},
++	[MT_ROM_XIP] = {
++		.prot_sect = PMD_TYPE_SECT,
++		.domain    = DOMAIN_KERNEL,
++	},
+ 	[MT_MEMORY_RWX_NONCACHED] = {
+ 		.prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
+ 				L_PTE_MT_BUFFERABLE,
+@@ -566,6 +570,7 @@ static void __init build_mem_type_table(void)
+ 		 * from SVC mode and no access from userspace.
+ 		 */
+ 		mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
++		mem_types[MT_ROM_XIP].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+ 		mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+ 		mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
+ #endif
+@@ -590,6 +595,7 @@ static void __init build_mem_type_table(void)
+ 			mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
+ 			mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
+ 			mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
++			mem_types[MT_ROM].prot_sect |= PMD_SECT_S;
+ 		}
+ 	}
+ 
+@@ -650,6 +656,7 @@ static void __init build_mem_type_table(void)
+ 	mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
+ 	mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
+ 	mem_types[MT_ROM].prot_sect |= cp->pmd;
++	mem_types[MT_ROM_XIP].prot_sect |= cp->pmd;
+ 
+ 	switch (cp->pmd) {
+ 	case PMD_SECT_WT:
+@@ -1372,7 +1379,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
+ 	map.pfn = __phys_to_pfn(CONFIG_XIP_PHYS_ADDR & SECTION_MASK);
+ 	map.virtual = MODULES_VADDR;
+ 	map.length = ((unsigned long)_exiprom - map.virtual + ~SECTION_MASK) & SECTION_MASK;
+-	map.type = MT_ROM;
++	map.type = MT_ROM_XIP;
+ 	create_mapping(&map);
+ #endif
+ 
+-- 
+2.25.1
+

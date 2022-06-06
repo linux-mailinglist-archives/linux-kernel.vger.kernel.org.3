@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5546153EAB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E760D53E7FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiFFKJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
+        id S233734AbiFFKJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233507AbiFFKGU (ORCPT
+        with ESMTP id S233538AbiFFKGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:06:20 -0400
+        Mon, 6 Jun 2022 06:06:31 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A205113F422;
-        Mon,  6 Jun 2022 03:06:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF26F14084B;
+        Mon,  6 Jun 2022 03:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654509979; x=1686045979;
+  t=1654509986; x=1686045986;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/YabGktWvQG02Q/xoYLG4tb6J7+vtQn25dgAbOHlnbo=;
-  b=HnO20zhfRM6HHbZDqXHftIHTrh4iIO/B6H+ebnleEsdEZXHWaAyh0NUt
-   KC12iQHrjhm4Iytl+NPfq9uDWNu5FMzUgh6+HWBftprn4LHJg4ElmJMdE
-   iLIAzdidQDt2/hUu96SI39584iiO9vH48rNhT6/2c6zr8tq+2gkHmTu3e
-   r/1lbU6P+GKY7Y/t63ZMlh/529biIo0wiL+PDsICAGUPzMsPJ4XHK4ifb
-   oN508xgNVBfwFmHQWW9/wmVvxDxUh+ENuR8JPFzI08i7QX3FMt9hh4Qr5
-   9reW3L4JEJizpT9206ux0RBw06pIGC8m1B5x6t28kGFnXX/cVE1gB2Pbx
+  bh=7XJq3KuEwylRleSQc/kmsQM+84+gFlD9hNoKE43ukeE=;
+  b=TCDO5eVXQ+w4bw109315m9zeLTX1V5oYlmIdqAQ1zpFvvbczPfXg64Qt
+   no6tqj/1Ewwyppx8D5eZBlN7LyGvIZvKGB9pYBzjvw8PplZOP18u7Tk2Q
+   NQvj28UhVJTsiklOu2i+lKa6X8elgxIqSBptkl3vgAt2JSNK70DD5ZlXl
+   GBE/tjFsqLtd5P1NUTSAetgKi4nwAWxUbTKkf9X7WxOxMclDV9oJrz13o
+   fqOXN9rwNsGcC4eugDx/IjWQh0TJK6eESbao7mmaDDeINXAYsk0id+hqS
+   OjA7FZ1YiK6iyxNCP4YJF25HVUa/qOTQvBWC1942kgANqapc1RuD294XO
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987085"
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987087"
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="362987085"
+   d="scan'208";a="362987087"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:19 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:23 -0700
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635523868"
+   d="scan'208";a="635523878"
 Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:17 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:20 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 30/36] serial: fsl_lpuart: Call core's sanitization and remove custom one
-Date:   Mon,  6 Jun 2022 13:04:27 +0300
-Message-Id: <20220606100433.13793-31-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 31/36] serial: imx: Remove serial_rs485 sanitization
+Date:   Mon,  6 Jun 2022 13:04:28 +0300
+Message-Id: <20220606100433.13793-32-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
 References: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
@@ -60,62 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Serial core handles serial_rs485 sanitization. Remove custom
-sanitization from lpuart_config_rs485.
-
-This change loses dev_err when SER_RS485_RX_DURING_TX is set due to
-incorrect configuration. Other drivers do not do similar prinout for
-full-duplex case and it should be done in serial core if it is
-desirable to notify on this condition. Personally, I doesn't see it
-important because the kernel gracefully downgrades to half-duplex.
+The driver provides different rs485_supported for the case where RTS is
+not available making it unnecessary to handle it in
+imx_uart_rs485_config.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/fsl_lpuart.c | 17 -----------------
- 1 file changed, 17 deletions(-)
+ drivers/tty/serial/imx.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 88692dc9eefa..d35414cb3e4e 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1365,11 +1365,6 @@ static int lpuart_config_rs485(struct uart_port *port,
- 		~(UARTMODEM_TXRTSPOL | UARTMODEM_TXRTSE);
- 	writeb(modem, sport->port.membase + UARTMODEM);
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index ba853bc9b4db..1e96ddd2e262 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -1913,10 +1913,6 @@ static int imx_uart_rs485_config(struct uart_port *port,
+ 	struct imx_port *sport = (struct imx_port *)port;
+ 	u32 ucr2;
  
--	/* clear unsupported configurations */
--	rs485->delay_rts_before_send = 0;
--	rs485->delay_rts_after_send = 0;
--	rs485->flags &= ~SER_RS485_RX_DURING_TX;
+-	/* RTS is required to control the transmitter */
+-	if (!sport->have_rtscts && !sport->have_rtsgpio)
+-		rs485conf->flags &= ~SER_RS485_ENABLED;
 -
- 	if (rs485->flags & SER_RS485_ENABLED) {
- 		/* Enable auto RS-485 RTS mode */
- 		modem |= UARTMODEM_TXRTSE;
-@@ -1400,11 +1395,6 @@ static int lpuart32_config_rs485(struct uart_port *port,
- 				& ~(UARTMODEM_TXRTSPOL | UARTMODEM_TXRTSE);
- 	lpuart32_write(&sport->port, modem, UARTMODIR);
- 
--	/* clear unsupported configurations */
--	rs485->delay_rts_before_send = 0;
--	rs485->delay_rts_after_send = 0;
--	rs485->flags &= ~SER_RS485_RX_DURING_TX;
--
- 	if (rs485->flags & SER_RS485_ENABLED) {
- 		/* Enable auto RS-485 RTS mode */
- 		modem |= UARTMODEM_TXRTSE;
-@@ -2723,13 +2713,6 @@ static int lpuart_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto failed_get_rs485;
- 
--	if (sport->port.rs485.flags & SER_RS485_RX_DURING_TX)
--		dev_err(&pdev->dev, "driver doesn't support RX during TX\n");
--
--	if (sport->port.rs485.delay_rts_before_send ||
--	    sport->port.rs485.delay_rts_after_send)
--		dev_err(&pdev->dev, "driver doesn't support RTS delays\n");
--
- 	uart_rs485_config(&sport->port);
- 
- 	ret = devm_request_irq(&pdev->dev, sport->port.irq, handler, 0,
+ 	if (rs485conf->flags & SER_RS485_ENABLED) {
+ 		/* Enable receiver if low-active RTS signal is requested */
+ 		if (sport->have_rtscts &&  !sport->have_rtsgpio &&
 -- 
 2.30.2
 

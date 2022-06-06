@@ -2,107 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CD353EAAA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDEE53E80B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbiFFMcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S237142AbiFFMdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237101AbiFFMch (ORCPT
+        with ESMTP id S237141AbiFFMdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:32:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A695006B;
-        Mon,  6 Jun 2022 05:32:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 567FC218A0;
-        Mon,  6 Jun 2022 12:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654518744; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9PH08cMIB+cEkHAUwWnoV2Rdrv9uIuIlFs1vAUeLjT8=;
-        b=kkcGeuhVE5Zp7oPO/179KJdiOaqFznXyMnLXtvm36fYBU0bVl0mvNwBtpbRJl9dfr/+RiE
-        6+V2g6bvqx/sqvTs8KJxLuwtOPyRCN+64wkDcfUBnK2Kl4cuUe61yYbnAbyigE+nfD07VX
-        PxiKWoJJKcspi04Ocy896GgXS5pzquw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 888FD139F5;
-        Mon,  6 Jun 2022 12:32:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UhHOH9fznWIuPQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 06 Jun 2022 12:32:23 +0000
-Date:   Mon, 6 Jun 2022 14:32:22 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 5/5] bpf: add a selftest for cgroup
- hierarchical stats collection
-Message-ID: <20220606123222.GA4377@blackbody.suse.cz>
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-6-yosryahmed@google.com>
- <20220603162339.GA25043@blackbody.suse.cz>
- <CAJD7tkYwU5dW9Oof+pC81R9Bi-F=-EuiXpTn+HDeqbhTOTCcuw@mail.gmail.com>
+        Mon, 6 Jun 2022 08:33:51 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3F362D4;
+        Mon,  6 Jun 2022 05:33:45 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1654518803tsg12c24
+Received: from localhost.localdomain ( [111.9.5.115])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 06 Jun 2022 20:33:14 +0800 (CST)
+X-QQ-SSF: 01000000002000C0H000B00A0000000
+X-QQ-FEAT: oL/cO9MxQnNSoE5dwibh5Q8a7uGey0p7VEuvzpAgvjo/nRrUZ3kB5FmtGlIYv
+        GVIb9DehZKx5wbML+DUWwIGkuhLLvYfWBJZVZbhDJZYptx1oKoVb2kwbZlfIBGxPOzlxHtR
+        qOOWIenu5KaN67z6NIbtwzhzpL23pXtW2D77rD6SfXuKBzONbZRTreK9IeOV+Ob+NbPsTxy
+        2TrIgTu3FCYKutDKK4jlz2Y36KUweUS5eprctygPXXYb/SQCAO313vFQ40lZwEFgRIX93FF
+        6xXJ6gZVwuVMd27Fy19tSu/mDoddeOCnGbGiIWV//jnznD1Qafv1f6T2HwsXk8kGV3snrIU
+        0WDzM2rubahaKJChw6yaXmGEXfnrawIPhounmjq
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        leon@kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH v2] RDMA/hw/hfi1/pio_copy: Fix syntax errors in comments
+Date:   Mon,  6 Jun 2022 20:33:12 +0800
+Message-Id: <20220606123312.29053-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkYwU5dW9Oof+pC81R9Bi-F=-EuiXpTn+HDeqbhTOTCcuw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:52:27PM -0700, Yosry Ahmed <yosryahmed@google.com> wrote:
-> Good catch. I get confused between cgrp->subsys and
-> task->cgroups->subsys sometimes because of different fallback
-> behavior. IIUC cgrp->subsys should have NULL if the memory controller
-> is not enabled (no nearest ancestor fallback), and hence I can use
-> memory_subsys_enabled() that I defined just above task_memcg() to test
-> for this (I have no idea why I am not already using it here). Is my
-> understanding correct?
+Delete the redundant word 'and'.
 
-You're correct, css_set (task->cgroups) has a css (memcg) always defined
-(be it root only (or even a css from v1 hierarchy but that should not
-relevant here)). A particular cgroup can have the css set to NULL.
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
 
-When I think about your stats collecting example now, task_memcg() looks
-more suitable to achieve proper hierarchical counting in the end (IOW
-you'd lose info from tasks who don't reside in memcg-enabled leaf).
+Changes since v1
+*Change commit log
 
-(It's just that task_memcg won't return NULL. Unless the kernel is
-compiled without memcg support completely, which makes me think how do
-the config-dependent values propagate to BPF programs?)
+ drivers/infiniband/hw/hfi1/pio_copy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Michal
+diff --git a/drivers/infiniband/hw/hfi1/pio_copy.c b/drivers/infiniband/hw/hfi1/pio_copy.c
+index 136f9a99e1e0..7690f996d5e3 100644
+--- a/drivers/infiniband/hw/hfi1/pio_copy.c
++++ b/drivers/infiniband/hw/hfi1/pio_copy.c
+@@ -172,7 +172,7 @@ static inline void jcopy(u8 *dest, const u8 *src, u32 n)
+ }
+ 
+ /*
+- * Read nbytes from "from" and and place them in the low bytes
++ * Read nbytes from "from" and place them in the low bytes
+  * of pbuf->carry.  Other bytes are left as-is.  Any previous
+  * value in pbuf->carry is lost.
+  *
+-- 
+2.36.1
+

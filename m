@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DF853E913
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D47953EA94
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241442AbiFFQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S241520AbiFFQSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241522AbiFFQSU (ORCPT
+        with ESMTP id S241522AbiFFQSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:18:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2723D1B607E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654532298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J0ZUO9BPOkOuAPGkk2Pz+5mNS4xSTxe1mTSmQ0cCQME=;
-        b=KEWXi00lU6ZtrgsQKu6kWt3Tm0fvKpnJLt58bkjxSLq529/m1PqVfz4AEksmWJl56XhL/A
-        ssUuARFi2MIzSvxuSy2QOaJ6IAa3W4JFgS++Yuze0/uWwwUeKJDkwGjnlu43wmE/4mklya
-        DYBynii0erxnrx7Yez9F1VPkfysCaH0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-503-MXTbn1vQN26BHNERoTOF_A-1; Mon, 06 Jun 2022 12:18:16 -0400
-X-MC-Unique: MXTbn1vQN26BHNERoTOF_A-1
-Received: by mail-wr1-f69.google.com with SMTP id bv8-20020a0560001f0800b002183c5d5c26so841994wrb.20
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:18:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J0ZUO9BPOkOuAPGkk2Pz+5mNS4xSTxe1mTSmQ0cCQME=;
-        b=0INA1j4b3yUtJNYX+C8iFYZqJxDpzHP1A/jOr1+zZSAJVqbHJILjVPVIFPGUucLySO
-         Bi1qBFiDJbOH0gW7E8IwQr+zOMyDopXPpRQdRlVp9Qim4vejWlFy0umTahtzDBi2ZMGy
-         DpcQjFaF++sJ5WDAeQee/uMOoRzWkrmZA4jeDyiyFILGburPhbByklidw9PMMKLx92WN
-         YaAFQMokYkHouKDwl53O9AoJqgqIg0ZBcdceGNDCMfShQKUq6wuPjhMRVtePzxTTx5eY
-         Sr8hPH0K2EaZLclpbRVCJgNPLXesxJxo2k2QeRsr7tZ/w94Itvzot9+1xJNHxZqCEwLd
-         QYvA==
-X-Gm-Message-State: AOAM533oMCkwGTibuBSg124PIQv5/zdgk9kh10G8YaVm8yzUAmpDIq4C
-        YKsKH5AXZxQ5pI4Iwx7vYKeoT4dyWAFPpgeX2XMpuYa0yy4bWWmKtTHZrT4IfFI8RWHEtkhrqhA
-        Q5FYNDvGqGcvfDmSEqnNpJRw9
-X-Received: by 2002:a7b:c012:0:b0:39c:529a:7590 with SMTP id c18-20020a7bc012000000b0039c529a7590mr4431373wmb.6.1654532295409;
-        Mon, 06 Jun 2022 09:18:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJytGjRc+3NcIpfrqSv+o2Yaf/0WsZqKDYGxK8IxZRkKuhEAHyljhV2LtSwvga+jXqWkWBYJuw==
-X-Received: by 2002:a7b:c012:0:b0:39c:529a:7590 with SMTP id c18-20020a7bc012000000b0039c529a7590mr4431330wmb.6.1654532295117;
-        Mon, 06 Jun 2022 09:18:15 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id u12-20020a05600c210c00b003942a244f39sm15167933wml.18.2022.06.06.09.18.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 09:18:14 -0700 (PDT)
-Message-ID: <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
-Date:   Mon, 6 Jun 2022 18:18:12 +0200
+        Mon, 6 Jun 2022 12:18:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3961C4B13
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:18:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EEBA60EA3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:18:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD1EC385A9;
+        Mon,  6 Jun 2022 16:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654532318;
+        bh=3oCBnEMhW8iOscqIU/v0ccC1Gno4VX5ZfFY5AQN/GQs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DOaXzseA3IdedKlDd/0SMXSAH2XsHX4047LtvaxgprVkZ5ylLldFVhtYPLNg8vz9m
+         F5tlfOrpFSXLtIlvFugShdJZDaeWfjPDjYGLkuuI6HnCYnUd9p3vqEb01M1cumxi6r
+         Vp94/VbeioAXEbIrImwBWcY2VPF2TTN+tEeLcfNx2nqcN7ooPVgJVUuBcX+CvFfpnC
+         zqOgDZKC/jgC4z8htUqsmPHnaNg71zIxbjHnrnIuCNgHUcQoK7xESnbV5rUTG+iDzU
+         GZEjKHVoPV2DBIv292LdXxIyoq3ixFVXvrFEhNPh1tBAe13KkotFQCTOGMChd3/mqg
+         WRjq4l6jJp8qg==
+Date:   Mon, 6 Jun 2022 17:18:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH 2/3] ASoC: wm8940: Rewrite code to set proper clocks
+Message-ID: <Yp4o2bQammYjv7Kt@sirena.org.uk>
+References: <20220606154441.20848-1-lukma@denx.de>
+ <20220606154441.20848-2-lukma@denx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-References: <20220301201344.18191-1-sashal@kernel.org>
- <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
- <YppVupW+IWsm7Osr@xz-m1.local>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YppVupW+IWsm7Osr@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3nyy0JRAQdDxWcrH"
+Content-Disposition: inline
+In-Reply-To: <20220606154441.20848-2-lukma@denx.de>
+X-Cookie: Bedfellows make strange politicians.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 20:40, Peter Xu wrote:
-> I'm not really sure whether this is a bug or by design - do we require this
-> patch to be applied to all stable branches to make the guest not crash
-> after migration, or it is unexpected?
 
-Yes, we do, though the only reported bug was for PKRU.
+--3nyy0JRAQdDxWcrH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> However there seems to be something missing at least to me, on why it'll
-> fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
-> In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
-> patch, but 0x0 if with it.
+On Mon, Jun 06, 2022 at 05:44:40PM +0200, Lukasz Majewski wrote:
+> Without this change, the wm8940 driver is not working when
+> set_sysclk callback (wm8940_set_dai_sysclk) is called with
+> freqency not listed in the switch clause.
 
-What CPU model are you using for the VM?  For example, if the source 
-lacks this patch but the destination has it, the source will transmit 
-YMM registers, but the destination will fail to set them if they are not 
-available for the selected CPU model.
+> This change adjusts this driver to allow non-standard frequency
+> set (just after the boot) being adjusted afterwards by the sound
+> system core code.
 
-See the commit message: "As a bonus, it will also fail if userspace 
-tries to set fpu features (with the KVM_SET_XSAVE ioctl) that are not 
-compatible to the guest configuration.  Such features will never be 
-returned by KVM_GET_XSAVE or KVM_GET_XSAVE2."
+I don't entirely follow the above - in what way might the core adjust
+the clocking, and why would we want to allow the use of invalid clocks?
+Surely that just makes error checking worse.
 
-Paolo
+> Code in this commit is based on previous change done for wm8974
+> (SHA1: 51b2bb3f2568e6d9d81a001d38b8d70c2ba4af99).
 
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
+
+--3nyy0JRAQdDxWcrH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKeKNkACgkQJNaLcl1U
+h9CBzwf7Bsk4iYWK7ta6JUCjk6j2ZHCbZQHOMiN6efdBy834xrJCPOHTbaCz3KvO
+Kye4CEAZP8dHX8/L8dHyOFnPlzcDTL2lbSoMJNOA9rP4IUjCGdCBIyPLQ/kzEi4t
+Zcvy/aAB3tiR6rtlHP/3f/B+gqW+2b5vqJ2bjYMLL0QaK4xo8T4OZbUTtxPn+yOc
+Wrm2qJGy1X2PFU+Rtoh/rE5wPyCzvhjW5GzJJ8i111MnFvLsVlfbB0ckZ1+zrYFY
+JiP+ELOKT7USyUFugr3W12oV0RSGMQYa+uDqXSeMwZpos7U1WqbxSuEo3uRldgsB
+gdAfowSaXfq1ayZwfjNAl4WtQWAakQ==
+=RBse
+-----END PGP SIGNATURE-----
+
+--3nyy0JRAQdDxWcrH--

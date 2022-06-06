@@ -2,231 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7424453EA65
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA64953EB53
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241391AbiFFQBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
+        id S241433AbiFFQCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241374AbiFFQBr (ORCPT
+        with ESMTP id S241389AbiFFQCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:01:47 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6442A5F8EC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:01:45 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256EFPMx004746;
-        Mon, 6 Jun 2022 16:01:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3HIhbIpWxbWLPGLMfByZdm1sKGbdvpDG4GoCHEVpvvI=;
- b=BpVvmMcdpmD4I/sBBqFy7nIxd0ara7C7BR/kf8//qgYRG3yhZ089JukO09t0cBZYB97I
- pY1YKDuwJeLGF/ewRLaZnIdNuT0e6KtwBD41IkAXU1EtUXvDFTvy49wnLq2zmChpQrcs
- cxJGioGfUm2+NJn9ZMGKzdCM3FJuRVLZLenPkGuAYHJZJH30hxMERPLCVJ5VWgbZ9ZaT
- Q7uD81tFqBe0ce4nTtt8ELQmYxuqJDigGzlkQ6RVloLG4mM+AdxEziPciJ1tCKK5Xs+a
- Elm70EYR+53BIuZE1luLDvI0yH9vsZAwzKUetormGmBXAu6N3RQHTMyvE8P/9LWvv+Xd 0g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gggpvm4cn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 16:01:28 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 256Expol006216;
-        Mon, 6 Jun 2022 16:01:27 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gggpvm4bh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 16:01:27 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256FofBH023350;
-        Mon, 6 Jun 2022 16:01:25 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gfy19ak9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 16:01:25 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256G1N1I16777684
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Jun 2022 16:01:23 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1B654203F;
-        Mon,  6 Jun 2022 16:01:22 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A89B842045;
-        Mon,  6 Jun 2022 16:01:17 +0000 (GMT)
-Received: from [9.43.87.254] (unknown [9.43.87.254])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Jun 2022 16:01:17 +0000 (GMT)
-Message-ID: <3a557f74-cc3a-c0ee-78e8-2cf50bee5f2d@linux.ibm.com>
-Date:   Mon, 6 Jun 2022 21:31:16 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
- sysfs
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Huang Ying <ying.huang@intel.com>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
- <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
- <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
- <20220527151531.00002a0c@Huawei.com>
- <fbebbd2b-2ddb-bee6-5e12-67e3e18648ee@linux.ibm.com>
- <20220606155920.00004ce9@Huawei.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220606155920.00004ce9@Huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 6 Jun 2022 12:02:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02A031909;
+        Mon,  6 Jun 2022 09:02:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0126B60B4E;
+        Mon,  6 Jun 2022 16:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F9EC385A9;
+        Mon,  6 Jun 2022 16:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654531354;
+        bh=4fcI46sksNPRQpKV25vl8NhCk5UfbVE4mI4k5n7Qnak=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SlDHGrGws5AkJ0Oa+XUokumnrvTmtnu6PAic6lDmnGc8BznCLkQFxEDRCVF8o5oWx
+         LLVRm48VOHFcW8b0sGim9MUjuu4enRCbwJgtisGXt6ngM+VTkxSdjH79sCQDGKejAx
+         LGdVJLl/F2RcowjbM8n2J+GXSdGo5eVYBBzt14olldD9JS7QWmQ58UvIl7lrZvCR4w
+         jsVZatcBymS2nQAuZzaPlGoJVo1Vt34KvmTDN1uzDR/8ruOIH5PRCuPtP6MDrIUDRo
+         DaCtu+jS+4/pfutn+Gm5vjENdQDi/ps3by2LQPwG3Os6SiDK85aBbTjPhjb/5DPHgF
+         z9jc7IyDtNBzQ==
+Date:   Tue, 7 Jun 2022 01:02:29 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH] rethook: Reject getting a rethook if RCU is not
+ watching
+Message-Id: <20220607010229.5e75445aedb12c99cae2cd51@kernel.org>
+In-Reply-To: <CAEf4BzZdPc3HVUwtuyifaPwz_=9VtykafJsSsvDbYonLA=K=2Q@mail.gmail.com>
+References: <165189881197.175864.14757002789194211860.stgit@devnote2>
+        <20220524192301.0c2ab08a@gandalf.local.home>
+        <20220526232530.cb7d0aed0c60625ef093a735@kernel.org>
+        <Yo+TWcfpyHy55Il5@krava>
+        <20220527011434.9e8c47d1b40f549baf2cf52a@kernel.org>
+        <YpFMQOjvV/tgwsuK@krava>
+        <20220528101928.5118395f2d97142f7625b761@kernel.org>
+        <CAEf4BzZdPc3HVUwtuyifaPwz_=9VtykafJsSsvDbYonLA=K=2Q@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FYKk9iv1-EOjwDEnva-GGmA2i4RTBehY
-X-Proofpoint-GUID: 6ZCav8lFZIaHvAfErRuEKfRcyfm0bEwB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-06_04,2022-06-03_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 impostorscore=0 bulkscore=0 phishscore=0
- clxscore=1015 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206060071
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 8:29 PM, Jonathan Cameron wrote:
-> On Fri, 3 Jun 2022 14:10:47 +0530
-> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> wrote:
-> 
->> On 5/27/22 7:45 PM, Jonathan Cameron wrote:
->>> On Fri, 27 May 2022 17:55:23 +0530
->>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
->>>    
->>>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
->>>>
->>>> Add support to read/write the memory tierindex for a NUMA node.
->>>>
->>>> /sys/devices/system/node/nodeN/memtier
->>>>
->>>> where N = node id
->>>>
->>>> When read, It list the memory tier that the node belongs to.
->>>>
->>>> When written, the kernel moves the node into the specified
->>>> memory tier, the tier assignment of all other nodes are not
->>>> affected.
->>>>
->>>> If the memory tier does not exist, writing to the above file
->>>> create the tier and assign the NUMA node to that tier.
->>> creates
->>>
->>> There was some discussion in v2 of Wei Xu's RFC that what matter
->>> for creation is the rank, not the tier number.
->>>
->>> My suggestion is move to an explicit creation file such as
->>> memtier/create_tier_from_rank
->>> to which writing the rank gives results in a new tier
->>> with the next device ID and requested rank.
->>
->> I think the below workflow is much simpler.
->>
->> :/sys/devices/system# cat memtier/memtier1/nodelist
->> 1-3
->> :/sys/devices/system# cat node/node1/memtier
->> 1
->> :/sys/devices/system# ls memtier/memtier*
->> nodelist  power  rank  subsystem  uevent
->> /sys/devices/system# ls memtier/
->> default_rank  max_tier  memtier1  power  uevent
->> :/sys/devices/system# echo 2 > node/node1/memtier
->> :/sys/devices/system#
->>
->> :/sys/devices/system# ls memtier/
->> default_rank  max_tier  memtier1  memtier2  power  uevent
->> :/sys/devices/system# cat memtier/memtier1/nodelist
->> 2-3
->> :/sys/devices/system# cat memtier/memtier2/nodelist
->> 1
->> :/sys/devices/system#
->>
->> ie, to create a tier we just write the tier id/tier index to
->> node/nodeN/memtier file. That will create a new memory tier if needed
->> and add the node to that specific memory tier. Since for now we are
->> having 1:1 mapping between tier index to rank value, we can derive the
->> rank value from the memory tier index.
->>
->> For dynamic memory tier support, we can assign a rank value such that
->> new memory tiers are always created such that it comes last in the
->> demotion order.
-> 
-> I'm not keen on having to pass through an intermediate state where
-> the rank may well be wrong, but I guess it's not that harmful even
-> if it feels wrong ;)
-> 
+On Fri, 3 Jun 2022 12:21:19 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-Any new memory tier added can be of lowest rank (rank - 0) and hence 
-will appear as the highest memory tier in demotion order. User can then
-assign the right rank value to the memory tier? Also the actual demotion 
-target paths are built during memory block online which in most case 
-would happen after we properly verify that the device got assigned to 
-the right memory tier with correct rank value?
+> On Fri, May 27, 2022 at 6:19 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Sat, 28 May 2022 00:10:08 +0200
+> > Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > > On Fri, May 27, 2022 at 01:14:34AM +0900, Masami Hiramatsu wrote:
+> > > > On Thu, 26 May 2022 16:49:26 +0200
+> > > > Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > >
+> > > > > On Thu, May 26, 2022 at 11:25:30PM +0900, Masami Hiramatsu wrote:
+> > > > > > On Tue, 24 May 2022 19:23:01 -0400
+> > > > > > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > > > > >
+> > > > > > > On Sat,  7 May 2022 13:46:52 +0900
+> > > > > > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > > > > >
+> > > > > > > Is this expected to go through the BPF tree?
+> > > > > > >
+> > > > > >
+> > > > > > Yes, since rethook (fprobe) is currently used only from eBPF.
+> > > > > > Jiri, can you check this is good for your test case?
+> > > > >
+> > > > > sure I'll test it.. can't see the original email,
+> > > > > perhaps I wasn't cc-ed.. but I'll find it
+> > > >
+> > > > Here it is. I Cc-ed your @kernel.org address.
+> > > > https://lore.kernel.org/all/165189881197.175864.14757002789194211860.stgit@devnote2/T/#u
+> > > >
+> > > > >
+> > > > > is this also related to tracing 'idle' functions,
+> > > > > as discussed in here?
+> > > > >   https://lore.kernel.org/bpf/20220515203653.4039075-1-jolsa@kernel.org/
+> > > >
+> > > > Ah, yes. So this may not happen with the above patch, but for the
+> > > > hardening (ensuring it is always safe), I would like to add this.
+> > > >
+> > > > >
+> > > > > because that's the one I can reproduce.. but I can
+> > > > > certainly try that with your change as well
+> > > >
+> > > > Thank you!
+> > >
+> > > it did not help the idle warning as expected, but I did not
+> > > see any problems running bpf tests on top of this
+> >
+> > Oops, right. I forgot this is only for the rethook, not protect the
+> > fprobe handlers, since fprobe code doesn't involve the RCU code (it
+> > depends on ftrace's check). Sorry about that.
+> > Hmm, I need to add a test code for this issue, but that could be
+> > solved by your noninstr patch.
+> >
+> 
+> 
+> Masami,
+> 
+> It's not clear to me, do you intend to send a new revision with some
+> more tests or this patch as is ready to go into bpf tree?
 
-> Races are potentially a bit of a pain though depending on what we
-> expect the usage model to be.
-> 
-> There are patterns (CXL regions for example) of guaranteeing the
-> 'right' device is created by doing something like
-> 
-> cat create_tier > temp.txt
-> #(temp gets 2 for example on first call then
-> # next read of this file gets 3 etc)
-> 
-> cat temp.txt > create_tier
-> # will fail if there hasn't been a read of the same value
-> 
-> Assuming all software keeps to the model, then there are no
-> race conditions over creation.  Otherwise we have two new
-> devices turn up very close to each other and userspace scripting
-> tries to create two new tiers - if it races they may end up in
-> the same tier when that wasn't the intent.  Then code to set
-> the rank also races and we get two potentially very different
-> memories in a tier with a randomly selected rank.
-> 
-> Fun and games...  And a fine illustration why sysfs based 'device'
-> creation is tricky to get right (and lots of cases in the kernel
-> don't).
-> 
+OK, let me make a test code against this issue. This may need a raw
+fprobe test code (not a test case because it depends on that we can
+trace the "arch_cpu_idle()"), but that test code won't work after
+the "arch_cpu_idle()" is marked as noinstr (thus the test code will
+only for the kernel which doesn't have the noinstr patch).
+I want to add this check for the case if someone accidentally add
+a function which is not covered by RCU and that is tracable by
+fprobe (ftrace).
+Thus this is a kind of preventative fix.
 
-I would expect userspace to be careful and verify the memory tier and 
-rank value before we online the memory blocks backed by the device. Even 
-if we race, the result would be two device not intended to be part of 
-the same memory tier appearing at the same tier. But then we won't be 
-building demotion targets yet. So userspace could verify this, move the 
-nodes out of the memory tier. Once it is verified, memory blocks can be 
-onlined.
+Thank you,
 
-Having said that can you outline the usage of 
-memtier/create_tier_from_rank ?
+> 
+> 
+> > Thank you,
+> >
+> > >
+> > > jirka
+> > >
+> > > >
+> > > > >
+> > > > > jirka
+> > > > >
+> > > > > >
+> > > > > > Thank you,
+> > > > > >
+> > > > > >
+> > > > > > > -- Steve
+> > > > > > >
+> > > > > > >
+> > > > > > > > Since the rethook_recycle() will involve the call_rcu() for reclaiming
+> > > > > > > > the rethook_instance, the rethook must be set up at the RCU available
+> > > > > > > > context (non idle). This rethook_recycle() in the rethook trampoline
+> > > > > > > > handler is inevitable, thus the RCU available check must be done before
+> > > > > > > > setting the rethook trampoline.
+> > > > > > > >
+> > > > > > > > This adds a rcu_is_watching() check in the rethook_try_get() so that
+> > > > > > > > it will return NULL if it is called when !rcu_is_watching().
+> > > > > > > >
+> > > > > > > > Fixes: 54ecbe6f1ed5 ("rethook: Add a generic return hook")
+> > > > > > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > > > > ---
+> > > > > > > >  kernel/trace/rethook.c |    9 +++++++++
+> > > > > > > >  1 file changed, 9 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+> > > > > > > > index b56833700d23..c69d82273ce7 100644
+> > > > > > > > --- a/kernel/trace/rethook.c
+> > > > > > > > +++ b/kernel/trace/rethook.c
+> > > > > > > > @@ -154,6 +154,15 @@ struct rethook_node *rethook_try_get(struct rethook *rh)
+> > > > > > > >     if (unlikely(!handler))
+> > > > > > > >             return NULL;
+> > > > > > > >
+> > > > > > > > +   /*
+> > > > > > > > +    * This expects the caller will set up a rethook on a function entry.
+> > > > > > > > +    * When the function returns, the rethook will eventually be reclaimed
+> > > > > > > > +    * or released in the rethook_recycle() with call_rcu().
+> > > > > > > > +    * This means the caller must be run in the RCU-availabe context.
+> > > > > > > > +    */
+> > > > > > > > +   if (unlikely(!rcu_is_watching()))
+> > > > > > > > +           return NULL;
+> > > > > > > > +
+> > > > > > > >     fn = freelist_try_get(&rh->pool);
+> > > > > > > >     if (!fn)
+> > > > > > > >             return NULL;
+> > > > > > >
+> > > > > >
+> > > > > >
+> > > > > > --
+> > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > >
+> > > >
+> > > > --
+> > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> >
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
--aneesh
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

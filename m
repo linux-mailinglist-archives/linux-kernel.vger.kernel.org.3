@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC7653E8CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E5A53E8C1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237406AbiFFMjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S237614AbiFFMnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237386AbiFFMjP (ORCPT
+        with ESMTP id S237569AbiFFMm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:39:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8F1F99CD;
-        Mon,  6 Jun 2022 05:39:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D658421A67;
-        Mon,  6 Jun 2022 12:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654519151; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S16O+A6T24T23c0/paG1pu0dx4tXfDlUNTS+nP+cphE=;
-        b=U+4ZaQnCAkAGLVYgMbcQ8yOw2leTw/G6XgP0SWYOPzpKwuYpVOOYoLHknUOva5iMzb3EtS
-        M85t36oJc92vhEOXG3fj8bROYoQennKsr8Ma34tiOlPA+RSMR/AT8JPnwEBnkHxlfSl30o
-        ULznUdIGJrExqifnQZHozgX7CxQbDEI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7AA02139F5;
-        Mon,  6 Jun 2022 12:39:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TzjmHG/1nWISPwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 06 Jun 2022 12:39:11 +0000
-Date:   Mon, 6 Jun 2022 14:39:10 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, cgroups@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] cgroup: serialize css kill and release paths
-Message-ID: <20220606123910.GF6928@blackbody.suse.cz>
-References: <20220603173455.441537-1-tadeusz.struk@linaro.org>
- <20220603181321.443716-1-tadeusz.struk@linaro.org>
+        Mon, 6 Jun 2022 08:42:58 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041612B7E14;
+        Mon,  6 Jun 2022 05:42:57 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x5so13563662edi.2;
+        Mon, 06 Jun 2022 05:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PQw1JMjVkiQNJoOck+3BLNmeUABMQ6F26CTlYYxJVUg=;
+        b=Ng7rwDZs533yTuxU6qmIud7CHDX5RNauYlwduBAqI+VGpzLM0OfZsGM1OY4you+QAm
+         I2WojNNq/1fgByZPnJgEnHqcIJQVs9fL078n2Sxk8yA4pT+6gsXheyQiPl4SIocvQ5wx
+         QRPkI/g3NoNPjZq/B8jryfbkxTNVDlktLexVWZlqWLT7/YbOJ/OISJlNT4Bt7Yq7ZhZr
+         9yWGewT9fsB7jb251KLuS+9Kq4j1aZ3/Qiuecv3UJYlXMntjonJBMurM1KuwsmzuDlAr
+         h+umElD64fVZLEKmqMLyG59TH3EohIXZhzAISLsEQBl6NNDzglq3jUpFScYx6B3c1irJ
+         SNkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PQw1JMjVkiQNJoOck+3BLNmeUABMQ6F26CTlYYxJVUg=;
+        b=2HXWRFBOkVuIsvFm3OXyThhc4MhjvNHvj0U/KEYT0hOMsQ0e23rYerN4XB4H/zYrBM
+         +z3ebeILZ7eGeJIuYzmreKClDyWAT6acngqpG7FbfqNxFYZQNAZZ+Vx2l1Bzgx5xcnrb
+         JEdZ45zUgbJZJ7qBDKWttJ20J6atB89JK9xa+xNX5PteknTUPGWQtMrMS4DRRfbpelEE
+         iFZloroVAbObmKDlZaVtgpHRHLh/OpA7M1BDUcjIn4rmYSq6fBhLK7gqUa4USBrNU1OC
+         AgrV8WMLYkmJXeoucMTdVNpi5fpolDefJ9uYi2tY+wSPGg449J5uPVpCHNpf09KjXnKh
+         iTww==
+X-Gm-Message-State: AOAM532lSh+CqEedHQBNR+8GIMYtUQz9EKBUu4ufVKyG61nHIWxJvP3I
+        nX0qfYujXwlAi91Hak90UFY1+NjXks6hCFexWqo=
+X-Google-Smtp-Source: ABdhPJwd9NnSRZjTJzpvbi20WWr6ZovTSqz3iv90KI/emBK8/uza2eOFP3qY1UAXZTHLv5clWLpBxiOnXe+NCscAG7E=
+X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
+ o16-20020a056402439000b0042e0b7ee9acmr25491093edc.97.1654519375435; Mon, 06
+ Jun 2022 05:42:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603181321.443716-1-tadeusz.struk@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220606111316.19265-1-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220606111316.19265-1-ddrokosov@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 6 Jun 2022 14:42:18 +0200
+Message-ID: <CAHp75VfRF=NyU9TN0FJ=cj0w_C-cKL+foa+WskwpoBP9b+SfDA@mail.gmail.com>
+Subject: Re: [PATCH v2] iio: trigger: warn about non-registered iio trigger
+ getting attempt
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Mon, Jun 6, 2022 at 1:23 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+>
+> As a part of patch series about wrong trigger register() and get()
+> calls order in the some IIO drivers trigger initialization path:
+>
+> https://lore.kernel.org/all/20220524181150.9240-1-ddrokosov@sberdevices.ru/
+>
+> runtime WARN() is added to alarm IIO driver authors who make such
+> a mistake.
+>
+> When IIO driver allocates a new IIO trigger, it should register it before
 
-On Fri, Jun 03, 2022 at 11:13:21AM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
-> In such scenario the css_killed_work_fn will be en-queued via
-> cgroup_apply_control_disable(cgrp)->kill_css(css), and bail out to
-> cgroup_kn_unlock(). Then cgroup_kn_unlock() will call:
-> cgroup_put(cgrp)->css_put(&cgrp->self), which will try to enqueue
-> css_release_work_fn for the same css instance, causing a list_add
-> corruption bug, as can be seen in the syzkaller report [1].
+an IIO
 
-This hypothesis doesn't add up to me (I am sorry).
+> calling the get() operation. In other words, each IIO driver must abide by
+> IIO trigger alloc()/register()/get() calls order.
 
-The kill_css(css) would be a css associated with a subsys (css.ss !=
-NULL) whereas css_put(&cgrp->self) is a different css just for the
-cgroup (css.ss == NULL).
+I believe triggers usually acquired at ->probe() time, means that in
+case if the following code (however, I believe it will be quite rare)
+goes into deferred probe cycle the WARN will be repeated. Perhaps
+WARN_ONCE() ?
 
-Michal
+-- 
+With Best Regards,
+Andy Shevchenko

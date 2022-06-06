@@ -2,104 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDBE53E84D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EBA53E743
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239396AbiFFOEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S239401AbiFFOJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239340AbiFFOD4 (ORCPT
+        with ESMTP id S238043AbiFFOJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:03:56 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E40027411E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654524211;
-        bh=1rXejKPjfPobdbqz0N4V2TYitGKaYG2LAs2vjWAHL3A=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=EAxXEQM9A8tBIvVlZgUEqYL2B0H6N0P+yNg6iv+qEy1iYrI6qVy2woDBhO/nvz6DB
-         0OF+XNMphKeXch/MdFJdERLDavK22RSFH6MMK5Og2fQjMkN+9jHxLFHh7g/qSkd6aP
-         PK4EmNPo+T3wCAtyBprZfT/OEQJX7EQs2HgSKRm0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.151.134] ([217.61.151.134]) by web-mail.gmx.net
- (3c-app-gmx-bs45.server.lan [172.19.170.97]) (via HTTP); Mon, 6 Jun 2022
- 16:03:31 +0200
+        Mon, 6 Jun 2022 10:09:23 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F961EC56
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:09:22 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B2A473200935;
+        Mon,  6 Jun 2022 10:09:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 06 Jun 2022 10:09:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1654524560; x=1654610960; bh=2tg/LQuqY/
+        dZKlfQNp8Nv2cxpu5KDqfqntDP+vsu7ig=; b=x5d3HP0ThpnI46zljY1w+GcKy5
+        tX/Ph9kIAJOKEkF1bbc8bLw9yKmkPrpgNQ/Sbyf3+emwY/qnQ2ZcgOezRvyPUdef
+        ul7cqS2c1OZHZsnB1A1cLbvAoaQkJVJqHh7B1gHYN9So0EFfPziRSU3/ZPEaJfeR
+        9d66YleW9AVpCksfh+3yLgWwk9GcLgwrsapxGLtwo0fK561EdqRTIogcv+zhP7LJ
+        gLNNI+3EjeXArBCB/b2OFT0us7OfbmvFE2Wzcgu/0s4E38lyeVkVKrjl3Mr+xy1l
+        FLciu6YkB0z4tCjRrY+8VKyVdfoTgwBt3lrUtCCohb0S+mjPk08L15WVnM9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1654524560; x=1654610960; bh=2tg/LQuqY/dZKlfQNp8Nv2cxpu5K
+        DqfqntDP+vsu7ig=; b=Cfbr3AFFQ+R9BSykxEa163bL+Pviy4whwsDqARZRAOEK
+        RrH36uJFqo4uoFRLFzizD/9d8rURgfUyHvP8DHwbcDUrWKFd2T71ZsOeywf0DaJ+
+        22IeSaj5aYoVgyBI6g1if6DUjBycKTNcaRIQhbfhW/YtZHRs3TwuRNbXmXllx6VO
+        hIn1tgmKUea3ac0r1Nppsoh/ngJoQATRQgrtlCHhHA6kKBTKfZ5S0xaOKzmz7Sgr
+        cOlY3ravPcdKn5n6VpWx1rglcDGPJyJ8Wc+wdFX2RSXTrdPr7i6he1NfVruCFtXT
+        pWLNXbHGEtQcu3AbEhyn1vvQZk1KgqmqV1BXiG6lbQ==
+X-ME-Sender: <xms:jwqeYuVp6Ry65mew6hY7shKdvqM89WjquzBH6QVArf88vfwKYwdSvg>
+    <xme:jwqeYqnwl4HLeq0iHCrQQTiotGgIkFNIC-7GSTkkHcjwqLBebdt8Ssz6Uxf6K-W0D
+    FjGLf0lyK8r-zV_c6M>
+X-ME-Received: <xmr:jwqeYiamFRE-WJ_GdLRa_MwrvZxUjx3RIpt5uZ3CC_T1N4IyLLAAPrzg4jjLfvzAudiIoV03Y9WZujFigyEPDJWcdui0usHtiyWkBpg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtvddgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedukeevvdehheeuhefhhfefteeiffefgeffuefgkeetffevgeevgeejteei
+    gffghfenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhn
+    ohdrthgvtghh
+X-ME-Proxy: <xmx:jwqeYlVOaR3C6oG6-sNpqbbct6loa5n0RAT3GumnrNnaYi_kBUZJVA>
+    <xmx:jwqeYol81kqFsvKtbLIydnTFP4Z0M6aEk4OaednnrhvaC1gb_xVXFQ>
+    <xmx:jwqeYqe4aK4Wkz0h0-PTZ33PXGz9CsfVS0FvYrSlMOPVevoaN_nsRg>
+    <xmx:kAqeYliu8sXPx5aQNDxS9V0_vAmqIc54D-KmLXk6OZjgK0hgkqntKg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Jun 2022 10:09:19 -0400 (EDT)
+Date:   Mon, 6 Jun 2022 16:09:17 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] drm/format-helper: Add KUnit tests for
+ drm_fb_xrgb8888_to_rgb332()
+Message-ID: <20220606140917.suwk3uqxzsqeiab2@houat>
+References: <20220606095516.938934-1-jose.exposito89@gmail.com>
+ <20220606095516.938934-2-jose.exposito89@gmail.com>
+ <20220606134242.h6kuqn4zbpmc2rql@houat>
+ <576ed6ef-b961-9214-2c9b-56cb5b493b4e@redhat.com>
+ <20220606135219.nwhp4fdawg2qjeam@houat>
+ <78c1eb65-ea78-8744-5382-ea86a56a66f4@redhat.com>
 MIME-Version: 1.0
-Message-ID: <trinity-aa8df6a5-bba9-4b36-8b0f-591113b5fe71-1654524211277@3c-app-gmx-bs45>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liang Chen <cl@rock-chips.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Jeffy Chen <jeffy.chen@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Aw: Re: [PATCH] firmware: arm_scmi: Relax BASE protocol sanity
- checks on protocol list
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 6 Jun 2022 16:03:31 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <45bf11a8-47eb-e088-ba99-30c8788c7143@wolfvision.net>
-References: <20220523171559.472112-1-cristian.marussi@arm.com>
- <45bf11a8-47eb-e088-ba99-30c8788c7143@wolfvision.net>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:z+1mX/8+LgSoLE4mwpZunGvi7NBzJPoQLSoQ49Tf5vqoXmRpTJOxQnbemvyiKLa/nrGBs
- LM+O107+QK089vb72msJ1F9l16vPq5HTZWa6ERvZeV8PV2DynEgLcGClj45GPHYeufNokXkF8t/S
- pYXtK0ylpd8s2GpipEgxaFdjz9alLS0KOq2SFM39SJ+0xljWXvSH+PYRY4R/dx6o41LcvKTlpI9n
- UdmdYpV2WY9IecUpjGycaAK5Hh2OB15czJ/lnswOrzwq+4lvYU36l+wBBPRzeI9Iu+O35ySymMAP
- HE=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3Wwq7P8Fq3U=:/jDxrhTWZhDc5/zwtz01m8
- 9sXuoH8rNFlnZeGYD5wK+m1kBe3BNi0BBEEdPOO6JisIDTik43OhHFL83uJxrBWfka/5oHaK9
- cJc8EonlHjW/jmaxq3PwXDc9uv9qtQP/RO3WM5q7+ukfEF03CAv2gDlYXG7jdsM/83iQk3l8T
- iR+iBCYvj+jYXhRd1GRdNhe20ityIxIpj218Y6MTqYmu9rrIqEBCLPv4pgXDfJyY2ENtAJ2+n
- 9YEnEOxnmQed8CUNaImLifhh71Z3Va+Xc3z4XfoSgxn5+4gbt7rXxYpjY2p+dEmRiuEA6Tupx
- rblEZa3gQhK4++pQpARLMW3VBa0LM7jyH+K02ixI8DGzNaZqgJmcFrdo+AE3CFTh1HXGEWnMm
- pGjGUGCMuYPnuuWCap/LR31TPuOSkQyQ08T0jD1sBnXxKV83PciZgz8NiX/JRcMTBlu7tSbtP
- PBLwolK6PKxcFci5CXvmjPLFh37gfd189MHJeE2H3qqdYWsSQIBw/lQ3E0ao6xYBIjJPZSU48
- vnMRHbTu5ZG5AnL6jUGhBZ6RJCSzdsoaeOETnOi5wbqb1kiieLb1D0/bvyr5sXFNdpQwv96fj
- sMOGR+R1Rf55GfPUatW2F6dR7LijIJCgAvbUmmBurSjjDMVwlQuh3K0XsinQJDv+qiXCQw8Vc
- KtT4fBZfjp/jWj1d9rnywpdG8WaqYAVG+WWAuVs8MtvDoPShgbkfGyR1mjsyYj8O6MmdKPGZ2
- 5mw1XidRn5QHzgXY0fVqB90M3Jx21ZuKNE37qFsvV5DrnZqe7Ajqj7Deow69zeekDEdAlDGTI
- YEVpIKp
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hinoebkwkjhusomc"
+Content-Disposition: inline
+In-Reply-To: <78c1eb65-ea78-8744-5382-ea86a56a66f4@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-> Gesendet: Montag, 06. Juni 2022 um 14:59 Uhr
-> Von: "Michael Riesch" <michael.riesch@wolfvision.net>
+--hinoebkwkjhusomc
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Thanks a lot, without this fix the Mali G52 GPU won't probe on my RK3568
-> EVB1 in vanilla v5.19-rc1.
->
-> I guess this patch should have a Fixes: tag, right?
->
-> Would be great to have this in v5.19. AFAIC:
->
-> Acked-by: Michael Riesch <michael.riesch@wolfvision.net>
+On Mon, Jun 06, 2022 at 03:57:45PM +0200, Javier Martinez Canillas wrote:
+> Hello Maxime,
+>=20
+> On 6/6/22 15:52, Maxime Ripard wrote:
+> > hi,
+> >=20
+> > On Mon, Jun 06, 2022 at 03:49:57PM +0200, Javier Martinez Canillas wrot=
+e:
+> >> Hello Maxime,
+> >>
+> >> On 6/6/22 15:42, Maxime Ripard wrote:
+> >>> Hi,
+> >>>
+> >>> On Mon, Jun 06, 2022 at 11:55:16AM +0200, Jos=E9 Exp=F3sito wrote:
+> >>>> Test the conversion from XRGB8888 to RGB332.
+> >>>>
+> >>>> What is tested?
+> >>>>
+> >>>>  - Different values for the X in XRGB8888 to make sure it is ignored
+> >>>>  - Different clip values: Single pixel and full and partial buffer
+> >>>>  - Well known colors: White, black, red, green, blue, magenta, yellow
+> >>>>    and cyan
+> >>>>  - Other colors: Randomly picked
+> >>>>  - Destination pitch
+> >>>>
+> >>>> How to run the tests?
+> >>>>
+> >>>>  $ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/dr=
+m \
+> >>>>          --kconfig_add CONFIG_VIRTIO_UML=3Dy \
+> >>>>          --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
+> >>>
+> >>> It's not clear to me why you would need VIRTIO here? The Kunit config
+> >>> file should be enough to run the tests properly
+> >>>
+> >>
+> >> It's needed or otherwise KUnit will complain with:
+> >>
+> >> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/.ku=
+nitconfig
+> >> [15:47:31] Configuring KUnit Kernel ...
+> >> Regenerating .config ...
+> >> Populating config with:
+> >> $ make ARCH=3Dum O=3D.kunit olddefconfig
+> >> ERROR:root:Not all Kconfig options selected in kunitconfig were in the=
+ generated .config.
+> >> This is probably due to unsatisfied dependencies.
+> >> Missing: CONFIG_DRM=3Dy, CONFIG_DRM_KUNIT_TEST=3Dy
+> >> Note: many Kconfig options aren't available on UML. You can try runnin=
+g on a different architecture with something like "--arch=3Dx86_64".
+> >>
+> >> The following works correctly but it won't use User Mode Linux:
+> >>
+> >> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/.ku=
+nitconfig --arch=3Dx86_64
+> >=20
+> > But then, can't we add them to .kunitconfig?
+> >
+>=20
+> That's what I asked in the previous RFC too. Daniel mentioned that it sho=
+uldn't
+> go there because is platform specific (AFAIU, one might want to test it o=
+n x86,
+> aarch64, etc) but then I asked why we couldn't have a arch/um/.kunitconfi=
+g.
+>=20
+> The answer was that's not that simple and some agreement on how to do it =
+is needed:
+>=20
+> https://lists.freedesktop.org/archives/dri-devel/2022-June/357617.html
 
-Thanks for the Patch, had also this on my rk3568 bpi-r2 pro board:
+Thanks for pointing this out. So yeah, it's indeed not very optimal
 
-panfrost fde60000.gpu: get clock failed -517
+We should probably just document it somewhere in KMS then? It doesn't
+have to be in this patch series, but I have the feeling that we will end
+up with that discussion a lot from people frustrated to have spent too
+much time figuring it out :)
 
-fixed by this patch
+Maxime
 
-Tested-By: Frank Wunderlich <frank-w@public-files.de>
+--hinoebkwkjhusomc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-regards Frank
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYp4KjQAKCRDj7w1vZxhR
+xcJMAP99qsO7FgUwevO9U74+Tm8BrRBDMWERHZvHOG3KcT4wrwD/QBNjSrBbIMvm
+xKS0u3DrSP9u+bXKM/YCl/qgLvwRuwM=
+=8VNg
+-----END PGP SIGNATURE-----
+
+--hinoebkwkjhusomc--

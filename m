@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE9653ECFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF46953ECFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiFFRVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 13:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
+        id S229580AbiFFR21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 13:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiFFRV3 (ORCPT
+        with ESMTP id S229451AbiFFR2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 13:21:29 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150CD1A8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654536088; x=1686072088;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aZXZAX8ryC13ARBWgSKuw181DuaR6jjPQGTuVRvJkHM=;
-  b=Aryw3HZeVxOQmDD1nU7us5Do5TvnfrQr8kIrwc90sbjB70XtIIf+wCeR
-   9I5u3iNFpwlkViQJrUEMQoKIx2+2J2PMWOs8DC6ybFsOjzwp6p74Ll4jj
-   jnBH65pVOzlKMbB85y8KOikl4wornU3xaAj1WHiAeBj2HaWtvSIf0crfe
-   z3tmnqFCS0RWaWFwUIdG33CtUjJtzkhTYKsthlYGBJ4/O5nzXZeVAukmG
-   LQV+lFmXjj45dL5Awgl7MruCVCaAiAVpnlJs9GR2fVEWmDAxul5yfUE/y
-   fVLneBg4a6V8mBoCzmzcj7usmYfvQVamf7wvuLJHZZBLuQZ7mwMNeZD9/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="257117588"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="257117588"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 10:21:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635700208"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Jun 2022 10:21:24 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyGPs-000Cvl-0j;
-        Mon, 06 Jun 2022 17:21:24 +0000
-Date:   Tue, 7 Jun 2022 01:20:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Harsha Priya <harshapriya.n@intel.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Sathyanarayana Nujella <sathyanarayana.nujella@intel.com>,
-        Mike Mason <michael.w.mason@intel.com>,
-        Sathya Prakash M R <sathya.prakash.m.r@intel.com>,
-        Ben Zhang <benzh@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 730/6555] kismet: WARNING: unmet direct
- dependencies detected for SND_SOC_MAX98373 when selected by
- SND_SOC_INTEL_CNL_MAX98373_MACH
-Message-ID: <202206070102.DI93Q0qc-lkp@intel.com>
+        Mon, 6 Jun 2022 13:28:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9178717F81D;
+        Mon,  6 Jun 2022 10:28:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F5CFB81ACB;
+        Mon,  6 Jun 2022 17:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78AA8C385A9;
+        Mon,  6 Jun 2022 17:28:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654536501;
+        bh=pusrDuz3WUyMpSksB1PRPjrsVClzJ3+UWr9Zr58Vto0=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=n8mQuHB2iketKlSgDR7HMWIiMRH14+ifSY5EffTO5vK2gOJcSRWQg5BuKRHQqhP/L
+         jtEF9ba67nfGdhUG7KRO/DdUu0O4dgFHO38s/3Mi0AxiPhr/CbT51HWIbuDnCYLJ2G
+         /WfiDnjPsL+b0ZH5bIkqyPOeJ2tBDe9WBgOqSFDK7bSUhAuHBrBNf2DFhlLLVZkTEp
+         67zTemCNaDWbh6hhc2kaKYujEfvYKe8Nh7PK/L8qiA6xkVciRHvZ7fOG9UNNQCl/ZD
+         R+WpS5f5/FGuK8/ZhB1fgqCTDA7rCxN5CHonMOwnF+4O3+a5v+BuWRP/vmB9MZo8g5
+         4LBDD00I3PD0w==
+From:   Mark Brown <broonie@kernel.org>
+To:     robimarko@gmail.com, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sravanhome@gmail.com
+In-Reply-To: <20220604145816.47576-1-robimarko@gmail.com>
+References: <20220604145816.47576-1-robimarko@gmail.com>
+Subject: Re: [PATCH v2 1/4] regulator: dt-bindings: mps,mp5416: add MP5496 compatible
+Message-Id: <165453650020.2545008.16222686601707817374.b4-ty@kernel.org>
+Date:   Mon, 06 Jun 2022 18:28:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: 0b5ce6206cb013899ab47514f534db745ae7ae17 [730/6555] CHROMIUM: ASoC: Intel: Boards: Add CNL max98373 I2S machine driver
-config: (https://download.01.org/0day-ci/archive/20220607/202206070102.DI93Q0qc-lkp@intel.com/config)
-reproduce:
-        # https://github.com/jsarha/linux/commit/0b5ce6206cb013899ab47514f534db745ae7ae17
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout 0b5ce6206cb013899ab47514f534db745ae7ae17
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_SND_SOC_MAX98373 --selectors CONFIG_SND_SOC_INTEL_CNL_MAX98373_MACH -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+On Sat, 4 Jun 2022 16:58:13 +0200, Robert Marko wrote:
+> MP5496 is the updated version of MP5416 with the only difference being
+> that now all Buck regulators have the same 0.6-2.1875V range with a 12.5mV
+> step.
+> 
+> Since there is no way to differentiate them other than using compatibles,
+> add compatible for the MP5496.
+> 
+> [...]
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for SND_SOC_MAX98373 when selected by SND_SOC_INTEL_CNL_MAX98373_MACH
-   
-   WARNING: unmet direct dependencies detected for SND_SOC_MAX98373
-     Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=n]
-     Selected by [y]:
-     - SND_SOC_INTEL_CNL_MAX98373_MACH [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_INTEL_MACH [=y] && SND_SOC_INTEL_SKYLAKE [=y]
+Thanks!
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1/4] regulator: dt-bindings: mps,mp5416: add MP5496 compatible
+      commit: 423156b3d37ba051e72e87a8b4791a2a0ea40592
+[2/4] regulator: mp5416: alphabetically sort header includes
+      commit: b9dea0184b2641fb3937162a617289b23d52a587
+[3/4] regulator: mp5416: use OF match data
+      commit: df43c245dd0535f6e2256e0261d43a4dd72b8b28
+[4/4] regulator: mp5416: add support for MP5496
+      commit: fcdaf74a0abb6a4410b69dd80b525562457daafd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

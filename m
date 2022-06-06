@@ -2,245 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8CF53EAB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E6753E839
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbiFFJPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S232828AbiFFJYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiFFJPJ (ORCPT
+        with ESMTP id S232789AbiFFJXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:15:09 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2042.outbound.protection.outlook.com [40.107.114.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE48326D7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:15:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LhSLk56kFeTYH/Se8U1QOEDiI6K8DMZ0XIVC4rLsSip3m1963ko5AB+NmyeA84we8FO5IBySirC49oHamSEWU/QJrIsNwIiAvDvkdII2QpP5Xe4iooidJ4vsh6K305UCtfYdv+o7hmmtgbP0DttmVRK/iLhqyQ/6wPASQFdwnWtSponiON7w4B4mEMnZbknRZhU4mM7so3w5N7qfUJ+XMQH9oNSG6JXrzp8tM/j+IvJpSaKK0NGkKq0jzijX8I1IB7/4lGmluBtrPu6wnoPMiMTQ+V+xe9fwQvca4dDsfdK/qoeYsEfCchrKR7ekpRv4seiQN/bIAoXwLrky4h8doA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BGTia8m6evVQPDOwDf4vKCv6Aa2C0mRXW6FVWveItSQ=;
- b=gONx7U9ASsk4aRRWgLVtqVDOQMoQJMyardMueaiYa8/qbm9v2zm42vk2SaVtogJ0BDlrFROwobxgnFfsgmhOGvHheTnum0U0IIA4GwZtOceAmnR5gmBJFRKQt4Iv6Ax/QqQT6J2+HL8hMMXfhRuuydsKaFM3CP+f4+QOD+M/1FcX3WDOSYSvBt03wZyjy/0c5/IULe3tQL4IfDkQisb3Gpmc19tlRmYYL1+jQbhnFT1e3bX5K+SrcAxj+DmWx7ORbmw6Cntbx9FxQZXH8C007bcncHRDMvjPFsDZxSicWQjo0r/qx0IBzB9web6G8PT2YRAph00n0VEO16wT/QRTNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BGTia8m6evVQPDOwDf4vKCv6Aa2C0mRXW6FVWveItSQ=;
- b=Hcpe+ynpBv2Er+jGuQ5/+WcXLfpVwFYXllyEgHYuR51mhfvSrv9fPyoQq4O7+KjaLd3Ey+YD15Mj4km9Gyg9yr9yz/k7tZLFClWLcO28/DlNvpG5AZ0pXp8X+oKg/uH8wthrv/hF2qM7sBLDyhnmhZqqMg/sH66RYTS8u+hIZ3A=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TY2PR01MB5017.jpnprd01.prod.outlook.com (2603:1096:404:10b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Mon, 6 Jun
- 2022 09:15:05 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::246b:9355:73ad:b995]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::246b:9355:73ad:b995%2]) with mapi id 15.20.5314.019; Mon, 6 Jun 2022
- 09:15:05 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Wu Fengguang <fengguang.wu@intel.com>
-Subject: Re: Re: Re: [PATCH] mm/memory-failure: don't allow to unpoison hw
- corrupted page
-Thread-Topic: Re: Re: [PATCH] mm/memory-failure: don't allow to unpoison hw
- corrupted page
-Thread-Index: AQHYd/77DaeB5sxRWU66b+I0guEwlK0/mYsAgACevACAAZR3AIAALw6AgAAgBYA=
-Date:   Mon, 6 Jun 2022 09:15:05 +0000
-Message-ID: <20220606091503.GA1337789@hori.linux.bs1.fc.nec.co.jp>
-References: <20220604103229.3378591-1-pizhenwei@bytedance.com>
- <20220604115616.b7d5912ac5a37db608f67b78@linux-foundation.org>
- <584eedd3-9369-9df1-39e2-62e331abdcc0@bytedance.com>
- <20220606043202.GA1328953@hori.linux.bs1.fc.nec.co.jp>
- <3b58adbf-a8b2-8dba-71a7-123ba3850c10@bytedance.com>
-In-Reply-To: <3b58adbf-a8b2-8dba-71a7-123ba3850c10@bytedance.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4f801bfe-fb55-4aec-e666-08da479d0ba4
-x-ms-traffictypediagnostic: TY2PR01MB5017:EE_
-x-microsoft-antispam-prvs: <TY2PR01MB50173AFF38DB46728C1A2E62E7A29@TY2PR01MB5017.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t4CVTcjTNvruPplgC1e+0H/m7KNM16ZScX9Tt+e5Ftdq7h20EFGwB85fob5VDXem71NcAFI3FsTXGvw5LiYi3DSk3cMfD47w6X6bCQ9VK+KzRQRP+O7fVt2yQhT6ATYas/7LMMcnHXdZoDdONk1/9RrRPW58gAynW3EkSZKJPR7JLBUVRIQDdG3J4IP6IoWu41k+BU7cBkyJIQ4gdpW+8tp59BhlnmO1bv14mahPTd895VDAiQ9uGILZyO4aibc6ywbAwM8N5vqiGHrz6F/JOKp98DFTH8yi1U5zRMcClQiHO0IctinaS7HtucBRvcq8ENjcpPIl9BhznJYhRNttQz9Hjr47/hiaqTjd2AtdVNARHtRuMwDKzMXlwUb0gh7HCJxIbbn8CcEF385ciKJpmRi4ie4IklbKWXSKV/4wvCKF74JEhZQTFajNyt780uu2trF/vbp5ugSc6BpQ2xCbOHVIMDfcOa4RmcaQ7QpYztaC0738rN9j2GHF5zOu10UDvP4hYwGntBSsgMRJ2YiZQeP0+nmBpoFR6yVxH3VH6Hwfv6dRC1CeqElyz1IUP8FwLHaBgGlEORtgHAkKDd1JT9qAwQsx2PpOD1eiGskicoOGIdoDSF8mJBxcjJ7A56UIOP7PikN2/0Q578xB6431yQzmMJP7RWNMauQbR2OgTxptUp8aTopQglVtdB+mnFHxxfLWTrYqeHYYZXHcFSPK2wH4SOjhcmQfe/ax/pkBtoP6dST0nUAc5N/+h4UKdV5P9W82qwIESG2b/mTDHWGPf7FNB6KTThV8lUCJe5nPWSQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(4326008)(8676002)(122000001)(5660300002)(38070700005)(85182001)(82960400001)(76116006)(66476007)(66556008)(66946007)(64756008)(66446008)(2906002)(38100700002)(33656002)(316002)(86362001)(83380400001)(966005)(6486002)(508600001)(54906003)(55236004)(53546011)(71200400001)(9686003)(6512007)(26005)(6506007)(1076003)(186003)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SXNmTFNZMkhFRExxS3k5Ui9aenZTTkpDSXRWVW5YNU5jWUFueFZPeU5WV3M4?=
- =?utf-8?B?Nnc1aENpSzlNeWR3UXR1bzVrdGhESzJPTDNBVGtvVWRLVzZCalNWSzcvMHBz?=
- =?utf-8?B?ZkdCeExoM0MzdGtFUHNwUlF6K2VuR3Bwci8xcjJ3cENseVVsbW52ckNlYm5E?=
- =?utf-8?B?Tk9OVWlFK3pNOEZoYzFDY2Y4Y3JoUWt5emZXMkVnUFVEWUN0b3ROdG1uWUNI?=
- =?utf-8?B?TVZLSkRiNlduY1Q4R09vUGg5cEh0Sjk1Y0lNUEJBT3RNT202Q0lENjFYUEI3?=
- =?utf-8?B?L1lIcUdSNFd5bDZrN05lM2JOYWREVmhaZTcxUmxwdkFTZXlVcndpbzFydVZI?=
- =?utf-8?B?bUhMeWw4OXE0N1RIZ2RsTi9VWnpIT3g3RHZzdDZ2a1JqakFra0RzSGNBMGhq?=
- =?utf-8?B?U1QyQVQrM2FVamRvSHN6VTc3SVgyZXVTWWxwTWZyZk5DZ1Y3aTU5WEtzVXg4?=
- =?utf-8?B?YkZZK1RPUkQxRXgreWliMGcwOHBTVEk1YlllWGlyTGdpY3c3TVhHWFFnNzJx?=
- =?utf-8?B?V2pnandUNmFjeVRTLzI0a1UxcDVpdDdGa3E3NnRRUUQ5VHdaYkVPcUpIa041?=
- =?utf-8?B?My9VeXVkM210QzgvREtzYkdaMHpRWEVESVJZdFQvbEh1aGtucUlMTHkxQlFE?=
- =?utf-8?B?Z3dSV29zNDZ6Tks1SnRrdDVIeTRSTEZXQkRBU2xSMExwQlQxcmFiNWNVeXNU?=
- =?utf-8?B?RGhZZzRnSzJ3NlM0ZitHTzJVbE1WSGlONjU0dHBRYnF4K3VyNjI3WGZOVUo3?=
- =?utf-8?B?YWNFS1JST1VWS3U3VXV6NStGWStHR1B1bG10YitxQ0VZTDZxSHpnV2dhUHB3?=
- =?utf-8?B?WlIzMmU3UENrM2wzWEVZN3JGSEtaRHB1czV3aEZQMzdqTVRqMjZwRnRUL2R4?=
- =?utf-8?B?akxYSUkrTHRhS2pjYTY3SHdaZUlvbFllNnNPbCswalJRU3VnQnE4OG5VRXRa?=
- =?utf-8?B?WklEcjlVZkJ5VE1KTmNkc09RYWQ0OUNQVnlEM0hHeVd4NVcvb3ZGR2FLdTRW?=
- =?utf-8?B?bTA0TWlzSm5ZOXFHNHJJdVVtTDkxYTJnbXpYc09EaC9TZzVEMjJzcUliSkcz?=
- =?utf-8?B?Rzlua3dFSW1Hd3RoMzdnZ0tldjFKejhrL0ZtSVdocWo4cUE1SGNabldWTElh?=
- =?utf-8?B?cWIvYjdoZEp2Wi9sMDErc2ZOby9STkJtL0NYckRmMEVFZTVPRk5IeExvYmFt?=
- =?utf-8?B?YlU5UVJRNW8vL3VFYitOM092SFprSlp5aUo5Z1FVM2djVVYrZmF4NmhDNG1h?=
- =?utf-8?B?Ym5MR0dZMG9wODR3UldWSnpIeWNYc1I1bzM3NEVDbTFIR3A4SUIwbjROMm5W?=
- =?utf-8?B?OHY5dUJDaDNQUGxENnpVYXI3N0hTdFZhSjVlSWJFVWk1cVg0eG0zU2JINWZX?=
- =?utf-8?B?MjJaK3ZrNnZaZUNoYjRSTml4UjJzRWJySDFCSmo1MjUxejhlSkpyRTQzTmdT?=
- =?utf-8?B?ZW8xLzE1M0g5WjJ1SVZvdktUV0lUQUhrdksrTnhLcWRjekx2WkxMMXh1eXoy?=
- =?utf-8?B?cmVYOWZpeCtnVVVTSWxGQ3dIQTFvY1FGcElUc2llREdPVldPTG9weEl5NXh3?=
- =?utf-8?B?OHBZS2tDdk05R041M09FYkI1RVZaSWJhVU5IVjQyenlkWVhlRHo5WHVITGdx?=
- =?utf-8?B?ZkloblhaTVQwVU5MbDBpZDI3NVpUQ05FbmVUdEJsaDMzMnJnMU5sZnpPSVZJ?=
- =?utf-8?B?NC9wckpyMlA1VUFQRlhTTWlVNE1KMzhUbStjTTJmWUFseEZVbnl2elFxODM1?=
- =?utf-8?B?NmVjT1ZGMnNJSjNnZmpQSlZMVkMzU2Jqa1ZmQi83Sm82NGpnY1JNZ1FMcDFH?=
- =?utf-8?B?RmNVdUNIY2M2dVhNTzRjZ0lNV2dCUTVPei95T2FyeXd3YWI1QWM4dGpjaktC?=
- =?utf-8?B?NEVnSHhacUQ5SWNnN05CSStlZDdqc3RaaTdlUm9HL0RBcnVxdVBYVUR0YzI1?=
- =?utf-8?B?aUdIcXJ0VUZ2ODRhWUppYUlkM2Z0ZXgwZUR6dVBjNGlQV0xzemRHV0VqRDVk?=
- =?utf-8?B?WkYxZ05uOXkvVmkwWFpDcG9QS0hNL2ppektpQUxDRWJEQmxmZnk0UG9GMTRm?=
- =?utf-8?B?d0lXK0ZVRS85NGluZWVjT2svWlR0bTFpNktpSUNTZFZ0YnpKOXZHZ2ZxdCtN?=
- =?utf-8?B?bnoxT3MxTjRRVTdtTytaR2lOVWMvUjYrN29wSzNjaFpGSDhnaTZyUUx4Vy80?=
- =?utf-8?B?RHlPNWlhYmtpM0RMMlpITmsydFdORThMckpuL2xRZ2FnZVFyaFlQOTBiTm1R?=
- =?utf-8?B?cHovUjF2ZTh5NTJMTTJTVjhNT1pXbUtVcGZaWVZRS1VILytwZS9jMy9KRnFz?=
- =?utf-8?B?eHppUDlUU0NVdTlycFFFb1FTcmtzaGhwei9GRDE2ekJwbjJXWmVzU3YxYVA4?=
- =?utf-8?Q?yVBjDkiIF6XbFDO8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FE62BE21855E5948BEE5769A166E67EC@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 6 Jun 2022 05:23:49 -0400
+X-Greylist: delayed 485 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 02:23:47 PDT
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBCD6B01D;
+        Mon,  6 Jun 2022 02:23:47 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 900246601F5F;
+        Mon,  6 Jun 2022 10:15:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654506936;
+        bh=zd8+qvjdsmsp34JFBZwd6faM6nKbL9aSsLtZSO56220=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LhOfStsHWebQlKZ3BiKGtM9N4+JcT5NsjH8/DOzSUZJVnB74ADfj0TAIIL8fYjI2Y
+         sXD4DMHMvcF2i3eMtJHGq18zP07m2zma5y9CS40y4vZ5ZwfyYHwMJfbgUXJ3JLqsOY
+         7U1udlsdxcXxNgeQ4f0/LoWB1DUpziOGsZ4zAZ9tb2SFFVJpaGlIiZSlDH0LvIETOR
+         tGflqhmz94FQBarUEPWSQ2SEy48IosFtp8D4hLje+4VGk0NM3r8CjcButRyBVnnp+c
+         2kFKinw5wOuioVwRvzcyomHgv2lM1FEFiQlZIEjyQDSu8zl2EFkJ2ibjWCZpecQQyf
+         wbDcWIXcfl60g==
+Message-ID: <dd12145b-bbb3-b771-b8f7-075ea20bee17@collabora.com>
+Date:   Mon, 6 Jun 2022 11:15:32 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f801bfe-fb55-4aec-e666-08da479d0ba4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2022 09:15:05.6671
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s2v0Pl8VJnj5C8hpMq33+JDr3hbdueAhm32WCkEpb3Va7Oc1boEJvYjqTDOcKM7MNqiKUqeQ2yoaQDCSeY/dwQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB5017
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 05/15] remoteproc: mediatek: Add SCP core 1 driver for
+ dual-core scp
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        weishunc@google.com
+References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
+ <20220601112201.15510-6-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220601112201.15510-6-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCBKdW4gMDYsIDIwMjIgYXQgMDM6MjA6MjdQTSArMDgwMCwgemhlbndlaSBwaSB3cm90
-ZToNCj4gDQo+IA0KPiBPbiA2LzYvMjIgMTI6MzIsIEhPUklHVUNISSBOQU9ZQSjloIDlj6Mg55u0
-5LmfKSB3cm90ZToNCj4gPiBPbiBTdW4sIEp1biAwNSwgMjAyMiBhdCAxMjoyNDoyNFBNICswODAw
-LCB6aGVud2VpIHBpIHdyb3RlOg0KPiA+ID4gDQo+ID4gPiANCj4gPiA+IE9uIDYvNS8yMiAwMjo1
-NiwgQW5kcmV3IE1vcnRvbiB3cm90ZToNCj4gPiA+ID4gT24gU2F0LCAgNCBKdW4gMjAyMiAxODoz
-MjoyOSArMDgwMCB6aGVud2VpIHBpIDxwaXpoZW53ZWlAYnl0ZWRhbmNlLmNvbT4gd3JvdGU6DQo+
-ID4gPiA+IA0KPiA+ID4gPiA+IEN1cnJlbnRseSB1bnBvaXNvbl9tZW1vcnkodW5zaWduZWQgbG9u
-ZyBwZm4pIGlzIGRlc2lnbmVkIGZvciBzb2Z0DQo+ID4gPiA+ID4gcG9pc29uKGh3cG9pc29uLWlu
-amVjdCkgb25seS4gVW5wb2lzb25pbmcgYSBoYXJkd2FyZSBjb3JydXB0ZWQgcGFnZQ0KPiA+ID4g
-PiA+IHB1dHMgcGFnZSBiYWNrIGJ1ZGR5IG9ubHksIHRoaXMgbGVhZHMgQlVHIGR1cmluZyBhY2Nl
-c3Npbmcgb24gdGhlDQo+ID4gPiA+ID4gY29ycnVwdGVkIEtQVEUuDQo+ID4gDQo+ID4gVGhhbmsg
-eW91IGZvciB0aGUgcGF0Y2guIEkgdGhpbmsgdGhpcyB3aWxsIGJlIGhlbHBmdWwgZm9yIGludGVn
-cmF0aW9uIHRlc3RpbmcuDQo+ID4gDQo+ID4gWW91IG1lbnRpb24gImhhcmR3YXJlIGNvcnJ1cHRl
-ZCBwYWdlIiBhcyB0aGUgY29uZGl0aW9uIG9mIHRoaXMgYnVnLCBhbmQgSQ0KPiA+IHRoaW5rIHRo
-YXQgaXQgbWVhbnMgYSByZWFsIGhhcmR3YXJlIGVycm9yLCBidXQgdGhpcyBCVUcgc2VlbXMgdG8g
-YmUNCj4gPiB0cmlnZ2VyZWQgd2hlbiB3ZSB1c2UgbWNlLWluamVjdCBvciBBUEVJICh0aGVzZSBh
-cmUgYWxzbyBzb2Z0d2FyZSBpbmplY3Rpb24NCj4gPiB3aXRob3V0IGNvcnJ1cHRpbmcgdGhlIG1l
-bW9yeSBwaHlzaWNhbGx5KS4gU28gdGhlIGFjdHVhbCBjb25kaXRpb24gaXMNCj4gPiAid2hlbiBt
-ZW1vcnlfZmFpbHVyZSgpIGlzIGNhbGxlZCBieSBNQ0UgaGFuZGxlciI/DQo+ID4gDQo+IA0KPiBZ
-ZXMsIEkgdXNlIFFFTVUgdG8gZW11bGF0ZSBhICdyZWFsIGhhcmR3YXJlIGVycm9yJyBieSBjb21t
-YW5kOg0KPiB2aXJzaCBxZW11LW1vbml0b3ItY29tbWFuZCB2bSAtLWhtcCBtY2UgMCA5IDB4YmQw
-MDAwMDAwMDAwMDBjMCAweGQNCj4gMHg2MTIzNDAwMCAweDhjDQo+IA0KPiA+ID4gPiA+IA0KPiA+
-ID4gPiA+IERvIG5vdCBhbGxvdyB0byB1bnBvaXNvbiBoYXJkd2FyZSBjb3JydXB0ZWQgcGFnZSBp
-biB1bnBvaXNvbl9tZW1vcnkoKQ0KPiA+ID4gPiA+IHRvIGF2b2lkIEJVRyBsaWtlIHRoaXM6DQo+
-ID4gPiA+ID4gDQo+ID4gPiA+ID4gICAgVW5wb2lzb246IFNvZnR3YXJlLXVucG9pc29uZWQgcGFn
-ZSAweDYxMjM0DQo+ID4gPiA+ID4gICAgQlVHOiB1bmFibGUgdG8gaGFuZGxlIHBhZ2UgZmF1bHQg
-Zm9yIGFkZHJlc3M6IGZmZmY4ODgwNjEyMzQwMDANCj4gPiA+ID4gDQo+ID4gPiA+IFRoYW5rcy4N
-Cj4gPiA+ID4gDQo+ID4gPiA+ID4gLS0tIGEvbW0vbWVtb3J5LWZhaWx1cmUuYw0KPiA+ID4gPiA+
-ICsrKyBiL21tL21lbW9yeS1mYWlsdXJlLmMNCj4gPiA+ID4gPiBAQCAtMjA5MCw2ICsyMDkwLDcg
-QEAgaW50IHVucG9pc29uX21lbW9yeSh1bnNpZ25lZCBsb25nIHBmbikNCj4gPiA+ID4gPiAgICB7
-DQo+ID4gPiA+ID4gICAgCXN0cnVjdCBwYWdlICpwYWdlOw0KPiA+ID4gPiA+ICAgIAlzdHJ1Y3Qg
-cGFnZSAqcDsNCj4gPiA+ID4gPiArCXB0ZV90ICprcHRlOw0KPiA+ID4gPiA+ICAgIAlpbnQgcmV0
-ID0gLUVCVVNZOw0KPiA+ID4gPiA+ICAgIAlpbnQgZnJlZWl0ID0gMDsNCj4gPiA+ID4gPiAgICAJ
-c3RhdGljIERFRklORV9SQVRFTElNSVRfU1RBVEUodW5wb2lzb25fcnMsIERFRkFVTFRfUkFURUxJ
-TUlUX0lOVEVSVkFMLA0KPiA+ID4gPiA+IEBAIC0yMTAxLDYgKzIxMDIsMTMgQEAgaW50IHVucG9p
-c29uX21lbW9yeSh1bnNpZ25lZCBsb25nIHBmbikNCj4gPiA+ID4gPiAgICAJcCA9IHBmbl90b19w
-YWdlKHBmbik7DQo+ID4gPiA+ID4gICAgCXBhZ2UgPSBjb21wb3VuZF9oZWFkKHApOw0KPiA+ID4g
-PiA+ICsJa3B0ZSA9IHZpcnRfdG9fa3B0ZSgodW5zaWduZWQgbG9uZylwYWdlX3RvX3ZpcnQocCkp
-Ow0KPiA+ID4gPiA+ICsJaWYgKGtwdGUgJiYgIXB0ZV9wcmVzZW50KCprcHRlKSkgew0KPiA+ID4g
-PiA+ICsJCXVucG9pc29uX3ByX2luZm8oIlVucG9pc29uOiBQYWdlIHdhcyBoYXJkd2FyZSBwb2lz
-b25lZCAlI2x4XG4iLA0KPiA+ID4gPiA+ICsJCQkJIHBmbiwgJnVucG9pc29uX3JzKTsNCj4gPiAN
-Cj4gPiBUaGlzIGNhbiBwcmV2ZW50IHVucG9pc29uIGZvciBod3BvaXNvbiBvbiA0a0IgcGFnZXMs
-IGJ1dCBub3QgZm9yIGh1Z2V0bGIgcGFnZXMsDQo+ID4gd2hlcmUgSSBzZWUgdGhlIHNpbWlsYXIg
-QlVHIGFzIGZvbGxvd3MgKGV2ZW4gd2l0aCBhcHBseWluZyB5b3VyIHBhdGNoKToNCj4gPiANCj4g
-PiAgICBbICA5MTcuODA2NzEyXSBCVUc6IHVuYWJsZSB0byBoYW5kbGUgcGFnZSBmYXVsdCBmb3Ig
-YWRkcmVzczogZmZmZjlmN2JiMzIwMTAwMA0KPiA+ICAgIFsgIDkxNy44MTAxNDRdICNQRjogc3Vw
-ZXJ2aXNvciB3cml0ZSBhY2Nlc3MgaW4ga2VybmVsIG1vZGUNCj4gPiAgICBbICA5MTcuODEyNTg4
-XSAjUEY6IGVycm9yX2NvZGUoMHgwMDAyKSAtIG5vdC1wcmVzZW50IHBhZ2UNCj4gPiAgICBbICA5
-MTcuODE1MDA3XSBQR0QgMTA0ODAxMDY3IFA0RCAxMDQ4MDEwNjcgUFVEIDEwMDA2YjA2MyBQTUQg
-MTA1MmQwMDYzIFBURSA4MDBmZmZmZWNjZGZlMDYyDQo+ID4gICAgWyAgOTE3LjgxODc2OF0gT29w
-czogMDAwMiBbIzFdIFBSRUVNUFQgU01QIFBUSQ0KPiA+ICAgIFsgIDkxNy44MjA3NTldIENQVTog
-MCBQSUQ6IDc3NzQgQ29tbTogdGVzdF9hbGxvY19nZW5lIFRhaW50ZWQ6IEcgICBNICAgICAgIE9F
-ICAgICA1LjE4LjAtdjUuMTgtMjIwNjA2LTA5NDItMDI5LWdlNGRjYysgIzQ3DQo+ID4gICAgWyAg
-OTE3LjgyNTcyMF0gSGFyZHdhcmUgbmFtZTogUUVNVSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsgUElJ
-WCwgMTk5NiksIEJJT1MgMS4xNS4wLTEuZmMzNSAwNC8wMS8yMDE0DQo+ID4gICAgWyAgOTE3Ljgy
-OTc2Ml0gUklQOiAwMDEwOmNsZWFyX3BhZ2VfZXJtcysweDcvMHgxMA0KPiA+ICAgIFsgIDkxNy44
-MzE4NjddIENvZGU6IDQ4IDg5IDQ3IDE4IDQ4IDg5IDQ3IDIwIDQ4IDg5IDQ3IDI4IDQ4IDg5IDQ3
-IDMwIDQ4IDg5IDQ3IDM4IDQ4IDhkIDdmIDQwIDc1IGQ5IDkwIGMzIDBmIDFmIDgwIDAwIDAwIDAw
-IDAwIGI5IDAwIDEwIDAwIDAwIDMxIGMwIDxmMz4gYWEgYzMgY2MgY2MgY2MgY2MgY2MgY2MgNDgg
-ODUgZmYgMGYgODQgZDMgMDAgMDAgMDAgMGYgYjYgMGYgNGMNCj4gPiAgICBbICA5MTcuODQwNTQw
-XSBSU1A6IDAwMDA6ZmZmZmFiNDljMjVlYmRmMCBFRkxBR1M6IDAwMDEwMjQ2DQo+ID4gICAgWyAg
-OTE3Ljg0MjgzOV0gUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZmQ1MzhjNGNjODAwMCBS
-Q1g6IDAwMDAwMDAwMDAwMDEwMDANCj4gPiAgICBbICA5MTcuODQ1ODM1XSBSRFg6IDAwMDAwMDAw
-ODAwMDAwMDAgUlNJOiAwMDAwN2YyYWViNjAwMDAwIFJESTogZmZmZjlmN2JiMzIwMTAwMA0KPiA+
-ICAgIFsgIDkxNy44NDg2ODddIFJCUDogMDAwMDAwMDAwMDAwMDAwMCBSMDg6IDAwMDAwMDAwMDAw
-MDAwMDAgUjA5OiAwMDAwMDAwMDAwMDAwMDAwDQo+ID4gICAgWyAgOTE3Ljg1MTM3N10gUjEwOiAw
-MDAwMDAwMDAwMDAwMDAyIFIxMTogZmZmZjlmN2I4N2UzYTJhMCBSMTI6IDAwMDAwMDAwMDAwMDAw
-MDANCj4gPiAgICBbICA5MTcuODU0MDM1XSBSMTM6IDAwMDAwMDAwMDAwMDAwMDEgUjE0OiBmZmZm
-ZDUzOGM0Y2M4MDAwIFIxNTogZmZmZjlmN2JjMDAyYTVkOA0KPiA+ICAgIFsgIDkxNy44NTY1Mzld
-IEZTOiAgMDAwMDdmMmFlYmFkMzc0MCgwMDAwKSBHUzpmZmZmOWY3YmJiYzAwMDAwKDAwMDApIGtu
-bEdTOjAwMDAwMDAwMDAwMDAwMDANCj4gPiAgICBbICA5MTcuODU5MjI5XSBDUzogIDAwMTAgRFM6
-IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQo+ID4gICAgWyAgOTE3Ljg2MTE0
-OV0gQ1IyOiBmZmZmOWY3YmIzMjAxMDAwIENSMzogMDAwMDAwMDEwNzcyNjAwMyBDUjQ6IDAwMDAw
-MDAwMDAxNzBlZjANCj4gPiAgICBbICA5MTcuODYzNDMzXSBDYWxsIFRyYWNlOg0KPiA+ICAgIFsg
-IDkxNy44NjQyNjZdICA8VEFTSz4NCj4gPiAgICBbICA5MTcuODY0OTYxXSAgY2xlYXJfaHVnZV9w
-YWdlKzB4MTQ3LzB4MjcwDQo+ID4gICAgWyAgOTE3Ljg2NjIzNl0gIGh1Z2V0bGJfZmF1bHQrMHg0
-NDAvMHhhZDANCj4gPiAgICBbICA5MTcuODY3MzY2XSAgaGFuZGxlX21tX2ZhdWx0KzB4MjcwLzB4
-MjkwDQo+ID4gICAgWyAgOTE3Ljg2ODUzMl0gIGRvX3VzZXJfYWRkcl9mYXVsdCsweDFjMy8weDY4
-MA0KPiA+ICAgIFsgIDkxNy44Njk3NjhdICBleGNfcGFnZV9mYXVsdCsweDZjLzB4MTYwDQo+ID4g
-ICAgWyAgOTE3Ljg3MDkxMl0gID8gYXNtX2V4Y19wYWdlX2ZhdWx0KzB4OC8weDMwDQo+ID4gICAg
-WyAgOTE3Ljg3MjA4Ml0gIGFzbV9leGNfcGFnZV9mYXVsdCsweDFlLzB4MzANCj4gPiAgICBbICA5
-MTcuODczMjIwXSBSSVA6IDAwMzM6MHg3ZjJhZWI4YmEzNjcNCj4gPiANCj4gPiBJIGRvbid0IHRo
-aW5rIG9mIGEgd29ya2Fyb3VuZCBmb3IgdGhpcyBub3cgLi4uDQo+ID4gDQo+IA0KPiBDb3VsZCB5
-b3UgcGxlYXNlIHRlbGwgbWUgaG93IHRvIHJlcHJvZHVjZSB0aGlzIGlzc3VlPw0KDQpZb3UgYXJl
-IGZhbWlsaWFyIHdpdGggcWVtdS1tb25pdG9yLWNvbW1hbmQsIHNvIHRoZSBmb2xsb3dpbmcgcHJv
-Y2VkdXJlDQpzaG91bGQgd29yayBmb3IgeW91Og0KDQogIC0gcnVuIGEgcHJvY2VzcyB1c2luZyBo
-dWdlcGFnZXMgb24geW91ciBWTSwNCiAgLSBjaGVjayB0aGUgZ3Vlc3QgcGh5c2ljYWwgYWRkcmVz
-cyBvZiB0aGUgaHVnZXBhZ2UgKHBhZ2UtdHlwZXMuYyBpcyBoZWxwZnVsIGZvciB0aGlzKSwNCiAg
-LSBpbmplY3QgYSBNQ0Ugd2l0aCB2aXJzaCBxZW11LW1vbml0b3ItY29tbWFuZCBvbiB0aGUgZ3Vl
-c3QgcGh5c2ljYWwgYWRkcmVzcywgdGhlbg0KICAtIHVucG9pc29uIHRoZSBpbmplY3RlZCBwaHlz
-aWNhbCBhZGRyZXNzLg0KDQoNCk1heWJlIHRoZSBhYm92ZSBpcyBlbm91Z2gsIGJ1dCBpbiBjYXNl
-IGxldCBtZSBzaGFyZSBteSBwcm9jZWR1cmUgdXNpbmcNCm15IG93biB0ZXN0IHRvb2wuDQoNCiAg
-JCBnaXQgY2xvbmUgaHR0cHM6Ly9naXRodWIuY29tL25ob3JpZ3VjaGkvbW1fcmVncmVzc2lvbg0K
-ICAkIGNkIG1tX3JlZ3Jlc3Npb24NCiAgJCAuLi4gICAgICAgICAgICAgICAjIE1ha2Ugc3VyZSB0
-aGUgcHJlcmVxdWlzaXRlcyAoc2VlIFJFQURNRS5tZCkgYXJlIG1ldC4NCiAgJCBtYWtlICAgICAg
-ICAgICAgICAjIFNvbWUgZmlsZXMgbWF5IGZhaWwgdG8gYnVpbGQsIGJ1dCBpdCdzIG9rIGlmDQog
-ICAgICAgICAgICAgICAgICAgICAgIyB0ZXN0X2FsbG9jX2dlbmVyaWMuYyBpcyBidWlsdC4NCiAg
-JCAuL3J1bi5zaCBwcmVwYXJlIGRlYnVnDQogICQgLi9ydW4uc2ggcmVjaXBlIGxpc3QgfCBncmVw
-IG1jZS91Yy9zcmFvL2JhY2tlbmQtaHVnZXRsYiA+IHdvcmsvZGVidWcvcmVjaXBlbGlzdA0KICAk
-IFJVTl9NT0RFPWFsbCAuL3J1bi5zaCBwcm9qZWN0IHJ1bg0KICAkIFJVTl9NT0RFPWFsbCAuL3J1
-bi5zaCBwcm9qZWN0IHJ1biAtYSAgICMgd2hlbiB5b3Ugd2FudCB0byByZXJ1bg0KDQpJIGRvbid0
-IHdhbnQgYm90aGVyIHlvdSB0byBsZWFybiB0aGlzIHRvb2wsIHNvIGlmIHNvbWV0aGluZyBnbyB3
-cm9uZywNCmZlZWwgZnJlZSB0byBsZXQgbWUga25vdy4NCg0KVGhhbmtzLA0KTmFveWEgSG9yaWd1
-Y2hp
+Il 01/06/22 13:21, Tinghan Shen ha scritto:
+> MT8195 SCP is a dual-core processor. The mtk_scp.c driver only controls
+> SCP core 0. This patch adds a basic driver to control the another core.
+> 
+> Core 1 and core 0 of the SCP are housed in the same subsys.They see
+> registers and memory in the same way.
+> 
+> Core 1 of the SCP features its own set of core configuration registers,
+> interrupt controller, timers, and DMAs. The rest of the peripherals
+> in this subsystem are shared by core 0 and core 1.
+> 
+> As for memory, core 1 has its own cache memory, and the SCP SRAM is shared
+> by core 0 and core 1.
+> 
+
+Hello Tinghan,
+
+checking all the patches that are introducing support for the secondary SCP core,
+it's clear that you're practically reusing *most of* mtk_scp in mtk_scp_dual.
+
+I don't think that adding a new configuration option for MTK_SCP_DUALCORE (nor a
+new file just for that) is a good idea... the code is "short enough" so you should
+really just add support for multi-core SCP in mtk_scp.c instead.
+
+After doing so, I have a hunch that we'll be able to reduce the size of this
+implementation even more, as I see literally too much common code :-)
+
+Cheers,
+Angelo
+
+
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>   drivers/remoteproc/Makefile       |  1 +
+>   drivers/remoteproc/mtk_scp_dual.c | 97 +++++++++++++++++++++++++++++++
+>   2 files changed, 98 insertions(+)
+>   create mode 100644 drivers/remoteproc/mtk_scp_dual.c
+> 
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index 5478c7cb9e07..84cb687d28da 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
+>   obj-$(CONFIG_IMX_DSP_REMOTEPROC)	+= imx_dsp_rproc.o
+>   obj-$(CONFIG_INGENIC_VPU_RPROC)		+= ingenic_rproc.o
+>   obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
+> +obj-$(CONFIG_MTK_SCP_DUALCORE)		+= mtk_scp_dual.o
+>   obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
+>   obj-$(CONFIG_WKUP_M3_RPROC)		+= wkup_m3_rproc.o
+>   obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
+> diff --git a/drivers/remoteproc/mtk_scp_dual.c b/drivers/remoteproc/mtk_scp_dual.c
+> new file mode 100644
+> index 000000000000..7bc08d26f208
+> --- /dev/null
+> +++ b/drivers/remoteproc/mtk_scp_dual.c
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// Copyright (c) 2022 MediaTek Inc.
+> +
+> +#include <linux/err.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "mtk_common.h"
+> +#include "remoteproc_internal.h"
+> +
+> +static const struct rproc_ops scp_ops;
+> +
+> +static int scp_dual_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct mtk_scp *scp;
+> +	struct rproc *rproc;
+> +	const char *fw_name = "scp-dual.img";
+> +	int ret, i;
+> +	struct resource *res;
+> +
+> +	ret = rproc_of_parse_firmware(dev, 0, &fw_name);
+> +	if (ret < 0 && ret != -EINVAL)
+> +		return ret;
+> +
+> +	rproc = devm_rproc_alloc(dev, np->name, &scp_ops, fw_name, sizeof(*scp));
+> +	if (!rproc) {
+> +		dev_err(dev, "unable to allocate remoteproc\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	scp = (struct mtk_scp *)rproc->priv;
+> +	scp->rproc = rproc;
+> +	scp->dev = dev;
+> +	platform_set_drvdata(pdev, scp);
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+> +	scp->sram_base = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(scp->sram_base))
+> +		return dev_err_probe(dev, PTR_ERR(scp->sram_base),
+> +				     "Failed to parse and map sram memory\n");
+> +
+> +	scp->sram_size = resource_size(res);
+> +	scp->sram_phys = res->start;
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
+> +	scp->reg_base = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(scp->reg_base))
+> +		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
+> +				     "Failed to parse and map cfg memory\n");
+> +
+> +	mutex_init(&scp->send_lock);
+> +	for (i = 0; i < SCP_IPI_MAX; i++)
+> +		mutex_init(&scp->ipi_desc[i].lock);
+> +
+> +	init_waitqueue_head(&scp->run.wq);
+> +	init_waitqueue_head(&scp->ack_wq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int scp_dual_remove(struct platform_device *pdev)
+> +{
+> +	struct mtk_scp *scp = platform_get_drvdata(pdev);
+> +	int i;
+> +
+> +	for (i = 0; i < SCP_IPI_MAX; i++)
+> +		mutex_destroy(&scp->ipi_desc[i].lock);
+> +	mutex_destroy(&scp->send_lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mtk_scp_dual_of_match[] = {
+> +	{ .compatible = "mediatek,mt8195-scp-dual" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_scp_dual_of_match);
+> +
+> +static struct platform_driver mtk_scp_dual_driver = {
+> +	.probe = scp_dual_probe,
+> +	.remove = scp_dual_remove,
+> +	.driver = {
+> +		.name = "mtk-scp-dual",
+> +		.of_match_table = mtk_scp_dual_of_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(mtk_scp_dual_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("MediaTek SCP dualcore control driver");

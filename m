@@ -2,182 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FF353E78B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4E253E816
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238192AbiFFNBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S238246AbiFFNFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238171AbiFFNBw (ORCPT
+        with ESMTP id S238254AbiFFNDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:01:52 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B372E21B8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:01:49 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id h19so18765410edj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PHja6eQ6Mv2Fce3sGPE0UzxsdJMvKhiNmaMfYmc4ndA=;
-        b=URrbnH33zLvDajx/0NU5kLo58AbZNjB8rEMPICV3OEKt/mAq2Nk9jrpxpVuUI74Pa8
-         Qg5PSBqML+Zi1e9grmdCRG9zwcGZkgLL5hqRWUMvMVsc1jaBdXscOjleVrsHY3+1L1CN
-         DJieqIyP2shK2Fxwll9P/g0kXuAY9GT6ZYLzA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PHja6eQ6Mv2Fce3sGPE0UzxsdJMvKhiNmaMfYmc4ndA=;
-        b=0KrH+gwGBWJVhrjcs1CWO6mYG1LNvakbJ4dsdvKy/NNM21saB0iNLwWKbl1j36wRnS
-         xp5OO/ibDEILXlIWHM5HOl9zrLy6zXrlbvWBp9gCnMaosl5jVTbEvT/JZDJ0JlI//crz
-         0cFsW2zgJZ8mIEsn3rczM1Ka+irGJckNTiIrW24+K/DlDZNaFowZy/8HseyAxgb/gk1c
-         BsZOmrZ0KwgUM9j5aVpOEAqwjVJVKYlI4HhvtBVCWkIjUEyHenTZJiVyz7T/QYKXkslr
-         V3WOUV1Nq8a+4B2Y5nlD5dtbLD6IaGjJf4fgYKOw0QPQJuxe4wXm3Gy7N2RRK8jouqQH
-         BDBQ==
-X-Gm-Message-State: AOAM533Lqh/47hjrWewRynmIOM2wtsxcFPNZvgv5Vv4Ouiv2pB9dQs2e
-        dcvLGmBO+5mAYlL4/jtuoksKpg==
-X-Google-Smtp-Source: ABdhPJyzKgOqfEIRXyIehEv8SNDfgWNU6dcDZo68dVn7XI3YY9qcBYcpsDLYrBihuvISNzn/a4SAOw==
-X-Received: by 2002:a05:6402:32a6:b0:42d:ed8b:3d8 with SMTP id f38-20020a05640232a600b0042ded8b03d8mr26381739eda.225.1654520508129;
-        Mon, 06 Jun 2022 06:01:48 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id t26-20020a17090605da00b006fe7d269db8sm6275447ejt.104.2022.06.06.06.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 06:01:47 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: dsa: realtek: rtl8365mb: fix GMII caps for ports with internal PHY
-Date:   Mon,  6 Jun 2022 15:01:30 +0200
-Message-Id: <20220606130130.2894410-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.36.0
+        Mon, 6 Jun 2022 09:03:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E11736B7B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:03:31 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGtrL5hg9zRhdM;
+        Mon,  6 Jun 2022 21:00:18 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 21:03:29 +0800
+Received: from localhost.localdomain (10.67.164.66) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 21:03:28 +0800
+From:   Qi Liu <liuqi115@huawei.com>
+To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>
+Subject: [PATCH v6 0/2] Add support for UltraSoc System Memory Buffer
+Date:   Mon, 6 Jun 2022 21:02:21 +0800
+Message-ID: <20220606130223.57354-1-liuqi115@huawei.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+Add support for UltraSoc System Memory Buffer.
 
-phylib defaults to GMII when no phy-mode or phy-connection-type property
-is specified in a DSA port node.
+Change since v5:
+- Address the comments from Suzuki, add some comments in SMB document, and modify
+  configuration of "drvdata->reading", to void problems in multi-core concurrency scenario
+- https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
 
-Commit a5dba0f207e5 ("net: dsa: rtl8365mb: add GMII as user port mode")
-introduced implicit support for GMII mode on ports with internal PHY to
-allow a PHY connection for device trees where the phy-mode is not
-explicitly set to "internal".
+Change since v4:
+- Add a simple document of SMB driver according to Suzuki's comment.
+- Address the comments from Suzuki.
+- https://lore.kernel.org/linux-arm-kernel/20220128061755.31909-1-liuqi115@huawei.com/
 
-Commit 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
-then broke this behaviour by discarding the usage of
-rtl8365mb_phy_mode_supported() - where this GMII support was indicated -
-while switching to the new .phylink_get_caps API.
+Change since v3:
+- Modify the file header according to community specifications.
+- Address the comments from Mathieu.
+- Link:https://lore.kernel.org/linux-arm-kernel/20211118110016.40398-1-liuqi115@huawei.com/
+Change since v2:
+- Move ultrasoc driver to drivers/hwtracing/coresight.
+- Link:https://lists.linaro.org/pipermail/coresight/2021-November/007310.html
 
-With the new API, rtl8365mb_phy_mode_supported() is no longer needed.
-Remove it altogether and add back the GMII capability - this time to
-rtl8365mb_phylink_get_caps() - so that the above default behaviour works
-for ports with internal PHY again.
+Change since v1:
+- Drop the document of UltraSoc according to Mathieu's comment.
+- Add comments to explain some private hardware settings.
+- Address the comments from Mathieu.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-August/006842.html
 
-Fixes: 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
+Change since RFC:
+- Move driver to drivers/hwtracing/coresight/ultrasoc.
+- Remove ultrasoc-axi-com.c, as AXI-COM doesn't need to be configured in
+  basic tracing function.
+- Remove ultrasoc.c as SMB does not need to register with the ultrasoc core.
+- Address the comments from Mathieu and Suzuki.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-June/006535.html
 
-Luiz, Russel:
+Qi Liu (2):
+  drivers/coresight: Add UltraSoc System Memory Buffer driver
+  Documentation: Add document for UltraSoc SMB drivers
 
-Commit a5dba0f207e5 ought to have had a Fixes: tag I think, because it
-claims to have been fixing a regression in the net-next tree - is that
-right? I seem to have missed both referenced commits when they were
-posted and never hit this issue personally. I only found things now
-during some other refactoring and the test for GMII looked weird to me
-so I went and investigated.
+ .../trace/coresight/ultrasoc-smb.rst          |  80 +++
+ drivers/hwtracing/coresight/Kconfig           |  10 +
+ drivers/hwtracing/coresight/Makefile          |   1 +
+ drivers/hwtracing/coresight/ultrasoc-smb.c    | 663 ++++++++++++++++++
+ drivers/hwtracing/coresight/ultrasoc-smb.h    | 110 +++
+ 5 files changed, 864 insertions(+)
+ create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
 
-Could you please help me identify that Fixes: tag? Just for my own
-understanding of what caused this added requirement for GMII on ports
-with internal PHY.
-
----
- drivers/net/dsa/realtek/rtl8365mb.c | 38 +++++++----------------------
- 1 file changed, 9 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
-index 3bb42a9f236d..769f672e9128 100644
---- a/drivers/net/dsa/realtek/rtl8365mb.c
-+++ b/drivers/net/dsa/realtek/rtl8365mb.c
-@@ -955,35 +955,21 @@ static int rtl8365mb_ext_config_forcemode(struct realtek_priv *priv, int port,
- 	return 0;
- }
- 
--static bool rtl8365mb_phy_mode_supported(struct dsa_switch *ds, int port,
--					 phy_interface_t interface)
--{
--	int ext_int;
--
--	ext_int = rtl8365mb_extint_port_map[port];
--
--	if (ext_int < 0 &&
--	    (interface == PHY_INTERFACE_MODE_NA ||
--	     interface == PHY_INTERFACE_MODE_INTERNAL ||
--	     interface == PHY_INTERFACE_MODE_GMII))
--		/* Internal PHY */
--		return true;
--	else if ((ext_int >= 1) &&
--		 phy_interface_mode_is_rgmii(interface))
--		/* Extension MAC */
--		return true;
--
--	return false;
--}
--
- static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
- 				       struct phylink_config *config)
- {
--	if (dsa_is_user_port(ds, port))
-+	if (dsa_is_user_port(ds, port)) {
- 		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
- 			  config->supported_interfaces);
--	else if (dsa_is_cpu_port(ds, port))
-+
-+		/* GMII is the default interface mode for phylib, so
-+		 * we have to support it for ports with integrated PHY.
-+		 */
-+		__set_bit(PHY_INTERFACE_MODE_GMII,
-+			  config->supported_interfaces);
-+	} else if (dsa_is_cpu_port(ds, port)) {
- 		phy_interface_set_rgmii(config->supported_interfaces);
-+	}
- 
- 	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
- 				   MAC_10 | MAC_100 | MAC_1000FD;
-@@ -996,12 +982,6 @@ static void rtl8365mb_phylink_mac_config(struct dsa_switch *ds, int port,
- 	struct realtek_priv *priv = ds->priv;
- 	int ret;
- 
--	if (!rtl8365mb_phy_mode_supported(ds, port, state->interface)) {
--		dev_err(priv->dev, "phy mode %s is unsupported on port %d\n",
--			phy_modes(state->interface), port);
--		return;
--	}
--
- 	if (mode != MLO_AN_PHY && mode != MLO_AN_FIXED) {
- 		dev_err(priv->dev,
- 			"port %d supports only conventional PHY or fixed-link\n",
 -- 
-2.36.0
+2.24.0
 

@@ -2,406 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA7353E784
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DE353EA3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbiFFKRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S233720AbiFFKQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiFFKO5 (ORCPT
+        with ESMTP id S233746AbiFFKO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Jun 2022 06:14:57 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9929C70938
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:12:26 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u12so27956303eja.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:12:26 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62E515A420;
+        Mon,  6 Jun 2022 03:12:43 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id q15so11141392wrc.11;
+        Mon, 06 Jun 2022 03:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/rP72ndeb3XJeLv7/6nfR2MkmciPGoTOZHeBxkMPBWk=;
-        b=zE1cu8vksSD/kISbvDwjuFoyt4y05QoS7lK1CwWbsaBABs5APNVz0OwXzQsjPuD3NQ
-         RbBc9OLILFKbE4vokDxEHTjfnFqyUJ6tB9ZQh8heIa5/OMQMp3AwfPOHzuxwx40FMxqr
-         d46Hoc/uwMbnQ6ZJhTRg3WkG3enjJjDigkFM/ggGP+/NqJJ25v3YI2VcFBmpb5GAcHou
-         f0vsDQbe8BVBoWu1E8IQkgvyVlpjTZflWFm8n8fAQylFs4pOUAu0Bc69g7RVWqJ4mB9o
-         7F2pOm6hoFjr1VyJ6Sn2raZt74+jKjWY06XxncvXHIsGEA3aTyIfySA4u2fHms6kifGs
-         HS5g==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Kc9pss6M5EdVd6bDsVFlb4mRLyBK68pzKpY9UHLCNLQ=;
+        b=PAsde7FE0eY245VPPyo/QV2ScdBZkyuRErqW696uwoJ7Xglgd7Vi4eX5uTqdz81P9y
+         ty2d2NjBH975NDBE/zAw4mearKzN63EVJEe9t1TwxJdnqjrrQ3vdulAk8+vCSk4MnOJb
+         S8L0cG4I98kMCbq0utiJxVNuFq5Ju8ijqzJB8oGpok6vXSL5J8JpZp5wNB5Hq8IaXK7U
+         9GVM+jtZ4EZdKLZUeGhAu5wy/0KrekP138W1lkRMCEDAczdSi5zydgVJGxxa96dBWNw5
+         fZcDOazXnTMSK8xuhAEM8YXkk+xd1nf1ZmZp6DRbTTFlDMi1QjjhMjfY1k94P+3kwWUl
+         z1Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/rP72ndeb3XJeLv7/6nfR2MkmciPGoTOZHeBxkMPBWk=;
-        b=mXRyt3XxG+RDmvECyf/4lAgRSFjeFi6GrI1gjeqGWzCt866UabKwFRKgR9UbRadJvr
-         LDWaJcEUuyMuf6icbYiBtFwO1igyeQ61cG96gYVRl4WubdVY9hAoIqzJO12yZLVABF06
-         2wV7rsxPUIDfmAD+3rKSeEb0wf551Pl1chVcPbuLpTSp15swS737S4n1APaU5/VHy+iS
-         Yui0me9aJW5vInLpQYh4eVWn39Ycp2q8tnmJCReSZhXfDAc4GbmQABL4EldNfXCyu8TM
-         1CnHdEo6Qgo1QZmPRcJgfgOmeoDO1q6+B99bZCMAUo3KYhcd55K2Pz1B/RPGcJ8d0a0i
-         j8EA==
-X-Gm-Message-State: AOAM53095KovTJXGkilFlGnPVHnvuRkvbMReKdHlDGW6DTv2e1bCZeqZ
-        633/kRb9dqYfaRnWxLUb/f8xj9JKWpNCJw==
-X-Google-Smtp-Source: ABdhPJxXt/7tuXk3SxarbpGplKqYeyMFywIvToUVUK8DmlFthjRz4FJubCNB3SBK/NTWS9T3IFg+Gg==
-X-Received: by 2002:a17:907:8a11:b0:6ff:d8c:eff with SMTP id sc17-20020a1709078a1100b006ff0d8c0effmr21340067ejc.659.1654510344640;
-        Mon, 06 Jun 2022 03:12:24 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f24-20020a05640214d800b0042617ba63basm8290577edx.68.2022.06.06.03.12.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 03:12:24 -0700 (PDT)
-Message-ID: <0ad94a8f-eec7-ab76-3b2d-99d4d3fbf21b@linaro.org>
-Date:   Mon, 6 Jun 2022 12:12:22 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Kc9pss6M5EdVd6bDsVFlb4mRLyBK68pzKpY9UHLCNLQ=;
+        b=T54815JEF12I5ibGoa63UKtdyS7WJCerDReZN/kyAZCngsX6bTL3m5LtkGakeom52H
+         KnIPK8uBT9c1REWzhFDAO1BL9ZY25ToDRqSDrY1b3BArpu7XmosY2qovSe3C+seBFsiz
+         nHWOszK+TzN8ot2KHBy6t/B4YGBoMHr4Byds1CREMR91NZPhwerx/RqWGfSX8j9MCJDp
+         agJCtAKczxrCaLaL1/MAurOpW131tE7xgTmmh1MN6dDiCP7lJnh4/+7ijWUidwkAYQvR
+         Bjx8rDhTUUcDt0exisvw64UxkZpt/8ZeKzESpcPojwMDzynCfjcEcBScvDW+fFGUc1Hp
+         3yeQ==
+X-Gm-Message-State: AOAM5333Lb7Ra3vrh/kSZdob22RpFvN47WcUAiWU3TtpBTvbTLCEIOYn
+        MVVp2O5O8IU/qaQNeAY8ZYNS+RF8xOBo8A==
+X-Google-Smtp-Source: ABdhPJxfzuPe49YNxWdW/gGPul24wHOZAPedrL65hAqJIBMCmHrfWfuPReHDT2XMFXFZF2kwTBccdg==
+X-Received: by 2002:adf:dd8e:0:b0:213:bbe1:ba56 with SMTP id x14-20020adfdd8e000000b00213bbe1ba56mr15223637wrl.559.1654510362390;
+        Mon, 06 Jun 2022 03:12:42 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id j3-20020a5d4643000000b002103a7c5c91sm14484690wrs.43.2022.06.06.03.12.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 03:12:42 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 12:12:37 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanberzl@gmail.com, dlatypov@google.com,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH v3 0/4] Add support for XP-PEN Deco L
+Message-ID: <20220606101237.GA939277@elementary>
+References: <20220531181246.190729-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
-Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>
-References: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
- <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p5>
- <20220603022353epcms2p5d83a4a7d95584ce6a65a63356cd46e76@epcms2p5>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220603022353epcms2p5d83a4a7d95584ce6a65a63356cd46e76@epcms2p5>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220531181246.190729-1-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 04:23, Wangseok Lee wrote:
-> Add description to support Axis, ARTPEC-8 SoC.
-> ARTPEC-8 is the SoC platform of Axis Communications
-> and PCIe controller is designed based on Design-Ware PCIe controller.
-> 
-> changes since v1 :
+Hi,
 
-Changelog goes after --- .
-
-> -'make dt_binding_check' result improvement
-> -Add the missing property list
-> -Align the indentation of continued lines/entries
+On Tue, May 31, 2022 at 08:12:42PM +0200, José Expósito wrote:
+> Hello everyone,
 > 
-> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+> This patchset adds support for the UGEE XP-PEN Deco L tablet.
+> This device belongs to a family of tablets that must receive a chunk of
+> magic data in order to be enabled (named UGEE v2 internally).
+>
+> [...]
+>
 > ---
->  .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 108 ++++++++++++++++++
->  .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 123 +++++++++++++++++++++
->  2 files changed, 231 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
->  create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
-> new file mode 100644
-> index 0000000..3512e38
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
-> @@ -0,0 +1,108 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie-ep.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ARTPEC-8 SoC PCIe Controller Device Tree Bindings
+> v1 - Initial version
+> https://lore.kernel.org/linux-input/20220518224702.1409327-1-jose.exposito89@gmail.com/
+> 
+> v2 - Fix some errors reported by the kernel test robot:
+> 
+>  - Add MODULE_DESCRIPTION/LICENSE/AUTHOR to hid-uclogic-rdesc-test.c
+>  - Remove unused variable in uclogic_params_ugee_v2_init
+>  - Add sparse __force anotation in the result of cpu_to_le16
+>  - Add DISABLE_STRUCTLEAK_PLUGIN for KUnit tests
+> 
+> https://lore.kernel.org/linux-input/20220518224702.1409327-1-jose.exposito89@gmail.com/T/
+> 
+> v3 - This version:
+> 
+>  - Improve Kconfig message
+>  - Add .kunitconfig. Thanks to Daniel Latypov for suggesting it in an
+>    unrelated patch:
+>    https://lore.kernel.org/dri-devel/CAGS_qxpV2SsihEdgXZ6+7N0dxLmdRANq+qE4iUZ2aNrf6vuLYg@mail.gmail.com/
 
-s/Device Tree Bindings//
+As mentioned in the v3 changelog, I'm working on a DRM patch including
+a few KUnit tests [1].
 
-> +
-> +maintainers:
-> +  - Jesper Nilsson <jesper.nilsson@axis.com>
-> +
-> +description: |+
-> +  This PCIe end-point controller is based on the Synopsys DesignWare PCIe IP
-> +  and thus inherits all the common properties defined in snps,dw-pcie-ep.yaml.
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: axis,artpec8-pcie-ep
-> +
-> +  reg:
-> +    items:
-> +      - description: Data Bus Interface (DBI) registers.
-> +      - description: Data Bus Interface (DBI2) registers.
-> +      - description: PCIe address space region.
-> +
-> +  reg-names:
-> +    items:
-> +      - const: dbi
-> +      - const: dbi2
-> +      - const: addr_space
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupts-names:
-> +    items:
-> +      - const: intr
+Some interesting highlights from the comments there:
 
-Remove the interrupts-names entirely, no need for single item with
-generic name.
+- It looks like the maintainers prefer to include a single symbol [2]
+to enable all tests in the subsystem.
 
+Jiří, Benjamin, how would you like to handle it? Would you prefer to
+have a symbol for each test (HID_UCLOGIC_KUNIT_TEST)? Or a symbol for
+all tests (HID_KUNIT_TEST)?
 
-> +
-> +  clocks:
-> +    items:
-> +      - description: PIPE clock, used by the controller to clock the PIPE
-> +      - description: PCIe dbi clock, ungated version
-> +      - description: PCIe master clock, ungated version
-> +      - description: PCIe slave clock, ungated version
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pipe_clk
-> +      - const: dbi_clk
-> +      - const: mstr_clk
-> +      - const: slv_clk
+- DISABLE_STRUCTLEAK_PLUGIN is not required [3]. I'd also need to
+remove it here.
 
-Remove "_clk" suffix from all entries.
+Jose
 
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    items:
-> +      - const: pcie_phy
-
-Remove the phy-names entirely, no need for single item with generic name.
-
-> +
-> +  num-lanes:
-> +    const: 2
-> +
-> +required:
-
-My comment was not applied here, so please fix it.
-
-
-> +  - reg
-> +  - reg-names
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +  - num-lanes
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    artpec8 {
-
-Generic nodes please. Did you see "artpec8" or something like this in
-any DTS?
-
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        pcie_ep: pcie-ep@17200000 {
-> +            compatible = "axis,artpec8-pcie-ep";
-> +            reg = <0x0 0x17200000 0x0 0x1000>,
-> +                  <0x0 0x17201000 0x0 0x1000>,
-> +                  <0x2 0x00000000 0x6 0x00000000>;
-> +            reg-names = "dbi", "dbi2", "addr_space";
-> +            #interrupt-cells = <1>;
-> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-> +            interrupt-names = "intr";
-> +            clocks = <&clock_cmu_fsys 39>,
-> +                     <&clock_cmu_fsys 38>,
-> +                     <&clock_cmu_fsys 37>,
-> +                     <&clock_cmu_fsys 36>;
-> +            clock-names = "pipe_clk", "dbi_clk", "mstr_clk", "slv_clk";
-> +            phys = <&pcie_phy>;
-> +            phy-names = "pcie_phy";
-> +            num-lanes = <2>;
-> +            bus-range = <0x00 0xff>;
-> +            num-ib-windows = <16>;
-> +            num-ob-windows = <16>;
-> +        };
-> +    };
-
-
-> +...
-> diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
-> new file mode 100644
-> index 0000000..945a061
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
-> @@ -0,0 +1,123 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Artpec-8 SoC PCIe Controller Device Tree Bindings
-
-Ditto
-
-> +
-> +maintainers:
-> +  - Jesper Nilsson <jesper.nilsson@axis.com>
-> +
-> +description: |+
-> +  This PCIe host controller is based on the Synopsys DesignWare PCIe IP
-> +  and thus inherits all the common properties defined in snps,dw-pcie.yaml.
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: axis,artpec8-pcie
-> +
-> +  reg:
-> +    items:
-> +      - description: Data Bus Interface (DBI) registers.
-> +      - description: External Local Bus interface (ELBI) registers.
-> +      - description: PCIe configuration space region.
-> +
-> +  reg-names:
-> +    items:
-> +      - const: dbi
-> +      - const: elbi
-> +      - const: config
-> +
-> +  device_type:
-> +    items:
-
-It's not a list, but just a string. No need for items.
-
-> +      - const: pci
-> +
-> +  ranges:
-> +    maxItems: 2
-> +
-> +  num-lanes:
-> +    const: 2
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupts-names:
-> +    items:
-> +      - const: intr
-
-Remove entire property.
-
-> +
-> +  clocks:
-> +    items:
-> +      - description: PIPE clock, used by the controller to clock the PIPE
-> +      - description: PCIe dbi clock, ungated version
-> +      - description: PCIe master clock,  ungated version
-> +      - description: PCIe slave clock, ungated version
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pipe_clk
-> +      - const: dbi_clk
-> +      - const: mstr_clk
-> +      - const: slv_clk
-
-Remove suffix.
-
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    items:
-> +      - const: pcie_phy
-
-Remove entire property.
-
-> +
-> +required:
-
-Previous comment not applied.
-
-> +  - reg
-> +  - reg-names
-> +  - device_type
-> +  - ranges
-> +  - num-lanes
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +  - phy-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    artpec8 {
-
-Same as previous patch.
-
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        pcie: pcie@17200000 {
-> +            compatible = "axis,artpec8-pcie";
-> +            reg = <0x0 0x17200000 0x0 0x1000>,
-> +                  <0x0 0x16ca0000 0x0 0x2000>,
-> +                  <0x7 0x0001e000 0x0 0x2000>;
-> +            reg-names = "dbi", "elbi", "config";
-> +            #address-cells = <3>;
-> +            #size-cells = <2>;
-> +            device_type = "pci";
-> +            ranges = </* non-prefetchable memory */
-> +                      0x83000000 0x0 0x0000000 0x2 0x00000000 0x5 0x00000000
-> +                      /* downstream I/O */
-> +                      0x81000000 0x0 0x0000000 0x7 0x00000000 0x0 0x00010000>;
-> +            num-lanes = <2>;
-> +            bus-range = <0x00 0xff>;
-> +            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-> +            interrupt-names = "intr";
-> +            #interrupt-cells = <1>;
-> +            clocks = <&cmu_fsys 39>,
-> +                     <&cmu_fsys 38>,
-> +                     <&cmu_fsys 37>,
-> +                     <&cmu_fsys 36>;
-> +            clock-names = "pipe_clk", "dbi_clk", "mstr_clk", "slv_clk";
-> +            phys = <&pcie_phy>;
-> +            phy-names = "pcie_phy";
-> +        };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+[1] https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89@gmail.com/T/
+[2] https://lore.kernel.org/dri-devel/CABVgOSkCxu2xBnxwc6mO2AQaqzTbDf53PJzT2QvZNyLeumt5hg@mail.gmail.com/
+[3] https://lore.kernel.org/dri-devel/CAGS_qxpFO4ixW=08ZcdcD9J1kU=B3mwoBJkPW8AKu0sKs8aKfA@mail.gmail.com/

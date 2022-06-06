@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C3A53DF74
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D150253DF76
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352031AbiFFBnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 21:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
+        id S1352037AbiFFBn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 21:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbiFFBnT (ORCPT
+        with ESMTP id S232327AbiFFBn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 21:43:19 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D4637018;
-        Sun,  5 Jun 2022 18:43:19 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id v3-20020a17090a0c8300b001e862664a08so2760843pja.5;
-        Sun, 05 Jun 2022 18:43:19 -0700 (PDT)
+        Sun, 5 Jun 2022 21:43:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DDD48311;
+        Sun,  5 Jun 2022 18:43:57 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so16637848pju.1;
+        Sun, 05 Jun 2022 18:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gaObAl1davpaWK8mfs4rknFImeJO0Clxwne4OGIVgnU=;
-        b=OKywvTXZJO3SG4a0nthNnL4RJKayjxIy4VqGQNXyA5WGzGVyYnLAmb/MfD6eBz5+3A
-         BJMs9CNxsLB4gDHOH0e3DC8dv8vwmnVgogm+Kv3o7EW4ql1GqbzAVC+Zgy6UOGRLAeyu
-         LfL0A9bczBftYg7Evec/fXsqieN3772yekCwz/oKM8Q8s60SiBNimhdGZjuXcDQkxZ5D
-         dDXed9jZ13uUEhPYcCIl8jAaxg+EvY4zzREzuGQyaG+DmMjvjTU0ZmDGPIzHipFsTsmE
-         VP+yihqfX3Pb5e6WGB40g0c2EBSn4I2o4gYXogtZz66Zs5x+z6uP+mix/KwQuC4DyZz9
-         9xdQ==
+        bh=wWxlBe2giDtCo7oDbL9azFDz5P3ZAGti7xLPxv0r0Y0=;
+        b=ZvGRiB+8gRkZMDwImgw3R8T8kSCKQirSNzn9vI8TBRy9lRhJWUXXcEimgpF/bi6NIL
+         nLQlICWu8kjkou8emQREYIbIogB4XWhkitnQTK/rU3k/Edr2WZVZFkcXp4mO6Dnc7QQ6
+         Bapz7uxbrG472Wmczg9qmtEnVMLvsZR4NcRnI8dagRlNo98UbL7hZNKz/Fm7z5dUtqnC
+         HdKuR+T2d/CoSQyUpKoECx4E97Focx+P1NRIkdwfDegxAnqDInbvwMmjnIstWnU50mYo
+         EKbIVCeSVeZl7XIY4DPtqj6PHKrCxuZnzI3Q1gyoleHF2hzmRqDsa0TkjncG6ZMLxADy
+         OmGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=gaObAl1davpaWK8mfs4rknFImeJO0Clxwne4OGIVgnU=;
-        b=wEsfOuR/50CVKCxfxgyddAEnyrpgA+2ZgPUdVxlLTy98nLlwRbB4fNoFdH/JRWfkrr
-         9heO+gDo6VdBQOtJQ9Y5IctZPilIRHSnmeNcmh8araFtISyPsbkysL9UwpMf0nsSN5D4
-         AV9KyPijTaRYUVufsLd7b9c4eo0oyZ81xIb3PCR3J1TCrQLOWuKUe4y15p9Z/cZe4eTF
-         ReMAZSQfhvmHQbN1Wf3TvjLzI3k/JE5eFx+840L8HDXBc7OLyHT3kIi1p13baOyxsVrt
-         xuCTSomBRoGuqXu6vHdCb9o/I4gnt/WJghqtSMyXymewDj+K4fsfXiSoRbPDexOdQy7v
-         C4Aw==
-X-Gm-Message-State: AOAM530CKafeAqFFbVafae43NfSQgscXMTQTKkuDvwFtvY/A8wMrbTDL
-        q+E4qYFx+xxVDAiM+UmpgKs=
-X-Google-Smtp-Source: ABdhPJwlYWzXXakJW+sH4spMPRqGoEX14QImNoPI26mASw6g+PMMrv6OzjRiOUQSjhhECufVRP+fRw==
-X-Received: by 2002:a17:902:f710:b0:15f:165f:b50b with SMTP id h16-20020a170902f71000b0015f165fb50bmr22467940plo.158.1654479798701;
-        Sun, 05 Jun 2022 18:43:18 -0700 (PDT)
+        bh=wWxlBe2giDtCo7oDbL9azFDz5P3ZAGti7xLPxv0r0Y0=;
+        b=N4tZj7w1klxTmskUrA9vLAlNDwC4Hz6C6vo6qRPCo8z6xcXBYnMZrg32ZdQm4Y0Mi+
+         mjnsWpnwk6Phrj8rvvuzXW4k8Lq1nmCl8pnXOm2FDLUnOSZXIPkyoGm9aK0NdaOlyBzX
+         NAFtAMN6CcaAWK74BwS370oqtZKR0hmLKSGNYRp3kAJavX8SOefhAUECzgkNHt1ziRvm
+         cG6TRZD0dt6qmvWrkTzSzKYkwUG14kbc7IqTfPR5t5ZbDb1q/KVgWoeM0W0xVDu8TrP8
+         Zcs+C6WVPu5fVZLvGIC4eatGItYIJv6SvzaXSmO7cYlHq0xocGGgJCU5faqjj0bwKgtB
+         GISA==
+X-Gm-Message-State: AOAM533oP8IAkplPzFBg3AKn9pVnFhIue+//1jYdcwGWMqaGqCTlUUlB
+        Uj3fuHh3zzQRzlftRx7D2U+V2A2/9IU=
+X-Google-Smtp-Source: ABdhPJxb0r/aQKzedv+VX+GLuYDZexJq+UL7AGYoc+lqjAdQYsN0CsWfjiH1jZkHmwL/4CI6jgGFjA==
+X-Received: by 2002:a17:902:f789:b0:156:5f56:ddff with SMTP id q9-20020a170902f78900b001565f56ddffmr21730502pln.116.1654479836657;
+        Sun, 05 Jun 2022 18:43:56 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056a001c4800b005183cf12184sm9299315pfw.133.2022.06.05.18.43.17
+        by smtp.gmail.com with ESMTPSA id j21-20020a170902759500b001620eb3a2d6sm9185348pll.203.2022.06.05.18.43.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 18:43:18 -0700 (PDT)
+        Sun, 05 Jun 2022 18:43:56 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+To:     gregkh@linuxfoundation.org
+Cc:     oneukum@suse.com, olebowle@gmx.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] USB: serial: Remove redundant NULL check before release_firmware() call
-Date:   Mon,  6 Jun 2022 01:43:15 +0000
-Message-Id: <20220606014315.290533-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] usb: core: Remove redundant NULL checks before kfree
+Date:   Mon,  6 Jun 2022 01:43:52 +0000
+Message-Id: <20220606014352.290600-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,29 +72,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-release_firmware() checks for NULL pointers internally so checking
-before calling it is redundant.
+Checking a pointer for NULL before calling kfree() on it is redundant,
+kfree() deals with NULL pointers just fine.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/usb/serial/mxuport.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/core/quirks.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
-index eb45a9b0005c..eb9090ab900f 100644
---- a/drivers/usb/serial/mxuport.c
-+++ b/drivers/usb/serial/mxuport.c
-@@ -1109,8 +1109,7 @@ static int mxuport_probe(struct usb_serial *serial,
- 	 */
- 	usb_set_serial_data(serial, (void *)id->driver_info);
- out:
--	if (fw_p)
--		release_firmware(fw_p);
-+	release_firmware(fw_p);
- 	return err;
- }
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index f99a65a64588..7e918e4a95f2 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -56,10 +56,8 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 		if (val[i] == ',')
+ 			quirk_count++;
  
+-	if (quirk_list) {
+-		kfree(quirk_list);
+-		quirk_list = NULL;
+-	}
++	kfree(quirk_list);
++	quirk_list = NULL;
+ 
+ 	quirk_list = kcalloc(quirk_count, sizeof(struct quirk_entry),
+ 			     GFP_KERNEL);
 -- 
 2.25.1
 

@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80A653F218
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33BA53F21B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbiFFWVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 18:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S235098AbiFFWV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 18:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbiFFWVM (ORCPT
+        with ESMTP id S234794AbiFFWVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 18:21:12 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EE56D872
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:21:11 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id u10-20020a17090a1d4a00b001e862680928so3131588pju.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 15:21:11 -0700 (PDT)
+        Mon, 6 Jun 2022 18:21:14 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3D86D95A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:21:13 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id i19-20020aa79093000000b0050d44b83506so8391450pfa.22
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 15:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ZKvJKacIZPpFbnd53bS1EL2rZ1vkQiMgyn6fonmD758=;
-        b=Zr9Q8V4nfUck7UMPiqqnChLoKCpFiU004y5VHpcxyH5mWHlhwIzYxUURvWJBq4dUhI
-         PEflFN4+yWiPedkxFNguL6KLVrX7tdllycYtTzVDtLTM5fSldbL5YGtSdvQhicV/VqNC
-         W9LyO1FZ89oe3glk7cppYh1QOUL7GWHvzV40mkYxY6Ot8nmOdZ1BmyJNi7r9lWo5/W5N
-         bMn6eQ26xiiSsDdv1sGuFTHXiFY4OC6CrIrPysYNh3IdjDsmHyydvK25MNicujeQ5HDt
-         CqB1bPPFGYC0qLNs/TbMrK22nRwsnULJfjNvc7HFOqj+269yjI72P9tp9IKYvoEk/5A9
-         jikw==
+        bh=kdA0hdnNlf5Ah+Sdfhrh5/pyHUvKpC5h3K4X0vH9N64=;
+        b=Jy0Nvp6l/SeDINdaapKCgsH604PDzAKJu+q61zsdbqS0WgfTf6DKA9ui8w9NOeKXLB
+         zV3rFx+mWBMFRAgLdnWnjF2l6fpisaOBqhX3AirSHdup3DSyot579H9rHLD+o6fbmQRk
+         FaJKa3uBvvWb/ywHl+G68ob0ojkfCd4KvuSoq0n86mSq7L/FcuboeRh8rpDp78eY8qcZ
+         n6nIYlYmcBUcV7QgzCTmqorAtcvEHjNETFQ+4fEEAn2BTJknB6ddaSu7THbAsyUBl7f8
+         BE7FECym3Mw5OpxGAbMCVb195W/C84+VufxOQUotNgydoUbVy0Ws+K0ug9KPgynMKrtc
+         1W+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ZKvJKacIZPpFbnd53bS1EL2rZ1vkQiMgyn6fonmD758=;
-        b=ySYH0oAER2PqxFi6HpEpWm4UX163Nk0o8JC0bXD8EjIzbethNxbIRA+5ltG3GxM1HS
-         Bwys6lWA5lUCJTGSRzo38VB7EQHHCYf77Ngr4CdJ3LVvK2k5Mie3ki26wXt+CjJhaEBS
-         Yu2NeKRrRSqRKYaPjecAcJa5q2FtpowKr9JqFufcumu1qRI3ICWthnDwP++mKI0DT8f7
-         SWbnGMdY3goPp0+nHD7DdEE1/tTY/+MpAXb/onAsqUVuOsxzUJ2ZA3UDXTasnbCqzM9b
-         zNfrB7DFbEi7IEXAG2gYnaymBpV7DxMaymIZASOXP4KR/pDHx1PrsyNMubKMPchIA9wL
-         D65Q==
-X-Gm-Message-State: AOAM532fSAR+FmmpbDPdTYi96+gMZcQMNqfMPXoHgvOX3S8wzEXiOdnk
-        b6/3/tzWem0DazBs3lcPGtUXUTaKgrGd6C6K
-X-Google-Smtp-Source: ABdhPJydFOJZXIlcEjQkgSriWABs0ECYT0csN/ZfxbgjEAFbaZOYZU1KL+PBDU3VaJNjamZ58gakzobgmymrjjXn
+        bh=kdA0hdnNlf5Ah+Sdfhrh5/pyHUvKpC5h3K4X0vH9N64=;
+        b=llQKKQJW13fd/LRlrRFr2Pw9T/uoyN0yaq8AXYM7yU3gmazL092nE6NzHAibFatv6l
+         UxCrrdQUMJiuuKzePoD8Z0kJtbCHKOmlVwsqF2jopOmfnh0MZRMWBSZUFq/xI1Uc4CWf
+         Ei2yw5D+DYnTIVrokRLkX429kjo4Rigj/ADxJkklIo9wkBWOGzJJnAjcPaZnIU6ulKs1
+         4MEKSti86/sFO3S4X1yMniiKky8xPXkBOtxSkOeB4ZhDCw8EuYOdFNR+2AMWYhPwl78i
+         a7NEChpYCMqpuXpaU08dcBuCF0UyYIl/MfcQcRJ/vVChF9johF0kCeTSDDk9OS8OAnEM
+         vmIQ==
+X-Gm-Message-State: AOAM5305XYEHB3qtPxvbjwh6HuuW8gzZTojSExHy0Zle//I40hvpVk3j
+        uFXxdDc2TfmczaQ5M00S2tTaCWpALdB1XNt+
+X-Google-Smtp-Source: ABdhPJy/F+KWMgHvnxrFnjnNsWZmlcg4trdZU2aFBDmcWxfCaapFDM+3Zf8+GdGQEkdAdISq1qm0RKV9vDvadP+C
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90b:1650:b0:1e4:cff1:5a86 with SMTP
- id il16-20020a17090b165000b001e4cff15a86mr28806822pjb.30.1654554070851; Mon,
- 06 Jun 2022 15:21:10 -0700 (PDT)
-Date:   Mon,  6 Jun 2022 22:20:56 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a63:dd17:0:b0:3fd:695e:8728 with SMTP
+ id t23-20020a63dd17000000b003fd695e8728mr11359137pgg.70.1654554072536; Mon,
+ 06 Jun 2022 15:21:12 -0700 (PDT)
+Date:   Mon,  6 Jun 2022 22:20:57 +0000
 In-Reply-To: <20220606222058.86688-1-yosryahmed@google.com>
-Message-Id: <20220606222058.86688-3-yosryahmed@google.com>
+Message-Id: <20220606222058.86688-4-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220606222058.86688-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v5 2/4] KVM: mmu: add a helper to account memory used by KVM MMU.
+Subject: [PATCH v5 3/4] KVM: x86/mmu: count KVM mmu usage in secondary
+ pagetable stats.
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
         Zefan Li <lizefan.x@bytedance.com>,
@@ -86,35 +87,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper to account pages used by KVM for page tables in secondary
-pagetable stats. This function will be used by subsequent patches in
-different archs.
+Count the pages used by KVM mmu on x86 for in secondary pagetable stats.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- include/linux/kvm_host.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/x86/kvm/mmu/mmu.c     | 16 ++++++++++++++--
+ arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++++++
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 883e86ec8e8c4..645585f3a4bed 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2246,6 +2246,15 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index efe5a3dca1e09..4090d228e1756 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1652,6 +1652,18 @@ static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
+ 	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
  }
- #endif /* CONFIG_KVM_XFER_TO_GUEST_WORK */
  
-+/*
-+ * If nr > 1, we assume virt is the address of the first page of a block of
-+ * pages that were allocated together (i.e accounted together).
-+ */
-+static inline void kvm_account_pgtable_pages(void *virt, int nr)
++static void kvm_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
 +{
-+	mod_lruvec_page_state(virt_to_page(virt), NR_SECONDARY_PAGETABLE, nr);
++	kvm_mod_used_mmu_pages(kvm, +1);
++	kvm_account_pgtable_pages((void *)sp->spt, +1);
 +}
 +
- /*
-  * This defines how many reserved entries we want to keep before we
-  * kick the vcpu to the userspace to avoid dirty ring full.  This
++static void kvm_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
++{
++	kvm_mod_used_mmu_pages(kvm, -1);
++	kvm_account_pgtable_pages((void *)sp->spt, -1);
++}
++
+ static void kvm_mmu_free_page(struct kvm_mmu_page *sp)
+ {
+ 	MMU_WARN_ON(!is_empty_shadow_page(sp->spt));
+@@ -1707,7 +1719,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct
+ 	 */
+ 	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
+ 	list_add(&sp->link, &vcpu->kvm->arch.active_mmu_pages);
+-	kvm_mod_used_mmu_pages(vcpu->kvm, +1);
++	kvm_account_mmu_page(vcpu->kvm, sp);
+ 	return sp;
+ }
+ 
+@@ -2336,7 +2348,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+ 			list_add(&sp->link, invalid_list);
+ 		else
+ 			list_move(&sp->link, invalid_list);
+-		kvm_mod_used_mmu_pages(kvm, -1);
++		kvm_unaccount_mmu_page(kvm, sp);
+ 	} else {
+ 		/*
+ 		 * Remove the active root from the active page list, the root
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 841feaa48be5e..0b70d1a1a3534 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -372,6 +372,16 @@ static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
+ 	}
+ }
+ 
++static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
++{
++	kvm_account_pgtable_pages((void *)sp->spt, +1);
++}
++
++static void tdp_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
++{
++	kvm_account_pgtable_pages((void *)sp->spt, -1);
++}
++
+ /**
+  * tdp_mmu_unlink_sp() - Remove a shadow page from the list of used pages
+  *
+@@ -384,6 +394,7 @@ static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
+ static void tdp_mmu_unlink_sp(struct kvm *kvm, struct kvm_mmu_page *sp,
+ 			      bool shared)
+ {
++	tdp_unaccount_mmu_page(kvm, sp);
+ 	if (shared)
+ 		spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+ 	else
+@@ -1146,6 +1157,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+ 	if (account_nx)
+ 		account_huge_nx_page(kvm, sp);
+ 	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
++	tdp_account_mmu_page(kvm, sp);
+ 
+ 	return 0;
+ }
 -- 
 2.36.1.255.ge46751e96f-goog
 

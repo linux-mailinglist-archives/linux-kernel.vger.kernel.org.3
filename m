@@ -2,150 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D702E53F14B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBD553F151
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiFFVAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S233033AbiFFVCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiFFU7t (ORCPT
+        with ESMTP id S234639AbiFFVBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:59:49 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF469419D;
-        Mon,  6 Jun 2022 13:48:58 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id 68so3359620qkk.9;
-        Mon, 06 Jun 2022 13:48:58 -0700 (PDT)
+        Mon, 6 Jun 2022 17:01:41 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E54A13F400
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:50:25 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id s13so17041719ljd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        h=from:date:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=g2dcvEx5ujIfq/vGwsQoEKMbkEYSqcC+pGjcA0dBu1c=;
-        b=f7b0v5dv8hmLnBlzL8WyYq5cOW64Y5WX7Dmpl69JKaPauL++ld78WKF8ntff7E3FD9
-         /EFPnKoGaHbNkPIgpiRh5FlgefHuwLc1yxNkOW+bHut9SVnVZCbu/JkykiPElo5zPWjp
-         nCuHLbsnuv21eFXD2iNnywm2Hbn427FK25GFy6T1JFuumczjXmgtp3nChf3HO/XhNBhM
-         NXjSU4JD0/Av3t8AAMTU1yL794U7NXS8pa6qxIcfy7ouTJCp/SF65MboQcoKMXA5+/fk
-         R0q5tIVK+/ksEV405xlxflOCs1qdnp/FFVTP6I8k8VtwErnFZfCokgUB0civbDGx+Ib2
-         7GIg==
+        bh=ZjAv5aFwvGTLPhlpRw2+o5abMQEEmcSWSknk+L4bkY4=;
+        b=f+kdRpZJxlwjyWP/saEwhC4acrcVKRuqglnbg8a3oSgvgDhOzmJk829LokCpxgeou5
+         zqAjGqYyl5eUvOXCsCiHkr88wk+vqokAYMkz9GqwJV9VLq+hQAdVqHmoeD8E1FNnM951
+         99ABBYcSx1+mIlZ5it+GwOa2RVq8+mW2uKEqAkRvRdf7AmN/Wfe4q6CA3259wLz0FeKH
+         2peT+Ptqqy7xKBQ3T7w19ryQeHs9nM5LKC8ojH411kymIEa1+ZJbCA7XyL6/UJ2vGNSS
+         8PNWsHM4m4nrvSZp948KuICdjFZb7rHnc13tU3vTYZFNzOLn2FP7PEruHTS2AW1rhYpZ
+         rJFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=g2dcvEx5ujIfq/vGwsQoEKMbkEYSqcC+pGjcA0dBu1c=;
-        b=IT4u7CmoWi6HX3yhfCZqnTHklKmxYH70Mp+prygtX+X6iGXyqlLSeFvgwYgtWeyCIe
-         zukDYBHOhQpWQ1q4hlEkCBpFtMsevyKSdhfgx7Z+rthrdfpneV1EgNvq6t8I6Rgldw0i
-         jcclSJPD3P8m6fnA8vXzh3wBBCb1TJ6obXLFPH0KtRlEjFuc6gEJo5qI4Q0H6hCxpGTL
-         msZiPybmC9OmoG/4Ze8naFtdxZLmus0O6Ss3HsawvXDIX9t9LOKyQPjgY0S4qtLOT//E
-         cTkdZR/ZoWNoUrPTtdl0YBCwQJcifH8LmS00KuogVNBk0PGGz4c4JRxPrN6uVO7WeJus
-         b3pA==
-X-Gm-Message-State: AOAM5324/lN02Hp6ppOB50edRazNGpcO8OmeBT+t9dHI8l47wpIwyJVC
-        aez+24OtinCucnef5Re+mzw=
-X-Google-Smtp-Source: ABdhPJy6iWrSjhT1+WPfkKbI1gHvATNgUCtpwq8y3JhsiD76yT4Gvelb8RZZw4VB5N3/itiqM6ja8g==
-X-Received: by 2002:a05:620a:14ad:b0:6a6:b8ab:9c3f with SMTP id x13-20020a05620a14ad00b006a6b8ab9c3fmr5227234qkj.410.1654548537353;
-        Mon, 06 Jun 2022 13:48:57 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:be9c:b2d9:3353:7a73])
-        by smtp.gmail.com with ESMTPSA id bm32-20020a05620a19a000b006a6d20386f6sm900223qkb.42.2022.06.06.13.48.56
+        bh=ZjAv5aFwvGTLPhlpRw2+o5abMQEEmcSWSknk+L4bkY4=;
+        b=cz8C73hQSlYy0cPNs0TK3QkMfggWJpwdsfT8JS6YFhjoxtyyWumnmk4hLijAV7xwca
+         VviQE3iFgMN9nIY4bAcrqANZpmyhanfAlymUz0DwnUtHkFITfYpkv/CfK+1jySFECrTK
+         KaEVhQfGmQ1oHSooVYs8QcqnmFKWmwrhJfK+cyNcObRqXCI/vebho3JURnPmwkuhZJba
+         gB1AMCReX5M3m/psX7osnGl+J1lLQi2Wkt7zrwpVXYdpIWBY8gCRYTSNc86iD94F6G8J
+         n6U7/KrJ6EIFWFQNrt+16h6NR5kAjjN1SX/TZFGGMTqZc5NnPqq/+UB+eyETUoPHhdCh
+         1Tpg==
+X-Gm-Message-State: AOAM533qMW7vLm8o53P6I0Zhr5KeEvrtR6iDG117goeIQrPUFE/4WYbN
+        LsKYhCFuU1K7uM/MGzNHxkk=
+X-Google-Smtp-Source: ABdhPJwJ3KllByNHOzNQfQeXSPKuKbmKZEO6YEk/D2I6ouGdP01uD322ewDAmJ7Yi3z550NeQ4LhjQ==
+X-Received: by 2002:a05:651c:160b:b0:247:f955:1b18 with SMTP id f11-20020a05651c160b00b00247f9551b18mr53514803ljq.427.1654548623775;
+        Mon, 06 Jun 2022 13:50:23 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id bp17-20020a056512159100b0047255d21186sm2990692lfb.181.2022.06.06.13.50.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 13:48:56 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 13:48:50 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] bitops: unify non-atomic bitops prototypes across
- architectures
-Message-ID: <Yp5oMmzNlq+Ut4So@yury-laptop>
-References: <20220606114908.962562-1-alexandr.lobakin@intel.com>
- <20220606114908.962562-5-alexandr.lobakin@intel.com>
+        Mon, 06 Jun 2022 13:50:23 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Mon, 6 Jun 2022 22:50:21 +0200
+To:     Baoquan He <bhe@redhat.com>
+Cc:     akpm@linux-foundation.org, npiggin@gmail.com, urezki@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] mm/vmalloc: Add code comment for
+ find_vmap_area_exceed_addr()
+Message-ID: <Yp5ojeAk+2tf2Rr2@pc638.lan>
+References: <20220606083909.363350-1-bhe@redhat.com>
+ <20220606083909.363350-5-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220606114908.962562-5-alexandr.lobakin@intel.com>
+In-Reply-To: <20220606083909.363350-5-bhe@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 01:49:05PM +0200, Alexander Lobakin wrote:
-> Currently, there is a mess with the prototypes of the non-atomic
-> bitops across the different architectures:
+On Mon, Jun 06, 2022 at 04:39:08PM +0800, Baoquan He wrote:
+> Its behaviour is like find_vma() which finds an area above the specified
+> address, add comment to make it easier to understand.
 > 
-> ret	bool, int, unsigned long
-> nr	int, long, unsigned int, unsigned long
-> addr	volatile unsigned long *, volatile void *
+> And also fix two places of grammer mistake/typo.
 > 
-> Thankfully, it doesn't provoke any bugs, but can sometimes make
-> the compiler angry when it's not handy at all.
-> Adjust all the prototypes to the following standard:
-> 
-> ret	bool				retval can be only 0 or 1
-> nr	unsigned long			native; signed makes no sense
-> addr	volatile unsigned long *	bitmaps are arrays of ulongs
-> 
-> Finally, add some static assertions in order to prevent people from
-> making a mess in this room again.
-> I also used the %__always_inline attribute consistently they always
-> get resolved to the actual operations.
-> 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
-
-Reviewed-by: Yury Norov <yury.norov@gmail.com>
-
-[...]
-
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 7aaed501f768..5520ac9b1c24 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -26,12 +26,25 @@ extern unsigned int __sw_hweight16(unsigned int w);
->  extern unsigned int __sw_hweight32(unsigned int w);
->  extern unsigned long __sw_hweight64(__u64 w);
+>  mm/vmalloc.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 11dfc897de40..860ed9986775 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -790,6 +790,7 @@ unsigned long vmalloc_nr_pages(void)
+>  	return atomic_long_read(&nr_vmalloc_pages);
+>  }
 >  
-> +#include <asm-generic/bitops/generic-non-atomic.h>
-> +
+> +/* Look up the first VA which satisfies  addr < va_end,  NULL if none. */
+>  static struct vmap_area *find_vmap_area_exceed_addr(unsigned long addr)
+>  {
+>  	struct vmap_area *va = NULL;
+> @@ -929,7 +930,7 @@ link_va(struct vmap_area *va, struct rb_root *root,
+>  		 * Some explanation here. Just perform simple insertion
+>  		 * to the tree. We do not set va->subtree_max_size to
+>  		 * its current size before calling rb_insert_augmented().
+> -		 * It is because of we populate the tree from the bottom
+> +		 * It is because we populate the tree from the bottom
+>  		 * to parent levels when the node _is_ in the tree.
+>  		 *
+>  		 * Therefore we set subtree_max_size to zero after insertion,
+> @@ -1659,7 +1660,7 @@ static atomic_long_t vmap_lazy_nr = ATOMIC_LONG_INIT(0);
+>  
 >  /*
->   * Include this here because some architectures need generic_ffs/fls in
->   * scope
+>   * Serialize vmap purging.  There is no actual critical section protected
+> - * by this look, but we want to avoid concurrent calls for performance
+> + * by this lock, but we want to avoid concurrent calls for performance
+>   * reasons and to make the pcpu_get_vm_areas more deterministic.
 >   */
->  #include <asm/bitops.h>
->  
-> +/* Check that the bitops prototypes are sane */
-> +#define __check_bitop_pr(name)	static_assert(__same_type(name, gen_##name))
-> +__check_bitop_pr(__set_bit);
-> +__check_bitop_pr(__clear_bit);
-> +__check_bitop_pr(__change_bit);
-> +__check_bitop_pr(__test_and_set_bit);
-> +__check_bitop_pr(__test_and_clear_bit);
-> +__check_bitop_pr(__test_and_change_bit);
-> +__check_bitop_pr(test_bit);
-> +#undef __check_bitop_pr
+>  static DEFINE_MUTEX(vmap_purge_lock);
+> -- 
+> 2.34.1
+> 
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-This one is amazing trick! And the series is good overall. Do you want me to
-take it in bitmap tree, when it's ready, or you'll move it somehow else?
-
-Thanks,
-Yury
+--
+Uladzislau Rezki

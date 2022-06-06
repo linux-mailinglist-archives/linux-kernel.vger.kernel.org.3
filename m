@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAE053EB10
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C8953EC7B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236900AbiFFM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S236854AbiFFMYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236893AbiFFM0O (ORCPT
+        with ESMTP id S236838AbiFFMYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:26:14 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162492A3BBD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:26:14 -0700 (PDT)
+        Mon, 6 Jun 2022 08:24:38 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21E124E1E9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:24:37 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id j6so12546793pfe.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 05:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654518374; x=1686054374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1r4i7S693eNGdvCLoo3S36nunc2SGIhjZFlXs94KVRg=;
-  b=sdAwZoKDSFcS1w5o+9XRppLlcUToTnT/zHdsLArT0ewH+zci8PoWCK7W
-   K9U6vcyCfUW0o75YDxOEBH2OtUT8bOKuoCptUaGnpImqWXIfdSpCMNMED
-   hzJ+PXe66wXVzdZPT7WHME9pVvd6S6kyeoeByaSY8hAefJVIfNluD/mkP
-   4=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jun 2022 05:26:13 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 05:26:13 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 6 Jun 2022 05:26:13 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 6 Jun 2022
- 05:26:12 -0700
-Date:   Mon, 6 Jun 2022 08:26:10 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v9 08/69] mm: start tracking VMAs with maple tree
-Message-ID: <Yp3yYmNJ5dd8g8Ur@qian>
-References: <20220504010716.661115-1-Liam.Howlett@oracle.com>
- <20220504010716.661115-10-Liam.Howlett@oracle.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TYpS9cCZe4FR4oc/36kZaTPU77Nit6eHdNRaR5Virrc=;
+        b=ZWoYsq1LxjMhfuXkA5IQYKmqfkRcwu6cgLcvwGKJbjmblTsvdiXpTqz9PKNCvNaGwn
+         O1aMO1vDjKM7yjozytN4W5opvvBkQSWfPNaGTabDBKXWCJloEiumZ/2n8eum0vJcsl3P
+         Yf0WAUOyyPf6kd6BIhGVHqJh43chJbGFEkiulDComCUDhVxpzzyOBv3eq2FGLYc4ryEY
+         0SH/AgbTHcM/nmSm70uNpBhJfrAMXHodUlOCkoC/TvnCNt0NHqYzQSwvjdVOuQWDGmwB
+         qdKxMebiVTF/4qAL9TC/s7eXKlqJVfhuioAU8zECi/qQVoOm8UGQEqeYmAzZ2ZLTTzQC
+         iO3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TYpS9cCZe4FR4oc/36kZaTPU77Nit6eHdNRaR5Virrc=;
+        b=OfDAdTQgfuAMCGkcPZbmMvh5vYK+peA5u3qc6pyQrTtJqrzL3yFXr8Ee04oKTWZ5/S
+         HzbpFFlo+Ca3lnLqhBWdfUpZmT0oazypjg+kwmwCJDvbxsCcOsLczAp6TqReUnouEu/O
+         RogpjlMjZLWLHXwTyEyErL8i/rJ2UkDKV++NDwTST8wLz3DH8I5N+4angHM4HX8eDf5J
+         vt5j5v8CjozHPJwvedrVaVw6WKo/2PbliDTjcHxLaI8qrCdSZXHzcJE1enPqinWKPyji
+         6Skf+0nJY+4o56cfpa1qGD/6OEzD8QWkTj2oIBWBi6HiTFY7NO8/0eYIrm6ayzCBUl9W
+         TlaQ==
+X-Gm-Message-State: AOAM531gW2PpZAdAYEGvq6H04xgTHt8PJ50ABpt40L5GABT/jqWI9r7m
+        yS7OaoMk0//jqGyAadpHd2rv/2xZz6+XMQ==
+X-Google-Smtp-Source: ABdhPJxxBpQ8X5nfUg/kDSJxFBf/CoG1q5oQrYT5M0W8MtVrlIgei8a8UGrHM2Hm4JNZv6X+g7I+RA==
+X-Received: by 2002:a17:902:c941:b0:164:14cb:ce5f with SMTP id i1-20020a170902c94100b0016414cbce5fmr23554092pla.127.1654518266749;
+        Mon, 06 Jun 2022 05:24:26 -0700 (PDT)
+Received: from archlinux.localdomain ([140.121.198.213])
+        by smtp.gmail.com with ESMTPSA id v10-20020aa7850a000000b0051868418b06sm8449860pfn.35.2022.06.06.05.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 05:24:26 -0700 (PDT)
+From:   Huichun Feng <foxhoundsk.tw@gmail.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org (open list:SCHEDULER),
+        jserv@ccns.ncku.edu.tw, Chin-En Lin <shiyn.lin@gmail.com>
+Subject: [PATCH] sched/fair: avoid redundant hrtimer check
+Date:   Mon,  6 Jun 2022 20:26:12 +0800
+Message-Id: <20220606122612.2580930-1-foxhoundsk.tw@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220504010716.661115-10-Liam.Howlett@oracle.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:07:52AM +0000, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-> 
-> Start tracking the VMAs with the new maple tree structure in parallel with
-> the rb_tree.  Add debug and trace events for maple tree operations and
-> duplicate the rb_tree that is created on forks into the maple tree.
-> 
-> The maple tree is added to the mm_struct including the mm_init struct,
-> added support in required mm/mmap functions, added tracking in kernel/fork
-> for process forking, and used to find the unmapped_area and checked
-> against what the rbtree finds.
-> 
-> This also moves the mmap_lock() in exit_mmap() since the oom reaper call
-> does walk the VMAs.  Otherwise lockdep will be unhappy if oom happens.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-...
-> @@ -842,6 +969,12 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
->  again:
->  	vma_adjust_trans_huge(orig_vma, start, end, adjust_next);
->  
-> +	if (mas_preallocate(&mas, vma, GFP_KERNEL)) {
-> +		if (exporter && exporter->anon_vma)
-> +			unlink_anon_vmas(importer);
-> +		return -ENOMEM;
-> +	}
-> +
->  	if (file) {
->  		mapping = file->f_mapping;
->  		root = &mapping->i_mmap;
+The check is required iff HRTICK is enabled and DOUBLE_TICK is disabled,
+avoid the redundant check by adding corresponding sched_feat() .
 
-Running a syscall fuzzer for a while could still trigger some memory leak reports.
+Signed-off-by: Huichun Feng <foxhoundsk.tw@gmail.com>
+---
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-unreferenced object 0xffff4021439c6100 (size 256):
-  comm "trinity-c32", pid 1329067, jiffies 4301918356 (age 231692.944s)
-  hex dump (first 32 bytes):
-    00 61 9c 43 21 40 ff ff 1c b1 65 1d 02 40 ff ff  .a.C!@....e..@..
-    ff 2f 42 97 ff ff 00 00 ff 2f 43 97 ff ff 00 00  ./B....../C.....
-  backtrace:
-    [<ffffd4be60434e28>] slab_post_alloc_hook+0x98/0xf0
-    [<ffffd4be6043a2e0>] kmem_cache_alloc_bulk+0x26c/0x4ac
-    [<ffffd4be60d549c8>] mas_alloc_nodes+0x1e8/0x500
-    [<ffffd4be60d7cc68>] mas_preallocate+0xc8/0x210
-    [<ffffd4be603607a0>] __vma_adjust+0x27c/0x1290
-    __vma_adjust at mm/mmap.c:762
-    [<ffffd4be60361b0c>] vma_merge+0x358/0x650
-    [<ffffd4be60370e20>] mprotect_fixup+0x160/0x530
-    [<ffffd4be60371544>] do_mprotect_pkey.constprop.0+0x354/0x710
-    [<ffffd4be60371978>] __arm64_sys_mprotect+0x78/0x130
-    [<ffffd4be5fc43a24>] invoke_syscall+0x74/0x260
-    [<ffffd4be5fc43db8>] el0_svc_common.constprop.0+0x1a8/0x260
-    [<ffffd4be5fc43f1c>] do_el0_svc+0xac/0xe0
-    [<ffffd4be62d68144>] el0_svc+0x84/0x1c0
-    [<ffffd4be62d687dc>] el0t_64_sync_handler+0xbc/0x140
-    [<ffffd4be5fc12548>] el0t_64_sync+0x18c/0x190
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 77b2048a9..80cc1a924 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4668,7 +4668,7 @@ entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)
+ 	/*
+ 	 * don't let the period tick interfere with the hrtick preemption
+ 	 */
+-	if (!sched_feat(DOUBLE_TICK) &&
++	if (sched_feat(HRTICK) && !sched_feat(DOUBLE_TICK) &&
+ 			hrtimer_active(&rq_of(cfs_rq)->hrtick_timer))
+ 		return;
+ #endif
+-- 
+2.36.1
+

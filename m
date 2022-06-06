@@ -2,196 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0E753EF68
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A6153EF6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbiFFURA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
+        id S233462AbiFFUSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbiFFUQp (ORCPT
+        with ESMTP id S233554AbiFFURw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:16:45 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A1D6FD13
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:16:36 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id h23so25063424lfe.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gvgkNt5AvonmRpEaW+kJLiTrofK1h4p2ZLrrpF3hb6g=;
-        b=WhNfhPUvNR4xNPpmPIjOZ33SDP8SNm1f2V4XQziGGsbFEtvGuEO+7kncu8CVybQwni
-         AMLGCqzs7wPsZyXipxxAwpUY/yl7XxFEL5XoitJLAncOtiDSdLJcHhE7FP/KDQSZlSXj
-         OkM0v+9UL4+z1yVDJoDbPydh4/vFaFxnleL43I4CVAl376fOD4K5ZhSspoxP6eRFVdKe
-         LPgZ1RzYk3AVRNPr7YLg2V8pT0sq/EHnrM4pbKL3A5EuWKJ+wRM+VYPPREfAXnoB163b
-         zBORHrb5Xncjv7rqstJhMH5ZcWINBCWncuVyK6oUlgMkBcBfmSU2cgqZ0I+bgQN5XY1e
-         K1DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gvgkNt5AvonmRpEaW+kJLiTrofK1h4p2ZLrrpF3hb6g=;
-        b=1AV+gEWCbRxAB9sQexY70dlbDr5xYFDGqnfjcgw1D+afAbfJZtBezMImsKmE9z/xTz
-         NEW4EPyEWINoTE6nB06m/rZnfK3dH+zw1S/72Izz61SW6id900zSpZ9zrE0LJO4/xFHr
-         5J4Mic9zM1rT0Vc/hH6zt1ZsrGTlOx8GIvTiPOvZtyguoBgjEZx4ijVqPGm+sHvBup+Q
-         7x8l//yuIAZ+IRswpUbI2os+1xgYKKwBuFgAWfjAqdU3FRGR0Z8DmKRckGAt5sINMcj7
-         Cb7xcEaQtoDfQKSZMFfIwFhNV9xWxSGElaoIirqi2pRKQIzUfJWO4l7r+8X++T/8cweZ
-         ctRA==
-X-Gm-Message-State: AOAM530H5QJcaDGblViTRlEgP6labKhP+lwWLwY6CyeZsDtPd+9eSXfl
-        w3rgvmUXb0xtQMg4954o/75Vh2I2K+CTWciPZIdybRlzkE4=
-X-Google-Smtp-Source: ABdhPJxTNHkrcmgcUtB/9S/c69fhktonAVfFFFI0WZphFUluFaXX3OOVp1GevheJd7U/W/TTo4Fmhkm5paB4lEM0+lw=
-X-Received: by 2002:a05:6512:3f1a:b0:477:8ecd:368c with SMTP id
- y26-20020a0565123f1a00b004778ecd368cmr64495550lfa.403.1654546594123; Mon, 06
- Jun 2022 13:16:34 -0700 (PDT)
+        Mon, 6 Jun 2022 16:17:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF00862A24;
+        Mon,  6 Jun 2022 13:17:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C422614F9;
+        Mon,  6 Jun 2022 20:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCE5C385A9;
+        Mon,  6 Jun 2022 20:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654546665;
+        bh=/B/PloBld3O4RZgCV+lWXc3i8yVuTLMMkjx9VYvCuws=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aoKo2oMj/3Zm29onm9GITm4MOVqXfu7+oV0bWECk3Z8pxRMmbBzPeRLkQJ7bc/eMZ
+         k0fbcvuo7hEgg+OIva5vuVm112PdpnSHmWtKZkcm3z2ryt0g2UST/yudrgzTG47qCS
+         8pdQTb7WDLJ+c43lGsbgXGidsXNQtW3z14NJEje+1u8lCONjFVNgIrvIeYPeYnyzrz
+         7BOaEGuqn0FtB5WNp1bye/dOhP9Mnp1ApvtcC3nV0lQ9fH6qhMJ8XO653U1hTrqkpU
+         wOa3b2pit7AO9MKP19/cFJFVkN23xKJEEzeNGvfAJaILVx/n4KV/Lp7HJKu72MG2rg
+         fp1Rzb6VMDC0Q==
+Date:   Mon, 6 Jun 2022 21:17:39 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, asahi@lists.linux.dev
+Subject: Re: [RFC PATCH v2 3/5] ASoC: apple: Add MCA platform driver for
+ Apple SoCs
+Message-ID: <Yp5g43IxFQsUoS/y@sirena.org.uk>
+References: <20220606191910.16580-1-povik+lin@cutebit.org>
+ <20220606191910.16580-4-povik+lin@cutebit.org>
 MIME-Version: 1.0
-References: <20220530090139.3030866-1-masahiroy@kernel.org> <20220530090139.3030866-2-masahiroy@kernel.org>
-In-Reply-To: <20220530090139.3030866-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 6 Jun 2022 13:16:22 -0700
-Message-ID: <CAKwvOdn4hf1PHsj6MdN1ZeYSpBBBK=EixCSwn88bnPvhY_F0WA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] modpost: use fnmatch() to simplify match()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="elKz+L5SmKmXJeQI"
+Content-Disposition: inline
+In-Reply-To: <20220606191910.16580-4-povik+lin@cutebit.org>
+X-Cookie: Have an adequate day.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 2:03 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Replace the own implementation for wildcard (glob) matching with
-> a function call to the library function, fnmatch().
->
-> Also, change the return type to 'bool'.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+--elKz+L5SmKmXJeQI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->
->  scripts/mod/modpost.c | 74 ++++++++-----------------------------------
->  1 file changed, 13 insertions(+), 61 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index c1558bacf717..29d5a841e215 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -13,6 +13,7 @@
->
->  #define _GNU_SOURCE
->  #include <elf.h>
-> +#include <fnmatch.h>
->  #include <stdio.h>
->  #include <ctype.h>
->  #include <string.h>
-> @@ -710,29 +711,6 @@ static char *get_modinfo(struct elf_info *info, const char *tag)
->         return get_next_modinfo(info, tag, NULL);
->  }
->
-> -/**
-> - * Test if string s ends in string sub
-> - * return 0 if match
-> - **/
-> -static int strrcmp(const char *s, const char *sub)
-> -{
-> -       int slen, sublen;
-> -
-> -       if (!s || !sub)
-> -               return 1;
-> -
-> -       slen = strlen(s);
-> -       sublen = strlen(sub);
-> -
-> -       if ((slen == 0) || (sublen == 0))
-> -               return 1;
-> -
-> -       if (sublen > slen)
-> -               return 1;
-> -
-> -       return memcmp(s + slen - sublen, sub, sublen);
-> -}
-> -
->  static const char *sym_name(struct elf_info *elf, Elf_Sym *sym)
->  {
->         if (sym)
-> @@ -741,48 +719,22 @@ static const char *sym_name(struct elf_info *elf, Elf_Sym *sym)
->                 return "(unknown)";
->  }
->
-> -/* The pattern is an array of simple patterns.
-> - * "foo" will match an exact string equal to "foo"
-> - * "*foo" will match a string that ends with "foo"
-> - * "foo*" will match a string that begins with "foo"
-> - * "*foo*" will match a string that contains "foo"
+On Mon, Jun 06, 2022 at 09:19:08PM +0200, Martin Povi=C5=A1er wrote:
+
+> +++ b/sound/soc/apple/mca.c
+> @@ -0,0 +1,1122 @@
 > +/*
-> + * Check whether the 'string' argument matches one of the 'patterns',
-> + * an array of shell wildcard patterns (glob).
-> + *
-> + * Return true is there is a match.
->   */
-> -static int match(const char *sym, const char * const pat[])
-> +static bool match(const char *string, const char *const patterns[])
->  {
-> -       const char *p;
-> -       while (*pat) {
-> -               const char *endp;
-> -
-> -               p = *pat++;
-> -               endp = p + strlen(p) - 1;
-> +       const char *pattern;
->
-> -               /* "*foo*" */
-> -               if (*p == '*' && *endp == '*') {
-> -                       char *bare = NOFAIL(strndup(p + 1, strlen(p) - 2));
-> -                       char *here = strstr(sym, bare);
-> -
-> -                       free(bare);
-> -                       if (here != NULL)
-> -                               return 1;
-> -               }
-> -               /* "*foo" */
-> -               else if (*p == '*') {
-> -                       if (strrcmp(sym, p + 1) == 0)
-> -                               return 1;
-> -               }
-> -               /* "foo*" */
-> -               else if (*endp == '*') {
-> -                       if (strncmp(sym, p, strlen(p) - 1) == 0)
-> -                               return 1;
-> -               }
-> -               /* no wildcards */
-> -               else {
-> -                       if (strcmp(p, sym) == 0)
-> -                               return 1;
-> -               }
-> +       while ((pattern = *patterns++)) {
-> +               if (!fnmatch(pattern, string, 0))
-> +                       return true;
->         }
-> -       /* no match */
-> -       return 0;
+> + * Apple SoCs MCA driver
+
+Please add SPDX headers to all your files.
+
+> +		mca_modify(cl, serdes_conf,
+> +			SERDES_CONF_SOME_RST, SERDES_CONF_SOME_RST);
+> +		(void) readl_relaxed(cl->base + serdes_conf);
+
+Please drop the cast, casts to/from void are generally a warning sign as
+they're unneeded in C.  If you want to document the barrier use a
+comment or wrapper function.
+
+> +	/*
+> +	 * Codecs require clocks at time of umute with the 'mute_stream' op.
+> +	 * We need to enable them here at the latest (frontend prepare would
+> +	 * be too late).
+> +	 */
+> +	if (!mca_fe_clocks_in_use(fe_cl)) {
+> +		ret =3D mca_fe_enable_clocks(fe_cl);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+
+This requirement is CODEC specific.  It's fine to bodge around to
+satisfy it though, especially given the restricted set of platforms this
+can be used with.
+
+> +	fe_cl =3D &mca->clusters[cl->port_driver];
+> +	if (!mca_fe_clocks_in_use(fe_cl))
+> +		return 0; /* Nothing to do */
 > +
-> +       return false;
->  }
->
->  /* sections that we do not want to do full section mismatch check on */
-> --
-> 2.32.0
->
+> +	cl->clocks_in_use[substream->stream] =3D false;
+> +
+> +	if (!mca_fe_clocks_in_use(fe_cl))
+> +		mca_fe_disable_clocks(fe_cl);
 
+Are you sure this doesn't need locking?
 
--- 
-Thanks,
-~Nick Desaulniers
+--elKz+L5SmKmXJeQI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKeYOIACgkQJNaLcl1U
+h9BVlQf9Hhza64pdhAryt0leuNmoItrjQI4ru3oVzIPzjS1FTHojgISfLilo8RjN
+xsVACb5GG0HKM5P/KUmFuH3+niL6W1zxmfO67gzGz0gr5zGpQLvy7XaNc52rVqM5
+u5A9NH0Mqv4/OBbjCi8UzbhG8wZfkAIr2B6FENy3KsSbzdUq2crOrOhiS+TwEK8P
+gQ0yfnnAAm7oueBiZ0ByCfMHOeBtG6dR3o5Yz+UhnZDmg783E0xvz4okjXcbuo2m
+eHMDeulABPHv86DHGZ3KlvUHIK3n8398P1iZxs/0NuJqvNkT4JFcL06Y1TFYeywz
+/0ogXX5hoScevm8+OW4gzuc99bGDBA==
+=ItfL
+-----END PGP SIGNATURE-----
+
+--elKz+L5SmKmXJeQI--

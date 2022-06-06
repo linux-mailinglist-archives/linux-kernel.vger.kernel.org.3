@@ -2,200 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7D153EF91
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4992653EF97
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbiFFUZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S232805AbiFFUbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233382AbiFFUYj (ORCPT
+        with ESMTP id S233506AbiFFUbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:24:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238BD3DA74;
-        Mon,  6 Jun 2022 13:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GqOZ2oW44Rjd4l49qywswNf1QFY4EfDlPVXlmqLvIWY=; b=usGdyI+OHK9lwgBXsMP0vw/JGP
-        xuWtAzGmimpHjSXBNH+xs2VSbqGVilyhFIjzH5xOdTGCu2Jc0mGbVijV6S0ys8/yh5AsWPpZ1PAfS
-        MIt4JtEJRVIUvy4grt+TEUlgma0VC/0rDleuyufqcJVta8DS9UgplKviSI6GOce953E7xST6avEP8
-        sPSOPlaRjz6SyQQrOkv1Nm8TfkWxufEB9ABSyEC1vXMk6zGOOA62xJPOZz+03kw2qMonbVcuLytZK
-        ln/yubj3x/2UpBxi7o3ZTOWhm8TFBe97Vn7hsYrrFRjAXN2mXokc9gIZVYp/q5GGTgPB3zD0JdTp9
-        UaYNXnJQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyJFy-00AzpO-Qa; Mon, 06 Jun 2022 20:23:23 +0000
-Date:   Mon, 6 Jun 2022 21:23:22 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        James Morris <jmorris@namei.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        gwml@vger.gnuweeb.org
-Subject: Re: Linux 5.18-rc4
-Message-ID: <Yp5iOlrgELc9SkSI@casper.infradead.org>
-References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
- <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
- <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
- <87r1414y5v.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wijAnOcC2qQEAvFtRD_xpPbG+aSUXkfM-nFTHuMmPbZGA@mail.gmail.com>
- <266e648a-c537-66bc-455b-37105567c942@canonical.com>
+        Mon, 6 Jun 2022 16:31:15 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4D82F037
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:30:22 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id v1so20477747ejg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FjlupzUpssQ/zXPtSpKMZWj3HluXgdG+Y/6lVpRKYVE=;
+        b=jc7C1tatqDAwbmm4LtwxcZKUU4YS1aHlJAk16DJLh6iid4pPV6KnFvBqqryAGu4hpT
+         gBOLwzgiy8mJ/KhKV+72Ub5FrPj9vR4NcxRr+2XWTWoRdkjQ5EIOVAWuZVDOa6dhCLeY
+         CnIDgfMOqKU4Yf0R1TXwOkwAyXUWaZcjXVZ94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FjlupzUpssQ/zXPtSpKMZWj3HluXgdG+Y/6lVpRKYVE=;
+        b=SaxL8OOTzDEjndc6h0Uav3ejj+W1W0n6e5S9JZU8XpIS3Wyi0+92qWOSNSOj6HUsp5
+         RWfwdrnulPDl8L2wiU/YwNeedick/BUyqz+rjiLidzFLlisdbe9laKvls/axjspqe6uQ
+         4aNLFTFrY/ybUZ84UAFiBeVJB4PqB9uKWw1N4Rx70TaeHHPaXB7DDwa/cKBlkedta3FC
+         uqPUJ5YorRPE+06nXBe4osmNy6KxI8GLN0+x+ZJb/54Yqzg3beaJRdwaIlh+ha602P6o
+         VofzSNuq/xGX15An3hs4sEuvbGl7Pq4ur9o/6WGrXmCK0yrXSXxN8FM/OqhBVG1zgbOX
+         vQKQ==
+X-Gm-Message-State: AOAM533XUGrbgyi9whbHTTQoxwaTaPWjVgCEb2VI5o10tW9Qn5m2XWus
+        PNB+qkTva/X9RCc9PQ2G+aNVmso4WoeoMa5iw1s=
+X-Google-Smtp-Source: ABdhPJy8y/FAopujf3SeN2paIf8Ch1b10kfWw/pvxyCoiWxZsZ6jFa1fzdMXpvpzubq1xCmae/F0kg==
+X-Received: by 2002:a17:906:4356:b0:711:cd0d:b205 with SMTP id z22-20020a170906435600b00711cd0db205mr7326984ejm.240.1654547420724;
+        Mon, 06 Jun 2022 13:30:20 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05640240cb00b0042e17781fc5sm7735495edb.49.2022.06.06.13.30.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 13:30:18 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso8460648wmr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:30:18 -0700 (PDT)
+X-Received: by 2002:a05:600c:591:b0:39c:4544:b814 with SMTP id
+ o17-20020a05600c059100b0039c4544b814mr14738745wmd.118.1654547418071; Mon, 06
+ Jun 2022 13:30:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <266e648a-c537-66bc-455b-37105567c942@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220228202532.869740-1-briannorris@chromium.org>
+ <CA+ASDXNSThy7usMKkN22VBq2iyej7sCJ8CAmgnNvxDgZiMbukA@mail.gmail.com>
+ <CA+ASDXMW14GqJUAogQ0=dVdamhTTGDzcMRv-8Cx-TaXShHxj+A@mail.gmail.com>
+ <CAOw6vb+myB0gB1kPvwuL+T1Ka10gDN5rGS2hW+UG+-+K2NGz_w@mail.gmail.com> <CAD=FV=X1F61nDcoQz4w1pJX_=Zzt6sLH8bcsGrxxTpGs6=yZ4w@mail.gmail.com>
+In-Reply-To: <CAD=FV=X1F61nDcoQz4w1pJX_=Zzt6sLH8bcsGrxxTpGs6=yZ4w@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 6 Jun 2022 13:30:06 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=URUUEtLfJprO72s307Op4Y9CQw0Uk3TUPBq8XAokhCsg@mail.gmail.com>
+Message-ID: <CAD=FV=URUUEtLfJprO72s307Op4Y9CQw0Uk3TUPBq8XAokhCsg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] drm/bridge: analogix_dp: Self-refresh state
+ machine fixes
+To:     Sean Paul <seanpaul@chromium.org>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sean Paul <sean@poorly.run>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Liu Ying <victor.liu@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 12:19:36PM -0700, John Johansen wrote:
-> > I suspect that part is that both Apparmor and IPC use the idr local lock.
-> > 
-> bingo,
-> 
-> apparmor moved its secids allocation from a custom radix tree to idr in
-> 
->   99cc45e48678 apparmor: Use an IDR to allocate apparmor secids
-> 
-> and ipc is using the idr for its id allocation as well
-> 
-> I can easily lift the secid() allocation out of the ctx->lock but that
-> would still leave it happening under the file_lock and not fix the problem.
-> I think the quick solution would be for apparmor to stop using idr, reverting
-> back at least temporarily to the custom radix tree.
+Hi,
 
-How about moving forward to the XArray that doesn't use that horrid
-prealloc gunk?  Compile tested only.
+On Fri, Jun 3, 2022 at 8:17 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Fri, Jun 3, 2022 at 8:11 AM Sean Paul <seanpaul@chromium.org> wrote:
+> >
+> > On Mon, May 23, 2022 at 5:51 PM Brian Norris <briannorris@chromium.org> wrote:
+> > >
+> > > On Thu, Mar 10, 2022 at 3:50 PM Brian Norris <briannorris@chromium.org> wrote:
+> > > > On Mon, Feb 28, 2022 at 12:25 PM Brian Norris <briannorris@chromium.org> wrote:
+> > >
+> > > > Ping for review? Sean, perhaps? (You already reviewed this on the
+> > > > Chromium tracker.)
+> > >
+> > > Ping
+> >
+> > Apologies for the delay. Please in future ping on irc/chat if you're
+> > waiting for review from me, my inbox is often neglected.
+> >
+> > The set still looks good to me,
+> >
+> > Reviewed-by: Sean Paul <seanpaul@chromium.org>
+>
+> Unless someone yells, I'll plan to apply both patches to
+> drm-misc-fixes early next week, possibly Monday. Seems like if someone
+> was going to object to these they've had plenty of time up until now.
 
+As promised, I pushed these to drm-misc-fixes:
 
-diff --git a/security/apparmor/include/secid.h b/security/apparmor/include/secid.h
-index 48ff1ddecad5..278dff5ecd1f 100644
---- a/security/apparmor/include/secid.h
-+++ b/security/apparmor/include/secid.h
-@@ -31,6 +31,4 @@ int aa_alloc_secid(struct aa_label *label, gfp_t gfp);
- void aa_free_secid(u32 secid);
- void aa_secid_update(u32 secid, struct aa_label *label);
- 
--void aa_secids_init(void);
--
- #endif /* __AA_SECID_H */
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 900bc540656a..9dfb4e4631da 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1857,8 +1857,6 @@ static int __init apparmor_init(void)
- {
- 	int error;
- 
--	aa_secids_init();
--
- 	error = aa_setup_dfa_engine();
- 	if (error) {
- 		AA_ERROR("Unable to setup dfa engine\n");
-diff --git a/security/apparmor/secid.c b/security/apparmor/secid.c
-index ce545f99259e..3b08942db1f6 100644
---- a/security/apparmor/secid.c
-+++ b/security/apparmor/secid.c
-@@ -13,9 +13,9 @@
- #include <linux/errno.h>
- #include <linux/err.h>
- #include <linux/gfp.h>
--#include <linux/idr.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/xarray.h>
- 
- #include "include/cred.h"
- #include "include/lib.h"
-@@ -29,8 +29,7 @@
-  */
- #define AA_FIRST_SECID 2
- 
--static DEFINE_IDR(aa_secids);
--static DEFINE_SPINLOCK(secid_lock);
-+static DEFINE_XARRAY_FLAGS(aa_secids, XA_FLAGS_LOCK_IRQ | XA_FLAGS_TRACK_FREE);
- 
- /*
-  * TODO: allow policy to reserve a secid range?
-@@ -47,9 +46,9 @@ void aa_secid_update(u32 secid, struct aa_label *label)
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&secid_lock, flags);
--	idr_replace(&aa_secids, label, secid);
--	spin_unlock_irqrestore(&secid_lock, flags);
-+	xa_lock_irqsave(&aa_secids, flags);
-+	__xa_store(&aa_secids, secid, label, 0);
-+	xa_unlock_irqrestore(&aa_secids, flags);
- }
- 
- /**
-@@ -58,13 +57,7 @@ void aa_secid_update(u32 secid, struct aa_label *label)
-  */
- struct aa_label *aa_secid_to_label(u32 secid)
- {
--	struct aa_label *label;
--
--	rcu_read_lock();
--	label = idr_find(&aa_secids, secid);
--	rcu_read_unlock();
--
--	return label;
-+	return xa_load(&aa_secids, secid);
- }
- 
- int apparmor_secid_to_secctx(u32 secid, char **secdata, u32 *seclen)
-@@ -126,19 +119,16 @@ int aa_alloc_secid(struct aa_label *label, gfp_t gfp)
- 	unsigned long flags;
- 	int ret;
- 
--	idr_preload(gfp);
--	spin_lock_irqsave(&secid_lock, flags);
--	ret = idr_alloc(&aa_secids, label, AA_FIRST_SECID, 0, GFP_ATOMIC);
--	spin_unlock_irqrestore(&secid_lock, flags);
--	idr_preload_end();
-+	xa_lock_irqsave(&aa_secids, flags);
-+	ret = __xa_alloc(&aa_secids, &label->secid, label,
-+			XA_LIMIT(AA_FIRST_SECID, INT_MAX), gfp);
-+	xa_unlock_irqrestore(&aa_secids, flags);
- 
- 	if (ret < 0) {
- 		label->secid = AA_SECID_INVALID;
- 		return ret;
- 	}
- 
--	AA_BUG(ret == AA_SECID_INVALID);
--	label->secid = ret;
- 	return 0;
- }
- 
-@@ -150,12 +140,7 @@ void aa_free_secid(u32 secid)
- {
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&secid_lock, flags);
--	idr_remove(&aa_secids, secid);
--	spin_unlock_irqrestore(&secid_lock, flags);
--}
--
--void aa_secids_init(void)
--{
--	idr_init_base(&aa_secids, AA_FIRST_SECID);
-+	xa_lock_irqsave(&aa_secids, flags);
-+	__xa_erase(&aa_secids, secid);
-+	xa_unlock_irqrestore(&aa_secids, flags);
- }
+e54a4424925a drm/atomic: Force bridge self-refresh-exit on CRTC switch
+ca871659ec16 drm/bridge: analogix_dp: Support PSR-exit to disable transition
+
+-Doug

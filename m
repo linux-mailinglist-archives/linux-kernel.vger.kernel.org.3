@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE09653EEA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5164D53EEAD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiFFTc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
+        id S232453AbiFFTdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbiFFTcY (ORCPT
+        with ESMTP id S232383AbiFFTdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 15:32:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777BB1A81E;
-        Mon,  6 Jun 2022 12:32:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01EBD6149D;
-        Mon,  6 Jun 2022 19:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5CEC34119;
-        Mon,  6 Jun 2022 19:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654543942;
-        bh=FWYO48tZzW1QrOl5nlcwP2dPQNnXBzxB9LYsv3bKWLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YwpVJetskC5OgVjir8JO7mJjMIZfFcjuffoAszOLlB4mIj7lbQlOt4QCBy+HlGlaV
-         RAqO0Oy6DmmIep/UbjHokCoGlyD/t9rkSiNH6b1igIxh//XC8mrRU3R1l67i1W/ARy
-         rmp0p4W3TpXAgGdYLBs85zH5IwcE2aErjv+rqjaJPG/aOhxsuzpwG2O2r6ZZiGc6L+
-         fPOjR9KCdE2iMCeupIYoW91awGzz3NDRtgugq+O70P8u+poHlNRjrTuuxeSPFWdWCy
-         8KHD6uj4jjGjv6ihS4EZBIOgyV/nTyVNyqVqrNTOjlaaRiMtGX50JzkYXcv5Ulgwu1
-         zD6BrrOVEF0CQ==
-Date:   Mon, 6 Jun 2022 12:32:20 -0700
-From:   Ben Widawsky <bwidawsk@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V10 9/9] cxl/port: Parse out DSMAS data from CDAT table
-Message-ID: <20220606193220.aw7ouwtop7lo2gpc@bwidawsk-mobl5>
-References: <20220605005049.2155874-1-ira.weiny@intel.com>
- <20220605005049.2155874-10-ira.weiny@intel.com>
+        Mon, 6 Jun 2022 15:33:07 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64590645B;
+        Mon,  6 Jun 2022 12:33:06 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id y16so12646214ili.13;
+        Mon, 06 Jun 2022 12:33:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tNX+fE5QMsC9Ks4TM/TrqMoy1piEYYRXSKM00brwA4A=;
+        b=6DoQBPui7qVgvUUc+FNMNc8mvmHRdOgGHW9E7+jg3WpwL3PgSYjaGfK49/wVWtLsBy
+         tKYL9ef/hgL6m/zUGauIbVVUQm0nE2+CRkVdw4ojEk5y+O0Sj78aWSoXmgvvKgS5QwJE
+         A/8hDsUa2PTOBAaEkFhS854fEQzx65v3hpzS0Abrwkt+KouED7yUBmr4dKQtY5QbMtGm
+         iXJriJGxVjLKi3vMMOME/bfHwIHs9D5VXJYjGxWV7Tk8BWIvbvpdOx/HA/qy+255gPev
+         ju+lkQYg7VIyspGo5m+iYB4AdYMgFBtCrwQdsz/aeJaFAqqSt2AXYXjL4GuzBRgfcupf
+         MJoQ==
+X-Gm-Message-State: AOAM533oXnrGYcPEYjIOYcI/MjIsAHXjwxsdGYlmyTG7ByoX6v58KtCv
+        8fVDxKOpjSIcfYmqjul4gw==
+X-Google-Smtp-Source: ABdhPJz2HY7kGWq5THpXteEuhoYM4oFuFpHDe3x9h/zZZDyGDLS+35sEVRPBUr0/3gI2PdpHWAZGig==
+X-Received: by 2002:a05:6e02:158b:b0:2cf:e058:8ecc with SMTP id m11-20020a056e02158b00b002cfe0588eccmr14792795ilu.30.1654543985645;
+        Mon, 06 Jun 2022 12:33:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id v9-20020a056602058900b00669384fcf88sm3457792iox.1.2022.06.06.12.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 12:33:05 -0700 (PDT)
+Received: (nullmailer pid 1127227 invoked by uid 1000);
+        Mon, 06 Jun 2022 19:33:03 -0000
+Date:   Mon, 6 Jun 2022 14:33:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Atul Khare <atulkhare@rivosinc.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: i2c: convert ocores binding to yaml
+Message-ID: <20220606193303.GA1124108-robh@kernel.org>
+References: <20220606152557.438771-1-mail@conchuod.ie>
+ <20220606152557.438771-3-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220605005049.2155874-10-ira.weiny@intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220606152557.438771-3-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,220 +75,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-06-04 17:50:49, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On Mon, Jun 06, 2022 at 04:25:56PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> CXL Ports with memory devices attached need the information from the
-> Device Scoped Memory Affinity Structure (DSMAS).  This information is
-> contained within the CDAT table buffer which is previously read and
-> cached in the port device.
+> Convert the open cores i2c controller binding from text to yaml.
 > 
-> If CDAT data is available, parse and cache DSMAS data from the table.
-> Store this data in unmarshaled struct dsmas data structures for ease of
-> use later.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
-> Changes from V8
-> 	Adjust to the cdat data being in cxl_port
+>  .../devicetree/bindings/i2c/i2c-ocores.txt    |  78 -----------
+>  .../bindings/i2c/opencores,i2c-ocores.yaml    | 123 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 124 insertions(+), 79 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
 > 
-> Changes from V7
-> 	Rebased on cxl-pending
-> 
-> Changes from V6
-> 	Move to port.c
-> 	It is not an error if no DSMAS data is found
-> 
-> Changes from V5
-> 	Fix up sparse warnings
-> 	Split out cdat_hdr_valid()
-> 	Update cdat_hdr_valid()
-> 		Remove revision and cs field parsing
-> 			There is no point in these
-> 		Add seq check and debug print.
-> 	From Jonathan
-> 		Add spaces around '+' and '/'
-> 		use devm_krealloc() for dmas_ary
-> ---
->  drivers/cxl/cdat.h     | 17 +++++++++++
->  drivers/cxl/core/pci.c | 65 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h      |  2 ++
->  drivers/cxl/cxlmem.h   |  4 +++
->  drivers/cxl/cxlpci.h   |  1 +
->  drivers/cxl/mem.c      |  1 +
->  6 files changed, 90 insertions(+)
-> 
-> diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-> index 3d8945612511..0a510f73fe6d 100644
-> --- a/drivers/cxl/cdat.h
-> +++ b/drivers/cxl/cdat.h
-> @@ -85,6 +85,23 @@
->  
->  #define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
->  
-> +/**
-> + * struct cxl_dsmas - host unmarshaled version of DSMAS data
-> + *
-> + * As defined in the Coherent Device Attribute Table (CDAT) specification this
-> + * represents a single DSMAS entry in that table.
-> + *
-> + * @dpa_base: The lowest Device Physical Address associated with this DSMAD
-> + * @length: Length in bytes of this DSMAD
-> + * @non_volatile: If set, the memory region represents Non-Volatile memory
-> + */
-> +struct cxl_dsmas {
-> +	u64 dpa_base;
-> +	u64 length;
-> +	/* Flags */
-> +	u8 non_volatile:1;
-> +};
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt b/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> deleted file mode 100644
+> index a37c9455b244..000000000000
+> --- a/Documentation/devicetree/bindings/i2c/i2c-ocores.txt
+> +++ /dev/null
+> @@ -1,78 +0,0 @@
+> -Device tree configuration for i2c-ocores
+> -
+> -Required properties:
+> -- compatible      : "opencores,i2c-ocores"
+> -                    "aeroflexgaisler,i2cmst"
+> -                    "sifive,fu540-c000-i2c", "sifive,i2c0"
+> -                    For Opencore based I2C IP block reimplemented in
+> -                    FU540-C000 SoC.
+> -                    "sifive,fu740-c000-i2c", "sifive,i2c0"
+> -                    For Opencore based I2C IP block reimplemented in
+> -                    FU740-C000 SoC.
+> -                    Please refer to sifive-blocks-ip-versioning.txt for
+> -                    additional details.
+> -- reg             : bus address start and address range size of device
+> -- clocks          : handle to the controller clock; see the note below.
+> -                    Mutually exclusive with opencores,ip-clock-frequency
+> -- opencores,ip-clock-frequency: frequency of the controller clock in Hz;
+> -                    see the note below. Mutually exclusive with clocks
+> -- #address-cells  : should be <1>
+> -- #size-cells     : should be <0>
+> -
+> -Optional properties:
+> -- interrupts      : interrupt number.
+> -- clock-frequency : frequency of bus clock in Hz; see the note below.
+> -                    Defaults to 100 KHz when the property is not specified
+> -- reg-shift       : device register offsets are shifted by this value
+> -- reg-io-width    : io register width in bytes (1, 2 or 4)
+> -- regstep         : deprecated, use reg-shift above
+> -
+> -Note
+> -clock-frequency property is meant to control the bus frequency for i2c bus
+> -drivers, but it was incorrectly used to specify i2c controller input clock
+> -frequency. So the following rules are set to fix this situation:
+> -- if clock-frequency is present and neither opencores,ip-clock-frequency nor
+> -  clocks are, then clock-frequency specifies i2c controller clock frequency.
+> -  This is to keep backwards compatibility with setups using old DTB. i2c bus
+> -  frequency is fixed at 100 KHz.
+> -- if clocks is present it specifies i2c controller clock. clock-frequency
+> -  property specifies i2c bus frequency.
+> -- if opencores,ip-clock-frequency is present it specifies i2c controller
+> -  clock frequency. clock-frequency property specifies i2c bus frequency.
+> -
+> -Examples:
+> -
+> -	i2c0: ocores@a0000000 {
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -		compatible = "opencores,i2c-ocores";
+> -		reg = <0xa0000000 0x8>;
+> -		interrupts = <10>;
+> -		opencores,ip-clock-frequency = <20000000>;
+> -
+> -		reg-shift = <0>;	/* 8 bit registers */
+> -		reg-io-width = <1>;	/* 8 bit read/write */
+> -
+> -		dummy@60 {
+> -			compatible = "dummy";
+> -			reg = <0x60>;
+> -		};
+> -	};
+> -or
+> -	i2c0: ocores@a0000000 {
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -		compatible = "opencores,i2c-ocores";
+> -		reg = <0xa0000000 0x8>;
+> -		interrupts = <10>;
+> -		clocks = <&osc>;
+> -		clock-frequency = <400000>; /* i2c bus frequency 400 KHz */
+> -
+> -		reg-shift = <0>;	/* 8 bit registers */
+> -		reg-io-width = <1>;	/* 8 bit read/write */
+> -
+> -		dummy@60 {
+> -			compatible = "dummy";
+> -			reg = <0x60>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+> new file mode 100644
+> index 000000000000..7074f019d94f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/opencores,i2c-ocores.yaml
+> @@ -0,0 +1,123 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/opencores,i2c-ocores.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  /**
->   * struct cxl_cdat - CXL CDAT data
->   *
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index e68f13e66fcf..9666cc4a67aa 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -673,3 +673,68 @@ void read_cdat_data(struct cxl_port *port)
->  		retries);
->  }
->  EXPORT_SYMBOL_NS_GPL(read_cdat_data, CXL);
+> +title: OpenCores I2C controller
 > +
-> +void parse_dsmas(struct cxl_memdev *cxlmd, struct cxl_port *port)
-> +{
-> +	struct device *dev = &port->dev;
-> +	struct cxl_dsmas *dsmas_ary = NULL;
-> +	u32 *data = port->cdat.table;
-> +	int bytes_left = port->cdat.length;
-> +	int nr_dsmas = 0;
+> +maintainers:
+> +  - Peter Korsgaard <peter@korsgaard.com>
+> +  - Andrew Lunn <andrew@lunn.ch>
 > +
-> +	if (!data) {
-> +		dev_info(dev, "No CDAT data available for DSMAS\n");
-> +		return;
-> +	}
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
 > +
-> +	/* Skip header */
-> +	data += CDAT_HEADER_LENGTH_DW;
-> +	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - sifive,fu740-c000-i2c # Opencore based IP block FU740-C000 SoC
+> +              - sifive,fu540-c000-i2c # Opencore based IP block FU540-C000 SoC
+> +          - const: sifive,i2c0
+> +      - enum:
+> +          - opencores,i2c-ocores
+> +          - aeroflexgaisler,i2cmst
 > +
-> +	while (bytes_left > 0) {
-> +		u32 *cur_rec = data;
-> +		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
-> +		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
+> +  reg:
+> +    maxItems: 1
 > +
-> +		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
-> +			struct cxl_dsmas *new_ary;
-> +			u8 flags;
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +			new_ary = devm_krealloc(dev, dsmas_ary,
-> +					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
-> +					   GFP_KERNEL);
-> +			if (!new_ary) {
-> +				dev_err(dev,
-> +					"Failed to allocate memory for DSMAS data (nr_dsmas %d)\n",
-> +					nr_dsmas);
-> +				return;
-> +			}
-> +			dsmas_ary = new_ary;
+> +  clocks:
+> +    maxItems: 1
+> +
 
-I don't love the realloc on every loop (though I've done something similar
-before). What about allocating enough entries port->cdat.length, and then a
-single krealloc to shorten the array upon success? I think krealloc pretty much
-always succeeds when you shrink FWIW.
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
 
-> +
-> +			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
+These 2 are covered by i2c-controller.yaml. Drop.
 
-Does it make sense to test length/bytes_left before reading cur_rec[1]?
+With that,
 
-> +
-> +			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
-> +			dsmas_ary[nr_dsmas].length = CDAT_DSMAS_DPA_LEN(cur_rec);
-> +			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
-> +
-> +			dev_dbg(dev, "DSMAS %d: %llx:%llx %s\n",
-> +				nr_dsmas,
-> +				dsmas_ary[nr_dsmas].dpa_base,
-> +				dsmas_ary[nr_dsmas].dpa_base +
-> +					dsmas_ary[nr_dsmas].length,
-> +				(dsmas_ary[nr_dsmas].non_volatile ?
-> +					"Persistent" : "Volatile")
-> +				);
-> +
-> +			nr_dsmas++;
-> +		}
-> +
-> +		data += (length / sizeof(u32));
-> +		bytes_left -= length;
-> +	}
-> +
-> +	dev_dbg(dev, "Found %d DSMAS entries\n", nr_dsmas);
-> +	cxlmd->dsmas_ary = dsmas_ary;
-> +	cxlmd->nr_dsmas = nr_dsmas;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(parse_dsmas, CXL);
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 531b77d296c7..4d779a8fb807 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -10,6 +10,8 @@
->  #include <linux/io.h>
->  #include "cdat.h"
->  
-> +#include "cdat.h"
-> +
->  /**
->   * DOC: cxl objects
->   *
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 4d2764b865ab..ce5b00f3ebcb 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -36,6 +36,8 @@
->   * @cxlds: The device state backing this device
->   * @detach_work: active memdev lost a port in its ancestry
->   * @id: id number of this memdev instance.
-> + * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
-> + * @nr_dsmas: Number of entries in dsmas_ary
-
-Personally don't think it's necessary to append "_ary". Up to you.
-
->   */
->  struct cxl_memdev {
->  	struct device dev;
-> @@ -43,6 +45,8 @@ struct cxl_memdev {
->  	struct cxl_dev_state *cxlds;
->  	struct work_struct detach_work;
->  	int id;
-> +	struct cxl_dsmas *dsmas_ary;
-> +	int nr_dsmas;
->  };
->  
->  static inline struct cxl_memdev *to_cxl_memdev(struct device *dev)
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index 71009a167a92..44d1c2b83aab 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -76,4 +76,5 @@ struct cxl_dev_state;
->  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
->  void cxl_cache_cdat_mb(struct cxl_port *port);
->  void read_cdat_data(struct cxl_port *port);
-> +void parse_dsmas(struct cxl_memdev *cxlmd, struct cxl_port *port);
->  #endif /* __CXL_PCI_H__ */
-> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> index c310f1fd3db0..a8768df4ae38 100644
-> --- a/drivers/cxl/mem.c
-> +++ b/drivers/cxl/mem.c
-> @@ -35,6 +35,7 @@ static int create_endpoint(struct cxl_memdev *cxlmd,
->  	if (IS_ERR(endpoint))
->  		return PTR_ERR(endpoint);
->  
-> +	parse_dsmas(cxlmd, endpoint);
->  	dev_dbg(&cxlmd->dev, "add: %s\n", dev_name(&endpoint->dev));
->  
->  	if (!endpoint->dev.driver) {
-> -- 
-> 2.35.1
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>

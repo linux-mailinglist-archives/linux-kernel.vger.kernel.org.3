@@ -2,106 +2,434 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BD753EC77
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D0653E6FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbiFFNQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S238813AbiFFNWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238656AbiFFNQY (ORCPT
+        with ESMTP id S238809AbiFFNWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:16:24 -0400
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A2337A9E;
-        Mon,  6 Jun 2022 06:16:23 -0700 (PDT)
-Received: by mail-pj1-f52.google.com with SMTP id d12-20020a17090abf8c00b001e2eb431ce4so12559517pjs.1;
-        Mon, 06 Jun 2022 06:16:23 -0700 (PDT)
+        Mon, 6 Jun 2022 09:22:09 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA7A1172
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:22:06 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id k16so19859349wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lvg+3jquYsBxKwAWn8JZTmkTL9YPez+eTbBaV2PCYy4=;
+        b=oGqWmFxbO3fQw7Ia584LW3Lfhn4gldqv4v6VkVM/LrLI3U+SNKJ+mgIUGDRF88tWQp
+         MSLJAyf9GTBTf1PhVKyC/+cQknFQU8hVj6F5OoMOIzqP9Bc0LbIHIjsmsLj7CsLZE+cH
+         vmuAty1LP+i0yTuvYxq18eovQ7nQHGyjT164JLpXWHmZUJxKW/469Su9+a1ze+8OvHu0
+         hM/rZFCNSvRR1I5THAz4qSD77sI120sjtINRANXO8jW/pojSA/bMKDxcPywI8/vA9JQw
+         Tkuths53j77lWIiN/AcyMXhjvNUEN3XY0UiVi4Jlcl9jKBUeAoNKJmrb6p585C0JkV4J
+         pxgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=haH1xGwhj/wZTEqY+orLGoeCGd0tL/KLJasnsNbhTtE=;
-        b=jdjkMrbtmFWn6pBFRLcUYvSZ7ufVSrB6PkFz8aJmJXo35hzO/heuTJOebe4JKhlIkX
-         XqGOmuGd82PYYYTiWb/YokVeVp9bMORP2y2WktgvrVdrzNIcOKpY41UxMLMZufsZuBJa
-         lp5u+oDwoqoAgny4Ubs1ej6Bp5r0z1DtT7wIFUpGQb7Xbp22CXhytMCN4hagfQweEjlD
-         pwAGqQniu6vEOESbJgbEEvUAI/Vf+CZOAUExqFkbKLfOUYbGQk8kohZuLGUQ0TSGATbo
-         D5R6a6S/K0EdtHF7JuJFoegI8Ecf9IlNaT6G5TEu/9MyjKLa/IqorwXsZTZbI92+Uu91
-         qE1A==
-X-Gm-Message-State: AOAM532sgX0ZOVKDpyB5OEdlOEedKClChojfqs4ikZxAZwOAsCtuAPX/
-        SWbNcOT5wF5XsIicmxGK30U=
-X-Google-Smtp-Source: ABdhPJzllokqDgNkPKCfrAp7djJclpbLsYrv65dsb7FFR7bMvYPum2ICUju4mffaQ35qoAmnj7c7yQ==
-X-Received: by 2002:a17:90b:4b0f:b0:1e8:53ac:ec51 with SMTP id lx15-20020a17090b4b0f00b001e853acec51mr13717685pjb.78.1654521382753;
-        Mon, 06 Jun 2022 06:16:22 -0700 (PDT)
-Received: from [192.168.51.14] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id bf7-20020a170902b90700b00163c6ac211fsm10478642plb.111.2022.06.06.06.16.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 06:16:21 -0700 (PDT)
-Message-ID: <2677b02e-b2a3-7c79-2e62-acf1acbc8ff0@acm.org>
-Date:   Mon, 6 Jun 2022 06:16:20 -0700
+        bh=lvg+3jquYsBxKwAWn8JZTmkTL9YPez+eTbBaV2PCYy4=;
+        b=CAN8seJ78lZQpVMGXaCCio1Luvtl8s+UmHE2qESqvmwvNB/28nfjo3mpyZRIq2NsS6
+         BfwkBihl4w0TwixgBJ9mayTdCXaiiS/Y7T2/hEvT7+w2oTdXWzfmrkTwLpjOVpMrhbMp
+         ch7uPkNxqVlUzeHhX2iCO7dfoKWqLiBr12Yq6Yhm/W28Iomusv7ro86nH1xSg7zdY+CE
+         0Q/lSh5OUrdcRzjRhRaYWTIBhm+ClxAmjmQ219MLFAhoFFpmZmQKn7/Rk1hK5NPl0Ygx
+         eCMIRJz6dbg97x985nQfzWOVV1mkINzop9A8mC/V0WIJsBaDJ5xe4pZxbD1/vFPR3p55
+         ZXhA==
+X-Gm-Message-State: AOAM533Wtjy+oBQbIPYJwMYHZil8YtQvMbsPhqrootl/5m4P8eHxxnE8
+        ZvTDrdgkhcAo42asj25MLpg=
+X-Google-Smtp-Source: ABdhPJwUyhXyypImfeLQWzahSG3tS8pItYccrxbCm+oIMq+GGVdC0WYIkX/a5tSugNtwSVZSj9Vi5w==
+X-Received: by 2002:a5d:594a:0:b0:212:3ad0:5bac with SMTP id e10-20020a5d594a000000b002123ad05bacmr21437983wri.393.1654521724837;
+        Mon, 06 Jun 2022 06:22:04 -0700 (PDT)
+Received: from morpheus.home.roving-it.com (3.e.2.0.0.0.0.0.0.0.0.0.0.0.0.0.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681::2e3])
+        by smtp.googlemail.com with ESMTPSA id 186-20020a1c19c3000000b0039c4ec6fdacsm3547481wmz.40.2022.06.06.06.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 06:22:04 -0700 (PDT)
+From:   Peter Robinson <pbrobinson@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Peter Robinson <pbrobinson@gmail.com>
+Subject: [PATCH] staging: Also remove the Unisys visorbus.h
+Date:   Mon,  6 Jun 2022 14:22:00 +0100
+Message-Id: <20220606132200.2873243-1-pbrobinson@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RESEND PATCH] scsi: ufs: sysfs: support writing boot_lun attr
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        "a5b6@riseup.net" <a5b6@riseup.net>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "phone-devel@vger.kernel.org" <phone-devel@vger.kernel.org>
-References: <20220525164013.93748-1-a5b6@riseup.net>
- <DM6PR04MB65750969ACD36EEEB48374DFFCD69@DM6PR04MB6575.namprd04.prod.outlook.com>
- <8d25171a-5d86-9acc-0f94-1a3c6efdb360@riseup.net>
- <DM6PR04MB65752422396C86EAD4591701FCD89@DM6PR04MB6575.namprd04.prod.outlook.com>
- <a7f46ad1-6d9e-a38e-31cc-29fddfa2b496@linaro.org>
- <DM6PR04MB65751A3B1D0BA4467CADDA93FCDF9@DM6PR04MB6575.namprd04.prod.outlook.com>
- <a4746c67-fa74-8af1-3f2d-7853e9fae8a6@acm.org>
- <3c400db6-d251-c4bd-b019-b9dc1d807212@opensource.wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <3c400db6-d251-c4bd-b019-b9dc1d807212@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/22 19:48, Damien Le Moal wrote:
-> On 6/5/22 12:55, Bart Van Assche wrote:
->> On 6/1/22 10:05, Avri Altman wrote:
->>> As a design rule, sysfs attribute files should not be used to make
->>> persistent modifications to a device configuration. This rule applies
->>> to all subsystems and ufs is no different.
->>
->> Hmm ... where does that rule come from? I can't find it in
->> Documentation/admin-guide/sysfs-rules.rst. Did I perhaps overlook something?
-> 
-> I am not aware of any writable sysfs attribute file that can be used to
-> make persistent device configuration changes, at least in storage area.
-> I know of plenty that do change a device setting, but without saving this
-> setting to maintain it across power cycles. Do you know of any such
-> attribute ? I was under the impression that sysfs should not be used to
-> persistently reconfigure a device...
+The commit that removed the Unisys s-Par and visorbus drivers
+left around the include/linux/visorbus.h file mentioned in the
+MAINTAINERS entry, we can also remove that too.
 
-I don't think the above is sufficient as an argument to reject a new 
-patch that introduces a sysfs attribute that changes the device 
-configuration.
+Fixes: e5f45b011e4a ("staging: Remove the drivers for the Unisys s-Par")
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+---
+ include/linux/visorbus.h | 344 ---------------------------------------
+ 1 file changed, 344 deletions(-)
+ delete mode 100644 include/linux/visorbus.h
 
-Thanks,
-
-Bart.
+diff --git a/include/linux/visorbus.h b/include/linux/visorbus.h
+deleted file mode 100644
+index 0d8bd6769b13..000000000000
+--- a/include/linux/visorbus.h
++++ /dev/null
+@@ -1,344 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- * Copyright (C) 2010 - 2013 UNISYS CORPORATION
+- * All rights reserved.
+- */
+-
+-/*
+- *  This header file is to be included by other kernel mode components that
+- *  implement a particular kind of visor_device.  Each of these other kernel
+- *  mode components is called a visor device driver.  Refer to visortemplate
+- *  for a minimal sample visor device driver.
+- *
+- *  There should be nothing in this file that is private to the visorbus
+- *  bus implementation itself.
+- */
+-
+-#ifndef __VISORBUS_H__
+-#define __VISORBUS_H__
+-
+-#include <linux/device.h>
+-
+-#define VISOR_CHANNEL_SIGNATURE ('L' << 24 | 'N' << 16 | 'C' << 8 | 'E')
+-
+-/*
+- * enum channel_serverstate
+- * @CHANNELSRV_UNINITIALIZED: Channel is in an undefined state.
+- * @CHANNELSRV_READY:	      Channel has been initialized by server.
+- */
+-enum channel_serverstate {
+-	CHANNELSRV_UNINITIALIZED = 0,
+-	CHANNELSRV_READY = 1
+-};
+-
+-/*
+- * enum channel_clientstate
+- * @CHANNELCLI_DETACHED:
+- * @CHANNELCLI_DISABLED:  Client can see channel but is NOT allowed to use it
+- *			  unless given TBD* explicit request
+- *			  (should actually be < DETACHED).
+- * @CHANNELCLI_ATTACHING: Legacy EFI client request for EFI server to attach.
+- * @CHANNELCLI_ATTACHED:  Idle, but client may want to use channel any time.
+- * @CHANNELCLI_BUSY:	  Client either wants to use or is using channel.
+- * @CHANNELCLI_OWNED:	  "No worries" state - client can access channel
+- *			  anytime.
+- */
+-enum channel_clientstate {
+-	CHANNELCLI_DETACHED = 0,
+-	CHANNELCLI_DISABLED = 1,
+-	CHANNELCLI_ATTACHING = 2,
+-	CHANNELCLI_ATTACHED = 3,
+-	CHANNELCLI_BUSY = 4,
+-	CHANNELCLI_OWNED = 5
+-};
+-
+-/*
+- * Values for VISOR_CHANNEL_PROTOCOL.Features: This define exists so that
+- * a guest can look at the FeatureFlags in the io channel, and configure the
+- * driver to use interrupts or not based on this setting. All feature bits for
+- * all channels should be defined here. The io channel feature bits are defined
+- * below.
+- */
+-#define VISOR_DRIVER_ENABLES_INTS (0x1ULL << 1)
+-#define VISOR_CHANNEL_IS_POLLING (0x1ULL << 3)
+-#define VISOR_IOVM_OK_DRIVER_DISABLING_INTS (0x1ULL << 4)
+-#define VISOR_DRIVER_DISABLES_INTS (0x1ULL << 5)
+-#define VISOR_DRIVER_ENHANCED_RCVBUF_CHECKING (0x1ULL << 6)
+-
+-/*
+- * struct channel_header - Common Channel Header
+- * @signature:	       Signature.
+- * @legacy_state:      DEPRECATED - being replaced by.
+- * @header_size:       sizeof(struct channel_header).
+- * @size:	       Total size of this channel in bytes.
+- * @features:	       Flags to modify behavior.
+- * @chtype:	       Channel type: data, bus, control, etc..
+- * @partition_handle:  ID of guest partition.
+- * @handle:	       Device number of this channel in client.
+- * @ch_space_offset:   Offset in bytes to channel specific area.
+- * @version_id:	       Struct channel_header Version ID.
+- * @partition_index:   Index of guest partition.
+- * @zone_uuid:	       Guid of Channel's zone.
+- * @cli_str_offset:    Offset from channel header to null-terminated
+- *		       ClientString (0 if ClientString not present).
+- * @cli_state_boot:    CHANNEL_CLIENTSTATE of pre-boot EFI client of this
+- *		       channel.
+- * @cmd_state_cli:     CHANNEL_COMMANDSTATE (overloaded in Windows drivers, see
+- *		       ServerStateUp, ServerStateDown, etc).
+- * @cli_state_os:      CHANNEL_CLIENTSTATE of Guest OS client of this channel.
+- * @ch_characteristic: CHANNEL_CHARACTERISTIC_<xxx>.
+- * @cmd_state_srv:     CHANNEL_COMMANDSTATE (overloaded in Windows drivers, see
+- *		       ServerStateUp, ServerStateDown, etc).
+- * @srv_state:	       CHANNEL_SERVERSTATE.
+- * @cli_error_boot:    Bits to indicate err states for boot clients, so err
+- *		       messages can be throttled.
+- * @cli_error_os:      Bits to indicate err states for OS clients, so err
+- *		       messages can be throttled.
+- * @filler:	       Pad out to 128 byte cacheline.
+- * @recover_channel:   Please add all new single-byte values below here.
+- */
+-struct channel_header {
+-	u64 signature;
+-	u32 legacy_state;
+-	/* SrvState, CliStateBoot, and CliStateOS below */
+-	u32 header_size;
+-	u64 size;
+-	u64 features;
+-	guid_t chtype;
+-	u64 partition_handle;
+-	u64 handle;
+-	u64 ch_space_offset;
+-	u32 version_id;
+-	u32 partition_index;
+-	guid_t zone_guid;
+-	u32 cli_str_offset;
+-	u32 cli_state_boot;
+-	u32 cmd_state_cli;
+-	u32 cli_state_os;
+-	u32 ch_characteristic;
+-	u32 cmd_state_srv;
+-	u32 srv_state;
+-	u8 cli_error_boot;
+-	u8 cli_error_os;
+-	u8 filler[1];
+-	u8 recover_channel;
+-} __packed;
+-
+-#define VISOR_CHANNEL_ENABLE_INTS (0x1ULL << 0)
+-
+-/*
+- * struct signal_queue_header - Subheader for the Signal Type variation of the
+- *                              Common Channel.
+- * @version:	      SIGNAL_QUEUE_HEADER Version ID.
+- * @chtype:	      Queue type: storage, network.
+- * @size:	      Total size of this queue in bytes.
+- * @sig_base_offset:  Offset to signal queue area.
+- * @features:	      Flags to modify behavior.
+- * @num_sent:	      Total # of signals placed in this queue.
+- * @num_overflows:    Total # of inserts failed due to full queue.
+- * @signal_size:      Total size of a signal for this queue.
+- * @max_slots:        Max # of slots in queue, 1 slot is always empty.
+- * @max_signals:      Max # of signals in queue (MaxSignalSlots-1).
+- * @head:	      Queue head signal #.
+- * @num_received:     Total # of signals removed from this queue.
+- * @tail:	      Queue tail signal.
+- * @reserved1:	      Reserved field.
+- * @reserved2:	      Reserved field.
+- * @client_queue:
+- * @num_irq_received: Total # of Interrupts received. This is incremented by the
+- *		      ISR in the guest windows driver.
+- * @num_empty:	      Number of times that visor_signal_remove is called and
+- *		      returned Empty Status.
+- * @errorflags:	      Error bits set during SignalReinit to denote trouble with
+- *		      client's fields.
+- * @filler:	      Pad out to 64 byte cacheline.
+- */
+-struct signal_queue_header {
+-	/* 1st cache line */
+-	u32 version;
+-	u32 chtype;
+-	u64 size;
+-	u64 sig_base_offset;
+-	u64 features;
+-	u64 num_sent;
+-	u64 num_overflows;
+-	u32 signal_size;
+-	u32 max_slots;
+-	u32 max_signals;
+-	u32 head;
+-	/* 2nd cache line */
+-	u64 num_received;
+-	u32 tail;
+-	u32 reserved1;
+-	u64 reserved2;
+-	u64 client_queue;
+-	u64 num_irq_received;
+-	u64 num_empty;
+-	u32 errorflags;
+-	u8 filler[12];
+-} __packed;
+-
+-/* VISORCHANNEL Guids */
+-/* {414815ed-c58c-11da-95a9-00e08161165f} */
+-#define VISOR_VHBA_CHANNEL_GUID \
+-	GUID_INIT(0x414815ed, 0xc58c, 0x11da, \
+-		  0x95, 0xa9, 0x0, 0xe0, 0x81, 0x61, 0x16, 0x5f)
+-#define VISOR_VHBA_CHANNEL_GUID_STR \
+-	"414815ed-c58c-11da-95a9-00e08161165f"
+-struct visorchipset_state {
+-	u32 created:1;
+-	u32 attached:1;
+-	u32 configured:1;
+-	u32 running:1;
+-	/* Remaining bits in this 32-bit word are reserved. */
+-};
+-
+-/**
+- * struct visor_device - A device type for things "plugged" into the visorbus
+- *                       bus
+- * @visorchannel:		Points to the channel that the device is
+- *				associated with.
+- * @channel_type_guid:		Identifies the channel type to the bus driver.
+- * @device:			Device struct meant for use by the bus driver
+- *				only.
+- * @list_all:			Used by the bus driver to enumerate devices.
+- * @timer:		        Timer fired periodically to do interrupt-type
+- *				activity.
+- * @being_removed:		Indicates that the device is being removed from
+- *				the bus. Private bus driver use only.
+- * @visordriver_callback_lock:	Used by the bus driver to lock when adding and
+- *				removing devices.
+- * @pausing:			Indicates that a change towards a paused state.
+- *				is in progress. Only modified by the bus driver.
+- * @resuming:			Indicates that a change towards a running state
+- *				is in progress. Only modified by the bus driver.
+- * @chipset_bus_no:		Private field used by the bus driver.
+- * @chipset_dev_no:		Private field used the bus driver.
+- * @state:			Used to indicate the current state of the
+- *				device.
+- * @inst:			Unique GUID for this instance of the device.
+- * @name:			Name of the device.
+- * @pending_msg_hdr:		For private use by bus driver to respond to
+- *				hypervisor requests.
+- * @vbus_hdr_info:		A pointer to header info. Private use by bus
+- *				driver.
+- * @partition_guid:		Indicates client partion id. This should be the
+- *				same across all visor_devices in the current
+- *				guest. Private use by bus driver only.
+- */
+-struct visor_device {
+-	struct visorchannel *visorchannel;
+-	guid_t channel_type_guid;
+-	/* These fields are for private use by the bus driver only. */
+-	struct device device;
+-	struct list_head list_all;
+-	struct timer_list timer;
+-	bool timer_active;
+-	bool being_removed;
+-	struct mutex visordriver_callback_lock; /* synchronize probe/remove */
+-	bool pausing;
+-	bool resuming;
+-	u32 chipset_bus_no;
+-	u32 chipset_dev_no;
+-	struct visorchipset_state state;
+-	guid_t inst;
+-	u8 *name;
+-	struct controlvm_message_header *pending_msg_hdr;
+-	void *vbus_hdr_info;
+-	guid_t partition_guid;
+-	struct dentry *debugfs_dir;
+-	struct dentry *debugfs_bus_info;
+-};
+-
+-#define to_visor_device(x) container_of(x, struct visor_device, device)
+-
+-typedef void (*visorbus_state_complete_func) (struct visor_device *dev,
+-					      int status);
+-
+-/*
+- * This struct describes a specific visor channel, by providing its GUID, name,
+- * and sizes.
+- */
+-struct visor_channeltype_descriptor {
+-	const guid_t guid;
+-	const char *name;
+-	u64 min_bytes;
+-	u32 version;
+-};
+-
+-/**
+- * struct visor_driver - Information provided by each visor driver when it
+- *                       registers with the visorbus driver
+- * @name:		Name of the visor driver.
+- * @owner:		The module owner.
+- * @channel_types:	Types of channels handled by this driver, ending with
+- *			a zero GUID. Our specialized BUS.match() method knows
+- *			about this list, and uses it to determine whether this
+- *			driver will in fact handle a new device that it has
+- *			detected.
+- * @probe:		Called when a new device comes online, by our probe()
+- *			function specified by driver.probe() (triggered
+- *			ultimately by some call to driver_register(),
+- *			bus_add_driver(), or driver_attach()).
+- * @remove:		Called when a new device is removed, by our remove()
+- *			function specified by driver.remove() (triggered
+- *			ultimately by some call to device_release_driver()).
+- * @channel_interrupt:	Called periodically, whenever there is a possiblity
+- *			that "something interesting" may have happened to the
+- *			channel.
+- * @pause:		Called to initiate a change of the device's state.  If
+- *			the return valu`e is < 0, there was an error and the
+- *			state transition will NOT occur.  If the return value
+- *			is >= 0, then the state transition was INITIATED
+- *			successfully, and complete_func() will be called (or
+- *			was just called) with the final status when either the
+- *			state transition fails or completes successfully.
+- * @resume:		Behaves similar to pause.
+- * @driver:		Private reference to the device driver. For use by bus
+- *			driver only.
+- */
+-struct visor_driver {
+-	const char *name;
+-	struct module *owner;
+-	struct visor_channeltype_descriptor *channel_types;
+-	int (*probe)(struct visor_device *dev);
+-	void (*remove)(struct visor_device *dev);
+-	void (*channel_interrupt)(struct visor_device *dev);
+-	int (*pause)(struct visor_device *dev,
+-		     visorbus_state_complete_func complete_func);
+-	int (*resume)(struct visor_device *dev,
+-		      visorbus_state_complete_func complete_func);
+-
+-	/* These fields are for private use by the bus driver only. */
+-	struct device_driver driver;
+-};
+-
+-#define to_visor_driver(x) (container_of(x, struct visor_driver, driver))
+-
+-int visor_check_channel(struct channel_header *ch, struct device *dev,
+-			const guid_t *expected_uuid, char *chname,
+-			u64 expected_min_bytes,	u32 expected_version,
+-			u64 expected_signature);
+-
+-int visorbus_register_visor_driver(struct visor_driver *drv);
+-void visorbus_unregister_visor_driver(struct visor_driver *drv);
+-int visorbus_read_channel(struct visor_device *dev,
+-			  unsigned long offset, void *dest,
+-			  unsigned long nbytes);
+-int visorbus_write_channel(struct visor_device *dev,
+-			   unsigned long offset, void *src,
+-			   unsigned long nbytes);
+-int visorbus_enable_channel_interrupts(struct visor_device *dev);
+-void visorbus_disable_channel_interrupts(struct visor_device *dev);
+-
+-int visorchannel_signalremove(struct visorchannel *channel, u32 queue,
+-			      void *msg);
+-int visorchannel_signalinsert(struct visorchannel *channel, u32 queue,
+-			      void *msg);
+-bool visorchannel_signalempty(struct visorchannel *channel, u32 queue);
+-const guid_t *visorchannel_get_guid(struct visorchannel *channel);
+-
+-#define BUS_ROOT_DEVICE UINT_MAX
+-struct visor_device *visorbus_get_device_by_id(u32 bus_no, u32 dev_no,
+-					       struct visor_device *from);
+-#endif
+-- 
+2.36.1
 

@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81C353E05A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 06:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332D953E04F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 06:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiFFD47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 23:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S229727AbiFFD74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 23:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiFFD4t (ORCPT
+        with ESMTP id S229483AbiFFD7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 23:56:49 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C5194197
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 20:56:45 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LGfmq2KDvzKmJG;
-        Mon,  6 Jun 2022 11:56:27 +0800 (CST)
-Received: from M910t (10.110.54.157) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 6 Jun
- 2022 11:56:42 +0800
-Date:   Mon, 6 Jun 2022 11:56:35 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     Changbin Du <changbin.du@gmail.com>,
-        Hui Wang <hw.huiwang@huawei.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <changbin.du@huawei.com>
-Subject: [PATCH] riscv: kexec: build
- {kexec_relocate,crash_save_regs,machine_kexec}.c as kexec core files
-Message-ID: <20220606035635.o52ja3bjpru3fqcf@M910t>
+        Sun, 5 Jun 2022 23:59:51 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358691D303;
+        Sun,  5 Jun 2022 20:59:44 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o6so6088445plg.2;
+        Sun, 05 Jun 2022 20:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=F3dlgaXmkDpDEty0Y4DNCWJHlmIObEDWkeyV88bJ1Pg=;
+        b=BJBW1yOCWpOULW0xyTrerbG4y7zPYfn1I61YNgD7Y70F8Q1r8/DhnX8ELeAIikMmoJ
+         1H06V89YylT/lmz+v7kGZMokx4yYvi7KuCd1pDt5Y40Noi2+c7TUw3BkWmdFzXUQG51A
+         QN4+Vd8DTPCp8UYaqAUVXnQHlgojK8SufP8tdKga6bUuZKJGQg1ylbJIdt+LAvTSx3GR
+         ByuG3q2sjMJLEkYCtghZO2ndpj8NR7n/fR64SQA+FUbygh4oHy4nFvHjeeYYEa68cYJj
+         t5Dxl0vt7EJ01dSGs75qVqBGbcyiz6DOX+DKxCX5fiyQTQ6v9OphrCyKgwD/kiSFJCRU
+         ytJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=F3dlgaXmkDpDEty0Y4DNCWJHlmIObEDWkeyV88bJ1Pg=;
+        b=NRNnPS7i1A8TxdnNO9h9prBMqXhwVm4k+TRt79GhB2AIBrNwhM+m4JbqVBDp0Naknf
+         hJIrL1eEhR9kvOzRoMhdAkPeX5EX6uBAGsd4vMgt5nGuF1u0WuBdlpE6fwa2k41o6//F
+         dWVrxAyIoR5FN69evIXnPS4iPmJe2lwyuIn7vKsUACDGwlA9Xwq9NrKvUm/FRcKArRMD
+         w1n/pttJCLf+82kc4NBhXvpWEoSeZgPNeDHWar+OHm46w6w1SWw/uvLJR/TN2+aGA6Ow
+         HkmxEBq9djiucL840MJcfYK6HDDNQYBAWIetQhodVV6D/LrW4SywxYALhDqNrrhoXAv1
+         +FjQ==
+X-Gm-Message-State: AOAM530LIONgeuYXR0VWAR/VVrmPofaG7WmNM/V/Oqcblheq/8B3Lb1e
+        7FUAd3GCeT7EBAopiY9LilE=
+X-Google-Smtp-Source: ABdhPJz018j7KIAM1lyTIrFxMTwuSnzEkr87RwbyQbdQnw5vzBA49wIGQTCLtHW+Xps8wJVjcivrFQ==
+X-Received: by 2002:a17:90a:9914:b0:1db:d10f:1fcf with SMTP id b20-20020a17090a991400b001dbd10f1fcfmr59116261pjp.241.1654487984072;
+        Sun, 05 Jun 2022 20:59:44 -0700 (PDT)
+Received: from localhost (subs03-180-214-233-92.three.co.id. [180.214.233.92])
+        by smtp.gmail.com with ESMTPSA id bi16-20020a056a00311000b0050dc762815asm2798215pfb.52.2022.06.05.20.59.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 20:59:43 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 10:59:40 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-mtd@lists.infradead.org
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Howells <dhowells@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Baokun Li <libaokun1@huawei.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
+        hongnanli <hongnan.li@linux.alibaba.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: partly outside array bounds warning on fs/jffs2/summary.c, GCC 12.1.0
+Message-ID: <Yp17rHxRb6d5JrHd@debian.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes below linking errors when building with CONFIG_KEXEC_FILE=y &&
-CONFIG_KEXEC=n. The {kexec_relocate,crash_save_regs,machine_kexec}.c should
-be core kexec source files.
+Hi everyone,
 
-riscv64-linux-gnu-ld: kernel/kexec_core.o: in function `kimage_free':
-/home/changbin/work/linux-riscv/kernel/kexec_core.c:651: undefined reference to `machine_kexec_cleanup'
-riscv64-linux-gnu-ld: kernel/kexec_core.o: in function `__crash_kexec':
-/home/changbin/work/linux-riscv/kernel/kexec_core.c:981: undefined reference to `machine_crash_shutdown'
-riscv64-linux-gnu-ld: /home/changbin/work/linux-riscv/kernel/kexec_core.c:982: undefined reference to `machine_kexec'
-riscv64-linux-gnu-ld: kernel/kexec_core.o: in function `crash_setup_regs':
-/home/changbin/work/linux-riscv/./arch/riscv/include/asm/kexec.h:35: undefined reference to `riscv_crash_save_regs'
-riscv64-linux-gnu-ld: kernel/kexec_core.o: in function `kernel_kexec':
-/home/changbin/work/linux-riscv/kernel/kexec_core.c:1200: undefined reference to `machine_shutdown'
-riscv64-linux-gnu-ld: /home/changbin/work/linux-riscv/kernel/kexec_core.c:1204: undefined reference to `machine_kexec'
-riscv64-linux-gnu-ld: kernel/kexec_file.o: in function `__do_sys_kexec_file_load':
-/home/changbin/work/linux-riscv/kernel/kexec_file.c:363: undefined reference to `machine_kexec_prepare'
-riscv64-linux-gnu-ld: /home/changbin/work/linux-riscv/kernel/kexec_file.c:363: undefined reference to `machine_kexec_prepare'
-make: *** [Makefile:1160: vmlinux] Error 1
+When I build arm64 kernel with GCC 12.1.0 (bcm2711_defconfig), I get
+partly outside array bounds warning on fs/jffs2/summary.c:
 
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
- arch/riscv/kernel/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  CC [M]  fs/jffs2/summary.o
+In file included from fs/jffs2/summary.c:23:
+In function 'jffs2_sum_add_mem',
+    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:130:9:
+fs/jffs2/nodelist.h:43:28: warning: array subscript 'union jffs2_sum_mem[0]' is partly outside array bounds of 'unsigned char[26]' [-Warray-bounds]
+   43 | #define je16_to_cpu(x) ((x).v16)
+      |                        ~~~~^~~~~
+fs/jffs2/summary.c:71:17: note: in expansion of macro 'je16_to_cpu'
+   71 |         switch (je16_to_cpu(item->u.nodetype)) {
+      |                 ^~~~~~~~~~~
+In file included from fs/jffs2/summary.c:17:
+In function 'kmalloc',
+    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:118:37:
+./include/linux/slab.h:600:24: note: object of size 26 allocated by 'kmem_cache_alloc_trace'
+  600 |                 return kmem_cache_alloc_trace(
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~
+  601 |                                 kmalloc_caches[kmalloc_type(flags)][index],
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  602 |                                 flags, size);
+      |                                 ~~~~~~~~~~~~
+In file included from fs/jffs2/nodelist.h:22:
+In function 'jffs2_sum_add_mem',
+    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:130:9:
+fs/jffs2/summary.c:79:73: warning: array subscript 'union jffs2_sum_mem[0]' is partly outside array bounds of 'unsigned char[26]' [-Warray-bounds]
+   79 |                         s->sum_size += JFFS2_SUMMARY_DIRENT_SIZE(item->d.nsize);
+fs/jffs2/summary.h:34:80: note: in definition of macro 'JFFS2_SUMMARY_DIRENT_SIZE'
+   34 | #define JFFS2_SUMMARY_DIRENT_SIZE(x) (sizeof(struct jffs2_sum_dirent_flash) + (x))
+      |                                                                                ^
+In function 'kmalloc',
+    inlined from 'jffs2_sum_add_inode_mem' at fs/jffs2/summary.c:118:37:
+./include/linux/slab.h:600:24: note: object of size 26 allocated by 'kmem_cache_alloc_trace'
+  600 |                 return kmem_cache_alloc_trace(
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~
+  601 |                                 kmalloc_caches[kmalloc_type(flags)][index],
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  602 |                                 flags, size);
+      |                                 ~~~~~~~~~~~~
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index c71d6591d539..33bb60a354cd 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -78,7 +78,7 @@ obj-$(CONFIG_SMP) += cpu_ops_sbi.o
- endif
- obj-$(CONFIG_HOTPLUG_CPU)	+= cpu-hotplug.o
- obj-$(CONFIG_KGDB)		+= kgdb.o
--obj-$(CONFIG_KEXEC)		+= kexec_relocate.o crash_save_regs.o machine_kexec.o
-+obj-$(CONFIG_KEXEC_CORE)	+= kexec_relocate.o crash_save_regs.o machine_kexec.o
- obj-$(CONFIG_KEXEC_FILE)	+= elf_kexec.o machine_kexec_file.o
- obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- 
+I first found these warnings when reviewing linux-5.18.y stable rc [1],
+for which Greg recommends me to contact JFFS subsystem developers.
+
+Thanks.
+
+[1]: https://lore.kernel.org/stable/YpxU%2FbVogip64iQF@debian.me/ 
+
 -- 
-2.26.2
-
-
--- 
-Cheers,
-Changbin Du
+An old man doll... just what I always wanted! - Clara

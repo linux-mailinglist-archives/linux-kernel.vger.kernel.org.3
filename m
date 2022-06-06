@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CA153DFF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 05:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C0E53DFFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 05:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352293AbiFFDQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 23:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S1352303AbiFFDSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 23:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237315AbiFFDQo (ORCPT
+        with ESMTP id S1348060AbiFFDSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 23:16:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A84644F473
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 20:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654485402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k29yc7w9b88p8N/STUF61jAqzTNY+1ywx+KU40xq0aA=;
-        b=AusE0J6ds82lzQAKPgPOg7OPKFfy4Gdcc2XeBI833LxDiLSxdGvBxLnT7jRTi1vu/STYbm
-        wSjVBTYh04BaHb0dHi/zxRF4enryGuMxtOXiPHahts8fVlIg2t3xABqTHmmsbAzuMceF5n
-        WOtlG00/yJI8Jn7dWqz4pbNNWej+ECU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-591-G2OsmNNaN5a1mKdR3Rp8sQ-1; Sun, 05 Jun 2022 23:16:39 -0400
-X-MC-Unique: G2OsmNNaN5a1mKdR3Rp8sQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB2DD3C02187;
-        Mon,  6 Jun 2022 03:16:38 +0000 (UTC)
-Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9020E2026D64;
-        Mon,  6 Jun 2022 03:16:34 +0000 (UTC)
-Date:   Mon, 6 Jun 2022 11:16:29 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Message-ID: <Yp1xjRyU9L5FiWXQ@T590>
-References: <20220602192020.166940-1-longman@redhat.com>
- <20220602192020.166940-4-longman@redhat.com>
+        Sun, 5 Jun 2022 23:18:38 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8532C123;
+        Sun,  5 Jun 2022 20:18:34 -0700 (PDT)
+X-UUID: 8ae2f090bd2b46028e3bfcf7f7b8516e-20220606
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:0f7a5a4c-6d37-4e0a-a8ff-4afa75ad2552,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.5,REQID:0f7a5a4c-6d37-4e0a-a8ff-4afa75ad2552,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:2a19b09,CLOUDID:6c4eb0ad-3171-4dd4-a2d9-73b846daf167,C
+        OID:43103050ffad,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 8ae2f090bd2b46028e3bfcf7f7b8516e-20220606
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 895111406; Mon, 06 Jun 2022 11:18:30 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 6 Jun 2022 11:18:29 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Mon, 6 Jun 2022 11:18:29 +0800
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <matthias.bgg@gmail.com>, <airlied@linux.ie>,
+        <angelogioacchino.delregno@collabora.com>, <pavel@ucw.cz>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v4 0/3] MediaTek MT8195 display binding
+Date:   Mon, 6 Jun 2022 11:18:15 +0800
+Message-ID: <20220606031818.13646-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602192020.166940-4-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 03:20:20PM -0400, Waiman Long wrote:
-> For a system with many CPUs and block devices, the time to do
-> blkcg_rstat_flush() from cgroup_rstat_flush() can be rather long. It
-> can be especially problematic as interrupt is disabled during the flush.
-> It was reported that it might take seconds to complete in some extreme
-> cases leading to hard lockup messages.
-> 
-> As it is likely that not all the percpu blkg_iostat_set's has been
-> updated since the last flush, those stale blkg_iostat_set's don't need
-> to be flushed in this case. This patch optimizes blkcg_rstat_flush()
-> by keeping a lockless list of recently updated blkg_iostat_set's in a
-> newly added percpu blkcg->lhead pointer.
-> 
-> The blkg_iostat_set is added to the lockless list on the update side
-> in blk_cgroup_bio_start(). It is removed from the lockless list when
-> flushed in blkcg_rstat_flush(). Due to racing, it is possible that
-> blk_iostat_set's in the lockless list may have no new IO stats to be
-> flushed. To protect against destruction of blkg, a percpu reference is
-> gotten when putting into the lockless list and put back when removed.
-> 
-> A blkg_iostat_set can determine if it is in a lockless list by checking
-> the content of its lnode.next pointer which will be non-NULL when in
-> a lockless list. This requires the presence of a special llist_last
-> sentinel node to be put at the end of the lockless list.
-> 
-> When booting up an instrumented test kernel with this patch on a
-> 2-socket 96-thread system with cgroup v2, out of the 2051 calls to
-> cgroup_rstat_flush() after bootup, 1788 of the calls were exited
-> immediately because of empty lockless list. After an all-cpu kernel
-> build, the ratio became 6295424/6340513. That was more than 99%.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> Acked-by: Tejun Heo <tj@kernel.org>
+Add this series to present MediaTek display binding for MT8195.
+The reason I send this series is Jason and Nancy's binding patches are
+never received by devicetree mail server.
+Therefore, I help them to resend binding patches.
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Changes for v4:
+1. Rebase to v5.19-rc1 which iommu series is included.
+2. Add my signed-off.
 
-Thanks,
-Ming
+Changes for v3:
+1. Fix rdma and ethdr binding doc.
+2. Nancy's series: [1].
+3. This series is based on linux-next: next-20220511.
+
+Changes for v2:
+1. This patch is based on linux next-20220506.
+2. Jason's patches are accepted and I drop them.
+
+[1]: https://lore.kernel.org/all/20220512053128.31415-1-nancy.lin@mediatek.com/
+
+Nancy.Lin (3):
+  dt-bindings: mediatek: add vdosys1 RDMA definition for mt8195
+  dt-bindings: reset: mt8195: add vdosys1 reset control bit
+  dt-bindings: mediatek: add ethdr definition for mt8195
+
+ .../display/mediatek/mediatek,ethdr.yaml      | 188 ++++++++++++++++++
+ .../display/mediatek/mediatek,mdp-rdma.yaml   |  88 ++++++++
+ include/dt-bindings/reset/mt8195-resets.h     |  45 +++++
+ 3 files changed, 321 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml
+
+-- 
+2.18.0
 

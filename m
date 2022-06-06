@@ -2,309 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92A153E856
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2083553EC40
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241397AbiFFQJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
+        id S241572AbiFFQKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241219AbiFFQJk (ORCPT
+        with ESMTP id S241534AbiFFQKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:09:40 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4129AE017
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:09:38 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y19so29886580ejq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:09:38 -0700 (PDT)
+        Mon, 6 Jun 2022 12:10:18 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B991A7D1B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:10:15 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id q18so12438879pln.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/tVPhGefm+GvsJF6VgftBj2NdA4gUHa6vMtmIepFS2o=;
-        b=WGV6noLQbRHM/I01wzfdtWjPJ9faaOT+sothneiZ8NuNoZsPYgS2KruiQX/h+7dbN2
-         yQrIj0ymPvB3PESxQ+mXf4DAfXkjKb+E/5O+K1/xy03sjcSWu/qi/sQlR5ek/URoIIQV
-         WIeGzE6G1VpXPrj+kxljBrWIH3v6p2gtYdWywolhbln6f5TBURKWwfL6jgUgKe0iKnNn
-         89/mhijZRNwsdbOcUCKz/pY4Hcr7l9mxZPOTBgy9CvjyYth4SkUwWQ/fZhqdvhp7XyVD
-         qiI7oTQJyEA9yDBaz5+qvFdrmev++B1dUCijJc/3Pq47AEmx7Je60eGBelgSmrzCPUxM
-         DZDA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HhPxGGkIV9aqD/daCoGu4xLDT4wIphgUYJ96fMx9qE0=;
+        b=Eb7DBYNsJRvRKxdal/A5ngoZjG6BemmrY5eRZneOiJiEJjFVcYhYOfSI99RFZbqMe8
+         rWWO3GQnWhYmsP+taTndgR+x0yI/Z2EzbtrzWHt2QyEBec5BUZyjoqBc5PdaqfAJfhKp
+         0oRoyfnoSI6ICcYn85+63XTVeRz9dKJr8X3d0sZbBF3UPQvMQilUJHatQSqtDRZ/SjqP
+         Rr68NDpTd2Ux6ZHwyF/IWYERtOIRriNzbQfJT186pseM2oYXV+960hlMbMeSwj5xnG0g
+         vIF9/yzu9DJeYtLdWoF5dABAFt2OzkDga4Ub2YWhbWT2Ha0xdXyBvQPQXg8D2WSoIqnk
+         zERg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/tVPhGefm+GvsJF6VgftBj2NdA4gUHa6vMtmIepFS2o=;
-        b=INT0u2r9CbPVX628a950rXQJuSknbYAsPkUK5gTfnjzVX+s29ociOG9yU9skQdhhGZ
-         reLtDvEIqN7PpWlCNCBwNwKk0YaYhSRqEGiBElglsW7pz0aGox5n6Y5Tft4elnAF1k+N
-         +svAJOPZkj8VHnCP/MfX7jfwKJVzCSvjtLICOtWFfxGAS0YDmM1FfD+QunPLsK1JY1kM
-         UFiW7rE46MJ2ymGQ6zRyyD8D9DdaA1DSMX0VtMoqmHO6/KvtV1OV1gE9eOBWh1oXD1jZ
-         jJVwAtd5AJJE1ZoKRLiVjPLMWGw+qcvMWmlwsNJG1AKYDnPKEcZq7EyJKo5cz3xuFPmB
-         9WhQ==
-X-Gm-Message-State: AOAM533Rg8BLcI4+05jzqYDUckBDjEIXCjZxL0/UEYHqbuT6AGxYZTw5
-        W1oJILWwudMNK74X3We0/fhlQlL0FfUcOkrPsSZyOw==
-X-Google-Smtp-Source: ABdhPJx+ALLTlqkGHIng2svvGDKMpNb8lWcNpuUwdkFkqhr5t4SpN8viFBuWmo2q8P8fJjTKklvcDsEauegahdrT0K0=
-X-Received: by 2002:a17:907:8689:b0:6fe:e525:ea9c with SMTP id
- qa9-20020a170907868900b006fee525ea9cmr22371754ejc.720.1654531776519; Mon, 06
- Jun 2022 09:09:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HhPxGGkIV9aqD/daCoGu4xLDT4wIphgUYJ96fMx9qE0=;
+        b=sRfzSgaP7pvRlxSG2jQwYLDpzUkepgTUeco5ywcZGXSIbw+lvQCMVNYUB/s9I5qkx0
+         etXi2K5lknZwyJPNd7nT6t3rztlpPaS0Fsyte81RggkE8iHbkTVwNQDyZj7qCqgLFOVp
+         5RbSJynT7EzUMedKx8cY5WSRYGtPBOE68LXz317bDkjiSLOQrQdbybD8orFf8oAvD7h8
+         QFR0L5NtqKpt/JS3QI5FmirdtY7JIAtQ9N1X7IYhvaTW3Bh8AUG+VR1PzdAjj+Lu9db1
+         2SCUEjm6HFq4FmR/7VpJNgnuw0zwiBhGelV9cJnbLxjBlBoWntkbzluBwzkfSs7Okh1b
+         7f5A==
+X-Gm-Message-State: AOAM532xjAUu3RDziO5pDzaOH051Pg3f2ur7B08OHcE9zLobrPWRuJgi
+        RDTtCrbtVA06POchR2e/Jok=
+X-Google-Smtp-Source: ABdhPJw7cfpuIOx2YqKCEXUtjwWsVQMvqBUR5E1FULMtFNWJKB6CeGCO5wF0866RRSDci4dLcf41HA==
+X-Received: by 2002:a17:90b:4a8e:b0:1e4:e2bd:7ff1 with SMTP id lp14-20020a17090b4a8e00b001e4e2bd7ff1mr30935665pjb.58.1654531814943;
+        Mon, 06 Jun 2022 09:10:14 -0700 (PDT)
+Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
+        by smtp.gmail.com with ESMTPSA id l63-20020a632542000000b003fc4001fd5fsm10777246pgl.10.2022.06.06.09.10.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 09:10:14 -0700 (PDT)
+From:   Jeff Xie <xiehuan09@gmail.com>
+To:     rostedt@goodmis.org
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
+Subject: [PATCH v12 0/4] trace: Introduce objtrace trigger to trace the kernel object
+Date:   Tue,  7 Jun 2022 00:09:39 +0800
+Message-Id: <20220606160943.663180-1-xiehuan09@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-11-tzungbi@kernel.org>
-In-Reply-To: <20220606141051.285823-11-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 6 Jun 2022 09:09:25 -0700
-Message-ID: <CABXOdTdPwvcS2eSrXsT8dNd1XnGNugD6ub-x2qscT8YRwwK0SQ@mail.gmail.com>
-Subject: Re: [PATCH 10/13] platform/chrome: cros_ec_proto: arrange get_host_command_version_mask()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> - cros_ec_get_host_command_version_mask() is a private (static) function.
->   Rename it to get_host_command_version_mask().
+Introduce a method based on function tracer to trace any object and get
+the value of the object dynamically. the object can be obtained from the
+dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
 
-Personally I prefer to still have prefixes, even for static functions.
-If the idea is to have a shorter function name, maybe shorten the rest
-of the function name a bit.
+Usage:
+When using the kprobe event, only need to set the objtrace(a new trigger),
+we can get the value of the object. The object is from the setting of the 
+kprobe event.
 
-Guenter
+For example:
+For the function bio_add_page():
 
->
-> - Join multiple lines into one if it can fit in 100 columns.
->
-> - Don't show MKBP support version if it doesn't support.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->  drivers/platform/chrome/cros_ec_proto.c      | 26 ++++++----------
->  drivers/platform/chrome/cros_ec_proto_test.c | 32 ++++++++++----------
->  2 files changed, 25 insertions(+), 33 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 5f4414f05d66..07b57ea105b6 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -400,7 +400,7 @@ static int fill_protocol_info_legacy(struct cros_ec_device *ec_dev)
->  }
->
->  /*
-> - * cros_ec_get_host_command_version_mask
-> + * get_host_command_version_mask
->   *
->   * Get the version mask of a given command.
->   *
-> @@ -415,16 +415,14 @@ static int fill_protocol_info_legacy(struct cros_ec_device *ec_dev)
->   * the caller has ec_dev->lock mutex or the caller knows there is
->   * no other command in progress.
->   */
-> -static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
-> -       u16 cmd, u32 *mask)
-> +static int get_host_command_version_mask(struct cros_ec_device *ec_dev, u16 cmd, u32 *mask)
->  {
->         struct ec_params_get_cmd_versions *pver;
->         struct ec_response_get_cmd_versions *rver;
->         struct cros_ec_command *msg;
->         int ret;
->
-> -       msg = kmalloc(sizeof(*msg) + max(sizeof(*rver), sizeof(*pver)),
-> -                     GFP_KERNEL);
-> +       msg = kmalloc(sizeof(*msg) + max(sizeof(*rver), sizeof(*pver)), GFP_KERNEL);
->         if (!msg)
->                 return -ENOMEM;
->
-> @@ -443,7 +441,6 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
->         }
->
->         kfree(msg);
-> -
->         return ret;
->  }
->
-> @@ -488,21 +485,16 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->                 return -ENOMEM;
->
->         /* Probe if MKBP event is supported */
-> -       ret = cros_ec_get_host_command_version_mask(ec_dev,
-> -                                                   EC_CMD_GET_NEXT_EVENT,
-> -                                                   &ver_mask);
-> -       if (ret < 0 || ver_mask == 0)
-> +       ret = get_host_command_version_mask(ec_dev, EC_CMD_GET_NEXT_EVENT, &ver_mask);
-> +       if (ret < 0 || ver_mask == 0) {
->                 ec_dev->mkbp_event_supported = 0;
-> -       else
-> +       } else {
->                 ec_dev->mkbp_event_supported = fls(ver_mask);
-> -
-> -       dev_dbg(ec_dev->dev, "MKBP support version %u\n",
-> -               ec_dev->mkbp_event_supported - 1);
-> +               dev_dbg(ec_dev->dev, "MKBP support version %u\n", ec_dev->mkbp_event_supported - 1);
-> +       }
->
->         /* Probe if host sleep v1 is supported for S0ix failure detection. */
-> -       ret = cros_ec_get_host_command_version_mask(ec_dev,
-> -                                                   EC_CMD_HOST_SLEEP_EVENT,
-> -                                                   &ver_mask);
-> +       ret = get_host_command_version_mask(ec_dev, EC_CMD_HOST_SLEEP_EVENT, &ver_mask);
->         ec_dev->host_sleep_v1 = (ret >= 0 && (ver_mask & EC_VER_MASK(1)));
->
->         /* Get host event wake mask. */
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index 22f9322787f4..e2c369765612 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -217,7 +217,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
->                 data->max_request_packet_size = 0xbf;
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 struct ec_response_get_cmd_versions *data;
->
-> @@ -228,7 +228,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
->                 data->version_mask = BIT(6) | BIT(5);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       /* For get_host_command_version_mask() for host sleep v1. */
->         {
->                 struct ec_response_get_cmd_versions *data;
->
-> @@ -288,7 +288,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, ec_dev->max_passthru, 0xbf - sizeof(struct ec_host_request));
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 struct ec_params_get_cmd_versions *data;
->
-> @@ -307,7 +307,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, ec_dev->mkbp_event_supported, 7);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       /* For get_host_command_version_mask() for host sleep v1. */
->         {
->                 struct ec_params_get_cmd_versions *data;
->
-> @@ -502,7 +502,7 @@ static void cros_ec_proto_test_query_all_no_mkbp(struct kunit *test)
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 struct ec_response_get_cmd_versions *data;
->
-> @@ -543,7 +543,7 @@ static void cros_ec_proto_test_query_all_no_mkbp(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 struct ec_params_get_cmd_versions *data;
->
-> @@ -596,7 +596,7 @@ static void cros_ec_proto_test_query_all_no_mkbp2(struct kunit *test)
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_add(test, 0);
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> @@ -632,7 +632,7 @@ static void cros_ec_proto_test_query_all_no_mkbp2(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 struct ec_params_get_cmd_versions *data;
->
-> @@ -685,14 +685,14 @@ static void cros_ec_proto_test_query_all_no_host_sleep(struct kunit *test)
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_add(test,
->                                                    sizeof(struct ec_response_get_cmd_versions));
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       /* For get_host_command_version_mask() for host sleep v1. */
->         {
->                 struct ec_response_get_cmd_versions *data;
->
-> @@ -733,7 +733,7 @@ static void cros_ec_proto_test_query_all_no_host_sleep(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_next();
->                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> @@ -745,7 +745,7 @@ static void cros_ec_proto_test_query_all_no_host_sleep(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       /* For get_host_command_version_mask() for host sleep v1. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_next();
->                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> @@ -793,14 +793,14 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_add(test,
->                                                    sizeof(struct ec_response_get_cmd_versions));
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       /* For get_host_command_version_mask() for host sleep v1. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_add(test,
->                                                    sizeof(struct ec_response_get_cmd_versions));
-> @@ -844,7 +844,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       /* For get_host_command_version_mask() for MKBP. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_next();
->                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> @@ -856,7 +856,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
->         }
->
-> -       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       /* For get_host_command_version_mask() for host sleep v1. */
->         {
->                 mock = cros_kunit_ec_xfer_mock_next();
->                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+int bio_add_page(struct bio *bio, struct page *page,
+	unsigned int len, unsigned int offset)
+
+Firstly, we can set the base of the object, thus the first string "arg1"
+stands for the value of the first parameter of this function bio_add_gage(),
+
+# echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+
+Secondly, we can get the value dynamically based on above object. 
+
+find the offset of the bi_size in struct bio:
+$ gdb vmlinux
+(gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+$1 = (unsigned int *) 0x28
+
+# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+	p_bio_add_page_0/trigger
+
+# cd /sys/kernel/debug/tracing/
+# echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+
+# du -sh /test.txt
+12.0K   /test.txt
+
+# cat  /test.txt > /dev/null
+# cat ./trace
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 128/128   #P:4
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+             cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+             cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+             cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+             cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+             cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+             cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
+             cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+             cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+             cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+          <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+	  ...
+
+Almost all changelogs were suggested by Masami(mhiramat@kernel.org)
+and steve(rostedt@goodmis.org), thank you all so much.
+
+v12:
+- use the %zu to print the sizeof
+  Reported-by: kernel test robot <lkp@intel.com>
+  Suggested-by: Nathan Chancellor <nathan@kernel.org>
+
+v11:
+- remove useless atomic counting methods for num_traced_obj
+- make array objtrace_fetch_types null terminated
+- add raw_spin_lock_init for obj_data_lock
+
+v10:
+- support ftrace instances
+- use trace_buffer_lock_reserve instead of trace_event_buffer_lock_reserve
+- a lot of cleanup work has been done mainly for event_object_trigger_parse
+
+v9:
+- fix objtrace trigger output was incomplete
+- fix the objtrace trigger was removed when using the existed parameter on
+  event.
+- add testcase for the second fix above.
+
+v8:
+- revert to use per-cpu recursion for the function trace_object_events_call
+- recover the filter when getting the value of the object
+- simplify the implementation for the function get_object_value
+- fix the build error
+
+v7:
+- use fixed-size array for object pool instead of list structure
+- use ftrace_test_recursion_trylock for function trace hook function
+- fix trace_object_ref reference count in the init_trace_object
+- invoke exit_trace_object no matter whether data->ops->free is null 
+  in the unregister_object_trigger
+- release private_data of event_trigger_data in the trace_object_trigger_free
+- remove [RFC] tag
+
+v6:
+- change the objtrace trigger syntax.
+- add patchset description
+- add <tracefs>/README
+
+v5:
+- add testcasts
+- add check the field->size
+- add lockless to search object
+- describe the object trace more clearly in Kconfig
+
+v4:
+- please ignore the v4 which is the same as v3
+
+v3:
+- change the objfilter to objtrace
+- add a command to the objfilter syntax
+- change to get the value of the object
+- use trace_find_event_field to find the field instead of using argN
+- get data from @rec in the event trigger callback funciton
+
+v2:
+- adding a "objfilter" trigger to update object
+
+Jeff Xie (4):
+  trace: Add trace any kernel object
+  trace/objtrace: Get the value of the object
+  trace/objtrace: Add testcases for objtrace
+  trace/objtrace: Add documentation for objtrace
+
+ Documentation/trace/events.rst                |  83 +++
+ include/linux/trace_events.h                  |   1 +
+ kernel/trace/Kconfig                          |  10 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/trace.c                          |  11 +
+ kernel/trace/trace.h                          |  21 +
+ kernel/trace/trace_entries.h                  |  18 +
+ kernel/trace/trace_events_trigger.c           |   5 +-
+ kernel/trace/trace_object.c                   | 615 ++++++++++++++++++
+ kernel/trace/trace_output.c                   |  40 ++
+ .../ftrace/test.d/trigger/trigger-objtrace.tc |  41 ++
+ 11 files changed, 844 insertions(+), 2 deletions(-)
+ create mode 100644 kernel/trace/trace_object.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+
+Jeff Xie (4):
+  trace: Add trace any kernel object
+  trace/objtrace: Get the value of the object
+  trace/objtrace: Add testcases for objtrace
+  trace/objtrace: Add documentation for objtrace
+
+ Documentation/trace/events.rst                |  83 +++
+ include/linux/trace_events.h                  |   1 +
+ kernel/trace/Kconfig                          |  10 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/trace.c                          |  11 +
+ kernel/trace/trace.h                          |  21 +
+ kernel/trace/trace_entries.h                  |  18 +
+ kernel/trace/trace_events_trigger.c           |   5 +-
+ kernel/trace/trace_object.c                   | 615 ++++++++++++++++++
+ kernel/trace/trace_output.c                   |  40 ++
+ .../ftrace/test.d/trigger/trigger-objtrace.tc |  41 ++
+ 11 files changed, 844 insertions(+), 2 deletions(-)
+ create mode 100644 kernel/trace/trace_object.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+
+
+base-commit: b39181f7c6907dc66ff937b74758671fa6ba430c
+-- 
+2.25.1
+

@@ -2,114 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC1C53EC65
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9382453E77A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239009AbiFFNco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S238940AbiFFNd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238924AbiFFNcg (ORCPT
+        with ESMTP id S238926AbiFFNdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:32:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A724348B;
-        Mon,  6 Jun 2022 06:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654522354; x=1686058354;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+cv5qN1igNw1Zx5NSV2OW8gEhkMunXxsP88oD3ZR3ck=;
-  b=Jl6v+7H1eV0r2f2TRxDbJCBuRWqynama6YcA6/QOrhaV1xwEuiQQCY0B
-   eBcCV4xuL2WmQJ3KU+TIxpQPyfz4duy0RGGJWuavLqZmWzgtTmiO0KYOL
-   rEFmDXDcHWeoqwpRRWujA5K0OlabWXFhdw0x7TBk4p7sOZC5GLOt/vUyl
-   xoFM4zVpdR0rHi1036tsVujlS4WCXtg6HQ5Gp9lcGDQtlQZZKU1JQnT4X
-   oqWFa+SvG9io9c1am4nW3RL50wr0rN8s74jV9928Cq3gtp/Hy6LvRJ6KZ
-   FYNMlVx+tlXehuIk0PcFFGgzom5NYZPxKUGGI35AympIy0OuUWNQwEiEh
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="264590623"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="264590623"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 06:32:32 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="906550690"
-Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 06:32:30 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v5 2/2] tty: Use flow-control char function on closing path
-Date:   Mon,  6 Jun 2022 16:32:15 +0300
-Message-Id: <20220606133215.57537-3-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220606133215.57537-1-ilpo.jarvinen@linux.intel.com>
-References: <20220606133215.57537-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 6 Jun 2022 09:33:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C341A7D31;
+        Mon,  6 Jun 2022 06:33:52 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256DBY7X017132;
+        Mon, 6 Jun 2022 13:33:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NyTJDh7PPGeAi5t+/Wm1kKgWU3Azl2FjpYMzUs8x3NU=;
+ b=dz7hZx3MIIEX6kGUhwj1jlHdHYB73K+uBQSlgQsTRMJTa7SOG8dqBNKCCeqguLBI9bxl
+ B4bTptLslLiffnxGfuJKxdkR0cwq7xNa4JBH3pVDCik579u8a2cxzZCZgbx4xKUmfCbH
+ it3+n//HFSxLOzXVMUn3Nw35UiihbkQ/vHjvh1ojF2qUM4FRiPLjXChnLzr/8u8JiV0l
+ GtYGShP50E5al0fhNkPWyHN8/PMKvUVWRquT29mkdEFQE1szyJx7WwFGBz/SrojwmSkd
+ pifKVXFWWysmVx+O8mmuk0TEko0D4OU+c0cf1gtIoRPs7P//Xb/kv6U3zM3UEShVPYsc bQ== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gg2070u69-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 13:33:27 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256DKAMC015353;
+        Mon, 6 Jun 2022 13:33:27 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma05wdc.us.ibm.com with ESMTP id 3gfy19du2a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 13:33:27 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256DXQC836766058
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 13:33:26 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 260EEBE05F;
+        Mon,  6 Jun 2022 13:33:26 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E926BE053;
+        Mon,  6 Jun 2022 13:33:25 +0000 (GMT)
+Received: from [9.160.184.8] (unknown [9.160.184.8])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 13:33:25 +0000 (GMT)
+Message-ID: <bc88300d-9321-e4f6-4215-1754fa3a0444@linux.ibm.com>
+Date:   Mon, 6 Jun 2022 08:33:24 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] hwmon: (occ) Delete unnecessary NULL check
+Content-Language: en-US
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>, jdelvare@suse.com,
+        linux@roeck-us.net, joel@jms.id.au, penberg@kernel.org,
+        akpm@linux-foundation.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220606131401.4053036-1-william.xuanziyang@huawei.com>
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20220606131401.4053036-1-william.xuanziyang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -aXpynAMbtfUyqlf4LawYpHQQCSLItl8
+X-Proofpoint-GUID: -aXpynAMbtfUyqlf4LawYpHQQCSLItl8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_04,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1011 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060062
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use n_tty_receive_char_flow_ctrl also on the closing path. This makes
-the code cleaner and consistent.
 
-However, there a small change of regression!
+On 6/6/22 08:14, Ziyang Xuan wrote:
+> kvfree(NULL) is safe. NULL check before kvfree() is not needed.
+> Delete them to simplify the code.
+>
+> Generated by coccinelle script:
+> 	scripts/coccinelle/free/ifnullfree.cocci
 
-The earlier closing path has a small difference compared with the
-normal receive path. If START_CHAR and STOP_CHAR are equal, their
-precedence is different depending on which path a character is
-processed. I don't know whether this difference was intentional or
-not, and if equal START_CHAR and STOP_CHAR is actually used anywhere.
-But it feels not so useful corner case.
 
-While this change would logically belong to those earlier changes,
-having a separate patch for this is useful. If this regresses, bisect
-can pinpoint this change rather than the large patch. Also, this
-change is not necessary to minimal fix for the issue addressed in
-the previous patch.
+Thanks for the patch!
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/n_tty.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
 
-diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
-index 917b5970b2e0..ea4dc316eafb 100644
---- a/drivers/tty/n_tty.c
-+++ b/drivers/tty/n_tty.c
-@@ -1434,15 +1434,10 @@ static void n_tty_receive_char_closing(struct tty_struct *tty, unsigned char c,
- 		c = tolower(c);
- 
- 	if (I_IXON(tty)) {
--		if (c == STOP_CHAR(tty)) {
--			if (!lookahead_done)
--				stop_tty(tty);
--		} else if (c == START_CHAR(tty) && lookahead_done) {
--			return;
--		} else if (c == START_CHAR(tty) ||
--			 (tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
--			  c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
--			  c != SUSP_CHAR(tty))) {
-+		if (!n_tty_receive_char_flow_ctrl(tty, c, lookahead_done) &&
-+		    tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
-+		    c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
-+		    c != SUSP_CHAR(tty)) {
- 			start_tty(tty);
- 			process_echoes(tty);
- 		}
--- 
-2.30.2
 
+>
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>   drivers/hwmon/occ/p9_sbe.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
+> index 42fc7b97bb34..01405ae2f9bd 100644
+> --- a/drivers/hwmon/occ/p9_sbe.c
+> +++ b/drivers/hwmon/occ/p9_sbe.c
+> @@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
+>   	mutex_lock(&ctx->sbe_error_lock);
+>   	if (!ctx->sbe_error) {
+>   		if (resp_len > ctx->ffdc_size) {
+> -			if (ctx->ffdc)
+> -				kvfree(ctx->ffdc);
+> +			kvfree(ctx->ffdc);
+>   			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
+>   			if (!ctx->ffdc) {
+>   				ctx->ffdc_len = 0;
+> @@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
+>   	ctx->sbe = NULL;
+>   	occ_shutdown(occ);
+>   
+> -	if (ctx->ffdc)
+> -		kvfree(ctx->ffdc);
+> +	kvfree(ctx->ffdc);
+>   
+>   	return 0;
+>   }

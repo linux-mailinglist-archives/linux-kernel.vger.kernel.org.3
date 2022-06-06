@@ -2,47 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19ED453E86E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9440453EC21
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239022AbiFFNhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S239229AbiFFNsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239016AbiFFNhl (ORCPT
+        with ESMTP id S239208AbiFFNsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:37:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22827643;
-        Mon,  6 Jun 2022 06:37:39 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGvdt2gtTzjXP0;
-        Mon,  6 Jun 2022 21:36:18 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 21:37:36 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 6 Jun
- 2022 21:37:35 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
-        <linux-crypto@vger.kernel.org>
-CC:     <clabbe.montjoie@gmail.com>, <herbert@gondor.apana.org.au>
-Subject: [PATCH -next] crypto: sun8i-ss - fix error return code in allocate_flows()
-Date:   Mon, 6 Jun 2022 21:48:15 +0800
-Message-ID: <20220606134815.4103024-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Jun 2022 09:48:31 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BC49A985;
+        Mon,  6 Jun 2022 06:48:27 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id v7so11961216ilo.3;
+        Mon, 06 Jun 2022 06:48:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Iq+/ZT5S/tsKY65k+c5zzqLlMmHdbOtpYrK6tQD4cqY=;
+        b=0zL69b45rZX+vti6TKAhUTuVAXolTaDVadZv3AygbgK75Iwf2HvWmPV4oa88S+yJDi
+         uREPJe51ALGVCoXQ9D+EaLN8GPGLRMptCyAyVYTFsMGPGQ1pnSLSe3vaHkvKnwRuT55A
+         swxhSbjT4a+9YHKrF28nIaaupjbMwfzCjrGGdwPhRj39NEvTbgTTqMaouCU1d5Y3Cn+W
+         548W5PBtE/5tupQ8GxbfTjde1KPkD+QlTtsLY5tXZ7pO6ikoJXT3OUViUpPwVZc6Afrr
+         Tl7GxeahBcEJUGQghjsP7/TZah1tJqZQH271sfFcRSkXnhNMwOUUu0T3KTKO9l0cLa1X
+         uiTA==
+X-Gm-Message-State: AOAM530SmjNBbwU5Jgg0m4QurEfekARzbCbcaDzuVYxGVDHDg50PRGVy
+        yCmETxiOrZpNxQxXezBKSQ==
+X-Google-Smtp-Source: ABdhPJwbi6EJiI2PaM91wEcFQReWOmrXQCRfzQHoHXpccKkWDSHoKnOoq6i68X1AyLTQWbbX3840mg==
+X-Received: by 2002:a05:6e02:15ca:b0:2bf:ad58:4a6d with SMTP id q10-20020a056e0215ca00b002bfad584a6dmr14825916ilu.13.1654523306793;
+        Mon, 06 Jun 2022 06:48:26 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y38-20020a029529000000b0032e583132e4sm5675598jah.123.2022.06.06.06.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 06:48:26 -0700 (PDT)
+Received: (nullmailer pid 632986 invoked by uid 1000);
+        Mon, 06 Jun 2022 13:48:24 -0000
+Date:   Mon, 6 Jun 2022 08:48:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sameer Pujar <spujar@nvidia.com>
+Cc:     broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        perex@perex.cz, tiwai@suse.com, jonathanh@nvidia.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/6] ASoC: tegra: Add binding doc for OPE module
+Message-ID: <20220606134824.GB564610-robh@kernel.org>
+References: <1654238172-16293-1-git-send-email-spujar@nvidia.com>
+ <1654238172-16293-2-git-send-email-spujar@nvidia.com>
+ <20220603203003.GA852734-robh@kernel.org>
+ <b70e024b-4f80-16b9-4bbe-ed8a24a384df@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b70e024b-4f80-16b9-4bbe-ed8a24a384df@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,58 +69,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If devm_kmalloc() fails, it should return error code in allocate_flows()
+On Mon, Jun 06, 2022 at 01:47:48PM +0530, Sameer Pujar wrote:
+> 
+> On 04-06-2022 02:00, Rob Herring wrote:
+> > Doesn't apply for me. I guess there is some undocumented dependency
+> > here? Resend after the merge window if that solves it.
+> 
+> These were getting applied fine on linux-next.
 
-Fixes: 8eec4563f152 ("crypto: sun8i-ss - do not allocate memory when handling hash requests")
-Fixes: 359e893e8af4 ("crypto: sun8i-ss - rework handling of IV")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- .../crypto/allwinner/sun8i-ss/sun8i-ss-core.c    | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+linux-next is not a base maintainers can apply to. Convenient instead of 
+having to get a specific tree, but you still need to say what the base 
+is (what tree it should be applied to).
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-index 98593a0cff69..ac2329e2b0e5 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-@@ -528,25 +528,33 @@ static int allocate_flows(struct sun8i_ss_dev *ss)
- 
- 		ss->flows[i].biv = devm_kmalloc(ss->dev, AES_BLOCK_SIZE,
- 						GFP_KERNEL | GFP_DMA);
--		if (!ss->flows[i].biv)
-+		if (!ss->flows[i].biv) {
-+			err = -ENOMEM;
- 			goto error_engine;
-+		}
- 
- 		for (j = 0; j < MAX_SG; j++) {
- 			ss->flows[i].iv[j] = devm_kmalloc(ss->dev, AES_BLOCK_SIZE,
- 							  GFP_KERNEL | GFP_DMA);
--			if (!ss->flows[i].iv[j])
-+			if (!ss->flows[i].iv[j]) {
-+				err = -ENOMEM;
- 				goto error_engine;
-+			}
- 		}
- 
- 		/* the padding could be up to two block. */
- 		ss->flows[i].pad = devm_kmalloc(ss->dev, MAX_PAD_SIZE,
- 						GFP_KERNEL | GFP_DMA);
--		if (!ss->flows[i].pad)
-+		if (!ss->flows[i].pad) {
-+			err = -ENOMEM;
- 			goto error_engine;
-+		}
- 		ss->flows[i].result = devm_kmalloc(ss->dev, SHA256_DIGEST_SIZE,
- 						   GFP_KERNEL | GFP_DMA);
--		if (!ss->flows[i].result)
-+		if (!ss->flows[i].result) {
-+			err = -ENOMEM;
- 			goto error_engine;
-+		}
- 
- 		ss->flows[i].engine = crypto_engine_alloc_init(ss->dev, true);
- 		if (!ss->flows[i].engine) {
--- 
-2.25.1
+> Merge window seems to have closed now and v5.19-rc1 release is out. I can
+> apply these cleanly on v5.19-rc1. Please let me know if re-send is needed
+> now or I need to wait for some more time? Thanks.
 
+Yes, or the automated checks don't run.
+
+Rob

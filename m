@@ -2,85 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5839653ECF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945B753ECF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiFFRT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 13:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
+        id S230149AbiFFRUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 13:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiFFRSy (ORCPT
+        with ESMTP id S229967AbiFFRTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 13:18:54 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672A5130C;
-        Mon,  6 Jun 2022 10:17:53 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id d6so1584259ilm.4;
-        Mon, 06 Jun 2022 10:17:53 -0700 (PDT)
+        Mon, 6 Jun 2022 13:19:03 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1408C205C0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:18:24 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id s15-20020a056e02216f00b002d3d5e41565so11835386ilv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 10:18:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HOgnxEn2ntmtyghL8kOb8yKeTcYGElnyCDEZZ25iRQw=;
-        b=4Rh+2Oy1eY+bYftHCMJntZLu8WUck5porKU754FT8zR6Zrc1ge8btPSGostMVvL3OV
-         SnatfcmfJPoHw7VIetGqvBuSKTKPotPkorQG4RXog3r5KyneQybFCNA9fqODyOKRq3cu
-         JkaTE/OFn4WPIjCWenuUfzjbasK2sDP1uqtUW/40cuMglBuofp7f/Oia3KkhOuYBhBs1
-         zDb4DZfYV+MsuQ3edePHr3aP1Esoi6MOLB2QkKXTxM7QsCyoF5MMBvITQaP0EV0aXodl
-         RetlcCfUZYhfHhYAog1vp4KXM6Gzb+sf29gK7B1QzTvRWwHn+wWbjU7x264uiR/Kwrn1
-         9X9A==
-X-Gm-Message-State: AOAM530qDiQ4MgwcvCqSG0y8EZVSl3dzi7fzsuYTm8MTuU14l6VTbLCZ
-        6jqA5yTXnzCXGGmZPA2C0A==
-X-Google-Smtp-Source: ABdhPJxXRz8rpxHVMQETrBoM9cb8XJJozkw5PJACTm4qK/vhBn8tviwY3PyY58j2eoaPB/u3qpK33w==
-X-Received: by 2002:a05:6e02:184f:b0:2d3:d0c2:d56a with SMTP id b15-20020a056e02184f00b002d3d0c2d56amr13953839ilv.174.1654535872910;
-        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id t17-20020a92c0d1000000b002d3da8e4af5sm6121750ilf.23.2022.06.06.10.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
-Received: (nullmailer pid 911134 invoked by uid 1000);
-        Mon, 06 Jun 2022 17:17:47 -0000
-Date:   Mon, 6 Jun 2022 12:17:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        keyrings@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 00/23] Update Documentation/ cross-references
-Message-ID: <20220606171747.GB899329-robh@kernel.org>
-References: <cover.1654529011.git.mchehab@kernel.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=4VOKrng55xUFb8XUxrJ9wrNLqS7yM56XBhDOi9HaXDU=;
+        b=1eOSwEEg+yXWbplAGVakokG0ygMMYKqGu4GpY9hXDpUU5CCiIdSHDJh/PooI7cTNbA
+         /orU29vLL+SKfhWL5FPiVDA8nVBJBucVLiydbEfGCWvzSYCqa4Q083p16ols5/4xztCQ
+         YjcP64ut3445Emqmm5mEz5/IcUkuItcHectcA//vMMn9ZDzhSfGe7PvOMC/NsorUhCCX
+         P1nUBCl2BjWku603hQV4h4uNYm/NmQFPfuSsw/emgVvlpwDgd4jBE6zttew/apzlH6Sa
+         4GaxCz/LkeMJNX2qG2pucX/UczyozpslpcADWwhs9Y87lvy4nSgVIIzAy4CNsdKalXmO
+         tIdg==
+X-Gm-Message-State: AOAM530LPoCnoMgpTuABFA1FtjDIRcPgZQjto9DRdJqiQH8l3O3V1+uM
+        M/Ey+YHmrxacgwOiMJwJBODiALWtFXZNdE7rxMZfa5j353S8
+X-Google-Smtp-Source: ABdhPJybRJYSyUBr3aF73q2QVzV51ZFaDL/Epe33Wf7F8YxYZ4eeGkUkJuf+z+1tTdrTvQTjWBeyO1E0TpW/ocoGeHp4jv7/tT00
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Received: by 2002:a05:6e02:12e3:b0:2d1:583e:32bb with SMTP id
+ l3-20020a056e0212e300b002d1583e32bbmr14321166iln.14.1654535903500; Mon, 06
+ Jun 2022 10:18:23 -0700 (PDT)
+Date:   Mon, 06 Jun 2022 10:18:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cbe0e605e0caa8e0@google.com>
+Subject: [syzbot] possible deadlock in corrupted
+From:   syzbot <syzbot+5c3c53e6db862466e7b6@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
@@ -90,40 +52,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 04:25:22PM +0100, Mauro Carvalho Chehab wrote:
-> Hi John,
-> 
-> There were a number of DT binding conversions and other docs change that
-> were not updated. Address them, in order to keep the cross-references on
-> a sane state.
-> 
-> Patch series is against v5.19-rc1 (and applies cleanly on the top of
-> today's -next).
-> 
-> Mauro Carvalho Chehab (23):
->   dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
->   dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
->   dt-bindings: arm: update vexpress-config.yaml references
->   dt-bindings: reset: update st,stih407-powerdown.yaml references
->   dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
->   dt-bindings: mmc: exynos-dw-mshc: update samsung,pinctrl.yaml
->     reference
->   docs: netdev: update maintainer-netdev.rst reference
->   docs: filesystems: update netfs-api.rst reference
->   Documentation: update watch_queue.rst references
->   Documentation: KVM: update s390-pv.rst reference
->   Documentation: KVM: update amd-memory-encryption.rst references
->   Documentation: KVM: update msr.rst reference
->   Documentation: KVM: update s390-diag.rst reference
->   MAINTAINERS: update arm,hdlcd.yaml reference
->   MAINTAINERS: update arm,komeda.yaml reference
->   MAINTAINERS: update arm,malidp.yaml reference
->   MAINTAINERS: update cortina,gemini-ethernet.yaml reference
->   MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
->   MAINTAINERS: update maxim,max77693.yaml reference
->   MAINTAINERS: update snps,axs10x-reset.yaml reference
->   objtool: update objtool.txt references
->   ASoC: wm8731: update wlf,wm8731.yaml reference
->   arch: m68k: q40: README: drop references to IDE driver
+Hello,
 
-Applied patches 1-5,17,18,20
+syzbot found the following issue on:
+
+HEAD commit:    d1dc87763f40 assoc_array: Fix BUG_ON during garbage collect
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=125e36ebf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e652a1bc921d8948
+dashboard link: https://syzkaller.appspot.com/bug?extid=5c3c53e6db862466e7b6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=141cc87df00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12613edbf00000
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1679bfcbf00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1579bfcbf00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1179bfcbf00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5c3c53e6db862466e7b6@syzkaller.appspotmail.com
+
+=====================================================
+WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
+5.18.0-syzkaller-11972-gd1dc87763f40 #0 Not tainted
+-----------------------------------------------------
+syz-executor227/3609 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
+ffff88801b5aa0c0 (&new->fa_lock){....}-{2:2}, at: 
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

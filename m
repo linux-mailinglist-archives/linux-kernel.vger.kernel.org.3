@@ -2,101 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF9B53E793
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D1753EB86
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241837AbiFFQae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S231233AbiFFQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241783AbiFFQa2 (ORCPT
+        with ESMTP id S230527AbiFFQgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:30:28 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ED6331C08;
-        Mon,  6 Jun 2022 09:30:27 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id h18so10530633qvj.11;
-        Mon, 06 Jun 2022 09:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Uj9IThCIXw7MmlitWv/kpBQW2fnYrdG6q6L4yRpNXrU=;
-        b=WSVHIJ2V4JVxNIpNbF02Y5N3cY/ORPB5W+ELXtMq3RlArA3/Ww9ebxkySarX1fiif+
-         7yylsTlypXMbeWEGDFghk6egHH7zdc0OSmIbakyDwbdrr0kSeE3J050dxn/5Kur9zZRt
-         y2TsdrprBjIMiRcfbB9oe5yDSxWx4FtJwu5CF0zhY0k+Swv1Aerdlbsv08r3KYZ/yA5f
-         IkdhXVaBROswnx1lMCPn1CESZ1ISHWOMpGlGFhA0h7j+pZ63oddoVWlpt77GshKpVGyq
-         OMzQfS+8rqs5+2bKTe0vPAGKeToLstintiQMRgdM1yGz+KoP53W4U4LU6gqxghhjkqk7
-         kPqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Uj9IThCIXw7MmlitWv/kpBQW2fnYrdG6q6L4yRpNXrU=;
-        b=J2vkMUKMEJFH/+27b6g52Cia3V/weVQY2vs4l9NssBb4rb/ukvZe72giWXA6Xxi/pg
-         aeHdlWxi59Js7qgwVkknYMBb1u8j5khb5RH0rXUUK4HwRCbBe/8690A/RRxZ4AMgwC0F
-         fhohk1XV71Qaj5VsmiZV+O+4LzCdpIVep4fU/YQseAFCQCgMhd/5dd7EtyeIEcGVs3Ta
-         q2h0bcd5nSFbl4xqogy/j6P0le/+lHo9i7a7pOcJZtKgHLNeAvjR0ytv0DrL2pEoMa6I
-         Bs2amYUv8TsA4p6432eL9TCWr0lDiddWC2ZGkhvuffAYbi1Gav5Zs5o5oUNdOILNDDPX
-         2Cqw==
-X-Gm-Message-State: AOAM532kzbJxJlr4tfZ5/laMqlCeg781dO70ONKu+4CemPPlaXeroBvM
-        zW2KCsQj9Z9tnDVrl/bMrIM=
-X-Google-Smtp-Source: ABdhPJx8DcER+KpdwW/dNyTBFgzXFRCtviHEu5OoAfCgnM6qWGz9mtUpn4YaL1thxkL4dgUTEWOY0g==
-X-Received: by 2002:ad4:5fcf:0:b0:467:dc87:82ff with SMTP id jq15-20020ad45fcf000000b00467dc8782ffmr13728091qvb.14.1654533026466;
-        Mon, 06 Jun 2022 09:30:26 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id bk3-20020a05620a1a0300b006a6ba92d852sm3329789qkb.83.2022.06.06.09.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 09:30:25 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Frank Mankel <frank.mankel@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: Fix ethernet on production Quartz64-B
-Date:   Mon,  6 Jun 2022 12:30:23 -0400
-Message-Id: <20220606163023.3677147-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Jun 2022 12:36:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8A1B7F7;
+        Mon,  6 Jun 2022 09:36:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F070A60C93;
+        Mon,  6 Jun 2022 16:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B57C385A9;
+        Mon,  6 Jun 2022 16:35:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654533362;
+        bh=0Mjg97U+ZMbST6i3lAYoqGdbBWQbXG3j5keTPSi7ieg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sy/VMLg9MW8C0l9Zr0sNxqtsspglU0kkaNq2eEia/2PxI5+Q2f6dSBLb4gOJ3vnTX
+         fl05wLcv9Y3j2ZfIQlo+pU/E1XoxPtcrduH/v0+SkDFZXEMiStQx0Uert34UQ7KXre
+         47gRZQMQ2DvMS/CX+ZzQkSerZQe6GY0+RavtTcs87RFi3toceavaIFlJGqJ0gTRXI+
+         zjf5c/FOzORqq3hpbw/i2bq8KPllQ1EAleKosvdED8vwgq5A7Z9PzFbft8sXx40dP1
+         wEisxn6cbmo7Hxmro/CBvVfwkPaLbZw5ctwOVSmQFE9R2qcQjG0EQ09Fa1C8YkS2k7
+         ytmgpVftCrWVw==
+Message-ID: <29ac9241-7007-1c5b-a313-2bdea32e1dc8@kernel.org>
+Date:   Mon, 6 Jun 2022 19:35:55 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
+ driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-3-krzysztof.kozlowski@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220601101140.170504-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The production Quartz64 Model B has compatibility issues when using
-rgmii-id mode. Switch to rgmii mode and use the SoC's delays to ensure
-full compatibility.
+Hi Krzysztof,
 
-Reported-by: Frank Mankel <frank.mankel@gmail.com>
-Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device
-tree")
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Frank Mankel <frank.mankel@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for working on this!
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-index 7bdcecc0dfe4..02d5f5a8ca03 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-@@ -133,7 +133,7 @@ &gmac1 {
- 	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1_RGMII_SPEED>, <&cru SCLK_GMAC1>;
- 	assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>, <&cru SCLK_GMAC1>, <&gmac1_clkin>;
- 	clock_in_out = "input";
--	phy-mode = "rgmii-id";
-+	phy-mode = "rgmii";
- 	phy-supply = <&vcc_3v3>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&gmac1m1_miim
--- 
-2.25.1
+On 1.06.22 13:11, Krzysztof Kozlowski wrote:
+> Bandwidth monitoring (BWMON) sits between various subsytems like CPU,
+> GPU, Last Level caches and memory subsystem.  The BWMON can be
+> configured to monitor the data throuhput between memory and other
+> subsytems.  The throughput is measured within specified sampling window
+> and is used to vote for corresponding interconnect bandwidth.
+> 
+> Current implementation brings support for BWMON v4, used for example on
+> SDM845 to measure bandwidth between CPU (gladiator_noc) and Last Level
+> Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
+> votes from cpufreq (CPU nodes) thus achieve high memory throughput even
+> with lower CPU frequencies.
 
+I am curious if you ran any tests - e.g set the CPU to some fixed
+frequency and run memory throughput benchmarks with/without this
+driver? Could you share any data?
+
+> Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   MAINTAINERS                  |   7 +
+>   drivers/soc/qcom/Kconfig     |  15 ++
+>   drivers/soc/qcom/Makefile    |   1 +
+>   drivers/soc/qcom/icc-bwmon.c | 421 +++++++++++++++++++++++++++++++++++
+>   4 files changed, 444 insertions(+)
+>   create mode 100644 drivers/soc/qcom/icc-bwmon.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6157e706ed02..bc123f706256 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16376,6 +16376,13 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+>   F:	drivers/i2c/busses/i2c-qcom-cci.c
+>   
+> +QUALCOMM INTERCONNECT BWMON DRIVER
+> +M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +L:	linux-arm-msm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+> +F:	drivers/soc/qcom/icc-bwmon.c
+> +
+>   QUALCOMM IOMMU
+>   M:	Rob Clark <robdclark@gmail.com>
+>   L:	iommu@lists.linux-foundation.org
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index e718b8735444..35c5192dcfc7 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -228,4 +228,19 @@ config QCOM_APR
+>   	  application processor and QDSP6. APR is
+>   	  used by audio driver to configure QDSP6
+>   	  ASM, ADM and AFE modules.
+> +
+> +config QCOM_ICC_BWMON
+> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	select PM_OPP
+> +	help
+> +	  Sets up driver monitoring bandwidth on various interconnects and
+> +	  based on that voting for interconnect bandwidth, adjusting their
+> +	  speed to current demand.
+> +	  Current implementation brings support for BWMON v4, used for example
+> +	  on SDM845 to measure bandwidth between CPU (gladiator_noc) and Last
+> +	  Level Cache (memnoc).  Usage of this BWMON allows to remove fixed
+> +	  bandwidth votes from cpufreq (CPU nodes) thus achieve high memory
+> +	  throughput even with lower CPU frequencies.
+> +
+>   endmenu
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 70d5de69fd7b..d66604aff2b0 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+>   obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+>   obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+>   obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+> +obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+> diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+> new file mode 100644
+> index 000000000000..1eed075545db
+> --- /dev/null
+> +++ b/drivers/soc/qcom/icc-bwmon.c
+> @@ -0,0 +1,421 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2014-2018, The Linux Foundation. All rights reserved.
+> + * Copyright (C) 2021-2022 Linaro Ltd
+> + * Author: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, based on
+> + *         previous work of Thara Gopinath and msm-4.9 downstream sources.
+> + */
+> +#include <linux/interconnect.h>
+
+Is this used?
+
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/sizes.h>
+
+Ditto.
+
+Thanks,
+Georgi

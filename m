@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56A553E96D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3F253E636
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiFFKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
+        id S233662AbiFFKJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233486AbiFFKGN (ORCPT
+        with ESMTP id S233425AbiFFKGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:06:13 -0400
+        Mon, 6 Jun 2022 06:06:15 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8E513B2C4;
-        Mon,  6 Jun 2022 03:06:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F4413A2C4;
+        Mon,  6 Jun 2022 03:06:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654509971; x=1686045971;
+  t=1654509974; x=1686045974;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AqwC+FxddxhYwSjVH6EJblIR6L9xqWvygg7hjybJuBc=;
-  b=bU9y9E13NvC4GZ8dhoiqbaVunUEDs5yrOKegE20koy2E/WaxNRDDx+Fi
-   3ayg+pS/aDiQyCTb1x5y2OBSrf7FjmFyloqq5hqwNdgCYblK4jqk/NML5
-   FdPh25dr4n5RgqL2tA/FxqJCYKTzpM0BaUlrnPD3tDdU6dNBKfxNqMtwh
-   Q33c3OHL0Oj2sQep8fDN+H5R2q33EUL8/vHT3CxWL5rtfy4aB+w+ToaZK
-   dmaKFijHiW80dqse9lp6ggcB6aw+B7lcnTlPts8wCm86zFITjb53XxNct
-   Gm0Efy4IGaLnr2o/lzE40oE6NpBS4C8W0akC7FCi4Wj8LWkeWk1Ap4pxl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987082"
+  bh=8oQ3ewHg3zpBccSONWwns1Fm40ESV4+zLrlmNBxoXUc=;
+  b=OUDOoAppi34XWjZnkdXuaSAFbTRh6XT0Fgh1oa1Q2l2mLDeGCp+xQG37
+   0XINOY97DGyb5d1y2njwyP+ayWaEPXPxEgnqWyTL3K3AcHjZ2iU4UvmCZ
+   Slma6N0EXLhrUr9RHqfPOHs00CdE1MlzcTLQIXd9KMYdxg4qZhoIY1mYg
+   W9pQBRfjgZ5jMm7LWnWtnNrSTv7Xo3oloHmkZsW73lSTFUJxqjckQfzQ0
+   ZBq8xsL8OxoMGCYf1+SRbUVYSQoWQFbgRXx11lCj0cQ065544TWq+2+l4
+   C4iHQoEUI2LR0OEbXKQWGFxhlNFEdNO2IVELLqcl8FOYUKaCGu+vNJpNv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987083"
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="362987082"
+   d="scan'208";a="362987083"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:11 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:13 -0700
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635523845"
+   d="scan'208";a="635523854"
 Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:09 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:12 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 27/36] serial: 8250: lpc18xx: Remove serial_rs485 sanitization
-Date:   Mon,  6 Jun 2022 13:04:24 +0300
-Message-Id: <20220606100433.13793-28-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 28/36] serial: 8250_pci: Remove serial_rs485 sanitization
+Date:   Mon,  6 Jun 2022 13:04:25 +0300
+Message-Id: <20220606100433.13793-29-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
 References: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
@@ -66,39 +64,44 @@ Serial core handles serial_rs485 sanitization and copying rs485 struct.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_lpc18xx.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/tty/serial/8250/8250_pci.c | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_lpc18xx.c b/drivers/tty/serial/8250/8250_lpc18xx.c
-index 66ce5d05fe9c..3a1cb51cbc91 100644
---- a/drivers/tty/serial/8250/8250_lpc18xx.c
-+++ b/drivers/tty/serial/8250/8250_lpc18xx.c
-@@ -40,14 +40,6 @@ static int lpc18xx_rs485_config(struct uart_port *port,
- 	u32 rs485_dly_reg = 0;
- 	unsigned baud_clk;
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+index a76254031bc2..b6d71268aa7d 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -1562,14 +1562,6 @@ static int pci_fintek_rs485_config(struct uart_port *port,
+ 
+ 	pci_read_config_byte(pci_dev, 0x40 + 8 * *index + 7, &setting);
  
 -	if (rs485->flags & SER_RS485_ENABLED)
 -		memset(rs485->padding, 0, sizeof(rs485->padding));
 -	else
 -		memset(rs485, 0, sizeof(*rs485));
 -
--	rs485->flags &= SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
--			SER_RS485_RTS_AFTER_SEND;
+-	/* F81504/508/512 not support RTS delay before or after send */
+-	rs485->flags &= SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND;
 -
  	if (rs485->flags & SER_RS485_ENABLED) {
- 		rs485_ctrl_reg |= LPC18XX_UART_RS485CTRL_NMMEN |
- 				  LPC18XX_UART_RS485CTRL_DCTRL;
-@@ -73,14 +65,9 @@ static int lpc18xx_rs485_config(struct uart_port *port,
- 						/ baud_clk;
- 	}
- 
--	/* Delay RTS before send not supported */
--	rs485->delay_rts_before_send = 0;
+ 		/* Enable RTS H/W control mode */
+ 		setting |= FINTEK_RTS_CONTROL_BY_HW;
+@@ -1581,9 +1573,6 @@ static int pci_fintek_rs485_config(struct uart_port *port,
+ 			/* RTS driving low on TX */
+ 			setting |= FINTEK_RTS_INVERT;
+ 		}
 -
- 	serial_out(up, LPC18XX_UART_RS485CTRL, rs485_ctrl_reg);
- 	serial_out(up, LPC18XX_UART_RS485DLY, rs485_dly_reg);
+-		rs485->delay_rts_after_send = 0;
+-		rs485->delay_rts_before_send = 0;
+ 	} else {
+ 		/* Disable RTS H/W control mode */
+ 		setting &= ~(FINTEK_RTS_CONTROL_BY_HW | FINTEK_RTS_INVERT);
+@@ -1591,9 +1580,6 @@ static int pci_fintek_rs485_config(struct uart_port *port,
  
--	port->rs485 = *rs485;
+ 	pci_write_config_byte(pci_dev, 0x40 + 8 * *index + 7, setting);
+ 
+-	if (rs485 != &port->rs485)
+-		port->rs485 = *rs485;
 -
  	return 0;
  }

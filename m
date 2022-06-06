@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E753453E0D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6470B53E0C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiFFFtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 01:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S229751AbiFFFtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiFFFtH (ORCPT
+        with ESMTP id S229703AbiFFFtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 01:49:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42A22CE02;
-        Sun,  5 Jun 2022 22:49:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LGjGd6VBbz4xXg;
-        Mon,  6 Jun 2022 15:48:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1654494539;
-        bh=CPBKHzFDCKd53m27AvAECAMd2sdqPutUmjqhp7KG9bI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IFweyYUIwvAkZnMkehnkfoif9wvOuCeXNIHleZUfiqOPZfKIThbnzZZOm/fKU1Mqd
-         +Og2OoQk4nJs6Zy5iy6Q3ir+RstQws3zok6zXGtjRJB0nie1irnHYoohlmXrS+Wsx9
-         gpiFbH1BHz1TCgvCp3xddkGrF4RB4v0sQZUou2gUSwvLEzt74QWn+dSCNAgaXlbMyL
-         jx7/1fRCkdhhUhTCfze6KF7GhRVScDdsSs4ilvUkCWEGTE+098gFi9VwMnmQElhkqL
-         DeNl1KO1mGClcIWEb4nc89y1euc/kh4pOC25q/AXC9b3YQyANhjDlx3bLTY6ODEj3C
-         k6GORb4heslPg==
-Date:   Mon, 6 Jun 2022 15:48:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
-Message-ID: <20220606154854.653c08ee@canb.auug.org.au>
-In-Reply-To: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
-References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
+        Mon, 6 Jun 2022 01:49:13 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FED2CE26;
+        Sun,  5 Jun 2022 22:49:10 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id h23so21642415lfe.4;
+        Sun, 05 Jun 2022 22:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=QsPSmnoDQSspdeB5NQpv+gur6fIi4kTRao6eLgRuaaM=;
+        b=dn8k0YfOtWS3vkhH2Zz5wYis8IFRK0/6wNFKdBIVwfp6QGSMtlIqQVS+0FhLVWIJfs
+         Eq3eiAtpYAgoH+mR0SyhC68qsuvZi7ISj+y9OfTY0dggQbdZCnHWSsf+859U31upP7sQ
+         xifla9pTa6rrk4ALid/lUD4JvEREUODVnEG4soV82LuaDqt8wvicuTSYyoBhLzRTnZqS
+         /AHvwaXRiFQr/zB+ngqYA75pXb9WGpAzTLpUfK092NpbvEOmYidFAQVjgFg9CjRrKjjf
+         921v8M59wRVFfzaERjaMEMuVswVWqug4Q1gwL+GV6nQTSVd44jNRaO/w7jxctITj8WQT
+         N69w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=QsPSmnoDQSspdeB5NQpv+gur6fIi4kTRao6eLgRuaaM=;
+        b=Bd8epFJe964FvrtN0z+hfF8pMq0oNr4VK29Ne+zmzEHO6+ED/SRIGdEVn2sf6QxF00
+         4+m14LHHUc0okMwrzy98XARvKrRIPDCoWCe5R82U+Ti5aX2a5O0dOQxYMuU/Q+rY7zDb
+         H3icW+PBUUhssu+8OhA0D8YOzzTqodwSmRPRdl2y8jyO5E4kkxmSZe+gGRfPITV0GDlu
+         uH/8wodZsKtRxyVNdyQoxfw1xh9CBPV4vAoohSpD8Y/Fr33L20w/8EvIzYxjqOVQ/HWB
+         cvKi5fjKorfCl+5gW6a1occw7k+JePN2l1yKI9ChuSiK6fizHn5RMqkXNsJaKk0N1V3O
+         /HRA==
+X-Gm-Message-State: AOAM532fJ/9D+JgH/HmP/nxwKDVZrtb0DoOzkA8+h4MQQ1b0aPIQAEAW
+        QN2/cqMVJP6NFU6YdPzBx1w=
+X-Google-Smtp-Source: ABdhPJzXPSXO1UB1Ofk63k65l3w0RiwRbD1x75/Fp4Lp9MKzCeFuUD3lINE4c84EolwoJo/MPhIpZg==
+X-Received: by 2002:a05:6512:2242:b0:478:ee3a:460d with SMTP id i2-20020a056512224200b00478ee3a460dmr21937913lfu.493.1654494548633;
+        Sun, 05 Jun 2022 22:49:08 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16ee:fa00::1? (dc73szyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::1])
+        by smtp.gmail.com with ESMTPSA id v18-20020a05651203b200b0047255d211adsm2724456lfp.220.2022.06.05.22.49.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jun 2022 22:49:07 -0700 (PDT)
+Message-ID: <96a66eab-cb20-71a4-baec-aff80f4cd93e@gmail.com>
+Date:   Mon, 6 Jun 2022 08:49:05 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OxU+zvSxT+aW_NkUeZrEfx2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Michael Trimarchi <michael@amarulasolutions.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-amarula@amarulasolutions.com
+References: <20220605165703.1565234-1-michael@amarulasolutions.com>
+ <20220605165703.1565234-2-michael@amarulasolutions.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH 1/3] clk: bd718x7: Clean up the code, no functional
+ changes
+In-Reply-To: <20220605165703.1565234-2-michael@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,57 +80,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OxU+zvSxT+aW_NkUeZrEfx2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Akira,
-
-On Mon, 6 Jun 2022 13:44:24 +0900 Akira Yokosawa <akiyks@gmail.com> wrote:
->
-> Commit 48ec13d36d3f ("gpio: Properly document parent data union")
-> is supposed to have fixed a warning from "make htmldocs" regarding
-> kernel-doc comments to union members.  However, the same warning
-> still remains [1].
->=20
-> Fix the issue by following the example found in section "Nested
-> structs/unions" of Documentation/doc-guide/kernel-doc.rst.
->=20
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
-> Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/=
- [1]
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Joey Gouly <joey.gouly@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
+On 6/5/22 19:57, Michael Trimarchi wrote:
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 > ---
->  include/linux/gpio/driver.h | 29 ++++++++++++++++-------------
->  1 file changed, 16 insertions(+), 13 deletions(-)
+>   drivers/clk/clk-bd718x7.c | 19 ++++++++++---------
+>   1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/clk/clk-bd718x7.c b/drivers/clk/clk-bd718x7.c
+> index ac40b669d60b..04cc0beb67df 100644
+> --- a/drivers/clk/clk-bd718x7.c
+> +++ b/drivers/clk/clk-bd718x7.c
+> @@ -81,27 +81,28 @@ static int bd71837_clk_probe(struct platform_device *pdev)
+>   	struct bd718xx_clk *c;
+>   	int rval = -ENOMEM;
+>   	const char *parent_clk;
+> +	struct device *dev = &pdev->dev;
 
-Looks good, thanks.
+I am not a fan of assigning pointers to struct members to local 
+variables unless they're shortening lines to fit on one row instead of 
+using two. Whenever we add such a variable we hide information. After 
+that being said - in this particular case the device 'dev' points to is 
+quite obvious so I am not completely against the change if other see the 
+value.
 
-Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>   	struct device *parent = pdev->dev.parent;
+>   	struct clk_init_data init = {
+>   		.name = "bd718xx-32k-out",
+>   		.ops = &bd71837_clk_ops,
+> +		.num_parents = 1,
 
---=20
-Cheers,
-Stephen Rothwell
+I like this. Thanks.
 
---Sig_/OxU+zvSxT+aW_NkUeZrEfx2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+>   	};
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKdlUYACgkQAVBC80lX
-0GzMeQgAmySfWjcyc+xFr/XHVcCpHvT2l98zbkfuyMs8Bu2vsutDKzizn/+T7hof
-2k5YYIAsxJSGd7bcKKyW6WuuCYILScEKiD2Lmh0RdDMMg6gOCdsoYA7VfYUhplvw
-qyCOx9xlE2Zlcjgu3K0XJEXDqKM9j4/CCbqWxlZLfJjEoWJyBhWjYv/Q7w/ZyqFV
-tI7suLKwiC0QXSWpKdP/m1xE8r92CdNsALaL1pN8uWureqDNDZfIFRxGxf4yZTAE
-lJjGvuxhfO7JYsaepVKmDNmNsYrSQbOkHT8lCx+ZFGzbgHTWgyEJNNs+zJ30SDrx
-5y4ZlcwFKNQeU7ZF/dx8CkFERNv/SA==
-=KKQb
------END PGP SIGNATURE-----
+Best Regards
+	-- Matti
 
---Sig_/OxU+zvSxT+aW_NkUeZrEfx2--
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));

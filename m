@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E5A53E8C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD4653E9ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbiFFMnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S237639AbiFFMnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237569AbiFFMm6 (ORCPT
+        with ESMTP id S237569AbiFFMn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:42:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041612B7E14;
-        Mon,  6 Jun 2022 05:42:57 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x5so13563662edi.2;
-        Mon, 06 Jun 2022 05:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PQw1JMjVkiQNJoOck+3BLNmeUABMQ6F26CTlYYxJVUg=;
-        b=Ng7rwDZs533yTuxU6qmIud7CHDX5RNauYlwduBAqI+VGpzLM0OfZsGM1OY4you+QAm
-         I2WojNNq/1fgByZPnJgEnHqcIJQVs9fL078n2Sxk8yA4pT+6gsXheyQiPl4SIocvQ5wx
-         QRPkI/g3NoNPjZq/B8jryfbkxTNVDlktLexVWZlqWLT7/YbOJ/OISJlNT4Bt7Yq7ZhZr
-         9yWGewT9fsB7jb251KLuS+9Kq4j1aZ3/Qiuecv3UJYlXMntjonJBMurM1KuwsmzuDlAr
-         h+umElD64fVZLEKmqMLyG59TH3EohIXZhzAISLsEQBl6NNDzglq3jUpFScYx6B3c1irJ
-         SNkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PQw1JMjVkiQNJoOck+3BLNmeUABMQ6F26CTlYYxJVUg=;
-        b=2HXWRFBOkVuIsvFm3OXyThhc4MhjvNHvj0U/KEYT0hOMsQ0e23rYerN4XB4H/zYrBM
-         +z3ebeILZ7eGeJIuYzmreKClDyWAT6acngqpG7FbfqNxFYZQNAZZ+Vx2l1Bzgx5xcnrb
-         JEdZ45zUgbJZJ7qBDKWttJ20J6atB89JK9xa+xNX5PteknTUPGWQtMrMS4DRRfbpelEE
-         iFZloroVAbObmKDlZaVtgpHRHLh/OpA7M1BDUcjIn4rmYSq6fBhLK7gqUa4USBrNU1OC
-         AgrV8WMLYkmJXeoucMTdVNpi5fpolDefJ9uYi2tY+wSPGg449J5uPVpCHNpf09KjXnKh
-         iTww==
-X-Gm-Message-State: AOAM532lSh+CqEedHQBNR+8GIMYtUQz9EKBUu4ufVKyG61nHIWxJvP3I
-        nX0qfYujXwlAi91Hak90UFY1+NjXks6hCFexWqo=
-X-Google-Smtp-Source: ABdhPJwd9NnSRZjTJzpvbi20WWr6ZovTSqz3iv90KI/emBK8/uza2eOFP3qY1UAXZTHLv5clWLpBxiOnXe+NCscAG7E=
-X-Received: by 2002:a05:6402:4390:b0:42e:b7e:e9ac with SMTP id
- o16-20020a056402439000b0042e0b7ee9acmr25491093edc.97.1654519375435; Mon, 06
- Jun 2022 05:42:55 -0700 (PDT)
+        Mon, 6 Jun 2022 08:43:28 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7135C2CBD2D;
+        Mon,  6 Jun 2022 05:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=S17W/Pm9YVh/HqKMgj1KO/HjHX9HcDXOf/ffbUmqK5A=; b=JQGlU/poW50DIvWBX4d2F5pO8Q
+        e1ogrNiB9rn2MCX3s6dmk7hshynvkKeM0faugenizIbvxnGl1cG24z9+v+p+aj0Hfgx94Oh6K7kW2
+        G4gcHmYRcw11ZAUPDQFGHT28a7mGox27tNRn60+UBZQkwyxn3eOPfb9FvgnAU34anaLg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nyC4O-005mXJ-7M; Mon, 06 Jun 2022 14:42:56 +0200
+Date:   Mon, 6 Jun 2022 14:42:56 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Tan Tee Min <tee.min.tan@linux.intel.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Dan Murphy <dmurphy@ti.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Subject: Re: [PATCH net-next v2 1/1] net: phy: dp83867: retrigger SGMII AN
+ when link change
+Message-ID: <Yp32UDf7JO2pHE8z@lunn.ch>
+References: <20220526090347.128742-1-tee.min.tan@linux.intel.com>
+ <Yo9zTmMduwel8XeZ@lunn.ch>
+ <20220527014709.GA26992@linux.intel.com>
+ <YpDHWMe7aEVWtECd@lunn.ch>
+ <20220530073356.GA1199@linux.intel.com>
 MIME-Version: 1.0
-References: <20220606111316.19265-1-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220606111316.19265-1-ddrokosov@sberdevices.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 6 Jun 2022 14:42:18 +0200
-Message-ID: <CAHp75VfRF=NyU9TN0FJ=cj0w_C-cKL+foa+WskwpoBP9b+SfDA@mail.gmail.com>
-Subject: Re: [PATCH v2] iio: trigger: warn about non-registered iio trigger
- getting attempt
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530073356.GA1199@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 1:23 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
->
-> As a part of patch series about wrong trigger register() and get()
-> calls order in the some IIO drivers trigger initialization path:
->
-> https://lore.kernel.org/all/20220524181150.9240-1-ddrokosov@sberdevices.ru/
->
-> runtime WARN() is added to alarm IIO driver authors who make such
-> a mistake.
->
-> When IIO driver allocates a new IIO trigger, it should register it before
+> Below is the HW structure for Intel mGbE controller with external PHY.
+> The SERDES is located in the PHY IF in the diagram below and the EQoS
+> MAC uses pcs-xpcs driver for SGMII interface.
+> 
+>     <-----------------GBE Controller---------->|<---External PHY chip--->
+>     +----------+         +----+            +---+           +------------+
+>     |   EQoS   | <-GMII->| DW | < ------ > |PHY| <-SGMII-> |External PHY|
+>     |   MAC    |         |xPCS|            |IF |           |(TI DP83867)|
+>     +----------+         +----+            +---+           +------------+
+>            ^               ^                 ^                ^
+>            |               |                 |                |
+>            +---------------------MDIO-------------------------+
+> 
+> There are registers in the DW XPCS to read the SGMII AN status and
+> it's showing the SGMII AN has not completed and link status is down.
+> But TI PHY is showing SGMII AN is completed and the copper link is
+> established.
+> 
+> FYI, the current pcs-xpcs driver is configuring C37 SGMII as MAC-side
+> SGMII, so it's expecting to receive AN Tx Config from PHY about the
+> link state change after C28 AN is completed between PHY and Link Partner.
+> Here is the pcs-xpcs code for your reference:
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/pcs/pcs-xpcs.c#L725
+> 
+> We faced a similar issue on MaxLinear GPY PHY in the past.
+> And, MaxLinear folks admitted the issue and implemented fixes/improvements
+> in the GPY PHY Firmware to overcome the SGMII AN issue.
+> Besides, they have also implemented this similar SW Workaround in their
+> PHY driver code to cater for the old Firmware.
+> Feel free to refer GPY driver code here:
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/mxl-gpy.c#L222
+> 
+> Apart from TI and MaxLinear PHY, we've also tested the Marvell 88E2110 and
+> 88E1512 PHY with the MAC/SERDES combination above, Marvell PHY is working
+> fine without any issue.
 
-an IIO
+Thanks for the additional details.
 
-> calling the get() operation. In other words, each IIO driver must abide by
-> IIO trigger alloc()/register()/get() calls order.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-I believe triggers usually acquired at ->probe() time, means that in
-case if the following code (however, I believe it will be quite rare)
-goes into deferred probe cycle the WARN will be repeated. Perhaps
-WARN_ONCE() ?
-
--- 
-With Best Regards,
-Andy Shevchenko
+    Andrew

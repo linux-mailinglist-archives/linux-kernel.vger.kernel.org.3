@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7BA53E9DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8AF53E7B3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbiFFJc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        id S232908AbiFFJej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233079AbiFFJcY (ORCPT
+        with ESMTP id S232895AbiFFJeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:32:24 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB1AB4B7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:32:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id q7so19045807wrg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 02:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DILDsr0b9hqKpzHkSK5EkqNENVkelrpz3368vmKRnRQ=;
-        b=K3iIi0U81SdwLg437LEDDbrh1s6RRYAb/HYOoQgkk6UcO4dNCa7D4Kuy2/oheMJess
-         Jz4E5ub7+ZhVinK0efcD0dQTPTQlNqA6o/BT6KnNRu4OV0GsE9Zv4Q7yKi0g7kHyTkhS
-         hZ7zXBrmLk0vS3iXgAS5DEfRI00Us9zK0jcmp/z1gktNOMkPArbBLPk4cNDH05IQJZGn
-         jLd/QMJhttYCevIWTZaHB12PRr20JR7De5I4htbXUJ8wXcKEtqDw1juBfzyHsES/kCSb
-         GZ3yuHlqHfTQw0QB60lR8OCzaHMEKgLCmDsipKlslOGhTPK6uvTl5ZOaGUXEW43UNQ7i
-         WNTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DILDsr0b9hqKpzHkSK5EkqNENVkelrpz3368vmKRnRQ=;
-        b=BqsDJdUrvZcWiDV43oCcV8TSSV/vgMEYx9SHEgrwLMhfiK05eAqW+hAHds620eiq3M
-         VYFh9NLbEn0RU/CgnHEGaOaI6wfTNVtJHw6V7a/zGKRDOPoMLrl1drna2CtalT6LFfW8
-         DN/aOeyCR4m/jQRZkjyM82J51JvQBOWu8te15hlSsteIYefvCaXlkBlP59hhWbA5i85z
-         +gfXmviNylBKVAn+sNfehpi3jvxaMtMD+HqSP8tobyJDt8f0KkxQ/1LXY+e7miWKtSI+
-         Z3SauMBK5s3BzgYk7kJYSuWvCEknLqMekJxuNpbCJoY5fyi8TK8WUlfLgLdSHgTSAMZ5
-         P5IA==
-X-Gm-Message-State: AOAM530KXW/cE359vuq0axs9VTwp5lee65wXXBhdUKqHdqaxroHm/KzD
-        GPg4jdAGO5ZCVyp9NsEn5jQLgjfWkJzIg9Tf
-X-Google-Smtp-Source: ABdhPJx+oRFZ+CN+fAAHTjHqkljtgqFJ2cn4uX2fDxDW75/GWl2ErIDYO2Zn59XfMwbkQkeK7XzUJQ==
-X-Received: by 2002:a5d:51d0:0:b0:218:4277:c786 with SMTP id n16-20020a5d51d0000000b002184277c786mr2313736wrv.255.1654507941470;
-        Mon, 06 Jun 2022 02:32:21 -0700 (PDT)
-Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
-        by smtp.gmail.com with ESMTPSA id bi11-20020a05600c3d8b00b0039c3ecdca66sm9941335wmb.23.2022.06.06.02.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 02:32:20 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 10:32:17 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, morten.rasmussen@arm.com,
-        chris.redpath@arm.com, qperret@google.com, tao.zhou@linux.dev,
-        kernel-team@android.com
-Subject: Re: [PATCH v9 6/7] sched/fair: Remove task_util from effective
- utilization in feec()
-Message-ID: <Yp3JodkEgYUsQ4EV@google.com>
-References: <20220523155140.2878563-1-vdonnefort@google.com>
- <20220523155140.2878563-7-vdonnefort@google.com>
- <d91ffb42-4440-7c07-6a87-3cce9fa3dcab@arm.com>
+        Mon, 6 Jun 2022 05:34:37 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1411B9A70
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:34:36 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2567cllq030641;
+        Mon, 6 Jun 2022 04:33:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=VUdD1guqD0Qi0LS/4B8LoHY2yPYYeCkOvTny4xFn5gY=;
+ b=BwuNFseyfaRSx/dcP0/JROg2dLRovYkXcKjTTY6s6rq5ZBrQhXAIgtkyveoolIpuN09w
+ Umbe3QhYmcop3blsgu+aNdkpB0Y8pQj2pWJ4VS9mvU9tn0dHwZlMqW9lZ08aQZnlqDeg
+ wBV15jXyBucpCt7Ltcl+eB68pP1Ln/ALBfWX00Le4vjxWF9OxYH/bMZ/AvXFBk4ZFHSV
+ IpVysORk++iAHg4m4iMDeJDmC5gwE6Sa8bvIrUl39K91TznaN5+fAS+F/f8KMh82qkHA
+ sP0kPr76C6CP9z0bnl3sTf36cRwFrqkk3j/UtyvL4Kl17NesU9Uj1EeuLRLHeMAbahF9 uw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gg4t3sngc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 06 Jun 2022 04:33:44 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 6 Jun
+ 2022 10:33:42 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Mon, 6 Jun 2022 10:33:42 +0100
+Received: from [10.0.2.15] (AUSNPC0LSNW1.ad.cirrus.com [198.90.251.45])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0732AB10;
+        Mon,  6 Jun 2022 09:33:42 +0000 (UTC)
+Subject: Re: [PATCH] ASoC: wm_adsp: Remove redundant NULL check before
+ release_firmware() call
+To:     <cgel.zte@gmail.com>, <lgirdwood@gmail.com>
+CC:     <broonie@kernel.org>, <perex@perex.cz>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220606013916.290387-1-chi.minghao@zte.com.cn>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+Message-ID: <ab457b05-6a50-9852-5f12-fed1558fae46@opensource.cirrus.com>
+Date:   Mon, 6 Jun 2022 10:33:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d91ffb42-4440-7c07-6a87-3cce9fa3dcab@arm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220606013916.290387-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 9M7AEQigAU00T33Sv2cjvfVeyDHvpHo0
+X-Proofpoint-ORIG-GUID: 9M7AEQigAU00T33Sv2cjvfVeyDHvpHo0
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:17:01AM +0200, Dietmar Eggemann wrote:
-> - Vincent Donnefort <vincent.donnefort@arm.com>
+On 06/06/2022 02:39, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> On 23/05/2022 17:51, Vincent Donnefort wrote:
-> > From: Vincent Donnefort <vincent.donnefort@arm.com>
+> release_firmware() checks for NULL pointers internally so checking
+> before calling it is redundant.
 > 
-> [...]
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>   sound/soc/codecs/wm_adsp.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> > @@ -6834,22 +6887,36 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >  	if (!task_util_est(p))
-> >  		goto unlock;
-> >  
-> > +	eenv_task_busy_time(&eenv, p, prev_cpu);
-> > +
-> >  	for (; pd; pd = pd->next) {
-> > -		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
-> > +		unsigned long cpu_cap, cpu_thermal_cap, util;
-> > +		unsigned long cur_delta, max_spare_cap = 0;
-> >  		bool compute_prev_delta = false;
-> >  		unsigned long base_energy_pd;
-> >  		int max_spare_cap_cpu = -1;
-> >  
-> >  		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+> diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
+> index 7973a75cac05..4c4344b21c2e 100644
+> --- a/sound/soc/codecs/wm_adsp.c
+> +++ b/sound/soc/codecs/wm_adsp.c
+> @@ -739,12 +739,10 @@ static void wm_adsp_release_firmware_files(struct wm_adsp *dsp,
+>   					   const struct firmware *coeff_firmware,
+>   					   char *coeff_filename)
+>   {
+> -	if (wmfw_firmware)
+> -		release_firmware(wmfw_firmware);
+> +	release_firmware(wmfw_firmware);
+>   	kfree(wmfw_filename);
+>   
+> -	if (coeff_firmware)
+> -		release_firmware(coeff_firmware);
+> +	release_firmware(coeff_firmware);
+>   	kfree(coeff_filename);
+>   }
+>   
 > 
-> Internal EAS testing of this patch-set version has revealed that this
-> doesn't work against LTP CPU hotplug stress test. `struct cpumask *cpus`
-> can't be used when it is empty. This can happen in case all PD CPUs are
-> hotplugged out since we `and` the invariant PD cpumask with
-> cpu_online_mask. We need a:
-> 
-> +               if (cpumask_empty(cpus))
-> +                       continue;
-> +
-> 
-> here.
-
-Good catch, thanks for trying the test suite.
-
-> 
-> > -		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-> > +		/* Account thermal pressure for the energy estimation */
-> > +		cpu = cpumask_first(cpus);
-> > +		cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
-> > +		cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
-> 
-> [...]
+Reviewed-by: Richard Fitzgerald <rf@opensource.cirrus.com>

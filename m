@@ -2,167 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8299E53F1FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3192D53F204
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbiFFWMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 18:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S233113AbiFFWN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 18:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiFFWMD (ORCPT
+        with ESMTP id S232290AbiFFWNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 18:12:03 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C392D66AFC;
-        Mon,  6 Jun 2022 15:12:01 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id EE60640003;
-        Mon,  6 Jun 2022 22:11:54 +0000 (UTC)
-From:   Ilya Maximets <i.maximets@ovn.org>
-To:     netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Aaron Conole <aconole@redhat.com>,
-        Paolo Valerio <pvalerio@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>, stable@vger.kernel.org,
-        Frode Nordahl <frode.nordahl@canonical.com>
-Subject: [PATCH net] net: openvswitch: fix misuse of the cached connection on tuple changes
-Date:   Tue,  7 Jun 2022 00:11:40 +0200
-Message-Id: <20220606221140.488984-1-i.maximets@ovn.org>
-X-Mailer: git-send-email 2.34.3
+        Mon, 6 Jun 2022 18:13:51 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0459D6D1AD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:13:48 -0700 (PDT)
+Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 256MDVYA022255;
+        Tue, 7 Jun 2022 07:13:31 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
+ Tue, 07 Jun 2022 07:13:31 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 256MDVQS022246
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 7 Jun 2022 07:13:31 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <8af7aebf-61ae-f126-57fa-8ff358c1841e@I-love.SAKURA.ne.jp>
+Date:   Tue, 7 Jun 2022 07:13:27 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: [PATCH v2] kbuild: fix build failure by scripts/check-local-export
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
+ <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
+In-Reply-To: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If packet headers changed, the cached nfct is no longer relevant
-for the packet and attempt to re-use it leads to the incorrect packet
-classification.
+scripts/check-local-export fails with some versions of bash.
 
-This issue is causing broken connectivity in OpenStack deployments
-with OVS/OVN due to hairpin traffic being unexpectedly dropped.
+    CC      scripts/mod/empty.o
+  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
+  make[2]: *** [scripts/mod/empty.o] Error 127
+  make[2]: *** Deleting file `scripts/mod/empty.o'
+  make[1]: *** [prepare0] Error 2
+  make: *** [__sub-make] Error 2
 
-The setup has datapath flows with several conntrack actions and tuple
-changes between them:
+Avoid use of bash's built-in wait command, by saving the output from
+nm command into a temporary variable.
 
-  actions:ct(commit,zone=8,mark=0/0x1,nat(src)),
-          set(eth(src=00:00:00:00:00:01,dst=00:00:00:00:00:06)),
-          set(ipv4(src=172.18.2.10,dst=192.168.100.6,ttl=62)),
-          ct(zone=8),recirc(0x4)
-
-After the first ct() action the packet headers are almost fully
-re-written.  The next ct() tries to re-use the existing nfct entry
-and marks the packet as invalid, so it gets dropped later in the
-pipeline.
-
-Clearing the cached conntrack entry whenever packet tuple is changed
-to avoid the issue.
-
-The flow key should not be cleared though, because we should still
-be able to match on the ct_state if the recirculation happens after
-the tuple change but before the next ct() action.
-
-Cc: stable@vger.kernel.org
-Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
-Reported-by: Frode Nordahl <frode.nordahl@canonical.com>
-Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-May/051829.html
-Link: https://bugs.launchpad.net/ubuntu/+source/ovn/+bug/1967856
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: 31cb50b5590fe911 ("kbuild: check static EXPORT_SYMBOL* by script instead of modpost")
 ---
+Changes in v2:
+  llvm-nm can't use end-of-options argument, reported-by kernel test robot <lkp@intel.com>
 
-The function ovs_ct_clear() looks a bit differently on older branches,
-but the change should be exactly the same, i.e. move the
-ovs_ct_fill_key() under the 'if (key)'.
+ scripts/check-local-export | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-The same behavior for userspace datapath was introduced along with
-the conntrack caching support here:
-  https://github.com/openvswitch/ovs/commit/594570ea1cdecc7ef7880d707cbc7a4a4ecef09f
-
-Interestingly, above commit also introduced the system test that can
-check the issue for the kernel as well, but the test sends only one
-packet and this packet goes via upcall to userspace and back to the
-kernel effectively clearing the cached connection along the way and
-avoiding the issue.  If the test is modified to send more than a few
-packets [1], it starts to fail without the kernel fix:
-
-  make check-kernel TESTSUITEFLAGS='-k negative'
-  142: conntrack - negative test for recirculation optimization FAILED
-
-[1] https://pastebin.com/H1YMqaLa
-
- net/openvswitch/actions.c   | 6 ++++++
- net/openvswitch/conntrack.c | 4 +++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index 1b5d73079dc9..868db4669a29 100644
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -373,6 +373,7 @@ static void set_ip_addr(struct sk_buff *skb, struct iphdr *nh,
- 	update_ip_l4_checksum(skb, nh, *addr, new_addr);
- 	csum_replace4(&nh->check, *addr, new_addr);
- 	skb_clear_hash(skb);
-+	ovs_ct_clear(skb, NULL);
- 	*addr = new_addr;
- }
+diff --git a/scripts/check-local-export b/scripts/check-local-export
+index da745e2743b7..850abc150855 100755
+--- a/scripts/check-local-export
++++ b/scripts/check-local-export
+@@ -11,9 +11,20 @@ set -e
+ declare -A symbol_types
+ declare -a export_symbols
  
-@@ -420,6 +421,7 @@ static void set_ipv6_addr(struct sk_buff *skb, u8 l4_proto,
- 		update_ipv6_checksum(skb, l4_proto, addr, new_addr);
- 
- 	skb_clear_hash(skb);
-+	ovs_ct_clear(skb, NULL);
- 	memcpy(addr, new_addr, sizeof(__be32[4]));
- }
- 
-@@ -660,6 +662,7 @@ static int set_nsh(struct sk_buff *skb, struct sw_flow_key *flow_key,
- static void set_tp_port(struct sk_buff *skb, __be16 *port,
- 			__be16 new_port, __sum16 *check)
- {
-+	ovs_ct_clear(skb, NULL);
- 	inet_proto_csum_replace2(check, skb, *port, new_port, false);
- 	*port = new_port;
- }
-@@ -699,6 +702,7 @@ static int set_udp(struct sk_buff *skb, struct sw_flow_key *flow_key,
- 		uh->dest = dst;
- 		flow_key->tp.src = src;
- 		flow_key->tp.dst = dst;
-+		ovs_ct_clear(skb, NULL);
- 	}
- 
- 	skb_clear_hash(skb);
-@@ -761,6 +765,8 @@ static int set_sctp(struct sk_buff *skb, struct sw_flow_key *flow_key,
- 	sh->checksum = old_csum ^ old_correct_csum ^ new_csum;
- 
- 	skb_clear_hash(skb);
-+	ovs_ct_clear(skb, NULL);
++function die
++{
++    echo "$1" >&2
++    exit 1
++}
 +
- 	flow_key->tp.src = sh->source;
- 	flow_key->tp.dst = sh->dest;
+ exit_code=0
  
-diff --git a/net/openvswitch/conntrack.c b/net/openvswitch/conntrack.c
-index 4a947c13c813..4e70df91d0f2 100644
---- a/net/openvswitch/conntrack.c
-+++ b/net/openvswitch/conntrack.c
-@@ -1342,7 +1342,9 @@ int ovs_ct_clear(struct sk_buff *skb, struct sw_flow_key *key)
- 
- 	nf_ct_put(ct);
- 	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
--	ovs_ct_fill_key(skb, key, false);
+-while read value type name
++# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
++# shows 'no symbols' diagnostic and exits with 0. Saving such line into
++# symbol_types is fine because export_symbols will remain empty.
++result=$(${NM} ${1} 2>&1) || die "${result}"
 +
-+	if (key)
-+		ovs_ct_fill_key(skb, key, false);
++echo "${result}" | while read value type name
+ do
+ 	# Skip the line if the number of fields is less than 3.
+ 	#
+@@ -37,21 +48,7 @@ do
+ 	if [[ ${name} == __ksymtab_* ]]; then
+ 		export_symbols+=(${name#__ksymtab_})
+ 	fi
+-
+-	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
+-	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
+-	# hidden by '2>/dev/null'. However, it suppresses real error messages
+-	# as well. Add a hand-crafted error message here.
+-	#
+-	# Use --quiet instead of 2>/dev/null when we upgrade the minimum version
+-	# of binutils to 2.37, llvm to 13.0.0.
+-	#
+-	# Then, the following line will be really simple:
+-	#   done < <(${NM} --quiet ${1})
+-done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
+-
+-# Catch error in the process substitution
+-wait $!
++done
  
- 	return 0;
- }
+ for name in "${export_symbols[@]}"
+ do
 -- 
-2.34.3
+2.18.4
+
 

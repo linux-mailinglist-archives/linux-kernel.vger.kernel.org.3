@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C509853E390
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7CE53E216
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiFFHY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S230468AbiFFH1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiFFHYx (ORCPT
+        with ESMTP id S230446AbiFFH05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 03:24:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615F31AF16
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654500292; x=1686036292;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xNNv8f5KLFlwE8E16qBiInBjz2utO9UckXry2wUB1oc=;
-  b=W096bTZK6adSx4Fy1Zg0nkqhm1yjBOU76u90E+cYBep6CEhgFMWK9uZ1
-   EK1OEo1U/obOC+7X/CZJc3lZIYeUNcwKn24jqQKa7RtwThYmzA/ivq4VM
-   DhD9sXlc7YpcbWOfl2cZMsP3yP1rC6P7lNG2SLtmsss19JRm7sR1HHY+H
-   qRqmkloh1/2sZFSeBPp72GG/VkuYaTYzZZekIoHMdKY6DAaQll47IoHba
-   nYxLG3Tbsg2O8Bqje+DtXx5ao9XtFcihmQOv2LCM2XKvISd1ivPi3RXaU
-   kA7sZlwMjoKk41heCB9UOCAXmQo1ajJJXpkv3CJseujVrlp9VplEov97N
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="275411503"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="275411503"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 00:24:52 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635461994"
-Received: from xingguom-mobl.ccr.corp.intel.com ([10.254.213.116])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 00:24:43 -0700
-Message-ID: <11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com>
-Subject: Re: [PATCH v5 9/9] mm/demotion: Update node_is_toptier to work with
- memory tiers
-From:   Ying Huang <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Mon, 06 Jun 2022 15:24:38 +0800
-In-Reply-To: <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
-References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
-         <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
-         <6e94b7e2a6192e4cacba1db3676b5b5cf9b98eac.camel@intel.com>
-         <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 6 Jun 2022 03:26:57 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AD312D1E2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:26:53 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id kq6so14166495ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 00:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=doPwBdHFWD14a2kAbTYFYO985iNgcJ4U7efAsJ68WJg=;
+        b=e9Eet/rubQ1dAldMT20UZNWIystnpXrq8GRJof9k8RTdLUW/jUD1HGfhgGnHs8wFb6
+         6igYDyujxRcRJlFuCntlt6LFyW90aNpU5MgTf2jUnPhMUXCvNEB7vjGPA060WmEVc2ZG
+         RFCMMx0G5Jtbm5wiY4pevkJ0S0Vw27VLsB5eEt8hmtHuin/eRDB1K9qxhrqlTwWw8JQ6
+         kqWStISJcQYsPBm4bx0ziF6Xtmx5/g5h7E3PzbwH6r9zYyWBoEH1TrozbZ4YOiiC3+K2
+         gluHBMjK50vEvuW8nrFl9OTgbx07KXDG/UKG44iHxftwXkGAL+KvHW5fKdaPsKMTb1kY
+         mRzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=doPwBdHFWD14a2kAbTYFYO985iNgcJ4U7efAsJ68WJg=;
+        b=Lz2Z4UTVP7QESnWDjcMM9zDdEGBvESEKOFceD97nLwz4pNk26xZ4vgJcblxNYqQhtw
+         Fhp9W5uHP+m6qnrcmGsp6wZmeoHNSfr6IqD4XnB6VSzw9DhNTKOEPUbT3Udxv0r/njW2
+         W8qQgrxYSuNi6bMT+DEHX+Wplx/DGlL8YuueyOXGh/stTnpC4eCpBrXerqWDOZHR0fDs
+         deRwNs0JjPUy4N8kDQNAoX3/9QJkBhgUEwLJc1rVRKyJxapxGyFdQkr4yD4OGGHy70Og
+         c4aj4EfVv0pKtyVBXZPGD7c0MaZx46aDfnAZFJ0zWTaXVAVdpVGK/iOBGPVBHGsHZUxu
+         RcnQ==
+X-Gm-Message-State: AOAM532pFxWuFV/OBbKvi/S34ogSXmzBV32Z09j5GrpLFkEOTvGWOblD
+        Bk8oZmIEXZttjmtHciCxvpeuyw==
+X-Google-Smtp-Source: ABdhPJyJOokEt0kcEBw3sSkPy6hMeFJoYm8dpZ17WrM50ttC3tQnAGNRQ3bcqQ/3RbnokzCBKZFsGQ==
+X-Received: by 2002:a17:906:b18e:b0:710:26db:7a53 with SMTP id w14-20020a170906b18e00b0071026db7a53mr11557189ejy.290.1654500411748;
+        Mon, 06 Jun 2022 00:26:51 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d7-20020a056402400700b0042e15364d14sm6332688eda.8.2022.06.06.00.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 00:26:51 -0700 (PDT)
+Message-ID: <14eeab94-8344-2c8d-9437-ddc8e367cfde@linaro.org>
+Date:   Mon, 6 Jun 2022 09:26:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] dt-bindings: i2c: qcom,i2c-qup: convert to dtschema
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-i2c@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220604164653.79284-1-robimarko@gmail.com>
+ <20220605140744.GA3416078-robh@kernel.org>
+ <CAOX2RU7PHpzKUNvuv=-MyqGtgcz30qKkvx2MHNV=ehtCZGBYEA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAOX2RU7PHpzKUNvuv=-MyqGtgcz30qKkvx2MHNV=ehtCZGBYEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,61 +81,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 09:22 +0530, Aneesh Kumar K V wrote:
-> On 6/6/22 8:41 AM, Ying Huang wrote:
-> > On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
-> > > With memory tiers support we can have memory on NUMA nodes
-> > > in the top tier from which we want to avoid promotion tracking NUMA
-> > > faults. Update node_is_toptier to work with memory tiers. To
-> > > avoid taking locks, a nodemask is maintained for all demotion
-> > > targets. All NUMA nodes are by default top tier nodes and as
-> > > we add new lower memory tiers NUMA nodes get added to the
-> > > demotion targets thereby moving them out of the top tier.
-> > 
-> > Check the usage of node_is_toptier(),
-> > 
-> > - migrate_misplaced_page()
-> >    node_is_toptier() is used to check whether migration is a promotion.
-> > We can avoid to use it.  Just compare the rank of the nodes.
-> > 
-> > - change_pte_range() and change_huge_pmd()
-> >    node_is_toptier() is used to avoid scanning fast memory (DRAM) pages
-> > for promotion.  So I think we should change the name to node_is_fast()
-> > as follows,
-> > 
-> > static inline bool node_is_fast(int node)
-> > {
-> > 	return NODE_DATA(node)->mt_rank >= MEMORY_RANK_DRAM;
-> > }
-> > 
+On 05/06/2022 18:09, Robert Marko wrote:
+> On Sun, 5 Jun 2022 at 16:07, Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Sat, Jun 04, 2022 at 06:46:53PM +0200, Robert Marko wrote:
+>>> Convert DT bindings for Qualcomm QUP I2C controller to DT schema format.
+>>>
+>>> Old text bindings were missing usage of DMA so that was documented, as
+>>> well as the max clock-frequency.
+>>>
+>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>> ---
+>>>  .../devicetree/bindings/i2c/qcom,i2c-qup.txt  | 40 ---------
+>>>  .../devicetree/bindings/i2c/qcom,i2c-qup.yaml | 83 +++++++++++++++++++
+>>>  2 files changed, 83 insertions(+), 40 deletions(-)
+>>>  delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+>>>  create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+>>
+>> This one is already done.
 > 
-> But that gives special meaning to MEMORY_RANK_DRAM. As detailed in other 
-> patches, absolute value of rank doesn't carry any meaning. It is only
-> the relative value w.r.t other memory tiers that decide whether it is 
-> fast or not. Agreed by default memory tiers get built with 
-> MEMORY_RANK_DRAM. But userspace can change the rank value of 'memtier1' 
-> Hence to determine a node is consisting of fast memory is essentially 
-> figuring out whether node is the top most tier in memory hierarchy and 
-> not just the memory tier rank value is >= MEMORY_RANK_DRAM?
+> Yeah, I did not check linux-next before doing the conversion.
+> Sorry for the noise.
 
-In a system with 3 tiers,
+Hi Robert,
 
-HBM	0
-DRAM	1
-PMEM	2
-
-In your implementation, only HBM will be considered fast.  But what we
-need is to consider both HBM and DRAM fast.  Because we use NUMA
-balancing to promote PMEM pages to DRAM.  It's unnecessary to scan HBM
-and DRAM pages for that.  And there're no requirements to promote DRAM
-pages to HBM with NUMA balancing.
-
-I can understand that the memory tiers are more dynamic now.  For
-requirements of NUMA balancing, we need the lowest memory tier (rank)
-where there's at least one node with CPU.  The nodes in it and the
-higher tiers will be considered fast. 
+Thanks for the patch. Several people are working on the bindings, so the
+best is to:
+1. rebase always on linux-next,
+2. check if anyone else posted the patches thus the work is in progress
+- use dfn keyword, like:
+https://lore.kernel.org/all/?q=dfn%3Aqcom%2Ci2c-qup.txt
 
 
-Best Regards,
-Huang, Ying
-
+Best regards,
+Krzysztof

@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6B453F072
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4201853F100
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiFFUq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S234410AbiFFUwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235366AbiFFUqV (ORCPT
+        with ESMTP id S234486AbiFFUvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:46:21 -0400
+        Mon, 6 Jun 2022 16:51:08 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFFE111B99
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:40:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BE8A76E9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:42:04 -0700 (PDT)
 Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256Ivt91017195;
-        Mon, 6 Jun 2022 20:38:29 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256IH5p6010190;
+        Mon, 6 Jun 2022 20:38:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=8gpbcHqofa3ZUH2AYI8aFIUjIzCV/nk6Swr3kdhQFQw=;
- b=gP1S49aqutBnkug2WTKe77ZF+6USRz1EaoVV6SYPDRNYFHwCnyAbbsH7Bv9IgYV4cbya
- Bn1zVDcrxj6SgW1arhVPPKM9mWRyhWOQl2zn1McHdOEijMFa9Dx/3cKU/2vT1clKQ+S9
- C695Idqa7et0mQ7BtHgSbXtBInbjoS7xiMAScs4ElDJgMA0WdeSrDcKhzPVp04b9unKI
- VXM+z4QxleMiqqRD8+1dvSp0lGVWrsIEL82Fa575UMBWpJkEkWAn7vp2GswHuugpTwKQ
- WIlBeioanDyMpKrp3vrTLQ5JpZ+gbcBWHVFKswVJwB4L4XqvGseKNPmzbh4vIVdb4lCy cQ== 
+ s=corp-2021-07-09; bh=5msmGPhnYMpzXeIEVJ2L1ZIQB+VFf1s7vKE0VKeA+bU=;
+ b=cYWtv5AQMwE4FfKlHDzfVxAKC7qlHXnZnnA0KgaFVKGaRxKsfRoa+rL6ChPlZpSAHUxa
+ twJmnBiknV/VraZ4i2ZRTIaXX9CCrQxemKF1tq6/CSqc8RFT0mDdGnqwuzwGteMkVThQ
+ WTW7X1H/KLyJ6yhVUG2TWNYi54xneUm1g/9seoxIOMPTxmgQa4n7rFTUIZAN5XMIIRUE
+ TeKLYmibsDW31WZKf7S1HNPZ8JvgfdPeGY70SoXrLm2HnVACx9xXkbcacmKGYyYtItLX
+ vhIdZMpFs+docj5W11uHw315U9vHs6O1XLAiRnppgtSYSqD+uYZyOg4PheX872JDQBpv CA== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ggvxmtfxg-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ggvxmtfya-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jun 2022 20:38:28 +0000
+        Mon, 06 Jun 2022 20:38:42 +0000
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 256KF8PG001195;
-        Mon, 6 Jun 2022 20:38:28 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gfwu91cqj-1
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 256KFBbK001327;
+        Mon, 6 Jun 2022 20:38:42 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gfwu91cum-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jun 2022 20:38:28 +0000
+        Mon, 06 Jun 2022 20:38:42 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AIa45NaG5SjyzHadejagKSY9jDkv0quHDQSMkKXIdT1PAIB+DnnD+cR1aGVa3xVC8fquq1PjdSnYB/DHQmDFM9ESeUUHAcJQvxSf5kNjMeEioEiwDrpzD3JuKGpu02NNhAM3Ku6f01tBOR/hP7gQbmwIp2qXarrB2ADPxycKtCyN0kqMLWpWr0yUARS0SwdIiNUFRGZfmzf98CvO/5MGIY4Y14ufzwa7KBcDsnwqWcmW61bmsy7D00jRodXgZjRQR234d5Md1yYsFEQbqNnJUOQUEVv/O6wZx9Np/27bSamKeQJ1fBB4ao8Yr92zJ4gBQjm3m9qBwLG6lK96snHQ7g==
+ b=IF6NHWn7Yw4jNnwkGPf0zw9AAI6jW+r9KUCmOfxx0E3x+TCAD8z60UzffhB5MoD4hapMhlrB9zCowFyJmBiT4/qf2Ns9vOc/Q5mvQhTR24xIv5Lr7r3kAWE4uOGiejFI0wn1O16/LwtpCv6dKgL9O3kPHss6KfAFkkPjYWY+QDrUKMRSGU6ruBeOsJcosymz0BfKRyfceLuRlUqJp+9zsrZTeQw13sX46rna645SUTKZP2spcfFC3vIUvIt5wiuqB3sH/qU1EmwNsEeklAWcK2IECTCv/6q78IjJ+9U/U7LPXAoWDi0ANER9bnAdr/qy3PktS+w7BpLQfz8nC3gxcw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8gpbcHqofa3ZUH2AYI8aFIUjIzCV/nk6Swr3kdhQFQw=;
- b=aN+7BqUBXzVC0/Rvf8A4x9AbXFzTsc4vMUMC8AlAx1mXYYR6p2/knh6mIMnYmFmZ8vYp4yE3WvDY9+lGmg+2/VA0Haf8crOQ4lI6shf3TufveuZ0z4ZCHbTNyrQPl8V/WIyLCh2PsiYcKee3Rgmo8byboy0tKO02+ApKg+YGNr0d7F50pmdchZ3L4WuX2IXhJwKJDl5SYBbGMacsJz08lhpPymTOK1MhqUaJYkDLX7mmeIy9wnvj7cVimvyHroP1kXWNP83n+vr4uZCsV7nLor6hJd4R117RbCSh5VGGIaejj0EI/B6P6ziYoRWdK4dJCl5rQhPWfSro2bpugq8ggw==
+ bh=5msmGPhnYMpzXeIEVJ2L1ZIQB+VFf1s7vKE0VKeA+bU=;
+ b=Qds31ICh0CgIOG7l6WjsXzr1C/gJxdl8/tFsBpjAPWE6/DC0NUvNkMJd7t034uBPAq8K/EaWLqoA/HZl2fahHcica4WkaFUja0f7Q8ThWOiHTJ2vMg0XeugepDCHq43dn6fAiNOD/SLt2sNJphOyEyKnFp898WB/3zQlUb0X1SDSNb5lggmXQq/loZ7SwY00mbzoq2KIjxtbPtKvgl3XSkhhhJl2cR2mRoLr3XarCXXo1xXmacHROAdPF9K7f16R17Ne1ImdWC7j1R5+VG3+SlBI/G447O69NIJeR3WoAZin4R6NeHyW7KrBzOuvNi1lDtiK5/4tdVrc6SOVxl/JtA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8gpbcHqofa3ZUH2AYI8aFIUjIzCV/nk6Swr3kdhQFQw=;
- b=Cfl+OMJVAgMPA88U5YxSf0pNIApj8v59nXdrRh+qA01aYelwfCykCLM5KyfhC60dXJTS454DsTJOvrVuWOWBGfZzdbuSDiBcuFdfK/yjsdvs1BVNLtH8zSlVtWKi5Tepa64vqSE7tBBGAxjpYDALXhrzRZaiSQOSuFoIYwXu2UA=
+ bh=5msmGPhnYMpzXeIEVJ2L1ZIQB+VFf1s7vKE0VKeA+bU=;
+ b=fsZ8L/SRA7Cqa9nXATo3nh/qqiBxRmEJzY3rCQc4ctB0W70cH0OppbEzDSHlG/8/3HU2itnSzCMXUnZO9mEJHSga4M4uRA6smoYxNKb4GNlAnOMykdJjysYM94KhDoGIv1hjf/cGGvWMp/5bUmfbp4//KedeL20bFC+VFSFGAdA=
 Received: from DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19) by
  SN6PR10MB2734.namprd10.prod.outlook.com (2603:10b6:805:41::24) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5314.12; Mon, 6 Jun 2022 20:38:25 +0000
+ 15.20.5314.12; Mon, 6 Jun 2022 20:38:40 +0000
 Received: from DM8PR10MB5416.namprd10.prod.outlook.com
  ([fe80::49dc:6a95:a2d5:fc08]) by DM8PR10MB5416.namprd10.prod.outlook.com
  ([fe80::49dc:6a95:a2d5:fc08%5]) with mapi id 15.20.5314.018; Mon, 6 Jun 2022
- 20:38:25 +0000
+ 20:38:40 +0000
 From:   Ankur Arora <ankur.a.arora@oracle.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
 Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
@@ -70,68 +70,67 @@ Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
         jon.grimm@amd.com, boris.ostrovsky@oracle.com,
         konrad.wilk@oracle.com, joao.m.martins@oracle.com,
         ankur.a.arora@oracle.com
-Subject: [PATCH v3 13/21] clear_page: add generic clear_user_pages_incoherent()
-Date:   Mon,  6 Jun 2022 20:37:17 +0000
-Message-Id: <20220606203725.1313715-9-ankur.a.arora@oracle.com>
+Subject: [PATCH v3 14/21] x86/clear_page: add clear_pages_incoherent()
+Date:   Mon,  6 Jun 2022 20:37:18 +0000
+Message-Id: <20220606203725.1313715-10-ankur.a.arora@oracle.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220606202109.1306034-1-ankur.a.arora@oracle.com>
 References: <20220606202109.1306034-1-ankur.a.arora@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0130.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::15) To DM8PR10MB5416.namprd10.prod.outlook.com
- (2603:10b6:8:3f::19)
+X-ClientProxiedBy: BYAPR01CA0016.prod.exchangelabs.com (2603:10b6:a02:80::29)
+ To DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 428ac945-9487-4c41-ed70-08da47fc8168
+X-MS-Office365-Filtering-Correlation-Id: 700ea80c-dcf1-48e0-d256-08da47fc89ec
 X-MS-TrafficTypeDiagnostic: SN6PR10MB2734:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB2734AFCF5FD9FDB7860CA045CEA29@SN6PR10MB2734.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <SN6PR10MB27346C668977DEC7C77E084ACEA29@SN6PR10MB2734.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GSwNndU3lPthop0EGjapoQ9syHlR7WpYqk/Ng0h99k9e8nUH2R5Ed1V+5QZa3WvOsKMABAjp9eYnHxxlhTFXu+oZyxyzMX91GcahrxK4o5qNHfHZl0doGTC4r/PN42MwyGEb9Mu9P8c+KJ4uozYVfMulzZfx1Zp6vNW5dd1Z0R9mFvleVLQ30hLwM8uyfVB9ontkr1lU0oRsSfB2yWD+U9o2Jrx1F2Mc3KBfrtlU6NbVgP0RET8aphsUBmfHnkaO6HzJNk4l/yTkcdtmpxmm2lLpjMqXxHWYFtK5jZ3C57kDaTtHw0VexEK0se6yB6c+dQdRVDqYfXK6jofQjCYwO9EBL0Hfv2zRS5c0jhOBZbjkOHoM6AcBHk9z1gHNMJCH+NsovxoqS1iHvVcWqBZ8ek43ayR3vjbsPuMR8mu6V7qa8zhOEKDnMFNems/hOmDsF5TPuhyrEXN2+bGk/5NsyOgQ7yWZ7ued1yv4M7A40z9bvhhgDjtM4F1jSeVyVIPPythS6hW1HW6sJ2l/mvg4azgKO/98hrW3gigUinb+a0T0R5R9TKAPi5SAsWArHWqnaxlA0si6CvBTPq3GH1g3/TvS1D75KRHI9Pk/zl7DJx/FbTnvKCByk34IWNSXQ4B8jpWAM6KCc3P1FO4w4tt1v2sN6oJklhlJGSVbt0I0LzjIRDVomGRLGqxeQdZ8Q82N/WBxbmQnbufFBojLXbuKm3QJEkp63QTJSPQCqKpXN1A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(83380400001)(52116002)(4326008)(2906002)(6506007)(1076003)(8676002)(186003)(508600001)(38100700002)(38350700002)(86362001)(6486002)(2616005)(103116003)(6666004)(66556008)(36756003)(107886003)(7416002)(6512007)(26005)(316002)(5660300002)(66946007)(66476007)(41533002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: IkHUdo+6QvnZeOboqCop7CpzCaQl4JIr4UOoKECe+B/xgP6SAkbhm7n+ZQLeAig/nOlb/7E+kbvmAv4osVxP2f+nxdQBDsChp41kNF6/xgo6CvjA29YIpOzpN3ghVu8SP/hb5Hdn3fdY2aL1G+/yrxWfuBR2DcHwsUBwqy62jaHz1QG5OXeTdEPMY6lI0VkHDcdM4XjyS3wDqNp5I44EKhH8s0nOMxXldteDjk7gxOL8NMcl8Q5s184HmWqQnRLax3k23cn4wjSEimmz0d4tO+UAKqUe+J1vwkuJmZpv/5Q8w1kcVDh6+dAb4isIu9Nu1apN+NjBNavwHDGilkfWaf+BO+m826W5UcR7l6UKqfn11SuCHqAnwSyKyzqBjTDVRCVcfz6sKxVQUymokWMnjRnDAwCgudUFV/tLrnqq24pYYPS5Y/YK2Td2ZEGjZKB+ja67M9yshlt5YpZ/IH2E3gDBAY+DahjdK+/TkbPtFTo3PC/xplrxalxT1FVJGCGuhdCec0LQG/rjf9bn4CsqAFjBqn6xH/vWkDxcqc/uNL3lh7EeX6pHge6BioVYHQyddngqVmmBvKwWUKcMT8dADI4N1BmMqy1DINJYcDGl9YkkNQK3VmdnCzVI6OMHApbH63c2DT33rGcfpAjP8+Zg9n+vUrvYaqYOQBIuzHEXPYdwz0jkLskvXuw7vGuIckk+fB84TbJ76RE/t3853sOXCA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(83380400001)(52116002)(4326008)(2906002)(6506007)(1076003)(8676002)(186003)(508600001)(38100700002)(38350700002)(86362001)(6486002)(2616005)(103116003)(6666004)(66556008)(36756003)(107886003)(7416002)(6512007)(26005)(316002)(5660300002)(66946007)(66476007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6lZzxuLLlOn4YNgtqQrxHoEmuDXAyXAfqX3oMwN989b7dCeE5yli9QJpkLud?=
- =?us-ascii?Q?vXyH20EY4f9Wits7T1brB+R11jL2idPaELfT2XlaJRU1PYlZYZej9Ocok/gY?=
- =?us-ascii?Q?r2ZTt1gBUTtpT67dWVoX5wmZyUBskAsiSeP6haidkKYXE0lCyoV8r4BKAkHk?=
- =?us-ascii?Q?ZvXNJpRafsb2eXtefl2eTTGf1oWHUB3HGVkCA5MJppYB8uLAgmZJjg5Fi1tG?=
- =?us-ascii?Q?DeC+sPzKvsOTBPpQachPlgCuCDHrnm+qLPsXYYTNZ5hSzcUvwafNUq8fr8LX?=
- =?us-ascii?Q?UF+7u4MvHEW90C+0m2NbCODvY098mYWM45sMFc0VA3uRuRvnaIRo9CikWUYI?=
- =?us-ascii?Q?ppOMWXSMXKVyh6Hnx0NLWpzCRfurd0mZUamwdUJKu4614Cj6OAM2hSbtuw2/?=
- =?us-ascii?Q?VWrdfdusP2p5lsiCzaiizCg4HTrkg4SgeBDMg4hQ+61UaZKV4SOV17+Ymdrl?=
- =?us-ascii?Q?jQ/qj4GD0cKZN/MaRS7WVVt16MULbpCIrVQDJZxbe8dQ6Wfk8XSiP8YzgE3m?=
- =?us-ascii?Q?IaIDWXT/HY+ZcBzQr8mJW1qJHP8CNKU/1Cujqvt8e1dBhAAiFGh0gS6pF+T3?=
- =?us-ascii?Q?VOKlnfmczOn98Mec072Sq79QOT44AjOP39vPS0XZgV520PNZCLtn0gPipsXC?=
- =?us-ascii?Q?uyGv+r8nsmJn13kfiP249qPRt8+mZyrp+kWq0aAdNn7t7pqVdBeO7fCRTnC4?=
- =?us-ascii?Q?bCKwNcsFmLEC9W3+gZ0ynX1eFqgE5dtTsTaIctQt1pppHdDS+J+UnDJAdNY8?=
- =?us-ascii?Q?8FGWkWU+0ouO9lKCqFEkHo+0M7OvksOGdynYmB0SFWv7rtOkB2+Uv+p7OBom?=
- =?us-ascii?Q?yEhG0um+pp4TXFhpUDk+w/vvbgniHIfQodg6bGvXapn6qvMdW8pexJAz1Gbn?=
- =?us-ascii?Q?X7WHbY2fzK97y0H3pt04L7rzcXMX7d3Y2LGaDdVrcBl1Uk+zj8CR63B+agY0?=
- =?us-ascii?Q?HXr5ORRXJPAhPyYzHw4s2Ew/1cDI4H5/Eyw+h1RigvDReuqmpgW+RmNECtnF?=
- =?us-ascii?Q?yfhEb5WQs7NVuc8SKIbxPuuMRGW4xGPU+cJi/Oj61+FwEQJJNqUbYnpgJ4qr?=
- =?us-ascii?Q?XXTDrefs++eNO7etBeUr0dRGa/lOYTvaNZ2FbkhrIUg9wuPh9xJxB7o/2+wg?=
- =?us-ascii?Q?rc0kP0DADOAs98EZaKWNfVFGUW1MYXtJUjuymFS7weQXX6eOTGV4bfqLk7i9?=
- =?us-ascii?Q?bnEDRyHGKXydiGYD97zPS4bQpCJ9qwsl/xiHiuwGO/H2uEPIs/8p+ZCBImhK?=
- =?us-ascii?Q?lafap1vMzR+Y1WeGv4C1rpBcU0Jts//ASQpUi9dAN0YurzpwlVVeOftkI/6m?=
- =?us-ascii?Q?nVGYBQnYGrh1NNj/LLMwBBCFsWDKpk88ayk8Y0/QOa9SOpl2gisOF7ZINPIy?=
- =?us-ascii?Q?1wAsDhEiv8wepYIaY8YlwTQTdDaVY8Ec4VCqkapwh364TYt5/jdYSmKMWpyu?=
- =?us-ascii?Q?UrEtJzN9hSy/WasM+tK5rW1MIk3k5z4uRGdsqBWCYNFVmxMT0e3e2JceAjtT?=
- =?us-ascii?Q?r+xW8qqKNI6xed9aj7yTRridTtXlFLJTCdFw1hcUtkTudxzy0YgMLLeVV/Z8?=
- =?us-ascii?Q?s6Nps0JYurfWOEOsnXN2XGYj45Q97/SSeDLguggHxF2yqPD6NAQ/sqHQOw8z?=
- =?us-ascii?Q?CFHqaVKs7qIyFwFWFyMgs9nKb4iHIK1Cf7pQ/j0FspFNelQrIg4ds+9Ad7qU?=
- =?us-ascii?Q?Jj3ZnwZg8GhTTKbzp4l5+YEkggG3TxtftqYBWsAFemkqzXa4Hf56oCRkA76m?=
- =?us-ascii?Q?BxzFPFZ5rddU4vZd0kaA5/NsI1ygsQI=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9TUNT//ISlVbLVcWbXI9kQSaU1mig1mW4CthFRIKhVltPigKe71+ialwW5TK?=
+ =?us-ascii?Q?0VDIIwtX80KxJLdJaup9u6SpzCHGkODbXVnrUvvSyd6Lpjz4VviTRY5A0z1Z?=
+ =?us-ascii?Q?U36c5X2s17JJOxLLpWVaVfYTDfTn5YtoitMWHMZa+GzY8jBKu2BUfhPN6+Ks?=
+ =?us-ascii?Q?s9INQcsAmR3dhLym8Zcwm/SH0wKR6Yxoq9Dlw3h4rqLE4cvlaft7VBqBIne1?=
+ =?us-ascii?Q?S/8j5l54qb5FfiNnNE7QVebHrJyHiZTy+dkPV4BPXiSaM5ftOIlV5nIKm1yQ?=
+ =?us-ascii?Q?5ilKCR63P4eK7EBx0y6i9AI9kd24+3I1IPS9QCg7Y8UnIimWbIryoMJIPI4n?=
+ =?us-ascii?Q?+Gbem/LApPMTSfGBBbDYEV/VvpQiq6bwBACyP5T5P1yxazcjKLNjPongGbbQ?=
+ =?us-ascii?Q?j7xj5UpKZjXKgAg4y04La5dWNzwo9Qa4Cj4cxv2lUaGXOKuOB06agyeVtcz0?=
+ =?us-ascii?Q?85tdhj/87PblnC7vv/sR+1zd7ECjGQvEWqcbMnupUiVTsFzFUtW5F2jfcLeX?=
+ =?us-ascii?Q?88W0vZAKqcqdz3dYKKqsql4dzECZlVfGg5tFHHE6AvySDz/f4MHGv+hGzJX9?=
+ =?us-ascii?Q?GZCjWKVnAr2Gu1G+fcgBDJ4C2oy7HMpE88o2mJcDTeUjLQq2DkkZzf2y2JNG?=
+ =?us-ascii?Q?o1/dq2gfOpqLJgmnBuQSyfR3tP3Pzs0D/pbkrLdN+0Tac30U1SqLz21KcuIu?=
+ =?us-ascii?Q?XkU1kjsSRh7y8FNhVOFY7CtGWAr+nrZtYVFQZXL84aN5kbq7blcdlNabG8Ob?=
+ =?us-ascii?Q?TAWk0EvJjzdkEJ4M7s8/kFWEGUfIW3oqRaoryhxH3iQEvoAKLYZzBpGV8s37?=
+ =?us-ascii?Q?/B91P6qCEcp/JuoeafsBkJdwjwhiyQqMJWS2KbitN7e/UFG/12nKqKa51j/k?=
+ =?us-ascii?Q?clZCGJBD3l1M+jUl2DP2ovqC4GIcpgCLl4r+4xEBSC+EKgf/xFp2HiJeYF27?=
+ =?us-ascii?Q?EcFjPJVSwki5FjKIMAsTMLzERd8pyU7tn0/mDLQzficfHnk4sFoQrEPD/hcv?=
+ =?us-ascii?Q?KSTgtbF8SGE/sAMYZPmQts9OcAGHY0dIKthk2kvncy1HAorJI1PX2D3A8ZTX?=
+ =?us-ascii?Q?RC1j7OBN9TZfXN0ZoeNYloOsHJenyu05RsaiqUhg2U5ERFRfHndxHPX7AbeQ?=
+ =?us-ascii?Q?Pbq+NzbSRqXZWNnIc0Y9xrDCkwAgF1r2hIIeKx1aTuC/TaPr2Pvd8KmCBKTM?=
+ =?us-ascii?Q?rCyULVOkDEsnj8FVeK82EqXZhLIXu/YkA6PcUByvHMB4qrWCKcW5m09O67A/?=
+ =?us-ascii?Q?QRB/g+JviODs0Yql0Xbal6IpN9JF5lvc3z2aWnFdcIMl4syY/oMcj0UNuwKy?=
+ =?us-ascii?Q?r0tVWBRm2rOMzhhWJ8MzolSb05xMHyj2mX7djsIM8HbFV5SiPn9my5PGmL2b?=
+ =?us-ascii?Q?1AQaTJriU6hGO0KsfL9HWQ2S8m8NL8sI+QKoX+QHMefynzD9UDRhA747n08j?=
+ =?us-ascii?Q?BLf3R2lmuIiHdzYaTtJQHOIClfAZEViqP/ewn2czsBiVewjpcARiqXA8INvg?=
+ =?us-ascii?Q?CJb18SD3+782yHoQTtD95kVo3W04jaeV+q1S+asQuGs9xI5Qfl8laHK0xakS?=
+ =?us-ascii?Q?LiWTCg9hKeecdU44vKieWXDjpQHkcpSSF80lVNefVHeOX2lATdykjIgdGK47?=
+ =?us-ascii?Q?4ot+hc7+8l91BYBpp3upbsGxpF7aDO0ttHI1n7ALEy5FzLqvwe2bsPAcka4e?=
+ =?us-ascii?Q?PSwibsv7i5D9qqxm9/b9spcWU7OUETE56uXnO+y/hYHV7LK0+q831C2GmEkY?=
+ =?us-ascii?Q?W1le8Tu00cyjnGpVBYmLHDlOtkqe0G0=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 428ac945-9487-4c41-ed70-08da47fc8168
+X-MS-Exchange-CrossTenant-Network-Message-Id: 700ea80c-dcf1-48e0-d256-08da47fc89ec
 X-MS-Exchange-CrossTenant-AuthSource: DM8PR10MB5416.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 20:38:25.6220
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 20:38:39.9863
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7UfeZi4kKIHq24wYNcDqc+nnP/L9mdcmxBB4Z1YQb/HMSOaiCVhgZoNwdMJQLhA8eV9pnhEmz1qzDQO6ujHBBINlhH5tjA6QSpDcMXJfOh4=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Dr5OVaZkqmZfCzObBwp9zC0UUXsCZVstX6w6IiJ33eg5W2MczgQOBSQBl9kIeq2SkOQn78jMYisyPKcQTVpVWBSn54ZgNr3rGvwZFQiX24I=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2734
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
  definitions=2022-06-06_06:2022-06-02,2022-06-06 signatures=0
@@ -139,8 +138,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bu
  malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 phishscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2204290000 definitions=main-2206060081
-X-Proofpoint-GUID: ddmajI0b9RWhluUJBhCtUE6uJti-FrxO
-X-Proofpoint-ORIG-GUID: ddmajI0b9RWhluUJBhCtUE6uJti-FrxO
+X-Proofpoint-GUID: mgRmUiLOFcvQLp-U8vHLaSwJPE3wULpV
+X-Proofpoint-ORIG-GUID: mgRmUiLOFcvQLp-U8vHLaSwJPE3wULpV
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -151,102 +150,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic primitives for clear_user_pages_incoherent() and
-clear_page_make_coherent().
+Expose incoherent clearing primitives (clear_pages_movnt(),
+clear_pages_clzero()) as alternatives via clear_pages_incoherent().
 
-To ensure that callers don't mix accesses to different types
-of address_spaces, annotate clear_user_pages_incoherent()
-as taking an __incoherent pointer as argument.
+Fallback to clear_pages() if, X86_FEATURE_MOVNT_SLOW is set and
+the CPU does not have X86_FEATURE_CLZERO.
 
-Also add clear_user_highpages_incoherent() which either calls
-clear_user_pages_incoherent() or falls back to clear_user_highpages()
+Both these primitives use weakly-ordered stores. To ensure that
+callers don't mix accesses to different types of address_spaces,
+annotate clear_user_pages_incoherent(), and clear_pages_incoherent()
+as taking __incoherent pointers as arguments.
+
+Also add clear_page_make_coherent() which provides the necessary
+store fence to make access to these __incoherent regions safe.
 
 Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 ---
+ arch/x86/include/asm/page.h    | 13 +++++++++++++
+ arch/x86/include/asm/page_64.h | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
-Notes:
-    clear_user_highpages_incoherent() operates on an __incoherent region
-    and expects the caller to call clear_page_make_coherent().
-    
-    It should, however be taking an __incoherent * as argument -- this it
-    does not do because I couldn't see a clean way of doing that with
-    highmem. Suggestions?
-
- include/asm-generic/clear_page.h | 21 +++++++++++++++++++++
- include/linux/highmem.h          | 23 +++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
-
-diff --git a/include/asm-generic/clear_page.h b/include/asm-generic/clear_page.h
-index f827d661519c..0ebff70a60a9 100644
---- a/include/asm-generic/clear_page.h
-+++ b/include/asm-generic/clear_page.h
-@@ -16,6 +16,9 @@
- #if defined(CONFIG_HIGHMEM) && defined(__HAVE_ARCH_CLEAR_USER_PAGES)
- #error CONFIG_HIGHMEM is incompatible with __HAVE_ARCH_CLEAR_USER_PAGES
- #endif
-+#if defined(CONFIG_HIGHMEM) && defined(__HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT)
-+#error CONFIG_HIGHMEM is incompatible with __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT
-+#endif
+diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
+index 045eaab08f43..8fc6cc6759b9 100644
+--- a/arch/x86/include/asm/page.h
++++ b/arch/x86/include/asm/page.h
+@@ -40,6 +40,19 @@ static inline void clear_user_page(void *page, unsigned long vaddr,
+ 	clear_page(page);
+ }
  
- #ifndef __HAVE_ARCH_CLEAR_USER_PAGES
- 
-@@ -41,4 +44,22 @@ static inline void clear_user_pages(void *page, unsigned long vaddr,
- 
- #define ARCH_MAX_CLEAR_PAGES	(1 << ARCH_MAX_CLEAR_PAGES_ORDER)
- 
-+#ifndef __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT
-+#ifndef __ASSEMBLY__
++#ifdef __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT /* x86_64 */
 +/*
-+ * Fallback path (via clear_user_pages()) if the architecture does not
-+ * support incoherent clearing.
++ * clear_pages_incoherent: valid on only __incoherent memory regions.
 + */
 +static inline void clear_user_pages_incoherent(__incoherent void *page,
 +					       unsigned long vaddr,
 +					       struct page *pg,
 +					       unsigned int npages)
 +{
-+	clear_user_pages((__force void *)page, vaddr, pg, npages);
++	clear_pages_incoherent(page, npages);
 +}
-+
-+static inline void clear_page_make_coherent(void) { }
-+#endif /* __ASSEMBLY__ */
 +#endif /* __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT */
 +
- #endif /* __ASM_GENERIC_CLEAR_PAGE_H */
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 08781d7693e7..90179f623c3b 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -231,6 +231,29 @@ static inline void clear_user_highpages(struct page *page, unsigned long vaddr,
+ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
+ 				  struct page *topage)
+ {
+diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+index e8d4698fda65..78417f63f522 100644
+--- a/arch/x86/include/asm/page_64.h
++++ b/arch/x86/include/asm/page_64.h
+@@ -69,6 +69,40 @@ static inline void clear_pages(void *page, unsigned int npages)
+ 			   : "cc", "memory", "rax", "rcx");
  }
- #endif /* __HAVE_ARCH_CLEAR_USER_PAGES */
  
-+#ifdef __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT
-+static inline void clear_user_highpages_incoherent(struct page *page,
-+						   unsigned long vaddr,
-+						   unsigned int npages)
++#define __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT
++/*
++ * clear_pages_incoherent: only allowed on __incoherent memory regions.
++ */
++static inline void clear_pages_incoherent(__incoherent void *page,
++					  unsigned int npages)
 +{
-+	__incoherent void *addr = (__incoherent void *) page_address(page);
-+
-+	clear_user_pages_incoherent(addr, vaddr, page, npages);
++	alternative_call_2(clear_pages_movnt,
++			   clear_pages, X86_FEATURE_MOVNT_SLOW,
++			   clear_pages_clzero, X86_FEATURE_CLZERO,
++			   "=D" (page), "S" ((unsigned long) npages),
++			   "0" (page)
++			   : "cc", "memory", "rax", "rcx");
 +}
-+#else
-+static inline void clear_user_highpages_incoherent(struct page *page,
-+						   unsigned long vaddr,
-+						   unsigned int npages)
++
++/*
++ * clear_page_make_coherent: execute the necessary store fence
++ * after which __incoherent regions can be safely accessed.
++ */
++static inline void clear_page_make_coherent(void)
 +{
 +	/*
-+	 * We fallback to clear_user_highpages() for the CONFIG_HIGHMEM
-+	 * configs.
-+	 * For !CONFIG_HIGHMEM, this will get translated to clear_user_pages().
++	 * Keep the sfence for oldinstr and clzero separate to guard against
++	 * the possibility that a CPU has both X86_FEATURE_MOVNT_SLOW and
++	 * X86_FEATURE_CLZERO.
++	 *
++	 * The alternatives need to be in the same order as the ones
++	 * in clear_pages_incoherent().
 +	 */
-+	clear_user_highpages(page, vaddr, npages);
++	alternative_2("sfence",
++		      "", X86_FEATURE_MOVNT_SLOW,
++		      "sfence", X86_FEATURE_CLZERO);
 +}
-+#endif /* __HAVE_ARCH_CLEAR_USER_PAGES_INCOHERENT */
 +
- #ifndef __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
- /**
-  * alloc_zeroed_user_highpage_movable - Allocate a zeroed HIGHMEM page for a VMA that the caller knows can move
+ void copy_page(void *to, void *from);
+ 
+ #ifdef CONFIG_X86_5LEVEL
 -- 
 2.31.1
 

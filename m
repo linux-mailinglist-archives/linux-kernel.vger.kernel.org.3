@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B146253EA30
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C836D53EAF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239453AbiFFOOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S239477AbiFFOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239441AbiFFOOC (ORCPT
+        with ESMTP id S239424AbiFFOPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:14:02 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1C42C653
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:14:00 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f2bb84f9edso19255555fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:14:00 -0700 (PDT)
+        Mon, 6 Jun 2022 10:15:30 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07412CE0C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:15:27 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id el14so10279617qvb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:15:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digitalocean.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3cP+WhjIMFd4Hbfsr5/ENvdSuimZ1mS+1KHrF7Liuqc=;
-        b=XGYmsxg14M+lK4OHA1hxciUhwAJ4vbhy5fXTMvSsLxpIJjqmBx7/hRJYO1yMWYugvc
-         dAFXKnRxXPCYSHFLunMNMaAUun8iauYkL8M7BQyzkaaP13kHA0dr500XDDeSwe9Eax1s
-         efplhlinjoA7rk4ZAYsJ1mN8Sg+T/HXX0ej60=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HFPPt/n+GC7L3I3lYwZwtJYqMlp4sB7MAQn4ER7tLHE=;
+        b=bVlDY6ViZmyAGO0CMS1dX7jnHLAN3Sjy0yQropvvm2Lr1B3viNAgrF0zZAEHZgkoSo
+         EaaH4Y2EEipZNwnn640gwn71RrUbD614LSM+y1PZDe1Zkcki0fhSR/xKHsq0Z3+0fCzX
+         WYnrxoNDXwCoYtl6E85JwIrgXh5fh4fk0+TblSwMVRst1DKOz5WIhzu/4ZEgyDroh/kY
+         xcRF5hQX6F84RSfKLY4lxsSRJxi/XXw+kxAbFYIxgbj0lIIfzFATBquKuMrKx+NdnJLj
+         jHsdNTXc6h+kjWScy6zNy3mf//Si+wZxFzFN9xubZEcyXBV1HrzL3iD2OVR23CWW8qf8
+         0+4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3cP+WhjIMFd4Hbfsr5/ENvdSuimZ1mS+1KHrF7Liuqc=;
-        b=VtDV4fMeoZ5SXFlLyeJyCTskwcuiXS8AZHuh/gd+fvmfHgo2W/KGqAQHt7DxFMRlro
-         FyRPExgQ3w3L50JzDQld8zzTNOSr6SUwY88RlD7CpPbymodxC/slm58XC7X0elDT4DeT
-         mcQwKlkmef5qADzUVnDdqZmD+LuUgA6/q+mBGdSDNZMUisj1gETMYzptY5waBLyrl8xM
-         axhFAz6jhdUNZBkOJmrCIyT+Ho6SK7IEu5UAJNUwvNyVmHcLlUuG8qehRLvpzmSZPu5x
-         VPmROIf9/+8IyCPk00XA87MaY2+pDupBWOwXwZ146uVVxhIBzMa9O5S2l2wuvlnIalpU
-         g5nQ==
-X-Gm-Message-State: AOAM533ecmx8Ighc06o0dLGEj3lCmtMYk2EVaGLwUBj7iC/+raWWJ0sg
-        0dYAvEYCQSaa69Ge9t1euRhI+g==
-X-Google-Smtp-Source: ABdhPJwLDiM99Fj8vzlM1sfE4CsjrhkLwScaAI2kR8dCZ0qI9jd/XAFsLz6CevfLJnhSXzNCmlp1PA==
-X-Received: by 2002:a05:6870:d192:b0:de:691:81ad with SMTP id a18-20020a056870d19200b000de069181admr30881237oac.165.1654524839943;
-        Mon, 06 Jun 2022 07:13:59 -0700 (PDT)
-Received: from localhost ([2605:a601:ac0f:820:cc11:d018:c11b:3321])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056830000b00b0060bec21ffcdsm3348053otp.22.2022.06.06.07.13.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HFPPt/n+GC7L3I3lYwZwtJYqMlp4sB7MAQn4ER7tLHE=;
+        b=opf0JbaRgzvOWUcyM7f7TUTyyn4TOgkBrUYCilNAzM0HuzAuMroXrH/3FKWtIYEvhN
+         wAmAOlLJaLdh8ktv3EzYRev/c1+8m79yw8YNJ6Y78tCoff4Nu6CrM8i0i2gH4Y5WcAt0
+         GVL11Oq0fuqMclDJ/k+Oy2GkokU2Ax/GajdbzxKecZM/1S3q+3fWd/JJB2XcpIp5PUBU
+         5zfegG3h43XjLj8JNWiP5AP0YxF3HJNY2EHjux2LeqHFst8YRbIzr7y13RUV/vLJcvOn
+         e54vuog+BEzXIq8D+uDf3m13t8v1hOJ0MbWPwIXSoeoeXzF9I1RFOCbfIQ6ZW2P0DLiA
+         a+Fg==
+X-Gm-Message-State: AOAM530VsOIJo1J8He/ewSfUsTWxn4OSFqc+iR8lbDLESkftkgG70ewT
+        vz6iFWUcD3wl2fbY+kUDzPo9Dg==
+X-Google-Smtp-Source: ABdhPJzvOYgaZe9iJDCKBu3RdSOxluQVF2VwpiTpr2nF8YwL/LxLzUTel3SnX3fufJcqp+nCcRWFmg==
+X-Received: by 2002:a05:6214:21eb:b0:464:5c48:4bc8 with SMTP id p11-20020a05621421eb00b004645c484bc8mr17346514qvj.23.1654524926468;
+        Mon, 06 Jun 2022 07:15:26 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id c15-20020a05620a268f00b006a3af1bd183sm10335086qkp.127.2022.06.06.07.15.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 07:13:59 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 09:13:58 -0500
-From:   Seth Forshee <sforshee@digitalocean.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, kvm@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH] entry/kvm: Exit to user mode when TIF_NOTIFY_SIGNAL is
- set
-Message-ID: <Yp4LpgBHjvBEbyeS@do-x1extreme>
-References: <20220504180840.2907296-1-sforshee@digitalocean.com>
+        Mon, 06 Jun 2022 07:15:25 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     jic23@kernel.org
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH 0/2] iio: Implement and utilize register structures for
+Date:   Mon,  6 Jun 2022 10:15:16 -0400
+Message-Id: <cover.1654118389.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504180840.2907296-1-sforshee@digitalocean.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,55 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:08:40PM -0500, Seth Forshee wrote:
-> A livepatch transition may stall indefinitely when a kvm vCPU is heavily
-> loaded. To the host, the vCPU task is a user thread which is spending a
-> very long time in the ioctl(KVM_RUN) syscall. During livepatch
-> transition, set_notify_signal() will be called on such tasks to
-> interrupt the syscall so that the task can be transitioned. This
-> interrupts guest execution, but when xfer_to_guest_mode_work() sees that
-> TIF_NOTIFY_SIGNAL is set but not TIF_SIGPENDING it concludes that an
-> exit to user mode is unnecessary, and guest execution is resumed without
-> transitioning the task for the livepatch.
-> 
-> This handling of TIF_NOTIFY_SIGNAL is incorrect, as set_notify_signal()
-> is expected to break tasks out of interruptible kernel loops and cause
-> them to return to userspace. Change xfer_to_guest_mode_work() to handle
-> TIF_NOTIFY_SIGNAL the same as TIF_SIGPENDING, signaling to the vCPU run
-> loop that an exit to userpsace is needed. Any pending task_work will be
-> run when get_signal() is called from exit_to_user_mode_loop(), so there
-> is no longer any need to run task work from xfer_to_guest_mode_work().
-> 
-> Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+The STX104 and CIO-DAC drivers were updated to use I/O memory accessor
+calls such as ioread8()/iowrite8() in previous patch series [1]. This
+patch series is a continuation of the effort to improve the code
+readability and reduce magic numbers by implementing and utilizing named
+register data structures.
 
-Friendly reminder as it seems like this patch may have been forgotten.
+[1] https://lore.kernel.org/all/cover.1652201921.git.william.gray@linaro.org/
 
-Thanks,
-Seth
+William Breathitt Gray (2):
+  iio: adc: stx104: Implement and utilize register structures
+  iio: dac: cio-dac: Implement and utilize register structures
 
-> ---
->  kernel/entry/kvm.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
-> index 9d09f489b60e..2e0f75bcb7fd 100644
-> --- a/kernel/entry/kvm.c
-> +++ b/kernel/entry/kvm.c
-> @@ -9,12 +9,6 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
->  		int ret;
->  
->  		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
-> -			clear_notify_signal();
-> -			if (task_work_pending(current))
-> -				task_work_run();
-> -		}
-> -
-> -		if (ti_work & _TIF_SIGPENDING) {
->  			kvm_handle_signal_exit(vcpu);
->  			return -EINTR;
->  		}
-> -- 
-> 2.32.0
-> 
+ drivers/iio/adc/stx104.c  | 70 ++++++++++++++++++++++++++-------------
+ drivers/iio/dac/cio-dac.c | 24 +++++++++-----
+ 2 files changed, 63 insertions(+), 31 deletions(-)
+
+
+base-commit: 7fa61f7dba74f6c5baf9f02b760924692acdd282
+-- 
+2.36.1
+

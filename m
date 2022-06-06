@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65F953EC6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6484753EB44
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239203AbiFFNq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S239212AbiFFNqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239054AbiFFNqP (ORCPT
+        with ESMTP id S239180AbiFFNqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:46:15 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAA32462F7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:46:15 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id q1so29073256ejz.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:46:14 -0700 (PDT)
+        Mon, 6 Jun 2022 09:46:18 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD61728D69A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:46:17 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id c2so18896075edf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pqrs.dk; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VYeSg1ZVJyO1wF6nKJrR5sFbD4VG+uA01p3eRJoARxI=;
-        b=BlqD4OrH8ijJBv3g48jIRjkB144fnXNgPgxahFkUUCU2nkV1FJ0YTeVOOj6rlB/vJf
-         0muLJg/FvIipcuViQyVfJPAuh3IjsNCWXVCZnMFqFGgoV6hzjiRXYjmcOTCNR2FKFF9J
-         5FGB682nb6m9sUhEAK/HpPpQJmeLhkUYUJU48=
+        bh=BnPeSuEupDbmGQ7GCHy4it+pAl5TcIPr5v39wk3VDWY=;
+        b=STlEAzxRwWbhrR37+QIghU6zligTbGACIocWguIbaXysVb7dqmW3Z161foAucHd9Fq
+         WNIf8NieYkCmdcGQTS1p1cXcFVxm1KlqCanD4uHpbsnV0AbX8PW+G0J8vmPYJSKHPA6m
+         z+Ou3/2aC6js2qQUDtJnp31U0ToUuhybLK5Qg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VYeSg1ZVJyO1wF6nKJrR5sFbD4VG+uA01p3eRJoARxI=;
-        b=0tfeI5O96j/EwXjfAOL/mt8h61Uc/72S0JzuelMGSvwMqhdFL22LoPrCquEJnL7Wz2
-         sOdGAAAusyvPbAmVAfNaOOcAVJ1NZlsoNPC+VqCqt/nlyQDnWILg62p2JVxst13Qdvy2
-         wTRHLH3xdVWenyES1pn74zob7VHWely3asQ7T23GX+9dTsHLSSHvYu0jqCWeXu1o2MSv
-         EZhXVoEuQT6BomAGEcVwQ5yFHrU3SBwqaWh6KS1OBQAmlBpbmgR0k79RHx4qggE1jxB/
-         PKthZoOIY08SQa8WNFDcSuyWzjgay8OsMwx//RTFtX2XREt7l9Di60F2WgpLLEsLxaop
-         QGAg==
-X-Gm-Message-State: AOAM530N23JDXz13h1UQd5erGD0QbSn3lL+TaxlkEuK9rlh+Th0Uu0yW
-        YujclvoE1+GD44n465J81LJbQw==
-X-Google-Smtp-Source: ABdhPJyfCep4n7xquLlwy7AVxmn0xa/oWVEI+ZOZvyZi6iA+YjNd0eF+CH6vK89MeOD2mZ5kkia2AA==
-X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id nb13-20020a1709071c8d00b006f20eb21cd6mr20960665ejc.568.1654523174637;
-        Mon, 06 Jun 2022 06:46:14 -0700 (PDT)
+        bh=BnPeSuEupDbmGQ7GCHy4it+pAl5TcIPr5v39wk3VDWY=;
+        b=vBKNtzh/ZnEIM+CPEqcbtq4ZLYRduSREVa19P73fyBqPrADcl6yLKXv6ifZ+5IWt30
+         bOzdy+HE17IDzSm2230p0Cgx7a0lHhOZq9QKESxQwqAWLnssf//RB05DQUxgKNkUnmuS
+         6ZcBvBNWEIi6h/zrhBP22rwAGL9ReD3/2059Ws4O13dxl7R+3WchkjBGPs7A5cp+gbVc
+         72mForkd4Dsz/hjeYCetssqXNwPsMtizFCi1OZfoK6CIVoJJsMgLPnr03eb7uc6gyRNY
+         NaVnTQPxeVsDTf+uIy+aqlejy0Cl/5f9ixq8J5qYs/qwc6CrNJDae4f6HLKQh4A93hIN
+         /4LQ==
+X-Gm-Message-State: AOAM532735TqYUaLRVMHa3fxyoHC86iTA7OaqzPt0Hwcy0QGdIYEQSbd
+        Pa2sQmfO3j5TC2TmeRSumHyoTw==
+X-Google-Smtp-Source: ABdhPJzUbpoI88p20ePtUpE/Efbx+rxctOBRmEkVhIGUkdBZ5Jl3JJOTojP18Va0VLSDZe/khPlZFw==
+X-Received: by 2002:a05:6402:1941:b0:413:2822:9c8 with SMTP id f1-20020a056402194100b00413282209c8mr27443321edz.13.1654523176298;
+        Mon, 06 Jun 2022 06:46:16 -0700 (PDT)
 Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id a26-20020a1709062b1a00b006f3ef214db4sm5496538ejg.26.2022.06.06.06.46.13
+        by smtp.gmail.com with ESMTPSA id a26-20020a1709062b1a00b006f3ef214db4sm5496538ejg.26.2022.06.06.06.46.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 06:46:14 -0700 (PDT)
+        Mon, 06 Jun 2022 06:46:15 -0700 (PDT)
 From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
 To:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
         =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
@@ -58,9 +58,9 @@ To:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Russell King <linux@armlinux.org.uk>
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/5] net: dsa: realtek: rtl8365mb: remove port_mask private data member
-Date:   Mon,  6 Jun 2022 15:45:50 +0200
-Message-Id: <20220606134553.2919693-3-alvin@pqrs.dk>
+Subject: [PATCH net-next 3/5] net: dsa: realtek: rtl8365mb: correct the max number of ports
+Date:   Mon,  6 Jun 2022 15:45:51 +0200
+Message-Id: <20220606134553.2919693-4-alvin@pqrs.dk>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220606134553.2919693-1-alvin@pqrs.dk>
 References: <20220606134553.2919693-1-alvin@pqrs.dk>
@@ -78,52 +78,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-There is no real need for this variable: the line change interrupt mask
-is sufficiently masked out when getting linkup_ind and linkdown_ind in
-the interrupt handler.
+The maximum number of ports is actually 11, according to two
+observations:
+
+1. The highest port ID used in the vendor driver is 10. Since port IDs
+   are indexed from 0, and since DSA follows the same numbering system,
+   this means up to 11 ports are to be presumed.
+
+2. The registers with port mask fields always amount to a maximum port
+   mask of 0x7FF, corresponding to a maximum 11 ports.
+
+In view of this, I also deleted the comment.
 
 Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
 ---
- drivers/net/dsa/realtek/rtl8365mb.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/net/dsa/realtek/rtl8365mb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
-index 0cc90e96aab7..c64219271a2b 100644
+index c64219271a2b..392047558656 100644
 --- a/drivers/net/dsa/realtek/rtl8365mb.c
 +++ b/drivers/net/dsa/realtek/rtl8365mb.c
-@@ -564,7 +564,6 @@ struct rtl8365mb_port {
-  * @irq: registered IRQ or zero
-  * @chip_id: chip identifier
-  * @chip_ver: chip silicon revision
-- * @port_mask: mask of all ports
-  * @learn_limit_max: maximum number of L2 addresses the chip can learn
-  * @cpu: CPU tagging and CPU port configuration for this chip
-  * @mib_lock: prevent concurrent reads of MIB counters
-@@ -579,7 +578,6 @@ struct rtl8365mb {
- 	int irq;
- 	u32 chip_id;
- 	u32 chip_ver;
--	u32 port_mask;
- 	u32 learn_limit_max;
- 	struct rtl8365mb_cpu cpu;
- 	struct mutex mib_lock;
-@@ -1540,7 +1538,7 @@ static irqreturn_t rtl8365mb_irq(int irq, void *data)
+@@ -115,8 +115,7 @@
+ #define RTL8365MB_PHYADDRMAX		7
+ #define RTL8365MB_NUM_PHYREGS		32
+ #define RTL8365MB_PHYREGMAX		(RTL8365MB_NUM_PHYREGS - 1)
+-/* RTL8370MB and RTL8310SR, possibly suportable by this driver, have 10 ports */
+-#define RTL8365MB_MAX_NUM_PORTS		10
++#define RTL8365MB_MAX_NUM_PORTS		11
+ #define RTL8365MB_LEARN_LIMIT_MAX	2112
  
- 		linkdown_ind = FIELD_GET(RTL8365MB_PORT_LINKDOWN_IND_MASK, val);
- 
--		line_changes = (linkup_ind | linkdown_ind) & mb->port_mask;
-+		line_changes = linkup_ind | linkdown_ind;
- 	}
- 
- 	if (!line_changes)
-@@ -2029,7 +2027,6 @@ static int rtl8365mb_detect(struct realtek_priv *priv)
- 		mb->priv = priv;
- 		mb->chip_id = chip_id;
- 		mb->chip_ver = chip_ver;
--		mb->port_mask = GENMASK(priv->num_ports - 1, 0);
- 		mb->learn_limit_max = RTL8365MB_LEARN_LIMIT_MAX;
- 		mb->jam_table = rtl8365mb_init_jam_8365mb_vc;
- 		mb->jam_size = ARRAY_SIZE(rtl8365mb_init_jam_8365mb_vc);
+ /* valid for all 6-port or less variants */
 -- 
 2.36.0
 

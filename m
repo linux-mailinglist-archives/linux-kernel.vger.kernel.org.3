@@ -2,317 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0537453E8D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EAC53E6DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiFFKZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S233928AbiFFKZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbiFFKXb (ORCPT
+        with ESMTP id S234032AbiFFKZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:23:31 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F19ACE25
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:23:29 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id u12so28009102eja.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4fC528rYEB+48Rn1G1nDF3sqdpbIgh93bu5dw33pZWc=;
-        b=lIkxI9ub3el5LZsSbt11MryA5NFGSmjCuEc4lVH5mavFbJ+HQl63gfjY8yhEUEcpCk
-         CsCAJSEsMv8ddLTJ284kZ0XYdgVMN6ythE4vuRyBEtVF4cDzf5gqyvcyPhB0eVMHz2o+
-         Xrv64MZ5Ci2ghoqtKmPq7E6jEgMCA41nwWmBmAO2lXvKkdbqwYVZAUv4zaaUQSjVluzr
-         lBlBIqkIc870WLd7CDtuTUlc52LPw68hLUd7AiMEb5vcojbAZGILNJWWVuESnnYXRJV2
-         wye3BEv9t++3wvPMRcf0IfQhKU4IW6nZM4AcI65fu5OMhTurawTaVy1FVPldOhy+3VLn
-         +aCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4fC528rYEB+48Rn1G1nDF3sqdpbIgh93bu5dw33pZWc=;
-        b=Vh3vgLsP5uCvugQCNo4lS85qLOFTHCvDaDXbEPR2agh32imDq1hoERiypVcgRBTd8J
-         kfpU3kmhCV26qrn1MPddJkcKo3nR4SnnqjqzMJ/PWIgNQpTFQYoxokl7TbJa/CJTGjar
-         i+4rrbj91lIqpmFwNSBJ60PV94CaexOIVXu11wWGdojycTbiMwm3sT6JmaMj0AQCgj0S
-         QyiGoFY8akmyrFfR2W76FIh++no8Ahq6d8mqVSXOT25Aqd8fXS5GxxJrOSnkS0UVj7SW
-         XLhicT1sW5oHEnyZhLO+jaW/0YQtys7Xh3xjVWGp4t0dwHwOdJk3+NnFeGDnvqS4TTAz
-         kFOQ==
-X-Gm-Message-State: AOAM530Ii8o2VSaugtzQDRQ597STXpGNiZ1z3dMhJQnr9nhlsRw4rcj6
-        NIhcvVbiNy9g4UHivmV2tg4FqQ==
-X-Google-Smtp-Source: ABdhPJxJV4zEbNNhKx5pPCIohTcPcFDBcwVmuGZ/60/VBMrh+TCuOm/Wpi+s93Bbm/FS4taCh9d6Rg==
-X-Received: by 2002:a17:906:1109:b0:711:d8fe:fe56 with SMTP id h9-20020a170906110900b00711d8fefe56mr850929eja.261.1654511007645;
-        Mon, 06 Jun 2022 03:23:27 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id iy18-20020a170907819200b006fec9cf9237sm5161850ejc.130.2022.06.06.03.23.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 03:23:27 -0700 (PDT)
-Message-ID: <5ddc30ca-df6d-d31d-e500-2faebc0f32f6@linaro.org>
-Date:   Mon, 6 Jun 2022 12:23:26 +0200
-MIME-Version: 1.0
+        Mon, 6 Jun 2022 06:25:19 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2052.outbound.protection.outlook.com [40.107.93.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003772A271
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:25:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BD0aiID4MpqN3q+5CbGiPl7lDNMTPzM4yKJmx3zIztAn+0ln8ZtYECM0qc+0W6lz4JFw6UBEk8l+5iiu7DIS0ZMbt+QaNyd9/p9ZPBKvt9/6ljLWhvNdEuaMGLees/zXKfEd3BXET2A2Yvm896KqAjcYDG2ikk9XvsJd4m5e4dFs5he3ifQlFk8L0vlsuj24Igd+615WJm8GCjaPPgfJfiN+JfC53yj26QcQA0hreiXojYgh19u0eSi54XYk+zrForKueKjzGTTkHQEjrsJC89XN25eXWtvcKAR23s/BdE0qE2Ib2OQdgGjifqpPf4QaVkdC+G76UiByMy/FiLk9FA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JMrgWxohJp65oa53VT+mqRodADyabkwMcjyScjg4zJs=;
+ b=Ymdlxvalc30WsCS6tTjMbnZXszDBnmAAjwPqKXNHAPatcAy3Z+rBNgqcDbXNpprtiIt29LiX7lm4bBJoFjZ3kzxb79ZiaSxZPiik9Zyv8Q1iWZG6bK7Iz7Lnpmg/F2rvkmtBiTdRm6EerUY0LP7ikAAimVqXkqnf8/dGT6k+t6+KetYOvO5c6nhsw8L9E94suKpdrgGBVZ7hteB3m9w9ur6nWHhxfjOSVYZEUbc/blNvxBQeV7PLai/hz183VGnMo5mxeZyOOT1WyEdrKAEmB+xudovicAulB+Fu9Q/gZB2Rl2HqKccf79TxHl2JQLlFzQi7glUl74GgMkcVW0xf4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JMrgWxohJp65oa53VT+mqRodADyabkwMcjyScjg4zJs=;
+ b=uq4MT1w5aCUW06t6FrtRSYzmiTflNauhzNS6XmFZuDX4PBLG6+B20hMPFRY2z1Tr3MKbIbiDqDSsoVLEokOFflRCXY4CiYIUGDLu5c62TZYl6lPAblv10alf0Bw0zN1kcTGjobGsdrLnloTqHtQZHVYbPGV4XBVIr2egPe0SSoM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MN0PR12MB6198.namprd12.prod.outlook.com (2603:10b6:208:3c5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Mon, 6 Jun
+ 2022 10:25:16 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7146:65ee:8fd3:dd03]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7146:65ee:8fd3:dd03%4]) with mapi id 15.20.5314.019; Mon, 6 Jun 2022
+ 10:25:16 +0000
+Message-ID: <a9d69525-04f0-5f75-b7a6-5a09199deb15@amd.com>
+Date:   Mon, 6 Jun 2022 12:25:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
+ Thunderbird/91.9.1
+Subject: Re: (REGRESSION bisected) Re: amdgpu errors (VM fault / GPU fault
+ detected) with 5.19 merge window snapshots
 Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>
-Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>
-References: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
- <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p2>
- <20220603023452epcms2p22b81cfd1ee4866d5a6663c089ded6eac@epcms2p2>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220603023452epcms2p22b81cfd1ee4866d5a6663c089ded6eac@epcms2p2>
-Content-Type: text/plain; charset=UTF-8
+To:     Michal Kubecek <mkubecek@suse.cz>,
+        Alex Deucher <alexdeucher@gmail.com>
+Cc:     "Yang, Philip" <Philip.Yang@amd.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz>
+ <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
+ <CADnq5_Pr-FKfhuXT9DR2rYD=dMfD=+Dfev+CO-xeaPGnhwSQaA@mail.gmail.com>
+ <20220602142254.2ck7dw7u3xlzdnt2@lion.mk-sys.cz>
+ <CADnq5_MiQKX4JA-3xbxGYXKHpJqD0Px1NYSiL6yPeTwseoNVGg@mail.gmail.com>
+ <20220605220055.cshuzyveneu5a4hf@lion.mk-sys.cz>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220605220055.cshuzyveneu5a4hf@lion.mk-sys.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR06CA0506.eurprd06.prod.outlook.com
+ (2603:10a6:20b:49b::29) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 653f477c-b49c-4ef2-d223-08da47a6d934
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6198:EE_
+X-Microsoft-Antispam-PRVS: <MN0PR12MB6198B2AE4EC3402A5DDA17C683A29@MN0PR12MB6198.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rxaAMo8GCuXx+W5cLF5s8w3zFBQ2hQwWUjBFvXfNbNMC3MA3QUEYCdSbztM1VkabcOxCye9A6Qfbyp/krOqht53tijYySi0Q4XEFoBZgkv6j77GitcLhmbqi1Uednb7nTucGVjAvqDCTxyGmgSb7aUBuiHqj18L5E57H4K6SfcpRtb1Ursh/x+U1upUlYFntGnMwJwEl394JrVjnX6DF4Ag3v5oB+uaXqHmuuQvS+vfFSCKIzVKJIVgBnQTqQdmxJNonoh+XBe+mWU+aygbBWhseOuLJg96aMP8sVpZvRb+HHDkKA95VVrdcG7F9Mfu6rMUFerKjz/SMRHM6NVqHDJNYOZUYJWG4dFMPvBtWK2FrG+qrHxNhMcE1lc3ciT0X6UC8Lzt3Qjf14XzEOi3Fh/QlaJunA8DJo+PA1nTVTKmDk5HXRWPrLv9o+nL9+RM3omhOUx/sOKYhpAReHZ7FufT6VM/qIG1UbNUT9gENUSsuZQE7S7TPk/mpVkGHZkyzgRDn3qOyPamPEClz9D0oGlH40r1abECMUCzvQAXtgviDZriR5+wx9voNEI765BwACCBK0FlFOFuw3OVtfKx4Mu5Px2WuulxjoRQif4I1YlrLugSehjPZQ3l5tLGQzPyQbTlNCgFH+5uQKiy3JEC+JDRgan51EKXWmHxxrfihM96tG6brYNrPQZhP+mLMmc2I0hDoY0OwrTPoqETCVXuDIbj6npH2gntKZBARppjxlCxixDXzvjNArxYFToIF+JBR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(8936002)(6666004)(31696002)(2906002)(6486002)(966005)(6512007)(66946007)(86362001)(508600001)(66556008)(8676002)(4326008)(66476007)(2616005)(5660300002)(54906003)(316002)(31686004)(110136005)(36756003)(6506007)(4744005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enZ1cFhQZEkwczFwa2d6RXJSTFBVdlFyQlFYeXY4N0xMaExrangybXAvclFZ?=
+ =?utf-8?B?NGg5RkNISTJNbXJYM2VHek0zL3A5QzVnUC9Mb29QaGlDcXNSdmNjL0dRdE5O?=
+ =?utf-8?B?V3pNVU9DekNWYkc4aEZFYmNWYStoWGpjbStUbFJnbWlqQ2haK3Bnak8zTEdG?=
+ =?utf-8?B?bWlReHhjTE0rQ3FVTHpkVlN2d3R0Rkw0Q0VRMzUzbUZMMjdxVFd2RnlFbXZK?=
+ =?utf-8?B?R2pRT0NFcTMxeGJya2RoTVJPdEtIQm44OHV5NmNCRkNiaTdxd1g4djdiWWxQ?=
+ =?utf-8?B?aEE4RUNUWnNSMjdFbWJHR3RWK2hJWjhnY1RObUZBbmkrTkwrVVV6d2JNVnJD?=
+ =?utf-8?B?a2p1VWZwVUVqLytSczU4K1dJL0xJdVd1T21IazBmRjdlSkl1ZTd4dnVQYUJ6?=
+ =?utf-8?B?cS9CSXpZaVdYUlE4U1BGRDVTcmxablBrVlZWOVQrckxXVkpsekZYdk9GVDkw?=
+ =?utf-8?B?WlVkNGc2SGRCY25FUGQ1WUZiTms4N2RpTDBIVGJnVFZmYjM5Uk5DcUl6TldI?=
+ =?utf-8?B?dzNtRDVHdDA2UTRocVFENXF3cXZ6T3pNVXUrVEJldkVUWHRYczZyVUlybWt3?=
+ =?utf-8?B?RmVkbFdhK2U3Y1RBQXZaYUFLOVlkbTlkdXdzU21ZdHJGMm9WaTNHemdKZmJO?=
+ =?utf-8?B?WVBGUUMxVXhWOFZ1UkRZV002WEx4em1yaXQ4Ti9JRWFVSkhreWlrUWpyaVRn?=
+ =?utf-8?B?MElrTG9VQTVZRVdSeTRjMUxwd05xTmYzZmY3V0VUTmh2WldZTUVuWVZQQ09l?=
+ =?utf-8?B?TDQrbkJ3UU9YN2tlbDRJQkpNb29vaEIvNDk1bU9GRHZiaE8zc2xkMmZWK1FP?=
+ =?utf-8?B?ZnVoWDh3QjcvRzhDZzFFK3NpN0hoQ2h1RHkvZVFkSnJzdGYwd1dybkhuNS9Z?=
+ =?utf-8?B?eHR2blhNcklBcGVhT09KbVppMnk0T0ZMU3ovbDZnVllKeSt6OWdyUFpqaUEv?=
+ =?utf-8?B?WjRiazF0Tkc5R0FzaWhFWlRWOWNSN3hQK01jc1cvRHBQUEJZQXc0TFNNYkMy?=
+ =?utf-8?B?aUNMK1lnMzlCdWNoZlJqdWNZWVNjNkQ1ZUpzNVFNTGpjbFdZQmdwWjdkeXcy?=
+ =?utf-8?B?VWxwNXo3Y1BQSkRRQVo0TTFDVGJGR1hlVmJNc1k2NzdFMXZPT3NXRFcxS3Y5?=
+ =?utf-8?B?c1UzUHVIK3ZtSE15aFNsYVk5TkxnK05uSkY3NG0wZ1g1djdNL0htVGRubTdl?=
+ =?utf-8?B?eFRKZlRhM3dPWkpkS2FKTnErTUl2MDFhUyt3WjlXSHZnYlRLWTBVZitRaWlE?=
+ =?utf-8?B?bjhzamRZdU9md2IrdER4LzJoVUZDaFpRZGd4VWJBeHlFTnA4a29XV1ZDU25t?=
+ =?utf-8?B?cnBGMDNJUmZIRlA5NFVLeUZZZnpMWVZHZCtYbU04ZWFuc0ZiOGQ1RGM0aWJn?=
+ =?utf-8?B?OXRjR3djdC9ObGRiNzYwOElmWDRENGloOXlOM2xnWWo4VU9pQUZFeFZjOGJG?=
+ =?utf-8?B?Mm53bndlSUVIY0s3RTBGZmxPY2pMTXBxdkNPdS9wNEppYmpSNHlSVTFaVWdB?=
+ =?utf-8?B?Q1J6ZDdPZHRCMHZnYmFLa1VOWUZOV3JEK3R3TmtFbkowY1VoTVRYcHRBQkJk?=
+ =?utf-8?B?OGFQVVJZblFJcXdHczg1VG0zSUZvQUswR1pwOG9YTVlGUVM1dzdha1hWazZJ?=
+ =?utf-8?B?VHBQdEVYeDFjcWxPSWp5RitHTzB2MjVyR2VrRVJGTUNzVGE4VURyaFl3Qm5D?=
+ =?utf-8?B?c2ZTN3JWYjhhendXNGk3UjBkTWJhR3ZFNHBhRnk4anBqMXBqeWJ6THJHRUdx?=
+ =?utf-8?B?aWxxclFDYTV6cml0NlJ1cjM2Zyt5QUsrUGN3MDBObEpSOWFDTlFibDEwS29R?=
+ =?utf-8?B?MzFOd2pGS1hockEvWW1URjJwVTA4MkNxLzBHemRySzhONWNUSGYyTnQ5L0ls?=
+ =?utf-8?B?a0xPZ1BHOW1DVlBTTllYQWVWZFQ2MmJlNzRkcnF5c24rcTNKUzc1Zk04ZmQ0?=
+ =?utf-8?B?K0dySGk5YXpRak9BcmY3RHcrMFhneDRCbHF5dm9YRUhqR0JHOEpYcW9QcTRu?=
+ =?utf-8?B?aEFNR2hTVFNXRmFIZzI4MCtEOWg0dGRSVFB1MVBTb0ZnVFh5RFFXaFllYlkz?=
+ =?utf-8?B?emIxZE9mVUJVcUtLOTVnTnF1a2RIaVF5RjZIRG55YjJqR050VDNacUFyS0ZL?=
+ =?utf-8?B?WkRMRmlnTlFXN3NUY3N3aWpmbjQ4UElnYVVsR0pLaGFlYnc5dnZtZDlOenB2?=
+ =?utf-8?B?cXNaWG9xenRqU0VpTlJsMFgrOGZUT3hxVTdYL0V1cG5UcnpQbitRK1lkQ3l4?=
+ =?utf-8?B?KzFYOWIxb09GMnhMcndOZWNpMFhGTXRBWDRpVWlFNEdmQjRYQS84MWhzTHUv?=
+ =?utf-8?B?L1Nab0F1VWdwdGNiOHN4aUMwTVRrd3lJUy9iR3BuVldFQk93WmFjTnpSSnVW?=
+ =?utf-8?Q?77WXK5/Ubx2bR2/28MsxBdkhmU3zqDXvmgoKRe7j7OmHU?=
+X-MS-Exchange-AntiSpam-MessageData-1: yaovGMB8wb3IKw==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 653f477c-b49c-4ef2-d223-08da47a6d934
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 10:25:16.2638
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: laDB6THDHKS0D5dwPspukZJfSmMY7JZoRms2i5ZsQsYA2nAz8VzVFvHpUAUM2jc3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6198
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 04:34, Wangseok Lee wrote:
-> Add support Axis, ARTPEC-8 SoC.
-> ARTPEC-8 is the SoC platform of Axis Communications.
-> This is based on arm64 and support GEN4 & 2lane.
-> This PCIe controller is based on DesignWare Hardware core
-> and uses DesignWare core functions to implement the driver.
-> 
-> changes since v1 :
-> improvement review comment of Krzysztof on driver code.
-> -debug messages for probe or other functions.
-> -Inconsistent coding style (different indentation in structure members).
-> -Inconsistent code (artpec8_pcie_get_subsystem_resources() gets device
->   from pdev and from pci so you have two same pointers;
->   or artpec8_pcie_get_ep_mem_resources() stores dev 
->   as local variable but uses instead pdev->dev).
-> -Not using devm_platform_ioremap_resource().
-> -Printing messages in interrupt handlers.
-> -Several local/static structures or array are not const.
-> 
-> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
-> ---
->  drivers/pci/controller/dwc/Kconfig        |  31 ++
->  drivers/pci/controller/dwc/Makefile       |   1 +
->  drivers/pci/controller/dwc/pcie-artpec8.c | 864 ++++++++++++++++++++++++++++++
->  3 files changed, 896 insertions(+)
->  create mode 100644 drivers/pci/controller/dwc/pcie-artpec8.c
-> 
-> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-> index 62ce3ab..4aa6da8 100644
-> --- a/drivers/pci/controller/dwc/Kconfig
-> +++ b/drivers/pci/controller/dwc/Kconfig
-> @@ -222,6 +222,37 @@ config PCIE_ARTPEC6_EP
->  	  Enables support for the PCIe controller in the ARTPEC-6 SoC to work in
->  	  endpoint mode. This uses the DesignWare core.
->  
-> +config PCIE_ARTPEC8
-> +	bool "Axis ARTPEC-8 PCIe controller"
-> +
-> +config PCIE_ARTPEC8_HOST
-> +	bool "Axis ARTPEC-8 PCIe controller Host Mode"
-> +	depends on ARCH_ARTPEC
+Am 06.06.22 um 00:00 schrieb Michal Kubecek:
+> [SNIP]
+>> This patch should help:
+>> https://patchwork.freedesktop.org/patch/488258/
+> After ~48 hours with this patch, still no apparent issues.
+>
+> Tested-by: Michal Kubecek <mkubecek@suse.cz>
 
-|| COMPILE_TEST
-and test it
+Thanks, this could be optimized for gfx8 a bit if anybody is interested 
+in a typing exercise.
 
-> +	depends on PCI_MSI_IRQ_DOMAIN
-> +	depends on PCI_ENDPOINT
-> +	select PCI_EPF_TEST
-> +	select PCIE_DW_HOST
-> +	select PCIE_ARTPEC8
-> +	help
-> +	  Say 'Y' here to enable support for the PCIe controller in the
-> +	  ARTPEC-8 SoC to work in host mode.
-> +	  This PCIe controller is based on DesignWare Hardware core.
-> +	  And uses DesignWare core functions to implement the driver.
-> +
-> +config PCIE_ARTPEC8_EP
-> +	bool "Axis ARTPEC-8 PCIe controller Endpoint Mode"
-> +	depends on ARCH_ARTPEC
+E.g. we only need the tlb flush when "start" or "end" are not 8 entries 
+aligned on gfx8.
 
-|| COMPILE_TEST
-and test it
+I don't have time to test this, but should be trivial to implement.
 
+Christian.
 
-> +	depends on PCI_ENDPOINT
-> +	depends on PCI_ENDPOINT_CONFIGFS
-> +	select PCI_EPF_TEST
-> +	select PCIE_DW_EP
-> +	select PCIE_ARTPEC8
-> +	help
-> +	  Say 'Y' here to enable support for the PCIe controller in the
-> +	  ARTPEC-8 SoC to work in endpoint mode.
-> +	  This PCIe controller is based on DesignWare Hardware core.
-> +	  And uses DesignWare core functions to implement the driver.
-> +
->  config PCIE_ROCKCHIP_DW_HOST
->  	bool "Rockchip DesignWare PCIe controller"
->  	select PCIE_DW
-> diff --git a/drivers/pci/controller/dwc/Makefile b/drivers/pci/controller/dwc/Makefile
-> index 8ba7b67..b361022 100644
-> --- a/drivers/pci/controller/dwc/Makefile
-> +++ b/drivers/pci/controller/dwc/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_PCIE_TEGRA194) += pcie-tegra194.o
->  obj-$(CONFIG_PCIE_UNIPHIER) += pcie-uniphier.o
->  obj-$(CONFIG_PCIE_UNIPHIER_EP) += pcie-uniphier-ep.o
->  obj-$(CONFIG_PCIE_VISCONTI_HOST) += pcie-visconti.o
-> +obj-$(CONFIG_PCIE_ARTPEC8) += pcie-artpec8.o
+>
+> Michal
 
-This does not look properly ordered. Usually entries should not be added
-at the end.
-
->  
->  # The following drivers are for devices that use the generic ACPI
->  # pci_root.c driver but don't support standard ECAM config access.
-> diff --git a/drivers/pci/controller/dwc/pcie-artpec8.c b/drivers/pci/controller/dwc/pcie-artpec8.c
-> new file mode 100644
-> index 0000000..d9ae9bf
-> --- /dev/null
-> +++ b/drivers/pci/controller/dwc/pcie-artpec8.c
-> @@ -0,0 +1,864 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * PCIe controller driver for Axis ARTPEC-8 SoC
-> + *
-> + * Copyright (C) 2019 Samsung Electronics Co., Ltd.
-> + *		http://www.samsung.com
-> + *
-> + * Author: Jaeho Cho <jaeho79.cho@samsung.com>
-> + * This file is based on driver/pci/controller/dwc/pci-exynos.c
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/module.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/resource.h>
-> +#include <linux/types.h>
-> +#include <linux/phy/phy.h>
-> +
-> +#include "pcie-designware.h"
-> +
-> +#define to_artpec8_pcie(x)	dev_get_drvdata((x)->dev)
-> +
-> +/* Gen3 Control Register */
-> +#define PCIE_GEN3_RELATED_OFF		0x890
-> +/* Disables equilzation feature */
-> +#define PCIE_GEN3_EQUALIZATION_DISABLE	(0x1 << 16)
-> +#define PCIE_GEN3_EQ_PHASE_2_3		(0x1 << 9)
-> +#define PCIE_GEN3_RXEQ_PH01_EN		(0x1 << 12)
-> +#define PCIE_GEN3_RXEQ_RGRDLESS_RXTS	(0x1 << 13)
-> +
-> +#define FAST_LINK_MODE			(7)
-> +
-> +/* PCIe ELBI registers */
-> +#define PCIE_IRQ0_STS			0x000
-> +#define PCIE_IRQ1_STS			0x004
-> +#define PCIE_IRQ2_STS			0x008
-> +#define PCIE_IRQ5_STS			0x00C
-> +#define PCIE_IRQ0_EN			0x010
-> +#define PCIE_IRQ1_EN			0x014
-> +#define PCIE_IRQ2_EN			0x018
-> +#define PCIE_IRQ5_EN			0x01C
-> +#define IRQ_MSI_ENABLE			BIT(20)
-> +#define PCIE_APP_LTSSM_ENABLE		0x054
-> +#define PCIE_ELBI_LTSSM_ENABLE		0x1
-> +#define PCIE_ELBI_CXPL_DEBUG_00_31	0x2C8
-> +#define PCIE_ELBI_CXPL_DEBUG_32_63	0x2CC
-> +#define PCIE_ELBI_SMLH_LINK_UP		BIT(4)
-> +#define PCIE_ARTPEC8_DEVICE_TYPE	0x080
-> +#define DEVICE_TYPE_EP			0x0
-> +#define DEVICE_TYPE_LEG_EP		0x1
-> +#define DEVICE_TYPE_RC			0x4
-> +#define PCIE_ELBI_SLV_AWMISC		0x828
-> +#define PCIE_ELBI_SLV_ARMISC		0x820
-> +#define PCIE_ELBI_SLV_DBI_ENABLE	BIT(21)
-> +#define LTSSM_STATE_MASK		0x3f
-> +#define LTSSM_STATE_L0			0x11
-> +
-> +/* FSYS SYSREG Offsets */
-> +#define FSYS_PCIE_CON			0x424
-> +#define PCIE_PERSTN			BIT(5)
-> +#define FSYS_PCIE_DBI_ADDR_CON		0x428
-> +#define FSYS_PCIE_DBI_ADDR_OVR_CDM	0x00
-> +#define FSYS_PCIE_DBI_ADDR_OVR_SHADOW	0x12
-> +#define FSYS_PCIE_DBI_ADDR_OVR_ATU	0x36
-> +
-> +/* PMU SYSCON Offsets */
-> +#define PMU_SYSCON_PCIE_ISOLATION	0x3200
-> +
-> +/* BUS P/S SYSCON Offsets */
-> +#define BUS_SYSCON_BUS_PATH_ENABLE	0x0
-> +
-> +int artpec8_pcie_dbi_addr_con[] = {
-
-1. I think I pointed before the need to constify everything which is const.
-2. Missing static
-3. definitions of static variables go after type declarations.
-
-> +	FSYS_PCIE_DBI_ADDR_CON
-> +};
-> +
-> +struct artpec8_pcie {
-> +	struct dw_pcie			*pci;
-> +	struct clk			*pipe_clk;
-> +	struct clk			*dbi_clk;
-> +	struct clk			*mstr_clk;
-> +	struct clk			*slv_clk;
-
-Not really...  Just use clk_bulk_api.
-
-> +	const struct artpec8_pcie_pdata	*pdata;
-> +	void __iomem			*elbi_base;
-> +	struct regmap			*sysreg;
-> +	struct regmap			*pmu_syscon;
-> +	struct regmap			*bus_s_syscon;
-> +	struct regmap			*bus_p_syscon;
-> +	enum dw_pcie_device_mode	mode;
-> +	int				link_id;
-> +	/* For Generic PHY Framework */
-
-Skip comment, it's obvious.
-
-> +	struct phy			*phy;
-> +};
-> +
-
-> +	/* fsys sysreg regmap handle */
-> +	artpec8_ctrl->sysreg =
-> +		syscon_regmap_lookup_by_phandle(dev->of_node,
-> +			"samsung,fsys-sysreg");
-
-NAK.
-
-Usage of undocumented properties. Every property must be documented.
-
-Since you do not want to merge it with existing drivers (and more people
-insist on that: https://lore.kernel.org/all/Ym+u9yYrV9mxkyWX@matsya/ ),
-I am actually considering to NAK entire set if you do not post a user of
-this - DTS. Mainly because we cannot verify how does that user look like
-and such changes are sneaked in.
-
-Best regards,
-Krzysztof

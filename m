@@ -2,128 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6470B53E0C8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD7D53E0BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiFFFtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 01:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S229736AbiFFFtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiFFFtN (ORCPT
+        with ESMTP id S229703AbiFFFtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 01:49:13 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FED2CE26;
-        Sun,  5 Jun 2022 22:49:10 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id h23so21642415lfe.4;
-        Sun, 05 Jun 2022 22:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=QsPSmnoDQSspdeB5NQpv+gur6fIi4kTRao6eLgRuaaM=;
-        b=dn8k0YfOtWS3vkhH2Zz5wYis8IFRK0/6wNFKdBIVwfp6QGSMtlIqQVS+0FhLVWIJfs
-         Eq3eiAtpYAgoH+mR0SyhC68qsuvZi7ISj+y9OfTY0dggQbdZCnHWSsf+859U31upP7sQ
-         xifla9pTa6rrk4ALid/lUD4JvEREUODVnEG4soV82LuaDqt8wvicuTSYyoBhLzRTnZqS
-         /AHvwaXRiFQr/zB+ngqYA75pXb9WGpAzTLpUfK092NpbvEOmYidFAQVjgFg9CjRrKjjf
-         921v8M59wRVFfzaERjaMEMuVswVWqug4Q1gwL+GV6nQTSVd44jNRaO/w7jxctITj8WQT
-         N69w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=QsPSmnoDQSspdeB5NQpv+gur6fIi4kTRao6eLgRuaaM=;
-        b=Bd8epFJe964FvrtN0z+hfF8pMq0oNr4VK29Ne+zmzEHO6+ED/SRIGdEVn2sf6QxF00
-         4+m14LHHUc0okMwrzy98XARvKrRIPDCoWCe5R82U+Ti5aX2a5O0dOQxYMuU/Q+rY7zDb
-         H3icW+PBUUhssu+8OhA0D8YOzzTqodwSmRPRdl2y8jyO5E4kkxmSZe+gGRfPITV0GDlu
-         uH/8wodZsKtRxyVNdyQoxfw1xh9CBPV4vAoohSpD8Y/Fr33L20w/8EvIzYxjqOVQ/HWB
-         cvKi5fjKorfCl+5gW6a1occw7k+JePN2l1yKI9ChuSiK6fizHn5RMqkXNsJaKk0N1V3O
-         /HRA==
-X-Gm-Message-State: AOAM532fJ/9D+JgH/HmP/nxwKDVZrtb0DoOzkA8+h4MQQ1b0aPIQAEAW
-        QN2/cqMVJP6NFU6YdPzBx1w=
-X-Google-Smtp-Source: ABdhPJzXPSXO1UB1Ofk63k65l3w0RiwRbD1x75/Fp4Lp9MKzCeFuUD3lINE4c84EolwoJo/MPhIpZg==
-X-Received: by 2002:a05:6512:2242:b0:478:ee3a:460d with SMTP id i2-20020a056512224200b00478ee3a460dmr21937913lfu.493.1654494548633;
-        Sun, 05 Jun 2022 22:49:08 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16ee:fa00::1? (dc73szyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::1])
-        by smtp.gmail.com with ESMTPSA id v18-20020a05651203b200b0047255d211adsm2724456lfp.220.2022.06.05.22.49.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 22:49:07 -0700 (PDT)
-Message-ID: <96a66eab-cb20-71a4-baec-aff80f4cd93e@gmail.com>
-Date:   Mon, 6 Jun 2022 08:49:05 +0300
+        Mon, 6 Jun 2022 01:49:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC972DA8E
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 22:49:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5797E60F9E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:49:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51EE3C385A9;
+        Mon,  6 Jun 2022 05:49:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654494568;
+        bh=bvq1JRPilmHtlKkjFDH6DUlt2t9c+LWSpYiZiLwBmsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=taW66KvRj6AIi30v46IlXtETnYb24uA43Fe6oFUn4ZV8732w13Ica+/dv5tzlWuBJ
+         lHn+x1L4lesdvnTLqVx4yrei5ixU98wzoho/BRqzBgH5bsmK6H75CuB0zrKOsvn2gA
+         4WwEVo34B6KKzydPVGwrZ+vXKbaMa85N9A/fJYOg=
+Date:   Mon, 6 Jun 2022 07:49:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        straube.linux@gmail.com, dan.carpenter@oracle.com,
+        fmdefrancesco@gmail.com, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2 4/4] MAINTAINERS: add myself as r8188eu reviewer
+Message-ID: <Yp2VZkfEv2pemEDi@kroah.com>
+References: <cover.1652993983.git.paskripkin@gmail.com>
+ <7656c9eb3d430524373f4826714f7d205480c3e2.1652993983.git.paskripkin@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Michael Trimarchi <michael@amarulasolutions.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-amarula@amarulasolutions.com
-References: <20220605165703.1565234-1-michael@amarulasolutions.com>
- <20220605165703.1565234-2-michael@amarulasolutions.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [RFC PATCH 1/3] clk: bd718x7: Clean up the code, no functional
- changes
-In-Reply-To: <20220605165703.1565234-2-michael@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7656c9eb3d430524373f4826714f7d205480c3e2.1652993983.git.paskripkin@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/22 19:57, Michael Trimarchi wrote:
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->   drivers/clk/clk-bd718x7.c | 19 ++++++++++---------
->   1 file changed, 10 insertions(+), 9 deletions(-)
+On Fri, May 20, 2022 at 12:10:08AM +0300, Pavel Skripkin wrote:
+> I was reviewing r8188eu patches for a while, but I am missing some of
+> them, since I am not in CC list. I want to be CC'ed to help reviewing
+> and testing more patches.
 > 
-> diff --git a/drivers/clk/clk-bd718x7.c b/drivers/clk/clk-bd718x7.c
-> index ac40b669d60b..04cc0beb67df 100644
-> --- a/drivers/clk/clk-bd718x7.c
-> +++ b/drivers/clk/clk-bd718x7.c
-> @@ -81,27 +81,28 @@ static int bd71837_clk_probe(struct platform_device *pdev)
->   	struct bd718xx_clk *c;
->   	int rval = -ENOMEM;
->   	const char *parent_clk;
-> +	struct device *dev = &pdev->dev;
+> Acked-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+> 
+> Changes since v1:
+> 	- Added Dan's Ack. Thanks to Dan! :)
+> 
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0a635f2ae5b9..bd38a2e465cc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18716,6 +18716,7 @@ F:	drivers/staging/olpc_dcon/
+>  STAGING - REALTEK RTL8188EU DRIVERS
+>  M:	Larry Finger <Larry.Finger@lwfinger.net>
+>  M:	Phillip Potter <phil@philpotter.co.uk>
+> +R:	Pavel Skripkin <paskripkin@gmail.com>
 
-I am not a fan of assigning pointers to struct members to local 
-variables unless they're shortening lines to fit on one row instead of 
-using two. Whenever we add such a variable we hide information. After 
-that being said - in this particular case the device 'dev' points to is 
-quite obvious so I am not completely against the change if other see the 
-value.
+For obvious reasons, I can't take changes like this unless the
+maintainers agree with it.
 
->   	struct device *parent = pdev->dev.parent;
->   	struct clk_init_data init = {
->   		.name = "bd718xx-32k-out",
->   		.ops = &bd71837_clk_ops,
-> +		.num_parents = 1,
+thanks,
 
-I like this. Thanks.
-
->   	};
-
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-Best Regards
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));
+greg k-h

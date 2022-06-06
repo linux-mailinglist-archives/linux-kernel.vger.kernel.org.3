@@ -2,56 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D65553E997
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA1253E740
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbiFFOVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
+        id S239496AbiFFOVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239441AbiFFOVL (ORCPT
+        with ESMTP id S239416AbiFFOVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:21:11 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6620ED78;
-        Mon,  6 Jun 2022 07:21:02 -0700 (PDT)
-X-UUID: cd0c6cd876844e8d97b4e853391e9f5d-20220606
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:9841e478-dbdc-4782-bd99-691bf31b0423,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:18e3c6ad-3171-4dd4-a2d9-73b846daf167,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: cd0c6cd876844e8d97b4e853391e9f5d-20220606
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <mengqi.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1901588414; Mon, 06 Jun 2022 22:20:57 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 6 Jun 2022 22:20:55 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 6 Jun 2022 22:20:55 +0800
-From:   Mengqi Zhang <mengqi.zhang@mediatek.com>
-To:     <chaotian.jing@mediatek.com>, <ulf.hansson@linaro.org>,
-        <matthias.bgg@gmail.com>
-CC:     <linux-mmc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Mengqi Zhang" <mengqi.zhang@mediatek.com>
-Subject: [PATCH] mmc: mediatek: wait dma stop bit reset to 0
-Date:   Mon, 6 Jun 2022 22:20:51 +0800
-Message-ID: <20220606142051.20350-1-mengqi.zhang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Jun 2022 10:21:47 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5158222654A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:21:46 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id v1so18586110ejg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:21:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=opLWEqC00jn82y4owwASw7k3zRYvjzMou2cjWKLBV64=;
+        b=gkHpY3ulU0qVJsCW/7cg5SzAjNDdn7t3avgpO4JqTMDcqwd128gyp/ezfuttq/hmoR
+         aLEzdUBdsdu9XlKb5oqWrctb+KeObzqrZ5blifz3w5ziL2IdUk1HAwIZtGb0nj94jxEo
+         WdDsmtzzAZ//UM7RfSH9d71dAoQNSW5P6aMlc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=opLWEqC00jn82y4owwASw7k3zRYvjzMou2cjWKLBV64=;
+        b=qXUqLlwIijS7vg75VcKOFTdJNFdEaj7Uoh2UNFfRBIE6ayLf85/9mdKMZiKxTFKVpG
+         sSQaDXpEwTAv4NzK0mIsGPOl5Uo8rVkxcYmZK7LFWVzRRjlnUIgg9h61xDy1MDJLJo2g
+         zSEPiZ65aDRzIAPg83i0vp6Ag2FiNUhjzQjAAuNSq29JYqY51yPiQurFRzWTfaR30A2Q
+         axrBA56JQBwz40h90QIPSTRycE47Fq1ohM50eDlpFMeqoonlRqNBhVUmzuRJlO/2/2nD
+         0E1sKG2R+vn4XO8W7+JT6Mr/Eb2lVQbr5pEcUclXXMHmzsnMe08lMoQFIH+GzDRLM7Tm
+         ztHw==
+X-Gm-Message-State: AOAM531CBnDXM08u0mahdoQFj5N5sPkEc5IS+ttQ2YB+criy1wJEFLM9
+        5urCnoszCVwNnaY6+sVl9kaDGYn50IaTuv1Z
+X-Google-Smtp-Source: ABdhPJyLKv92PcYhNBmJ97j10A1uFIPr5keVI8yOE6qBp94oVJuvqS+MWaqBbWH4WzZ0JCLj3yYCZQ==
+X-Received: by 2002:a17:907:1b09:b0:6d8:faa8:4a06 with SMTP id mp9-20020a1709071b0900b006d8faa84a06mr21403792ejc.701.1654525304650;
+        Mon, 06 Jun 2022 07:21:44 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id kl10-20020a170907994a00b006fec69a3978sm6396244ejc.207.2022.06.06.07.21.39
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 07:21:42 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso7998288wmr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:21:39 -0700 (PDT)
+X-Received: by 2002:a05:600c:591:b0:39c:4544:b814 with SMTP id
+ o17-20020a05600c059100b0039c4544b814mr12815954wmd.118.1654525298761; Mon, 06
+ Jun 2022 07:21:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-2-hsinyi@chromium.org>
+In-Reply-To: <20220606044720.945964-2-hsinyi@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 6 Jun 2022 07:21:26 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V7FmkJyyXr4C6jy9-hOhnzgoo=g5tx_3z3rnCCC40Exg@mail.gmail.com>
+Message-ID: <CAD=FV=V7FmkJyyXr4C6jy9-hOhnzgoo=g5tx_3z3rnCCC40Exg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] drm/panel: Add an API drm_panel_get_orientation()
+ to return panel orientation
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,55 +91,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MediaTek IP requires that after dma stop, it need to wait this dma stop
-bit auto-reset to 0. When bus is in high loading state, it will take a
-while for the dma stop complete. If there is no waiting operation here,
-when program runs to clear fifo and reset, bus will hang.
+Hi,
 
-In addition, there should be no return in msdc_data_xfer_next, because no
-matter what error occurs here, it should continue to excute to the
-following mmc_request_done. Otherwise the core layer may wait complete
-forever.
+On Sun, Jun 5, 2022 at 9:47 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> Panels usually call drm_connector_set_panel_orientation(), which is
+> later than drm/kms driver calling drm_dev_register(). This leads to a
+> WARN().
+>
+> The orientation property is known earlier. For example, some panels
+> parse the property through device tree during probe.
+>
+> Add an API to return the property from panel to drm/kms driver, so the
+> drivers are able to call drm_connector_set_panel_orientation() before
+> drm_dev_register().
+>
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> v2->v3: no change
+> ---
+>  drivers/gpu/drm/drm_panel.c |  8 ++++++++
+>  include/drm/drm_panel.h     | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
+> index f634371c717a..4a512ca80673 100644
+> --- a/drivers/gpu/drm/drm_panel.c
+> +++ b/drivers/gpu/drm/drm_panel.c
+> @@ -223,6 +223,14 @@ int drm_panel_get_modes(struct drm_panel *panel,
+>  }
+>  EXPORT_SYMBOL(drm_panel_get_modes);
+>
+> +enum drm_panel_orientation drm_panel_get_orientation(struct drm_panel *panel)
+> +{
+> +       if (panel && panel->funcs && panel->funcs->get_orientation)
+> +               return panel->funcs->get_orientation(panel);
+> +
+> +       return DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
+> +}
+> +EXPORT_SYMBOL(drm_panel_get_orientation);
+>  #ifdef CONFIG_OF
 
-Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
----
- drivers/mmc/host/mtk-sd.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+nit: there used to be a blank line before the #ifdef but there no
+longer is after your patch.
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 195dc897188b..c925f45786c2 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1385,12 +1385,15 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
- 		sdr_set_field(host->base + MSDC_DMA_CTRL, MSDC_DMA_CTRL_STOP,
- 				1);
- 
-+		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CTRL, val,
-+						!(val & MSDC_DMA_CTRL_STOP), 1, 20000);
-+		if (ret)
-+			dev_dbg(host->dev, "DMA stop timed out\n");
-+
- 		ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CFG, val,
- 						!(val & MSDC_DMA_CFG_STS), 1, 20000);
--		if (ret) {
--			dev_dbg(host->dev, "DMA stop timed out\n");
--			return false;
--		}
-+		if (ret)
-+			dev_dbg(host->dev, "DMA inactive timed out\n");
- 
- 		sdr_clr_bits(host->base + MSDC_INTEN, data_ints_mask);
- 		dev_dbg(host->dev, "DMA stop\n");
-@@ -2416,6 +2419,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
- 	if (recovery) {
- 		sdr_set_field(host->base + MSDC_DMA_CTRL,
- 			      MSDC_DMA_CTRL_STOP, 1);
-+		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
-+			!(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
-+			return;
- 		if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
- 			!(val & MSDC_DMA_CFG_STS), 1, 3000)))
- 			return;
--- 
-2.25.1
+Other than that...
 
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

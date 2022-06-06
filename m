@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AE853E354
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C509853E390
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiFFHY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S230429AbiFFHY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiFFHYZ (ORCPT
+        with ESMTP id S230381AbiFFHYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 03:24:25 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31B31A800
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:24:24 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so17133017pjl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 00:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pMfut4LPsHaQl9oSY0zIbRD7TwaINdF2fCPCCoRTmzk=;
-        b=Jl/v7UQ2V39aHQrh/Am7iP+T7NGe3QacYFlH0Ig4qdL5AiB+Dp+T229S4wFwZMPQ6a
-         xzAAgpFGOeVLZ775zebxoG+K4mBQu7CS7y83DrBE9t+waNPQ60EwDUxoWJ83nlU6/5t+
-         T3zL8AGrm6DrgAEMGw4ekxZLj1CTAdOkoGi6M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pMfut4LPsHaQl9oSY0zIbRD7TwaINdF2fCPCCoRTmzk=;
-        b=WlzusR873e+D3yMtE89vwTj09ov4NSS1OpNfvTjKqXv2X+Zd/PLp7ajuhLln8hKk35
-         m6bD/ZX3Cm5vUPZj31VGk7w0yD/ViPNQL21RyuixDibuhG4uPvFtd2rCXZnKBM5X9bUI
-         saAiB+20oDTBl6siA0KdQJnjxk99o9B3Jmj1Pz+g1DjQiZDNmvoyLGz8ufss+SIh5cAY
-         golcQw3nUSMz+HBV/RgFVJcQ2O/ChyElaaJeS6kNwEfCaVFM5aewoENE6A1Z0hMoD0oP
-         mw1DWkCp4kiNeN8iUS23PUnp4j3AHLXAs0fwHpPPQzTxThcfPqBDe2X3E2RvoCob+/0N
-         SMmA==
-X-Gm-Message-State: AOAM531WtiTS2sAtzH949k6c5PWZzotwwpK5Fy57aw8CZZfrmBARvahO
-        D3A/9wZ1D+LYzSrBI6gSrv8JvQ==
-X-Google-Smtp-Source: ABdhPJwIbAPZl7VVoUAdeTLq7nntvE3YRj01MWcFW6M6bKPiVfbIr2+NrNIRF094+iw89O8FMIWWZg==
-X-Received: by 2002:a17:902:7202:b0:167:6548:3f3e with SMTP id ba2-20020a170902720200b0016765483f3emr10255212plb.98.1654500264178;
-        Mon, 06 Jun 2022 00:24:24 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:e921:a124:f7a6:a292])
-        by smtp.gmail.com with ESMTPSA id o20-20020a635d54000000b003fae8a7e3e5sm9802731pgm.91.2022.06.06.00.24.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 00:24:23 -0700 (PDT)
-From:   Pin-Yen Lin <treapking@chromium.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Allen Chen <allen.chen@ite.com.tw>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/bridge: it6505: Power off downstream device in .atomic_enable
-Date:   Mon,  6 Jun 2022 15:24:17 +0800
-Message-Id: <20220606072417.328354-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+        Mon, 6 Jun 2022 03:24:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615F31AF16
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654500292; x=1686036292;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xNNv8f5KLFlwE8E16qBiInBjz2utO9UckXry2wUB1oc=;
+  b=W096bTZK6adSx4Fy1Zg0nkqhm1yjBOU76u90E+cYBep6CEhgFMWK9uZ1
+   EK1OEo1U/obOC+7X/CZJc3lZIYeUNcwKn24jqQKa7RtwThYmzA/ivq4VM
+   DhD9sXlc7YpcbWOfl2cZMsP3yP1rC6P7lNG2SLtmsss19JRm7sR1HHY+H
+   qRqmkloh1/2sZFSeBPp72GG/VkuYaTYzZZekIoHMdKY6DAaQll47IoHba
+   nYxLG3Tbsg2O8Bqje+DtXx5ao9XtFcihmQOv2LCM2XKvISd1ivPi3RXaU
+   kA7sZlwMjoKk41heCB9UOCAXmQo1ajJJXpkv3CJseujVrlp9VplEov97N
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="275411503"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="275411503"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 00:24:52 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="635461994"
+Received: from xingguom-mobl.ccr.corp.intel.com ([10.254.213.116])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 00:24:43 -0700
+Message-ID: <11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com>
+Subject: Re: [PATCH v5 9/9] mm/demotion: Update node_is_toptier to work with
+ memory tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Mon, 06 Jun 2022 15:24:38 +0800
+In-Reply-To: <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+         <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
+         <6e94b7e2a6192e4cacba1db3676b5b5cf9b98eac.camel@intel.com>
+         <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +79,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Power off the downstream device in .atomic_enable callback, so the
-external display shows up again after changing resolution.
+On Mon, 2022-06-06 at 09:22 +0530, Aneesh Kumar K V wrote:
+> On 6/6/22 8:41 AM, Ying Huang wrote:
+> > On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+> > > With memory tiers support we can have memory on NUMA nodes
+> > > in the top tier from which we want to avoid promotion tracking NUMA
+> > > faults. Update node_is_toptier to work with memory tiers. To
+> > > avoid taking locks, a nodemask is maintained for all demotion
+> > > targets. All NUMA nodes are by default top tier nodes and as
+> > > we add new lower memory tiers NUMA nodes get added to the
+> > > demotion targets thereby moving them out of the top tier.
+> > 
+> > Check the usage of node_is_toptier(),
+> > 
+> > - migrate_misplaced_page()
+> >    node_is_toptier() is used to check whether migration is a promotion.
+> > We can avoid to use it.  Just compare the rank of the nodes.
+> > 
+> > - change_pte_range() and change_huge_pmd()
+> >    node_is_toptier() is used to avoid scanning fast memory (DRAM) pages
+> > for promotion.  So I think we should change the name to node_is_fast()
+> > as follows,
+> > 
+> > static inline bool node_is_fast(int node)
+> > {
+> > 	return NODE_DATA(node)->mt_rank >= MEMORY_RANK_DRAM;
+> > }
+> > 
+> 
+> But that gives special meaning to MEMORY_RANK_DRAM. As detailed in other 
+> patches, absolute value of rank doesn't carry any meaning. It is only
+> the relative value w.r.t other memory tiers that decide whether it is 
+> fast or not. Agreed by default memory tiers get built with 
+> MEMORY_RANK_DRAM. But userspace can change the rank value of 'memtier1' 
+> Hence to determine a node is consisting of fast memory is essentially 
+> figuring out whether node is the top most tier in memory hierarchy and 
+> not just the memory tier rank value is >= MEMORY_RANK_DRAM?
 
-Fixes: 46ca7da7f1e8 ("drm/bridge: it6505: Send DPCD SET_POWER to downstream")
+In a system with 3 tiers,
 
-Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
----
+HBM	0
+DRAM	1
+PMEM	2
 
- drivers/gpu/drm/bridge/ite-it6505.c | 3 +++
- 1 file changed, 3 insertions(+)
+In your implementation, only HBM will be considered fast.  But what we
+need is to consider both HBM and DRAM fast.  Because we use NUMA
+balancing to promote PMEM pages to DRAM.  It's unnecessary to scan HBM
+and DRAM pages for that.  And there're no requirements to promote DRAM
+pages to HBM with NUMA balancing.
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 4b673c4792d7..e5626035f311 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -2945,6 +2945,9 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
- 	if (ret)
- 		dev_err(dev, "Failed to setup AVI infoframe: %d", ret);
- 
-+	it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
-+				     DP_SET_POWER_D0);
-+
- 	it6505_update_video_parameter(it6505, mode);
- 
- 	ret = it6505_send_video_infoframe(it6505, &frame);
--- 
-2.36.1.255.ge46751e96f-goog
+I can understand that the memory tiers are more dynamic now.  For
+requirements of NUMA balancing, we need the lowest memory tier (rank)
+where there's at least one node with CPU.  The nodes in it and the
+higher tiers will be considered fast. 
+
+
+Best Regards,
+Huang, Ying
 

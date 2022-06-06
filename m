@@ -2,148 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8828253E2D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553F553E221
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbiFFISF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 04:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
+        id S231649AbiFFISs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 04:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiFFISD (ORCPT
+        with ESMTP id S231640AbiFFISq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 04:18:03 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2040.outbound.protection.outlook.com [40.107.95.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79914D243;
-        Mon,  6 Jun 2022 01:18:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bl0L+dVOxvu+i9zElgIC6htzdlD8QShO0Ln/xz884lUrwFpOrYuI0b1jXTPxhiOnWCg7CRF5jYsA7/oUgXvplyWoHhgFoBqyckbRBasumGC4KHcxT5/VRQ+qOJC12ZSS5ScxHK9sJ3Tj39Dh+hvs8oc48ay6cUIbeWgLDzfmHNa8gdkJwQVlnWSFC5IhtbFd8my4ycHRV6dkQ8IGcx4Jl2nIFxDAi/zeIr1dXFAPOCbFLYAHLt+g7kx+zD1wNds2HluvrBJ+iAaEOvHF/AcrTFNxl0AwjB+h9Ckwv+tgDoCAvjGvlymXhpEK5zci0J5zsF71+VTkfN4V4gkLiMWShA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cGXKcMlsvkGPR7qh7EoU9l3P0Ro25S80vVxETCM9I6k=;
- b=i+PKHjdG5OQz+2vcHfRKAnkjwyocAPDFNIubDhI1+vtViJBmp3PHz2CpEXOIgDlQ6fR8N7qYYy0HicbV0aTXY4H9jDd135RehG68tMrtKqMoazjDd0shdyOoR9X37LswaSucSF68vCE7s/a/rEm603fYN2U696UNgZ/cZuEXGY8yGQfuhbKESrE9iZs9rGRFk+Pe915KoOZL3yXFiad5opZP07r9njzoMXS2mCQaF4Ix3DQjTbRVLhJV4IoLbFCsem/K1C47mu4KQQeqktwtxuh4pzC2wrCiPT/3OPJp+teAvjpB1pN3MVeMY9OtRt5v/RMOo2T9ysPi/r9ywGASrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cGXKcMlsvkGPR7qh7EoU9l3P0Ro25S80vVxETCM9I6k=;
- b=lsy25EGnocmjPS0OToSWvcLTGHhyVCJSIlyzdfzzdqZOGhYRe+5/6CU1u5Ub0XIxO1jr4P9WDY59CwwpuGdzF7hAMMr4OG1JZJtENP7iS9XxCRUpAcgA/WskKNfyTCSwcwzN4jW8sxrT85UVhb6xEtSTCcLTf8ej0eKZltbVNSycEPdakvV4HyxnkuX5ic0JbhW8Qq5A05MRypgE1vJ/KrLmBp55zGbWnFlhNp+lNbhGdduvYSEjrmJ62VMyMJGDIRarayRb0aWg7wAz3XuBVwBmpbu+wo2UzA4oK/kK2yrf6j7cr38GAxrVnErM8XtFaMb753P24pKfQfkUuZm/eg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY4PR12MB1576.namprd12.prod.outlook.com (2603:10b6:910:10::9)
- by MN0PR12MB6127.namprd12.prod.outlook.com (2603:10b6:208:3c5::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Mon, 6 Jun
- 2022 08:18:00 +0000
-Received: from CY4PR12MB1576.namprd12.prod.outlook.com
- ([fe80::16b:eff7:847b:19e7]) by CY4PR12MB1576.namprd12.prod.outlook.com
- ([fe80::16b:eff7:847b:19e7%10]) with mapi id 15.20.5314.019; Mon, 6 Jun 2022
- 08:18:00 +0000
-Message-ID: <b70e024b-4f80-16b9-4bbe-ed8a24a384df@nvidia.com>
-Date:   Mon, 6 Jun 2022 13:47:48 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 1/6] ASoC: tegra: Add binding doc for OPE module
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        perex@perex.cz, tiwai@suse.com, jonathanh@nvidia.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1654238172-16293-1-git-send-email-spujar@nvidia.com>
- <1654238172-16293-2-git-send-email-spujar@nvidia.com>
- <20220603203003.GA852734-robh@kernel.org>
-From:   Sameer Pujar <spujar@nvidia.com>
-In-Reply-To: <20220603203003.GA852734-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0067.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:ad::13) To CY4PR12MB1576.namprd12.prod.outlook.com
- (2603:10b6:910:10::9)
+        Mon, 6 Jun 2022 04:18:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7155663387
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 01:18:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0917711FB;
+        Mon,  6 Jun 2022 01:18:41 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A2383F66F;
+        Mon,  6 Jun 2022 01:18:39 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 09:18:33 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Peter Hilber <peter.hilber@opensynergy.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com
+Subject: Re: [PATCH 15/22] firmware: arm_scmi: Add SCMIv3.1
+ SENSOR_AXIS_NAME_GET support
+Message-ID: <Yp24WY3xlQuUa59A@e120937-lin>
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-16-cristian.marussi@arm.com>
+ <d523569d-2470-3e01-c407-d6e723c7d0c1@opensynergy.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 86460810-abd1-4fbd-63a1-08da47951198
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6127:EE_
-X-Microsoft-Antispam-PRVS: <MN0PR12MB6127694EF436C789F8E0B56EA7A29@MN0PR12MB6127.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Lw5a1Xxe23rRr8NRFrhOCxxmluRvwOSxBcNybbRYcTQgXcFcc/bLo6AXJGg3Jv06QSkLSuA1V0dX+Ws7JDehz3Vx+Tt+XarYEoQDurdyZRRxKwvs375pUN601mY4j/l27QYtD55/UVxnmatn3HTxWc4whtEMMg/b9rsSS0LT6WrA6Y/ltMfGa8HkQgbN4/TGbqQWosPkDCoG0tykBpn0TR5fFWSFMrcw/ZpKKV/FSJ0qEBJBd6g0EI09KXqGtM8ujIRhaPXaeJ9Jr5r8y9jwO+QSU257pJ0UQgt3XfzOgGTpXy0JJ4rl5twRfuUrCCu/inYkO6XuZT2X3K9su7hj0Nrjr3VlESiA+ApzRZEKsYfuOxxSkZ17WvjJ6OyseY5IdJJz+utoHxpGJXOjlP3ZClAIzv9BcPVNrfv5dYR2O5ttbvfA6EpA/tm6jTZofR6ADIdGXyQ3jbkiG4VcmTM11xR0J/S9Yq32ETn7Po/BiIsVuRDmgfdKIVTRWKDLz1ky58xvKdwDDxM3VXVPVwSeXXZEYfGSUIhnEwLR0JjK5a7wfbAsmWScgUn/Mf6lGeGEA4dbQr+WE354QaYAzU5UQZYd38RRZ9aqXA/0Cexw1L2Vj0jgKaUQ+EDIAstQGA012EVQSo5p9J0Q4ZD8WcPU0NjhUtZr3pFB98UFuVHjimffXqfK2rwp1A0+2GDveNmSzhTU0hNeEdQCgKJr3hl76BaPCMKd6U+fAiFGoVq5lbc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1576.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(31696002)(66476007)(86362001)(6486002)(186003)(66556008)(66946007)(6506007)(6666004)(8676002)(4326008)(53546011)(38100700002)(6916009)(8936002)(36756003)(31686004)(508600001)(83380400001)(6512007)(7416002)(2616005)(2906002)(26005)(5660300002)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWV4eENPNTZiZ3p0dEIxVHVQSVVXaDZhbkppd1FiQSthN3ozV01WRThBUTg3?=
- =?utf-8?B?RnR3cjV3VHJ5ZFBzOStEb0FubWkyTlRZQ2ZFUVVqRnRDRjM0MFZBcnlOUUNX?=
- =?utf-8?B?K3hzOTJwekl0dDF2VGJOc1hUNmlmVVA3SFJ6OGJlSUhDdFNDVThNSUFORVdj?=
- =?utf-8?B?SW9xS01VR0QyVEdTUTcrL1NzaDRGYktFOU02dGJ1Z2l3K0Vjb1VlQmZ3WlVh?=
- =?utf-8?B?RTZyNUI3OEszRVZ1TFBJYjBxZmFocFBrSVl5SUdoWmhIZ2E1UTRzdVBOQVBS?=
- =?utf-8?B?ZjB5UmZ0dE9wQjZUbDZ5UktGS08zamZHY291S0w0TGNPWlFkQkw4Z3RWUnNT?=
- =?utf-8?B?eU5LT0xzR01FQUtQRktndlpFVkhBcjdXYVlLSnpiWXdMYVVOaXNlRkFGMmFk?=
- =?utf-8?B?RCtzTG0wMnFvekZnbEVCY3ZMWkhKTXc1NDJ6ZHBwM2lPK2pyT2ppVXJ2ci9J?=
- =?utf-8?B?U01CdWZmTW02OEJpL2prb3IvdFprdXRYRXhZalBybUx2UUZlek12aXp1ZHFB?=
- =?utf-8?B?QVM2VVkvaGNPSllVb3BpUGxmeXdJZ1FER28xQi9SYTJNV2hYYU1TVTRoUXhH?=
- =?utf-8?B?RzNnZVdndFNDQU9zWDJsSk9PVk9ndGticngxQmNXYmdaV3R0Sm4yK0VXK3Mz?=
- =?utf-8?B?WmNuNFRRYjdaOEV1VEpIMHdMRG9rQ2lQSHVBM1ZtUDllN3duUTRuTzNEc3hO?=
- =?utf-8?B?TDFDenozZ3NsZ201cEJwVFZ4eDJSSkU1YVdSS2pMOXhKQUZTZ1NPMDBiNnN2?=
- =?utf-8?B?YjBrS1JBSTVTVlJmUmtGRUhwK3doTFkxcUFsenhvd2JCZWEvRC9aeVhlOE8y?=
- =?utf-8?B?TlJTdGswRTdsaTVHTnB6TmpQT0RoVmZ6bzNUTWlkaFdxL2pIMjR6MGh5Y2t2?=
- =?utf-8?B?ZWpoV1ZpV3FKT0dMd0M0ZzhsQ2tQbDd1YkJUTEVkbmdOSVR3Qjh2UFJHVlJ0?=
- =?utf-8?B?byswSC9JMzVkQmJDVGlhNVZSNkhhY3ZUaWtUUHVLSXdGYVRYcHB5WEpxTkFa?=
- =?utf-8?B?N05XWjllN1dnYjB2ZlNFMnk5ZjVYRkhZZ0c3SUs3TE1mM2FSRHpaZUR4R2JC?=
- =?utf-8?B?eDRvVUo2aWVlbmhWZkxuZGV1WWRGbEpaTUtwdlhKeU1ha2N0Ukh0WStGRkhl?=
- =?utf-8?B?MjFZdlBQV0tpNVJtUWpxRHhTWU9BbnN4dGk5dWxkNnlaSTJHUkkxT2xDQ3l3?=
- =?utf-8?B?WmlENExnbXdweTZiNHk2ZmFJaEZmTjhCVitjMU5XaHd1Rk1tUHpYdUJramVu?=
- =?utf-8?B?UFlEaGRkWkN5Ryt2VnpYY3dTNVZweERtNUFNVytRa2hKbDVkaEJMRURpcU9w?=
- =?utf-8?B?dFRMdFhQUmZXUmlmNGRxbmQxOGJpQStydmErZXFDNDRmRUFXN1ZpU0NIRHBo?=
- =?utf-8?B?bmdxb1JJMUkvNzlxQkMxai9DQUZpWk5TczZ6ZXdvOUU5d3ZjSHQxdlBhMkY3?=
- =?utf-8?B?ZGZLL1lIMHJoc01lVGxLQzdWbWVNekc1K2VZY2lUc0lVaVFzN0tPWFRXaUF4?=
- =?utf-8?B?N3I5TEM5c00rdWF1dnZZNHJ4Z29NemNybG83Y0trSkFqY05iZ2VKSGIyZ3V5?=
- =?utf-8?B?aXVZNHRTckxCVzE5aTB3ejF4cW5nN3BtaXdCdk41cW1sSkRKWFVlTC83azR3?=
- =?utf-8?B?T2Y3Rzk5RXVNMlZrMitMS0hkbkwxNThEaDBhNHRMeTNhekNWTDNnR0gzb3BI?=
- =?utf-8?B?Q2Npc1BZbmtaSE1RTUxvM0dKWXhDV1pTQldDN1NDUzZZeHNEdGViK3pvSm9M?=
- =?utf-8?B?dlhVMjRSYS9nd1ZLTGtsaUU3OEx0UEF3ZXpWZEFrQ2ovWXlUUFFnSlErRWd2?=
- =?utf-8?B?eCtSZ005UEN0Mm5YQTFnb3IxV2hEMThkNDBBZDMvOFFMSUErSGcwZWdOak9O?=
- =?utf-8?B?K0crbHB2NHRHVFU0NXJNRFVnaUsyMUFxVzkzWitqWXAzSUFEekl3c2x0cnZm?=
- =?utf-8?B?ejhWb3VORkdaRVJmZk9XZkxkNTFEUUtYRDg2dnl4V3ByNk1QeDNPY2lUY240?=
- =?utf-8?B?U1NrV3Y2aWh6ZS9pNW05NVUyaHRGYjNjSERzS1V2NTQwSEFWTkJxbldQWUM4?=
- =?utf-8?B?RzVMaThXTGpDOEJ3UzErU2VqTE90RFdZSjlMMXJxMzFtdkE4dnFpUnd2V0tR?=
- =?utf-8?B?U0VJaGZ0OVNleVAvUk5tVWZHc1RxZlhFQkhURnY1WDRsa3pqNFVoYlkrL1pC?=
- =?utf-8?B?NzJwY29tZDJwSnVhcUhxTjV3RGtCVG5GV1pPNTErQk1KNWJ2dmlFOUJGTUFq?=
- =?utf-8?B?aVFnMkJwS2FMa3FlcFBvNWpkZjE2dHZqK2RNTTZybitRaUJmMTBJTE4vZkM2?=
- =?utf-8?B?K3dHN1pQOVFRd2VhVmx4cm83dW9kdDlqMHJXTHJDcnNSbUgvUjFBdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86460810-abd1-4fbd-63a1-08da47951198
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1576.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 08:18:00.1776
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vhUUErsIshzJt5fVT3uFgeKTx4dJbRy29wh4t/RaqnOLKVONscm6lZeXAWUhWXJtdU3IztO0KlY/mH7I/AukMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6127
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d523569d-2470-3e01-c407-d6e723c7d0c1@opensynergy.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 02, 2022 at 04:25:45PM +0200, Peter Hilber wrote:
+> On 30.03.22 17:05, Cristian Marussi wrote:
+> > Add support for SCMIv3.1 SENSOR_AXIS_NAME_GET multi-part command using the
+> > common iterator protocol helpers.
+> > 
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> >  drivers/firmware/arm_scmi/sensors.c | 82 ++++++++++++++++++++++++++---
+> >  1 file changed, 76 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
+> > index e1a94463d7d8..21e0ce89b153 100644
+> > --- a/drivers/firmware/arm_scmi/sensors.c
+> > +++ b/drivers/firmware/arm_scmi/sensors.c
+> > @@ -28,6 +28,7 @@ enum scmi_sensor_protocol_cmd {
+> >  	SENSOR_CONFIG_SET = 0xA,
+> >  	SENSOR_CONTINUOUS_UPDATE_NOTIFY = 0xB,
+> >  	SENSOR_NAME_GET = 0xC,
+> > +	SENSOR_AXIS_NAME_GET = 0xD,
+> >  };
+> >  
+> >  struct scmi_msg_resp_sensor_attributes {
+> > @@ -117,13 +118,22 @@ struct scmi_msg_resp_sensor_axis_description {
+> >  	struct scmi_axis_descriptor {
+> >  		__le32 id;
+> >  		__le32 attributes_low;
+> > +#define SUPPORTS_EXTENDED_AXIS_NAMES(x)	FIELD_GET(BIT(9), (x))
+> 
+> Hi Cristian,
+> 
+> I saw this patch is probably going into v5.19 already, so I'm a bit late, but I
+> wanted to point out a compatibility issue, and a small error handling issue.
+> 
+> Please see below.
+> 
 
-On 04-06-2022 02:00, Rob Herring wrote:
-> Doesn't apply for me. I guess there is some undocumented dependency
-> here? Resend after the merge window if that solves it.
+Hi Peter,
 
-These were getting applied fine on linux-next.
+thanks for having a look, your feedback is always appreciated.
 
-Merge window seems to have closed now and v5.19-rc1 release is out. I 
-can apply these cleanly on v5.19-rc1. Please let me know if re-send is 
-needed now or I need to wait for some more time? Thanks.
+Plese see my answers inline.
+
+> Best regards,
+> 
+> Peter
+> 
+> >  		__le32 attributes_high;
+> > -		u8 name[SCMI_MAX_STR_SIZE];
+> > +		u8 name[SCMI_SHORT_NAME_MAX_SIZE];
+> >  		__le32 resolution;
+> >  		struct scmi_msg_resp_attrs attrs;
+> >  	} desc[];
+> >  };
+> >  
+> > +struct scmi_msg_resp_sensor_axis_names_description {
+> > +	__le32 num_axis_flags;
+> > +	struct scmi_sensor_axis_name_descriptor {
+> > +		__le32 axis_id;
+> > +		u8 name[SCMI_MAX_STR_SIZE];
+> > +	} desc[];
+> > +};
+> > +
+> >  /* Base scmi_axis_descriptor size excluding extended attrs after name */
+> >  #define SCMI_MSG_RESP_AXIS_DESCR_BASE_SZ	28
+> >  
+> > @@ -393,7 +403,6 @@ iter_axes_desc_process_response(const struct scmi_protocol_handle *ph,
+> >  	a->extended_attrs = SUPPORTS_EXTEND_ATTRS(attrl);
+> >  
+> >  	attrh = le32_to_cpu(adesc->attributes_high);
+> > -
+> >  	a->scale = S32_EXT(SENSOR_SCALE(attrh));
+> >  	a->type = SENSOR_TYPE(attrh);
+> >  	strscpy(a->name, adesc->name, SCMI_MAX_STR_SIZE);
+> 
+> The strscpy() call should probably change the size parameter to
+> SCMI_SHORT_NAME_MAX_SIZE.
+> 
+
+I disagree on this, the strscpy size param is meant to represent the max
+size of the dest buffer and here the destination buffer 'a->name' is the
+string buffer publicly exposed by include/linux/scmi_protocol.h:scmi_sensor_axis_info
+whose size is SCMI_MAX_STR_SIZE.
+
+> > @@ -408,15 +417,69 @@ iter_axes_desc_process_response(const struct scmi_protocol_handle *ph,
+> >  		scmi_parse_range_attrs(&a->attrs, &adesc->attrs);
+> >  		dsize += sizeof(adesc->attrs);
+> >  	}
+> > -
+> >  	st->priv = ((u8 *)adesc + dsize);
+> >  
+> >  	return 0;
+> >  }
+> >  
+> > +static int
+> > +iter_axes_extended_name_update_state(struct scmi_iterator_state *st,
+> > +				     const void *response, void *priv)
+> > +{
+> > +	u32 flags;
+> > +	const struct scmi_msg_resp_sensor_axis_names_description *r = response;
+> > +
+> > +	flags = le32_to_cpu(r->num_axis_flags);
+> > +	st->num_returned = NUM_AXIS_RETURNED(flags);
+> > +	st->num_remaining = NUM_AXIS_REMAINING(flags);
+> > +	st->priv = (void *)&r->desc[0];
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int
+> > +iter_axes_extended_name_process_response(const struct scmi_protocol_handle *ph,
+> > +					 const void *response,
+> > +					 struct scmi_iterator_state *st,
+> > +					 void *priv)
+> > +{
+> > +	struct scmi_sensor_axis_info *a;
+> > +	const struct scmi_sensor_info *s = priv;
+> > +	struct scmi_sensor_axis_name_descriptor *adesc = st->priv;
+> > +
+> > +	a = &s->axis[st->desc_index + st->loop_idx];
+> > +	strscpy(a->name, adesc->name, SCMI_MAX_STR_SIZE);
+> > +	st->priv = ++adesc;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int
+> > +scmi_sensor_axis_extended_names_get(const struct scmi_protocol_handle *ph,
+> > +				    struct scmi_sensor_info *s)
+> > +{
+> > +	void *iter;
+> > +	struct scmi_msg_sensor_axis_description_get *msg;
+> > +	struct scmi_iterator_ops ops = {
+> > +		.prepare_message = iter_axes_desc_prepare_message,
+> > +		.update_state = iter_axes_extended_name_update_state,
+> > +		.process_response = iter_axes_extended_name_process_response,
+> > +	};
+> > +
+> > +	iter = ph->hops->iter_response_init(ph, &ops, s->num_axis,
+> > +					    SENSOR_AXIS_NAME_GET,
+> > +					    sizeof(*msg), s);
+> > +	if (IS_ERR(iter))
+> > +		return PTR_ERR(iter);
+> > +
+> > +	return ph->hops->iter_response_run(iter);
+> > +}
+> > +
+> >  static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+> > -					struct scmi_sensor_info *s)
+> > +					struct scmi_sensor_info *s,
+> > +					u32 version)
+> >  {
+> > +	int ret;
+> >  	void *iter;
+> >  	struct scmi_msg_sensor_axis_description_get *msg;
+> >  	struct scmi_iterator_ops ops = {
+> > @@ -436,7 +499,14 @@ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+> >  	if (IS_ERR(iter))
+> >  		return PTR_ERR(iter);
+> >  
+> > -	return ph->hops->iter_response_run(iter);
+> > +	ret = ph->hops->iter_response_run(iter);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (PROTOCOL_REV_MAJOR(version) >= 0x3)
+> > +		ret = scmi_sensor_axis_extended_names_get(ph, s);
+> 
+> From the SCMI v3.1 spec, I understood that the reading of the extended axis
+> name should be conditional on the bit checked by SUPPORTS_EXTENDED_AXIS_NAMES()
+> (the `Extended axis name' bit). Yet, the implementation doesn't use the macro,
+> and instead decides whether to issue SENSOR_AXIS_NAME_GET depending on the
+> (sensor management) protocol version being at least v3.0. But, per the spec, it
+> would be permissible for a v3.0 protocol to not support SENSOR_AXIS_NAME_GET at
+> all. Is my understanding correct?
+> 
+
+Yes, indeed this behaviour was deliberate so as to keep this code
+simpler while addressing some tricky definitions in the spec.
+(not so short explanation follows :P)
+
+SENSOR_AXIS_DESCRIPTION_GET is a command that, issued against a specific
+sensor, return a list of axes descriptors for that sensor and such
+descriptors in turn also include the flag you're mentioning that states
+if a specific ax does support an extended name or not that will have to
+be fetched with SENSOR_AXIS_GET_NAME.
+
+BUT the SENSOR_AXIS_GET_NAME command is a multi-part command issued
+against a specific sensor to retrieve the list of all the axes extended
+names for that sensor, NOT to retrieve a single ax extended name, so I
+cannot really check each ax extended name support before issuing the
+commmand and, even though weird, the axes could have different support
+with some of them supporting the extended name while some other don't:
+as a consequence my take about this was that the platform would reply
+anyway but only with the list of axes having an extended name (possibly
+a subset of all the axes).
+
+What could be missing in this context it's the handling of the case in
+which all axes does NOT support extended names where probably the platform
+won't even answer my request. (unsupported even if PROTO > 3.0)
+
+Moreover even tracking this per-ax support while iterating the replies
+would have made more complex some of the logic with anyway at the same
+time hitting all the limitations explained above.
+
+In this context, it seemed to me simpler (and a good trade-off) to issue
+anyway the command while checking only for the protocol version and
+accepting thatSENSOR_AXIS_GET_NAME could fail because unsupported
+by all the axes, with the result of leaving the ax->name string content
+filled with the short name previously retrieved.
+
+Assuming that my blabbing above is acceptable, what IS indeed wrong
+(reviewig this patch) is that the any 'acceptable' failure as depicted
+above is not properly ignored in fact. I'll post a fix on top like:
+
+--->8----
+diff --git a/drivers/firmware/arm_scmi/sensors.c b/drivers/firmware/arm_scmi/sensors.c
+index 50502c530b2f..788b566f634b 100644
+--- a/drivers/firmware/arm_scmi/sensors.c
++++ b/drivers/firmware/arm_scmi/sensors.c
+@@ -472,7 +472,9 @@ scmi_sensor_axis_extended_names_get(const struct scmi_protocol_handle *ph,
+        if (IS_ERR(iter))
+                return PTR_ERR(iter);
+ 
+-       return ph->hops->iter_response_run(iter);
++       ph->hops->iter_response_run(iter);
++
++       return 0;
+ }
+ 
+ static int scmi_sensor_axis_description(const struct scmi_protocol_handle *ph,
+----
+
+Moreover even the parsing logic for the SENSOR_AXIS_GET_NAME command has to
+be sligthly reviewed to address the fact that the list of returned axes
+extended names is incomplete so the returned axes won't necessarily be
+returned in order (i.e. I'll have to check 'axis_d' in the SENSOR_AXIS_NAME_GET
+replies to look up the proper ax descriptor.).
+I'll post this as a distinct fix.
+
+Does all of this make sense/seems reasonable ?
+
+Thanks for the review again,
+Cristian
 

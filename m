@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A095053F144
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D702E53F14B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbiFFU7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S230300AbiFFVAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234741AbiFFU7J (ORCPT
+        with ESMTP id S230140AbiFFU7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:59:09 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A506C56C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:48:14 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so13568822pjq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:48:14 -0700 (PDT)
+        Mon, 6 Jun 2022 16:59:49 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF469419D;
+        Mon,  6 Jun 2022 13:48:58 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id 68so3359620qkk.9;
+        Mon, 06 Jun 2022 13:48:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=AlPPNyvR7lWFI2X/TgyXlnC9vx00TL5Vm+xNvpSSNoA=;
-        b=onq/TWloM+5cXdpjwh/6inxOthaxTkEiG/j5wDpdk6g/TQkcp9a0A+cafRzZH35+AM
-         ZM78epWv+TGXUvh1aF99og/sdEOHYj9PPDmcP6q+Sk3A/vtzuJ9yJfhssR6P7u1CpRLp
-         cUMJsu8Kp0AoqeSUW1gKx0cD5FcaEVuyLAm6U2EV5DuEcbJkMPMIzCpDBo0/uw2TqMlB
-         NkFVawwE6H/O7ifHQ4ahzFWZIubIh2RrBNturvuIQ/95QzXagP5JXv3trzWsVWnGBsPi
-         AlrkyUFxg8++9C9cXcLpL4GS5GodMQGQeODET7T6YwVNABW4h9qluL7f9ni/DSuPrJzq
-         uO+Q==
+        bh=g2dcvEx5ujIfq/vGwsQoEKMbkEYSqcC+pGjcA0dBu1c=;
+        b=f7b0v5dv8hmLnBlzL8WyYq5cOW64Y5WX7Dmpl69JKaPauL++ld78WKF8ntff7E3FD9
+         /EFPnKoGaHbNkPIgpiRh5FlgefHuwLc1yxNkOW+bHut9SVnVZCbu/JkykiPElo5zPWjp
+         nCuHLbsnuv21eFXD2iNnywm2Hbn427FK25GFy6T1JFuumczjXmgtp3nChf3HO/XhNBhM
+         NXjSU4JD0/Av3t8AAMTU1yL794U7NXS8pa6qxIcfy7ouTJCp/SF65MboQcoKMXA5+/fk
+         R0q5tIVK+/ksEV405xlxflOCs1qdnp/FFVTP6I8k8VtwErnFZfCokgUB0civbDGx+Ib2
+         7GIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=AlPPNyvR7lWFI2X/TgyXlnC9vx00TL5Vm+xNvpSSNoA=;
-        b=qTMBjs+ZAcu6md3tqYCTAC1o9qk13KplzDm0Mv+/0rKB/sSgLCOXJvETrO9XG0wMwk
-         V1dhj1e36gyQ2vL4tYQL+Tkm0WQVsCSr1u27KGkOHz6lWR1a+UltJnPOhb9kddB3W98H
-         X29aU1+4km2b2zBzXD50NkZNFx3/9vnpkgIprh76bUamGu7xxHILPuzUJ3re7zRwjaRi
-         S79zxxx1YfPAnHZB6ewcPHdDPY8FKsWNN1AhA4YtRioP3Q8Zjr9TRRzLE9g1zio/KS6l
-         7b9N1FtMCTM7IAPMU0BzpRMLwxjWs6ayPJdNme8nzAV73kX+haVhwK+/sRjLMkMg/GFi
-         pkUg==
-X-Gm-Message-State: AOAM532d3YdG1dwfBo6VJ4kBMyEAabvxzlwU94zXRWK+X5l6j+WuNpiO
-        v/s7f9Zi3k+Rl/Zjl8LKf1k=
-X-Google-Smtp-Source: ABdhPJxgji6mfqhBbxL3JBchT6aASnEZ9yodH/o/YTvmACsIhcerFsRvM1Xm+fzxjamxFo0x3EBZ+w==
-X-Received: by 2002:a17:90b:1b05:b0:1e2:a053:2fad with SMTP id nu5-20020a17090b1b0500b001e2a0532fadmr52776954pjb.209.1654548494401;
-        Mon, 06 Jun 2022 13:48:14 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:e75e:2c04:7854:d454])
-        by smtp.gmail.com with ESMTPSA id q3-20020a056a0002a300b0051be16492basm7119485pfs.195.2022.06.06.13.48.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g2dcvEx5ujIfq/vGwsQoEKMbkEYSqcC+pGjcA0dBu1c=;
+        b=IT4u7CmoWi6HX3yhfCZqnTHklKmxYH70Mp+prygtX+X6iGXyqlLSeFvgwYgtWeyCIe
+         zukDYBHOhQpWQ1q4hlEkCBpFtMsevyKSdhfgx7Z+rthrdfpneV1EgNvq6t8I6Rgldw0i
+         jcclSJPD3P8m6fnA8vXzh3wBBCb1TJ6obXLFPH0KtRlEjFuc6gEJo5qI4Q0H6hCxpGTL
+         msZiPybmC9OmoG/4Ze8naFtdxZLmus0O6Ss3HsawvXDIX9t9LOKyQPjgY0S4qtLOT//E
+         cTkdZR/ZoWNoUrPTtdl0YBCwQJcifH8LmS00KuogVNBk0PGGz4c4JRxPrN6uVO7WeJus
+         b3pA==
+X-Gm-Message-State: AOAM5324/lN02Hp6ppOB50edRazNGpcO8OmeBT+t9dHI8l47wpIwyJVC
+        aez+24OtinCucnef5Re+mzw=
+X-Google-Smtp-Source: ABdhPJy6iWrSjhT1+WPfkKbI1gHvATNgUCtpwq8y3JhsiD76yT4Gvelb8RZZw4VB5N3/itiqM6ja8g==
+X-Received: by 2002:a05:620a:14ad:b0:6a6:b8ab:9c3f with SMTP id x13-20020a05620a14ad00b006a6b8ab9c3fmr5227234qkj.410.1654548537353;
+        Mon, 06 Jun 2022 13:48:57 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:be9c:b2d9:3353:7a73])
+        by smtp.gmail.com with ESMTPSA id bm32-20020a05620a19a000b006a6d20386f6sm900223qkb.42.2022.06.06.13.48.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 13:48:14 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Mon, 6 Jun 2022 13:48:12 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jaewon Kim <jaewon31.kim@samsung.com>, ngupta@vflare.org,
-        senozhatsky@chromium.org, avromanov@sberdevices.ru,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        s.suk@samsung.com, ytk.lee@samsung.com, jaewon31.kim@gmail.com
-Subject: Re: [PATCH] zram_drv: add __GFP_NOMEMALLOC not to use
- ALLOC_NO_WATERMARKS
-Message-ID: <Yp5oDD8mfsGtsSaB@google.com>
-References: <CGME20220603055341epcas1p2dd357326eea0cd818daf6f0db7c2aae1@epcas1p2.samsung.com>
- <20220603055747.11694-1-jaewon31.kim@samsung.com>
- <Yp5ZnkYEA5xrUksX@google.com>
- <20220606125939.ae37867e43b8b8b07fa06ca7@linux-foundation.org>
+        Mon, 06 Jun 2022 13:48:56 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 13:48:50 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] bitops: unify non-atomic bitops prototypes across
+ architectures
+Message-ID: <Yp5oMmzNlq+Ut4So@yury-laptop>
+References: <20220606114908.962562-1-alexandr.lobakin@intel.com>
+ <20220606114908.962562-5-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220606125939.ae37867e43b8b8b07fa06ca7@linux-foundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220606114908.962562-5-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 12:59:39PM -0700, Andrew Morton wrote:
-> On Mon, 6 Jun 2022 12:46:38 -0700 Minchan Kim <minchan@kernel.org> wrote:
+On Mon, Jun 06, 2022 at 01:49:05PM +0200, Alexander Lobakin wrote:
+> Currently, there is a mess with the prototypes of the non-atomic
+> bitops across the different architectures:
 > 
-> > On Fri, Jun 03, 2022 at 02:57:47PM +0900, Jaewon Kim wrote:
-> > > The atomic page allocation failure sometimes happened, and most of them
-> > > seem to occur during boot time.
-> > > 
-> > > <4>[   59.707645] system_server: page allocation failure: order:0, mode:0xa20(GFP_ATOMIC), nodemask=(null),cpuset=foreground-boost,mems_allowed=0
-> >
-> > ...
-> >
-> > > 
-> > > The kswapd or other reclaim contexts may not prepare enough free pages
-> > > for too many atomic allocations occurred in short time. But zram may not
-> > > be helpful for this atomic allocation even though zram is used to
-> > > reclaim.
-> > > 
-> > > To get one zs object for a specific size, zram may allocate serveral
-> > > pages. And this can be happened on different class sizes at the same
-> > > time. It means zram may consume more pages to reclaim only one page.
-> > > This inefficiency may consume all free pages below watmerk min by a
-> > > process having PF_MEMALLOC like kswapd.
-> > 
-> > However, that's how zram has worked for a long time(allocate memory
-> > under memory pressure) and many folks already have raised min_free_kbytes
-> > when they use zram as swap. If we don't allow the allocation, swap out
-> > fails easier than old, which would break existing tunes.
+> ret	bool, int, unsigned long
+> nr	int, long, unsigned int, unsigned long
+> addr	volatile unsigned long *, volatile void *
 > 
-> So is there a better way of preventing this warning?  Just suppress it
-> with __GFP_NOWARN?
+> Thankfully, it doesn't provoke any bugs, but can sometimes make
+> the compiler angry when it's not handy at all.
+> Adjust all the prototypes to the following standard:
+> 
+> ret	bool				retval can be only 0 or 1
+> nr	unsigned long			native; signed makes no sense
+> addr	volatile unsigned long *	bitmaps are arrays of ulongs
+> 
+> Finally, add some static assertions in order to prevent people from
+> making a mess in this room again.
+> I also used the %__always_inline attribute consistently they always
+> get resolved to the actual operations.
+> 
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
 
-For me, I usually tries to remove GFP_ATOMIC alllocation since the
-atomic allocation can be failed easily(zram is not only source for
-it). Otherwise, increase min_free_kbytes?
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+
+[...]
+
+> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> index 7aaed501f768..5520ac9b1c24 100644
+> --- a/include/linux/bitops.h
+> +++ b/include/linux/bitops.h
+> @@ -26,12 +26,25 @@ extern unsigned int __sw_hweight16(unsigned int w);
+>  extern unsigned int __sw_hweight32(unsigned int w);
+>  extern unsigned long __sw_hweight64(__u64 w);
+>  
+> +#include <asm-generic/bitops/generic-non-atomic.h>
+> +
+>  /*
+>   * Include this here because some architectures need generic_ffs/fls in
+>   * scope
+>   */
+>  #include <asm/bitops.h>
+>  
+> +/* Check that the bitops prototypes are sane */
+> +#define __check_bitop_pr(name)	static_assert(__same_type(name, gen_##name))
+> +__check_bitop_pr(__set_bit);
+> +__check_bitop_pr(__clear_bit);
+> +__check_bitop_pr(__change_bit);
+> +__check_bitop_pr(__test_and_set_bit);
+> +__check_bitop_pr(__test_and_clear_bit);
+> +__check_bitop_pr(__test_and_change_bit);
+> +__check_bitop_pr(test_bit);
+> +#undef __check_bitop_pr
+
+This one is amazing trick! And the series is good overall. Do you want me to
+take it in bitmap tree, when it's ready, or you'll move it somehow else?
+
+Thanks,
+Yury

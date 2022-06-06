@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B5953EAD5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6872853E9AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbiFFOWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S239529AbiFFOWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239414AbiFFOWT (ORCPT
+        with ESMTP id S239414AbiFFOWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:22:19 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03182ED7F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:22:17 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id x62so19035675ede.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:22:17 -0700 (PDT)
+        Mon, 6 Jun 2022 10:22:41 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C922D4444
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:22:36 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id v1so18590937ejg.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lYyKGEeq3UcMlhiJRIzst7R0qW1WAne+X1OnepWLUYE=;
-        b=SFL7T5uifrBNLjB2DlOQ76k2CWD4lYFfvi+Cpg2JoGdLGFnhB7NYaEk4VeIgQjMih4
-         dWD6g0rOGkVYh08vQvggGJY2yZvlDGzOf+oz68gB+AJ6zFrx06LXKkzALLHoXBKljZOe
-         I9/PsfKKDUm55hO4bPdYQWfKmR4oBwin7fnuU=
+        bh=HR9ZimCCmd1j/amkGhRbfPT914SxfF+DwhvAMa7hG8s=;
+        b=Be/WplNQmJ47YORrypJyjDO3xZsi5v0eEVHzRhHm2XQqN5zxhzrkg7g+OKgS/P4kbm
+         ZEtsFw6L3iaoh/1K2n7/XQ0Km74kYu+r1oguG6izyr2gCro2CAG9vbUsiuQS1PwXTH5n
+         FrBly5SHx9gQH+Pb60Yer4UrxS7ftU1j4CmJw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lYyKGEeq3UcMlhiJRIzst7R0qW1WAne+X1OnepWLUYE=;
-        b=nmIWoajROdd0BNi1jNbbuo23d1f8AVNardoNmAy3+6yuvuDLnvCSovkAO5tfciyFP4
-         FRDNJEZEi8sVlI4moBayzSwBKBQjTKXW6P4tDrXq+nXv8nitUGPTjym94cZ8Xt/6Hr1r
-         HWtGeulyX00ByeCqe61s6YDKPzUTlSIn6UTjCbuc96d/IzhYSDbg/eCUdk1PuSQ95RzG
-         FUeSpEcERWSJ+NQ+uL9zJxn9KgIg14J0leKe5vi8D6dQQApTiT++KDxkJLCAAqfy1KzZ
-         ojK4a4vfEDaMv+65h8neTjc/SCGk7E3qtazmUnI0TOwJlHob0KR+26Fq829QxSkadCbh
-         rkeg==
-X-Gm-Message-State: AOAM532a9Iiy/DOh/WBHld/jm7flFWCq0y9h9ZMJ3NlPOBwDBqwOQnNK
-        HNUQi8n7ajaX95RaNYpKemEgRxT70m23nmkA
-X-Google-Smtp-Source: ABdhPJyOHmPkvVIzCYlqN3JChqDedv3776dPBfZyJTf8f5VeT+ylPEmeCwTgq2OAVEMpsv1nCyfvIw==
-X-Received: by 2002:a05:6402:438a:b0:42e:985:4944 with SMTP id o10-20020a056402438a00b0042e09854944mr26293258edc.283.1654525334895;
-        Mon, 06 Jun 2022 07:22:14 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id kq15-20020a170906abcf00b0070cac22060esm4777909ejb.95.2022.06.06.07.22.10
+        bh=HR9ZimCCmd1j/amkGhRbfPT914SxfF+DwhvAMa7hG8s=;
+        b=J98YlpXKIMc5gMxkS0PNi59Ilmh1DuSWdUYQkBYuIE4c+a0yrBkkAPWzfo9lAWh8MI
+         ByRMXIZqbnPn9WrSd5vZlOQFR2SRGmK20ukfD96JtvlnMCKFTBIxQVgP6X6QbjLgENIk
+         bm0uGkHv6VkLBeGcN1JHx+SU+9AnIUvFUN5PjcT2e/vYNzTU5WCnV0ySB6oqUOzLmRUD
+         BO9ZB5u9iMN+6ikPDW4sMMoxOrZWUcx0kXVuwrO9F0mZoC7o5NEgGz3gd0mSXb8B4a7+
+         IW8s4VX2vfa1bNTu0tbdx7l6YNuVSRpTztgNU2qBgf7/+VhRda4vGlp0wL+ZTiy50+go
+         +MSA==
+X-Gm-Message-State: AOAM532ABoE40p0bcuA/kZl3l4UvrcODa/K7DQpX2AHEPMPee+49wcrR
+        yCBlMq5EjeJlWP9IOw59OmiiA48TOBrDJzBs
+X-Google-Smtp-Source: ABdhPJwjpCK4iPMPc8Lp8n+ybBbAMGzGfDJiHUlhbWdR25GyXGYVvBPf7dGzeIpHgWX/zllmtQA6Yw==
+X-Received: by 2002:a17:907:2161:b0:70f:5db6:1ff2 with SMTP id rl1-20020a170907216100b0070f5db61ff2mr13832771ejb.249.1654525354800;
+        Mon, 06 Jun 2022 07:22:34 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id h1-20020a170906590100b006fe97996423sm6339072ejq.219.2022.06.06.07.22.32
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:22:12 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id t13so20082369wrg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:22:10 -0700 (PDT)
-X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
- p18-20020a5d68d2000000b0021031cc64a6mr21413566wrw.679.1654525330160; Mon, 06
- Jun 2022 07:22:10 -0700 (PDT)
+        Mon, 06 Jun 2022 07:22:33 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id q15so12043811wrc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:22:32 -0700 (PDT)
+X-Received: by 2002:a5d:6483:0:b0:20f:d046:6382 with SMTP id
+ o3-20020a5d6483000000b0020fd0466382mr21837218wri.342.1654525352126; Mon, 06
+ Jun 2022 07:22:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-4-hsinyi@chromium.org>
-In-Reply-To: <20220606044720.945964-4-hsinyi@chromium.org>
+References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-5-hsinyi@chromium.org>
+In-Reply-To: <20220606044720.945964-5-hsinyi@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 6 Jun 2022 07:21:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VNnWcvedzgxfSWT0-sTR3jF8LsVXKFRnm49ZCJw6EH6A@mail.gmail.com>
-Message-ID: <CAD=FV=VNnWcvedzgxfSWT0-sTR3jF8LsVXKFRnm49ZCJw6EH6A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] drm/panel: panel-edp: Implement .get_orientation callback
+Date:   Mon, 6 Jun 2022 07:22:20 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XQbXK13M_X_AsqSPS+D_zQqLtAGFGz=YbHoPu3bcvhZQ@mail.gmail.com>
+Message-ID: <CAD=FV=XQbXK13M_X_AsqSPS+D_zQqLtAGFGz=YbHoPu3bcvhZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/8] drm/panel: lvds: Implement .get_orientation callback
 To:     Hsin-Yi Wang <hsinyi@chromium.org>
 Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -101,7 +101,22 @@ On Sun, Jun 5, 2022 at 9:47 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
 > ---
 > v2->v3: add comments for notice.
 > ---
->  drivers/gpu/drm/panel/panel-edp.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+>  drivers/gpu/drm/panel/panel-lvds.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
+> index 27a1c9923b09..239527409b00 100644
+> --- a/drivers/gpu/drm/panel/panel-lvds.c
+> +++ b/drivers/gpu/drm/panel/panel-lvds.c
+> @@ -102,15 +102,29 @@ static int panel_lvds_get_modes(struct drm_panel *panel,
+>         connector->display_info.bus_flags = lvds->data_mirror
+>                                           ? DRM_BUS_FLAG_DATA_LSB_TO_MSB
+>                                           : DRM_BUS_FLAG_DATA_MSB_TO_LSB;
+
+Can you rebase your patch and send again? There's a context conflict
+with the above line because your tree is lacking commit 83c784e70036
+("drm/panel: lvds: Use bus_flags from DT panel-timing property")
+
+In any case:
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>

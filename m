@@ -2,193 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EBA53E743
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CE153E6F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239401AbiFFOJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S239585AbiFFOKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238043AbiFFOJX (ORCPT
+        with ESMTP id S239450AbiFFOKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:09:23 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F961EC56
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:09:22 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id B2A473200935;
-        Mon,  6 Jun 2022 10:09:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 06 Jun 2022 10:09:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654524560; x=1654610960; bh=2tg/LQuqY/
-        dZKlfQNp8Nv2cxpu5KDqfqntDP+vsu7ig=; b=x5d3HP0ThpnI46zljY1w+GcKy5
-        tX/Ph9kIAJOKEkF1bbc8bLw9yKmkPrpgNQ/Sbyf3+emwY/qnQ2ZcgOezRvyPUdef
-        ul7cqS2c1OZHZsnB1A1cLbvAoaQkJVJqHh7B1gHYN9So0EFfPziRSU3/ZPEaJfeR
-        9d66YleW9AVpCksfh+3yLgWwk9GcLgwrsapxGLtwo0fK561EdqRTIogcv+zhP7LJ
-        gLNNI+3EjeXArBCB/b2OFT0us7OfbmvFE2Wzcgu/0s4E38lyeVkVKrjl3Mr+xy1l
-        FLciu6YkB0z4tCjRrY+8VKyVdfoTgwBt3lrUtCCohb0S+mjPk08L15WVnM9g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654524560; x=1654610960; bh=2tg/LQuqY/dZKlfQNp8Nv2cxpu5K
-        DqfqntDP+vsu7ig=; b=Cfbr3AFFQ+R9BSykxEa163bL+Pviy4whwsDqARZRAOEK
-        RrH36uJFqo4uoFRLFzizD/9d8rURgfUyHvP8DHwbcDUrWKFd2T71ZsOeywf0DaJ+
-        22IeSaj5aYoVgyBI6g1if6DUjBycKTNcaRIQhbfhW/YtZHRs3TwuRNbXmXllx6VO
-        hIn1tgmKUea3ac0r1Nppsoh/ngJoQATRQgrtlCHhHA6kKBTKfZ5S0xaOKzmz7Sgr
-        cOlY3ravPcdKn5n6VpWx1rglcDGPJyJ8Wc+wdFX2RSXTrdPr7i6he1NfVruCFtXT
-        pWLNXbHGEtQcu3AbEhyn1vvQZk1KgqmqV1BXiG6lbQ==
-X-ME-Sender: <xms:jwqeYuVp6Ry65mew6hY7shKdvqM89WjquzBH6QVArf88vfwKYwdSvg>
-    <xme:jwqeYqnwl4HLeq0iHCrQQTiotGgIkFNIC-7GSTkkHcjwqLBebdt8Ssz6Uxf6K-W0D
-    FjGLf0lyK8r-zV_c6M>
-X-ME-Received: <xmr:jwqeYiamFRE-WJ_GdLRa_MwrvZxUjx3RIpt5uZ3CC_T1N4IyLLAAPrzg4jjLfvzAudiIoV03Y9WZujFigyEPDJWcdui0usHtiyWkBpg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtvddgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedukeevvdehheeuhefhhfefteeiffefgeffuefgkeetffevgeevgeejteei
-    gffghfenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhn
-    ohdrthgvtghh
-X-ME-Proxy: <xmx:jwqeYlVOaR3C6oG6-sNpqbbct6loa5n0RAT3GumnrNnaYi_kBUZJVA>
-    <xmx:jwqeYol81kqFsvKtbLIydnTFP4Z0M6aEk4OaednnrhvaC1gb_xVXFQ>
-    <xmx:jwqeYqe4aK4Wkz0h0-PTZ33PXGz9CsfVS0FvYrSlMOPVevoaN_nsRg>
-    <xmx:kAqeYliu8sXPx5aQNDxS9V0_vAmqIc54D-KmLXk6OZjgK0hgkqntKg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Jun 2022 10:09:19 -0400 (EDT)
-Date:   Mon, 6 Jun 2022 16:09:17 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, airlied@linux.ie,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] drm/format-helper: Add KUnit tests for
- drm_fb_xrgb8888_to_rgb332()
-Message-ID: <20220606140917.suwk3uqxzsqeiab2@houat>
-References: <20220606095516.938934-1-jose.exposito89@gmail.com>
- <20220606095516.938934-2-jose.exposito89@gmail.com>
- <20220606134242.h6kuqn4zbpmc2rql@houat>
- <576ed6ef-b961-9214-2c9b-56cb5b493b4e@redhat.com>
- <20220606135219.nwhp4fdawg2qjeam@houat>
- <78c1eb65-ea78-8744-5382-ea86a56a66f4@redhat.com>
+        Mon, 6 Jun 2022 10:10:17 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD1325590;
+        Mon,  6 Jun 2022 07:10:15 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id fd25so19011838edb.3;
+        Mon, 06 Jun 2022 07:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FzjA3O/a7rMXwWvrBiZXtQGHAjzdhILvDzu+Ghq0zf8=;
+        b=YIXUXa1kcMVfU98TcAIoBZLwFx+/N73w0XQw5zugvA10mCe3uTwo6Pp1K5Km01k8kB
+         E3R6YM3l/5m3RJwKZ9Jqddpcg1OQkAWztgoHj1jFJetScOb9E02a8KdEypVuhv8HsZse
+         MLqesZpiGFwsgur3x/N8c1qyyshGQB71pzecbbCaDLSrmPtmT7hPNaf53MPbdLP3XTPS
+         1tOf8wZ3SMyxeWsHjNFthpQlGjwQhqEWPwvWUEQ0VTK/W960HU0695mqdQVXK0ntmSXc
+         077Q4sdNgpRoQaRUEMRSk50AJtVTsAZPx4nZzlHb8RzxcRKc88qxEZgg6iwjs3BDUtNP
+         B88A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FzjA3O/a7rMXwWvrBiZXtQGHAjzdhILvDzu+Ghq0zf8=;
+        b=bixi+j+klvrnXPIw9lpTP0ypb7LrChQorUqmPGWroqs1hf5Q5n4GTtov8fXpzDG6eL
+         JzxVFa24CvTfCMn42od2/LVqUyiPWiJDQzeQXgWwlPF4PaakfUCSfJzwqUTc6ZX7lgIF
+         rI9MvmDUX4LXMf0dX0EPNsl7U5fAPhnRT54B/qcDefXo9/BjOsAvNZYGlOYne+OZrpra
+         LJ5krJdz8bJ5gpOvjoR+4B0MSaDMBx8u7QgVq495h8lkFVpUo/Q9WPYQQmfUEPBym0Ps
+         7H9sR2uAzGq0Hsa1GIMREUa+Og1VDkknjzGt4JS39IGe4cL/h4iYZ6wpeRDYHHwMd8TB
+         QJ0g==
+X-Gm-Message-State: AOAM532cS40t/XXHlYo6fNIxZJxTgvCVtJPjUZSkKxZYiI9xQQ43KZdU
+        MBBZP2ouzf1W7252E3r7De5FGkxaFnf64TSf/Vg=
+X-Google-Smtp-Source: ABdhPJy/WfLBuUZM/jaM4TSbYSVcUIAsMT8S16IbN61ZKvZvl9SpTq/QCZSMUpZiOXatrQSV8GEUszaB4j3ZQIPOmeg=
+X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
+ b1-20020aa7d481000000b0042dd5fdf963mr27266018edr.209.1654524613831; Mon, 06
+ Jun 2022 07:10:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hinoebkwkjhusomc"
-Content-Disposition: inline
-In-Reply-To: <78c1eb65-ea78-8744-5382-ea86a56a66f4@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
+ <20220606131124.53394-2-ilpo.jarvinen@linux.intel.com> <fb32bda5-ea44-da8d-493a-a043b8619022@linux.intel.com>
+In-Reply-To: <fb32bda5-ea44-da8d-493a-a043b8619022@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 6 Jun 2022 16:09:37 +0200
+Message-ID: <CAHp75Ve4t1aF4wDpXPOcOX3MXbn_DaaNWG4S9Ft1jpZ0dGSXzw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] serial: 8250: Store to lsr_save_flags after lsr read
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 6, 2022 at 3:55 PM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+> On Mon, 6 Jun 2022, Ilpo J=C3=A4rvinen wrote:
 
---hinoebkwkjhusomc
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Mon, Jun 06, 2022 at 03:57:45PM +0200, Javier Martinez Canillas wrote:
-> Hello Maxime,
->=20
-> On 6/6/22 15:52, Maxime Ripard wrote:
-> > hi,
-> >=20
-> > On Mon, Jun 06, 2022 at 03:49:57PM +0200, Javier Martinez Canillas wrot=
-e:
-> >> Hello Maxime,
-> >>
-> >> On 6/6/22 15:42, Maxime Ripard wrote:
-> >>> Hi,
-> >>>
-> >>> On Mon, Jun 06, 2022 at 11:55:16AM +0200, Jos=E9 Exp=F3sito wrote:
-> >>>> Test the conversion from XRGB8888 to RGB332.
-> >>>>
-> >>>> What is tested?
-> >>>>
-> >>>>  - Different values for the X in XRGB8888 to make sure it is ignored
-> >>>>  - Different clip values: Single pixel and full and partial buffer
-> >>>>  - Well known colors: White, black, red, green, blue, magenta, yellow
-> >>>>    and cyan
-> >>>>  - Other colors: Randomly picked
-> >>>>  - Destination pitch
-> >>>>
-> >>>> How to run the tests?
-> >>>>
-> >>>>  $ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/dr=
-m \
-> >>>>          --kconfig_add CONFIG_VIRTIO_UML=3Dy \
-> >>>>          --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
-> >>>
-> >>> It's not clear to me why you would need VIRTIO here? The Kunit config
-> >>> file should be enough to run the tests properly
-> >>>
-> >>
-> >> It's needed or otherwise KUnit will complain with:
-> >>
-> >> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/.ku=
-nitconfig
-> >> [15:47:31] Configuring KUnit Kernel ...
-> >> Regenerating .config ...
-> >> Populating config with:
-> >> $ make ARCH=3Dum O=3D.kunit olddefconfig
-> >> ERROR:root:Not all Kconfig options selected in kunitconfig were in the=
- generated .config.
-> >> This is probably due to unsatisfied dependencies.
-> >> Missing: CONFIG_DRM=3Dy, CONFIG_DRM_KUNIT_TEST=3Dy
-> >> Note: many Kconfig options aren't available on UML. You can try runnin=
-g on a different architecture with something like "--arch=3Dx86_64".
-> >>
-> >> The following works correctly but it won't use User Mode Linux:
-> >>
-> >> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/.ku=
-nitconfig --arch=3Dx86_64
-> >=20
-> > But then, can't we add them to .kunitconfig?
-> >
->=20
-> That's what I asked in the previous RFC too. Daniel mentioned that it sho=
-uldn't
-> go there because is platform specific (AFAIU, one might want to test it o=
-n x86,
-> aarch64, etc) but then I asked why we couldn't have a arch/um/.kunitconfi=
-g.
->=20
-> The answer was that's not that simple and some agreement on how to do it =
-is needed:
->=20
-> https://lists.freedesktop.org/archives/dri-devel/2022-June/357617.html
+> > Fixes: e490c9144cfa ("tty: Add software emulated RS485 support for 8250=
+")
+> > Link: https://lore.kernel.org/all/1d6c31d-d194-9e6a-ddf9-5f29af829f3@li=
+nux.intel.com/T/#m1737eef986bd20cf19593e344cebd7b0244945fc
+> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> > Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@penugtronix.de>
+>
+> It seems that Uwe managed to mistype his email for the A-by which I just
+> happily copy-pasted.
+>
+> Greg, please let me know if you want me to resend the series (or if you
+> will just change it on the fly while applying).
 
-Thanks for pointing this out. So yeah, it's indeed not very optimal
+I believe Greg doesn't handle patches on the fly, hence resend.
+But more importantly I do not see the reason for the Acked-by tag when
+SoB of the same person is present.
 
-We should probably just document it somewhere in KMS then? It doesn't
-have to be in this patch series, but I have the feeling that we will end
-up with that discussion a lot from people frustrated to have spent too
-much time figuring it out :)
 
-Maxime
-
---hinoebkwkjhusomc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYp4KjQAKCRDj7w1vZxhR
-xcJMAP99qsO7FgUwevO9U74+Tm8BrRBDMWERHZvHOG3KcT4wrwD/QBNjSrBbIMvm
-xKS0u3DrSP9u+bXKM/YCl/qgLvwRuwM=
-=8VNg
------END PGP SIGNATURE-----
-
---hinoebkwkjhusomc--
+--=20
+With Best Regards,
+Andy Shevchenko

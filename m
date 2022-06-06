@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B34C53E1ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236B353E35F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiFFHjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
+        id S231370AbiFFHjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbiFFHin (ORCPT
+        with ESMTP id S231372AbiFFHin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Jun 2022 03:38:43 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C63D25294
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:38:41 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGldX5dTHzRhkv;
-        Mon,  6 Jun 2022 15:35:28 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0171D252B8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:38:42 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGlgk4Fs2zjXMJ;
+        Mon,  6 Jun 2022 15:37:22 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Mon, 6 Jun 2022 15:38:39 +0800
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 15:38:38 +0800
+ 15.1.2375.24; Mon, 6 Jun 2022 15:38:39 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <akpm@linux-foundation.org>,
@@ -34,9 +34,9 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
 CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
         <anshuman.khandual@arm.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v4 5/6] arm64: mm: Convert to GENERIC_IOREMAP
-Date:   Mon, 6 Jun 2022 15:48:14 +0800
-Message-ID: <20220606074815.139265-6-wangkefeng.wang@huawei.com>
+Subject: [PATCH v4 6/6] arm64: Add HAVE_IOREMAP_PROT support
+Date:   Mon, 6 Jun 2022 15:48:15 +0800
+Message-ID: <20220606074815.139265-7-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220606074815.139265-1-wangkefeng.wang@huawei.com>
 References: <20220606074815.139265-1-wangkefeng.wang@huawei.com>
@@ -56,189 +56,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add hook for arm64's special operation when ioremap() and iounmap(),
-then ioremap_wc/np/cache is converted to use ioremap_prot()
-from GENERIC_IOREMAP, update the Copyright and kill the unused
-inclusions.
+With ioremap_prot() definition from generic ioremap, also move
+pte_pgprot() from hugetlbpage.c into pgtable.h, then arm64 could
+have HAVE_IOREMAP_PROT, which will enable generic_access_phys()
+code, it is useful for debug, eg, gdb.
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- arch/arm64/Kconfig          |  1 +
- arch/arm64/include/asm/io.h | 20 ++++++---
- arch/arm64/kernel/acpi.c    |  2 +-
- arch/arm64/mm/ioremap.c     | 84 +++++--------------------------------
- 4 files changed, 26 insertions(+), 81 deletions(-)
+ .../features/vm/ioremap_prot/arch-support.txt          |  2 +-
+ arch/arm64/Kconfig                                     |  1 +
+ arch/arm64/include/asm/pgtable.h                       | 10 ++++++++++
+ arch/arm64/mm/hugetlbpage.c                            | 10 ----------
+ 4 files changed, 12 insertions(+), 11 deletions(-)
 
+diff --git a/Documentation/features/vm/ioremap_prot/arch-support.txt b/Documentation/features/vm/ioremap_prot/arch-support.txt
+index 205a90e82050..a710bd99c32e 100644
+--- a/Documentation/features/vm/ioremap_prot/arch-support.txt
++++ b/Documentation/features/vm/ioremap_prot/arch-support.txt
+@@ -9,7 +9,7 @@
+     |       alpha: | TODO |
+     |         arc: |  ok  |
+     |         arm: | TODO |
+-    |       arm64: | TODO |
++    |       arm64: |  ok  |
+     |        csky: | TODO |
+     |     hexagon: | TODO |
+     |        ia64: | TODO |
 diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1652a9800ebe..ac160aa26126 100644
+index ac160aa26126..1267f325d32b 100644
 --- a/arch/arm64/Kconfig
 +++ b/arch/arm64/Kconfig
-@@ -126,6 +126,7 @@ config ARM64
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_EARLY_IOREMAP
- 	select GENERIC_IDLE_POLL_SETUP
-+	select GENERIC_IOREMAP
- 	select GENERIC_IRQ_IPI
- 	select GENERIC_IRQ_PROBE
- 	select GENERIC_IRQ_SHOW
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 3995652daf81..02aa5a5e9190 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -163,13 +163,21 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
- /*
-  * I/O memory mapping functions.
-  */
--extern void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot);
--extern void iounmap(volatile void __iomem *addr);
--extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
- 
--#define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
--#define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
--#define ioremap_np(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
-+int ioremap_allowed(phys_addr_t phys_addr, size_t size, unsigned long prot);
-+#define ioremap_allowed ioremap_allowed
-+
-+int iounmap_allowed(void __iomem *addr);
-+#define iounmap_allowed iounmap_allowed
-+
-+#define _PAGE_IOREMAP PROT_DEVICE_nGnRE
-+
-+#define ioremap_wc(addr, size)		ioremap_prot((addr), (size), PROT_NORMAL_NC)
-+#define ioremap_np(addr, size)		ioremap_prot((addr), (size), PROT_DEVICE_nGnRnE)
-+#define ioremap_cache(addr, size) ({							\
-+	pfn_is_map_memory(__phys_to_pfn(addr)) ?					\
-+	(void __iomem *)__phys_to_virt(addr) : ioremap_prot(addr, size, PROT_NORMAL);	\
-+})
- 
- /*
-  * io{read,write}{16,32,64}be() macros
-diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index e4dea8db6924..a5a256e3f9fe 100644
---- a/arch/arm64/kernel/acpi.c
-+++ b/arch/arm64/kernel/acpi.c
-@@ -351,7 +351,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
- 				prot = __acpi_get_writethrough_mem_attribute();
- 		}
- 	}
--	return __ioremap(phys, size, prot);
-+	return ioremap_prot(phys, size, pgprot_val(prot));
+@@ -189,6 +189,7 @@ config ARM64
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_GCC_PLUGINS
+ 	select HAVE_HW_BREAKPOINT if PERF_EVENTS
++	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+ 	select HAVE_KVM
+ 	select HAVE_NMI
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 0b6632f18364..5a2eb6232e69 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -427,6 +427,16 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+ 	return clear_pte_bit(pte, __pgprot(PTE_SWP_EXCLUSIVE));
  }
  
++/*
++ * Select all bits except the pfn
++ */
++static inline pgprot_t pte_pgprot(pte_t pte)
++{
++	unsigned long pfn = pte_pfn(pte);
++
++	return __pgprot(pte_val(pfn_pte(pfn, __pgprot(0))) ^ pte_val(pte));
++}
++
+ #ifdef CONFIG_NUMA_BALANCING
  /*
-diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
-index b21f91cd830d..4a3f526c6057 100644
---- a/arch/arm64/mm/ioremap.c
-+++ b/arch/arm64/mm/ioremap.c
-@@ -1,96 +1,32 @@
- // SPDX-License-Identifier: GPL-2.0-only
+  * See the comment in include/linux/pgtable.h
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index e2a5ec9fdc0d..8eab05367549 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -100,16 +100,6 @@ int pud_huge(pud_t pud)
+ #endif
+ }
+ 
 -/*
-- * Based on arch/arm/mm/ioremap.c
-- *
-- * (C) Copyright 1995 1996 Linus Torvalds
-- * Hacked for ARM by Phil Blundell <philb@gnu.org>
-- * Hacked to allow all architectures to build, and various cleanups
-- * by Russell King
-- * Copyright (C) 2012 ARM Ltd.
+- * Select all bits except the pfn
 - */
- 
--#include <linux/export.h>
- #include <linux/mm.h>
- #include <linux/vmalloc.h>
- #include <linux/io.h>
- 
--#include <asm/fixmap.h>
--#include <asm/tlbflush.h>
+-static inline pgprot_t pte_pgprot(pte_t pte)
+-{
+-	unsigned long pfn = pte_pfn(pte);
 -
--static void __iomem *__ioremap_caller(phys_addr_t phys_addr, size_t size,
--				      pgprot_t prot, void *caller)
-+int ioremap_allowed(phys_addr_t phys_addr, size_t size, unsigned long prot)
- {
--	unsigned long last_addr;
--	unsigned long offset = phys_addr & ~PAGE_MASK;
--	int err;
--	unsigned long addr;
--	struct vm_struct *area;
--
--	/*
--	 * Page align the mapping address and size, taking account of any
--	 * offset.
--	 */
--	phys_addr &= PAGE_MASK;
--	size = PAGE_ALIGN(size + offset);
-+	unsigned long last_addr = phys_addr + size - 1;
- 
--	/*
--	 * Don't allow wraparound, zero size or outside PHYS_MASK.
--	 */
--	last_addr = phys_addr + size - 1;
--	if (!size || last_addr < phys_addr || (last_addr & ~PHYS_MASK))
--		return NULL;
-+	/* Don't allow outside PHYS_MASK */
-+	if (last_addr & ~PHYS_MASK)
-+		return -EINVAL;
- 
--	/*
--	 * Don't allow RAM to be mapped.
--	 */
-+	/* Don't allow RAM to be mapped. */
- 	if (WARN_ON(pfn_is_map_memory(__phys_to_pfn(phys_addr))))
--		return NULL;
-+		return -EINVAL;
- 
--	area = get_vm_area_caller(size, VM_IOREMAP, caller);
--	if (!area)
--		return NULL;
--	addr = (unsigned long)area->addr;
--	area->phys_addr = phys_addr;
--
--	err = ioremap_page_range(addr, addr + size, phys_addr, prot);
--	if (err) {
--		vunmap((void *)addr);
--		return NULL;
--	}
--
--	return (void __iomem *)(offset + addr);
+-	return __pgprot(pte_val(pfn_pte(pfn, __pgprot(0))) ^ pte_val(pte));
 -}
 -
--void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
--{
--	return __ioremap_caller(phys_addr, size, prot,
--				__builtin_return_address(0));
-+	return 0;
- }
--EXPORT_SYMBOL(__ioremap);
- 
--void iounmap(volatile void __iomem *io_addr)
-+int iounmap_allowed(void __iomem *addr)
+ static int find_num_contig(struct mm_struct *mm, unsigned long addr,
+ 			   pte_t *ptep, size_t *pgsize)
  {
--	unsigned long addr = (unsigned long)io_addr & PAGE_MASK;
--
- 	/*
- 	 * We could get an address outside vmalloc range in case
- 	 * of ioremap_cache() reusing a RAM mapping.
- 	 */
--	if (is_vmalloc_addr((void *)addr))
--		vunmap((void *)addr);
--}
--EXPORT_SYMBOL(iounmap);
--
--void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
--{
--	/* For normal memory we already have a cacheable mapping. */
--	if (pfn_is_map_memory(__phys_to_pfn(phys_addr)))
--		return (void __iomem *)__phys_to_virt(phys_addr);
--
--	return __ioremap_caller(phys_addr, size, __pgprot(PROT_NORMAL),
--				__builtin_return_address(0));
-+	return is_vmalloc_addr(addr) ? 0 : -EINVAL;
- }
--EXPORT_SYMBOL(ioremap_cache);
- 
- /*
-  * Must be called after early_fixmap_init
 -- 
 2.35.3
 

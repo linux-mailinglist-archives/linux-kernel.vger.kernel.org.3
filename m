@@ -2,240 +2,574 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7105553DF21
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 02:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C4453DF1D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 02:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351874AbiFFAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 20:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S1351880AbiFFAmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 20:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351840AbiFFAkt (ORCPT
+        with ESMTP id S1351840AbiFFAmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 20:40:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B6A549CA6
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 17:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654476046;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ztkmqVnlNudKHK3nozyJXARq4S0vh4WAgBlCzt1poB4=;
-        b=ZCR8gUOtBs8GfyTl4v5saAEYw2QiaO5s95CGvVxXkji8BlaRGksHBkjPu9LddH1nhMRggk
-        6ZrY+OIjjFRAEN/XRy4ZOc2Qbuj36Dcuik+OJQudgy1Fzy+npTCrdOjIv/E5rHEz3uiJCZ
-        CO/Cu8AVQVmPtRtLYyWQrzk96im0RV8=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-kvQKwdxqMN6R5aSBM1O4dw-1; Sun, 05 Jun 2022 20:40:45 -0400
-X-MC-Unique: kvQKwdxqMN6R5aSBM1O4dw-1
-Received: by mail-pg1-f197.google.com with SMTP id x16-20020a63f710000000b003f6082673afso6126521pgh.15
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 17:40:45 -0700 (PDT)
+        Sun, 5 Jun 2022 20:42:53 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2455422B35
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 17:42:52 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id v19so16782251edd.4
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 17:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=I7xCsl+LsrWw/kJQv30wr9Ryoz1F7lkRXyZdtKnCpm0=;
+        b=LdZXB4ad8APxIdK/VzYw9XHEaeflm4L67/zsWh/Ylx5NWpNB0PMLIDTdn5HF4O6bBv
+         AOV4tB7glRUd7Fu/cL6rLvJUSR4D5FExMc+Xx2oqhml7ZqfxeDVDtIwoaqoBUb3W5Kxz
+         JjFCJWg9Bb/z8nqHcd1yRCkm3pi3TwQs3DSA0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ztkmqVnlNudKHK3nozyJXARq4S0vh4WAgBlCzt1poB4=;
-        b=zvwHFCw7u2WAmQQgaPBwzwOI4tpqS7Mw2VGsciwC2jTXQufEkswCZLX0cv4nKkQIxN
-         Tro/gSrs0ipp8hVaNMaAhrBa4k8w2MSqMjUDCK36eqh1DVmjrSFhM0VO/56niQJbftN/
-         kDScdUCIckNaJzTn+d22JqjvqWDGO5oF1EezmvtGV8VsFkYtARv+cdQ0lYP44wgWnJH9
-         dbPsez8Z4fo6t6iSxqhLLFBfYnq7s3WxxCpygNo6czNFbhobq7F7WezQQPg8g+Ai68M3
-         ve7bQLLkdjeiMBdhZkDOYCPZBv5Q58+OvvDVkfcwS41tJFNxMjBTt407D77aeMt2x6g1
-         tt+A==
-X-Gm-Message-State: AOAM530Kof09H76jDPbMAOkubLpNMEBAedXBRGZTzCv/vVxgoyWFgz75
-        Jph4IOrjUtDFiuoosuHzrdMVi2DAEi0MNjWx6aVJHPhnZqbEqKv/A9+j0tyRX3eV/1exUupDnlp
-        3vEmwUh7tdR1F2UWDTHB03PI5omk7ZIUTKE/4ivigAczxE09CRTvsOKUMkq83vcOZQ7m5FvFdYg
-        ==
-X-Received: by 2002:a63:844a:0:b0:3fc:e1a0:b80d with SMTP id k71-20020a63844a000000b003fce1a0b80dmr16846802pgd.616.1654476044154;
-        Sun, 05 Jun 2022 17:40:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwtQsB/rHO6jVQtH0zjxtudP5oSFGZvjZj1UdtuM5h8TVy5SvctlmWYisl02MPCrsEhKmKlBA==
-X-Received: by 2002:a63:844a:0:b0:3fc:e1a0:b80d with SMTP id k71-20020a63844a000000b003fce1a0b80dmr16846781pgd.616.1654476043766;
-        Sun, 05 Jun 2022 17:40:43 -0700 (PDT)
-Received: from [10.72.12.54] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id x5-20020a170902a38500b001640beeebf1sm9128120pla.268.2022.06.05.17.40.40
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=I7xCsl+LsrWw/kJQv30wr9Ryoz1F7lkRXyZdtKnCpm0=;
+        b=0iX0NlDCopzczkBlRLrUlI1HD3vyELZaWv8bmfK1xU2kwbDtRjgW3gtWY0xWtb5DSY
+         IK5DuK0U3kTMQ7utJrTTVSvOT7n/tdqsbhyQVU3FmsGYZBcxM18WRs00vTJZwSAOTmXI
+         8d4gBY9W29jQxiIquUyDijiu++RtMrk7dfnYd4XIocbPx7/9rbziL4K6ZdXq2NDyutIH
+         MZIWNiPe3aYPyebKjGVrWghuG/Ph6DyVGq4LQik8ZnadKrg9vBzgSIT9Ncixelq+Qaf5
+         7G0Kvap1kS0xv4OlL3mS409pMi2TPcqLBUGTfl7uTJ3f9yf7D+BUX2fZvIj+qzsySb2c
+         +kqQ==
+X-Gm-Message-State: AOAM53345TZa91GcFCPxMv2DZzFs9jGlYy33ZjgestUgJ8BXStoXQ6li
+        NXl8i4V3WJm6tKhWB5LBwld8EYjb2gNmpT23XuM=
+X-Google-Smtp-Source: ABdhPJxUp4lM0cOtHQLjfRXG5x8KYKo9YEol0mjVRwUgyEynFSLF5VUX9L0gOjBHlaan72wE9WM3jA==
+X-Received: by 2002:aa7:c44b:0:b0:42d:d107:7e7a with SMTP id n11-20020aa7c44b000000b0042dd1077e7amr23650186edr.261.1654476170388;
+        Sun, 05 Jun 2022 17:42:50 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id y17-20020a170906525100b006ff9e36cfeesm5587603ejm.196.2022.06.05.17.42.49
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 17:40:42 -0700 (PDT)
-Subject: Re: [PATCH v5] ceph: prevent a client from exceeding the MDS maximum
- xattr size
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Gregory Farnum <gfarnum@redhat.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220603132909.10166-1-lhenriques@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <54a87be1-d46a-bc50-cf2d-1a094bb4c176@redhat.com>
-Date:   Mon, 6 Jun 2022 08:40:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sun, 05 Jun 2022 17:42:50 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id h5so17860066wrb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 17:42:49 -0700 (PDT)
+X-Received: by 2002:a5d:6da6:0:b0:20f:bc8a:9400 with SMTP id
+ u6-20020a5d6da6000000b0020fbc8a9400mr18763663wrs.274.1654476169406; Sun, 05
+ Jun 2022 17:42:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220603132909.10166-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 5 Jun 2022 17:42:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgZt-YDSKfdyES2p6A_KJoG8DwQ0mb9CeS8jZYp+0Y2Rw@mail.gmail.com>
+Message-ID: <CAHk-=wgZt-YDSKfdyES2p6A_KJoG8DwQ0mb9CeS8jZYp+0Y2Rw@mail.gmail.com>
+Subject: Linux 5.19-rc1
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,LONGWORDS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+So the last two weeks were _fairly_ normal, although I will gripe and
+moan a bit about how many late pull requests I got. The second week
+started out very calm, but that was sadly only because a _lot_ of
+people left their final pull request pretty late. Not very pleasant at
+all.
 
-On 6/3/22 9:29 PM, Luís Henriques wrote:
-> The MDS tries to enforce a limit on the total key/values in extended
-> attributes.  However, this limit is enforced only if doing a synchronous
-> operation (MDS_OP_SETXATTR) -- if we're buffering the xattrs, the MDS
-> doesn't have a chance to enforce these limits.
->
-> This patch adds support for decoding the xattrs maximum size setting that is
-> distributed in the mdsmap.  Then, when setting an xattr, the kernel client
-> will revert to do a synchronous operation if that maximum size is exceeded.
->
-> While there, fix a dout() that would trigger a printk warning:
->
-> [   98.718078] ------------[ cut here ]------------
-> [   98.719012] precision 65536 too large
-> [   98.719039] WARNING: CPU: 1 PID: 3755 at lib/vsprintf.c:2703 vsnprintf+0x5e3/0x600
-> ...
->
-> URL: https://tracker.ceph.com/issues/55725
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->   fs/ceph/mdsmap.c            | 22 ++++++++++++++++++----
->   fs/ceph/xattr.c             | 12 ++++++++----
->   include/linux/ceph/mdsmap.h |  1 +
->   3 files changed, 27 insertions(+), 8 deletions(-)
->
-> * Changes since v4
->
-> - Dropped definition of MDS_MAX_XATTR_SIZE, which isn't needed anymore
-> - Fixed (finally?) the compilation warning detected by bot
-> (also dropped the RFC from the subject)
->
-> * Changes since v3
->
-> As per Xiubo review:
->    - Always force a (sync) SETXATTR Op when connecting to an old cluster
->    - use '>' instead of '>='
-> Also fixed the warning detected by 0day.
->
-> * Changes since v2
->
-> Well, a lot has changed since v2!  Now the xattr max value setting is
-> obtained through the mdsmap, which needs to be decoded, and the feature
-> that was used in the previous revision was dropped.  The drawback is that
-> the MDS isn't unable to know in advance if a client is aware of this xattr
-> max value.
->
-> * Changes since v1
->
-> Added support for new feature bit to get the MDS max_xattr_pairs_size
-> setting.
->
-> Also note that this patch relies on a patch that hasn't been merged yet
-> ("ceph: use correct index when encoding client supported features"),
-> otherwise the new feature bit won't be correctly encoded.
->
-> diff --git a/fs/ceph/mdsmap.c b/fs/ceph/mdsmap.c
-> index 30387733765d..8d0a6d2c2da4 100644
-> --- a/fs/ceph/mdsmap.c
-> +++ b/fs/ceph/mdsmap.c
-> @@ -352,12 +352,10 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
->   		__decode_and_drop_type(p, end, u8, bad_ext);
->   	}
->   	if (mdsmap_ev >= 8) {
-> -		u32 name_len;
->   		/* enabled */
->   		ceph_decode_8_safe(p, end, m->m_enabled, bad_ext);
-> -		ceph_decode_32_safe(p, end, name_len, bad_ext);
-> -		ceph_decode_need(p, end, name_len, bad_ext);
-> -		*p += name_len;
-> +		/* fs_name */
-> +		ceph_decode_skip_string(p, end, bad_ext);
->   	}
->   	/* damaged */
->   	if (mdsmap_ev >= 9) {
-> @@ -370,6 +368,22 @@ struct ceph_mdsmap *ceph_mdsmap_decode(void **p, void *end, bool msgr2)
->   	} else {
->   		m->m_damaged = false;
->   	}
-> +	if (mdsmap_ev >= 17) {
-> +		/* balancer */
-> +		ceph_decode_skip_string(p, end, bad_ext);
-> +		/* standby_count_wanted */
-> +		ceph_decode_skip_32(p, end, bad_ext);
-> +		/* old_max_mds */
-> +		ceph_decode_skip_32(p, end, bad_ext);
-> +		/* min_compat_client */
-> +		ceph_decode_skip_8(p, end, bad_ext);
-> +		/* required_client_features */
-> +		ceph_decode_skip_set(p, end, 64, bad_ext);
-> +		ceph_decode_64_safe(p, end, m->m_max_xattr_size, bad_ext);
-> +	} else {
-> +		/* This forces the usage of the (sync) SETXATTR Op */
-> +		m->m_max_xattr_size = 0;
-> +	}
->   bad_ext:
->   	dout("mdsmap_decode m_enabled: %d, m_damaged: %d, m_num_laggy: %d\n",
->   	     !!m->m_enabled, !!m->m_damaged, m->m_num_laggy);
-> diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
-> index 8c2dc2c762a4..902323b12c35 100644
-> --- a/fs/ceph/xattr.c
-> +++ b/fs/ceph/xattr.c
-> @@ -1086,7 +1086,7 @@ static int ceph_sync_setxattr(struct inode *inode, const char *name,
->   			flags |= CEPH_XATTR_REMOVE;
->   	}
->   
-> -	dout("setxattr value=%.*s\n", (int)size, value);
-> +	dout("setxattr value size: %zu\n", size);
->   
->   	/* do request */
->   	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-> @@ -1184,8 +1184,14 @@ int __ceph_setxattr(struct inode *inode, const char *name,
->   	spin_lock(&ci->i_ceph_lock);
->   retry:
->   	issued = __ceph_caps_issued(ci, NULL);
-> -	if (ci->i_xattrs.version == 0 || !(issued & CEPH_CAP_XATTR_EXCL))
-> +	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
-> +	if ((ci->i_xattrs.version == 0) || !(issued & CEPH_CAP_XATTR_EXCL) ||
-> +	    (required_blob_size > mdsc->mdsmap->m_max_xattr_size)) {
-> +		dout("%s do sync setxattr: version: %llu size: %d max: %llu\n",
-> +		     __func__, ci->i_xattrs.version, required_blob_size,
-> +		     mdsc->mdsmap->m_max_xattr_size);
->   		goto do_sync;
-> +	}
->   
->   	if (!lock_snap_rwsem && !ci->i_head_snapc) {
->   		lock_snap_rwsem = true;
-> @@ -1201,8 +1207,6 @@ int __ceph_setxattr(struct inode *inode, const char *name,
->   	     ceph_cap_string(issued));
->   	__build_xattrs(inode);
->   
-> -	required_blob_size = __get_required_blob_size(ci, name_len, val_len);
-> -
->   	if (!ci->i_xattrs.prealloc_blob ||
->   	    required_blob_size > ci->i_xattrs.prealloc_blob->alloc_len) {
->   		struct ceph_buffer *blob;
-> diff --git a/include/linux/ceph/mdsmap.h b/include/linux/ceph/mdsmap.h
-> index 523fd0452856..4c3e0648dc27 100644
-> --- a/include/linux/ceph/mdsmap.h
-> +++ b/include/linux/ceph/mdsmap.h
-> @@ -25,6 +25,7 @@ struct ceph_mdsmap {
->   	u32 m_session_timeout;          /* seconds */
->   	u32 m_session_autoclose;        /* seconds */
->   	u64 m_max_file_size;
-> +	u64 m_max_xattr_size;		/* maximum size for xattrs blob */
->   	u32 m_max_mds;			/* expected up:active mds number */
->   	u32 m_num_active_mds;		/* actual up:active mds number */
->   	u32 possible_max_rank;		/* possible max rank index */
->
-Merged into the testing branch. Thanks Luis.
+But what does make me pretty pleased is that pretty much all of the
+pull requests were signed tags. I still don't technically _require_
+signatures for pulls from kernel.org, but I've been (not very subtly)
+encouraging people to use them, and we're getting there. It's just
+good hygiene.
 
--- Xiubo
+And to cap off the good news, this is the first merge window when
+Andrew participated all through git, and the first time in basically
+Linux history when I didn't have a single patch-bomb to apply (I still
+do individual random patches, and expect to always do them, but no
+more "big series of raw patches").
 
+So on the whole it's all very good.
 
+Anyway, apart from those three "process" issues, things look perfectly
+normal. Judging by the merge window, this release is going to be on
+the bigger side, but certainly not breaking any records, and nothing
+looks particularly odd or crazy. The diffstat is skewed by yet another
+drop of generated AMD GPU register descriptor headers, but I guess
+even that is "normal" by now. Certainly not a new thing. And if you
+ignore that drivers/gpu/drm/amd/include/ subdirectory, the stats look
+like they tend to do: roughly 60% drivers,  with the rest being
+architecture updates, tooling, documentation and some relatively minor
+core kernel updates (filesystems, mm, networking etc. Oh, and the core
+module handling got split up into more manageable pieces rather than
+one big file).
+
+One thing of note is how the long-time ARM generic kernel work (aka
+"multiplatform") is pretty much done after 10+ years. Congrats to
+everybody involved. The StrongARM platforms remain with their separate
+kernels, and are expected to stay so, but compared to where things
+were a decade ago, this is a pretty big step.
+
+So hey, let's start calming things down and testing this all.
+
+                      Linus
+
+---
+
+ Luis Chamberlain (1):
+    modules updates
+
+Al Viro (4):
+    file descriptor updates
+    mount handling updates
+    vfs pathname updates
+    file descriptor fix
+
+Alex Williamson (1):
+    vfio updates
+
+Alexandre Belloni (2):
+    i3c updates
+    RTC updates
+
+Andreas Gruenbacher (1):
+    gfs2 updates
+
+Andrew Morton (6):
+    MM updates
+    misc updates
+    hotfixes
+    more MM updates
+    delay-accounting update
+    mm hotfixes
+
+Anna Schumaker (1):
+    NFS client updates
+
+Ard Biesheuvel (2):
+    EFI updates
+    more EFI updates
+
+Arnaldo Carvalho de Melo (3):
+    perf tool updates
+    more perf tools updates
+    more perf tools updates
+
+Arnd Bergmann (11):
+    32-bit ARM SoC updates
+    ARM DT updates
+    ARM driver updates
+    ARM defconfig updates
+    ARMv4T/v5 multiplatform support
+    asm-generic updates
+    more ARM multiplatform updates
+    more ARM SoC updates
+    asm-generic fixes
+    initial Loongarch architecture code
+    yet more ARM multiplatform updates
+
+Bartosz Golaszewski (2):
+    gpio updates
+    gpio fixes
+
+Bjorn Andersson (2):
+    remoteproc updates
+    rpmsg updates
+
+Bjorn Helgaas (2):
+    pci updates
+    pci fixes
+
+Borislav Petkov (18):
+    EDAC updates
+    AMD SEV-SNP support
+    x86 RAS updates
+    Intel TDX support
+    x86 CPU feature updates
+    x86 asm updates
+    x86 build updates
+    x86 cleanups
+    core x86 updates
+    x86 fpu updates
+    x86 mm fixlet
+    x86 platform updates
+    x86 kdump fixlet
+    x86 APIC updates
+    x86 splitlock updates
+    misc x86 updates
+    x86 microcode loader update
+    x86 vdso update
+
+Casey Schaufler (1):
+    smack update
+
+Catalin Marinas (2):
+    arm64 updates
+    arm64 fixes
+
+Christian Brauner (1):
+    fs idmapping updates
+
+Christoph Hellwig (1):
+    dma-mapping updates
+
+Chuck Lever (1):
+    nfsd updates
+
+Corey Minyard (1):
+    IPMI update
+
+Damien Le Moal (3):
+    ata updates
+    zonefs updates
+    zonefs fix
+
+Dan Williams (2):
+    libnvdimm and DAX updates
+    cxl updates
+
+Darrick Wong (1):
+    iomap updates
+
+Dave Airlie (2):
+    drm updates
+    more drm updates
+
+Dave Chinner (2):
+    xfs updates
+    more xfs updates
+
+Dave Hansen (1):
+    x86 SGX updates
+
+David Kleikamp (1):
+    jfs updates
+
+David Sterba (1):
+    btrfs updates
+
+David Teigland (1):
+    dlm updates
+
+Dmitry Torokhov (1):
+    input updates
+
+Dominik Brodowski (1):
+    pcmcia updates
+
+Eric Biederman (3):
+    ipc sysctl namespace updates
+    kthread updates
+    ptrace_stop cleanups
+
+Eric Biggers (2):
+    fscrypt updates
+    fsverity updates
+
+Gao Xiang (2):
+    erofs (and fscache) updates
+    more erofs updates
+
+Geert Uytterhoeven (1):
+    m68k updates
+
+Greg KH (6):
+    SPDX updates
+    staging driver updates
+    tty and serial driver updates
+    USB / Thunderbolt updates
+    char / misc / other smaller driver subsystem updates
+    driver core updates
+
+Greg Ungerer (1):
+    m68knommu updates
+
+Guenter Roeck (1):
+    hwmon updates
+
+Guo Ren (1):
+    arch/csky updates
+
+Gustavo Silva (3):
+    Wstringop-overflow fixes
+    misc hardening updates
+    checkpatch update
+
+Hans de Goede (1):
+    x86 platform driver updates
+
+Heiko Carstens (2):
+    s390 updates
+    more s390 updates
+
+Helge Deller (3):
+    parisc architecture updates
+    fbdev fixes and updates
+    more parisc architecture updates
+
+Herbert Xu (1):
+    crypto updates
+
+Ilya Dryomov (1):
+    ceph updates
+
+Ingo Molnar (4):
+    locking updates
+    objtool updates
+    perf events updates
+    scheduler updates
+
+Jaegeuk Kim (1):
+    f2fs updates
+
+Jakub Kicinski (2):
+    networking updates
+    networking fixes
+
+James Bottomley (2):
+    SCSI updates
+    more SCSI updates
+
+Jan Kara (2):
+    writeback and ext2 cleanups
+    fsnotify updates
+
+Jarkko Sakkinen (1):
+    tpm updates
+
+Jason Donenfeld (1):
+    random number generator updates
+
+Jason Gunthorpe (1):
+    rdma updates
+
+Jassi Brar (1):
+    mailbox updates
+
+Jens Axboe (13):
+    io_uring updates
+    io_uring xattr support
+    io_uring socket() support
+    io_uring 'more data in socket' support
+    io_uring NVMe command passthrough
+    writeback fix
+    cdrom updates
+    block updates
+    block driver updates
+    more io_uring updates
+    block fixes
+    block request execute cleanups
+    more block driver updates
+
+Jiri Kosina (1):
+    HID updates
+
+Joerg Roedel (1):
+    iommu updates
+
+Jonathan Corbet (2):
+    documentation updates
+    documentation fixes
+
+Juergen Gross (2):
+    xen updates
+    more xen updates
+
+Kees Cook (4):
+    kernel hardening updates
+    seccomp updates
+    execve updates
+    kernel hardening fix
+
+Konstantin Komarov (1):
+    ntfs3 updates
+
+Lee Jones (1):
+    MFD updates
+
+Linus Walleij (1):
+    pin control updates
+
+Luis Chamberlain (1):
+    sysctl updates
+
+Mark Brown (5):
+    regmap updates
+    regulator updates
+    spi updates
+    spi fixes
+    regulator fix
+
+Masahiro Yamada (2):
+    Kbuild updates
+    more Kbuild updates
+
+Matthew Wilcox (1):
+    page cache updates
+
+Mauro Carvalho Chehab (1):
+    media updates
+
+Max Filippov (1):
+    xtensa architecture updates
+
+Michael Ellerman (1):
+    powerpc updates
+
+Michael Tsirkin (1):
+    virtio updates
+
+Michal Simek (1):
+    microblaze updates
+
+Micka=C3=ABl Sala=C3=BCn (1):
+    Landlock updates
+
+Miguel Ojeda (1):
+    clang-format updates
+
+Mike Rapoport (1):
+    memblock test suite updates
+
+Mike Snitzer (2):
+    device mapper updates
+    device mapper fixes
+
+Miklos Szeredi (1):
+    overlayfs updates
+
+Mimi Zohar (1):
+    IMA updates
+
+Miquel Raynal (1):
+    mtd updates
+
+Namjae Jeon (1):
+    exfat updates
+
+Palmer Dabbelt (2):
+    RISC-V updates
+    more RISC-V updates
+
+Paolo Bonzini (1):
+    kvm updates
+
+Paul McKenney (3):
+    nolibc library updates
+    LKMM update
+    RCU update
+
+Paul Moore (1):
+    selinux updates
+
+Pavel Machek (1):
+    LED updates
+
+Petr Mladek (3):
+    printk updates
+    printk fixup
+    livepatching cleanup
+
+Rafael Wysocki (7):
+    ACPI updates
+    power management updates
+    thermal control updates
+    device properties framework updates
+    more ACPI updates
+    additional thermal control update
+    more power management updates
+
+Richard Weinberger (2):
+    UML updates
+    JFFS2, UBI and UBIFS updates
+
+Rob Herring (2):
+    devicetree updates
+    devicetree fixes
+
+Russell King (1):
+    ARM updates
+
+Sebastian Reichel (1):
+    power supply and reset updates
+
+Shuah Khan (2):
+    Kselftest updates
+    KUnit updates
+
+Stafford Horne (1):
+    OpenRISC updates
+
+Stephen Boyd (1):
+    clk updates
+
+Steve French (3):
+    cifs client updates
+    ksmbd server updates
+    cifs client fixes
+
+Steven Rostedt (2):
+    tracing updates
+    tracing tool updates
+
+Takashi Iwai (2):
+    sound updates
+    sound fixes
+
+Ted Ts'o (1):
+    ext4 updates
+
+Tejun Heo (2):
+    cgroup updates
+    workqueue update
+
+Thierry Reding (2):
+    pwm updates
+    hardware timestamping subsystem
+
+Thomas Bogendoerfer (1):
+    MIPS updates
+
+Thomas Gleixner (16):
+    irqpoll update
+    debugobjects fixlet
+    CPU hotplug updates
+    interrupt handling updates
+    timer and timekeeping updates
+    x86 PCI irq routing updates
+    objtool fixes
+    perf fixlet
+    perf fixes
+    scheduler fix
+    clockevent/clocksource updates
+    x86 boot update
+    x86 cleanups
+    x86 microcode updates
+    x86 mm cleanup
+    x86 SGX fix
+
+Tzung-Bi Shih (1):
+    chrome platform updates
+
+Ulf Hansson (1):
+    MMC updates
+
+Vineet Gupta (1):
+    ARC updates
+
+Vinod Koul (1):
+    dmaengine updates
+
+Vlastimil Babka (1):
+    slab updates
+
+Wei Liu (1):
+    hyperv updates
+
+Wim Van Sebroeck (1):
+    watchdog updates
+
+Wolfram Sang (1):
+    i2c updates
+
+Yury Norov (1):
+    bitmap updates

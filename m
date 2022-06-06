@@ -2,115 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD10E53DFC3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8946C53DFC5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238847AbiFFCmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S1352223AbiFFCmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352198AbiFFCmQ (ORCPT
+        with ESMTP id S1352206AbiFFCmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:42:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4200E640E
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654483334; x=1686019334;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fit8HZMPGvo/+C1wqhHEmiPdAbd1OryM+h5M+okK88U=;
-  b=kceVARGhz0X+DYysLzYrqB262E3kUqjYf5u92tmqUh89tKekNwlxE4+4
-   jXB58yiU2FI92Dztt3Dau4XlX4lNtovlLpnIgB+Of3WrO1xtKj/kAUwqc
-   ml9r58yiVBus8IY8KQl7GUNwh2UG4DpIOvqNT6o7qNPbUm53uzaI22spw
-   HwaDZy+5au0GnDP7siulcstEHVJSBmF2d18sOhN+xwx4KQHR/OV9mfelj
-   7fIDqDyuhcr1DptmaRV0/V4tadPayeloLlqSRElMd39iSrbNucFVBZRc4
-   yXJO0FfxZwBr5APL7yiTRnXmwr+E0Asap29HgP40UnUHv1HodJZO6VvYG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="257059796"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="257059796"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 19:42:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="906315383"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Jun 2022 19:42:04 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ny2gt-000CQX-Or;
-        Mon, 06 Jun 2022 02:42:03 +0000
-Date:   Mon, 6 Jun 2022 10:41:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Atish Patra <Atish.Patra@wdc.com>, linux-kernel@vger.kernel.org
-Subject: [atishp04:kvm_pmu 4/4] arch/riscv/include/asm/kvm_host.h:19:10:
- fatal error: 'asm/kvm_vcpu_pmu.h' file not found
-Message-ID: <202206061019.MqcefJj0-lkp@intel.com>
+        Sun, 5 Jun 2022 22:42:33 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903AB95B7;
+        Sun,  5 Jun 2022 19:42:28 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bg6so6505313ejb.0;
+        Sun, 05 Jun 2022 19:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1N3UQUBc3SITykVwo1DI11Mg5L1Q2wcvd0ubz4CZVpI=;
+        b=QR1BrIRVMMEg2pgbBohP2/arDirkXnP+tL4I5QMLHUWjiYDbuH6aIrxuPPxCPrWBpx
+         E7AeY+OCPrIOCSFxXu6077V46+Bknu5f1NrpoPF4TXfMtH+KH/ypkYQ9d3ME2aeDANp/
+         b3+bimiNl8MpeSYkBDFlBYwV0AQX3bB2Rd1WAT3/PB3IEBfpVaWO0HXtUsL80NX/V0r9
+         3YC26wLFLQHE1W8LV4p4sx00MCYjzwbdkBOq2YsZlKFZMHlEACQ8CcaAGLVWh/kQIlGU
+         g72pssLvO4y/Iwr9EgKi5wtbfPb5mxpRE7TeZ+NuXc0bq716HTfN7raiAr1TeA/4F3wx
+         DbMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1N3UQUBc3SITykVwo1DI11Mg5L1Q2wcvd0ubz4CZVpI=;
+        b=pTEQMQVCnYcEbjE+kyEXsNjAhXVs0F7oXsbFN3UI6Ql38i9pyDY/PvkSYGHnuWWhmc
+         nHnWANtii74/hI+S4a5su10ni2PmKlpIh2Cbi89I/eOWX2yr1BaPW5Hn5g5pxnH3Bv28
+         fh2OhpfIG9IAW5So0iTDEOIVvSQo9ctcG45Cpz0T24QgyLHXZykO2pnDUfT8UHVuWNHt
+         nKIJF/kc0jLu81I9NJX4J22Le8qRVrM8ePGVcuLyVjSzpopCut/lrdMlS5maRblgycB8
+         XsI4KrawPokx2JyZyue4P2I4Y3g+10gZA9Epd1l7cfNmmK0L8OaQsS9zRP02/50yALHW
+         S+Aw==
+X-Gm-Message-State: AOAM530EgC7wilYlK0glWcixPSG7XCv9A+6YNjJezCMPCo1hAp9HjSh5
+        W/IgV9Ip/iNZl0KZ7CHi7fY5pRbktjuopTCDD8yp1PVdMbU=
+X-Google-Smtp-Source: ABdhPJxkVMadKzZkp4603xDlsiXx/Hb59+1zjauQ6/hsxzM25KnSP9koqlSzgftzD42Y0SBSjP9JmAjC536SXaDMa24=
+X-Received: by 2002:a17:906:b294:b0:6fe:fdb9:5fb4 with SMTP id
+ q20-20020a170906b29400b006fefdb95fb4mr19414342ejz.179.1654483346371; Sun, 05
+ Jun 2022 19:42:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513033450.7038-1-kflin@nuvoton.com> <20220513033450.7038-6-kflin@nuvoton.com>
+ <b5361f08-f9eb-9384-f904-2625bae0fd9a@molgen.mpg.de> <CADnNmFqfxDE3UbNQiyhwkLBugfZ1fSZYDbGDQFnRZdD_4q58+A@mail.gmail.com>
+In-Reply-To: <CADnNmFqfxDE3UbNQiyhwkLBugfZ1fSZYDbGDQFnRZdD_4q58+A@mail.gmail.com>
+From:   Kun-Fa Lin <milkfafa@gmail.com>
+Date:   Mon, 6 Jun 2022 10:42:39 +0800
+Message-ID: <CADnNmFqzAmyxgc0jbXFXUy8ueb=6-RxoWWHP4A=iRUO1fx4zRA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] drivers: media: platform: Add NPCM Video
+ Capture/Encode Engine driver
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, CS20 KWLiu <kwliu@nuvoton.com>,
+        tmaimon77@gmail.com, avifishman70@gmail.com,
+        openbmc@lists.ozlabs.org, tali.perry1@gmail.com,
+        Marvin Lin <kflin@nuvoton.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux kvm_pmu
-head:   9df21c8955e9552aae9109be01c0f910e4023667
-commit: 9df21c8955e9552aae9109be01c0f910e4023667 [4/4] RISC-V: KVM: Add skeleton support
-config: riscv-buildonly-randconfig-r009-20220605 (https://download.01.org/0day-ci/archive/20220606/202206061019.MqcefJj0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/9df21c8955e9552aae9109be01c0f910e4023667
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 kvm_pmu
-        git checkout 9df21c8955e9552aae9109be01c0f910e4023667
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
+Dear Paul,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+These problems have been addressed in the new patch.
+Could you please help to review the new patch v4? Thanks.
 
-All errors (new ones prefixed by >>):
+Regards,
+Marvin
 
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
->> arch/riscv/include/asm/kvm_host.h:19:10: fatal error: 'asm/kvm_vcpu_pmu.h' file not found
-   #include <asm/kvm_vcpu_pmu.h>
-            ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/riscv/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1196: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +19 arch/riscv/include/asm/kvm_host.h
-
-    11	
-    12	#include <linux/types.h>
-    13	#include <linux/kvm.h>
-    14	#include <linux/kvm_types.h>
-    15	#include <linux/spinlock.h>
-    16	#include <asm/csr.h>
-    17	#include <asm/kvm_vcpu_fp.h>
-    18	#include <asm/kvm_vcpu_timer.h>
-  > 19	#include <asm/kvm_vcpu_pmu.h>
-    20	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kun-Fa Lin <milkfafa@gmail.com> =E6=96=BC 2022=E5=B9=B45=E6=9C=8817=E6=97=
+=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8810:59=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Dear Paul,
+>
+> Thanks for your review and comments.
+>
+> > Please mention the datasheet name and revision used to implement this?
+> > How can your patch be tested?
+> >
+> > For a over 2000 line patch, I would expect a longer commit message with
+> > a summary of the hardware features, and implementation.
+>
+> Okay, I'll add more information to the commit message, but it may not
+> be appropriate to add the datasheet name since it is not public.
+> And I tested with openbmc/obmc-ikvm (with patches to support Hextile
+> encoding that our driver used) and used VNC Viewer to verify the video
+> result.
+>
+> >
+> > As the module author should you also be added to the file `MAINTAINERS`=
+?
+> > (Maybe even with a functional address <linux-npcm-video@nuvoton.com>?
+> >
+> > > Signed-off-by: Marvin Lin <kflin@nuvoton.com>
+> >
+> > Same comment as in 1/5 regarding the author email address.
+>
+> I'll add a new entry in MAINTAINERS.
+>
+> > > +++ b/drivers/media/platform/nuvoton/Kconfig
+> > > @@ -0,0 +1,12 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only
+> > > +
+> > > +comment "Nuvoton media platform drivers"
+> > > +
+> > > +config VIDEO_NUVOTON
+> >
+> > Is that driver going to support all Nuvoton devices or just NPCM? If
+> > only NPCM, that should be part of the Kconfig config name?
+> >
+> > > +     tristate "Nuvoton NPCM Video Capture/Encode Engine driver"
+> > > +     depends on V4L_PLATFORM_DRIVERS
+> > > +     depends on VIDEO_DEV
+> > > +     select VIDEOBUF2_DMA_CONTIG
+> > > +     help
+> > > +       Support for the Video Capture/Differentiation Engine (VCD) an=
+d
+> > > +       Encoding Compression Engine (ECE) present on Nuvoton NPCM SoC=
+s.
+> >
+> > Mention the module name?
+> >
+> >  > To compile this driver as a module, choose M here: the module will b=
+e
+> > called XXX.
+>
+> The driver just supports NPCM. I'll change the config to
+> VIDEO_NUVOTON_NPCM_VCD_ECE.
+>
+> > > +struct nuvoton_video_addr {
+> > > +     unsigned int size;
+> >
+> > size_t?
+>
+> > > +struct rect_list_info {
+> > > +     struct rect_list *list;
+> > > +     struct rect_list *first;
+> > > +     struct list_head *head;
+> > > +     int index;
+> > > +     int tile_perline;
+> > > +     int tile_perrow;
+> > > +     int offset_perline;
+> > > +     int tile_size;
+> > > +     int tile_cnt;
+> >
+> > Can all of these be unsigned?
+>
+> > > +     int frame_rate;
+> > > +     int vb_index;
+> >
+> > Unsigned?
+> >
+>
+> They will be addressed in the next patch.
+>
+> > > +     u32 bytesperline;
+> > > +     u8 bytesperpixel;
+> > > +     u32 rect_cnt;
+> > > +     u8 num_buffers;
+> > > +     struct list_head *list;
+> > > +     u32 *rect;
+> >
+> > I would not limit the size?
+>
+> It's clearer to know that it stores u32 exactly.
+>
+> > > +static u32 nuvoton_video_ece_get_ed_size(struct nuvoton_video *video=
+,
+> > > +                                      u32 offset, void *addr)
+> >
+> > Use unsigned int as return value?
+>
+> Okay.
+>
+> > > +static void nuvoton_video_ece_enc_rect(struct nuvoton_video *video, =
+u32 r_off_x,
+> > > +                                    u32 r_off_y, u32 r_w, u32 r_h)
+> > > +{
+> > > +     struct regmap *ece =3D video->ece.regmap;
+> > > +     u32 rect_offset =3D (r_off_y * video->bytesperline) + (r_off_x =
+* 2);
+> > > +     u32 temp;
+> > > +     u32 w_tile;
+> > > +     u32 h_tile;
+> > > +     u32 w_size =3D ECE_TILE_W;
+> > > +     u32 h_size =3D ECE_TILE_H;
+> >
+> > Any reason to fix the sizes?
+>
+> A "Hextile" is fixed to 16x16 pixels size, which is defined in Remote
+> Framebuffer Protocol (RFC 6143, chapter 7.7.4 Hextile Encoding).
+>
+> > > +static void nuvoton_video_ece_ip_reset(struct nuvoton_video *video)
+> > > +{
+> > > +     reset_control_assert(video->ece.reset);
+> > > +     msleep(100);
+> > > +     reset_control_deassert(video->ece.reset);
+> > > +     msleep(100);
+> >
+> > 100 ms is quite long. Please add a comment, where that is documented. I=
+s
+> > there a way to poll, if the device is done?
+>
+> I'll add a comment. It should be reduced to ~10 us (suggested in
+> spec.) and there's no way to poll.
+>
+> > > +
+> > > +static void nuvoton_video_free_diff_table(struct nuvoton_video *vide=
+o)
+> > > +{
+> > > +     struct list_head *head, *pos, *nx;
+> > > +     struct rect_list *tmp;
+> > > +     int i;
+> >
+> > unsigned?
+> >
+>
+> > > +static int nuvoton_video_find_rect(struct nuvoton_video *video,
+> > > +                                struct rect_list_info *info, u32 off=
+set)
+> > > +{
+> > > +     int i =3D info->index;
+> > > +
+> > > +     if (offset < info->tile_perline) {
+> > > +             info->list =3D nuvoton_video_new_rect(video, offset, i)=
+;
+> >
+> > `i` is only used here, so use `info->index`?
+> >
+>
+> > > +static int nuvoton_video_build_table(struct nuvoton_video *video,
+> > > +                                  struct rect_list_info *info)
+> > > +{
+> > > +     int i =3D info->index;
+> > > +     int j, ret, bit;
+> >
+> > Make `j` unsigned?
+> >
+> > > +     u32 value;
+> > > +     struct regmap *vcd =3D video->vcd_regmap;
+> > > +
+> > > +     for (j =3D 0; j < info->offset_perline; j +=3D 4) {
+> > > +             regmap_read(vcd, VCD_DIFF_TBL + (j + i), &value);
+> >
+> > `i` is only used here, so use `info->index`?
+> >
+>
+> > > +static void nuvoton_video_vcd_ip_reset(struct nuvoton_video *video)
+> > > +{
+> > > +     reset_control_assert(video->reset);
+> > > +     msleep(100);
+> > > +     reset_control_deassert(video->reset);
+> > > +     msleep(100);
+> >
+> > 100 ms is quite long. Please add a comment, where that is documented. I=
+s
+> > there a way to poll, if the device is done?
+> >
+>
+> > > +static int nuvoton_video_queue_setup(struct vb2_queue *q,
+> > > +                                  unsigned int *num_buffers,
+> > > +                                  unsigned int *num_planes,
+> > > +                                  unsigned int sizes[],
+> > > +                                  struct device *alloc_devs[])
+> > > +{
+> > > +     struct nuvoton_video *video =3D vb2_get_drv_priv(q);
+> > > +     int i;
+> >
+> > unsigned?
+> >
+>
+> > > +static void nuvoton_video_buf_queue(struct vb2_buffer *vb)
+> > > +{
+> > > +     int empty;
+> > > +     struct nuvoton_video *video =3D vb2_get_drv_priv(vb->vb2_queue)=
+;
+> > > +     struct vb2_v4l2_buffer *vbuf =3D to_vb2_v4l2_buffer(vb);
+> > > +     struct nuvoton_video_buffer *nvb =3D to_nuvoton_video_buffer(vb=
+uf);
+> > > +     unsigned long flags;
+> > > +
+> > > +     dev_dbg(video->dev, "%s\n", __func__);
+> > > +
+> > > +     spin_lock_irqsave(&video->lock, flags);
+> > > +     empty =3D list_empty(&video->buffers);
+> >
+> > Where is empty read later?
+> >
+>
+> > > +     regs =3D devm_platform_ioremap_resource_byname(pdev, VCD_MODULE=
+_NAME);
+> > > +     if (IS_ERR(regs)) {
+> > > +             dev_err(&pdev->dev, "Failed to get VCD regmap resource!=
+\n");
+> >
+> > Can you help the user more by saying what to fix like check devicetree
+> > or so?
+> >
+>
+> Okay. All of them will be addressed in the next patch.
+>
+> Regards,
+> Marvin

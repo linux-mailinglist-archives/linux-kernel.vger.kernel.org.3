@@ -2,117 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E09353ED23
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA6253ED38
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiFFRnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 13:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S230190AbiFFRwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 13:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiFFRnZ (ORCPT
+        with ESMTP id S229504AbiFFRwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 13:43:25 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1462231E514;
-        Mon,  6 Jun 2022 10:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654537404; x=1686073404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/S6pr49WABi/EsUuj7n0Y6baq3JnjVB8EfNPrmXyCtI=;
-  b=Jm4Ht9Iu1f86D+kewB5Z+bywhNrLdaYJW7tv23812OAKJpp8SjEbimz0
-   eqmfsu7XQlQ0NDexlqWoqsvmQd2809g4O1uqNUKl1PWefrMzOe+oRRazT
-   md2VvZj/gHEOhw/7t5CS55TtOyOD8WDbl5+SIR1gQVn5os6g7x+VoWmpu
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jun 2022 10:43:23 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 10:43:22 -0700
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 6 Jun 2022
- 10:43:22 -0700
-Date:   Mon, 6 Jun 2022 10:43:20 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <wens@csie.org>,
-        <jic23@kernel.org>, <lee.jones@linaro.org>, <sre@kernel.org>,
-        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <lars@metafoo.de>, <rafael@kernel.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/10] regmap-irq: Add get_irq_reg to support unusual
- register layouts
-Message-ID: <20220606174320.GA16522@quicinc.com>
-References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
- <20220603135714.12007-2-aidanmacdonald.0x0@gmail.com>
+        Mon, 6 Jun 2022 13:52:51 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C053F5B8A8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:52:49 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256GB6gu005152;
+        Mon, 6 Jun 2022 17:46:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=EQMNc2paYwDVPhdwmyQ9DL/f0BkyHyvUKb/mm7hjZqg=;
+ b=MiOl+4h95hGgZjaIMhp2vlo6wOC1nIdU734T4hrlWzYo6iDohuyDOPTYxMpVM1woRHlX
+ iXY8I3xsL/Zuc/l28O622c3G3McJo2cmZifxWLG35vsrvJSEID1c9swv2GWuP1OEC8nw
+ oLw0yz+zfGOe0pxMkAztgQrP1ntBTQ4JHKNSE8EfoZqFKURy4+6WYLQRftR3DJlRS8qy
+ q3eifaUwJjVDXcHUFDa5FaJT+/+YXg58nUOsAlmMjRlaXH/SDgyl5IaNk7qJL+8k8zTO
+ oILQ3n3kE2aFhUZYRKnHwxK2aoQZKBh49Lk/ZsDWxWHpXp0J88b6x3UXtez9l6eg7ONO /w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gghesd6ev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 17:46:27 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 256Hi8F8006422;
+        Mon, 6 Jun 2022 17:46:26 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gghesd6en-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 17:46:26 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256HK4Wb019807;
+        Mon, 6 Jun 2022 17:46:25 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma05wdc.us.ibm.com with ESMTP id 3gfy19f3uk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 17:46:25 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256HkPtu60031268
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 17:46:25 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6BC94AE05C;
+        Mon,  6 Jun 2022 17:46:25 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1CAFAE05F;
+        Mon,  6 Jun 2022 17:46:18 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.87.254])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 17:46:18 +0000 (GMT)
+X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [RFC PATCH v4 2/7] mm/demotion: Expose per node memory tier to
+ sysfs
+In-Reply-To: <efede910-e0d7-02e6-d536-c25a7225d88c@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-3-aneesh.kumar@linux.ibm.com>
+ <20220527151531.00002a0c@Huawei.com>
+ <fbebbd2b-2ddb-bee6-5e12-67e3e18648ee@linux.ibm.com>
+ <20220606155920.00004ce9@Huawei.com>
+ <3a557f74-cc3a-c0ee-78e8-2cf50bee5f2d@linux.ibm.com>
+ <20220606171622.000036ed@Huawei.com>
+ <efede910-e0d7-02e6-d536-c25a7225d88c@linux.ibm.com>
+Date:   Mon, 06 Jun 2022 23:16:15 +0530
+Message-ID: <87ee01ofbs.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220603135714.12007-2-aidanmacdonald.0x0@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0lbmtZkKv6-E1NGC5ez2hqZzG-BjA2nd
+X-Proofpoint-ORIG-GUID: 6wKaTOpKkHfEw3MfN3IesiQqAt9H5NJ6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_05,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ spamscore=0 mlxscore=0 adultscore=0 clxscore=1015 malwarescore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 02:57:05PM +0100, Aidan MacDonald wrote:
-> Add a new callback, get_irq_reg, for regmap IRQ chips, to support devices
-> with unusual register layouts. This is required in the rare cases where
-> the offset of an IRQ register is not constant with respect to the base
-> register. This is probably best illustrated with an example:
-> 
->             mask    status
->     IRQ0    0x40    0x44
->     IRQ1    0x41    0x45
->     IRQ2    0x42    0x46
->     IRQ3    0x43    0x47
->     IRQ4    0x4a    0x4d
-> 
-> If we set mask_base = 0x40 and status_base = 0x44, the offsets of each
-> register relative to the base are:
-> 
->             mask    status
->     IRQ0    0       0
->     IRQ1    1       1
->     IRQ2    2       2
->     IRQ3    3       3
->     IRQ4    10      9
-> 
-> The existing mapping mechanisms can't include IRQ4 in the same irqchip
-> as IRQ0-3 because the offset of IRQ4's register depends on which type
-> of register we're asking for, ie. which base register is used.
-> 
-> The get_irq_reg callback allows drivers to specify an arbitrary mapping
-> of (base register, register index) pairs to register addresses, instead
-> of the default linear mapping "base_register + register_index". This
-> allows unusual layouts, like the one above, to be handled using a single
-> regmap IRQ chip.
-> 
-> The drawback is that when get_irq_reg is used, it's impossible to use
-> bulk reads for status registers even if some of them are contiguous,
-> because the mapping is opaque to regmap-irq. This should be acceptable
-> for the case of a few infrequently-polled status registers.
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-This patch does two things:
+> On 6/6/22 9:46 PM, Jonathan Cameron wrote:
+>> On Mon, 6 Jun 2022 21:31:16 +0530
+>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> wrote:
+>> 
+>>> On 6/6/22 8:29 PM, Jonathan Cameron wrote:
+>>>> On Fri, 3 Jun 2022 14:10:47 +0530
+>>>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> wrote:
+>>>>    
+>>>>> On 5/27/22 7:45 PM, Jonathan Cameron wrote:
+>>>>>> On Fri, 27 May 2022 17:55:23 +0530
+>>>>>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> wrote:
+>>>>>>       
+>>>>>>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>>>>>>
+>>>>>>> Add support to read/write the memory tierindex for a NUMA node.
+>>>>>>>
+>>>>>>> /sys/devices/system/node/nodeN/memtier
+>>>>>>>
+>>>>>>> where N = node id
+>>>>>>>
+>>>>>>> When read, It list the memory tier that the node belongs to.
+>>>>>>>
+>>>>>>> When written, the kernel moves the node into the specified
+>>>>>>> memory tier, the tier assignment of all other nodes are not
+>>>>>>> affected.
+>>>>>>>
+>>>>>>> If the memory tier does not exist, writing to the above file
+>>>>>>> create the tier and assign the NUMA node to that tier.
+>>>>>> creates
+>>>>>>
+>>>>>> There was some discussion in v2 of Wei Xu's RFC that what matter
+>>>>>> for creation is the rank, not the tier number.
+>>>>>>
+>>>>>> My suggestion is move to an explicit creation file such as
+>>>>>> memtier/create_tier_from_rank
+>>>>>> to which writing the rank gives results in a new tier
+>>>>>> with the next device ID and requested rank.
+>>>>>
+>>>>> I think the below workflow is much simpler.
+>>>>>
+>>>>> :/sys/devices/system# cat memtier/memtier1/nodelist
+>>>>> 1-3
+>>>>> :/sys/devices/system# cat node/node1/memtier
+>>>>> 1
+>>>>> :/sys/devices/system# ls memtier/memtier*
+>>>>> nodelist  power  rank  subsystem  uevent
+>>>>> /sys/devices/system# ls memtier/
+>>>>> default_rank  max_tier  memtier1  power  uevent
+>>>>> :/sys/devices/system# echo 2 > node/node1/memtier
+>>>>> :/sys/devices/system#
+>>>>>
+>>>>> :/sys/devices/system# ls memtier/
+>>>>> default_rank  max_tier  memtier1  memtier2  power  uevent
+>>>>> :/sys/devices/system# cat memtier/memtier1/nodelist
+>>>>> 2-3
+>>>>> :/sys/devices/system# cat memtier/memtier2/nodelist
+>>>>> 1
+>>>>> :/sys/devices/system#
+>>>>>
+>>>>> ie, to create a tier we just write the tier id/tier index to
+>>>>> node/nodeN/memtier file. That will create a new memory tier if needed
+>>>>> and add the node to that specific memory tier. Since for now we are
+>>>>> having 1:1 mapping between tier index to rank value, we can derive the
+>>>>> rank value from the memory tier index.
+>>>>>
+>>>>> For dynamic memory tier support, we can assign a rank value such that
+>>>>> new memory tiers are always created such that it comes last in the
+>>>>> demotion order.
+>>>>
+>>>> I'm not keen on having to pass through an intermediate state where
+>>>> the rank may well be wrong, but I guess it's not that harmful even
+>>>> if it feels wrong ;)
+>>>>    
+>>>
+>>> Any new memory tier added can be of lowest rank (rank - 0) and hence
+>>> will appear as the highest memory tier in demotion order.
+>> 
+>> Depends on driver interaction - if new memory is CXL attached or
+>> GPU attached, chances are the driver has an input on which tier
+>> it is put in by default.
+>> 
+>>> User can then
+>>> assign the right rank value to the memory tier? Also the actual demotion
+>>> target paths are built during memory block online which in most case
+>>> would happen after we properly verify that the device got assigned to
+>>> the right memory tier with correct rank value?
+>> 
+>> Agreed, though that may change the model of how memory is brought online
+>> somewhat.
+>> 
+>>>
+>>>> Races are potentially a bit of a pain though depending on what we
+>>>> expect the usage model to be.
+>>>>
+>>>> There are patterns (CXL regions for example) of guaranteeing the
+>>>> 'right' device is created by doing something like
+>>>>
+>>>> cat create_tier > temp.txt
+>>>> #(temp gets 2 for example on first call then
+>>>> # next read of this file gets 3 etc)
+>>>>
+>>>> cat temp.txt > create_tier
+>>>> # will fail if there hasn't been a read of the same value
+>>>>
+>>>> Assuming all software keeps to the model, then there are no
+>>>> race conditions over creation.  Otherwise we have two new
+>>>> devices turn up very close to each other and userspace scripting
+>>>> tries to create two new tiers - if it races they may end up in
+>>>> the same tier when that wasn't the intent.  Then code to set
+>>>> the rank also races and we get two potentially very different
+>>>> memories in a tier with a randomly selected rank.
+>>>>
+>>>> Fun and games...  And a fine illustration why sysfs based 'device'
+>>>> creation is tricky to get right (and lots of cases in the kernel
+>>>> don't).
+>>>>    
+>>>
+>>> I would expect userspace to be careful and verify the memory tier and
+>>> rank value before we online the memory blocks backed by the device. Even
+>>> if we race, the result would be two device not intended to be part of
+>>> the same memory tier appearing at the same tier. But then we won't be
+>>> building demotion targets yet. So userspace could verify this, move the
+>>> nodes out of the memory tier. Once it is verified, memory blocks can be
+>>> onlined.
+>> 
+>> The race is there and not avoidable as far as I can see. Two processes A and B.
+>> 
+>> A checks for a spare tier number
+>> B checks for a spare tier number
+>> A tries to assign node 3 to new tier 2 (new tier created)
+>> B tries to assign node 4 to new tier 2 (accidentally hits existing tier - as this
+>> is the same method we'd use to put it in the existing tier we can't tell this
+>> write was meant to create a new tier).
+>> A writes rank 100 to tier 2
+>> A checks rank for tier 2 and finds it is 100 as expected.
+>> B write rank 200 to tier 2 (it could check if still default but even that is racy)
+>> B checks rank for tier 2 rank and finds it is 200 as expected.
+>> A onlines memory.
+>> B onlines memory.
+>> 
+>> Both think they got what they wanted, but A definitely didn't.
+>> 
+>> One work around is the read / write approach and create_tier.
+>> 
+>> A reads create_tier - gets 2.
+>> B reads create_tier - gets 3.
+>> A writes 2 to create_tier as that's what it read.
+>> B writes 3 to create_tier as that's what it read.
+>> 
+>> continue with created tiers.  Obviously can exhaust tiers, but if this is
+>> root only, could just create lots anyway so no worse off.
+>>   
+>>>
+>>> Having said that can you outline the usage of
+>>> memtier/create_tier_from_rank ?
+>> 
+>> There are corner cases to deal with...
+>> 
+>> A writes 100 to create_tier_from_rank.
+>> A goes looking for matching tier - finds it: tier2
+>> B writes 200 to create_tier_from_rank
+>> B goes looking for matching tier - finds it: tier3
+>> 
+>> rest is fine as operating on different tiers.
+>> 
+>> Trickier is
+>> A writes 100 to create_tier_from_rank  - succeed.
+>> B writes 100 to create_tier_from_rank  - Could fail, or could just eat it?
+>> 
+>> Logically this is same as separate create_tier and then a write
+>> of rank, but in one operation, but then you need to search
+>> for the right one.  As such, perhaps a create_tier
+>> that does the read/write pair as above is the best solution.
+>> 
+>
+> This all is good when we allow dynamic rank values. But currently we are 
+> restricting ourselves to three rank value as below:
+>
+> rank   memtier
+> 300    memtier0
+> 200    memtier1
+> 100    memtier2
+>
+> Now with the above, how do we define a write to create_tier_from_rank. 
+> What should be the behavior if user write value other than above defined 
+> rank values? Also enforcing the above three rank values as supported 
+> implies teaching userspace about them. I am trying to see how to fit
+> create_tier_from_rank without requiring the above.
+>
+> Can we look at implementing create_tier_from_rank when we start 
+> supporting dynamic tiers/rank values? ie,
+>
+> we still allow node/nodeN/memtier. But with dynamic tiers a race free
+> way to get a new memory tier would be echo rank > 
+> memtier/create_tier_from_rank. We could also say, memtier0/1/2 are 
+> kernel defined memory tiers. Writing to memtier/create_tier_from_rank 
+> will create new memory tiers above memtier2 with the rank value specified?
+>
 
-1. Add a new callback `get_irq_reg`
-2. Replace unmask_offset calculation with call to sub_irq_reg()
+To keep it compatible we could do this. ie, we just allow creation of
+one additional memory tier (memtier3) via the above interface.
 
-Could you please split the patch into two to better reflect this?
 
-Thank you.
+:/sys/devices/system/memtier# ls -al
+total 0
+drwxr-xr-x  4 root root    0 Jun  6 17:39 .
+drwxr-xr-x 10 root root    0 Jun  6 17:39 ..
+--w-------  1 root root 4096 Jun  6 17:40 create_tier_from_rank
+-r--r--r--  1 root root 4096 Jun  6 17:40 default_tier
+-r--r--r--  1 root root 4096 Jun  6 17:40 max_tier
+drwxr-xr-x  3 root root    0 Jun  6 17:39 memtier1
+drwxr-xr-x  2 root root    0 Jun  6 17:40 power
+-rw-r--r--  1 root root 4096 Jun  6 17:39 uevent
+:/sys/devices/system/memtier# echo 20 > create_tier_from_rank 
+:/sys/devices/system/memtier# ls
+create_tier_from_rank  default_tier  max_tier  memtier1  memtier3  power  uevent
+:/sys/devices/system/memtier# cat memtier3/rank 
+20
+:/sys/devices/system/memtier# echo 20 > create_tier_from_rank 
+bash: echo: write error: No space left on device
+:/sys/devices/system/memtier# 
 
-Guru Das.
+is this good? 
+
+diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+index 0468af60d427..a4150120ba24 100644
+--- a/include/linux/memory-tiers.h
++++ b/include/linux/memory-tiers.h
+@@ -13,7 +13,7 @@
+ #define MEMORY_RANK_PMEM	100
+ 
+ #define DEFAULT_MEMORY_TIER	MEMORY_TIER_DRAM
+-#define MAX_MEMORY_TIERS  3
++#define MAX_MEMORY_TIERS  4
+ 
+ extern bool numa_demotion_enabled;
+ extern nodemask_t promotion_mask;
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index c6eb223a219f..7fdee0c4c4ea 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -169,7 +169,8 @@ static void insert_memory_tier(struct memory_tier *memtier)
+ 	list_add_tail(&memtier->list, &memory_tiers);
+ }
+ 
+-static struct memory_tier *register_memory_tier(unsigned int tier)
++static struct memory_tier *register_memory_tier(unsigned int tier,
++						unsigned int rank)
+ {
+ 	int error;
+ 	struct memory_tier *memtier;
+@@ -182,7 +183,7 @@ static struct memory_tier *register_memory_tier(unsigned int tier)
+ 		return NULL;
+ 
+ 	memtier->dev.id = tier;
+-	memtier->rank = get_rank_from_tier(tier);
++	memtier->rank = rank;
+ 	memtier->dev.bus = &memory_tier_subsys;
+ 	memtier->dev.release = memory_tier_device_release;
+ 	memtier->dev.groups = memory_tier_dev_groups;
+@@ -218,9 +219,53 @@ default_tier_show(struct device *dev, struct device_attribute *attr, char *buf)
+ }
+ static DEVICE_ATTR_RO(default_tier);
+ 
++
++static struct memory_tier *__get_memory_tier_from_id(int id);
++static ssize_t create_tier_from_rank_store(struct device *dev,
++					   struct device_attribute *attr,
++					   const char *buf, size_t count)
++{
++	int ret, rank;
++	struct memory_tier *memtier;
++
++	ret = kstrtouint(buf, 10, &rank);
++	if (ret)
++		return ret;
++
++	if (ret == MEMORY_RANK_HBM_GPU ||
++	    rank == MEMORY_TIER_DRAM ||
++	    rank == MEMORY_RANK_PMEM)
++		return -EINVAL;
++
++	mutex_lock(&memory_tier_lock);
++	/*
++	 * For now we only support creation of one additional tier via
++	 * this interface.
++	 */
++	memtier = __get_memory_tier_from_id(3);
++	if (!memtier) {
++		memtier = register_memory_tier(3, rank);
++		if (!memtier) {
++			ret = -EINVAL;
++			goto out;
++		}
++	} else {
++		ret = -ENOSPC;
++		goto out;
++	}
++
++	ret = count;
++out:
++	mutex_unlock(&memory_tier_lock);
++	return ret;
++}
++static DEVICE_ATTR_WO(create_tier_from_rank);
++
++
+ static struct attribute *memory_tier_attrs[] = {
+ 	&dev_attr_max_tier.attr,
+ 	&dev_attr_default_tier.attr,
++	&dev_attr_create_tier_from_rank.attr,
+ 	NULL
+ };
+ 
+@@ -302,7 +347,7 @@ static int __node_set_memory_tier(int node, int tier)
+ 
+ 	memtier = __get_memory_tier_from_id(tier);
+ 	if (!memtier) {
+-		memtier = register_memory_tier(tier);
++		memtier = register_memory_tier(tier, get_rank_from_tier(tier));
+ 		if (!memtier) {
+ 			ret = -EINVAL;
+ 			goto out;
+@@ -651,7 +696,8 @@ static int __init memory_tier_init(void)
+ 	 * Register only default memory tier to hide all empty
+ 	 * memory tier from sysfs.
+ 	 */
+-	memtier = register_memory_tier(DEFAULT_MEMORY_TIER);
++	memtier = register_memory_tier(DEFAULT_MEMORY_TIER,
++				       get_rank_from_tier(DEFAULT_MEMORY_TIER));
+ 	if (!memtier)
+ 		panic("%s() failed to register memory tier: %d\n", __func__, ret);
+ 
+

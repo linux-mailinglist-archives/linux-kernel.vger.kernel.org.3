@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD58D53EE50
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3778C53EE54
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiFFTGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
+        id S232115AbiFFTIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbiFFTGb (ORCPT
+        with ESMTP id S232111AbiFFTIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 15:06:31 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF7410544
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:06:30 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-f2e0a41009so20297998fac.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 12:06:30 -0700 (PDT)
+        Mon, 6 Jun 2022 15:08:50 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C522AC7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:08:48 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id s8so15667515oib.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 12:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:in-reply-to:references:from:user-agent:date:message-id
          :subject:to:cc;
-        bh=6MJn5zOFXH+nWMLAd2/1FRGMn9RFPXr7yGq/vNuS/UQ=;
-        b=RrDmHLneHhzEqgs+avpAIqmSmppTbvcPYikg5GtlhI4zj6YLM5PeQdvjIKm2LPaPVk
-         siI6Gc87siSylXHmHcyi1wSxGVzUSl5n1RmgILW+hi2JodCl4iV/B+ESsfafQBHWTdL1
-         2phByD2xPheRa7+S+FDGacySTsKu0YaYz1B5s=
+        bh=U+d48J6VO4jwWOwK4nY7MppUng+HS6f87TdgczeTWfA=;
+        b=jbYQLfVc8E3vRnH/nAaGpEpu3GBx4LeR4+rgdiFOihSxweRGcyNUDXo8oXTht50+6z
+         vCTaJSGT4TIKqAoQCMUYxwZN9KwxGDwPDjCxGedcYvmUQ583rhPZD1tmOJE3v34dIpjn
+         C98AM8dS6nf6IlEL28J7wSLX2wRF8ySv7yZOo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:in-reply-to:references:from
          :user-agent:date:message-id:subject:to:cc;
-        bh=6MJn5zOFXH+nWMLAd2/1FRGMn9RFPXr7yGq/vNuS/UQ=;
-        b=Q75bAKybxZTM5qgx4ui7cvYYhEc2nhuysLEvqD8sFq32w2Hh8zSHuvwebNK0ez/Bhv
-         CY96pdCULs3niXSn2b7UROU3HZNVIG1E9nEoMEfu10b4EXjH99KrDL1jPxSXu/+2ju39
-         nfFMxUGekXhE97smOhPYhQWkvERPTIDHmy7KxLLDqsjC6fqvKDCsAeWhvoaOXwU9GAsS
-         fqUVoLo67iW8SxgspfEkkVEFjTVssZSD3QPbxDHSUVr2RFDCbVBv+qkMpxIW2gsHuxnT
-         /0cJnYIyAtSrZbFsdYDGYHHScDlNAk9IF0+6qPfmY+fq/KTUS0DS2bAT5cLejTcu3wAW
-         9IHQ==
-X-Gm-Message-State: AOAM531mtByzaJXXgOHZqpN//PSfgQ+9EkgqAOFnySlrZTODfNcbMYSi
-        xTHoBTXezXWRuVgf9Dwgyk6br0veCF1R/E8WDm/MdA==
-X-Google-Smtp-Source: ABdhPJwZghG/x2b/qz0erem1Frm0KKmZ2Jh/gPhQA7lPaNFJWoTR0HNboBvnJkV/j1y3j4iPrsscIBz2ag23cFHg/Io=
-X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
- n14-20020a056870558e00b000e1db7c26aamr14654864oao.63.1654542390129; Mon, 06
- Jun 2022 12:06:30 -0700 (PDT)
+        bh=U+d48J6VO4jwWOwK4nY7MppUng+HS6f87TdgczeTWfA=;
+        b=S5u9bg641T1WeRuibSX1cUZMGz+U0u0Za0XzTmag6495KLeCGIfhTe4aaxDBV25s86
+         k9R1kh/tFaaJiHyAgCAy1D5yoiYgtvbIfOmNaSuz1cq1EXR3Ecmmd7PFjK+nkBuSGwAD
+         oUQLQr1AOc9ZsDbjy9pVBdpjYAW6NuopR7f+F2986VSQB6xSWxRHoO1tSV7TU5OCUaSp
+         sb+EaMPREdXd1x04znqLTXSJlONdoqhL+R+P5ZAPNOgXYNmB9sXPVNGUs7g26IX/u87t
+         dUFQW5oVnwX5O6Jqsy0REBl8Abwlym2pAAy0NCK4flhLCS0b2HcyH5EdhEFqIULbrRsk
+         H07A==
+X-Gm-Message-State: AOAM530QqgzfW2IizfhNmpX4Qk4/ZinsF+z9kV547R+4xOyhRgLniR9/
+        Aowq0PVcoCv4W+SkAGmyDnT1aGrrhKG70irXm+jvnA==
+X-Google-Smtp-Source: ABdhPJy4c94CssdxgDB7cICSjvhkR/T7a00ZnGxM1AaOQjnzXXHNZCZXMZRtPZa2NcP41pwS569R9SzLPrA11kDyVIA=
+X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
+ k7-20020a0568080e8700b0032e47890d2cmr11740857oil.193.1654542527131; Mon, 06
+ Jun 2022 12:08:47 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 6 Jun 2022 12:06:29 -0700
+ HTTPREST; Mon, 6 Jun 2022 12:08:46 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220606152431.1889185-2-hsinyi@chromium.org>
-References: <20220606152431.1889185-1-hsinyi@chromium.org> <20220606152431.1889185-2-hsinyi@chromium.org>
+In-Reply-To: <20220606152431.1889185-5-hsinyi@chromium.org>
+References: <20220606152431.1889185-1-hsinyi@chromium.org> <20220606152431.1889185-5-hsinyi@chromium.org>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Mon, 6 Jun 2022 12:06:29 -0700
-Message-ID: <CAE-0n52mzczUdtwUgfdNOC_V7kBGhzFWHRT=QHDoH4kN+yCMGA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/8] drm/panel: Add an API drm_panel_get_orientation()
- to return panel orientation
+Date:   Mon, 6 Jun 2022 12:08:46 -0700
+Message-ID: <CAE-0n51xPADPVcBH7QRh96t7q=mx4VhxrEb1cZENcsu7Z=Nv0A@mail.gmail.com>
+Subject: Re: [PATCH v4 4/8] drm/panel: lvds: Implement .get_orientation callback
 To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>
 Cc:     Hans de Goede <hdegoede@redhat.com>,
@@ -82,19 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Hsin-Yi Wang (2022-06-06 08:24:24)
-> diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
-> index f634371c717a..e12056cfeca8 100644
-> --- a/drivers/gpu/drm/drm_panel.c
-> +++ b/drivers/gpu/drm/drm_panel.c
-> @@ -223,6 +223,15 @@ int drm_panel_get_modes(struct drm_panel *panel,
->  }
->  EXPORT_SYMBOL(drm_panel_get_modes);
->
-> +enum drm_panel_orientation drm_panel_get_orientation(struct drm_panel *panel)
+Quoting Hsin-Yi Wang (2022-06-06 08:24:27)
+> diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
+> index f11252fb00fe..491b64c2c8d6 100644
+> --- a/drivers/gpu/drm/panel/panel-lvds.c
+> +++ b/drivers/gpu/drm/panel/panel-lvds.c
+> @@ -99,15 +99,30 @@ static int panel_lvds_get_modes(struct drm_panel *panel,
+>         drm_display_info_set_bus_formats(&connector->display_info,
+>                                          &lvds->bus_format, 1);
+>         connector->display_info.bus_flags = lvds->bus_flags;
+> +
+> +       /*
+> +        * drm drivers are expected to call drm_panel_get_orientation() to get
+> +        * panel's orientation then drm_connector_set_panel_orientation() to
+> +        * set the property before drm_dev_register(). Otherwise there will be
+> +        * a WARN_ON if orientation is set after drm is registered.
+> +        */
 
-Should 'panel' be marked const to indicate that it can't be modified?
+Should this comment also be a "TODO: Remove once all drm drivers call
+drm_connector_set_panel_orientation()"?
+
+>         drm_connector_set_panel_orientation(connector, lvds->orientation);
+>
+>         return 1;
+>  }
+>
+> +static enum drm_panel_orientation panel_lvds_get_orientation,(struct drm_panel *panel)
+
+Stray comma here                                            ---^
 
 > +{
-> +       if (panel && panel->funcs && panel->funcs->get_orientation)
-> +               return panel->funcs->get_orientation(panel);
+> +       struct panel_lvds *lvds = to_panel_lvds(panel);
+> +
+> +       return lvds->orientation;
+> +}
+> +

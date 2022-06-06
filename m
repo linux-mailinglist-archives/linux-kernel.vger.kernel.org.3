@@ -2,250 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C1553EDAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D4B53EDB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiFFSNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
+        id S231451AbiFFSOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiFFSNt (ORCPT
+        with ESMTP id S231417AbiFFSOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:13:49 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41205D186
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 11:13:47 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id yHENnESwl3JPEyHENnixWC; Mon, 06 Jun 2022 20:13:45 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 06 Jun 2022 20:13:45 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <349c0714-5ec8-4233-0f0d-669e4ad3bf59@wanadoo.fr>
-Date:   Mon, 6 Jun 2022 20:13:35 +0200
+        Mon, 6 Jun 2022 14:14:11 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12525331C12
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 11:14:10 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id g186so4680146pgc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 11:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BKtPwMUXie7g4BTvnYFB06bJ1lqeS0VDnIi+PuKvIk4=;
+        b=QPYDCgOhcWP7ZJtPVM6YyQMFudpnbxAWNVBjk8usYVzstW9wTP7fRz9d1vsueKTkXQ
+         lJavanuHLYqsz2sdKXd8Aj4un3caqBzXCxcyrvmF/cMqN8V4akbOG2caMaOAWkK/lAz3
+         cmwpPdLT8pjFTMWPD2ocNkEfovkxtcqr+ou5c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BKtPwMUXie7g4BTvnYFB06bJ1lqeS0VDnIi+PuKvIk4=;
+        b=AKEQ0ZY0unfRmL+jMkFWaGvZypFz2p40/TIREEW1OvtHRpZOGi/eBFh6VZVGmKM4DU
+         Z7Ta/zlchW2itAVkeo8dgJTYpDt3UYII2gAdgCnPsp91ph62Br1VAtxgmlD8Bj2qBTTY
+         0NG2vCsF6EPOCkw/X4rEwDXfvuDFvHTEo4TBNTUqlGmTpc1gFoEprUmxbBVRTwG+Kqga
+         nrMWeb5E5NHI0Nic+0MFrs7g4d172AKXNfYF9wCQwIlfWNFLvuB8YXWChk9tLdsnbyIo
+         s+OXQwUST7p+QVHiBoKbn/KdAtj/KWBfxs0KECgKg98q8aSEt87kR96liBs8U3s0EmpR
+         vykQ==
+X-Gm-Message-State: AOAM532ahawxfEMpbqaNjCBYQIAdy4oTokOIeOp7kp1B5TP/YQ9CwWav
+        2TvGxlPYfbNBwqvGS18ogSkiohq1/TLk+A==
+X-Google-Smtp-Source: ABdhPJzXbGFrXBHqxba8t5vpk4T6DIeM1IIDerEZasSPyWlyYN/rGgwQDFwyqowzN83RwvX0/qpenQ==
+X-Received: by 2002:a65:5188:0:b0:3fa:6081:7393 with SMTP id h8-20020a655188000000b003fa60817393mr21698692pgq.72.1654539249516;
+        Mon, 06 Jun 2022 11:14:09 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:6e63:c427:72dc:aaa8])
+        by smtp.gmail.com with ESMTPSA id cp14-20020a170902e78e00b0015e8d4eb1d3sm10770551plb.29.2022.06.06.11.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 11:14:08 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 11:14:05 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v5 2/2] mwifiex: fix sleep in atomic context bugs caused
+ by dev_coredumpv
+Message-ID: <Yp5D7TRdNJ+bW1ud@google.com>
+References: <cover.1654229964.git.duoming@zju.edu.cn>
+ <54f886c2fce5948a8743b9de65d36ec3e8adfaf1.1654229964.git.duoming@zju.edu.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/5] crypto: aspeed: Add HACE hash driver
-Content-Language: fr
-References: <20220606064935.1458903-1-neal_liu@aspeedtech.com>
- <20220606064935.1458903-2-neal_liu@aspeedtech.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Reply-To: Neal Liu <neal_liu@aspeedtech.com>
-In-Reply-To: <20220606064935.1458903-2-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,MISSING_HEADERS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54f886c2fce5948a8743b9de65d36ec3e8adfaf1.1654229964.git.duoming@zju.edu.cn>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 06/06/2022 à 08:49, Neal Liu a écrit :
-> Hash and Crypto Engine (HACE) is designed to accelerate the
-> throughput of hash data digest, encryption, and decryption.
-> 
-> Basically, HACE can be divided into two independently engines
-> - Hash Engine and Crypto Engine. This patch aims to add HACE
-> hash engine driver for hash accelerator.
-> 
-> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+On Fri, Jun 03, 2022 at 01:09:35PM +0800, Duoming Zhou wrote:
+> There are sleep in atomic context bugs when uploading device dump
+> data in mwifiex. The root cause is that dev_coredumpv could not
+> be used in atomic contexts, because it calls dev_set_name which
+> include operations that may sleep. The call tree shows execution
+> paths that could lead to bugs:
+...
+> Fixes: f5ecd02a8b20 ("mwifiex: device dump support for usb interface")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 > ---
+> Changes in v5:
+>   - Use delayed work to replace timer.
+> 
+>  drivers/net/wireless/marvell/mwifiex/init.c      | 10 ++++++----
+>  drivers/net/wireless/marvell/mwifiex/main.h      |  2 +-
+>  drivers/net/wireless/marvell/mwifiex/sta_event.c |  6 +++---
+>  3 files changed, 10 insertions(+), 8 deletions(-)
 
-[...]
+Looks great! Thanks for working on this.
 
-> +static int aspeed_ahash_dma_prepare(struct aspeed_hace_dev *hace_dev)
-> +{
-> +	struct aspeed_engine_hash *hash_engine = &hace_dev->hash_engine;
-> +	struct ahash_request *req = hash_engine->ahash_req;
-> +	struct aspeed_sham_reqctx *rctx = ahash_request_ctx(req);
-> +	struct device *dev = hace_dev->dev;
-> +	int length, remain;
-> +	int rc = 0;
-> +
-> +	length = rctx->total + rctx->bufcnt;
-> +	remain = length % rctx->block_size;
-> +
-> +	AHASH_DBG(hace_dev, "length:0x%x, remain:0x%x\n", length, remain);
-> +
-> +	if (rctx->bufcnt)
-> +		memcpy(hash_engine->ahash_src_addr, rctx->buffer, rctx->bufcnt);
-> +
-> +	if (rctx->total + rctx->bufcnt < ASPEED_CRYPTO_SRC_DMA_BUF_LEN) {
-> +		scatterwalk_map_and_copy(hash_engine->ahash_src_addr +
-> +					 rctx->bufcnt, rctx->src_sg,
-> +					 rctx->offset, rctx->total - remain, 0);
-> +		rctx->offset += rctx->total - remain;
-> +
-> +	} else {
-> +		dev_warn(dev, "Hash data length is too large\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	scatterwalk_map_and_copy(rctx->buffer, rctx->src_sg,
-> +				 rctx->offset, remain, 0);
-> +
-> +	rctx->bufcnt = remain;
-> +	rctx->digest_dma_addr = dma_map_single(hace_dev->dev, rctx->digest,
-> +					       SHA512_DIGEST_SIZE,
-> +					       DMA_BIDIRECTIONAL);
-> +	if (dma_mapping_error(hace_dev->dev, rctx->digest_dma_addr)) {
-> +		dev_warn(hace_dev->dev, "dma_map() rctx digest error\n");
-> +		rc = -ENOMEM;
-> +		goto free;
-> +	}
-> +
-> +	hash_engine->src_length = length - remain;
-> +	hash_engine->src_dma = hash_engine->ahash_src_dma_addr;
-> +	hash_engine->digest_dma = rctx->digest_dma_addr;
-> +
-> +	return 0;
-> +
-> +free:
-> +	dma_unmap_single(hace_dev->dev, rctx->digest_dma_addr,
-> +			 SHA512_DIGEST_SIZE, DMA_BIDIRECTIONAL);
+Reviewed-by: Brian Norris <briannorris@chromium.org>
 
-Here, dma_map_single() has failed. Do we need to unmap? (other calls 
-below don't)
+Some small nitpicks below, but they're definitely not critical.
 
-> +	return rc;
-> +}
-> +
-> +/*
-> + * Prepare DMA buffer as SG list buffer before
-> + * hardware engine processing.
-> + */
-> +static int aspeed_ahash_dma_prepare_sg(struct aspeed_hace_dev *hace_dev)
-> +{
-> +	struct aspeed_engine_hash *hash_engine = &hace_dev->hash_engine;
-> +	struct ahash_request *req = hash_engine->ahash_req;
-> +	struct aspeed_sham_reqctx *rctx = ahash_request_ctx(req);
-> +	struct aspeed_sg_list *src_list;
-> +	struct scatterlist *s;
-> +	int length, remain, sg_len, i;
-> +	int rc = 0;
-> +
-> +	remain = (rctx->total + rctx->bufcnt) % rctx->block_size;
-> +	length = rctx->total + rctx->bufcnt - remain;
-> +
-> +	AHASH_DBG(hace_dev, "%s:0x%x, %s:0x%x, %s:0x%x, %s:0x%x\n",
-> +		  "rctx total", rctx->total, "bufcnt", rctx->bufcnt,
-> +		  "length", length, "remain", remain);
-> +
-> +	sg_len = dma_map_sg(hace_dev->dev, rctx->src_sg, rctx->src_nents,
-> +			    DMA_TO_DEVICE);
-> +	if (!sg_len) {
-> +		dev_warn(hace_dev->dev, "dma_map_sg() src error\n");
-> +		rc = -ENOMEM;
+> diff --git a/drivers/net/wireless/marvell/mwifiex/init.c b/drivers/net/wireless/marvell/mwifiex/init.c
+> index 88c72d1827a..3713f3e323f 100644
+> --- a/drivers/net/wireless/marvell/mwifiex/init.c
+> +++ b/drivers/net/wireless/marvell/mwifiex/init.c
+> @@ -63,9 +63,11 @@ static void wakeup_timer_fn(struct timer_list *t)
+>  		adapter->if_ops.card_reset(adapter);
+>  }
+>  
+> -static void fw_dump_timer_fn(struct timer_list *t)
+> +static void fw_dump_work(struct work_struct *work)
+>  {
+> -	struct mwifiex_adapter *adapter = from_timer(adapter, t, devdump_timer);
+> +	struct mwifiex_adapter *adapter = container_of(work,
+> +					struct mwifiex_adapter,
+> +					devdump_work.work);
 
-Direct return, as done in v1, looks fine to me. But it is mostly a 
-matter of test, I guess.
+Super nitpicky: the hanging indent style seems a bit off. I typically
+see people try to align to the first character after the parenthesis,
+like:
 
-> +		goto end;
-> +	}
-> +
-> +	src_list = (struct aspeed_sg_list *)hash_engine->ahash_src_addr;
-> +	rctx->digest_dma_addr = dma_map_single(hace_dev->dev, rctx->digest,
-> +					       SHA512_DIGEST_SIZE,
-> +					       DMA_BIDIRECTIONAL);
-> +	if (dma_mapping_error(hace_dev->dev, rctx->digest_dma_addr)) {
-> +		dev_warn(hace_dev->dev, "dma_map() rctx digest error\n");
-> +		rc = -ENOMEM;
-> +		goto free_src_sg;
-> +	}
-> +
-> +	if (rctx->bufcnt != 0) {
-> +		rctx->buffer_dma_addr = dma_map_single(hace_dev->dev,
-> +						       rctx->buffer,
-> +						       rctx->block_size * 2,
-> +						       DMA_TO_DEVICE);
-> +		if (dma_mapping_error(hace_dev->dev, rctx->buffer_dma_addr)) {
-> +			dev_warn(hace_dev->dev, "dma_map() rctx buffer error\n");
-> +			rc = -ENOMEM;
-> +			goto free_rctx_digest;
-> +		}
-> +
-> +		src_list[0].phy_addr = rctx->buffer_dma_addr;
-> +		src_list[0].len = rctx->bufcnt;
-> +		length -= src_list[0].len;
-> +
-> +		/* Last sg list */
-> +		if (length == 0)
-> +			src_list[0].len |= HASH_SG_LAST_LIST;
-> +		src_list++;
-> +	}
-> +
-> +	if (length != 0) {
-> +		for_each_sg(rctx->src_sg, s, sg_len, i) {
-> +			src_list[i].phy_addr = sg_dma_address(s);
-> +
-> +			if (length > sg_dma_len(s)) {
-> +				src_list[i].len = sg_dma_len(s);
-> +				length -= sg_dma_len(s);
-> +
-> +			} else {
-> +				/* Last sg list */
-> +				src_list[i].len = length;
-> +				src_list[i].len |= HASH_SG_LAST_LIST;
-> +				length = 0;
-> +				break;
-> +			}
-> +		}
-> +	}
-> +
-> +	if (length != 0) {
-> +		rc = -EINVAL;
-> +		goto free_rctx_buffer;
-> +	}
-> +
-> +	rctx->offset = rctx->total - remain;
-> +	hash_engine->src_length = rctx->total + rctx->bufcnt - remain;
-> +	hash_engine->src_dma = hash_engine->ahash_src_dma_addr;
-> +	hash_engine->digest_dma = rctx->digest_dma_addr;
-> +
-> +	goto end;
-> +
-> +free_rctx_buffer:
-> +	dma_unmap_single(hace_dev->dev, rctx->buffer_dma_addr,
-> +			 rctx->block_size * 2, DMA_TO_DEVICE);
+	struct mwifiex_adapter *adapter = container_of(work,
+						       struct mwifiex_adapter,
+						       devdump_work.work);
 
-If "rctx->bufcnt == 0" the correspondning dma_map_single() has not been 
-called. Is it an issue? (the test exists in 
-aspeed_ahash_update_resume_sg(), so I guess it is needed)
+It's not a clearly-specified style rule I think, so I definitely
+wouldn't insist.
 
-> +free_rctx_digest:
-> +	dma_unmap_single(hace_dev->dev, rctx->digest_dma_addr,
-> +			 SHA512_DIGEST_SIZE, DMA_BIDIRECTIONAL);
-> +free_src_sg:
-> +	dma_unmap_sg(hace_dev->dev, rctx->src_sg, rctx->src_nents,
-> +		     DMA_TO_DEVICE);
-> +end:
-> +	return rc;
-> +}
-> +
+On the bright side: I think the clang-format rules (in .clang-format)
+are getting better, so one can make some formatting decisions via tools
+instead of opinion and close reading! Unfortunately, we probably can't
+do that extensively and automatically, because I doubt people will love
+all the reformatting because of all the existing inconsistent style.
 
-[...]
+Anyway, to cut to the chase: clang-format chooses moving to a new line:
 
-> +
-> +#define HASH_SG_LAST_LIST               BIT(31)
+	struct mwifiex_adapter *adapter =
+		container_of(work, struct mwifiex_adapter, devdump_work.work);
 
-Tab as done in the other #define?
+More info if you're interested:
+https://www.kernel.org/doc/html/latest/process/clang-format.html
 
-[...]
+>  
+>  	mwifiex_upload_device_dump(adapter);
+>  }
+
+...
+
+> diff --git a/drivers/net/wireless/marvell/mwifiex/main.h b/drivers/net/wireless/marvell/mwifiex/main.h
+> index 332dd1c8db3..6530c6ee308 100644
+> --- a/drivers/net/wireless/marvell/mwifiex/main.h
+> +++ b/drivers/net/wireless/marvell/mwifiex/main.h
+> @@ -1055,7 +1055,7 @@ struct mwifiex_adapter {
+
+Nitpick: main.h is probably missing a lot of #includes, but you could
+probably add <linux/workqueue.h> while you're at it.
+
+Brian
+
+>  	/* Device dump data/length */
+>  	void *devdump_data;
+>  	int devdump_len;
+> -	struct timer_list devdump_timer;
+> +	struct delayed_work devdump_work;
+>  
+>  	bool ignore_btcoex_events;
+>  };

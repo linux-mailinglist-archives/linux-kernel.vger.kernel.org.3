@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB1753EF81
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B26F53EF8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbiFFUWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S233810AbiFFUZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbiFFUWd (ORCPT
+        with ESMTP id S233488AbiFFUZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:22:33 -0400
+        Mon, 6 Jun 2022 16:25:12 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02752A19F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:22:32 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256JP4tu002554;
-        Mon, 6 Jun 2022 20:22:04 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB130131F08
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:24:29 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256KJjoC030086;
+        Mon, 6 Jun 2022 20:22:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=hEvEoeSig8HHMEjaixIlVBLZWPY91AfXXyj9GOsNcyk=;
- b=V2t32qvfAGjRFZSOnyB6sQ8VbMydLdjZtKZ+hxG3DZIfgj8X4dvW1ZMOYHMfiGtgmuf0
- OAm4WDt8y/I36qLkIgYIWzep1smhu+A+XE9sRWdhJtG+ihjqI53Et224kMJXQesQr/Kj
- JOXdoqwyHVPSOFtKVqfY/1JZU1YGZm5lz4/zBaDpbstEa7iqKVPVQL4x7ZtbBLl6FHMp
- ItWdhT/Jgz5OOowrmHD+cOenpnEvs+BqgnAffZRoyuZp3Jq7NjErCM9NuvX/DjDpPRuE
- 6tmZK2Or6JGipOGGgWb1xJfW4GoVh/VL1Ysn03D5PMit8wbma2oEce3TZHwZGCoVH+FT AQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gfyxsc5fh-1
+ s=corp-2021-07-09; bh=6BJ963cSHLwoWXx+Sn1JXEa7kfrO5qnc4QbhLDXzJfM=;
+ b=XSThaI5efd5j+aWpu4xuZcVqnFgJClYUuiZswgGeBPUfdrF/YofPWTV4RNIiJSSy7cSG
+ zpK7LZCFmPjxl+CpnmH0sBqCSZGEzCR9/KUsEDv7BN09bOW/DnKxFuf7CAJ3h3rkgKn2
+ /+f8aDK8vBnrxywjjo3XyZGLxmZrvliOBsun3xid3nAwh9zaAeSxYOirOS1fOJKQ6Udz
+ UeX0VEdyk1TPm8WR8zSQCbFW38zQrsBJQqBQMUocgAp0QSO5mBOpPz7eZsrhcx7lnXle
+ 4JlxJ86umZkiuBJwfz2W4sWnGgmVH3AvlwKOrh7fhcYMqP1WJAbq6mV3wav7x/jc8q2z WA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ghqad84qy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jun 2022 20:22:04 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 256KF83w001176;
-        Mon, 6 Jun 2022 20:22:03 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gfwu9123f-1
+        Mon, 06 Jun 2022 20:22:08 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 256KGEXr003280;
+        Mon, 6 Jun 2022 20:22:08 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2175.outbound.protection.outlook.com [104.47.58.175])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu2bt3r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jun 2022 20:22:02 +0000
+        Mon, 06 Jun 2022 20:22:07 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=is+0HuNgrhDJHTZn58JZOw+pTBMBAn/cq02PdcNMmT/Sm5eetg7nIrSGFJnlV+sAiX/HPUrCxmud5X23b57nEY3srUipjvwwcr8QrvgfJO0KSQirU9fXCJ97tDblQUzMJu8E+GRQKy+/N7WDkJ26BS5DI4vtfYpGKs89bG3cJtzFhFjXmKz8r76XvKqvcBquRulJ79T1VaFdlaX+Zi7JVkS+GEGJw3eAPdijNPVXnGcN5t5bPWhT89/F6uEezHmkBVdhw/BYzJl+9P+xO5CjAfoXcdPPGRNgyPyqK9zUc8Hs4qyc+pKxnLh2Mtmx105UGbji+I+HGw0klp4+3uMEqA==
+ b=md3YSVD2WL410xId5KsVGrrgBh97VuNC4dmOa2zf9YTTxREVkajpdWa5ZHze3j87NVldkEbxTYzVRkvgYcW4KpLvZua2weH5E5h+BsjsSgg8uZeaxmZagdN62FEygA46+7K4yYnsjX9xVmAvHINThEI6oyCFkO/MYWZt08PtS989fGNX0WoQIaNPGdcefVMnyskVVt34YgyR/vIxVJd8rfvdYQ+OnH4paxkZgoemW3kai5XjIaN8HQnC3tDQYHq87fW/q5LsFccLt9F4qOaX6qXREfHVKqEbLbPHc7GNzTBX/RRiuwjk66TgU14uOXX7DKXqeEYMBudaeyuzr6eR2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hEvEoeSig8HHMEjaixIlVBLZWPY91AfXXyj9GOsNcyk=;
- b=XoPPxaGwemCSsxG9IQsNewHNJm98u57VFnVLv341yNqFKPfLcfXTCmHApolZwoYRihO4giFU4tY9Po1pzuMG6ru5U90SMi/cw/22pVsllgFOc0UA+j3xD192darQQVlKexnHHPVuaepULbcNITlC4N/qT79Brf+kwjA9nB2160YdQez8OKMPqDUvP87XEGGP0Z+C1Y/1Axl/qOvsuhkibLFY9HRsUoos3iGlTWGA25qEt2OHtt4pUh99quO9NVOLkR8AKinty3NjrLGut7kk8V15qqSHQZc9WsS8bFaWitYre+ikGvLc4N0KoGSs+ytP6cm5Y1VosbT3u6Rz85Hncg==
+ bh=6BJ963cSHLwoWXx+Sn1JXEa7kfrO5qnc4QbhLDXzJfM=;
+ b=Pw5xFKv53wTk0iYxs1/f0XOgTWpgQzIN+MAGLPQl2TM2DfdDL+GC1qeatZaRO/JQtme1X+XAEFSLYCNU/iVV+wgR2HUx2EMZ1EtekYk0rAK0H68xfTmN3OpCJ3poF61dzLKVH6qvLGi2MUtAqDBu2mb93O2tMul6X01GEV8ho0V6yIHCa1VUs/6opGiOYPzhhYFmvazCXAw/7dPclcnTwgJZOA5JvEOx9N0dMRyOiRjHK4wkMyufWKX4dpFZy5aFtOcciDOcmrUU43vMLw6bxwVMYgeKA1f3ibJ8/8RIg3d4OUCgWF40N8+Vdb0ktGV4MQCW1Vbt1TPWJeWQuA9IWg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hEvEoeSig8HHMEjaixIlVBLZWPY91AfXXyj9GOsNcyk=;
- b=G+qxufo/kiRs7Ei+1hGOkcVgZilD8jSmc6a7AM4NTjPseeVqtoahJA/+Tixh3BITYQ2K4sJ0AIBb5xdwHJQDXqW75P0iumDkmpQXYvNf3fgMEbnQnQtT8IfzU5LvRGe3QFYEsAAvYu9XzVJSYdpvmB3nBE6v0cDR6UvLJwuUTdg=
+ bh=6BJ963cSHLwoWXx+Sn1JXEa7kfrO5qnc4QbhLDXzJfM=;
+ b=NWdT/+Y2K4pGMYi7xbHKmQSeTL8tkQm2A6pnou0u4mKZ/XUzr0egvjkNt/oACen0CpUF0vZZ4js+1d5YmW+hqbcyKKyxSYUO2kIeTYtn85v8pICBC+3TOORE1Z2fz1Z6ijq8UJNiB3m2hT9+kRPZebINKfKIK1fIaku+g94xysg=
 Received: from DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19) by
  DM5PR10MB1772.namprd10.prod.outlook.com (2603:10b6:4:11::20) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5314.13; Mon, 6 Jun 2022 20:22:01 +0000
+ 15.20.5314.13; Mon, 6 Jun 2022 20:22:05 +0000
 Received: from DM8PR10MB5416.namprd10.prod.outlook.com
  ([fe80::49dc:6a95:a2d5:fc08]) by DM8PR10MB5416.namprd10.prod.outlook.com
  ([fe80::49dc:6a95:a2d5:fc08%5]) with mapi id 15.20.5314.018; Mon, 6 Jun 2022
- 20:22:01 +0000
+ 20:22:05 +0000
 From:   Ankur Arora <ankur.a.arora@oracle.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
 Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
@@ -70,9 +70,9 @@ Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
         jon.grimm@amd.com, boris.ostrovsky@oracle.com,
         konrad.wilk@oracle.com, joao.martins@oracle.com,
         ankur.a.arora@oracle.com
-Subject: [PATCH v3 03/21] clear_page: add generic clear_user_pages()
-Date:   Mon,  6 Jun 2022 20:20:51 +0000
-Message-Id: <20220606202109.1306034-4-ankur.a.arora@oracle.com>
+Subject: [PATCH v3 04/21] mm, clear_huge_page: support clear_user_pages()
+Date:   Mon,  6 Jun 2022 20:20:52 +0000
+Message-Id: <20220606202109.1306034-5-ankur.a.arora@oracle.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220606202109.1306034-1-ankur.a.arora@oracle.com>
 References: <20220606202109.1306034-1-ankur.a.arora@oracle.com>
@@ -82,64 +82,64 @@ X-ClientProxiedBy: BYAPR01CA0034.prod.exchangelabs.com (2603:10b6:a02:80::47)
  To DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 95c6d1f2-f12f-4f34-4e99-08da47fa3658
+X-MS-Office365-Filtering-Correlation-Id: e76cfaf1-db89-4c79-6177-08da47fa3948
 X-MS-TrafficTypeDiagnostic: DM5PR10MB1772:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB1772B0B22D12AC9C1B41E69ECEA29@DM5PR10MB1772.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DM5PR10MB17720A4F2C3742A53B95B5FBCEA29@DM5PR10MB1772.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OYg15oXLjxoAFPvRRajQMYLdp+8Xe04grDw94LCwxeSdabQFra+Sb066b1Yl8+H8tVNFYp7bpgtlqOWBmRkTnNsBhren1HV951PlIP/HRqTZGLRBfyUnCR0K0bFfX0I5GlyiKzXEiiMB9QoOvBCRPIWi88erLSscDzI2l+hTuRlXr5SzxX4fT7KT4rbHVJdT+P2r0kfQmjjub/ZM68Q/g194jOgpdxRkrIUHpBldJ3MlOFaRnDSjV7Vn8G8Jy4t8FzCTcOQchDxr7iMUNQOMo1vdvXP0s5dXx4GBXaNEXRJ4MqFwTQRXDGunirM3VVpuTgtSfeHDkgiBcOqSgZNohcuJotFA+8oBbdBsJP6trhIyMl8VNP9U+5EyM1nlDT1LcCeeT8Q82JmBQ198QuBlJxJWZF+BUHddxOKlnlBXAGYUqsUJ8WwwzeEkoWwn/mYCNx+EQwAOFpu0T2F2xwtuEq5yHkckiTyhhKGrvLDHRRZGqf1VFqxsIOaZtktftD2nbHg3fSirNWpaGsQbQ0bLc5deQCxp6mH1wNVEEw6NEJYJlCAaVUZKl+WGCVnSyjl1KpeyK7uA3wwQzVAjbbtJhWVWDHOGhSJ6FeTE3b0G3vvypWbzbnwvyebtjtAaQ3xObGvSHOin+8BklWhKDGLGUK3Lbvq6pKsCqpisEOJndvNhuX9slyjZt/K0YJduTlK4UZhoZIGnTkrcsdJNWdzAe6Tqr2kmJWBZPzEhWQGqkkt4scb8ps4esSMDvS0+rNV3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(30864003)(8936002)(7416002)(6506007)(83380400001)(107886003)(66556008)(36756003)(1076003)(38100700002)(186003)(6666004)(66946007)(508600001)(6512007)(26005)(2616005)(5660300002)(38350700002)(4326008)(8676002)(316002)(103116003)(2906002)(66476007)(86362001)(52116002)(6486002)(41533002)(21314003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: YK6dU+WVvxawlCO6baPU3XgPpQMrOkN04BqU6vXolYAQoDtuGld7NzufJDLr5yhvjszGJzxhWeeWPFbb/yUl4OKB9VY9hX1NVcGfm+/R/3okMufB9H/jV03dStNZ8QIDmnXLyjctOKIzRwc/EbT4Y8TToBdYDAZuf7T4F5v/e2A7EgQ36UbKct0QPgHmV9+ikmRO31qMIwD7DlhYKOlJI5fF1iGM1WilcKPO8kSp6JWJ4B53oHEEFOWWUcS3QFz+//SUUD3s48d7EZnocmyXjE8iSJZKpiHO7r7/Zfg8zflIKMblPms8YrE/SABwiXz51HlBNdfnfvsxsxwof7E3NK27VDsv/4vgGGgcgSQuHZj1tbDqvCAgB0jL1K3LBlreVPRsIpn1glAyLNOaoU4F0rKayT9K2R6mZnBND6fKqBfNBcKT9pS9RuBUs8Pp4k+XSHUEuRQioGyDXlA+Y5VHkUsK4VGro8o/L2ZPBessZv1bxePs75ZwXfD3rr/wHa07lF2fsBRSBg7ce/2unWtYu2V84bDppElzPvQ1hDmZFf6bKWapEiHV3nYt2N8D84VfwqD4AEASHufUPYO32MhRDp8ZeXPxCpEpoq/xuseKhOzKoLa3yTZ4+ks4RjDZfEK361dtbcrP75GKWCFKXFvW8kiS1A1qcnEynyVzNiYkvPXHXN1bXR6bLeUY2XKSVBX/8Nx9/aptu9904jGluI73zSVJWJSp7snF1g1Z00NRcRw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(7416002)(6506007)(83380400001)(107886003)(66556008)(36756003)(1076003)(38100700002)(186003)(6666004)(66946007)(508600001)(6512007)(26005)(2616005)(5660300002)(38350700002)(4326008)(8676002)(316002)(103116003)(2906002)(66476007)(86362001)(52116002)(6486002)(14583001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9j//PY9j/QZ9WtKluHN6V3uNY4IFNZsk8RyAh5JQbz2TiR6YNsC0uvxH1Rp6?=
- =?us-ascii?Q?t9YJ96P60Ip4mLzfHrFQNw3ByJe0dJAnFe/YomFgzDeJ6yrLOHH8GJJJoiQr?=
- =?us-ascii?Q?rbpDtunFO41Wh2wPEEmi1lk7y23NYOSwKIA/5gpcbHpOfYxP9Xvx2/wGcnmx?=
- =?us-ascii?Q?O9LQyqV653dqiW6mmjp8shXo7FfJhXTBRCkCoOvMmSKNBp6HlcK2pm+Acy+k?=
- =?us-ascii?Q?XoOiRbLSJYNrcAx0HdWsCIFRtw3tyCdmeLzobsaJxHAyGZueDH1hX8v4WhlV?=
- =?us-ascii?Q?KRh7lWC1dUff8XPIa6afNm/kVrz8NI2RjR/0d3GWcventkJQMhvZoyErqfdU?=
- =?us-ascii?Q?JLPRxDs2LggIXVtyn3upY3CfLOPGour3ZmBHaoxvsGbrkBMRJjzGly2aW0JL?=
- =?us-ascii?Q?vSsav11bNOWE0UvMB9jCoJvi2QGWLCHDNA/ouf5yipKqj+GJl6CB7zDiWikr?=
- =?us-ascii?Q?/NUKXV+a2zndv1NqA1yoNzPOovTwa/rgDhVkHlMGdEZnIWqmKT7E2B7z1Kys?=
- =?us-ascii?Q?ag9oZGpCS2Bs0vgLoKM+KNWvWP6LIWv1hTUzwR4Lzrv0aKY+ylGRljV6XLAX?=
- =?us-ascii?Q?U5l9qlJmbZte1Z72Cyy6o6vSIWH4OH6NYo90MVjBa6cd2VqXZJ0vvjHUAbkx?=
- =?us-ascii?Q?GHFRGF57Xf4jLNWDesFtoUTWCq/cKwllPDwtAkXWcLC/4/rr9glVBULUr/K7?=
- =?us-ascii?Q?t7Kq6zW4r2BRHfKOi7d1n8m4n/3el6BSfqeuy6OE6GHO+kXiLSHXVOWl7Ssl?=
- =?us-ascii?Q?XCnWU4cUh3n4ampbegp4SFv1KJmseoZoygcKC5jswct/MyQcLVXTjEbjbKoI?=
- =?us-ascii?Q?yi6CNj9DZ46u8eLs3fcKZ9BzAZD51doKboUU1REs+QszmeNsIU/i1g1vmpZX?=
- =?us-ascii?Q?O/U0U5Bjg57JzLu+z8hVdRgP8zlnqhl46TuHLoGYYnImrk0tSHXiX+TNTvKQ?=
- =?us-ascii?Q?xVUqBEI+rxwPWziX2TYZbC7LWSVa3+aiOC2wwV4Ur537NLJ6lnuKbWixXuXG?=
- =?us-ascii?Q?AY4o7TEyOdw9IvkbwfPKU3vK09K+iWUHIYcoQOGqr37kKaoCsKgTixiMn59l?=
- =?us-ascii?Q?b2Q/dZrC67Ij91CtjeGdr8fRhvYdg1WEBGa53+xkZiBk5YSI2petfzjByIR/?=
- =?us-ascii?Q?w2q95fPFmi1H8+VV1bhlOzYFAhyLk+BlUra2TwUqaxmO7nPhlB82arOo/4Gf?=
- =?us-ascii?Q?4TuvE0R4/iME+Y0SwYuE0cnGq7A64105IjiMH+FyRZN3keQiSQTpZpcIOvN4?=
- =?us-ascii?Q?+PGpuIfPxVqdjWeGEKwe/rLvcWGz/uOvZOOaf+k+xmHzbZNPD4kiIfLZecUf?=
- =?us-ascii?Q?X4aP/6xQclaefiR4pMIsWbsCoIMl54fzZixImzoyIIA4epqKgwVCZxhSxvVw?=
- =?us-ascii?Q?rm0gm/rLf1sUKi1rqUpLL9Orivdx64SbaxRx9Rc3WMQmxI+JukKw+z9p05Y/?=
- =?us-ascii?Q?StaFNX5GsF8QY8UMa1oosMpUBRw4YSaszg29DgUwTAycu8PdLYTZv4cG9usY?=
- =?us-ascii?Q?mcY20a31XAn8vnfweenu0mRDCVflD4WUXpvG5A98jevFyTY7EFxZgCNrmKCF?=
- =?us-ascii?Q?SMYJ1tDjQC4vscrnWYglXJaFCz96o6WfZOZz9JhtMivy8vNx8L+8ftk3Y2IY?=
- =?us-ascii?Q?lEDBdjjUmLPmgDtDtkahtY5/shAGWY5fPz4raxWjDbClWEFFoFV5JS7TMshC?=
- =?us-ascii?Q?/VxBnF3koRuggeA0OOJLvL3pO+c5WqfgRUEPMG4LqZCtpK0XQoWj4H/3AnRg?=
- =?us-ascii?Q?670A9oxgdwl6dFmhnhP7gNBaX33QwH4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eIGiphxJVBJHg/dOZ2mWIy7aJflRUe16uqgUYp2oRx1+OguaDfVQb5Gpbijp?=
+ =?us-ascii?Q?SyOn9K8kE32kRVPdYm6P0MQUUYIbPDi+ptKgi2EKjzd2rcsxvRYMwCnBNslv?=
+ =?us-ascii?Q?rf0CrxTW1gRat3cLw3jJxpLt+JhfIZEsCeciLK4zN4uE77KEQxI1KUy8bESL?=
+ =?us-ascii?Q?GxSWbuaFW1ynsZIrOtGysd6Egd0svED8CjrliSXq9ibLv44n3g43jxclm3Lk?=
+ =?us-ascii?Q?R6BeVer3XM5olK0AEBZBOEo/mvx1BBIq5zBZgxU6tOmGxMQtMuYeCrMlaf+K?=
+ =?us-ascii?Q?fYe1Xc5fDgyWwaQC6otl30HTUPTtCdOHJyGmpMNhMW25Ol2s/dPD1mnPEzwV?=
+ =?us-ascii?Q?T3HIs/ARaIB849XjMH779UiLjPy6T1QD/9bY/bRtUtAC8UzxjXIp8LTY3+al?=
+ =?us-ascii?Q?iAb5rGqpv9ydkLOvwdKbeDZK0pPW67nAlaYwh/9KLhx9umSPO76KG8Po9NTP?=
+ =?us-ascii?Q?SLGr6dRiqR6xQr7qUa9ZBwUuK+JSGOWeY+vyOcZDpApbuN9DmQo+SO6rgRZ+?=
+ =?us-ascii?Q?bm5ez4mplu41VTJHYmcUss0CnZA5EeBf6dMtNf8knP/KFCh/AAcZfNuQeZah?=
+ =?us-ascii?Q?gXE3tsQTqvyf0J+FUMk7X9Tvjbp+RePisQGTj/f/C6NwCkqoJU/AYB1nWead?=
+ =?us-ascii?Q?JogEDmAJ/aPjRFifkWfabdu7O9JZ8+K3Ur+oBr0pW6UUHx+30rdG+3KMTXXS?=
+ =?us-ascii?Q?237WXk6KZHmGt0bsc8YV4jRB+IMeJCBIcioFlYVxQcChLiDophEu62tFNhW5?=
+ =?us-ascii?Q?J8xo6j/wbfa9GqPB6v3dxWd2TDKimKvwL7us/0L2DsXlD33T2DX/r+E2Vie7?=
+ =?us-ascii?Q?r+Eg1sW7JV3c6JipahUEDkJ9vXxS3G4X3bvFCQkN4EYFO6MFBNb/ckgLRu6Q?=
+ =?us-ascii?Q?gLnDfzZZrqQIn4bO4mPR4IRAEAGIf/MaKeEbyjavilcXtKvqXIyKRud1C+lR?=
+ =?us-ascii?Q?gte3FmHHswbXr+mUTWWqloCFtQ3tQH8zIA87W8b6QlKAGzyWPIBOTb9tkFKU?=
+ =?us-ascii?Q?ihng1hnWBNqCx+UqHzznEqIGCDVL8LrKSgz+AZZ2oxXpx9ilx5LBJr5wPbIs?=
+ =?us-ascii?Q?CJMmq1oWqeyOXVnHPr7SFpZ1PKmdeSDRjybuKdtFXbUS+ai417OUofCU65dR?=
+ =?us-ascii?Q?ELG19Vgxx56cLu0HmTmauB8B7kKpo6s7QyW7eXBdsJjZ+VjJIA6KnofR+lBB?=
+ =?us-ascii?Q?iP2MX4OV9gbVzGMKmf0SdQPowjn5ae8lziBZblPAMlDFUJtk/Vjy9TXUoTh8?=
+ =?us-ascii?Q?9U06VxYopXPR4r88OcFWSv3aDFYt1tTZtwYGJLHbHw4NArB63AKQ3IE454jD?=
+ =?us-ascii?Q?91QKmXdqDvw8AZNfdolXMLX02TiiKrOAOfcdkb5aMArRzMmdmXOcfdNWGSj6?=
+ =?us-ascii?Q?AKs8hFASQrlKlNijYDHI3cebl81/scN59fba1/p4lUDtHC7B/CiqVd4mT8Nx?=
+ =?us-ascii?Q?0RwSa5w/KLAgA8+E1J8lwkmWcMDLMJ+pTaSnZWqiNowQGinjiSBK5+eiLGmc?=
+ =?us-ascii?Q?BZj3E2WCawc/dHg+mUJKWXW8EJcuc6ci2C+jI5c7QBMEtEuswfS4CtVceBEA?=
+ =?us-ascii?Q?sRse0oIwolO28OMg9/MMj1MY9VVsI/HP0Lf3J5g5MH7xXD+w3OCadQD17uJ3?=
+ =?us-ascii?Q?RMpJ9bKqyHtIvesUnwhQh3+Hy+5gnndSN/3SDPuQtzQMx9a9FLn2tavfHIPl?=
+ =?us-ascii?Q?uvVPiGpuRaW54yiGqyih6oV2CL8ja4yHDJbGPQrh3ITIZZr/Xhg+J348H4WJ?=
+ =?us-ascii?Q?AQqmCV/xe7DoGZLM+Y5HEN/IGx5vq8U=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95c6d1f2-f12f-4f34-4e99-08da47fa3658
+X-MS-Exchange-CrossTenant-Network-Message-Id: e76cfaf1-db89-4c79-6177-08da47fa3948
 X-MS-Exchange-CrossTenant-AuthSource: DM8PR10MB5416.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 20:22:00.7231
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 20:22:05.6818
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UxDC99v9v0IUM/q3lge/Sai9x3yAHUpZVXXe3CpA9lE94KEWcOTqtANr1pTwO8Zt4YHaiNxuhrah4JAjLPl8rOa7OWGVyBIZT0WRDIk2yMo=
+X-MS-Exchange-CrossTenant-UserPrincipalName: t8vkoxPS9odXsOp5gm7LcQuVAP+g6fvtqh/MEbErxdXyO88H9Ob/o7DtsghT3horY+0fKfZNgQE6GQIc9QcHQ16PsGb6gaWZaT9tnSiJMPI=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1772
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
  definitions=2022-06-06_06:2022-06-02,2022-06-06 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 mlxscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206060081
-X-Proofpoint-ORIG-GUID: slYONR98P7rk9SvASI4CRCxuMoYz3CXJ
-X-Proofpoint-GUID: slYONR98P7rk9SvASI4CRCxuMoYz3CXJ
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206060081
+X-Proofpoint-ORIG-GUID: qqGtsA2CUbLUkubRmSxzRBXAEcra_0nE
+X-Proofpoint-GUID: qqGtsA2CUbLUkubRmSxzRBXAEcra_0nE
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -150,416 +150,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add generic clear_user_pages() which operates on contiguous
-PAGE_SIZE'd chunks via an arch defined primitive.
+process_huge_page() now handles page extents with process_subpages()
+handling the individual page level operation.
 
-The generic version defines:
-  #define ARCH_MAX_CLEAR_PAGES_ORDER	0
-so clear_user_pages() would fallback to clear_user_page().
+process_subpages() workers, clear_subpages() and copy_subpages()
+chunk the clearing in units of clear_page_unit, or continue to copy
+using a single page operation.
 
-An arch can expose this by defining __HAVE_ARCH_CLEAR_USER_PAGES.
+Relatedly, define clear_user_extent() which uses clear_user_highpages()
+to funnel through to clear_user_pages() or falls back to page-at-a-time
+clearing via clear_user_highpage().
 
-Also add clear_user_highpages() which, either funnels through
-to clear_user_pages() or does the clearing page-at-a-time.
+clear_page_unit, the clearing unit size, is defined to be:
+   1 << min(MAX_ORDER - 1, ARCH_MAX_CLEAR_PAGES_ORDER).
 
 Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 ---
+ mm/memory.c | 95 ++++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 69 insertions(+), 26 deletions(-)
 
-Notes:
-    1. I'm not sure that a new header asm-generic/clear_page.h is ideal.
-    
-    The logical place for this is asm-generic/page.h itself. However, only
-    H8300 includes that and so this (and the next few patches) would need
-    a stub everywhere else.
-    (Just rechecked and looks like arch/h8300 is no more.)
-    
-    If adding a new header looks reasonable to the community, I'm happy
-    to move clear_user_page(), copy_user_page() stubs out to this file.
-    (Note that patches further on add non-caching clear_user_pages()
-     as well.)
-    
-    Or, if asm-generic/page.h is the best place, then add stubs
-    everywhere else.
-    
-    2. Shoehorning a multiple page operation in CONFIG_HIGHMEM seems
-    ugly but, seemed like the best choice of a bad set of options.
-    Is there a better way of doing this?
-
- arch/alpha/include/asm/page.h      |  1 +
- arch/arc/include/asm/page.h        |  1 +
- arch/arm/include/asm/page.h        |  1 +
- arch/arm64/include/asm/page.h      |  1 +
- arch/csky/include/asm/page.h       |  1 +
- arch/hexagon/include/asm/page.h    |  1 +
- arch/ia64/include/asm/page.h       |  1 +
- arch/m68k/include/asm/page.h       |  1 +
- arch/microblaze/include/asm/page.h |  1 +
- arch/mips/include/asm/page.h       |  1 +
- arch/nios2/include/asm/page.h      |  2 ++
- arch/openrisc/include/asm/page.h   |  1 +
- arch/parisc/include/asm/page.h     |  1 +
- arch/powerpc/include/asm/page.h    |  1 +
- arch/riscv/include/asm/page.h      |  1 +
- arch/s390/include/asm/page.h       |  1 +
- arch/sh/include/asm/page.h         |  1 +
- arch/sparc/include/asm/page_32.h   |  1 +
- arch/sparc/include/asm/page_64.h   |  1 +
- arch/um/include/asm/page.h         |  1 +
- arch/x86/include/asm/page.h        |  1 +
- arch/xtensa/include/asm/page.h     |  1 +
- include/asm-generic/clear_page.h   | 44 ++++++++++++++++++++++++++++++
- include/asm-generic/page.h         |  1 +
- include/linux/highmem.h            | 23 ++++++++++++++++
- 25 files changed, 91 insertions(+)
- create mode 100644 include/asm-generic/clear_page.h
-
-diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
-index 8f3f5eecba28..2d3b099e165c 100644
---- a/arch/alpha/include/asm/page.h
-+++ b/arch/alpha/include/asm/page.h
-@@ -93,5 +93,6 @@ typedef struct page *pgtable_t;
+diff --git a/mm/memory.c b/mm/memory.c
+index 2c86d79c9d98..fbc7bc70dc3d 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -5563,6 +5563,31 @@ EXPORT_SYMBOL(__might_fault);
  
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
+ #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
  
- #endif /* _ALPHA_PAGE_H */
-diff --git a/arch/arc/include/asm/page.h b/arch/arc/include/asm/page.h
-index 9a62e1d87967..abdbef6897bf 100644
---- a/arch/arc/include/asm/page.h
-+++ b/arch/arc/include/asm/page.h
-@@ -133,6 +133,7 @@ extern int pfn_valid(unsigned long pfn);
- 
- #include <asm-generic/memory_model.h>   /* page_to_pfn, pfn_to_page */
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* !__ASSEMBLY__ */
- 
-diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
-index 5fcc8a600e36..ba244baca1fa 100644
---- a/arch/arm/include/asm/page.h
-+++ b/arch/arm/include/asm/page.h
-@@ -167,5 +167,6 @@ extern int pfn_valid(unsigned long);
- #define VM_DATA_DEFAULT_FLAGS	VM_DATA_FLAGS_TSK_EXEC
- 
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif
-diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
-index 993a27ea6f54..8407ac2b5d68 100644
---- a/arch/arm64/include/asm/page.h
-+++ b/arch/arm64/include/asm/page.h
-@@ -50,5 +50,6 @@ int pfn_is_map_memory(unsigned long pfn);
- #define VM_DATA_DEFAULT_FLAGS	(VM_DATA_FLAGS_TSK_EXEC | VM_MTE_ALLOWED)
- 
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif
-diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
-index ed7451478b1b..47cc27d4ede1 100644
---- a/arch/csky/include/asm/page.h
-+++ b/arch/csky/include/asm/page.h
-@@ -89,6 +89,7 @@ extern unsigned long va_pa_offset;
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* !__ASSEMBLY__ */
- #endif /* __ASM_CSKY_PAGE_H */
-diff --git a/arch/hexagon/include/asm/page.h b/arch/hexagon/include/asm/page.h
-index 7cbf719c578e..e7a8edd6903a 100644
---- a/arch/hexagon/include/asm/page.h
-+++ b/arch/hexagon/include/asm/page.h
-@@ -142,6 +142,7 @@ static inline void clear_page(void *page)
- #include <asm-generic/memory_model.h>
- /* XXX Todo: implement assembly-optimized version of getorder. */
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* ifdef __ASSEMBLY__ */
- #endif /* ifdef __KERNEL__ */
-diff --git a/arch/ia64/include/asm/page.h b/arch/ia64/include/asm/page.h
-index 1b990466d540..1feae333e250 100644
---- a/arch/ia64/include/asm/page.h
-+++ b/arch/ia64/include/asm/page.h
-@@ -96,6 +96,7 @@ do {						\
- #define virt_addr_valid(kaddr)	pfn_valid(__pa(kaddr) >> PAGE_SHIFT)
- 
- #include <asm-generic/memory_model.h>
-+#include <asm-generic/clear_page.h>
- 
- #ifdef CONFIG_FLATMEM
- # define pfn_valid(pfn)		((pfn) < max_mapnr)
-diff --git a/arch/m68k/include/asm/page.h b/arch/m68k/include/asm/page.h
-index 2f1c54e4725d..1aeaae820670 100644
---- a/arch/m68k/include/asm/page.h
-+++ b/arch/m68k/include/asm/page.h
-@@ -68,5 +68,6 @@ extern unsigned long _ramend;
- #endif
- 
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _M68K_PAGE_H */
-diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include/asm/page.h
-index 4b8b2fa78fc5..baa03569477a 100644
---- a/arch/microblaze/include/asm/page.h
-+++ b/arch/microblaze/include/asm/page.h
-@@ -137,5 +137,6 @@ extern int page_is_ram(unsigned long pfn);
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _ASM_MICROBLAZE_PAGE_H */
-diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
-index 96bc798c1ec1..3dde03bf99f3 100644
---- a/arch/mips/include/asm/page.h
-+++ b/arch/mips/include/asm/page.h
-@@ -269,5 +269,6 @@ static inline unsigned long kaslr_offset(void)
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _ASM_PAGE_H */
-diff --git a/arch/nios2/include/asm/page.h b/arch/nios2/include/asm/page.h
-index 6a989819a7c1..9763048bd3ed 100644
---- a/arch/nios2/include/asm/page.h
-+++ b/arch/nios2/include/asm/page.h
-@@ -104,6 +104,8 @@ static inline bool pfn_valid(unsigned long pfn)
- 
- #include <asm-generic/getorder.h>
- 
-+#include <asm-generic/clear_page.h>
++static unsigned int __ro_after_init clear_page_unit = 1;
++static int __init setup_clear_page_params(void)
++{
++	clear_page_unit = 1 << min(MAX_ORDER - 1, ARCH_MAX_CLEAR_PAGES_ORDER);
++	return 0;
++}
 +
- #endif /* !__ASSEMBLY__ */
++/*
++ * cacheinfo is setup via device_initcall and we want to get set after
++ * that. Use the default value until then.
++ */
++late_initcall(setup_clear_page_params);
++
++/*
++ * Clear a page extent.
++ *
++ * With ARCH_MAX_CLEAR_PAGES == 1, clear_user_highpages() drops down
++ * to page-at-a-time mode. Or, funnels through to clear_user_pages().
++ */
++static void clear_user_extent(struct page *start_page, unsigned long vaddr,
++			      unsigned int npages)
++{
++	clear_user_highpages(start_page, vaddr, npages);
++}
++
+ struct subpage_arg {
+ 	struct page *dst;
+ 	struct page *src;
+@@ -5576,34 +5601,29 @@ struct subpage_arg {
+  */
+ static inline void process_huge_page(struct subpage_arg *sa,
+ 	unsigned long addr_hint, unsigned int pages_per_huge_page,
+-	void (*process_subpage)(struct subpage_arg *sa,
+-				unsigned long base_addr, int idx))
++	void (*process_subpages)(struct subpage_arg *sa,
++				 unsigned long base_addr, int lidx, int ridx))
+ {
+ 	int i, n, base, l;
+ 	unsigned long addr = addr_hint &
+ 		~(((unsigned long)pages_per_huge_page << PAGE_SHIFT) - 1);
  
- #endif /* _ASM_NIOS2_PAGE_H */
-diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-index aab6e64d6db4..879419c00cd4 100644
---- a/arch/openrisc/include/asm/page.h
-+++ b/arch/openrisc/include/asm/page.h
-@@ -88,5 +88,6 @@ typedef struct page *pgtable_t;
+ 	/* Process target subpage last to keep its cache lines hot */
+-	might_sleep();
+ 	n = (addr_hint - addr) / PAGE_SIZE;
++
+ 	if (2 * n <= pages_per_huge_page) {
+ 		/* If target subpage in first half of huge page */
+ 		base = 0;
+ 		l = n;
+ 		/* Process subpages at the end of huge page */
+-		for (i = pages_per_huge_page - 1; i >= 2 * n; i--) {
+-			cond_resched();
+-			process_subpage(sa, addr, i);
+-		}
++		process_subpages(sa, addr, 2*n, pages_per_huge_page-1);
+ 	} else {
+ 		/* If target subpage in second half of huge page */
+ 		base = pages_per_huge_page - 2 * (pages_per_huge_page - n);
+ 		l = pages_per_huge_page - n;
++
+ 		/* Process subpages at the begin of huge page */
+-		for (i = 0; i < base; i++) {
+-			cond_resched();
+-			process_subpage(sa, addr, i);
+-		}
++		process_subpages(sa, addr, 0, base);
+ 	}
+ 	/*
+ 	 * Process remaining subpages in left-right-left-right pattern
+@@ -5613,15 +5633,13 @@ static inline void process_huge_page(struct subpage_arg *sa,
+ 		int left_idx = base + i;
+ 		int right_idx = base + 2 * l - 1 - i;
  
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* __ASM_OPENRISC_PAGE_H */
-diff --git a/arch/parisc/include/asm/page.h b/arch/parisc/include/asm/page.h
-index 6faaaa3ebe9b..961f88d6ff63 100644
---- a/arch/parisc/include/asm/page.h
-+++ b/arch/parisc/include/asm/page.h
-@@ -184,6 +184,7 @@ extern int npmem_ranges;
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- #include <asm/pdc.h>
- 
- #define PAGE0   ((struct zeropage *)absolute_pointer(__PAGE_OFFSET))
-diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
-index e5f75c70eda8..4742b1f99a3e 100644
---- a/arch/powerpc/include/asm/page.h
-+++ b/arch/powerpc/include/asm/page.h
-@@ -335,6 +335,7 @@ static inline unsigned long kaslr_offset(void)
+-		cond_resched();
+-		process_subpage(sa, addr, left_idx);
+-		cond_resched();
+-		process_subpage(sa, addr, right_idx);
++		process_subpages(sa, addr, left_idx, left_idx);
++		process_subpages(sa, addr, right_idx, right_idx);
+ 	}
  }
  
- #include <asm-generic/memory_model.h>
-+#include <asm-generic/clear_page.h>
- #endif /* __ASSEMBLY__ */
+ static void clear_gigantic_page(struct page *page,
+-				unsigned long addr,
++				unsigned long base_addr,
+ 				unsigned int pages_per_huge_page)
+ {
+ 	int i;
+@@ -5629,18 +5647,35 @@ static void clear_gigantic_page(struct page *page,
  
- #endif /* _ASM_POWERPC_PAGE_H */
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 1526e410e802..ce9005ffccb0 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -188,5 +188,6 @@ extern phys_addr_t __phys_addr_symbol(unsigned long x);
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _ASM_RISCV_PAGE_H */
-diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
-index 61dea67bb9c7..7a598f86ae39 100644
---- a/arch/s390/include/asm/page.h
-+++ b/arch/s390/include/asm/page.h
-@@ -207,5 +207,6 @@ int arch_make_page_accessible(struct page *page);
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _S390_PAGE_H */
-diff --git a/arch/sh/include/asm/page.h b/arch/sh/include/asm/page.h
-index eca5daa43b93..5e49bb342c2c 100644
---- a/arch/sh/include/asm/page.h
-+++ b/arch/sh/include/asm/page.h
-@@ -176,6 +176,7 @@ typedef struct page *pgtable_t;
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- /*
-  * Some drivers need to perform DMA into kmalloc'ed buffers
-diff --git a/arch/sparc/include/asm/page_32.h b/arch/sparc/include/asm/page_32.h
-index fff8861df107..2f061d9a5a30 100644
---- a/arch/sparc/include/asm/page_32.h
-+++ b/arch/sparc/include/asm/page_32.h
-@@ -135,5 +135,6 @@ extern unsigned long pfn_base;
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _SPARC_PAGE_H */
-diff --git a/arch/sparc/include/asm/page_64.h b/arch/sparc/include/asm/page_64.h
-index 254dffd85fb1..2026bf92e3e7 100644
---- a/arch/sparc/include/asm/page_64.h
-+++ b/arch/sparc/include/asm/page_64.h
-@@ -159,5 +159,6 @@ extern unsigned long PAGE_OFFSET;
- #endif /* !(__ASSEMBLY__) */
- 
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* _SPARC64_PAGE_H */
-diff --git a/arch/um/include/asm/page.h b/arch/um/include/asm/page.h
-index 95af12e82a32..79768ad6069c 100644
---- a/arch/um/include/asm/page.h
-+++ b/arch/um/include/asm/page.h
-@@ -113,6 +113,7 @@ extern unsigned long uml_physmem;
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif	/* __ASSEMBLY__ */
- 
-diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
-index 9cc82f305f4b..5a246a2a66aa 100644
---- a/arch/x86/include/asm/page.h
-+++ b/arch/x86/include/asm/page.h
-@@ -85,6 +85,7 @@ static __always_inline u64 __is_canonical_address(u64 vaddr, u8 vaddr_bits)
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
- 
-diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/page.h
-index 493eb7083b1a..2812f2bea844 100644
---- a/arch/xtensa/include/asm/page.h
-+++ b/arch/xtensa/include/asm/page.h
-@@ -200,4 +200,5 @@ static inline unsigned long ___pa(unsigned long va)
- #endif /* __ASSEMBLY__ */
- 
- #include <asm-generic/memory_model.h>
-+#include <asm-generic/clear_page.h>
- #endif /* _XTENSA_PAGE_H */
-diff --git a/include/asm-generic/clear_page.h b/include/asm-generic/clear_page.h
-new file mode 100644
-index 000000000000..f827d661519c
---- /dev/null
-+++ b/include/asm-generic/clear_page.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_GENERIC_CLEAR_PAGE_H
-+#define __ASM_GENERIC_CLEAR_PAGE_H
-+
-+/*
-+ * clear_user_pages() operates on contiguous pages and does the clearing
-+ * operation in a single arch defined primitive.
-+ *
-+ * To do this, arch code defines clear_user_pages() and the max granularity
-+ * it can handle via ARCH_MAX_CLEAR_PAGES_ORDER.
-+ *
-+ * Note that given the need for contiguity, __HAVE_ARCH_CLEAR_USER_PAGES
-+ * and CONFIG_HIGHMEM are mutually exclusive.
-+ */
-+
-+#if defined(CONFIG_HIGHMEM) && defined(__HAVE_ARCH_CLEAR_USER_PAGES)
-+#error CONFIG_HIGHMEM is incompatible with __HAVE_ARCH_CLEAR_USER_PAGES
-+#endif
-+
-+#ifndef __HAVE_ARCH_CLEAR_USER_PAGES
-+
-+/*
-+ * For architectures that do not expose __HAVE_ARCH_CLEAR_USER_PAGES, set
-+ * the granularity to be identical to clear_user_page().
-+ */
-+#define ARCH_MAX_CLEAR_PAGES_ORDER	0
-+
-+#ifndef __ASSEMBLY__
-+
-+/*
-+ * With ARCH_MAX_CLEAR_PAGES_ORDER == 0, all callers should be specifying
-+ * npages == 1 and so we just fallback to clear_user_page().
-+ */
-+static inline void clear_user_pages(void *page, unsigned long vaddr,
-+			       struct page *start_page, unsigned int npages)
-+{
-+	clear_user_page(page, vaddr, start_page);
-+}
-+#endif /* __ASSEMBLY__ */
-+#endif /* __HAVE_ARCH_CLEAR_USER_PAGES */
-+
-+#define ARCH_MAX_CLEAR_PAGES	(1 << ARCH_MAX_CLEAR_PAGES_ORDER)
-+
-+#endif /* __ASM_GENERIC_CLEAR_PAGE_H */
-diff --git a/include/asm-generic/page.h b/include/asm-generic/page.h
-index 6fc47561814c..060094e7f964 100644
---- a/include/asm-generic/page.h
-+++ b/include/asm-generic/page.h
-@@ -93,5 +93,6 @@ extern unsigned long memory_end;
- 
- #include <asm-generic/memory_model.h>
- #include <asm-generic/getorder.h>
-+#include <asm-generic/clear_page.h>
- 
- #endif /* __ASM_GENERIC_PAGE_H */
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 3af34de54330..08781d7693e7 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -208,6 +208,29 @@ static inline void clear_user_highpage(struct page *page, unsigned long vaddr)
+ 	might_sleep();
+ 	for (i = 0; i < pages_per_huge_page;
+-	     i++, p = mem_map_next(p, page, i)) {
++	     i += clear_page_unit, p = mem_map_offset(page, i)) {
++		/*
++		 * clear_page_unit is a factor of 1<<MAX_ORDER which
++		 * guarantees that p[0] and p[clear_page_unit-1]
++		 * never straddle a mem_map discontiguity.
++		 */
++		clear_user_extent(p, base_addr + i * PAGE_SIZE, clear_page_unit);
+ 		cond_resched();
+-		clear_user_highpage(p, addr + i * PAGE_SIZE);
+ 	}
  }
- #endif
  
-+#ifdef __HAVE_ARCH_CLEAR_USER_PAGES
-+static inline void clear_user_highpages(struct page *page, unsigned long vaddr,
-+					unsigned int npages)
-+{
-+	void *addr = page_address(page);
+-static void clear_subpage(struct subpage_arg *sa,
+-			  unsigned long base_addr, int idx)
++static void clear_subpages(struct subpage_arg *sa,
++			   unsigned long base_addr, int lidx, int ridx)
+ {
+ 	struct page *page = sa->dst;
++	int i, n;
+ 
+-	clear_user_highpage(page + idx, base_addr + idx * PAGE_SIZE);
++	might_sleep();
 +
-+	clear_user_pages(addr, vaddr, page, npages);
-+}
-+#else
-+static inline void clear_user_highpages(struct page *page, unsigned long vaddr,
-+					unsigned int npages)
-+{
-+	void *addr;
-+	unsigned int i;
++	for (i = lidx; i <= ridx; ) {
++		unsigned int remaining = (unsigned int) ridx - i + 1;
 +
-+	for (i = 0; i < npages; i++, page++, vaddr += PAGE_SIZE) {
-+		addr = kmap_local_page(page);
-+		clear_user_page(addr, vaddr, page);
-+		kunmap_local(addr);
++		n = min(clear_page_unit, remaining);
++
++		clear_user_extent(page + i, base_addr + i * PAGE_SIZE, n);
++		i += n;
++
++		cond_resched();
 +	}
-+}
-+#endif /* __HAVE_ARCH_CLEAR_USER_PAGES */
+ }
+ 
+ void clear_huge_page(struct page *page,
+@@ -5659,7 +5694,7 @@ void clear_huge_page(struct page *page,
+ 		return;
+ 	}
+ 
+-	process_huge_page(&sa, addr_hint, pages_per_huge_page, clear_subpage);
++	process_huge_page(&sa, addr_hint, pages_per_huge_page, clear_subpages);
+ }
+ 
+ static void copy_user_gigantic_page(struct page *dst, struct page *src,
+@@ -5681,11 +5716,19 @@ static void copy_user_gigantic_page(struct page *dst, struct page *src,
+ 	}
+ }
+ 
+-static void copy_subpage(struct subpage_arg *copy_arg,
+-			 unsigned long base_addr, int idx)
++static void copy_subpages(struct subpage_arg *copy_arg,
++			  unsigned long base_addr, int lidx, int ridx)
+ {
+-	copy_user_highpage(copy_arg->dst + idx, copy_arg->src + idx,
++	int idx;
 +
- #ifndef __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
- /**
-  * alloc_zeroed_user_highpage_movable - Allocate a zeroed HIGHMEM page for a VMA that the caller knows can move
++	might_sleep();
++
++	for (idx = lidx; idx <= ridx; idx++) {
++		copy_user_highpage(copy_arg->dst + idx, copy_arg->src + idx,
+ 			   base_addr + idx * PAGE_SIZE, copy_arg->vma);
++
++		cond_resched();
++	}
+ }
+ 
+ void copy_user_huge_page(struct page *dst, struct page *src,
+@@ -5706,7 +5749,7 @@ void copy_user_huge_page(struct page *dst, struct page *src,
+ 		return;
+ 	}
+ 
+-	process_huge_page(&sa, addr_hint, pages_per_huge_page, copy_subpage);
++	process_huge_page(&sa, addr_hint, pages_per_huge_page, copy_subpages);
+ }
+ 
+ long copy_huge_page_from_user(struct page *dst_page,
 -- 
 2.31.1
 

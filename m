@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3141053E0DD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E7B53E0EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiFFF1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 01:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S229870AbiFFF3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiFFF1K (ORCPT
+        with ESMTP id S229900AbiFFF2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 01:27:10 -0400
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA4D6F4A6
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 22:03:48 -0700 (PDT)
-Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-07.nifty.com with ESMTP id 25651Pml026657
-        for <linux-kernel@vger.kernel.org>; Mon, 6 Jun 2022 14:01:25 +0900
+        Mon, 6 Jun 2022 01:28:17 -0400
+X-Greylist: delayed 167 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Jun 2022 22:10:19 PDT
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390B513C1EE;
+        Sun,  5 Jun 2022 22:10:18 -0700 (PDT)
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-02.nifty.com with ESMTP id 256547AF021526;
+        Mon, 6 Jun 2022 14:04:19 +0900
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 2564xNUT024943;
-        Mon, 6 Jun 2022 13:59:23 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2564xNUT024943
+        by conuserg-09.nifty.com with ESMTP id 25652gOh011474;
+        Mon, 6 Jun 2022 14:02:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 25652gOh011474
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654491564;
-        bh=02SaZmEKBPMSF76nbpCPhuGFilCILCVnozQUdrfNE4A=;
+        s=dec2015msa; t=1654491764;
+        bh=fe9PsgfIFxKcSrvbsk+3O4QEH1o6xyD9G98e0hlENu4=;
         h=From:To:Cc:Subject:Date:From;
-        b=RkkHLUjqmtVqOahyc+gud1UArOBglFYPpJZgVzg8bXRPULtWmrJ+kliGNUKHHtDny
-         JiWmrEm1pKeMQhx2JCtK9wQffux2NWWrU2BsRIZYg4fVi8QAJBz/YpNdoCzKKf7LoC
-         vlI95bU/MbYRII7rJ4vFT9VnOmGsvYvVjmfBi67GMgy6q/HMo/eJE1mr/Cp8Ciqoyv
-         0YxSF9sCrBzJ/Pj0oh9NLLnSXjg/VriRCI5ccSBEb2gDb7aiUlEeceQTnmO3Sunl3e
-         3lE9jXK7ywjcnYJylguEOjMYY88BLGf0e+gIJPOolZo3FUDfdRnG2wpAtAxSG0/lgj
-         ONhdPeLT6l+rg==
+        b=J4idJDLliOL/8DeR5nGQQ2niDlZAIc3RakMevfSYF1S8fMMDf7vJXp/Kod69RdRBu
+         pebb1wNXk2zWAyp6pjp0FCsor4vevekziwRM1BKBt283vZTSOOQA0B6W9zbFOYog/P
+         IaKkq2XWMkrVdugNWkzXMtxkc3JgSeUFvieNwLy5VL/PWabzoc+yj+B0qbspiTzWGQ
+         MS7+Jy/D+ymgiPz/0LlbBbLPG5l5E2TTUrSNfIRTrfb3H2xTTQ1oBL0N9CFQJGqCdL
+         y1VFBCFOqgaOWSvaDzUg89R4VffE1o17U6tTlMB8iTXvyIXRFnF28ZlUMLByeU2HfA
+         Uu3y5YIzO0zUg==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org (moderated for non-subscribers)
+To:     "K . Y . Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Julien Grall <julien.grall@arm.com>,
-        Shannon Zhao <shannon.zhao@linaro.org>,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: [PATCH] xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
-Date:   Mon,  6 Jun 2022 13:59:20 +0900
-Message-Id: <20220606045920.4161881-1-masahiroy@kernel.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clocksource: hyper-v: unexport __init-annotated hv_init_clocksource()
+Date:   Mon,  6 Jun 2022 14:02:38 +0900
+Message-Id: <20220606050238.4162200-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,30 +76,27 @@ There are two ways to fix it:
   - Remove __init
   - Remove EXPORT_SYMBOL
 
-I chose the latter for this case because none of the in-tree call-sites
-(arch/arm/xen/enlighten.c, arch/x86/xen/grant-table.c) is compiled as
-modular.
+I chose the latter for this case because the only in-tree call-site,
+arch/x86/kernel/cpu/mshyperv.c is never compiled as modular.
+(CONFIG_HYPERVISOR_GUEST is boolean)
 
-Fixes: 243848fc018c ("xen/grant-table: Move xlated_setup_gnttab_pages to common place")
+Fixes: dd2cb348613b ("clocksource/drivers: Continue making Hyper-V clocksource ISA agnostic")
 Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- drivers/xen/xlate_mmu.c | 1 -
+ drivers/clocksource/hyperv_timer.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/xen/xlate_mmu.c b/drivers/xen/xlate_mmu.c
-index 34742c6e189e..f17c4c03db30 100644
---- a/drivers/xen/xlate_mmu.c
-+++ b/drivers/xen/xlate_mmu.c
-@@ -261,7 +261,6 @@ int __init xen_xlate_map_ballooned_pages(xen_pfn_t **gfns, void **virt,
- 
- 	return 0;
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index ff188ab68496..bb47610bbd1c 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -565,4 +565,3 @@ void __init hv_init_clocksource(void)
+ 	hv_sched_clock_offset = hv_read_reference_counter();
+ 	hv_setup_sched_clock(read_hv_sched_clock_msr);
  }
--EXPORT_SYMBOL_GPL(xen_xlate_map_ballooned_pages);
- 
- struct remap_pfn {
- 	struct mm_struct *mm;
+-EXPORT_SYMBOL_GPL(hv_init_clocksource);
 -- 
 2.32.0
 

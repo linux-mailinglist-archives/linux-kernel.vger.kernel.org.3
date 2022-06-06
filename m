@@ -2,203 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D24053E769
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AD453EB8F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241305AbiFFPwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S241315AbiFFPxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241274AbiFFPwX (ORCPT
+        with ESMTP id S241309AbiFFPxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:52:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C7B1C107
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:52:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48779B81A9A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9A0C3411F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654530737;
-        bh=JNfglN4TZ3Ga1Y1j0CLkEDe16Ldfqa9ttWOItunPbUE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SYio+eGswoGQ4mrY9dqr97kx2Td1NOZmRCjScSqZYm4LOJLuHtXUIZ1FKnOja4t0w
-         k+wehzT3SWE2wiiXRRbvNHxLinm8jGLyR63bD/F3aonIfTXulYrX39zrZr0s6ESGUH
-         imKawooNO6H7A72aEbLU+1owpUXjQrPv9ADY5GPf0sgh80gsY7oT0l9Hsu7vX84qz3
-         zsU+0QWPLOqoe065U7Noo60Q7JGE0QFFIg1VL58omMAq84DlyetT3uvw9e4fPZLZSP
-         BquU2f/9diHMSWVJwskB1Pj/b408PjVOCBXI2lxsxaO+zxG5FPMB1gg0Y0UrQkRKa7
-         bAU4C0q2Sur9Q==
-Received: by mail-oi1-f176.google.com with SMTP id l81so4765574oif.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:52:16 -0700 (PDT)
-X-Gm-Message-State: AOAM5332by9HvYuMzOMlDQCPHo8xNWGb1q1iXCgHKkaZrzTW3mO8BEYL
-        Fg7CPmDs8iYzD23loqk8RrHtEbiXeXBQR0JYXaU=
-X-Google-Smtp-Source: ABdhPJz04RHdaSFXcfSoyEUmK0UdSU80QU/wwjDu5bmHIX97jOhEuyA77XUZcZb4P6LXzByuaQ7qj/YeQde3+veqgZo=
-X-Received: by 2002:a05:6808:f88:b0:32b:d10f:cc6b with SMTP id
- o8-20020a0568080f8800b0032bd10fcc6bmr29207384oiw.228.1654530736144; Mon, 06
- Jun 2022 08:52:16 -0700 (PDT)
+        Mon, 6 Jun 2022 11:53:16 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C902226CE1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:53:15 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id p8so13034888pfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hc9viEeZffCjBHu/ML1+/iUUNsF5FvYmtO3dN3G4Vlw=;
+        b=ewoiGIcHnngJ8XnuyY2jIwN2ChspJyDD06xIEttXPId2yo5q8lZvjdkMTP+UBe/weY
+         2llWNBnVcx8AlKWfV8HzQcmwXUEEikJ6isuAKerjkF7h7HoyqdjSRO8xEM4H0svFPCf1
+         YYm/fQbB+1omnCmLIouQIUX9Ms1HRCmablN5JxKM2E0SJsjvbAVKaeap3hqgS77EgLyC
+         RbMeDFbVuSMNqfLaNukLhoRg+UMftSUB7u6b7/k+cvy2G1g1/8y1t5FayjUYqgdxe+/1
+         FO2YAHgEgvE9y56lNV9ndYqXYVAT5MDoRJjtwsVEm28OmUKzAGFEjQ56U+S7KyUeuOj5
+         Adlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hc9viEeZffCjBHu/ML1+/iUUNsF5FvYmtO3dN3G4Vlw=;
+        b=7I/cQdMMTF0eU6eMZgNURlyvlmEa5j0NEkrUSdH90z/iVrertXcKe013KyG8GiLNin
+         25QtKI2tNyHHbtyBq0wg/nclzHf2geWjQODwJ+PZ0TUxG9JYjVyVoirPEohkXQ+YN0XH
+         aMn5O4jt9ENkZk76kwFXhty81AQqHABn7C4PMJ/0DwzHYHdtLeFO5ZRkJksB6NZl3jxp
+         yKox8UC76Mn3ehEKxxRYu7RtZCJjnA6TgjsFaQxXwx6NWGLSV7Y0coY+4bez5t2+dxL9
+         aY9UTbSmv32YDrpsDDhn/gNEysqmuvlyNvl32YTr7Um52bXnG0M5TbbqXHcP1DU0UCJf
+         hmCw==
+X-Gm-Message-State: AOAM5326TPLHmvWqyGRo6Ok+S9RrND9SH1w/TBNL8fdKY8BA4MaBmiGc
+        uRWw5puFuB7IHRc7yY/iiLglKA==
+X-Google-Smtp-Source: ABdhPJx0gfs2uBVwDAH9+sv20TF8wBI/O1vbv568hmncRBiTUr/Kng5zHTKiMHbRtDfNJDlNJgm/yA==
+X-Received: by 2002:a05:6a00:98b:b0:51b:d730:c58 with SMTP id u11-20020a056a00098b00b0051bd7300c58mr21079020pfg.23.1654530794513;
+        Mon, 06 Jun 2022 08:53:14 -0700 (PDT)
+Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id 65-20020a620444000000b0050dc76281dcsm10962951pfe.182.2022.06.06.08.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:53:14 -0700 (PDT)
+From:   Jinke Han <hanjinke.666@bytedance.com>
+X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lei.rao@intel.com, hanjinke <hanjinke.666@bytedance.com>
+Subject: [PATCH] ext4: reuse order and buddy in mb_mark_used when buddy split
+Date:   Mon,  6 Jun 2022 23:53:05 +0800
+Message-Id: <20220606155305.74146-1-hanjinke.666@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-References: <20220606124858.384-1-thunder.leizhen@huawei.com>
-In-Reply-To: <20220606124858.384-1-thunder.leizhen@huawei.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 6 Jun 2022 17:52:03 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGCbCnV6FGTq2pBosqBTVv3B8WpNnOuiV0eSgvBMO-+8A@mail.gmail.com>
-Message-ID: <CAMj1kXGCbCnV6FGTq2pBosqBTVv3B8WpNnOuiV0eSgvBMO-+8A@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Mark the FDT_FIXED sections as shareable
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Zhen Lei,
+From: hanjinke <hanjinke.666@bytedance.com>
 
-On Mon, 6 Jun 2022 at 14:49, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->
-> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
-> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
-> which contains fdt. But it only reserves the exact physical memory that
-> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
-> speculative read access can bring the RAM content from non-fdt zone into
-> cache, PIPT makes it to be hit by subsequently read access through
-> shareable mapping(such as linear mapping), and the cache consistency
-> between cores is lost due to non-shareable property.
->
-> |<---------FDT_FIXED_SIZE------>|
-> |                               |
->  -------------------------------
-> | <non-fdt> | <fdt> | <non-fdt> |
->  -------------------------------
->
-> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
->    into the cache.
-> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
->    received the notification to invalid the corresponding cachelines, but
->    the property non-shareable makes it to be ignored.
-> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
->    is read.
->
+After each buddy split, mb_mark_used will search the proper order
+for the block which may consume some loop in mb_find_order_for_block.
+In fact, we can reuse the oder and buddy generated by the buddy split.
 
-Thanks for the excellent write-up, and for what must have been a lot
-of work to narrow down and diagnose!
+Reviewed by: lei.rao@intel.com
+Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+---
+ fs/ext4/mballoc.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> To eliminate this risk, mark the MT_ROM sections as shareable.
->
-> The other user of MT_ROM is XIP_KERNEL. XIP allows the kernel to run from
-> flash to save RAM space. Not sure if anyone is still using XIP in order to
-> save a little memory and not care about performance degradation. Add a new
-> memory type MT_ROM_XIP to be compatible with it.
->
-> BTW: Another solution is to memblock_reserve() all the sections that fdt
-> spans, but this will waste 2-4MiB memory.
->
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index 9f12f29bc346..c7ac6b269dd8 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -1933,6 +1933,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+ 	unsigned ret = 0;
+ 	int len0 = len;
+ 	void *buddy;
++	bool split = false;
+ 
+ 	BUG_ON(start + len > (e4b->bd_sb->s_blocksize << 3));
+ 	BUG_ON(e4b->bd_group != ex->fe_group);
+@@ -1957,12 +1958,16 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+ 
+ 	/* let's maintain buddy itself */
+ 	while (len) {
+-		ord = mb_find_order_for_block(e4b, start);
++		if (!split)
++			ord = mb_find_order_for_block(e4b, start);
+ 
+ 		if (((start >> ord) << ord) == start && len >= (1 << ord)) {
+ 			/* the whole chunk may be allocated at once! */
+ 			mlen = 1 << ord;
+-			buddy = mb_find_buddy(e4b, ord, &max);
++			if (!split)
++				buddy = mb_find_buddy(e4b, ord, &max);
++			else
++				split = false;
+ 			BUG_ON((start >> ord) >= max);
+ 			mb_set_bit(start >> ord, buddy);
+ 			e4b->bd_info->bb_counters[ord]--;
+@@ -1989,6 +1994,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
+ 		mb_clear_bit(cur + 1, buddy);
+ 		e4b->bd_info->bb_counters[ord]++;
+ 		e4b->bd_info->bb_counters[ord]++;
++		split = true;
+ 	}
+ 	mb_set_largest_free_order(e4b->bd_sb, e4b->bd_info);
+ 
+-- 
+2.20.1
 
-I agree that we should not add shareable attributes to the memory type
-used by XIP kernels for code regions: NOR flash is not usually
-integrated in a way that allows it to participate in the coherency
-protocol, so that will likely break things.
-
-I think, though, that it would be better to leave MT_ROM alone, and
-introduce a new type MT_MEMORY_RO instead, which is wired up in the
-right way (see below), so that we get NX attributes, and can use it to
-create non-section mappings as well.
-
-Then, as a followup which does not need to go into -stable, we can
-reduce the size of the mapping: there is really no need for the
-permanent mapping to be section granular - this is only for the early
-asm code that is not able to create 2 levels of page tables.
-
-
---------------->8-----------------
-diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
-index 92282558caf7..2b8970d8e5a2 100644
---- a/arch/arm/include/asm/mach/map.h
-+++ b/arch/arm/include/asm/mach/map.h
-@@ -27,6 +27,7 @@ enum {
-        MT_HIGH_VECTORS,
-        MT_MEMORY_RWX,
-        MT_MEMORY_RW,
-+       MT_MEMORY_RO,
-        MT_ROM,
-        MT_MEMORY_RWX_NONCACHED,
-        MT_MEMORY_RW_DTCM,
-diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-index 5e2be37a198e..cd17e324aa51 100644
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -296,6 +296,13 @@ static struct mem_type mem_types[] __ro_after_init = {
-                .prot_sect = PMD_TYPE_SECT | PMD_SECT_AP_WRITE,
-                .domain    = DOMAIN_KERNEL,
-        },
-+       [MT_MEMORY_RO] = {
-+               .prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
-+                            L_PTE_XN | L_PTE_RDONLY,
-+               .prot_l1   = PMD_TYPE_TABLE,
-+               .prot_sect = PMD_TYPE_SECT,
-+               .domain    = DOMAIN_KERNEL,
-+       },
-        [MT_ROM] = {
-                .prot_sect = PMD_TYPE_SECT,
-                .domain    = DOMAIN_KERNEL,
-@@ -489,6 +496,7 @@ static void __init build_mem_type_table(void)
-
-                        /* Also setup NX memory mapping */
-                        mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_XN;
-+                       mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_XN;
-                }
-                if (cpu_arch >= CPU_ARCH_ARMv7 && (cr & CR_TRE)) {
-                        /*
-@@ -568,6 +576,7 @@ static void __init build_mem_type_table(void)
-                mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
-                mem_types[MT_MINICLEAN].prot_sect |=
-PMD_SECT_APX|PMD_SECT_AP_WRITE;
-                mem_types[MT_CACHECLEAN].prot_sect |=
-PMD_SECT_APX|PMD_SECT_AP_WRITE;
-+               mem_types[MT_MEMORY_RO].prot_sect |=
-PMD_SECT_APX|PMD_SECT_AP_WRITE;
- #endif
-
-                /*
-@@ -587,6 +596,8 @@ static void __init build_mem_type_table(void)
-                        mem_types[MT_MEMORY_RWX].prot_pte |= L_PTE_SHARED;
-                        mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_S;
-                        mem_types[MT_MEMORY_RW].prot_pte |= L_PTE_SHARED;
-+                       mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_S;
-+                       mem_types[MT_MEMORY_RO].prot_pte |= L_PTE_SHARED;
-                        mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
-                        mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect
-|= PMD_SECT_S;
-                        mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |=
-L_PTE_SHARED;
-@@ -647,6 +658,8 @@ static void __init build_mem_type_table(void)
-        mem_types[MT_MEMORY_RWX].prot_pte |= kern_pgprot;
-        mem_types[MT_MEMORY_RW].prot_sect |= ecc_mask | cp->pmd;
-        mem_types[MT_MEMORY_RW].prot_pte |= kern_pgprot;
-+       mem_types[MT_MEMORY_RO].prot_sect |= ecc_mask | cp->pmd;
-+       mem_types[MT_MEMORY_RO].prot_pte |= kern_pgprot;
-        mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
-        mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
-        mem_types[MT_ROM].prot_sect |= cp->pmd;
-@@ -1360,7 +1373,7 @@ static void __init devicemaps_init(const struct
-machine_desc *mdesc)
-                map.pfn = __phys_to_pfn(__atags_pointer & SECTION_MASK);
-                map.virtual = FDT_FIXED_BASE;
-                map.length = FDT_FIXED_SIZE;
--               map.type = MT_ROM;
-+               map.type = MT_MEMORY_RO;
-                create_mapping(&map);
-        }

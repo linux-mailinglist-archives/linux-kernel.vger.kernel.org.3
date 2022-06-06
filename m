@@ -2,103 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B6D53E8DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 666B153EC9D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238609AbiFFNPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S238553AbiFFNN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238594AbiFFNPW (ORCPT
+        with ESMTP id S238540AbiFFNNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:15:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394B537019;
-        Mon,  6 Jun 2022 06:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654521321; x=1686057321;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y1kaCaz5N1o1+4WtActhJKFA70UAkSgBZb5Wg1uAewU=;
-  b=SmP44Exql6VmNx50T+xK+N/wyc2eB3AANrmvVCI9g2PvrDAjfin+EVJ2
-   4vxY81GooidkXaX9otuzSQ2yNRVNtDa1NxKvz2jZ1gN17XZjuoGvO2YYi
-   s3OlTMYjKUOntWOi4dBV56LLgY2YHjvmAD0huqAjnaAJwo7NRwOgR5lMY
-   n1JD5CSQKYogh/48NaAHAP3x0OoyVgTdsWNW078fuqzoxaLKZcULfphvC
-   S/eC/utF5NcRwDkbpcWBfVZ5P1ek8sVBvamFVhqf5M9iJshYgwB9vMX+U
-   8a7lbo4WUWy9N5SXGT+k3uDbG/U9dBZsOJb6eKWZnfePIkxQkEmPZzAhx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="339948498"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="339948498"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 06:11:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="583631022"
-Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 06:11:55 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Joshua Scott <joshua.scott@alliedtelesis.co.nz>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@penugtronix.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 6/6] serial: 8250_dw: Store LSR into lsr_saved_flags in dw8250_tx_wait_empty()
-Date:   Mon,  6 Jun 2022 16:11:24 +0300
-Message-Id: <20220606131124.53394-7-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
-References: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 6 Jun 2022 09:13:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B719718B0F;
+        Mon,  6 Jun 2022 06:13:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AE3AB81812;
+        Mon,  6 Jun 2022 13:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2862DC3411C;
+        Mon,  6 Jun 2022 13:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654521199;
+        bh=qbO7lBbtmW3Eet7P0hr1OYo1n6g40lpKLJ1V7MD0vxY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mlzLz+kOsMx/FW6FW7BiEQ7laxoGg0DZj1Std7P3Y3JNYkG0AyRfekSyye8MKjMOs
+         Z3kFBnj4guzB0y+7cYNglF/MvvatjrXIqtljIPTt88RxEdbD5zfh2H+fsgWNTb771I
+         i9s7n138ZFWLn7hDjtDWGCFyZ/fxpXiTodeICQqmIHJQahRQdC6gP5tseboA7LWWs6
+         HvWqHCoixjs5Fyte09ar+iCmKtvfa+lqskuYj0w8kayv+wKPUahzj2EXzEQUX4hxTD
+         VL1bMev2+bgs0oWpDmEWXHNzmSFiKxreMHxQ3a7zM0HnF4IXXQiTrDPNBRi2L2wgM/
+         qsFaUxdChEDcQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyCXk-00FuJV-Pw; Mon, 06 Jun 2022 14:13:16 +0100
+Date:   Mon, 06 Jun 2022 14:13:16 +0100
+Message-ID: <87tu8y3pg3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Chao-ying Fu <cfu@wavecomp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+Subject: Re: [PATCH v2 04/12] irqchip: mips-gic: Support multi-cluster in gic_with_each_online_cpu()
+In-Reply-To: <20220525121030.16054-5-Dragan.Mladjenovic@syrmia.com>
+References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
+        <20220525121030.16054-5-Dragan.Mladjenovic@syrmia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Dragan.Mladjenovic@syrmia.com, tsbogend@alpha.franken.de, cfu@wavecomp.com, daniel.lezcano@linaro.org, geert@linux-m68k.org, gerg@kernel.org, hauke@hauke-m.de, ilya.lipnitskiy@gmail.com, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, paulburton@kernel.org, peterz@infradead.org, fancer.lancer@gmail.com, tglx@linutronix.de, yangtiezhu@loongson.cn, dragan.mladjenovic@syrmia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure LSR flags are preserved in dw8250_tx_wait_empty(). This
-function is called from a low-level out function and therefore cannot
-call serial_lsr_in() as it would lead to infinite recursion.
+On Wed, 25 May 2022 13:10:22 +0100,
+Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+> 
+> From: Paul Burton <paulburton@kernel.org>
+> 
+> Introduce support for multi-cluster GIC register access in
+> __gic_with_next_online_cpu(), and therefore in its user
+> gic_with_each_online_cpu(). We access registers in remote clusters using
+> the CM's GCR_CL_REDIRECT register, and so here we delegate to
+> mips_cm_lock_other() in order to configure this access.
+> 
+> With this done, users of gic_with_each_online_cpu() gain support for
+> multi-cluster with no further changes.
+> 
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+> 
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index 4872bebe24cf..89a3c6d04e09 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
+> @@ -69,6 +69,20 @@ static int __gic_with_next_online_cpu(int prev)
+>  {
+>  	unsigned int cpu;
+>  
+> +	/*
+> +	 * Unlock access to the previous CPU's GIC local register block.
+> +	 *
+> +	 * Delegate to the CM locking code in the multi-cluster case, since
+> +	 * other clusters can only be accessed using GCR_CL_REDIRECT.
+> +	 *
+> +	 * In the single cluster case we don't need to do anything; the caller
+> +	 * is responsible for maintaining gic_lock & nothing should be
+> +	 * expecting any particular value of GIC_VL_OTHER so we can leave it
+> +	 * as-is.
+> +	 */
+> +	if ((prev != -1) && mips_cps_multicluster_cpus())
+> +		mips_cm_unlock_other();
 
-It is borderline if the flags need to be saved here at all since this
-code relates to writing LCR register which usually implies no important
-characters should be arriving.
+Huh. It now strikes me that if you exit the gic_with_next_online_cpu()
+early (with a 'break;', for example), the state machine breaks as you
+won't have performed the unlock...
 
-Fixes: 914eaf935ec7 ("serial: 8250_dw: Allow TX FIFO to drain before writing to UART_LCR")
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_dw.c | 3 +++
- 1 file changed, 3 insertions(+)
+This definitely needs some documenting, at the very least.
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 1fae45991812..4cc69bb612ab 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -122,12 +122,15 @@ static void dw8250_check_lcr(struct uart_port *p, int value)
- /* Returns once the transmitter is empty or we run out of retries */
- static void dw8250_tx_wait_empty(struct uart_port *p)
- {
-+	struct uart_8250_port *up = up_to_u8250p(p);
- 	unsigned int tries = 20000;
- 	unsigned int delay_threshold = tries - 1000;
- 	unsigned int lsr;
- 
- 	while (tries--) {
- 		lsr = readb (p->membase + (UART_LSR << p->regshift));
-+		up->lsr_saved_flags |= lsr & LSR_SAVE_FLAGS;
-+
- 		if (lsr & UART_LSR_TEMT)
- 			break;
- 
+	M.
+
 -- 
-2.30.2
-
+Without deviation from the norm, progress is not possible.

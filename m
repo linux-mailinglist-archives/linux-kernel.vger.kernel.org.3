@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F196253E285
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26C953E25F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbiFFHi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S231393AbiFFHiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbiFFHim (ORCPT
+        with ESMTP id S231356AbiFFHim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Jun 2022 03:38:42 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F7824F12
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC1FDF0E
         for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:38:39 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGldT74qPzRhpy;
-        Mon,  6 Jun 2022 15:35:25 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGlgg5dryzjXVN;
+        Mon,  6 Jun 2022 15:37:19 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 15:38:36 +0800
+ 15.1.2375.24; Mon, 6 Jun 2022 15:38:37 +0800
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 15:38:35 +0800
+ 15.1.2375.24; Mon, 6 Jun 2022 15:38:36 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <akpm@linux-foundation.org>,
@@ -33,11 +33,10 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
         <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH v4 1/6] ARM: mm: kill unused runtime hook arch_iounmap()
-Date:   Mon, 6 Jun 2022 15:48:10 +0800
-Message-ID: <20220606074815.139265-2-wangkefeng.wang@huawei.com>
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v4 2/6] mm: ioremap: Use more sensibly name in ioremap_prot()
+Date:   Mon, 6 Jun 2022 15:48:11 +0800
+Message-ID: <20220606074815.139265-3-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220606074815.139265-1-wangkefeng.wang@huawei.com>
 References: <20220606074815.139265-1-wangkefeng.wang@huawei.com>
@@ -57,97 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the following commits,
+Use more meaningful and sensibly naming phys_addr
+instead addr in ioremap_prot().
 
-v5.4
-  commit 59d3ae9a5bf6 ("ARM: remove Intel iop33x and iop13xx support")
-v5.11
-  commit 3e3f354bc383 ("ARM: remove ebsa110 platform")
-
-The runtime hook arch_iounmap() on ARM is useless, kill arch_iounmap()
-and __iounmap().
-
-Cc: Russell King <linux@armlinux.org.uk>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- arch/arm/include/asm/io.h | 4 +---
- arch/arm/mm/ioremap.c     | 9 +--------
- arch/arm/mm/nommu.c       | 9 +--------
- 3 files changed, 3 insertions(+), 19 deletions(-)
+ include/asm-generic/io.h |  2 +-
+ mm/ioremap.c             | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-index eba7cbc93b86..7fcdc785366c 100644
---- a/arch/arm/include/asm/io.h
-+++ b/arch/arm/include/asm/io.h
-@@ -139,11 +139,9 @@ extern void __iomem *__arm_ioremap_caller(phys_addr_t, size_t, unsigned int,
- extern void __iomem *__arm_ioremap_pfn(unsigned long, unsigned long, size_t, unsigned int);
- extern void __iomem *__arm_ioremap_exec(phys_addr_t, size_t, bool cached);
- void __arm_iomem_set_ro(void __iomem *ptr, size_t size);
--extern void __iounmap(volatile void __iomem *addr);
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index 7ce93aaf69f8..e6ffa2519f08 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -964,7 +964,7 @@ static inline void iounmap(volatile void __iomem *addr)
+ #elif defined(CONFIG_GENERIC_IOREMAP)
+ #include <linux/pgtable.h>
  
- extern void __iomem * (*arch_ioremap_caller)(phys_addr_t, size_t,
- 	unsigned int, void *);
--extern void (*arch_iounmap)(volatile void __iomem *);
+-void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
++void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot);
+ void iounmap(volatile void __iomem *addr);
  
- /*
-  * Bad read/write accesses...
-@@ -380,7 +378,7 @@ void __iomem *ioremap_wc(resource_size_t res_cookie, size_t size);
- #define ioremap_wc ioremap_wc
- #define ioremap_wt ioremap_wc
+ static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
+diff --git a/mm/ioremap.c b/mm/ioremap.c
+index 5fe598ecd9b7..1f9597fbcc07 100644
+--- a/mm/ioremap.c
++++ b/mm/ioremap.c
+@@ -11,20 +11,20 @@
+ #include <linux/io.h>
+ #include <linux/export.h>
  
--void iounmap(volatile void __iomem *iomem_cookie);
-+void iounmap(volatile void __iomem *io_addr);
- #define iounmap iounmap
- 
- void *arch_memremap_wb(phys_addr_t phys_addr, size_t size);
-diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
-index 576c0e6c92fc..2129070065c3 100644
---- a/arch/arm/mm/ioremap.c
-+++ b/arch/arm/mm/ioremap.c
-@@ -418,7 +418,7 @@ void *arch_memremap_wb(phys_addr_t phys_addr, size_t size)
- 						   __builtin_return_address(0));
- }
- 
--void __iounmap(volatile void __iomem *io_addr)
-+void iounmap(volatile void __iomem *io_addr)
+-void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
++void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot)
  {
- 	void *addr = (void *)(PAGE_MASK & (unsigned long)io_addr);
- 	struct static_vm *svm;
-@@ -446,13 +446,6 @@ void __iounmap(volatile void __iomem *io_addr)
+ 	unsigned long offset, vaddr;
+ 	phys_addr_t last_addr;
+ 	struct vm_struct *area;
  
- 	vunmap(addr);
- }
--
--void (*arch_iounmap)(volatile void __iomem *) = __iounmap;
--
--void iounmap(volatile void __iomem *cookie)
--{
--	arch_iounmap(cookie);
--}
- EXPORT_SYMBOL(iounmap);
+ 	/* Disallow wrap-around or zero size */
+-	last_addr = addr + size - 1;
+-	if (!size || last_addr < addr)
++	last_addr = phys_addr + size - 1;
++	if (!size || last_addr < phys_addr)
+ 		return NULL;
  
- #if defined(CONFIG_PCI) || IS_ENABLED(CONFIG_PCMCIA)
-diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
-index 2658f52903da..c42debaded95 100644
---- a/arch/arm/mm/nommu.c
-+++ b/arch/arm/mm/nommu.c
-@@ -230,14 +230,7 @@ void *arch_memremap_wb(phys_addr_t phys_addr, size_t size)
- 	return (void *)phys_addr;
- }
+ 	/* Page-align mappings */
+-	offset = addr & (~PAGE_MASK);
+-	addr -= offset;
++	offset = phys_addr & (~PAGE_MASK);
++	phys_addr -= offset;
+ 	size = PAGE_ALIGN(size + offset);
  
--void __iounmap(volatile void __iomem *addr)
--{
--}
--EXPORT_SYMBOL(__iounmap);
--
--void (*arch_iounmap)(volatile void __iomem *);
--
--void iounmap(volatile void __iomem *addr)
-+void iounmap(volatile void __iomem *io_addr)
- {
- }
- EXPORT_SYMBOL(iounmap);
+ 	area = get_vm_area_caller(size, VM_IOREMAP,
+@@ -33,7 +33,7 @@ void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
+ 		return NULL;
+ 	vaddr = (unsigned long)area->addr;
+ 
+-	if (ioremap_page_range(vaddr, vaddr + size, addr, __pgprot(prot))) {
++	if (ioremap_page_range(vaddr, vaddr + size, phys_addr, __pgprot(prot))) {
+ 		free_vm_area(area);
+ 		return NULL;
+ 	}
 -- 
 2.35.3
 

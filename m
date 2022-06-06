@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E648453F1D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EF753F1DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbiFFVnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S231772AbiFFVpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbiFFVnk (ORCPT
+        with ESMTP id S233599AbiFFVo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 17:43:40 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A856237;
-        Mon,  6 Jun 2022 14:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654551810;
-        bh=/rWCIXPO+DIHy5Wbvb0BsPXQuXvrzb8zMl/UnJyKspM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=IcURhFFFu+vzmB3Fi6OLRgy0a+suJkg6LAU2z5iEc24Nmis5bjtKEihWOJUcDmpKa
-         l6W36nVhATTrmRloAAaKYt/5/WrHH5KdUKOsTUSZMk45hfoPCYx+B80Ez9Zi22OvH6
-         wGEs4ABON1qO/18NyZlG0CdEw20+fYU7ysPTXScc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrhUK-1nSVwT3bPg-00neUP; Mon, 06
- Jun 2022 23:43:29 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-gpio@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] pinctrl: nuvoton: wpcm450: Convert irqchip to IRQCHIP_IMMUTABLE
-Date:   Mon,  6 Jun 2022 23:43:00 +0200
-Message-Id: <20220606214301.2061467-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        Mon, 6 Jun 2022 17:44:27 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B451181486
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:44:19 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so13684154pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 14:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p9AymPPffeIR1VQQPaQ/nzlIfZdjrOkxBeqoJZ0QW7Q=;
+        b=dhkIidP9TDH9wpEPcVPvs+yx1doA1HyD65I5go3pCHsNqRF6zO80Q689hhPpcdi1i8
+         AeNKphBHL/T7ROn1fB0y7y2L0iidfw/exIF8YawilsG+2wnterdE0RDRmpVylpfWoSZB
+         lfNGLPZVBqJqd4+USHbNtDDlZ149kk9NjmwedZ8SbPjVaO0MJaave1Sgz+StKQ4oCr1s
+         TZXlKrfPd0GlE7Brx38GBpq4ZHoKY9kM4tU42VQp1dbPJRBiwtY8ybSeQpkqwU4lce0p
+         ua8lTh72X/bTWX1uFercec6E1TYN9pqZ+pIPi9M4gu4z7rmygORfVX9eAare/XMArw3d
+         9IsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p9AymPPffeIR1VQQPaQ/nzlIfZdjrOkxBeqoJZ0QW7Q=;
+        b=iMASsIvlR356i7AduT/dfpez3tbKNT+PT+sx8t4DGgWLEH01YpzhAiHWr5nOo3dbMw
+         f2mi4ljGT8l6JDlOVF27fnUGQiA59XrzL2Ch++E4k+RKy+Jubc6xgQilY+LPdbX0gi0i
+         U/zuV3jr6KPiWZnpm8csWqGn637jqZi8pYr9rakYrEIk9cfz7P1unRzHhGY8i9p2Zv1B
+         lrj2vj6KcuEkoi1BNmD1i6hrBB+DvAHqzKo4vWlV6PhojrIOKNa5S4DcHd9ngwqGFOG5
+         b6Vvj9241K9BN8OiejnLhE32F/ufqo7Y0+z9kJ3rFZKB51FjpGPdF1k+As7kRcHIrrZK
+         0xVg==
+X-Gm-Message-State: AOAM533hS1VE/hf3PKm/PI24tmHibSolw2Q8sYgjH/XgTT89j/503dYP
+        PhtTj8I6Og9pbHLBRw/tRaM=
+X-Google-Smtp-Source: ABdhPJwKmWKXAYuoYaGrhEXXA0EBVG5iWfr3EaP0Y73mI+/FRVnIsYoqUZ5CgX8LP1Z3jVbZL4+ycQ==
+X-Received: by 2002:a17:902:ce87:b0:163:fc5e:398b with SMTP id f7-20020a170902ce8700b00163fc5e398bmr25674640plg.125.1654551859268;
+        Mon, 06 Jun 2022 14:44:19 -0700 (PDT)
+Received: from localhost.biz ([8.25.197.27])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170903100400b0016397da033csm10881675plb.62.2022.06.06.14.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 14:44:18 -0700 (PDT)
+From:   Yang Shi <shy828301@gmail.com>
+To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
+        willy@infradead.org, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [mm-unstable v3 PATCH 0/7] Cleanup transhuge_xxx helpers
+Date:   Mon,  6 Jun 2022 14:44:07 -0700
+Message-Id: <20220606214414.736109-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:LhGxtsXUq/6ysDnU3oTP8OdWjKQdiLoxcP4ZbK3dGsPVNl4Uu2T
- NjNq/YOJDOmQQSdo+XzAxBoSIHSWq0ODxiOhH3FOjVmYVIwK5VguTuztpW6BwUBlyFNTwA1
- TQbxOC43xmEPYNS3+Y7Dk5Rw4r+aWkZU/iefvza6QSSkDVIkE8HrX/t59JtqoKmcqUGpDyw
- tXhto6Dg+/6k7pZmdwvsQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6Y5Abz3mh9Y=:upHy6CS9v/bm2UnsNwn07u
- kouAio+9nVrabGQsCEIuoxocJKOW7wvDbeyaY+u1iHomTg+hEy8T+fIXADn3moC5ecVRpKdFh
- jPpFvxSwGq20RpIQ2+eGDp7oJhFNiffTx1LG0+LeQTkYQ505h03vRNSw37Kgf1yr6DMIqjGDU
- IJbhchvbgkXiSxtlWlXgzA0SLy0hQ9y3p4HqKGd9atSBxSwZ3Uy2up6QYHBQm8iA89j7h5+Zw
- +14fiiEqxfEkI3XsYqOfmywPUvDY+UApKBFb0Mywv6jeg5FKnZ1UFiv0FHRyofcNa+Cv/Z5RO
- 3hCaJFazggeVAW1rLWtDb11OvdFzLhnBYU9B/kNTS9Pw2XlDPsdBWIOnzm/S/0O9pFaT7KKBj
- 3OL7XmAqdQZDFi2oJ4C2xwnGnTL8+nafluNPt3/YT/TDeflkktbsY7Ujb5Qc7uhesiA2EdQ67
- koyMzomKdCmv1+rAOTxcbV4Rme74phZNuIqdIlN6j8fya69l2rmvjGSbz7oQTnyUZ1VtHC8uI
- Nvfkme0O7Nvvd8eYH0P43u9THy46vGIO69z0LIhITe9fEcaRo4jNwKGb7x5w0XWmSQjx9bkzt
- qeJ+BcL1jM7urgk+wYugAa0PSDe29ZqWH2qn/q4xTyFBLoAc830O4T8cDPZC14j3V6592BTtn
- z193rw/rDs2ZDOs+Tx5Z90T9/kCuEtvzfC7vQVPai1L7Wqql4sRHN0D+VoPxkqOz7F+wD+FYh
- azRUw1BftpjadONMpBfnb1T/n92dU7AYk/xA/hORIOSzwBmHeqgM5jgYELKCU3JRaMqZcw+gE
- nhV/Z90KCrFeUHFQA0Y1o7kQ3iG9YPmY/pAZoXTdeFWF4mWi3S7/iSoeo19FXmLiijB2Hz5Xo
- lgPzz8/JGxm8uCS8s94aG85RlOm2O0CrDz3S3utegwh0tYfieeJoj4kW42Xx9EaX1C0xd0AEx
- ry6qdqETMAtPS9Q+ysa4eZd8dFDvcMH/KLkq8e4yaDucX2iqc1OwdfyLxnOoT8FlJSTFLVn77
- P3XPl+fcBZ7JmogvxI3tmiwQzJ1YFnmIOkPv78pgSUx/JbvsqQC45TtTQaw3+CIoSziFEXFos
- CX+kiW76VcwBGLFZiugeKbwYIzUiccW9Dq3gFOJkeSyvPya5Bq0HGS7Tw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6c846d026d490 ("gpio: Don't fiddle with irqchips marked as
-immutable") added a warning for irqchips that are not marked with
-IRQCHIP_IMMUTABLE.
 
-Convert the pinctrl-wpcm450 driver to an immutable irqchip.
+v3: * Fixed the comment from Willy
+v2: * Rebased to the latest mm-unstable
+    * Fixed potential regression for smaps's THPeligible
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+This series is the follow-up of the discussion about cleaning up transhuge_xxx
+helpers at https://lore.kernel.org/linux-mm/627a71f8-e879-69a5-ceb3-fc8d29d2f7f1@suse.cz/.
 
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/n=
-uvoton/pinctrl-wpcm450.c
-index 0dbeb91f0bf27..cff784a7ce4d7 100644
-=2D-- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-@@ -293,6 +293,8 @@ static const struct irq_chip wpcm450_gpio_irqchip =3D =
-{
- 	.irq_unmask =3D wpcm450_gpio_irq_unmask,
- 	.irq_mask =3D wpcm450_gpio_irq_mask,
- 	.irq_set_type =3D wpcm450_gpio_set_irq_type,
-+	.flags =3D IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
+THP has a bunch of helpers that do VMA sanity check for different paths, they
+do the similar checks for the most callsites and have a lot duplicate codes.
+And it is confusing what helpers should be used at what conditions.
 
- static void wpcm450_gpio_irqhandler(struct irq_desc *desc)
-@@ -1068,9 +1070,8 @@ static int wpcm450_gpio_register(struct platform_dev=
-ice *pdev,
- 		gpio->gc.fwnode =3D child;
- 		gpio->gc.add_pin_ranges =3D wpcm450_gpio_add_pin_ranges;
+This series reorganized and cleaned up the code so that we could consolidate
+all the checks into hugepage_vma_check().
 
--		gpio->irqc =3D wpcm450_gpio_irqchip;
- 		girq =3D &gpio->gc.irq;
--		girq->chip =3D &gpio->irqc;
-+		gpio_irq_chip_set_chip(girq, &wpcm450_gpio_irqchip);
- 		girq->parent_handler =3D wpcm450_gpio_irqhandler;
- 		girq->parents =3D devm_kcalloc(dev, WPCM450_NUM_GPIO_IRQS,
- 					     sizeof(*girq->parents), GFP_KERNEL);
-=2D-
-2.35.1
+The transhuge_vma_enabled(), transparent_hugepage_active() and
+__transparent_hugepage_enabled() are killed by this series.
+
+Added transhuge_vma_size_ok() helper to remove some duplicate code.
+
+
+Yang Shi (7):
+      mm: khugepaged: check THP flag in hugepage_vma_check()
+      mm: thp: introduce transhuge_vma_size_ok() helper
+      mm: khugepaged: remove the redundant anon vma check
+      mm: khugepaged: use transhuge_vma_suitable replace open-code
+      mm: thp: kill transparent_hugepage_active()
+      mm: thp: kill __transhuge_page_enabled()
+      mm: khugepaged: reorg some khugepaged helpers
+
+ fs/proc/task_mmu.c         |  2 +-
+ include/linux/huge_mm.h    | 84 ++++++++++++++++++++++++++++------------------------------------------
+ include/linux/khugepaged.h | 21 ++----------------
+ mm/huge_memory.c           | 64 +++++++++++++++++++++++++++++++++++++++++++++--------
+ mm/khugepaged.c            | 78 +++++++++++++++--------------------------------------------------
+ mm/memory.c                |  7 ++++--
+ 6 files changed, 114 insertions(+), 142 deletions(-)
+
 

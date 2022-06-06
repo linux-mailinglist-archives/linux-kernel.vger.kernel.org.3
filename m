@@ -2,159 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9D053E868
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDBE53E84D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239385AbiFFOCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S239396AbiFFOEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239340AbiFFOC2 (ORCPT
+        with ESMTP id S239340AbiFFOD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:02:28 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E3B13D30
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:02:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VFZTyX5_1654524138;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VFZTyX5_1654524138)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 06 Jun 2022 22:02:20 +0800
-Date:   Mon, 6 Jun 2022 22:02:18 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        Xiang Gao <xiang@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [xiang:erofs/initrd-fsdax 2/3] drivers/block/brd.c:466
- brd_alloc() warn: missing error code 'err'
-Message-ID: <Yp4I6i5mFB1aHo62@B-P7TQMD6M-0146.local>
-References: <202206062100.MJhGyCcE-lkp@intel.com>
+        Mon, 6 Jun 2022 10:03:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E40027411E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654524211;
+        bh=1rXejKPjfPobdbqz0N4V2TYitGKaYG2LAs2vjWAHL3A=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=EAxXEQM9A8tBIvVlZgUEqYL2B0H6N0P+yNg6iv+qEy1iYrI6qVy2woDBhO/nvz6DB
+         0OF+XNMphKeXch/MdFJdERLDavK22RSFH6MMK5Og2fQjMkN+9jHxLFHh7g/qSkd6aP
+         PK4EmNPo+T3wCAtyBprZfT/OEQJX7EQs2HgSKRm0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.151.134] ([217.61.151.134]) by web-mail.gmx.net
+ (3c-app-gmx-bs45.server.lan [172.19.170.97]) (via HTTP); Mon, 6 Jun 2022
+ 16:03:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202206062100.MJhGyCcE-lkp@intel.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-aa8df6a5-bba9-4b36-8b0f-591113b5fe71-1654524211277@3c-app-gmx-bs45>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liang Chen <cl@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Aw: Re: [PATCH] firmware: arm_scmi: Relax BASE protocol sanity
+ checks on protocol list
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 6 Jun 2022 16:03:31 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <45bf11a8-47eb-e088-ba99-30c8788c7143@wolfvision.net>
+References: <20220523171559.472112-1-cristian.marussi@arm.com>
+ <45bf11a8-47eb-e088-ba99-30c8788c7143@wolfvision.net>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:z+1mX/8+LgSoLE4mwpZunGvi7NBzJPoQLSoQ49Tf5vqoXmRpTJOxQnbemvyiKLa/nrGBs
+ LM+O107+QK089vb72msJ1F9l16vPq5HTZWa6ERvZeV8PV2DynEgLcGClj45GPHYeufNokXkF8t/S
+ pYXtK0ylpd8s2GpipEgxaFdjz9alLS0KOq2SFM39SJ+0xljWXvSH+PYRY4R/dx6o41LcvKTlpI9n
+ UdmdYpV2WY9IecUpjGycaAK5Hh2OB15czJ/lnswOrzwq+4lvYU36l+wBBPRzeI9Iu+O35ySymMAP
+ HE=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3Wwq7P8Fq3U=:/jDxrhTWZhDc5/zwtz01m8
+ 9sXuoH8rNFlnZeGYD5wK+m1kBe3BNi0BBEEdPOO6JisIDTik43OhHFL83uJxrBWfka/5oHaK9
+ cJc8EonlHjW/jmaxq3PwXDc9uv9qtQP/RO3WM5q7+ukfEF03CAv2gDlYXG7jdsM/83iQk3l8T
+ iR+iBCYvj+jYXhRd1GRdNhe20ityIxIpj218Y6MTqYmu9rrIqEBCLPv4pgXDfJyY2ENtAJ2+n
+ 9YEnEOxnmQed8CUNaImLifhh71Z3Va+Xc3z4XfoSgxn5+4gbt7rXxYpjY2p+dEmRiuEA6Tupx
+ rblEZa3gQhK4++pQpARLMW3VBa0LM7jyH+K02ixI8DGzNaZqgJmcFrdo+AE3CFTh1HXGEWnMm
+ pGjGUGCMuYPnuuWCap/LR31TPuOSkQyQ08T0jD1sBnXxKV83PciZgz8NiX/JRcMTBlu7tSbtP
+ PBLwolK6PKxcFci5CXvmjPLFh37gfd189MHJeE2H3qqdYWsSQIBw/lQ3E0ao6xYBIjJPZSU48
+ vnMRHbTu5ZG5AnL6jUGhBZ6RJCSzdsoaeOETnOi5wbqb1kiieLb1D0/bvyr5sXFNdpQwv96fj
+ sMOGR+R1Rf55GfPUatW2F6dR7LijIJCgAvbUmmBurSjjDMVwlQuh3K0XsinQJDv+qiXCQw8Vc
+ KtT4fBZfjp/jWj1d9rnywpdG8WaqYAVG+WWAuVs8MtvDoPShgbkfGyR1mjsyYj8O6MmdKPGZ2
+ 5mw1XidRn5QHzgXY0fVqB90M3Jx21ZuKNE37qFsvV5DrnZqe7Ajqj7Deow69zeekDEdAlDGTI
+ YEVpIKp
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+Hi
 
-On Mon, Jun 06, 2022 at 04:56:13PM +0300, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git erofs/initrd-fsdax
-> head:   e04a723ce39c31ea57edfbfd70c867a2025910e3
-> commit: a610c807a6b52cbce515911dba9b9cc316a6c117 [2/3] brd: support FSDAX
-> config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220606/202206062100.MJhGyCcE-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> drivers/block/brd.c:466 brd_alloc() warn: missing error code 'err'
+> Gesendet: Montag, 06. Juni 2022 um 14:59 Uhr
+> Von: "Michael Riesch" <michael.riesch@wolfvision.net>
 
-This still has many remaining works to do, many thanks for pointing
-out!
+> Thanks a lot, without this fix the Mali G52 GPU won't probe on my RK3568
+> EVB1 in vanilla v5.19-rc1.
+>
+> I guess this patch should have a Fixes: tag, right?
+>
+> Would be great to have this in v5.19. AFAIC:
+>
+> Acked-by: Michael Riesch <michael.riesch@wolfvision.net>
 
-Thanks,
-Gao Xiang
- 
-> 
-> vim +/err +466 drivers/block/brd.c
-> 
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  407  static int brd_alloc(int i)
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  408  {
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  409  	struct brd_device *brd;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  410  	struct gendisk *disk;
-> f4be591f1436af Calvin Owens      2021-04-16  411  	char buf[DISK_NAME_LEN];
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  412  	int err = -ENOMEM;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  413  
-> 00358933f66c44 Tetsuo Handa      2022-01-06  414  	list_for_each_entry(brd, &brd_devices, brd_list)
-> 00358933f66c44 Tetsuo Handa      2022-01-06  415  		if (brd->brd_number == i)
-> f7bf35862477d6 Tetsuo Handa      2021-09-07  416  			return -EEXIST;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  417  	brd = kzalloc(sizeof(*brd), GFP_KERNEL);
-> 00358933f66c44 Tetsuo Handa      2022-01-06  418  	if (!brd)
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  419  		return -ENOMEM;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  420  	brd->brd_number		= i;
-> f7bf35862477d6 Tetsuo Handa      2021-09-07  421  	list_add_tail(&brd->brd_list, &brd_devices);
-> f7bf35862477d6 Tetsuo Handa      2021-09-07  422  
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  423  	spin_lock_init(&brd->brd_lock);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  424  	INIT_RADIX_TREE(&brd->brd_pages, GFP_ATOMIC);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  425  
-> f4be591f1436af Calvin Owens      2021-04-16  426  	snprintf(buf, DISK_NAME_LEN, "ram%d", i);
-> f4be591f1436af Calvin Owens      2021-04-16  427  	if (!IS_ERR_OR_NULL(brd_debugfs_dir))
-> f4be591f1436af Calvin Owens      2021-04-16  428  		debugfs_create_u64(buf, 0444, brd_debugfs_dir,
-> f4be591f1436af Calvin Owens      2021-04-16  429  				&brd->brd_nr_pages);
-> f4be591f1436af Calvin Owens      2021-04-16  430  
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  431  	disk = brd->brd_disk = blk_alloc_disk(NUMA_NO_NODE);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  432  	if (!disk)
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  433  		goto out_free_dev;
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  434  
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  435  	disk->major		= RAMDISK_MAJOR;
-> 937af5ecd0591e Boaz Harrosh      2015-01-07  436  	disk->first_minor	= i * max_part;
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  437  	disk->minors		= max_part;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  438  	disk->fops		= &brd_fops;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  439  	disk->private_data	= brd;
-> f4be591f1436af Calvin Owens      2021-04-16  440  	strlcpy(disk->disk_name, buf, DISK_NAME_LEN);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  441  	set_capacity(disk, rd_size * 2);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  442  	
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  443  	/*
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  444  	 * This is so fdisk will align partitions on 4k, because of
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  445  	 * direct_access API needing 4k alignment, returning a PFN
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  446  	 * (This is only a problem on very small devices <= 4M,
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  447  	 *  otherwise fdisk will align on 1M. Regardless this call
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  448  	 *  is harmless)
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  449  	 */
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  450  	blk_queue_physical_block_size(disk->queue, PAGE_SIZE);
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  451  
-> 316ba5736c9caa SeongJae Park     2018-05-03  452  	/* Tell the block layer that this is not a rotational device */
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  453  	blk_queue_flag_set(QUEUE_FLAG_NONROT, disk->queue);
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  454  	blk_queue_flag_clear(QUEUE_FLAG_ADD_RANDOM, disk->queue);
-> a610c807a6b52c Gao Xiang         2022-06-05  455  
-> a610c807a6b52c Gao Xiang         2022-06-05  456  	if (enable_fsdax)
-> a610c807a6b52c Gao Xiang         2022-06-05  457  		blk_queue_flag_set(QUEUE_FLAG_DAX, disk->queue);
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  458  	err = add_disk(disk);
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  459  	if (err)
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  460  		goto out_cleanup_disk;
-> 316ba5736c9caa SeongJae Park     2018-05-03  461  
-> a610c807a6b52c Gao Xiang         2022-06-05  462  	if (enable_fsdax) {
-> a610c807a6b52c Gao Xiang         2022-06-05  463  		brd->dax_dev = alloc_dax(brd, &brd_dax_ops);
-> a610c807a6b52c Gao Xiang         2022-06-05  464  		if (IS_ERR(brd->dax_dev)) {
-> 
-> err = PTR_ERR(brd->dax_dev)
-> 
-> a610c807a6b52c Gao Xiang         2022-06-05  465  			brd->dax_dev = NULL;
-> a610c807a6b52c Gao Xiang         2022-06-05 @466  			goto out_del_gendisk;
-> a610c807a6b52c Gao Xiang         2022-06-05  467  		}
-> a610c807a6b52c Gao Xiang         2022-06-05  468  		set_dax_nocache(brd->dax_dev);
-> a610c807a6b52c Gao Xiang         2022-06-05  469  		set_dax_nomc(brd->dax_dev);
-> a610c807a6b52c Gao Xiang         2022-06-05  470  		run_dax(brd->dax_dev);
-> a610c807a6b52c Gao Xiang         2022-06-05  471  		if (dax_add_host(brd->dax_dev, disk))
-> a610c807a6b52c Gao Xiang         2022-06-05  472  			goto out_del_gendisk;
-> 
-> 
-> err = dax_add_host(brd->dax_dev, disk);
-> if (err)
-> 	goto out_del_gendisk;
-> 
-> a610c807a6b52c Gao Xiang         2022-06-05  473  	}
-> 7f9b348cb5e942 Christoph Hellwig 2021-05-21  474  	return 0;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  475  
-> a610c807a6b52c Gao Xiang         2022-06-05  476  out_del_gendisk:
-> a610c807a6b52c Gao Xiang         2022-06-05  477  	del_gendisk(disk);
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  478  out_cleanup_disk:
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  479  	blk_cleanup_disk(disk);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  480  out_free_dev:
-> f7bf35862477d6 Tetsuo Handa      2021-09-07  481  	list_del(&brd->brd_list);
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  482  	kfree(brd);
-> e1528830bd4ebf Luis Chamberlain  2021-10-15  483  	return err;
-> 9db5579be4bb53 Nicholas Piggin   2008-02-08  484  }
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Thanks for the Patch, had also this on my rk3568 bpi-r2 pro board:
+
+panfrost fde60000.gpu: get clock failed -517
+
+fixed by this patch
+
+Tested-By: Frank Wunderlich <frank-w@public-files.de>
+
+regards Frank

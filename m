@@ -2,162 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8744153EC0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8961A53EC7A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241750AbiFFQU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S241766AbiFFQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241688AbiFFQUz (ORCPT
+        with ESMTP id S241556AbiFFQWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:20:55 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C32B2BAF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:20:54 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id q1so29955913ejz.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=12UkLhNWmn2NlSuxlr6S4i7rRJBFRzlnkvu5nBhtCdk=;
-        b=DFflpyIFsZnXHHqmPDg2ed5oqgbXienQBXEPLAaCN/Rw/SD9GDpUQKli40bGJQrMvW
-         d+mCUp9VxvOfdf5J0RrlUNq7WdkjaSStwDF4au+pvldwh621urWTtklhLgROAMxL6Zb0
-         /12gojX0eluv6wl7sIV3Cb+6xpuA68WDLF4eopEzoDyz1FilA1N40+ZRysXVjgyBZ3my
-         ydGPh5FvCWvFpOCLtzcbqk1eabc01zfqE3A8+cy9O7r2XTkvpDje1arAnkuTEpgT1OSO
-         yFNMJa5+XiBnHZB/lCCWXGKcmG1hqtTH6eIHfuRHNkrVZDoQFvKPEhqaMSY6JBMtn0pc
-         3Hng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=12UkLhNWmn2NlSuxlr6S4i7rRJBFRzlnkvu5nBhtCdk=;
-        b=DedX4EGRk6AOnPDxv6maLdp3S6bvM0xDxJBR5/ieLjqQ0wom6UWlv09MPI2KLuiOhY
-         wggqiJbyYSqa4y0jLTrpkjmxNn4p6M8P2tHE/NP6k9U4H9VeWNY3RChSB2g+H5oUd5kw
-         cagnR/7fTEhkWL0cVSR/Y3pqYYHo/rgbeP79Uns51SrUmJVyTdvwjlrME8E5DmJNR56B
-         /w1LvewKgLaMq6TXqXizo4iFswl0WrnEYQM3dfhRNag8xAcbmdLxC0K8SGebOlnJxAvJ
-         xfCwlUY10sTIKjqN2eA72Lc89mjeJf06y9l8vpqZ9RnrXXsLKoflWzVjH/6UNO6OF5I3
-         wFkA==
-X-Gm-Message-State: AOAM532nE6KbeXBA+oCWd39sGOspvfJzjPVhBqak3zJlZDXyZqBLEnIC
-        L6ZDWkxmYXgSxxLPYtmHMfsF/Jgags+9xyavI9m2Ww==
-X-Google-Smtp-Source: ABdhPJySZx0kslKEfNGrGcdenQ/vGoHfPvIpIIerAHQ96ovYKU6gs5Xm9U68o1ARI3U9vVrPknGE2fegJ/Nwqo5tf6g=
-X-Received: by 2002:a17:907:c22:b0:711:dc95:3996 with SMTP id
- ga34-20020a1709070c2200b00711dc953996mr396834ejc.62.1654532453015; Mon, 06
- Jun 2022 09:20:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220406095446.1187968-1-arnaud.pouliquen@foss.st.com>
- <20220406095446.1187968-3-arnaud.pouliquen@foss.st.com> <20220601174159.GD531268@p14s>
- <b85c7526-80a4-35f2-7629-319d172bc734@foss.st.com>
-In-Reply-To: <b85c7526-80a4-35f2-7629-319d172bc734@foss.st.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Mon, 6 Jun 2022 10:20:41 -0600
-Message-ID: <CANLsYkwsqoKVoYSj7bWxT+t=rMp3dhsrpMYaWm6DhFKHvMSEKw@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 2/4] remoteproc: core: Introduce
- rproc_register_rvdev function
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        Bruce Ashfield <bruce.ashfield@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 6 Jun 2022 12:22:09 -0400
+Received: from azure-sdnproxy-2.icoremail.net (azure-sdnproxy.icoremail.net [52.175.55.52])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 30C1A2E59BF;
+        Mon,  6 Jun 2022 09:22:03 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.78.144])
+        by mail-app2 (Coremail) with SMTP id by_KCgDHG0CSKZ5iwb1gAQ--.36763S2;
+        Tue, 07 Jun 2022 00:21:45 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-hams@vger.kernel.org,
+        thomas@osterried.de, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net-next] ax25: Fix deadlock caused by skb_recv_datagram in ax25_recvmsg
+Date:   Tue,  7 Jun 2022 00:21:38 +0800
+Message-Id: <20220606162138.81505-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgDHG0CSKZ5iwb1gAQ--.36763S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw43ZFyruFW3Xr1DCF4xCrg_yoW5AFW7pF
+        y5tw48Gr40yFykXF47AFykXr4UAFsIkFy5WFyxXw4xArn8Gwn8JFWrtw4Yva45tFZ8Aw1x
+        tF1qgw40yF15XaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
+        7I0E8cxan2IY04v7MxkIecxEwVAFwVWUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUjnjjDUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgoNAVZdtaEUYgAgsN
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 at 05:54, Arnaud POULIQUEN
-<arnaud.pouliquen@foss.st.com> wrote:
->
-> Hello Mathieu,
->
-> On 6/1/22 19:41, Mathieu Poirier wrote:
-> > On Wed, Apr 06, 2022 at 11:54:44AM +0200, Arnaud Pouliquen wrote:
-> >> The rproc structure contains a list of registered rproc_vdev structure.
-> >
-> > This should be rproc_rvdev.
->
-> Thanks for your review!
->
-> I will send a new version according to your comments except
-> this one.
-> The structure name rproc_vdev is the good one, or
-> or maybe I'm missing something?
->
+The skb_recv_datagram() in ax25_recvmsg() will hold lock_sock
+and block until it receives a packet from the remote. If the client
+doesn`t connect to server and calls read() directly, it will not
+receive any packets forever. As a result, the deadlock will happen.
 
-You are correct - I had the name of the variable, i.e rvdev, found in
-rproc_handle_vdev() in my head.  You can forget this comment.
+The fail log caused by deadlock is shown below:
 
-> Thanks,
-> Arnaud
->
-> >
-> >> To be able to move the management of the rproc_vdev structure in
-> >> remoteproc_virtio.c (i.e rproc_rvdev_add_device and
-> >> rproc_rvdev_remove_device functions), introduce the rproc_register_rvdev
-> >> and rproc_unregister_rvdev functions.
-> >
-> > The name of those functions doesn't match the content of the patch.
-> >
-> >>
-> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> >> ---
-> >>  drivers/remoteproc/remoteproc_core.c | 16 ++++++++++++++--
-> >>  1 file changed, 14 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> >> index 3a469220ac73..081bea39daf4 100644
-> >> --- a/drivers/remoteproc/remoteproc_core.c
-> >> +++ b/drivers/remoteproc/remoteproc_core.c
-> >> @@ -484,6 +484,18 @@ static int copy_dma_range_map(struct device *to, struct device *from)
-> >>      return 0;
-> >>  }
-> >>
-> >> +static void rproc_add_rvdev(struct rproc *rproc, struct rproc_vdev *rvdev)
-> >> +{
-> >> +    if (rvdev && rproc)
-> >> +            list_add_tail(&rvdev->node, &rproc->rvdevs);
-> >> +}
-> >> +
-> >> +static void rproc_remove_rvdev(struct rproc_vdev *rvdev)
-> >> +{
-> >> +    if (rvdev)
-> >> +            list_del(&rvdev->node);
-> >> +}
-> >> +
-> >>  static struct rproc_vdev *
-> >>  rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
-> >>  {
-> >> @@ -547,7 +559,7 @@ rproc_rvdev_add_device(struct rproc *rproc, struct rproc_vdev_data *rvdev_data)
-> >>                      goto unwind_vring_allocations;
-> >>      }
-> >>
-> >> -    list_add_tail(&rvdev->node, &rproc->rvdevs);
-> >> +    rproc_add_rvdev(rproc, rvdev);
-> >>
-> >>      rvdev->subdev.start = rproc_vdev_do_start;
-> >>      rvdev->subdev.stop = rproc_vdev_do_stop;
-> >> @@ -576,7 +588,7 @@ static void rproc_rvdev_remove_device(struct rproc_vdev *rvdev)
-> >>      }
-> >>
-> >>      rproc_remove_subdev(rproc, &rvdev->subdev);
-> >> -    list_del(&rvdev->node);
-> >> +    rproc_remove_rvdev(rvdev);
-> >
-> > With the above:
-> >
-> > Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> >
-> >>      device_unregister(&rvdev->dev);
-> >>  }
-> >>
-> >> --
-> >> 2.25.1
-> >>
+[  861.122612] INFO: task ax25_deadlock:148 blocked for more than 737 seconds.
+[  861.124543] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[  861.127764] Call Trace:
+[  861.129688]  <TASK>
+[  861.130743]  __schedule+0x2f9/0xb20
+[  861.131526]  schedule+0x49/0xb0
+[  861.131640]  __lock_sock+0x92/0x100
+[  861.131640]  ? destroy_sched_domains_rcu+0x20/0x20
+[  861.131640]  lock_sock_nested+0x6e/0x70
+[  861.131640]  ax25_sendmsg+0x46/0x420
+[  861.134383]  ? ax25_recvmsg+0x1e0/0x1e0
+[  861.135658]  sock_sendmsg+0x59/0x60
+[  861.136791]  __sys_sendto+0xe9/0x150
+[  861.137212]  ? __schedule+0x301/0xb20
+[  861.137710]  ? __do_softirq+0x4a2/0x4fd
+[  861.139153]  __x64_sys_sendto+0x20/0x30
+[  861.140330]  do_syscall_64+0x3b/0x90
+[  861.140731]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+[  861.141249] RIP: 0033:0x7fdf05ee4f64
+[  861.141249] RSP: 002b:00007ffe95772fc0 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+[  861.141249] RAX: ffffffffffffffda RBX: 0000565303a013f0 RCX: 00007fdf05ee4f64
+[  861.141249] RDX: 0000000000000005 RSI: 0000565303a01678 RDI: 0000000000000005
+[  861.141249] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[  861.141249] R10: 0000000000000000 R11: 0000000000000246 R12: 0000565303a00cf0
+[  861.141249] R13: 00007ffe957730e0 R14: 0000000000000000 R15: 0000000000000000
+
+This patch moves the skb_recv_datagram() before lock_sock() in order
+that other functions that need lock_sock could be executed.
+
+Reported-by: Thomas Habets <thomas@@habets.se>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ net/ax25/af_ax25.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 95393bb2760..02cd6087512 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -1665,6 +1665,11 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	int copied;
+ 	int err = 0;
+ 
++	/* Now we can treat all alike */
++	skb = skb_recv_datagram(sk, flags, &err);
++	if (!skb)
++		goto done;
++
+ 	lock_sock(sk);
+ 	/*
+ 	 * 	This works for seqpacket too. The receiver has ordered the
+@@ -1675,11 +1680,6 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 		goto out;
+ 	}
+ 
+-	/* Now we can treat all alike */
+-	skb = skb_recv_datagram(sk, flags, &err);
+-	if (skb == NULL)
+-		goto out;
+-
+ 	if (!sk_to_ax25(sk)->pidincl)
+ 		skb_pull(skb, 1);		/* Remove PID */
+ 
+@@ -1725,6 +1725,7 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ out:
+ 	release_sock(sk);
+ 
++done:
+ 	return err;
+ }
+ 
+-- 
+2.17.1
+

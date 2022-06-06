@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C52A53EE03
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9433553EE08
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiFFSnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
+        id S231936AbiFFSoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiFFSno (ORCPT
+        with ESMTP id S231312AbiFFSoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:43:44 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3487B1A3598;
-        Mon,  6 Jun 2022 11:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654541023; x=1686077023;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zBGk5qIFMqfmDlZW092e3SVIsz61LPw9vTaFM7k3klM=;
-  b=orIbPEgg2DQ6ZywvWiICzRipAfzZvFmhWlFY1h686HxZICe0IxqzQxKa
-   1l6aWalGQ65yCRbXnglPxVEZfP9OCw7TwY9KYQdRikzNsIhMxHLq967+F
-   yuVbg9bvVRgsEvnJYatEMGVHbKYhWjuKeJkz2G+XY+Qqqb6wQDrL+iB2f
-   s=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Jun 2022 11:43:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 11:43:42 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 6 Jun 2022 11:43:42 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 6 Jun 2022
- 11:43:40 -0700
-Date:   Mon, 6 Jun 2022 14:43:38 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Vasily Averin <vvs@openvz.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <kernel@openvz.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, <cgroups@vger.kernel.org>
-Subject: Re: [PATCH memcg v6] net: set proper memcg for net_init hooks
- allocations
-Message-ID: <Yp5K2iupKdVdQXUc@qian>
-References: <6b362c6e-9c80-4344-9430-b831f9871a3c@openvz.org>
- <f9394752-e272-9bf9-645f-a18c56d1c4ec@openvz.org>
- <Yp4F6n2Ie32re7Ed@qian>
- <0e714a5a-d2ed-9b44-fdbe-04b5595165da@openvz.org>
+        Mon, 6 Jun 2022 14:44:02 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFE12DD56;
+        Mon,  6 Jun 2022 11:44:02 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id a10so13131883ioe.9;
+        Mon, 06 Jun 2022 11:44:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4mg14PQUB0NRNPUP48ZZmOWq8GxI88Pp1N6oKyXh8xY=;
+        b=L0iIE3urXL/pWmh5JM4pqNGtrnOtnifI9XIo8nfVKoQgX4hGZg32205PaENRYEWZMH
+         vXr34JN4s5Lp8m9bHCtyQgfScEUhvRUDHK4oHtNngnwsFNpSyddc6uDxE3PIw+yJsaAu
+         Dn2NrZ7woUP+UjQ4xquCRY8WK7Ts+ysBRMyGpIXo41P0B0PGELLx8RVvGLabFWrvlYY3
+         9GCIHpktADNq2hebceErGql/IHIV4tNX4Uqdb5hft2MOi+r/DrivFw80oRs+U5VMwRxq
+         PsYmcVAtS3yi+NZnsx3fCjsDXXYxcGY2pmo+/s4z/AHLNqzLCjzT6ZaLdvDQOR8MWjn5
+         OElg==
+X-Gm-Message-State: AOAM5307q591onmKo/DojUZsbKFRlh/JOwmgPMmaB9A/owqQVfddlVwo
+        Jlx+vL8QBJbiiFljvR5df+Jjo+yMIw==
+X-Google-Smtp-Source: ABdhPJxMVe/Xc7siiCt1gNczRdXAABgZ6GHHgoHZNpaiksIDCW+LDDjUyBg5NHaG3n6BIjR7xTNjrA==
+X-Received: by 2002:a5d:9543:0:b0:668:7deb:ee4d with SMTP id a3-20020a5d9543000000b006687debee4dmr12104417ios.181.1654541041439;
+        Mon, 06 Jun 2022 11:44:01 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.251])
+        by smtp.googlemail.com with ESMTPSA id j21-20020a5e9b15000000b006657621fecesm5736115iok.55.2022.06.06.11.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 11:44:01 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: i2c: Convert arm,i2c-versatile to DT schema
+Date:   Mon,  6 Jun 2022 13:43:39 -0500
+Message-Id: <20220606184339.1058557-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0e714a5a-d2ed-9b44-fdbe-04b5595165da@openvz.org>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 08:37:26PM +0300, Vasily Averin wrote:
-> On 6/6/22 16:49, Qian Cai wrote:
-> > This triggers a few boot warnings like those.
-> > 
-> >  virt_to_phys used for non-linear address: ffffd8efe2d2fe00 (init_net)
-> >  WARNING: CPU: 87 PID: 3170 at arch/arm64/mm/physaddr.c:12 __virt_to_phys
-> 
-> Thank you for reporting the problem,
-> Could you please provide me your config file via private email?
+Convert the arm,i2c-versatile binding to DT schema format.
 
-$ make ARCH=arm64 defconfig debug.config
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/i2c/arm,i2c-versatile.yaml       | 29 +++++++++++++++++++
+ .../devicetree/bindings/i2c/i2c-versatile.txt | 10 -------
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 30 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-versatile.txt
+
+diff --git a/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
+new file mode 100644
+index 000000000000..e58465d1b0c8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/i2c/arm,i2c-versatile.yaml
+@@ -0,0 +1,29 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/i2c/arm,i2c-versatile.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: I2C Controller on ARM Ltd development platforms
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++
++allOf:
++  - $ref: /schemas/i2c/i2c-controller.yaml#
++
++properties:
++  compatible:
++    const: arm,versatile-i2c
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++...
++
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt b/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
+deleted file mode 100644
+index 361d31c51b6f..000000000000
+--- a/Documentation/devicetree/bindings/i2c/i2c-versatile.txt
++++ /dev/null
+@@ -1,10 +0,0 @@
+-i2c Controller on ARM Versatile platform:
+-
+-Required properties:
+-- compatible : Must be "arm,versatile-i2c";
+-- reg
+-- #address-cells = <1>;
+-- #size-cells = <0>;
+-
+-Optional properties:
+-- Child nodes conforming to i2c bus binding
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a6d3bd9d2a8d..ecc0907e312a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1520,7 +1520,7 @@ F:	Documentation/devicetree/bindings/arm/arm,versatile.yaml
+ F:	Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
+ F:	Documentation/devicetree/bindings/auxdisplay/arm,versatile-lcd.yaml
+ F:	Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+-F:	Documentation/devicetree/bindings/i2c/i2c-versatile.txt
++F:	Documentation/devicetree/bindings/i2c/arn,i2c-versatile.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/arm,versatile-fpga-irq.txt
+ F:	Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
+ F:	arch/arm/boot/dts/arm-realview-*
+-- 
+2.34.1
+

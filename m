@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFAB53DF78
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D151A53DF7A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352044AbiFFBok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 21:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S1352048AbiFFBpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 21:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiFFBoi (ORCPT
+        with ESMTP id S232327AbiFFBph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 21:44:38 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE9D4EF77;
-        Sun,  5 Jun 2022 18:44:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gd1so11643706pjb.2;
-        Sun, 05 Jun 2022 18:44:37 -0700 (PDT)
+        Sun, 5 Jun 2022 21:45:37 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9834EF77;
+        Sun,  5 Jun 2022 18:45:36 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so13457485pjm.2;
+        Sun, 05 Jun 2022 18:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7xwpmzfKNMi656LDDOGdxoZgROWz8e8HUFBd0cY/pYI=;
-        b=mZypeES6c0VJa4XMsSpXlNC7yBCeS1kuYqPYtd5pcp+8ZqKM0YXLpPtZVyH9h1seVg
-         vsxLS3iBC0ADH87aAyNUekw2G5l1VragLBywL0vD9VfalCveTV0VMnZgI6qvOjoVXoGP
-         ZKAAqOFAnEbl7hhzbjiDvEddDiCF/bcVOt1Bg4FwUecWMjtgw7THhiAWA06EHfLa90LA
-         aruXSbEYZ2rYpM71uNwbYbznH4ch0xQGEGBq6DG1nqbw6kbXtQuwJzQjkcMP0+c3qylz
-         +oaEGMpfUspZH0QhGU/FbNjPvXjg7MYV0BR0baRMRH5BmOn4135HK1Y/amYxwiwliLMV
-         EPVg==
+        bh=tmMJEfDrOjSFqugkaoY7mGyJmkmpzClAJ8D6S6ijc/E=;
+        b=Y5EBX/5PgQO4RhMgbvJNn1pNzjKL+Ws1rzXsTYjq7l0xh1Nae0JiiOW0TMSPp/8EaE
+         391M7kZAlPAhvHURJHO1jfKoUlaLuZVWITxte1u4oTDFtClQnaMZHjFPd18ry+LgRrMa
+         Olz+nQwLTK95qLqobmXmlW+94qk08/lHvVpqoJkRuYgwiCiX/3aPHBptq5X8Ww4qjgit
+         qluc/1vSfk1VXMq+QAG2oWrOECBI848LqRzU5zUG/5ZgZXqvqdC/zwTIYqGDOmmUgJdr
+         wF0uRlmyyQCMeeZBNgSEb/BLLNOV6vrlIDAcdamGO1Zh7P8XZktFlS+YvZ0sVpGZ1ujv
+         VZ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7xwpmzfKNMi656LDDOGdxoZgROWz8e8HUFBd0cY/pYI=;
-        b=IWnCF4FUN5uz0GdrtvmnHapExNmAsU7R5YyCKyhQumWd0nX/6WIwnCGsZuaLvCTPGr
-         1e8E4zXDoIYJWEethhTUDyVMmV2FQEnsNNDW/yKYYBSV1GxN3qbWPFADCcp6zsy1anTS
-         h+Z2QC3+eIophAl3ou9Qy/vAHfeVfjkXvVwNBFJef83EhN9WTv2GVCwCBwVd+IFIxmwS
-         Wsb74aoCOCRJcue9s147UBzjy4a53NVtiPNGSPB3crKYJ0hFIL9H2F78NHoRJGdaTG98
-         diCkR93M8wExM/QMltv4d/fHqqM0pYHu3R+WOrHpTkZq/Xh8g8DYa8ksSXAyBfLfFNb6
-         wqsQ==
-X-Gm-Message-State: AOAM531EiMjse8E+L/g4rFvbqLZWrDt7tfqMvmGuuBqmaFbDUlD3zScq
-        JqMMOnlrE+gc4oGi+JJhjaA=
-X-Google-Smtp-Source: ABdhPJwGgLrO6fXboCXH3FeM9syTAPsTB8j49Ok+YxvoH++9hKSCjSRRt09MVw1IIqLt81lYng6B/Q==
-X-Received: by 2002:a17:902:8c93:b0:167:879d:6670 with SMTP id t19-20020a1709028c9300b00167879d6670mr241668plo.31.1654479877262;
-        Sun, 05 Jun 2022 18:44:37 -0700 (PDT)
+        bh=tmMJEfDrOjSFqugkaoY7mGyJmkmpzClAJ8D6S6ijc/E=;
+        b=uH/YcuZxBagqAALNmhBDyuzea56ok2t9CXiPCqZt7NP1tfndindb/ps0HB9724DmFq
+         9NTWnYmUu4V2V1t7hZwYnHEibhuMuiMwVCRAj/2pASFtY5ByA8NqH2nrgOGKWhDjHnJh
+         8x/euQ1buzGaABHsz7bDEs1FgktOAyyogM+Cm7HYdof3FpNIZb1B2de1riEOlUSjvW+S
+         3ehHYLknhSyi9IDDa68T7bFIJcE2fQt8v6I22NYKPU1BQiaJqhLnp5thihe+eEtpd6ig
+         2n+3qW1FIxxPYqEC4I04rVAXjInuUrzC7RnKrn3mHw5L994oI2kmEnHlDBhxHK24zNSc
+         n8Og==
+X-Gm-Message-State: AOAM531HhW9EKmhAp5ZxTcQOOIRf1bmHzafVCTgzFnFOEG9p9UZfOfSb
+        kXWF7liJVSIjLV/0dqm04lY=
+X-Google-Smtp-Source: ABdhPJwCzZw6U2Sr83zQQi4ysy2UfIpR0FU9Fx8Eu/42pFSLLS9sTGAgVAxMiO/lm/kwWBRRMMA86g==
+X-Received: by 2002:a17:90a:6941:b0:1e2:f37a:f889 with SMTP id j1-20020a17090a694100b001e2f37af889mr42633766pjm.160.1654479936154;
+        Sun, 05 Jun 2022 18:45:36 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id n7-20020a170902968700b001676f87473fsm1889515plp.302.2022.06.05.18.44.35
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902684600b001675d843332sm3528800pln.63.2022.06.05.18.45.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 18:44:37 -0700 (PDT)
+        Sun, 05 Jun 2022 18:45:35 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     zzam@gentoo.org
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+To:     davem@davemloft.net
+Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] [media] si2165: Remove redundant NULL check before release_firmware() call
-Date:   Mon,  6 Jun 2022 01:44:33 +0000
-Message-Id: <20220606014433.290667-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] sparc64: Remove redundant NULL checks before kfree
+Date:   Mon,  6 Jun 2022 01:45:30 +0000
+Message-Id: <20220606014530.290732-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,32 +72,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi <chi.minghao@zte.com.cn>
 
-release_firmware() checks for NULL pointers internally so checking
-before calling it is redundant.
+Checking a pointer for NULL before calling kfree() on it is redundant,
+kfree() deals with NULL pointers just fine.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/media/dvb-frontends/si2165.c | 6 ++----
+ arch/sparc/kernel/cpumap.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/si2165.c b/drivers/media/dvb-frontends/si2165.c
-index ebee230afb7b..3d167ca670a4 100644
---- a/drivers/media/dvb-frontends/si2165.c
-+++ b/drivers/media/dvb-frontends/si2165.c
-@@ -513,10 +513,8 @@ static int si2165_upload_firmware(struct si2165_state *state)
- 	ret = 0;
- 	state->firmware_loaded = true;
- error:
--	if (fw) {
--		release_firmware(fw);
--		fw = NULL;
--	}
-+	release_firmware(fw);
-+	fw = NULL;
+diff --git a/arch/sparc/kernel/cpumap.c b/arch/sparc/kernel/cpumap.c
+index f07ea88a83af..1ae22b0d938c 100644
+--- a/arch/sparc/kernel/cpumap.c
++++ b/arch/sparc/kernel/cpumap.c
+@@ -352,10 +352,8 @@ static void _cpu_map_rebuild(void)
+ {
+ 	int i;
  
- 	return ret;
- }
+-	if (cpuinfo_tree) {
+-		kfree(cpuinfo_tree);
+-		cpuinfo_tree = NULL;
+-	}
++	kfree(cpuinfo_tree);
++	cpuinfo_tree = NULL;
+ 
+ 	cpuinfo_tree = build_cpuinfo_tree();
+ 	if (!cpuinfo_tree)
 -- 
 2.25.1
 

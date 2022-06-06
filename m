@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B18A53F1B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E3453F1BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbiFFVb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S234931AbiFFVcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiFFVb2 (ORCPT
+        with ESMTP id S233631AbiFFVcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 17:31:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9861A394;
-        Mon,  6 Jun 2022 14:31:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF5406164F;
-        Mon,  6 Jun 2022 21:31:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E556C385A9;
-        Mon,  6 Jun 2022 21:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654551086;
-        bh=4Xm0R5P+VrCwOW+zqQpekghTWxOqCtFkCmzjB4kSLss=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=KWhSttqILWZQreWlBFVuXFUfmoWeA03sUhkuDma+WHXl+RsxZKH9sPKk4HER0NQpq
-         L7U5/g9NjmANfX8Qq17db5Ts3HoT/9oJ8ci1ib7MprRxMQaWHFAjAnbAtcBNLAEWeB
-         ipzIE3KsDU3rvyGKrOCIHhmT8CTGQe0Tv8f7IMN9FKTzaB70tBy2EGwDioYy58Yqs+
-         fFnKQGoZkEUWAlx0S/uP8NHqCrdpg8SDzE48vz/hS9sIxCEzzKkI4LtWcDZs407KwG
-         Qy3LGVy68t5qT23k8giQiRfzCmaf5rWUszvUtNOhpo9Od3x01SknQxu46OatVYVaJ8
-         RE+IxjFj+5Nbg==
-Date:   Mon, 6 Jun 2022 23:31:19 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Solar Designer <solar@openwall.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>
-Subject: Re: [PATCH v2] Documentation/security-bugs: overhaul
-In-Reply-To: <20220606194850.26122-1-vegard.nossum@oracle.com>
-Message-ID: <nycvar.YFH.7.76.2206062326230.10851@cbobk.fhfr.pm>
-References: <20220606194850.26122-1-vegard.nossum@oracle.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 6 Jun 2022 17:32:16 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB66E7A;
+        Mon,  6 Jun 2022 14:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654551128;
+        bh=0HIULZ+QP47IbHx9ecHTqk4qfd6wTa7bUnEWZ6Ul/pU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=LGBF5z2kQpKcqSn8NXeg9N7NOiyjuNsyRANovXTFFoSsA9P+XBhKCbJU3p3D01RCf
+         8hwQHle5o3cWY3KyNOcH8h0BxLdW5viokBnRVqGi1tLiBUrck9JwWfACLh3+Jkkupw
+         XaTHDTIfBBf8nPWDgRhZq+1dY+xmW7cX6I512HNs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MN5iZ-1oF2Mk3EH7-00IzfX; Mon, 06
+ Jun 2022 23:32:07 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] ARM: dts: nuvoton: wpcm450: Add missing aliases for serial0/serial1
+Date:   Mon,  6 Jun 2022 23:31:53 +0200
+Message-Id: <20220606213154.2055462-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LtQZT3D+BZrxCdI5eT8HYdXnSpeQX5cgZkRRcTjGUGJg7dIL8Ni
+ 1ksqGpWYcHKX6IpAbqXjp1lM74QHRV+cgGvJV8y/nlMZ0sMyIopRIQN0uFuSmrByN6PNxex
+ V2SgSH4/fhfHaC1ic4B5awunyPCQyLoZLnFClTT/Zv++2hNKuGPm5p1+FfyD4fb2P2Qq7/O
+ 6q2k3Htc+k0JTQdM9PcGw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eJ0U6DDgKAo=:+29B9ZWSIcRb7rOY68M354
+ Y2FlAIacp5pNWI45nRCfkuTBshXIy2X3liqJXQJQYl9EmUdkqnNrmX8lz9p0kQezJSP9/UHcK
+ BVyd5fB4/a0lcPxbuKrG74f8jgaXopesUVIvjG8bG2tGq95eWAkBe9CaRLisiTzmD8RiNuCbu
+ dmYh8rCfrNfbpyQh78APTp4X1pU1DRcoC6OgC1j5O4qxqvwdnqcnjf33wiNmOhsMn5q9MCDId
+ 7xOlzA5f0MK5LEnr6x2bwhuWs1n48wOsfGIm79f8Y2yrbhhXm6xXAYznMoNyUCrz+RE60dwbr
+ J/6eyoeJhBSsJivlpOWc1EglBbU1S8ozpuC22rJxPGkjXmKD1p9Q4Ub7g9JMeGcRUnylCx3cy
+ Y/CVGXleg0HDqWubQNHOirEBDsDha/PYTYeTbufvnPJgmdLwxXVDrT0XgM2zHc+qCbbgsl5uu
+ AHb+NQvp5LwV98456quC1CMQWouwZTDGrNIc9njMtNaC7n42uB4/LlJBC8S5uhnsHeZPl4qiN
+ mKniEasQDuNLxgotVc44MUVO6rPzjSltm1rf0jxH6rJ6e6wMgDcJYxdH6ndNaSTAhIxGtpYQ0
+ bSqVGgkr4M7Y17NqATkQlgSpnYBCZ6+Y/TTesPdWWJV4jf+kjAVL/Je7oI1hHfxbPSc1dCJfW
+ jjM1TqhHK5T62fl7xmNazupUgLtTcVyiNNgq7/tRJU+qMm2w20dkOBjvdbazZ1OlUOE8fdM1K
+ aPMApAEwZmzYsso9UJHKnEphtB4cGgcsw8h3bOMGw/KaDOBUBOd+0T4KUY+FPlYCZ6We2K8y2
+ mJ3k7ffFjS3CKWbkplXXn2kaHvLD39MmfiT7unWHYDGqoi0gMHnU2WTYlJzPDVYdEZpLPrNTO
+ jtXMk+jNVMPhKjNm9+TlMYMtW4BHjWUgcoawNa4jiYQFBncRkIq3bkF0XJzOxPc/Q0X1gknUD
+ b0rD4C8RwiEUy2bGAQX+eOsio4/nt1IAtLZS5rgjvWiWMIfpWtWkCocDR8Xxa98HYd6MvH4Qq
+ 8oCGRhmHx2QodVFGYBM9ZnmX7lo3gpbYMl5YJUSv3tm65dnJh6F9aeBQQoFEaxTgokQGqi5zo
+ ebhz44EZ8aJC+hKE0AsfNOeSb5dz8VixfR5rr9SbKWOSTrhWf1kvtvYew==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022, Vegard Nossum wrote:
+Without these, /chosen/stdout-path =3D "serial0:115200n8" does not work.
 
-> The current instructions for reporting security vulnerabilities in the
-> kernel are not clear enough, in particular the process of disclosure
-> and requesting CVEs, and what the roles of the different lists are and
-> how exactly to report to each of them.
-> 
-> Let's give this document an overhaul. Goals are stated as a comment at
-> the bottom of the document; these will not appear in the rendered HTML
-> document.
-> 
-> v2: address feedback from Willy Tarreau and Jonathan Corbet
-> 
-> Link: https://seclists.org/oss-sec/2022/q2/133
-> Cc: Amit Shah <aams@amazon.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: David Woodhouse <dwmw@amazon.co.uk>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Cc: Jiri Kosina <jkosina@suse.cz>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Laura Abbott <labbott@kernel.org>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Solar Designer <solar@openwall.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Thorsten Leemhuis <linux@leemhuis.info>
-> Cc: Tyler Hicks <tyhicks@linux.microsoft.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Willy Tarreau <w@1wt.eu>
-> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
-> ---
->  Documentation/admin-guide/security-bugs.rst | 252 +++++++++++++-------
->  1 file changed, 167 insertions(+), 85 deletions(-)
-> 
-> v1 thread:
-> https://lore.kernel.org/all/20220531230309.9290-1-vegard.nossum@oracle.com/T/#u
-> 
-> Updated rendered HTML:
-> https://vegard.github.io/security/Documentation/output/admin-guide/security-bugs-v2.html
-> 
-> diff --git a/Documentation/admin-guide/security-bugs.rst b/Documentation/admin-guide/security-bugs.rst
-> index 82e29837d5898..c63eeb1e89ffd 100644
-> --- a/Documentation/admin-guide/security-bugs.rst
-> +++ b/Documentation/admin-guide/security-bugs.rst
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+v3:
+- Move serial aliases to board-specific file
 
-Thanks for investing time into fixing this aged document.
+v2:
+- mention WPCM450 in the summary
+=2D--
+ arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Two rather minor things come to my mind, but as you are touching that 
-document anyway ...
+diff --git a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts b=
+/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+index 3ee61251a16d0..83363c578f53c 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
++++ b/arch/arm/boot/dts/nuvoton-wpcm450-supermicro-x9sci-ln4f.dts
+@@ -15,6 +15,11 @@ / {
+ 	model =3D "Supermicro X9SCi-LN4F BMC";
+ 	compatible =3D "supermicro,x9sci-ln4f-bmc", "nuvoton,wpcm450";
 
-- what sense does it make to have embargoed-hardware-issues.rst and 
-  security-bugs.rst live in different Documentation/ subdirectories 
-  (admin-guide/ vs process/)? It'd seem to make sense to me to have them 
-  in one common place?
-
-- would it make sense to briefly reference embargoed-hardware-issues.rst 
-  somewhere in this text, to make the distinction as obvious as possible? 
-  It's referenced the other way around.
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
++	aliases {
++		serial0 =3D &serial0;
++		serial1 =3D &serial1;
++	};
++
+ 	chosen {
+ 		stdout-path =3D "serial0:115200n8";
+ 	};
+=2D-
+2.35.1
 

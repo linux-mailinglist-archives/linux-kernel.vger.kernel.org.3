@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E03153F1D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E648453F1D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbiFFVkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S231727AbiFFVnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233987AbiFFVkA (ORCPT
+        with ESMTP id S231620AbiFFVnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 17:40:00 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3687C7D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:39:57 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id q26so11149167wra.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 14:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jamieiles.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=em1IHn0NxzIl6+tjg4rJxJdRlPkWKD7AgY1X7ddtRrM=;
-        b=PHRW+YfAlgWwd60JmJEEDEJP2sVLw53JUSsTkW9zNS0P/ED1ryIG7B9OSAw2TggkXj
-         ooWrYKeHGlOVcj3WNWzvPVvRo3NB4MXiZKoRPJQjyTE4N85wkzgMDiw75TGNDJhe1fzd
-         OpLAKj2XG13c3GNy4uuzp4dpYs8gHiJEQFs4+c6Sn/3lOmnO0q0qo+O7YEN1NLzvyyhs
-         XTQFzURvE8CyIYny+j8qSEnXI2fYXXm90VmVAFRWUV4pSE+DFmZIu1FKyYRlJCZiOOUe
-         ZUqirYWIhBiCpvsKUgnpXOwxiQtjFoY2DBsXwEkUIN6s5jdrCS+ZrJdu1cRc9ltTAOS/
-         ZWuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=em1IHn0NxzIl6+tjg4rJxJdRlPkWKD7AgY1X7ddtRrM=;
-        b=nKafy8+lSAio/q5sEoDapwVAvXLX4njJiIRJG7Co9Og5gm20dZIV6nmAKlVXvuBITW
-         3MjDLd4VOkOPK6WuFC86yXTaQl0zWasaCnpS9A/WDtsCYk4DyDUAMz36wCIzQ5ixWi8z
-         KjuyWq3W9veB9QLFE7JSWA8Oyn2yjGeD2BmMHcB8tmyIl0OhS47dQuaNUw8PwXz8Cvx+
-         AJxUMbv46/BBXKd+/K3/2dcU6Gd2UFrnwrPxF8MGkMvXqc9v8VM0dIZrdbY0CfAF9WOM
-         t0wrSI9ajBDKtYrVuhCirn+02xMDiKkV4gcq0e4xcOTtV3S9H/qQXzDqo6HPfAeKhqkF
-         z+8A==
-X-Gm-Message-State: AOAM530wSbrQwT9R+Lns0uStfh8Z2IgNUqCGsZiJqqzxGmXZbNwLijB9
-        YZdPb70qkL6Gs1Qs013wpbH6FyJogPmuUA==
-X-Google-Smtp-Source: ABdhPJwPvYCfZ2Z5iAmLoI+neaQu7PlpV7jFLc7ozHLUJhBTWgprVmLtP2p6/63Lsy83Ura6nQh87A==
-X-Received: by 2002:a5d:54c3:0:b0:210:2a28:5666 with SMTP id x3-20020a5d54c3000000b002102a285666mr23930277wrv.345.1654551596120;
-        Mon, 06 Jun 2022 14:39:56 -0700 (PDT)
-Received: from localhost ([5.181.106.148])
-        by smtp.gmail.com with ESMTPSA id f6-20020a05600c4e8600b0039466988f6csm27918836wmq.31.2022.06.06.14.39.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 14:39:55 -0700 (PDT)
-From:   Jamie Iles <jamie@jamieiles.com>
-To:     linux-kernel@vger.kernel.org, tglx@linutronix.de, maz@kernel.org
-Cc:     michal.simek@xilinx.com, Jamie Iles <jamie@jamieiles.com>
-Subject: [PATCH] irqchip/xilinx: remove microblaze+zynq dependency
-Date:   Mon,  6 Jun 2022 22:39:52 +0100
-Message-Id: <20220606213952.298686-1-jamie@jamieiles.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 6 Jun 2022 17:43:40 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A856237;
+        Mon,  6 Jun 2022 14:43:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654551810;
+        bh=/rWCIXPO+DIHy5Wbvb0BsPXQuXvrzb8zMl/UnJyKspM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=IcURhFFFu+vzmB3Fi6OLRgy0a+suJkg6LAU2z5iEc24Nmis5bjtKEihWOJUcDmpKa
+         l6W36nVhATTrmRloAAaKYt/5/WrHH5KdUKOsTUSZMk45hfoPCYx+B80Ez9Zi22OvH6
+         wGEs4ABON1qO/18NyZlG0CdEw20+fYU7ysPTXScc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrhUK-1nSVwT3bPg-00neUP; Mon, 06
+ Jun 2022 23:43:29 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-gpio@vger.kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: nuvoton: wpcm450: Convert irqchip to IRQCHIP_IMMUTABLE
+Date:   Mon,  6 Jun 2022 23:43:00 +0200
+Message-Id: <20220606214301.2061467-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:LhGxtsXUq/6ysDnU3oTP8OdWjKQdiLoxcP4ZbK3dGsPVNl4Uu2T
+ NjNq/YOJDOmQQSdo+XzAxBoSIHSWq0ODxiOhH3FOjVmYVIwK5VguTuztpW6BwUBlyFNTwA1
+ TQbxOC43xmEPYNS3+Y7Dk5Rw4r+aWkZU/iefvza6QSSkDVIkE8HrX/t59JtqoKmcqUGpDyw
+ tXhto6Dg+/6k7pZmdwvsQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6Y5Abz3mh9Y=:upHy6CS9v/bm2UnsNwn07u
+ kouAio+9nVrabGQsCEIuoxocJKOW7wvDbeyaY+u1iHomTg+hEy8T+fIXADn3moC5ecVRpKdFh
+ jPpFvxSwGq20RpIQ2+eGDp7oJhFNiffTx1LG0+LeQTkYQ505h03vRNSw37Kgf1yr6DMIqjGDU
+ IJbhchvbgkXiSxtlWlXgzA0SLy0hQ9y3p4HqKGd9atSBxSwZ3Uy2up6QYHBQm8iA89j7h5+Zw
+ +14fiiEqxfEkI3XsYqOfmywPUvDY+UApKBFb0Mywv6jeg5FKnZ1UFiv0FHRyofcNa+Cv/Z5RO
+ 3hCaJFazggeVAW1rLWtDb11OvdFzLhnBYU9B/kNTS9Pw2XlDPsdBWIOnzm/S/0O9pFaT7KKBj
+ 3OL7XmAqdQZDFi2oJ4C2xwnGnTL8+nafluNPt3/YT/TDeflkktbsY7Ujb5Qc7uhesiA2EdQ67
+ koyMzomKdCmv1+rAOTxcbV4Rme74phZNuIqdIlN6j8fya69l2rmvjGSbz7oQTnyUZ1VtHC8uI
+ Nvfkme0O7Nvvd8eYH0P43u9THy46vGIO69z0LIhITe9fEcaRo4jNwKGb7x5w0XWmSQjx9bkzt
+ qeJ+BcL1jM7urgk+wYugAa0PSDe29ZqWH2qn/q4xTyFBLoAc830O4T8cDPZC14j3V6592BTtn
+ z193rw/rDs2ZDOs+Tx5Z90T9/kCuEtvzfC7vQVPai1L7Wqql4sRHN0D+VoPxkqOz7F+wD+FYh
+ azRUw1BftpjadONMpBfnb1T/n92dU7AYk/xA/hORIOSzwBmHeqgM5jgYELKCU3JRaMqZcw+gE
+ nhV/Z90KCrFeUHFQA0Y1o7kQ3iG9YPmY/pAZoXTdeFWF4mWi3S7/iSoeo19FXmLiijB2Hz5Xo
+ lgPzz8/JGxm8uCS8s94aG85RlOm2O0CrDz3S3utegwh0tYfieeJoj4kW42Xx9EaX1C0xd0AEx
+ ry6qdqETMAtPS9Q+ysa4eZd8dFDvcMH/KLkq8e4yaDucX2iqc1OwdfyLxnOoT8FlJSTFLVn77
+ P3XPl+fcBZ7JmogvxI3tmiwQzJ1YFnmIOkPv78pgSUx/JbvsqQC45TtTQaw3+CIoSziFEXFos
+ CX+kiW76VcwBGLFZiugeKbwYIzUiccW9Dq3gFOJkeSyvPya5Bq0HGS7Tw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Xilinx IRQ controller doesn't really have any architecture
-dependencies - it's a generic AXI component that can be used for any
-FPGA core from Zynq hard processor systems to microblaze+riscv soft
-cores and more.
+Commit 6c846d026d490 ("gpio: Don't fiddle with irqchips marked as
+immutable") added a warning for irqchips that are not marked with
+IRQCHIP_IMMUTABLE.
 
-Signed-off-by: Jamie Iles <jamie@jamieiles.com>
----
- drivers/irqchip/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Convert the pinctrl-wpcm450 driver to an immutable irqchip.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 15edb9a6fcae..a81d57677a39 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -286,7 +286,7 @@ config XTENSA_MX
- 
- config XILINX_INTC
- 	bool "Xilinx Interrupt Controller IP"
--	depends on MICROBLAZE || ARCH_ZYNQ || ARCH_ZYNQMP
-+	depends on OF
- 	select IRQ_DOMAIN
- 	help
- 	  Support for the Xilinx Interrupt Controller IP core.
--- 
-2.34.1
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/n=
+uvoton/pinctrl-wpcm450.c
+index 0dbeb91f0bf27..cff784a7ce4d7 100644
+=2D-- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+@@ -293,6 +293,8 @@ static const struct irq_chip wpcm450_gpio_irqchip =3D =
+{
+ 	.irq_unmask =3D wpcm450_gpio_irq_unmask,
+ 	.irq_mask =3D wpcm450_gpio_irq_mask,
+ 	.irq_set_type =3D wpcm450_gpio_set_irq_type,
++	.flags =3D IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+ };
+
+ static void wpcm450_gpio_irqhandler(struct irq_desc *desc)
+@@ -1068,9 +1070,8 @@ static int wpcm450_gpio_register(struct platform_dev=
+ice *pdev,
+ 		gpio->gc.fwnode =3D child;
+ 		gpio->gc.add_pin_ranges =3D wpcm450_gpio_add_pin_ranges;
+
+-		gpio->irqc =3D wpcm450_gpio_irqchip;
+ 		girq =3D &gpio->gc.irq;
+-		girq->chip =3D &gpio->irqc;
++		gpio_irq_chip_set_chip(girq, &wpcm450_gpio_irqchip);
+ 		girq->parent_handler =3D wpcm450_gpio_irqhandler;
+ 		girq->parents =3D devm_kcalloc(dev, WPCM450_NUM_GPIO_IRQS,
+ 					     sizeof(*girq->parents), GFP_KERNEL);
+=2D-
+2.35.1
 

@@ -2,163 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776F253E97D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D649C53E63D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238903AbiFFNa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S238916AbiFFNbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238867AbiFFNay (ORCPT
+        with ESMTP id S238867AbiFFNbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:30:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF161053EC;
-        Mon,  6 Jun 2022 06:30:49 -0700 (PDT)
-X-UUID: a0ec86c67f274074b7e688a18597a874-20220606
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:8658252a-4f70-4798-8950-687847093197,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:2ce8557e-c8dc-403a-96e8-6237210dceee,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: a0ec86c67f274074b7e688a18597a874-20220606
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1973886207; Mon, 06 Jun 2022 21:30:43 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 6 Jun 2022 21:30:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 6 Jun 2022 21:30:42 +0800
-Message-ID: <8598b46381861bd36008cc87599c73863cb4b98e.camel@mediatek.com>
-Subject: Re: [RESEND v4 1/3] dt-bindings: mediatek: add vdosys1 RDMA
- definition for mt8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?=" 
-        <Nancy.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?=" 
-        <ck.hu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-Date:   Mon, 6 Jun 2022 21:30:42 +0800
-In-Reply-To: <1654520033.524963.534472.nullmailer@robh.at.kernel.org>
-References: <20220606051131.14182-1-rex-bc.chen@mediatek.com>
-         <20220606051131.14182-2-rex-bc.chen@mediatek.com>
-         <1654520033.524963.534472.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 6 Jun 2022 09:31:31 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31C1190D35;
+        Mon,  6 Jun 2022 06:31:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=O73kJ0AnT0Z8YM1gj4D+7aWy/bjgMjU/TGjAUbj6GKc=; b=fLcLgNpZBH/ZmSSttDHtE2xOyx
+        2zhUSgJ1gMLo390BgcwFMa5B0tTZk5xfQxiCOfHBqc63JOjPuLNrxsOsTuI6/XiukLP13lVQZREz9
+        Or1ub9HFXZeNI0axgKRLqbp4wD1ECZMxQB1PIPVqQZBjQ/oqk5iZ1ELT8MX2qvM7raBrBH6NmGUbU
+        5ex+rEEbWy3NBlu7eMLQ2lIlY15A5wN3d1SnxHoxge+idOXDrjLvjfxVhzBvJNhbR62cEp/X+5U25
+        QTE7yt8Dh8vA7kEB+vP/PHacclrWLHNFc41gguNvQrQ6TNSxHdJy47RtTUyiA6LImlduNe5YPAz1p
+        BLzEQbIw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60970)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nyCpD-00023V-Ku; Mon, 06 Jun 2022 14:31:19 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nyCpA-0008GJ-Me; Mon, 06 Jun 2022 14:31:16 +0100
+Date:   Mon, 6 Jun 2022 14:31:16 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: dsa: realtek: rtl8365mb: fix GMII caps for
+ ports with internal PHY
+Message-ID: <Yp4BpJkZx4szsLfm@shell.armlinux.org.uk>
+References: <20220606130130.2894410-1-alvin@pqrs.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220606130130.2894410-1-alvin@pqrs.dk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 20:53 +0800, Rob Herring wrote:
-> On Mon, 06 Jun 2022 13:11:29 +0800, Bo-Chen Chen wrote:
-> > From: "Nancy.Lin" <nancy.lin@mediatek.com>
-> > 
-> > Add vdosys1 RDMA definition.
-> > 
-> > Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Tested-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  .../display/mediatek/mediatek,mdp-rdma.yaml   | 88
-> > +++++++++++++++++++
-> >  1 file changed, 88 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> > rdma.yaml
-> > 
+On Mon, Jun 06, 2022 at 03:01:30PM +0200, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m
-> dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> phylib defaults to GMII when no phy-mode or phy-connection-type property
+> is specified in a DSA port node.
 > 
-> yamllint warnings/errors:
+> Commit a5dba0f207e5 ("net: dsa: rtl8365mb: add GMII as user port mode")
+> introduced implicit support for GMII mode on ports with internal PHY to
+> allow a PHY connection for device trees where the phy-mode is not
+> explicitly set to "internal".
 > 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-
-> review/Documentation/devicetree/bindings/display/mediatek/mediatek,md
-> p-rdma.yaml: properties:compatible: [{'const': 'mediatek,mt8195-vdo1-
-> rdma'}] is not of type 'object', 'boolean'
-> 	from schema $id: 
-> https://urldefense.com/v3/__http://json-schema.org/draft-07/schema*__;Iw!!CTRNKA9wMg0ARbw!3hhZrSKSWnCN5Bha9laiHlB5JCx9_p-ksaYDZmoCLQRi1tI4KJCcTJQva2vds3j3bwKF$
+> Commit 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
+> then broke this behaviour by discarding the usage of
+> rtl8365mb_phy_mode_supported() - where this GMII support was indicated -
+> while switching to the new .phylink_get_caps API.
+> 
+> With the new API, rtl8365mb_phy_mode_supported() is no longer needed.
+> Remove it altogether and add back the GMII capability - this time to
+> rtl8365mb_phylink_get_caps() - so that the above default behaviour works
+> for ports with internal PHY again.
+
+Oops - I guess this has been caused by the delay between my patch being
+initially prepared, it sitting around in my tree for many months while
+other patches get merged, and it eventually seeing the light of day.
+
+Sorry about that.
+
+> Fixes: 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> ---
+> 
+> Luiz, Russel:
+> 
+> Commit a5dba0f207e5 ought to have had a Fixes: tag I think, because it
+> claims to have been fixing a regression in the net-next tree - is that
+> right? I seem to have missed both referenced commits when they were
+> posted and never hit this issue personally. I only found things now
+> during some other refactoring and the test for GMII looked weird to me
+> so I went and investigated.
+> 
+> Could you please help me identify that Fixes: tag? Just for my own
+> understanding of what caused this added requirement for GMII on ports
+> with internal PHY.
+
+I have absolutely no idea. I don't think any "requirement" has ever been
+added - phylib has always defaulted to GMII, so as the driver stood when
+it was first submitted on Oct 18 2021, I don't see how it could have
+worked, unless the DT it was being tested with specified a phy-mode of
+"internal". As you were the one who submitted it, you would have a
+better idea.
+
+The only suggestion I have is to bisect to find out exactly what caused
+the GMII vs INTERNAL issue to crop up.
+
+> 
+> ---
+>  drivers/net/dsa/realtek/rtl8365mb.c | 38 +++++++----------------------
+>  1 file changed, 9 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
+> index 3bb42a9f236d..769f672e9128 100644
+> --- a/drivers/net/dsa/realtek/rtl8365mb.c
+> +++ b/drivers/net/dsa/realtek/rtl8365mb.c
+> @@ -955,35 +955,21 @@ static int rtl8365mb_ext_config_forcemode(struct realtek_priv *priv, int port,
+>  	return 0;
+>  }
 >  
-> /builds/robherring/linux-dt-
-> review/Documentation/devicetree/bindings/display/mediatek/mediatek,md
-> p-rdma.yaml: ignoring, error in schema: properties: compatible
-> Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-
-> rdma.example.dtb:0:0: /example-0/soc/rdma@1c104000: failed to match
-> any schema with compatible: ['mediatek,mt8195-vdo1-rdma']
+> -static bool rtl8365mb_phy_mode_supported(struct dsa_switch *ds, int port,
+> -					 phy_interface_t interface)
+> -{
+> -	int ext_int;
+> -
+> -	ext_int = rtl8365mb_extint_port_map[port];
+> -
+> -	if (ext_int < 0 &&
+> -	    (interface == PHY_INTERFACE_MODE_NA ||
+> -	     interface == PHY_INTERFACE_MODE_INTERNAL ||
+> -	     interface == PHY_INTERFACE_MODE_GMII))
+> -		/* Internal PHY */
+> -		return true;
+> -	else if ((ext_int >= 1) &&
+> -		 phy_interface_mode_is_rgmii(interface))
+> -		/* Extension MAC */
+> -		return true;
+> -
+> -	return false;
+> -}
+> -
+>  static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
+>  				       struct phylink_config *config)
+>  {
+> -	if (dsa_is_user_port(ds, port))
+> +	if (dsa_is_user_port(ds, port)) {
+
+Given the updates to rtl8365mb_phy_mode_supported(), this misses out on
+the check of rtl8365mb_extint_port_map[port] introduced in commit
+6147631c079f ("net: dsa: realtek: rtl8365mb: allow non-cpu extint
+ports").
+
+>  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+>  			  config->supported_interfaces);
+> -	else if (dsa_is_cpu_port(ds, port))
+> +
+> +		/* GMII is the default interface mode for phylib, so
+> +		 * we have to support it for ports with integrated PHY.
+> +		 */
+> +		__set_bit(PHY_INTERFACE_MODE_GMII,
+> +			  config->supported_interfaces);
+> +	} else if (dsa_is_cpu_port(ds, port)) {
+
+This test also needs to be updated.
+
+Not sure what rtl8365mb_extint_port_map[port] == 0 is supposed to
+signify - maybe port unusable? Looks that way to me.
+
+>  		phy_interface_set_rgmii(config->supported_interfaces);
+> +	}
+>  
+>  	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
+>  				   MAC_10 | MAC_100 | MAC_1000FD;
+> @@ -996,12 +982,6 @@ static void rtl8365mb_phylink_mac_config(struct dsa_switch *ds, int port,
+>  	struct realtek_priv *priv = ds->priv;
+>  	int ret;
+>  
+> -	if (!rtl8365mb_phy_mode_supported(ds, port, state->interface)) {
+> -		dev_err(priv->dev, "phy mode %s is unsupported on port %d\n",
+> -			phy_modes(state->interface), port);
+> -		return;
+> -	}
+> -
+>  	if (mode != MLO_AN_PHY && mode != MLO_AN_FIXED) {
+>  		dev_err(priv->dev,
+>  			"port %d supports only conventional PHY or fixed-link\n",
+> -- 
+> 2.36.0
 > 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a
-> patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up
-> to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
 > 
 
-Hello Rob,
-
-We found that if we write this, and the error will disapear:
- properties:
-   compatible:
--    - const: mediatek,mt8195-vdo1-rdma
-+    items:
-+      - const: mediatek,mt8195-vdo1-rdma
-
-But from Krzysztof's review[1], he adviced us to drop items.
-
-Is there any suggsetion for this error or do we have any
-misunderstanding?
-
-[1]:https://patchwork.kernel.org/comment/24849447/
-
-BRs,
-Rex
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

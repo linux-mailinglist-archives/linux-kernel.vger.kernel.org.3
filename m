@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA20E53EB1A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A4753E8AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbiFFKIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S233687AbiFFKIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbiFFKGD (ORCPT
+        with ESMTP id S233468AbiFFKGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:06:03 -0400
+        Mon, 6 Jun 2022 06:06:05 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3261128C2C;
-        Mon,  6 Jun 2022 03:05:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4D112DBEC;
+        Mon,  6 Jun 2022 03:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654509951; x=1686045951;
+  t=1654509955; x=1686045955;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=S3gDlxKOTB6cNszyQehsU3Wkz7UsMQbXrzXb2KIgEfU=;
-  b=VN5mTF4UczqR+iuDwFRsQL79FdxOThp9BmshVAmyF16nGr3koUE7Gjqf
-   GbC865z7PAEgSIEdKptrsIW4KS0XmEAj+kZtpX7/NGKoqWE+OCwormabm
-   gHn/AjtyGn1daVakk2z6EiEtB1FcixPg/gJFgRJH9QyNrQ+p/2OoGAYNH
-   U3KMdp0jS+lI1o/QBKiLFKZGEyMVwllHe9naFt6IinQaUIqTanCVn/KWC
-   6xwcI60dqkKuWO+TRgxf3rdaMKS5WgnPtLAOMo4L15+0faZj7H3N8UhSu
-   587FwYjKQFLdRZu7AZfSwqZHiMGpuXzfRSfjolKoYtf4Zu/zgBXK1D2e3
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987068"
+  bh=ZM/pEhOqDZJ2vEjEvweRMXHfCanuCKshhfEXaADs/+c=;
+  b=VbiL4JLVsWYN60pCpVxMhSnIhF+xCGHB7hl6W9xKfaA4yIaDcG6LJwAn
+   iaZm9yF5ci/TqLdOPEx7hNZi16D7Oh8r1OovW4z3OgUS9oqOPmXplrkex
+   9ZAwlyZD396NEpCSc0sEFoyat98w9YN8A5qjOCWWjZMBMpTv3MMqirwOf
+   QnE49DTEeoNnm8eN8MpAuhOjk6qDltj5wV2aQKzN29XABSLK6fcwMDHlN
+   4PVma0m5zq9zBgjCLVixRY2W/ScG1TwPkOM/kevyxMyq8Tgf1k6zycULp
+   Fv/2C++SNdiQsZx65BrsWLiUoMjrcKgpojx+6hRsNgVJkKW3/bL9+qBgL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987070"
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="362987068"
+   d="scan'208";a="362987070"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:05:51 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:05:55 -0700
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635523780"
+   d="scan'208";a="635523787"
 Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:05:50 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:05:52 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 20/36] serial: sc16is7xx: Fill in rs485_supported
-Date:   Mon,  6 Jun 2022 13:04:17 +0300
-Message-Id: <20220606100433.13793-21-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 21/36] serial: stm32: Fill in rs485_supported
+Date:   Mon,  6 Jun 2022 13:04:18 +0300
+Message-Id: <20220606100433.13793-22-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
 References: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
@@ -62,44 +66,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Add information on supported serial_rs485 features.
 
-This driver does not support delay_rts_after_send but the pre-existing
-behavior is to return -EINVAL if delay_rts_after_send is non-zero. In
-contrast, other drivers that do not support delay_rts_after_send either
-zero delay_rts_after_send or do not care (leave the inaccurate value).
-As changing this would cause userspace visible impact, the change is
-not attempted here. But perhaps it should be still tried (maybe nobody
-finds that kind of API oddity significant)?
-
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/sc16is7xx.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/tty/serial/stm32-usart.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 8472bf70477c..b3162dfe97b1 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -1354,6 +1354,12 @@ static int sc16is7xx_gpio_direction_output(struct gpio_chip *chip,
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index b7b44f4050d4..db3dd9731ee1 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -1375,6 +1375,13 @@ static void stm32_usart_deinit_port(struct stm32_port *stm32port)
+ 	clk_disable_unprepare(stm32port->clk);
  }
- #endif
  
-+static const struct serial_rs485 sc16is7xx_rs485_supported = {
-+	.flags = SER_RS485_ENABLED | SER_RS485_RTS_AFTER_SEND,
++static const struct serial_rs485 stm32_rs485_supported = {
++	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND | SER_RS485_RTS_AFTER_SEND |
++		 SER_RS485_RX_DURING_TX,
 +	.delay_rts_before_send = 1,
-+	.delay_rts_after_send = 1,	/* Not supported but keep returning -EINVAL */
++	.delay_rts_after_send = 1,
 +};
 +
- static int sc16is7xx_probe(struct device *dev,
- 			   const struct sc16is7xx_devtype *devtype,
- 			   struct regmap *regmap, int irq)
-@@ -1456,6 +1462,7 @@ static int sc16is7xx_probe(struct device *dev,
- 		s->p[i].port.iotype	= UPIO_PORT;
- 		s->p[i].port.uartclk	= freq;
- 		s->p[i].port.rs485_config = sc16is7xx_config_rs485;
-+		s->p[i].port.rs485_supported = &sc16is7xx_rs485_supported;
- 		s->p[i].port.ops	= &sc16is7xx_ops;
- 		s->p[i].old_mctrl	= 0;
- 		s->p[i].port.line	= sc16is7xx_alloc_line();
+ static int stm32_usart_init_port(struct stm32_port *stm32port,
+ 				 struct platform_device *pdev)
+ {
+@@ -1394,6 +1401,7 @@ static int stm32_usart_init_port(struct stm32_port *stm32port,
+ 	port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_STM32_CONSOLE);
+ 	port->irq = irq;
+ 	port->rs485_config = stm32_usart_config_rs485;
++	port->rs485_supported = &stm32_rs485_supported;
+ 
+ 	ret = stm32_usart_init_rs485(port, pdev);
+ 	if (ret)
 -- 
 2.30.2
 

@@ -2,159 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB6D53E8D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5B253E95D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbiFFJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S232801AbiFFJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbiFFJWc (ORCPT
+        with ESMTP id S232717AbiFFJWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:22:32 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBD56599
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:22:30 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 93D2132002FB;
-        Mon,  6 Jun 2022 05:22:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 06 Jun 2022 05:22:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654507348; x=1654593748; bh=Xw4lnTY/et
-        JsJAGDFGc3jcxrakgTZHGFztPy9C0RzDM=; b=qxiiLfWULeAPQo8wYKlgqESjFG
-        6TGaZfecQYvAdffjoLWu9YG0TrJovLyO7ylqUihe6F61QahAqc0BAVqRy4Ucxxy4
-        DrxmKAJLMzMOgbfXVoP+AHuvh6QztQtYmBw4ibyH0LST0wlJmazaMMxuzMvSoMta
-        s3YBZb5JA644H4gnTon7TvG0pEfMZV9xrjpkm9Fh5FlMYGpn3gpkemo5Yyq+KG2a
-        LlhxrUovfCmLEph0pA7McLE9e/u+JYiDvoyXB723FRFYjBvXw6hEHQpzrDaGkgeo
-        kittXLPBx1KAA5i5K9YN2Y0eVrcEGROCfDa21n8f+jMnK1plVMDohSYuZlDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654507348; x=1654593748; bh=Xw4lnTY/etJsJAGDFGc3jcxrakgT
-        ZHGFztPy9C0RzDM=; b=PEwqST23OMlAUNHFqMxHnAJfKU40BvEfscyGrQViseSX
-        px/VVlVaH+85i1wn8bN9DA7pxQX5/Rxm5Zmo/ntfQmPFTukTpi+NRnAX23o72TF7
-        V5KBmBp5lnVpSAoYMAIQP4CCa0XL9IhN2Sg5yPHxMzUheZ50BpYNaZwKXLw3TRaY
-        TatwtKg9n/tMw8K4WTrtjSx4mQPhRPBSpekrPd+o9PdJ31SSjUsTWQQAn34Wq4Fg
-        3ph9Q0957ns9Xr+D4pChkbEj8qG/pzqR8cC4c4tuZpOy9lGyxyjLnLIQKjlfA86L
-        xz32lzWRe/283rcsK4w7GAZCkCsNYQ1UvgN0yUkovA==
-X-ME-Sender: <xms:U8edYg2cRD82UHQxi1oxy42mFBVxzggZweD4Nwu3WAAIGVxZDDk4dQ>
-    <xme:U8edYrE7XP7dBoaKUXxX-NGMjWuj3IvRvSuBjLHp7VkS6IB6S_Jx1TqjU0a0A6t8x
-    PfYVE0mSmsk6TPrQCk>
-X-ME-Received: <xmr:U8edYo7IcqcQ_YmKavdRNLFx3FiGjQf09ogJ_6Q8UX9yCopdZPW4avJhuyJQuJy7Bcjqz-_p53wK5pjg2dshDTVfA7tk8pRTitZScAE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtvddgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejgeeiveevvdfgffeftdevuefhheduveejieefgeejveeuhfetkeelgfev
-    teefffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:U8edYp1k2rdN6LO_i3E36JF8vVN-xX-clV_1IrYu677gipX0WUG4dA>
-    <xmx:U8edYjGpYaHBOxOiONoCqdCg9oObmTyUyKXtkVsge35Si535KTsYBA>
-    <xmx:U8edYi-sqWw1vD9L4j8_KtpIJF59CU6yj1bz7VspQPAy4co9HE1VKA>
-    <xmx:VMedYr_puFd5iP3itjaz9la2pq6V6Vbt4L3B8XB-XInrG1Gjccl17g>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Jun 2022 05:22:26 -0400 (EDT)
-Date:   Mon, 6 Jun 2022 11:22:25 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        wens@csie.org, airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz,
-        Roman Stratiienko <roman.o.stratiienko@globallogic.com>
-Subject: Re: [PATCH] drm/sun4i: sun8i: Add support for pixel blend mode
- property
-Message-ID: <20220606092225.yxyw77mtuqpbmd35@houat>
-References: <20220605154731.17362-1-roman.o.stratiienko@globallogic.com>
- <4714286.GXAFRqVoOG@jernej-laptop>
- <CAGphcdniPFdqgLcpUc88ak9GzNaCvmj_TDVYTOe2bXto-Y12FQ@mail.gmail.com>
- <20220606092006.4bgxibmayv44juox@houat>
+        Mon, 6 Jun 2022 05:22:47 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C2A7652
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:22:40 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z7so17922065edm.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 02:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=PMqWJhtAyYq2IUfZFroUIAerSMEPBvVpvuurqeNCYvs=;
+        b=OFo8uppJzXZ9dL33NSJdpecRS/Coh98SLo26IW6BwmTiTcVnDEC+YVfZtOtfzSJ2JI
+         9LEHqkJgC6yIJSftDx9Dy0QNhGWHh5CFy9MfxEeS3IM3Qhv5kHbWGt2NruIeBXGsB0Pn
+         uCygGT4/DAV6y4Fdw1yJ/kwdhGAdgMBpsF1NQZwVNFSkJA2KTpwvjd/QCEtW8M/YUFT1
+         wSTLhdn5918MujkrWEMarEQaM4MpdTDp9Il6EbOwdTWB/MBG2yrKPWjUD8TyC19JT2OK
+         Akq26IjOSv2mM1WBIdeZf8dq6LDAeOg24BSDkYaIv8Nl6LNtbEYqRRLjjYVfIg38lZdD
+         tMdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=PMqWJhtAyYq2IUfZFroUIAerSMEPBvVpvuurqeNCYvs=;
+        b=kwvyT0M3JqFOOeb4NzGYT2dSqDoGL8rLUsivWrWC1531oAGp044xHhCRLcyY9ycTLl
+         OPCpEWqGv405TPGMrwBb/J2iMqrNOjS6bddnIKw2ePQGkAyzhrROLY9Vy301X4M9vWkS
+         TMqBiBKKAD+xKeTPmxNIbGd+hPOFx8WIqmzfDZf3iuFwYxquLw6uVICMTVmiVaWd85h/
+         4bI408s3HysEK1g3ATjxx0B4huDDoZYmhTPhkv84MsnVfuLvs6r0vPmRU2EerlHBmmxY
+         D0j04W+p+udgnzN0fE2d/pa33Q0uR8JW2Tpd8Rb7lzV/8arlY8INyc2jrijEioAjTIz6
+         b9yQ==
+X-Gm-Message-State: AOAM5305fwQqQrMYgCalAZsaD9+h94z/MPl4K990TyynXwPqoHogzICx
+        VkMLTkApd3RlO6y8THEdPjJYHA==
+X-Google-Smtp-Source: ABdhPJx/X8ut+ZeKxFGC0bxQqfhkiA/i7ro48JbnFWKO71mIkbWH8LPakdxH6RVQafUsgWK9oUurwQ==
+X-Received: by 2002:aa7:c492:0:b0:42d:ed6a:26e5 with SMTP id m18-20020aa7c492000000b0042ded6a26e5mr25368434edq.64.1654507359330;
+        Mon, 06 Jun 2022 02:22:39 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u21-20020a1709064ad500b006f3ef214e14sm5956397ejt.122.2022.06.06.02.22.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 02:22:38 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-fsd@tesla.com
+Subject: Re: [PATCH] arm64: dts: fsd: Add cpu cache information
+Date:   Mon,  6 Jun 2022 11:22:30 +0200
+Message-Id: <165450734050.62970.7702995773411139877.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220518132350.35762-1-alim.akhtar@samsung.com>
+References: <CGME20220518132329epcas5p307c6908621c3faa94d085b4a2cc931e1@epcas5p3.samsung.com> <20220518132350.35762-1-alim.akhtar@samsung.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ycmmdvpgrnhgi2cu"
-Content-Disposition: inline
-In-Reply-To: <20220606092006.4bgxibmayv44juox@houat>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 18 May 2022 18:53:50 +0530, Alim Akhtar wrote:
+> Add CPU caches information so that the same is available to
+> userspace via sysfs.  This SoC has 48/32 KB I/D cache for
+> each CPU cores and 4MB of L2 cache.
+> 
+> 
 
---ycmmdvpgrnhgi2cu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Mon, Jun 06, 2022 at 11:20:06AM +0200, Maxime Ripard wrote:
-> On Mon, Jun 06, 2022 at 11:17:20AM +0300, Roman Stratiienko wrote:
-> > Hello Jernej,
-> >=20
-> > Thank you for having a look.
-> >=20
-> > =D0=B2=D1=81, 5 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 23:37, Jernej =
-=C5=A0krabec <jernej.skrabec@gmail.com>:
-> > >
-> > > Dne nedelja, 05. junij 2022 ob 17:47:31 CEST je Roman Stratiienko nap=
-isal(a):
-> > > > Allwinner DE2 and DE3 hardware support 3 pixel blend modes:
-> > > > "None", "Pre-multiplied", "Coverage"
-> > > >
-> > > > Add the blend mode property and route it to the appropriate registe=
-rs.
-> > > >
-> > > > Note:
-> > > > "force_premulti" parameter was added to handle multi-overlay channel
-> > > > cases in future changes. It must be set to true for cases when more
-> > > > than 1 overlay layer is used within a channel and at least one of t=
-he
-> > > > overlay layers within a group uses premultiplied blending mode.
-> > >
-> > > Please remove this parameter. It's nothing special, so it can be easi=
-ly added
-> > > once it's actually needed. For now, it only complicates code.
-> >=20
-> > I would prefer keeping it if you do not have any strong opinion against=
- it.
-> >=20
-> > I am working now on exposing all overlays, so it will be needed soon an=
-yway.
->=20
-> KMS assumes pre-multiplied alpha anyway, so we shouldn't need a
-> parameter to force it: we're always going to force it.
+[1/1] arm64: dts: fsd: Add cpu cache information
+      https://git.kernel.org/krzk/linux/c/5355559555b98cd2f0b96b2c4e56c32356f90cc1
 
-My bad, I got confused with your other patch.
-
-Still, I agree with Jernej, if it's not needed it only complicates the
-code for no particular reason. If you need it at some point in the
-future, add it then. Otherwise, it's hard to reason about, since we
-don't know what are the expectations that those future patches will
-bring.
-
-Maxime
-
---ycmmdvpgrnhgi2cu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYp3HUQAKCRDj7w1vZxhR
-xQ7JAPwOH2WywNctfCg4rbYtCxC02Owlfgb33BXYypx4Py8rtQEAp7OVVf9HelNl
-uO4X3n7onqZVEW/knsWlXLnynOLuLgo=
-=oSp3
------END PGP SIGNATURE-----
-
---ycmmdvpgrnhgi2cu--
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

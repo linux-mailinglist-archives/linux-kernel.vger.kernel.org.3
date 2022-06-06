@@ -2,71 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7802453E798
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227C253EC72
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238004AbiFFM6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S238054AbiFFM7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237982AbiFFM6l (ORCPT
+        with ESMTP id S238045AbiFFM7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:58:41 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C83C21AC64;
-        Mon,  6 Jun 2022 05:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654520311;
-        bh=ZVKaO4pxHclqnySYO4A/cs/oINIor54RsEyTmpsCsfg=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=N/H+KZLMIL73pEKnIkEbMl61gD1g0DBQOeU018iUoa57vRqwoPVukTY9gKxlJjqL+
-         LqayCA0sBSikXFpdB7MLOJFNBAAAsEOUPXjPr+8Njd+Fwq5ZpOATl3cKKLvdOlVy+e
-         kFlRlGyNtz23ESmHi3nraNgo1yAoaGGIfssYYgmU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLiCu-1oFjAE38sa-00HhuI; Mon, 06
- Jun 2022 14:58:30 +0200
-Date:   Mon, 6 Jun 2022 14:57:22 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        openbmc@lists.ozlabs.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 RESEND] ARM: dts: nuvoton: wpcm450: Add missing
- aliases for serial0/serial1
-Message-ID: <Yp35sl5WPnLxZNiE@latitude>
-References: <20220606123529.1738542-1-j.neuschaefer@gmx.net>
- <fc350cfd-e9c1-e29e-392b-ede4fe7fb265@linaro.org>
+        Mon, 6 Jun 2022 08:59:17 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60053.outbound.protection.outlook.com [40.107.6.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5E423146D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:59:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BPAz9ocFy430xupOvhcrwa09a2xFVQuvCRjgdgfZ0orGrxMhAKQieHYMEU/nuVAN1XjoG2FNS9YVfrzug3VAe0AqWuSrbbzzlMjdgfRa642UtUKtjk4PMeIa5vGNzrOI3dvr/lG1BgQhz9pB44pogzgUSXsG5DBs7e4VkGH719AArTBF1WHnWWUhkHjMqxZksYlupMA980qwXxf4Hj+DhXhw7pCMf6lcA13R6akmkycEMcy8KgCZwPaQuwLQKYyNOrR93//idBBzBtsoLN22fTuwA8IY6bUYBM33I9S8WNawgMic6rbWDTxT3Mf/gxerFAiDzoD0o49+hIDIDUTbRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pZ2aktnt7dRdeEWaHtQs4hHuBHKyUFjObnUYp2yKFpU=;
+ b=afkXG5y6eBOMINeyU8mMwBfLwf1THJVuk+M7q42s3F/ueG9ena8ADN0nnITHJWuJvUEhPDycyOpu76bwRFvJrO5uROBgDkZm9UPCGQuvMAcvl6e/mlz38htr9ehn43+hwiD8nYHwFTrpl7cUWJkEeqLS7RDJue/3rskVR1r0+sG1+wbmA8S5NFKfPKS2AqV/zVMOy+olcgsjWUlqeOWdxwJUMQSrnm6bXSJjo2oSVTnf867z64cG8McfAtqYw3VqkPuVu3NGvGiL2MVwLFs9UMGj9vh7Q+XKp4+vXYw2zOghDC6hufRbBOorGfgRIOB6eSZNn+KsK9lEm889gjYZYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pZ2aktnt7dRdeEWaHtQs4hHuBHKyUFjObnUYp2yKFpU=;
+ b=m7aFW2m3yoXN9ojPvDihHrerPi/jlIYyOEqVPbzp0OaY4lREPWJALRIQEdmm+N6JbFXKcGopNDCyzyETpT+32RewR+Ru2OHcLrigwJPKIvtxc08i17Yf/Mr77dBH+wiXZJNhQAMpGMJK4OIWgrg8M3FuCB1APzjS78O9QWnTS+A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from AM4PR0802MB2131.eurprd08.prod.outlook.com
+ (2603:10a6:200:5c::22) by PAXPR08MB7318.eurprd08.prod.outlook.com
+ (2603:10a6:102:231::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Mon, 6 Jun
+ 2022 12:59:12 +0000
+Received: from AM4PR0802MB2131.eurprd08.prod.outlook.com
+ ([fe80::248c:2539:5ba5:74f2]) by AM4PR0802MB2131.eurprd08.prod.outlook.com
+ ([fe80::248c:2539:5ba5:74f2%3]) with mapi id 15.20.5314.019; Mon, 6 Jun 2022
+ 12:59:12 +0000
+Message-ID: <45bf11a8-47eb-e088-ba99-30c8788c7143@wolfvision.net>
+Date:   Mon, 6 Jun 2022 14:59:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] firmware: arm_scmi: Relax BASE protocol sanity checks on
+ protocol list
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Heiko Stuebner <heiko@sntech.de>, Liang Chen <cl@rock-chips.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Jeffy Chen <jeffy.chen@rock-chips.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20220523171559.472112-1-cristian.marussi@arm.com>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+In-Reply-To: <20220523171559.472112-1-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0166.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:45::13) To AM4PR0802MB2131.eurprd08.prod.outlook.com
+ (2603:10a6:200:5c::22)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g37Y/w1vok8Y1ZFx"
-Content-Disposition: inline
-In-Reply-To: <fc350cfd-e9c1-e29e-392b-ede4fe7fb265@linaro.org>
-X-Provags-ID: V03:K1:u2pColPCmNln/DBYE/sKdlTLQFN0eghzzPnVBKH8gjjPHiFphe5
- Cs/iSr71BZIAiFAZgXuTSGsa1eTDV+ICWQ+VJ74Ll71Dv9c5qyKZw0FgBRldAU9mgAisTSx
- SUmYuoMfjJD3VCTBNJFtleE8C/C6UVFwR8HdnAbBd4A07lXjqnkO0IEE5OWXMbPBnjAt4sF
- hTKfnJ47cUXz2/N/E8dBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Q93iPs3qD00=:EiNpUkkhXyT+z2RrDZRkSA
- aeAMnQJMYEA6MIRszjgG8eLGT7XxLrNhvjQRZWeXI3yFfWwv3CKrgTVl0X13BvXBAE3QSW2vn
- VFz3EH2VCO+g+KuGekAv7TOzBcJP4jegDVvAMiE/s8lQdolmjtkV8RhFspoqrQXJyiH1JxBRu
- uXPJr4CGd/I0L92KA4UtHGywIOCb1J/IOxHqfGcwSPcOL1FcrLaMtC7IFM4G/2f5DGPM3W+ya
- GdMD1hf4aF7m5haxt6IMi4Uj8yA5wokntfNLkAwPxrfcSG1CtJyQql7V47xq/gLKzVgqxLvs/
- YR10jQ6Psh/nB05gY8LHVwr9X+55Rk5THHo7B9ujh3jjY/lCiRnNMeQgP+WU8XvWfqg/XQsMW
- irGgmsc5FED/JBn56knIZstF21aNCvczcRwOfoXTKcQx5Mp5CWZL1vK/spT+49vt53bBz3DNI
- 1aNWHtqTmYTFR76Pg6xTS/FgknvUAEgCbU3X5js2+lBe0mjK9CtbN31aRMgM5f1u02YXWD8sL
- YhLFpybj82rA3Qtpi3ZBafHGACHsqJgPC1XByVco6kIictVtCOLvtZK1cLwSn9Ds14asrNtb1
- L0G+8GblE/Epdso4gKH1dbh3akgrC+QjUv0xljytWHQk5JkxxDR7cGl+cn0qpXgtlMH6/Zn7N
- myA9KA1KLiMnDeVYVgCOsj1ZUkbSZsMupddzEmkD8I7OyGQldNQM6Ya8Mc5A3pNPXpJj46zvE
- SIJXCrZJ5VCOt/XzRSL+2pTedQIWguBC3G/ckI2kmGv4/Dr5yAlf0Hv09Ixf9L2ZRavw7zVwD
- Q2QsIxaE5Zq0u3LbC6B/wscdMeeyRCoLETjkJD6k6qYMw+xZBnhoUG+/ztNqgXnIl+3/UEWgh
- TSsVTRpZQuLzMaf+He5wkihefp9TPKJNUCRAn43bDNdlxOU7zDgcxi/359p8jIBeRN/7HBCiD
- SbRYIgE0DMQvSyaEqQad7CrgLYBi/6N8u02aArHBJoB2n8oQdJJ0ssRJxLJWNqUJihbnung8I
- esAh4NdKqs3nF1rvOoO2A/9zk8soU+tdbWjSp75hSP3D46Z2p30wxE4S8FG2p41KUBkbD0WVO
- nDQzO9NdX0XoGuNQTqAiPL7KwCh0mDP/7neZ7dqMbKdbrWvOQivjUJ75Q==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 203d80cd-9dfd-4e9e-6619-08da47bc5a2d
+X-MS-TrafficTypeDiagnostic: PAXPR08MB7318:EE_
+X-Microsoft-Antispam-PRVS: <PAXPR08MB731893B2688B04786848023EF2A29@PAXPR08MB7318.eurprd08.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oc6kQrxZFcF6plkoJ2OULAXzQuuW2DDAokK2v6v1zlJi8cr/6N1yQs1sPuiTerM0kKqrNSGtN6CqdNS1ZDLb1xtRJANoeACKtoUCZ0wsx6pUfJV/hfmrhmv1pWJpLApsqc9bpVW7l6XGe5dHmmerEhEzJGq2LJaoMhF0OT9GXceln/KPyW8qc1m7JeH5t//q+iV0tDJa4KT/I2dDcHbEaeYkkLfAJhDadm4oG+nuBrbEOdm4nd2Ty6ZEwbOZ0wuYzFpgy7KjXmCi3t3yNfbdI6G3hUV1NOSziyTHJxjOFhEQxjY21HO5qfuCx4QpZR+5SPixuFSYjup1Ix8iN1A0O4gqVY/K9xgQ3Rm1zvRD1Y0nA0Z6ydVSPMX0M9pes4XwUTvsfo1i8GMKcUrFmBHibCxKPFlg+l3hqy8KAM+p0yLf2XiNFruZglnOQJVDtfKhfZcrWcd0uNseISMj3AOXXuPZNqplnSDXXYuS6dSYYESFc3uDdNyULiJu46+t8mPoIeHWi8hzQeclQdKYxCa5MiFNHItyf1oTV9YhI39U4U8PpR+wbxfDRzGuS8msVB4HVbHn8bcz1Gp/hr2mUriNInDIeXJXbInrxCh8XKWswlE080nhMmCDYD9ZQBMsKGPjBnLTaCfiRhf26Pd7dYGPzTC2xKDvjv2DY5pryPV4eHAz5b5BAiL1RsH1k+hgVDPE6XgT6RHqSwn4vQnmQtC0r92aerWvo7gEO66MP3xZZ2czeglJTt8pifGXUEgP0aKm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM4PR0802MB2131.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(376002)(366004)(39840400004)(136003)(346002)(396003)(186003)(2616005)(41300700001)(2906002)(4326008)(36756003)(86362001)(8676002)(31696002)(31686004)(6486002)(54906003)(83380400001)(316002)(6512007)(508600001)(44832011)(8936002)(6506007)(66556008)(52116002)(7416002)(38100700002)(66946007)(66476007)(5660300002)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGhzVDhmOGNFd1NnMEZRZkZBbXBmWURUNm83MVZJRTh6RWNxaktkcXpQNlF1?=
+ =?utf-8?B?QloxM0p0dVBZRDhqMGtOTnNWNTRYSjF1V2E5V284ZzFqb0N0b1hwRUJWUldl?=
+ =?utf-8?B?NHFvYzdlOUFzVlJtSmNRd1ZsK3gvbGxRUlAxTFhzUGczZVpjTDlUcis5MXFF?=
+ =?utf-8?B?clFqT2k1Z2JDVW12OGpKMW54aTlMaDBsQW1yVEw0WVNDcllsMmlhdnJzWHdk?=
+ =?utf-8?B?Z0d4OWZreW9VUlRvaHYxbTZIS3hpS0pFNm93Y01kOENVWVpsY1BJcWdLZ2R6?=
+ =?utf-8?B?ZkRtWUtXTHRTTkgyVHpKN2NrdERoeWFONGJ6eVNnSUpYTWp0ZWhmVkxpcGkv?=
+ =?utf-8?B?My9xb3Y1R1d5MXdhajY5Nyt1RktlbGlONnJCNTM3ZFh0Zk9WTTFqSnRObFMx?=
+ =?utf-8?B?RUhQOEtaazg3YnQxcGFRMjN2a3NiWXowZnhrUnRuN2ZqZHBnVVUxUDl6WkNy?=
+ =?utf-8?B?SVEwSmw0TFNMN3Mrc1JVYmpnN09QNGoyMDBHaTk1Nm9GTTJzU3c3MGtzRmhM?=
+ =?utf-8?B?L2diTE1Vc0h4TUR1RzErY1ZJSTlRZG13VFVlUDk3Nno0VXE3dFVLc3ZreCtV?=
+ =?utf-8?B?ZXIwTW9vM2g1bDNpMkV5dU42KzI0aDJYbWNSZU9OWXNKaEtUVGt3VC9VMmFj?=
+ =?utf-8?B?bitZdnp6STR5YWI0WGZDMlJtbWxWSndyRXF6d0YyK3A3eG91Y1FDT1ZMbGtF?=
+ =?utf-8?B?RHVrOFN4Y2ZIeDhpakFmSzZLaGdJNGNXQTQ1aDR6VThaSXVvNXl0dnc1aSt5?=
+ =?utf-8?B?NjRYeFFrVit3czVGMDc4SGliMzJmWTdFNGYxcW5INTZucGZBWFgxNVJuREcy?=
+ =?utf-8?B?ZEsyZm5oKzl3d2V2NkR6My9tRkpEOEtXOFdjVURLUHlCYkVXVUxZdENqWis2?=
+ =?utf-8?B?N01hNE9uYnZUaUJ4Wk5seDJqOHNjaEwyb1dBNDZVYUxENUEvcE5PWUVmUzRi?=
+ =?utf-8?B?QWJxTmgxSXJMTlBQeWJzWmx4cTlDS1J1R0dZQmJ2Z1NzdVg1dGhDN1p5OUs1?=
+ =?utf-8?B?cEYwRWJNNHlXY2dxRnVIT2UybkhGTDgxWE15dlJFaGpUUVN6KzBKNE50S3Vq?=
+ =?utf-8?B?MnRrTnFMSVZUbTB1czBSd0kwa0ZMZUl5eE9PMWNzU1pVRFZ6ZVNSbU93dVVD?=
+ =?utf-8?B?OVkycWhrb0h4aUMyblJkT21uTGkxVzdDdkkxYXdUQ29FSko0K2pOOU4vRWMr?=
+ =?utf-8?B?UkxUajlvcnJ3Z09TZHE2WWcvNGFXcG8rVFBjRzErK1FydHRWNE9Gd3hKbFlm?=
+ =?utf-8?B?RWxQVjRBSExUeTJYS3VHVVBTRElXSGhPS2EwNVFBaHhvdXpwMFFtYk94cEM2?=
+ =?utf-8?B?NjJqeGJOWDUza3BzbDNsSW40NUI3MFlsVlB1RWhTT2ZFVVpnSFJId1F6a2xk?=
+ =?utf-8?B?azNDN3p4NTJqMGlmY3NEQ0ZyZXdlcTdzUk9DWXpGWE5CUUhTRHNneDZKSWt0?=
+ =?utf-8?B?WU40S2hWS1ZuZHZMb2lDdjVhbGszb2FXOUc3S2RGS0lXdkRoOHp3Q3B2QmJP?=
+ =?utf-8?B?a1RjT2lRcU0yUHg2RnlxRXplVG9YbVpOajlUV1hYTWVRUk9HbmUyT0lMSE1T?=
+ =?utf-8?B?NWxWMXRJd0M1SDdzejUwYXZnYnA2cDVjRG4wdE5zbE5GU3RxVy9hNUVJQ0Ux?=
+ =?utf-8?B?b3ZiK08zUkdSZm05RGpsY0Z4ZjgxaTFQOGdaTDZvUzloVFhtTWhXTUVVR2xz?=
+ =?utf-8?B?WmRGbkhya1BHWTczNVF5UFJib3FPWWJMNnAxWTd0RmhIc1ByVmJWSUlUQklX?=
+ =?utf-8?B?Z1Q3NEVaVnBwWTFxMy9Wc3Z4YTNnY2JyZnc1akgzTHFzbkpVMm52ZlNra0F0?=
+ =?utf-8?B?RHkraEdsNEpzOTA1QUhvTW1pWm42dldOLzMzMlZTelY1RVQ4MTRKK3RJcXA1?=
+ =?utf-8?B?TXhsZjZwNndYY2thOC9Ja05Ob2JUMGRQbERoYyt5S0JqUHc4QllnQUJqOVFB?=
+ =?utf-8?B?MElMRkhFVGpOYlJOOTJ2VVp1aElxS3g2cVNxeDZ1NjNSRS9lK3lCVDhxUU85?=
+ =?utf-8?B?NTI5MmxtYUlZWFdQa1pLV29vWHdGalFyT1BwQnloaWNpVGluMEUxSE96ZFhN?=
+ =?utf-8?B?NVRMWDBpM0M0cGlTQ1Zjd3g3d21XdG5MQ1Mwa2pYdTNjRWRwMTEwOHR2cjZM?=
+ =?utf-8?B?eXorQzIrRmlqZU16cXF3N3BKaWEzb1RTd1cwc3diZ0xka0x4S1FtMlRPUDNu?=
+ =?utf-8?B?ZDlLVGMwek95d3F4RTQ1dERORUR6aUN6dXhaWlNEbUs1ZHZtYWlRcUViOFpQ?=
+ =?utf-8?B?OEhPcFU5Ny92cDFpakJRdW5KcGNxNDI4UDVGK0pseFRDQmozSUw3bFhuaWtH?=
+ =?utf-8?B?VXBOVlBsaS9RSHNoamlaZC94MTlvdGdBa2JJTURTUzZYSDJlbzB3ZlQ1alpw?=
+ =?utf-8?Q?DlAgIMKHj0u6nhR/eAAIrE26M7yebCzzh/1CiYzx8S9YF?=
+X-MS-Exchange-AntiSpam-MessageData-1: ToOyJNpllMxSxSDVR3p0CK7xYB9N6Eka3UCk3ekNXtAF8Y86EvN/tUPg
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 203d80cd-9dfd-4e9e-6619-08da47bc5a2d
+X-MS-Exchange-CrossTenant-AuthSource: AM4PR0802MB2131.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 12:59:12.0101
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iW3rPy3SifX0yIG29WBqftT5lc4wqm1mn7cOOI7eYI8xKcjr+7D4buX9xpSopwn+qZRrRJl8PShbP4RiNDMcWBn5OmjM23eD5p99cTHjWCo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB7318
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,64 +139,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cristian,
 
---g37Y/w1vok8Y1ZFx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/23/22 19:15, Cristian Marussi wrote:
+> Even though malformed replies from firmware must be treated carefully to
+> avoid memory corruption Kernel side, some out-of-spec SCMI replies can
+> be tolerated to avoid breaking existing deployed system, as long as they
+> won't cause memory issues.
+> 
+> Reported-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> Cc: Etienne Carriere <etienne.carriere@linaro.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 
-On Mon, Jun 06, 2022 at 02:54:21PM +0200, Krzysztof Kozlowski wrote:
-> On 06/06/2022 14:35, Jonathan Neusch=C3=A4fer wrote:
-> > Without these, /chosen/stdout-path =3D "serial0:115200n8", as done in
-> > nuvoton-wpcm450-supermicro-x9sci-ln4f.dts, does not work.
-> >=20
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-> >=20
-> > v2:
-> > - mention WPCM450 in the summary
-> > ---
-> >  arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts=
-/nuvoton-wpcm450.dtsi
-> > index 93595850a4c3c..57943bf5aa4a9 100644
-> > --- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-> > +++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-> > @@ -17,6 +17,8 @@ aliases {
-> >  		gpio5 =3D &gpio5;
-> >  		gpio6 =3D &gpio6;
-> >  		gpio7 =3D &gpio7;
-> > +		serial0 =3D &serial0;
-> > +		serial1 =3D &serial1;
->=20
-> Serial aliases might be wired differently per board, so this should go
-> to board DTS instead.
+Thanks a lot, without this fix the Mali G52 GPU won't probe on my RK3568
+EVB1 in vanilla v5.19-rc1.
 
-Ok, I'll do that.
+I guess this patch should have a Fixes: tag, right?
 
+Would be great to have this in v5.19. AFAIC:
 
-Jonathan
+Acked-by: Michael Riesch <michael.riesch@wolfvision.net>
 
---g37Y/w1vok8Y1ZFx
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+Michael
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKd+ZAACgkQCDBEmo7z
-X9uCPA/+OwujkFECqueUAvo5d+T/SBa+2E3zrOPtWQint1Jmz4N5+AJJuAmEPbht
-/Wwdh3ib1NCjGAcGEPxXVoGkzU0DIlx0huUEN6KdcmrZLoaVazZeONR7b6B9wVF2
-cVrQ2Lw1+CIYcxET9D0UWwKYiT+vnTslTzo7SBC7fEt8sQkMp3opGyouS11Kpx+r
-1ngwBGZSooz6RFG7pt0+8Cssd44gn7X6pvHD1kOJNfIdY7HdtiRmrVMDXg3Kt+VL
-+/rhNxNVhnN3L41KjXdf/BjbtP7TfQPXpADWXa5Oir/X7InbOkirv/GUJPCZZBvr
-Rrt1fflFPFa977jtTJI5kiORjnfmdh3stTuszgYlZbQMJqkHlzOgfiKVNi/gEGjS
-cPU/JWD8MDierIjwmFvavJQsraZBTpNWruJ7GlbZDRqFEYE9cCzB9Y3ySgp11eMk
-ip1h0rMhsGfFnjthW+JMWs6if1+3wYs/tMlr0Dni5IuKON7iiqbTylr2fot3ZFNe
-4qi4QuI3ZL8cXR1TUhja/StmaWOAEsUeVI+bT+ZMG/XeCp4nsMaIq26TPfIdIIcE
-wz8NlKIDcoDbmnv65xktvEdHkJyF/YIX5LwYPmeZlEIKPLSDFI8F75uIjMymoVpK
-ruej0z4rPRt+kvXNQ4s1J0uc6Xg322TW1YHUsjkMrFd9ekn5rFQ=
-=Nv4x
------END PGP SIGNATURE-----
-
---g37Y/w1vok8Y1ZFx--
+> ---
+>  drivers/firmware/arm_scmi/base.c | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
+> index 20fba7370f4e..d0ac96da1ddf 100644
+> --- a/drivers/firmware/arm_scmi/base.c
+> +++ b/drivers/firmware/arm_scmi/base.c
+> @@ -221,11 +221,17 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
+>  		calc_list_sz = (1 + (loop_num_ret - 1) / sizeof(u32)) *
+>  				sizeof(u32);
+>  		if (calc_list_sz != real_list_sz) {
+> -			dev_err(dev,
+> -				"Malformed reply - real_sz:%zd  calc_sz:%u\n",
+> -				real_list_sz, calc_list_sz);
+> -			ret = -EPROTO;
+> -			break;
+> +			dev_warn(dev,
+> +				 "Malformed reply - real_sz:%zd  calc_sz:%u  (loop_num_ret:%d)\n",
+> +				 real_list_sz, calc_list_sz, loop_num_ret);
+> +			/*
+> +			 * Bail out if the expected list size is bigger than the
+> +			 * total payload size of the received reply.
+> +			 */
+> +			if (calc_list_sz > real_list_sz) {
+> +				ret = -EPROTO;
+> +				break;
+> +			}
+>  		}
+>  
+>  		for (loop = 0; loop < loop_num_ret; loop++)

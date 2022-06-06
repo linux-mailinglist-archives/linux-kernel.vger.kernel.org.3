@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB6453DFD5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2EC53DFD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352233AbiFFCtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S1349195AbiFFCwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbiFFCtx (ORCPT
+        with ESMTP id S232695AbiFFCwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:49:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4D511452
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654483792; x=1686019792;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=p29TgaZG9mtSmtjL1acqW5VnhwVAVC4lrQZFNN9yRKs=;
-  b=JytA87ZAOYZL08CF3zwZXlXAikjOAlyQAk2lqP9yRXkiX0R3xKGhaWv6
-   3Z5lEHglHewncqP88zQOe5lmmAQL4XWiqHq/m8uTAkenJgqdk1XHxDxj5
-   qD0FTYAH/OnAm7aUCkPrOmxVR5mB34pJcdrjnplYnHbFXj0H1QrpPKHf3
-   VaHWmeH+JG4j+Av5mPQSwMPX5JwvfTSasEVNjJm4cHy4hN13frPMr3cp+
-   Fk+EjjoB7AbQkZsMvkue+vbOU/yuZ/2kEBAInVn4Hg0LANGicgpMIXs5z
-   dmt5tClLqTzheI1OXcOAFx3ZQ+BMu/Czr3GQdWijw0ODa42gixEaUPlet
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276654410"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="276654410"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 19:49:52 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635363523"
-Received: from xingguom-mobl.ccr.corp.intel.com ([10.254.213.116])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 19:49:47 -0700
-Message-ID: <aeced91ea9d9396e9842f5c0264391aabd291726.camel@intel.com>
-Subject: Re: [RFC PATCH v4 1/7] mm/demotion: Add support for explicit memory
- tiers
-From:   Ying Huang <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Date:   Mon, 06 Jun 2022 10:49:44 +0800
-In-Reply-To: <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
-         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
-         <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
-         <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
+        Sun, 5 Jun 2022 22:52:09 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87630B2F;
+        Sun,  5 Jun 2022 19:52:02 -0700 (PDT)
+X-UUID: 22f519b0d8684bd48f0b24d3fe1e0c55-20220606
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:373d1128-b6ba-4757-9a25-544eeb922b03,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:78ed3e7e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 22f519b0d8684bd48f0b24d3fe1e0c55-20220606
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 864540654; Mon, 06 Jun 2022 10:51:57 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 6 Jun 2022 10:51:56 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 6 Jun 2022 10:51:56 +0800
+Message-ID: <fa71cdebe09b7939bccc3b4b4f40d62afdb09158.camel@mediatek.com>
+Subject: Re: [PATCH v1] dt-bindings: dsp: mediatek: add mt8186 dsp document
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 6 Jun 2022 10:51:56 +0800
+In-Reply-To: <2c610d82-65bf-60c8-05f3-434eaa1cfc8b@linaro.org>
+References: <20220422071534.15653-1-tinghan.shen@mediatek.com>
+         <c0a188e5-8a8c-d4a3-5a3d-9b9dd85d8f44@linaro.org>
+         <eb4deff1a01c09783518bbaff8fe4e4c4ca6fa5b.camel@mediatek.com>
+         <591767ee-e349-7a17-a9e9-b95d0500c7c1@linaro.org>
+         <774c075ca4ad815c88be755cfb51889a171e835d.camel@mediatek.com>
+         <9e3f5586-59fa-42cc-770c-b8694b4f2bf3@linaro.org>
+         <a1140bd47cbd68436d0b9e147c2d6d6327ac092e.camel@mediatek.com>
+         <2c610d82-65bf-60c8-05f3-434eaa1cfc8b@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,82 +71,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-06-02 at 14:07 +0800, Ying Huang wrote:
-> On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
-> > From: Jagdish Gediya <jvgediya@linux.ibm.com>
+Hi Krzysztof,
+
+On Thu, 2022-06-02 at 14:26 +0200, Krzysztof Kozlowski wrote:
+> On 02/06/2022 13:53, Tinghan Shen wrote:
+> > Hi Krzysztof,
 > > 
-> > In the current kernel, memory tiers are defined implicitly via a
-> > demotion path relationship between NUMA nodes, which is created
-> > during the kernel initialization and updated when a NUMA node is
-> > hot-added or hot-removed.  The current implementation puts all
-> > nodes with CPU into the top tier, and builds the tier hierarchy
-> > tier-by-tier by establishing the per-node demotion targets based
-> > on the distances between nodes.
+> > On Thu, 2022-06-02 at 12:45 +0200, Krzysztof Kozlowski wrote:
+> > > On 02/06/2022 12:19, Tinghan Shen wrote:
+> > > > Hi Krzysztof,
+> > > > 
+> > > > On Thu, 2022-06-02 at 09:40 +0200, Krzysztof Kozlowski wrote:
+> > > > > On 02/06/2022 08:44, Tinghan Shen wrote:
+> > > > > > > > +  mbox-names:
+> > > > > > > > +    items:
+> > > > > > > > +      - const: mbox0
+> > > > > > > > +      - const: mbox1
+> > > > > > > 
+> > > > > > > These should be rather some meaningful names, e.g. "rx" and "tx".
+> > > > > > 
+> > > > > > The mbox name has to align with the adsp ipc driver.
+> > > > > > The adsp ipc driver is using 'mbox%d' for mailbox channels.
+> > > > > > 
+> > > > > > 
+> > > > > > 
+> > > > 
+> > > > 
 > > 
-> > This current memory tier kernel interface needs to be improved for
-> > several important use cases,
 > > 
-> > The current tier initialization code always initializes
-> > each memory-only NUMA node into a lower tier.  But a memory-only
-> > NUMA node may have a high performance memory device (e.g. a DRAM
-> > device attached via CXL.mem or a DRAM-backed memory-only node on
-> > a virtual machine) and should be put into a higher tier.
+https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git/commit/?id=9db69df4bdd37eb1f65b6931ee067fb15b9a4d5c__;!!CTRNKA9wMg0ARbw!1TmempNkQhC5QuLBhyfWo_AC97MoLuWipsGV-LPaW9RKNPheU7Bgc-eboNi1JA1nC5I$
+> > > > > >  
+> > > > > > 
+> > > > > > 	chan_name = kasprintf(GFP_KERNEL, "mbox%d", i);
+> > > > > > 
+> > > > > > 	/* ...snip... */
+> > > > > > 
+> > > > > > 	adsp_chan->ch = mbox_request_channel_byname(cl, chan_name);
+> > > > > > 
+> > > > > > Is it ok to continue using these names?
+> > > > > 
+> > > > > It is a bit confusing... how did that driver got merged recently without
+> > > > > bindings? Why bindings are separate?
+> > > > > 
+> > > > > The bindings always come together in one patchset with the driver
+> > > > > implementing them. Bindings are though a separate patch, yet still
+> > > > > followed by the driver which uses them.
+> > > > > 
+> > > > > I do not see any compatibles in that driver, which suggests there is no
+> > > > > other binding using it. If that's correct, then you need to change the
+> > > > > driver.
+> > > > > 
+> > > > 
+> > > > The mtk-adsp-ipc driver's sole function is to encapsulate the operations 
+> > > > of mailbox framework from adsp ipc users. The mtk-adsp-ipc is not defined 
+> > > > in the dts file and we don't need it to be defined. The creation of mtk-adsp-ipc 
+> > > > device is requested by adsp ipc users via the use of 'platform_device_register_data'[1].
+> > > > 
+> > > > the driver implemented the mailbox framework is 'mtk-adsp-mailbox'[2]. it has 
+> > > > corresponding hardwares and a yaml file[3] to describe it.
+> > > 
+> > > I don't understand how is this related. We talk here about the
+> > > mbox-names for this bindings file. You replied, that these bindings are
+> > > already used by something, but now you say that they are not? So why do
+> > > you need to change anything in any driver?
+> > > 
+> > > Simple question - do the bindings here "add mt8186 dsp document" are
+> > > used by any specific Linux driver already?
 > > 
-> > The current tier hierarchy always puts CPU nodes into the top
-> > tier. But on a system with HBM or GPU devices, the
-> > memory-only NUMA nodes mapping these devices should be in the
-> > top tier, and DRAM nodes with CPUs are better to be placed into the
-> > next lower tier.
+> > This bindings, 'add mt8186 dsp document', are used by the SOF sound driver of MT8186[1]. 
 > > 
-> > With current kernel higher tier node can only be demoted to selected nodes on the
-> > next lower tier as defined by the demotion path, not any other
-> > node from any lower tier.  This strict, hard-coded demotion order
-> > does not work in all use cases (e.g. some use cases may want to
-> > allow cross-socket demotion to another node in the same demotion
-> > tier as a fallback when the preferred demotion node is out of
-> > space), This demotion order is also inconsistent with the page
-> > allocation fallback order when all the nodes in a higher tier are
-> > out of space: The page allocation can fall back to any node from
-> > any lower tier, whereas the demotion order doesn't allow that.
-> > 
-> > The current kernel also don't provide any interfaces for the
-> > userspace to learn about the memory tier hierarchy in order to
-> > optimize its memory allocations.
-> > 
-> > This patch series address the above by defining memory tiers explicitly.
-> > 
-> > This patch adds below sysfs interface which is read-only and
-> > can be used to read nodes available in specific tier.
-> > 
-> > /sys/devices/system/memtier/memtierN/nodelist
-> > 
-> > Tier 0 is the highest tier, while tier MAX_MEMORY_TIERS - 1 is the
-> > lowest tier. The absolute value of a tier id number has no specific
-> > meaning. what matters is the relative order of the tier id numbers.
-> > 
-> > All the tiered memory code is guarded by CONFIG_TIERED_MEMORY.
-> > Default number of memory tiers are MAX_MEMORY_TIERS(3). All the
-> > nodes are by default assigned to DEFAULT_MEMORY_TIER(1).
-> > 
-> > Default memory tier can be read from,
-> > /sys/devices/system/memtier/default_tier
-> > 
-> > Max memory tier can be read from,
-> > /sys/devices/system/memtier/max_tiers
-> > 
-> > This patch implements the RFC spec sent by Wei Xu <weixugc@google.com> at [1].
-> > 
-> > [1] https://lore.kernel.org/linux-mm/CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com/
-> > 
-> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
-> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> > I'm sorry for miss leading you in previous reply. I was thought that you're 
+> > asking why the mtk-adsp-ipc driver got merged without bindings. So, I tried 
+> > to explain why mtk-adsp-ipc doesn't have bindings.
 > 
-> IMHO, we should change the kernel internal implementation firstly, then
-> implement the kerne/user space interface.  That is, make memory tier
-> explicit inside kernel, then expose it to user space.
+> Then my question is kind of still valid:
+> How did "mt8186 SOF" driver got merged recently without bindings? Why
+> bindings are separate?
+> 
+> You cannot just sneak in usage of bindings in a driver, then submit
+> bindings and say "we already have an user!". No, the bindings come with
+> the driver. Always.
+> 
+> Linked patch [1] brings undocumented compatible mediatek,mt8186-dsp, so
+> you should see big fat warning when running checkpatch. So this points
+> that you did not run checkpatch which is another not acceptable
+> submission. :(
+> 
+> [1]
+> https://lore.kernel.org/all/20220422055659.8738-2-tinghan.shen@mediatek.com/
+> 
 
-Why ignore this comment for v5?  If you don't agree, please respond me.
+I apologize for breaking the rules and sending inappropriate patches.
 
-Best Regards,
-Huang, Ying
+I was thought that it was acceptable to send community reviewed patches in a series, 
+then followed the bindings at another patch. I was believed that separating un-reviewed
+binding patch from reviewed driver patches would aid in patch acceptance.
+Now, I see I make a big mistake. I'm sorry.
+
+Best regards,
+TingHan
+
+
+
 

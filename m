@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB78053E7A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07F853EA28
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiFFKJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
+        id S233436AbiFFKJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiFFKGe (ORCPT
+        with ESMTP id S233572AbiFFKGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:06:34 -0400
+        Mon, 6 Jun 2022 06:06:37 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625FE144786;
-        Mon,  6 Jun 2022 03:06:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5AE144FC7;
+        Mon,  6 Jun 2022 03:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654509989; x=1686045989;
+  t=1654509992; x=1686045992;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nkqgtQAboZnM/AAFg9v2/5Z9Uxqx4JM1lubOKwYAy7M=;
-  b=i80R34XwgvxyfzxgBQTku+Ba0lnu1S+6XBt8i08ZEyucHIKBN8+AY3z2
-   MhzKmzfKbvCGlxhjE4YyyBEukbJ17r2qnTfn7UGMq9n7M1RHZ3VnAlkZM
-   AFPX4CHvps6a11RbsWs8T7i73A44KjxDbiy/Ahr7pgUi7F0VSv8STYdzT
-   DiuAkgp/+MjwryMZm+hkYOQACBXri5ZCESYOH+lzLgG6HjMygoWqZe9wN
-   euDF6X7OqUTMYV7X9LsHa25dM7xc7qJjv/SJLfKHw9ySitlfzGLruruKr
-   KucFwOJ8QoNk9WOu4IErfYZrBDvMh2TqdOEFRVW1q0G37VvXEs2PS8nBa
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987093"
+  bh=oll5KaEkDpEpL5et566YY0PuRsrie8otuYYJ8R196ro=;
+  b=QGIhEVFgkBXsxjRSBVk4PB1KuCJn6rrEfXH3rDAUde8dCZ7niZzZQIO5
+   if5nPpvC9DHlNp6ShudiXunKabH2z69vDUiykp8Il7qlSrle/e1ru4YqO
+   qOJkbQl0stO7mNaEsQmRtzstq7mPaU0j48/ecNeRCiH6HCumbRVx04JL8
+   EK999bmNLwP1xejBMiQhrJmoAXeXw5bvK95bY+/N5t7EJSKi3anRG4oSf
+   G/W8hDS+v6AbM5vZ2DhMivfzuLHA1h9qhYcaLwQJEAGBonRIVc44yDg3h
+   9qemJimvSJ+Oa4UfvbC2Eo9Tg5I9Nqgw8svgguGw1w//ACWx+K32PlYy2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987095"
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="362987093"
+   d="scan'208";a="362987095"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:29 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:31 -0700
 X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="635523908"
+   d="scan'208";a="635523918"
 Received: from amkossek-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.57.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:27 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:06:30 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 33/36] serial: 8250_exar: Remove serial_rs485 assignment
-Date:   Mon,  6 Jun 2022 13:04:30 +0300
-Message-Id: <20220606100433.13793-34-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 34/36] serial: mcf: Remove serial_rs485 assignment
+Date:   Mon,  6 Jun 2022 13:04:31 +0300
+Message-Id: <20220606100433.13793-35-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
 References: <20220606100433.13793-1-ilpo.jarvinen@linux.intel.com>
@@ -64,22 +64,21 @@ Serial core handles serial_rs485 assignment.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/8250/8250_exar.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/tty/serial/mcf.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
-index 11916f603a3d..528779b40049 100644
---- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -427,8 +427,6 @@ static int generic_rs485_config(struct uart_port *port,
- 	if (is_rs485)
- 		writeb(UART_EXAR_RS485_DLY(4), p + UART_MSR);
- 
+diff --git a/drivers/tty/serial/mcf.c b/drivers/tty/serial/mcf.c
+index 655255e0c76a..036f178e3d66 100644
+--- a/drivers/tty/serial/mcf.c
++++ b/drivers/tty/serial/mcf.c
+@@ -448,7 +448,6 @@ static int mcf_config_rs485(struct uart_port *port, struct serial_rs485 *rs485)
+ 	}
+ 	writeb(mr1, port->membase + MCFUART_UMR);
+ 	writeb(mr2, port->membase + MCFUART_UMR);
 -	port->rs485 = *rs485;
--
+ 
  	return 0;
  }
- 
 -- 
 2.30.2
 

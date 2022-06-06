@@ -2,306 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0087C53EF88
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C106C53EEF4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiFFUXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S232539AbiFFT4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbiFFUXn (ORCPT
+        with ESMTP id S233011AbiFFT4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:23:43 -0400
-X-Greylist: delayed 1274 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 13:22:58 PDT
-Received: from neon-v2.ccupm.upm.es (neon-v2.ccupm.upm.es [138.100.198.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FE34BBA0;
-        Mon,  6 Jun 2022 13:22:57 -0700 (PDT)
-Received: from localhost (82-69-11-11.dsl.in-addr.zen.co.uk [82.69.11.11])
-        (user=adrianml@alumnos.upm.es mech=PLAIN bits=0)
-        by neon-v2.ccupm.upm.es (8.15.2/8.15.2/neon-v2-001) with ESMTPSA id 256JsxWg016779
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Jun 2022 19:55:00 GMT
-Date:   Mon, 6 Jun 2022 20:54:55 +0100
-From:   Adrian Larumbe <adrianml@alumnos.upm.es>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, michal.simek@xilinx.com,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] dmaengine: remove DMA_MEMCPY_SG once again
-Message-ID: <20220606195455.qmq3yu6mc6g4rmm2@sobremesa>
-References: <20220606074733.622616-1-hch@lst.de>
- <Yp4/JW4P12s4siRz@matsya>
+        Mon, 6 Jun 2022 15:56:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B7FE64F4;
+        Mon,  6 Jun 2022 12:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654545368; x=1686081368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rvMXoxpRuDnCE4wJwCq4WiYxb2zBU8ejJRlWm/twmeE=;
+  b=jd9GyOfxiBU8mylYThX3R9mwi6jyaI+SrAk/ZQVfOqSjA3QT2d4FRCoc
+   Ta6ceGHNtzCzptZ7jWo44lHsFez7afa+tjaHNHUDEJFFTe8fJmUIsFP/K
+   6TgMoqWz6Bk7li4rosMmOuU0fFW5OfIFY6BXWF35dqb5P87jPrt5040yY
+   veREIdydcyHC73exzd59v975GnlYPC7+pQcu66c+ZsYA3MalWBoICV/BL
+   NCweXZVO7nQLgmHonm9InC7u7s+UHOLBBjyronKediUkvvTbK9YTxzbDZ
+   JSbFaaKMD0vA6tUOK3FDJCEJTDwtstiEwHGd886TYsldegJxDCaoqv4O2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="259170509"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="259170509"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 12:56:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="826009834"
+Received: from sarojkum-mobl.amr.corp.intel.com (HELO localhost) ([10.212.220.176])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 12:56:06 -0700
+Date:   Mon, 6 Jun 2022 12:56:05 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V8 03/10] PCI: Create PCI library functions in support of
+ DOE mailboxes.
+Message-ID: <Yp5b1TSxw28hCZ+z@iweiny-desk3>
+References: <20220414203237.2198665-1-ira.weiny@intel.com>
+ <20220414203237.2198665-4-ira.weiny@intel.com>
+ <20220530190657.GA14765@wunner.de>
+ <20220531113350.0000421e@Huawei.com>
+ <YpbWCYujYDEkMm1B@iweiny-desk3>
+ <20220601071808.GA19924@wunner.de>
+ <Ypee328j+l6ZdbUT@iweiny-desk3>
+ <20220606154646.00001663@Huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yp4/JW4P12s4siRz@matsya>
-X-BitDefender-Scanner: Clean, Agent: BitDefender Milter 3.1.7 on neon-v2.ccupm.upm.es, sigver: 7.92076
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220606154646.00001663@Huawei.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 06.06.2022 23:23, Vinod Koul wrote:
->On 06-06-22, 09:47, Christoph Hellwig wrote:
->> This was removed before due to the complete lack of users, but
->> 3218910fd585 ("dmaengine: Add core function and capability check for
->> DMA_MEMCPY_SG") and 29cf37fa6dd9 ("dmaengine: Add consumer for the new
->> DMA_MEMCPY_SG API function.") added it back despite still not having
->> any users whatsoever.
->> 
->> Fixes: 3218910fd585 ("dmaengine: Add core function and capability check for DMA_MEMCPY_SG")
->> Fixes: 29cf37fa6dd9 ("dmaengine: Add consumer for the new DMA_MEMCPY_SG API function.")
->
->This is consumer of the driver API and it was bought back with the
->premise that user will also come...
+On Mon, Jun 06, 2022 at 03:46:46PM +0100, Jonathan Cameron wrote:
+> On Wed, 1 Jun 2022 10:16:15 -0700
+> Ira Weiny <ira.weiny@intel.com> wrote:
+> 
+> > On Wed, Jun 01, 2022 at 09:18:08AM +0200, Lukas Wunner wrote:
+> > > On Tue, May 31, 2022 at 07:59:21PM -0700, Ira Weiny wrote:  
+> > > > On Tue, May 31, 2022 at 11:33:50AM +0100, Jonathan Cameron wrote:  
+> > > > > On Mon, 30 May 2022 21:06:57 +0200 Lukas Wunner <lukas@wunner.de> wrote:  
+> > > > > > On Thu, Apr 14, 2022 at 01:32:30PM -0700, ira.weiny@intel.com wrote:  
+> > 
+> > > 
+> > >   
+> > > > > > > +static irqreturn_t pci_doe_irq_handler(int irq, void *data)
+> > > > > > > +{
+> > > > > > > +	struct pci_doe_mb *doe_mb = data;
+> > > > > > > +	struct pci_dev *pdev = doe_mb->pdev;
+> > > > > > > +	int offset = doe_mb->cap_offset;
+> > > > > > > +	u32 val;
+> > > > > > > +
+> > > > > > > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
+> > > > > > > +
+> > > > > > > +	/* Leave the error case to be handled outside IRQ */
+> > > > > > > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
+> > > > > > > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
+> > > > > > > +		return IRQ_HANDLED;
+> > > > > > > +	}
+> > > > > > > +
+> > > > > > > +	if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
+> > > > > > > +		pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
+> > > > > > > +					PCI_DOE_STATUS_INT_STATUS);
+> > > > > > > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
+> > > > > > > +		return IRQ_HANDLED;
+> > > > > > > +	}
+> > > > > > > +
+> > > > > > > +	return IRQ_NONE;
+> > > > > > > +}    
+> > > > > > 
+> > > > > > PCIe 6.0, table 7-316 says that an interrupt is also raised when
+> > > > > > "the DOE Busy bit has been Cleared", yet such an interrupt is
+> > > > > > not handled here.  It is incorrectly treated as a spurious
+> > > > > > interrupt by returning IRQ_NONE.  The right thing to do
+> > > > > > is probably to wake the state machine in case it's polling
+> > > > > > for the Busy flag to clear.  
+> > > > > 
+> > > > > Ah. I remember testing this via a lot of hacking on the QEMU code
+> > > > > to inject the various races that can occur (it was really ugly to do).
+> > > > > 
+> > > > > Guess we lost the handling at some point.  I think your fix
+> > > > > is the right one.  
+> > > > 
+> > > > Perhaps I am missing something but digging into this more.  I disagree
+> > > > that the handler fails to handle this case.  If I read the spec correctly
+> > > > DOE Interrupt Status must be set when an interrupt is generated.
+> > > > The handler wakes the state machine in that case.  The state machine
+> > > > then checks for busy if there is work to be done.  
+> > > 
+> > > Right, I was mistaken, sorry for the noise.  
+> > 
+> > NP I'm not always following this either.
+> > 
+> > > 
+> > >   
+> > > > Normally we would not even need to check for status error.  But that is
+> > > > special cased because clearing that status is left to the state machine.  
+> > > 
+> > > That however looks wrong because the DOE Interrupt Status bit is never
+> > > cleared after a DOE Error is signaled.  The state machine performs an
+> > > explicit abort upon an error by setting the DOE Abort bit, but that
+> > > doesn't seem to clear DOE Interrupt Status:
+> > > 
+> > > Per section 6.30.2, "At any time, the system firmware/software is
+> > > permitted to set the DOE Abort bit in the DOE Control Register,
+> > > and the DOE instance must Clear the Data Object Ready bit,
+> > > if not already Clear, and Clear the DOE Error bit, if already Set,
+> > > in the DOE Status Register, within 1 second."  
+> > 
+> > I thought that meant the hardware (the DOE instance) must clear those bits
+> > within 1 second?
+> > 
+> > > 
+> > > No mention of the DOE Interrupt Status bit, so we cannot assume that
+> > > it's cleared by a DOE Abort and we must clear it explicitly.  
+> > 
+> > Oh...  yea.  Jonathan?  We discussed this before and I was convinced it worked
+> > but I think Lukas is correct here.
+> 
+> Hmm. I thought we were good as well, but Lukas is correct in saying
+> the interrupt status bit isn't cleared (which is 'novel' give the associated
+> bit to tell you what the interrupt means will be cleared). 
+> 
+> I'm not sure I want to think around the race conditions that result...
+> 
+> > 
+> > Should we drop the special case in pci_doe_irq_handler() and just clear the
+> > status always?  Or should we wait and clear it is pci_doe_abort_start?
+> 
+> I don't think it matters.  pci_doe_irq_handler() seems a little cleaner.
 
-It's commit 29cf37fa6dd9 ("dmaengine: Add consumer for the new DMA_MEMCPY_SG API function.")
+I agree and that is what V10 does.
 
-The two previous commits add the new driver API callback and document it.
+> 
+> I've not figured out completely if there are races however...
 
->Adrianm, Michal any reason why user is not mainline yet..?
+This is why I reworked the handling of cur_task in those error cases.
 
-Just double checked the mainline, and all three commits are there.
+> 
+> It is set when no already set and we get transitions of any of the following:
+> - DOE error bit set (this can't happen until abort so no race here)
+> 
+> - Data Object Ready bit is set: Can this happen with the DOE error set? I don't
+>   immediately see language saying it can't. However, I don't think it can
+>   for any of the challenge response protocols yet defined (and there are other
+>   problems if anyone wants to implement unsolicited messages)
+> 
+> - DOE busy bit has cleared - can definitely happen after an abort (which is
+>   fine as nothing to do anyway, so we'll handle a pointless interrupt).
+>   Could it in theory happen when error is set? I think not but only because
+>   of the statement  "Clear this bit when it is able to receive a new data
+>   object."
+> 
+> So I think we are fine doing it preabort,
 
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->> ---
->>  .../driver-api/dmaengine/provider.rst         |  10 --
->>  drivers/dma/dmaengine.c                       |   7 -
->>  drivers/dma/xilinx/xilinx_dma.c               | 122 ------------------
->>  include/linux/dmaengine.h                     |  20 ---
->>  4 files changed, 159 deletions(-)
->> 
->> diff --git a/Documentation/driver-api/dmaengine/provider.rst b/Documentation/driver-api/dmaengine/provider.rst
->> index 1e0f1f85d10e5..ceac2a300e328 100644
->> --- a/Documentation/driver-api/dmaengine/provider.rst
->> +++ b/Documentation/driver-api/dmaengine/provider.rst
->> @@ -162,16 +162,6 @@ Currently, the types available are:
->>  
->>    - The device is able to do memory to memory copies
->>  
->> -- - DMA_MEMCPY_SG
->> -
->> -  - The device supports memory to memory scatter-gather transfers.
->> -
->> -  - Even though a plain memcpy can look like a particular case of a
->> -    scatter-gather transfer, with a single chunk to copy, it's a distinct
->> -    transaction type in the mem2mem transfer case. This is because some very
->> -    simple devices might be able to do contiguous single-chunk memory copies,
->> -    but have no support for more complex SG transfers.
->> -
->>    - No matter what the overall size of the combined chunks for source and
->>      destination is, only as many bytes as the smallest of the two will be
->>      transmitted. That means the number and size of the scatter-gather buffers in
->> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
->> index e80feeea0e018..c741b6431958c 100644
->> --- a/drivers/dma/dmaengine.c
->> +++ b/drivers/dma/dmaengine.c
->> @@ -1153,13 +1153,6 @@ int dma_async_device_register(struct dma_device *device)
->>  		return -EIO;
->>  	}
->>  
->> -	if (dma_has_cap(DMA_MEMCPY_SG, device->cap_mask) && !device->device_prep_dma_memcpy_sg) {
->> -		dev_err(device->dev,
->> -			"Device claims capability %s, but op is not defined\n",
->> -			"DMA_MEMCPY_SG");
->> -		return -EIO;
->> -	}
->> -
->>  	if (dma_has_cap(DMA_XOR, device->cap_mask) && !device->device_prep_dma_xor) {
->>  		dev_err(device->dev,
->>  			"Device claims capability %s, but op is not defined\n",
->> diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
->> index cd62bbb50e8b4..6276934d4d2be 100644
->> --- a/drivers/dma/xilinx/xilinx_dma.c
->> +++ b/drivers/dma/xilinx/xilinx_dma.c
->> @@ -2127,126 +2127,6 @@ xilinx_cdma_prep_memcpy(struct dma_chan *dchan, dma_addr_t dma_dst,
->>  	return NULL;
->>  }
->>  
->> -/**
->> - * xilinx_cdma_prep_memcpy_sg - prepare descriptors for a memcpy_sg transaction
->> - * @dchan: DMA channel
->> - * @dst_sg: Destination scatter list
->> - * @dst_sg_len: Number of entries in destination scatter list
->> - * @src_sg: Source scatter list
->> - * @src_sg_len: Number of entries in source scatter list
->> - * @flags: transfer ack flags
->> - *
->> - * Return: Async transaction descriptor on success and NULL on failure
->> - */
->> -static struct dma_async_tx_descriptor *xilinx_cdma_prep_memcpy_sg(
->> -			struct dma_chan *dchan, struct scatterlist *dst_sg,
->> -			unsigned int dst_sg_len, struct scatterlist *src_sg,
->> -			unsigned int src_sg_len, unsigned long flags)
->> -{
->> -	struct xilinx_dma_chan *chan = to_xilinx_chan(dchan);
->> -	struct xilinx_dma_tx_descriptor *desc;
->> -	struct xilinx_cdma_tx_segment *segment, *prev = NULL;
->> -	struct xilinx_cdma_desc_hw *hw;
->> -	size_t len, dst_avail, src_avail;
->> -	dma_addr_t dma_dst, dma_src;
->> -
->> -	if (unlikely(dst_sg_len == 0 || src_sg_len == 0))
->> -		return NULL;
->> -
->> -	if (unlikely(!dst_sg  || !src_sg))
->> -		return NULL;
->> -
->> -	desc = xilinx_dma_alloc_tx_descriptor(chan);
->> -	if (!desc)
->> -		return NULL;
->> -
->> -	dma_async_tx_descriptor_init(&desc->async_tx, &chan->common);
->> -	desc->async_tx.tx_submit = xilinx_dma_tx_submit;
->> -
->> -	dst_avail = sg_dma_len(dst_sg);
->> -	src_avail = sg_dma_len(src_sg);
->> -	/*
->> -	 * loop until there is either no more source or no more destination
->> -	 * scatterlist entry
->> -	 */
->> -	while (true) {
->> -		len = min_t(size_t, src_avail, dst_avail);
->> -		len = min_t(size_t, len, chan->xdev->max_buffer_len);
->> -		if (len == 0)
->> -			goto fetch;
->> -
->> -		/* Allocate the link descriptor from DMA pool */
->> -		segment = xilinx_cdma_alloc_tx_segment(chan);
->> -		if (!segment)
->> -			goto error;
->> -
->> -		dma_dst = sg_dma_address(dst_sg) + sg_dma_len(dst_sg) -
->> -			dst_avail;
->> -		dma_src = sg_dma_address(src_sg) + sg_dma_len(src_sg) -
->> -			src_avail;
->> -		hw = &segment->hw;
->> -		hw->control = len;
->> -		hw->src_addr = dma_src;
->> -		hw->dest_addr = dma_dst;
->> -		if (chan->ext_addr) {
->> -			hw->src_addr_msb = upper_32_bits(dma_src);
->> -			hw->dest_addr_msb = upper_32_bits(dma_dst);
->> -		}
->> -
->> -		if (prev) {
->> -			prev->hw.next_desc = segment->phys;
->> -			if (chan->ext_addr)
->> -				prev->hw.next_desc_msb =
->> -					upper_32_bits(segment->phys);
->> -		}
->> -
->> -		prev = segment;
->> -		dst_avail -= len;
->> -		src_avail -= len;
->> -		list_add_tail(&segment->node, &desc->segments);
->> -
->> -fetch:
->> -		/* Fetch the next dst scatterlist entry */
->> -		if (dst_avail == 0) {
->> -			if (dst_sg_len == 0)
->> -				break;
->> -			dst_sg = sg_next(dst_sg);
->> -			if (dst_sg == NULL)
->> -				break;
->> -			dst_sg_len--;
->> -			dst_avail = sg_dma_len(dst_sg);
->> -		}
->> -		/* Fetch the next src scatterlist entry */
->> -		if (src_avail == 0) {
->> -			if (src_sg_len == 0)
->> -				break;
->> -			src_sg = sg_next(src_sg);
->> -			if (src_sg == NULL)
->> -				break;
->> -			src_sg_len--;
->> -			src_avail = sg_dma_len(src_sg);
->> -		}
->> -	}
->> -
->> -	if (list_empty(&desc->segments)) {
->> -		dev_err(chan->xdev->dev,
->> -			"%s: Zero-size SG transfer requested\n", __func__);
->> -		goto error;
->> -	}
->> -
->> -	/* Link the last hardware descriptor with the first. */
->> -	segment = list_first_entry(&desc->segments,
->> -				struct xilinx_cdma_tx_segment, node);
->> -	desc->async_tx.phys = segment->phys;
->> -	prev->hw.next_desc = segment->phys;
->> -
->> -	return &desc->async_tx;
->> -
->> -error:
->> -	xilinx_dma_free_tx_descriptor(chan, desc);
->> -	return NULL;
->> -}
->> -
->>  /**
->>   * xilinx_dma_prep_slave_sg - prepare descriptors for a DMA_SLAVE transaction
->>   * @dchan: DMA channel
->> @@ -3240,9 +3120,7 @@ static int xilinx_dma_probe(struct platform_device *pdev)
->>  					  DMA_RESIDUE_GRANULARITY_SEGMENT;
->>  	} else if (xdev->dma_config->dmatype == XDMA_TYPE_CDMA) {
->>  		dma_cap_set(DMA_MEMCPY, xdev->common.cap_mask);
->> -		dma_cap_set(DMA_MEMCPY_SG, xdev->common.cap_mask);
->>  		xdev->common.device_prep_dma_memcpy = xilinx_cdma_prep_memcpy;
->> -		xdev->common.device_prep_dma_memcpy_sg = xilinx_cdma_prep_memcpy_sg;
->>  		/* Residue calculation is supported by only AXI DMA and CDMA */
->>  		xdev->common.residue_granularity =
->>  					  DMA_RESIDUE_GRANULARITY_SEGMENT;
->> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
->> index b46b88e6aa0d1..c923f4e60f240 100644
->> --- a/include/linux/dmaengine.h
->> +++ b/include/linux/dmaengine.h
->> @@ -50,7 +50,6 @@ enum dma_status {
->>   */
->>  enum dma_transaction_type {
->>  	DMA_MEMCPY,
->> -	DMA_MEMCPY_SG,
->>  	DMA_XOR,
->>  	DMA_PQ,
->>  	DMA_XOR_VAL,
->> @@ -887,11 +886,6 @@ struct dma_device {
->>  	struct dma_async_tx_descriptor *(*device_prep_dma_memcpy)(
->>  		struct dma_chan *chan, dma_addr_t dst, dma_addr_t src,
->>  		size_t len, unsigned long flags);
->> -	struct dma_async_tx_descriptor *(*device_prep_dma_memcpy_sg)(
->> -		struct dma_chan *chan,
->> -		struct scatterlist *dst_sg, unsigned int dst_nents,
->> -		struct scatterlist *src_sg, unsigned int src_nents,
->> -		unsigned long flags);
->>  	struct dma_async_tx_descriptor *(*device_prep_dma_xor)(
->>  		struct dma_chan *chan, dma_addr_t dst, dma_addr_t *src,
->>  		unsigned int src_cnt, size_t len, unsigned long flags);
->> @@ -1060,20 +1054,6 @@ static inline struct dma_async_tx_descriptor *dmaengine_prep_dma_memcpy(
->>  						    len, flags);
->>  }
->>  
->> -static inline struct dma_async_tx_descriptor *dmaengine_prep_dma_memcpy_sg(
->> -		struct dma_chan *chan,
->> -		struct scatterlist *dst_sg, unsigned int dst_nents,
->> -		struct scatterlist *src_sg, unsigned int src_nents,
->> -		unsigned long flags)
->> -{
->> -	if (!chan || !chan->device || !chan->device->device_prep_dma_memcpy_sg)
->> -		return NULL;
->> -
->> -	return chan->device->device_prep_dma_memcpy_sg(chan, dst_sg, dst_nents,
->> -						       src_sg, src_nents,
->> -						       flags);
->> -}
->> -
->>  static inline bool dmaengine_is_metadata_mode_supported(struct dma_chan *chan,
->>  		enum dma_desc_metadata_mode mode)
->>  {
->> -- 
->> 2.30.2
->
->-- 
->~Vinod
+That is what I though for V10 especially after reworking the cur_task locking.
+An extra interrupt would either start processing the next task or return with
+nothing to do.
+
+> but wouldn't put it past a hardware
+> designer to find some path through that which results in a bonus interrupt
+> and potentially us resetting twice.
+> 
+> If we clear it at the end of abort instead, what happens?
+> Definitely no interrupts until we clear it. As we are doing query response
+> protocols only, no new data until state machine moves on, so fine there.
+> 
+> So what about just doing it unconditionally..
+> 
+> +	case DOE_WAIT_ABORT:
+> +	case DOE_WAIT_ABORT_ON_ERR:
+> +		pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
+> +
+> +		if (!FIELD_GET(PCI_DOE_STATUS_ERROR, val) &&
+> +		    !FIELD_GET(PCI_DOE_STATUS_BUSY, val)) {
+> 
+> 	here...
+> 
+> +			/* Back to normal state - carry on */
+> +			retire_cur_task(doe_mb);
+> 
+> This feels a little bit more 'standard' as we are allowing new interrupts
+> only after everything is back to a nice state.
+
+As I reworked the cur_task locking I really thought about locking cur_task
+throughout doe_statemachine_work().  It seems a lot safer for a lot of reasons.
+Doing so would make the extra work item no big deal.
+
+So I looked at this again because you got me worried.  If mod_delayed_work()
+can cause doe_statemachine_work() while another thread is in the middle of
+processing the interrupt there is a chance that signal_task_complete() is
+called a second time on a given task pointer.
+
+However, I _don't_ _think_ that can happen.  Because I don't think
+mod_delayed_work() can cause the work item to run while it is already running.
+
+So unless I misunderstand how mod_delayed_work() works we are guaranteed that
+the extra interrupt will see the correct mailbox state and do the right thing.
+
+Ira

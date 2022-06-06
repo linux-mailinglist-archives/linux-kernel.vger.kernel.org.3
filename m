@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82EE53ECE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6E653ECDF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiFFRSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 13:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        id S229828AbiFFRRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 13:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiFFRRI (ORCPT
+        with ESMTP id S229886AbiFFRRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Jun 2022 13:17:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C291CFE0D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:13:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA4E960F59
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 17:13:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6077DC34115
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 17:13:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654535582;
-        bh=x2ZepxeeIeY1f3G4Tpv3PLXujBrPC6tcAoQhFhDaFs0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ula5yoSKegOU7amcLkPQQRcPeOrzsp+FddfyhuaK+BUxtSJeaiBgkB/PJzbKqwUwu
-         HKFSETf7VlJaMek73K4/7sYqSwnHpiREfYTe1N09ljDc1XqN7smGASbxjeU6wUODVq
-         +PkYHuRef7102f9I2UbUEAWtfjD6fbzIeAuERw9/bWHetdrNDW+06Sk4z0C2KgcaYq
-         K/B2E12K17ZZdUyHQgJFq+iQ+yfy3kMJSLLJ8OO7/JyQ3U0b14/NNrUIKLT9uNSpGs
-         bw8haiYgww6Y1YPkUpRkJsbcUdV+POviyYq/Iq1bnJNPes8mS0F/3yOsu0sS73mi3U
-         lyCXkYFKqEoHQ==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f2e0a41009so19916664fac.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 10:13:02 -0700 (PDT)
-X-Gm-Message-State: AOAM5333ofNhxi42sih9dE6b3E2VAHbbm2O5JBmyiLlJt09jiSpSwzjS
-        7v2eicezOdxY6C6tesyq3NOq4CpQoLim0PV++eg=
-X-Google-Smtp-Source: ABdhPJzAlVFGSDorNCgpbzm7GeYWgSOBEMtTA3i62dskqex7sORsqhnqllqdGPInR71puUxdKGm8o15C9eLK0yXiK5g=
-X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
- v8-20020a05687105c800b000f33c1c126fmr13983694oan.126.1654535581552; Mon, 06
- Jun 2022 10:13:01 -0700 (PDT)
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B742A08;
+        Mon,  6 Jun 2022 10:13:04 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id a10so12866952ioe.9;
+        Mon, 06 Jun 2022 10:13:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T5YHzXRjPtC200vv9hoqJeGGEkRGnL+7w3QqiAQN+TM=;
+        b=r/PkSlzOFDleKY8iBXGdTPhHXApoXgdg5JBlVIhE9JCZqOA3nVMn5bhQ7AX5FvaMvX
+         w87CcWULq9WixwmB+eJ6v6tDbZPeI5WzQmQqAf/wTK673Gczw9EsxqlSFknErzm3jDx8
+         pYQQkJhAG8kNsWmW4ZO2sHCwplgwzSkMOZpz/6ZLjZyEjxrup9WKKqLSsWXe0PUTmBz4
+         UgrUFNoxUZQO0mxyTK3aMCffvga1/QOHa1BOMyGkdyjpmlCEfLodJmew0VdiuXpVjxOn
+         qVpgDLdjdCEsNadMDKySgHd2uBoiOfvvYy+VGNPVTJquMSO/OFz1Nm9JHqvdw+DrfCM3
+         +AkA==
+X-Gm-Message-State: AOAM5303xqbEP6sE0fa/vJIynT8LSbcr38r+i6qtLiFSY9yezld1Brr6
+        jatDvyjiEjWUDb8hi65qNA==
+X-Google-Smtp-Source: ABdhPJz2y+CCdx3q0SwKpY+tb7SzPRSL0+ZHCKWijihTGCxh7qxVlU0vcmJrL7FUNCRk3ErsgKwXEA==
+X-Received: by 2002:a5d:9a96:0:b0:669:50d6:815 with SMTP id c22-20020a5d9a96000000b0066950d60815mr3580524iom.110.1654535584095;
+        Mon, 06 Jun 2022 10:13:04 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id i41-20020a026029000000b0033155f242f0sm5810134jac.23.2022.06.06.10.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 10:13:03 -0700 (PDT)
+Received: (nullmailer pid 904364 invoked by uid 1000);
+        Mon, 06 Jun 2022 17:13:01 -0000
+Date:   Mon, 6 Jun 2022 12:13:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH 14/23] MAINTAINERS: update arm,hdlcd.yaml reference
+Message-ID: <20220606171301.GA899329-robh@kernel.org>
+References: <cover.1654529011.git.mchehab@kernel.org>
+ <714c3b6e10736d51268b9d71b97829a224b3bae1.1654529011.git.mchehab@kernel.org>
+ <20220606163401.13e5bea3@donnerap.cambridge.arm.com>
 MIME-Version: 1.0
-References: <20220606124858.384-1-thunder.leizhen@huawei.com> <CAMj1kXGCbCnV6FGTq2pBosqBTVv3B8WpNnOuiV0eSgvBMO-+8A@mail.gmail.com>
-In-Reply-To: <CAMj1kXGCbCnV6FGTq2pBosqBTVv3B8WpNnOuiV0eSgvBMO-+8A@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 6 Jun 2022 19:12:48 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEoL32qV_xKb9ueBoJFboif2hEC_2+m-4bD5BdDnaES9w@mail.gmail.com>
-Message-ID: <CAMj1kXEoL32qV_xKb9ueBoJFboif2hEC_2+m-4bD5BdDnaES9w@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Mark the FDT_FIXED sections as shareable
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606163401.13e5bea3@donnerap.cambridge.arm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,67 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Jun 2022 at 17:52, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> Hello Zhen Lei,
->
-> On Mon, 6 Jun 2022 at 14:49, Zhen Lei <thunder.leizhen@huawei.com> wrote:
-> >
-> > commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
-> > region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
-> > which contains fdt. But it only reserves the exact physical memory that
-> > fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
-> > speculative read access can bring the RAM content from non-fdt zone into
-> > cache, PIPT makes it to be hit by subsequently read access through
-> > shareable mapping(such as linear mapping), and the cache consistency
-> > between cores is lost due to non-shareable property.
-> >
-> > |<---------FDT_FIXED_SIZE------>|
-> > |                               |
-> >  -------------------------------
-> > | <non-fdt> | <fdt> | <non-fdt> |
-> >  -------------------------------
-> >
-> > 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
-> >    into the cache.
-> > 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
-> >    received the notification to invalid the corresponding cachelines, but
-> >    the property non-shareable makes it to be ignored.
-> > 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
-> >    is read.
-> >
->
-> Thanks for the excellent write-up, and for what must have been a lot
-> of work to narrow down and diagnose!
->
-> > To eliminate this risk, mark the MT_ROM sections as shareable.
-> >
-> > The other user of MT_ROM is XIP_KERNEL. XIP allows the kernel to run from
-> > flash to save RAM space. Not sure if anyone is still using XIP in order to
-> > save a little memory and not care about performance degradation. Add a new
-> > memory type MT_ROM_XIP to be compatible with it.
-> >
-> > BTW: Another solution is to memblock_reserve() all the sections that fdt
-> > spans, but this will waste 2-4MiB memory.
-> >
->
-> I agree that we should not add shareable attributes to the memory type
-> used by XIP kernels for code regions: NOR flash is not usually
-> integrated in a way that allows it to participate in the coherency
-> protocol, so that will likely break things.
->
-> I think, though, that it would be better to leave MT_ROM alone, and
-> introduce a new type MT_MEMORY_RO instead, which is wired up in the
-> right way (see below), so that we get NX attributes, and can use it to
-> create non-section mappings as well.
->
-> Then, as a followup which does not need to go into -stable, we can
-> reduce the size of the mapping: there is really no need for the
-> permanent mapping to be section granular - this is only for the early
-> asm code that is not able to create 2 levels of page tables.
->
+On Mon, Jun 06, 2022 at 04:34:01PM +0100, Andre Przywara wrote:
+> On Mon,  6 Jun 2022 16:25:36 +0100
+> Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
+> 
+> Hi Mauro,
+> 
+> > Changeset 36fd2a65bcaf ("dt-bindings: display: convert Arm HDLCD to DT schema")
+> > renamed: Documentation/devicetree/bindings/display/arm,hdlcd.txt
+> > to: Documentation/devicetree/bindings/display/arm,hdlcd.yaml.
+> > 
+> > Update its cross-reference accordingly.
+> 
+> So Lukas sent the same thing already last week:
+> https://lore.kernel.org/linux-kernel/20220601041746.22986-1-lukas.bulwahn@gmail.com/
+> 
+> His patch covered all of the three ARM display updates (14, 15, 16/23
+> in this series) in one go.
+> Not sure where to go from here, or if Lukas' patch already made it
+> somewhere.
 
-Actually, on second thought, I think reducing the size of the FDT
-mapping is also needed for correctness, as the non-fdt regions could
-potentially be covered by a no-map memory reservation, or get mapped
-non-cacheable for things like non-coherent DMA.
+I'll apply that one.
+
+Rob

@@ -2,86 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E733953EE88
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C98853EE8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbiFFTXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S232282AbiFFTYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiFFTXH (ORCPT
+        with ESMTP id S232111AbiFFTY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 15:23:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2357666
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:23:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D06961464
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 19:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EB23C385A9;
-        Mon,  6 Jun 2022 19:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654543383;
-        bh=nacxubDqFFdRgVSLGS1ry36IABpXpVQprcKZtbeliOs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vxc6V+aPGyj7IZtXMPWd1wyKdJMKJdmLb7acJqI0wxdZlPloE6DcXfTYfaMS6KsuH
-         Em6FW1FQD/p6GKuD6O8eB4GpbhxYIA5agMKnG0TNMJ03YXL1Qwspd4g9FqenQpMYmi
-         dyPUFe8xBgubXXb/spABHk4+oElZS+nPa1xODKOE=
-Date:   Mon, 6 Jun 2022 12:23:02 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     syzbot <syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: [syzbot] WARNING in register_shrinker_prepared
-Message-Id: <20220606122302.dc265509ca896073e98049a3@linux-foundation.org>
-In-Reply-To: <000000000000db448c05e0caa5ba@google.com>
-References: <000000000000db448c05e0caa5ba@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 6 Jun 2022 15:24:28 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86B6BF0;
+        Mon,  6 Jun 2022 12:24:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654543461;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=RPmNSu8/QJlogBiUR3dv8QYSPVrk49UYvH70EI6bUmo=;
+    b=mgXpuIWJdyKxDvAOvdwr83RMrLy1LZZS7jXbxPlZC5AgJuxjT7uzWFZlmocwCmlU4e
+    fZaV3HKLycEjsZZLZFKwS11hGZgR2h2qtbpCVk01X2IoHU82nyLsfgPyXfD0JCRGux2G
+    kVvdyoruTrBAx3g7eq0J4yJwSRe9UE22iEeCAHSfuOsmIfZvHM7/Y/tMB6IcgDYmsn+O
+    7yS3j3J7A2H+EXe5HJkstDoR5okNXIgfc11eq0CrPG5wtC4Kjv34vG59PVJ+BcI6IXGu
+    qzYlgOBGM91rXLc6rFHCkVXNogjR4BnQUVMw+4DPvA+h+KXJXO73QbDsI/lBrvlIRUb6
+    FSSw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofo7wZbW6ThU4"
+X-RZG-CLASS-ID: mo00
+Received: from [172.20.10.8]
+    by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
+    with ESMTPSA id R0691fy56JOK4tw
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 6 Jun 2022 21:24:20 +0200 (CEST)
+Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <2e8666f3-1bd9-8610-6b72-e56e669d3484@hartkopp.net>
+Date:   Mon, 6 Jun 2022 21:24:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc Roman)
+Hi Vincent,
 
-On Mon, 06 Jun 2022 10:17:34 -0700 syzbot <syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com> wrote:
+great work!
 
-> Hello,
+On 04.06.22 18:29, Vincent Mailhol wrote:
+
+> * menu after this series *
 > 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    1cfd968b58a1 Add linux-next specific files for 20220603
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=12f7b6b3f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=7da8386e3742814f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=300d27c79fe6d4cbcc39
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103e5177f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13545057f00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+300d27c79fe6d4cbcc39@syzkaller.appspotmail.com
-> 
-> loop0: detected capacity change from 0 to 20
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 3694 at mm/vmscan.c:681 register_shrinker_prepared+0x119/0x150 mm/vmscan.c:681
+> Network device support
+>    symbol: CONFIG_NETDEVICES
+>    |
+>    +-> CAN Device Drivers
+>        symbol: CONFIG_CAN_DEV
+>        |
+>        +-> software/virtual CAN device drivers
+>        |   (at time of writing: slcan, vcan, vxcan)
+>        |
+>        +-> CAN device drivers with Netlink support
+>            symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+>            |
+>            +-> CAN bit-timing calculation (optional for all drivers)
+>            |   symbol: CONFIG_CAN_BITTIMING
+>            |
+>            +-> All other CAN devices not relying on RX offload
+>            |
+>            +-> CAN rx offload
+>                symbol: CONFIG_CAN_RX_OFFLOAD
 
-That's
+Is this still true in patch series 5?
 
-	WARN_ON_ONCE(shrinker_debugfs_add(shrinker));
+If I understood it correctly CONFIG_CAN_BITTIMING and 
+CONFIG_CAN_RX_OFFLOAD can be enabled by the user and 
+(alternatively/additionally) the selection of "flexcan, m_can, mcp251xfd 
+and ti_hecc" enables CONFIG_CAN_RX_OFFLOAD too.
 
-I assume that debugfs_create_dir() failed.  Please see the NOTE: in
-that function's kerneldoc.
+Right?
 
+>                |
+>                +-> CAN devices relying on rx offload
+>                    (at time of writing: flexcan, m_can, mcp251xfd and ti_hecc)
 
+Best regards,
+Oliver

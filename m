@@ -2,212 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D19053EDA8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F60453EDAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiFFSMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S231368AbiFFSM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiFFSL7 (ORCPT
+        with ESMTP id S231269AbiFFSMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:11:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94E1A99809
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 11:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654539117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8OoV43vL2FT0NRTiVxi+/RfFyzhXqUOu+4aucOWRN6s=;
-        b=YYlTx0q6J9PgpimyFPcDTMVJlyPUdbOABpSzARb5G8ZQVnhBDx/IkLypWjzq3IDhkMGl3p
-        gkfZ2yOgIKIqdVBBPKy3blRAxKYn6Ds8gG7Qmsb6b76memK82IJ8iy0f7pSOKgkiAUdPsz
-        49+uD7/xwymKMnSThoxHd9JyOH0pBMQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-3m-kRYCpOrW4bXRHHEjHcQ-1; Mon, 06 Jun 2022 14:11:54 -0400
-X-MC-Unique: 3m-kRYCpOrW4bXRHHEjHcQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E130B185A79C;
-        Mon,  6 Jun 2022 18:11:53 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.40.194.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CA2D1410F39;
-        Mon,  6 Jun 2022 18:11:50 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ilias Stamatis <ilstam@amazon.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH] KVM: SVM: fix tsc scaling cache logic
-Date:   Mon,  6 Jun 2022 21:11:49 +0300
-Message-Id: <20220606181149.103072-1-mlevitsk@redhat.com>
+        Mon, 6 Jun 2022 14:12:54 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 234E42AC72
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 11:12:53 -0700 (PDT)
+Received: (qmail 377508 invoked by uid 1000); 6 Jun 2022 14:12:52 -0400
+Date:   Mon, 6 Jun 2022 14:12:52 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-at91: add support to enter suspend using
+ SMC
+Message-ID: <Yp5DpPpW5/3SnuJl@rowland.harvard.edu>
+References: <20220606141802.165252-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220606141802.165252-1-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SVM uses a per-cpu variable to cache the current value of the
-tsc scaling multiplier msr on each cpu.
+On Mon, Jun 06, 2022 at 04:18:02PM +0200, Clément Léger wrote:
+> When Linux is running under OP-TEE, the SFR is set as secured and thus
+> the AT91_OHCIICR_USB_SUSPEND register isn't accessible. Add a SMC to
+> do the appropriate call to suspend the controller.
+> The SMC id is fetched from the device-tree property
+> "microchip,suspend-smc-id". if present, then the syscon regmap is not
+> used to enter suspend and a SMC is issued.
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
 
-Commit 1ab9287add5e2
-("KVM: X86: Add vendor callbacks for writing the TSC multiplier")
-broke this caching logic.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Refactor the code so that all TSC scaling multiplier writes go through
-a single function which checks and updates the cache.
+However, this is a little weird...  You've written 
+usb_hcd_at91_probe() so that the SMC is detected in preference to the 
+regmap, but then you wrote ohci_at91_port_suspend() so that the regmap 
+is used in preference to the SMC.  It's not wrong, but it is confusing 
+to read.
 
-This fixes the following scenario:
+Do you want to rewrite the patch to make the two routines agree on which 
+mechanism to use by default?
 
-1. A CPU runs a guest with some tsc scaling ratio.
+Alan Stern
 
-2. New guest with different tsc scaling ratio starts on this CPU
-   and terminates almost immediately.
-
-   This ensures that the short running guest had set the tsc scaling ratio just
-   once when it was set via KVM_SET_TSC_KHZ. Due to the bug,
-   the per-cpu cache is not updated.
-
-3. The original guest continues to run, it doesn't restore the msr
-   value back to its own value, because the cache matches,
-   and thus continues to run with a wrong tsc scaling ratio.
-
-
-Fixes: 1ab9287add5e2 ("KVM: X86: Add vendor callbacks for writing the TSC multiplier")
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/svm/nested.c |  4 ++--
- arch/x86/kvm/svm/svm.c    | 32 ++++++++++++++++++++------------
- arch/x86/kvm/svm/svm.h    |  2 +-
- 3 files changed, 23 insertions(+), 15 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 88da8edbe1e1f..83bae1f2eeb8a 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -1037,7 +1037,7 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
- 	if (svm->tsc_ratio_msr != kvm_caps.default_tsc_scaling_ratio) {
- 		WARN_ON(!svm->tsc_scaling_enabled);
- 		vcpu->arch.tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
--		svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
-+		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
- 	}
- 
- 	svm->nested.ctl.nested_cr3 = 0;
-@@ -1442,7 +1442,7 @@ void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu)
- 	vcpu->arch.tsc_scaling_ratio =
- 		kvm_calc_nested_tsc_multiplier(vcpu->arch.l1_tsc_scaling_ratio,
- 					       svm->tsc_ratio_msr);
--	svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
-+	__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
- }
- 
- /* Inverse operation of nested_copy_vmcb_control_to_cache(). asid is copied too. */
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 4aea82f668fb1..5c873db9432e5 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -512,11 +512,24 @@ static int has_svm(void)
- 	return 1;
- }
- 
-+void __svm_write_tsc_multiplier(u64 multiplier)
-+{
-+	preempt_disable();
-+
-+	if (multiplier == __this_cpu_read(current_tsc_ratio))
-+		goto out;
-+
-+	wrmsrl(MSR_AMD64_TSC_RATIO, multiplier);
-+	__this_cpu_write(current_tsc_ratio, multiplier);
-+out:
-+	preempt_enable();
-+}
-+
- static void svm_hardware_disable(void)
- {
- 	/* Make sure we clean up behind us */
- 	if (tsc_scaling)
--		wrmsrl(MSR_AMD64_TSC_RATIO, SVM_TSC_RATIO_DEFAULT);
-+		__svm_write_tsc_multiplier(SVM_TSC_RATIO_DEFAULT);
- 
- 	cpu_svm_disable();
- 
-@@ -562,8 +575,7 @@ static int svm_hardware_enable(void)
- 		 * Set the default value, even if we don't use TSC scaling
- 		 * to avoid having stale value in the msr
- 		 */
--		wrmsrl(MSR_AMD64_TSC_RATIO, SVM_TSC_RATIO_DEFAULT);
--		__this_cpu_write(current_tsc_ratio, SVM_TSC_RATIO_DEFAULT);
-+		__svm_write_tsc_multiplier(SVM_TSC_RATIO_DEFAULT);
- 	}
- 
- 
-@@ -1046,11 +1058,12 @@ static void svm_write_tsc_offset(struct kvm_vcpu *vcpu, u64 offset)
- 	vmcb_mark_dirty(svm->vmcb, VMCB_INTERCEPTS);
- }
- 
--void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier)
-+static void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier)
- {
--	wrmsrl(MSR_AMD64_TSC_RATIO, multiplier);
-+	__svm_write_tsc_multiplier(multiplier);
- }
- 
-+
- /* Evaluate instruction intercepts that depend on guest CPUID features. */
- static void svm_recalc_instruction_intercepts(struct kvm_vcpu *vcpu,
- 					      struct vcpu_svm *svm)
-@@ -1410,13 +1423,8 @@ static void svm_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
- 		sev_es_prepare_switch_to_guest(hostsa);
- 	}
- 
--	if (tsc_scaling) {
--		u64 tsc_ratio = vcpu->arch.tsc_scaling_ratio;
--		if (tsc_ratio != __this_cpu_read(current_tsc_ratio)) {
--			__this_cpu_write(current_tsc_ratio, tsc_ratio);
--			wrmsrl(MSR_AMD64_TSC_RATIO, tsc_ratio);
--		}
--	}
-+	if (tsc_scaling)
-+		__svm_write_tsc_multiplier(vcpu->arch.tsc_scaling_ratio);
- 
- 	if (likely(tsc_aux_uret_slot >= 0))
- 		kvm_set_user_return_msr(tsc_aux_uret_slot, svm->tsc_aux, -1ull);
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index cd92f43437539..2495fe548b5e9 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -594,7 +594,7 @@ int nested_svm_check_exception(struct vcpu_svm *svm, unsigned nr,
- 			       bool has_error_code, u32 error_code);
- int nested_svm_exit_special(struct vcpu_svm *svm);
- void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu);
--void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier);
-+void __svm_write_tsc_multiplier(u64 multiplier);
- void nested_copy_vmcb_control_to_cache(struct vcpu_svm *svm,
- 				       struct vmcb_control_area *control);
- void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
--- 
-2.26.3
-
+>  drivers/usb/host/ohci-at91.c | 69 ++++++++++++++++++++++++------------
+>  1 file changed, 46 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+> index a24aea3d2759..e73fda4af278 100644
+> --- a/drivers/usb/host/ohci-at91.c
+> +++ b/drivers/usb/host/ohci-at91.c
+> @@ -13,6 +13,7 @@
+>   * This file is licenced under the GPL.
+>   */
+>  
+> +#include <linux/arm-smccc.h>
+>  #include <linux/clk.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/gpio/consumer.h>
+> @@ -55,6 +56,7 @@ struct ohci_at91_priv {
+>  	bool clocked;
+>  	bool wakeup;		/* Saved wake-up state for resume */
+>  	struct regmap *sfr_regmap;
+> +	u32 smc_id;
+>  };
+>  /* interface and function clocks; sometimes also an AHB clock */
+>  
+> @@ -135,6 +137,19 @@ static void at91_stop_hc(struct platform_device *pdev)
+>  
+>  static void usb_hcd_at91_remove (struct usb_hcd *, struct platform_device *);
+>  
+> +static u32 at91_dt_suspend_smc(struct device *dev)
+> +{
+> +	u32 smc_id;
+> +
+> +	if (!dev->of_node)
+> +		return 0;
+> +
+> +	if (of_property_read_u32(dev->of_node, "microchip,suspend-smc-id", &smc_id))
+> +		return 0;
+> +
+> +	return smc_id;
+> +}
+> +
+>  static struct regmap *at91_dt_syscon_sfr(void)
+>  {
+>  	struct regmap *regmap;
+> @@ -215,9 +230,13 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
+>  		goto err;
+>  	}
+>  
+> -	ohci_at91->sfr_regmap = at91_dt_syscon_sfr();
+> -	if (!ohci_at91->sfr_regmap)
+> -		dev_dbg(dev, "failed to find sfr node\n");
+> +	ohci_at91->smc_id = at91_dt_suspend_smc(dev);
+> +	if (!ohci_at91->smc_id)  {
+> +		dev_dbg(dev, "failed to find sfr suspend smc id, using regmap\n");
+> +		ohci_at91->sfr_regmap = at91_dt_syscon_sfr();
+> +		if (!ohci_at91->sfr_regmap)
+> +			dev_dbg(dev, "failed to find sfr node\n");
+> +	}
+>  
+>  	board = hcd->self.controller->platform_data;
+>  	ohci = hcd_to_ohci(hcd);
+> @@ -303,24 +322,30 @@ static int ohci_at91_hub_status_data(struct usb_hcd *hcd, char *buf)
+>  	return length;
+>  }
+>  
+> -static int ohci_at91_port_suspend(struct regmap *regmap, u8 set)
+> +static int ohci_at91_port_suspend(struct ohci_at91_priv *ohci_at91, u8 set)
+>  {
+> +	struct regmap *regmap = ohci_at91->sfr_regmap;
+>  	u32 regval;
+>  	int ret;
+>  
+> -	if (!regmap)
+> -		return 0;
+> +	if (regmap) {
+> +		ret = regmap_read(regmap, AT91_SFR_OHCIICR, &regval);
+> +		if (ret)
+> +			return ret;
+>  
+> -	ret = regmap_read(regmap, AT91_SFR_OHCIICR, &regval);
+> -	if (ret)
+> -		return ret;
+> +		if (set)
+> +			regval |= AT91_OHCIICR_USB_SUSPEND;
+> +		else
+> +			regval &= ~AT91_OHCIICR_USB_SUSPEND;
+>  
+> -	if (set)
+> -		regval |= AT91_OHCIICR_USB_SUSPEND;
+> -	else
+> -		regval &= ~AT91_OHCIICR_USB_SUSPEND;
+> +		regmap_write(regmap, AT91_SFR_OHCIICR, regval);
+> +	} else if (ohci_at91->smc_id) {
+> +		struct arm_smccc_res res;
+>  
+> -	regmap_write(regmap, AT91_SFR_OHCIICR, regval);
+> +		arm_smccc_smc(ohci_at91->smc_id, set, 0, 0, 0, 0, 0, 0, &res);
+> +		if (res.a0)
+> +			return -EINVAL;
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -357,9 +382,8 @@ static int ohci_at91_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>  
+>  		case USB_PORT_FEAT_SUSPEND:
+>  			dev_dbg(hcd->self.controller, "SetPortFeat: SUSPEND\n");
+> -			if (valid_port(wIndex) && ohci_at91->sfr_regmap) {
+> -				ohci_at91_port_suspend(ohci_at91->sfr_regmap,
+> -						       1);
+> +			if (valid_port(wIndex)) {
+> +				ohci_at91_port_suspend(ohci_at91, 1);
+>  				return 0;
+>  			}
+>  			break;
+> @@ -400,9 +424,8 @@ static int ohci_at91_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>  
+>  		case USB_PORT_FEAT_SUSPEND:
+>  			dev_dbg(hcd->self.controller, "ClearPortFeature: SUSPEND\n");
+> -			if (valid_port(wIndex) && ohci_at91->sfr_regmap) {
+> -				ohci_at91_port_suspend(ohci_at91->sfr_regmap,
+> -						       0);
+> +			if (valid_port(wIndex)) {
+> +				ohci_at91_port_suspend(ohci_at91, 0);
+>  				return 0;
+>  			}
+>  			break;
+> @@ -630,10 +653,10 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+>  		/* flush the writes */
+>  		(void) ohci_readl (ohci, &ohci->regs->control);
+>  		msleep(1);
+> -		ohci_at91_port_suspend(ohci_at91->sfr_regmap, 1);
+> +		ohci_at91_port_suspend(ohci_at91, 1);
+>  		at91_stop_clock(ohci_at91);
+>  	} else {
+> -		ohci_at91_port_suspend(ohci_at91->sfr_regmap, 1);
+> +		ohci_at91_port_suspend(ohci_at91, 1);
+>  	}
+>  
+>  	return ret;
+> @@ -645,7 +668,7 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+>  	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+>  	struct ohci_at91_priv *ohci_at91 = hcd_to_ohci_at91_priv(hcd);
+>  
+> -	ohci_at91_port_suspend(ohci_at91->sfr_regmap, 0);
+> +	ohci_at91_port_suspend(ohci_at91, 0);
+>  
+>  	if (ohci_at91->wakeup)
+>  		disable_irq_wake(hcd->irq);
+> -- 
+> 2.36.1
+> 

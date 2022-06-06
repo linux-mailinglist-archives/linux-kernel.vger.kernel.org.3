@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119C553EDD5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB5553EDD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbiFFSXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S231675AbiFFSXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbiFFSXY (ORCPT
+        with ESMTP id S231583AbiFFSXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:23:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D8910655B;
-        Mon,  6 Jun 2022 11:23:22 -0700 (PDT)
+        Mon, 6 Jun 2022 14:23:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001391059F8;
+        Mon,  6 Jun 2022 11:23:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E35AB81AF1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BC0161336;
         Mon,  6 Jun 2022 18:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C751BC385A9;
-        Mon,  6 Jun 2022 18:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6CEC341C0;
+        Mon,  6 Jun 2022 18:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654539800;
-        bh=zzYotTKEGLDprg9+poMHiWB57TXnLs8veIXqbVZJakQ=;
+        s=k20201202; t=1654539801;
+        bh=FuYn5OaBm/cdGtgDHAKwyk/NB5Y5Xx2dRB0uYwvqtbI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cxG50trjbZk11hd8BkFPwMnPsdUMaKaDxA2TDSM1UP6LsoVQ2+0tCUFnSFT9JTdgi
-         /Lfe0F+d4rorgHfn5Dn1QZm0yd2Of6JsN4IBr2lSKmC05oOsOFOKb9RXwNYBUX3sNz
-         jccl9HwJ5MX8yhA+qInAi3jwKf9gVkYG0SB5R4cJOQfzGvXYDNq+kEXV8PuK5rGnre
-         7Ne08FyMzxIoQvddB01DsviJGOfNDDCKiqalHx8+QnvFVUzsqzqilvFWYw0I9e+WGj
-         7YZe6OK5GXKeiLIZqpS5L2VACnDfO3ic+5RciciQeU/GEi2W+xdaXzBT3/cNwJtX2C
-         tbYobf3tbGxGQ==
+        b=lTHVR2x65cV9HsW/o06kyp604ujtkTQmRbApF/mteXZb9eHjqhKmnuXWcYEHlCnV0
+         uG4U1ETDaKCJWJLDC1+U6ibmwsX41DXZrlz5Ykx1WxkxFxr1mpOO0qglWWJPINaTmO
+         gCO6OF+KZfvll4FZEn4kZX2wve2tNfgC3rNmoTcpeWvPkENWytqks6ck4QbcDdjrbx
+         cB/X8Gk5dJbFUNsfW0eyVU/cF0oT39DRJruw2S1DVjbErlNXgInirmdDaxq0h4reA/
+         NjomkYMDQCaoMCoJLdc8i1TftJA6JO5BQDo+r6z8ODW3TdFJVS6hPeScHtK7dLsQPa
+         NEL/3ariFGPiA==
 From:   SeongJae Park <sj@kernel.org>
 To:     akpm@linux-foundation.org
 Cc:     corbet@lwn.net, damon@lists.linux.dev, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         SeongJae Park <sj@kernel.org>
-Subject: [PATCH 5/6] mm/damon/reclaim: make 'enabled' checking timer simpler
-Date:   Mon,  6 Jun 2022 18:23:09 +0000
-Message-Id: <20220606182310.48781-6-sj@kernel.org>
+Subject: [PATCH 6/6] mm/damon/reclaim: add 'damon_reclaim_' prefix to 'enabled_store()'
+Date:   Mon,  6 Jun 2022 18:23:10 +0000
+Message-Id: <20220606182310.48781-7-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220606182310.48781-1-sj@kernel.org>
 References: <20220606182310.48781-1-sj@kernel.org>
@@ -55,53 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMON_RECLAIM's 'enabled' parameter store callback ('enabled_store()')
-schedules the parameter check timer ('damon_reclaim_timer') if the
-parameter is set as 'Y'.  Then, the timer schedules itself to check if
-user has set the parameter as 'N'.  It's unnecessarily complex.
-
-This commit makes it simpler by making the parameter store callback to
-schedule the timer regardless of the parameter value and disabling the
-timer's self scheduling.
+This commit adds 'damon_reclaim_' prefix to 'enabled_store()', so that
+we can distinguish it easily from the stack trace using 'faddr2line.sh'
+like tools.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/reclaim.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ mm/damon/reclaim.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index c2ed962db23f..38da28803d75 100644
+index 38da28803d75..e69b807fefe4 100644
 --- a/mm/damon/reclaim.c
 +++ b/mm/damon/reclaim.c
-@@ -353,7 +353,6 @@ static int damon_reclaim_turn(bool on)
- 	return 0;
- }
+@@ -371,7 +371,7 @@ static DECLARE_DELAYED_WORK(damon_reclaim_timer, damon_reclaim_timer_fn);
  
--#define ENABLE_CHECK_INTERVAL_MS	1000
- static struct delayed_work damon_reclaim_timer;
- static void damon_reclaim_timer_fn(struct work_struct *work)
+ static bool damon_reclaim_initialized;
+ 
+-static int enabled_store(const char *val,
++static int damon_reclaim_enabled_store(const char *val,
+ 		const struct kernel_param *kp)
  {
-@@ -367,10 +366,6 @@ static void damon_reclaim_timer_fn(struct work_struct *work)
- 		else
- 			enabled = last_enabled;
- 	}
--
--	if (enabled)
--		schedule_delayed_work(&damon_reclaim_timer,
--			msecs_to_jiffies(ENABLE_CHECK_INTERVAL_MS));
+ 	int rc = param_set_bool(val, kp);
+@@ -388,7 +388,7 @@ static int enabled_store(const char *val,
  }
- static DECLARE_DELAYED_WORK(damon_reclaim_timer, damon_reclaim_timer_fn);
  
-@@ -388,9 +383,7 @@ static int enabled_store(const char *val,
- 	if (!damon_reclaim_initialized)
- 		return rc;
- 
--	if (enabled)
--		schedule_delayed_work(&damon_reclaim_timer, 0);
--
-+	schedule_delayed_work(&damon_reclaim_timer, 0);
- 	return 0;
- }
+ static const struct kernel_param_ops enabled_param_ops = {
+-	.set = enabled_store,
++	.set = damon_reclaim_enabled_store,
+ 	.get = param_get_bool,
+ };
  
 -- 
 2.25.1

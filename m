@@ -2,132 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07C953F05F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5FF53F073
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbiFFUoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S234414AbiFFUqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiFFUoF (ORCPT
+        with ESMTP id S232339AbiFFUoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:44:05 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E705F33BD;
-        Mon,  6 Jun 2022 13:39:16 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id m20so31151717ejj.10;
-        Mon, 06 Jun 2022 13:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wcrwg+5kpusbUv6mM8nbAt914joU1P7QO7DYSLgfbnI=;
-        b=hG6c1HAkk4iy0xcKIdNNZsdOuZOT49l0YicDt6SMRjScPtsjE3PTe0e5XO10BfG+cW
-         2Ajn2ksBfIBJX/nZoXrbs+eFlDZT8lFtSBhAv+jJsbhqrV+qR7xENo9opmBxqrgkAK2s
-         Kus0HwEnFYcIYXMfZIaom57Xmc2MJ7x0tQ4f73LW7TeMmLC7IQXilETyXvD0UTun35Zo
-         /30B8NezejluftCu47wls8OFiO2n3pNND4OOPA/SA/AIbSQACw3vimoFBZVjXlEy2IGn
-         /68SBpSwWWAlCniGiWJOlkk3qkM7E4Mf4HGP5o2+G74gDWev4/BUp46wq5LOztC3z4rq
-         aiXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wcrwg+5kpusbUv6mM8nbAt914joU1P7QO7DYSLgfbnI=;
-        b=M9Qisoya7P5KS+uz6G7w0JDB0RSOAtgc/fDprdjWdwpjH67s9YXkiIH80z6EaEfZCK
-         5wrnUUGzm1fuzX7Grnlwj3AalLlrbQvaX1WUkxxr3KpbuE1jzljL7IFKKgOAIZGKHJwd
-         laGRE/9+rzYfJgOeMypVWmzMX8hDLhMSwuVssA/mS8qCZg6HJzklyMECSuKcMD7rGN1j
-         WGS16Lu9OtuQYAC/zhomHy4fY91vPmsQjIu8/6u1E01MMd5cZw8qfIKN6h+G28I7X0+/
-         wI9Vq/0PuDEL7zVfNAqTyuekgTxrfhC6MA0lkaJCi2nq2cCi22gED7gDTMp5i2rCB4W1
-         pVNg==
-X-Gm-Message-State: AOAM5301wYBGHFzdAT7wp4+FhdmSyIDjeeKtIgdpS5R7yJhV9u1n2eNt
-        ryqgCeHqJjFsQfdMRgDwRs/WvNbJSKiRP3h8g2d3jB2ozggIEw==
-X-Google-Smtp-Source: ABdhPJzRBPIq2f0KX08oiamErCtsNsQ+t7PKyD4s10gN2LPnxLwGP5Go/5ir9YXLAGN3nnRdHciPXmDPjZYFJBAkSxY=
-X-Received: by 2002:a17:907:9721:b0:70c:65e7:2aa5 with SMTP id
- jg33-20020a170907972100b0070c65e72aa5mr19987923ejc.132.1654547954422; Mon, 06
- Jun 2022 13:39:14 -0700 (PDT)
+        Mon, 6 Jun 2022 16:44:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206F6FC4DF;
+        Mon,  6 Jun 2022 13:39:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AEA561572;
+        Mon,  6 Jun 2022 20:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 436B5C385A9;
+        Mon,  6 Jun 2022 20:39:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654547967;
+        bh=qeDYNocyvB6ztqkmiLeKEV1qxWokU2Os5Sf6lfKULq8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FLWMznABSFfkkpCwItmaxJq1ey3mCAS4AXqqUmDRoUHjQ/qct9ufY+QcZtrjhadXE
+         QFmDLlQYvd//o0Ort33ZfuZTBuMuFY9rDheTFpbf7HqkJJ/Yt87LO4lFHlKjylrsb8
+         UF7H/a94f7uM6JXxvsEgcbSl0V4JveoceNnBFhonxzrR/L6UCEbVun1WZ6fHg9FkYe
+         t/oP70qpkDr9wfj9yz4PSYlBCfOy5AnEhW+r4OA//YZm2aWlch0DTlJGSsRSj4dW/o
+         3PekMMwifLR+XgCyTqJAC1zbkjt7MX+0zV57FpKopFEAEwIUmNc6P08egXuTGZ7DBD
+         TsI7lBry+VZdA==
+Message-ID: <058de46e-24cf-e25b-121c-3ff080702776@kernel.org>
+Date:   Mon, 6 Jun 2022 23:39:19 +0300
 MIME-Version: 1.0
-References: <20220606131124.53394-1-ilpo.jarvinen@linux.intel.com>
- <20220606131124.53394-2-ilpo.jarvinen@linux.intel.com> <fb32bda5-ea44-da8d-493a-a043b8619022@linux.intel.com>
- <CAHp75Ve4t1aF4wDpXPOcOX3MXbn_DaaNWG4S9Ft1jpZ0dGSXzw@mail.gmail.com>
- <97e83f-8011-37fb-d958-2d881fcdbd3@linux.intel.com> <CAHp75Vek_O9MJHGXkgJQZT1w-QbdiU0Bpc_PqcA+P6yEBJcEpA@mail.gmail.com>
- <20220606194046.gbt4ghz2yvazsfo4@pengutronix.de>
-In-Reply-To: <20220606194046.gbt4ghz2yvazsfo4@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 6 Jun 2022 22:38:37 +0200
-Message-ID: <CAHp75VdiJFtLnEJfW6KXwaVFsKWSSTSMgKQLvikSEQj7x3tgLA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] serial: 8250: Store to lsr_save_flags after lsr read
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Matwey V. Kornilov" <matwey@sai.msu.ru>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 9:40 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> On Mon, Jun 06, 2022 at 07:01:15PM +0200, Andy Shevchenko wrote:
-> > On Mon, Jun 6, 2022 at 6:54 PM Ilpo J=C3=A4rvinen
-> > <ilpo.jarvinen@linux.intel.com> wrote:
-> > > On Mon, 6 Jun 2022, Andy Shevchenko wrote:
-> > > > On Mon, Jun 6, 2022 at 3:55 PM Ilpo J=C3=A4rvinen
-> > > > <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > ...
-> >
-> > > > But more importantly I do not see the reason for the Acked-by tag w=
-hen
-> > > > SoB of the same person is present.
-> > >
-> > > I just repeated what Uwe gave me. Maybe he didn't notice he was alrea=
-dy
-> > > there as SoB.
-> > >
-> > > This situation is anyway a bit more complex than usual. The line I to=
-ok
-> > > was part of Uwe's much larger patch initially (which was fully revert=
-ed)
-> > > so his SoB was carried over to preserve the authorship. As I made a
-> > > non-trivial modification to his original patch by removing almost all=
- of
-> > > it, I added my SoB too. Given this situation, I kind of thought he Ac=
-ked
-> > > (approved) the post-modification version of it.
-> >
-> > I believe you haven't preserved the authorship that way (since From
-> > line is different), but since you have done non-trivial changes and
-> > Uwe is okay with them, the straightforward tag chain would be (with
-> > your authorship implied):
-> > Co-developed-by: Uwe
-> > SoB: Uwe
-> > SoB: yours
->
-> I don't care much, but IMHO the initial set of tags made sense to me.
+On 1.06.22 13:11, Krzysztof Kozlowski wrote:
+> Add device node for CPU-memory BWMON device (bandwidth monitoring) on
+> SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
+> Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
+> votes from cpufreq (CPU nodes) thus achieve high memory throughput even
+> with lower CPU frequencies.
+> 
+> Performance impact (SDM845-MTP RB3 board, linux next-20220422):
+> 1. No noticeable impact when running with schedutil or performance
+>     governors.
+> 
+> 2. When comparing to customized kernel with synced interconnects and
+>     without bandwidth votes from CPU freq, the sysbench memory tests
+>     show significant improvement with bwmon for blocksizes past the L3
+>     cache.  The results for such superficial comparison:
+> 
+> sysbench memory test, results in MB/s (higher is better)
+>   bs kB |  type |    V  | V+no bw votes | bwmon | benefit %
+>       1 | W/seq | 14795 |          4816 |  4985 |      3.5%
+>      64 | W/seq | 41987 |         10334 | 10433 |      1.0%
+>    4096 | W/seq | 29768 |          8728 | 32007 |    266.7%
+>   65536 | W/seq | 17711 |          4846 | 18399 |    279.6%
+> 262144 | W/seq | 16112 |          4538 | 17429 |    284.1%
+>      64 | R/seq | 61202 |         67092 | 66804 |     -0.4%
+>    4096 | R/seq | 23871 |          5458 | 24307 |    345.4%
+>   65536 | R/seq | 18554 |          4240 | 18685 |    340.7%
+> 262144 | R/seq | 17524 |          4207 | 17774 |    322.4%
+>      64 | W/rnd |  2663 |          1098 |  1119 |      1.9%
+>   65536 | W/rnd |   600 |           316 |   610 |     92.7%
+>      64 | R/rnd |  4915 |          4784 |  4594 |     -4.0%
+>   65536 | R/rnd |   664 |           281 |   678 |    140.7%
+> 
+> Legend:
+> bs kB: block size in KB (small block size means only L1-3 caches are
+>        used
+> type: R - read, W - write, seq - sequential, rnd - random
+> V: vanilla (next-20220422)
+> V + no bw votes: vanilla without bandwidth votes from CPU freq
+> bwmon: bwmon without bandwidth votes from CPU freq
+> benefit %: difference between vanilla without bandwidth votes and bwmon
+>             (higher is better)
+> 
 
-> It
-> has my S-o-b because the change is (somewhat) taken from me and it has
-> my ack because the modification looked good to me.
+Ok, now i see! So bwmon shows similar performance compared with the current
+cpufreq-based bandwidth scaling. And if you add bwmon on top of vanilla, are
+the results close/same? Is the plan to remove the cpufreq based bandwidth
+scaling and switch to bwmon? It might improve the power consumption in some
+scenarios.
 
-According to
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when=
--to-use-acked-by-cc-and-co-developed-by
-the SoB already implies that you developed that, but Ack if not. It
-also clarifies Co-developed-by for cases like this.
+Thanks,
+Georgi
 
+> Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 54 ++++++++++++++++++++++++++++
+>   1 file changed, 54 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 83e8b63f0910..adffb9c70566 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
+>   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+>   		};
+>   
+> +		pmu@1436400 {
+> +			compatible = "qcom,sdm845-cpu-bwmon";
+> +			reg = <0 0x01436400 0 0x600>;
+> +
+> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+> +			interconnect-names = "ddr", "l3c";
+> +
+> +			operating-points-v2 = <&cpu_bwmon_opp_table>;
+> +
+> +			cpu_bwmon_opp_table: opp-table {
+> +				compatible = "operating-points-v2";
+> +
+> +				/*
+> +				 * The interconnect paths bandwidths taken from
+> +				 * cpu4_opp_table bandwidth.
+> +				 * They also match different tables from
+> +				 * msm-4.9 downstream kernel:
+> +				 *  - the gladiator_noc-mem_noc from bandwidth
+> +				 *    table of qcom,llccbw (property qcom,bw-tbl);
+> +				 *    bus width: 4 bytes;
+> +				 *  - the OSM L3 from bandwidth table of
+> +				 *    qcom,cpu4-l3lat-mon (qcom,core-dev-table);
+> +				 *    bus width: 16 bytes;
+> +				 */
+> +				opp-0 {
+> +					opp-peak-kBps = <800000 4800000>;
+> +				};
+> +				opp-1 {
+> +					opp-peak-kBps = <1804000 9216000>;
+> +				};
+> +				opp-2 {
+> +					opp-peak-kBps = <2188000 11980800>;
+> +				};
+> +				opp-3 {
+> +					opp-peak-kBps = <3072000 15052800>;
+> +				};
+> +				opp-4 {
+> +					opp-peak-kBps = <4068000 19353600>;
+> +				};
+> +				opp-5 {
+> +					opp-peak-kBps = <5412000 20889600>;
+> +				};
+> +				opp-6 {
+> +					opp-peak-kBps = <6220000 22425600>;
+> +				};
+> +				opp-7 {
+> +					opp-peak-kBps = <7216000 25497600>;
+> +				};
+> +			};
+> +		};
+> +
+>   		pcie0: pci@1c00000 {
+>   			compatible = "qcom,pcie-sdm845";
+>   			reg = <0 0x01c00000 0 0x2000>,
 
---=20
-With Best Regards,
-Andy Shevchenko

@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404ED53EC26
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC65953E6DD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbiFFPK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S240247AbiFFPNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240406AbiFFPK4 (ORCPT
+        with ESMTP id S240100AbiFFPNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:10:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19C4D135691
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:10:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBAABD6E;
-        Mon,  6 Jun 2022 08:10:54 -0700 (PDT)
-Received: from bogus (unknown [10.57.9.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 407A13F73B;
-        Mon,  6 Jun 2022 08:10:52 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 16:10:04 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Liang Chen <cl@rock-chips.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        Jeffy Chen <jeffy.chen@rock-chips.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Etienne Carriere <etienne.carriere@linaro.org>
-Subject: Re: [PATCH] firmware: arm_scmi: Relax BASE protocol sanity checks on
- protocol list
-Message-ID: <20220606151004.hevt4zh6boypdd4x@bogus>
-References: <20220523171559.472112-1-cristian.marussi@arm.com>
- <Yp4Br5d0jMnlF5yy@e120937-lin>
- <20220606144305.agzzyf7c4kp2nwlw@bogus>
- <4402272.LvFx2qVVIh@diego>
+        Mon, 6 Jun 2022 11:13:14 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B782B25A;
+        Mon,  6 Jun 2022 08:13:12 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LGxmK6K06z67PsD;
+        Mon,  6 Jun 2022 23:12:01 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 17:13:10 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 6 Jun
+ 2022 16:13:09 +0100
+Date:   Mon, 6 Jun 2022 16:13:02 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "noname.nuno@gmail.com" <noname.nuno@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v1] iio: trigger: move trig->owner init to trigger
+ allocate() stage
+Message-ID: <20220606161302.000026ed@Huawei.com>
+In-Reply-To: <20220606113829.kmiudrofm2s6onpc@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220601174837.20292-1-ddrokosov@sberdevices.ru>
+        <20220604145955.2a1108ca@jic23-huawei>
+        <20220606113829.kmiudrofm2s6onpc@CAB-WSD-L081021.sigma.sbrf.ru>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4402272.LvFx2qVVIh@diego>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 04:55:10PM +0200, Heiko Stübner wrote:
-> Am Montag, 6. Juni 2022, 16:43:05 CEST schrieb Sudeep Holla:
-> > On Mon, Jun 06, 2022 at 02:31:48PM +0100, Cristian Marussi wrote:
-> > > On Mon, Jun 06, 2022 at 02:59:10PM +0200, Michael Riesch wrote:
-> > > > Hi Cristian,
-> > > >
-> > > Hi Michael,
-> > >
-> > > > On 5/23/22 19:15, Cristian Marussi wrote:
-> > > > > Even though malformed replies from firmware must be treated carefully to
-> > > > > avoid memory corruption Kernel side, some out-of-spec SCMI replies can
-> > > > > be tolerated to avoid breaking existing deployed system, as long as they
-> > > > > won't cause memory issues.
-> > > > >
-> > > > > Reported-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > > > > Cc: Etienne Carriere <etienne.carriere@linaro.org>
-> > > > > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > > >
-> > > > Thanks a lot, without this fix the Mali G52 GPU won't probe on my RK3568
-> > > > EVB1 in vanilla v5.19-rc1.
-> > > >
-> > >
-> > > Yes, the break was reported on -next and today it appeared in 5.19-rc1.
-> > > A proper FW fix is also up for review by Etienne but in the meantime
-> > > this tries to limit damages relaxing a bit the checks.
-> > >
-> > > > I guess this patch should have a Fixes: tag, right?
-> > > >
-> > >
-> > > It has not a Fixes tag because the issue was introduced in 5.19-rc1 and the
-> > > fix will go in with the next round of v5.19 fixes by Sudeep (AFAIU) so it
-> > > will be solved within the v5.19 cycle and I thought the Fixes tag was
-> > > not needed in this case (I could be wrong...)
+On Mon, 6 Jun 2022 11:37:42 +0000
+Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+
+> Hello Jonathan,
+> 
+> Thank you for comments. I have a several questions about the flow,
+> please find them below.
+> 
+> On Sat, Jun 04, 2022 at 02:59:55PM +0100, Jonathan Cameron wrote:
+> > On Wed, 1 Jun 2022 17:48:32 +0000
+> > Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+> >   
+> > > To provide a new IIO trigger to the IIO core, usually driver executes the
+> > > following pipeline: allocate()/register()/get(). Before, IIO core assigned
+> > > trig->owner as a pointer to the module which registered this trigger at
+> > > the register() stage. But actually the trigger object is owned by the
+> > > module earlier, on the allocate() stage, when trigger object is
+> > > successfully allocated for the driver.
+> > > 
+> > > This patch moves trig->owner initialization from register()
+> > > stage of trigger initialization pipeline to allocate() stage to
+> > > eliminate all misunderstandings and time gaps between trigger object
+> > > creation and owner acquiring.
+> > > 
+> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>  
 > > 
-> > Correct, if for some reason, we can't push this before v5.19, then fixes
-> > tag needs to added. I will add that then, but for now let us target getting
-> > it in before v5.19
+> > Hi Dmitry,
+> > 
+> > I 'think' this is fine, but its in the high risk category that I'd like
+> > to keep it on list for a few weeks before applying.
+> >   
 > 
-> hmm, I'd disagree for the generalization.
+> Could you please explain what it means? Do you have some testing branch
+> with such dangerous patches or do we need just to wait other developers
+> for more points of view? Thanks in advance.
+
+The second - so far I haven't applied it anywhere.
+
 > 
-> While true that is not 100% necessary to be present in all cases, so
-> definitly no reason for a new version when applied to the same -rc series,
-> having the Fixes tag not only clearly marks the patch as such, but also
-> allows people reading either mailing lists or the later the git history
-> to actually see where the issue started. So I really think it is a
-> nice-to-have in most cases.
+> > Note I'm still keen that in general we keep the flow such that
+> > we do allocate()/register()/get() as there is no guarantee that the get()
+> > will never do anything that requires the trigger to be registered, even
+> > though that is true today.  Which is another way of saying I'm still
+> > keen we fix up any cases that sneak in after your fix up set dealt with
+> > the current ones.  
+> 
+> I fully agree with you. I suppose to resolve such a problem we need to
+> have some indicators that the trigger is already registered or not.
+> From my point of view, trig->list entry fits well to answer this question.
+> Trigger is added to the global IIO triggers list during register()
+> execution, so we can just check that entry is not empty to make sure that
+> trigger is registered.
+> 
+> I've sent a v2 patch version, where I use trig->list entry empty status to
+> warn it:
+> 
+> https://lore.kernel.org/linux-iio/20220606111316.19265-1-ddrokosov@sberdevices.ru/
 
-Absolutely agreed in general. But I asked Cristian to not add as we are work
-around the firmware bug by relaxing the checks in the kernel. This is not
-fixing anything in the original commit IMO, it is just that the original
-commit highlighted the firmware issue on that system.
+Great!
 
--- 
-Regards,
-Sudeep
+Jonathan
+
+> 
+> > 
+> > Thanks for following up on this!
+> > 
+> > Jonathan
+> >   
+> 
+

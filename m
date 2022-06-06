@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AD453EB8F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9756753EB7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241315AbiFFPxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S241326AbiFFPzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241309AbiFFPxQ (ORCPT
+        with ESMTP id S241068AbiFFPz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:53:16 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C902226CE1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:53:15 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id p8so13034888pfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:53:15 -0700 (PDT)
+        Mon, 6 Jun 2022 11:55:28 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3502235B19
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:55:26 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gl15so15946621ejb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Hc9viEeZffCjBHu/ML1+/iUUNsF5FvYmtO3dN3G4Vlw=;
-        b=ewoiGIcHnngJ8XnuyY2jIwN2ChspJyDD06xIEttXPId2yo5q8lZvjdkMTP+UBe/weY
-         2llWNBnVcx8AlKWfV8HzQcmwXUEEikJ6isuAKerjkF7h7HoyqdjSRO8xEM4H0svFPCf1
-         YYm/fQbB+1omnCmLIouQIUX9Ms1HRCmablN5JxKM2E0SJsjvbAVKaeap3hqgS77EgLyC
-         RbMeDFbVuSMNqfLaNukLhoRg+UMftSUB7u6b7/k+cvy2G1g1/8y1t5FayjUYqgdxe+/1
-         FO2YAHgEgvE9y56lNV9ndYqXYVAT5MDoRJjtwsVEm28OmUKzAGFEjQ56U+S7KyUeuOj5
-         Adlw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OyTbKzsjMWwUwZL5SRg35VIyuSrvd4hrhHdZpr2aEOY=;
+        b=HsN12eaSchfRAga+qrLk/zwMDjiloHPOIo6tuhJQY/CZwhGJzq00ySOnbBVrq4SeQg
+         lZIjFoT51lIlA0y/Fc+X/b7883LNAAm87aDcZFKQHK2qFVo6cm9iqc6yrjIA/suhhB85
+         KgMbqKUo+cHvvhldTv8YohG9sCt/OilC6hL0xnr2yA1y8aP+z0q6qW35v2O6ApvKgXRb
+         8Ee4EsJmhEd9kT+Mbba3IOds0L5VUbhsdbSbyfQ/nbe26uGpGB2eEv385NkEMguy/kUf
+         o9Ru9uuSRyZxRsxxWznhiIZvSE69Z8jpIXmvw3fAvtqgV1ZaSI1Fs+KWLrdcpaJwZojL
+         9QLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Hc9viEeZffCjBHu/ML1+/iUUNsF5FvYmtO3dN3G4Vlw=;
-        b=7I/cQdMMTF0eU6eMZgNURlyvlmEa5j0NEkrUSdH90z/iVrertXcKe013KyG8GiLNin
-         25QtKI2tNyHHbtyBq0wg/nclzHf2geWjQODwJ+PZ0TUxG9JYjVyVoirPEohkXQ+YN0XH
-         aMn5O4jt9ENkZk76kwFXhty81AQqHABn7C4PMJ/0DwzHYHdtLeFO5ZRkJksB6NZl3jxp
-         yKox8UC76Mn3ehEKxxRYu7RtZCJjnA6TgjsFaQxXwx6NWGLSV7Y0coY+4bez5t2+dxL9
-         aY9UTbSmv32YDrpsDDhn/gNEysqmuvlyNvl32YTr7Um52bXnG0M5TbbqXHcP1DU0UCJf
-         hmCw==
-X-Gm-Message-State: AOAM5326TPLHmvWqyGRo6Ok+S9RrND9SH1w/TBNL8fdKY8BA4MaBmiGc
-        uRWw5puFuB7IHRc7yY/iiLglKA==
-X-Google-Smtp-Source: ABdhPJx0gfs2uBVwDAH9+sv20TF8wBI/O1vbv568hmncRBiTUr/Kng5zHTKiMHbRtDfNJDlNJgm/yA==
-X-Received: by 2002:a05:6a00:98b:b0:51b:d730:c58 with SMTP id u11-20020a056a00098b00b0051bd7300c58mr21079020pfg.23.1654530794513;
-        Mon, 06 Jun 2022 08:53:14 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id 65-20020a620444000000b0050dc76281dcsm10962951pfe.182.2022.06.06.08.53.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 08:53:14 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lei.rao@intel.com, hanjinke <hanjinke.666@bytedance.com>
-Subject: [PATCH] ext4: reuse order and buddy in mb_mark_used when buddy split
-Date:   Mon,  6 Jun 2022 23:53:05 +0800
-Message-Id: <20220606155305.74146-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OyTbKzsjMWwUwZL5SRg35VIyuSrvd4hrhHdZpr2aEOY=;
+        b=XudP2kYaKe+WQdu4CdptzS95+qPQsLM3IYuS0o363elRNB0Dhz5gMXq7OaArQ0R5xX
+         KJzhkTnL6yu+iAoVvhOnzCi8sim1Fso6+pvtA/+HfzwbV+GMp1XZ7C/zqf5stkzGv73m
+         t93rLFawTXXlI5Nn1utPDqbkZmLVrvPPDbOtm5sm6RanBj4KXSPJ0tkgLVH9Qhv29Fy0
+         kg36NKVY1vOFpat4EXdOv071ZgVvV20xQCLZA4AGE5MuwoTZyM6SLqCaypcsWErhksRk
+         sXf87/Uil89bB1GJeAo+3QZyzLtr4YLVGaDHb8Z6h82Lla/lIjO6lBgW27WFFBzjwBaL
+         nwhg==
+X-Gm-Message-State: AOAM533pov/76Byv+bK1/tJIBtTPYvHb3YDjZm9/ndUE6UzsqtY70hiS
+        kUNv+KTxnkl8TcOKpCoIR6DrrI9bpO6h5IIKlYABsg==
+X-Google-Smtp-Source: ABdhPJz3Mq3IMfcDu/Cuub9xOBDyP5zz4COVAFXlmMtrZ+GAOmJ3s3a7/vHwxn8jk+cf8QeW7HW+CGV4YBCJOc7LkK8=
+X-Received: by 2002:a17:907:1ca8:b0:70c:68ce:dade with SMTP id
+ nb40-20020a1709071ca800b0070c68cedademr19254581ejc.723.1654530925293; Mon, 06
+ Jun 2022 08:55:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-7-tzungbi@kernel.org>
+In-Reply-To: <20220606141051.285823-7-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Mon, 6 Jun 2022 08:55:14 -0700
+Message-ID: <CABXOdTdhGYhS=qO7M5OQ9GDv7LEUQTzrpEkYwas+VfomxDaUcw@mail.gmail.com>
+Subject: Re: [PATCH 06/13] platform/chrome: cros_ec_proto: use cros_ec_map_error()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,57 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: hanjinke <hanjinke.666@bytedance.com>
+On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> Use cros_ec_map_error() in cros_ec_get_host_event_wake_mask().
+>
+> The behavior of cros_ec_get_host_event_wake_mask() slightly changed.  It
+> is acceptable because the caller only needs it returns negative integers
+> for indicating errors.  Especially, the EC_RES_INVALID_COMMAND still
+> maps to -EOPNOTSUPP.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-After each buddy split, mb_mark_used will search the proper order
-for the block which may consume some loop in mb_find_order_for_block.
-In fact, we can reuse the oder and buddy generated by the buddy split.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-Reviewed by: lei.rao@intel.com
-Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
----
- fs/ext4/mballoc.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 9f12f29bc346..c7ac6b269dd8 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -1933,6 +1933,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
- 	unsigned ret = 0;
- 	int len0 = len;
- 	void *buddy;
-+	bool split = false;
- 
- 	BUG_ON(start + len > (e4b->bd_sb->s_blocksize << 3));
- 	BUG_ON(e4b->bd_group != ex->fe_group);
-@@ -1957,12 +1958,16 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
- 
- 	/* let's maintain buddy itself */
- 	while (len) {
--		ord = mb_find_order_for_block(e4b, start);
-+		if (!split)
-+			ord = mb_find_order_for_block(e4b, start);
- 
- 		if (((start >> ord) << ord) == start && len >= (1 << ord)) {
- 			/* the whole chunk may be allocated at once! */
- 			mlen = 1 << ord;
--			buddy = mb_find_buddy(e4b, ord, &max);
-+			if (!split)
-+				buddy = mb_find_buddy(e4b, ord, &max);
-+			else
-+				split = false;
- 			BUG_ON((start >> ord) >= max);
- 			mb_set_bit(start >> ord, buddy);
- 			e4b->bd_info->bb_counters[ord]--;
-@@ -1989,6 +1994,7 @@ static int mb_mark_used(struct ext4_buddy *e4b, struct ext4_free_extent *ex)
- 		mb_clear_bit(cur + 1, buddy);
- 		e4b->bd_info->bb_counters[ord]++;
- 		e4b->bd_info->bb_counters[ord]++;
-+		split = true;
- 	}
- 	mb_set_largest_free_order(e4b->bd_sb, e4b->bd_info);
- 
--- 
-2.20.1
-
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 1b851dcd20c9..71ba6a56ad7c 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -247,7 +247,7 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
+>                                             uint32_t *mask)
+>  {
+>         struct ec_response_host_event_mask *r;
+> -       int ret;
+> +       int ret, mapped;
+>
+>         msg->command = EC_CMD_HOST_EVENT_GET_WAKE_MASK;
+>         msg->version = 0;
+> @@ -256,10 +256,9 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
+>
+>         ret = send_command(ec_dev, msg);
+>         if (ret >= 0) {
+> -               if (msg->result == EC_RES_INVALID_COMMAND)
+> -                       return -EOPNOTSUPP;
+> -               if (msg->result != EC_RES_SUCCESS)
+> -                       return -EPROTO;
+> +               mapped = cros_ec_map_error(msg->result);
+> +               if (mapped)
+> +                       return mapped;
+>         }
+>         if (ret > 0) {
+>                 r = (struct ec_response_host_event_mask *)msg->data;
+> --
+> 2.36.1.255.ge46751e96f-goog
+>

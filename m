@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88AC53EEEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6C753EEEE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbiFFTyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S232757AbiFFTyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiFFTy2 (ORCPT
+        with ESMTP id S232746AbiFFTyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 15:54:28 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A01FE;
-        Mon,  6 Jun 2022 12:54:27 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h192so6995670pgc.4;
-        Mon, 06 Jun 2022 12:54:27 -0700 (PDT)
+        Mon, 6 Jun 2022 15:54:32 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57FC1FE;
+        Mon,  6 Jun 2022 12:54:30 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id j7so13663051pjn.4;
+        Mon, 06 Jun 2022 12:54:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U22q+bCY4VehZDY1ro1wKhQ9JA/5THGWTqZ5PD1r04Q=;
-        b=MsRh9c98MvoAppDPeqo38Vb739JyYwj+s41ar9mghVqyhGsmukgMPi8IRp/2ifr+/1
-         wQUx2lZuy3g5xrM+gAYUS2bNFC3/1WHTkaJmkc6iVqDutQ5aYD6gdfcq+qxJ9r8B77Xl
-         MSS2HCpHn+G/A/MNwYJ8UhktBiScFyL6xUiQZnY7PvOCVX9O5HdFIrRqph2pvjgMGBRJ
-         G1007ZgbrDnvrFm3gcnAT64XrMDrUTQQG+JSzKGlArdPK5w4NiiM9gzegK8PDTkou/gF
-         ej5Oe62IVuk91glANudWjZN9AxhpX9TOaxrB3G8ttEn79cmf3yPfPl1xGyuni1H/xeM/
-         9Tnw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8q1bn4DIkVdPYocO3zbCpHORpBrE1kGq1oYmf6HtOsQ=;
+        b=mINn9lreCSDSLRjzYdkyakH7yu1xAu+JVxl4M3NKQNUO8NWCIji+Rg6dcg9XN92Dfe
+         jYN5iYbjFfYMGkY/13NHhv/udazkkmpBC32NPAWcl0LB5fcVJTJZk9LwRGvouoPPp23c
+         QlHN+iGVcMZApXMDDqIkmJOp/SGQRVFDADNQizTZBlXk4q9lA+8z2AJRLRRvxawOCGze
+         umg1tBSEOLEmfGquqdxyyWBaeq2I7g8bSvE9ril7aKuycWeLKJGIzkUkT+cwwluaKDIv
+         UILQs03kROqlIbJzsDKz1M1UbmmY1eIosuYzQX2WiWCUMqfYSJXx8vz0Me5X5OCdLddi
+         Q7Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=U22q+bCY4VehZDY1ro1wKhQ9JA/5THGWTqZ5PD1r04Q=;
-        b=wqC/hzxjkxKChEXoJa5nRgs6LKckt8gMjMUBxTLFbm4jWVehFIjq5yUtq3skGTk41g
-         KXXOIpJPrQZVZE8tRO2L76dKE4mRqLk4gBkakOon787wivfmKuotrEY8DXluaDhVh4tG
-         CNufKs2rHqFP82buN3m+ztUB7Ae9AcpRqDGYfQ3Yky+46pcBZDrDRxBWlx6z80HdKWGn
-         aOOJx1ZIVfuFegZIhgLNGz/Ls2hR/3cJ/7MdzIezdpB7WNsKJT/gxU4YGibBXvYwvGYR
-         pbj9c9j5c3Ig+4BFyXXiraERU+4qz08UUxUUHF3mfbS+eGIXQlDxa5o1tKOPeQdIRA9B
-         xvjg==
-X-Gm-Message-State: AOAM530PLgjdi6EOO0a1g/NQulNdP+KWZX4dv8SC7dUF0UDlZQ5tMxWK
-        gdNL/wiBvvt8Cw4oXq4uAME=
-X-Google-Smtp-Source: ABdhPJyOhQAvqpntmLlHAcjV3qfEg+KW6muhda1YLTUDNbrs9eK1BvjRMgvyNwrpCI/PRLxHSCMoEw==
-X-Received: by 2002:a65:64d9:0:b0:3fc:5285:5d63 with SMTP id t25-20020a6564d9000000b003fc52855d63mr22376970pgv.456.1654545266970;
-        Mon, 06 Jun 2022 12:54:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8q1bn4DIkVdPYocO3zbCpHORpBrE1kGq1oYmf6HtOsQ=;
+        b=RHcw2uRWAFftA6Go70ZwwpSieV7667/yQA45CIyIbY5MWcigpr2789fW0/jl/c1Az1
+         nftlT9uy617Zh/Ixwq1Jdjv3VcImSNeoXbBdKG6btZ19K5WeaCL5O9ieLKACn796+dfN
+         y1QQTXJOWcyXwvEiZV09ud2i+K6IqqseH39LKmc/EUdMvNzhWg3c7U3UamJICGcPXKai
+         SKcZXFPTHzq01C/gIopyBVAqPpioEmeDDXz4eyw4RegCZrOuSMgVU8AUWBj7ehabSjb7
+         no/OCUuT/pEAq2HTt54EevKrTtFkovws93kVGWdP7cke0Flu2HgfFDUiXaMWZDaeyQYb
+         JHdA==
+X-Gm-Message-State: AOAM532WMfG4rnYl9Q+cxEj+P6EqtfUxJ3FP5EjOcEtxOy67UTtjkyzl
+        BFsndzd5JfA7jRl5jouDbTI=
+X-Google-Smtp-Source: ABdhPJwcps+5XEULqwqwbglOyf5515hyF9v/tsYQo6POITCwxg+LpNt/xyw1wZhJkQLbzY4ali+PGA==
+X-Received: by 2002:a17:90a:e2c6:b0:1e2:fad9:40f7 with SMTP id fr6-20020a17090ae2c600b001e2fad940f7mr45813125pjb.198.1654545270086;
+        Mon, 06 Jun 2022 12:54:30 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016196bcf743sm4556724plk.275.2022.06.06.12.54.24
+        by smtp.gmail.com with ESMTPSA id t1-20020a63f341000000b003fc4cc19414sm11011928pgj.45.2022.06.06.12.54.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 12:54:25 -0700 (PDT)
+        Mon, 06 Jun 2022 12:54:28 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -58,11 +58,19 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/2] drm: Add DRM_GEM_FOPS
-Date:   Mon,  6 Jun 2022 12:54:31 -0700
-Message-Id: <20220606195432.1888346-1-robdclark@gmail.com>
+Subject: [PATCH v2 2/2] drm/msm: Expose client engine utilization via fdinfo
+Date:   Mon,  6 Jun 2022 12:54:32 -0700
+Message-Id: <20220606195432.1888346-2-robdclark@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220606195432.1888346-1-robdclark@gmail.com>
+References: <20220606195432.1888346-1-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,58 +85,191 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-The DEFINE_DRM_GEM_FOPS() helper is a bit limiting if a driver wants to
-provide additional file ops, like show_fdinfo().
+Similar to AMD commit
+874442541133 ("drm/amdgpu: Add show_fdinfo() interface"), using the
+infrastructure added in previous patches, we add basic client info
+and GPU engine utilisation for msm.
+
+Example output:
+
+	# cat /proc/`pgrep glmark2`/fdinfo/6
+	pos:	0
+	flags:	02400002
+	mnt_id:	21
+	ino:	162
+	drm-driver:	msm
+	drm-client-id:	7
+	drm-engine-gpu:	1734371319 ns
+	drm-cycles-gpu:	1153645024
+	drm-maxfreq-gpu:	800000000 Hz
+
+See also: https://patchwork.freedesktop.org/patch/468505/
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- include/drm/drm_gem.h | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ Documentation/gpu/drm-usage-stats.rst | 21 +++++++++++++++++++++
+ drivers/gpu/drm/msm/msm_drv.c         | 19 ++++++++++++++++++-
+ drivers/gpu/drm/msm/msm_gpu.c         | 21 +++++++++++++++++++--
+ drivers/gpu/drm/msm/msm_gpu.h         | 19 +++++++++++++++++++
+ 4 files changed, 77 insertions(+), 3 deletions(-)
 
-diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-index 9d7c61a122dc..dc88d4a2cdf6 100644
---- a/include/drm/drm_gem.h
-+++ b/include/drm/drm_gem.h
-@@ -314,6 +314,23 @@ struct drm_gem_object {
- 	const struct drm_gem_object_funcs *funcs;
+diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+index 6c9f166a8d6f..60e5cc9c13ad 100644
+--- a/Documentation/gpu/drm-usage-stats.rst
++++ b/Documentation/gpu/drm-usage-stats.rst
+@@ -105,6 +105,27 @@ object belong to this client, in the respective memory region.
+ Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+ indicating kibi- or mebi-bytes.
+ 
++- drm-cycles-<str> <uint>
++
++Engine identifier string must be the same as the one specified in the
++drm-engine-<str> tag and shall contain the number of busy cycles for the given
++engine.
++
++Values are not required to be constantly monotonic if it makes the driver
++implementation easier, but are required to catch up with the previously reported
++larger value within a reasonable period. Upon observing a value lower than what
++was previously read, userspace is expected to stay with that larger previous
++value until a monotonic update is seen.
++
++- drm-maxfreq-<str> <uint> [Hz|MHz|KHz]
++
++Engine identifier string must be the same as the one specified in the
++drm-engine-<str> tag and shall contain the maxium frequence for the given
++engine.  Taken together with drm-cycles-<str>, this can be used to calculate
++percentage utilization of the engine, whereas drm-engine-<str> only refects
++time active without considering what frequency the engine is operating as a
++percentage of it's maximum frequency.
++
+ ===============================
+ Driver specific implementations
+ ===============================
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index 14ab9a627d8b..57a66093e671 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -948,7 +948,24 @@ static const struct drm_ioctl_desc msm_ioctls[] = {
+ 	DRM_IOCTL_DEF_DRV(MSM_SUBMITQUEUE_QUERY, msm_ioctl_submitqueue_query, DRM_RENDER_ALLOW),
  };
  
-+/**
-+ * DRM_GEM_FOPS - Default drm GEM file operations
-+ *
-+ * This macro provides a shorthand for setting the GEM file ops in the
-+ * &file_operations structure.
-+ */
-+#define DRM_GEM_FOPS \
-+	.open		= drm_open,\
-+	.release	= drm_release,\
-+	.unlocked_ioctl	= drm_ioctl,\
-+	.compat_ioctl	= drm_compat_ioctl,\
-+	.poll		= drm_poll,\
-+	.read		= drm_read,\
-+	.llseek		= noop_llseek,\
-+	.mmap		= drm_gem_mmap
+-DEFINE_DRM_GEM_FOPS(fops);
++static void msm_fop_show_fdinfo(struct seq_file *m, struct file *f)
++{
++	struct drm_file *file = f->private_data;
++	struct drm_device *dev = file->minor->dev;
++	struct msm_drm_private *priv = dev->dev_private;
++	struct drm_printer p = drm_seq_file_printer(m);
 +
++	if (!priv->gpu)
++		return;
 +
- /**
-  * DEFINE_DRM_GEM_FOPS() - macro to generate file operations for GEM drivers
-  * @name: name for the generated structure
-@@ -330,14 +347,7 @@ struct drm_gem_object {
- #define DEFINE_DRM_GEM_FOPS(name) \
- 	static const struct file_operations name = {\
- 		.owner		= THIS_MODULE,\
--		.open		= drm_open,\
--		.release	= drm_release,\
--		.unlocked_ioctl	= drm_ioctl,\
--		.compat_ioctl	= drm_compat_ioctl,\
--		.poll		= drm_poll,\
--		.read		= drm_read,\
--		.llseek		= noop_llseek,\
--		.mmap		= drm_gem_mmap,\
-+		DRM_GEM_FOPS,\
++	msm_gpu_show_fdinfo(priv->gpu, file->driver_priv, &p);
++}
++
++static const struct file_operations fops = {
++	.owner = THIS_MODULE,
++	DRM_GEM_FOPS,
++	.show_fdinfo = msm_fop_show_fdinfo,
++};
+ 
+ static const struct drm_driver msm_driver = {
+ 	.driver_features    = DRIVER_GEM |
+diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+index eb8a6663f309..333a9a299b41 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.c
++++ b/drivers/gpu/drm/msm/msm_gpu.c
+@@ -4,6 +4,8 @@
+  * Author: Rob Clark <robdclark@gmail.com>
+  */
+ 
++#include "drm/drm_drv.h"
++
+ #include "msm_gpu.h"
+ #include "msm_gem.h"
+ #include "msm_mmu.h"
+@@ -146,6 +148,16 @@ int msm_gpu_pm_suspend(struct msm_gpu *gpu)
+ 	return 0;
+ }
+ 
++void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
++			 struct drm_printer *p)
++{
++	drm_printf(p, "drm-driver:\t%s\n", gpu->dev->driver->name);
++	drm_printf(p, "drm-client-id:\t%u\n", ctx->seqno);
++	drm_printf(p, "drm-engine-gpu:\t%llu ns\n", ctx->elapsed_ns);
++	drm_printf(p, "drm-cycles-gpu:\t%llu\n", ctx->cycles);
++	drm_printf(p, "drm-maxfreq-gpu:\t%lu Hz\n", gpu->fast_rate);
++}
++
+ int msm_gpu_hw_init(struct msm_gpu *gpu)
+ {
+ 	int ret;
+@@ -652,7 +664,7 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+ {
+ 	int index = submit->seqno % MSM_GPU_SUBMIT_STATS_COUNT;
+ 	volatile struct msm_gpu_submit_stats *stats;
+-	u64 elapsed, clock = 0;
++	u64 elapsed, clock = 0, cycles;
+ 	unsigned long flags;
+ 
+ 	stats = &ring->memptrs->stats[index];
+@@ -660,12 +672,17 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+ 	elapsed = (stats->alwayson_end - stats->alwayson_start) * 10000;
+ 	do_div(elapsed, 192);
+ 
++	cycles = stats->cpcycles_end - stats->cpcycles_start;
++
+ 	/* Calculate the clock frequency from the number of CP cycles */
+ 	if (elapsed) {
+-		clock = (stats->cpcycles_end - stats->cpcycles_start) * 1000;
++		clock = cycles * 1000;
+ 		do_div(clock, elapsed);
  	}
  
- void drm_gem_object_release(struct drm_gem_object *obj);
++	submit->queue->ctx->elapsed_ns += elapsed;
++	submit->queue->ctx->cycles     += cycles;
++
+ 	trace_msm_gpu_submit_retired(submit, elapsed, clock,
+ 		stats->alwayson_start, stats->alwayson_end);
+ 
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 6def00883046..4911943ba53b 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -361,6 +361,22 @@ struct msm_file_private {
+ 	/** cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE */
+ 	char *cmdline;
+ 
++	/**
++	 * elapsed:
++	 *
++	 * The total (cumulative) elapsed time GPU was busy with rendering
++	 * from this context in ns.
++	 */
++	uint64_t elapsed_ns;
++
++	/**
++	 * cycles:
++	 *
++	 * The total (cumulative) GPU cycles elapsed attributed to this
++	 * context.
++	 */
++	uint64_t cycles;
++
+ 	/**
+ 	 * entities:
+ 	 *
+@@ -544,6 +560,9 @@ static inline void gpu_write64(struct msm_gpu *gpu, u32 lo, u32 hi, u64 val)
+ int msm_gpu_pm_suspend(struct msm_gpu *gpu);
+ int msm_gpu_pm_resume(struct msm_gpu *gpu);
+ 
++void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
++			 struct drm_printer *p);
++
+ int msm_submitqueue_init(struct drm_device *drm, struct msm_file_private *ctx);
+ struct msm_gpu_submitqueue *msm_submitqueue_get(struct msm_file_private *ctx,
+ 		u32 id);
 -- 
 2.36.1
 

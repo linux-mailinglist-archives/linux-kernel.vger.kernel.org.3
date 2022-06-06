@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA5153F297
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FAA53F29A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbiFFXem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 19:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
+        id S235258AbiFFXfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 19:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235258AbiFFXej (ORCPT
+        with ESMTP id S235290AbiFFXfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 19:34:39 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EC0A88A7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:34:38 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id w19-20020a9d6393000000b0060aeb359ca8so11843521otk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 16:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=rguJKwRR36lQl5uxZm7mHzCFYZdBsPv0ibNSdNomq/k=;
-        b=dXUI/JUv2d8G38kg33SyEWXiYyw2PJJXVOxl1omnLH9Ja27JzXJUX6fxIVIJFIbJaG
-         dzF/NOhUNrECly3GluZei2LvRqwnZwcw4HLnbdiWxJ6x+PjHN0h/ebSlOKVaTHKq3qwr
-         0lkT9APpstb3GD1fHst78eocrp4yrVMiAz3A4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=rguJKwRR36lQl5uxZm7mHzCFYZdBsPv0ibNSdNomq/k=;
-        b=rV82zhIolSbi8j8pOHpN783Azinm1VEeVTBOYDedkwv+I2+aKjRVlVb2SGfP4NCeZQ
-         mEQmlunOhsNH1z0owlcDyLbxp+2y4buw6HpYPGRUaTGJPn2ymNoOe/hLG/zxSHCSC7i+
-         +Al0YY0Mf1yAnAJEbTVh/cmOJ+NwzgP1RAViXLN42XiK/uXHswpyrs52XzFpejrkYcyr
-         PchNGNBFtVC+OKgdOs9884f/NWMXJMGcXl15eHWdTV8ObAbBJYzRuQJj4+Qy96UY68Kj
-         v7hjWjrULS+gxfU8bqfWjM1USHmHCQ9f7Cb4QEVK0bm49ZtLbRLMGFeFuFldaj/0+Q/v
-         mhag==
-X-Gm-Message-State: AOAM530NouTHrtTx3mpoYdKPC4Ok8BFRwo14HiqLlYIfwG9NW3Xh/dv3
-        iZZ2i37snYK6StU9HqxC7oTHpQcVfKuim2KY1wH3ww==
-X-Google-Smtp-Source: ABdhPJzLShdt3/ZtY8VDYrGeT2bzo7GXF1G0CHIwEpTjOmrao6i0lcn628upmloNW7vGMA5dYEStU0exWrOIQCT7qso=
-X-Received: by 2002:a05:6830:113:b0:60b:eb0b:4054 with SMTP id
- i19-20020a056830011300b0060beb0b4054mr5867675otp.159.1654558477386; Mon, 06
- Jun 2022 16:34:37 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 6 Jun 2022 16:34:36 -0700
+        Mon, 6 Jun 2022 19:35:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97A664D622
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654558502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s4IezUTWggXGPOKGySEBoAtlNsKku7jiGHhVNtLr7us=;
+        b=W7+49+LDuSc2/l3ffncEBCaQoMBF3H8F4jo3CHypiet9y7b0oRu2tXocYYYYjRRBHMMl57
+        YhrqDJyVbeR/hY1uImhOEgEToo8kw39zr+JR3VHzQw3UenHhO/NuF6WUlb56j8uCIvwbJS
+        3XaYwAK3axwwguAyXZGY9QbjdVXfqz4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-433-YX7i_jadODWTHeVDUt9k4g-1; Mon, 06 Jun 2022 19:34:59 -0400
+X-MC-Unique: YX7i_jadODWTHeVDUt9k4g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9B901C1C1A1;
+        Mon,  6 Jun 2022 23:34:58 +0000 (UTC)
+Received: from localhost (ovpn-12-18.pek2.redhat.com [10.72.12.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D3BD840CF8EA;
+        Mon,  6 Jun 2022 23:34:57 +0000 (UTC)
+Date:   Tue, 7 Jun 2022 07:34:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Uladzislau Rezki <urezki@gmail.com>, akpm@linux-foundation.org
+Cc:     npiggin@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] mm/vmalloc: remove the unnecessary type check
+Message-ID: <20220606233454.GB234358@MiWiFi-R3L-srv>
+References: <20220606083909.363350-1-bhe@redhat.com>
+ <20220606083909.363350-2-bhe@redhat.com>
+ <Yp5lM0j1JdceUEjw@pc638.lan>
 MIME-Version: 1.0
-In-Reply-To: <20220606201825.763788-4-pmalani@chromium.org>
-References: <20220606201825.763788-1-pmalani@chromium.org> <20220606201825.763788-4-pmalani@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 6 Jun 2022 16:34:36 -0700
-Message-ID: <CAE-0n52GScELw_Bb1HSLnktMLTiw3bjK6A6e4uCNLtqmEx+z_Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] platform/chrome: cros_ec_proto: Update size arg types
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org
-Cc:     bleung@chromium.org, Guenter Roeck <groeck@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yp5lM0j1JdceUEjw@pc638.lan>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,27 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Prashant Malani (2022-06-06 13:18:05)
-> cros_ec_cmd() takes 2 size arguments. Update them to be of the more
-> appropriate type size_t.
->
-> Suggested-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
+On 06/06/22 at 10:36pm, Uladzislau Rezki wrote:
+> > In function adjust_va_to_fit_type(), it checks all values of passed
+> > in fit type, including NOTHING_FIT in the else branch. In fact, it's
+> > unnecessary to check NOTHING_FIT since the check has been done before
+> > adjust_va_to_fit_type() is called in all call sites. So clean it up.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > ---
+> >  mm/vmalloc.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > index 07db42455dd4..b7a138ab7b79 100644
+> > --- a/mm/vmalloc.c
+> > +++ b/mm/vmalloc.c
+> > @@ -1418,8 +1418,6 @@ adjust_va_to_fit_type(struct vmap_area *va,
+> >  		 * Shrink this VA to remaining size.
+> >  		 */
+> >  		va->va_start = nva_start_addr + size;
+> > -	} else {
+> > -		return -1;
+> >  	}
+> >  
+> >  	if (type != FL_FIT_TYPE) {
+> > -- 
+> > 2.34.1
+> > 
+> Why not just invoke the classify_va_fit_type() inside the adjust_va_to_fit_type()?
+> In this case we do not need to rely on upper-stack checks and the split logic 
+> becomes fully implemented in one solid function.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Ah, that's much better, let me post a new one. Thanks a lot.
 
-> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-> index 816da4eef3e5..85e29300f63d 100644
-> --- a/include/linux/platform_data/cros_ec_proto.h
-> +++ b/include/linux/platform_data/cros_ec_proto.h
-> @@ -232,7 +232,7 @@ bool cros_ec_check_features(struct cros_ec_dev *ec, int feature);
->  int cros_ec_get_sensor_count(struct cros_ec_dev *ec);
->
->  int cros_ec_cmd(struct cros_ec_device *ec_dev, unsigned int version, int command, void *outdata,
-> -                   int outsize, void *indata, int insize);
-> +                   size_t outsize, void *indata, size_t insize);
-
-We should also mark 'outdata' as const in another patch because it's
-being copied out and I assume unmodified by the callee. It's nice to
-tell the caller that their data will be sent unmodified.

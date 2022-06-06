@@ -2,133 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B4E53E376
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724C453E21B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiFFGvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 02:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S229623AbiFFGwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 02:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiFFGuz (ORCPT
+        with ESMTP id S230193AbiFFGvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 02:50:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5C163C4;
-        Sun,  5 Jun 2022 23:50:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 180AF610E8;
-        Mon,  6 Jun 2022 06:50:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2B1C341C0;
-        Mon,  6 Jun 2022 06:50:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654498253;
-        bh=Qk9/ffEjmSeLWVANW6nMVZzHlvbbvnY1jfXwQOlyMTA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oB4A9SxEKzpeXcxXXB4jEzKPCpORgKx5WVhH6mfDFuLlxkjlv/oxzhovULD7gkBOD
-         vykxFuBGZ8/27/S0Q7V8twyIODH0p29g3XPbNFhk3zqT5aLWvZjrge9ftUrCaz5W5F
-         cMDgctVyIR860mOtnWwA1TuPiEg1Zx3zQeTrTGqHWYTWIxjRO5T2vIsctR2gYDt+cN
-         C7JBfROjF3LBW9KHv4/sOX2YivREjYqA6RwmF+dF0w2AQU9zjbRAhoaWwdAFXN+rnS
-         InNHYvo/xbTwi16+1i+Iq5OHUexQqWPi5whMlArs/34aogzqWc4QM3GIZQ7ytCGsbz
-         M6WA+y3XFAuxA==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 3/3] arm64: dts: qcom: sm8250: Move qup-opp-table out of soc node
-Date:   Mon,  6 Jun 2022 12:20:35 +0530
-Message-Id: <20220606065035.553533-4-vkoul@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220606065035.553533-1-vkoul@kernel.org>
-References: <20220606065035.553533-1-vkoul@kernel.org>
+        Mon, 6 Jun 2022 02:51:10 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9ECD9EBF
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 23:51:07 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 6555868AA6; Mon,  6 Jun 2022 08:51:03 +0200 (CEST)
+Date:   Mon, 6 Jun 2022 08:51:02 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Caroline Subramoney <Caroline.Subramoney@microsoft.com>,
+        Richard Wurdack <riwurd@microsoft.com>,
+        Nathan Obr <Nathan.Obr@microsoft.com>
+Subject: Re: [PATCH v2 2/2] nvme: handle persistent internal error AER from
+ NVMe controller
+Message-ID: <20220606065102.GA2551@lst.de>
+References: <1654278961-81423-1-git-send-email-mikelley@microsoft.com> <1654278961-81423-2-git-send-email-mikelley@microsoft.com> <Yppfm5n41NEcrRlU@kbusch-mbp.dhcp.thefacebook.com> <PH0PR21MB3025781A702070304BB8A282D7A09@PH0PR21MB3025.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR21MB3025781A702070304BB8A282D7A09@PH0PR21MB3025.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The soc node expects all the nodes to have unit addresses. The
-qup-opp-table does not have that which causes warnings:
+On Sat, Jun 04, 2022 at 02:28:11PM +0000, Michael Kelley (LINUX) wrote:
+> > driver's irq handler. The other transports block on register reads, though, so
+> > they can't call this from an atomic context. The TCP context looks safe, but
+> > I'm not sure about RDMA or FC.
+> 
+> Good point.  But even if the RDMA and FC contexts are safe,
 
-arch/arm64/boot/dts/qcom/sm8250.dtsi:916.32-933.5:
-	Warning (simple_bus_reg): /soc@0/qup-opp-table:
-	missing or empty reg/ranges property
+For RDMA this is typically called from softirq context, so it is indeed
+not save.
 
-Move the qup-opp-table out of soc node to fix these warnings
+> if a
+> persistent error is reported, the controller is already in trouble and
+> may not respond to a request to retrieve the CSTS anyway.  Perhaps
+> we should just trust the AER error report and not bother checking
+> CSTS to decide whether to do the reset.  We can still check ctrl->state
+> and skip the reset if there's already one in progress.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 38 ++++++++++++++--------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index cf0c97bd5ad3..6fd30064ea74 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -702,6 +702,25 @@ CLUSTER_PD: cpu-cluster0 {
- 		};
- 	};
- 
-+	qup_opp_table: qup-opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-50000000 {
-+			opp-hz = /bits/ 64 <50000000>;
-+			required-opps = <&rpmhpd_opp_min_svs>;
-+		};
-+
-+		opp-75000000 {
-+			opp-hz = /bits/ 64 <75000000>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+		};
-+
-+		opp-120000000 {
-+			opp-hz = /bits/ 64 <120000000>;
-+			required-opps = <&rpmhpd_opp_svs>;
-+		};
-+	};
-+
- 	reserved-memory {
- 		#address-cells = <2>;
- 		#size-cells = <2>;
-@@ -914,25 +933,6 @@ rng: rng@793000 {
- 			clock-names = "core";
- 		};
- 
--		qup_opp_table: qup-opp-table {
--			compatible = "operating-points-v2";
--
--			opp-50000000 {
--				opp-hz = /bits/ 64 <50000000>;
--				required-opps = <&rpmhpd_opp_min_svs>;
--			};
--
--			opp-75000000 {
--				opp-hz = /bits/ 64 <75000000>;
--				required-opps = <&rpmhpd_opp_low_svs>;
--			};
--
--			opp-120000000 {
--				opp-hz = /bits/ 64 <120000000>;
--				required-opps = <&rpmhpd_opp_svs>;
--			};
--		};
--
- 		gpi_dma2: dma-controller@800000 {
- 			compatible = "qcom,sm8250-gpi-dma";
- 			reg = <0 0x00800000 0 0x70000>;
--- 
-2.34.1
-
+Yes, that might be a better option.

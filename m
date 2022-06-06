@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9440453EC21
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB7553E999
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbiFFNsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S239217AbiFFNqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239208AbiFFNsb (ORCPT
+        with ESMTP id S239066AbiFFNqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:48:31 -0400
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BC49A985;
-        Mon,  6 Jun 2022 06:48:27 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id v7so11961216ilo.3;
-        Mon, 06 Jun 2022 06:48:27 -0700 (PDT)
+        Mon, 6 Jun 2022 09:46:17 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC201C2D60
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:46:16 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-f33f0f5b1dso19154362fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xTpWPSxN0cL0aVs3iLR/HmIswwTyMjklIN9jCgr7T+Q=;
+        b=FcPDlAGsBBZqIo/U7deOp4+kp/FFXUkJnzTHVfhMBmEPyi9B3VzXHpf9gxN0z9WkZE
+         zMex9FE2JL2CXklp11tM+RvrBj2sYpgTHD7by7BoUHU3pZmfwFqd8lcUpyC1rjyBO1bm
+         YCd03N3WPWfcU+4W6kh7sCBKnMJnjOmWzjjWZWdg4XY4USYk6DjUd77G1FNecYHavaK9
+         aGMnGYduuyWNrQl6bnFZuv9IHGX89Lrc6mq3xecc153xREDsJw++jqd/pn3Abtox+NkW
+         wzKxonhke55kKh88L6qB9H87YfwIf04YwnblGT9+aG1335WeM4zWDlhR7pVeun0+kLQB
+         ViWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Iq+/ZT5S/tsKY65k+c5zzqLlMmHdbOtpYrK6tQD4cqY=;
-        b=0zL69b45rZX+vti6TKAhUTuVAXolTaDVadZv3AygbgK75Iwf2HvWmPV4oa88S+yJDi
-         uREPJe51ALGVCoXQ9D+EaLN8GPGLRMptCyAyVYTFsMGPGQ1pnSLSe3vaHkvKnwRuT55A
-         swxhSbjT4a+9YHKrF28nIaaupjbMwfzCjrGGdwPhRj39NEvTbgTTqMaouCU1d5Y3Cn+W
-         548W5PBtE/5tupQ8GxbfTjde1KPkD+QlTtsLY5tXZ7pO6ikoJXT3OUViUpPwVZc6Afrr
-         Tl7GxeahBcEJUGQghjsP7/TZah1tJqZQH271sfFcRSkXnhNMwOUUu0T3KTKO9l0cLa1X
-         uiTA==
-X-Gm-Message-State: AOAM530SmjNBbwU5Jgg0m4QurEfekARzbCbcaDzuVYxGVDHDg50PRGVy
-        yCmETxiOrZpNxQxXezBKSQ==
-X-Google-Smtp-Source: ABdhPJwbi6EJiI2PaM91wEcFQReWOmrXQCRfzQHoHXpccKkWDSHoKnOoq6i68X1AyLTQWbbX3840mg==
-X-Received: by 2002:a05:6e02:15ca:b0:2bf:ad58:4a6d with SMTP id q10-20020a056e0215ca00b002bfad584a6dmr14825916ilu.13.1654523306793;
-        Mon, 06 Jun 2022 06:48:26 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y38-20020a029529000000b0032e583132e4sm5675598jah.123.2022.06.06.06.48.25
+        bh=xTpWPSxN0cL0aVs3iLR/HmIswwTyMjklIN9jCgr7T+Q=;
+        b=hBJSNMYX/cAVwGooToCkuWz+b8oFVQOIfERkGL2gscd9snP/CzUfZN3QS9Vex64REj
+         T2LCwMrdt7D7wQ/innTVqAGHfPg/cTN8qtKvPPqjbvXf+VG31ujkAp4U7iT5vsExvNGj
+         rtJKZx+cnfo5LAKiIasjblX4DD3E7LH3Tssim6DmQwy8tirXAEpLR0aEUNlp6CK1uMPZ
+         gE1A0rp+yL2xKS+E524c0KV6mP+AY2sgSEb5NALt5ATqQ4/76oO4/ZBoIy98YDRQ6g4/
+         SPGtbs96chBMYRTLVkpzZf4QLJlOm91pjoh+lQ2G0A51bVU+V5Y9OWAJTRNNBj2rIGm1
+         spzw==
+X-Gm-Message-State: AOAM533f8QC2+yU+MkFD0uRvET+CQgNT+91yR2bEJj+vDKtvCRHmmgTe
+        v3ysbnVWfY0TksQewZI+mDKWyg==
+X-Google-Smtp-Source: ABdhPJzjWkyxD1qfFKANpxzk990e+EpRbqV/OdMD73IIFh/8xr2wLPUb0uOpjWjw5mrkS+7u1j/ptw==
+X-Received: by 2002:a05:6870:8184:b0:f5:dd95:7ef7 with SMTP id k4-20020a056870818400b000f5dd957ef7mr13883037oae.117.1654523174846;
+        Mon, 06 Jun 2022 06:46:14 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id pu7-20020a0568709e8700b000f5e33aaa66sm6770625oab.0.2022.06.06.06.46.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 06:48:26 -0700 (PDT)
-Received: (nullmailer pid 632986 invoked by uid 1000);
-        Mon, 06 Jun 2022 13:48:24 -0000
-Date:   Mon, 6 Jun 2022 08:48:24 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sameer Pujar <spujar@nvidia.com>
-Cc:     broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        perex@perex.cz, tiwai@suse.com, jonathanh@nvidia.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/6] ASoC: tegra: Add binding doc for OPE module
-Message-ID: <20220606134824.GB564610-robh@kernel.org>
-References: <1654238172-16293-1-git-send-email-spujar@nvidia.com>
- <1654238172-16293-2-git-send-email-spujar@nvidia.com>
- <20220603203003.GA852734-robh@kernel.org>
- <b70e024b-4f80-16b9-4bbe-ed8a24a384df@nvidia.com>
+        Mon, 06 Jun 2022 06:46:14 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 06:48:39 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 1/3] phy: qcom-edp: add regulator_set_load to edp phy
+Message-ID: <Yp4FtznlEzNKmRPZ@ripper>
+References: <1653512540-21956-1-git-send-email-quic_khsieh@quicinc.com>
+ <1653512540-21956-2-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b70e024b-4f80-16b9-4bbe-ed8a24a384df@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <1653512540-21956-2-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,22 +76,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 01:47:48PM +0530, Sameer Pujar wrote:
+On Wed 25 May 14:02 PDT 2022, Kuogee Hsieh wrote:
+
+> This patch add regulator_set_load() before enable regulator at
+> eDP phy driver.
 > 
-> On 04-06-2022 02:00, Rob Herring wrote:
-> > Doesn't apply for me. I guess there is some undocumented dependency
-> > here? Resend after the merge window if that solves it.
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+> ---
+>  drivers/phy/qualcomm/phy-qcom-edp.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> These were getting applied fine on linux-next.
-
-linux-next is not a base maintainers can apply to. Convenient instead of 
-having to get a specific tree, but you still need to say what the base 
-is (what tree it should be applied to).
-
-> Merge window seems to have closed now and v5.19-rc1 release is out. I can
-> apply these cleanly on v5.19-rc1. Please let me know if re-send is needed
-> now or I need to wait for some more time? Thanks.
-
-Yes, or the automated checks don't run.
-
-Rob
+> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
+> index cacd32f..7e357078 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
+> @@ -639,6 +639,18 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = regulator_set_load(edp->supplies[0].consumer, 21800); /* 1.2 V vdda-phy */
+> +	if (ret) {
+> +		dev_err(dev, "failed to set load at %s\n", edp->supplies[0].supply);
+> +		return ret;
+> +	}
+> +
+> +	ret = regulator_set_load(edp->supplies[1].consumer, 36000); /* 0.9 V vdda-pll */
+> +	if (ret) {
+> +		dev_err(dev, "failed to set load at %s\n", edp->supplies[1].supply);
+> +		return ret;
+> +	}
+> +
+>  	ret = qcom_edp_clks_register(edp, pdev->dev.of_node);
+>  	if (ret)
+>  		return ret;
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

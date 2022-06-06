@@ -2,44 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC65B53EC7C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF5253E73B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbiFFPQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S240416AbiFFPSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240346AbiFFPQO (ORCPT
+        with ESMTP id S240390AbiFFPSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:16:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BA5655499
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:16:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28595D6E;
-        Mon,  6 Jun 2022 08:16:13 -0700 (PDT)
-Received: from [10.57.82.168] (unknown [10.57.82.168])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03ACB3F73B;
-        Mon,  6 Jun 2022 08:16:11 -0700 (PDT)
-Message-ID: <367f8d3d-7890-12bd-6caf-c470b0b4c614@arm.com>
-Date:   Mon, 6 Jun 2022 16:16:10 +0100
+        Mon, 6 Jun 2022 11:18:22 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF6100525
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:18:21 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id x17so20308834wrg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=yeGsWUwpCqkjWUw73ezm6VojJaHFvekgLNZVHSqo7Vk=;
+        b=jqOsThaHylCTCcwoOhLVg1XFb7HupBei3AqE6zAsnr53Rae0pt2I2ft8PAiQF+RDFx
+         NG5eYCW+hMRDYDdAuHthvtZvb+0Sy+zkSuSlhXI4eSZpgaD5yydw5TJsK/tSdPu6UWxo
+         WWscIeUsxEbkTc4uZrJff3xTeMtdYil/Z7z7WaOX2UxGcdjMqmiPw5KUw4CT86bAo7nM
+         B4LDnMM9XcHtOIhVh9oXtZjgJeOP9/GxkUaNVRVa+c1QHaT/q+FqHE4jNsYcrh+tfYVy
+         yI/yS+NENKjrVtLoLtJDuUcgqEHar/jklU4sVotrx8dmq/SGSyC13Um2p+YmYeXhx0/X
+         1Dzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yeGsWUwpCqkjWUw73ezm6VojJaHFvekgLNZVHSqo7Vk=;
+        b=WNfPFWUJfuGwdShlyNgBj4G/Rfld+Jiqx3bcCsZdPRi4xJJeJDXKJi7aX8HBoQAj/y
+         Tpm4JFlKaYzqgmLa5W8k0NbciwL/p2pC5C3AV3YLiMEKJ7PUkLTzI5Eb/ZrOEiYWk5Yb
+         NGaxHqQbjKo2INgLwVxENylRl4nyibAVOMpxWBco/W8d84dNK7SksdpaTv7c4XL33JZP
+         PFcz94tFPuW4pmnEmSQ/eFpw0X76mdHojBeERDh7IXdXM7MN7ReUY5c9RhjMs29p2q59
+         TIv8Em1bGZmrHdL2M+cq+kpys2gyFsDOvnzqezG8bnAsXNkVpo+5zjNw9W0yHp1I6Zkl
+         3KMQ==
+X-Gm-Message-State: AOAM531GTRiapoEr7B73jBw26mPhM/4sPIjBwsI4v4E60mNYrP8Lt2In
+        PZaFgNBWQnVDIwNvyucIMkw=
+X-Google-Smtp-Source: ABdhPJyfdynbUbRFVUwiSWF+FSgpV5zzbCJhjuM4ntSDGcaz4MbSpwgejdAwe7ix3NmvKNWH6FhDRQ==
+X-Received: by 2002:adf:9bcd:0:b0:210:2fdc:c1f8 with SMTP id e13-20020adf9bcd000000b002102fdcc1f8mr21761855wrc.148.1654528699553;
+        Mon, 06 Jun 2022 08:18:19 -0700 (PDT)
+Received: from opensuse.localnet (host-79-13-108-3.retail.telecomitalia.it. [79.13.108.3])
+        by smtp.gmail.com with ESMTPSA id o17-20020a5d6711000000b00218453adaefsm1640899wru.101.2022.06.06.08.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:18:18 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Peter Robinson <pbrobinson@gmail.com>
+Subject: Re: [PATCH] staging: Also remove the Unisys visorbus.h
+Date:   Mon, 06 Jun 2022 17:18:17 +0200
+Message-ID: <5574984.DvuYhMxLoT@opensuse>
+In-Reply-To: <20220606132200.2873243-1-pbrobinson@gmail.com>
+References: <20220606132200.2873243-1-pbrobinson@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v6 2/2] Documentation: Add document for UltraSoc SMB
- drivers
-To:     Qi Liu <liuqi115@huawei.com>, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com
-References: <20220606130223.57354-1-liuqi115@huawei.com>
- <20220606130223.57354-3-liuqi115@huawei.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220606130223.57354-3-liuqi115@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,127 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qi
-
-Please find my comments below.
-
-On 06/06/2022 14:02, Qi Liu wrote:
-> This patch bring in a documentation for UltraSoc SMB drivers.
-> It simple descripts the device, sysfs interface and the
-> firmware bindings.
-> 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+On luned=C3=AC 6 giugno 2022 15:22:00 CEST Peter Robinson wrote:
+> The commit that removed the Unisys s-Par and visorbus drivers
+> left around the include/linux/visorbus.h file mentioned in the
+> MAINTAINERS entry, we can also remove that too.
+>=20
+> Fixes: e5f45b011e4a ("staging: Remove the drivers for the Unisys s-Par")
+> Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
 > ---
->   .../trace/coresight/ultrasoc-smb.rst          | 80 +++++++++++++++++++
->   1 file changed, 80 insertions(+)
->   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
-> 
-> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
-> new file mode 100644
-> index 000000000000..b4cfea82deb8
-> --- /dev/null
-> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
-> @@ -0,0 +1,80 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +UltraSoc - HW Assisted Tracing on SoC
-> +======================================
-> +   :Author:   Qi Liu <liuqi115@huawei.com>
-> +   :Date:     March 2022
-> +
-> +Introduction
-> +------------
-> +
-> +UltraSoc SMB is a per SCCL(Super CPU Cluster) hardware, and it provides a way to buffer and store
+>  include/linux/visorbus.h | 344 ---------------------------------------
+>  1 file changed, 344 deletions(-)
+>  delete mode 100644 include/linux/visorbus.h
+>=20
+Good catch, I had overlooked this file.
 
-minor nit: alignment.
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-> +CPU trace messages in a region of shared system memory. SMB is plugged as
-> +a coresight sink device and the corresponding trace generators (ETM) are
-> +plugged in as source devices.
-> +
+Thanks,
 
---8>---
-
-> +Sysfs files and directories
-> +---------------------------
-> +
-> +The SMB devices appear on the existing coresight bus alongside the other
-> +coresight devices::
-> +
-> +	$# ls /sys/bus/coresight/devices/
-> +	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
-> +
-> +The ``ultra_smb<N>`` named SMB associated with SCCL.::
-> +
-> +	$# ls /sys/bus/coresight/devices/ultra_smb0
-> +	enable_sink   mgmt
-> +	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
-> +	buf_size  buf_status  read_pos  write_pos
-> +
-
-These should also be placed in, with the appropriate format.
-
-Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+=46abio
 
 
-
-> +*Key file items are:-*
-> +   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
-> +   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
-> +   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
-> +		     BIT(0) is zero means buffer is empty.
-> +   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
-> +
-> +Firmware Bindings
-> +---------------------------
-> +
-> +Firmware binding of SMB device describes SMB device indentifier, resource
-> +information and graph structure.
-
-Please could you mention that this is only supported with ACPI here ?
-
-> +
-> +SMB is platform device and device id is "HISI03A1", resource of device is
-> +declared using the _CRS method. Each SMB must present two base address,
-
-Simply say, the device is identified by ACPI HID "HISI03A1".
-
-> +the first one is the configuration base address of SMB device, the second
-> +one is the base address of shared system memory.
-> +
-> +examples::
-> +
-> +    Device(USMB) {                                               \
-> +      Name(_HID, "HISI03A1")                                     \
-> +      Name(_CRS, ResourceTemplate() {                            \
-> +          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
-> +          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
-> +      })                                                         \
-> +      Name(_DSD, Package() {                                     \
-> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
-> +	/* Use CoreSight Graph ACPI bindings to describe connections topology */
-> +        Package() {                                              \
-> +          0,                                                     \
-> +          1,                                                     \
-> +          Package() {                                            \
-> +            1,                                                   \
-> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
-> +            8,                                                   \
-> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
-> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
-> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
-> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
-> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
-> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
-> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
-> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
-> +          }                                                      \
-> +        }                                                        \
-> +      })                                                         \
-> +    }
-
-Rest looks fine to me
-
-Suzuki

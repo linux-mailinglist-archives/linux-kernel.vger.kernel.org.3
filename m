@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E8D53E808
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE7C53EC8B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240586AbiFFPZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
+        id S240839AbiFFP14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240565AbiFFPZG (ORCPT
+        with ESMTP id S240584AbiFFPZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:25:06 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706E2FDBE0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:25:05 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id f65so2966747pgc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i0tXsXMGjaecgqX3jWpPhbYuXc4NjomTM5fJCVscSk0=;
-        b=a/ZhaRa9zo0Z+8UTqr4oxABM0QmsWfKwzfWfEdvvhnN7Kt79x0XsK9jl0J5IM9yQgp
-         b7jru9uewrcIzSerXlyuYqTRy1pNQeDmmpu5FQRcXa3YM8E55k+kbzDJQHWPunqxd7vA
-         uWSj9XuO4JXDZUEQ94DhrV+B3k8FRVN8nJIUk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i0tXsXMGjaecgqX3jWpPhbYuXc4NjomTM5fJCVscSk0=;
-        b=iqYriZX4LGSt0QAPtHgj6gNEnnHATPV8mkkaE+6mUnMUuD33dIoRxvsPGBecgBzMnX
-         tcAibad7xqtBx7lIpB4/g47mtYKJeygBLVq++L8VfaZ5GoY49AYHf/Iqe6u3PlMypq3u
-         j/a5Ea2eknnYhWzoI1wFg2Y6FFyeP2zQkON9d88gzAeKJgjt2p6Gfxe3rEY3eVkPBMwV
-         D3/SMc5r6eGAAgdgKZvyeusSnY64bxyfe0KlCmv5pIG9izBZ9i7gmu812bOo+78dVCZp
-         qrRktL7F8E3RhwaG45KU4M+pXiaejtgscgW5OWxOzIDPZYQZvUsdWzOeY4tpM/HhE/Wp
-         knWw==
-X-Gm-Message-State: AOAM533+Z6kTxTdrwPQ1IWNZWwmb1azRgN/ykgJUpQOZLGgoMg6wmqcQ
-        P0w5MTk7XcEzTOfaNY5LoCYu9Q==
-X-Google-Smtp-Source: ABdhPJwqPPpmDUkcXjmB6V/bMm8g+iVPCzngOYGUAR97PXSflEMdb1TJJvgiKirHO/VjPQebLdJxnw==
-X-Received: by 2002:a62:d101:0:b0:51b:eed5:8c91 with SMTP id z1-20020a62d101000000b0051beed58c91mr14876270pfg.32.1654529104777;
-        Mon, 06 Jun 2022 08:25:04 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:a0a:5e4:e24:c8c4])
-        by smtp.gmail.com with ESMTPSA id h1-20020a655181000000b003fbaae74971sm10749306pgq.72.2022.06.06.08.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 08:25:04 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        Rob Clark <robdclark@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
+        Mon, 6 Jun 2022 11:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BADE1CD350;
+        Mon,  6 Jun 2022 08:25:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97A6761532;
+        Mon,  6 Jun 2022 15:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9A7C341DE;
+        Mon,  6 Jun 2022 15:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654529149;
+        bh=JJt0IO+HD16nKaMzBkekejjxzH6zJTBr5QCuFRGczGE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FQvjxVAjYkRkMlnXeUbGK/ffXS9EGiIGJB6czmy41m7BUi+gGlw+X1Vu+xVWhr8kL
+         VZmd7RutDKDJkQ6+PNC2k4EBuWcMiwehnWLeUgcaztEFymFfTpyADom9iKEZ2r0U6R
+         8QTKxcO8tqR2nN17KQ7uaYrNw3fG0aG82GOK9/YW0npuVqsyv4lNhNtBEPuUTmVVIT
+         XOE4wPosVqLjYqBNBMuGPxA5PXF0QCAYswfnxGdyJu5zTk6VkYY/y8ZNnVzT895FLj
+         P6YX/uUQeJAT8yJ01In++Ksk7XfTNpL0aA6OZ6qjgQfLIhLB4De2E2AivHQOnNJprR
+         rbUcjc+xUJibQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nyEby-0012On-0x;
+        Mon, 06 Jun 2022 16:25:46 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] drm/mediatek: Config orientation property if panel provides it
-Date:   Mon,  6 Jun 2022 23:24:31 +0800
-Message-Id: <20220606152431.1889185-9-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-In-Reply-To: <20220606152431.1889185-1-hsinyi@chromium.org>
-References: <20220606152431.1889185-1-hsinyi@chromium.org>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        keyrings@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mmc@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        x86@kernel.org
+Subject: [PATCH 00/23] Update Documentation/ cross-references
+Date:   Mon,  6 Jun 2022 16:25:22 +0100
+Message-Id: <cover.1654529011.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,59 +85,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Panel orientation property should be set before drm_dev_register().
-Mediatek drm driver calls drm_dev_register() in .bind(). However, most
-panels sets orientation property relatively late, mostly in .get_modes()
-callback, since this is when they are able to get the connector and
-binds the orientation property to it, though the value should be known
-when the panel is probed.
+Hi John,
 
-Let the drm driver check if the remote end point is a panel and if it
-contains the orientation property. If it does, set it before
-drm_dev_register() is called.
+There were a number of DT binding conversions and other docs change that
+were not updated. Address them, in order to keep the cross-references on
+a sane state.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Patch series is against v5.19-rc1 (and applies cleanly on the top of
+today's -next).
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index d9f10a33e6fa..c56282412bfa 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -185,6 +185,7 @@ struct mtk_dsi {
- 	struct drm_encoder encoder;
- 	struct drm_bridge bridge;
- 	struct drm_bridge *next_bridge;
-+	struct drm_panel *panel;
- 	struct drm_connector *connector;
- 	struct phy *phy;
- 
-@@ -822,6 +823,12 @@ static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
- 		ret = PTR_ERR(dsi->connector);
- 		goto err_cleanup_encoder;
- 	}
-+
-+	/* Read panel orientation */
-+	if (dsi->panel)
-+		drm_connector_set_panel_orientation(dsi->connector,
-+				drm_panel_get_orientation(dsi->panel));
-+
- 	drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
- 
- 	return 0;
-@@ -837,6 +844,9 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
- 	struct drm_device *drm = data;
- 	struct mtk_dsi *dsi = dev_get_drvdata(dev);
- 
-+	/* Get panel if existed */
-+	drm_of_find_panel_or_bridge(dev->of_node, 0, 0, &dsi->panel, NULL);
-+
- 	ret = mtk_dsi_encoder_init(drm, dsi);
- 	if (ret)
- 		return ret;
+Mauro Carvalho Chehab (23):
+  dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
+  dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
+  dt-bindings: arm: update vexpress-config.yaml references
+  dt-bindings: reset: update st,stih407-powerdown.yaml references
+  dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
+  dt-bindings: mmc: exynos-dw-mshc: update samsung,pinctrl.yaml
+    reference
+  docs: netdev: update maintainer-netdev.rst reference
+  docs: filesystems: update netfs-api.rst reference
+  Documentation: update watch_queue.rst references
+  Documentation: KVM: update s390-pv.rst reference
+  Documentation: KVM: update amd-memory-encryption.rst references
+  Documentation: KVM: update msr.rst reference
+  Documentation: KVM: update s390-diag.rst reference
+  MAINTAINERS: update arm,hdlcd.yaml reference
+  MAINTAINERS: update arm,komeda.yaml reference
+  MAINTAINERS: update arm,malidp.yaml reference
+  MAINTAINERS: update cortina,gemini-ethernet.yaml reference
+  MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
+  MAINTAINERS: update maxim,max77693.yaml reference
+  MAINTAINERS: update snps,axs10x-reset.yaml reference
+  objtool: update objtool.txt references
+  ASoC: wm8731: update wlf,wm8731.yaml reference
+  arch: m68k: q40: README: drop references to IDE driver
+
+ .../ABI/testing/sysfs-driver-bd9571mwv-regulator   |  2 +-
+ Documentation/admin-guide/kernel-parameters.txt    |  2 +-
+ .../bindings/cpufreq/brcm,stb-avs-cpu-freq.txt     |  2 +-
+ .../devicetree/bindings/hwmon/vexpress.txt         |  2 +-
+ .../devicetree/bindings/mmc/exynos-dw-mshc.txt     |  2 +-
+ .../devicetree/bindings/phy/phy-stih407-usb.txt    |  2 +-
+ .../devicetree/bindings/pinctrl/pinctrl-rk805.txt  |  2 +-
+ .../devicetree/bindings/regulator/vexpress.txt     |  2 +-
+ .../bindings/sound/atmel-sam9x5-wm8731-audio.txt   |  2 +-
+ Documentation/devicetree/bindings/usb/dwc3-st.txt  |  2 +-
+ Documentation/devicetree/bindings/usb/ehci-st.txt  |  2 +-
+ Documentation/devicetree/bindings/usb/ohci-st.txt  |  2 +-
+ Documentation/security/keys/core.rst               |  2 +-
+ Documentation/security/secrets/coco.rst            |  2 +-
+ .../translations/it_IT/networking/netdev-FAQ.rst   |  2 +-
+ Documentation/virt/kvm/api.rst                     |  4 ++--
+ Documentation/virt/kvm/s390/s390-pv-boot.rst       |  2 +-
+ Documentation/virt/kvm/x86/hypercalls.rst          |  2 +-
+ Documentation/x86/orc-unwinder.rst                 |  2 +-
+ MAINTAINERS                                        | 14 +++++++-------
+ arch/m68k/q40/README                               |  4 +---
+ include/linux/fscache.h                            |  2 +-
+ include/linux/objtool.h                            |  2 +-
+ include/linux/watch_queue.h                        |  2 +-
+ init/Kconfig                                       |  2 +-
+ kernel/watch_queue.c                               |  2 +-
+ lib/Kconfig.debug                                  |  2 +-
+ tools/include/linux/objtool.h                      |  2 +-
+ tools/objtool/check.c                              |  2 +-
+ 29 files changed, 36 insertions(+), 38 deletions(-)
+
 -- 
-2.36.1.255.ge46751e96f-goog
+2.36.1
+
 

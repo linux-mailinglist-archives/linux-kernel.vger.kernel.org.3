@@ -2,146 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F310F53E680
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D641F53E7D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239802AbiFFOeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S239955AbiFFOgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbiFFOeM (ORCPT
+        with ESMTP id S239912AbiFFOgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:34:12 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDC42D1FE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:34:10 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:34356)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nyDo0-00D2LX-5K; Mon, 06 Jun 2022 08:34:08 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:60040 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nyDny-007IX0-Uu; Mon, 06 Jun 2022 08:34:07 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Hao Wu <guoyuanchao1202@gmail.com>
-Cc:     brauner@kernel.org, keescook@chromium.org, axboe@kernel.dk,
-        peterz@infradead.org, elver@google.com, tglx@linutronix.de,
-        legion@kernel.org, linux-kernel@vger.kernel.org
-References: <20220223133540.24230-1-guoyuanchao1202@gmail.com>
-Date:   Mon, 06 Jun 2022 09:33:17 -0500
-In-Reply-To: <20220223133540.24230-1-guoyuanchao1202@gmail.com> (Hao Wu's
-        message of "Wed, 23 Feb 2022 21:35:40 +0800")
-Message-ID: <878rq96evm.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 6 Jun 2022 10:36:19 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FE5131F04
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:36:12 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id r14-20020a056830418e00b0060b8da9ff75so10861913otu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Q2777MlCrWf6jryTiFZsDg5chGgCdhRgryHt5py+rzE=;
+        b=diH8ZiHRZY9FdSSg+r7mCyQm4v39feHVxKCXY+sivbww1p9dhsxV3I0Baqr7+TeVyB
+         irIbsOItz9rYAOnVKfXbV9utUyGnuxnVizZR8EYJYJKpaYfFug+W9+jXT6n1MjZPuWhh
+         Q25u1XZj1vz6lp9Lc/N4vtrlskijlOh0rfAFtBrZrZpadx9i+3/L+TWzz418/sDJ4b1z
+         knOFBRlOXeeavEYZY5KnvUIot+IuZOcyoNOzuahk8qVoca5uUPQrATdA0ha/2S/V5I0M
+         QDov0776gS41vaqKgHOdkMP0q0S1cLW6nQXIBfshsiZcu67HACYKn+oJpywAxFg/TCGC
+         F0bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Q2777MlCrWf6jryTiFZsDg5chGgCdhRgryHt5py+rzE=;
+        b=ouuzJgVrUvVWJPem7k5ms6TTxE/LXTOW6XM1+tYOYHbjzJtV15lS80kpfY04noGXFC
+         II4Ip8WBgxFaGgxiXg4F0XiXTWIIgB1yJxRVxUdsWi+/XK8IQutP5vOiYtmnc3f9ffyo
+         pq036CgQx/pO/mOI7xFHOO3uGWFD2BdLG1sDO2e4CC0G1H5aIkbSIQ48aJbI41ocF2ee
+         MgorpWUYNzb58emNNj33PSpokPuCwT72R/hapDmEu8ip5G6HgpFGCoWBjkHSCXsz7mgl
+         /29VPgS4/x7ndkd7Uec7MPqYgSFAGo0p+bcrzQx4T0Extc/Uy3wC04+gx3lG8Em7Hn2O
+         AVyA==
+X-Gm-Message-State: AOAM533/2fuhC1VxoHiAjwdBAoaLEY097lJsTNPaP8hnjGA107/OLdSK
+        xh3NXDD9/yeVHBODz/9PqvsHSw==
+X-Google-Smtp-Source: ABdhPJwK6LANYJEn1qcfJ4u+9iQE0OOYcHswotmAQeDnQnoBMVzE/2VQEMs7e4dwb0BqvjEG9Ip3VA==
+X-Received: by 2002:a9d:6250:0:b0:60b:e6cf:4942 with SMTP id i16-20020a9d6250000000b0060be6cf4942mr5669186otk.278.1654526171894;
+        Mon, 06 Jun 2022 07:36:11 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id u13-20020a056871008d00b000f5d4e5b9a0sm6942791oaa.2.2022.06.06.07.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 07:36:11 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH 3/5] gpio: 104-idio-16: Implement and utilize register structures
+Date:   Mon,  6 Jun 2022 10:33:18 -0400
+Message-Id: <a3c220528a1f29455aaf126b5c4435c610b74dce.1654525394.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1654525394.git.william.gray@linaro.org>
+References: <cover.1654525394.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nyDny-007IX0-Uu;;;mid=<878rq96evm.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/tCTIH6sFgbMpYmO8+BYSCq+lVTT7M1/Q=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Hao Wu <guoyuanchao1202@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 527 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 11 (2.1%), b_tie_ro: 10 (1.8%), parse: 0.89
-        (0.2%), extract_message_metadata: 3.9 (0.7%), get_uri_detail_list:
-        1.82 (0.3%), tests_pri_-1000: 3.8 (0.7%), tests_pri_-950: 1.44 (0.3%),
-        tests_pri_-900: 1.03 (0.2%), tests_pri_-90: 83 (15.8%), check_bayes:
-        81 (15.4%), b_tokenize: 8 (1.5%), b_tok_get_all: 9 (1.7%),
-        b_comp_prob: 4.0 (0.8%), b_tok_touch_all: 56 (10.6%), b_finish: 1.11
-        (0.2%), tests_pri_0: 403 (76.5%), check_dkim_signature: 0.62 (0.1%),
-        check_dkim_adsp: 2.7 (0.5%), poll_dns_idle: 0.84 (0.2%), tests_pri_10:
-        2.2 (0.4%), tests_pri_500: 7 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v1] signal.c: repeatedly set the TIF_SIGPENDING flag
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hao Wu <guoyuanchao1202@gmail.com> writes:
+Reduce magic numbers and improve code readability by implementing and
+utilizing named register data structures.
 
-> The recalc_sigpending_and_wake() function calls recalc_sigpending_tsk() and signal_wake_up(),
-> both of which set the TIF_SIGPENDING flag, so when recalc_sigpending_tsk() returns true,
-> the TIF_SIGPENDING flag will be set twice.
->
-> Maybe we can take away the set TIF_SIGPENDING logic from recalc_sigpending_tsk(),
-> so that recalc_sigpending_tsk() just determines whether the TIF_SIGPENDING flag needs to be set,
-> and the actual set TIF_SIGPENDING flag logic is executed outside.
->
-> kernel/signal.c:175: recalc_sigpending_and_wake()
-> kernel/signal.c:154: recalc_sigpending_tsk()
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/gpio/gpio-104-idio-16.c | 58 +++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 17 deletions(-)
 
-I just saw this.
+diff --git a/drivers/gpio/gpio-104-idio-16.c b/drivers/gpio/gpio-104-idio-16.c
+index 45f7ad8573e1..2f8e295f5541 100644
+--- a/drivers/gpio/gpio-104-idio-16.c
++++ b/drivers/gpio/gpio-104-idio-16.c
+@@ -19,6 +19,7 @@
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/spinlock.h>
++#include <linux/types.h>
+ 
+ #define IDIO_16_EXTENT 8
+ #define MAX_NUM_IDIO_16 max_num_isa_dev(IDIO_16_EXTENT)
+@@ -32,19 +33,42 @@ static unsigned int irq[MAX_NUM_IDIO_16];
+ module_param_hw_array(irq, uint, irq, NULL, 0);
+ MODULE_PARM_DESC(irq, "ACCES 104-IDIO-16 interrupt line numbers");
+ 
++/**
++ * struct idio_16_reg - device registers structure
++ * @out0_7:	Read: N/A
++ *		Write: FET Drive Outputs 0-7
++ * @in0_7:	Read: Isolated Inputs 0-7
++ *		Write: Clear Interrupt
++ * @irq_ctl:	Read: Enable IRQ
++ *		Write: Disable IRQ
++ * @unused:	N/A
++ * @out8_15:	Read: N/A
++ *		Write: FET Drive Outputs 8-15
++ * @in8_15:	Read: Isolated Inputs 8-15
++ *		Write: N/A
++ */
++struct idio_16_reg {
++	u8 out0_7;
++	u8 in0_7;
++	u8 irq_ctl;
++	u8 unused;
++	u8 out8_15;
++	u8 in8_15;
++};
++
+ /**
+  * struct idio_16_gpio - GPIO device private data structure
+  * @chip:	instance of the gpio_chip
+  * @lock:	synchronization lock to prevent I/O race conditions
+  * @irq_mask:	I/O bits affected by interrupts
+- * @base:	base port address of the GPIO device
++ * @reg:	I/O address offset for the device registers
+  * @out_state:	output bits state
+  */
+ struct idio_16_gpio {
+ 	struct gpio_chip chip;
+ 	raw_spinlock_t lock;
+ 	unsigned long irq_mask;
+-	void __iomem *base;
++	struct idio_16_reg __iomem *reg;
+ 	unsigned int out_state;
+ };
+ 
+@@ -79,9 +103,9 @@ static int idio_16_gpio_get(struct gpio_chip *chip, unsigned int offset)
+ 		return -EINVAL;
+ 
+ 	if (offset < 24)
+-		return !!(ioread8(idio16gpio->base + 1) & mask);
++		return !!(ioread8(&idio16gpio->reg->in0_7) & mask);
+ 
+-	return !!(ioread8(idio16gpio->base + 5) & (mask>>8));
++	return !!(ioread8(&idio16gpio->reg->in8_15) & (mask>>8));
+ }
+ 
+ static int idio_16_gpio_get_multiple(struct gpio_chip *chip,
+@@ -91,9 +115,9 @@ static int idio_16_gpio_get_multiple(struct gpio_chip *chip,
+ 
+ 	*bits = 0;
+ 	if (*mask & GENMASK(23, 16))
+-		*bits |= (unsigned long)ioread8(idio16gpio->base + 1) << 16;
++		*bits |= (unsigned long)ioread8(&idio16gpio->reg->in0_7) << 16;
+ 	if (*mask & GENMASK(31, 24))
+-		*bits |= (unsigned long)ioread8(idio16gpio->base + 5) << 24;
++		*bits |= (unsigned long)ioread8(&idio16gpio->reg->in8_15) << 24;
+ 
+ 	return 0;
+ }
+@@ -116,9 +140,9 @@ static void idio_16_gpio_set(struct gpio_chip *chip, unsigned int offset,
+ 		idio16gpio->out_state &= ~mask;
+ 
+ 	if (offset > 7)
+-		iowrite8(idio16gpio->out_state >> 8, idio16gpio->base + 4);
++		iowrite8(idio16gpio->out_state >> 8, &idio16gpio->reg->out8_15);
+ 	else
+-		iowrite8(idio16gpio->out_state, idio16gpio->base);
++		iowrite8(idio16gpio->out_state, &idio16gpio->reg->out0_7);
+ 
+ 	raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
+ }
+@@ -135,9 +159,9 @@ static void idio_16_gpio_set_multiple(struct gpio_chip *chip,
+ 	idio16gpio->out_state |= *mask & *bits;
+ 
+ 	if (*mask & 0xFF)
+-		iowrite8(idio16gpio->out_state, idio16gpio->base);
++		iowrite8(idio16gpio->out_state, &idio16gpio->reg->out0_7);
+ 	if ((*mask >> 8) & 0xFF)
+-		iowrite8(idio16gpio->out_state >> 8, idio16gpio->base + 4);
++		iowrite8(idio16gpio->out_state >> 8, &idio16gpio->reg->out8_15);
+ 
+ 	raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
+ }
+@@ -158,7 +182,7 @@ static void idio_16_irq_mask(struct irq_data *data)
+ 	if (!idio16gpio->irq_mask) {
+ 		raw_spin_lock_irqsave(&idio16gpio->lock, flags);
+ 
+-		iowrite8(0, idio16gpio->base + 2);
++		iowrite8(0, &idio16gpio->reg->irq_ctl);
+ 
+ 		raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
+ 	}
+@@ -177,7 +201,7 @@ static void idio_16_irq_unmask(struct irq_data *data)
+ 	if (!prev_irq_mask) {
+ 		raw_spin_lock_irqsave(&idio16gpio->lock, flags);
+ 
+-		ioread8(idio16gpio->base + 2);
++		ioread8(&idio16gpio->reg->irq_ctl);
+ 
+ 		raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
+ 	}
+@@ -212,7 +236,7 @@ static irqreturn_t idio_16_irq_handler(int irq, void *dev_id)
+ 
+ 	raw_spin_lock(&idio16gpio->lock);
+ 
+-	iowrite8(0, idio16gpio->base + 1);
++	iowrite8(0, &idio16gpio->reg->in0_7);
+ 
+ 	raw_spin_unlock(&idio16gpio->lock);
+ 
+@@ -232,8 +256,8 @@ static int idio_16_irq_init_hw(struct gpio_chip *gc)
+ 	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(gc);
+ 
+ 	/* Disable IRQ by default */
+-	iowrite8(0, idio16gpio->base + 2);
+-	iowrite8(0, idio16gpio->base + 1);
++	iowrite8(0, &idio16gpio->reg->irq_ctl);
++	iowrite8(0, &idio16gpio->reg->in0_7);
+ 
+ 	return 0;
+ }
+@@ -255,8 +279,8 @@ static int idio_16_probe(struct device *dev, unsigned int id)
+ 		return -EBUSY;
+ 	}
+ 
+-	idio16gpio->base = devm_ioport_map(dev, base[id], IDIO_16_EXTENT);
+-	if (!idio16gpio->base)
++	idio16gpio->reg = devm_ioport_map(dev, base[id], IDIO_16_EXTENT);
++	if (!idio16gpio->reg)
+ 		return -ENOMEM;
+ 
+ 	idio16gpio->chip.label = name;
+-- 
+2.36.1
 
-I agree that it is unfortunate that recalc_sigpending_and_wake sets
-TIF_SIGPENDING twice.
-
-Looking at the code only force_sig_info_to_task calls
-recalc_sigpending_and_wake.  I have some work underway that removes the
-need to call recalc_sigpending in force_sig_info_to_task so I believe
-that will resolve the matter.
-
-Regardless of changes I have planned force_sig_info_to_task appears to
-be the proper place to resolve this issue.  It looks like
-complete_signal called from __send_signal_locked called from
-send_signal_locked called from force_sig_info_to_task calls
-signal_wake_up if that is needed at all.  So I believe the issue you are
-seeing could be solved be simply replacing recalc_sigpending_and_wake
-with recalc_sigpending_tsk.
-
-Some more analysis might reveal and even nicer clean up.  If
-sending the signal is always going to call signal_wake_up calling
-recalc_sigpending_tsk might not even be necessary.
-
-Good spotting of a rough spot in the code.  I don't think your proposed
-change is the way we should go about fixing it.
-
-Eric
->
-> Signed-off-by: Hao Wu <guoyuanchao1202@gmail.com>
-> ---
->  kernel/signal.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 9b04631acde8..6c5a00cd7e9a 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -157,7 +157,6 @@ static bool recalc_sigpending_tsk(struct task_struct *t)
->  	    PENDING(&t->pending, &t->blocked) ||
->  	    PENDING(&t->signal->shared_pending, &t->blocked) ||
->  	    cgroup_task_frozen(t)) {
-> -		set_tsk_thread_flag(t, TIF_SIGPENDING);
->  		return true;
->  	}
-> @@ -181,8 +180,11 @@ void recalc_sigpending_and_wake(struct task_struct *t)
->  void recalc_sigpending(void)
->  {
-> -	if (!recalc_sigpending_tsk(current) && !freezing(current))
-> +	if (recalc_sigpending_tsk(current)) {
-> +		set_tsk_thread_flag(t, TIF_SIGPENDING);
-> +	} else if (!freezing(current)) {
->  		clear_thread_flag(TIF_SIGPENDING);
-> +	}
->  }
->  EXPORT_SYMBOL(recalc_sigpending);
-> @@ -2325,7 +2327,9 @@ static void ptrace_stop(int exit_code, int why, int clear_code, kernel_siginfo_t
->  	 * So check for any that we should take before resuming user mode.
->  	 * This sets TIF_SIGPENDING, but never clears it.
->  	 */
-> -	recalc_sigpending_tsk(current);
-> +	if (recalc_sigpending_tsk(current)) {
-> +		set_tsk_thread_flag(t, TIF_SIGPENDING);
-> +	}
->  }
->  static void ptrace_do_notify(int signr, int exit_code, int why)
-> 2.32.0

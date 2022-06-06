@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E4C53EAB6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979B153EA85
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241351AbiFFQII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
+        id S241352AbiFFQIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241208AbiFFQID (ORCPT
+        with ESMTP id S241219AbiFFQIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:08:03 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED945FDD;
-        Mon,  6 Jun 2022 09:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=BTkBGPOQBnugqSzn8eLuGd4rM1iSDLOsvnLCslHwyGE=; b=hgTPHiBYlfwkGkI63QfFhvMbyB
-        4srPt4mfRmF1EbDrRBueAz1xHa22G14lX1rbiaVLA6TsVxzTZ2XoHL1V2Zlz+uqFHhw5CtNCsIGyo
-        j6cxzassqK2CA+vFfaQrxGnW+HXBV/L3Chcl7a52m9igHcVSp3NkOTsdTLiJVFVEYP64v13fU7fFY
-        JCe5M8MxG5WhrZFaLvlHPqefR+NQkgfCs87WAgKzJ5nymVNXZpVyM9Q2jXnfYxcc5EQEH65ScSm+8
-        XUKA/QWDplvvXv3kyo/4rmT8xqxSfwAO2Jcke8TQCXR55m1LA3Ul9hqZvW+Muc3xqDJ9LRzsCIMC9
-        DBgsmWzg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyFGl-005Ue0-RQ; Mon, 06 Jun 2022 16:07:56 +0000
-Message-ID: <d4de59db-62ba-22c3-3fc4-c69aa46b5c7a@infradead.org>
-Date:   Mon, 6 Jun 2022 09:07:51 -0700
+        Mon, 6 Jun 2022 12:08:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8C19FA4;
+        Mon,  6 Jun 2022 09:08:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC40BB81A87;
+        Mon,  6 Jun 2022 16:08:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B34DC385A9;
+        Mon,  6 Jun 2022 16:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654531721;
+        bh=VcnSGVYbTblm760SjoQqgE9wkQ5/rRfgycH6HwRHJBc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V+beBwDxRnKh4QQe2VqHO65haLEa4SFcYqmwQ5ha8+WUYCaxluVJVO3WScGsMh7p/
+         yCfF9SVghYkLIH6xbuY7EblAx0+pw2kCeFY+U8r5aYiYId7tg1gWkBet3TOBYGLIQT
+         PcGrSh8CCrUG5ygkR02Frlr2vLWxWu4elm2N6km6BG/SAlnAB2hA9vt/LQe6X0dQsB
+         l9+KnyRf/Tk2tZ0WgxX6uJlruPDsrpmtYtQVC3nbp0WKqm9tlPjhyXCBWfx3JGBLic
+         6DN4asOH0MIrEIiwReQNoKx9++AZ6UztiGOM76QW95uzWgz6z9uoC1ZFVsS5+hc9Y0
+         yB6c3lFfV6NaA==
+Date:   Mon, 6 Jun 2022 17:08:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     robh+dt@kernel.org, angelogioacchino.delregno@collabora.com,
+        aaronyu@google.com, matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        tzungbi@google.com, julianbraha@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v5 19/20] ASoC: mediatek: mt8186: add machine driver with
+ mt6366, rt1019 and rt5682s
+Message-ID: <Yp4mg3ObzfQJ3FgP@sirena.org.uk>
+References: <20220523132858.22166-1-jiaxin.yu@mediatek.com>
+ <20220523132858.22166-20-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 23/23] arch: m68k: q40: README: drop references to IDE
- driver
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org
-References: <cover.1654529011.git.mchehab@kernel.org>
- <39b24f99f5b71eb5ac025b438b7eb2a0df2258a1.1654529011.git.mchehab@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <39b24f99f5b71eb5ac025b438b7eb2a0df2258a1.1654529011.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9rL9qmwu0rrfH0q3"
+Content-Disposition: inline
+In-Reply-To: <20220523132858.22166-20-jiaxin.yu@mediatek.com>
+X-Cookie: Zeus gave Leda the bird.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +64,94 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--9rL9qmwu0rrfH0q3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/6/22 08:25, Mauro Carvalho Chehab wrote:
-> Since IDE support was deleted by Christoph Hellwig <hch@lst.de>,
-> Jun 16 2021, drop the left-over from README file.
-> 
-> Fixes: b7fb14d3ac63 ("ide: remove the legacy ide driver")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+On Mon, May 23, 2022 at 09:28:57PM +0800, Jiaxin Yu wrote:
+> Add support for mt8186 board with mt6366, rt1019 and rt5682s.
+>=20
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+This breaks an x86 allmodconfig build:
 
-Thanks.
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.=
+c: In function =E2=80=98mt8186_da7219_init=E2=80=99:
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.=
+c:58:15: error: too many arguments to function =E2=80=98snd_soc_card_jack_n=
+ew=E2=80=99
+   58 |         ret =3D snd_soc_card_jack_new(rtd->card, "Headset Jack",
+      |               ^~~~~~~~~~~~~~~~~~~~~
+In file included from /build/stage/linux/include/sound/soc.h:1362,
+                 from /build/stage/linux/sound/soc/mediatek/mt8186/mt8186-m=
+t6366-da7219-max98357.c:15:
+/build/stage/linux/include/sound/soc-card.h:18:5: note: declared here
+   18 | int snd_soc_card_jack_new(struct snd_soc_card *card, const char *id=
+, int type,
+      |     ^~~~~~~~~~~~~~~~~~~~~
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.=
+c: In function =E2=80=98mt8186_mt6366_da7219_max98357_hdmi_init=E2=80=99:
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.=
+c:161:15: error: too many arguments to function =E2=80=98snd_soc_card_jack_=
+new=E2=80=99
+  161 |         ret =3D snd_soc_card_jack_new(rtd->card, "HDMI Jack", SND_J=
+ACK_LINEOUT,
+      |               ^~~~~~~~~~~~~~~~~~~~~
+In file included from /build/stage/linux/include/sound/soc.h:1362,
+                 from /build/stage/linux/sound/soc/mediatek/mt8186/mt8186-m=
+t6366-da7219-max98357.c:15:
+/build/stage/linux/include/sound/soc-card.h:18:5: note: declared here
+   18 | int snd_soc_card_jack_new(struct snd_soc_card *card, const char *id=
+, int type,
+      |     ^~~~~~~~~~~~~~~~~~~~~
+make[5]: *** [/build/stage/linux/scripts/Makefile.build:249: sound/soc/medi=
+atek/mt8186/mt8186-mt6366-da7219-max98357.o] Error 1
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c=
+: In function =E2=80=98mt8186_rt5682s_init=E2=80=99:
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c=
+:61:15: error: too many arguments to function =E2=80=98snd_soc_card_jack_ne=
+w=E2=80=99
+   61 |         ret =3D snd_soc_card_jack_new(rtd->card, "Headset Jack",
+      |               ^~~~~~~~~~~~~~~~~~~~~
+In file included from /build/stage/linux/include/sound/soc.h:1362,
+                 from /build/stage/linux/sound/soc/mediatek/mt8186/mt8186-m=
+t6366-rt1019-rt5682s.c:17:
+/build/stage/linux/include/sound/soc-card.h:18:5: note: declared here
+   18 | int snd_soc_card_jack_new(struct snd_soc_card *card, const char *id=
+, int type,
+      |     ^~~~~~~~~~~~~~~~~~~~~
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c=
+: In function =E2=80=98mt8186_mt6366_rt1019_rt5682s_hdmi_init=E2=80=99:
+/build/stage/linux/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c=
+:137:15: error: too many arguments to function =E2=80=98snd_soc_card_jack_n=
+ew=E2=80=99
+  137 |         ret =3D snd_soc_card_jack_new(rtd->card, "HDMI Jack", SND_J=
+ACK_LINEOUT,
+      |               ^~~~~~~~~~~~~~~~~~~~~
+In file included from /build/stage/linux/include/sound/soc.h:1362,
+                 from /build/stage/linux/sound/soc/mediatek/mt8186/mt8186-m=
+t6366-rt1019-rt5682s.c:17:
+/build/stage/linux/include/sound/soc-card.h:18:5: note: declared here
+   18 | int snd_soc_card_jack_new(struct snd_soc_card *card, const char *id=
+, int type,
+      |     ^~~~~~~~~~~~~~~~~~~~~
+make[5]: *** [/build/stage/linux/scripts/Makefile.build:249: sound/soc/medi=
+atek/mt8186/mt8186-mt6366-rt1019-rt5682s.o] Error 1
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
-> 
->  arch/m68k/q40/README | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/arch/m68k/q40/README b/arch/m68k/q40/README
-> index a4991d2d8af6..4db6db54d57a 100644
-> --- a/arch/m68k/q40/README
-> +++ b/arch/m68k/q40/README
-> @@ -30,9 +30,7 @@ drivers used by the Q40, apart from the very obvious (console etc.):
->  		     genrtc.c		# RTC
->  		char/joystick/*		# most of this should work, not
->  				        # in default config.in
-> -	        block/q40ide.c		# startup for ide
-> -		      ide*		# see Documentation/ide/ide.rst
-> -		      floppy.c		# normal PC driver, DMA emu in asm/floppy.h
-> +	        block/floppy.c		# normal PC driver, DMA emu in asm/floppy.h
->  					# and arch/m68k/kernel/entry.S
->  					# see drivers/block/README.fd
->  		net/ne.c
+--9rL9qmwu0rrfH0q3
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-~Randy
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKeJoIACgkQJNaLcl1U
+h9CFwgf9G5LGVON0H/dhjgLQ816wyvWWAsYE0+WxJJpawHUSAJG6kzTYC82FZhmg
+sKZTDn6T5jUPGtP/wzWpE+EzcUyUds+Uo6QzoZ4rqzYCEid76p5sksmT5oGdmn8R
+HaQSkTKIWF6OprneORmZda8SBV+UcpqScD8irzR1x5V/ZAxo7BRqfOw3ZiTcz8Ru
+RgJf+UcRdUoECGjsxBl0yA4BLMfk6Bt8SDPr/KG5J4mkdFxzRwZCz68nyWdt0CFE
+FDU1KIBy/P0Oy5eyMdw1n+gT63rWT2swrBcjfanH+HML8cj4Yo63Fl7wMxA1C+WN
+ZB/b3z4o7yvK/wM7PbzvknzAm0536w==
+=91r5
+-----END PGP SIGNATURE-----
+
+--9rL9qmwu0rrfH0q3--

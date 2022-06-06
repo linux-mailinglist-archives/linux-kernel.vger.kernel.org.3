@@ -2,143 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3DA53E096
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 06:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E533053E0EB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiFFEtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 00:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S229497AbiFFFGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiFFEtK (ORCPT
+        with ESMTP id S229453AbiFFFGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 00:49:10 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996D12D4452;
-        Sun,  5 Jun 2022 21:44:32 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id h192so5204477pgc.4;
-        Sun, 05 Jun 2022 21:44:32 -0700 (PDT)
+        Mon, 6 Jun 2022 01:06:17 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19214926F
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 21:47:27 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id w3so11202948plp.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Jun 2022 21:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=Ei98CzMADVmZgYFeiLtsGJYTQVfE9A0BeZIjyPKxUtY=;
-        b=CSuyvVspJpgNGH9mOvuz7ac/YH7ga0gFudZfmsHX3Ot8N8h8Z4THzZb8P6v7A16pxW
-         3f9h82XPYmwfzrdKdGtHFc120HqaiPdQgMjL9h+y+H+ZUsTUZ/4bGPjN/Fklf7+tOuzN
-         Kvs94TR6MfZWCPCQfhFwS3dmfnAGi6I9TwdKUNiv5v83NJAEmqKCgBRN/TPZcfYxnY8C
-         24q2viLFBH2i/jnZkwQlxAWNPeaJ5eUA1jl9KLATOjkVS2boATi+e/cRJ67IYRdQa7zk
-         3WfxWgBPTmvl7JS5zGBbPDTkLpr8RtUMDrBiplyAuhbBgxd+sTNyeAiyJ0/Xe8/dhGZD
-         i+ig==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V48jIpUPpkwi/mXw0vV1qlo/0R+nh6UqO3bUzG0QHns=;
+        b=nqQSjOvanX+8t+tfNQWjxQaFfRS/+GiSKg6PgDaC+vs0EtY834wW/8lUSx+MIh6+66
+         QxSZBzAa72S8ewu9/W+7na7Kc7k0dqpizfCf/j+3vNxRtbDBwkBlrf52exTYP/uHo+77
+         Ssb8uKKBEcUSKuPtsbTbCH81UkVrmiSnDCncw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=Ei98CzMADVmZgYFeiLtsGJYTQVfE9A0BeZIjyPKxUtY=;
-        b=UCP44IBHKqule4+o2LAXcKU+g6LFNmw6/Mf8DhhdzlIzuAGf5XivOYwosQeHkZ2ADZ
-         ya53cHoImZjtmumEjGZTF4lECyixhUeQ8gzyEvKHbjNrx/3dbmCFeJ65x7LqqtJWQg7B
-         Yp28a5FDfwwJ9/iFIvHs9MkFL9x8X+RwLD9UHQ7MsMngtWPevJJXunJn177QUH2bhQo6
-         /k8OtlN02MWvGww38ldM9s6RW6gknJiF37wolPe7oAA+RraVlTpCm1LN8oiQ5XfI4zTs
-         8U1+Q6rRPcz2urVchXr5TAq+1XU1VgCw4a9CJwXMw53xcsgyYJkBziQ9EnNAuo2YFPH+
-         e5sw==
-X-Gm-Message-State: AOAM531MSpS+1X7vbv5DZt05ZucR9SakVLSaIsw2DEGQRHXHkKuUqQXf
-        rf8JGIHXRBkLZnK0ocstU8Q=
-X-Google-Smtp-Source: ABdhPJxF/pRL7PBQzioMDWZkadWITlMEbaosSR/T+Gac9Nx5KXf/CYJVQGejc5ZvODYb5r4B8ibBxA==
-X-Received: by 2002:a05:6a00:1805:b0:51c:1a6:2253 with SMTP id y5-20020a056a00180500b0051c01a62253mr7996757pfa.70.1654490671586;
-        Sun, 05 Jun 2022 21:44:31 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id jh17-20020a170903329100b001636d95fe59sm9472391plb.172.2022.06.05.21.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 21:44:30 -0700 (PDT)
-Message-ID: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
-Date:   Mon, 6 Jun 2022 13:44:24 +0900
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V48jIpUPpkwi/mXw0vV1qlo/0R+nh6UqO3bUzG0QHns=;
+        b=osgjjDtzqwm1m+uzs2/hUujR1OMwwU+HO+ZwJZiFvMx758GdXCqEGypJlUpZTiVyNB
+         pjVGKBek32adTjHS+FnPfnHCaEeLhD4+c347djIlGBMS8hYbBdgY31IGCnPpnfWjL83K
+         tT220NK7c+4vYwXUv4Ynt2Bf0iezIeAelpV1h9aZ8wVqVFomkEL5K0kBquXXglufCfqE
+         AeOd2TP66AY0dtsqiv0AQSnR7DsSiiS75tJm+c1ku60JyAs/mAG92yayP3oXk0HjgZ1x
+         0Madfq9bN7AHclKq+n51R51J17JpLZuFvh8XpSHLNgzt+Z+Eo0CQEP03x8Vp5TpwmV1c
+         DSgw==
+X-Gm-Message-State: AOAM533EDsl+mNLISjTLBRRShqP+g77WeYJA14fhZNiD+94BYmbTfKLx
+        A3nHmbwxeGA5rwf5IwDbU+JYlg==
+X-Google-Smtp-Source: ABdhPJwNc9WTpHKy7nu/+3cTPEdExZl8996ly7Ju/bCZ1Rjy5dZNznjIR0+wzUFpxhRy9BhxaOu5oQ==
+X-Received: by 2002:a17:90a:c002:b0:1d9:250a:73c8 with SMTP id p2-20020a17090ac00200b001d9250a73c8mr24459800pjt.133.1654490847065;
+        Sun, 05 Jun 2022 21:47:27 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:ced3:b110:401b:b32c])
+        by smtp.gmail.com with ESMTPSA id t190-20020a6381c7000000b003db7de758besm9718609pgd.5.2022.06.05.21.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 21:47:26 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/8] Add a panel API to return panel orientation
+Date:   Mon,  6 Jun 2022 12:47:12 +0800
+Message-Id: <20220606044720.945964-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
-Cc:     Joey Gouly <joey.gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH] gpio: Fix kernel-doc comments to nested union
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 48ec13d36d3f ("gpio: Properly document parent data union")
-is supposed to have fixed a warning from "make htmldocs" regarding
-kernel-doc comments to union members.  However, the same warning
-still remains [1].
+Panels usually call drm_connector_set_panel_orientation(), which is
+later than drm/kms driver calling drm_dev_register(). This leads to a
+WARN()[1].
 
-Fix the issue by following the example found in section "Nested
-structs/unions" of Documentation/doc-guide/kernel-doc.rst.
+The orientation property is known earlier. For example, some panels
+parse the property through device tree during probe.
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
-Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/ [1]
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Joey Gouly <joey.gouly@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
----
- include/linux/gpio/driver.h | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+The series add a panel API drm_panel_get_orientation() for drm/kms
+drivers. The drivers can use the API to get panel's orientation, so they
+can call drm_connector_set_panel_orientation() before drm_dev_register().
 
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index b1e0f1f8ee2e..54c3c6506503 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -167,21 +167,24 @@ struct gpio_irq_chip {
- 	 */
- 	irq_flow_handler_t parent_handler;
- 
--	/**
--	 * @parent_handler_data:
--	 *
--	 * If @per_parent_data is false, @parent_handler_data is a single
--	 * pointer used as the data associated with every parent interrupt.
--	 *
--	 * @parent_handler_data_array:
--	 *
--	 * If @per_parent_data is true, @parent_handler_data_array is
--	 * an array of @num_parents pointers, and is used to associate
--	 * different data for each parent. This cannot be NULL if
--	 * @per_parent_data is true.
--	 */
- 	union {
-+		/**
-+		 * @parent_handler_data:
-+		 *
-+		 * If @per_parent_data is false, @parent_handler_data is a
-+		 * single pointer used as the data associated with every
-+		 * parent interrupt.
-+		 */
- 		void *parent_handler_data;
-+
-+		/**
-+		 * @parent_handler_data_array:
-+		 *
-+		 * If @per_parent_data is true, @parent_handler_data_array is
-+		 * an array of @num_parents pointers, and is used to associate
-+		 * different data for each parent. This cannot be NULL if
-+		 * @per_parent_data is true.
-+		 */
- 		void **parent_handler_data_array;
- 	};
- 
+Panel needs to implement .get_orientation callback to return the property.
 
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220530081910.3947168-2-hsinyi@chromium.org/
+
+Hsin-Yi Wang (8):
+  drm/panel: Add an API drm_panel_get_orientation() to return panel
+    orientation
+  drm/panel: boe-tv101wum-nl6: Implement .get_orientation callback
+  drm/panel: panel-edp: Implement .get_orientation callback
+  drm/panel: lvds: Implement .get_orientation callback
+  drm/panel: panel-simple: Implement .get_orientation callback
+  drm/panel: ili9881c: Implement .get_orientation callback
+  drm/panel: elida-kd35t133: Implement .get_orientation callback
+  drm/mediatek: Config orientation property if panel provides it
+
+ drivers/gpu/drm/drm_panel.c                    |  8 ++++++++
+ drivers/gpu/drm/mediatek/mtk_dsi.c             | 10 ++++++++++
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-edp.c              | 15 ++++++++++++++-
+ drivers/gpu/drm/panel/panel-elida-kd35t133.c   | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-ilitek-ili9881c.c  | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-lvds.c             | 14 ++++++++++++++
+ drivers/gpu/drm/panel/panel-simple.c           | 16 +++++++++++++++-
+ include/drm/drm_panel.h                        | 10 ++++++++++
+ 9 files changed, 113 insertions(+), 2 deletions(-)
+
 -- 
-2.25.1
+2.36.1.255.ge46751e96f-goog
 

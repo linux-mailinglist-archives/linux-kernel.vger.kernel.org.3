@@ -2,79 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432FC53EAAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686EA53E914
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbiFFLBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 07:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S234558AbiFFLFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 07:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234658AbiFFLBI (ORCPT
+        with ESMTP id S234787AbiFFLFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 07:01:08 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ABE16BE0C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 04:01:00 -0700 (PDT)
-Received: from [192.168.1.103] (31.173.84.0) by msexch01.omp.ru (10.188.4.12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 6 Jun 2022
- 14:00:56 +0300
-Subject: Re: [PATCH v2 2/3] usb: phy: Add devm_of_usb_get_phy_by_phandle
-To:     Harsh Agarwal <quic_harshq@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        <ahalaney@redhat.com>
-References: <1654276362-28930-1-git-send-email-quic_harshq@quicinc.com>
- <1654276362-28930-3-git-send-email-quic_harshq@quicinc.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <c52d93db-e89a-24ba-725c-420641bd43af@omp.ru>
-Date:   Mon, 6 Jun 2022 14:00:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 6 Jun 2022 07:05:37 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095501ABFAB;
+        Mon,  6 Jun 2022 04:05:34 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 256B5JOu128160;
+        Mon, 6 Jun 2022 06:05:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1654513519;
+        bh=RzofpN8LTT0pK90RsTEKA9YlM2UMDZ0XQd/tW3igcIU=;
+        h=From:To:CC:Subject:Date;
+        b=dsooFiJ7o8tCRTVwf0W45wIfk8pXtIgr6Ae1Hv8n9NS46ePHyWlHJ4r15alG5tPHq
+         FvDNyAf5sAH8jL02aOGBuePgLktYNhSTuuL4tPBUXdtL5oNfZx/XDtDlz1jAzHltE/
+         vnwHeu5/jTgwYmIp53NAUNwRGnLUDWrdwRsRsmh0=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 256B5J2h009986
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Jun 2022 06:05:19 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
+ Jun 2022 06:05:14 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 6 Jun 2022 06:05:14 -0500
+Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 256B57G2072083;
+        Mon, 6 Jun 2022 06:05:08 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kishon@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Subject: [PATCH v3 0/3] J7200: CPSW5G: Add support for QSGMII mode to am65-cpsw driver
+Date:   Mon, 6 Jun 2022 16:34:40 +0530
+Message-ID: <20220606110443.30362-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <1654276362-28930-3-git-send-email-quic_harshq@quicinc.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.84.0]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/06/2022 10:38:49
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 170918 [Jun 06 2022]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 482 482 6622156fb2e4848883fa5c715ac8f6ff125fd631
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.84.0:7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.0
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/06/2022 10:41:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 6/6/2022 9:18:00 AM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,36 +67,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Add support for QSGMII mode to am65-cpsw driver.
 
-On 6/3/22 8:12 PM, Harsh Agarwal wrote:
+Change log:
 
-> Adding support for devm_of_usb_get_phy_by_phandle which allows
-> us to get PHY phandles of a device declared inside lookup_node.
-> 
-> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-[...]
-> diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
-> index e4de6bc..2581c72 100644
-> --- a/include/linux/usb/phy.h
-> +++ b/include/linux/usb/phy.h
-[...]
-> @@ -249,6 +251,12 @@ static inline struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
->  	return ERR_PTR(-ENXIO);
->  }
->  
-> +extern inline struct usb_phy *devm_of_usb_get_phy_by_phandle(struct device *dev,
+v2 -> v3:
+1. In ti,k3-am654-cpsw-nuss.yaml, restrict if/then statement to port
+   nodes.
 
-   *extern inline*? :-O
-   Shouldn't it be *static*?
- 
-> +	const char *phandle, u8 index, struct device_node *lookup_node)
-> +{
-> +	return ERR_PTR(-ENXIO);
-> +}
-> +
->  static inline struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
->  	struct device_node *node, struct notifier_block *nb)
->  {
+v1 -> v2:
+1. Add new compatible for CPSW5G in ti,k3-am654-cpsw-nuss.yaml and extend
+   properties for new compatible.
+2. Add extra_modes member to struct am65_cpsw_pdata to be used for QSGMII
+   mode by new compatible.
+3. Add check for phylink supported modes to ensure that only one phy mode
+   is advertised as supported.
+4. Check if extra_modes supports QSGMII mode in am65_cpsw_nuss_mac_config()
+   for register write.
+5. Add check for assigning port->sgmii_base only when extra_modes is valid.
 
-MBR, Sergey
+v2: https://lore.kernel.org/r/20220602114558.6204-1-s-vadapalli@ti.com/
+v1: https://lore.kernel.org/r/20220531113058.23708-1-s-vadapalli@ti.com
+
+Siddharth Vadapalli (3):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Update bindings for J7200
+    CPSW5G
+  net: ethernet: ti: am65-cpsw: Add support for J7200 CPSW5G
+  net: ethernet: ti: am65-cpsw: Move phy_set_mode_ext() to correct
+    location
+
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 135 ++++++++++++------
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c      |  41 +++++-
+ drivers/net/ethernet/ti/am65-cpsw-nuss.h      |   2 +
+ 3 files changed, 129 insertions(+), 49 deletions(-)
+
+-- 
+2.36.1
+

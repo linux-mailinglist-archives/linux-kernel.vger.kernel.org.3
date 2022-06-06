@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2492953E726
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F92D53E9FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239998AbiFFOmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S239878AbiFFOmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239993AbiFFOmF (ORCPT
+        with ESMTP id S239838AbiFFOml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:42:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8482D89A3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:41:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DC53B81A6B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B385C385A9;
-        Mon,  6 Jun 2022 14:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654526515;
-        bh=+PqOvDVBMAo5Z0wuMAGeqDON3g9v2EJjw+ews+oIwQI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u8bBqivZ51RJxDpkBkRgbts5/QcuEKDS6tOOamCUGQuaJrIJmSB/q/H2/WfJwRZVH
-         CAtyEqUH+m8Y1dhBW8xPaHeh/PcxmZOHCBhv61coiUN8OqEqeVruXlhtM6B76FBaW5
-         32HTLpaYCSKmGC3lWcEjoJU/6+ps8CkTRJ+EKXEjGJO8OgdC719atFy8XgcjFzCOkM
-         Sx044R5yTYD1aG4a3CgTCU8FbDe0295+ZyQZb3pbLpcl8o8Y8OYIP+Tf0yOe2N3ukv
-         VFQ+kEdCBa2734zqGT4gHckpkBna3w2sraSVwZPxW7gL1xF0EAPbw1sgoHGNtnguW8
-         cHEFBnR0uMgSw==
-Date:   Mon, 6 Jun 2022 23:41:50 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 0/3] tracing/probes: allow no event name input when
- create group
-Message-Id: <20220606234150.43ddad8dd5b459c18a46994d@kernel.org>
-In-Reply-To: <1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Jun 2022 10:42:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91A71A384
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654526559; x=1686062559;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VzrlOVXFHNGxewHeQ9+phMApukJnGGy7+AOe2fFMn6M=;
+  b=H16dDoDv5GWISp3fo7QFUt2b1Gv7w18F/YRWja+j8RFzZzIDrXl8eqbo
+   gTWCSmXv8vp4F66vpsSsQ/ql6HXCGVQgbBdcVebtZlwOtORKw/h9HU57P
+   cJpHUn4t86HTRvi57aeFydmtwdJ3stEke4/+YzAnhRnvFGxOzsdK5aaW0
+   M2i6/0VG3TT81negjh90rk1+S/cZ1U1UIe3N71olXh1SRQASgEuF0D4kh
+   mowmEa2DFgKRBSkXhbRDYj1f3jjGMjkk9Ygyr9JE6Dq/OLO2o5EJ1z//E
+   8IG96piqjECjSJMZ8kZMa2ZItnLuaz0MYkNjnYdCwqxfPsvyMt4t4DlkT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="256497758"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="256497758"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 07:42:39 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="906574474"
+Received: from twinkler-lnx.jer.intel.com ([10.12.87.143])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 07:42:37 -0700
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc-next 1/3] mei: me: set internal pg flag to off on hardware reset
+Date:   Mon,  6 Jun 2022 17:42:23 +0300
+Message-Id: <20220606144225.282375-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linyu,
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-On Thu, 2 Jun 2022 20:10:58 +0800
-Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
+Link reset flow is always performed in the runtime resumed state.
+The internal PG state may be left as ON after the suspend
+and will not be updated upon the resume if the D0i3 is not supported.
 
-> take kprobe event as example, when create a group of events,
-> p[:[GRP/]EVENT] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS],
-> according to this format, we must input EVENT name,
-> 
-> this change allow only GRP/ input, EVENT name auto generate from KSYM,
-> p[:[GRP/][EVENT]] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
-> 
-> siliar change apply to eprobe and uprobe.
+Ensure that the internal PG state is set to the right value on the flow
+entrance in case the firmware does not support D0i3.
 
-Thanks for updating the series. This looks godd to me.
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+---
+ drivers/misc/mei/hw-me.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-for this series.
-
-Thank you!
-
-> 
-> V1: https://lore.kernel.org/lkml/1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com/
-> 
-> V2: fix remove comment in V1 patch1,
->     remove v1 patch2 as it is NACK.
-> 
-> v3: (v2 link: https://lore.kernel.org/lkml/1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com/)
->     add selftest cases for kprobe and eprobe event,
->     remove macro used in v1,v2,
->     change location to generate eprobe event name.
-> 
-> v4: (v3 link: https://lore.kernel.org/lkml/1653978552-18637-1-git-send-email-quic_linyyuan@quicinc.com/)
->     fix comment of kprobe/eprobe test case.
-> 
-> Linyu Yuan (3):
->   tracing: eprobe: remove duplicate is_good_name() operation
->   tracing: auto generate event name when create a group of events
->   selftests/ftrace: add test case for GRP/ only input
-> 
->  Documentation/trace/kprobetrace.rst                |  8 +++----
->  Documentation/trace/uprobetracer.rst               |  8 +++----
->  kernel/trace/trace.c                               |  8 +++----
->  kernel/trace/trace_dynevent.c                      |  2 +-
->  kernel/trace/trace_eprobe.c                        | 25 +++++++++++-----------
->  kernel/trace/trace_kprobe.c                        | 16 ++++++++------
->  kernel/trace/trace_probe.c                         |  6 ++++++
->  kernel/trace/trace_uprobe.c                        | 12 +++++++----
->  .../ftrace/test.d/dynevent/add_remove_eprobe.tc    |  9 +++++++-
->  .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |  7 ++++++
->  10 files changed, 64 insertions(+), 37 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
-
-
+diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
+index 9870bf717979..befa491e3344 100644
+--- a/drivers/misc/mei/hw-me.c
++++ b/drivers/misc/mei/hw-me.c
+@@ -1154,6 +1154,8 @@ static int mei_me_hw_reset(struct mei_device *dev, bool intr_enable)
+ 			ret = mei_me_d0i3_exit_sync(dev);
+ 			if (ret)
+ 				return ret;
++		} else {
++			hw->pg_state = MEI_PG_OFF;
+ 		}
+ 	}
+ 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.35.3
+

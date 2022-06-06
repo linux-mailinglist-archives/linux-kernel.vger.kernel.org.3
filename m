@@ -2,143 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E21C53EADF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B69B53E939
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbiFFJBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S232555AbiFFJDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiFFJBi (ORCPT
+        with ESMTP id S232515AbiFFJCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:01:38 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88B112D11
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:01:36 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7475D5C00A1;
-        Mon,  6 Jun 2022 05:01:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 06 Jun 2022 05:01:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1654506094; x=1654592494; bh=KmUEnrHf+o
-        GOuY+Xvakm6L4Zo3/Ea+eM9/DA5uFudkY=; b=rCWtGLL6Iu/ZnCom744WZU1x7k
-        WuHyF5YZCXN90nVnHwJyQ3jvrjT+Sw1STF5/A6Uec7WZ+Cnaa/IfXBj3Ga1njgM2
-        O2ZQcG91cbGMIGBdQNAZVVJmXPdm3yq+qw7yuny2M7FeDtCpm1ooU0ffHkaZYU6z
-        MKJSy2eBLuRivoMfyoM3Q/WN9lGvYwqgbhR7bgCeqCpMj9HqUludzlvPhP6vAwdF
-        XSg1hfnf+SZ+FX5Rp0+94m83J+vsX9pwy515dQbcwhxOewFelr6WgscA2eq0riXB
-        vZ0/p9rAdMqrJPdG/+XsAt43tlKjn7J9yFSursDpkDfj+dAMdvtHbdz0my4w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1654506094; x=1654592494; bh=KmUEnrHf+oGOuY+Xvakm6L4Zo3/E
-        a+eM9/DA5uFudkY=; b=oULOGo5cddjw63j71RFECI1sLvIK3lCDex4rzqZ6dbKt
-        GkADHMKVqWI3UufCLVDWKGLAiezEbpkRcYadcBzCPkRxXMldOlmd8vSLBuzSwFsi
-        XX0e0MkvGPxGZcsm7uQsnSnuCTaMF5nmVSzGkh/XExaLjb3xSuTZik0kbioHkOC1
-        JxbLTpr68KUKay8+y0K7upNY+2Y8PcQhQuexP6D1Xzu7iAWXRgLZbaoNy4u9+Hrc
-        gU5kJHi2rkDeg90jF3X0hE48HE9ArEBlLF+5Z1cZJIvTEQ9fotzII38UdHM8T/1o
-        fMaxXTCw33fzJEZrHzWJ93DzmMspVOI+8Fi/vWVbUw==
-X-ME-Sender: <xms:a8KdYlKBWa3UJ4NS08ntsE3zZmL0Y2TzSloHSXkgEk4WcmZjy3Dlhw>
-    <xme:a8KdYhLY2dQk0cAmHjK78z-IYSO6emPPdnle4LYztnqYeH_X32SyXmLS-UdrESus0
-    qFEDcb8qEhBmeR-z9E>
-X-ME-Received: <xmr:a8KdYtuD2Rx6OEygLXyIlRFFAq3kZFVvmrm1ujB-nCU0ZGHD7znX3W6BUTdEFRiTd82P70MKZ-OAIaXa8k2-XLMnsOVTGS02omNiwsg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddtvddgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:a8KdYmZS23Gs5UU-hzrjJpc6lNNQcqsh7PwI9iiT2mjeblQFDDYfDg>
-    <xmx:a8KdYsZ9tSxi9OJooqSyoOtek41gJpOBiUSFVSBkc04C8wRj1qpMbw>
-    <xmx:a8KdYqANtT-1pAjs3zvvzWroLtYscdaSzZzY4gLrOhnLmf11qrszQA>
-    <xmx:bsKdYsJkIobMQ7FUDeX37llie5znXiD3s1PHy9oYe-pLI9bwpANZEw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Jun 2022 05:01:31 -0400 (EDT)
-Date:   Mon, 6 Jun 2022 11:01:29 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: gcc-12: build errors: arch/arm64/kernel/setup.c:225:56: warning:
- array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
-Message-ID: <20220606090129.mpidmwwobgkcfc2v@houat>
-References: <CA+G9fYts-KH-R5EkBpz2u6H_Cx6YTXus1JKJS6yBxGhb0O2qQQ@mail.gmail.com>
- <CAK8P3a3QKWxqGore3+_DJnWo7bJgvDhkZjtkyg5EUg4_D=mE2w@mail.gmail.com>
+        Mon, 6 Jun 2022 05:02:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E678A21814
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:02:50 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2568a0Mt015613;
+        Mon, 6 Jun 2022 09:02:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=mzZRZT0AHyq8asyKqO60WX5Lt3f8z0sEDNX/x+OL8GM=;
+ b=KLLkjnVy1FzYLEa96yyDz9iJ+ljdJoPsG7XWRhczhNOYgOR+isSTFD/XaI0UPnQbLU8Q
+ JbIu8fS68H7tbxPB947mfePx2DbiEJpmlrBvB0EXAV+Diy48JmHCr+4+mmLGpD9jixWf
+ AVJlJQBZz7IPnUFUyn1Jq6uDv6fR40NmYA1QnHsS2EDe/wQkvf+e9U1RjVMGqRQ7FuQP
+ tN851335kIwyaX5bH0E7wRF/eSCErRzZbqjRME7dcZrr6W8JbFRPIUCA4bpanqRIIbmZ
+ UxXdMYox30RD1GKiJ4PtWIiSue5mjTHTnbhr9GHfheuFl97cHNQXY4auyVIOzfkLOeNz Cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gghf7bs03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 09:02:30 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2568OtO1006102;
+        Mon, 6 Jun 2022 09:02:29 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gghf7bryd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 09:02:29 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2568pjjS002172;
+        Mon, 6 Jun 2022 09:02:27 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma02fra.de.ibm.com with ESMTP id 3gfy191ngv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 09:02:27 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25692PZ913697476
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 09:02:25 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47095A4040;
+        Mon,  6 Jun 2022 09:02:25 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02554A404D;
+        Mon,  6 Jun 2022 09:02:19 +0000 (GMT)
+Received: from [9.43.87.254] (unknown [9.43.87.254])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 09:02:18 +0000 (GMT)
+Message-ID: <1301311f-12f0-0fda-1245-82bb4c3f5e93@linux.ibm.com>
+Date:   Mon, 6 Jun 2022 14:32:17 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tsirw27bcrup6k37"
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3QKWxqGore3+_DJnWo7bJgvDhkZjtkyg5EUg4_D=mE2w@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v4 1/7] mm/demotion: Add support for explicit memory
+ tiers
+Content-Language: en-US
+To:     Ying Huang <ying.huang@intel.com>
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
+ <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
+ <aeced91ea9d9396e9842f5c0264391aabd291726.camel@intel.com>
+ <d429a644-ef27-bcd8-52bd-c8cbe5fedc26@linux.ibm.com>
+ <143e40bcf46097d14514504518fdc1870fd8d4a1.camel@intel.com>
+ <eb6d7346-32a9-4fb2-61c2-a413c9f94f1c@linux.ibm.com>
+ <87ilpe8fxh.fsf@linux.ibm.com>
+ <a20f4db3c55f9471d27eacd7a8a245691a8fcd2f.camel@intel.com>
+ <b97d2013-ad5e-9b29-0b95-f52273bd3a8b@linux.ibm.com>
+ <d36eabfdc062aeb5aee18ab7ac0bca36b19f8521.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <d36eabfdc062aeb5aee18ab7ac0bca36b19f8521.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sJ8vN0SFkEeNXPAJn6o8Cf3tKTp8qn-N
+X-Proofpoint-ORIG-GUID: -pUIvSSa_YdMBAh1F8FxerjJXz4pW1Hp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_02,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060039
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/6/22 2:22 PM, Ying Huang wrote:
+....
+>>>> I can move the patch "mm/demotion/dax/kmem: Set node's memory tier to
+>>>> MEMORY_TIER_PMEM" before switching the demotion logic so that on systems
+>>>> with two memory tiers (DRAM and pmem) the demotion continues to work
+>>>> as expected after patch 3 ("mm/demotion: Build demotion targets based on
+>>>> explicit memory tiers"). With that, there will not be any regression in
+>>>> between the patch series.
+>>>>
+>>>
+>>> Thanks!  Please do that.  And I think you can add sysfs interface after
+>>> that patch too.  That is, in [1/7]
+>>>
+>>
+>> I am not sure why you insist on moving sysfs interfaces later. They are
+>> introduced based on the helper added. It make patch review easier to
+>> look at both the helpers and the user of the helper together in a patch.
+> 
+> Yes.  We should introduce a function and its user in one patch for
+> review.  But this doesn't mean that we should introduce the user space
+> interface as the first step.  I think the user space interface should
+> output correct information when we expose it.
+> 
 
---tsirw27bcrup6k37
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you look at this patchset we are not exposing any wrong information.
 
-Hi,
+patch 1 -> adds ability to register the memory tiers and expose details 
+of registered memory tier. At this point the patchset only support DRAM 
+tier and hence only one tier is shown
 
-On Fri, Jun 03, 2022 at 09:40:07AM +0200, Arnd Bergmann wrote:
-> On Fri, Jun 3, 2022 at 4:03 AM Naresh Kamboju <naresh.kamboju@linaro.org>=
- wrote:
-> >     inlined from 'setup_arch' at arch/arm64/kernel/setup.c:350:2:
-> > arch/arm64/kernel/setup.c:225:56: warning: array subscript -1 is
-> > outside array bounds of 'char[]' [-Warray-bounds]
-> >   225 |         kernel_code.end     =3D __pa_symbol(__init_begin - 1);
-> >
->=20
-> Is this the only warning of this type that you get for arm64?
+patch 2 -> adds per node memtier attribute. So only DRAM nodes shows the 
+details, because the patchset yet has not introduced a slower memory 
+tier like PMEM.
 
-In that function, both kernel_code.end and kernel_data_end show a
-similar warning in 5.19-rc1
+patch 4 -> introducing demotion. Will make that patch 5
 
-> I think the easy fix would be to reword this line to
->=20
->        kernel_code.end     =3D __pa_symbol(__init_begin) - 1;
+patch 5 -> add dax kmem numa nodes as slower memory tier. Now this 
+becomes patch 4 at which point we will correctly show two memory tiers 
+in the system.
 
-Doing this for both fix the warnings.
 
-Maxime
+>>> +struct memory_tier {
+>>> +	nodemask_t nodelist;
+>>> +};
+>>>
+>>> And struct device can be added after the kernel has switched the
+>>> implementation based on explicit memory tiers.
+>>>
+>>> +struct memory_tier {
+>>> +	struct device dev;
+>>> +	nodemask_t nodelist;
+>>> +};
+>>>
+>>
+>>
+>> Can you elaborate on this? or possibly review the v5 series indicating
+>> what change you are suggesting here?
+>>
+>>
+>>> But I don't think it's a good idea to have "struct device" embedded in
+>>> "struct memory_tier".  We don't have "struct device" embedded in "struct
+>>> pgdata_list"...
+>>>
+>>
+>> I avoided creating an array for memory_tier (memory_tier[]) so that we
+>> can keep it dynamic. Keeping dev embedded in struct memory_tier simplify
+>> the life cycle management of that dynamic list. We free the struct
+>> memory_tier allocation via device release function (memtier->dev.release
+>> = memory_tier_device_release )
+>>
+>> Why do you think it is not a good idea?
+> 
+> I think that we shouldn't bind our kernel internal implementation with
+> user space interface too much.  Yes.  We can expose kernel internal
+> implementation to user space in a direct way.  I suggest you to follow
+> the style of "struct pglist_data" and "struct node".  If we decouple
+> "struct memory_tier" and "struct memory_tier_dev" (or some other name),
+> we can refer to "struct memory_tier" without depending on all device
+> core.  Memory tier should be accessible inside the kernel even without a
+> user interface.  And memory tier isn't a device in concept.
+> 
 
---tsirw27bcrup6k37
-Content-Type: application/pgp-signature; name="signature.asc"
+memory_tiers are different from pglist_data and struct node in that we 
+also allow the creation of them from userspace. That is the life time of 
+a memory tier is driven from userspace and it is much easier to manage 
+them via sysfs file lifetime mechanism rather than inventing an 
+independent and more complex way of doing the same.
 
------BEGIN PGP SIGNATURE-----
+> For life cycle management, I think that we can do that without sysfs
+> too.
+> 
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYp3CaQAKCRDj7w1vZxhR
-xSNxAQCcTzhzMOxcDL9WGAwz0vVmy99JZhx9Udyas1PPaIoBcwEAyh5jqqVu2smB
-yLg+OIxwEhblK6XNPX6hyeOfhD412w0=
-=6RO8
------END PGP SIGNATURE-----
+unless there are specific details that you think will be broken by 
+embedding struct device inside struct memory_tier, IMHO I still consider 
+the embedded implementation much simpler and in accordance with other 
+kernel design patterns.
 
---tsirw27bcrup6k37--
+-aneesh

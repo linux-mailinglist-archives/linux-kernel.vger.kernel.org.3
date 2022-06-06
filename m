@@ -2,136 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E1553E7FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E014E53EA14
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241360AbiFFQG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S241538AbiFFQFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241348AbiFFQGt (ORCPT
+        with ESMTP id S241446AbiFFQFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:06:49 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD258E52A7;
-        Mon,  6 Jun 2022 09:06:47 -0700 (PDT)
-Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 89D28CD361;
-        Mon,  6 Jun 2022 16:06:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1654531576; bh=o9eixXtP/Xx2M72rr+rsSeCZivwh5KMZsFPSUC13lhk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=p2lrpkAjAckkN/gcgXfr6BiCj7ajAkXyu3tfJ2Z0ipTkPVvszYVyHnsVdoVuQaAsH
-         8ewkiYQch+POrrxMXT3j8Mimt59m6Q9GFDe9FMTZo7hCbHu6J/IalpnMJ6RLKROYFU
-         pz+K3O9Gbf/0dDFIZBA+ILvwG/lKw4hXQM2TaRPg=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ARM: dts: qcom: msm8974-*: re-add remoteproc supplies
-Date:   Mon,  6 Jun 2022 18:04:23 +0200
-Message-Id: <20220606160421.1641778-2-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220606160421.1641778-1-luca@z3ntu.xyz>
-References: <20220606160421.1641778-1-luca@z3ntu.xyz>
+        Mon, 6 Jun 2022 12:05:30 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F672166447
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:05:21 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-30fdbe7467cso112520017b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hkb/bGVyuMqTZRXVw6tHXbfDJb2Rv/dx6ERatAJ2rC0=;
+        b=sWnen0QbVrpHJrYP5g4e/CpughJv5Xsf8460mMdBKUx4OTmW9Qr3EJjZH24KgWua78
+         7SO6mkI+7tUe89LfbJsvCFDzlzdNeMw/gz1PVyPzlV50tpFc3IhJK1mSOpN9IJnBXgIg
+         e0zSuMMRoHlevEhKJFjxeieKivjrkcWH3fivpf+3ozagiT6DrvjNMAmWx+uWXx/QH3Yb
+         hKQPIrtydMfIlf4AGKk5CQ8cjr3EG1XPrlTBkEkTQbKjS6zhKIElw0kkgYB+uUipIsRQ
+         qrBsNJCuvIfH2Ro5oe7HsiF7IpkIq6163YEEyjL0hHD0J0b/x/cAuqcGxch9bKP3rKD8
+         8n9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hkb/bGVyuMqTZRXVw6tHXbfDJb2Rv/dx6ERatAJ2rC0=;
+        b=JKfg88H1Mtn3EuUpSYRjh3l338vIGgyuSr16RpuJYKplkhQeB/uqsAgnRkuBHnUOx3
+         2U5aODHZ2PETm6q2pzksBXml6MbgzYxrs4Kjlj2CECS9KDW3xa2ZIlTS+aWYMwwzh/3J
+         JM+bnIU2iv8F/9M0ziwZBFoBMHYvJ4+BbMPnaX+UMOvXD+RClrIC+v8EDntv0nNJ3Nxc
+         /y1aeKACAUb8k4f0QJ3tXPhNSaoJklPPebQt7gb1YAgsmHFRqhDDpWm7sxtRUvtFtBLu
+         ltwgUJTe3W4hn70RF9dvM9AqRduH2ed/OcVBp1dqnPKxJIesz54BOSb+NN7+++4QuL3x
+         aXQQ==
+X-Gm-Message-State: AOAM533WtQ0s1qBX1Y/3uy0OO4uTdhosSGiwpZc9WpDduieeDlxBXsCu
+        C/YzQMoxwWKSFmX6iZY6i8C0Xw2fl8VPtQDsKZVnjw==
+X-Google-Smtp-Source: ABdhPJwva2zNMNdY7W28yUe2zvaMfHOUFz8u4sZGR3aghRSe9HFp2eMiDV5XEb1NIf2ZbVxtbmqrDyTidCAc4E0ed5s=
+X-Received: by 2002:a81:4811:0:b0:30c:8021:4690 with SMTP id
+ v17-20020a814811000000b0030c80214690mr26771026ywa.47.1654531520769; Mon, 06
+ Jun 2022 09:05:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220606070804.40268-1-songmuchun@bytedance.com>
+In-Reply-To: <20220606070804.40268-1-songmuchun@bytedance.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 6 Jun 2022 09:05:09 -0700
+Message-ID: <CANn89iJwuW6PykKE03wB24KATtk88tS4eSHH42i+dBFtaK8zsg@mail.gmail.com>
+Subject: Re: [PATCH] tcp: use kvmalloc_array() to allocate table_perturb
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of a recent cleanup commit, the remoteproc supplies for adsp and
-modem were removed from msm8974.dtsi and now need to be set in the
-device dts. Do so.
+On Mon, Jun 6, 2022 at 12:08 AM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> In our server, there may be no high order (>= 6) memory since we reserve
+> lots of HugeTLB pages when booting.  Then the system panic.  So use
+> kvmalloc_array() to allocate table_perturb.
+>
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 
-Fixes: f300826d27be ("ARM: dts: qcom-msm8974: Sort and clean up nodes")
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Bjorn, could you please pick this up for -fixes so it lands in an
-upcoming 5.19-rc?
+Please add a Fixes: tag and CC original author ?
 
- .../boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts   | 11 +++++++++++
- arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi | 11 +++++++++++
- .../qcom-msm8974pro-sony-xperia-shinano-castor.dts    | 11 +++++++++++
- 3 files changed, 33 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index 9493886a5c0d..2d699de713ce 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -313,6 +313,17 @@ otg {
- 	};
- };
- 
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+};
-+
-+&remoteproc_mss {
-+	cx-supply = <&pm8841_s2>;
-+	mss-supply = <&pm8841_s3>;
-+	mx-supply = <&pm8841_s1>;
-+	pll-supply = <&pm8941_l12>;
-+};
-+
- &rpm_requests {
- 	pm8841-regulators {
- 		compatible = "qcom,rpm-pm8841-regulators";
-diff --git a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-index 1d21de46f85c..60bf96304687 100644
---- a/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974-sony-xperia-rhine.dtsi
-@@ -183,6 +183,17 @@ &pm8941_wled {
- 	qcom,num-strings = <2>;
- };
- 
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+};
-+
-+&remoteproc_mss {
-+	cx-supply = <&pm8841_s2>;
-+	mss-supply = <&pm8841_s3>;
-+	mx-supply = <&pm8841_s1>;
-+	pll-supply = <&pm8941_l12>;
-+};
-+
- &rpm_requests {
- 	pm8841-regulators {
- 		compatible = "qcom,rpm-pm8841-regulators";
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 9bd8faea61a5..48f0c47a45ef 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -288,6 +288,17 @@ lcd_dcdc_en_pin_a: lcd-dcdc-en-active {
- 
- };
- 
-+&remoteproc_adsp {
-+	cx-supply = <&pm8841_s2>;
-+};
-+
-+&remoteproc_mss {
-+	cx-supply = <&pm8841_s2>;
-+	mss-supply = <&pm8841_s3>;
-+	mx-supply = <&pm8841_s1>;
-+	pll-supply = <&pm8941_l12>;
-+};
-+
- &rpm_requests {
- 	pm8941-regulators {
- 		compatible = "qcom,rpm-pm8941-regulators";
--- 
-2.36.1
-
+Thanks.

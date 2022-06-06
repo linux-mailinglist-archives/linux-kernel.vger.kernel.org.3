@@ -2,101 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AEC153EC90
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9DA53EC41
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238989AbiFFN2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S238979AbiFFN2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238969AbiFFN2s (ORCPT
+        with ESMTP id S238969AbiFFN2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:28:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91458CCF1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654522124; x=1686058124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jV+w5dOWr1t7rNYIEA+7OT7tjQehbbZXnLkxc6LGUA0=;
-  b=GWomXD8oaScSabVQWAlbe4Fg3R4dww9OgBVyyaGPHtPaFvc9P3TA201a
-   bZrxuwBoDHAGYEc4GXCW9LQHOgg7q/Qe3dJO91ewwKlukG2iKHJRE+vyF
-   wbD/njW9iVf/0WoLRT9HJlHYF8YBQKJGg/V/BXKfcyp6fAmLO+4WmwmqZ
-   SEAjal6Ptg8f5pByNkh+6b7gDbZKROpY2RoMKv4iHT6HJ7dMANQL5tAqM
-   6e04vsMOdUqBXqSR1THw65DaZWX0+HxzpNrCtzrsXkW4JhR6Pf0kx38yD
-   e0G+zu+MV2hKq0IB/y1A2wTzpedFnaiOG+/XISzZYQIWnUvyGu2hLLNLV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276951855"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="276951855"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 06:28:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="532126032"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Jun 2022 06:28:16 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyCmF-000CkX-H9;
-        Mon, 06 Jun 2022 13:28:15 +0000
-Date:   Mon, 6 Jun 2022 21:27:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [jsarha:topic/chromeos-4.19-s0ix 6373/9999] kismet: WARNING: unmet
- direct dependencies detected for PM_GENERIC_DOMAINS when selected by
- QCOM_AOSS_QMP
-Message-ID: <202206062135.fQzlABwc-lkp@intel.com>
+        Mon, 6 Jun 2022 09:28:13 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3BE27FF4;
+        Mon,  6 Jun 2022 06:28:12 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id d6so1108422ilm.4;
+        Mon, 06 Jun 2022 06:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vMzKJ/pAxxp57ZRIpF3s0dQuSBrLlmQcoV9kqSPPIIg=;
+        b=Xi/hphIpGKx+QJ1uQpR1Ctr88s4lQXNdKZ9YsAXjAfkaj/fW943LTMDSNgT2AztgRR
+         +N/fk+7VyuyyomkXaOxk9bh/0+KNCLNTnordoCgehaA0q4qMnyhhE/vGqUsDybjQWDEQ
+         tqhwOiTHKzDyFo7gJJwyCmzpXgSJfOuHuuj2ZNntusX63GLuoVtvtQrYBVTpT2C1ZciX
+         4XUHpy2sJVQEFCSP9ceTKuINYth23q7Tu/pFCtVi1Tt9dxw6VUDcrKx7NmI4KvZjrxDe
+         FA5oBFwV8rgaRl5g9O8BMz7R4VxBVqJpPErZeMLoaGdDjrE8+xVdeRvnP4/U4wo5KEMA
+         OXtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vMzKJ/pAxxp57ZRIpF3s0dQuSBrLlmQcoV9kqSPPIIg=;
+        b=rjbF3FbsWpHhnqbfT3JHYflID1A0ol4ahZISYA0VlfENVsxKkBmKpM54gJ8xST6UVy
+         51roazrqcQhCErhVgBoiDSg9cUTYsHwzduHWo3Or5+LlSzPt9aBzKWfZSgzDgegFT56F
+         ihAIlOSHZNHbmf0MOnt5tmbCULKvNfzb2PHXxdU3prfGqg+ypxCN/QGyLUdDMMokKQwm
+         k+ebiatuT1JK8CJ95VopKinEkM9mJxhAS46Rb92UyyxdJc0CUGpHOttngokbIEuTexYg
+         PkxEl0hH95Vo2JONw++s9F5TyDlcNxGpRYkRGcDm20/H4R5T2JvUdv6xP8LWCpgTzR08
+         WjbA==
+X-Gm-Message-State: AOAM531zbBkfSYtAZ+nnZP7woP0ZwovAJb99ZwlPqzRY56FqF3LmRdSp
+        107NZhIw5ZWgAPMhd4qVFucLXW2vFapJIg==
+X-Google-Smtp-Source: ABdhPJx+oYqz3OZuyeQCK75PBjZdLqSzMEYQSkMj/aBcYrp8SQMdD7oDbd+GePN91U14HIzadY0Tqw==
+X-Received: by 2002:a05:6e02:15ca:b0:2d1:9146:c79a with SMTP id q10-20020a056e0215ca00b002d19146c79amr14022665ilu.97.1654522091303;
+        Mon, 06 Jun 2022 06:28:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-113-86.hlrn.qwest.net. [71.218.113.86])
+        by smtp.gmail.com with ESMTPSA id q2-20020a056e020c2200b002d546bec2f6sm479474ilg.67.2022.06.06.06.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 06:28:10 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        netdev@vger.kernel.org (open list:BPF (Safe dynamic programs and tools)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/1] libbpf: fix broken gcc pragma macros in bpf_helpers.h/bpf_tracing.h
+Date:   Mon,  6 Jun 2022 07:27:40 -0600
+Message-Id: <20220606132741.3462925-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: fdd3df25c06810614b642173cf8eca20610958ce [6373/9999] FROMGIT: soc: qcom: Add AOSS QMP driver
-config: (https://download.01.org/0day-ci/archive/20220606/202206062135.fQzlABwc-lkp@intel.com/config)
-reproduce:
-        # https://github.com/jsarha/linux/commit/fdd3df25c06810614b642173cf8eca20610958ce
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout fdd3df25c06810614b642173cf8eca20610958ce
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_PM_GENERIC_DOMAINS --selectors CONFIG_QCOM_AOSS_QMP -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+It seems the gcc preprocessor breaks unless pragmas are wrapped
+individually inside macros.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes errors like:
+error: expected identifier or '(' before '#pragma'
+  106 | SEC("cgroup/bind6")
+      | ^~~
 
+error: expected '=', ',', ';', 'asm' or '__attribute__' before '#pragma'
+  114 | char _license[] SEC("license") = "GPL";
+      | ^~~
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS when selected by QCOM_AOSS_QMP
-   
-   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS
-     Depends on [n]: PM [=n]
-     Selected by [y]:
-     - QCOM_AOSS_QMP [=y] && (ARCH_QCOM || COMPILE_TEST [=y]) && MAILBOX [=y] && COMMON_CLK [=y]
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ tools/lib/bpf/bpf_helpers.h | 26 ++++++++++++++------------
+ tools/lib/bpf/bpf_tracing.h | 26 ++++++++++++++------------
+ 2 files changed, 28 insertions(+), 24 deletions(-)
 
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index fb04eaf367f1..6d159082727d 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -22,11 +22,13 @@
+  * To allow use of SEC() with externs (e.g., for extern .maps declarations),
+  * make sure __attribute__((unused)) doesn't trigger compilation warning.
+  */
++#define __gcc_helpers_pragma(x) _Pragma(#x)
++#define __gcc_helpers_diag_pragma(x) __gcc_helpers_pragma("GCC diagnostic " #x)
+ #define SEC(name) \
+-	_Pragma("GCC diagnostic push")					    \
+-	_Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")	    \
++	__gcc_helpers_diag_pragma(push)					    \
++	__gcc_helpers_diag_pragma(ignored "-Wignored-attributes")	    \
+ 	__attribute__((section(name), used))				    \
+-	_Pragma("GCC diagnostic pop")					    \
++	__gcc_helpers_diag_pragma(pop)
+ 
+ /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
+ #undef __always_inline
+@@ -215,10 +217,10 @@ enum libbpf_tristate {
+ 	static const char ___fmt[] = fmt;			\
+ 	unsigned long long ___param[___bpf_narg(args)];		\
+ 								\
+-	_Pragma("GCC diagnostic push")				\
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
++	__gcc_helpers_diag_pragma(push)				\
++	__gcc_helpers_diag_pragma(ignored "-Wint-conversion")	\
+ 	___bpf_fill(___param, args);				\
+-	_Pragma("GCC diagnostic pop")				\
++	__gcc_helpers_diag_pragma(pop)				\
+ 								\
+ 	bpf_seq_printf(seq, ___fmt, sizeof(___fmt),		\
+ 		       ___param, sizeof(___param));		\
+@@ -233,10 +235,10 @@ enum libbpf_tristate {
+ 	static const char ___fmt[] = fmt;			\
+ 	unsigned long long ___param[___bpf_narg(args)];		\
+ 								\
+-	_Pragma("GCC diagnostic push")				\
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
++	__gcc_helpers_diag_pragma(push)				\
++	__gcc_helpers_diag_pragma(ignored "-Wint-conversion")	\
+ 	___bpf_fill(___param, args);				\
+-	_Pragma("GCC diagnostic pop")				\
++	__gcc_helpers_diag_pragma(pop)				\
+ 								\
+ 	bpf_snprintf(out, out_size, ___fmt,			\
+ 		     ___param, sizeof(___param));		\
+@@ -264,10 +266,10 @@ enum libbpf_tristate {
+ 	static const char ___fmt[] = fmt;			\
+ 	unsigned long long ___param[___bpf_narg(args)];		\
+ 								\
+-	_Pragma("GCC diagnostic push")				\
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
++	__gcc_helpers_diag_pragma(push)				\
++	__gcc_helpers_diag_pragma(ignored "-Wint-conversion")	\
+ 	___bpf_fill(___param, args);				\
+-	_Pragma("GCC diagnostic pop")				\
++	__gcc_helpers_diag_pragma(pop)				\
+ 								\
+ 	bpf_trace_vprintk(___fmt, sizeof(___fmt),		\
+ 			  ___param, sizeof(___param));		\
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 01ce121c302d..e08ffc290b3e 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -422,16 +422,18 @@ struct pt_regs;
+  * This is useful when using BPF helpers that expect original context
+  * as one of the parameters (e.g., for bpf_perf_event_output()).
+  */
++#define __gcc_tracing_pragma(x) _Pragma(#x)
++#define __gcc_tracing_diag_pragma(x) __gcc_tracing_pragma("GCC diagnostic " #x)
+ #define BPF_PROG(name, args...)						    \
+ name(unsigned long long *ctx);						    \
+ static __attribute__((always_inline)) typeof(name(0))			    \
+ ____##name(unsigned long long *ctx, ##args);				    \
+ typeof(name(0)) name(unsigned long long *ctx)				    \
+ {									    \
+-	_Pragma("GCC diagnostic push")					    \
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
++	__gcc_tracing_diag_pragma(push)					    \
++	__gcc_tracing_diag_pragma(ignored "-Wint-conversion")		    \
+ 	return ____##name(___bpf_ctx_cast(args));			    \
+-	_Pragma("GCC diagnostic pop")					    \
++	__gcc_tracing_diag_pragma(pop)					    \
+ }									    \
+ static __attribute__((always_inline)) typeof(name(0))			    \
+ ____##name(unsigned long long *ctx, ##args)
+@@ -462,10 +464,10 @@ static __attribute__((always_inline)) typeof(name(0))			    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+-	_Pragma("GCC diagnostic push")					    \
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
++	__gcc_tracing_diag_pragma(push)					    \
++	__gcc_tracing_diag_pragma(ignored "-Wint-conversion")		    \
+ 	return ____##name(___bpf_kprobe_args(args));			    \
+-	_Pragma("GCC diagnostic pop")					    \
++	__gcc_tracing_diag_pragma(pop)					    \
+ }									    \
+ static __attribute__((always_inline)) typeof(name(0))			    \
+ ____##name(struct pt_regs *ctx, ##args)
+@@ -486,10 +488,10 @@ static __attribute__((always_inline)) typeof(name(0))			    \
+ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+-	_Pragma("GCC diagnostic push")					    \
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
++	__gcc_tracing_diag_pragma(push)					    \
++	__gcc_tracing_diag_pragma(ignored "-Wint-conversion")		    \
+ 	return ____##name(___bpf_kretprobe_args(args));			    \
+-	_Pragma("GCC diagnostic pop")					    \
++	__gcc_tracing_diag_pragma(pop)					    \
+ }									    \
+ static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
+ 
+@@ -520,10 +522,10 @@ ____##name(struct pt_regs *ctx, ##args);				    \
+ typeof(name(0)) name(struct pt_regs *ctx)				    \
+ {									    \
+ 	struct pt_regs *regs = PT_REGS_SYSCALL_REGS(ctx);		    \
+-	_Pragma("GCC diagnostic push")					    \
+-	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
++	__gcc_tracing_diag_pragma(push)		    \
++	__gcc_tracing_diag_pragma(ignored "-Wint-conversion")		    \
+ 	return ____##name(___bpf_syscall_args(args));			    \
+-	_Pragma("GCC diagnostic pop")					    \
++	__gcc_tracing_diag_pragma(pop)					    \
+ }									    \
+ static __attribute__((always_inline)) typeof(name(0))			    \
+ ____##name(struct pt_regs *ctx, ##args)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

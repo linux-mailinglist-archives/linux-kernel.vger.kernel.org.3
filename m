@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C5653DF43
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4706A53DF46
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351929AbiFFBMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 21:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S1351939AbiFFBQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 21:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241008AbiFFBMD (ORCPT
+        with ESMTP id S241008AbiFFBQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 21:12:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889293527D;
-        Sun,  5 Jun 2022 18:12:00 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LGb5z52tczjXL2;
-        Mon,  6 Jun 2022 09:11:03 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 09:11:58 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 09:11:57 +0800
-Subject: Re: [PATCH -next] mm/filemap: fix that first page is not mark
- accessed in filemap_read()
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     <willy@infradead.org>, <kent.overstreet@gmail.com>,
-        <axboe@kernel.dk>, <linux-fsdevel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220602082129.2805890-1-yukuai3@huawei.com>
- <20220602112248.1e3cd871a87fe9df1ca13f08@linux-foundation.org>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <1a6128d2-d3cd-c922-3a01-d661eae104c3@huawei.com>
-Date:   Mon, 6 Jun 2022 09:11:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 5 Jun 2022 21:16:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D9B4E3A7;
+        Sun,  5 Jun 2022 18:16:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LGbDC4Cmwz4xDK;
+        Mon,  6 Jun 2022 11:16:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1654478188;
+        bh=NSfCInElj8gvzdEZsEIDFPfbLOUwPQ6wXjMgnxMr02Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YO4+dWPAzlntVfpe/NOJ49qS2ouQbToF/7IeeMXNa7of6KWeUZ92oyJl/I4KNV9z+
+         iv5+ZzBZFcGQSgAvSr/FP/YndTEBszgcg41kSy7r6bi5xJsQ00DoSDaY2FBoUlvqya
+         V0En6YbhbgPL9QwzQ6jZyBL9JIw8WNZ8XO/TnM2pyIOTKvIVfolHwAHj22KYfJu2Uk
+         VgbItbZiSW/Db8Yghh/If4owXMwyFRYONr9OJp1mrQvj4ieNHYNjzHgNxJM74tirbd
+         VORqyzrZkwq/zgKvLnxKW6Dawp1q2M0+piKIB5Aotr3FqYpEPPp33Gv/Auhj4sHcMh
+         FvWwdBN4vGR9A==
+Date:   Mon, 6 Jun 2022 11:16:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: linux-next: build warning after merge of the bluetooth tree
+Message-ID: <20220606111531.00bc960a.sfr@canb.auug.org.au>
+In-Reply-To: <Yp0w21pH4R6WaC1R@yury-laptop>
+References: <20220516175757.6d9f47b3@canb.auug.org.au>
+        <20220524082256.3b8033a9@canb.auug.org.au>
+        <20220606080631.0c3014f2@canb.auug.org.au>
+        <Yp0w21pH4R6WaC1R@yury-laptop>
 MIME-Version: 1.0
-In-Reply-To: <20220602112248.1e3cd871a87fe9df1ca13f08@linux-foundation.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/YzMUj8d/JLdDHO_PT6w4o6o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,43 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/06/03 2:22, Andrew Morton wrote:
-> On Thu, 2 Jun 2022 16:21:29 +0800 Yu Kuai <yukuai3@huawei.com> wrote:
-> 
->> In filemap_read(), 'ra->prev_pos' is set to 'iocb->ki_pos + copied',
->> while it should be 'iocb->ki_ops'. For consequence,
->> folio_mark_accessed() will not be called for 'fbatch.folios[0]' since
->> 'iocb->ki_pos' is always equal to 'ra->prev_pos'.
->>
->> ...
->>
->> --- a/mm/filemap.c
->> +++ b/mm/filemap.c
->> @@ -2728,10 +2728,11 @@ ssize_t filemap_read(struct kiocb *iocb, struct iov_iter *iter,
->>   				flush_dcache_folio(folio);
->>   
->>   			copied = copy_folio_to_iter(folio, offset, bytes, iter);
->> -
->> -			already_read += copied;
->> -			iocb->ki_pos += copied;
->> -			ra->prev_pos = iocb->ki_pos;
->> +			if (copied) {
->> +				ra->prev_pos = iocb->ki_pos;
->> +				already_read += copied;
->> +				iocb->ki_pos += copied;
->> +			}
->>   
->>   			if (copied < bytes) {
->>   				error = -EFAULT;
-> 
-> It seems tidier, but does it matter?  If copied==0 we're going to break
-> out and return -EFAULT anyway?
-Hi,
+--Sig_/YzMUj8d/JLdDHO_PT6w4o6o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Please notice that I set 'prev_ops' to 'ki_pos' first here, instead of
-'ki_pos + copied'.
+Hi Yury,
 
-Thanks,
-Kuai
-> .
-> 
+On Sun, 5 Jun 2022 15:40:27 -0700 Yury Norov <yury.norov@gmail.com> wrote:
+>
+> I completely forgot about this bug, and sent a quick fix when this
+> was spotted by Sudip [1]. Linus proposed another fix [2] that drops
+> bitmap API in net/bluetooth/mgmt.c.
+>=20
+> I would prefer Linus' version, and this is the way I already suggested
+> to Luiz before in this thread.
+>=20
+> Thanks,
+> Yury
+>=20
+> [1] https://lore.kernel.org/lkml/YpyJ9qTNHJzz0FHY@debian/t/
+> [2] https://lore.kernel.org/lkml/CAHk-=3DwhqgEA=3DOOPQs7JF=3Dxps3VxjJ5uUn=
+fXgzTv4gqTDhraZFA@mail.gmail.com/T/#mcf29754f405443ca7d2a18db863c7a20439bd5=
+a0
+
+Linus has applied his fix to his tree now (before -rc1), so it should
+be all good.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YzMUj8d/JLdDHO_PT6w4o6o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKdVWoACgkQAVBC80lX
+0Gxoqwf/TkPwfHFtuVTjt5YwKxTUZrA0kEaCCz+gHsxY3d9kw2Bltlbut5RH8pmZ
+AMnFFadmlw1UKNihBXku7TucJ0kehZLfYi4nyac8nut50nThf7a1sQu20B1GO5nz
+b1WEGnkVIbSfASBlQHz7m7l5JnRZf/9QofogsI7YfUEWpg6nZOL7hVX0F9pdjEIg
+RoUNUmp0UVC3dJ1NX4/wPUzKYlIRQud7QVben4bVRbEyEcF/aJaGybMQeveBbTQF
+PO8Of5lCHKpUUtw/7YZ8/kMQfuWQdhMKrcl1DK5pTpvA7yE7larfE99RQUi9ANd+
+J/Mh2Z5a+up7GQbJ+bFz+rXoMpDiLg==
+=TsjI
+-----END PGP SIGNATURE-----
+
+--Sig_/YzMUj8d/JLdDHO_PT6w4o6o--

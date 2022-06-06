@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC77253E602
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0406353E86D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239973AbiFFOtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S239691AbiFFOZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240114AbiFFOtO (ORCPT
+        with ESMTP id S239581AbiFFOZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:49:14 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFB96D866
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:49:12 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id a23so16023470ljd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:49:12 -0700 (PDT)
+        Mon, 6 Jun 2022 10:25:49 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F1E2D6AA6;
+        Mon,  6 Jun 2022 07:25:48 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y19so29294228ejq.6;
+        Mon, 06 Jun 2022 07:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=H9gSJdumX788ea5ymBPhF6Qx4oKS3kXqxz2HGbJIL4Q=;
-        b=NDhxYiHFP2DQ/Hg/9TucNlDLLMsU/ntXpeN0g2X8O+A2BUihfdLVBLLH7RWDprBeHQ
-         YwaJrLW49qHLVTYYoKNvynnJ3jb79kiSyxeSMy2uxFQjXwG+gVg48vktfIa85w7hKfQ1
-         g4jx4e8LsxUAl7JSRLIBkVIW6BW0V9jVja/Dk=
+        bh=a0c8aCXTnV+YnzgcVK3cYCsnaQ2OrGwT8XZ+B+Q/jUg=;
+        b=GcisAG8Oa7796L9CONDDt6OIIQn0huGp9VfxwdG6OouVCGHztFap6mMZZrhHRGubZm
+         VD9xcpd+/w40aih8Uj1iNf3fS6OHMI7M428hiwgs1qwYgoB6xRXUdr6DXRRE+wJRgH17
+         X4yAfXt9TFiN0Uq9XO6mGXYiYh9CvWMwBB46Ob6gs+X5yZBGTSuFuJhdyu8tZjKKDja9
+         5vQxw+xJdSKO/qUzjCo7Lw8T0N2E1gfSSON+TWD+Yiro/wHufQAbakKOR9o/ALbwWw39
+         Mjk4pA0NCdIy1PD7V9S++yqxdnhdQL7NJn4Bpr+QigZIH/aJOArjyD89A2r0AyQMM3MF
+         +9BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=H9gSJdumX788ea5ymBPhF6Qx4oKS3kXqxz2HGbJIL4Q=;
-        b=UGzLpemT4v1Gvd9dQDgaerSujJz82DWwNn9ufpbgbjUm6R4hYcDXN1oQp4PDH3055P
-         pw+1MpQDNdszbLqOK3mQ31z3Ue6m1PFQHQygXVLfb7YpJrWhDBOKcrMNduMRuElGkP5L
-         4Wf4lclb5YqxP6oMxctdcBWw7YuttQF6uwtOy0ySsR1ruDrsLBjvXKjy43VHhdKoJ/B2
-         t9KeBFOMVs/raVMgn/HMdS7EhTyXg1zTXFBRlv/0SVZe/eEbo6/5MO/Tcxza4ma7aBwV
-         Hyg193EuOoU7y7PHuBPa7FF0Yb78qpa8LQ453YKfQiY1L4l3ce0jSwyGULNtlCVvP2/5
-         qrJQ==
-X-Gm-Message-State: AOAM533iTdW0Vmw3G5Yiq+QujK71t/Ax0HH5Wiz1Nk6ZN+gyRZAE+v4a
-        AWqebAovNhDSdrTXepWjcBACdj9yh82F19uBIF8=
-X-Google-Smtp-Source: ABdhPJy8yTQ/X3yTlwDvDnZGAnXt39UDSHBJ4Fq4pYy5pdfeK2f9AdIHgteCUSw6AIEOggEAs2cb5g==
-X-Received: by 2002:a2e:890b:0:b0:255:5f1c:8958 with SMTP id d11-20020a2e890b000000b002555f1c8958mr17359984lji.134.1654526950209;
-        Mon, 06 Jun 2022 07:49:10 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id i27-20020ac25b5b000000b00478ebc6be69sm735486lfp.261.2022.06.06.07.49.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:49:09 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id y15so10617418ljc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:49:09 -0700 (PDT)
-X-Received: by 2002:a05:6000:1685:b0:218:45f0:5be6 with SMTP id
- y5-20020a056000168500b0021845f05be6mr2533347wrd.301.1654525406801; Mon, 06
- Jun 2022 07:23:26 -0700 (PDT)
+        bh=a0c8aCXTnV+YnzgcVK3cYCsnaQ2OrGwT8XZ+B+Q/jUg=;
+        b=xRUfZLbt7pgkmkndADiD5svasc8yeKo7IFKHDng827fF079+05zFEltgmS+5eTZKAm
+         /8HNggDCMP51NDyJlAne0cAR0oUui3Rutl2Ig8PEsWCQoSMn++8CEm+G0r2rwcgTs2cn
+         YO6MHVOtc7B55qTGJnlr9OFyqSMoagTyiAo+ftq9sr958qG94YC7mvGYX0Fq75NHom/l
+         kcppgoMfkOiOMDqL4mcoswbf2hSV8QrGwTPPseXgaUdK2noeI0kligEfJVoUVOA5t/9q
+         3RpFno1Nq21ztOdhJFatHA2ZOELanMmkfixWJx9KH1K/YtFDqTM1lG+NiA5rbejzwpgL
+         ZTbA==
+X-Gm-Message-State: AOAM531b/4O2RqX6jLFYGJCl2vdEHSBv5KfHL9SG33CdcsuGEJ4IngOc
+        nFzCGhlVMWGMDyOJDFtsiPW6EskmpIZ2RrpBfILXaLwUX4SADg==
+X-Google-Smtp-Source: ABdhPJzD7u77fBcesP17TjFNq0z2fD+tq04dRC4JePcC1QiaGc2nhtbfkRYB0490U7l5eh6dTvULHUrEbwCqVDzeShc=
+X-Received: by 2002:a17:907:2ce3:b0:6ff:1447:d3a4 with SMTP id
+ hz3-20020a1709072ce300b006ff1447d3a4mr22624124ejc.497.1654525547146; Mon, 06
+ Jun 2022 07:25:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-8-hsinyi@chromium.org>
-In-Reply-To: <20220606044720.945964-8-hsinyi@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 6 Jun 2022 07:23:15 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V7EiaYgzr57geyeqEafLJ67G2PJa8ejZwgWNV+icD0RQ@mail.gmail.com>
-Message-ID: <CAD=FV=V7EiaYgzr57geyeqEafLJ67G2PJa8ejZwgWNV+icD0RQ@mail.gmail.com>
-Subject: Re: [PATCH v3 7/8] drm/panel: elida-kd35t133: Implement
- .get_orientation callback
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220605144659.4169853-1-demonsingur@gmail.com>
+In-Reply-To: <20220605144659.4169853-1-demonsingur@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 6 Jun 2022 16:25:10 +0200
+Message-ID: <CAHp75VeHAGM=cxGRzWsv7KxUD0rjiudxOJ2HrtgtTFbuG+z8=g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] MAX310X I2C support
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, Jun 5, 2022 at 9:47 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+On Mon, Jun 6, 2022 at 8:08 AM Cosmin Tanislav <demonsingur@gmail.com> wrote:
 >
-> To return the orientation property to drm/kms driver.
->
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> v2->v3: add comments for notice.
-> ---
->  drivers/gpu/drm/panel/panel-elida-kd35t133.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> V1 -> V2:
+>  * set_ext_reg_en -> extended_reg_enable
+>  * move extended_reg_enable functions under guards
+>  * move if_cfg structs under guards
+>  * remove __maybe_unused from max310x_i2c_driver
+>  * fix order of error labels in module register
+>  * guard i2c register error label
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+LGTM, thanks!
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Cosmin Tanislav (4):
+>   serial: max310x: use regmap methods for SPI batch operations
+>   serial: max310x: use a separate regmap for each port
+>   serial: max310x: make accessing revision id interface-agnostic
+>   serial: max310x: implement I2C support
+>
+>  drivers/tty/serial/Kconfig   |   1 +
+>  drivers/tty/serial/max310x.c | 261 ++++++++++++++++++++++++++---------
+>  2 files changed, 200 insertions(+), 62 deletions(-)
+>
+> --
+> 2.36.1
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382A453E2D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DA553E373
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiFFIJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 04:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45620 "EHLO
+        id S231628AbiFFIKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 04:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiFFIJb (ORCPT
+        with ESMTP id S231613AbiFFIKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 04:09:31 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B807D5EDEA;
-        Mon,  6 Jun 2022 01:09:29 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id x17so18765833wrg.6;
-        Mon, 06 Jun 2022 01:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=55gnPINtsFPFd2IhvtfL5C51CaXoml0DfEKveP/xXyE=;
-        b=FY14aHG+M1ivaNxoVyt6bw617tg7SLpmHKJkKnw7ZiBFa5bcMH28PRhbF+5/CxEB4M
-         RWPw5VAU3V8FsqwgzENi2il9HokLiJ8/fX8mE8TDBR3hWvJkacNEF+ErJKm9tHl7RaB+
-         npldND8zTlpuqQsFRhYByq9G+D4Rnstqaxn3Bi56xRS2uT6Di07qbbS0s52dunRaqaCC
-         K7yISRTRLLu4/QXGVd+wO+NorRCg958iO5PSHn8wCNESTQTickgj7RU28Mtrdu/leXNh
-         0iOXFuJiyJ/CeYgIwRwkvOTKjJarPOO26jtKGRF4jZLOLnPHZx5wvC5WTL2AgPiWiwyK
-         0tUw==
+        Mon, 6 Jun 2022 04:10:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C425E6B081
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 01:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654503007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=obCrGJypUtMnd9bI3/liPqkSW10QMUPaG2j9LH/B4lY=;
+        b=ga4fuBQtuqzNAL7usWqlC0NePSp8eZxobUXPK8ouzJcrKLeQJZFKf/fPDAtiBK5e3TcuVN
+        Afd5+E5vT39Al57r9ptr0R6SP0HxTsvjuEO4/HZhLlUUDChS37ET7q0O2/+TR9RAlMzz9a
+        WKwfRFbKi+4xds6mrlpvjHzf6l8XCZo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-aHgsapA_MdyNA1rCaNIVRw-1; Mon, 06 Jun 2022 04:10:05 -0400
+X-MC-Unique: aHgsapA_MdyNA1rCaNIVRw-1
+Received: by mail-wr1-f72.google.com with SMTP id h2-20020adfe982000000b002102da95c71so2532528wrm.23
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 01:10:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=55gnPINtsFPFd2IhvtfL5C51CaXoml0DfEKveP/xXyE=;
-        b=fQas94U0twhcYI7nNfTl4cGk7kf6CuvIpQLcV2sY4i06feks2yTtZ8SGDyYPzkn6cC
-         m/eLgirnQhH2kjLwnwTjHMrd37P+WXC/wLzeaaBxvM8dy5W7XvUrQe+t7tF0wDbyenIK
-         nvabE3CxnRbb92aEF6lCLRiY0Az9TRkW0qkuEU0jCYQl/pqQh2BGq+IpVPO91AnQa+AZ
-         sEnLWV1lELBQrMH/bSEdBI5vE+9h3tGPke+4pQVWw51DGuKZUsl3fhi7b21R4jio5hg+
-         M78fDHhxTTuBEo6uwn76WmEPQy8MLuTiheFursTKubApKDCn5Nm2gTpzSY4zhVVGKr2N
-         cTWw==
-X-Gm-Message-State: AOAM533Dn0JcsKx+GZoPfqbCTINrDNA2pdxe6xNxvuirTzuq1JefPfh0
-        QeSQnfwcfvLFOVHgxHjXc7M=
-X-Google-Smtp-Source: ABdhPJxs7oVThXBAjBXXkUL5eYBbt54XbarGQN20qK31IXQ/6R4+6z2LD1zS/sezB+Av3llV24Ko0g==
-X-Received: by 2002:adf:ed41:0:b0:210:20a5:26c2 with SMTP id u1-20020adfed41000000b0021020a526c2mr19871874wro.603.1654502968088;
-        Mon, 06 Jun 2022 01:09:28 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:86cb:1c00:f508:89e3:8d18:b335? (2a01cb0586cb1c00f50889e38d18b335.ipv6.abo.wanadoo.fr. [2a01:cb05:86cb:1c00:f508:89e3:8d18:b335])
-        by smtp.gmail.com with ESMTPSA id y3-20020a7bcd83000000b0039747cf8354sm16206206wmj.39.2022.06.06.01.09.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 01:09:27 -0700 (PDT)
-Message-ID: <53818857-18b8-c7d8-8003-43452c9aa003@gmail.com>
-Date:   Mon, 6 Jun 2022 10:09:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] net: mdio: unexport __init-annotated mdio_bus_init()
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>,
+        h=x-gm-message-state:message-id:subject:from:to:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=obCrGJypUtMnd9bI3/liPqkSW10QMUPaG2j9LH/B4lY=;
+        b=Cpvxk3PXs1+cX9nloKc4HLvcBmeni2jqHcDWxPU2drYfqEreW4U/MusxXmUDBzjX8D
+         WTPaCRK/vmdicqXD3MYqYe9VVJwAceVb0oSsJg6uR5pVW4HSk19hI4J60gj+x1qen5+k
+         StypTCmRgtrBkPwaQEwpNK2vUZZ0zU6X97HE2sX4reXWMwFagYXVFk0bg66n4G7po6c+
+         ocag+elrnAq6EVAZIqdYCMXyQiReCgCcQ8YOxjdBevxDa1OdZU8nwX89iJmbu8Y8v1Dj
+         rFQONZycq6XPICdwPG4QgwXify52p0hLiL8s1JYgSQGGAtKIgnV0HhHSVqgbDwBTxGsW
+         swHA==
+X-Gm-Message-State: AOAM533ftaHmDDzFrjPxqRfVGT7YY9UCwD9pUHJx6J9760EFdj1H+HK/
+        f7wtvTF8pN3Q5EgOa/deCsQcwEdCSWiwznvkV2fHaz7nlf3/I9N2q5HrNDBokr4dDfsc5CtPChX
+        L6v+n6iF6xW5Q4yQa2s86EwTo
+X-Received: by 2002:a1c:ed0e:0:b0:397:2c71:c476 with SMTP id l14-20020a1ced0e000000b003972c71c476mr21767854wmh.113.1654503003889;
+        Mon, 06 Jun 2022 01:10:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzOSVcOJDSge59HfwBAndkDw0Jz/viRLPlqzKLuh8E/9wwQHp1Tppl7/PVanwk/HLtyNRVz2Q==
+X-Received: by 2002:a1c:ed0e:0:b0:397:2c71:c476 with SMTP id l14-20020a1ced0e000000b003972c71c476mr21767836wmh.113.1654503003629;
+        Mon, 06 Jun 2022 01:10:03 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
+        by smtp.gmail.com with ESMTPSA id k7-20020a5d6d47000000b0020e5e906e47sm14399752wri.75.2022.06.06.01.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 01:10:03 -0700 (PDT)
+Message-ID: <33aae30b17a14b41212f9c3ed0f8943817a835d9.camel@redhat.com>
+Subject: Re: [PATCH 2/2] l2tp: fix possible use-after-free
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Xiaohui Zhang <ruc_zhangxiaohui@163.com>,
         "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.or,
         linux-kernel@vger.kernel.org
-References: <20220606045355.4160711-1-masahiroy@kernel.org>
- <20220606045355.4160711-2-masahiroy@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220606045355.4160711-2-masahiroy@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 06 Jun 2022 10:10:01 +0200
+In-Reply-To: <20220605115412.16004-1-ruc_zhangxiaohui@163.com>
+References: <20220605115412.16004-1-ruc_zhangxiaohui@163.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+On Sun, 2022-06-05 at 19:54 +0800, Xiaohui Zhang wrote:
+> From: xiaohuizhang98 <ruc_zhangxiaohui@163.com>
+> 
+> We detected a suspected bug with our code clone detection tool.
+> 
+> Similar to the handling of l2tp_tunnel_get in commit a622b40035d1
+> ("l2ip: fix possible use-after-free"), we thought a patch might
+> be needed here as well.
+> 
+> Before taking a refcount on a rcu protected structure,
+> we need to make sure the refcount is not zero.
+> 
+> Signed-off-by: xiaohuizhang98 <ruc_zhangxiaohui@163.com>
 
-On 6/6/2022 6:53 AM, Masahiro Yamada wrote:
-> EXPORT_SYMBOL and __init is a bad combination because the .init.text
-> section is freed up after the initialization. Hence, modules cannot
-> use symbols annotated __init. The access to a freed symbol may end up
-> with kernel panic.
-> 
-> modpost used to detect it, but it has been broken for a decade.
-> 
-> Recently, I fixed modpost so it started to warn it again, then this
-> showed up in linux-next builds.
-> 
-> There are two ways to fix it:
-> 
->    - Remove __init
->    - Remove EXPORT_SYMBOL
-> 
-> I chose the latter for this case because the only in-tree call-site,
-> drivers/net/phy/phy_device.c is never compiled as modular.
-> (CONFIG_PHYLIB is boolean)
-> 
-> Fixes: 90eff9096c01 ("net: phy: Allow splitting MDIO bus/device support from PHYs")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+It looks like series this did not make to patchwork, due to a typo in
+the ML address, please fix it and resend: netdev@vger.kernel.or ->
+netdev@vger.kernel.org
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks,
+
+Paolo
+

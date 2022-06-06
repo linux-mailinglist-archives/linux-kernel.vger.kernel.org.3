@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9FB53EE95
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E24753EE93
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbiFFT0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S232259AbiFFT0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiFFT03 (ORCPT
+        with ESMTP id S232304AbiFFT0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 15:26:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2872F02C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654543588; x=1686079588;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I59ZioF6ftkeKF9BWFVRlPxcwwrWxaAGZj/i74sOpGo=;
-  b=J3Y09+dhdm6r+4XkMuNJRQJSqz9G/HUUZRnAqUsTbWSUklwfddg97ea/
-   0b02bdKhe91ZAfdm9zWdaHOeOtPVbn2EO0LgDEa8w4K6toFyHGr8bnfMi
-   LOiEgEhBINaTZU9YRWdnv2JR/IcHGXw3pXXaoVowMLv0pDG/7/ps+mxyP
-   ZdXHfPby4nhwfOZ029JqH87dWebRJr5BH6OAcclLaaaK8Yq9zhcLZTOuX
-   9PgCiRQRrlxTn4xS4YCy+DDV5tkcg2lVgUTFYSVrV9XPe0Bj7KTl8/+9l
-   6K+nz1Iu5Wa9/Hjhonfa8lEh0ne691yRsXm1gf8XjKHcT3TfhzEjVp1ne
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="276725950"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="276725950"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 12:26:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="647704472"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Jun 2022 12:26:27 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyIMs-000Czt-Iq;
-        Mon, 06 Jun 2022 19:26:26 +0000
-Date:   Tue, 7 Jun 2022 03:25:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/ftrace/per-callsite-ops 2/4]
- arch/riscv/kernel/setup.c:318:1: warning: 'text_section' attribute directive
- ignored
-Message-ID: <202206070358.Tnsgqt6p-lkp@intel.com>
+        Mon, 6 Jun 2022 15:26:14 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC950E06;
+        Mon,  6 Jun 2022 12:26:13 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id q76so8049429iod.8;
+        Mon, 06 Jun 2022 12:26:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nUwoRK1Vj+8sy8SVxzKcJRhrQsEifyPzc9VgrjwL4ek=;
+        b=P9i2uORFKd98uj0kmeYA6bmbDp7v+AWf2OiRgYhdlBr2l/I7o0Whwis21r4BcSLnpl
+         xrJCK4Z/1GXUjKqfM+4v3YAF4LWtDb5RVOKMRXK9PARWrfCH4bAJTx4Q14Wi5U+SKYFI
+         0N8GQb8zt7QI50QDOiZ6grsGaSM++APAjjIemOoS5NgKPOffALJ70Qq6l1VtJTY8tYSb
+         5Yy6pmMgUJbUUIBbhl88ukxABPOn0K9f8mNHmPYYaDn1NKl13bGUFSilJGxVwNSka1HD
+         8on2LJkIYV/wVEh9/qadj/bk0jqvpdqKGODJMmNURRCYeI/4bAddsrBFShzGpLPHra6H
+         9vdg==
+X-Gm-Message-State: AOAM530iVxuK1FHQTpkdRPCqMR7nIzkXwP7lWfiV7I0NzOf6B1JlYJFg
+        Iv4ProQq6G8+1kOWH0pGxw==
+X-Google-Smtp-Source: ABdhPJwhKTtphn6QN1OHiDFAVtAMaOl9ZTMicC/Fve+VnI1gdtbJ/yYlFWee0L6fHMGLVQMiwrx82A==
+X-Received: by 2002:a02:ba82:0:b0:331:5aaf:e4b0 with SMTP id g2-20020a02ba82000000b003315aafe4b0mr13869104jao.196.1654543572788;
+        Mon, 06 Jun 2022 12:26:12 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id m12-20020a6b7c0c000000b006694b2de3bbsm1874997iok.11.2022.06.06.12.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 12:26:12 -0700 (PDT)
+Received: (nullmailer pid 1117627 invoked by uid 1000);
+        Mon, 06 Jun 2022 19:26:10 -0000
+Date:   Mon, 6 Jun 2022 14:26:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org,
+        Ken Chen <chen.kenyy@inventec.com>,
+        linux-kernel@vger.kernel.org,
+        Steven Lee <steven_lee@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org,
+        David Wang <David_Wang6097@jabil.com>,
+        devicetree@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 3/7] dt-bindings: arm: aspeed: add Aspeed Evaluation
+ boards
+Message-ID: <20220606192610.GA1117514-robh@kernel.org>
+References: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org>
+ <20220529104928.79636-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220529104928.79636-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,60 +73,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
-head:   7f0d1ffaab77795e4ca97db4a901cc347c850ff7
-commit: efc001292934b744fa4c8147668fa4bd0ee909bf [2/4] WIP: incomplete alignment hacks
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20220607/202206070358.Tnsgqt6p-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=efc001292934b744fa4c8147668fa4bd0ee909bf
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/ftrace/per-callsite-ops
-        git checkout efc001292934b744fa4c8147668fa4bd0ee909bf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+On Sun, 29 May 2022 12:49:24 +0200, Krzysztof Kozlowski wrote:
+> Document the new compatibles used on Aspeed Evaluation boards.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/kernel/setup.c:318:1: warning: 'text_section' attribute directive ignored [-Wattributes]
-     318 | subsys_initcall(topology_init);
-         | ^~~~~~~~~~~~~~~
-
-
-vim +/text_section +318 arch/riscv/kernel/setup.c
-
-f1e58583b9c7ce Atish Patra 2020-03-17  301  
-f1e58583b9c7ce Atish Patra 2020-03-17  302  static int __init topology_init(void)
-f1e58583b9c7ce Atish Patra 2020-03-17  303  {
-4f0e8eef772ee4 Atish Patra 2020-11-18  304  	int i, ret;
-4f0e8eef772ee4 Atish Patra 2020-11-18  305  
-f1e58583b9c7ce Atish Patra 2020-03-17  306  	for_each_possible_cpu(i) {
-f1e58583b9c7ce Atish Patra 2020-03-17  307  		struct cpu *cpu = &per_cpu(cpu_devices, i);
-f1e58583b9c7ce Atish Patra 2020-03-17  308  
-f1e58583b9c7ce Atish Patra 2020-03-17  309  		cpu->hotpluggable = cpu_has_hotplug(i);
-4f0e8eef772ee4 Atish Patra 2020-11-18  310  		ret = register_cpu(cpu, i);
-4f0e8eef772ee4 Atish Patra 2020-11-18  311  		if (unlikely(ret))
-4f0e8eef772ee4 Atish Patra 2020-11-18  312  			pr_warn("Warning: %s: register_cpu %d failed (%d)\n",
-4f0e8eef772ee4 Atish Patra 2020-11-18  313  			       __func__, i, ret);
-f1e58583b9c7ce Atish Patra 2020-03-17  314  	}
-f1e58583b9c7ce Atish Patra 2020-03-17  315  
-f1e58583b9c7ce Atish Patra 2020-03-17  316  	return 0;
-f1e58583b9c7ce Atish Patra 2020-03-17  317  }
-f1e58583b9c7ce Atish Patra 2020-03-17 @318  subsys_initcall(topology_init);
-19a00869028f4a Atish Patra 2020-11-04  319  
-
-:::::: The code at line 318 was first introduced by commit
-:::::: f1e58583b9c7ceae7f11646e9edf2561d67f29c9 RISC-V: Support cpu hotplug
-
-:::::: TO: Atish Patra <atish.patra@wdc.com>
-:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B6A53E857
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C28C53E8E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239825AbiFFOfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S239982AbiFFOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239809AbiFFOe4 (ORCPT
+        with ESMTP id S239855AbiFFOgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:34:56 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0772E0AA;
-        Mon,  6 Jun 2022 07:34:55 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 25so18832420edw.8;
-        Mon, 06 Jun 2022 07:34:55 -0700 (PDT)
+        Mon, 6 Jun 2022 10:36:22 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561B3134E0F;
+        Mon,  6 Jun 2022 07:36:15 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gl15so15498979ejb.4;
+        Mon, 06 Jun 2022 07:36:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UBnTnofx1egjVYMXsVKnzCrT8go4XNCwGGXlPsFzsQA=;
-        b=azV5GzMMa++q0Epo0MDaOVueIR/LwrW+VySLdOxKsvHyTQCveKvSoWdowrxeTsXPis
-         ADZ8YkUbT/PDj2crA7LNxwxdiS4cq4XsPY0uZpGm0x7jEeMaU0G9Bg8dYGf/jdzv+9we
-         s7/qhctFIOJmUnwcJ28H+yT9Z0eiiNnazOu6o9wBPLmMEDOpwJaKVbecD0UQjb+CarAh
-         al2usVJSQfVhO3neOz3ESYjQDU2csK5R1sE9uQDCdq42GlTX8ga3dBlZUTkocXYFkdsw
-         vQBstuts0wA5bVPDtO6XRccnYYhtA1Z2flHrqkLctTskaoeftkCx6/3ymFoBjYvv2JgR
-         fEng==
+        bh=P8DnZHGE2vgMI63o/XuWMCrMyIJgyxN5npgPANAZCSQ=;
+        b=pcpLwsI323LNbbTPDRiEm8e0HpXKuMSNEB09iFlO6vvrWIh42IjIV0OttnBF9RFu0x
+         n2nNl3w6XCnfMgiYdcf/lV7zOnsv6nWbPzGD8+t+ge8fZkeIi4gzvxEn9MU19SuZC9yK
+         MPcvUBN1GQl+0CmSB9shHozkxPSiuWMREE3fRlShwLL6YdopfVWvN3dlDfEpGZXedFkI
+         SkULvkW0CtWqsvGq8QUCK2QwdZTrotMItwCWQ+r9reuelwPX/0wOm3NXwXwZwEVUXjwO
+         NwEhU6mPNp9tLLH9waIXHMfhz0cXyrXTgxGTd7uHC5BgyXID47IQK7Q3OCQGFHW5xhhc
+         feMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UBnTnofx1egjVYMXsVKnzCrT8go4XNCwGGXlPsFzsQA=;
-        b=FVpPCIrF17M2MUwSlUoeSKr9D0U6vHkcGMF0SfqkQwd0XtaoXYSnbDLk8ZTfvLZg2u
-         yVJRBM917aN0Z7uVyuphpWDo5Vpgjvc3q7uOpowcM9y7j08XQPnwAHCm4VZAgpFhK7AS
-         wciabWMPOSCsqixUemh+cyOtEGsRbltJPE+yZfVuYCX4wFsbGQLOGitSBG+x6gMhrUdT
-         fjZW08/hKb88r+uUt/B0p8vw2n8ju1HQ1KohC2uXaWeW9Lb40C+iAfVkuRstvkJKz1R9
-         xcgtek9ZFDgyy84hXZpj8jDlr8foBcrLBjE77CFGL0USr2Bki/f+lOoEx/KmLRrJCcNx
-         /SXw==
-X-Gm-Message-State: AOAM531NGYlEJhnkIdm2+4e6vf9wGItGEpAajUhsVRzOaXIWgP0DIjmt
-        IeSJ3nP7gWGtZQux4/5+52PhhwzLOSIz89X73hE=
-X-Google-Smtp-Source: ABdhPJwfn4g/UnCK2hjftmJUfPtxQcX/+HyTUYgLkCK+SY1VM8dNkEyDTGXdKyzApGi+XESSlUkKXuaI9VnefDP+/SQ=
-X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
- b1-20020aa7d481000000b0042dd5fdf963mr27412796edr.209.1654526094287; Mon, 06
- Jun 2022 07:34:54 -0700 (PDT)
+        bh=P8DnZHGE2vgMI63o/XuWMCrMyIJgyxN5npgPANAZCSQ=;
+        b=u/WPILuPVInlJ2D7E0MBjQI2clYjJ/B5GJeUynY1od2v0/KmZfyjkso8BVdUr7VQFX
+         XfYqhQiJyHbQzvGvHwbEN1qIaRdKa6bXgykG5hdPTOmnj5TbLcW8uawsN6OYcFTlszGW
+         foI6CK2QHohPTejHl/8sj8hjV8YrZY8SMmRHjQ04x6rCZ90+JGbQ3yCnlltheq/4sNB7
+         bV+dYRnDIgqUiOF1bheH6ZZv/AjHaiEJYE4FjewGrK4lVMfMrBql7e2KCxSJXLxej7Nc
+         9JIy0kwrJtoSrpmZJf+3ampfD5R7Z2tpy+45e+BLIXhSTiGbNcyyFaiFErkW+BAUHtw0
+         VDKg==
+X-Gm-Message-State: AOAM532F2DhhVTR997WwvkT7ucRVGXbsGrI0kwOARUfGJPPyci53Rjb0
+        4XuYPXxNk2WOIJfMmTsDNJJTBmIoyuGzrwLXbwR7s58n1sM=
+X-Google-Smtp-Source: ABdhPJxgS23WYwbt+mF3jnkmWmfs7zhRJy0TM5IGchFJ/dZMGJIgHTAaP+RAqV9sJlVx+Rgwd0TsIvR7VYG4hthUQ8k=
+X-Received: by 2002:a17:906:c7c1:b0:711:d2e9:99d0 with SMTP id
+ dc1-20020a170906c7c100b00711d2e999d0mr3456644ejb.639.1654526173854; Mon, 06
+ Jun 2022 07:36:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220605083825.9854-1-wangxiang@cdjrlc.com>
-In-Reply-To: <20220605083825.9854-1-wangxiang@cdjrlc.com>
+References: <20220602083128.22540-1-jslaby@suse.cz> <20220602083128.22540-2-jslaby@suse.cz>
+In-Reply-To: <20220602083128.22540-2-jslaby@suse.cz>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 6 Jun 2022 16:34:17 +0200
-Message-ID: <CAHp75VcXnKHnEkov0i-=D_qPsVCY_PjasJ9Dni99fj+uKpHjdQ@mail.gmail.com>
-Subject: Re: [PATCH] serial: 8250: 8250_omap: Fix syntax errors in comments
-To:     Xiang wangx <wangxiang@cdjrlc.com>
+Date:   Mon, 6 Jun 2022 16:35:37 +0200
+Message-ID: <CAHp75VfsR6sVwO9iF6RA0bhVjMF1jC1_JEkv106TubPgL_m8YA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tty/vt: Makefile, add --unicode for loadkeys invocation
+To:     Jiri Slaby <jslaby@suse.cz>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
         "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -69,34 +67,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 5:25 AM Xiang wangx <wangxiang@cdjrlc.com> wrote:
+On Thu, Jun 2, 2022 at 12:30 PM Jiri Slaby <jslaby@suse.cz> wrote:
 >
-> Delete the redundant word 'have'.
+> For a long time, we generate unicode tables using loadkeys. So fix
+> Makefile to use that flag too.
 
-Not critical right now, but you may shorten the subject by dropping
-"8250:" part in the prefix, just leaving "serial: 8250_omap:" is
-enough.
+generated
+
+Does it make sense to add the Fixes tag?
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 > ---
->  drivers/tty/serial/8250/8250_omap.c | 2 +-
+>  drivers/tty/vt/Makefile | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-> index ac8bfa042391..a7a95c013fe6 100644
-> --- a/drivers/tty/serial/8250/8250_omap.c
-> +++ b/drivers/tty/serial/8250/8250_omap.c
-> @@ -345,7 +345,7 @@ static void omap8250_restore_regs(struct uart_8250_port *up)
->  }
+> diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
+> index fe30ce512819..b3dfe9d5717e 100644
+> --- a/drivers/tty/vt/Makefile
+> +++ b/drivers/tty/vt/Makefile
+> @@ -30,6 +30,6 @@ $(obj)/defkeymap.o:  $(obj)/defkeymap.c
+>  ifdef GENERATE_KEYMAP
 >
->  /*
-> - * OMAP can use "CLK / (16 or 13) / div" for baud rate. And then we have have
-> + * OMAP can use "CLK / (16 or 13) / div" for baud rate. And then we have
->   * some differences in how we want to handle flow control.
->   */
->  static void omap_8250_set_termios(struct uart_port *port,
+>  $(obj)/defkeymap.c: $(obj)/%.c: $(src)/%.map
+> -       loadkeys --mktable $< > $@
+> +       loadkeys --mktable --unicode $< > $@
+>
+>  endif
 > --
 > 2.36.1
 >

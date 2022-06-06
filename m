@@ -2,233 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC1053EF11
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3BB53EF16
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiFFUAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        id S232842AbiFFUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiFFUAo (ORCPT
+        with ESMTP id S232965AbiFFUBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:00:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC95AF8E75
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:00:42 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256JTG2Z007427;
-        Mon, 6 Jun 2022 20:00:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=fXuykce64vZlAH9rivZ/1ZhrX5e9mctMF0eKqPMr4c8=;
- b=JOBaYIR4v+UriCinwnJVhpv+NHj8b+pbQ9/XKSqo1zaF80LU8Sei4gMdRBJEwxV1P50h
- +nx3veULXfThfv7+y5pSCZ2bWNl4BfB1t7UsIz4MaeakVM8jr82uRI4AA/E/3vyCPBZT
- qrZwwEKdTKNIf0qrycHUhnQZI86JVsgJg6Z/Avh8PnxT28UhoNL0CwYI6WdY+4YRGKpj
- JGozGTss4Tl9bVyxi+xdW0wJ6zKUmg5NG3VZlDLXOjAC/uO7kJmVpTlY1Zlg4OE8jEeu
- OLxvl38RKQbg83SrUUdburxvy0aDQ8I0c4H683y20DbXoTPJC/8pQqm/2coBDeiIATKo ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ghqsjgfhv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 20:00:17 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 256JnXUr014489;
-        Mon, 6 Jun 2022 20:00:16 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ghqsjgfhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 20:00:16 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256JZIT8020556;
-        Mon, 6 Jun 2022 20:00:16 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma02dal.us.ibm.com with ESMTP id 3gfy1abhe9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Jun 2022 20:00:16 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256K0FCD34930984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Jun 2022 20:00:15 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 56DBB112062;
-        Mon,  6 Jun 2022 20:00:15 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18A06112063;
-        Mon,  6 Jun 2022 20:00:15 +0000 (GMT)
-Received: from localhost (unknown [9.211.52.224])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Jun 2022 20:00:14 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, npiggin@gmail.com, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, haren@linux.vnet.ibm.com
-Subject: Re: [PATCH 0/2] Disabling NMI watchdog during LPM's memory transfer
-In-Reply-To: <666cedea-2dbc-254e-467b-c02a3a2d8795@linux.ibm.com>
-References: <20220601155315.35109-1-ldufour@linux.ibm.com>
- <87a6av0wxk.fsf@linux.ibm.com>
- <666cedea-2dbc-254e-467b-c02a3a2d8795@linux.ibm.com>
-Date:   Mon, 06 Jun 2022 15:00:14 -0500
-Message-ID: <874k0x1s1d.fsf@linux.ibm.com>
+        Mon, 6 Jun 2022 16:01:13 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE12721B4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:01:09 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id q15so5062327wmj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=W5TqJYafwftJ1q16jDwsapCbeMrbhqufuDDjVq8Z1/0=;
+        b=dRai72lfgPZVIbcYWbUJgQZW62213vXNScspB3WEJ8uXaErK7Wm69WAfoUX4ybfir5
+         hGG+oasznTALQNkRvzo4k3jjOa5QWG4Q7qaLY2vlMOL0HIQvV8DB/wJc4HPztmZJKHQg
+         bgjw9FszVQUdeqkBcBCL7z1i3oUV4vGRLv7xGkQN+5dXsdh9YvZWGM8+UsJL45omX6bt
+         OJMtAV9tYU83SJwh93SuVYmMkYMj96481RHZ/H7H9FNMPH5GSpI9UOCOvRo+0FZqUHkj
+         DF/AA5b1zGXOO1kcS9aRFg/N6xzK0ao4g3Ic4hAsHSIMDrNE5Gmm9zTqm4+LahveQS/A
+         nL+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W5TqJYafwftJ1q16jDwsapCbeMrbhqufuDDjVq8Z1/0=;
+        b=fgWg53EqN4ioCgjgWq9XydHnFn3CRuNgDufkFzE4ofN/eUqT8WoPXcrmcy/zLmLDvY
+         jAozvYXmoH6ingBynPOE5QmZsgtjVvm0ZCJEdsHZzwbuoLVSj6MwgH4xBCJwXc3kluBY
+         hwj+UWQdpQo84+QYaKslgT5qLvr4GGjnhGoW3Qlpy0cJJZtLNJ4Gpo8Wc5zN0WA1r/Y4
+         jwPwcI++aKMBmj66uUPNUKkwj4bXDCvz5LVxY+fk6oQ7OSV65IEbuDfPaQVHVo4cEQmK
+         0rnSSxKzIK1RCbGMB25XrFrdctqA/mGk066+dw7uK4WPjIqghVQIofv9/hkpFntMYdcX
+         E/qw==
+X-Gm-Message-State: AOAM531HJkpz8MgaOZMhmhaL4Mhv+rM9JOJYYDkNEC8IEgAvKn4eGE/r
+        yV0W3utpg72zI1vAxK65z3Z5UC1cddiNMPd8sM7eOg==
+X-Google-Smtp-Source: ABdhPJyEMUN07Nx+Z6Hur5B7Ckxoi3WjMhd9MJBUwtTUCWQoJCvlJDkV6RZ2FWrtlkbBQxf7z3rq1LujRmEt7yno97I=
+X-Received: by 2002:a7b:c7c3:0:b0:398:934f:a415 with SMTP id
+ z3-20020a7bc7c3000000b00398934fa415mr25516158wmk.27.1654545667336; Mon, 06
+ Jun 2022 13:01:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9IDLFr5SyVgxc0RzNaHPUDmncQtpI5jI
-X-Proofpoint-ORIG-GUID: EmlhjjKCEEcdrMs65C76h5sxpgN6s-ub
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-06_06,2022-06-03_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- adultscore=0 mlxscore=0 bulkscore=0 phishscore=0 spamscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206060079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220603162247.GC16134@blackbody.suse.cz> <CAJD7tkbp9Tw4oGtxsnHQB+5VZHMFa4J0qvJGRyj3VuuQ4UPF=g@mail.gmail.com>
+ <20220606123209.GE6928@blackbody.suse.cz> <CAJD7tkZeNhyEL4WtkEMOUeLsLX4x4roMuNCocEhz5yHm7=h4vw@mail.gmail.com>
+ <20220606195454.byivqaarp6ra7dpc@apollo.legion>
+In-Reply-To: <20220606195454.byivqaarp6ra7dpc@apollo.legion>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 6 Jun 2022 13:00:30 -0700
+Message-ID: <CAJD7tkbOFHW+Z48CbpsG3O8wvh0GYjChDgNhoiVJ=_LZsND8wQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/5] bpf: rstat: cgroup hierarchical stats
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> On 02/06/2022, 19:58:31, Nathan Lynch wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> When a partition is transferred, once it arrives at the destination node,
->>> the partition is active but much of its memory must be transferred from the
->>> start node.
->>>
->>> It depends on the activity in the partition, but the more CPU the partition
->>> has, the more memory to be transferred is likely to be. This causes latency
->>> when accessing pages that need to be transferred, and often, for large
->>> partitions, it triggers the NMI watchdog.
->> 
->> It also triggers warnings from other watchdogs and subsystems that
->> have soft latency requirements  - softlockup, RCU, workqueue. The issue
->> is more general than the NMI watchdog.
+On Mon, Jun 6, 2022 at 12:55 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> I agree, but, as you can read in the title, this series is focusing on the
-> NMI watchdog which may have some dangerous side effects.
+> On Tue, Jun 07, 2022 at 01:02:04AM IST, Yosry Ahmed wrote:
+> > On Mon, Jun 6, 2022 at 5:32 AM Michal Koutn=C3=BD <mkoutny@suse.com> wr=
+ote:
+> > >
+> > > On Fri, Jun 03, 2022 at 12:47:19PM -0700, Yosry Ahmed <yosryahmed@goo=
+gle.com> wrote:
+> > > > In short, think of these bpf maps as equivalents to "struct
+> > > > memcg_vmstats" and "struct memcg_vmstats_percpu" in the memory
+> > > > controller. They are just containers to store the stats in, they do
+> > > > not have any subgraph structure and they have no use beyond storing
+> > > > percpu and total stats.
+> > >
+> > > Thanks for the explanation.
+> > >
+> > > > I run small microbenchmarks that are not worth posting, they compar=
+ed
+> > > > the latency of bpf stats collection vs. in-kernel code that adds st=
+ats
+> > > > to struct memcg_vmstats[_percpu] and flushes them accordingly, the
+> > > > difference was marginal.
+> > >
+> > > OK, that's a reasonable comparison.
+> > >
+> > > > The main reason for this is to provide data in a similar fashion to
+> > > > cgroupfs, in text file per-cgroup. I will include this clearly in t=
+he
+> > > > next cover message.
+> > >
+> > > Thanks, it'd be great to have that use-case captured there.
+> > >
+> > > > AFAIK loading bpf programs requires a privileged user, so someone h=
+as
+> > > > to approve such a program. Am I missing something?
+> > >
+> > > A sysctl unprivileged_bpf_disabled somehow stuck in my head. But as I
+> > > wrote, this adds a way how to call cgroup_rstat_updated() directly, i=
+t's
+> > > not reserved for privilged users anyhow.
+> >
+> > I am not sure if kfuncs have different privilege requirements or if
+> > there is a way to mark a kfunc as privileged. Maybe someone with more
+> > bpf knowledge can help here. But I assume if unprivileged_bpf_disabled
+> > is not set then there is a certain amount of risk/trust that you are
+> > taking anyway?
+> >
+>
+> It requires CAP_BPF or CAP_SYS_ADMIN, see verifier.c:add_subprog_or_kfunc=
+.
 
-Sure, I read the subject line. I'm saying that focus may be too narrow.
+Thanks for the clarification!
 
 >
->>> The NMI watchdog causes the CPU stack to dump where it appears to be
->>> stuck. In this case, it does not bring much information since it can happen
->>> during any memory access of the kernel.
->> 
->> When the site of a watchdog backtrace shows a thread stuck on a routine
->> memory access as opposed to something like a lock acquisition, that is
->> actually useful information that shouldn't be discarded. It tells us the
->> platform is failing to adequately virtualize partition memory. This
->> isn't a benign situation and it's likely to unacceptably affect real
->> workloads. The kernel is ideally situated to detect and warn about this.
->> 
+> > >
+> > > > bpf_iter_run_prog() is used to run bpf iterator programs, and it gr=
+abs
+> > > > rcu read lock before doing so. So AFAICT we are good on that front.
+> > >
+> > > Thanks for the clarification.
+> > >
+> > >
+> > > Michal
 >
-> I agree, but the information provided are most of the time misleading,
-> pointing to various part in the kernel where the last page fault of a
-> series generated by the kernel happened. There is no real added value,
-> since this is well known that the memory transfer is introducing latency
-> that is detected by the kernel.
-
-Hmm, I don't understand why it would be considered misleading when the
-stack trace shows where the thread has been stuck. And this behavior of
-the platform, where resolving post-resume memory accesses takes multiple
-seconds under certain conditions has not been well-understood by us
-until recently.
-
-> Furthermore, soft lockups are still
-> triggered and report as well this latency without any side effect.
-
-It's fair to say that the softlockup watchdog does not panic in the
-configurations that our internal test environments happen to use. But
-real users can (and do) enable these:
-
-/proc/sys/kernel/hardlockup_panic
-/proc/sys/kernel/hung_task_panic
-/proc/sys/kernel/panic_on_rcu_stall
-/proc/sys/kernel/softlockup_panic
-
-And if so, they likely expect that the OS will simply panic and reboot
-when a condition arises that causes memory access times to exceed the
-corresponding timeout or threshold. Even during a partition migration.
-
-
->>> In addition, the NMI interrupt mechanism is not secure and can generate a
->>> dump system in the event that the interruption is taken while
->>> MSR[RI]=0.
->> 
->> This sounds like a general problem with that facility that isn't
->> specific to partition migration? Maybe it should be disabled altogether
->> until that can be fixed?
->
-> We already discuss that with Nick and it sounds that it is not so easy to
-> fix that. Furthermore, the NMI watchdog is considered as last option for
-> analyzing a potential dying system. So taking the risk of generating a
-> crash because of the NMI interrupt looks acceptable. But disabling it
-> totally because of that is not the right option.
-
-OK.
-
-> In the LPM's case, the system is dependent on the LPM's latency, it is not
-> really dying or in a really bad shape, so that risk is too expansive.
-
-I would say the partition OS is actually in very bad shape if memory
-accesses are taking dozens of seconds or more. Any real workload is
-likely to be affected to an unacceptable degree. It depends on the
-situation, but some users may prefer a panic+reboot to waiting for the
-situation to resolve. And this change would effectively prevent the
-kernel from carrying out that policy.
-
-> Fixing the latency at the source is definitively the best option, and the
-> PHYP team is already investigating that. But, in the meantime, there is a
-> way to prevent the system to die because of that side effect by disabling
-> the NMI watchdog during the memory transfer.
->
->> 
->>> Given how often hard lockups are detected when transferring large
->>> partitions, it seems best to disable the watchdog NMI until the memory
->>> transfer from the start node is complete.
->> 
->> At this time, I'm far from convinced. Disabling the watchdog is going to
->> make the underlying problems in the platform and/or network harder to
->> understand.
->
-> I was also reluctant, and would like the NMI watchdog to remain active
-> during LPM. But there is currently no other way to work around the LPM's
-> latency, and its potential risk of system crash.
->
-> I've spent a lot of time analyzing many crashes happening during LPM and
-> all of them are now pointing to the NMI watchdog issue. Furthermore, on a
-> system with thousands of CPUs, I saw a system crash because a CPU was not
-> able to respond in time (1s) to the NMI interrupt and thus generate
-> the panic.
->
-> In addition, we now know that a RTAS call, made right after the system is
-> running again on the arrival side, is taking ages and is most of the time
-> triggering the NMI watchdog.
-
-That's good to know.
-
-> There are  ongoing investigations to clarify where and how this latency is
-> happening. I'm not excluding any other issue in the Linux kernel, but right
-> now, this looks to be the best option to prevent system crash during
-> LPM.
-
-It will prevent the likely crash mode for enterprise distros with
-default watchdog tunables that our internal test environments happen to
-use. But if someone were to run the same scenario with softlockup_panic
-enabled, or with the RCU stall timeout lower than the watchdog
-threshold, the failure mode would be different.
-
-Basically I'm saying:
-* Some users may actually want the OS to panic when it's in this state,
-  because their applications can't work correctly.
-* But if we're going to inhibit one watchdog, we should inhibit them
-  all.
-
-I wonder if we should freeze processes across the suspend, thawing them
-on the destination only after the device tree update is complete,
-perhaps even waiting until the VASI state transitions to "Completed".
-Suspending the workload for some time after resume would reduce the
-number of demand faults that have to be serviced. If that provides
-better overall behavior then we could avoid disabling watchdogs.
+> --
+> Kartikeya

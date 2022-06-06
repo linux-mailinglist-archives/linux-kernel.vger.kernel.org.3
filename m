@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D910C53E861
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8814453EBDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240703AbiFFP0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S240761AbiFFP0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240565AbiFFPZv (ORCPT
+        with ESMTP id S240597AbiFFPZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4751CD340;
-        Mon,  6 Jun 2022 08:25:50 -0700 (PDT)
+        Mon, 6 Jun 2022 11:25:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E621CD35F;
+        Mon,  6 Jun 2022 08:25:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1835261519;
+        by ams.source.kernel.org (Postfix) with ESMTPS id B18AAB81A99;
         Mon,  6 Jun 2022 15:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7BA9C341CA;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE69C341C5;
         Mon,  6 Jun 2022 15:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654529149;
-        bh=HX77o3GbP6StQGsmQNWtxrZSPmAY70fcGW/50iB60UM=;
+        s=k20201202; t=1654529148;
+        bh=xBGosraEKFDvlEvVzHl4N9rATzwTfAcB7t6s+0VGeFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s9/yhptvDXGC62EWjCN9/23AE9//q71Xm8NvXmnBg+QHhBfORkclu0uFVDhhDrOmv
-         vVRudrbYG0KpPqaKG3pSovGItwyqpIz4gAwxRwS/EMUOHz0+GGt3feFL93pM2MWf0g
-         5aVmu7XR7MpRMn7+pkRO5dnib/Fapm94XG7tEvTcacoJqinocJdlG6T8vL7OoG89YE
-         6TZ12UTAuVqrgjPUWURnPlwWBXA1HADxidBq54xvJhttueY7wQn27dYU+zrNjo+M0o
-         f6MQ/P1oWpXLa1iCW/LbG8+vJN6DQt/sQWY2jZeLKg4L3FnAwfqs1rb0Klx15H1pQx
-         eBmI2stxwjv1A==
+        b=fiDerU78PUo1aGbGscYWQhmP5Dz5G1/CIK8SjjjdLf8+Yt0WMO/FMD/LVSQgOmSws
+         5SczbvxJr57J/FoP2KOZD539AVkh2rMI1ugTvoImHZsisEM/h0vRRIjh8wi0LQYMGa
+         BtLTWl+qxHp8MhLvYvlVzixrFufhtwbC7Q+JDFAwULaufg0AJuFhlE+J7IqkqdlPRI
+         WQkT1OaW2+F5BqAcQ7e9z01hX8975Bu1oKl5iG87Hwpdk4mBLeQ7ih0dfoGZIOEuLK
+         M8yp80aystS5AompHnODjLUcKfrvxi6k2CNvynCU42Cx/8d5JWI3Hd390aNvnjF3H7
+         QZBUeIJX+0KQg==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1nyEby-0012Pp-Cy;
+        id 1nyEby-0012Ps-Dc;
         Mon, 06 Jun 2022 16:25:46 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 18/23] MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
-Date:   Mon,  6 Jun 2022 16:25:40 +0100
-Message-Id: <89f11772dd4afe9700d6cbbb3da8749eb98b396a.1654529011.git.mchehab@kernel.org>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 19/23] MAINTAINERS: update maxim,max77693.yaml reference
+Date:   Mon,  6 Jun 2022 16:25:41 +0100
+Message-Id: <6a87dfb278765465d82ad4641a42ae4de0ded392.1654529011.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
 References: <cover.1654529011.git.mchehab@kernel.org>
@@ -62,13 +62,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changeset a1f4626b282d ("media: dt-bindings: Convert Dongwoon dw9807-vcm bindings to json-schema")
-renamed: Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.txt
-to: Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.yaml.
+Changeset b38213c6118b ("dt-bindings: mfd: maxim,max77693: Convert to dtschema")
+renamed: Documentation/devicetree/bindings/mfd/max77693.txt
+to: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml.
 
 Update its cross-reference accordingly.
 
-Fixes: a1f4626b282d ("media: dt-bindings: Convert Dongwoon dw9807-vcm bindings to json-schema")
+Fixes: b38213c6118b ("dt-bindings: mfd: maxim,max77693: Convert to dtschema")
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
@@ -79,18 +79,18 @@ See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@k
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index e122b6946063..a11aa7ebb6af 100644
+index a11aa7ebb6af..dc64a23d0bdc 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -6078,7 +6078,7 @@ M:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
- S:	Maintained
- T:	git git://linuxtv.org/media_tree.git
--F:	Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.txt
-+F:	Documentation/devicetree/bindings/media/i2c/dongwoon,dw9807-vcm.yaml
- F:	drivers/media/i2c/dw9807-vcm.c
- 
- DOUBLETALK DRIVER
+@@ -12118,7 +12118,7 @@ F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
+ F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
+ F:	Documentation/devicetree/bindings/*/maxim,max77843.yaml
+ F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
+-F:	Documentation/devicetree/bindings/mfd/max77693.txt
++F:	Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+ F:	drivers/*/*max77843.c
+ F:	drivers/*/max14577*.c
+ F:	drivers/*/max77686*.c
 -- 
 2.36.1
 

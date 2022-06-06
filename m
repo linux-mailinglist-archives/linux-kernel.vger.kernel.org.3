@@ -2,117 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3778C53EE54
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2011653EE5B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbiFFTIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S231921AbiFFTOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiFFTIu (ORCPT
+        with ESMTP id S231665AbiFFTOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 15:08:50 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C522AC7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:08:48 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id s8so15667515oib.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 12:08:48 -0700 (PDT)
+        Mon, 6 Jun 2022 15:14:49 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FC452B00
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 12:14:47 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id h18so10838695qvj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 12:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=U+d48J6VO4jwWOwK4nY7MppUng+HS6f87TdgczeTWfA=;
-        b=jbYQLfVc8E3vRnH/nAaGpEpu3GBx4LeR4+rgdiFOihSxweRGcyNUDXo8oXTht50+6z
-         vCTaJSGT4TIKqAoQCMUYxwZN9KwxGDwPDjCxGedcYvmUQ583rhPZD1tmOJE3v34dIpjn
-         C98AM8dS6nf6IlEL28J7wSLX2wRF8ySv7yZOo=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1sFfmt+aAU3MlHrhFJtWHXyGldxbtLEza9Q/vq/tl9o=;
+        b=D1Fxn/imDZ+yKEXDtzx64TcIterAly3HWaTCmzC7ENFjTU1ee+CoZEYDVWZSybb/cx
+         XndPbR6u0bC+W1neTG3XcC84ZsTk47i3ywAnXzGrcpXZYv1lbdLei4j2E+DkJGzlLwhe
+         AcRnpxHYWi856DmWQQh9Gwnd8MKJsN5gpl8ybn6xqfZW3HCUDeAdtlIshge+3yNOs8+p
+         lD5uCxI+YYX+DaOcSNxlhpFL398gJxCZbudqI2nDQD+ZtupNgtAIQjGQwGtR9pcRVkgd
+         yj3Mod1LUgwRRDB4BGr6ifFffHQ5IzSWxRB2N3NWtmOC3xlB5NDjGaBhoxY0TidCu2Ww
+         hUZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=U+d48J6VO4jwWOwK4nY7MppUng+HS6f87TdgczeTWfA=;
-        b=S5u9bg641T1WeRuibSX1cUZMGz+U0u0Za0XzTmag6495KLeCGIfhTe4aaxDBV25s86
-         k9R1kh/tFaaJiHyAgCAy1D5yoiYgtvbIfOmNaSuz1cq1EXR3Ecmmd7PFjK+nkBuSGwAD
-         oUQLQr1AOc9ZsDbjy9pVBdpjYAW6NuopR7f+F2986VSQB6xSWxRHoO1tSV7TU5OCUaSp
-         sb+EaMPREdXd1x04znqLTXSJlONdoqhL+R+P5ZAPNOgXYNmB9sXPVNGUs7g26IX/u87t
-         dUFQW5oVnwX5O6Jqsy0REBl8Abwlym2pAAy0NCK4flhLCS0b2HcyH5EdhEFqIULbrRsk
-         H07A==
-X-Gm-Message-State: AOAM530QqgzfW2IizfhNmpX4Qk4/ZinsF+z9kV547R+4xOyhRgLniR9/
-        Aowq0PVcoCv4W+SkAGmyDnT1aGrrhKG70irXm+jvnA==
-X-Google-Smtp-Source: ABdhPJy4c94CssdxgDB7cICSjvhkR/T7a00ZnGxM1AaOQjnzXXHNZCZXMZRtPZa2NcP41pwS569R9SzLPrA11kDyVIA=
-X-Received: by 2002:a05:6808:e87:b0:32e:4789:d2c with SMTP id
- k7-20020a0568080e8700b0032e47890d2cmr11740857oil.193.1654542527131; Mon, 06
- Jun 2022 12:08:47 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 6 Jun 2022 12:08:46 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1sFfmt+aAU3MlHrhFJtWHXyGldxbtLEza9Q/vq/tl9o=;
+        b=xbc5X/mJiV2vJF5qHhCFiLJbLp8nLMKN7kUxmCW0kQpWcAIwbqM9oolo2XIAYfziJD
+         IsNqIuw3P+z1T65JNje/oJWPBYcmi1AVSS9PGZJ4mvaYhyd6puQSn+7PTwTboByrIoV0
+         rd03TdwYjPFCetIwLuMm3ynnGYKfKexC6igtv4bG2igS7rSKKZIbc2Jzd1uvaKl233v3
+         gv06KjApFauxjrlwy8YHJDRxSK3PGGF6T4meodUQWWOFcZFolwGckqJ4aoOxuPsKeVXB
+         db0Z9lGwCG/faBuA2R83eQ6ja8jYxa+9NMJvEOPHZnhfrYA+31Nqo9CzEp4v7PH15zSN
+         6BDQ==
+X-Gm-Message-State: AOAM532MjEJvjYdcSPG+gqazXxgSwpO+FaURPm+mmzwoFY8HF/bFMsAl
+        bJ9/A6JlF9xGm2R/79+nc/8=
+X-Google-Smtp-Source: ABdhPJxnnR7ytJ5vSs/YYi81m/riE2K8mM9+kuJxGK7ob+t8a3yp06jp/xumDhwyZs+6/1wn/ppQlA==
+X-Received: by 2002:a05:6214:dc1:b0:467:dcd2:3f9 with SMTP id 1-20020a0562140dc100b00467dcd203f9mr13987819qvt.30.1654542886923;
+        Mon, 06 Jun 2022 12:14:46 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:be9c:b2d9:3353:7a73])
+        by smtp.gmail.com with ESMTPSA id ca27-20020a05622a1f1b00b00304e43ac0a5sm6150631qtb.79.2022.06.06.12.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 12:14:45 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 12:14:44 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v3 1/4] cpumask: Fix invalid uniprocessor mask assumption
+Message-ID: <Yp5SJAkq8whC8EBI@yury-laptop>
+References: <cover.1654410109.git.sander@svanheule.net>
+ <cc1f7d3334348cccbf9fde091015a802f379a9be.1654410109.git.sander@svanheule.net>
 MIME-Version: 1.0
-In-Reply-To: <20220606152431.1889185-5-hsinyi@chromium.org>
-References: <20220606152431.1889185-1-hsinyi@chromium.org> <20220606152431.1889185-5-hsinyi@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 6 Jun 2022 12:08:46 -0700
-Message-ID: <CAE-0n51xPADPVcBH7QRh96t7q=mx4VhxrEb1cZENcsu7Z=Nv0A@mail.gmail.com>
-Subject: Re: [PATCH v4 4/8] drm/panel: lvds: Implement .get_orientation callback
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        Rob Clark <robdclark@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc1f7d3334348cccbf9fde091015a802f379a9be.1654410109.git.sander@svanheule.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Hsin-Yi Wang (2022-06-06 08:24:27)
-> diff --git a/drivers/gpu/drm/panel/panel-lvds.c b/drivers/gpu/drm/panel/panel-lvds.c
-> index f11252fb00fe..491b64c2c8d6 100644
-> --- a/drivers/gpu/drm/panel/panel-lvds.c
-> +++ b/drivers/gpu/drm/panel/panel-lvds.c
-> @@ -99,15 +99,30 @@ static int panel_lvds_get_modes(struct drm_panel *panel,
->         drm_display_info_set_bus_formats(&connector->display_info,
->                                          &lvds->bus_format, 1);
->         connector->display_info.bus_flags = lvds->bus_flags;
-> +
-> +       /*
-> +        * drm drivers are expected to call drm_panel_get_orientation() to get
-> +        * panel's orientation then drm_connector_set_panel_orientation() to
-> +        * set the property before drm_dev_register(). Otherwise there will be
-> +        * a WARN_ON if orientation is set after drm is registered.
-> +        */
-
-Should this comment also be a "TODO: Remove once all drm drivers call
-drm_connector_set_panel_orientation()"?
-
->         drm_connector_set_panel_orientation(connector, lvds->orientation);
->
->         return 1;
+On Sun, Jun 05, 2022 at 08:22:38AM +0200, Sander Vanheule wrote:
+> On uniprocessor builds, any CPU mask is assumed to contain exactly one
+> CPU (cpu0). This assumption ignores the existence of empty masks,
+> resulting in incorrect behaviour.
+> cpumask_first_zero(), cpumask_next_zero(), and for_each_cpu_not() don't
+> provide behaviour matching the assumption that a UP mask is always "1",
+> and instead provide behaviour matching the empty mask.
+> 
+> Drop the incorrectly optimised code and use the generic implementations
+> in all cases.
+> 
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> ---
+> Changes since v1:
+> - Drop UP implementations instead of trying to fix them
+> ---
+>  include/linux/cpumask.h | 80 -----------------------------------------
+>  lib/Makefile            |  3 +-
+>  2 files changed, 1 insertion(+), 82 deletions(-)
+> 
+> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> index fe29ac7cc469..d6add0e29ef4 100644
+> --- a/include/linux/cpumask.h
+> +++ b/include/linux/cpumask.h
+> @@ -116,85 +116,6 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
+>  	return cpu;
 >  }
->
-> +static enum drm_panel_orientation panel_lvds_get_orientation,(struct drm_panel *panel)
+>  
+> -#if NR_CPUS == 1
+> -/* Uniprocessor.  Assume all masks are "1". */
+> -static inline unsigned int cpumask_first(const struct cpumask *srcp)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline unsigned int cpumask_first_and(const struct cpumask *srcp1,
+> -					     const struct cpumask *srcp2)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline unsigned int cpumask_last(const struct cpumask *srcp)
+> -{
+> -	return 0;
+> -}
+> -
+> -/* Valid inputs for n are -1 and 0. */
+> -static inline unsigned int cpumask_next(int n, const struct cpumask *srcp)
+> -{
+> -	return n+1;
+> -}
+> -
+> -static inline unsigned int cpumask_next_zero(int n, const struct cpumask *srcp)
+> -{
+> -	return n+1;
+> -}
+> -
+> -static inline unsigned int cpumask_next_and(int n,
+> -					    const struct cpumask *srcp,
+> -					    const struct cpumask *andp)
+> -{
+> -	return n+1;
+> -}
+> -
+> -static inline unsigned int cpumask_next_wrap(int n, const struct cpumask *mask,
+> -					     int start, bool wrap)
+> -{
+> -	/* cpu0 unless stop condition, wrap and at cpu0, then nr_cpumask_bits */
+> -	return (wrap && n == 0);
+> -}
+> -
+> -/* cpu must be a valid cpu, ie 0, so there's no other choice. */
+> -static inline unsigned int cpumask_any_but(const struct cpumask *mask,
+> -					   unsigned int cpu)
+> -{
+> -	return 1;
+> -}
+> -
+> -static inline unsigned int cpumask_local_spread(unsigned int i, int node)
+> -{
+> -	return 0;
+> -}
+> -
+> -static inline int cpumask_any_and_distribute(const struct cpumask *src1p,
+> -					     const struct cpumask *src2p) {
+> -	return cpumask_first_and(src1p, src2p);
+> -}
+> -
+> -static inline int cpumask_any_distribute(const struct cpumask *srcp)
+> -{
+> -	return cpumask_first(srcp);
+> -}
 
-Stray comma here                                            ---^
+It looks like cpumask_local_spread, cpumask_any_and_distribute and
+cpumask_any_distribute were correct and better optimized in UP case.
+cpumask_local_spread - for sure. I think it's worth keeping them
+optimized.
 
-> +{
-> +       struct panel_lvds *lvds = to_panel_lvds(panel);
-> +
-> +       return lvds->orientation;
-> +}
-> +
+Thanks,
+Yury
+
+> -#define for_each_cpu(cpu, mask)			\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask)
+> -#define for_each_cpu_not(cpu, mask)		\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask)
+> -#define for_each_cpu_wrap(cpu, mask, start)	\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask, (void)(start))
+> -#define for_each_cpu_and(cpu, mask1, mask2)	\
+> -	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask1, (void)mask2)
+> -#else
+>  /**
+>   * cpumask_first - get the first cpu in a cpumask
+>   * @srcp: the cpumask pointer
+> @@ -324,7 +245,6 @@ extern int cpumask_next_wrap(int n, const struct cpumask *mask, int start, bool
+>  	for ((cpu) = -1;						\
+>  		(cpu) = cpumask_next_and((cpu), (mask1), (mask2)),	\
+>  		(cpu) < nr_cpu_ids;)
+> -#endif /* SMP */
+>  
+>  #define CPU_BITS_NONE						\
+>  {								\
+> diff --git a/lib/Makefile b/lib/Makefile
+> index 89fcae891361..6f26a429115b 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -34,10 +34,9 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+>  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+>  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+>  	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
+> -	 buildid.o
+> +	 buildid.o cpumask.o
+>  
+>  lib-$(CONFIG_PRINTK) += dump_stack.o
+> -lib-$(CONFIG_SMP) += cpumask.o
+>  
+>  lib-y	+= kobject.o klist.o
+>  obj-y	+= lockref.o
+> -- 
+> 2.36.1

@@ -2,71 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ADE53DF53
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B356053DF56
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 03:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351962AbiFFB3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 21:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S1351970AbiFFBeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 21:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348931AbiFFB3q (ORCPT
+        with ESMTP id S1348931AbiFFBeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 21:29:46 -0400
-Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D6BDF5E
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 18:29:38 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1654478970tyhjp24p
-Received: from localhost.localdomain ( [111.9.5.115])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 06 Jun 2022 09:29:23 +0800 (CST)
-X-QQ-SSF: 01000000000000C0G000000A0000000
-X-QQ-FEAT: 50GcHO11QPGP7X2zxDByGO3USZgo5jXmMxDDXrT1iV2TWjNCxWZbExBKTbLZZ
-        x0CkzNXR7SnmxN/esPnuVszq5KgvMLalFEt9Bfnx4BY+7Jpewvf7j6B2yrOVdMjYYJVZyjl
-        VkDZszzYHB1dMfZH2hB4YSeE36gl9qiRdGRjOdvcLcx4MlXaY0nEaQeNMLk+1FLhmexwYv0
-        pq7ewfwJjJpCFP2zQbP4fQH5Kly/nMs3bjLOeb2zs50aj7rsRToLebtOa1142GOv9ENJDXA
-        QsULKEabKLl7kbFB2CCGpx1u8WEQwWQ6oM+YP7iHzOSTqwY4XACdX4gI4=
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     peterz@infradead.org
-Cc:     will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] seqlock: Fix syntax errors in comments
-Date:   Mon,  6 Jun 2022 09:29:21 +0800
-Message-Id: <20220606012921.22246-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 5 Jun 2022 21:34:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E525222293
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 18:34:15 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LGbbf6K6DzjXLj;
+        Mon,  6 Jun 2022 09:33:18 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 09:34:14 +0800
+Received: from [10.174.178.178] (10.174.178.178) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 09:34:13 +0800
+Message-ID: <aaebf2a5-026b-54f8-3fad-8e9611732e5e@huawei.com>
+Date:   Mon, 6 Jun 2022 09:34:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.3
+Subject: Re: [PATCH v2 1/3] mm/shmem: check return value of
+ shmem_init_inodecache
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <hughd@google.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <david@redhat.com>, <wangkefeng.wang@huawei.com>
+References: <20220605035557.3957759-1-chenwandun@huawei.com>
+ <20220605035557.3957759-2-chenwandun@huawei.com>
+ <YpyYSFjTQQQ/p4bM@casper.infradead.org>
+From:   Chen Wandun <chenwandun@huawei.com>
+In-Reply-To: <YpyYSFjTQQQ/p4bM@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.178]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
- include/linux/seqlock.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index 3926e9027947..4e2ae90554cd 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -863,7 +863,7 @@ static inline unsigned read_seqretry(const seqlock_t *sl, unsigned start)
- }
- 
- /*
-- * For all seqlock_t write side functions, use the the internal
-+ * For all seqlock_t write side functions, use the internal
-  * do_write_seqcount_begin() instead of generic write_seqcount_begin().
-  * This way, no redundant lockdep_assert_held() checks are added.
-  */
--- 
-2.36.1
+On 2022/6/5 19:49, Matthew Wilcox wrote:
+> On Sun, Jun 05, 2022 at 11:55:55AM +0800, Chen Wandun wrote:
+>> It will result in null pointer access if shmem_init_inodecache fail,
+>> so check return value of shmem_init_inodecache
+> You ignored my suggestion from v1.  Here, let me write it out for you.
+Hi Matthew,
+I didn't ignore your suggestion,  some explanation is needed, sorry for 
+that.
+
+In V1, Kefeng point:
+"kmem_cache_create return a pointer to the cache on success, NULL on 
+failure,
+so error = -ENOMEM; is right :)"
+
+so, I look some similar code such as init_inodecache in kinds of file 
+system,  they all
+return -ENOMEM on failure, so is it OK to return -ENOMEM on failure :)
+
+Besides,  kmem_cache_create return NULL on failure, maybe returning 
+error code
+on failure is more proper, but it is another job.
+>
+> +static int shmem_init_inodecache(void)
+>   {
+>    	shmem_inode_cachep = kmem_cache_create("shmem_inode_cache",
+>    				sizeof(struct shmem_inode_info),
+>    				0, SLAB_PANIC|SLAB_ACCOUNT, shmem_init_inode);
+> +	if (!shmem_inode_cachep)
+> +		return -ENOMEM;
+> +	return 0;
+>   }
+>
+> ...
+>
+> +	error = shmem_init_inodecache();
+> +	if (error)
+> +		goto out2;
+>
+>
+> .
 

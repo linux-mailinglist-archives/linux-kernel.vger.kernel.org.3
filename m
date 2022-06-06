@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CCB53E7E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDCA53E968
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbiFFMav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S237071AbiFFMcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236991AbiFFMat (ORCPT
+        with ESMTP id S237077AbiFFMcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:30:49 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBAA2A3A23;
-        Mon,  6 Jun 2022 05:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654518648; x=1686054648;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XbjNlt3CgxlWJwI2YJzT7T5pyVzwTRcy1dlaQHnhbo4=;
-  b=JMFxfA4mnwPgl7BFrbjwfjhLRSGe7FsIvmUN65m0ldJB12laIcFuE/cs
-   MSC70lHd6fGnE2ysHFo9Wq1O8zjiUwcy5IjOqvidHi04xgXMziqhTe7c2
-   uiexSh6yYFgEjedJUhTNsdaV2/Hkc0661rSCdg5+mm1tRo1C/wfe9EgSW
-   U=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 06 Jun 2022 05:30:46 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 05:30:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 6 Jun 2022 05:30:45 -0700
-Received: from [10.242.7.200] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 6 Jun 2022
- 05:30:42 -0700
-Message-ID: <a7e8b822-a33d-ff50-e740-4884c44813e7@quicinc.com>
-Date:   Mon, 6 Jun 2022 18:00:39 +0530
+        Mon, 6 Jun 2022 08:32:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FD6924091
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654518727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=od0IzxEHlRLIxAPHSHU26K5ts6TWDmeD0CotDfSkrvk=;
+        b=HjtBy5jVM47L/+fetj5ErQ6A9RMe83dI5B2DxpkqvV9xSb9SBp12W6jh90Q/vim7SKapKu
+        NKKOqDDBOdpF6Bzaws8CnelzVttBd7nO84N5vqcviT7b579/yN3r9/2D9OVRe20cGK/m4y
+        3ATOU0jCQjRxOcMRIOrW6RuY18zt+5A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-307-aRAT3_QfNLWUTD_pjSy1eQ-1; Mon, 06 Jun 2022 08:32:01 -0400
+X-MC-Unique: aRAT3_QfNLWUTD_pjSy1eQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 578461C13940;
+        Mon,  6 Jun 2022 12:32:01 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 623BC40CF8EA;
+        Mon,  6 Jun 2022 12:32:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] certs: Convert spaces in certs/Makefile to a tab
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@linux.microsoft.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        dhowells@redhat.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 06 Jun 2022 13:31:59 +0100
+Message-ID: <165451871967.1941436.17828809503267245815.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [V4] serial: core: Do stop_rx in suspend path for console if
- console_suspend is disabled
-Content-Language: en-CA
-To:     Doug Anderson <dianders@chromium.org>
-CC:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Stephen Boyd" <swboyd@chromium.org>
-References: <1652692810-31148-1-git-send-email-quic_vnivarth@quicinc.com>
- <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
- <CGME20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b@eucas1p1.samsung.com>
- <3866c083-0064-ac9a-4587-91a83946525d@samsung.com>
- <ff029402-f90c-096a-7366-b58f53555ace@quicinc.com>
- <fb44af37-daf7-974d-95fe-1a6c2cdab676@samsung.com>
- <cb802fb1-d0b8-68af-1c04-f73bc1beca77@quicinc.com>
- <f525c352-d995-0589-584f-0e9acf419f80@quicinc.com>
- <CAD=FV=UyNgfYe2Xh3uuYYHB4yPajZKO+i8nCngFn7TedbF-piA@mail.gmail.com>
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-In-Reply-To: <CAD=FV=UyNgfYe2Xh3uuYYHB4yPajZKO+i8nCngFn7TedbF-piA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+There's a rule in certs/Makefile for which the command begins with eight
+spaces.  This results in:
+
+	../certs/Makefile:21: FORCE prerequisite is missing
+	../certs/Makefile:21: *** missing separator.  Stop.
+
+Fix this by turning the spaces into a tab.
+
+Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are valid")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Mickaël Salaün <mic@linux.microsoft.com>
+cc: Jarkko Sakkinen <jarkko@kernel.org>
+cc: keyrings@vger.kernel.org
+---
+
+ certs/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/certs/Makefile b/certs/Makefile
+index bb904f90f139..cb1a9da3fc58 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -18,7 +18,7 @@ CFLAGS_blacklist_hashes.o += -I$(srctree)
+ 
+ targets += blacklist_hashes_checked
+ $(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FORCE
+-       $(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
++	$(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
+ obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
+ else
+ obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
 
 
-On 6/4/2022 12:58 AM, Doug Anderson wrote:
-> Hi,
->
-> On Fri, Jun 3, 2022 at 11:54 AM Vijaya Krishna Nivarthi
-> <quic_vnivarth@quicinc.com> wrote:
->>>>> Add a start_rx in uart_resume_port after call to set_termios to handle
->>>>> this scenario for other drivers.
->> Since start_rx is not exposed it doesn't seem like we will be able to
->> handle it in core.
->>
->> In your drivers, Can we add a call to stop_rx at begin of set_termios
->> and then undo it at end?
->>
->> That would ensure that set_termios functionality is unaffected while
->> fixing the broken cases?
->>
->> If that's not an option we will have to go back to a previous version of
->> limiting the change to qcom driver.
-> How about this: add an optional start_rx() callback to "struct
-> uart_ops" and then only do your stop_rx() logic in uart_suspend_port()
-> if you'll be able to start it again (AKA if the start_rx() callback is
-> not NULL). That keeps the logic in the core.
-
-This seems good. Thank you.
-
-And also conditionally call start_rx in uart_resume_port after call to 
-set_termios?
-I have tested such patch and it is working fine, will upload it.
-
--Vijay/
-
-> -Doug

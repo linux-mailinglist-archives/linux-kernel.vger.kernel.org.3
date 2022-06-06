@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B03053E389
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A7B53E288
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiFFHeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S231294AbiFFHfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiFFHei (ORCPT
+        with ESMTP id S231195AbiFFHfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 03:34:38 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA9E2251B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:34:37 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id h19so17653181edj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 00:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=f+ScugHy4AlcscEnldL2i5PmbfvQGH4t+6gM1Or5hQU=;
-        b=vClp7zDdiSSua3oBwwpibNjZV1/FgtOu6YjrqDwUTJeboiE7xMBaRmFzZMij4Ifk4V
-         wi1bRx7Z9cZm8iePc4KGYsAxqQaczdTNO0TuWLC8sfYe58H85wFqY/tTJYRNnFpoENnd
-         q/Q6OcXje+KY0K+IBjZYvdv9ubDHESPmjIzGv/ZQHo5WiZzovNe1QccTp6zliv/2bjRy
-         8bO8xx8Rx5LzCmfv8xmrsU9sHqkxzHw14kni133wgXHF+3wjZDjumWn+4mZkQyH+ygl9
-         Od415jviG4Ua4gqf4lZaqwnvChKc2TkvTQaRd05vx77YDjoRUphETVbVnVhB5QUpH/9Q
-         mVAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=f+ScugHy4AlcscEnldL2i5PmbfvQGH4t+6gM1Or5hQU=;
-        b=jF33CMOFsz4iSSiRB1kXYCgBaSK4v7taxnvjtLG0QfVS7UJsyXt6gUVG0WNU4V8Rj0
-         Cs1dDHt9VEKPfg9u9dBr8v9zb2P18siSLp0a4u4Qacin9DCIhvE9ZNoCA2uBPfKPjoln
-         jGeoQa8T6BMTr8omlpKLlZ9Tg/bsQVZ6TutU6r+/YnmhWHwSa5N8tVPJBWo25LqJvta9
-         GadW3Oj6oE7ZilhXo0TJm8Ahg+UI+REsIljRBEPQUuH6ILtaz05oKikzn7zuvp5C3p1L
-         vDFm6IhPU/mWCh50Bhi9/IRV4QHIyN1p+1AlDFx+Vz3IGIWqFsNZW0cn2Y27vjx/zvf2
-         PPYQ==
-X-Gm-Message-State: AOAM533zM8UNwXMtUBScRoOH5aWwhq+MlNIg7p0NGqgvBRTMjDG7sUE5
-        vCpkhDERm+RAwVe80XwShQ/60A==
-X-Google-Smtp-Source: ABdhPJzsdrYxbqs5FgA4BhHAFfwRp0nwo5WvSOzpYDmPzZFoFqOex6Gm7p+2PUm7Ju5jyIpMQcx65g==
-X-Received: by 2002:a05:6402:1cb5:b0:42d:ddda:7459 with SMTP id cz21-20020a0564021cb500b0042dddda7459mr25843817edb.16.1654500876277;
-        Mon, 06 Jun 2022 00:34:36 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f7-20020a170906560700b006fef5088792sm5980417ejq.108.2022.06.06.00.34.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 00:34:35 -0700 (PDT)
-Message-ID: <a83be47b-4cba-e397-51ba-c2093fa0d46c@linaro.org>
-Date:   Mon, 6 Jun 2022 09:34:34 +0200
+        Mon, 6 Jun 2022 03:35:12 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186BF248D9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:35:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LGld70rS2z4xDK;
+        Mon,  6 Jun 2022 17:35:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1654500907;
+        bh=VXk24EbNzKUoMXno58Py6qg0gnRf+KEUXyEIyOwIFm0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=cs0nyc1uHndP9Xs2H7fKEXcwp8KKlnaaciymMe2zU54+MSROONOrStn24NoDklkMt
+         fB+unGwy8tiU8yVdSWv6gOpM+kvObM6vjmgw1YAnPl0SPqydmIfvVteMkU57i+WGgF
+         kHhVecbnAzwDuMzYR6lVzIHDo+ke5rLGJsvPQI7YeTKeo1rNWKnYO6k87jbZMsOhzO
+         oiqYc/DUwXZ/gPfhn3Sy24Z91+USpbsIZsVFGwnrxvtaESGC3owLbJhSNWACzqzZht
+         FuvUOhUy6jjSyqzFxYnfPRUqNzdKOUf+IwU/GB+t+6d27N6Rg5HPnu1Nfi37jy6IVC
+         k5wjzJVdxXkeQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Russell Currey <ruscur@russell.cc>
+Subject: Re: 5.19-rc1 build fails at scripts/check-local-export
+In-Reply-To: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
+References: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
+Date:   Mon, 06 Jun 2022 17:34:58 +1000
+Message-ID: <87tu8ynt25.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 0/6] clear riscv dtbs_check errors
-Content-Language: en-US
-To:     mail@conchuod.ie, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Steve Twiss <stwiss.opensource@diasemi.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Atul Khare <atulkhare@rivosinc.com>
-References: <20220605133300.376161-1-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220605133300.376161-1-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2022 15:32, mail@conchuod.ie wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Hey,
-> Couple conversions from txt to yaml here with the intent of fixing the
-> the dtbs_check warnings for riscv. Atul Khare already sent patches for
-> the gpio-line-names & cache-sets (which went awol) and will clear the
-> remaining two errors.
-> 
-> Rob/Krzysztof:
-> Have I correctly expressed the mutually exclusive properties?
-> I had a look around, but wasn't able to find an obvious binding to ape.
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> writes:
+> Hello.
+>
+> Commit 31cb50b5590fe911 ("kbuild: check static EXPORT_SYMBOL* by script
+> instead of modpost") introduced scripts/check-local-export but it fails
+> in my CentOS 7 environment.
+>
+> $ rpm -q binutils bash
+> binutils-2.27-44.base.el7_9.1.x86_64
+> bash-4.2.46-35.el7_9.x86_64
 
-I'll take a look.
+I'm also seeing this, on Ubuntu 16.04.
 
-> 
-> Wasn't sure if a txt -> yaml conversion's MAINTAINERS update was meant
-> to be in the same patch or not, so feel free to squash.
+$ bash --version
+GNU bash, version 4.3.48(1)-release (powerpc64le-unknown-linux-gnu)
 
-It's the same patch, so please squash with next release.
+> $ make
+...
+>   HOSTCC  scripts/mod/mk_elfconfig
+>   CC      scripts/mod/empty.o
+> ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
+> make[2]: *** [scripts/mod/empty.o] Error 127
+> make[2]: *** Deleting file `scripts/mod/empty.o'
+> make[1]: *** [prepare0] Error 2
+> make: *** [__sub-make] Error 2
+>
+> Is below change OK for you?
+>
+> diff --git a/scripts/check-local-export b/scripts/check-local-export
+> index da745e2743b7..1631c79558b7 100755
+> --- a/scripts/check-local-export
+> +++ b/scripts/check-local-export
+> @@ -51,7 +51,7 @@ do
+>  done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
+>  
+>  # Catch error in the process substitution
+> -wait $!
+> +wait $! 2>/dev/null || :
+>  
+>  for name in "${export_symbols[@]}"
+>  do
 
+That fixes it for me.
 
-Best regards,
-Krzysztof
+Tested-by: Michael Ellerman <mpe@ellerman.id.au>
+
+cheers

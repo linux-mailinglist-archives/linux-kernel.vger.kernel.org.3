@@ -2,110 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B74753EA96
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B990E53E84C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239729AbiFFOc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S239738AbiFFOdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239535AbiFFOcY (ORCPT
+        with ESMTP id S239627AbiFFOdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:32:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2208913F61;
-        Mon,  6 Jun 2022 07:32:19 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 38D496601E94;
-        Mon,  6 Jun 2022 15:32:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654525938;
-        bh=YMYIIOjdr7X3xgwUiFiBZS3Co4/RxQgCOo0x434ptFE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=T8KWPtQKbM+lkmGY0j+8VgnQys9vQH8Fyd2an0W04VCW9bsCAddlaI0zF/fqgHQzQ
-         mBXQdV0nNgS4PZhqX+Uiks0E46zyNJytUkQ7hKmBQi2I5C6l+oyE61SU/xJcRf46yx
-         OxTv7DUL3Ci3D9jlc21E+dyqt7MpnOM9vI0xC6SfTXB9ZRiq0QrUONZJHRbydTcuXk
-         1GLkxJL2oHvX/p3UQYQH4pE6JFuK2k/boWb+u7pmNrj9CVxcmn74K2LWlIwPVynuXr
-         vqzWnw6Y0HFpziWY82HxloJ+2SLipB86z+lqfr71BdBUXdJ4xDIATSHmLGTvOM+piQ
-         3Ol27qkGt6uIw==
-Message-ID: <287b7d3a-a412-0ec9-7be0-c17f3da782b6@collabora.com>
-Date:   Mon, 6 Jun 2022 16:32:16 +0200
+        Mon, 6 Jun 2022 10:33:02 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B7F2AC5E;
+        Mon,  6 Jun 2022 07:33:01 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id q15so12086125wrc.11;
+        Mon, 06 Jun 2022 07:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=T2WMsUxzc11zSP3SEaSzeZg0r4jEfgd/2nHBgyOqTNM=;
+        b=oPQMW767uSFPmkznlyNOwLkO1E+Py3pEiUAdu5aDoOx9B1P8D+xAgWXPm7Qhy7Ue1a
+         XC+0+nLLS6nWuaJ7HrmOuO2j1epyaQD/sm/m0sUNfE7NMgaGWn6RCNaJx30xgy2nWtb3
+         nik5QBQVlxZ8TdXo0cGSLZ2KstAI+3j4aNs/LI4RZd+TL5hAnOBSxcGNr3jPj8uhFujd
+         0aTha74diX4ObZ+TFbFzxjOcDtiFBKcI22AlVc2BZH5ip07FtZIena6BZLtruAxAOnio
+         Qca12p3StCU+L3hzjXUh8ORNZm3vI2TyyjfAp00x+VUF3xGUYaUfBNXZC7ZtX7kTDf2F
+         gp2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=T2WMsUxzc11zSP3SEaSzeZg0r4jEfgd/2nHBgyOqTNM=;
+        b=2cQhA72DB5+7pEdbrqmXrK3kWvccF/tGNuo+8Yz0ofUwvUeUJMTleaDH5FDamTKxWa
+         UBlSRMfI/Ep/bCGeqpKy9oQK2lLz49SUgqEXZ0rJeaNSixCyoPZKieGuKwqUgluJNHq+
+         yrwBO7drsg0fyl0hLFhnu+wPlwSRf4faes88y7I92TvjYQTVqjOZW/mQgjfczM8zQR/g
+         sL8QG0agW5irxKhT1hftRGdQKpsAPgAP6OD9pC64iP5uc1roQZj2szo8H2XSgk3DroTq
+         KpkgwM9jgjARLwMH41w6R1an0baWFBtLlIZ3CsDlaN/jr+eUfSJ7wnJcEvs3UgE2I+tz
+         e1lw==
+X-Gm-Message-State: AOAM530UPE0gUp/aDBX4hB7t8xm5npKF3NDQKyAhETP6D091byjbpozP
+        ZCTN+O7G+V1qXAXjwtGGmEDmvkXbF9M=
+X-Google-Smtp-Source: ABdhPJzqN4cWZJ6Ag/jC5Ezs4cbaqkGE6PFX1fiQ+wVAcUBIwMFyV9pdT4P/LI0Z247Z2KIkNphKhQ==
+X-Received: by 2002:a05:6000:18a4:b0:210:7e22:cd07 with SMTP id b4-20020a05600018a400b002107e22cd07mr21611412wri.703.1654525979972;
+        Mon, 06 Jun 2022 07:32:59 -0700 (PDT)
+Received: from opensuse.localnet (host-79-13-108-3.retail.telecomitalia.it. [79.13.108.3])
+        by smtp.gmail.com with ESMTPSA id t187-20020a1c46c4000000b0039c45fc58c4sm8177822wma.21.2022.06.06.07.32.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 07:32:58 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     dsterba@suse.cz, "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] btrfs: Replace kmap() with kmap_local_page()
+Date:   Mon, 06 Jun 2022 16:32:57 +0200
+Message-ID: <2242021.ElGaqSPkdT@opensuse>
+In-Reply-To: <20220606103243.GZ20633@twin.jikos.cz>
+References: <20220531145335.13954-1-fmdefrancesco@gmail.com> <1793713.atdPhlSkOF@opensuse> <20220606103243.GZ20633@twin.jikos.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] arm64: dts: mediatek: mt8195: add pwm node
-Content-Language: en-US
-To:     Fabien Parent <fparent@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220531114544.144785-1-fparent@baylibre.com>
- <20220531114544.144785-2-fparent@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220531114544.144785-2-fparent@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 31/05/22 13:45, Fabien Parent ha scritto:
-> MT8195's PWM IP has 4 PWM blocks.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+On luned=C3=AC 6 giugno 2022 12:32:44 CEST David Sterba wrote:
+>
+> [snip]=20
+>=20
+> Yes I can pick 1 and 2. Removing the whole series is needed in case it
+> crashes tests as it affects everybody.
+>=20
+Thanks!
 
-I've verified that the binding is actually right - and it is, the MT8183
-data is a perfect match with MT8195.
+If everything goes smoothly, you will receive the remaining conversions=20
+within the next days. I still have to make several of them  (both from=20
+kmap() as well as from kmap_local()) and the ones already done and placed=20
+in my queue still need to be properly tested.
 
-In any case, there are at least a few MT8195 boards on which the PWM controller
-is not used (only the disp-pwm one is used), so please set this node as disabled
-by default, after which, you get my:
+Again, thanks,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+=46abio
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index d076a376bdcc..366543f27a99 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -367,6 +367,21 @@ pwrap: pwrap@10024000 {
->   			assigned-clock-parents = <&topckgen CLK_TOP_ULPOSC1_D10>;
->   		};
->   
-> +		pwm0: pwm@10048000 {
-> +			compatible = "mediatek,mt8195-pwm",
-> +				     "mediatek,mt8183-pwm";
-> +			reg = <0 0x10048000 0 0x1000>;
-> +			#pwm-cells = <2>;
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_PWM_H>,
-> +				 <&infracfg_ao CLK_INFRA_AO_PWM>,
-> +				 <&infracfg_ao CLK_INFRA_AO_PWM1>,
-> +				 <&infracfg_ao CLK_INFRA_AO_PWM2>,
-> +				 <&infracfg_ao CLK_INFRA_AO_PWM3>,
-> +				 <&infracfg_ao CLK_INFRA_AO_PWM4>;
-> +			clock-names = "top", "main", "pwm1", "pwm2", "pwm3",
-> +				      "pwm4";
-> +		};
-> +
->   		scp_adsp: clock-controller@10720000 {
->   			compatible = "mediatek,mt8195-scp_adsp";
->   			reg = <0 0x10720000 0 0x1000>;
-> 
 
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7416453EC39
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE0F53EB36
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240017AbiFFOow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
+        id S240025AbiFFOpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239996AbiFFOot (ORCPT
+        with ESMTP id S240031AbiFFOoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:44:49 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CF050E1E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:44:48 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 7so12281320pga.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:44:48 -0700 (PDT)
+        Mon, 6 Jun 2022 10:44:55 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2AD26543
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:44:51 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id y187so13090525pgd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FSeMlanFh2svXxaNRkwpD5s2Jt4O19S77leAuNHNOlo=;
-        b=WyES++Ws5th4dbIFtc9TyfPnVGRjm9A3RdjviwsyL5TUR4voWiPOI22jrHtE09OkBU
-         DB+COkkoaryb+TiQZ8xREwMtrGSURLJrFyTgtXUQNFZbZEfpjsjkbjPa7D+NWdMxrza/
-         q2pkY393zj9G0k1PphbRqD9U+mf+3uki0YsQb5R7CEi/eJI80836tIn1Kxg75f2WpIpv
-         WyzJ1dSJac/oaOmhRLav/5soBFC4jFYdf0CeMxQiIJMUAStPMaDy91HC527UWwZ0HU1J
-         QKpTvnc7W4mtU/KWP8N23cUBky5PJ7zCEIMhwYdA42u1+Dh5du2Oct1oi2XEIvyWxO8R
-         ofRA==
+        bh=gkGEhy3VfxaC6VD1+0Znm8PQRe5Rv1gv7lzNV+9U6sU=;
+        b=XJm7qKD2bOT58RQ97zCn/zWbGHjdyy77P5xi96N2i7a9i8tTiEn3+2Panyl6bkL0K2
+         xda6xnU78lpVlW2JjeD3Vn/7rouIulCAg4Y9duaPAhKbDdqe3FSwZnjuNZ8T5Fu4aGHG
+         0TLfDpYoeKYfB2D9JSICOzPOdue57TP6Dbf0iM8FPbdQ7qGKqhmTPOwBPheewKwpdN8e
+         rJgsLR3GpJuL5WOrsi3uJrQ72lkyiyzlXEOyuFawixOKPgiqVRWHm6UFLbTb0RpHYs/7
+         bshgQln3hBIa2J2CM3dRE1XjwKOLOxgoZSIsuReh0RjdRmDIxYHs2VxcLR12FcQBXEcT
+         KEhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FSeMlanFh2svXxaNRkwpD5s2Jt4O19S77leAuNHNOlo=;
-        b=hAXLJoN6hOjiAZDhY5YJdJIqWv0nYBprnppsTLSRsD2K5ALDAa7nNRyVS8AW9mT7K8
-         Ii28Bt6SJly4W5Xo/uE1naGqukqU7ZqJr23ftpl/hqwcxNtPahYP8hFOyjAkkkWZaoPo
-         iideA0rQ2kRhr1T01l44qKxhNFFpEn01YbZp+O5NQPCMRrrUqRymlB803duOexDn4nZ0
-         WPIv6ih+EA17in0Ya5RHSnIYol+JaPpFL4RxB2t5hnbOJVaMF2EGXkXfvxtwok49JnxT
-         vFNAKxGERKn+3ibN/1UvzgjXVOPxqTFv9rzqrsEjEXbFumaetvRh6QNSHLY4Up6pWuM5
-         Md1g==
-X-Gm-Message-State: AOAM532/okrTXmj11rr4DXFwfRaS1cnnEOSlsORWNafPzpNXkojm8Us1
-        A26C4YRnr7jdGcVNDpqR6lr81RQN+Mo=
-X-Google-Smtp-Source: ABdhPJyhjn8JL5F/rkrJLtDcxn01B4M7DGyI+z+JnIQ91v9wV1926Nh2e1nU3mcEEbgLJbfF5Sg9MA==
-X-Received: by 2002:a05:6a00:1488:b0:51b:e7a2:9181 with SMTP id v8-20020a056a00148800b0051be7a29181mr16324623pfu.31.1654526687214;
-        Mon, 06 Jun 2022 07:44:47 -0700 (PDT)
+        bh=gkGEhy3VfxaC6VD1+0Znm8PQRe5Rv1gv7lzNV+9U6sU=;
+        b=Y+AUCXyktJn8jkcs7sIZF7z+jN1njwKr1jZ53MObRpS65elNDlY8PRyWKKpylC8eAP
+         WCmEdSEEP4RozvJfr+Isr1/n/Kgcg8ew1zi25ZfkXo3z/wUws2zOrRxFVYUFbQH9NRta
+         +ULBZ4TKMkrobkfnu6vlGC3NuLid87sURTGFFuhrc2TqX1nIxrqN2Znh+9lSDZXZA4b5
+         +HoUG2DHdKh4k8cTlv3L41fyqn9xwiCNuE/6OhHGps/b7kZVQNJg1IVu3B8LWNs4Hu7j
+         aMOpNxt0HAVMKTlKnGvn4NxfK+5mUmXbWHKFiCf70HQKcBwRBIky4wh6OnMn91ZoFiea
+         zCdg==
+X-Gm-Message-State: AOAM532iKzZOCahq52cGrcjm2UR4rbl7CWqj2reMCct/hX4W2TlaqxcN
+        Ae4oerKekH3YZFNulsp94nNn8PDTcdw=
+X-Google-Smtp-Source: ABdhPJwHtzCg5kFnUiWNadbeSw965fhqP0DNjV0hekDkRGPaONCqQVXORVETWVV98temea8+zvNgdw==
+X-Received: by 2002:a63:5a58:0:b0:3fb:b455:ed15 with SMTP id k24-20020a635a58000000b003fbb455ed15mr21332437pgm.228.1654526691026;
+        Mon, 06 Jun 2022 07:44:51 -0700 (PDT)
 Received: from localhost ([198.11.178.15])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170902ea4a00b00163e459be9asm3624550plg.136.2022.06.06.07.44.46
+        by smtp.gmail.com with ESMTPSA id y125-20020a626483000000b0050dc76281d3sm7606451pfb.173.2022.06.06.07.44.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:44:46 -0700 (PDT)
+        Mon, 06 Jun 2022 07:44:50 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -59,9 +59,9 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V3 5/7] x86/entry: Add the C verion of SWITCH_TO_KERNEL_CR3 as switch_to_kernel_cr3()
-Date:   Mon,  6 Jun 2022 22:45:07 +0800
-Message-Id: <20220606144509.617611-6-jiangshanlai@gmail.com>
+Subject: [PATCH V3 6/7] x86/traps: Add fence_swapgs_{user,kernel}_entry() and user_entry_swapgs_and_fence()
+Date:   Mon,  6 Jun 2022 22:45:08 +0800
+Message-Id: <20220606144509.617611-7-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220606144509.617611-1-jiangshanlai@gmail.com>
 References: <20220606144509.617611-1-jiangshanlai@gmail.com>
@@ -79,57 +79,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Add the C version switch_to_kernel_cr3() which implements the macro
-SWITCH_TO_KERNEL_CR3() in arch/x86/entry/calling.h.
+Add the C version fence_swapgs_{user,kernel}_entry() in entry64.c which
+are the same as the ASM macro FENCE_SWAPGS_{USER,KERNEL}_ENTRY.
 
-No functional difference intended.
+fence_swapgs_user_entry is used in the user entry swapgs code path,
+to prevent a speculative swapgs when coming from kernel space.
 
-Note:
-The compiler generates "AND $0xe7,%ah" (3 bytes) for the code
-"cr3 = user_cr3 & ~PTI_USER_PGTABLE_AND_PCID_MASK" while the ASM code in
-SWITCH_TO_KERNEL_CR3() results "AND $0xffffffffffffe7ff,%rax" (6 bytes).
+fence_swapgs_kernel_entry is used in the kernel entry code path,
+to prevent the swapgs from getting speculatively skipped when
+coming from user space.
 
-The compiler generates lengthier code for "cr3 |= X86_CR3_PCID_NOFLUSH"
-because it uses "MOVABS+OR" (13 bytes) rather than a single
-"BTS" (5 bytes).
+Add the C user_entry_swapgs_and_fence() which implements the ASM code:
+        swapgs
+        FENCE_SWAPGS_USER_ENTRY
 
+It will be used in the user entry swapgs code path,  doing the swapgs and
+lfence to prevent a speculative swapgs when coming from kernel space.
+
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/entry/entry64.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ arch/x86/entry/entry64.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/arch/x86/entry/entry64.c b/arch/x86/entry/entry64.c
-index ace73861c2a0..bd77cc8373ce 100644
+index bd77cc8373ce..f7f23800cee4 100644
 --- a/arch/x86/entry/entry64.c
 +++ b/arch/x86/entry/entry64.c
-@@ -12,3 +12,27 @@
-  * is the PTI user CR3 or both.
-  */
- #include <asm/traps.h>
+@@ -36,3 +36,33 @@ static __always_inline void switch_to_kernel_cr3(void)
+ #else
+ static __always_inline void switch_to_kernel_cr3(void) {}
+ #endif
 +
-+#ifdef CONFIG_PAGE_TABLE_ISOLATION
-+static __always_inline void pti_switch_to_kernel_cr3(unsigned long user_cr3)
++/*
++ * Mitigate Spectre v1 for conditional swapgs code paths.
++ *
++ * fence_swapgs_user_entry is used in the user entry swapgs code path, to
++ * prevent a speculative swapgs when coming from kernel space.  It must be
++ * used with switch_to_kernel_cr3() in the same path.
++ *
++ * fence_swapgs_kernel_entry is used in the kernel entry code path without
++ * CR3 write or with conditinal CR3 write only, to prevent the swapgs from
++ * getting speculatively skipped when coming from user space.
++ *
++ * user_entry_swapgs_and_fence is a wrapper of swapgs and fence for user entry
++ * code path.
++ */
++static __always_inline void fence_swapgs_user_entry(void)
 +{
-+	/*
-+	 * Clear PCID and "PAGE_TABLE_ISOLATION bit", point CR3
-+	 * at kernel pagetables:
-+	 */
-+	unsigned long cr3 = user_cr3 & ~PTI_USER_PGTABLE_AND_PCID_MASK;
-+
-+	if (static_cpu_has(X86_FEATURE_PCID))
-+		cr3 |= X86_CR3_PCID_NOFLUSH;
-+
-+	native_write_cr3(cr3);
++	alternative("", "lfence", X86_FEATURE_FENCE_SWAPGS_USER);
 +}
 +
-+static __always_inline void switch_to_kernel_cr3(void)
++static __always_inline void fence_swapgs_kernel_entry(void)
 +{
-+	if (static_cpu_has(X86_FEATURE_PTI))
-+		pti_switch_to_kernel_cr3(__native_read_cr3());
++	alternative("", "lfence", X86_FEATURE_FENCE_SWAPGS_KERNEL);
 +}
-+#else
-+static __always_inline void switch_to_kernel_cr3(void) {}
-+#endif
++
++static __always_inline void user_entry_swapgs_and_fence(void)
++{
++	native_swapgs();
++	fence_swapgs_user_entry();
++}
 -- 
 2.19.1.6.gb485710b
 

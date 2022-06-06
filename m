@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D848253E2F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C898853E34F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiFFIbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 04:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S232254AbiFFIiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 04:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiFFIbX (ORCPT
+        with ESMTP id S232010AbiFFIhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 04:31:23 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2076.outbound.protection.outlook.com [40.107.236.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFCE9D4E4;
-        Mon,  6 Jun 2022 01:31:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FNClM5yYehkgHewyT6qCJ59tRTOpD0m7ezEty+MF47ZNGqmCjPa3DApzKOdEb8jw4BkbXKuzmiETiXRReVQYdGydGsTYEffYO4x5TGoWCZLj2E2eMXCCJ554Q4M3uA758zgyR+BQ1c8nnKH8Em28jxcsoo+ptSbcbzFx1m2LZuz0kXokxfnNuHiW7wz9RfGv6lG9XLozVOfus5LxUza++G+hu9s3fPa0kzSIvuqwQE2HJ1EQBnfkikMlP6XqYGcXiL0NmlvrP/W4LMVSn22QN6HtCYShuAhnUoNpsa5QtaLQ3alDsKo+ZiQ3ST3SQZhzBS07heKXAazyO0gdsK54ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w3pTFAbFWjdnru4Lo4rhHpoZHd4B6jfCtabfm6qLXW4=;
- b=ZJgy+25x5dHbjPC/ttNJgJVHqxQKiw5AYRA25SFzVk6GW0iteajcuh08PbjvtYu2CmSqxtNzkrHRScMKdwimvXIuj4jeILZlGuaHaKpAP4U0M0WUUonKqjCUz3QVJ4JAyfvhT+7s7tbjQR5w/pOq2eQ170REE8zUbLkD9oQkBw5NupaDTPQVUUtfxujPcUEK0GCjpUpkXNVxhitL61zHIUKc1uGaiMHdRO+176UfclyhH4sTjLaw8qk+cxU6KSLcdgrubr2kb4gXNDTQvy0nxsqE79P3paYj0U/SdYhQw60EGaYCNpgld5vVzXsFxsH/LWU4LAqiL5GfTRJvu4a+/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w3pTFAbFWjdnru4Lo4rhHpoZHd4B6jfCtabfm6qLXW4=;
- b=f9koqim8xJ8BO3hi4YcvG8EuvV5mdK6wVOfiYmR0v1oC8ITzbIKdRXSQThl55scF4jcYmZrtx66L4GA6JcmERDUl+O1rg9xnWzP+OufYvBE6fQ6iMEqBLRxXrcDpY2Z9PfO1JGOvu/HHTrzT/QjYzg0ux9L7YxWfMPtFYVUusH3T2QancZWblU8K50dHis32G+CHHxB8i9ITzp+A9olDETo4bffxfrMhlzDyahoUrADuMnVd49qfENl19lqy6ADIM4mBxz+9XWj1azFjrPADBuMYh0cdJ3/D4Z9qrbbhJGDp32x8tZ5oW4mmNHEXbA4gRAad6zYgOyou9JBIMCp8Kg==
-Received: from BN8PR15CA0072.namprd15.prod.outlook.com (2603:10b6:408:80::49)
- by BN8PR12MB3620.namprd12.prod.outlook.com (2603:10b6:408:49::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Mon, 6 Jun
- 2022 08:31:20 +0000
-Received: from BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:80:cafe::96) by BN8PR15CA0072.outlook.office365.com
- (2603:10b6:408:80::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19 via Frontend
- Transport; Mon, 6 Jun 2022 08:31:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT006.mail.protection.outlook.com (10.13.177.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5314.12 via Frontend Transport; Mon, 6 Jun 2022 08:31:20 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 6 Jun
- 2022 08:31:19 +0000
-Received: from [172.27.11.36] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 6 Jun 2022
- 01:31:15 -0700
-Message-ID: <0338001c-4a8c-bf28-b857-42e1bc775ea0@nvidia.com>
-Date:   Mon, 6 Jun 2022 11:31:12 +0300
+        Mon, 6 Jun 2022 04:37:52 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16EE21811
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 01:37:48 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25661WvX010595;
+        Mon, 6 Jun 2022 08:33:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=D6RD3ix5AkUWorpYfTPLoFeoD4U7HldNHq2KlxZp0YY=;
+ b=PCgymK3S58nk1PEsSDL71lxpRs8qjmH8LcBMTSWLxLKiFlG41kjC0GNubSNweDSOu8CK
+ fOFsjhT6rj40bPZvQEDeGny+Ac4k97m0SRZKKvW4IraeToECv5iH4PnBsRa70OYk4MKz
+ R97LDK3NMWcwzTDw+6vQYkeyLVHDMQmRYZtKtRCQh2f8a4qO8234OmQQ7/C8BYH0qDo9
+ kdBGPjym3dbqFgOUVXj19raNbwElbEXQARXWTffgFjLJ8Uz0JVYiIE7z9D9fduBx1XLr
+ jeQIYn8XLcD/llLmSmaAhoczn2etlbn6xRY5USt67kR+gNFIFZZ/4AQqZb5KK97iICBD 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ggh2judcj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 08:33:35 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2568XZe3020633;
+        Mon, 6 Jun 2022 08:33:35 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ggh2judc3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 08:33:34 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2568Jops007834;
+        Mon, 6 Jun 2022 08:33:32 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gfy19a3gu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 08:33:32 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2568XUkI22675842
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 08:33:30 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 207F0A4053;
+        Mon,  6 Jun 2022 08:33:30 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C814A4051;
+        Mon,  6 Jun 2022 08:33:23 +0000 (GMT)
+Received: from [9.43.87.254] (unknown [9.43.87.254])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 08:33:23 +0000 (GMT)
+Message-ID: <d2513be5-be87-2957-a0d4-1d99b9e83114@linux.ibm.com>
+Date:   Mon, 6 Jun 2022 14:03:21 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] net/mlx5: Add affinity for each irq
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v5 9/9] mm/demotion: Update node_is_toptier to work with
+ memory tiers
 Content-Language: en-US
-To:     Yajun Deng <yajun.deng@linux.dev>, <saeedm@nvidia.com>,
-        <leon@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220606071351.3550997-1-yajun.deng@linux.dev>
-From:   Shay Drory <shayd@nvidia.com>
-In-Reply-To: <20220606071351.3550997-1-yajun.deng@linux.dev>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e8105cdf-db6e-4e93-6e51-08da4796eec7
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3620:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB36201634D2AC097E6DE76773CFA29@BN8PR12MB3620.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wZGF24sTJLmoODzuG31Jbdjm5/85MIQa93i0YuKiXkqnQIB5+J5OKchdrSGhy9p8tM/gH/I8zR+DzMSf4eA0iYgSFpHF33ddaiS2bWGP3Ml0EP3xN6MaV72S/uFqZPH9nhG4c/yHR/xvKRaJs1rL6bXZuOeYuO7cZsPwKPnTBVLkkFtl0tWM6opCnN1w3dSG9F3JDYbCkG+oRwlAOi8ZeAi6cFmnPv4jxLzPgeycx9DlTIQz5oapC097kkZgjfx0bsx4Lwc++VATSjBEWxVEtjSj2Hk2OWg6bUsNs+AI0Ymkhf9WwpnHGYmQxWSryr36eJtPOYPbm0IhlD4J+201r2StJ93OBZChFxh/NmJOHwyGRE/SCeIqPAdyT7k0bD3pyQDHrt1yav2gwG1ysIFxeuDZyEUxTPV11alZ0lQ357/b+YBN5Sk4/zOSQ4A8WaUqTEBVBJAxvBpq6sN0S7r6ymnkGKv/gptdoO48CjqOixFzYbxsS2JJ7K1vRhPqy7EvzKrZa/Te+5k4TVBI5kve6+jpNYx4Gia8a3tTJA5bcQrgDad4UDTOhShLtXSs4aag1c0GFsAghFwTHJXAX4ydPT4XnWifYygJnQqvGyizLAUn3nX2EInSebx00ukD+BTaMzolWZY1Gs3tvFT7dDdh2e+zNwyUuAxMOj2TuDHaGd6BDlteV1v58zQoi9C4IvLOX481jLR/ig6BtRtJnDhFkrydj+BRQT0WpRIGX+np9tZ8FXByB+6q690DFiuiTOd/
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(70206006)(47076005)(426003)(336012)(16526019)(186003)(2616005)(54906003)(110136005)(5660300002)(8936002)(508600001)(26005)(31686004)(70586007)(36756003)(53546011)(82310400005)(83380400001)(45080400002)(6666004)(356005)(81166007)(86362001)(31696002)(36860700001)(16576012)(316002)(4326008)(8676002)(40460700003)(2906002)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 08:31:20.1341
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8105cdf-db6e-4e93-6e51-08da4796eec7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3620
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-10-aneesh.kumar@linux.ibm.com>
+ <6e94b7e2a6192e4cacba1db3676b5b5cf9b98eac.camel@intel.com>
+ <f9a26536-05f6-5d12-5c61-cdd35ab33a40@linux.ibm.com>
+ <11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <11f94e0c50f17f4a6a2f974cb69a1ae72853e2be.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CGFDgbn45xL78LkzZ6dNilLNfTc0dKCP
+X-Proofpoint-ORIG-GUID: e52-4VTv95LSENaHpH1V1Dipw53a7BsH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_02,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
+ clxscore=1015 bulkscore=0 spamscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060039
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,150 +114,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/6/22 12:54 PM, Ying Huang wrote:
+> On Mon, 2022-06-06 at 09:22 +0530, Aneesh Kumar K V wrote:
+>> On 6/6/22 8:41 AM, Ying Huang wrote:
+>>> On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+>>>> With memory tiers support we can have memory on NUMA nodes
+>>>> in the top tier from which we want to avoid promotion tracking NUMA
+>>>> faults. Update node_is_toptier to work with memory tiers. To
+>>>> avoid taking locks, a nodemask is maintained for all demotion
+>>>> targets. All NUMA nodes are by default top tier nodes and as
+>>>> we add new lower memory tiers NUMA nodes get added to the
+>>>> demotion targets thereby moving them out of the top tier.
+>>>
+>>> Check the usage of node_is_toptier(),
+>>>
+>>> - migrate_misplaced_page()
+>>>     node_is_toptier() is used to check whether migration is a promotion.
+>>> We can avoid to use it.  Just compare the rank of the nodes.
+>>>
+>>> - change_pte_range() and change_huge_pmd()
+>>>     node_is_toptier() is used to avoid scanning fast memory (DRAM) pages
+>>> for promotion.  So I think we should change the name to node_is_fast()
+>>> as follows,
+>>>
+>>> static inline bool node_is_fast(int node)
+>>> {
+>>> 	return NODE_DATA(node)->mt_rank >= MEMORY_RANK_DRAM;
+>>> }
+>>>
+>>
+>> But that gives special meaning to MEMORY_RANK_DRAM. As detailed in other
+>> patches, absolute value of rank doesn't carry any meaning. It is only
+>> the relative value w.r.t other memory tiers that decide whether it is
+>> fast or not. Agreed by default memory tiers get built with
+>> MEMORY_RANK_DRAM. But userspace can change the rank value of 'memtier1'
+>> Hence to determine a node is consisting of fast memory is essentially
+>> figuring out whether node is the top most tier in memory hierarchy and
+>> not just the memory tier rank value is >= MEMORY_RANK_DRAM?
+> 
+> In a system with 3 tiers,
+> 
+> HBM	0
+> DRAM	1
+> PMEM	2
+> 
+> In your implementation, only HBM will be considered fast.  But what we
+> need is to consider both HBM and DRAM fast.  Because we use NUMA
+> balancing to promote PMEM pages to DRAM.  It's unnecessary to scan HBM
+> and DRAM pages for that.  And there're no requirements to promote DRAM
+> pages to HBM with NUMA balancing.
+> 
+> I can understand that the memory tiers are more dynamic now.  For
+> requirements of NUMA balancing, we need the lowest memory tier (rank)
+> where there's at least one node with CPU.  The nodes in it and the
+> higher tiers will be considered fast.
+> 
 
-On 6/6/2022 10:13, Yajun Deng wrote:
-> The mlx5 would allocate no less than one irq for per cpu, we can bond each
-> irq to a cpu to improve interrupt performance.
+is this good (not tested)?
+/*
+  * build the allowed promotion mask. Promotion is allowed
+  * from higher memory tier to lower memory tier only if
+  * lower memory tier doesn't include compute. We want to
+  * skip promotion from a memory tier, if any node which is
+  * part of that memory tier have CPUs. Once we detect such
+  * a memory tier, we consider that tier as top tier from
+  * which promotion is not allowed.
+  */
+list_for_each_entry_reverse(memtier, &memory_tiers, list) {
+	nodes_and(allowed, node_state[N_CPU], memtier->nodelist);
+	if (nodes_empty(allowed))
+		nodes_or(promotion_mask, promotion_mask, allowed);
+	else
+		break;
+}
 
-The maximum number of affinity set is hard coded to 4. in case nvec > 4 
-* (num_CPUs)[1]
-we will hit the following WARN[2].
-Also, we hit an oops following this WARN...
+and then
 
-[1]
-mlx5 support up to 2K MSIX (depends on the HW). e.g.: if we max out mlx5 
-MSIX capability,
-we will cross this limit on any machine, at least that I know of.
+static inline bool node_is_toptier(int node)
+{
 
-[2]
+	return !node_isset(node, promotion_mask);
+}
 
-This is a machine with 10 CPUs and 350 MSIX
-
-[    1.633436] ------------[ cut here ]------------
-  [    1.633437] WARNING: CPU: 2 PID: 194 at kernel/irq/affinity.c:443 irq_create_affinity_masks+0x175/0x270
-  [    1.633467] Modules linked in: mlx5_core(+)
-  [    1.633474] CPU: 2 PID: 194 Comm: systemd-modules Not tainted 5.18.0+ #1
-  [    1.633480] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
-  [    1.633483] RIP: 0010:irq_create_affinity_masks+0x175/0x270
-  [    1.633492] Code: 5c 41 5d 41 5e 41 5f c3 48 c7 46 20 90 6d 19 81 48 c7 c0 90 6d 19 81 8b 34 24 4c 89 ef ff d0 41 83 7d 08 04 0f 86 de fe ff ff <0f> 0b 45 31 f6 eb c5 45 8b 5d 00 8b 34 24 43 8d 04 1f 42 8d 0c 1e
-  [    1.633497] RSP: 0018:ffff88810716bac0 EFLAGS: 00010202
-  [    1.633501] RAX: 000000000000000a RBX: 0000000000000001 RCX: 0000000000000200
-  [    1.633504] RDX: ffffffff82605000 RSI: ffffffff82605000 RDI: 0000000000000000
-  [    1.633507] RBP: ffff88810716bbd0 R08: 000000000000000a R09: ffffffff82604fc0
-  [    1.633510] R10: 0000000000000008 R11: 000ffffffffff000 R12: 0000000000000000
-  [    1.633513] R13: ffff88810716bbd0 R14: 0000000000000160 R15: 0000000000000160
-  [    1.633516] FS:  00007f8d72994b80(0000) GS:ffff88852c900000(0000) knlGS:0000000000000000
-  [    1.633525] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [    1.633528] CR2: 00007f8d73ba4490 CR3: 0000000103fce001 CR4: 0000000000370ea0
-  [    1.633531] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-  [    1.633534] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-  [    1.633536] Call Trace:
-  [    1.633549]  <TASK>
-  [    1.633553]  __pci_enable_msix_range+0x2b9/0x4c0
-  [    1.633572]  pci_alloc_irq_vectors_affinity+0xa5/0x100
-  [    1.633579]  mlx5_irq_table_create.cold+0x6d/0x22f [mlx5_core]
-  [    1.634032]  ? probe_one+0x1aa/0x280 [mlx5_core]
-  [    1.634193]  ? pci_device_probe+0xa4/0x140
-  [    1.634201]  ? really_probe+0xc9/0x350
-  [    1.634205]  ? pm_runtime_barrier+0x43/0x80
-  [    1.634213]  ? __driver_probe_device+0x80/0x170
-  [    1.634218]  ? driver_probe_device+0x1e/0x90
-  [    1.634223]  ? __driver_attach+0xcd/0x1b0
-  [    1.634226]  ? __device_attach_driver+0xf0/0xf0
-  [    1.634231]  ? __device_attach_driver+0xf0/0xf0
-  [    1.634235]  ? bus_for_each_dev+0x77/0xc0
-  [    1.634243]  ? bus_add_driver+0x184/0x1f0
-  [    1.634247]  ? driver_register+0x8f/0xe0
-  [    1.634251]  ? 0xffffffffa0180000
-  [    1.634256]  ? init+0x62/0x1000 [mlx5_core]
-  [    1.634413]  ? do_one_initcall+0x4a/0x1e0
-  [    1.634418]  ? kmem_cache_alloc_trace+0x33/0x420
-  [    1.634426]  ? do_init_module+0x72/0x260
-  [    1.634434]  ? __do_sys_finit_module+0xbb/0x130
-  [    1.634443]  ? do_syscall_64+0x3d/0x90
-  [    1.634452]  ? entry_SYSCALL_64_after_hwframe+0x46/0xb0
-  [    1.634461]  </TASK>
-  [    1.634463] ---[ end trace 0000000000000000 ]---
-  [[0;32m  OK  [0m] Finished [0;1;39mudev Coldplug all Devices[0m.
-  [    1.713428] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: mlx5_irq_table_create+0x9c/0xa0 [mlx5_core]
-  [    1.715521] CPU: 2 PID: 194 Comm: systemd-modules Tainted: G        W         5.18.0+ #1
-  [    1.715524] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
-  [    1.715525] Call Trace:
-  [    1.715532]  <TASK>
-  [    1.715533]  dump_stack_lvl+0x34/0x44
-  [    1.715538]  panic+0x100/0x255
-  [    1.715542]  ? mlx5_irq_table_create+0x9c/0xa0 [mlx5_core]
-  [    1.715602]  __stack_chk_fail+0x10/0x10
-  [    1.715607]  mlx5_irq_table_create+0x9c/0xa0 [mlx5_core]
-  [    1.715662]  ? probe_one+0x1aa/0x280 [mlx5_core]
-  [    1.715709]  ? pci_device_probe+0xa4/0x140
-  [    1.715712]  ? really_probe+0xc9/0x350
-  [    1.715715]  ? pm_runtime_barrier+0x43/0x80
-  [    1.715718]  ? __driver_probe_device+0x80/0x170
-  [    1.715719]  ? driver_probe_device+0x1e/0x90
-  [    1.715721]  ? __driver_attach+0xcd/0x1b0
-  [    1.715722]  ? __device_attach_driver+0xf0/0xf0
-  [    1.715723]  ? __device_attach_driver+0xf0/0xf0
-  [    1.715724]  ? bus_for_each_dev+0x77/0xc0
-  [    1.715727]  ? bus_add_driver+0x184/0x1f0
-  [    1.715728]  ? driver_register+0x8f/0xe0
-  [    1.715730]  ? 0xffffffffa0180000
-  [    1.715731]  ? init+0x62/0x1000 [mlx5_core]
-  [    1.715778]  ? do_one_initcall+0x4a/0x1e0
-  [    1.715781]  ? kmem_cache_alloc_trace+0x33/0x420
-  [    1.715784]  ? do_init_module+0x72/0x260
-  [    1.715788]  ? __do_sys_finit_module+0xbb/0x130
-  [    1.715790]  ? do_syscall_64+0x3d/0x90
-  [    1.715792]  ? entry_SYSCALL_64_after_hwframe+0x46/0xb0
-  [    1.715796]  </TASK>
-  [    1.715938] Kernel Offset: disabled
-  [    1.732563] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: mlx5_irq_table_create+0x9c/0xa0 [mlx5_core] ]---
-
->
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> ---
->   .../net/ethernet/mellanox/mlx5/core/pci_irq.c | 19 ++++++++++++++++++-
->   1 file changed, 18 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-> index 662f1d55e30e..d13fc403fe78 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
-> @@ -624,11 +624,27 @@ int mlx5_irq_table_get_num_comp(struct mlx5_irq_table *table)
->   	return table->pf_pool->xa_num_irqs.max - table->pf_pool->xa_num_irqs.min;
->   }
->   
-> +static void mlx5_calc_sets(struct irq_affinity *affd, unsigned int nvecs)
-> +{
-> +	int i;
-> +
-> +	affd->nr_sets = (nvecs - 1) / num_possible_cpus() + 1;
-> +
-> +	for (i = 0; i < affd->nr_sets; i++) {
-> +		affd->set_size[i] = min(nvecs, num_possible_cpus());
-> +		nvecs -= num_possible_cpus();
-> +	}
-> +}
-> +
->   int mlx5_irq_table_create(struct mlx5_core_dev *dev)
->   {
->   	int num_eqs = MLX5_CAP_GEN(dev, max_num_eqs) ?
->   		      MLX5_CAP_GEN(dev, max_num_eqs) :
->   		      1 << MLX5_CAP_GEN(dev, log_max_eq);
-> +	struct irq_affinity affd = {
-> +		.pre_vectors = 0,
-> +		.calc_sets   = mlx5_calc_sets,
-> +	};
->   	int total_vec;
->   	int pf_vec;
->   	int err;
-> @@ -644,7 +660,8 @@ int mlx5_irq_table_create(struct mlx5_core_dev *dev)
->   		total_vec += MLX5_IRQ_CTRL_SF_MAX +
->   			MLX5_COMP_EQS_PER_SF * mlx5_sf_max_functions(dev);
->   
-> -	total_vec = pci_alloc_irq_vectors(dev->pdev, 1, total_vec, PCI_IRQ_MSIX);
-> +	total_vec = pci_alloc_irq_vectors_affinity(dev->pdev, 1, total_vec,
-> +						   PCI_IRQ_MSIX | PCI_IRQ_AFFINITY, &affd);
->   	if (total_vec < 0)
->   		return total_vec;
->   	pf_vec = min(pf_vec, total_vec);

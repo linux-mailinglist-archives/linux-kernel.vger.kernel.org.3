@@ -2,157 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3BB53EF16
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809FB53EF18
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiFFUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S232967AbiFFUCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiFFUBN (ORCPT
+        with ESMTP id S232846AbiFFUCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:01:13 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE12721B4
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:01:09 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id q15so5062327wmj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:01:09 -0700 (PDT)
+        Mon, 6 Jun 2022 16:02:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDDB1EAF9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:02:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id n10so31064968ejk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=W5TqJYafwftJ1q16jDwsapCbeMrbhqufuDDjVq8Z1/0=;
-        b=dRai72lfgPZVIbcYWbUJgQZW62213vXNScspB3WEJ8uXaErK7Wm69WAfoUX4ybfir5
-         hGG+oasznTALQNkRvzo4k3jjOa5QWG4Q7qaLY2vlMOL0HIQvV8DB/wJc4HPztmZJKHQg
-         bgjw9FszVQUdeqkBcBCL7z1i3oUV4vGRLv7xGkQN+5dXsdh9YvZWGM8+UsJL45omX6bt
-         OJMtAV9tYU83SJwh93SuVYmMkYMj96481RHZ/H7H9FNMPH5GSpI9UOCOvRo+0FZqUHkj
-         DF/AA5b1zGXOO1kcS9aRFg/N6xzK0ao4g3Ic4hAsHSIMDrNE5Gmm9zTqm4+LahveQS/A
-         nL+w==
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f4YhtFq7gpt5SCvZO+T7ylGVP3MGJYIhRqtlKBWOMr0=;
+        b=WlYCSdpxeDlJZcJ/ihVtIrbtovOo784RLDbNUT40brnr1yFo1QrCUhbRPHF1UyywPD
+         Y6FPmoMwCWYbbgFXlv2x6X6yh1OuRHPXOEhlj3puWT0IQkVj2k/oKfebEG2hwjAgXDA1
+         gLtt52Crqd+2u4zQgPVAGx2hMmir3pQH/4JKI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W5TqJYafwftJ1q16jDwsapCbeMrbhqufuDDjVq8Z1/0=;
-        b=fgWg53EqN4ioCgjgWq9XydHnFn3CRuNgDufkFzE4ofN/eUqT8WoPXcrmcy/zLmLDvY
-         jAozvYXmoH6ingBynPOE5QmZsgtjVvm0ZCJEdsHZzwbuoLVSj6MwgH4xBCJwXc3kluBY
-         hwj+UWQdpQo84+QYaKslgT5qLvr4GGjnhGoW3Qlpy0cJJZtLNJ4Gpo8Wc5zN0WA1r/Y4
-         jwPwcI++aKMBmj66uUPNUKkwj4bXDCvz5LVxY+fk6oQ7OSV65IEbuDfPaQVHVo4cEQmK
-         0rnSSxKzIK1RCbGMB25XrFrdctqA/mGk066+dw7uK4WPjIqghVQIofv9/hkpFntMYdcX
-         E/qw==
-X-Gm-Message-State: AOAM531HJkpz8MgaOZMhmhaL4Mhv+rM9JOJYYDkNEC8IEgAvKn4eGE/r
-        yV0W3utpg72zI1vAxK65z3Z5UC1cddiNMPd8sM7eOg==
-X-Google-Smtp-Source: ABdhPJyEMUN07Nx+Z6Hur5B7Ckxoi3WjMhd9MJBUwtTUCWQoJCvlJDkV6RZ2FWrtlkbBQxf7z3rq1LujRmEt7yno97I=
-X-Received: by 2002:a7b:c7c3:0:b0:398:934f:a415 with SMTP id
- z3-20020a7bc7c3000000b00398934fa415mr25516158wmk.27.1654545667336; Mon, 06
- Jun 2022 13:01:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f4YhtFq7gpt5SCvZO+T7ylGVP3MGJYIhRqtlKBWOMr0=;
+        b=K1FzKo0QXZPsrQSQFovFH4DWnv10EgTyHfQX0n29ZzE5tcc2GhXQTGWrpKOWPXCtZ0
+         Z1f/oY5hybqDurgu1TYJHZF04tQDOmD0dMXznMY+M6DvlGM+0MXacEDQ2+iFUfpIT7ST
+         hz2Jpfjq+NnYvCVnvTe5ocgE/GKIXx2y99+h2VaQQZFdTEOWST4hgdS+gcfzyqB3Hn5Z
+         2/83VcwQKcb3DyVgPcUV5sDM7TQDhMdbhRNoRR+V619ytYfqlIRxmR3uHcC4T8S4XNd6
+         WNcs5jTxgywlY3ImvBimFChJC2YNqsNuYV5e8PbmIvMZJWZAzXCD/yWMHCmA1AZOmPyA
+         F+VA==
+X-Gm-Message-State: AOAM5339ExFNaTGhadVeK+MNXahUg+Z8pte/EOYURt/i8qqMTjluD17U
+        u4npM70sEt4phOUJRVenwlSoSA==
+X-Google-Smtp-Source: ABdhPJwt2I4FbXbOCurE7PeUk1wWg0jl/KOh25KW4tm8zgWkp/EEVNLY0dHSV5SrZCmD9o57qYXMxQ==
+X-Received: by 2002:a17:906:1193:b0:70d:cf39:a4db with SMTP id n19-20020a170906119300b0070dcf39a4dbmr17730625eja.44.1654545731648;
+        Mon, 06 Jun 2022 13:02:11 -0700 (PDT)
+Received: from prevas-ravi.tritech.se ([80.208.64.233])
+        by smtp.gmail.com with ESMTPSA id o8-20020a1709062e8800b006f3ef214e0esm6664814eji.116.2022.06.06.13.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 13:02:11 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: phy: fixed_phy: set phy_mask before calling mdiobus_register()
+Date:   Mon,  6 Jun 2022 22:02:08 +0200
+Message-Id: <20220606200208.1665417-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220603162247.GC16134@blackbody.suse.cz> <CAJD7tkbp9Tw4oGtxsnHQB+5VZHMFa4J0qvJGRyj3VuuQ4UPF=g@mail.gmail.com>
- <20220606123209.GE6928@blackbody.suse.cz> <CAJD7tkZeNhyEL4WtkEMOUeLsLX4x4roMuNCocEhz5yHm7=h4vw@mail.gmail.com>
- <20220606195454.byivqaarp6ra7dpc@apollo.legion>
-In-Reply-To: <20220606195454.byivqaarp6ra7dpc@apollo.legion>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 6 Jun 2022 13:00:30 -0700
-Message-ID: <CAJD7tkbOFHW+Z48CbpsG3O8wvh0GYjChDgNhoiVJ=_LZsND8wQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/5] bpf: rstat: cgroup hierarchical stats
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 12:55 PM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Tue, Jun 07, 2022 at 01:02:04AM IST, Yosry Ahmed wrote:
-> > On Mon, Jun 6, 2022 at 5:32 AM Michal Koutn=C3=BD <mkoutny@suse.com> wr=
-ote:
-> > >
-> > > On Fri, Jun 03, 2022 at 12:47:19PM -0700, Yosry Ahmed <yosryahmed@goo=
-gle.com> wrote:
-> > > > In short, think of these bpf maps as equivalents to "struct
-> > > > memcg_vmstats" and "struct memcg_vmstats_percpu" in the memory
-> > > > controller. They are just containers to store the stats in, they do
-> > > > not have any subgraph structure and they have no use beyond storing
-> > > > percpu and total stats.
-> > >
-> > > Thanks for the explanation.
-> > >
-> > > > I run small microbenchmarks that are not worth posting, they compar=
-ed
-> > > > the latency of bpf stats collection vs. in-kernel code that adds st=
-ats
-> > > > to struct memcg_vmstats[_percpu] and flushes them accordingly, the
-> > > > difference was marginal.
-> > >
-> > > OK, that's a reasonable comparison.
-> > >
-> > > > The main reason for this is to provide data in a similar fashion to
-> > > > cgroupfs, in text file per-cgroup. I will include this clearly in t=
-he
-> > > > next cover message.
-> > >
-> > > Thanks, it'd be great to have that use-case captured there.
-> > >
-> > > > AFAIK loading bpf programs requires a privileged user, so someone h=
-as
-> > > > to approve such a program. Am I missing something?
-> > >
-> > > A sysctl unprivileged_bpf_disabled somehow stuck in my head. But as I
-> > > wrote, this adds a way how to call cgroup_rstat_updated() directly, i=
-t's
-> > > not reserved for privilged users anyhow.
-> >
-> > I am not sure if kfuncs have different privilege requirements or if
-> > there is a way to mark a kfunc as privileged. Maybe someone with more
-> > bpf knowledge can help here. But I assume if unprivileged_bpf_disabled
-> > is not set then there is a certain amount of risk/trust that you are
-> > taking anyway?
-> >
->
-> It requires CAP_BPF or CAP_SYS_ADMIN, see verifier.c:add_subprog_or_kfunc=
-.
+There's no point probing for phys on this artificial bus, so we can
+save a little bit of boot time by telling mdiobus_register() not to do
+that.
 
-Thanks for the clarification!
+This doesn't have any functional change, since, at this point,
+fixed_mdio_read() returns 0xffff for all addresses/registers, so
 
->
-> > >
-> > > > bpf_iter_run_prog() is used to run bpf iterator programs, and it gr=
-abs
-> > > > rcu read lock before doing so. So AFAICT we are good on that front.
-> > >
-> > > Thanks for the clarification.
-> > >
-> > >
-> > > Michal
->
-> --
-> Kartikeya
+  mdiobus_scan() -> get_phy_device() -> get_phy_c22_id()
+
+will return -ENODEV, which is just ignored.
+
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+I was trying to debug something and got distracted by the printk() I
+added in get_phy_device() triggering 32 times in a row.
+
+drivers/net/phy/fixed_phy.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
+index 03abe6233bbb..aef739c20ac4 100644
+--- a/drivers/net/phy/fixed_phy.c
++++ b/drivers/net/phy/fixed_phy.c
+@@ -353,6 +353,7 @@ static int __init fixed_mdio_bus_init(void)
+ 	fmb->mii_bus->parent = &pdev->dev;
+ 	fmb->mii_bus->read = &fixed_mdio_read;
+ 	fmb->mii_bus->write = &fixed_mdio_write;
++	fmb->mii_bus->phy_mask = ~0;
+ 
+ 	ret = mdiobus_register(fmb->mii_bus);
+ 	if (ret)
+-- 
+2.31.1
+

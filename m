@@ -2,135 +2,402 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECEC53E7B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2509653E6E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbiFFOKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S239664AbiFFOMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239450AbiFFOKu (ORCPT
+        with ESMTP id S239613AbiFFOMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:10:50 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F4B25EAC;
-        Mon,  6 Jun 2022 07:10:47 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id n10so29227534ejk.5;
-        Mon, 06 Jun 2022 07:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:from
-         :subject:cc:content-transfer-encoding;
-        bh=zcfwBnYsaM3osnPpLQRxR1JrABrX/zB0kh++woByQVw=;
-        b=gEpMt7Yd2UxBYkCte5IR1tgFlFVQEJ5SylH2/PBFk99wiIMXMkM+sU44fPiSwHBSIa
-         IMN0bB6BoqeG1sEJlrPjvDJwshD0q/AyS0IJHSN0P9Ag849SN82OU8Ve5PJzspiKPaW1
-         ixl/BLksjnyF6+Q+zGJYXDzeZpi/LDj+JclfL1cyrON5hgnvjaUXMyC7nb1ksactUBIH
-         jb2tLQZDR3UZzGNzC9dAr2e1XwZYvkD5WfHeYwhKxD+AUN/NVrWM8f/WdIoZfPQ/vOJo
-         Hy5xj1R8bnKIgXu+lNCl9xqLdJ5CDltw8jt+jMNUJK7Q1MpOo0KjmNKdY80vONgP9gY3
-         g/vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:from:subject:cc:content-transfer-encoding;
-        bh=zcfwBnYsaM3osnPpLQRxR1JrABrX/zB0kh++woByQVw=;
-        b=ss3fQdadU5gm21exoNWt7o3haLozUczfmXkPubPJabujpQWjlH8XniKWvLOfjBxJPw
-         dhzV0q+V6v++/2qb57tbq8uOscmIZ12L8HhM3tfEQ+Qs9S7StNnw/gO+QKmKYVq1jxYy
-         0Vd2j15ZZieUrvHokggrKElPc1GuyPXHAB/gWZi8hOz7zrQKRH7iuaCfPjX/78wfg9A2
-         PAUaj8OzOv9GCR45D9vUVyk0xxZZ5BXxONJCF3jEod7R+qCJM7AvsI7y6AIDM9WlnacE
-         5pOHPDgtXI1AISGq4OFkEAvwv6OBT8Kxp4HqmJm3cYA+FIGp3/sdt1R+xdclT+FP+cwG
-         H6kA==
-X-Gm-Message-State: AOAM532d8PaRKNM0RkupMzqtzQtcQB0j0dSlYbQw7km3DXWATjhCXi/Y
-        qpHp6FpNWxC7wu3QfRO/8is=
-X-Google-Smtp-Source: ABdhPJzqBAw+J0OHGwBe1PkTWA7yEhL5aB2O9MeJxPiApU6qXMja7NqcmfnC2G25AjnP5JFxsUOEog==
-X-Received: by 2002:a17:907:16a4:b0:711:c9a7:dc75 with SMTP id hc36-20020a17090716a400b00711c9a7dc75mr6290181ejc.542.1654524645895;
-        Mon, 06 Jun 2022 07:10:45 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id e1-20020a17090618e100b006f3ef214dc3sm6357044ejf.41.2022.06.06.07.10.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:10:45 -0700 (PDT)
-Message-ID: <a1aab4df-9e1c-793f-5c3d-d735e4f4fb57@gmail.com>
-Date:   Mon, 6 Jun 2022 15:10:44 +0100
+        Mon, 6 Jun 2022 10:12:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9C013D1C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:12:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 95D15CE1B91
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD65C3411C;
+        Mon,  6 Jun 2022 14:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654524724;
+        bh=lGEAv6EhkksqsGHf4CEfbHrL1PvhP0/478q2J5yXn3s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=G7LnS7M3/jXlyX/bEIV5lZ1Dkz8sAJmIdbcu+3StpcDT9o0IbD54iW5tBCe2YZXX5
+         +ruMvZHI/ynzBQYa4aznjGG1pgIRJ6mHC7XUeHE5cQ3QX0XgmNbvSc/PmZvmeNJfDZ
+         269Xz726airOGRsZJjenO0qsWOY0wlNFEBBlAuk+pCWMPD0kD/f3P6bJvurrxpNzo8
+         Rf81LbYKe3cDbUsH3Totz2Mt7fIF829i02a6nSctaZMnuTjbzHAOA8w7jYmAhGMCUU
+         9zEkEj9zIVgclKDY28iSnJeZgNHfu8o4yXgiPj3O8HZepWtqcqLdxbV5DrIYQjKsFx
+         vOy51RuZsVndw==
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     bleung@chromium.org, groeck@chromium.org
+Cc:     chrome-platform@lists.linux.dev, tzungbi@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 07/13] platform/chrome: cros_ec_proto: separate fill_protocol_info()
+Date:   Mon,  6 Jun 2022 14:10:45 +0000
+Message-Id: <20220606141051.285823-8-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+In-Reply-To: <20220606141051.285823-1-tzungbi@kernel.org>
+References: <20220606141051.285823-1-tzungbi@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: re: fsdax: output address in dax_iomap_pfn() and rename it
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        nvdimm@lists.linux.dev,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Rename cros_ec_host_command_proto_query() to fill_protocol_info() and
+make it responsible for setting `ec_dev` fields according to the
+response protocol info.
 
-Static analysis with clang scan-build found a potential issue with the 
-following commit in linux-next today:
+Also make cros_ec_get_host_event_wake_mask() allocate its own message
+buffer.  It was lucky that size of `struct ec_response_host_event_mask`
+is less than `struct ec_response_get_protocol_info`.  Thus, the buffer
+wasn't overflow.
 
-commit 1447ac26a96463a05ad9f5cfba7eef43d52913ef
-Author: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Date:   Fri Jun 3 13:37:32 2022 +0800
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+---
+ drivers/platform/chrome/cros_ec_proto.c      | 130 +++++++++----------
+ drivers/platform/chrome/cros_ec_proto_test.c |  28 ++--
+ 2 files changed, 76 insertions(+), 82 deletions(-)
 
-     fsdax: output address in dax_iomap_pfn() and rename it
-
-
-The analysis is as follows:
-
-
-static int dax_iomap_direct_access(const struct iomap *iomap, loff_t pos,
-                 size_t size, void **kaddr, pfn_t *pfnp)
-{
-         pgoff_t pgoff = dax_iomap_pgoff(iomap, pos);
-         int id, rc;
-         long length;
-
-         id = dax_read_lock();
-         length = dax_direct_access(iomap->dax_dev, pgoff, PHYS_PFN(size),
-                                    DAX_ACCESS, kaddr, pfnp);
-         if (length < 0) {
-                 rc = length;
-                 goto out;
-         }
-         if (!pfnp)
-                 goto out_check_addr;
-
-The above check jumps to out_check_addr, if kaddr is null then rc is not 
-set and a garbage uninitialized value for rc is returned on the out path.
-
-
-         rc = -EINVAL;
-         if (PFN_PHYS(length) < size)
-                 goto out;
-         if (pfn_t_to_pfn(*pfnp) & (PHYS_PFN(size)-1))
-                 goto out;
-         /* For larger pages we need devmap */
-         if (length > 1 && !pfn_t_devmap(*pfnp))
-                 goto out;
-         rc = 0;
-
-out_check_addr:
-         if (!kaddr)
-                 goto out;
-         if (!*kaddr)
-                 rc = -EFAULT;
-out:
-         dax_read_unlock(id);
-         return rc;
-}
-
-
-Colin
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index 71ba6a56ad7c..f57b4dba95b7 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -242,47 +242,53 @@ EXPORT_SYMBOL(cros_ec_check_result);
+  * the caller has ec_dev->lock mutex, or the caller knows there is
+  * no other command in progress.
+  */
+-static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
+-					    struct cros_ec_command *msg,
+-					    uint32_t *mask)
++static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint32_t *mask)
+ {
++	struct cros_ec_command *msg;
+ 	struct ec_response_host_event_mask *r;
+ 	int ret, mapped;
+ 
++	msg = kzalloc(sizeof(*msg) + sizeof(*r), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
++
+ 	msg->command = EC_CMD_HOST_EVENT_GET_WAKE_MASK;
+-	msg->version = 0;
+-	msg->outsize = 0;
+ 	msg->insize = sizeof(*r);
+ 
+ 	ret = send_command(ec_dev, msg);
+ 	if (ret >= 0) {
+ 		mapped = cros_ec_map_error(msg->result);
+-		if (mapped)
+-			return mapped;
++		if (mapped) {
++			ret = mapped;
++			goto exit;
++		}
+ 	}
+ 	if (ret > 0) {
+ 		r = (struct ec_response_host_event_mask *)msg->data;
+ 		*mask = r->mask;
+ 	}
+ 
++exit:
++	kfree(msg);
+ 	return ret;
+ }
+ 
+-static int cros_ec_host_command_proto_query(struct cros_ec_device *ec_dev,
+-					    int devidx,
+-					    struct cros_ec_command *msg)
++static int fill_protocol_info(struct cros_ec_device *ec_dev, int devidx)
+ {
+-	/*
+-	 * Try using v3+ to query for supported protocols. If this
+-	 * command fails, fall back to v2. Returns the highest protocol
+-	 * supported by the EC.
+-	 * Also sets the max request/response/passthru size.
+-	 */
++	struct cros_ec_command *msg;
++	struct ec_response_get_protocol_info *info;
+ 	int ret;
+ 
+-	memset(msg, 0, sizeof(*msg));
++	ec_dev->proto_version = 3;
++	if (devidx > 0)
++		ec_dev->max_passthru = 0;
++
++	msg = kzalloc(sizeof(*msg) + sizeof(*info), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
++
+ 	msg->command = EC_CMD_PASSTHRU_OFFSET(devidx) | EC_CMD_GET_PROTOCOL_INFO;
+-	msg->insize = sizeof(struct ec_response_get_protocol_info);
++	msg->insize = sizeof(*info);
+ 
+ 	ret = send_command(ec_dev, msg);
+ 	/*
+@@ -299,15 +305,43 @@ static int cros_ec_host_command_proto_query(struct cros_ec_device *ec_dev,
+ 		dev_dbg(ec_dev->dev,
+ 			"failed to check for EC[%d] protocol version: %d\n",
+ 			devidx, ret);
+-		return ret;
++		goto exit;
+ 	}
+ 
+-	if (devidx > 0 && msg->result == EC_RES_INVALID_COMMAND)
+-		return -ENODEV;
+-	else if (msg->result != EC_RES_SUCCESS)
+-		return msg->result;
++	ret = cros_ec_map_error(msg->result);
++	if (ret)
++		goto exit;
++
++	info = (struct ec_response_get_protocol_info *)msg->data;
++
++	switch (devidx) {
++	case CROS_EC_DEV_EC_INDEX:
++		ec_dev->max_request = info->max_request_packet_size -
++						sizeof(struct ec_host_request);
++		ec_dev->max_response = info->max_response_packet_size -
++						sizeof(struct ec_host_response);
++		ec_dev->proto_version = min(EC_HOST_REQUEST_VERSION,
++					    fls(info->protocol_versions) - 1);
++		ec_dev->din_size = info->max_response_packet_size + EC_MAX_RESPONSE_OVERHEAD;
++		ec_dev->dout_size = info->max_request_packet_size + EC_MAX_REQUEST_OVERHEAD;
++
++		dev_dbg(ec_dev->dev, "using proto v%u\n", ec_dev->proto_version);
++		break;
++	case CROS_EC_DEV_PD_INDEX:
++		ec_dev->max_passthru = info->max_request_packet_size -
++						sizeof(struct ec_host_request);
++
++		dev_dbg(ec_dev->dev, "found PD chip\n");
++		break;
++	default:
++		dev_dbg(ec_dev->dev, "unknwon passthru index: %d\n", devidx);
++		break;
++	}
+ 
+-	return 0;
++	ret = 0;
++exit:
++	kfree(msg);
++	return ret;
+ }
+ 
+ static int cros_ec_host_command_proto_query_v2(struct cros_ec_device *ec_dev)
+@@ -417,51 +451,13 @@ static int cros_ec_get_host_command_version_mask(struct cros_ec_device *ec_dev,
+ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ {
+ 	struct device *dev = ec_dev->dev;
+-	struct cros_ec_command *proto_msg;
+-	struct ec_response_get_protocol_info *proto_info;
+ 	u32 ver_mask = 0;
+ 	int ret;
+ 
+-	proto_msg = kzalloc(sizeof(*proto_msg) + sizeof(*proto_info),
+-			    GFP_KERNEL);
+-	if (!proto_msg)
+-		return -ENOMEM;
+-
+ 	/* First try sending with proto v3. */
+-	ec_dev->proto_version = 3;
+-	ret = cros_ec_host_command_proto_query(ec_dev, CROS_EC_DEV_EC_INDEX, proto_msg);
+-
+-	if (ret == 0) {
+-		proto_info = (struct ec_response_get_protocol_info *)
+-			proto_msg->data;
+-		ec_dev->max_request = proto_info->max_request_packet_size -
+-			sizeof(struct ec_host_request);
+-		ec_dev->max_response = proto_info->max_response_packet_size -
+-			sizeof(struct ec_host_response);
+-		ec_dev->proto_version =
+-			min(EC_HOST_REQUEST_VERSION,
+-					fls(proto_info->protocol_versions) - 1);
+-		dev_dbg(ec_dev->dev,
+-			"using proto v%u\n",
+-			ec_dev->proto_version);
+-
+-		ec_dev->din_size = proto_info->max_response_packet_size + EC_MAX_RESPONSE_OVERHEAD;
+-		ec_dev->dout_size = proto_info->max_request_packet_size + EC_MAX_REQUEST_OVERHEAD;
+-
+-		/*
+-		 * Check for PD
+-		 */
+-		ret = cros_ec_host_command_proto_query(ec_dev, CROS_EC_DEV_PD_INDEX, proto_msg);
+-
+-		if (ret) {
+-			dev_dbg(ec_dev->dev, "no PD chip found: %d\n", ret);
+-			ec_dev->max_passthru = 0;
+-		} else {
+-			dev_dbg(ec_dev->dev, "found PD chip\n");
+-			ec_dev->max_passthru =
+-				proto_info->max_request_packet_size -
+-				sizeof(struct ec_host_request);
+-		}
++	if (!fill_protocol_info(ec_dev, CROS_EC_DEV_EC_INDEX)) {
++		/* Check for PD. */
++		fill_protocol_info(ec_dev, CROS_EC_DEV_PD_INDEX);
+ 	} else {
+ 		/* Try querying with a v2 hello message. */
+ 		ec_dev->proto_version = 2;
+@@ -524,8 +520,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ 	ec_dev->host_sleep_v1 = (ret >= 0 && (ver_mask & EC_VER_MASK(1)));
+ 
+ 	/* Get host event wake mask. */
+-	ret = cros_ec_get_host_event_wake_mask(ec_dev, proto_msg,
+-					       &ec_dev->host_event_wake_mask);
++	ret = cros_ec_get_host_event_wake_mask(ec_dev, &ec_dev->host_event_wake_mask);
+ 	if (ret < 0) {
+ 		/*
+ 		 * If the EC doesn't support EC_CMD_HOST_EVENT_GET_WAKE_MASK,
+@@ -556,7 +551,6 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
+ 	ret = 0;
+ 
+ exit:
+-	kfree(proto_msg);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(cros_ec_query_all);
+diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+index 5169bf33360b..cdedbdfc1885 100644
+--- a/drivers/platform/chrome/cros_ec_proto_test.c
++++ b/drivers/platform/chrome/cros_ec_proto_test.c
+@@ -194,7 +194,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
+ 	struct ec_xfer_mock *mock;
+ 	int ret;
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		struct ec_response_get_protocol_info *data;
+ 
+@@ -207,7 +207,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
+ 		data->max_response_packet_size = 0xef;
+ 	}
+ 
+-	/* For cros_ec_host_command_proto_query() with passthru. */
++	/* For fill_protocol_info() with passthru. */
+ 	{
+ 		struct ec_response_get_protocol_info *data;
+ 
+@@ -255,7 +255,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
+ 	ret = cros_ec_query_all(ec_dev);
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+@@ -273,7 +273,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
+ 		KUNIT_EXPECT_EQ(test, ec_dev->dout_size, 0xbe + EC_MAX_REQUEST_OVERHEAD);
+ 	}
+ 
+-	/* For cros_ec_host_command_proto_query() with passthru. */
++	/* For fill_protocol_info() with passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+@@ -348,7 +348,7 @@ static void cros_ec_proto_test_query_all_no_pd(struct kunit *test)
+ 	struct ec_xfer_mock *mock;
+ 	int ret;
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		struct ec_response_get_protocol_info *data;
+ 
+@@ -364,7 +364,7 @@ static void cros_ec_proto_test_query_all_no_pd(struct kunit *test)
+ 		data->max_response_packet_size = 0xef;
+ 	}
+ 
+-	/* For cros_ec_host_command_proto_query() with passthru. */
++	/* For fill_protocol_info() with passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND,
+ 						    sizeof(struct ec_response_get_protocol_info));
+@@ -375,7 +375,7 @@ static void cros_ec_proto_test_query_all_no_pd(struct kunit *test)
+ 	ret = cros_ec_query_all(ec_dev);
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+@@ -387,7 +387,7 @@ static void cros_ec_proto_test_query_all_no_pd(struct kunit *test)
+ 		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+ 	}
+ 
+-	/* For cros_ec_host_command_proto_query() with passthru. */
++	/* For fill_protocol_info() with passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+@@ -411,7 +411,7 @@ static void cros_ec_proto_test_query_all_legacy_normal(struct kunit *test)
+ 	struct ec_xfer_mock *mock;
+ 	int ret;
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND,
+ 						    sizeof(struct ec_response_get_protocol_info));
+@@ -433,7 +433,7 @@ static void cros_ec_proto_test_query_all_legacy_normal(struct kunit *test)
+ 	ret = cros_ec_query_all(ec_dev);
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+@@ -771,7 +771,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
+ 	/* Set some garbage bytes. */
+ 	ec_dev->host_event_wake_mask = U32_MAX;
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		struct ec_response_get_protocol_info *data;
+ 
+@@ -787,7 +787,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
+ 		data->max_response_packet_size = 0xef;
+ 	}
+ 
+-	/* For cros_ec_host_command_proto_query() with passthru. */
++	/* For fill_protocol_info() with passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND,
+ 						    sizeof(struct ec_response_get_protocol_info));
+@@ -819,7 +819,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
+ 	ret = cros_ec_query_all(ec_dev);
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ 
+-	/* For cros_ec_host_command_proto_query() without passthru. */
++	/* For fill_protocol_info() without passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+@@ -831,7 +831,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
+ 		KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+ 	}
+ 
+-	/* For cros_ec_host_command_proto_query() with passthru. */
++	/* For fill_protocol_info() with passthru. */
+ 	{
+ 		mock = cros_kunit_ec_xfer_mock_next();
+ 		KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+-- 
+2.36.1.255.ge46751e96f-goog
 

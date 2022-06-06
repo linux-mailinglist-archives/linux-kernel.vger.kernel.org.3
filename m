@@ -2,119 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB5253E2D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA26953E1D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiFFH7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S231613AbiFFIMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 04:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiFFH7C (ORCPT
+        with ESMTP id S231587AbiFFILz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 03:59:02 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7CD15727
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:59:00 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id c18so3972868pgh.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 00:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yXfk+pV14N8uRHKyKDyfNelIYS7BHAUOLYy6g/CrD/Q=;
-        b=oN5ZTX/u0mjNJXsVTHRx05wP3sAoWHsew7muqi3kK4IDOlcQe79pIP7h7A5UEJS4uZ
-         lCI/GOCyaU1c+i8rQ4Jv204cN9b+vi8F6PbG/oqlB05fUs2jKfiUEu8FZktISIeJe+vf
-         g2dAMBWeIVMfdoS6xZSdMo3JS6jiRnRPAK9RCWYZd9lFCZF4Xyls2EoejoOcidxuZOKz
-         TP6P9mZponxwgy2Rrr74FTy2wY75EXwO4a+zC0QCiB1cw1vCiP4e610fgDBez+rEbOo0
-         cKd6feG6sNOiv8P/aFOUmCLZMlag6MqwSu7GVQMf5sCqZcgGblXbnnnKlgayw+2eeWEu
-         zo7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yXfk+pV14N8uRHKyKDyfNelIYS7BHAUOLYy6g/CrD/Q=;
-        b=2edGrCGw3NayOON3bRD42wh6Bbz4vBGyR0iNgBIHzWW2jbj08RvOra50ToiHbzMzHt
-         lBHc+6U77RmS1fmlr03PAa2lfLQxKUAxIXX7lo4hOI0P0aumBqmPqO6vZmRMAqa1RZMO
-         e8pPq03pufWRa1tuGL6VVSTfvLnkaG6JX/vsYyVXw0gHHM4thlaXoZcODfGfS+j00O/r
-         I5nhWTbNcTCe4hkWmDm0Y/wkVLR18gp9hZTLzFVQX5ArUsJ2c1c/hFvlF1Y/k30E14GY
-         T5wZm7cW9Bk9Zg6I65MMyh5qNmaxfqKI4nsS6UbwRiVVnaj6YC8BfdZOt3swb0m2sFM9
-         WqPA==
-X-Gm-Message-State: AOAM530UJflBKRpZKhdsfVHhu96LUAItmBJ7VTviALEO/vNLN9CG3/Dc
-        BCDh58FqKZYzJIPi6UPVqoY=
-X-Google-Smtp-Source: ABdhPJw/2S40bNMLgP5EwoSMIjOlqJNvRgzfhEdg6IHM/ugfgOyuCvD/EKx0isk4ffOnTccP0LokEw==
-X-Received: by 2002:a65:694a:0:b0:3fb:9d3b:431b with SMTP id w10-20020a65694a000000b003fb9d3b431bmr20359002pgq.276.1654502340347;
-        Mon, 06 Jun 2022 00:59:00 -0700 (PDT)
-Received: from localhost (subs03-180-214-233-76.three.co.id. [180.214.233.76])
-        by smtp.gmail.com with ESMTPSA id y189-20020a6264c6000000b0050dc762814asm10020438pfb.36.2022.06.06.00.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 00:58:59 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 14:58:56 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] staging: r8188eu: Fix kernel-doc
-Message-ID: <Yp2zwBqn6uDvGNWN@debian.me>
-References: <20220524083914.68736-1-jiapeng.chong@linux.alibaba.com>
- <Yp2WPrOz85/70CZx@kroah.com>
+        Mon, 6 Jun 2022 04:11:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1257A45C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 01:11:54 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2567fkPQ026652;
+        Mon, 6 Jun 2022 08:01:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Nch9RLRpXchA624SzaHhzVdmvvKVAfop9o5cTTTYQMQ=;
+ b=Zb4ktAs83idLeE46YyAmDTNz4QxszSQzjJxLl5dtXoCVh6GDIIPvrodLUu5uGgPs478D
+ nVDw71Krf5rdss3qstPyRvYHHYGHx57+Datl3CR3oxCtEJmooPpCiAX3zjF3rMs2XeRH
+ LPT44slmcy7q9U1ebz/5DSBBJrvhNmHDFlUT2HF3Yn+w4wzFsKS5TJAmxoDRuzDxpbzV
+ 1qi0V1dDwIh56dZzGQ2GfxUSs878gumjigpnMoOUDNgMZPwZe/vcJLpjCWkIrWe3BD38
+ u+8vdj45FOOybrJbzA5hZqxJ3UmGk8zP9JQp04JWzFWsd5JJ0pw+m56QQs3fu2o79J+t Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gghahu23w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 08:01:43 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2567UC45025710;
+        Mon, 6 Jun 2022 08:01:42 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gghahu230-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 08:01:42 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2567pAKS013289;
+        Mon, 6 Jun 2022 08:01:39 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3gfy18sksr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 08:01:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25681OcH19857864
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 08:01:24 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2145A4057;
+        Mon,  6 Jun 2022 08:01:36 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 33F8FA4070;
+        Mon,  6 Jun 2022 08:01:31 +0000 (GMT)
+Received: from [9.43.87.254] (unknown [9.43.87.254])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 08:01:30 +0000 (GMT)
+Message-ID: <b97d2013-ad5e-9b29-0b95-f52273bd3a8b@linux.ibm.com>
+Date:   Mon, 6 Jun 2022 13:31:29 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v4 1/7] mm/demotion: Add support for explicit memory
+ tiers
+Content-Language: en-US
+To:     Ying Huang <ying.huang@intel.com>
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
+ <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
+ <aeced91ea9d9396e9842f5c0264391aabd291726.camel@intel.com>
+ <d429a644-ef27-bcd8-52bd-c8cbe5fedc26@linux.ibm.com>
+ <143e40bcf46097d14514504518fdc1870fd8d4a1.camel@intel.com>
+ <eb6d7346-32a9-4fb2-61c2-a413c9f94f1c@linux.ibm.com>
+ <87ilpe8fxh.fsf@linux.ibm.com>
+ <a20f4db3c55f9471d27eacd7a8a245691a8fcd2f.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <a20f4db3c55f9471d27eacd7a8a245691a8fcd2f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Hm2BLNLkhmLGIffeouMeg8O0UbMkfQNH
+X-Proofpoint-ORIG-GUID: QiRRRb7KgBP-4w9xqASD0dI-8XtTpL4j
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yp2WPrOz85/70CZx@kroah.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_02,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060037
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 07:53:02AM +0200, Greg KH wrote:
-> On Tue, May 24, 2022 at 04:39:14PM +0800, Jiapeng Chong wrote:
-> > Fix the following W=1 kernel warnings:
-> > 
-> > drivers/staging/r8188eu/hal/rtl8188e_phycfg.c:291: warning: expecting
-> > prototype for Function(). Prototype was for rtl8188e_PHY_SetRFReg()
-> > instead.
-> > 
-> > drivers/staging/r8188eu/hal/rtl8188e_phycfg.c:257: warning: expecting
-> > prototype for Function(). Prototype was for rtl8188e_PHY_QueryRFReg()
-> > instead.
+On 6/6/22 1:23 PM, Ying Huang wrote:
+> On Mon, 2022-06-06 at 11:57 +0530, Aneesh Kumar K.V wrote:
+>> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>
+>>> On 6/6/22 11:03 AM, Ying Huang wrote:
+>>>> On Mon, 2022-06-06 at 09:26 +0530, Aneesh Kumar K V wrote:
+>>>>> On 6/6/22 8:19 AM, Ying Huang wrote:
+>>>>>> On Thu, 2022-06-02 at 14:07 +0800, Ying Huang wrote:
+>>>>>>> On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+>>>>>>>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>>>>>>>
+>>>>>>>> In the current kernel, memory tiers are defined implicitly via a
+>>>>>>>> demotion path relationship between NUMA nodes, which is created
+>>>>>>>> during the kernel initialization and updated when a NUMA node is
+>>>>>>>> hot-added or hot-removed.  The current implementation puts all
+>>>>>>>> nodes with CPU into the top tier, and builds the tier hierarchy
+>>>>>>>> tier-by-tier by establishing the per-node demotion targets based
+>>>>>>>> on the distances between nodes.
+>>>>>>>>
+>>>>>>>> This current memory tier kernel interface needs to be improved for
+>>>>>>>> several important use cases,
+>>>>>>>>
+>>>>>>>> The current tier initialization code always initializes
+>>>>>>>> each memory-only NUMA node into a lower tier.  But a memory-only
+>>>>>>>> NUMA node may have a high performance memory device (e.g. a DRAM
+>>>>>>>> device attached via CXL.mem or a DRAM-backed memory-only node on
+>>>>>>>> a virtual machine) and should be put into a higher tier.
+>>>>>>>>
+>>>>>>>> The current tier hierarchy always puts CPU nodes into the top
+>>>>>>>> tier. But on a system with HBM or GPU devices, the
+>>>>>>>> memory-only NUMA nodes mapping these devices should be in the
+>>>>>>>> top tier, and DRAM nodes with CPUs are better to be placed into the
+>>>>>>>> next lower tier.
+>>>>>>>>
+>>>>>>>> With current kernel higher tier node can only be demoted to selected nodes on the
+>>>>>>>> next lower tier as defined by the demotion path, not any other
+>>>>>>>> node from any lower tier.  This strict, hard-coded demotion order
+>>>>>>>> does not work in all use cases (e.g. some use cases may want to
+>>>>>>>> allow cross-socket demotion to another node in the same demotion
+>>>>>>>> tier as a fallback when the preferred demotion node is out of
+>>>>>>>> space), This demotion order is also inconsistent with the page
+>>>>>>>> allocation fallback order when all the nodes in a higher tier are
+>>>>>>>> out of space: The page allocation can fall back to any node from
+>>>>>>>> any lower tier, whereas the demotion order doesn't allow that.
+>>>>>>>>
+>>>>>>>> The current kernel also don't provide any interfaces for the
+>>>>>>>> userspace to learn about the memory tier hierarchy in order to
+>>>>>>>> optimize its memory allocations.
+>>>>>>>>
+>>>>>>>> This patch series address the above by defining memory tiers explicitly.
+>>>>>>>>
+>>>>>>>> This patch adds below sysfs interface which is read-only and
+>>>>>>>> can be used to read nodes available in specific tier.
+>>>>>>>>
+>>>>>>>> /sys/devices/system/memtier/memtierN/nodelist
+>>>>>>>>
+>>>>>>>> Tier 0 is the highest tier, while tier MAX_MEMORY_TIERS - 1 is the
+>>>>>>>> lowest tier. The absolute value of a tier id number has no specific
+>>>>>>>> meaning. what matters is the relative order of the tier id numbers.
+>>>>>>>>
+>>>>>>>> All the tiered memory code is guarded by CONFIG_TIERED_MEMORY.
+>>>>>>>> Default number of memory tiers are MAX_MEMORY_TIERS(3). All the
+>>>>>>>> nodes are by default assigned to DEFAULT_MEMORY_TIER(1).
+>>>>>>>>
+>>>>>>>> Default memory tier can be read from,
+>>>>>>>> /sys/devices/system/memtier/default_tier
+>>>>>>>>
+>>>>>>>> Max memory tier can be read from,
+>>>>>>>> /sys/devices/system/memtier/max_tiers
+>>>>>>>>
+>>>>>>>> This patch implements the RFC spec sent by Wei Xu <weixugc@google.com> at [1].
+>>>>>>>>
+>>>>>>>> [1] https://lore.kernel.org/linux-mm/CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com/
+>>>>>>>>
+>>>>>>>> Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>>>>>>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>>>>>>
+>>>>>>> IMHO, we should change the kernel internal implementation firstly, then
+>>>>>>> implement the kerne/user space interface.  That is, make memory tier
+>>>>>>> explicit inside kernel, then expose it to user space.
+>>>>>>
+>>>>>> Why ignore this comment for v5?  If you don't agree, please respond me.
+>>>>>>
+>>>>>
+>>>>> I am not sure what benefit such a rearrange would bring in? Right now I
+>>>>> am writing the series from the point of view of introducing all the
+>>>>> plumbing and them switching the existing demotion logic to use the new
+>>>>> infrastructure. Redoing the code to hide all the userspace sysfs till we
+>>>>> switch the demotion logic to use the new infrastructure doesn't really
+>>>>> bring any additional clarity to patch review and would require me to
+>>>>> redo the series with a lot of conflicts across the patches in the patchset.
+>>>>
+>>>> IMHO, we shouldn't introduce regression even in the middle of a
+>>>> patchset.  Each step should only rely on previous patches in the series
+>>>> to work correctly.  In your current way of organization, after patch
+>>>> [1/7], on a system with 2 memory tiers, the user space interface will
+>>>> output wrong information (only 1 memory tier).  So I think the correct
+>>>> way is to make it right inside the kenrel firstly, then expose the right
+>>>> information to user space.
+>>>>
+>>>
+>>> The patchset doesn't add additional tier until "mm/demotion/dax/kmem:
+>>> Set node's memory tier to MEMORY_TIER_PMEM". ie, there is no additional
+>>> tiers done till all the demotion logic is in place. So even if the
+>>> system got dax/kmem, the support for adding dax/kmem as a memory tier
+>>> comes later in the patch series.
+>>
+>> Let me clarify this a bit more. This patchset doesn't change the
+>> existing kernel behavior till "mm/demotion: Build demotion targets
+>> based on explicit memory tiers". So there is no regression till then.
+>> It adds a parallel framework (memory tiers to the existing demotion
+>> logic).
+>>
+>> I can move the patch "mm/demotion/dax/kmem: Set node's memory tier to
+>> MEMORY_TIER_PMEM" before switching the demotion logic so that on systems
+>> with two memory tiers (DRAM and pmem) the demotion continues to work
+>> as expected after patch 3 ("mm/demotion: Build demotion targets based on
+>> explicit memory tiers"). With that, there will not be any regression in
+>> between the patch series.
+>>
 > 
-> Please put build warning lines all on one line.
-> 
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> 
-> No, gcc reported this, not a robot, right?
-> 
-> You have read Documentation/process/researcher-guidelines.rst for how to
-> properly document patches that are created by research tools like this,
-> right?  Please fix this commit up to follow those requirements please.
+> Thanks!  Please do that.  And I think you can add sysfs interface after
+> that patch too.  That is, in [1/7]
 > 
 
-Hi Greg and Jiapeng,
+I am not sure why you insist on moving sysfs interfaces later. They are 
+introduced based on the helper added. It make patch review easier to 
+look at both the helpers and the user of the helper together in a patch.
 
-First, IMO this is not research tool (in the sense of academic purposes),
-but development bot used in corporate environment, kinda like kernel
-test robot <lkp@intel.com>. When the bot reports any build warnings,
-these will be followed up by developers proposing fixes.
+> +struct memory_tier {
+> +	nodemask_t nodelist;
+> +};
+> 
+> And struct device can be added after the kernel has switched the
+> implementation based on explicit memory tiers.
+> 
+> +struct memory_tier {
+> +	struct device dev;
+> +	nodemask_t nodelist;
+> +};
+> 
 
-What I see in the patch message is just "Fix this warning..." without
-saying why there is the warning.
 
-Second, gcc DOESN'T, again DOESN'T, report "expecting prototype"
-warnings. These are from scripts/kernel-doc, which enabled these
-warnings on W=1 build.
+Can you elaborate on this? or possibly review the v5 series indicating 
+what change you are suggesting here?
 
-So the underlying problem is mismatching function name in kernel-doc
-comment and actual function.
 
-Thanks.
+> But I don't think it's a good idea to have "struct device" embedded in
+> "struct memory_tier".  We don't have "struct device" embedded in "struct
+> pgdata_list"...
+> 
 
--- 
-An old man doll... just what I always wanted! - Clara
+I avoided creating an array for memory_tier (memory_tier[]) so that we 
+can keep it dynamic. Keeping dev embedded in struct memory_tier simplify 
+the life cycle management of that dynamic list. We free the struct 
+memory_tier allocation via device release function (memtier->dev.release 
+= memory_tier_device_release )
+
+Why do you think it is not a good idea?
+
+-aneesh
+

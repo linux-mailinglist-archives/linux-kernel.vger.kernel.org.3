@@ -2,114 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0402153E858
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FF353E78B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbiFFNB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S238192AbiFFNBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238144AbiFFNBT (ORCPT
+        with ESMTP id S238171AbiFFNBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:01:19 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69404527EE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:01:18 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id q1so28815984ejz.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:01:18 -0700 (PDT)
+        Mon, 6 Jun 2022 09:01:52 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B372E21B8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:01:49 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id h19so18765410edj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 06:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h1m3RQgl4XOArgt66k3NUS75Xxdt0168uvwBuanYOsA=;
-        b=E5H1VvUpCKh6EY97ERLISONJ4bt1XDT4xrpgdLOUS+fM5kqjjAr+Xk8msa5eZYYd6Q
-         9K9TVTkCKd4stBAPxvFaJKWB11AVgpvutQ3t7MHBzTV3JNXcECnYFXGLEyAGazGEw2Ke
-         n0+yNf4gDGDuuk7yrNY31O3hdDKR3SRXAO+OLB2m9wgg8gC9TuUPZNhc6Aq1Hy+cpv9d
-         gAx1BC7ju4s21/+9Tf4h2cmVlGUJBV/wKVk8GTmACbBtnbtzm63lcwToO2N/IslQY+jp
-         9OEHiyU2sSObzY51gNWmQ9bn65LjzIzEdq8faRn3piuit/BNe02+tIL770/gFS46ypw0
-         2CQA==
+        d=pqrs.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PHja6eQ6Mv2Fce3sGPE0UzxsdJMvKhiNmaMfYmc4ndA=;
+        b=URrbnH33zLvDajx/0NU5kLo58AbZNjB8rEMPICV3OEKt/mAq2Nk9jrpxpVuUI74Pa8
+         Qg5PSBqML+Zi1e9grmdCRG9zwcGZkgLL5hqRWUMvMVsc1jaBdXscOjleVrsHY3+1L1CN
+         DJieqIyP2shK2Fxwll9P/g0kXuAY9GT6ZYLzA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=h1m3RQgl4XOArgt66k3NUS75Xxdt0168uvwBuanYOsA=;
-        b=CzxJ81YtvJUxSMOYHyaPwjPeYJeLfgvo8W4Aag4ihBJeD2QcND/ekhz9Krh4OK0NGZ
-         l3A2boPwwS3Xzx2Ifa+LthAgCp+jES/G2hVGQivlTBpbbtlr6fLNNto+gfrcc6npY6tL
-         IbzX+PcxUe8ABh6rZSTz5MLbHcFX2b3+WjotjgVEkwrfGvd/Nz2iFx6qNziqOgzIJ3O5
-         HpilHIJBCqD5JnG8E5i2wBBRNR92ZTF8LlyPiEn4lXTnqCxFeR4iWNOI60hSKBb4bGMs
-         V0EufudYWw40hD2yj5u5i25QCKE9WRNFHXYlTqhzYfJjAN7UvQFxD5ixdA95H78z2xzU
-         vmng==
-X-Gm-Message-State: AOAM530Ohe5SxTaYN2JPSGnKcgAd9zYrQnt0H3rKo4WT2keRZwxXmELX
-        nkEQanxVtvQ7T55DcIr3EO+uRQ==
-X-Google-Smtp-Source: ABdhPJws0YTuXlPG7rD3iB4yGZAKH7ihRhnQrcSFYkPV14mM09aTsOcUCFRHvzhpIa709UCZYR3Whg==
-X-Received: by 2002:a17:907:3e8d:b0:6fe:d99b:90a with SMTP id hs13-20020a1709073e8d00b006fed99b090amr21447213ejc.416.1654520476858;
-        Mon, 06 Jun 2022 06:01:16 -0700 (PDT)
-Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id yz17-20020a170906dc5100b0070b1ecdc12bsm5117954ejb.112.2022.06.06.06.01.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 06:01:14 -0700 (PDT)
-Message-ID: <ba24037d-8c31-ea35-6fc9-ed8a61118848@linaro.org>
-Date:   Mon, 6 Jun 2022 15:01:13 +0200
+        bh=PHja6eQ6Mv2Fce3sGPE0UzxsdJMvKhiNmaMfYmc4ndA=;
+        b=0KrH+gwGBWJVhrjcs1CWO6mYG1LNvakbJ4dsdvKy/NNM21saB0iNLwWKbl1j36wRnS
+         xp5OO/ibDEILXlIWHM5HOl9zrLy6zXrlbvWBp9gCnMaosl5jVTbEvT/JZDJ0JlI//crz
+         0cFsW2zgJZ8mIEsn3rczM1Ka+irGJckNTiIrW24+K/DlDZNaFowZy/8HseyAxgb/gk1c
+         BsZOmrZ0KwgUM9j5aVpOEAqwjVJVKYlI4HhvtBVCWkIjUEyHenTZJiVyz7T/QYKXkslr
+         V3WOUV1Nq8a+4B2Y5nlD5dtbLD6IaGjJf4fgYKOw0QPQJuxe4wXm3Gy7N2RRK8jouqQH
+         BDBQ==
+X-Gm-Message-State: AOAM533Lqh/47hjrWewRynmIOM2wtsxcFPNZvgv5Vv4Ouiv2pB9dQs2e
+        dcvLGmBO+5mAYlL4/jtuoksKpg==
+X-Google-Smtp-Source: ABdhPJyzKgOqfEIRXyIehEv8SNDfgWNU6dcDZo68dVn7XI3YY9qcBYcpsDLYrBihuvISNzn/a4SAOw==
+X-Received: by 2002:a05:6402:32a6:b0:42d:ed8b:3d8 with SMTP id f38-20020a05640232a600b0042ded8b03d8mr26381739eda.225.1654520508129;
+        Mon, 06 Jun 2022 06:01:48 -0700 (PDT)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id t26-20020a17090605da00b006fe7d269db8sm6275447ejt.104.2022.06.06.06.01.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 06:01:47 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     luizluca@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net] net: dsa: realtek: rtl8365mb: fix GMII caps for ports with internal PHY
+Date:   Mon,  6 Jun 2022 15:01:30 +0200
+Message-Id: <20220606130130.2894410-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: mfd: atmel,flexcom: Convert to
- json-schema
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, UNGLinuxDriver@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220603121802.30320-1-kavyasree.kotagiri@microchip.com>
- <20220603121802.30320-2-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220603121802.30320-2-kavyasree.kotagiri@microchip.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 14:18, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
-> 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> ---
->  .../bindings/mfd/atmel,flexcom.yaml           | 97 +++++++++++++++++++
->  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 ------------
->  2 files changed, 97 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> new file mode 100644
-> index 000000000000..221bd840b49e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/atmel,flexcom.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Device tree bindings for Atmel Flexcom (Flexible Serial Communication Unit)
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-There was a v2 of the same patch to which already commented. Now you
-send the same patch, without comments applied as v1. This does not make
-any sense.
+phylib defaults to GMII when no phy-mode or phy-connection-type property
+is specified in a DSA port node.
 
-Please version your patches correctly and do not ignore received feedback.
+Commit a5dba0f207e5 ("net: dsa: rtl8365mb: add GMII as user port mode")
+introduced implicit support for GMII mode on ports with internal PHY to
+allow a PHY connection for device trees where the phy-mode is not
+explicitly set to "internal".
 
+Commit 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
+then broke this behaviour by discarding the usage of
+rtl8365mb_phy_mode_supported() - where this GMII support was indicated -
+while switching to the new .phylink_get_caps API.
 
-Best regards,
-Krzysztof
+With the new API, rtl8365mb_phy_mode_supported() is no longer needed.
+Remove it altogether and add back the GMII capability - this time to
+rtl8365mb_phylink_get_caps() - so that the above default behaviour works
+for ports with internal PHY again.
+
+Fixes: 6ff6064605e9 ("net: dsa: realtek: convert to phylink_generic_validate()")
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+
+Luiz, Russel:
+
+Commit a5dba0f207e5 ought to have had a Fixes: tag I think, because it
+claims to have been fixing a regression in the net-next tree - is that
+right? I seem to have missed both referenced commits when they were
+posted and never hit this issue personally. I only found things now
+during some other refactoring and the test for GMII looked weird to me
+so I went and investigated.
+
+Could you please help me identify that Fixes: tag? Just for my own
+understanding of what caused this added requirement for GMII on ports
+with internal PHY.
+
+---
+ drivers/net/dsa/realtek/rtl8365mb.c | 38 +++++++----------------------
+ 1 file changed, 9 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
+index 3bb42a9f236d..769f672e9128 100644
+--- a/drivers/net/dsa/realtek/rtl8365mb.c
++++ b/drivers/net/dsa/realtek/rtl8365mb.c
+@@ -955,35 +955,21 @@ static int rtl8365mb_ext_config_forcemode(struct realtek_priv *priv, int port,
+ 	return 0;
+ }
+ 
+-static bool rtl8365mb_phy_mode_supported(struct dsa_switch *ds, int port,
+-					 phy_interface_t interface)
+-{
+-	int ext_int;
+-
+-	ext_int = rtl8365mb_extint_port_map[port];
+-
+-	if (ext_int < 0 &&
+-	    (interface == PHY_INTERFACE_MODE_NA ||
+-	     interface == PHY_INTERFACE_MODE_INTERNAL ||
+-	     interface == PHY_INTERFACE_MODE_GMII))
+-		/* Internal PHY */
+-		return true;
+-	else if ((ext_int >= 1) &&
+-		 phy_interface_mode_is_rgmii(interface))
+-		/* Extension MAC */
+-		return true;
+-
+-	return false;
+-}
+-
+ static void rtl8365mb_phylink_get_caps(struct dsa_switch *ds, int port,
+ 				       struct phylink_config *config)
+ {
+-	if (dsa_is_user_port(ds, port))
++	if (dsa_is_user_port(ds, port)) {
+ 		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+ 			  config->supported_interfaces);
+-	else if (dsa_is_cpu_port(ds, port))
++
++		/* GMII is the default interface mode for phylib, so
++		 * we have to support it for ports with integrated PHY.
++		 */
++		__set_bit(PHY_INTERFACE_MODE_GMII,
++			  config->supported_interfaces);
++	} else if (dsa_is_cpu_port(ds, port)) {
+ 		phy_interface_set_rgmii(config->supported_interfaces);
++	}
+ 
+ 	config->mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
+ 				   MAC_10 | MAC_100 | MAC_1000FD;
+@@ -996,12 +982,6 @@ static void rtl8365mb_phylink_mac_config(struct dsa_switch *ds, int port,
+ 	struct realtek_priv *priv = ds->priv;
+ 	int ret;
+ 
+-	if (!rtl8365mb_phy_mode_supported(ds, port, state->interface)) {
+-		dev_err(priv->dev, "phy mode %s is unsupported on port %d\n",
+-			phy_modes(state->interface), port);
+-		return;
+-	}
+-
+ 	if (mode != MLO_AN_PHY && mode != MLO_AN_FIXED) {
+ 		dev_err(priv->dev,
+ 			"port %d supports only conventional PHY or fixed-link\n",
+-- 
+2.36.0
+

@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD05153F0FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9947753F133
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbiFFUw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S234370AbiFFUxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiFFUwY (ORCPT
+        with ESMTP id S231741AbiFFUws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:52:24 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F007821818
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:42:16 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id yJY7nohIwJXxRyJY8nmBKa; Mon, 06 Jun 2022 22:42:15 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Mon, 06 Jun 2022 22:42:15 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <75b293bd-ec8d-8c90-ffe5-afa49d6a218d@wanadoo.fr>
-Date:   Mon, 6 Jun 2022 22:42:07 +0200
-MIME-Version: 1.0
+        Mon, 6 Jun 2022 16:52:48 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F70338B7;
+        Mon,  6 Jun 2022 13:42:40 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 256KV1pI029119;
+        Mon, 6 Jun 2022 20:42:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : from : to : cc : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=lbaSShEGkI4JCswyOaLK2k7dTapx0AV7036Hk3OhJwE=;
+ b=JSV7KtCY7/ifNq4rB26a7tyTcMPfR0+CkHfgJG3GnqGXNCAnRRJXey6mf98nU0jzidy9
+ YEODAVohzc0C+YTFHZDpLRYPyLXJuVGbygPyqBbGSjwsmMrw9QkzSgd3qyKYhhbP1nJm
+ zvQtxnfRPsjU3mJZrW4l9OyfBMLASzjNdJjtjYoIrrkWHmesxAi4iny8q004QHKcwhxn
+ AhoV4yxfbMY2yUZJ6oOsPwe7xkxAIONd3oG1fRjHH5C7rk5tSlD0gNdwzwPT0c6nrhu7
+ StDmdBiu+kXUI1xDfJIihMuNmXZZMutPcm7Nyve6zQBrqvvG0P7tciLSU6a5dMSD/OhK JQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ghpqfjbuy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 20:42:36 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 256KW27A032554;
+        Mon, 6 Jun 2022 20:42:36 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ghpqfjbuv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 20:42:36 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 256KKGOo030481;
+        Mon, 6 Jun 2022 20:42:35 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma03wdc.us.ibm.com with ESMTP id 3gfy19fwpf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 20:42:35 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 256KgYOu35520962
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 20:42:34 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 533FF6A04F;
+        Mon,  6 Jun 2022 20:42:34 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ABBCF6A047;
+        Mon,  6 Jun 2022 20:42:31 +0000 (GMT)
+Received: from [9.163.20.188] (unknown [9.163.20.188])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Jun 2022 20:42:31 +0000 (GMT)
+Message-ID: <5a2b4f8f-14b4-cbf2-7c22-ba7bbcd4e09f@linux.ibm.com>
+Date:   Mon, 6 Jun 2022 16:42:31 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] stmmac: intel: Fix an error handling path in
- intel_eth_pci_probe()
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v9 00/21] KVM: s390: enable zPCI for interpretive
+ execution
 Content-Language: en-US
-To:     Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr>
- <20220606062650.GA31937@linux.intel.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220606062650.GA31937@linux.intel.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220606203325.110625-1-mjrosato@linux.ibm.com>
+In-Reply-To: <20220606203325.110625-1-mjrosato@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WFXtV8rQRBX5Bmwtlid3r8AwwaBWsNT_
+X-Proofpoint-GUID: lyTwiG177E8ZqAOvlxnKbrvOiwU_nyNv
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_06,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 mlxlogscore=709
+ suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060081
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 06/06/2022 à 08:26, Wong Vee Khee a écrit :
-> On Sun, Jun 05, 2022 at 10:50:48PM +0200, Christophe JAILLET wrote:
->> When the managed API is used, there is no need to explicitly call
->> pci_free_irq_vectors().
->>
->> This looks to be a left-over from the commit in the Fixes tag. Only the
->> .remove() function had been updated.
->>
->> So remove this unused function call and update goto label accordingly.
->>
->> Fixes: 8accc467758e ("stmmac: intel: use managed PCI function on probe and resume")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 4 +---
->>   1 file changed, 1 insertion(+), 3 deletions(-)
->>
+On 6/6/22 4:33 PM, Matthew Rosato wrote:
+> Enable interpretive execution of zPCI instructions + adapter interruption
+> forwarding for s390x KVM vfio-pci.  This is done by triggering a routine
+> when the VFIO group is associated with the KVM guest, transmitting to
+> firmware a special token (GISA designation) to enable that specific guest
+> for interpretive execution on that zPCI device.  Load/store interpreation
+> enablement is then controlled by userspace (based upon whether or not a
+> SHM bit is placed in the virtual function handle).  Adapter Event
+> Notification interpretation is controlled from userspace via a new KVM
+> ioctl.
 > 
-> LGTM
+> By allowing intepretation of zPCI instructions and firmware delivery of
+> interrupts to guests, we can reduce the frequency of guest SIE exits for
+> zPCI.
 > 
-> Reviewed-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+>  From the perspective of guest configuration, you passthrough zPCI devices
+> in the same manner as before, with intepretation support being used by
+> default if available in kernel+qemu.
 > 
+> Will follow up with a link the most recent QEMU series.
 > 
 
-Hi,
+Latest QEMU series:
 
-I've looked at it again.
-
-I still think that the patch is good, but pcim_release() has changed in 
-5.18 since commit 3f35d2cf9fbc ("PCI/MSI: Decouple MSI[-X] disable from 
-pcim_release()")
-
-I guess that all the mechanic is in place so that everything is 
-registered when needed, but I've not been able to figure it out in the 
-case of dwmac-intel.c.
-
-So, double check :).
-
-CJ
+https://lore.kernel.org/kvm/20220606203614.110928-1-mjrosato@linux.ibm.com/

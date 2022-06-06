@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3B353E82F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B751653EA9D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240891AbiFFP2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        id S240672AbiFFP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240732AbiFFP0S (ORCPT
+        with ESMTP id S240757AbiFFP03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:26:18 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E1D328ED3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:26:15 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id k19so20317461wrd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:26:15 -0700 (PDT)
+        Mon, 6 Jun 2022 11:26:29 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60EB1AADA6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:26:27 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id h23so18566364ejj.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:26:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z2mKX+kU+0IXP/mFpleoQum6Bqhsq7l65uSh5/bTW4g=;
-        b=HMwGyp6CzEvlRC14FS57rwtanxig4GLA0FRKh8Ap4Kl+5s5sAb7edQyqJx/6zxLgRl
-         Ny1LZC+rCwH8uQsmSyoQ3zaSrJaoLCzV2pCnJ6htCk/SyrRL2RW+9oaO9wAE091+lhte
-         VbdkoDYOgTzaeDP8W32qHJorSUSW22c6eS1fvuxUinvAJPezQO6/id98yPoeIrq3jZhM
-         dgvvJQBpDsfl5OGNogPTcDByqCTGADB54X0LVtftiotrgVK0F4j2MbH8GOCwZienUlDm
-         aAaAC8PlzTvymW3kNrRwXFqIMNZ1D45n7/zIonpOec/LbgD+0R+4irBKn+sw/+v21pdZ
-         ohOQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g0CfqZDZnQGiX6/HBvu3FZf3i9OJ+2C0+13cUpQYRZM=;
+        b=fLRQ3/QA1wNcb4MXDUqS4aU+HWo7LVK33bo5FNY/J5Vg95iJWBLdAyFukFxriEzpwA
+         jjcSJ6rwdgTWTIyuUdKJrao/n19sdCT5gry7LauyyQwURqAJr2MEeE+aJDVRB1g8mNuJ
+         gLH9M5JMHkqEzr4X3juuMpuGvpbhqKX7daMNE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=z2mKX+kU+0IXP/mFpleoQum6Bqhsq7l65uSh5/bTW4g=;
-        b=OXfFqVCepOoKxYx5v6QrTXHm10KlV4vbr/hhIrxRMES+bGKdAojaFXSfsbEeKNJH5y
-         iw8edXII9GkhYfQVToconx5/X8r1h5UmbzQORpdWfLYKRG5wQVjIyl1EfHfxFmrexhmn
-         xJzpNVyKQ4iq8FZ3eltqd6iVqkRslOiS3jaFsrLcp3intqbGETwjUZpP1hzDsGDUJkNR
-         4Kz/cfrVQTze842yv5lhVpgt/qJtBMFlOUUu9c7j/U1iYuS/i53FkQ0RcJaCP6OsjDAH
-         CndqcLATvvW95seT2xMtLdsbnYllUtaf8kY4c2qjlbsvGQ1vxF392oaLWBS03VIlKW8R
-         gv2g==
-X-Gm-Message-State: AOAM532jO6VIlN73EMPAApvvTmm3Ua9V61iM/rsH5eM8Xyd1aXsw16Ju
-        hbUmFWn4mDyS1FDuN5BIh5v/dQ==
-X-Google-Smtp-Source: ABdhPJwxneQK3qa97OwL1W+PfqxqssVm1NE2jPe1s3DSYbSYAVD7FYprnFkal9IGgv+FhvsBTVndUw==
-X-Received: by 2002:a5d:458e:0:b0:216:9e07:ceb1 with SMTP id p14-20020a5d458e000000b002169e07ceb1mr11170467wrq.21.1654529173436;
-        Mon, 06 Jun 2022 08:26:13 -0700 (PDT)
-Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id h1-20020adffd41000000b002103aebe8absm15623944wrs.93.2022.06.06.08.26.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 08:26:12 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Steve Twiss <stwiss.opensource@diasemi.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Atul Khare <atulkhare@rivosinc.com>
-Subject: [PATCH v2 3/4] dt-bindings: mfd: convert da9063 to yaml
-Date:   Mon,  6 Jun 2022 16:25:57 +0100
-Message-Id: <20220606152557.438771-4-mail@conchuod.ie>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220606152557.438771-1-mail@conchuod.ie>
-References: <20220606152557.438771-1-mail@conchuod.ie>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g0CfqZDZnQGiX6/HBvu3FZf3i9OJ+2C0+13cUpQYRZM=;
+        b=c0Ky7JzfFkqKRSlF1Qdi6aHP8/Hg668hhSEZGl1gNGxzLhbGMJR7R7UcgoIN6cEW1E
+         xOsQ9fzn2jb3sEkkDhjBff9xXKLVD7QJsBrBBZpauqDgpkG81OBKjg52KbfIG9b/KvtY
+         /3MY14oZnjqr5qpnaqUIGcSA9kh+LHPKRH7MJVQgD8wV9T5DA/l7Bj1RQYbl2JhrCjS4
+         Vjr1thG6Hd1So7huzzVCpL6eHT/8Gtn83qGIwymGmWEqZkvoXoChJnjzf2FMS1aPBtTY
+         +xRP06/ZcX6OeW8gIwBrc+xZtKEr7J0bT5RUWRS5235NEzjg3+AUzOqnXn+1/fwynWig
+         jHew==
+X-Gm-Message-State: AOAM5338/2WiI0Nd1FVYV7c+QRRedR68wP3k6VhnDA7OCBElQ3niH8fx
+        ciq7rpmYNau3KJWv7QWnMsPpaRQbLjQB61I08gLEUQ==
+X-Google-Smtp-Source: ABdhPJwoDpT6S3WSY8htZrD/zFlYO0O4+g2JDXZf4OQeXUukmweb7201Svj1Dc8HJysdoeWK939TEdsLvzykBknOAiY=
+X-Received: by 2002:a17:906:9b46:b0:711:1f7e:36f8 with SMTP id
+ ep6-20020a1709069b4600b007111f7e36f8mr10222093ejc.746.1654529183491; Mon, 06
+ Jun 2022 08:26:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-2-hsinyi@chromium.org>
+ <CAD=FV=V7FmkJyyXr4C6jy9-hOhnzgoo=g5tx_3z3rnCCC40Exg@mail.gmail.com>
+In-Reply-To: <CAD=FV=V7FmkJyyXr4C6jy9-hOhnzgoo=g5tx_3z3rnCCC40Exg@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 6 Jun 2022 23:25:57 +0800
+Message-ID: <CAJMQK-ic2fGfyEaJp5By1dNRJYy7Qwes4gQWADD5Sf=Z5zgafg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] drm/panel: Add an API drm_panel_get_orientation()
+ to return panel orientation
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,303 +82,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
-
-Convert the dt binding for the da9063/da9063l to yaml.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../devicetree/bindings/mfd/da9063.txt        | 114 ---------------
- .../devicetree/bindings/mfd/dlg,da9063.yaml   | 132 ++++++++++++++++++
- .../devicetree/bindings/trivial-devices.yaml  |   2 -
- MAINTAINERS                                   |   1 +
- 4 files changed, 133 insertions(+), 116 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-
-diff --git a/Documentation/devicetree/bindings/mfd/da9063.txt b/Documentation/devicetree/bindings/mfd/da9063.txt
-deleted file mode 100644
-index aa8b800cc4ad..000000000000
---- a/Documentation/devicetree/bindings/mfd/da9063.txt
-+++ /dev/null
-@@ -1,114 +0,0 @@
--* Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
--
--DA9063 consists of a large and varied group of sub-devices (I2C Only):
--
--Device                   Supply Names    Description
--------                   ------------    -----------
--da9063-regulator        :               : LDOs & BUCKs
--da9063-onkey            :               : On Key
--da9063-rtc              :               : Real-Time Clock (DA9063 only)
--da9063-watchdog         :               : Watchdog
--
--======
--
--Required properties:
--
--- compatible : Should be "dlg,da9063" or "dlg,da9063l"
--- reg : Specifies the I2C slave address (this defaults to 0x58 but it can be
--  modified to match the chip's OTP settings).
--- interrupts : IRQ line information.
--- interrupt-controller
--
--Sub-nodes:
--
--- regulators : This node defines the settings for the LDOs and BUCKs.
--  The DA9063(L) regulators are bound using their names listed below:
--
--    bcore1    : BUCK CORE1
--    bcore2    : BUCK CORE2
--    bpro      : BUCK PRO
--    bmem      : BUCK MEM
--    bio       : BUCK IO
--    bperi     : BUCK PERI
--    ldo1      : LDO_1	(DA9063 only)
--    ldo2      : LDO_2	(DA9063 only)
--    ldo3      : LDO_3
--    ldo4      : LDO_4	(DA9063 only)
--    ldo5      : LDO_5	(DA9063 only)
--    ldo6      : LDO_6	(DA9063 only)
--    ldo7      : LDO_7
--    ldo8      : LDO_8
--    ldo9      : LDO_9
--    ldo10     : LDO_10	(DA9063 only)
--    ldo11     : LDO_11
--
--  The component follows the standard regulator framework and the bindings
--  details of individual regulator device can be found in:
--  Documentation/devicetree/bindings/regulator/regulator.txt
--
--- rtc : This node defines settings for the Real-Time Clock associated with
--  the DA9063 only. The RTC is not present in DA9063L. There are currently
--  no entries in this binding, however compatible = "dlg,da9063-rtc" should
--  be added if a node is created.
--
--- onkey : This node defines the OnKey settings for controlling the key
--  functionality of the device. The node should contain the compatible property
--  with the value "dlg,da9063-onkey".
--
--  Optional onkey properties:
--
--  - dlg,disable-key-power : Disable power-down using a long key-press. If this
--    entry exists the OnKey driver will remove support for the KEY_POWER key
--    press. If this entry does not exist then by default the key-press
--    triggered power down is enabled and the OnKey will support both KEY_POWER
--    and KEY_SLEEP.
--
--- watchdog : This node defines settings for the Watchdog timer associated
--  with the DA9063 and DA9063L. The node should contain the compatible property
--  with the value "dlg,da9063-watchdog".
--
--  Optional watchdog properties:
--  - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
--  Only use this option if you can't use the watchdog automatic suspend
--  function during a suspend (see register CONTROL_B).
--
--Example:
--
--	pmic0: da9063@58 {
--		compatible = "dlg,da9063"
--		reg = <0x58>;
--		interrupt-parent = <&gpio6>;
--		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
--		interrupt-controller;
--
--		rtc {
--			compatible = "dlg,da9063-rtc";
--		};
--
--		wdt {
--			compatible = "dlg,da9063-watchdog";
--		};
--
--		onkey {
--			compatible = "dlg,da9063-onkey";
--			dlg,disable-key-power;
--		};
--
--		regulators {
--			DA9063_BCORE1: bcore1 {
--				regulator-name = "BCORE1";
--				regulator-min-microvolt = <300000>;
--				regulator-max-microvolt = <1570000>;
--				regulator-min-microamp = <500000>;
--				regulator-max-microamp = <2000000>;
--				regulator-boot-on;
--			};
--			DA9063_LDO11: ldo11 {
--				regulator-name = "LDO_11";
--				regulator-min-microvolt = <900000>;
--				regulator-max-microvolt = <3600000>;
--				regulator-boot-on;
--			};
--		};
--	};
--
-diff --git a/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-new file mode 100644
-index 000000000000..d71933460e90
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-@@ -0,0 +1,132 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/dlg,da9063.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
-+
-+maintainers:
-+  - Steve Twiss <stwiss.opensource@diasemi.com>
-+
-+description: |
-+  For device-tree bindings of other sub-modules refer to the binding documents
-+  under the respective sub-system directories.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - dlg,da9063
-+      - dlg,da9063l
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  "#interrupt-cells":
-+    const: 2
-+
-+  dlg,use-sw-pm:
-+    type: boolean
-+    description:
-+      Disable the watchdog during suspend.
-+      Only use this option if you can't use the watchdog automatic suspend
-+      function during a suspend (see register CONTROL_B).
-+
-+  watchdog:
-+    type: object
-+    $ref: /schemas/watchdog/watchdog.yaml#
-+    unevaluatedProperties: false
-+    properties:
-+      compatible:
-+        const: dlg,da9063-watchdog
-+
-+  rtc:
-+    type: object
-+    $ref: /schemas/rtc/rtc.yaml#
-+    unevaluatedProperties: false
-+    properties:
-+      compatible:
-+        const: dlg,da9063-rtc
-+
-+  onkey:
-+    type: object
-+    $ref: /schemas/input/input.yaml#
-+    unevaluatedProperties: false
-+    properties:
-+      compatible:
-+        const: dlg,da9063-onkey
-+
-+      dlg,disable-key-power:
-+        type: boolean
-+        description: |
-+          Disable power-down using a long key-press.
-+          If this entry does not exist then by default the key-press triggered
-+          power down is enabled and the OnKey will support both KEY_POWER and
-+          KEY_SLEEP.
-+
-+  regulators:
-+    type: object
-+    patternProperties:
-+      "^(ldo[1-11]|bcore[1-2]|bpro|bmem|bio|bperi)$":
-+        $ref: /schemas/regulator/regulator.yaml
-+        unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      pmic@58 {
-+        compatible = "dlg,da9063";
-+        reg = <0x58>;
-+        #interrupt-cells = <2>;
-+        interrupt-parent = <&gpio6>;
-+        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-+        interrupt-controller;
-+
-+        rtc {
-+          compatible = "dlg,da9063-rtc";
-+        };
-+
-+        watchdog {
-+          compatible = "dlg,da9063-watchdog";
-+        };
-+
-+        onkey {
-+          compatible = "dlg,da9063-onkey";
-+          dlg,disable-key-power;
-+        };
-+
-+        regulators {
-+          regulator-bcore1 {
-+            regulator-name = "BCORE1";
-+            regulator-min-microvolt = <300000>;
-+            regulator-max-microvolt = <1570000>;
-+            regulator-min-microamp = <500000>;
-+            regulator-max-microamp = <2000000>;
-+            regulator-boot-on;
-+          };
-+          regulator-ldo11 {
-+            regulator-name = "LDO_11";
-+            regulator-min-microvolt = <900000>;
-+            regulator-max-microvolt = <3600000>;
-+            regulator-boot-on;
-+          };
-+        };
-+      };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 6aafa71806a3..00acb9078cc0 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -93,8 +93,6 @@ properties:
-           - dh,dhcom-board
-             # DA9053: flexible system level PMIC with multicore support
-           - dlg,da9053
--            # DA9063: system PMIC for quad-core application processors
--          - dlg,da9063
-             # DMARD05: 3-axis I2C Accelerometer
-           - domintech,dmard05
-             # DMARD06: 3-axis I2C Accelerometer
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cfaf02fc9191..777b453593ad 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5831,6 +5831,7 @@ W:	http://www.dialog-semiconductor.com/products
- F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
- F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
- F:	Documentation/devicetree/bindings/mfd/da90*.txt
-+F:	Documentation/devicetree/bindings/mfd/da90*.yaml
- F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
- F:	Documentation/devicetree/bindings/regulator/da92*.txt
- F:	Documentation/devicetree/bindings/regulator/slg51000.txt
--- 
-2.36.1
-
+On Mon, Jun 6, 2022 at 10:21 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Sun, Jun 5, 2022 at 9:47 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+> >
+> > Panels usually call drm_connector_set_panel_orientation(), which is
+> > later than drm/kms driver calling drm_dev_register(). This leads to a
+> > WARN().
+> >
+> > The orientation property is known earlier. For example, some panels
+> > parse the property through device tree during probe.
+> >
+> > Add an API to return the property from panel to drm/kms driver, so the
+> > drivers are able to call drm_connector_set_panel_orientation() before
+> > drm_dev_register().
+> >
+> > Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > ---
+> > v2->v3: no change
+> > ---
+> >  drivers/gpu/drm/drm_panel.c |  8 ++++++++
+> >  include/drm/drm_panel.h     | 10 ++++++++++
+> >  2 files changed, 18 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
+> > index f634371c717a..4a512ca80673 100644
+> > --- a/drivers/gpu/drm/drm_panel.c
+> > +++ b/drivers/gpu/drm/drm_panel.c
+> > @@ -223,6 +223,14 @@ int drm_panel_get_modes(struct drm_panel *panel,
+> >  }
+> >  EXPORT_SYMBOL(drm_panel_get_modes);
+> >
+> > +enum drm_panel_orientation drm_panel_get_orientation(struct drm_panel *panel)
+> > +{
+> > +       if (panel && panel->funcs && panel->funcs->get_orientation)
+> > +               return panel->funcs->get_orientation(panel);
+> > +
+> > +       return DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
+> > +}
+> > +EXPORT_SYMBOL(drm_panel_get_orientation);
+> >  #ifdef CONFIG_OF
+>
+> nit: there used to be a blank line before the #ifdef but there no
+> longer is after your patch.
+>
+Added in v4.
+> Other than that...
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>

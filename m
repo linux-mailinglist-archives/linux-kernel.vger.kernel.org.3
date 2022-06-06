@@ -2,186 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F8153EC4A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA4F53E988
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240238AbiFFPBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S240271AbiFFPDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240149AbiFFPBa (ORCPT
+        with ESMTP id S240149AbiFFPDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:01:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF50A322C1C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:01:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33E15614BF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:01:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65CBDC34115;
-        Mon,  6 Jun 2022 15:01:26 +0000 (UTC)
-Date:   Mon, 6 Jun 2022 16:01:22 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Patrick Wang <patrick.wang.shcn@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, yee.lee@mediatek.com
-Subject: Re: [PATCH v2 3/4] mm: kmemleak: handle address stored in object
- based on its type
-Message-ID: <Yp4Wwtg1uxZ9NLTw@arm.com>
-References: <20220603035415.1243913-1-patrick.wang.shcn@gmail.com>
- <20220603035415.1243913-4-patrick.wang.shcn@gmail.com>
+        Mon, 6 Jun 2022 11:03:13 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022FABE163
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:03:12 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id cx11so13044582pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u/qVH/JzAtOjd7wOJnhVf/fg1Cz1T/bObRHmqtOqxLs=;
+        b=VP83WIlxTfcsIiCwnGLyHEwOdzkMAjiNd35I7TWu2jZfL2DSyQH8ta3ZleGMiyIkm2
+         XBTDF0VeYVsWxbwpO5zhR2Y4lj7wL+5vIUR1mLd5U0p45yg9qOjr7Nvfnmp7ubjErJu0
+         NHQWV934SSNf836D85YO6qS/dPtd533HrLp9s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u/qVH/JzAtOjd7wOJnhVf/fg1Cz1T/bObRHmqtOqxLs=;
+        b=MX8gj/95U5ozbLUZ9JYp83+94LdvjmZcQkyAT2DV/S87fHYeOHVKTrnpyyMxizzud4
+         vtJehPQREhjfmDMut1TqbbQ3BuEuqkt9BAxCe1GNhsXx6SWaQWyupKERHWrd4QDBeq67
+         4FRZQ2aN8kxjoW4Pv0gusr2/pHyoUi7pGeGTIyl6QN7WxUnIRnpLoZlD7NVcdY6C+NEh
+         Nr5CvOLURq/bgiI7dRx97oBbXqgdnVQlo6nGtq2CD3VxXW6N8pTPsx64fqOAdn+RWorL
+         6k4wOJPC+VAxINB2NAMlol1KMPX145z4Xk8AxarQxvDN3cP3iW6M6J9PQF0LO8fskV3G
+         ZzDQ==
+X-Gm-Message-State: AOAM532p/GsrYiq+/jqqnTuIpTUzrVnbKIS3NRByKn1QsveRANjmkISg
+        AzE9Mi1fW8b0ULEAjWSbMYrZLA==
+X-Google-Smtp-Source: ABdhPJx8aTAJm37UgychcNCv2OMoouLeNCV8OtVUfCNyl2p0kiMAU53Zsa1DMJLOqKWibSVfBx3iTw==
+X-Received: by 2002:a17:90b:4c06:b0:1e3:17fa:e387 with SMTP id na6-20020a17090b4c0600b001e317fae387mr41330610pjb.53.1654527791257;
+        Mon, 06 Jun 2022 08:03:11 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:a0a:5e4:e24:c8c4])
+        by smtp.gmail.com with ESMTPSA id k13-20020aa7998d000000b0050dc76281ecsm7468864pfh.198.2022.06.06.08.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:03:10 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] Implement readahead for squashfs
+Date:   Mon,  6 Jun 2022 23:03:02 +0800
+Message-Id: <20220606150305.1883410-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603035415.1243913-4-patrick.wang.shcn@gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 11:54:14AM +0800, Patrick Wang wrote:
-> Treat the address stored in object in different way according
-> to its type:
-> 
-> - Only use kasan_reset_tag for virtual address
-> - Only update min_addr and max_addr for virtual address
-> - Convert physical address to virtual address in scan_object
-> 
-> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
-> ---
->  mm/kmemleak.c | 34 ++++++++++++++++++++++++----------
->  1 file changed, 24 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 218144392446..246a70b7218f 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -297,7 +297,9 @@ static void hex_dump_object(struct seq_file *seq,
->  	warn_or_seq_printf(seq, "  hex dump (first %zu bytes):\n", len);
->  	kasan_disable_current();
->  	warn_or_seq_hex_dump(seq, DUMP_PREFIX_NONE, HEX_ROW_SIZE,
-> -			     HEX_GROUP_SIZE, kasan_reset_tag((void *)ptr), len, HEX_ASCII);
-> +			     HEX_GROUP_SIZE, object->flags & OBJECT_PHYS ? ptr :
-> +			     kasan_reset_tag((void *)ptr),
-> +			     len, HEX_ASCII);
->  	kasan_enable_current();
->  }
+Commit c1f6925e1091("mm: put readahead pages in cache earlier") requires
+fs to implement readahead callback. Otherwise there will be a
+performance regression.
 
-This will go wrong since ptr is the actual physical address, it cannot
-be dereferenced. This should only be used on virtual pointers and this
-is the case already as we never print unreferenced objects from the phys
-tree. What we could do though is something like an early exit from this
-function (together with a comment that it doesn't support dumping such
-objects):
+Commit 9eec1d897139("squashfs: provide backing_dev_info in order to
+disable read-ahead") mitigates the performance drop issue for squashfs
+by closing readahead for it.
 
-	if (WARN_ON_ONCE(object->flags & OBJECT_PHYS))
-		return;
+This series implements readahead callback for squashfs. The previous
+discussion are in [1] and [2].
 
->  
-> @@ -389,14 +391,15 @@ static struct kmemleak_object *lookup_object(unsigned long ptr, int alias,
->  {
->  	struct rb_node *rb = is_phys ? object_phys_tree_root.rb_node :
->  			     object_tree_root.rb_node;
-> -	unsigned long untagged_ptr = (unsigned long)kasan_reset_tag((void *)ptr);
-> +	unsigned long untagged_ptr = is_phys ? ptr : (unsigned long)kasan_reset_tag((void *)ptr);
->  
->  	while (rb) {
->  		struct kmemleak_object *object;
->  		unsigned long untagged_objp;
->  
->  		object = rb_entry(rb, struct kmemleak_object, rb_node);
-> -		untagged_objp = (unsigned long)kasan_reset_tag((void *)object->pointer);
-> +		untagged_objp = is_phys ? object->pointer :
-> +				(unsigned long)kasan_reset_tag((void *)object->pointer);
->  
->  		if (untagged_ptr < untagged_objp)
->  			rb = object->rb_node.rb_left;
+[1] https://lore.kernel.org/all/CAJMQK-g9G6KQmH-V=BRGX0swZji9Wxe_2c7ht-MMAapdFy2pXw@mail.gmail.com/T/
+[2] https://lore.kernel.org/linux-mm/Yn5Yij9pRPCzDozt@casper.infradead.org/t/#m4af4473b94f98a4996cb11756b633a07e5e059d1
 
-You could leave this unchanged. A phys pointer is already untagged, so
-it wouldn't make any difference.
+Hsin-Yi Wang (2):
+  Revert "squashfs: provide backing_dev_info in order to disable
+    read-ahead"
+  squashfs: implement readahead
 
-> @@ -643,16 +646,19 @@ static struct kmemleak_object *create_object(unsigned long ptr, size_t size,
->  
->  	raw_spin_lock_irqsave(&kmemleak_lock, flags);
->  
-> -	untagged_ptr = (unsigned long)kasan_reset_tag((void *)ptr);
-> -	min_addr = min(min_addr, untagged_ptr);
-> -	max_addr = max(max_addr, untagged_ptr + size);
-> +	untagged_ptr = is_phys ? ptr : (unsigned long)kasan_reset_tag((void *)ptr);
+Phillip Lougher (1):
+  squashfs: always build "file direct" version of page actor
 
-Same here.
-
-> +	if (!is_phys) {
-> +		min_addr = min(min_addr, untagged_ptr);
-> +		max_addr = max(max_addr, untagged_ptr + size);
-> +	}
->  	link = is_phys ? &object_phys_tree_root.rb_node :
->  		&object_tree_root.rb_node;
->  	rb_parent = NULL;
->  	while (*link) {
->  		rb_parent = *link;
->  		parent = rb_entry(rb_parent, struct kmemleak_object, rb_node);
-> -		untagged_objp = (unsigned long)kasan_reset_tag((void *)parent->pointer);
-> +		untagged_objp = is_phys ? parent->pointer :
-> +				(unsigned long)kasan_reset_tag((void *)parent->pointer);
-
-And here.
-
->  		if (untagged_ptr + size <= untagged_objp)
->  			link = &parent->rb_node.rb_left;
->  		else if (untagged_objp + parent->size <= untagged_ptr)
-> @@ -1202,7 +1208,9 @@ static bool update_checksum(struct kmemleak_object *object)
->  
->  	kasan_disable_current();
->  	kcsan_disable_current();
-> -	object->checksum = crc32(0, kasan_reset_tag((void *)object->pointer), object->size);
-> +	object->checksum = crc32(0, object->flags & OBJECT_PHYS ? (void *)object->pointer :
-> +				    kasan_reset_tag((void *)object->pointer),
-> +				    object->size);
-
-Luckily that's never called on a phys object, otherwise *object->pointer
-would segfault. As for hex_dump, just return early with a warning if
-that's the case.
-
->  	kasan_enable_current();
->  	kcsan_enable_current();
->  
-> @@ -1353,6 +1361,7 @@ static void scan_object(struct kmemleak_object *object)
->  {
->  	struct kmemleak_scan_area *area;
->  	unsigned long flags;
-> +	void *obj_ptr;
->  
->  	/*
->  	 * Once the object->lock is acquired, the corresponding memory block
-> @@ -1364,10 +1373,15 @@ static void scan_object(struct kmemleak_object *object)
->  	if (!(object->flags & OBJECT_ALLOCATED))
->  		/* already freed object */
->  		goto out;
-> +
-> +	obj_ptr = object->flags & OBJECT_PHYS ?
-> +		  __va((void *)object->pointer) :
-> +		  (void *)object->pointer;
-> +
->  	if (hlist_empty(&object->area_list) ||
->  	    object->flags & OBJECT_FULL_SCAN) {
-> -		void *start = (void *)object->pointer;
-> -		void *end = (void *)(object->pointer + object->size);
-> +		void *start = obj_ptr;
-> +		void *end = obj_ptr + object->size;
->  		void *next;
->  
->  		do {
-
-This looks fine, assuming that the following patch adds the checks for
-objects above max_low_pfn (I haven't got there yet).
+ fs/squashfs/Makefile     |   4 +-
+ fs/squashfs/file.c       | 124 ++++++++++++++++++++++++++++++++++++++-
+ fs/squashfs/page_actor.h |  41 -------------
+ fs/squashfs/super.c      |  33 -----------
+ 4 files changed, 125 insertions(+), 77 deletions(-)
 
 -- 
-Catalin
+2.36.1.255.ge46751e96f-goog
+

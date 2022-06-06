@@ -2,234 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E6753E839
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE2C53E797
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbiFFJYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S232672AbiFFJRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbiFFJXt (ORCPT
+        with ESMTP id S232568AbiFFJRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:23:49 -0400
-X-Greylist: delayed 485 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 02:23:47 PDT
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBCD6B01D;
-        Mon,  6 Jun 2022 02:23:47 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 6 Jun 2022 05:17:08 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443A13524F;
+        Mon,  6 Jun 2022 02:16:49 -0700 (PDT)
+Received: from pps.filterd (m0150244.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2569CL7Z008565;
+        Mon, 6 Jun 2022 09:16:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pps0720;
+ bh=QYEmeQE8+30+1aFDhZOWwmdvgWf38zX/CePvO7aXijM=;
+ b=GeyOcFpJtZJQ3xcH5XdHfx9scPoibpR7IKcZWsGYfUL6CoDGWLCMs2J0pK6X+m3d4z+8
+ 9Yp6h579yfbVuJjcWYu3AP1phPTISN3iyk4bE9m8hIiluFAKFnmoSVjX6K0Nk7Xa+Z7O
+ wJ+wECRwzO1MDI1i5GeilZ7ZHuZiOoi3MTYe0StR796sVVD4nFFCO0yLc5F+M+jDvtVy
+ jBTs6aPCa4dvorhSB9QSGzx6ItsLsDEs+o/ofC9xFlL5q9m/GyjyqKEz6u6l3tynB4Zf
+ LtF2qZ3TRrbgOqWXc/cnLfjkQK4lLpIBZAJR8ZAkxQfM6+NFRVmc7D2lKH62bpfdMEkR hw== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3gg0269amp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 09:16:40 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 900246601F5F;
-        Mon,  6 Jun 2022 10:15:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654506936;
-        bh=zd8+qvjdsmsp34JFBZwd6faM6nKbL9aSsLtZSO56220=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LhOfStsHWebQlKZ3BiKGtM9N4+JcT5NsjH8/DOzSUZJVnB74ADfj0TAIIL8fYjI2Y
-         sXD4DMHMvcF2i3eMtJHGq18zP07m2zma5y9CS40y4vZ5ZwfyYHwMJfbgUXJ3JLqsOY
-         7U1udlsdxcXxNgeQ4f0/LoWB1DUpziOGsZ4zAZ9tb2SFFVJpaGlIiZSlDH0LvIETOR
-         tGflqhmz94FQBarUEPWSQ2SEy48IosFtp8D4hLje+4VGk0NM3r8CjcButRyBVnnp+c
-         2kFKinw5wOuioVwRvzcyomHgv2lM1FEFiQlZIEjyQDSu8zl2EFkJ2ibjWCZpecQQyf
-         wbDcWIXcfl60g==
-Message-ID: <dd12145b-bbb3-b771-b8f7-075ea20bee17@collabora.com>
-Date:   Mon, 6 Jun 2022 11:15:32 +0200
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 09DC212E96;
+        Mon,  6 Jun 2022 09:16:38 +0000 (UTC)
+Received: from ubuntu-20.04.3 (unknown [16.99.211.150])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id B868E80DE70;
+        Mon,  6 Jun 2022 09:16:37 +0000 (UTC)
+Date:   Mon, 6 Jun 2022 17:16:36 +0800
+From:   James Liu <james.liu@hpe.com>
+To:     "rafael@kernel.org" <rafael@kernel.org>
+Cc:     lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ACPI: OSL: Fix the memory mapping of an ACPI GAS that
+ addresses a data structure
+Message-ID: <20220606091636.GA47704@ubuntu-20.04.3>
+References: <20220522214302.39024-1-james.liu@hpe.com>
+ <PH7PR84MB1958F5A9F4F05EFE72A9E906E6A29@PH7PR84MB1958.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v1 05/15] remoteproc: mediatek: Add SCP core 1 driver for
- dual-core scp
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Brian Norris <briannorris@chromium.org>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        weishunc@google.com
-References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
- <20220601112201.15510-6-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220601112201.15510-6-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PH7PR84MB1958F5A9F4F05EFE72A9E906E6A29@PH7PR84MB1958.NAMPRD84.PROD.OUTLOOK.COM>
+X-Proofpoint-GUID: mk6Rf3NFqEPy-IJtKIgMN9e-KbMj0rsU
+X-Proofpoint-ORIG-GUID: mk6Rf3NFqEPy-IJtKIgMN9e-KbMj0rsU
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_03,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 clxscore=1011
+ bulkscore=0 suspectscore=0 impostorscore=0 mlxlogscore=884
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060043
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/06/22 13:21, Tinghan Shen ha scritto:
-> MT8195 SCP is a dual-core processor. The mtk_scp.c driver only controls
-> SCP core 0. This patch adds a basic driver to control the another core.
+Hi Rafael, the reported warning (i.e., uninitialized local variable) in V1
+by the robot has been fixed. Could you check V2 of this patch? Thanks.
+
+> Subject: [PATCH v2] ACPI: OSL: Fix the memory mapping of an ACPI GAS that addresses a data structure 
+>  
+> From: James Liu <james.liu@hpe.com>
 > 
-> Core 1 and core 0 of the SCP are housed in the same subsys.They see
-> registers and memory in the same way.
+>     Modify acpi_os_map_generic_address() & acpi_os_unmap_generic_address()
+>     to correctly handle cases that a GAS table (i.e., Table 5.1, ACPI 6.4)
+>     is used to address a data structure; in the case, the GAS has the field
+>     of "Register Bit Width" equal to 0.
 > 
-> Core 1 of the SCP features its own set of core configuration registers,
-> interrupt controller, timers, and DMAs. The rest of the peripherals
-> in this subsystem are shared by core 0 and core 1.
+>     For example, "Injection Instruction Entry" (Table 18.25, ACPI 6.4) has
+>     a RegisterRegion field that is a GAS that points to a data structure
+>     SET_ERROR_TYPE_WITH_ADDRESS (Table 18.30), which is required when using
+>     EINJ (Error Injection module).
 > 
-> As for memory, core 1 has its own cache memory, and the SCP SRAM is shared
-> by core 0 and core 1.
+>     This fix preserves a fairly sufficient memory space (i.e. page size) to
+>     store the data structure to prevent EINJ module from loading failure if
+>     platform firmware can correctly support Injection Instruction Entry in
+>     an EINJ table.
 > 
-
-Hello Tinghan,
-
-checking all the patches that are introducing support for the secondary SCP core,
-it's clear that you're practically reusing *most of* mtk_scp in mtk_scp_dual.
-
-I don't think that adding a new configuration option for MTK_SCP_DUALCORE (nor a
-new file just for that) is a good idea... the code is "short enough" so you should
-really just add support for multi-core SCP in mtk_scp.c instead.
-
-After doing so, I have a hunch that we'll be able to reduce the size of this
-implementation even more, as I see literally too much common code :-)
-
-Cheers,
-Angelo
-
-
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Signed-off-by: James Liu <james.liu@hpe.com>
 > ---
->   drivers/remoteproc/Makefile       |  1 +
->   drivers/remoteproc/mtk_scp_dual.c | 97 +++++++++++++++++++++++++++++++
->   2 files changed, 98 insertions(+)
->   create mode 100644 drivers/remoteproc/mtk_scp_dual.c
+>  drivers/acpi/osl.c | 27 +++++++++++++++++++++++----
+>  1 file changed, 23 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-> index 5478c7cb9e07..84cb687d28da 100644
-> --- a/drivers/remoteproc/Makefile
-> +++ b/drivers/remoteproc/Makefile
-> @@ -15,6 +15,7 @@ obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
->   obj-$(CONFIG_IMX_DSP_REMOTEPROC)	+= imx_dsp_rproc.o
->   obj-$(CONFIG_INGENIC_VPU_RPROC)		+= ingenic_rproc.o
->   obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
-> +obj-$(CONFIG_MTK_SCP_DUALCORE)		+= mtk_scp_dual.o
->   obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
->   obj-$(CONFIG_WKUP_M3_RPROC)		+= wkup_m3_rproc.o
->   obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
-> diff --git a/drivers/remoteproc/mtk_scp_dual.c b/drivers/remoteproc/mtk_scp_dual.c
-> new file mode 100644
-> index 000000000000..7bc08d26f208
-> --- /dev/null
-> +++ b/drivers/remoteproc/mtk_scp_dual.c
-> @@ -0,0 +1,97 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// Copyright (c) 2022 MediaTek Inc.
+> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+> index 45c5c0e45..99f987c8c 100644
+> --- a/drivers/acpi/osl.c
+> +++ b/drivers/acpi/osl.c
+> @@ -452,14 +452,20 @@ EXPORT_SYMBOL_GPL(acpi_os_unmap_memory);
+>  
+>  void __iomem *acpi_os_map_generic_address(struct acpi_generic_address *gas)
+>  {
+> -       u64 addr;
+> +       u64 addr = 0;
+>  
+>          if (gas->space_id != ACPI_ADR_SPACE_SYSTEM_MEMORY)
+>                  return NULL;
+>  
+> +       /* Handle a case that GAS is used to address an ACPI data structure */
+> +       if (!gas->bit_width) {
+> +               pr_info("An ACPI data structure at 0x%llx is mapped\n", addr);
+> +               return  acpi_os_map_iomem(addr, PAGE_SIZE);
+> +       }
 > +
-> +#include <linux/err.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
+>          /* Handle possible alignment issues */
+>          memcpy(&addr, &gas->address, sizeof(addr));
+> -       if (!addr || !gas->bit_width)
+> +       if (!addr)
+>                  return NULL;
+>  
+>          return acpi_os_map_iomem(addr, gas->bit_width / 8);
+> @@ -468,15 +474,28 @@ EXPORT_SYMBOL(acpi_os_map_generic_address);
+>  
+>  void acpi_os_unmap_generic_address(struct acpi_generic_address *gas)
+>  {
+> -       u64 addr;
+> +       u64 addr = 0;
+>          struct acpi_ioremap *map;
+>  
+>          if (gas->space_id != ACPI_ADR_SPACE_SYSTEM_MEMORY)
+>                  return;
+>  
+> +       /* Handle a case that GAS is used to address an ACPI data structure */
+> +       if (!gas->bit_width) {
+> +               pr_info("An ACPI data structure at 0x%llx is unmapped\n", addr);
+> +               mutex_lock(&acpi_ioremap_lock);
+> +               map = acpi_map_lookup(addr, PAGE_SIZE);
+> +               if (!map) {
+> +                       mutex_unlock(&acpi_ioremap_lock);
+> +                       return;
+> +               }
+> +               acpi_os_drop_map_ref(map);
+> +               mutex_unlock(&acpi_ioremap_lock);
+> +       }
 > +
-> +#include "mtk_common.h"
-> +#include "remoteproc_internal.h"
-> +
-> +static const struct rproc_ops scp_ops;
-> +
-> +static int scp_dual_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct mtk_scp *scp;
-> +	struct rproc *rproc;
-> +	const char *fw_name = "scp-dual.img";
-> +	int ret, i;
-> +	struct resource *res;
-> +
-> +	ret = rproc_of_parse_firmware(dev, 0, &fw_name);
-> +	if (ret < 0 && ret != -EINVAL)
-> +		return ret;
-> +
-> +	rproc = devm_rproc_alloc(dev, np->name, &scp_ops, fw_name, sizeof(*scp));
-> +	if (!rproc) {
-> +		dev_err(dev, "unable to allocate remoteproc\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	scp = (struct mtk_scp *)rproc->priv;
-> +	scp->rproc = rproc;
-> +	scp->dev = dev;
-> +	platform_set_drvdata(pdev, scp);
-> +
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
-> +	scp->sram_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	if (IS_ERR(scp->sram_base))
-> +		return dev_err_probe(dev, PTR_ERR(scp->sram_base),
-> +				     "Failed to parse and map sram memory\n");
-> +
-> +	scp->sram_size = resource_size(res);
-> +	scp->sram_phys = res->start;
-> +
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-> +	scp->reg_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	if (IS_ERR(scp->reg_base))
-> +		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
-> +				     "Failed to parse and map cfg memory\n");
-> +
-> +	mutex_init(&scp->send_lock);
-> +	for (i = 0; i < SCP_IPI_MAX; i++)
-> +		mutex_init(&scp->ipi_desc[i].lock);
-> +
-> +	init_waitqueue_head(&scp->run.wq);
-> +	init_waitqueue_head(&scp->ack_wq);
-> +
-> +	return 0;
-> +}
-> +
-> +static int scp_dual_remove(struct platform_device *pdev)
-> +{
-> +	struct mtk_scp *scp = platform_get_drvdata(pdev);
-> +	int i;
-> +
-> +	for (i = 0; i < SCP_IPI_MAX; i++)
-> +		mutex_destroy(&scp->ipi_desc[i].lock);
-> +	mutex_destroy(&scp->send_lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id mtk_scp_dual_of_match[] = {
-> +	{ .compatible = "mediatek,mt8195-scp-dual" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, mtk_scp_dual_of_match);
-> +
-> +static struct platform_driver mtk_scp_dual_driver = {
-> +	.probe = scp_dual_probe,
-> +	.remove = scp_dual_remove,
-> +	.driver = {
-> +		.name = "mtk-scp-dual",
-> +		.of_match_table = mtk_scp_dual_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(mtk_scp_dual_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("MediaTek SCP dualcore control driver");
+>          /* Handle possible alignment issues */
+>          memcpy(&addr, &gas->address, sizeof(addr));
+> -       if (!addr || !gas->bit_width)
+> +       if (!addr)
+>                  return;
+>  
+>          mutex_lock(&acpi_ioremap_lock);
+> -- 
+> 2.25.1

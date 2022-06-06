@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9FC53E772
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE9853EB15
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240140AbiFFO5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S240161AbiFFO6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240109AbiFFO5l (ORCPT
+        with ESMTP id S240137AbiFFO6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:57:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A5F2F1F3B;
-        Mon,  6 Jun 2022 07:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=b4Cas22YvXWguCl9MVadBf58XqwkKGzOV9uwbfM1yR0=; b=U21+DJBV8mG13ppaokHm7Fb782
-        OisPxobgWgrV3MykMs2B+HToa2G1JM8pcAFqzM07rEr0ATq9w9Sgxa2/XMIGwX5mBViDPvpOq+KzI
-        Y4lHufHP+NFfTNoHoJEylR4cq5df1AgldeQsNDiiokFwetdgyvySGJuts+/oEnW0jn9QcN2hx2Jt7
-        c9f9VBlnPJYYenO9AqdCBxw0mumB42POg+bnjGKBJqTffldzk+2LovdMaymR4aJusfnILmUzuV393
-        BT0ZUra2b3MHizDhn5B8UK0ahq7z372i0+DghbNc+ivcsBBEEusRfRv/z2/yFcDGTRTGBC9P14xxj
-        tD0LVESQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyEA5-005Taq-S8; Mon, 06 Jun 2022 14:56:59 +0000
-Message-ID: <8f4176e7-87b0-1cf9-bcef-6a423d17fd6a@infradead.org>
-Date:   Mon, 6 Jun 2022 07:56:51 -0700
+        Mon, 6 Jun 2022 10:58:17 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9322014093
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:58:16 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7C485FF802;
+        Mon,  6 Jun 2022 14:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1654527495;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=G5rmJAvan3aX1SCJeI8dLxn4vqFTK+kq/60NkF5cUlI=;
+        b=YkhG3XH0X5IhFm7d7W6q5x4fScATmJC+5V9wozKmb+YFtONIA0cWFZPjDK+9vHYupz3t2K
+        J3+KBJiPPmx/Z2Ix+ERiU+ykArLaOfZN0PnWzJOqiv8rbSQZuS2XbGvrSVd0hkNQeEtqN0
+        RdOA+UI5Gof0wKUOAVCFjLfg/uxq030Q3/pCh8+WhKnEjjE3ZtpgOOweChaZd+cP4Y/IwP
+        3/Tz/PoX3oB9WYjBD+roNiX/C/x/pqcr3Koi34uJmguWzAkors3yuo7yrdu1YzXnigNEiD
+        /Mq3eN8UlONFDJCStP5qDLNoFoBmisvcD+Wwvd1CNQBGdJszOvGUWlNbWigrag==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH 0/2] ARM: at91: add support for L2 cache write_sec() callback
+Date:   Mon,  6 Jun 2022 16:56:59 +0200
+Message-Id: <20220606145701.185552-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 5/5] crypto: aspeed: add HACE crypto driver
-Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
-References: <20220606064935.1458903-1-neal_liu@aspeedtech.com>
- <20220606064935.1458903-6-neal_liu@aspeedtech.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220606064935.1458903-6-neal_liu@aspeedtech.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+When running under OP-TEE the L2 cache is configured by OP-TEE and
+can't be modified for the moment. Add necessary function to get
+the current execution world of Linux and add early_setup() callback
+that will set the .write_sec() callback for the outer cache.
 
-On 6/5/22 23:49, Neal Liu wrote:
-> diff --git a/drivers/crypto/aspeed/Kconfig b/drivers/crypto/aspeed/Kconfig
-> index 17b800286a51..5e4d18288bf1 100644
-> --- a/drivers/crypto/aspeed/Kconfig
-> +++ b/drivers/crypto/aspeed/Kconfig
-> @@ -20,3 +20,19 @@ config CRYPTO_DEV_ASPEED_HACE_HASH
->  	  hash driver.
->  	  Supports multiple message digest standards, including
->  	  SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, and so on.
-> +
-> +config CRYPTO_DEV_ASPEED_HACE_CRYPTO
-> +        bool "Enable ASPEED Hash & Crypto Engine (HACE) crypto"
-> +        depends on CRYPTO_DEV_ASPEED
 
-The 2 lines above should be indented with one tab instead of multiple spaces.
+Clément Léger (2):
+  ARM: at91: add sam_linux_is_in_normal_world() function
+  ARM: at91: setup outer cache .write_sec() callback if needed
 
-> +	select CRYPTO_AES
-> +	select CRYPTO_DES
-> +	select CRYPTO_ECB
-> +	select CRYPTO_CBC
-> +	select CRYPTO_CFB
-> +	select CRYPTO_OFB
-> +	select CRYPTO_CTR
-> +	help
-> +	  Select here to enable ASPEED Hash & Crypto Engine (HACE)
-> +	  crypto driver.
-> +	  Supports AES/DES symmetric-key encryption and decryption
-> +	  with ECB/CBC/CFB/OFB/CTR options.
+ arch/arm/mach-at91/sam_secure.c |  6 ++++++
+ arch/arm/mach-at91/sam_secure.h |  1 +
+ arch/arm/mach-at91/sama5.c      | 17 +++++++++++++++++
+ 3 files changed, 24 insertions(+)
 
 -- 
-~Randy
+2.36.1
+

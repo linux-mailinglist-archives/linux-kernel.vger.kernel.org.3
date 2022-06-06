@@ -2,337 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A94553EB9C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6036753E60E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiFFJzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S233283AbiFFJ4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbiFFJzc (ORCPT
+        with ESMTP id S233253AbiFFJ4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:55:32 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50EF113FB4
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:55:30 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id k16so19129445wrg.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 02:55:30 -0700 (PDT)
+        Mon, 6 Jun 2022 05:56:14 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5B6118D25
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:56:12 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id q1so27867164ejz.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 02:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VI7jKguz64IHvJ5TEIj0r1SKnJ4ebikCUHTFwDjd6dk=;
-        b=JGYX1CE2svBH5IaFvJehoWXbI0JoEIv09CqYQGvJ5Y+BIofZC2Rmf82ROn4UU7vrF4
-         DQ3Y/X/oPhvxkNia8dtCaXEq7yFq/vzjul4TLSIaJ+Tfd/k1XaU/fgedpdNwNuCNjIqr
-         x/J9aRXCLWT+tcOCs6BHnJGCOWh8llZE7rz78GbpA3QnEk1nRqjlhv7Zi14lkcoblDiv
-         BpGlJ6ZXHKM2MtVDxgiKN5gMNpaOjhRRn6Aoq/3ChzKJPp8Cm8jh8x0qjbGwSaSDKMJf
-         or5O7uvg+fCkJ/vsoY8uGi9inwk0I5aIsDg3t8QeQm+l1qmMUDr1SY4NAG6xyd27gsZ0
-         AUAQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wl/4+gqlRIpnZ9afydR1MhherCCAEwCFrXnlIDnjQZI=;
+        b=gggJDu+JblfDexfqcK5EaRvBHEqC12bcsI/OlR26sqffk9I4lIK2wk0Ul8QiNM7Baq
+         Fieg7hFeEhmAAWZSo5/mi8AuffEQv7oV6zZH4i4SM8quF8/y9ztI++gAy1Ce7nwZ/Qh/
+         moR+aEqMqt0mD/WUx1z0U527rCJ0a1qvgV6fU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VI7jKguz64IHvJ5TEIj0r1SKnJ4ebikCUHTFwDjd6dk=;
-        b=eUWnsw7qBjyLV3NQJWyMwCtg2Z8aHMMza9MpkJC2KWa+d7EEvr1LK/4Ni9jeO+OLGp
-         IsIJ7x+PvYOYFNbcjl0MT4hyxnMDgcr8NtPJ5Gec0KX8ME+rXtleeImU+YucXCVpY/Wd
-         ntB/gFWotb+9S0TdG0S7ZAoIblzsUdCcNK3KVgQYmqt6bvhQvlymmhoL5NQ7bbITWt4t
-         yVvPng5s+r/sJkk+IOmabRjX+qpjMWBIAIM2Ek6GqoSqWUT6EKUGbxew+kTxtfTCJ4Sj
-         CGpKADyIFZR6pq2Hnp/c0yQhALD44fRNDrKRJ8YfGD9zmNH0DpCJSXHATOfCsn9kTtCr
-         xAMA==
-X-Gm-Message-State: AOAM533kYjn12wsQCxeA3/JPkCizFjhzZ/i/MHDfm03Vurb6JE0KCdRS
-        zeft6gPVKkYVytDgUTmCV4g=
-X-Google-Smtp-Source: ABdhPJzALk5QcREu8wRZ5x86tHw0K6BoldCvyfcbB53r4zHhv+i0Kn5WlknKC4EsxOos+0h04H04Ww==
-X-Received: by 2002:adf:e347:0:b0:217:6f4b:f3d6 with SMTP id n7-20020adfe347000000b002176f4bf3d6mr7138165wrj.73.1654509329385;
-        Mon, 06 Jun 2022 02:55:29 -0700 (PDT)
-Received: from localhost.localdomain ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id n8-20020a05600c4f8800b0039c325eaff2sm13654326wmq.26.2022.06.06.02.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 02:55:28 -0700 (PDT)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     javierm@redhat.com
-Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 1/1] drm/format-helper: Add KUnit tests for drm_fb_xrgb8888_to_rgb332()
-Date:   Mon,  6 Jun 2022 11:55:16 +0200
-Message-Id: <20220606095516.938934-2-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220606095516.938934-1-jose.exposito89@gmail.com>
-References: <20220606095516.938934-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wl/4+gqlRIpnZ9afydR1MhherCCAEwCFrXnlIDnjQZI=;
+        b=rbR9KuwM/2NdgrDugd0URJEqxF2UT0BnXfWIce+mLmoq8CZx4w3qOv/hEAfUQwEMYy
+         i3IZU+BFVNLbvxNxGj6lOYSNB6W9x39XDFONv1DxNtFTXsjsPrlZ3QqWAc2MFmiQdIQb
+         CZuGsPtGCXu9fD87FEtP6Opj1rZwyqP/oBf0I3754ob0gezfiudL0t4KDoDgjGLMaQbx
+         +cgxv3JdTfciaye0nEDttkrr5XAxE7wSoQdW1N6e0SFQOotx5n1QJrvN1hMPkZhGllhi
+         JJWMa+Cl+rQuhWGBDE0SaS6fRINEi+Wjxp2XPp7tEi2uL0c7vRVZLohVFqmFXSutVpfZ
+         isyQ==
+X-Gm-Message-State: AOAM531UtX7KrWtOMIyxSSjmBUZLKsLL/XFy96lp1j6uWOnKU4zeZKgh
+        lzjojk7ibtY66EurRFo1aNIRbrO9hyqvGBrCJO3nVn0UZIk=
+X-Google-Smtp-Source: ABdhPJyIDAfxeWnxM5gNGtFczryKxVv58eBf3V3Zqzj/8koduVCoyhccdUq7ZtZcNfSe60Zatb6G0KEMFAZpsrUH3AI=
+X-Received: by 2002:a17:906:99ca:b0:711:bdca:b85a with SMTP id
+ s10-20020a17090699ca00b00711bdcab85amr6902624ejn.224.1654509370576; Mon, 06
+ Jun 2022 02:56:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601103922.1338320-1-hsinyi@chromium.org> <20220601103922.1338320-4-hsinyi@chromium.org>
+ <CGME20220603125421eucas1p17da286a3e7f2d4759aa4c7639dd62f75@eucas1p1.samsung.com>
+ <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com> <YpoFnROxAwdSScuV@casper.infradead.org>
+ <90b228ea-1b0e-d2e8-62be-9ad5802dcce7@samsung.com> <CAJMQK-jDwchHokDZw7k24rGdy7OeUmiVWUCfxBiu1E1dZwuy2Q@mail.gmail.com>
+ <Ypoo4WrVx5/YvaXx@casper.infradead.org> <aa54b4cb-e8ee-8c1a-c826-8016f42a5da1@samsung.com>
+ <0e84fe64-c993-7f43-ca52-8fee735b0372@squashfs.org.uk>
+In-Reply-To: <0e84fe64-c993-7f43-ca52-8fee735b0372@squashfs.org.uk>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 6 Jun 2022 17:55:44 +0800
+Message-ID: <CAJMQK-ijicqF3P8FC2kvJ4E3JTm237LkqwwZ1VfKD30GPRUYQw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] squashfs: implement readahead
+To:     Phillip Lougher <phillip@squashfs.org.uk>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test the conversion from XRGB8888 to RGB332.
+On Mon, Jun 6, 2022 at 11:54 AM Phillip Lougher <phillip@squashfs.org.uk> wrote:
+>
+> On 03/06/2022 16:58, Marek Szyprowski wrote:
+> > Hi Matthew,
+> >
+> > On 03.06.2022 17:29, Matthew Wilcox wrote:
+> >> On Fri, Jun 03, 2022 at 10:55:01PM +0800, Hsin-Yi Wang wrote:
+> >>> On Fri, Jun 3, 2022 at 10:10 PM Marek Szyprowski
+> >>> <m.szyprowski@samsung.com> wrote:
+> >>>> Hi Matthew,
+> >>>>
+> >>>> On 03.06.2022 14:59, Matthew Wilcox wrote:
+> >>>>> On Fri, Jun 03, 2022 at 02:54:21PM +0200, Marek Szyprowski wrote:
+> >>>>>> On 01.06.2022 12:39, Hsin-Yi Wang wrote:
+> >>>>>>> Implement readahead callback for squashfs. It will read datablocks
+> >>>>>>> which cover pages in readahead request. For a few cases it will
+> >>>>>>> not mark page as uptodate, including:
+> >>>>>>> - file end is 0.
+> >>>>>>> - zero filled blocks.
+> >>>>>>> - current batch of pages isn't in the same datablock or not enough in a
+> >>>>>>>       datablock.
+> >>>>>>> - decompressor error.
+> >>>>>>> Otherwise pages will be marked as uptodate. The unhandled pages will be
+> >>>>>>> updated by readpage later.
+> >>>>>>>
+> >>>>>>> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> >>>>>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> >>>>>>> Reported-by: Matthew Wilcox <willy@infradead.org>
+> >>>>>>> Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
+> >>>>>>> Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
+> >>>>>>> ---
+> >>>>>> This patch landed recently in linux-next as commit 95f7a26191de
+> >>>>>> ("squashfs: implement readahead"). I've noticed that it causes serious
+> >>>>>> issues on my test systems (various ARM 32bit and 64bit based boards).
+> >>>>>> The easiest way to observe is udev timeout 'waiting for /dev to be fully
+> >>>>>> populated' and prolonged booting time. I'm using squashfs for deploying
+> >>>>>> kernel modules via initrd. Reverting aeefca9dfae7 & 95f7a26191deon on
+> >>>>>> top of the next-20220603 fixes the issue.
+> >>>>> How large are these files?  Just a few kilobytes?
+> >>>> Yes, they are small, most of them are smaller than 16KB, some about
+> >>>> 128KB and a few about 256KB. I've sent a detailed list in private mail.
+> >>>>
+> >>> Hi Marek,
+> >>>
+> >>> Are there any obvious squashfs errors in dmesg? Did you enable
+> >>> CONFIG_SQUASHFS_FILE_DIRECT or CONFIG_SQUASHFS_FILE_CACHE?
+> >> I don't think it's an error problem.  I think it's a short file problem.
+> >>
+> >> As I understand the current code (and apologies for not keeping up
+> >> to date with how the patch is progressing), if the file is less than
+> >> msblk->block_size bytes, we'll leave all the pages as !uptodate, leaving
+> >> them to be brough uptodate by squashfs_read_folio().  So Marek is hitting
+> >> the worst case scenario where we re-read the entire block for each page
+> >> in it.  I think we have to handle this tail case in ->readahead().
+> >
+> > I'm not sure if this is related to reading of small files. There are
+> > only 50 modules being loaded from squashfs volume. I did a quick test of
+> > reading the files.
+> >
+> > Simple file read with this patch:
+> >
+> > root@target:~# time find /initrd/ -type f | while read f; do cat $f
+> >   >/dev/null; done
+> >
+> > real    0m5.865s
+> > user    0m2.362s
+> > sys     0m3.844s
+> >
+> > Without:
+> >
+> > root@target:~# time find /initrd/ -type f | while read f; do cat $f
+> >   >/dev/null; done
+> >
+> > real    0m6.619s
+> > user    0m2.112s
+> > sys     0m4.827s
+> >
+>
+> It has been a four day holiday in the UK (Queen's Platinum Jubilee),
+> hence the delay in responding.
+>
+> The above read use-case is sequential (only one thread/process),
+> whereas the use-case where the slow-down is observed may be
+> parallel (multiple threads/processes entering Squashfs).
+>
+> The above sequential use-case if the small files are held in
+> fragments, will be exhibiting caching behaviour that will
+> ameliorate the case where the same block is being repeatedly
+> re-read for each page in it.  Because each time
+> Squashfs is re-entered handling only a single page, the
+> decompressed block will be found in the fragment
+> cache, eliminating a block decompression for each page.
+>
+> In a parallel use-case the decompressed fragment block
+> may be being eliminated from the cache (by other reading
+> processes), hence forcing the block to be repeatedly
+> decompressed.
+>
+> Hence the slow-down will be much more noticable with a
+> parallel use-case than a sequential use-case.  It also may
+> be why this slipped through testing, if the test cases
+> are purely sequential in nature.
+>
+> So Matthew's previous comment is still the most likely
+> explanation for the slow-down.
+>
+Thanks for the pointers. To deal with short file cases (nr_pages <
+max_pages), Can we refer to squashfs_fill_page() used in
+squashfs_read_cache(), similar to the case where there are missing
+pages on the block?
 
-What is tested?
+Directly calling squashfs_read_data() on short files will lead to crash:
 
- - Different values for the X in XRGB8888 to make sure it is ignored
- - Different clip values: Single pixel and full and partial buffer
- - Well known colors: White, black, red, green, blue, magenta, yellow
-   and cyan
- - Other colors: Randomly picked
- - Destination pitch
+Unable to handle kernel paging request at virtual address:
+[   19.244654]  zlib_inflate+0xba4/0x10c8
+[   19.244658]  zlib_uncompress+0x150/0x1bc
+[   19.244662]  squashfs_decompress+0x6c/0xb4
+[   19.244669]  squashfs_read_data+0x1a8/0x298
+[   19.244673]  squashfs_readahead+0x2cc/0x4cc
 
-How to run the tests?
+I also noticed that the function didn't set flush_dcache_page() with
+SetPageUptodate() previously.
 
- $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm \
-         --kconfig_add CONFIG_VIRTIO_UML=y \
-         --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
+Put these 2 issues together:
 
-Suggested-by: Javier Martinez Canillas <javierm@redhat.com>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+index 658fb98af0cd..27519f1f9045 100644
+--- a/fs/squashfs/file.c
++++ b/fs/squashfs/file.c
+@@ -532,8 +532,7 @@ static void squashfs_readahead(struct
+readahead_control *ractl)
+                if (!nr_pages)
+                        break;
 
----
+-               if (readahead_pos(ractl) >= i_size_read(inode) ||
+-                   nr_pages < max_pages)
++               if (readahead_pos(ractl) >= i_size_read(inode))
+                        goto skip_pages;
 
-RFC -> v1: https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89@gmail.com/T/
+                index = pages[0]->index >> shift;
+@@ -548,6 +547,23 @@ static void squashfs_readahead(struct
+readahead_control *ractl)
+                if (bsize == 0)
+                        goto skip_pages;
 
- - Add .kunitconfig (Maxime Ripard)
- - Fix memory leak (Daniel Latypov)
- - Make config option generic (Javier Martinez Canillas):
-   DRM_FORMAR_HELPER_TEST -> DRM_KUNIT_TEST
- - Remove DISABLE_STRUCTLEAK_PLUGIN (Daniel Latypov)
----
- drivers/gpu/drm/.kunitconfig             |   3 +
- drivers/gpu/drm/Kconfig                  |  16 +++
- drivers/gpu/drm/Makefile                 |   2 +
- drivers/gpu/drm/drm_format_helper_test.c | 166 +++++++++++++++++++++++
- 4 files changed, 187 insertions(+)
- create mode 100644 drivers/gpu/drm/.kunitconfig
- create mode 100644 drivers/gpu/drm/drm_format_helper_test.c
++               if (nr_pages < max_pages) {
++                       struct squashfs_cache_entry *buffer;
++
++                       buffer = squashfs_get_datablock(inode->i_sb, block,
++                                                       bsize);
++                       if (!buffer->error) {
++                               for (i = 0; i < nr_pages && expected > 0; i++,
++                                                       expected -= PAGE_SIZE) {
++                                       int avail = min_t(int,
+expected, PAGE_SIZE);
++
++                                       squashfs_fill_page(pages[i],
+buffer, i * PAGE_SIZE, avail);
++                               }
++                       }
++                       squashfs_cache_put(buffer);
++                       goto skip_pages;
++               }
++
+                res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
+                                         actor);
 
-diff --git a/drivers/gpu/drm/.kunitconfig b/drivers/gpu/drm/.kunitconfig
-new file mode 100644
-index 000000000000..6ec04b4c979d
---- /dev/null
-+++ b/drivers/gpu/drm/.kunitconfig
-@@ -0,0 +1,3 @@
-+CONFIG_KUNIT=y
-+CONFIG_DRM=y
-+CONFIG_DRM_KUNIT_TEST=y
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index e88c497fa010..3c0b1faba439 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -70,6 +70,22 @@ config DRM_DEBUG_SELFTEST
- 
- 	  If in doubt, say "N".
- 
-+config DRM_KUNIT_TEST
-+	tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
-+	depends on DRM && KUNIT=y
-+	select DRM_KMS_HELPER
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds unit tests for DRM. This option is not useful for
-+	  distributions or general kernels, but only for kernel
-+	  developers working on DRM and associated drivers.
-+
-+	  For more information on KUnit and unit tests in general,
-+	  please refer to the KUnit documentation in
-+	  Documentation/dev-tools/kunit/.
-+
-+	  If in doubt, say "N".
-+
- config DRM_KMS_HELPER
- 	tristate
- 	depends on DRM
-diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-index 15fe3163f822..6549471f09c7 100644
---- a/drivers/gpu/drm/Makefile
-+++ b/drivers/gpu/drm/Makefile
-@@ -76,6 +76,8 @@ obj-$(CONFIG_DRM_KMS_HELPER) += drm_kms_helper.o
- #
- 
- obj-$(CONFIG_DRM_DEBUG_SELFTEST) += selftests/
-+obj-$(CONFIG_DRM_KUNIT_TEST) += drm_kms_helper.o \
-+		drm_format_helper_test.o
- 
- obj-$(CONFIG_DRM_MIPI_DBI) += drm_mipi_dbi.o
- obj-$(CONFIG_DRM_MIPI_DSI) += drm_mipi_dsi.o
-diff --git a/drivers/gpu/drm/drm_format_helper_test.c b/drivers/gpu/drm/drm_format_helper_test.c
-new file mode 100644
-index 000000000000..e9302219f3f9
---- /dev/null
-+++ b/drivers/gpu/drm/drm_format_helper_test.c
-@@ -0,0 +1,166 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+#include <kunit/test.h>
-+
-+#include <drm/drm_device.h>
-+#include <drm/drm_file.h>
-+#include <drm/drm_format_helper.h>
-+#include <drm/drm_fourcc.h>
-+#include <drm/drm_framebuffer.h>
-+#include <drm/drm_gem_framebuffer_helper.h>
-+#include <drm/drm_mode.h>
-+#include <drm/drm_print.h>
-+#include <drm/drm_rect.h>
-+
-+#include "drm_crtc_internal.h"
-+
-+#define TEST_BUF_SIZE 50
-+#define CLIP(x, y, w, h) { (x), (y), (x) + (w), (y) + (h) }
-+
-+struct xrgb8888_to_rgb332_case {
-+	const char *name;
-+	unsigned int pitch;
-+	unsigned int dst_pitch;
-+	struct drm_rect clip;
-+	const u32 xrgb8888[TEST_BUF_SIZE];
-+	const u8 expected[4 * TEST_BUF_SIZE];
-+};
-+
-+static struct xrgb8888_to_rgb332_case xrgb8888_to_rgb332_cases[] = {
-+	{
-+		.name = "Single pixel source",
-+		.pitch = 1 * 4,
-+		.dst_pitch = 0,
-+		.clip = CLIP(0, 0, 1, 1),
-+		.xrgb8888 = { 0x01FF0000 },
-+		.expected = { 0xE0 },
-+	},
-+	{
-+		.name = "Single pixel clip",
-+		.pitch = 2 * 4,
-+		.dst_pitch = 0,
-+		.clip = CLIP(1, 1, 1, 1),
-+		.xrgb8888 = {
-+			0x00000000, 0x00000000,
-+			0x00000000, 0x10FF0000,
-+		},
-+		.expected = { 0xE0 },
-+	},
-+	{
-+		.name = "White, black, red, green, blue, magenta, yellow, cyan",
-+		.pitch = 4 * 4,
-+		.dst_pitch = 0,
-+		.clip = CLIP(1, 1, 2, 4),
-+		.xrgb8888 = {
-+			0x00000000, 0x00000000, 0x00000000, 0x00000000,
-+			0x00000000, 0x11FFFFFF, 0x22000000, 0x00000000,
-+			0x00000000, 0x33FF0000, 0x4400FF00, 0x00000000,
-+			0x00000000, 0x550000FF, 0x66FF00FF, 0x00000000,
-+			0x00000000, 0x77FFFF00, 0x8800FFFF, 0x00000000,
-+		},
-+		.expected = {
-+			0xFF, 0x00,
-+			0xE0, 0x1C,
-+			0x03, 0xE3,
-+			0xFC, 0x1F,
-+		},
-+	},
-+	{
-+		.name = "Destination pitch",
-+		.pitch = 3 * 4,
-+		.dst_pitch = 5,
-+		.clip = CLIP(0, 0, 3, 3),
-+		.xrgb8888 = {
-+			0xA10E449C, 0xB1114D05, 0xC1A80303,
-+			0xD16C7073, 0xA20E449C, 0xB2114D05,
-+			0xC2A80303, 0xD26C7073, 0xA30E449C,
-+		},
-+		.expected = {
-+			0x0A, 0x08, 0xA0, 0x00, 0x00,
-+			0x6D, 0x0A, 0x08, 0x00, 0x00,
-+			0xA0, 0x6D, 0x0A, 0x00, 0x00,
-+		},
-+	},
-+};
-+
-+/**
-+ * conversion_buf_size - Return the destination buffer size required to convert
-+ * between formats.
-+ * @src_format: source buffer pixel format (DRM_FORMAT_*)
-+ * @dst_format: destination buffer pixel format (DRM_FORMAT_*)
-+ * @dst_pitch: Number of bytes between two consecutive scanlines within dst
-+ * @clip: Clip rectangle area to convert
-+ *
-+ * Returns:
-+ * The size of the destination buffer or negative value on error.
-+ */
-+static size_t conversion_buf_size(u32 src_format, u32 dst_format,
-+				  unsigned int dst_pitch,
-+				  const struct drm_rect *clip)
-+{
-+	const struct drm_format_info *src_fi = drm_format_info(src_format);
-+	const struct drm_format_info *dst_fi = drm_format_info(dst_format);
-+	size_t width = drm_rect_width(clip);
-+	size_t src_nbytes;
-+
-+	if (!src_fi || !dst_fi)
-+		return -EINVAL;
-+
-+	if (dst_pitch)
-+		width = dst_pitch;
-+
-+	src_nbytes = width * drm_rect_height(clip) * src_fi->cpp[0];
-+	if (!src_nbytes)
-+		return 0;
-+
-+	return (src_nbytes * dst_fi->cpp[0]) / src_fi->cpp[0];
-+}
-+
-+static void xrgb8888_to_rgb332_case_desc(struct xrgb8888_to_rgb332_case *t,
-+					 char *desc)
-+{
-+	strscpy(desc, t->name, KUNIT_PARAM_DESC_SIZE);
-+}
-+
-+KUNIT_ARRAY_PARAM(xrgb8888_to_rgb332, xrgb8888_to_rgb332_cases,
-+		  xrgb8888_to_rgb332_case_desc);
-+
-+static void xrgb8888_to_rgb332_test(struct kunit *test)
-+{
-+	const struct xrgb8888_to_rgb332_case *params = test->param_value;
-+	size_t dst_size;
-+	__u8 *dst = NULL;
-+
-+	struct drm_framebuffer fb = {
-+		.format = drm_format_info(DRM_FORMAT_XRGB8888),
-+		.pitches = { params->pitch, 0, 0 },
-+	};
-+
-+	dst_size = conversion_buf_size(DRM_FORMAT_XRGB8888, DRM_FORMAT_RGB332,
-+				       params->dst_pitch, &params->clip);
-+	KUNIT_ASSERT_GT(test, dst_size, 0);
-+
-+	dst = kunit_kzalloc(test, dst_size, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dst);
-+
-+	drm_fb_xrgb8888_to_rgb332(dst, params->dst_pitch, params->xrgb8888,
-+				  &fb, &params->clip);
-+	KUNIT_EXPECT_EQ(test, memcmp(dst, params->expected, dst_size), 0);
-+}
-+
-+static struct kunit_case drm_format_helper_test_cases[] = {
-+	KUNIT_CASE_PARAM(xrgb8888_to_rgb332_test,
-+			 xrgb8888_to_rgb332_gen_params),
-+	{}
-+};
-+
-+static struct kunit_suite drm_format_helper_test_suite = {
-+	.name = "drm-format-helper-test",
-+	.test_cases = drm_format_helper_test_cases,
-+};
-+
-+kunit_test_suite(drm_format_helper_test_suite);
-+
-+MODULE_DESCRIPTION("KUnit tests for the drm_format_helper APIs");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("José Expósito <jose.exposito89@gmail.com>");
--- 
-2.25.1
+@@ -564,8 +580,10 @@ static void squashfs_readahead(struct
+readahead_control *ractl)
+                                kunmap_atomic(pageaddr);
+                        }
 
+-                       for (i = 0; i < nr_pages; i++)
++                       for (i = 0; i < nr_pages; i++) {
++                               flush_dcache_page(pages[i]);
+                                SetPageUptodate(pages[i]);
++                       }
+                }
+
+
+> Phillip
+>
+> > Best regards
+>

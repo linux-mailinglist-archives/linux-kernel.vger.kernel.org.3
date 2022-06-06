@@ -2,214 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F8D53ED2B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6535453ED32
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiFFRs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 13:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S230142AbiFFRuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 13:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiFFRsZ (ORCPT
+        with ESMTP id S230026AbiFFRur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 13:48:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDA232EEB;
-        Mon,  6 Jun 2022 10:48:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65747B81AC0;
-        Mon,  6 Jun 2022 17:48:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E30C385A9;
-        Mon,  6 Jun 2022 17:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654537701;
-        bh=lOIwjZPFduWzF4p12LQgqQGU+8inbntKFhATkukdnAA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pkfuQzSimBGGvyyoijy+xIdUPepciJbyFYeblvbEeS93pn+tOfpHbPNHZrsuOTU3p
-         axshPmVVE9UJuY7fhQ1S45flA8oEGS8LPSDKFaa3HuNtwq8K0x1aVT+/asJ5Fi8jbW
-         JoDpbVIaPc9VNY0Ot0P8rHSwa3uxCuDJtI+MDXBYOr6bVl/lOExDFdqw0K7qGLvx7K
-         WC8w4252cezRDp3Wy4rx+rJS2DosZ9quP0IaOxhU2enumwCAosmnjwnb5MRzre2Rkk
-         Nd7wZ3KkyngwHfB3RIXXUQ7cRhar60h+d9XgOw9SXsqW21vdJvH9G1VPzCyKgd8gSs
-         s7PQ3fcCMQbKQ==
-Date:   Mon, 6 Jun 2022 10:48:19 -0700
-From:   Ben Widawsky <bwidawsk@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V10 5/9] cxl/port: Find a DOE mailbox which supports CDAT
-Message-ID: <20220606174819.hhnb4jh27nxxvrdf@bwidawsk-mobl5>
-References: <20220605005049.2155874-1-ira.weiny@intel.com>
- <20220605005049.2155874-6-ira.weiny@intel.com>
+        Mon, 6 Jun 2022 13:50:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 405B56B7D4;
+        Mon,  6 Jun 2022 10:50:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8FE65165C;
+        Mon,  6 Jun 2022 10:50:45 -0700 (PDT)
+Received: from [10.57.81.38] (unknown [10.57.81.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 344483F66F;
+        Mon,  6 Jun 2022 10:50:38 -0700 (PDT)
+Message-ID: <6575de6d-94ba-c427-5b1e-967750ddff23@arm.com>
+Date:   Mon, 6 Jun 2022 18:50:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605005049.2155874-6-ira.weiny@intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/5] iommu: Ensure device has the same iommu_ops as the
+ domain
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     jgg@nvidia.com, joro@8bytes.org, will@kernel.org, marcan@marcan.st,
+        sven@svenpeter.dev, robdclark@gmail.com, m.szyprowski@samsung.com,
+        krzysztof.kozlowski@linaro.org, baolu.lu@linux.intel.com,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        matthias.bgg@gmail.com, heiko@sntech.de, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        jean-philippe@linaro.org, alex.williamson@redhat.com,
+        suravee.suthikulpanit@amd.com, alyssa@rosenzweig.io,
+        alim.akhtar@samsung.com, dwmw2@infradead.org, yong.wu@mediatek.com,
+        mjrosato@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
+        cohuck@redhat.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
+References: <20220606061927.26049-1-nicolinc@nvidia.com>
+ <20220606061927.26049-3-nicolinc@nvidia.com>
+ <1e0e5403-1e65-db9a-c8e7-34e316bfda8e@arm.com>
+ <Yp4wiJZWxoCLY8tm@Asurada-Nvidia>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <Yp4wiJZWxoCLY8tm@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-06-04 17:50:45, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On 2022-06-06 17:51, Nicolin Chen wrote:
+> Hi Robin,
 > 
-> Each CXL device may have multiple DOE mailbox capabilities and each
-> mailbox may support multiple protocols.  CXL port devices need to query
-> the CDAT information specifically.
+> On Mon, Jun 06, 2022 at 03:33:42PM +0100, Robin Murphy wrote:
+>> On 2022-06-06 07:19, Nicolin Chen wrote:
+>>> The core code should not call an iommu driver op with a struct device
+>>> parameter unless it knows that the dev_iommu_priv_get() for that struct
+>>> device was setup by the same driver. Otherwise in a mixed driver system
+>>> the iommu_priv could be casted to the wrong type.
+>>
+>> We don't have mixed-driver systems, and there are plenty more
+>> significant problems than this one to solve before we can (but thanks
+>> for pointing it out - I hadn't got as far as auditing the public
+>> interfaces yet). Once domains are allocated via a particular device's
+>> IOMMU instance in the first place, there will be ample opportunity for
+>> the core to stash suitable identifying information in the domain for
+>> itself. TBH even the current code could do it without needing the
+>> weirdly invasive changes here.
 > 
-> Search the DOE mailboxes for one which supports the CDAT protocol.
-> Cache that mailbox to be used for future queries.
+> Do you have an alternative and less invasive solution in mind?
 > 
-> Only support memory devices at this time.
+>>> Store the iommu_ops pointer in the iommu_domain and use it as a check to
+>>> validate that the struct device is correct before invoking any domain op
+>>> that accepts a struct device.
+>>
+>> In fact this even describes exactly that - "Store the iommu_ops pointer
+>> in the iommu_domain", vs. the "Store the iommu_ops pointer in the
+>> iommu_domain_ops" which the patch is actually doing :/
 > 
-> Cc: Ben Widawsky <ben.widawsky@intel.com>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes from V9
-> 	Ben Widawsky
-> 		s/cxl_find_cdat_mb/cxl_cache_cdat_mb/; add kdoc
-> 	Jonathan Cameron
-> 		Move cache_cdat to port probe [Not 100% necessary but it
-> 		goes along with reading the cdat data.]
-> 
-> Changes from V8
-> 	Incorporate feedback from Jonathan
-> 	Move all this to the cxl_port object
-> 
-> Changes from V7
-> 	Minor code clean ups
-> 
-> Changes from V6
-> 	Adjust for aux devices being a CXL only concept
-> 	Update commit msg.
-> 	Ensure devices iterated by auxiliary_find_device() are checked
-> 		to be DOE devices prior to checking for the CDAT
-> 		protocol
-> 	From Ben
-> 		Ensure reference from auxiliary_find_device() is dropped
-> ---
->  drivers/cxl/core/pci.c | 35 +++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxl.h      |  2 ++
->  drivers/cxl/cxlpci.h   |  1 +
->  drivers/cxl/port.c     |  2 ++
->  4 files changed, 40 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index c4c99ff7b55e..d814d8317975 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -4,11 +4,14 @@
->  #include <linux/device.h>
->  #include <linux/delay.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-doe.h>
->  #include <cxlpci.h>
->  #include <cxlmem.h>
->  #include <cxl.h>
->  #include "core.h"
->  
-> +#define CXL_DOE_PROTOCOL_TABLE_ACCESS 2
-> +
->  /**
->   * DOC: cxl core pci
->   *
-> @@ -458,3 +461,35 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm)
->  	return 0;
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, CXL);
-> +
-> +/**
-> + * cxl_cache_cdat_mb() -- cache the DOE mailbox which suports the CDAT protocol
-> + *
-> + * @port: Port to containing DOE Mailboxes
-> + *
-> + * Cache a pointer to the doe mailbox which supports CDAT.
-> + */
-> +void cxl_cache_cdat_mb(struct cxl_port *port)
-> +{
-> +	struct device *dev = port->uport;
-> +	struct cxl_memdev *cxlmd;
-> +	struct cxl_dev_state *cxlds;
-> +	int i;
-> +
-> +	if (!is_cxl_memdev(dev))
-> +		return;
-> +
-> +	cxlmd = to_cxl_memdev(dev);
-> +	cxlds = cxlmd->cxlds;
-> +
-> +	for (i = 0; i < cxlds->num_mbs; i++) {
-> +		struct pci_doe_mb *cur = cxlds->doe_mbs[i];
-> +
-> +		if (pci_doe_supports_prot(cur, PCI_DVSEC_VENDOR_ID_CXL,
-> +					  CXL_DOE_PROTOCOL_TABLE_ACCESS)) {
-> +			port->cdat_mb = cur;
+> Will fix that.
 
-What happens if cxl_pci is unloaded after this? Would it be better to copy out
-the CDAT info? Otherwise, I think you need to hold a ref on the PCI device
-(though I only took a quick look).
+Well, as before I'd prefer to make the code match the commit message - 
+if I really need to spell it out, see below - since I can't imagine that 
+we should ever have need to identify a set of iommu_domain_ops in 
+isolation, therefore I think it's considerably clearer to use the 
+iommu_domain itself. However, either way we really don't need this yet, 
+so we may as well just go ahead and remove the redundant test from VFIO 
+anyway, and I can add some form of this patch to my dev branch for now.
 
-> +			return;
-> +		}
-> +	}
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_cache_cdat_mb, CXL);
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 140dc3278cde..0a86be589ffc 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -267,6 +267,7 @@ struct cxl_nvdimm {
->   * @component_reg_phys: component register capability base address (optional)
->   * @dead: last ep has been removed, force port re-creation
->   * @depth: How deep this port is relative to the root. depth 0 is the root.
-> + * @cdat_mb: Mailbox which supports the CDAT protocol
->   */
->  struct cxl_port {
->  	struct device dev;
-> @@ -278,6 +279,7 @@ struct cxl_port {
->  	resource_size_t component_reg_phys;
->  	bool dead;
->  	unsigned int depth;
-> +	struct pci_doe_mb *cdat_mb;
->  };
->  
->  /**
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index fce1c11729c2..ddbb8b77752e 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -74,4 +74,5 @@ static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
->  int devm_cxl_port_enumerate_dports(struct cxl_port *port);
->  struct cxl_dev_state;
->  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
-> +void cxl_cache_cdat_mb(struct cxl_port *port);
->  #endif /* __CXL_PCI_H__ */
-> diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
-> index 3cf308f114c4..04f3d1fc6e07 100644
-> --- a/drivers/cxl/port.c
-> +++ b/drivers/cxl/port.c
-> @@ -49,6 +49,8 @@ static int cxl_port_probe(struct device *dev)
->  	if (IS_ERR(cxlhdm))
->  		return PTR_ERR(cxlhdm);
->  
-> +	cxl_cache_cdat_mb(port);
-> +
->  	if (is_cxl_endpoint(port)) {
->  		struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
->  		struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> -- 
-> 2.35.1
-> 
+Thanks,
+Robin.
+
+----->8-----
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index cde2e1d6ab9b..72990edc9314 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1902,6 +1902,7 @@ static struct iommu_domain 
+*__iommu_domain_alloc(struct device *dev,
+  	domain->type = type;
+  	/* Assume all sizes by default; the driver may override this later */
+  	domain->pgsize_bitmap = ops->pgsize_bitmap;
++	domain->owner = ops;
+  	if (!domain->ops)
+  		domain->ops = ops->default_domain_ops;
+
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 6f64cbbc6721..79e557207f53 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -89,6 +89,7 @@ struct iommu_domain_geometry {
+
+  struct iommu_domain {
+  	unsigned type;
++	const struct iommu_ops *owner; /* Who allocated this domain */
+  	const struct iommu_domain_ops *ops;
+  	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
+  	iommu_fault_handler_t handler;

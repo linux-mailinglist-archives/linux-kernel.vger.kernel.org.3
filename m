@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D1753EB86
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3FA53EBC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiFFQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S241790AbiFFQgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiFFQgF (ORCPT
+        with ESMTP id S231286AbiFFQgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:36:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8A1B7F7;
-        Mon,  6 Jun 2022 09:36:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F070A60C93;
-        Mon,  6 Jun 2022 16:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B57C385A9;
-        Mon,  6 Jun 2022 16:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654533362;
-        bh=0Mjg97U+ZMbST6i3lAYoqGdbBWQbXG3j5keTPSi7ieg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sy/VMLg9MW8C0l9Zr0sNxqtsspglU0kkaNq2eEia/2PxI5+Q2f6dSBLb4gOJ3vnTX
-         fl05wLcv9Y3j2ZfIQlo+pU/E1XoxPtcrduH/v0+SkDFZXEMiStQx0Uert34UQ7KXre
-         47gRZQMQ2DvMS/CX+ZzQkSerZQe6GY0+RavtTcs87RFi3toceavaIFlJGqJ0gTRXI+
-         zjf5c/FOzORqq3hpbw/i2bq8KPllQ1EAleKosvdED8vwgq5A7Z9PzFbft8sXx40dP1
-         wEisxn6cbmo7Hxmro/CBvVfwkPaLbZw5ctwOVSmQFE9R2qcQjG0EQ09Fa1C8YkS2k7
-         ytmgpVftCrWVw==
-Message-ID: <29ac9241-7007-1c5b-a313-2bdea32e1dc8@kernel.org>
-Date:   Mon, 6 Jun 2022 19:35:55 +0300
-MIME-Version: 1.0
-Subject: Re: [PATCH v4 2/4] soc: qcom: icc-bwmon: Add bandwidth monitoring
- driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 6 Jun 2022 12:36:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B860B7F7;
+        Mon,  6 Jun 2022 09:36:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DBFA165C;
+        Mon,  6 Jun 2022 09:36:06 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.37.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB1243F73B;
+        Mon,  6 Jun 2022 09:36:00 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 17:35:57 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-3-krzysztof.kozlowski@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220601101140.170504-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com
+Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call
+ support
+Message-ID: <Yp4s7eNGvb2CNtPp@FVFF77S0Q05N.cambridge.arm.com>
+References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N>
+ <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
+ <Yo9REdx3nsgbZunE@FVFF77S0Q05N>
+ <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,116 +81,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, May 26, 2022 at 10:48:05PM +0800, Xu Kuohai wrote:
+> On 5/26/2022 6:06 PM, Mark Rutland wrote:
+> > On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
+> >> On 5/25/2022 9:38 PM, Mark Rutland wrote:
+> >>> On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
+> >>>> Add ftrace direct support for arm64.
+> >>>>
+> >>>> 1. When there is custom trampoline only, replace the fentry nop to a
+> >>>>    jump instruction that jumps directly to the custom trampoline.
+> >>>>
+> >>>> 2. When ftrace trampoline and custom trampoline coexist, jump from
+> >>>>    fentry to ftrace trampoline first, then jump to custom trampoline
+> >>>>    when ftrace trampoline exits. The current unused register
+> >>>>    pt_regs->orig_x0 is used as an intermediary for jumping from ftrace
+> >>>>    trampoline to custom trampoline.
+> >>>
+> >>> For those of us not all that familiar with BPF, can you explain *why* you want
+> >>> this? The above explains what the patch implements, but not why that's useful.
+> >>>
+> >>> e.g. is this just to avoid the overhead of the ops list processing in the
+> >>> regular ftrace code, or is the custom trampoline there to allow you to do
+> >>> something special?
+> >>
+> >> IIUC, ftrace direct call was designed to *remove* the unnecessary
+> >> overhead of saving regs completely [1][2].
+> > 
+> > Ok. My plan is to get rid of most of the register saving generally, so I think
+> > that aspect can be solved without direct calls.
+> Looking forward to your new solution.
 
-Thanks for working on this!
+For the register saving rework, I have a WIP branch on my kernel.org repo:
 
-On 1.06.22 13:11, Krzysztof Kozlowski wrote:
-> Bandwidth monitoring (BWMON) sits between various subsytems like CPU,
-> GPU, Last Level caches and memory subsystem.  The BWMON can be
-> configured to monitor the data throuhput between memory and other
-> subsytems.  The throughput is measured within specified sampling window
-> and is used to vote for corresponding interconnect bandwidth.
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/minimal-regs
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/minimal-regs
+
+I'm working on that at the moment along with a per-callsite ops implementaiton
+that would avoid most of the need for custom trampolines (and work with branch
+range limitations):
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
+
+> >> [1]
+> >> https://lore.kernel.org/all/20191022175052.frjzlnjjfwwfov64@ast-mbp.dhcp.thefacebook.com/
+> >> [2] https://lore.kernel.org/all/20191108212834.594904349@goodmis.org/
+> >>
+> >> This patch itself is just a variant of [3].
+> >>
+> >> [3] https://lore.kernel.org/all/20191108213450.891579507@goodmis.org/
+> >>
+> >>>
+> >>> There is another patch series on the list from some of your colleagues which
+> >>> uses dynamic trampolines to try to avoid that ops list overhead, and it's not
+> >>> clear to me whether these are trying to solve the largely same problem or
+> >>> something different. That other thread is at:
+> >>>
+> >>>   https://lore.kernel.org/linux-arm-kernel/20220316100132.244849-1-bobo.shaobowang@huawei.com/
+> >>>
+> >>> ... and I've added the relevant parties to CC here, since there doesn't seem to
+> >>> be any overlap in the CC lists of the two threads.
+> >>
+> >> We're not working to solve the same problem. The trampoline introduced
+> >> in this series helps us to monitor kernel function or another bpf prog
+> >> with bpf, and also helps us to use bpf prog like a normal kernel
+> >> function pointer.
+> > 
+> > Ok, but why is it necessary to have a special trampoline?
+> > 
+> > Is that *just* to avoid overhead, or do you need to do something special that
+> > the regular trampoline won't do?
+> > 
 > 
-> Current implementation brings support for BWMON v4, used for example on
-> SDM845 to measure bandwidth between CPU (gladiator_noc) and Last Level
-> Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
-> votes from cpufreq (CPU nodes) thus achieve high memory throughput even
-> with lower CPU frequencies.
-
-I am curious if you ran any tests - e.g set the CPU to some fixed
-frequency and run memory throughput benchmarks with/without this
-driver? Could you share any data?
-
-> Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   MAINTAINERS                  |   7 +
->   drivers/soc/qcom/Kconfig     |  15 ++
->   drivers/soc/qcom/Makefile    |   1 +
->   drivers/soc/qcom/icc-bwmon.c | 421 +++++++++++++++++++++++++++++++++++
->   4 files changed, 444 insertions(+)
->   create mode 100644 drivers/soc/qcom/icc-bwmon.c
+> Sorry for not explaining the problem. The main bpf prog accepts only a
+> single argument 'ctx' in r1, so to allow kernel code to call bpf prog
+> transparently, we need a trampoline to convert native calling convention
+> into BPF calling convention [1].
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6157e706ed02..bc123f706256 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16376,6 +16376,13 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
->   F:	drivers/i2c/busses/i2c-qcom-cci.c
->   
-> +QUALCOMM INTERCONNECT BWMON DRIVER
-> +M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +L:	linux-arm-msm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-> +F:	drivers/soc/qcom/icc-bwmon.c
-> +
->   QUALCOMM IOMMU
->   M:	Rob Clark <robdclark@gmail.com>
->   L:	iommu@lists.linux-foundation.org
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index e718b8735444..35c5192dcfc7 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -228,4 +228,19 @@ config QCOM_APR
->   	  application processor and QDSP6. APR is
->   	  used by audio driver to configure QDSP6
->   	  ASM, ADM and AFE modules.
-> +
-> +config QCOM_ICC_BWMON
-> +	tristate "QCOM Interconnect Bandwidth Monitor driver"
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	select PM_OPP
-> +	help
-> +	  Sets up driver monitoring bandwidth on various interconnects and
-> +	  based on that voting for interconnect bandwidth, adjusting their
-> +	  speed to current demand.
-> +	  Current implementation brings support for BWMON v4, used for example
-> +	  on SDM845 to measure bandwidth between CPU (gladiator_noc) and Last
-> +	  Level Cache (memnoc).  Usage of this BWMON allows to remove fixed
-> +	  bandwidth votes from cpufreq (CPU nodes) thus achieve high memory
-> +	  throughput even with lower CPU frequencies.
-> +
->   endmenu
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 70d5de69fd7b..d66604aff2b0 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -28,3 +28,4 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
->   obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
->   obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
->   obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
-> +obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
-> diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
-> new file mode 100644
-> index 000000000000..1eed075545db
-> --- /dev/null
-> +++ b/drivers/soc/qcom/icc-bwmon.c
-> @@ -0,0 +1,421 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2014-2018, The Linux Foundation. All rights reserved.
-> + * Copyright (C) 2021-2022 Linaro Ltd
-> + * Author: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, based on
-> + *         previous work of Thara Gopinath and msm-4.9 downstream sources.
-> + */
-> +#include <linux/interconnect.h>
+> [1] https://lore.kernel.org/bpf/20191114185720.1641606-5-ast@kernel.org/
 
-Is this used?
+Thanks for the pointer; I'll go page that in.
 
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/sizes.h>
+> For example,
+> 
+> SEC("struct_ops/dctcp_state")
+> void BPF_PROG(dctcp_state, struct sock *sk, __u8 new_state)
+> {
+>     // do something
+> }
+> 
+> The above bpf prog will be compiled to something like this:
+> 
+> dctcp_state:
+>     r2 = *(u64 *)(r1 + 8)  // new_state
+>     r1 = *(u64 *)(r1 + 0)  // sk
+>     ...
+> 
+> It accepts only one argument 'ctx' in r1, and loads the actual arugment
+> 'sk' and 'new_state' from r1 + 0 and r1 + 8, resepectively. So before
+> calling this prog, we need to construct 'ctx' and store its address to r1.
+> 
+> >>>
+> >>> In that other thread I've suggested a general approach we could follow at:
+> >>>   
+> >>>   https://lore.kernel.org/linux-arm-kernel/YmGF%2FOpIhAF8YeVq@lakrids/
+> >>
+> >> Is it possible for a kernel function to take a long jump to common
+> >> trampoline when we get a huge kernel image?
+> > 
+> > It is possible, but only where the kernel Image itself is massive and the .text
+> > section exceeeds 128MiB, at which point other things break anyway. Practically
+> > speaking, this doesn't happen for production kernels, or reasonable test
+> > kernels.
+> 
+> So even for normal kernel functions, we need some way to construct and
+> destruct long jumps atomically and safely.
 
-Ditto.
+My point was that case is unrealistic for production kernels, and utterly
+broken anyway (and as below I intend to make ftrace detect this and mark itself
+as broken).
+
+FWIW, an allmodconfig kernel built with GCC 12.1.0 has a ~30MB .text segment,
+so for realistic kernels we have plenty of headroom for normal functions to
+reach the in-kernel trampoline.
+
+> > I've been meaning to add some logic to detect this at boot time and idsable
+> > ftrace (or at build time), since live patching would also be broken in that
+> > case.
+> >>>> As noted in that thread, I have a few concerns which equally apply here:
+> >>>
+> >>> * Due to the limited range of BL instructions, it's not always possible to
+> >>>   patch an ftrace call-site to branch to an arbitrary trampoline. The way this
+> >>>   works for ftrace today relies upon knowingthe set of trampolines at
+> >>>   compile-time, and allocating module PLTs for those, and that approach cannot
+> >>>   work reliably for dynanically allocated trampolines.
+> >>
+> >> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
+> >> bpf trampoline is constructed for out of range patch-site:
+> >>
+> >> if (is_long_jump(orig_call, image))
+> >> 	return -ENOTSUPP;
+> > 
+> > Sure, my point is that in practice that means that (from the user's PoV) this
+> > may randomly fail to work, and I'd like something that we can ensure works
+> > consistently.
+> > 
+> 
+> OK, should I suspend this work until you finish refactoring ftrace?
+
+Yes; I'd appreciate if we could hold on this for a bit.
+
+I think with some ground work we can avoid most of the painful edge cases and
+might be able to avoid the need for custom trampolines.
 
 Thanks,
-Georgi
+Mark.

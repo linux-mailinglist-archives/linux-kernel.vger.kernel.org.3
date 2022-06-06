@@ -2,365 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E2F53E61F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F8853E9C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236444AbiFFMJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
+        id S236506AbiFFMKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236439AbiFFMJa (ORCPT
+        with ESMTP id S236497AbiFFMKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:09:30 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4D2314C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654517369; x=1686053369;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sfERSy5MjyQR2r6Hb/MsJx4ZFcEy3ApknClDSObpEz0=;
-  b=Qpg5APmj3UfgUdr+NWPA3mvTYusOqDoO8mLR9c3HWjv+dpRrlOMKrI9p
-   uEf512CGmMpdPQQflqUjJ7l3jKxzQ9Bl8kTCoSXU2MkS+KwtfhJ1s7Z8X
-   GbMjLb1TdfFx98/tW6grRHi+i+qpW/KY3/AJgWjaAcM4mxQZs5UyZRN5T
-   c=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 06 Jun 2022 05:09:28 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 05:09:28 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 6 Jun 2022 05:09:28 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 6 Jun 2022
- 05:09:27 -0700
-Date:   Mon, 6 Jun 2022 08:09:24 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v9 28/69] mm/mmap: reorganize munmap to use maple states
-Message-ID: <Yp3udPy0vuDK8khc@qian>
-References: <20220504002554.654642-1-Liam.Howlett@oracle.com>
- <20220504011345.662299-1-Liam.Howlett@oracle.com>
- <20220504011345.662299-13-Liam.Howlett@oracle.com>
+        Mon, 6 Jun 2022 08:10:21 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2041.outbound.protection.outlook.com [40.107.102.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8ED245A8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:10:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QaXjs3zDDA90WSrHC+mrWB+u4Jyd1uCT1+PUOAmZPxy/YzojYxA1Sjl6Bo3jSnLrgJZDF+0X4LeZObqxhxr9OR2/4D1PSaIJaLckUBtdQRFtrNWxufzfsOy5dBlX15m2LSbDAAnHrcH+3HWzHmmd71s4uc7Fw4Dxx+XR5R3R5R17udFzL0QqYbwlFb/Jh92eRzFvxZ0/JBnkQkOMvIGOZsUlThxTz9CknQ7Ac+Y452hg2g0abtlRMeM8T/T1DTGApoYzfNzju01T4tklu1/E5gsE4Vp5u0MxC6WeqnsRt145sMME6LxssB1OyKKLVe8nep90ZYY0kSdfTyYPXyWC9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OVQO3rtktdKzWbKTUZnVmP93MIwQ2gdQCMb14CNFrL8=;
+ b=hHFyZtKp4CdVUdn0LFC0v0El7kWco3T4qUtem2qGIggyIre/xsWh6b/A/92L2MK6fG2+pzRKQZR9l5Og3x5H2RtoKvdFjxbxlNVjxXN0zWI/SgY1H4Frxw1hmSZz68/f7sZwKY5ZWGHRU8IT03O0KkIUzJarfZR0ixc9chLPMJjIRFGYxb1MFWtE5iu5cRKT0/DzIyehm9vuL1imdhdQNWTJVB9hk7v3wyrx7PHELFZyVXSUOkG3ZNtl0PcYHPw4Gzlbi2Ne49kBmEVCmX2JBBzUOWDDmvsz0l0nqpcnsmaZFMcK5fcJnkuZoP4mv+HjrNaBxS461uRAmKMkKJREYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OVQO3rtktdKzWbKTUZnVmP93MIwQ2gdQCMb14CNFrL8=;
+ b=3nvO4giOnX3kJpugf8twc2eaIm4fjTkGRDukNDhoUf46UMBydF4IisG8JXMI+vFOEfvLVWLkgLvyVQQe4MhxguFXWxUnwXRbHz1ZJFlewntvIImA+kqOp0De3O8zPUJR4XNholehplRAX5ImohgzJrzVyL5bd7TmQnvWtiKPqQU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
+ by MWHPR12MB1934.namprd12.prod.outlook.com (2603:10b6:300:109::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Mon, 6 Jun
+ 2022 12:10:15 +0000
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::d978:617e:55a3:cfd]) by IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::d978:617e:55a3:cfd%5]) with mapi id 15.20.5314.015; Mon, 6 Jun 2022
+ 12:10:15 +0000
+Message-ID: <eaf22a62-73c7-d96b-fcd8-4437eb3d8559@amd.com>
+Date:   Mon, 6 Jun 2022 17:39:56 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH v4 4/7] mm/demotion/dax/kmem: Set node's memory tier
+ to MEMORY_TIER_PMEM
+Content-Language: en-US
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-5-aneesh.kumar@linux.ibm.com>
+ <5706f5e9-0609-98c9-a0cd-7d96336d73dd@amd.com>
+ <8e651a1e-d189-3e8a-438f-298f21402bd2@linux.ibm.com>
+ <d45374fa-6e51-36cb-9a2c-96f85d9de528@amd.com>
+ <c98eb873-a5bb-edcc-743d-89cfffe52cd9@linux.ibm.com>
+ <d6c94fd5-053b-7e6f-dc4e-83184ecf131a@amd.com>
+ <a844c8c9-e1e1-2ccb-d58c-a5a608afabc0@linux.ibm.com>
+ <87fski80sx.fsf@linux.ibm.com>
+From:   Bharata B Rao <bharata@amd.com>
+In-Reply-To: <87fski80sx.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0012.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::21) To IA1PR12MB6434.namprd12.prod.outlook.com
+ (2603:10b6:208:3ae::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220504011345.662299-13-Liam.Howlett@oracle.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bdb47771-ebd4-412a-ebba-08da47b583a9
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1934:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1934E759D556B82D11007A6FB0A29@MWHPR12MB1934.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hZETCl4g/N7tmyarj1WLcYAg8EwEw8cVji5q+w66y2orgg8za4R9Ylxx/v5f3v4z7BXeIGPAXMtsKxL8XHWWl8vc77Ma2buZS70ynZd9b7GGwaW8bFAO8H+rB/HalBAM3PGEldBNZOteId6K7LTgEpT5catRwdn9eK0Cpa1wIghm4oar2WOzuxmCp773SrM00rOeV/my6v1Ndj3ZGyXVvQZqbTu4WVpBVe0Y30cZNECsNrwYaZBw/ZfKQugipnqitHccDuQd5ORjM8uQXdMx1S+4KgTYRtsZTlkJlphyfYOxD3uJcN2I2FebpCkJFmRBtM1owu8wrobKdwa5ezCI5IXFbaygdKE3bC3FC/DIAXZE6MoCDLCxvNyDgjpWqJrqoLZNO3JOO0hiwkOotGqzwbl+ZtiBh2YCBsUfFmqTbIkbyiE/jJ2fsLydWFaL43khTp+3zavxR4vDFe94KfSecFt8LHwmKMbEKOY47PqRuwQo7MszZ5ETQhmgZEPcxx/jJCAdBrbcPJzLGg+ctqcvl3kr+bnxbE7MgSCUKm91xNhF6LENzFDTsGfE2wHRZ5tBqhNH50pQJphV0MmS2eduEcOAZSoSP77pwNytszXOCn/+cMDT+JxX2+cd+f9bgCa9yh2/cfj3Gtp76rPoyxYmTpMneoSkDde/W7xh+Zb0KDUPXeQv6RplMQVwfJUgww87+cHnDs8QFcPfau7BG3KEbaJYVHouA9ds8dy5T9GpPq0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(6666004)(66946007)(36756003)(31686004)(53546011)(8936002)(66556008)(4326008)(8676002)(83380400001)(26005)(508600001)(54906003)(38100700002)(6512007)(316002)(6486002)(7416002)(31696002)(186003)(2906002)(6506007)(2616005)(86362001)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWdTV2I0RWxKSVM4azBoY0lTZmIyUTV4ak1wVFVTYm5KekUwZm1MeHYydVBo?=
+ =?utf-8?B?cVBpUWJVTUZzcFdkVVM0U0dIL05tdnFneC9Sb1ZreFlJYWdCa3lmUDQ4ZHY5?=
+ =?utf-8?B?d2RJNm1wT1NJMEJDMURiek5GY2NYTGRSVndhUTZnTWRHQkp2NEg3blg2THZv?=
+ =?utf-8?B?V1UrcXB4cDd5S0Vpd2R0TWp3a0kzc3poSEZka1lhT2ZFRVo4ZzkrWFdnQm9Y?=
+ =?utf-8?B?ZFNmMHg2MkRFNXlvcnpOZFovWU9LQ0lMdExlZEdJUFo1NnVITFlYWnBYSnht?=
+ =?utf-8?B?L2Z4bktITE1vOXpOWFZrbEcxUDdGUEd2K29qajBhNjZFRzNpTDM3MlBrSXFJ?=
+ =?utf-8?B?eUErOE0rcTNGOGhWOTJMcDBSVzRvSnJ2UFg5TU4rVlNyZVpkTE01TmdCZ1FE?=
+ =?utf-8?B?VHMycnZ0eHFJSE9tTllGV2FMdnVBSFNzRzFGN0hScHFOMklFaTcrRjJneHE4?=
+ =?utf-8?B?eVpLdzB4NDNnK1VMN3RhYk5LdFh3WEZ5ZGhlbFFZOWlLUkxnOTNPVFB2YW5E?=
+ =?utf-8?B?UlFEMXJtRVBYMGYzWTkyV1M1M2YwUm1rSzdKL0JRVy9BeXI1dWQ2WUZsbFhH?=
+ =?utf-8?B?S2ZvSTM4MzU5eTZMamtMdE9wMFhLMVdyQ2dJam9YMG9HZjBhcjNWWXlDSmQz?=
+ =?utf-8?B?aVppaU9MUmQzZGN6SHVkL29zOTl5bVBVS1lhWFZoNE50ZnVmZ3FVRnk5R2Vm?=
+ =?utf-8?B?QndVdlVhYTloVUpxdU9DanhFZUxBZWJXelR2Y2d3cFM2UDhwQ0kxbm5oSWNw?=
+ =?utf-8?B?eTdGczh3cVJNRzJuckhyQTdWUmFjeUdTSnkxZWhwdG1HZmJvUVIwcjAzLzFE?=
+ =?utf-8?B?RURnTmNsVk5BY3JRT3BxM2kveXFUNVNLeTZDOXoxclpYRXd5RDMxZmVEeFBK?=
+ =?utf-8?B?SG56dm9WakExMDJEaXBjWWdVcVFBTDMzZENIVUxUa25iQzFMc3lQZ1Y2U0tG?=
+ =?utf-8?B?dU85czlFZGhETVRyTXNvRDRiUXY5amxFZC9IUTQvWnRMZ0RwMHk3YW00aytp?=
+ =?utf-8?B?QlUxSEdXZ3RUd0k5VHhCT0diQzZ1QmhyY0taMzMvYmNlbWJ4ekxnbUk1QjFN?=
+ =?utf-8?B?K0g5ZldJRXd3S0lGY1pmdGlmSldvWkRVQmV1cit4amdSTXljZjlNcW9kMGkw?=
+ =?utf-8?B?a1NERWhjcXBjOTF2LzFkSERhNmNzTENyM2xpUmdTUFNTVU5wOFA3M1RNa2NW?=
+ =?utf-8?B?RVJEVEE5Vk9na3U4V0QwL2lMdXYya1c3cTRIZFIxOGJLNE1GcnpaeXZTcmRj?=
+ =?utf-8?B?RDZ1S1hiYk45dVdlQ0ltbVpBZXdCTzFiOU0yKzZ3UUUyRzR2aHB3UjQ2S3pP?=
+ =?utf-8?B?WTI3QVpmOHdCZW9EL1doRnpPeTk1UFd1MDBzbEZsVXcvOUliVmNTdDNBaHN0?=
+ =?utf-8?B?Wk1DNGFlR0IwbGY1T0J6MjhFdHhPaVNObnMwK1V2aFN1OU82cFZ1aHd3VTNN?=
+ =?utf-8?B?d1hQeVlBams1NElHMEtVMnNDbTdOM3NiVk5xbEU1ODJ5dXZLZGFGbFZEUHl2?=
+ =?utf-8?B?ZnozQWJWQklYTFBuY0Y4NXQwSmRyK3dhT25zSmxGUlNCZWFxY1BUMm00MWxV?=
+ =?utf-8?B?aVJNRkN5dHJoamNIUXdTclBvM0s2cVRGUWt5ckoxMnczblc0bmlpYzFGbFhh?=
+ =?utf-8?B?M3hyQmZScmJlcUdYVkJVU1FRUjZ0M2VkUkFxUitveGtlSVc5bytTbEMvUU55?=
+ =?utf-8?B?RkZ6dWpKRE5zM2Q4NVN3ZjRnK1ozVnNDcXFSNzN5SGFQRVllVlFqQzhOS25O?=
+ =?utf-8?B?VFdDcjdWN3dnTWdSbFRLTEczRXEraCs5SFNIWE9yZ3BRTHZISTFPUUJScFBY?=
+ =?utf-8?B?OHBCOHVRanlvUDBmWTdKN1lOKzdTRktKQ25iSlc1VjVnN05rRk9LU3VyZ0hV?=
+ =?utf-8?B?Q2xEWWlyT0lFa0Y0aG9oR0NCak0wbEJkZEdBOFhVcHBPbzNiREpoZVhVTVNQ?=
+ =?utf-8?B?VU0zcStWUE1jbHNoaTVuZ3NkR3lkSTkxTWtKbkMvZ2pGTmRUMlZGYzExcXlj?=
+ =?utf-8?B?L0laZlNlZmhkR1M2NkRVNE9KTzE4Q3M1MG5uYWptWEduaHo0ZVJOa3VQeE1G?=
+ =?utf-8?B?d2kxY2pqUCtRRFkrYzZKNWh1SC95aVVlVkUvRHlBWThpL3oyS2dPdXYzV2FB?=
+ =?utf-8?B?bGZoWTBpSFF2dWFsSS9oL0ViZ2FveGY0T0VOUGFsZWFQLzFxOWRJbE9DZ25T?=
+ =?utf-8?B?OVUrK0FZL2c4VEx3Y3ZOSG5TVHZ2MTJub0VldndFVmdJVlp1eXRFUG1wcllr?=
+ =?utf-8?B?aVE0YmpmVjhKbmVoTnM5QXNFMkxvTDlkVklxQi8wN0hXRUZGd2JqWnJpdEVY?=
+ =?utf-8?B?OTM2NS9vZEJRM25YR1BvVTZWUWRjUlJNWGJvc2xHOStENmY5aGRjQT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdb47771-ebd4-412a-ebba-08da47b583a9
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 12:10:15.2606
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QCWaJDdoUePOUcktbuxfyNdFdex56ReyhO/cVIJxE9Xkc9EAnoWerpcjb8ZomGTiS5CUhWOck1mpS6AuD24npg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1934
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 04, 2022 at 01:13:53AM +0000, Liam Howlett wrote:
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+On 6/6/2022 5:24 PM, Aneesh Kumar K.V wrote:
+> Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+>>
+> Can you try this change?
 > 
-> Remove __do_munmap() in favour of do_munmap(), do_mas_munmap(), and
-> do_mas_align_munmap().
-> 
-> do_munmap() is a wrapper to create a maple state for any callers that have
-> not been converted to the maple tree.
-> 
-> do_mas_munmap() takes a maple state to mumap a range.  This is just a
-> small function which checks for error conditions and aligns the end of the
-> range.
-> 
-> do_mas_align_munmap() uses the aligned range to mumap a range.
-> do_mas_align_munmap() starts with the first VMA in the range, then finds
-> the last VMA in the range.  Both start and end are split if necessary.
-> Then the VMAs are removed from the linked list and the mm mlock count is
-> updated at the same time.  Followed by a single tree operation of
-> overwriting the area in with a NULL.  Finally, the detached list is
-> unmapped and freed.
-> 
-> By reorganizing the munmap calls as outlined, it is now possible to avoid
-> extra work of aligning pre-aligned callers which are known to be safe,
-> avoid extra VMA lookups or tree walks for modifications.
-> 
-> detach_vmas_to_be_unmapped() is no longer used, so drop this code.
-> 
-> vm_brk_flags() can just call the do_mas_munmap() as it checks for
-> intersecting VMAs directly.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-...
-> +/*
-> + * do_mas_align_munmap() - munmap the aligned region from @start to @end.
-> + * @mas: The maple_state, ideally set up to alter the correct tree location.
-> + * @vma: The starting vm_area_struct
-> + * @mm: The mm_struct
-> + * @start: The aligned start address to munmap.
-> + * @end: The aligned end address to munmap.
-> + * @uf: The userfaultfd list_head
-> + * @downgrade: Set to true to attempt a write downgrade of the mmap_sem
-> + *
-> + * If @downgrade is true, check return code for potential release of the lock.
-> + */
-> +static int
-> +do_mas_align_munmap(struct ma_state *mas, struct vm_area_struct *vma,
-> +		    struct mm_struct *mm, unsigned long start,
-> +		    unsigned long end, struct list_head *uf, bool downgrade)
-> +{
-> +	struct vm_area_struct *prev, *last;
-> +	int error = -ENOMEM;
-> +	/* we have start < vma->vm_end  */
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 7a11c387fbbc..905609260dda 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -94,6 +94,17 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  		goto err_reg_mgid;
+>  	data->mgid = rc;
 >  
-> -	if (mas_preallocate(&mas, vma, GFP_KERNEL))
-> +	if (mas_preallocate(mas, vma, GFP_KERNEL))
->  		return -ENOMEM;
-> -	prev = vma->vm_prev;
-> -	/* we have start < vma->vm_end  */
+> +	/*
+> +	 * This get called before the node is brought online. That
+> +	 * is because depending on the value of mhp_default_online_type
+> +	 * the kernel will online the memory along with hotplug
+> +	 * operation. Add the new memory tier before we try to bring
+> +	 * memory blocks online. Otherwise new node will get added to
+> +	 * the default memory tier via hotplug callbacks.
+> +	 */
+> +#ifdef CONFIG_TIERED_MEMORY
+> +	node_set_memory_tier(numa_node, MEMORY_TIER_PMEM);
+> +#endif
+>  	for (i = 0; i < dev_dax->nr_range; i++) {
+>  		struct resource *res;
+>  		struct range range;
+> @@ -148,9 +159,6 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
 >  
-> +	mas->last = end - 1;
->  	/*
->  	 * If we need to split any vma, do it now to save pain later.
->  	 *
-...
-> +/*
-> + * do_mas_munmap() - munmap a given range.
-> + * @mas: The maple state
-> + * @mm: The mm_struct
-> + * @start: The start address to munmap
-> + * @len: The length of the range to munmap
-> + * @uf: The userfaultfd list_head
-> + * @downgrade: set to true if the user wants to attempt to write_downgrade the
-> + * mmap_sem
-> + *
-> + * This function takes a @mas that is either pointing to the previous VMA or set
-> + * to MA_START and sets it up to remove the mapping(s).  The @len will be
-> + * aligned and any arch_unmap work will be preformed.
-> + *
-> + * Returns: -EINVAL on failure, 1 on success and unlock, 0 otherwise.
-> + */
-> +int do_mas_munmap(struct ma_state *mas, struct mm_struct *mm,
-> +		  unsigned long start, size_t len, struct list_head *uf,
-> +		  bool downgrade)
-> +{
-> +	unsigned long end;
-> +	struct vm_area_struct *vma;
-> +
-> +	if ((offset_in_page(start)) || start > TASK_SIZE || len > TASK_SIZE-start)
-> +		return -EINVAL;
-> +
-> +	end = start + PAGE_ALIGN(len);
-> +	if (end == start)
-> +		return -EINVAL;
-> +
-> +	 /* arch_unmap() might do unmaps itself.  */
-> +	arch_unmap(mm, start, end);
-> +
-> +	/* Find the first overlapping VMA */
-> +	vma = mas_find(mas, end - 1);
-> +	if (!vma)
-> +		return 0;
-> +
-> +	return do_mas_align_munmap(mas, vma, mm, start, end, uf, downgrade);
-> +}
-> +
-...
-> @@ -2845,11 +2908,12 @@ static int __vm_munmap(unsigned long start, size_t len, bool downgrade)
->  	int ret;
->  	struct mm_struct *mm = current->mm;
->  	LIST_HEAD(uf);
-> +	MA_STATE(mas, &mm->mm_mt, start, start);
+>  	dev_set_drvdata(dev, data);
 >  
->  	if (mmap_write_lock_killable(mm))
->  		return -EINTR;
+> -#ifdef CONFIG_TIERED_MEMORY
+> -	node_set_memory_tier(numa_node, MEMORY_TIER_PMEM);
+> -#endif
+>  	return 0;
 >  
-> -	ret = __do_munmap(mm, start, len, &uf, downgrade);
-> +	ret = do_mas_munmap(&mas, mm, start, len, &uf, downgrade);
->  	/*
->  	 * Returning 1 indicates mmap_lock is downgraded.
->  	 * But 1 is not legal return value of vm_munmap() and munmap(), reset
+>  err_request_mem:
 
-Running a syscall fuzzer for a while could trigger those.
+Yes, this fixes the issue for me. Thanks.
 
- WARNING: CPU: 95 PID: 1329067 at mm/slub.c:3643 kmem_cache_free_bulk
- CPU: 95 PID: 1329067 Comm: trinity-c32 Not tainted 5.18.0-next-20220603 #137
- pstate: 10400009 (nzcV daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : kmem_cache_free_bulk
- lr : mt_destroy_walk
- sp : ffff80005ed66bf0
- x29: ffff80005ed66bf0 x28: ffff401d6c82f050 x27: 0000000000000000
- x26: dfff800000000000 x25: 0000000000000003 x24: 1ffffa97cc5fb120
- x23: ffffd4be62fd8760 x22: ffff401d6c82f050 x21: 0000000000000003
- x20: 0000000000000000 x19: ffff401d6c82f000 x18: ffffd4be66407d1c
- x17: ffff40297ac21f0c x16: 1fffe8016136146b x15: 1fffe806c7d1ad38
- x14: 1fffe8016136145e x13: 0000000000000004 x12: ffff70000bdacd8d
- x11: 1ffff0000bdacd8c x10: ffff70000bdacd8c x9 : ffffd4be60d633c4
- x8 : ffff80005ed66c63 x7 : 0000000000000001 x6 : 0000000000000003
- x5 : ffff80005ed66c60 x4 : 0000000000000000 x3 : ffff400b09b09a80
- x2 : ffff401d6c82f050 x1 : 0000000000000000 x0 : ffff07ff80014a80
- Call trace:
-  kmem_cache_free_bulk
-  mt_destroy_walk
-  mas_wmb_replace
-  mas_spanning_rebalance.isra.0
-  mas_wr_spanning_store.isra.0
-  mas_wr_store_entry.isra.0
-  mas_store_prealloc
-  do_mas_align_munmap.constprop.0
-  do_mas_munmap
-  __vm_munmap
-  __arm64_sys_munmap
-  invoke_syscall
-  el0_svc_common.constprop.0
-  do_el0_svc
-  el0_svc
-  el0t_64_sync_handler
-  el0t_64_sync
- irq event stamp: 665580
- hardirqs last  enabled at (665579):  kasan_quarantine_put
- hardirqs last disabled at (665580):  el1_dbg
- softirqs last  enabled at (664048):  __do_softirq
- softirqs last disabled at (663831):  __irq_exit_rcu
-
-
- BUG: KASAN: double-free or invalid-free in kmem_cache_free_bulk
-
- CPU: 95 PID: 1329067 Comm: trinity-c32 Tainted: G        W         5.18.0-next-20220603 #137
- Call trace:
-  dump_backtrace
-  show_stack
-  dump_stack_lvl
-  print_address_description.constprop.0
-  print_report
-  kasan_report_invalid_free
-  ____kasan_slab_free
-  __kasan_slab_free
-  slab_free_freelist_hook
-  kmem_cache_free_bulk
-  mas_destroy
-  mas_store_prealloc
-  do_mas_align_munmap.constprop.0
-  do_mas_munmap
-  __vm_munmap
-  __arm64_sys_munmap
-  invoke_syscall
-  el0_svc_common.constprop.0
-  do_el0_svc
-  el0_svc
-  el0t_64_sync_handler
-  el0t_64_sync
-
- Allocated by task 1329067:
-  kasan_save_stack
-  __kasan_slab_alloc
-  slab_post_alloc_hook
-  kmem_cache_alloc_bulk
-  mas_alloc_nodes
-  mas_preallocate
-  __vma_adjust
-  vma_merge
-  mprotect_fixup
-  do_mprotect_pkey.constprop.0
-  __arm64_sys_mprotect
-  invoke_syscall
-  el0_svc_common.constprop.0
-  do_el0_svc
-  el0_svc
-  el0t_64_sync_handler
-  el0t_64_sync
-
- Freed by task 1329067:
-  kasan_save_stack
-  kasan_set_track
-  kasan_set_free_info
-  ____kasan_slab_free
-  __kasan_slab_free
-  slab_free_freelist_hook
-  kmem_cache_free
-  mt_destroy_walk
-  mas_wmb_replace
-  mas_spanning_rebalance.isra.0
-  mas_wr_spanning_store.isra.0
-  mas_wr_store_entry.isra.0
-  mas_store_prealloc
-  do_mas_align_munmap.constprop.0
-  do_mas_munmap
-  __vm_munmap
-  __arm64_sys_munmap
-  invoke_syscall
-  el0_svc_common.constprop.0
-  do_el0_svc
-  el0_svc
-  el0t_64_sync_handler
-  el0t_64_sync
-
- The buggy address belongs to the object at ffff401d6c82f000
-                which belongs to the cache maple_node of size 256
- The buggy address is located 0 bytes inside of
-                256-byte region [ffff401d6c82f000, ffff401d6c82f100)
-
- The buggy address belongs to the physical page:
- page:fffffd0075b20a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x401dec828
- head:fffffd0075b20a00 order:3 compound_mapcount:0 compound_pincount:0
- flags: 0x1bfffc0000010200(slab|head|node=1|zone=2|lastcpupid=0xffff)
- raw: 1bfffc0000010200 fffffd00065b2a08 fffffd0006474408 ffff07ff80014a80
- raw: 0000000000000000 00000000002a002a 00000001ffffffff 0000000000000000
- page dumped because: kasan: bad access detected
- page_owner tracks the page as allocated
- page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 185514, tgid 185514 (trinity-c15), ts 9791681605400, free_ts 9785882037080
-  post_alloc_hook
-  get_page_from_freelist
-  __alloc_pages
-  alloc_pages
-  allocate_slab
-  new_slab
-  ___slab_alloc
-  __slab_alloc.constprop.0
-  kmem_cache_alloc
-  mas_alloc_nodes
-  mas_preallocate
-  __vma_adjust
-  vma_merge
-  mlock_fixup
-  apply_mlockall_flags
-  __arm64_sys_munlockall
- page last free stack trace:
-  free_pcp_prepare
-  free_unref_page
-  __free_pages
-  __free_slab
-  discard_slab
-  __slab_free
-  ___cache_free
-  qlist_free_all
-  kasan_quarantine_reduce
-  __kasan_slab_alloc
-  __kmalloc_node
-  kvmalloc_node
-  __slab_free
-  ___cache_free
-  qlist_free_all
-  kasan_quarantine_reduce
-  __kasan_slab_alloc
-  __kmalloc_node
-  kvmalloc_node
-  proc_sys_call_handler
-  proc_sys_read
-  new_sync_read
-  vfs_read
-
- Memory state around the buggy address:
-  ffff401d6c82ef00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff401d6c82ef80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- >ffff401d6c82f000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                    ^
-  ffff401d6c82f080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff401d6c82f100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+Regards,
+Bharata.

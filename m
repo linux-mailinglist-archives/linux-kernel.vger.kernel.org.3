@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658D253DFD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB6453DFD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352257AbiFFCsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S1352233AbiFFCtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345740AbiFFCsJ (ORCPT
+        with ESMTP id S232695AbiFFCtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:48:09 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E14165A4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1654483688; x=1686019688;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=D/wS6F2qtObb/FfuG5OxzP+ia1M5T+oSNe0EBUl49xg=;
-  b=ZHTpxQL7ZPyUobx32bcBWnw83ZTK8cM3WpzJkquzm4UwXygPcyWqlMvM
-   Y3k+1e3dKe0a3O6xhm8mHaZgbTmWc7GtY26PNOvXjKTYRuXEK6v2Rl1dG
-   ltg2YjnZqJf+zloDZWjdNCGN8ca9rPjFInwO1gJTEXdG6AjkXLOZOhZ9l
-   8uZiqIMSgEc/HKqZ/w4iLQlfzGlfKkq7As8UXwEKP1wX1ie31YxW1Ob/u
-   QKGKHQEjp7j5A91D6vPkSmpGXSd6P+r/rtEopU7BayOcrmbW1vPJnRVt0
-   55WOJDbO8AycG7Zf3VFl65UHjJFT+x8BJsuwNhEMIV+EIcyWp21rI478W
+        Sun, 5 Jun 2022 22:49:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4D511452
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654483792; x=1686019792;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=p29TgaZG9mtSmtjL1acqW5VnhwVAVC4lrQZFNN9yRKs=;
+  b=JytA87ZAOYZL08CF3zwZXlXAikjOAlyQAk2lqP9yRXkiX0R3xKGhaWv6
+   3Z5lEHglHewncqP88zQOe5lmmAQL4XWiqHq/m8uTAkenJgqdk1XHxDxj5
+   qD0FTYAH/OnAm7aUCkPrOmxVR5mB34pJcdrjnplYnHbFXj0H1QrpPKHf3
+   VaHWmeH+JG4j+Av5mPQSwMPX5JwvfTSasEVNjJm4cHy4hN13frPMr3cp+
+   Fk+EjjoB7AbQkZsMvkue+vbOU/yuZ/2kEBAInVn4Hg0LANGicgpMIXs5z
+   dmt5tClLqTzheI1OXcOAFx3ZQ+BMu/Czr3GQdWijw0ODa42gixEaUPlet
    g==;
-X-IronPort-AV: E=Sophos;i="5.91,280,1647273600"; 
-   d="scan'208";a="203119277"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Jun 2022 10:48:07 +0800
-IronPort-SDR: p8X5P6/vrzD/wkZt7OE4gVwxVGk7bJbvfyasImzscs/sGmHCFsmOhZd6ea7OlRpuF0KC6trBJG
- 0UAhcHr05Xh2PS7w89Mb/MzqmGcKQwt+7fObt/Tnfsyj+dcaIEJuj+VnBhcT7XPEK786Hszofc
- o9SwhRx3EEvTE34PRgJUdhQ+7nWUx76zbLszMIahLcyYO5QKxeY2+qolgmTwYLdQrHtzrV3PGg
- WNcdusjT+XO+S1pB3FtgfqF2l+GAZoy/poETnvrrl8Den4mSvf2/g+gFFa0YtUTKV25S8oMnuO
- vHHCgq9tSK5LKk4xgS9JtOOh
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jun 2022 19:11:27 -0700
-IronPort-SDR: ICLbCZkJcU60jBB7e8B4qWOhc3cxlgVU6kxS1ZQRVTnO28UJg9rEIUQLD9nRthghjjwzVvAvA2
- MI1bAghF4NiJn2w7WjP0rAtxDSP4RXFqEeCeVf02vKzxyaq4v2nB27dMk7Y1z0O9snGm4zL6Xu
- BUBO4uoLHZfuZXf/AopveY1mcRJJ4OxTrv6j6e4iZZIVXqxCZY+gQvKapmoqyirEMfZRyKcNTD
- 00j5udsTAxCvZcGoxtnpKL78kF3QOOQ/TlOciGSh46fsu2bDJ5+lSPfndChoHAIcj2djtOyFg3
- +qs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jun 2022 19:48:07 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LGdFy2qvSz1Rwrw
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:48:06 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1654483685; x=1657075686; bh=D/wS6F2qtObb/FfuG5OxzP+ia1M5T+oSNe0
-        EBUl49xg=; b=d3dlbZMa6gaY3hULhIWoEKv6PVGRqRPMuhOz0C2c2KhqPDJM6yr
-        7LZI1PPTTX/14vzTEcmERaWpNWrjm/dclvcOVvQo98bYDCeEIH5fVWRAwS8HIjzD
-        AT2uy8O9hWtwGGNzTd5GPvps3u2Q9VCbVKQAjizuCbGfdObJChsS5siq+/1hAbzU
-        65yTiuBF0gVI1nXbmFB3KVOsto+2WXaodQlAZpVMdS+bBZ2scyPWZswunlT3Nw01
-        ly94Vvpkf7LLdV9UURUrqdKsHT4AkgnPQZ2oBjQrmeX2Qj30sYcktr+9HYzt+Xft
-        m2j031FcpSh5iHLlzEPPmeLUQ1eLoDqElHQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nmd3wcyeblr0 for <linux-kernel@vger.kernel.org>;
-        Sun,  5 Jun 2022 19:48:05 -0700 (PDT)
-Received: from [10.225.163.72] (unknown [10.225.163.72])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LGdFt50L7z1Rvlc;
-        Sun,  5 Jun 2022 19:48:02 -0700 (PDT)
-Message-ID: <3c400db6-d251-c4bd-b019-b9dc1d807212@opensource.wdc.com>
-Date:   Mon, 6 Jun 2022 11:48:01 +0900
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276654410"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="276654410"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 19:49:52 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="635363523"
+Received: from xingguom-mobl.ccr.corp.intel.com ([10.254.213.116])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 19:49:47 -0700
+Message-ID: <aeced91ea9d9396e9842f5c0264391aabd291726.camel@intel.com>
+Subject: Re: [RFC PATCH v4 1/7] mm/demotion: Add support for explicit memory
+ tiers
+From:   Ying Huang <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Date:   Mon, 06 Jun 2022 10:49:44 +0800
+In-Reply-To: <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+         <20220527122528.129445-2-aneesh.kumar@linux.ibm.com>
+         <352ae5f408b6d7d4d3d820d68e2f2c6b494e95e1.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RESEND PATCH] scsi: ufs: sysfs: support writing boot_lun attr
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        "a5b6@riseup.net" <a5b6@riseup.net>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "phone-devel@vger.kernel.org" <phone-devel@vger.kernel.org>
-References: <20220525164013.93748-1-a5b6@riseup.net>
- <DM6PR04MB65750969ACD36EEEB48374DFFCD69@DM6PR04MB6575.namprd04.prod.outlook.com>
- <8d25171a-5d86-9acc-0f94-1a3c6efdb360@riseup.net>
- <DM6PR04MB65752422396C86EAD4591701FCD89@DM6PR04MB6575.namprd04.prod.outlook.com>
- <a7f46ad1-6d9e-a38e-31cc-29fddfa2b496@linaro.org>
- <DM6PR04MB65751A3B1D0BA4467CADDA93FCDF9@DM6PR04MB6575.namprd04.prod.outlook.com>
- <a4746c67-fa74-8af1-3f2d-7853e9fae8a6@acm.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <a4746c67-fa74-8af1-3f2d-7853e9fae8a6@acm.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,22 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/22 12:55, Bart Van Assche wrote:
-> On 6/1/22 10:05, Avri Altman wrote:
->> As a design rule, sysfs attribute files should not be used to make
->> persistent modifications to a device configuration. This rule applies
->> to all subsystems and ufs is no different.
+On Thu, 2022-06-02 at 14:07 +0800, Ying Huang wrote:
+> On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+> > From: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > 
+> > In the current kernel, memory tiers are defined implicitly via a
+> > demotion path relationship between NUMA nodes, which is created
+> > during the kernel initialization and updated when a NUMA node is
+> > hot-added or hot-removed.  The current implementation puts all
+> > nodes with CPU into the top tier, and builds the tier hierarchy
+> > tier-by-tier by establishing the per-node demotion targets based
+> > on the distances between nodes.
+> > 
+> > This current memory tier kernel interface needs to be improved for
+> > several important use cases,
+> > 
+> > The current tier initialization code always initializes
+> > each memory-only NUMA node into a lower tier.  But a memory-only
+> > NUMA node may have a high performance memory device (e.g. a DRAM
+> > device attached via CXL.mem or a DRAM-backed memory-only node on
+> > a virtual machine) and should be put into a higher tier.
+> > 
+> > The current tier hierarchy always puts CPU nodes into the top
+> > tier. But on a system with HBM or GPU devices, the
+> > memory-only NUMA nodes mapping these devices should be in the
+> > top tier, and DRAM nodes with CPUs are better to be placed into the
+> > next lower tier.
+> > 
+> > With current kernel higher tier node can only be demoted to selected nodes on the
+> > next lower tier as defined by the demotion path, not any other
+> > node from any lower tier.  This strict, hard-coded demotion order
+> > does not work in all use cases (e.g. some use cases may want to
+> > allow cross-socket demotion to another node in the same demotion
+> > tier as a fallback when the preferred demotion node is out of
+> > space), This demotion order is also inconsistent with the page
+> > allocation fallback order when all the nodes in a higher tier are
+> > out of space: The page allocation can fall back to any node from
+> > any lower tier, whereas the demotion order doesn't allow that.
+> > 
+> > The current kernel also don't provide any interfaces for the
+> > userspace to learn about the memory tier hierarchy in order to
+> > optimize its memory allocations.
+> > 
+> > This patch series address the above by defining memory tiers explicitly.
+> > 
+> > This patch adds below sysfs interface which is read-only and
+> > can be used to read nodes available in specific tier.
+> > 
+> > /sys/devices/system/memtier/memtierN/nodelist
+> > 
+> > Tier 0 is the highest tier, while tier MAX_MEMORY_TIERS - 1 is the
+> > lowest tier. The absolute value of a tier id number has no specific
+> > meaning. what matters is the relative order of the tier id numbers.
+> > 
+> > All the tiered memory code is guarded by CONFIG_TIERED_MEMORY.
+> > Default number of memory tiers are MAX_MEMORY_TIERS(3). All the
+> > nodes are by default assigned to DEFAULT_MEMORY_TIER(1).
+> > 
+> > Default memory tier can be read from,
+> > /sys/devices/system/memtier/default_tier
+> > 
+> > Max memory tier can be read from,
+> > /sys/devices/system/memtier/max_tiers
+> > 
+> > This patch implements the RFC spec sent by Wei Xu <weixugc@google.com> at [1].
+> > 
+> > [1] https://lore.kernel.org/linux-mm/CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com/
+> > 
+> > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 > 
-> Hmm ... where does that rule come from? I can't find it in
-> Documentation/admin-guide/sysfs-rules.rst. Did I perhaps overlook something?
+> IMHO, we should change the kernel internal implementation firstly, then
+> implement the kerne/user space interface.  That is, make memory tier
+> explicit inside kernel, then expose it to user space.
 
-I am not aware of any writable sysfs attribute file that can be used to
-make persistent device configuration changes, at least in storage area.
-I know of plenty that do change a device setting, but without saving this
-setting to maintain it across power cycles. Do you know of any such
-attribute ? I was under the impression that sysfs should not be used to
-persistently reconfigure a device...
+Why ignore this comment for v5?  If you don't agree, please respond me.
 
--- 
-Damien Le Moal
-Western Digital Research
+Best Regards,
+Huang, Ying
+

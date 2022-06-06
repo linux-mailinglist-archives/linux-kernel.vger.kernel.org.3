@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844F553EE69
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D8553EE6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 21:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbiFFTUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 15:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S232180AbiFFTUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 15:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiFFTT6 (ORCPT
+        with ESMTP id S229819AbiFFTT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Jun 2022 15:19:58 -0400
 Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF835113B75;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E83113B77;
         Mon,  6 Jun 2022 12:19:54 -0700 (PDT)
 From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1654543192; bh=Vla6Rhfl/gMBj6xgJ0VP7fQelpDgmC8OEg+qQWxrpmQ=;
+        t=1654543192; bh=QBs7UtuS1Zqfk21JmPJtrPH28UjdCT91NFOWXH9PRtA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ny6DtajuT28g+Hn74q+dQy3n8P98yg8HxM2Q2EGHrASbKTqYagLJ4C99wA52Wy8aJ
-         EfSFqLu6+/CcTDGF6vq6pnWADSLQltOYIeVoqG+8EnqMZaRLewBpRxvRPV/2A5x9W3
-         blGBSzzqkwiD2T1MsUTMV4vEQg9LMMN83v7byraY=
+        b=mdDf+14SP4WSk9ObzLihhJ+lqyl6VWwKgHzVVo5GUwW8+ZDIM1sS2y/jjgmk2buER
+         5P+G59wXVOHyxvMsoh1kEr3p0jkusK+lPcewH/5ba2fshFuYWUlcUoQ0T1AIFbhAs5
+         NkruLCpMelDMckZFD4dJ4Sgh61XuBcoMGO3V1dEY=
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -32,9 +32,9 @@ Cc:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
         linux-kernel@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
         Hector Martin <marcan@marcan.st>,
         Sven Peter <sven@svenpeter.dev>, asahi@lists.linux.dev
-Subject: [RFC PATCH v2 1/5] dt-bindings: sound: Add Apple MCA I2S transceiver
-Date:   Mon,  6 Jun 2022 21:19:06 +0200
-Message-Id: <20220606191910.16580-2-povik+lin@cutebit.org>
+Subject: [RFC PATCH v2 2/5] dt-bindings: sound: Add Apple Macs sound peripherals
+Date:   Mon,  6 Jun 2022 21:19:07 +0200
+Message-Id: <20220606191910.16580-3-povik+lin@cutebit.org>
 In-Reply-To: <20220606191910.16580-1-povik+lin@cutebit.org>
 References: <20220606191910.16580-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
@@ -49,33 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding schema for MCA I2S transceiver found on Apple M1 and other
-chips.
+Add binding for Apple Silicon Macs' machine-level integration of sound
+peripherals.
 
 Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 ---
- .../devicetree/bindings/sound/apple,mca.yaml  | 102 ++++++++++++++++++
- 1 file changed, 102 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/apple,mca.yaml
+ .../bindings/sound/apple,macaudio.yaml        | 157 ++++++++++++++++++
+ 1 file changed, 157 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/apple,macaudio.yaml
 
-diff --git a/Documentation/devicetree/bindings/sound/apple,mca.yaml b/Documentation/devicetree/bindings/sound/apple,mca.yaml
+diff --git a/Documentation/devicetree/bindings/sound/apple,macaudio.yaml b/Documentation/devicetree/bindings/sound/apple,macaudio.yaml
 new file mode 100644
-index 000000000000..c8a36d8c38ad
+index 000000000000..f7c12697beab
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/apple,mca.yaml
-@@ -0,0 +1,102 @@
++++ b/Documentation/devicetree/bindings/sound/apple,macaudio.yaml
+@@ -0,0 +1,157 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/sound/apple,mca.yaml#
++$id: http://devicetree.org/schemas/sound/apple,macaudio.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Apple MCA I2S transceiver
++title: Apple Silicon Macs integrated sound peripherals
 +
 +description: |
-+  MCA is an I2S transceiver peripheral found on M1 and other Apple chips. It is
-+  composed of a number of identical clusters which can operate independently
-+  or in an interlinked fashion. Up to 6 clusters have been seen on an MCA.
++  This binding represents the overall machine-level integration of sound
++  peripherals on 'Apple Silicon' machines by Apple.
 +
 +maintainers:
 +  - Martin Povišer <povik+lin@cutebit.org>
@@ -84,18 +83,10 @@ index 000000000000..c8a36d8c38ad
 +  compatible:
 +    items:
 +      - enum:
-+          - apple,t8103-mca
-+          - apple,t6000-mca
-+      - const: apple,mca
-+
-+  reg:
-+    minItems: 2
-+    maxItems: 2
-+
-+  interrupts:
-+    maxItems: 6
-+    description: |
-+      One interrupt per each cluster
++          - apple,j274-macaudio
++          - apple,j293-macaudio
++          - apple,j314-macaudio
++      - const: apple,macaudio
 +
 +  "#address-cells":
 +    const: 1
@@ -103,45 +94,72 @@ index 000000000000..c8a36d8c38ad
 +  "#size-cells":
 +    const: 0
 +
-+  dmas:
-+    minItems: 16
-+    maxItems: 24
++  model:
 +    description: |
-+      DMA channels associated to the SERDES units within the peripheral. They
-+      are listed in groups of four per cluster, and within the cluster they are
-+      given in order TXA, RXA, TXB, RXB of the respective SERDES units.
++      Model name for presentation to users
++    $ref: /schemas/types.yaml#/definitions/string
 +
-+  dma-names:
-+    minItems: 16
-+    maxItems: 24
++patternProperties:
++  "^dai-link(@[0-9a-f]+)?$":
 +    description: |
-+      Names for the DMA channels: 'tx'/'rx', then cluster number, then 'a'/'b'
-+      based on the associated SERDES unit.
++      Node for each sound peripheral such as the speaker array, headphones jack,
++      or microphone.
++    type: object
++    properties:
++      reg:
++        maxItems: 1
 +
-+  clocks:
-+    minItems: 4
-+    maxItems: 6
-+    description: |
-+      Clusters' input reference clock.
++      link-name:
++        description: |
++          Name for the peripheral, expecting 'Speaker' or 'Speakers' if this is
++          the speaker array.
++        $ref: /schemas/types.yaml#/definitions/string
 +
-+  power-domains:
-+    minItems: 5
-+    maxItems: 7
-+    description: |
-+      First the overall power domain for register access, then the power
-+      domains of individual clusters for their operation.
++      cpu:
++        type: object
++        properties:
++          sound-dai:
++            description: |
++              DAI list with CPU-side I2S ports involved in this peripheral.
++            minItems: 1
++            maxItems: 2
++        required:
++          - sound-dai
 +
-+  "#sound-dai-cells":
-+    const: 1
++      codec:
++        type: object
++        properties:
++          sound-dai:
++            description: |
++              DAI list with the CODEC-side DAIs connected to the above CPU-side
++              DAIs and involved in this sound peripheral.
++
++              The list is in left/right order if applicable. If there are more
++              than one CPU-side DAIs (there can be two), the CODECs must be
++              listed first those connected to the first CPU, then those
++              connected to the second.
++
++              In addition, on some machines with many speaker codecs, the CODECs
++              are listed in this fixed order:
++
++              J293: Left Front, Left Rear, Right Front, Right Rear
++              J314: Left Woofer 1, Left Tweeter, Left Woofer 2,
++                    Right Woofer 1, Right Tweeter, Right Woofer 2
++            minItems: 1
++            maxItems: 8
++        required:
++          - sound-dai
++
++    required:
++      - reg
++      - cpu
++      - codec
++
++    additionalProperties: false
 +
 +required:
 +  - compatible
-+  - reg
-+  - dmas
-+  - dma-names
-+  - clocks
-+  - power-domains
-+  - '#sound-dai-cells'
++  - model
 +
 +additionalProperties: false
 +
@@ -165,6 +183,43 @@ index 000000000000..c8a36d8c38ad
 +                  "tx3a", "rx3a", "tx3b", "rx3b";
 +
 +      #sound-dai-cells = <1>;
++    };
++
++    sound {
++      compatible = "apple,j314-macaudio", "apple,macaudio";
++      model = "MacBook Pro J314 integrated audio";
++
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      dai-link@0 {
++        reg = <0>;
++        link-name = "Speakers";
++
++        cpu {
++          sound-dai = <&mca 0>, <&mca 1>;
++        };
++        codec {
++          sound-dai = <&speaker_left_woof1>,
++                      <&speaker_left_tweet>,
++                      <&speaker_left_woof2>,
++                      <&speaker_right_woof1>,
++                      <&speaker_right_tweet>,
++                      <&speaker_right_woof2>;
++        };
++      };
++
++      dai-link@1 {
++        reg = <1>;
++        link-name = "Headphones Jack";
++
++        cpu {
++          sound-dai = <&mca 2>;
++        };
++        codec {
++          sound-dai = <&jack_codec>;
++        };
++      };
 +    };
 -- 
 2.33.0

@@ -2,160 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0295253E694
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FB953EB12
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234842AbiFFLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 07:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S234860AbiFFLJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 07:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiFFLJM (ORCPT
+        with ESMTP id S234834AbiFFLJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 07:09:12 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C31CF149
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 04:09:11 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id q123so12627973pgq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 04:09:11 -0700 (PDT)
+        Mon, 6 Jun 2022 07:09:31 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0095B1E4B43
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 04:09:29 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id s12so21013016ejx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 04:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=65ZFtNVWUgEiF7UjYBW3wJFLdAL4nYqOOHa7JvHA8WU=;
-        b=Px0ePYPnmtG7I5kdPgobkR76856+txRiHqnX/3R6oKLXI3ByaR3Yr+EzS59BDH5Xj2
-         VVdinsihZmFgJpZAuzCgrO64PkKL0wdhAog5rJ8gObl/+CNPmS/bGFAaO1gwI4VRhfTk
-         z9sJFXdZHIK06bPhicVEP7ViHFs7WNEg7bLrKWsoCr4ANseGp6JNPmFaGi+WWjigZRSb
-         xGe+7YUg2/XOLI4CmG09u8ytF3Kq+fJTQdPT8mMT0hjJP+5qk5FGVs59uNtuV8MUar8k
-         KBODMSo/8HBnFlTRVG3gwtyGN4rhrI+RreJR9p4iRtInCAvj0rC0o8JNx3lGqx5Qw/AL
-         HBDw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aVB3XbU6kEJk6PZvO2s24tR9BLuUb9YyAtaHVff3Smg=;
+        b=kCuKP28lLx9qHmUYTzw63TGSZ4ZLrTo9Mo4fi0LZ0fGgatjpSxWXEcT90a2dn/xtjQ
+         mH67EVkxUS+BP3DG8v4cS3paK5FApfdQboxBLbYWVbJbFL0uxVj1SGaEc8s4Px7Lbnew
+         w3CZ+PUghhKG76uflkVwMa5C+kn3vscdENOcM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=65ZFtNVWUgEiF7UjYBW3wJFLdAL4nYqOOHa7JvHA8WU=;
-        b=TRyIHP8j8e0kIsIB0WXAnndB6r+/A8r68qz0gyL4vf6HSPPF6piB9o3wvsaqqPMH01
-         tYbRFbFHSckdykdKdBE07Q0f3/FL7+EPDdTig4h2KRSZ95NeTQqL5aUvl7E/3WWosxGv
-         fEz4LIwPhbIy6IJQi3ow9xlOoJc3buJgfKXgo5Wlx+iZwbUTmey/s3tJQ1R52WtKX3qr
-         8bOvtLlbcG4mOvl4KwmmyU8qB/9DOL685VPGqNMVqkXAoCYa4QwE4Ze9GbaKo0KA+xm+
-         t4/dD/l8GlmInrWMg687QVxVymHT3/KY0oBLH8gnAmkYRc70OhFb4aAYsY2uPezOE6ct
-         zPNg==
-X-Gm-Message-State: AOAM530577YucL65Wb3xVjysXKlI08QJ/xtjIQVWPqP0y1IJbjXcE9sz
-        +MoV+Ifz4jsmcy02zmNGj1ZXVxnVgIG6YPQ=
-X-Google-Smtp-Source: ABdhPJwZCbQ2c5TjAeigfOfiMddP8L3OM54QgRxAAxussvJ8m5BjFmpg/MQRgyFluzTBLW0uT/r76A==
-X-Received: by 2002:a05:6a00:8ce:b0:510:9298:ea26 with SMTP id s14-20020a056a0008ce00b005109298ea26mr23735422pfu.55.1654513750693;
-        Mon, 06 Jun 2022 04:09:10 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id h17-20020a62b411000000b004fa743ba3f9sm10469574pfn.2.2022.06.06.04.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 04:09:10 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     eli.billauer@gmail.com, arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH v5] char: xillybus: Check endpoint type at probe time
-Date:   Mon,  6 Jun 2022 19:09:00 +0800
-Message-Id: <20220606110900.789260-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aVB3XbU6kEJk6PZvO2s24tR9BLuUb9YyAtaHVff3Smg=;
+        b=CO4AxrCAgTL6QPyjYf/yb4r/L3iKlgRVRShNbqqkjN01VjM7NdNS6gZxSjkSLWixUN
+         viYVo/fgzF3F+K2IPuCzZhD2tYrO9nhzx0WvKMNX3brXKAmKgZ4PHJNMeefmEQHZxKwO
+         gaFAMOHytD2TukHzZU2TqN1gzHF89qE/3BiteagSbgytpBRg309MQSb0MQ6JjETnQs+U
+         UVesnCLxf0zg34q70ODZnV/hrdBif+k33ItKx3JF+7pwEe5bih1Phzhrn3A/mLbixSGf
+         CVrTNhNbrnmBd4t3CmmFkl/CT6Ny6OXRrrU7fAa6NaxU3+xuhAIKDPFI4DFXwu9OWuSH
+         UUig==
+X-Gm-Message-State: AOAM530Vm+UXtzvrMHiRoXGPwW5LwnOUApBBdq73L2MJeS4SXvAURVB6
+        lPETx6DWy6wWkCb/ztcqIKrT3/VkKAGUAqiHVorQNNQdZOc=
+X-Google-Smtp-Source: ABdhPJyJPwoCQLz42TcsuXybDtT9fJIguSRG0tgbFV4k6nuX1TO+kFWCGNV1923oYfFqh4WJAVmqflPuyX0lpjJh6eY=
+X-Received: by 2002:a17:906:ced1:b0:710:f654:87ef with SMTP id
+ si17-20020a170906ced100b00710f65487efmr9799921ejb.194.1654513768335; Mon, 06
+ Jun 2022 04:09:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220601103922.1338320-1-hsinyi@chromium.org> <20220601103922.1338320-4-hsinyi@chromium.org>
+ <CGME20220603125421eucas1p17da286a3e7f2d4759aa4c7639dd62f75@eucas1p1.samsung.com>
+ <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com> <YpoFnROxAwdSScuV@casper.infradead.org>
+ <90b228ea-1b0e-d2e8-62be-9ad5802dcce7@samsung.com> <CAJMQK-jDwchHokDZw7k24rGdy7OeUmiVWUCfxBiu1E1dZwuy2Q@mail.gmail.com>
+ <Ypoo4WrVx5/YvaXx@casper.infradead.org> <aa54b4cb-e8ee-8c1a-c826-8016f42a5da1@samsung.com>
+ <0e84fe64-c993-7f43-ca52-8fee735b0372@squashfs.org.uk> <CAJMQK-ijicqF3P8FC2kvJ4E3JTm237LkqwwZ1VfKD30GPRUYQw@mail.gmail.com>
+In-Reply-To: <CAJMQK-ijicqF3P8FC2kvJ4E3JTm237LkqwwZ1VfKD30GPRUYQw@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 6 Jun 2022 19:09:02 +0800
+Message-ID: <CAJMQK-haQ92dQ1vrKhySvPx8kRvhKkqvgjG62eQfTZM9sExcag@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] squashfs: implement readahead
+To:     Phillip Lougher <phillip@squashfs.org.uk>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver submits bulk urb without checking the endpoint type is
-actually bulk.
+On Mon, Jun 6, 2022 at 5:55 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> On Mon, Jun 6, 2022 at 11:54 AM Phillip Lougher <phillip@squashfs.org.uk> wrote:
+> >
+> > On 03/06/2022 16:58, Marek Szyprowski wrote:
+> > > Hi Matthew,
+> > >
+> > > On 03.06.2022 17:29, Matthew Wilcox wrote:
+> > >> On Fri, Jun 03, 2022 at 10:55:01PM +0800, Hsin-Yi Wang wrote:
+> > >>> On Fri, Jun 3, 2022 at 10:10 PM Marek Szyprowski
+> > >>> <m.szyprowski@samsung.com> wrote:
+> > >>>> Hi Matthew,
+> > >>>>
+> > >>>> On 03.06.2022 14:59, Matthew Wilcox wrote:
+> > >>>>> On Fri, Jun 03, 2022 at 02:54:21PM +0200, Marek Szyprowski wrote:
+> > >>>>>> On 01.06.2022 12:39, Hsin-Yi Wang wrote:
+> > >>>>>>> Implement readahead callback for squashfs. It will read datablocks
+> > >>>>>>> which cover pages in readahead request. For a few cases it will
+> > >>>>>>> not mark page as uptodate, including:
+> > >>>>>>> - file end is 0.
+> > >>>>>>> - zero filled blocks.
+> > >>>>>>> - current batch of pages isn't in the same datablock or not enough in a
+> > >>>>>>>       datablock.
+> > >>>>>>> - decompressor error.
+> > >>>>>>> Otherwise pages will be marked as uptodate. The unhandled pages will be
+> > >>>>>>> updated by readpage later.
+> > >>>>>>>
+> > >>>>>>> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> > >>>>>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > >>>>>>> Reported-by: Matthew Wilcox <willy@infradead.org>
+> > >>>>>>> Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
+> > >>>>>>> Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
+> > >>>>>>> ---
+> > >>>>>> This patch landed recently in linux-next as commit 95f7a26191de
+> > >>>>>> ("squashfs: implement readahead"). I've noticed that it causes serious
+> > >>>>>> issues on my test systems (various ARM 32bit and 64bit based boards).
+> > >>>>>> The easiest way to observe is udev timeout 'waiting for /dev to be fully
+> > >>>>>> populated' and prolonged booting time. I'm using squashfs for deploying
+> > >>>>>> kernel modules via initrd. Reverting aeefca9dfae7 & 95f7a26191deon on
+> > >>>>>> top of the next-20220603 fixes the issue.
+> > >>>>> How large are these files?  Just a few kilobytes?
+> > >>>> Yes, they are small, most of them are smaller than 16KB, some about
+> > >>>> 128KB and a few about 256KB. I've sent a detailed list in private mail.
+> > >>>>
+> > >>> Hi Marek,
+> > >>>
+> > >>> Are there any obvious squashfs errors in dmesg? Did you enable
+> > >>> CONFIG_SQUASHFS_FILE_DIRECT or CONFIG_SQUASHFS_FILE_CACHE?
+> > >> I don't think it's an error problem.  I think it's a short file problem.
+> > >>
+> > >> As I understand the current code (and apologies for not keeping up
+> > >> to date with how the patch is progressing), if the file is less than
+> > >> msblk->block_size bytes, we'll leave all the pages as !uptodate, leaving
+> > >> them to be brough uptodate by squashfs_read_folio().  So Marek is hitting
+> > >> the worst case scenario where we re-read the entire block for each page
+> > >> in it.  I think we have to handle this tail case in ->readahead().
+> > >
+> > > I'm not sure if this is related to reading of small files. There are
+> > > only 50 modules being loaded from squashfs volume. I did a quick test of
+> > > reading the files.
+> > >
+> > > Simple file read with this patch:
+> > >
+> > > root@target:~# time find /initrd/ -type f | while read f; do cat $f
+> > >   >/dev/null; done
+> > >
+> > > real    0m5.865s
+> > > user    0m2.362s
+> > > sys     0m3.844s
+> > >
+> > > Without:
+> > >
+> > > root@target:~# time find /initrd/ -type f | while read f; do cat $f
+> > >   >/dev/null; done
+> > >
+> > > real    0m6.619s
+> > > user    0m2.112s
+> > > sys     0m4.827s
+> > >
+> >
+> > It has been a four day holiday in the UK (Queen's Platinum Jubilee),
+> > hence the delay in responding.
+> >
+> > The above read use-case is sequential (only one thread/process),
+> > whereas the use-case where the slow-down is observed may be
+> > parallel (multiple threads/processes entering Squashfs).
+> >
+> > The above sequential use-case if the small files are held in
+> > fragments, will be exhibiting caching behaviour that will
+> > ameliorate the case where the same block is being repeatedly
+> > re-read for each page in it.  Because each time
+> > Squashfs is re-entered handling only a single page, the
+> > decompressed block will be found in the fragment
+> > cache, eliminating a block decompression for each page.
+> >
+> > In a parallel use-case the decompressed fragment block
+> > may be being eliminated from the cache (by other reading
+> > processes), hence forcing the block to be repeatedly
+> > decompressed.
+> >
+> > Hence the slow-down will be much more noticable with a
+> > parallel use-case than a sequential use-case.  It also may
+> > be why this slipped through testing, if the test cases
+> > are purely sequential in nature.
+> >
+> > So Matthew's previous comment is still the most likely
+> > explanation for the slow-down.
+> >
+> Thanks for the pointers. To deal with short file cases (nr_pages <
+> max_pages), Can we refer to squashfs_fill_page() used in
+> squashfs_read_cache(), similar to the case where there are missing
+> pages on the block?
+>
+> Directly calling squashfs_read_data() on short files will lead to crash:
+>
+> Unable to handle kernel paging request at virtual address:
+> [   19.244654]  zlib_inflate+0xba4/0x10c8
+> [   19.244658]  zlib_uncompress+0x150/0x1bc
+> [   19.244662]  squashfs_decompress+0x6c/0xb4
+> [   19.244669]  squashfs_read_data+0x1a8/0x298
+> [   19.244673]  squashfs_readahead+0x2cc/0x4cc
+>
+> I also noticed that the function didn't set flush_dcache_page() with
+> SetPageUptodate() previously.
+>
+> Put these 2 issues together:
+>
 
-[    3.108690] usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-[    3.108983] WARNING: CPU: 0 PID: 211 at drivers/usb/core/urb.c:503 usb_submit_urb+0xcd9/0x18b0
-[    3.110976] RIP: 0010:usb_submit_urb+0xcd9/0x18b0
-[    3.115318] Call Trace:
-[    3.115452]  <TASK>
-[    3.115570]  try_queue_bulk_in+0x43c/0x6e0 [xillyusb]
-[    3.115838]  xillyusb_probe+0x488/0x1230 [xillyusb]
+The patch here is not correct. Please ignore it for now. Sorry for the noice.
 
-Add a check at probe time to fix the bug.
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
-Changes in v5:
-    - Delete the misused function kfree()
-Changes in v4:
-    - Use function xillyusb_check_endpoint() to check the endpoint in
-      xillyusb_setup_base_eps()
-Changes in v3:
-    - Check the endpoint type more earlier
-Changes in v2:
-    - Check the endpoint type at probe time
----
- drivers/char/xillybus/xillyusb.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/char/xillybus/xillyusb.c b/drivers/char/xillybus/xillyusb.c
-index 39bcbfd908b4..b1bac2fdb42a 100644
---- a/drivers/char/xillybus/xillyusb.c
-+++ b/drivers/char/xillybus/xillyusb.c
-@@ -167,6 +167,7 @@ struct xillyusb_dev {
- 	struct device		*dev; /* For dev_err() and such */
- 	struct kref		kref;
- 	struct workqueue_struct	*workq;
-+	struct usb_interface *intf;
- 
- 	int error;
- 	spinlock_t error_lock; /* protect @error */
-@@ -1890,8 +1891,31 @@ static const struct file_operations xillyusb_fops = {
- 	.poll       = xillyusb_poll,
- };
- 
-+static int xillyusb_check_endpoint(struct xillyusb_dev *xdev, u8 addr)
-+{
-+	int i;
-+	struct usb_host_interface *if_desc = xdev->intf->altsetting;
-+
-+	for (i = 0; i < if_desc->desc.bNumEndpoints; i++) {
-+		struct usb_endpoint_descriptor *ep = &if_desc->endpoint[i].desc;
-+
-+		if (ep->bEndpointAddress != addr)
-+			continue;
-+
-+		if ((usb_pipein(addr) && usb_endpoint_is_bulk_in(ep)) ||
-+			(usb_pipeout(addr) && usb_endpoint_is_bulk_out(ep)))
-+			return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- static int xillyusb_setup_base_eps(struct xillyusb_dev *xdev)
- {
-+	if (xillyusb_check_endpoint(xdev, IN_EP_NUM | USB_DIR_IN) ||
-+		xillyusb_check_endpoint(xdev, MSG_EP_NUM | USB_DIR_OUT))
-+		return -EINVAL;
-+
- 	xdev->msg_ep = endpoint_alloc(xdev, MSG_EP_NUM | USB_DIR_OUT,
- 				      bulk_out_work, 1, 2);
- 	if (!xdev->msg_ep)
-@@ -1963,6 +1987,8 @@ static int setup_channels(struct xillyusb_dev *xdev,
- 			chan->out_log2_element_size = out_desc & 0x0f;
- 			chan->out_log2_fifo_size =
- 				((out_desc >> 8) & 0x1f) + 16;
-+			if (xillyusb_check_endpoint(xdev, (i+2) | USB_DIR_OUT))
-+				return -EINVAL;
- 		}
- 	}
- 
-@@ -2126,6 +2152,7 @@ static int xillyusb_probe(struct usb_interface *interface,
- 	mutex_init(&xdev->process_in_mutex);
- 	mutex_init(&xdev->msg_mutex);
- 
-+	xdev->intf = interface;
- 	xdev->udev = usb_get_dev(interface_to_usbdev(interface));
- 	xdev->dev = &interface->dev;
- 	xdev->error = 0;
--- 
-2.25.1
-
+> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
+> index 658fb98af0cd..27519f1f9045 100644
+> --- a/fs/squashfs/file.c
+> +++ b/fs/squashfs/file.c
+> @@ -532,8 +532,7 @@ static void squashfs_readahead(struct
+> readahead_control *ractl)
+>                 if (!nr_pages)
+>                         break;
+>
+> -               if (readahead_pos(ractl) >= i_size_read(inode) ||
+> -                   nr_pages < max_pages)
+> +               if (readahead_pos(ractl) >= i_size_read(inode))
+>                         goto skip_pages;
+>
+>                 index = pages[0]->index >> shift;
+> @@ -548,6 +547,23 @@ static void squashfs_readahead(struct
+> readahead_control *ractl)
+>                 if (bsize == 0)
+>                         goto skip_pages;
+>
+> +               if (nr_pages < max_pages) {
+> +                       struct squashfs_cache_entry *buffer;
+> +
+> +                       buffer = squashfs_get_datablock(inode->i_sb, block,
+> +                                                       bsize);
+> +                       if (!buffer->error) {
+> +                               for (i = 0; i < nr_pages && expected > 0; i++,
+> +                                                       expected -= PAGE_SIZE) {
+> +                                       int avail = min_t(int,
+> expected, PAGE_SIZE);
+> +
+> +                                       squashfs_fill_page(pages[i],
+> buffer, i * PAGE_SIZE, avail);
+> +                               }
+> +                       }
+> +                       squashfs_cache_put(buffer);
+> +                       goto skip_pages;
+> +               }
+> +
+>                 res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
+>                                          actor);
+>
+> @@ -564,8 +580,10 @@ static void squashfs_readahead(struct
+> readahead_control *ractl)
+>                                 kunmap_atomic(pageaddr);
+>                         }
+>
+> -                       for (i = 0; i < nr_pages; i++)
+> +                       for (i = 0; i < nr_pages; i++) {
+> +                               flush_dcache_page(pages[i]);
+>                                 SetPageUptodate(pages[i]);
+> +                       }
+>                 }
+>
+>
+> > Phillip
+> >
+> > > Best regards
+> >

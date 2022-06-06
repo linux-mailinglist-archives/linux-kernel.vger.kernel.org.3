@@ -2,132 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3192D53F204
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D64453F207
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbiFFWN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 18:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S233747AbiFFWQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 18:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiFFWNv (ORCPT
+        with ESMTP id S231176AbiFFWQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 18:13:51 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0459D6D1AD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 15:13:48 -0700 (PDT)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 256MDVYA022255;
-        Tue, 7 Jun 2022 07:13:31 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Tue, 07 Jun 2022 07:13:31 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 256MDVQS022246
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 7 Jun 2022 07:13:31 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <8af7aebf-61ae-f126-57fa-8ff358c1841e@I-love.SAKURA.ne.jp>
-Date:   Tue, 7 Jun 2022 07:13:27 +0900
+        Mon, 6 Jun 2022 18:16:20 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9352AE1;
+        Mon,  6 Jun 2022 15:16:19 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:56556)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nyL18-00Dr2R-6X; Mon, 06 Jun 2022 16:16:10 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53752 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nyL17-008WKx-AS; Mon, 06 Jun 2022 16:16:09 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+        <20220518225355.784371-8-ebiederm@xmission.com>
+        <20220524152725.GE14347@redhat.com>
+Date:   Mon, 06 Jun 2022 17:16:01 -0500
+In-Reply-To: <20220524152725.GE14347@redhat.com> (Oleg Nesterov's message of
+        "Tue, 24 May 2022 17:27:25 +0200")
+Message-ID: <87pmjl1lr2.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: [PATCH v2] kbuild: fix build failure by scripts/check-local-export
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
- <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
-In-Reply-To: <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nyL17-008WKx-AS;;;mid=<87pmjl1lr2.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+XLuQrB0IHmo0lv55ADS0tXNzKSUteaDM=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 309 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 11 (3.7%), b_tie_ro: 10 (3.2%), parse: 0.95
+        (0.3%), extract_message_metadata: 2.9 (0.9%), get_uri_detail_list:
+        0.92 (0.3%), tests_pri_-1000: 5 (1.7%), tests_pri_-950: 1.15 (0.4%),
+        tests_pri_-900: 1.03 (0.3%), tests_pri_-90: 64 (20.6%), check_bayes:
+        62 (20.1%), b_tokenize: 9 (2.8%), b_tok_get_all: 8 (2.6%),
+        b_comp_prob: 2.4 (0.8%), b_tok_touch_all: 39 (12.7%), b_finish: 0.94
+        (0.3%), tests_pri_0: 206 (66.7%), check_dkim_signature: 0.53 (0.2%),
+        check_dkim_adsp: 2.8 (0.9%), poll_dns_idle: 0.96 (0.3%), tests_pri_10:
+        2.1 (0.7%), tests_pri_500: 7 (2.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 08/16] ptrace: Only populate last_siginfo from ptrace
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-scripts/check-local-export fails with some versions of bash.
+Oleg Nesterov <oleg@redhat.com> writes:
 
-    CC      scripts/mod/empty.o
-  ./scripts/check-local-export: line 54: wait: pid 17328 is not a child of this shell
-  make[2]: *** [scripts/mod/empty.o] Error 127
-  make[2]: *** Deleting file `scripts/mod/empty.o'
-  make[1]: *** [prepare0] Error 2
-  make: *** [__sub-make] Error 2
+> On 05/18, Eric W. Biederman wrote:
+>>
+>> The code in ptrace_signal to populate siginfo if the signal number
+>> changed is buggy.  If the tracer contined the tracee using
+>> ptrace_detach it is guaranteed to use the real_parent (or possibly a
+>> new tracer) but definitely not the origional tracer to populate si_pid
+>> and si_uid.
+>
+> I guess nobody cares. As the comment says
+>
+> 	 If the debugger wanted something
+> 	 specific in the siginfo structure then it should
+> 	 have updated *info via PTRACE_SETSIGINFO.
+>
+> otherwise I don't think si_pid/si_uid have any value.
 
-Avoid use of bash's built-in wait command, by saving the output from
-nm command into a temporary variable.
+No one has complained so it is clearly no one cares.  So it is
+definitely not a regression.  Or even anything that needs to be
+backported.
 
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 31cb50b5590fe911 ("kbuild: check static EXPORT_SYMBOL* by script instead of modpost")
----
-Changes in v2:
-  llvm-nm can't use end-of-options argument, reported-by kernel test robot <lkp@intel.com>
+However si_pid and si_uid are defined with SI_USER are defined
+to be whomever sent the signal.  So I would argue by definition
+those values are wrong.
 
- scripts/check-local-export | 29 +++++++++++++----------------
- 1 file changed, 13 insertions(+), 16 deletions(-)
+> However the patch looks fine to me, just the word "buggy" looks a bit
+> too strong imo.
 
-diff --git a/scripts/check-local-export b/scripts/check-local-export
-index da745e2743b7..850abc150855 100755
---- a/scripts/check-local-export
-+++ b/scripts/check-local-export
-@@ -11,9 +11,20 @@ set -e
- declare -A symbol_types
- declare -a export_symbols
- 
-+function die
-+{
-+    echo "$1" >&2
-+    exit 1
-+}
-+
- exit_code=0
- 
--while read value type name
-+# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
-+# shows 'no symbols' diagnostic and exits with 0. Saving such line into
-+# symbol_types is fine because export_symbols will remain empty.
-+result=$(${NM} ${1} 2>&1) || die "${result}"
-+
-+echo "${result}" | while read value type name
- do
- 	# Skip the line if the number of fields is less than 3.
- 	#
-@@ -37,21 +48,7 @@ do
- 	if [[ ${name} == __ksymtab_* ]]; then
- 		export_symbols+=(${name#__ksymtab_})
- 	fi
--
--	# If there is no symbol in the object, ${NM} (both GNU nm and llvm-nm)
--	# shows 'no symbols' diagnostic (but exits with 0). It is harmless and
--	# hidden by '2>/dev/null'. However, it suppresses real error messages
--	# as well. Add a hand-crafted error message here.
--	#
--	# Use --quiet instead of 2>/dev/null when we upgrade the minimum version
--	# of binutils to 2.37, llvm to 13.0.0.
--	#
--	# Then, the following line will be really simple:
--	#   done < <(${NM} --quiet ${1})
--done < <(${NM} ${1} 2>/dev/null || { echo "${0}: ${NM} failed" >&2; false; } )
--
--# Catch error in the process substitution
--wait $!
-+done
- 
- for name in "${export_symbols[@]}"
- do
--- 
-2.18.4
+I guess I am in general agreement.  Perhaps I can just say they values
+are wrong by definition?
+
+Eric
 
 

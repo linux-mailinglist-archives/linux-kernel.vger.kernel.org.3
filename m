@@ -2,167 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D62C53E056
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 06:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC0353E0CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiFFEHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 00:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S229449AbiFFFDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiFFEHL (ORCPT
+        with ESMTP id S229436AbiFFFDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 00:07:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E72126154
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 21:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654488427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MuRk3Tab2Z4ZRUgMYXS0prZ+jhG+XkNVjb1ON2n0G3E=;
-        b=R0whKCNVb6pPgScWbGIzihmMJ5mZTSe0gSowNwiuBSHJGLZMI5CUE4XCof4deiKwApueQ9
-        acr5JjaNvDBQ189dgD55Jag1NP2xMZ3hov/KWpmRD8MBPGR2En7i9exrKafSbJxqJhmDMA
-        7HU8JmSn7a93PdSxcksUFaBgE769WiQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-f6LMyBluPuqPdnmQJ73N8A-1; Mon, 06 Jun 2022 00:06:58 -0400
-X-MC-Unique: f6LMyBluPuqPdnmQJ73N8A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4BADC811E83;
-        Mon,  6 Jun 2022 04:06:57 +0000 (UTC)
-Received: from localhost (ovpn-12-209.pek2.redhat.com [10.72.12.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D67A40E80E0;
-        Mon,  6 Jun 2022 04:06:55 +0000 (UTC)
-Date:   Mon, 6 Jun 2022 12:06:51 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Jonathan McDowell <noodles@fb.com>, Coiby Xu <coxu@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v4] x86/kexec: Carry forward IMA measurement log on kexec
-Message-ID: <Yp19W4/ZQm/8U+BG@MiWiFi-R3L-srv>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
- <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
- <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
+        Mon, 6 Jun 2022 01:03:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D7B2C5DAA
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 21:43:41 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2560KgbX013268;
+        Mon, 6 Jun 2022 04:07:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6zhhzeHxXAOMQz5XGKts0jYo52r235YeZxvi49FXyWQ=;
+ b=LeCiJfyyRPD8j2dX0Q5pembWMV6Ae6i0B/KTVofJOG7bMYNGbw1dTmL1qSH+ga8KElHt
+ SPaTW7ROLxhO4l2Fzto4LV4lVldMmYg01NM1x+qqz0wD8Ow+lcrDyEqooYB9fq6wd9kt
+ 7EeaJovGOnw9Wfw0uD08FmqIWMEbU3AsbVeWyxYNyp0oxpQTc+sAufdLAZonitDqJQhl
+ GqNqJ5YUQvhUWF2jR1CKpIrnAvy1KEhsYA6di0J+QyMziGNu439Q9jmX3qs6LP+YCfz+
+ +z8O4O++4+4SUfwzzETs++kivMPeOcqrXPX5CqUynJDmoo7d4TySx5mN6ORbjod/06tY vQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gggtjqq5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 04:07:38 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25647beK012595;
+        Mon, 6 Jun 2022 04:07:37 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gggtjqq4w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 04:07:37 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25645dTN006502;
+        Mon, 6 Jun 2022 04:07:35 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gfy199t83-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Jun 2022 04:07:35 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25647XeB52298076
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Jun 2022 04:07:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35FF952050;
+        Mon,  6 Jun 2022 04:07:33 +0000 (GMT)
+Received: from [9.43.83.177] (unknown [9.43.83.177])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 696545204F;
+        Mon,  6 Jun 2022 04:07:27 +0000 (GMT)
+Message-ID: <a7d3829e-8bc5-d7a8-5e9e-a7943bb50740@linux.ibm.com>
+Date:   Mon, 6 Jun 2022 09:37:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v4 7/7] mm/demotion: Demote pages according to
+ allocation fallback order
+Content-Language: en-US
+To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+ <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+ <20220527122528.129445-8-aneesh.kumar@linux.ibm.com>
+ <b102d5773bffd6391283773044f756e810c1f044.camel@intel.com>
+ <046c373a-f30b-091d-47a1-e28bfb7e9394@linux.ibm.com>
+ <9f6e60cc8be3cbde4871458c612c5c31d2a9e056.camel@intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <9f6e60cc8be3cbde4871458c612c5c31d2a9e056.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jbC8yOk8SUxDAu8J9Cl5SQQVHKRBxL9S
+X-Proofpoint-ORIG-GUID: qeGq60ZRtLgXGPf6EZj5KAuEoUqZO_j5
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-06_01,2022-06-03_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206060021
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/22 at 04:25pm, Jonathan McDowell wrote:
-> On kexec file load Integrity Measurement Architecture (IMA) subsystem
-> may verify the IMA signature of the kernel and initramfs, and measure
-> it. The command line parameters passed to the kernel in the kexec call
-> may also be measured by IMA. A remote attestation service can verify
-> a TPM quote based on the TPM event log, the IMA measurement list, and
-> the TPM PCR data. This can be achieved only if the IMA measurement log
-> is carried over from the current kernel to the next kernel across
-> the kexec call.
+On 6/6/22 6:13 AM, Ying Huang wrote:
+> On Fri, 2022-06-03 at 20:39 +0530, Aneesh Kumar K V wrote:
+>> On 6/2/22 1:05 PM, Ying Huang wrote:
+>>> On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+>>>> From: Jagdish Gediya <jvgediya@linux.ibm.com>
+>>>>
+>>>> currently, a higher tier node can only be demoted to selected
+>>>> nodes on the next lower tier as defined by the demotion path,
+>>>> not any other node from any lower tier.  This strict, hard-coded
+>>>> demotion order does not work in all use cases (e.g. some use cases
+>>>> may want to allow cross-socket demotion to another node in the same
+>>>> demotion tier as a fallback when the preferred demotion node is out
+>>>> of space). This demotion order is also inconsistent with the page
+>>>> allocation fallback order when all the nodes in a higher tier are
+>>>> out of space: The page allocation can fall back to any node from any
+>>>> lower tier, whereas the demotion order doesn't allow that currently.
+>>>>
+>>>> This patch adds support to get all the allowed demotion targets mask
+>>>> for node, also demote_page_list() function is modified to utilize this
+>>>> allowed node mask by filling it in migration_target_control structure
+>>>> before passing it to migrate_pages().
+>>>
+>>
+>> ...
+>>
+>>>>     * Take pages on @demote_list and attempt to demote them to
+>>>>     * another node.  Pages which are not demoted are left on
+>>>> @@ -1481,6 +1464,19 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
+>>>>    {
+>>>>    	int target_nid = next_demotion_node(pgdat->node_id);
+>>>>    	unsigned int nr_succeeded;
+>>>> +	nodemask_t allowed_mask;
+>>>> +
+>>>> +	struct migration_target_control mtc = {
+>>>> +		/*
+>>>> +		 * Allocate from 'node', or fail quickly and quietly.
+>>>> +		 * When this happens, 'page' will likely just be discarded
+>>>> +		 * instead of migrated.
+>>>> +		 */
+>>>> +		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) | __GFP_NOWARN |
+>>>> +			__GFP_NOMEMALLOC | GFP_NOWAIT,
+>>>> +		.nid = target_nid,
+>>>> +		.nmask = &allowed_mask
+>>>> +	};
+>>>
+>>> IMHO, we should try to allocate from preferred node firstly (which will
+>>> kick kswapd of the preferred node if necessary).  If failed, we will
+>>> fallback to all allowed node.
+>>>
+>>> As we discussed as follows,
+>>>
+>>> https://lore.kernel.org/lkml/69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com/
+>>>
+>>> That is, something like below,
+>>>
+>>> static struct page *alloc_demote_page(struct page *page, unsigned long node)
+>>> {
+>>> 	struct page *page;
+>>> 	nodemask_t allowed_mask;
+>>> 	struct migration_target_control mtc = {
+>>> 		/*
+>>> 		 * Allocate from 'node', or fail quickly and quietly.
+>>> 		 * When this happens, 'page' will likely just be discarded
+>>> 		 * instead of migrated.
+>>> 		 */
+>>> 		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) |
+>>> 			    __GFP_THISNODE  | __GFP_NOWARN |
+>>> 			    __GFP_NOMEMALLOC | GFP_NOWAIT,
+>>> 		.nid = node
+>>> 	};
+>>>
+>>> 	page = alloc_migration_target(page, (unsigned long)&mtc);
+>>> 	if (page)
+>>> 		return page;
+>>>
+>>> 	mtc.gfp_mask &= ~__GFP_THISNODE;
+>>> 	mtc.nmask = &allowed_mask;
+>>>
+>>> 	return alloc_migration_target(page, (unsigned long)&mtc);
+>>> }
+>>
+>> I skipped doing this in v5 because I was not sure this is really what we
+>> want.
 > 
-> powerpc and ARM64 both achieve this using device tree with a
-> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
-> device tree, so use the setup_data mechanism to pass the IMA buffer to
-> the new kernel.
-
-The entire looks good to me, other than a minor concern, please see the
-inline comment.
-
-Reviewed-by: Baoquan He <bhe@redhat.com>
-
-Hi Coiby,
-
-You can check this patch, see if you can take the same way to solve the
-LUKS-encrypted disk issue by passing the key via setup_data.
-
+> I think so.  And this is the original behavior.  We should keep the
+> original behavior as much as possible, then make changes if necessary.
 > 
-> Signed-off-by: Jonathan McDowell <noodles@fb.com>
-> ---
-......snip...
 
-> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-> index 170d0fd68b1f..54bd4ce5f908 100644
-> --- a/arch/x86/kernel/kexec-bzimage64.c
-> +++ b/arch/x86/kernel/kexec-bzimage64.c
-> @@ -186,6 +186,33 @@ setup_efi_state(struct boot_params *params, unsigned long params_load_addr,
->  }
->  #endif /* CONFIG_EFI */
->  
-> +static void
-> +setup_ima_state(const struct kimage *image, struct boot_params *params,
-> +		unsigned long params_load_addr,
-> +		unsigned int ima_setup_data_offset)
-> +{
-> +#ifdef CONFIG_IMA_KEXEC
-> +	struct setup_data *sd = (void *)params + ima_setup_data_offset;
-> +	unsigned long setup_data_phys;
-> +	struct ima_setup_data *ima;
-> +
-> +	if (!image->ima_buffer_size)
-> +		return;
-> +
-> +	sd->type = SETUP_IMA;
-> +	sd->len = sizeof(*ima);
-> +
-> +	ima = (void *)sd + sizeof(struct setup_data);
-> +	ima->addr = image->ima_buffer_addr;
-> +	ima->size = image->ima_buffer_size;
-> +
-> +	/* Add setup data */
-> +	setup_data_phys = params_load_addr + ima_setup_data_offset;
-> +	sd->next = params->hdr.setup_data;
-> +	params->hdr.setup_data = setup_data_phys;
-> +#endif /* CONFIG_IMA_KEXEC */
-> +}
-> +
->  static int
->  setup_boot_parameters(struct kimage *image, struct boot_params *params,
->  		      unsigned long params_load_addr,
-> @@ -247,6 +274,13 @@ setup_boot_parameters(struct kimage *image, struct boot_params *params,
->  	setup_efi_state(params, params_load_addr, efi_map_offset, efi_map_sz,
->  			efi_setup_data_offset);
->  #endif
-> +
-> +	/* Setup IMA log buffer state */
-> +	setup_ima_state(image, params, params_load_addr,
-> +			efi_setup_data_offset +
-> +			sizeof(struct setup_data) +
-> +			sizeof(struct efi_setup_data));
+That is the reason I split the new page allocation as a separate patch. 
+Previous discussion on this topic didn't conclude on whether we really 
+need to do the above or not
+https://lore.kernel.org/lkml/CAAPL-u9endrWf_aOnPENDPdvT-2-YhCAeJ7ONGckGnXErTLOfQ@mail.gmail.com/
 
-Is it a little better to update efi_setup_data_offset beforehand, or
-define a local variable?
+Based on the above I looked at avoiding GFP_THISNODE allocation. If you 
+have experiment results that suggest otherwise can you share? I could 
+summarize that in the commit message for better description of why 
+GFP_THISNODE enforcing is needed.
 
-	efi_setup_data_offset += sizeof(struct setup_data) + sizeof(struct efi_setup_data));
-	setup_ima_state(image, params, params_load_addr,
-			efi_setup_data_offset));
+>> I guess we can do this as part of the change that is going to
+>> introduce the usage of memory policy for the allocation?
+> 
+> Like the memory allocation policy, the default policy should be local
+> preferred.  We shouldn't force users to use explicit memory policy for
+> that.
+> 
+> And the added code isn't complex.
+> 
 
-No strong opinion. If nobody has concern about it.
-
-> +
->  	/* Setup EDD info */
->  	memcpy(params->eddbuf, boot_params.eddbuf,
->  				EDDMAXNR * sizeof(struct edd_info));
-
+-aneesh

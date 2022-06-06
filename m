@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9756753EB7D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1FC53EB85
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241326AbiFFPzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S241340AbiFFP4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241068AbiFFPz2 (ORCPT
+        with ESMTP id S241335AbiFFP4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:55:28 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3502235B19
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:55:26 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gl15so15946621ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:55:26 -0700 (PDT)
+        Mon, 6 Jun 2022 11:56:17 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FEB2390A5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:56:16 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id g205so13020911pfb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OyTbKzsjMWwUwZL5SRg35VIyuSrvd4hrhHdZpr2aEOY=;
-        b=HsN12eaSchfRAga+qrLk/zwMDjiloHPOIo6tuhJQY/CZwhGJzq00ySOnbBVrq4SeQg
-         lZIjFoT51lIlA0y/Fc+X/b7883LNAAm87aDcZFKQHK2qFVo6cm9iqc6yrjIA/suhhB85
-         KgMbqKUo+cHvvhldTv8YohG9sCt/OilC6hL0xnr2yA1y8aP+z0q6qW35v2O6ApvKgXRb
-         8Ee4EsJmhEd9kT+Mbba3IOds0L5VUbhsdbSbyfQ/nbe26uGpGB2eEv385NkEMguy/kUf
-         o9Ru9uuSRyZxRsxxWznhiIZvSE69Z8jpIXmvw3fAvtqgV1ZaSI1Fs+KWLrdcpaJwZojL
-         9QLA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HqBVIaUxLFLt31mKtTfmzpaubYdTK4hqFLvxcHrajGI=;
+        b=am390ormAxfQBcDhad1xqfGuaIZhU7gIyzfW/9uyFo3xvj2W19MLPe42Uxbqs6q937
+         WLzpSDXD9fxuZqRO2SmIDl3w0Cwe8amaEnwFcOEnLReu0b1+W18AgTvCA3yyiCdFMxk6
+         H5tx+lg9wX6uKyHJz1DtdAqa66eSr/6WvFO7lJqSxj//PJqxpBDwR+YevD8yqIlJK/Mx
+         ZcqC+/cRvVqub4Ggt/l/3P3QWCr+b4CkTekrLG3K45HTTZrJZt5U6kt8kyraYtRvIsD7
+         PJDLyj70pL7QYVclaTA8PuCd/+cfqq/wzBL80/7UiaDyOElSklvX7PxNJIrVlxh41xi0
+         QGkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OyTbKzsjMWwUwZL5SRg35VIyuSrvd4hrhHdZpr2aEOY=;
-        b=XudP2kYaKe+WQdu4CdptzS95+qPQsLM3IYuS0o363elRNB0Dhz5gMXq7OaArQ0R5xX
-         KJzhkTnL6yu+iAoVvhOnzCi8sim1Fso6+pvtA/+HfzwbV+GMp1XZ7C/zqf5stkzGv73m
-         t93rLFawTXXlI5Nn1utPDqbkZmLVrvPPDbOtm5sm6RanBj4KXSPJ0tkgLVH9Qhv29Fy0
-         kg36NKVY1vOFpat4EXdOv071ZgVvV20xQCLZA4AGE5MuwoTZyM6SLqCaypcsWErhksRk
-         sXf87/Uil89bB1GJeAo+3QZyzLtr4YLVGaDHb8Z6h82Lla/lIjO6lBgW27WFFBzjwBaL
-         nwhg==
-X-Gm-Message-State: AOAM533pov/76Byv+bK1/tJIBtTPYvHb3YDjZm9/ndUE6UzsqtY70hiS
-        kUNv+KTxnkl8TcOKpCoIR6DrrI9bpO6h5IIKlYABsg==
-X-Google-Smtp-Source: ABdhPJz3Mq3IMfcDu/Cuub9xOBDyP5zz4COVAFXlmMtrZ+GAOmJ3s3a7/vHwxn8jk+cf8QeW7HW+CGV4YBCJOc7LkK8=
-X-Received: by 2002:a17:907:1ca8:b0:70c:68ce:dade with SMTP id
- nb40-20020a1709071ca800b0070c68cedademr19254581ejc.723.1654530925293; Mon, 06
- Jun 2022 08:55:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HqBVIaUxLFLt31mKtTfmzpaubYdTK4hqFLvxcHrajGI=;
+        b=1YtX84ypnZuk1Ohem1/qv5SNl1p9yCovcqXLvIni3k6PZH7EQrYjQe7aVBn6CCwLPu
+         p6/zHoLZYbNb3x+uVOM9RaWqK6wRkIGGmhEUPGs+zQmeDMON6G06ycTzKbTS59ajGA5c
+         6LckfB6T8rXTxOmQK4Z9c6FeYgLm1yarqQmaZwZSQuxSs04YEoEnpGystpJXWZWYA+0X
+         8Q4BrADrayOtEBWzMgzutPTmJ9aYnDBAeZvR3bELGAv6WusbIWEibuTtQQsvOnzzbVVf
+         6Sn4c0sqJrBOCJ0zMaQzcX/rJ1SdsgI+tfVBgV4I8+scfOPgmICQCJs3BkL9D9+oLvN+
+         5i8g==
+X-Gm-Message-State: AOAM532ivTykd7ZosYYTx/7d+f5CL/qHaXbkEZk8HZLgWyUodW3LPyXi
+        790FRWDvnECD8FCWFbalBRlBsw==
+X-Google-Smtp-Source: ABdhPJze2KfB5rZ725/eBE9Lz2Jfsvti1kHUrazKUB2pLSiIxcf6vV6SLvqVc/BjbYmcF7nR2jTnuA==
+X-Received: by 2002:a63:741:0:b0:3fc:6b3c:f9dd with SMTP id 62-20020a630741000000b003fc6b3cf9ddmr21224601pgh.351.1654530975570;
+        Mon, 06 Jun 2022 08:56:15 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id i6-20020a17090ad34600b001cd4989ff41sm10370086pjx.8.2022.06.06.08.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 08:56:14 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 09:56:12 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        nm@ti.com, ssantosh@kernel.org, s-anna@ti.com,
+        linux-arm-kernel@lists.infradead.org, rogerq@kernel.org,
+        grygorii.strashko@ti.com, vigneshr@ti.com, kishon@ti.com,
+        robh@kernel.org
+Subject: Re: [PATCH v4 0/6] Introduce PRU remoteproc consumer API
+Message-ID: <20220606155612.GA809345@p14s>
+References: <20220603121520.13730-1-p-mohan@ti.com>
 MIME-Version: 1.0
-References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-7-tzungbi@kernel.org>
-In-Reply-To: <20220606141051.285823-7-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 6 Jun 2022 08:55:14 -0700
-Message-ID: <CABXOdTdhGYhS=qO7M5OQ9GDv7LEUQTzrpEkYwas+VfomxDaUcw@mail.gmail.com>
-Subject: Re: [PATCH 06/13] platform/chrome: cros_ec_proto: use cros_ec_map_error()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603121520.13730-1-p-mohan@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> Use cros_ec_map_error() in cros_ec_get_host_event_wake_mask().
->
-> The behavior of cros_ec_get_host_event_wake_mask() slightly changed.  It
-> is acceptable because the caller only needs it returns negative integers
-> for indicating errors.  Especially, the EC_RES_INVALID_COMMAND still
-> maps to -EOPNOTSUPP.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+I have started to review this set, comments will come over the next few days.  I
+will clearly inform you when I am done reviewing.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Thanks,
+Mathieu
 
-> ---
->  drivers/platform/chrome/cros_ec_proto.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 1b851dcd20c9..71ba6a56ad7c 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -247,7 +247,7 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
->                                             uint32_t *mask)
->  {
->         struct ec_response_host_event_mask *r;
-> -       int ret;
-> +       int ret, mapped;
->
->         msg->command = EC_CMD_HOST_EVENT_GET_WAKE_MASK;
->         msg->version = 0;
-> @@ -256,10 +256,9 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev,
->
->         ret = send_command(ec_dev, msg);
->         if (ret >= 0) {
-> -               if (msg->result == EC_RES_INVALID_COMMAND)
-> -                       return -EOPNOTSUPP;
-> -               if (msg->result != EC_RES_SUCCESS)
-> -                       return -EPROTO;
-> +               mapped = cros_ec_map_error(msg->result);
-> +               if (mapped)
-> +                       return mapped;
->         }
->         if (ret > 0) {
->                 r = (struct ec_response_host_event_mask *)msg->data;
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+On Fri, Jun 03, 2022 at 05:45:14PM +0530, Puranjay Mohan wrote:
+> This is the v4 of the patch series [1]. The v3 had some comments
+> on the DT patch that have been addressed here. The 6th patch in this
+> series was missed in the previous versions, so, it has been added now.
+> 
+> I have posted two more patch series that depend on this series, one to
+> the soc tree and another to the networking tree. I had sent all the 3
+> series, including this one as RFC [2] to get comments and to explain the
+> dependencies.
+> 
+> The Programmable Real-Time Unit and Industrial Communication Subsystem
+> (PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+> RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
+> 
+> There are 3 foundation components for PRUSS subsystem: the PRUSS platform
+> driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
+> already merged and can be found under:
+> 1) drivers/soc/ti/pruss.c
+>    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> 2) drivers/irqchip/irq-pruss-intc.c
+>    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+> 3) drivers/remoteproc/pru_rproc.c
+>    Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
+> 
+> The programmable nature of the PRUs provide flexibility to implement custom
+> peripheral interfaces, fast real-time responses, or specialized data handling.
+> Example of a PRU consumer drivers will be:
+>   - Software UART over PRUSS
+>   - PRU-ICSS Ethernet EMAC
+> 
+> In order to make usage of common PRU resources and allow the consumer drivers to
+> configure the PRU hardware for specific usage the PRU API is introduced.
+> 
+> [1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220418104118.12878-1-p-mohan@ti.com/
+> [2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+> 
+> Thanks and Regards,
+> Puranjay Mohan
+> 
+> Roger Quadros (1):
+>   remoteproc: pru: Add pru_rproc_set_ctable() function
+> 
+> Suman Anna (2):
+>   dt-bindings: remoteproc: Add PRU consumer bindings
+>   remoteproc: pru: Make sysfs entries read-only for PRU client driven
+>     boots
+> 
+> Tero Kristo (3):
+>   remoteproc: pru: Add APIs to get and put the PRU cores
+>   remoteproc: pru: Configure firmware based on client setup
+>   remoteproc: pru: add support for configuring GPMUX based on client
+>     setup
+> 
+>  .../bindings/remoteproc/ti,pru-consumer.yaml  |  69 +++++
+>  drivers/remoteproc/pru_rproc.c                | 254 +++++++++++++++++-
+>  include/linux/pruss.h                         |  78 ++++++
+>  3 files changed, 396 insertions(+), 5 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>  create mode 100644 include/linux/pruss.h
+> 
+> -- 
+> 2.17.1
+> 

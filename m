@@ -2,470 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B33553F1AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBE153F1B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbiFFV1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S234835AbiFFV17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234631AbiFFV1K (ORCPT
+        with ESMTP id S230513AbiFFV1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 17:27:10 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CA1271B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:27:08 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d14so12494104wra.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 14:27:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=R9WXEt0d5VWVPT45RFnI3iwWeV57Th5zrE4OG14fWsM=;
-        b=UKJAaMHvsMk3isiZOfnAHzy5T2BlXzSGz/br0IRqcPitgBBVswDiMU6CXUv2eiX+nx
-         RtmdEv+IiJCozRPwLIHyhiIyHX8UkEIEekJdyqSEVdGV+zcFG2qYr1e9p6q8bvQixB7p
-         15JkXEd+vp/VA3LRa3S4XcxWTbO8UKgPqHnx5ErXRzDDHDfnR2sWqATzGOV0K6e5Vl1x
-         yG3GYe/AUb11OTOogIbyyneef7kjpiAg/E6/Ii1t5wUVPjW4lMUi+k1MDO/miT7zHmp2
-         Mh4ATTgL3Zvtj5mbpJrMAn/yZZF5Tud1O7hRPZUG6QEVu7P+pw3aPO3eicFyto8R2A8f
-         pfXg==
+        Mon, 6 Jun 2022 17:27:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D370C3191D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654550865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0gHafx1/UEiuRTrmu2J/TCDpx54W1WkTUpOQaQflrmc=;
+        b=S1iaQyvi/YitgUdAFQb4MA6ZTQDeSvAfnh+BYAfOuQvbLz7OzalWkLaaVdBtjCZFQw7ybz
+        BGand/nolvnRX78+gt6OwAFEraS99++KyfI3mJ1b0FDEaPcBmwpgfWf1zZmJNecJNHj3Q5
+        yjyPjc43o/ncazemANC3Os6VM638Aqw=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-117-JlUL0iSWNiGFzirSTH8r3g-1; Mon, 06 Jun 2022 17:27:42 -0400
+X-MC-Unique: JlUL0iSWNiGFzirSTH8r3g-1
+Received: by mail-il1-f198.google.com with SMTP id a3-20020a924443000000b002d1bc79da14so12450848ilm.15
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 14:27:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=R9WXEt0d5VWVPT45RFnI3iwWeV57Th5zrE4OG14fWsM=;
-        b=V0A64Sf7bDdJA+n21cnDChBYIsw4f0eT5fAuuGCCWipvj99F6M9hLNDeDwxe69WQrf
-         yj7fKcpJ18n/huUu/aT/As8BNVC0GLASix1zrfV+RWoFsFwHexwH07g6zbB1nxxvtWcz
-         opWthgZnBR/WngssiJzoTC3wG2HvaYpkXhR4rYL/QST+zjJ2/I9/Ekop5ZfZmFH1UMIk
-         VxgYi/XMRwUdRXEd3XDwbgj/kWIU0DV9XcvD301BXYZCqQcQyTVxHZjn7C4vtUUoD23g
-         fEG5yE7LRbGuurHRKyUMiscJy4kalkYGJJaT6Cpp8EIMOrHVAcXQLBEt0pVmMZJYtUM5
-         TlCw==
-X-Gm-Message-State: AOAM5326K+pI58Vg1mODNd0OKDLrOYqWwz0OStnTWcqvOp3QiJcWOMsL
-        Oy/OEfUbEbAt+vnY++XvLoI=
-X-Google-Smtp-Source: ABdhPJyTo9+sRapDu7NrIA5yA88XZaxNNZffIkE8/f8rSHy8reybydN8y/QdAITvfzIrsF/UeVWGSw==
-X-Received: by 2002:a5d:44d1:0:b0:218:418a:3e8e with SMTP id z17-20020a5d44d1000000b00218418a3e8emr6120121wrr.112.1654550826754;
-        Mon, 06 Jun 2022 14:27:06 -0700 (PDT)
-Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id n6-20020a05600c4f8600b0039b006bd6d9sm24758061wmq.6.2022.06.06.14.27.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0gHafx1/UEiuRTrmu2J/TCDpx54W1WkTUpOQaQflrmc=;
+        b=rz3nJ15NHcJMzguZlYU56tmng9PPsHIioo7ZpVmNMBOiRs7y4c4yOPUHM7916xIl+r
+         9GscedO1w+jKi9vPw0Fhxp2G7gyPRF//UnliAoF36hxGULuC+DOGFAbk9CZn5TBGiu4/
+         S1SkNNCqjR80oV16cF0lmx0sU6zzJq4MYVbrGAimVThFiM1cvuAtBWPLU3gt1HH+Ilbk
+         8sznbyPJDWQIGdEel1qa/Qq8r9RzI+WTVBgd1ufuQ71W9j3DWf5xpvXbccDWNZ5yYjLk
+         y/BFNWll6cPj2BFwRZPpA7juSuojHG7qqikzf9W+uR+omyX8rq+sXZ4OB/3oI4DRhBer
+         lKOA==
+X-Gm-Message-State: AOAM530cBaPFHIOoAm4zKPy78noGISoviGOP/+qM/FE+iJ78cwdb0BIl
+        SDUA2iQciAQCjgb7iWzN7y30nr2UyIocpKlwtQSJRIlEG7ajVsQOERAXHh5toHMWHPiSVRDjQRk
+        Ly1jXwkPNKNSTcDJNQJZNoQN7
+X-Received: by 2002:a6b:b552:0:b0:668:9215:a4a1 with SMTP id e79-20020a6bb552000000b006689215a4a1mr12207355iof.20.1654550861293;
+        Mon, 06 Jun 2022 14:27:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJygrthUv4dmOMiSXgg0nazpIEw06i7aozoK5SHLCqqaTiiH6rk/o1epUh6iMKjf5nK+vVWocQ==
+X-Received: by 2002:a6b:b552:0:b0:668:9215:a4a1 with SMTP id e79-20020a6bb552000000b006689215a4a1mr12207339iof.20.1654550861051;
+        Mon, 06 Jun 2022 14:27:41 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id a1-20020a056e0208a100b002d53ade2fffsm1449802ilt.85.2022.06.06.14.27.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 14:27:06 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Roman Stratiienko <r.stratiienko@gmail.com>
-Cc:     mripard@kernel.org, wens@csie.org, airlied@linux.ie,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Samuel Holland <samuel@sholland.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, megi@xff.cz,
-        Roman Stratiienko <roman.o.stratiienko@globallogic.com>
-Subject: Re: Re: [PATCH] drm/sun4i: sun8i: Add support for pixel blend mode property
-Date:   Mon, 06 Jun 2022 23:27:05 +0200
-Message-ID: <2240089.ElGaqSPkdT@kista>
-In-Reply-To: <CAGphcdniPFdqgLcpUc88ak9GzNaCvmj_TDVYTOe2bXto-Y12FQ@mail.gmail.com>
-References: <20220605154731.17362-1-roman.o.stratiienko@globallogic.com> <4714286.GXAFRqVoOG@jernej-laptop> <CAGphcdniPFdqgLcpUc88ak9GzNaCvmj_TDVYTOe2bXto-Y12FQ@mail.gmail.com>
+        Mon, 06 Jun 2022 14:27:40 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 17:27:38 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
+ user_xfeatures to supported bits of XCR0
+Message-ID: <Yp5xSi6P3q187+A+@xz-m1.local>
+References: <20220301201344.18191-1-sashal@kernel.org>
+ <20220301201344.18191-7-sashal@kernel.org>
+ <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
+ <YppVupW+IWsm7Osr@xz-m1.local>
+ <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 06. junij 2022 ob 10:17:20 CEST je Roman Stratiienko=20
-napisal(a):
-> Hello Jernej,
->=20
-> Thank you for having a look.
->=20
-> =D0=B2=D1=81, 5 =D0=B8=D1=8E=D0=BD. 2022 =D0=B3. =D0=B2 23:37, Jernej =C5=
-=A0krabec <jernej.skrabec@gmail.com>:
-> >
-> > Dne nedelja, 05. junij 2022 ob 17:47:31 CEST je Roman Stratiienko=20
-napisal(a):
-> > > Allwinner DE2 and DE3 hardware support 3 pixel blend modes:
-> > > "None", "Pre-multiplied", "Coverage"
-> > >
-> > > Add the blend mode property and route it to the appropriate registers.
-> > >
-> > > Note:
-> > > "force_premulti" parameter was added to handle multi-overlay channel
-> > > cases in future changes. It must be set to true for cases when more
-> > > than 1 overlay layer is used within a channel and at least one of the
-> > > overlay layers within a group uses premultiplied blending mode.
-> >
-> > Please remove this parameter. It's nothing special, so it can be easily=
-=20
-added
-> > once it's actually needed. For now, it only complicates code.
->=20
-> I would prefer keeping it if you do not have any strong opinion against i=
-t.
+On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
+> > However there seems to be something missing at least to me, on why it'll
+> > fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
+> > In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
+> > patch, but 0x0 if with it.
+> 
+> What CPU model are you using for the VM?
 
-Actually I do. Patch will be smaller and easier to follow if there is no ex=
-tra=20
-variables with fixed values in it.
+I didn't specify it, assuming it's qemu64 with no extra parameters.
 
->=20
-> I am working now on exposing all overlays, so it will be needed soon anyw=
-ay.
+I just tried two other options with: (1) -cpu host, and (2) -cpu Haswell
+(the choice of Haswell was really random..), with the same 5.15->5.18
+migration scenario, both of them will not trigger the same guest kernel
+crash.  Only qemu64 will.
 
-Well, it will just be one patch more there, if at all.
+Both hosts have Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz.
 
-Regards,
-Jernej
+> For example, if the source lacks this patch but the destination has it,
+> the source will transmit YMM registers, but the destination will fail to
+> set them if they are not available for the selected CPU model.
+> 
+> See the commit message: "As a bonus, it will also fail if userspace tries to
+> set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
+> the guest configuration.  Such features will never be returned by
+> KVM_GET_XSAVE or KVM_GET_XSAVE2."
 
->=20
-> Also it helps to better understand the COV2PREMULT mode which has not
-> the best description in the datasheet. Only after testing this
-> register using devmem I became confident on its purpose.
->=20
-> >
-> > >
-> > > Test:
-> > > Manually tested all the modes using kmsxx python wrapper with and
-> > > without 'force_premulti' flag enabled.
-> > >
-> > > Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
-> > > ---
-> > >  drivers/gpu/drm/sun4i/sun8i_mixer.h    |  2 ++
-> > >  drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 48 ++++++++++++++++++++-----
-> > >  drivers/gpu/drm/sun4i/sun8i_ui_layer.h |  5 +++
-> > >  drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 49 ++++++++++++++++++++++--=
-=2D-
-> > >  drivers/gpu/drm/sun4i/sun8i_vi_layer.h |  5 +++
-> > >  5 files changed, 94 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h
-> > > b/drivers/gpu/drm/sun4i/sun8i_mixer.h index ebfc276b2464..5c05907e26fb
-> > > 100644
-> > > --- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
-> > > +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
-> > > @@ -65,6 +65,8 @@
-> > >  #define SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(n)  (0xf << ((n) << 2))
-> > >  #define SUN8I_MIXER_BLEND_ROUTE_PIPE_SHIFT(n)        ((n) << 2)
-> > >
-> > > +#define SUN8I_MIXER_BLEND_PREMULTIPLY_EN(pipe)       BIT(pipe)
-> > > +
-> > >  #define SUN8I_MIXER_BLEND_OUTCTL_INTERLACED  BIT(1)
-> > >
-> > >  #define SUN50I_MIXER_BLEND_CSC_CTL_EN(ch)    BIT(ch)
-> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-> > > b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c index 6ccbbca3176d..
-29c0d9cca19a
-> > > 100644
-> > > --- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-> > > +++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-> > > @@ -58,24 +58,46 @@ static void sun8i_ui_layer_enable(struct sun8i_mi=
-xer
-> > > *mixer, int channel, }
-> > >
-> > >  static void sun8i_ui_layer_update_alpha(struct sun8i_mixer *mixer, i=
-nt
-> > > channel, -                                    int overlay, struct
-> > drm_plane *plane)
-> > > +                                     int overlay, struct
-> > drm_plane *plane,
-> > > +                                     unsigned int zpos,
-> > bool force_premulti)
-> > >  {
-> > > -     u32 mask, val, ch_base;
-> > > +     u32 mask, val, ch_base, bld_base;
-> > > +     bool in_premulti, out_premulti;
-> > >
-> > > +     bld_base =3D sun8i_blender_base(mixer);
-> > >       ch_base =3D sun8i_channel_base(mixer, channel);
-> > >
-> > > +     in_premulti =3D plane->state->pixel_blend_mode =3D=3D
-> > DRM_MODE_BLEND_PREMULTI;
-> > > +     out_premulti =3D force_premulti || in_premulti;
-> > > +
-> > >       mask =3D SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_MASK |
-> > > -             SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MASK;
-> > > +            SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MASK |
-> > > +            SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_MASK;
-> > >
-> > >       val =3D SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA(plane->state->alph=
-a >>
-> > 8);
-> > >
-> > > -     val |=3D (plane->state->alpha =3D=3D DRM_BLEND_ALPHA_OPAQUE) ?
-> > > -             SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_PIXEL :
-> > > -             SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_COMBINED;
-> > > +     if (plane->state->pixel_blend_mode =3D=3D DRM_MODE_BLEND_PIXEL_=
-NONE) {
-> > > +             val |=3D SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_LAYE=
-R;
-> > > +     } else {
-> > > +             val |=3D (plane->state->alpha =3D=3D DRM_BLEND_ALPHA_OP=
-AQUE)
-> > ?
-> > > +
-> > SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_PIXEL :
-> > > +
-> > SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_COMBINED;
-> > > +
-> > > +             if (in_premulti)
-> > > +                     val |=3D
-> > SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_PREMULTI;
-> > > +     }
-> > > +
-> > > +     if (!in_premulti && out_premulti)
-> > > +             val |=3D SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_COV2PREM;
-> > >
-> > >       regmap_update_bits(mixer->engine.regs,
-> > >                          SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base,
-> > overlay),
-> > >                          mask, val);
-> > > +
-> > > +     regmap_update_bits(
-> > > +             mixer->engine.regs,
-> > SUN8I_MIXER_BLEND_PREMULTIPLY(bld_base),
-> > > +             SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos),
-> > > +             out_premulti ? SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos) :
-> > 0);
-> > >  }
-> > >
-> > >  static int sun8i_ui_layer_update_coord(struct sun8i_mixer *mixer, int
-> > > channel, @@ -274,7 +296,7 @@ static void
-> > > sun8i_ui_layer_atomic_update(struct drm_plane *plane,
-> > > sun8i_ui_layer_update_coord(mixer, layer->channel,
-> > >                                   layer->overlay, plane, zpos);
-> > >       sun8i_ui_layer_update_alpha(mixer, layer->channel,
-> > > -                                 layer->overlay, plane);
-> > > +                                 layer->overlay, plane, zpos,
-> > false);
-> > >       sun8i_ui_layer_update_formats(mixer, layer->channel,
-> > >                                     layer->overlay, plane);
-> > >       sun8i_ui_layer_update_buffer(mixer, layer->channel,
-> > > @@ -332,8 +354,8 @@ struct sun8i_ui_layer=20
-*sun8i_ui_layer_init_one(struct
-> > > drm_device *drm, {
-> > >       enum drm_plane_type type =3D DRM_PLANE_TYPE_OVERLAY;
-> > >       int channel =3D mixer->cfg->vi_num + index;
-> > > +     unsigned int plane_cnt, blend_modes;
-> > >       struct sun8i_ui_layer *layer;
-> > > -     unsigned int plane_cnt;
-> > >       int ret;
-> > >
-> > >       layer =3D devm_kzalloc(drm->dev, sizeof(*layer), GFP_KERNEL);
-> > > @@ -362,6 +384,16 @@ struct sun8i_ui_layer=20
-*sun8i_ui_layer_init_one(struct
-> > > drm_device *drm, return ERR_PTR(ret);
-> > >       }
-> > >
-> > > +     blend_modes =3D BIT(DRM_MODE_BLEND_PREMULTI) |
-> > > +                   BIT(DRM_MODE_BLEND_COVERAGE) |
-> > > +                   BIT(DRM_MODE_BLEND_PIXEL_NONE);
-> > > +
-> > > +     ret =3D drm_plane_create_blend_mode_property(&layer->plane,
-> > blend_modes);
-> > > +     if (ret) {
-> > > +             dev_err(drm->dev, "Couldn't add blend mode
-> > property\n");
-> > > +             return ERR_PTR(ret);
-> > > +     }
-> > > +
-> > >       ret =3D drm_plane_create_zpos_property(&layer->plane, channel,
-> > >                                            0, plane_cnt -
-> > 1);
-> > >       if (ret) {
-> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.h
-> > > b/drivers/gpu/drm/sun4i/sun8i_ui_layer.h index=20
-43c48cf7bc51..bd3c30e8058d
-> > > 100644
-> > > --- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.h
-> > > +++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.h
-> > > @@ -46,6 +46,11 @@
-> > >  #define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_LAYER             =
-=20
-((1) << 1)
-> > >  #define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_ALPHA_MODE_COMBINED   ((2) <<=
- 1)
-> > >
-> > > +#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_MASK    GENMASK(17, 16)
-> > > +#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_COVERAGE        ((0) <<=
- 16)
-> > > +#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_COV2PREM        ((1) <<=
- 16)
-> > > +#define SUN8I_MIXER_CHAN_UI_LAYER_ATTR_BLEND_PREMULTI        ((2) <<=
- 16)
-> > > +
-> > >  struct sun8i_mixer;
-> > >
-> > >  struct sun8i_ui_layer {
-> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> > > b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c index=20
-662ba1018cc4..6581fc7d9668
-> > > 100644
-> > > --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> > > +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
-> > > @@ -52,21 +52,38 @@ static void sun8i_vi_layer_enable(struct sun8i_mi=
-xer
-> > > *mixer, int channel, }
-> > >
-> > >  static void sun8i_vi_layer_update_alpha(struct sun8i_mixer *mixer, i=
-nt
-> > > channel, -                                    int overlay, struct
-> > drm_plane *plane)
-> > > +                                     int overlay, struct
-> > drm_plane *plane,
-> > > +                                     unsigned int zpos,
-> > bool force_premulti)
-> > >  {
-> > > -     u32 mask, val, ch_base;
-> > > +     u32 mask, val, ch_base, bld_base;
-> > > +     bool in_premulti =3D false, out_premulti =3D false;
-> > >
-> > >       ch_base =3D sun8i_channel_base(mixer, channel);
-> > > +     bld_base =3D sun8i_blender_base(mixer);
-> > >
-> > >       if (mixer->cfg->is_de3) {
-> > > +             in_premulti =3D plane->state->pixel_blend_mode =3D=3D
-> > DRM_MODE_BLEND_PREMULTI;
-> > > +             out_premulti =3D force_premulti || in_premulti;
-> > > +
-> > >               mask =3D SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MASK |
-> > > -                    SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_MASK;
-> > > +                    SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_MASK
-> > |
-> > > +                    SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_MASK;
-> > >               val =3D SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA
-> > >                       (plane->state->alpha >> 8);
-> > >
-> > > -             val |=3D (plane->state->alpha =3D=3D DRM_BLEND_ALPHA_OP=
-AQUE)
-> > ?
-> > > -
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_PIXEL :
-> > > -
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_COMBINED;
-> > > +             if (plane->state->pixel_blend_mode =3D=3D
-> > DRM_MODE_BLEND_PIXEL_NONE) {
-> > > +                     val |=3D
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_LAYER;
-> > > +             } else {
-> > > +                     val |=3D (plane->state->alpha =3D=3D
-> > DRM_BLEND_ALPHA_OPAQUE) ?
-> > > +
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_PIXEL :
-> > > +
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_COMBINED;
-> > > +
-> > > +                     if (in_premulti)
-> > > +                             val |=3D
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_PREMULTI;
-> > > +             }
-> > > +
-> > > +             if (!in_premulti && out_premulti)
-> > > +                     val |=3D
-> > SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_COV2PREM;
-> > >
-> > >               regmap_update_bits(mixer->engine.regs,
-> > >
-> > SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base,
-> > > @@ -79,6 +96,11 @@ static void sun8i_vi_layer_update_alpha(struct
-> > > sun8i_mixer *mixer, int channel, SUN8I_MIXER_FCC_GLOBAL_ALPHA
-> > >                                       (plane->state->alpha
-> > >> 8));
-> > >       }
-> > > +
-> > > +     regmap_update_bits(
-> > > +             mixer->engine.regs,
-> > SUN8I_MIXER_BLEND_PREMULTIPLY(bld_base),
-> > > +             SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos),
-> > > +             out_premulti ? SUN8I_MIXER_BLEND_PREMULTIPLY_EN(zpos) :
-> > 0);
-> >
-> > Shouldn't be above block inside DE3 if block?
->=20
-> No, we have to update the value to non-premulti in case it was set to
-> premulti by another layer.
->=20
->=20
-> Regards,
-> Roman.
->=20
-> >
-> > Looks good otherwise.
-> >
-> > Best regards,
-> > Jernej
-> >
-> > >  }
-> > >
-> > >  static int sun8i_vi_layer_update_coord(struct sun8i_mixer *mixer, int
-> > > channel, @@ -408,7 +430,7 @@ static void
-> > > sun8i_vi_layer_atomic_update(struct drm_plane *plane,
-> > > sun8i_vi_layer_update_coord(mixer, layer->channel,
-> > >                                   layer->overlay, plane, zpos);
-> > >       sun8i_vi_layer_update_alpha(mixer, layer->channel,
-> > > -                                 layer->overlay, plane);
-> > > +                                 layer->overlay, plane, zpos,
-> > false);
-> > >       sun8i_vi_layer_update_formats(mixer, layer->channel,
-> > >                                     layer->overlay, plane);
-> > >       sun8i_vi_layer_update_buffer(mixer, layer->channel,
-> > > @@ -563,6 +585,19 @@ struct sun8i_vi_layer=20
-*sun8i_vi_layer_init_one(struct
-> > > drm_device *drm, }
-> > >       }
-> > >
-> > > +     if (mixer->cfg->is_de3) {
-> > > +             unsigned int blend_modes =3D BIT(DRM_MODE_BLEND_PREMULT=
-I)
-> > |
-> > > +
-> > BIT(DRM_MODE_BLEND_COVERAGE) |
-> > > +
-> > BIT(DRM_MODE_BLEND_PIXEL_NONE);
-> > > +
-> > > +             ret =3D drm_plane_create_blend_mode_property(&layer-
-> > >plane,
-> > > +
-> > blend_modes);
-> > > +             if (ret) {
-> > > +                     dev_err(drm->dev, "Couldn't add blend mode
-> > property\n");
-> > > +                     return ERR_PTR(ret);
-> > > +             }
-> > > +     }
-> > > +
-> > >       ret =3D drm_plane_create_zpos_property(&layer->plane, index,
-> > >                                            0, plane_cnt -
-> > 1);
-> > >       if (ret) {
-> > > diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.h
-> > > b/drivers/gpu/drm/sun4i/sun8i_vi_layer.h index=20
-9939a4cc7a52..ccf91f09f1fe
-> > > 100644
-> > > --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.h
-> > > +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.h
-> > > @@ -44,6 +44,11 @@
-> > >  #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MASK   GENMASK(31, 24)
-> > >  #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA(x)     ((x) << 24)
-> > >
-> > > +#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_MASK   GENMASK(17, 16)
-> > > +#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_COVERAGE       ((0) <<=
- 16)
-> > > +#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_COV2PREM       ((1) <<=
- 16)
-> > > +#define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_BLEND_PREMULTI       ((2) <<=
- 16)
-> > > +
-> > >  #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_PIXEL     ((0) <<
-> > 1)
-> > >  #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_LAYER     ((1) <<
-> > 1)
-> > >  #define SUN50I_MIXER_CHAN_VI_LAYER_ATTR_ALPHA_MODE_COMBINED  ((2) <<=
- 1)
-> >
-> >
-> >
-> >
->=20
+IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
+(probably by failing validate_user_xstate_header when checking against the
+user_xfeatures on dest host). But that's probably not my case, because here
+KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
+the precopy migration completes (or for postcopy when the switchover is
+done).
 
+Thanks,
+
+-- 
+Peter Xu
 

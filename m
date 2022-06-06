@@ -2,163 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0B953F1FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8299E53F1FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 00:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiFFWLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 18:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S232271AbiFFWMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 18:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiFFWLI (ORCPT
+        with ESMTP id S231521AbiFFWMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 18:11:08 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D96129D;
-        Mon,  6 Jun 2022 15:11:05 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:48510)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nyKvz-004XaN-Qz; Mon, 06 Jun 2022 16:10:51 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53402 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nyKvy-008VN9-IW; Mon, 06 Jun 2022 16:10:51 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-        <20220518225355.784371-7-ebiederm@xmission.com>
-        <20220524132553.GD14347@redhat.com>
-        <20220524162808.GF14347@redhat.com> <20220525142845.GA2687@redhat.com>
-Date:   Mon, 06 Jun 2022 17:10:02 -0500
-In-Reply-To: <20220525142845.GA2687@redhat.com> (Oleg Nesterov's message of
-        "Wed, 25 May 2022 16:28:46 +0200")
-Message-ID: <87a6ap30lh.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 6 Jun 2022 18:12:03 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C392D66AFC;
+        Mon,  6 Jun 2022 15:12:01 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id EE60640003;
+        Mon,  6 Jun 2022 22:11:54 +0000 (UTC)
+From:   Ilya Maximets <i.maximets@ovn.org>
+To:     netdev@vger.kernel.org
+Cc:     Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Aaron Conole <aconole@redhat.com>,
+        Paolo Valerio <pvalerio@redhat.com>,
+        Ilya Maximets <i.maximets@ovn.org>, stable@vger.kernel.org,
+        Frode Nordahl <frode.nordahl@canonical.com>
+Subject: [PATCH net] net: openvswitch: fix misuse of the cached connection on tuple changes
+Date:   Tue,  7 Jun 2022 00:11:40 +0200
+Message-Id: <20220606221140.488984-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nyKvy-008VN9-IW;;;mid=<87a6ap30lh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+3n228nDtWW1iPO1xW1EOl4V38qn2RLFc=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 680 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 10 (1.5%), b_tie_ro: 9 (1.3%), parse: 0.95 (0.1%),
-         extract_message_metadata: 3.3 (0.5%), get_uri_detail_list: 1.48
-        (0.2%), tests_pri_-1000: 5 (0.8%), tests_pri_-950: 1.20 (0.2%),
-        tests_pri_-900: 1.06 (0.2%), tests_pri_-90: 345 (50.8%), check_bayes:
-        344 (50.6%), b_tokenize: 10 (1.5%), b_tok_get_all: 11 (1.5%),
-        b_comp_prob: 2.8 (0.4%), b_tok_touch_all: 316 (46.5%), b_finish: 0.90
-        (0.1%), tests_pri_0: 296 (43.5%), check_dkim_signature: 0.52 (0.1%),
-        check_dkim_adsp: 2.8 (0.4%), poll_dns_idle: 0.99 (0.1%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 7 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+If packet headers changed, the cached nfct is no longer relevant
+for the packet and attempt to re-use it leads to the incorrect packet
+classification.
 
-> On 05/24, Oleg Nesterov wrote:
->>
->> On 05/24, Oleg Nesterov wrote:
->> >
->> > I fail to understand this patch...
->> >
->> > On 05/18, Eric W. Biederman wrote:
->> > >
->> > > Today if a process is ptraced only the ptracer will ever be woken up in
->> > > wait
->> >
->> > and why is this wrong?
->> >
->> > > Fixes: 75b95953a569 ("job control: Add @for_ptrace to do_notify_parent_cldstop()")
->> >
->> > how does this change fix 75b95953a569?
->>
->> OK, I guess you mean the 2nd do_notify_parent_cldstop() in ptrace_stop(),
->> the problematic case is current->ptrace == T. Right?
->>
->> I dislike this patch anyway, but let me think more about it.
->
-> OK, now that I understand the problem, the patch doesn't look bad to me,
-> although I'd ask to make the changelog more clear.
+This issue is causing broken connectivity in OpenStack deployments
+with OVS/OVN due to hairpin traffic being unexpectedly dropped.
 
-I will see what I can do.
+The setup has datapath flows with several conntrack actions and tuple
+changes between them:
 
-> After this change __wake_up_parent() can't accept any "parent" from
-> p->parent thread group, but all callers look fine except
-> ptrace_detach().
+  actions:ct(commit,zone=8,mark=0/0x1,nat(src)),
+          set(eth(src=00:00:00:00:00:01,dst=00:00:00:00:00:06)),
+          set(ipv4(src=172.18.2.10,dst=192.168.100.6,ttl=62)),
+          ct(zone=8),recirc(0x4)
 
-Having looked at it a little more I think the change was too
-restrictive.  For the !ptrace_reparented case there are possibly
-two threads of the parent process that wait_consider_task will
-allow to wait even with __WNOTHREAD specified.  It is desirable
-to wake them both up.
+After the first ct() action the packet headers are almost fully
+re-written.  The next ct() tries to re-use the existing nfct entry
+and marks the packet as invalid, so it gets dropped later in the
+pipeline.
 
-Which if I have had enough sleep reduces this patch to just:
+Clearing the cached conntrack entry whenever packet tuple is changed
+to avoid the issue.
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index f072959fcab7..c8156366b722 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -1431,8 +1431,10 @@ static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
-        if (!eligible_pid(wo, p))
-                return 0;
- 
--       if ((wo->wo_flags & __WNOTHREAD) && wait->private != p->parent)
--               return 0;
-+       if ((wo->wo_flags & __WNOTHREAD) &&
-+           (wait->private != p->parent) &&
-+           (wait->private != p->real_parent))
-+                       return 0;
- 
-        return default_wake_function(wait, mode, sync, key);
+The flow key should not be cleared though, because we should still
+be able to match on the ct_state if the recirculation happens after
+the tuple change but before the next ct() action.
+
+Cc: stable@vger.kernel.org
+Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
+Reported-by: Frode Nordahl <frode.nordahl@canonical.com>
+Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-May/051829.html
+Link: https://bugs.launchpad.net/ubuntu/+source/ovn/+bug/1967856
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+---
+
+The function ovs_ct_clear() looks a bit differently on older branches,
+but the change should be exactly the same, i.e. move the
+ovs_ct_fill_key() under the 'if (key)'.
+
+The same behavior for userspace datapath was introduced along with
+the conntrack caching support here:
+  https://github.com/openvswitch/ovs/commit/594570ea1cdecc7ef7880d707cbc7a4a4ecef09f
+
+Interestingly, above commit also introduced the system test that can
+check the issue for the kernel as well, but the test sends only one
+packet and this packet goes via upcall to userspace and back to the
+kernel effectively clearing the cached connection along the way and
+avoiding the issue.  If the test is modified to send more than a few
+packets [1], it starts to fail without the kernel fix:
+
+  make check-kernel TESTSUITEFLAGS='-k negative'
+  142: conntrack - negative test for recirculation optimization FAILED
+
+[1] https://pastebin.com/H1YMqaLa
+
+ net/openvswitch/actions.c   | 6 ++++++
+ net/openvswitch/conntrack.c | 4 +++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+index 1b5d73079dc9..868db4669a29 100644
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -373,6 +373,7 @@ static void set_ip_addr(struct sk_buff *skb, struct iphdr *nh,
+ 	update_ip_l4_checksum(skb, nh, *addr, new_addr);
+ 	csum_replace4(&nh->check, *addr, new_addr);
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
+ 	*addr = new_addr;
  }
-
-
-I think that solves the issue without missing wake-ups without adding
-any more.
-
-For the same set of reasons it looks like the __wake_up_parent in
-__ptrace_detach is just simply dead code.  I don't think there is a case
-where when !ptrace_reparented the thread that is the real_parent can
-sleep in do_wait when the thread that was calling ptrace could not.
-
-That needs a very close look to confirm. 
-
-Eric
+ 
+@@ -420,6 +421,7 @@ static void set_ipv6_addr(struct sk_buff *skb, u8 l4_proto,
+ 		update_ipv6_checksum(skb, l4_proto, addr, new_addr);
+ 
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
+ 	memcpy(addr, new_addr, sizeof(__be32[4]));
+ }
+ 
+@@ -660,6 +662,7 @@ static int set_nsh(struct sk_buff *skb, struct sw_flow_key *flow_key,
+ static void set_tp_port(struct sk_buff *skb, __be16 *port,
+ 			__be16 new_port, __sum16 *check)
+ {
++	ovs_ct_clear(skb, NULL);
+ 	inet_proto_csum_replace2(check, skb, *port, new_port, false);
+ 	*port = new_port;
+ }
+@@ -699,6 +702,7 @@ static int set_udp(struct sk_buff *skb, struct sw_flow_key *flow_key,
+ 		uh->dest = dst;
+ 		flow_key->tp.src = src;
+ 		flow_key->tp.dst = dst;
++		ovs_ct_clear(skb, NULL);
+ 	}
+ 
+ 	skb_clear_hash(skb);
+@@ -761,6 +765,8 @@ static int set_sctp(struct sk_buff *skb, struct sw_flow_key *flow_key,
+ 	sh->checksum = old_csum ^ old_correct_csum ^ new_csum;
+ 
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
++
+ 	flow_key->tp.src = sh->source;
+ 	flow_key->tp.dst = sh->dest;
+ 
+diff --git a/net/openvswitch/conntrack.c b/net/openvswitch/conntrack.c
+index 4a947c13c813..4e70df91d0f2 100644
+--- a/net/openvswitch/conntrack.c
++++ b/net/openvswitch/conntrack.c
+@@ -1342,7 +1342,9 @@ int ovs_ct_clear(struct sk_buff *skb, struct sw_flow_key *key)
+ 
+ 	nf_ct_put(ct);
+ 	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+-	ovs_ct_fill_key(skb, key, false);
++
++	if (key)
++		ovs_ct_fill_key(skb, key, false);
+ 
+ 	return 0;
+ }
+-- 
+2.34.3
 

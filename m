@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C261553E8AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B5953EAD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239499AbiFFOWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S239517AbiFFOWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239416AbiFFOWA (ORCPT
+        with ESMTP id S239414AbiFFOWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:22:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD8C22E69F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:21:58 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b8so2369200edj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:21:58 -0700 (PDT)
+        Mon, 6 Jun 2022 10:22:19 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03182ED7F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:22:17 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id x62so19035675ede.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Vp8NNxHI8Mr5cvDebnpWHQ0r8fITxP4wMBgbky8hlKs=;
-        b=cbfuFGvG9P3RoNLs/7komKcZAI5iYlhxO2c1PtY35nnPC3+G7B+1hWFJWkoS4PJIsj
-         12l7R0+8en8jn64ramruBDLAM4LNDxwV5QlXnXU3GiVqV+E3Gtvm4iPw/S9vicOs+MKd
-         veBzx9Qi7+Ff2iaPYmy4Uf1JlMPTfqESgCUDU=
+        bh=lYyKGEeq3UcMlhiJRIzst7R0qW1WAne+X1OnepWLUYE=;
+        b=SFL7T5uifrBNLjB2DlOQ76k2CWD4lYFfvi+Cpg2JoGdLGFnhB7NYaEk4VeIgQjMih4
+         dWD6g0rOGkVYh08vQvggGJY2yZvlDGzOf+oz68gB+AJ6zFrx06LXKkzALLHoXBKljZOe
+         I9/PsfKKDUm55hO4bPdYQWfKmR4oBwin7fnuU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Vp8NNxHI8Mr5cvDebnpWHQ0r8fITxP4wMBgbky8hlKs=;
-        b=UrzncEUlm/+n476p/3gtxKMkcB9/zIBA7f01wGk25QH8zEk/OXwGsCseOMdiHTw1Td
-         cnvso57zPNnNvfsjdyb5MBaxZ8k/8RacXWuW77r4QCepuLGWqI8d0sVhJXTgUGLfH9NP
-         NgLObJ33KHkGbDQ8P0f3ajH4hMvYP6w6YTWzgA9V2wKNseyaVBxe1a/H4TYECLSW3H/o
-         VS8YE1OtSvZCy3Hz/+J6JLCVu5QHAXPHt8YYftP5FlpNcf0CWBlqwwxTCSvuS3dyu6oq
-         fGhOTlBduQgFKBWKloHA1Ftlgbj/cJNmWaenPsN32NVe3Q9qI4f6DsqQEo66KES21kVL
-         CAeg==
-X-Gm-Message-State: AOAM531LM8csspYtT0hT2SaMSkMHbRMosSkGW4QQVKKhFPF1PZq4gHvn
-        +eRWmA1+afnXAqzYBHzq+tkifhD7s95iVRka
-X-Google-Smtp-Source: ABdhPJyMh5EWpCWNKPH6rM2tVxXfKdtDDpBTSg+pAF69Ey/kKnh6R5T3je6NSLkbgHuZ2gKP3nKQ/A==
-X-Received: by 2002:a05:6402:84a:b0:423:fe99:8c53 with SMTP id b10-20020a056402084a00b00423fe998c53mr26852321edz.195.1654525316984;
-        Mon, 06 Jun 2022 07:21:56 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id bv3-20020a170906b1c300b006f3ef214ddesm6411388ejb.68.2022.06.06.07.21.54
+        bh=lYyKGEeq3UcMlhiJRIzst7R0qW1WAne+X1OnepWLUYE=;
+        b=nmIWoajROdd0BNi1jNbbuo23d1f8AVNardoNmAy3+6yuvuDLnvCSovkAO5tfciyFP4
+         FRDNJEZEi8sVlI4moBayzSwBKBQjTKXW6P4tDrXq+nXv8nitUGPTjym94cZ8Xt/6Hr1r
+         HWtGeulyX00ByeCqe61s6YDKPzUTlSIn6UTjCbuc96d/IzhYSDbg/eCUdk1PuSQ95RzG
+         FUeSpEcERWSJ+NQ+uL9zJxn9KgIg14J0leKe5vi8D6dQQApTiT++KDxkJLCAAqfy1KzZ
+         ojK4a4vfEDaMv+65h8neTjc/SCGk7E3qtazmUnI0TOwJlHob0KR+26Fq829QxSkadCbh
+         rkeg==
+X-Gm-Message-State: AOAM532a9Iiy/DOh/WBHld/jm7flFWCq0y9h9ZMJ3NlPOBwDBqwOQnNK
+        HNUQi8n7ajaX95RaNYpKemEgRxT70m23nmkA
+X-Google-Smtp-Source: ABdhPJyOHmPkvVIzCYlqN3JChqDedv3776dPBfZyJTf8f5VeT+ylPEmeCwTgq2OAVEMpsv1nCyfvIw==
+X-Received: by 2002:a05:6402:438a:b0:42e:985:4944 with SMTP id o10-20020a056402438a00b0042e09854944mr26293258edc.283.1654525334895;
+        Mon, 06 Jun 2022 07:22:14 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id kq15-20020a170906abcf00b0070cac22060esm4777909ejb.95.2022.06.06.07.22.10
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:21:55 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id q15so12041181wrc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:21:54 -0700 (PDT)
-X-Received: by 2002:a05:6000:1685:b0:218:45f0:5be6 with SMTP id
- y5-20020a056000168500b0021845f05be6mr2525253wrd.301.1654525314159; Mon, 06
- Jun 2022 07:21:54 -0700 (PDT)
+        Mon, 06 Jun 2022 07:22:12 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id t13so20082369wrg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:22:10 -0700 (PDT)
+X-Received: by 2002:a5d:68d2:0:b0:210:31cc:64a6 with SMTP id
+ p18-20020a5d68d2000000b0021031cc64a6mr21413566wrw.679.1654525330160; Mon, 06
+ Jun 2022 07:22:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-3-hsinyi@chromium.org>
-In-Reply-To: <20220606044720.945964-3-hsinyi@chromium.org>
+References: <20220606044720.945964-1-hsinyi@chromium.org> <20220606044720.945964-4-hsinyi@chromium.org>
+In-Reply-To: <20220606044720.945964-4-hsinyi@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 6 Jun 2022 07:21:42 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VYjMKN=M=PWnGny0x5TaQ5gF7b_vL4muCsCi+rH7FAbA@mail.gmail.com>
-Message-ID: <CAD=FV=VYjMKN=M=PWnGny0x5TaQ5gF7b_vL4muCsCi+rH7FAbA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/8] drm/panel: boe-tv101wum-nl6: Implement
- .get_orientation callback
+Date:   Mon, 6 Jun 2022 07:21:58 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VNnWcvedzgxfSWT0-sTR3jF8LsVXKFRnm49ZCJw6EH6A@mail.gmail.com>
+Message-ID: <CAD=FV=VNnWcvedzgxfSWT0-sTR3jF8LsVXKFRnm49ZCJw6EH6A@mail.gmail.com>
+Subject: Re: [PATCH v3 3/8] drm/panel: panel-edp: Implement .get_orientation callback
 To:     Hsin-Yi Wang <hsinyi@chromium.org>
 Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -102,7 +101,7 @@ On Sun, Jun 5, 2022 at 9:47 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
 > ---
 > v2->v3: add comments for notice.
 > ---
->  drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+>  drivers/gpu/drm/panel/panel-edp.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>

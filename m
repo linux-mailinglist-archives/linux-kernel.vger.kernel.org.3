@@ -2,172 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA4053ED06
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D459953ED11
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiFFRcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 13:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S229781AbiFFRhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 13:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiFFRcF (ORCPT
+        with ESMTP id S229814AbiFFRfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 13:32:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79B71A45F4
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:32:02 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id a30so8163109ybj.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 10:32:02 -0700 (PDT)
+        Mon, 6 Jun 2022 13:35:10 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F501B1F49
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 10:35:06 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id h18so10651940qvj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 10:35:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h4C9WpLUh/VIc8qz9wWANgWf77RNe31qiFw7MR8/RHI=;
-        b=apHOPXnRIiSdZ45R4m8vufwr+NeG8y1pzCQXi+GrC852y1Xl9f9LsfqG9me1qaLzoh
-         8+ABu67BD5sTDqxowSSwbPqKxcasK8w2GAsOqdSP0hLndoa0EtCa2+BwsK2gFolE4pHK
-         MyQA5SJMyqdvkrg6txryVjkZMms3+fW2PzqSTz7GiB2iJhkpr/BfDOR+nBYFU0BI/U35
-         Kvzf3ek1xq8H44vc7oevhKT4Zc3yt1djSQEpcGAcQljoe/1v37kRRBZRf+k3acRGyM9L
-         YYr+/T8gGjQ1wsfAe7i6SArugJMmB9kO930+XrArPjwuVhqfo33/MTTBi20KocaK+jXW
-         cGHQ==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ONtgrpUVfgaDiq1zXnbAn6nVrL5RzEEKdEEOpv/ts/w=;
+        b=RPfBncwo3xRZLwPCaB9JoOSmhUbJjQWh9/5exDp/xTLykz+3iQC2crnSEzJTjWyngW
+         IO+Uunz+rAz2cBH+5mqRSxNUA0mo50556+qYwskvrDKYj/86Oh7U1tHDmYc0kL4XFimb
+         28/h/wWggvQUJvn+QDFC8qSqgypcW8OXO5p8MCzEzNPUvxnnLpYDMlj5rkMrpLW2GJpF
+         XTzyw1Tx3zPSOsULoI+qZ6DwI6rqRiepjm29aGw7avud7eFNPacK0xOxx8hAb4XLaw+Y
+         7B8tg2GZowlAXWZzUhqt/D3u3E+cr/E7Y6CMu+HqfRt7RFUgXIsF9idwf8un6kTDs60i
+         IAKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h4C9WpLUh/VIc8qz9wWANgWf77RNe31qiFw7MR8/RHI=;
-        b=FrWP3VSvMi4YYqceU0/whwpHKIE6bIizRhvS8elS2jsGrh9fPtZjsdsGA95We0m75I
-         QLIqfvIRmzj7o/2Add17shADK3bzTOzQIhdUGBupHxLoqMkQNw/MWoy9L6xCtfQ1RsZy
-         tzNZwYfy7DlLA8O9KqTIQuMu2ry2T7BXkdfRxq0XJSDIsi8mOkWCD155UMLIUFDgQuNt
-         POQlBbFHs0PhyFebrFZqQUjUHDDpYaQMHxvgxy/jYxNEB2uC5RiFqMJDNxozI0RDQbqX
-         reGcFo/o/z5RGvE6vUMZohNBPSpLkjD1IToxF7xj28BAcYpIz/MX67bH72wWwyiO9xcF
-         1Chg==
-X-Gm-Message-State: AOAM531+XvYNxYDVfjLXiO/QSFHVLA1DxQgJnSz8KM0aAH+5UCEGKZk3
-        g0T7rdQrwG1hgGPRNKX3v3eR0Gimepoot3B7V5IGkQ==
-X-Google-Smtp-Source: ABdhPJyln0XAhu0MGDOEEGvLmEPTQLb7ZpwI8GRDAEKgqr2CoPH8Y2XkVwUILvdNSg4aRKRJjQka6uK5s4Q9xgA9oVI=
-X-Received: by 2002:a05:6902:c9:b0:641:1998:9764 with SMTP id
- i9-20020a05690200c900b0064119989764mr25712824ybs.427.1654536721612; Mon, 06
- Jun 2022 10:32:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ONtgrpUVfgaDiq1zXnbAn6nVrL5RzEEKdEEOpv/ts/w=;
+        b=EriWVPynR372Z8XlEAYtqSMWeYVp+vqEMt0H+BKHvqoi5LdZ7V6uC0tOY9tQVWWmmO
+         XMXNlu1ZJknMpxEf0t2fBgJ2ut5O0Lbm1kr/f/9kVtPaNpUpwDw+3cZ2gxzSsHnaiwIr
+         /rNJc3xxpwTkRojfs3i4LJ1BrrkT+FgOySgGIXYm+Nrzr6GGVvm59/KXaEYne4hqAHsi
+         +4dtRscWF9MEY3YqdVR9F48dPkQKfLoTENp7P/X4yuEgXLxIIy8sCaQgRAjkyQeaPLyh
+         hAn//EbINts3/lq9gaHUN47neqOenFuBxFmy/kRtDbjxOmcMHVkKpmLWfg/QgoiEkLwp
+         6OWw==
+X-Gm-Message-State: AOAM533nE1KEck0w5OUbcWPDuXcgiYoxZNfCM1R0Z7vMZtYhJR5/AwYf
+        GvWBZ7V4f7fCFkzGa7FK4aWjiw==
+X-Google-Smtp-Source: ABdhPJwHrpLRvcb2wRgm9WoukfE/nzu+lokhq+WkPqXduzdXyYjlDQJX7ghcMowYgUkJL1HDosduPQ==
+X-Received: by 2002:a05:6214:1d2f:b0:464:46fe:ca68 with SMTP id f15-20020a0562141d2f00b0046446feca68mr34363805qvd.4.1654536905279;
+        Mon, 06 Jun 2022 10:35:05 -0700 (PDT)
+Received: from localhost (cpe-67-251-217-1.hvc.res.rr.com. [67.251.217.1])
+        by smtp.gmail.com with ESMTPSA id g4-20020a37b604000000b006a5fb8219bbsm11805833qkf.44.2022.06.06.10.35.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 10:35:04 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 13:34:59 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     roman.gushchin@linux.dev, shakeelb@google.com,
+        songmuchun@bytedance.com, mhocko@kernel.org,
+        akpm@linux-foundation.org, corbet@lwn.net, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3] mm: memcontrol: add {pgscan,pgsteal}_{kswapd,direct}
+ items in memory.stat of cgroup v2
+Message-ID: <Yp46w4op9JeX9+g9@cmpxchg.org>
+References: <20220606154028.55030-1-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
-References: <20220606162138.81505-1-duoming@zju.edu.cn>
-In-Reply-To: <20220606162138.81505-1-duoming@zju.edu.cn>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 6 Jun 2022 10:31:49 -0700
-Message-ID: <CANn89i+HbdWS4JU0odCbRApuCTGFAt9_NSUoCSFo-b4-z0uWCQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] ax25: Fix deadlock caused by skb_recv_datagram
- in ax25_recvmsg
-To:     Duoming Zhou <duoming@zju.edu.cn>
-Cc:     LKML <linux-kernel@vger.kernel.org>, jreuter@yaina.de,
-        Ralf Baechle <ralf@linux-mips.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>, linux-hams@vger.kernel.org,
-        thomas@osterried.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606154028.55030-1-zhengqi.arch@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 9:21 AM Duoming Zhou <duoming@zju.edu.cn> wrote:
->
-> The skb_recv_datagram() in ax25_recvmsg() will hold lock_sock
-> and block until it receives a packet from the remote. If the client
-> doesn`t connect to server and calls read() directly, it will not
-> receive any packets forever. As a result, the deadlock will happen.
->
-> The fail log caused by deadlock is shown below:
->
-> [  861.122612] INFO: task ax25_deadlock:148 blocked for more than 737 seconds.
-> [  861.124543] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  861.127764] Call Trace:
-> [  861.129688]  <TASK>
-> [  861.130743]  __schedule+0x2f9/0xb20
-> [  861.131526]  schedule+0x49/0xb0
-> [  861.131640]  __lock_sock+0x92/0x100
-> [  861.131640]  ? destroy_sched_domains_rcu+0x20/0x20
-> [  861.131640]  lock_sock_nested+0x6e/0x70
-> [  861.131640]  ax25_sendmsg+0x46/0x420
-> [  861.134383]  ? ax25_recvmsg+0x1e0/0x1e0
-> [  861.135658]  sock_sendmsg+0x59/0x60
-> [  861.136791]  __sys_sendto+0xe9/0x150
-> [  861.137212]  ? __schedule+0x301/0xb20
-> [  861.137710]  ? __do_softirq+0x4a2/0x4fd
-> [  861.139153]  __x64_sys_sendto+0x20/0x30
-> [  861.140330]  do_syscall_64+0x3b/0x90
-> [  861.140731]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> [  861.141249] RIP: 0033:0x7fdf05ee4f64
-> [  861.141249] RSP: 002b:00007ffe95772fc0 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-> [  861.141249] RAX: ffffffffffffffda RBX: 0000565303a013f0 RCX: 00007fdf05ee4f64
-> [  861.141249] RDX: 0000000000000005 RSI: 0000565303a01678 RDI: 0000000000000005
-> [  861.141249] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> [  861.141249] R10: 0000000000000000 R11: 0000000000000246 R12: 0000565303a00cf0
-> [  861.141249] R13: 00007ffe957730e0 R14: 0000000000000000 R15: 0000000000000000
->
-> This patch moves the skb_recv_datagram() before lock_sock() in order
-> that other functions that need lock_sock could be executed.
->
+On Mon, Jun 06, 2022 at 11:40:28PM +0800, Qi Zheng wrote:
+> There are already statistics of {pgscan,pgsteal}_kswapd and
+> {pgscan,pgsteal}_direct of memcg event here, but now only the
+> sum of the two is displayed in memory.stat of cgroup v2.
+> 
+> In order to obtain more accurate information during monitoring
+> and debugging, and to align with the display in /proc/vmstat,
+> it better to display {pgscan,pgsteal}_kswapd and
+> {pgscan,pgsteal}_direct separately.
+> 
+> Also, for forward compatibility, we still display pgscan and
+> pgsteal items so that it won't break existing applications.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Acked-by: Muchun Song <songmuchun@bytedance.com>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
 
+No objection to keeping pgscan and pgsteal, but can you please fix the
+doc to present the items in the same order as memory.stat has them?
 
-Why is this targeting net-next tree ?
-
-1) A fix should target net tree
-2) It should include a Fixes: tag
-
-Also:
-- this patch bypasses tests in ax25_recvmsg()
-- This might break applications depending on blocking read() operations.
-
-I feel a real fix is going to be slightly more difficult than that.
-
-Thank you
-
-> Reported-by: Thomas Habets <thomas@@habets.se>
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
->  net/ax25/af_ax25.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-> index 95393bb2760..02cd6087512 100644
-> --- a/net/ax25/af_ax25.c
-> +++ b/net/ax25/af_ax25.c
-> @@ -1665,6 +1665,11 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->         int copied;
->         int err = 0;
->
-> +       /* Now we can treat all alike */
-> +       skb = skb_recv_datagram(sk, flags, &err);
-> +       if (!skb)
-> +               goto done;
+> @@ -1445,9 +1445,21 @@ PAGE_SIZE multiple when read back.
+>  	  pgscan (npn)
+>  		Amount of scanned pages (in an inactive LRU list)
+>  
+> +	  pgscan_kswapd (npn)
+> +		Amount of scanned pages by kswapd (in an inactive LRU list)
 > +
->         lock_sock(sk);
->         /*
->          *      This works for seqpacket too. The receiver has ordered the
-> @@ -1675,11 +1680,6 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->                 goto out;
->         }
->
-> -       /* Now we can treat all alike */
-> -       skb = skb_recv_datagram(sk, flags, &err);
-> -       if (skb == NULL)
-> -               goto out;
+> +	  pgscan_direct (npn)
+> +		Amount of scanned pages directly  (in an inactive LRU list)
+> +
+>  	  pgsteal (npn)
+>  		Amount of reclaimed pages
+>  
+> +	  pgsteal_kswapd (npn)
+> +		Amount of reclaimed pages by kswapd
+> +
+> +	  pgsteal_direct (npn)
+> +		Amount of reclaimed pages directly
+> +
+>  	  pgactivate (npn)
+>  		Amount of pages moved to the active LRU list
+
+vs:
+
+> @@ -1495,41 +1518,17 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
+>  	}
+>  
+>  	/* Accumulated memory events */
 > -
->         if (!sk_to_ax25(sk)->pidincl)
->                 skb_pull(skb, 1);               /* Remove PID */
->
-> @@ -1725,6 +1725,7 @@ static int ax25_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->  out:
->         release_sock(sk);
->
-> +done:
->         return err;
->  }
->
-> --
-> 2.17.1
->
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
+> -		       memcg_events(memcg, PGFAULT));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
+> -		       memcg_events(memcg, PGMAJFAULT));
+> -	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
+> -		       memcg_events(memcg, PGREFILL));
+>  	seq_buf_printf(&s, "pgscan %lu\n",
+>  		       memcg_events(memcg, PGSCAN_KSWAPD) +
+>  		       memcg_events(memcg, PGSCAN_DIRECT));
+>  	seq_buf_printf(&s, "pgsteal %lu\n",
+>  		       memcg_events(memcg, PGSTEAL_KSWAPD) +
+>  		       memcg_events(memcg, PGSTEAL_DIRECT));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
+> -		       memcg_events(memcg, PGACTIVATE));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
+> -		       memcg_events(memcg, PGDEACTIVATE));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
+> -		       memcg_events(memcg, PGLAZYFREE));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
+> -		       memcg_events(memcg, PGLAZYFREED));
+> -
+> -#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPIN),
+> -		       memcg_events(memcg, ZSWPIN));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPOUT),
+> -		       memcg_events(memcg, ZSWPOUT));
+> -#endif
+>  
+> -#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
+> -		       memcg_events(memcg, THP_FAULT_ALLOC));
+> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
+> -		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
+> -#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> +	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
+> +		seq_buf_printf(&s, "%s %lu\n",
+> +			       vm_event_name(memcg_vm_event_stat[i]),
+> +			       memcg_events(memcg, memcg_vm_event_stat[i]));
+
+Thanks

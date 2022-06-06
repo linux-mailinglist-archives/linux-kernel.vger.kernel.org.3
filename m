@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5940C53E62F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E12453E696
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238343AbiFFNHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
+        id S237799AbiFFMxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238128AbiFFNHo (ORCPT
+        with ESMTP id S237772AbiFFMxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:07:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1449A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:07:36 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-138-163.dynamic.spd-mgts.ru [109.252.138.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E0FE76601E95;
-        Mon,  6 Jun 2022 14:07:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654520855;
-        bh=LSsMVAQZyPb3UHQGiFXE07RX1x68iQrPgzsQm/Y6N8k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=J7lZtYY4Cuoa9mBoGgmh7HzBulDfQSltbib9XF0llbPdiEZUwfyVZy75VhebvcF6x
-         LfmN/6WvLMFFEd57Xiq7Uzj+VOp0wfPESDbkDSRDN6xRfXFaLAm4pYCXfTKCIrWFm6
-         I+X9pOVA9y74JXswamQvAzNzliEeOrb5vaFb2pmkT5f1/ClW23KrVJzH+FPh9bWfFi
-         rm98yIYgZ2/sQ022F4i2iXIM+DIY0sElaY+mEkqwrv2OmPUZuJ+eQtTxFBedW+5+NQ
-         2F6zphwJ+8t02wTzUfaL3YwkCUl/mWTeXfB6lLJvQR/OJVYwnCxTbFcT9A2j0v4cD/
-         ZVYJRqnvVnp8g==
-Message-ID: <5dbf4f96-7218-f238-5426-1ad0b4045aeb@collabora.com>
-Date:   Mon, 6 Jun 2022 16:07:32 +0300
+        Mon, 6 Jun 2022 08:53:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A04A2497C;
+        Mon,  6 Jun 2022 05:53:17 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LGtf86vTGzfbQw;
+        Mon,  6 Jun 2022 20:51:28 +0800 (CST)
+Received: from container.huawei.com (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 20:53:15 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <ming.qian@nxp.com>, <shijie.qin@nxp.com>, <eagle.zhou@nxp.com>,
+        <mchehab@kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <william.xuanziyang@huawei.com>
+Subject: [PATCH] media: amphion: delete unnecessary NULL check
+Date:   Mon, 6 Jun 2022 21:10:42 +0800
+Message-ID: <20220606131042.4052393-1-william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v1] kernel/reboot: Change registration order of legacy
- power-off handler
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20220524212118.425702-1-dmitry.osipenko@collabora.com>
- <8735gjq365.fsf@mpe.ellerman.id.au>
- <e597fd8e-d0d1-dd1c-b889-86cfca60f0f6@collabora.com>
- <87r142ndps.fsf@mpe.ellerman.id.au>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <87r142ndps.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 16:06, Michael Ellerman wrote:
-> Dmitry Osipenko <dmitry.osipenko@collabora.com> writes:
->> Hi Michael,
->>
->> On 6/5/22 05:01, Michael Ellerman wrote:
->>> Dmitry Osipenko <dmitry.osipenko@collabora.com> writes:
->>>> We're unconditionally registering sys-off handler for the legacy
->>>> pm_power_off() callback, this causes problem for platforms that don't
->>>> use power-off handlers at all and should be halted. Now reboot syscall
->>>> assumes that there is a power-off handler installed and tries to power
->>>> off system instead of halting it.
->>>>
->>>> To fix the trouble, move the handler's registration to the reboot syscall
->>>> and check the pm_power_off() presence.
->>>
->>> I'm seeing a qemu virtual machine (ppce500) fail to power off using the
->>> gpio-poweroff driver. I bisected it to this commit.
->>>
->>> I think the problem is that the machine is going via kernel_power_off(),
->>> not sys_reboot(), and so legacy_pm_power_off() has not been registered.
->>>
->>> If I just put the core_initcall back then it works as before. Not sure
->>> if that's a safe change in general though.
->>
->> Thank you very much for the testing and reporting the problem! I see now the two more cases that were missed previously:
->>
->> 1. There is the orderly_poweroff() used by some drivers.
->> 2. PowerPC may invoke do_kernel_power_off() directly from xmon code.
->>
->> Could you please test this change:
-> 
-> That works, thanks.
-> 
-> I tested both sysrq-o and the xmon power off path.
-> 
-> I couldn't come up with an easy way to test the orderly_poweroff()
-> path, but it boils down to basically the same code in the end.
-> 
-> Tested-by: Michael Ellerman <mpe@ellerman.id.au>
-> 
-> cheers
+vfree(NULL) is safe. NULL check before vfree() is not needed.
+Delete them to simplify the code.
 
-Awesome, thank you!
+Generated by coccinelle script:
+	scripts/coccinelle/free/ifnullfree.cocci
 
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+---
+ drivers/media/platform/amphion/vdec.c     | 3 +--
+ drivers/media/platform/amphion/venc.c     | 3 +--
+ drivers/media/platform/amphion/vpu_cmds.c | 3 +--
+ 3 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
+index 3c02aa2a54aa..09d4f27970ec 100644
+--- a/drivers/media/platform/amphion/vdec.c
++++ b/drivers/media/platform/amphion/vdec.c
+@@ -1369,8 +1369,7 @@ static void vdec_cleanup(struct vpu_inst *inst)
+ 		return;
+ 
+ 	vdec = inst->priv;
+-	if (vdec)
+-		vfree(vdec);
++	vfree(vdec);
+ 	inst->priv = NULL;
+ 	vfree(inst);
+ }
+diff --git a/drivers/media/platform/amphion/venc.c b/drivers/media/platform/amphion/venc.c
+index 43d61d82f58c..461524dd1e44 100644
+--- a/drivers/media/platform/amphion/venc.c
++++ b/drivers/media/platform/amphion/venc.c
+@@ -919,8 +919,7 @@ static void venc_cleanup(struct vpu_inst *inst)
+ 		return;
+ 
+ 	venc = inst->priv;
+-	if (venc)
+-		vfree(venc);
++	vfree(venc);
+ 	inst->priv = NULL;
+ 	vfree(inst);
+ }
+diff --git a/drivers/media/platform/amphion/vpu_cmds.c b/drivers/media/platform/amphion/vpu_cmds.c
+index 9b39d77a178d..f4d7ca78a621 100644
+--- a/drivers/media/platform/amphion/vpu_cmds.c
++++ b/drivers/media/platform/amphion/vpu_cmds.c
+@@ -117,8 +117,7 @@ static void vpu_free_cmd(struct vpu_cmd_t *cmd)
+ {
+ 	if (!cmd)
+ 		return;
+-	if (cmd->pkt)
+-		vfree(cmd->pkt);
++	vfree(cmd->pkt);
+ 	vfree(cmd);
+ }
+ 
 -- 
-Best regards,
-Dmitry
+2.25.1
+

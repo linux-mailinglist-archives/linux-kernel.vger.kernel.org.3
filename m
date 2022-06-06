@@ -2,230 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B5453DFC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214B853DFCD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349730AbiFFCpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S1352225AbiFFCr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238762AbiFFCpZ (ORCPT
+        with ESMTP id S1343817AbiFFCrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:45:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E49C4C425
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654483524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aNDoMccQ7mEW7iwCLiSB8XQaZrFaD9G9J8zeTIHHoD4=;
-        b=WsJznzY9StKhP6vq62G6EZRpA7jIBkGqYRyywvbq2eq1PmSJKzRPlr1dvNtM4vZw1bYTmX
-        chPxHGAlhbzeI7dLhV5R0vB3EII4JIWFMErY9QJK2GH2hzWAZwklZAzX+NAdXIUTnz+nBr
-        xJ79I2f4VigSx+XlIf2qF5D/SCBnF8Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-88-AOWKI5UJNA2j7AViM93Ciw-1; Sun, 05 Jun 2022 22:45:21 -0400
-X-MC-Unique: AOWKI5UJNA2j7AViM93Ciw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8325E801228;
-        Mon,  6 Jun 2022 02:45:20 +0000 (UTC)
-Received: from localhost (ovpn-12-209.pek2.redhat.com [10.72.12.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4A8BE2166B26;
-        Mon,  6 Jun 2022 02:45:18 +0000 (UTC)
-Date:   Mon, 6 Jun 2022 10:45:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     sashal@kernel.org, ebiederm@xmission.com, rburanyi@google.com,
-        gthelen@google.com, viro@zeniv.linux.org.uk,
-        kexec@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] fs/kernel_read_file: Allow to read files up-to
- ssize_t
-Message-ID: <Yp1qO70pdxLx4h1H@MiWiFi-R3L-srv>
-References: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
- <20220527025535.3953665-2-pasha.tatashin@soleen.com>
+        Sun, 5 Jun 2022 22:47:23 -0400
+Received: from sonic308-21.consmr.mail.sg3.yahoo.com (sonic308-21.consmr.mail.sg3.yahoo.com [106.10.241.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88763F4
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com.tw; s=s2048; t=1654483637; bh=QXj6PURIQUaCdrfr15xm4Zh9/UDEJ2ARKkaiXl6akD0=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=WicVmVkGzPhd9hj2CMA603BqDxOdJt0h9aSntiI2FGSmDK31W+WvrACnxwh4bzY8YjcUFju16elcmTm/2PORZwtKtRLjXSTF4zzGzwAEiZf+fK/JTxt9NiflHc9a1vlxtSUoG665rnhUE94Cl75YeUw3FgSl44mtR6Tah0tOqU/hrANBWE2tkoQIVt0xQcgV+tljf3IAVqBMDGNs9oyX/6NvX0ClSL19U1BgEkG9WeJ1J2iiTDJW9zMfcWS6WCxg2uebGvttO0XroFHLh1rTrdnwgAWKBtKq894aeQhNCvgz/FCyeMBB0lcs9rIm2ot/6QfurojLOuAVO2NOEwyIog==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1654483637; bh=L1zxY4efVVZlwmSPsVIBtRqKcEZjyysK1tCCWYMltmh=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=fxPjkqN5S/EEQqhOsxkG3E+CUBfWg8yP7B5p7rnONTHGemLyU0bZM6T2ma0pQHGlq/T+CYga6i5odL0qfiwhONLM5wC2NL6JJ2FjQszeZDY8+uB9LjXiuc0Aw6EKI+wqoXba+5zgZ5MxxyTRw7MeoYHiK8UFnXeIc7iYGblMLY8O4LxcXDVogiF48aCWOt/8M021JBYrdkhKxdWaF0M1MBFBXfDESvpOVtetpsZgAkIvtI888yJqBzF6hda0B7PEVuoJBrWXHynfiHZumsx0rDO25bE+iggg51KKTXoWCy8RmkrwLVol0BfebRRazzyJ2yG4BmwrORKlPoFo78dTfA==
+X-YMail-OSG: _iyoQs4VM1kXrGhcDqDev5I1b0aJbFIeeAglBQJF39Sj8sJm2c3x0QoiTWVo.iS
+ 6Vecz4gDEPzurWSHWdR.9A7HAq1tsGP3lpHHLZ2.xQ59NyjwW3X13Oo_vBZnja26ubom.azK_PRZ
+ eZRaiHAlQGfER0e2bUqk_zpwFAx8ZWlUkaJPhs4QW2kMrLLa6hTpHeaTGA2ydIH5PYG_OufeAYKJ
+ 2E_LdmRYUjzXF80DujlbZsGEO_TBncnHcPuaKaipnPe10VyzAYV8BzDLwRA3XN_Pdb5lWRTUOcb5
+ ajC4L876g.RjXnpRZIgSk1LxlwWm7n.kI.fFGauExIP1SBWcqdTTOuX626jlk_CxyzEoOS2fR9qs
+ .PEn.LnzlFma8SOQwsAktoQJ0UV4NDsWN6WBgPkXut13kMyte2SY4vW6sF1DytiXIMWMWKNFva77
+ bKMxMjsKEjq3yBYznsGttvVzTI_ZUrIWRDFUKekdqdfqihzC19nLrejLz7tLzZRg.shljuesveRk
+ tcbKIdiHkqyca2qoBbxy_GldNQmM_be.bT8jrb8eHL4D.o77ogrfh3l3RWo96C9nZlrlktNX735k
+ wprxwT_FpPyxDKm9Rf9Okv5feUbcNG4i_Hpa2M.lIVw_nxMFOLwnGFQOElSXOKsS9lruy9ogBU8F
+ oP1NicuUh.QrkL1wBtirNNOPsUNu8KnFElr7sgNmOHCL4UVBT4pm6avEU9JBXEt6NejlUNRi1EDF
+ KTC0FPaqyIZVHCPXMgvnRKDGzp9j.gci8wlQhElatIiBwz9yq4H6rHquigWBsMKbqrDeYw5HrvYK
+ MzPI3OuNnGxbmwYBZX23mAgQ._nBB6kNPK20FBFEHV6AoMehvO6ATa3gZ2_dhhOShqw9JllsfOHT
+ T4ixgCEHRSjvw0h.DCSneZruzC1PcuC0VCLIFRoePk3ErVdSN_MU6aNE65bQRHT1KW6ygDrREJKn
+ 70g96T_m2SGSQsgek9tdvcDI1MGa1IZ18OlPA6hoLl9R_abedPxjITyUZ23qPxJUeM.ZaWDLRp_G
+ JnBbxQHff6P8Y88Pk.aoaOAERoBpep3lcEdWAUftXX28SRNEAzh2ejAnRF8lTs6YqOjynKYCfsrj
+ bjMP7WCwjJc1_8OcyWgbhQRqflLh0rZjCBOgoeRrsHE5HCPRMHhDZGUdWhqiQFsthq129B58U_3_
+ u_8K0I4VbTz85nAVaYRu4xysgwOnmx2vlkKsiDuk7FcKao2HCKAa6gpOUyq0FKMYY3s4o6OupbHo
+ 28kgAFz5RjW8LsxKkQuCY2pEyBVq8kN5twHXx0mUbudNjghFHqq91n6QHK7pfFxxFiaPU9RMklon
+ 9WPgCbzh4mr1HPnZ3mf8H4PLVgrveaVDZUG8KkYZHa3g49QkF45B9WwxSqWEF3q3YdOtfOE.mx8K
+ s2nWtypPBNDxRWkasfOeORC_EP2dHWy8q6YywpDVG_wlS09513.Db5EJcT3YJs9OaJ_f3ESsWc2x
+ BeDMyofDlKEc56TjvSjK_R5gXrFAasbA0YTlquaJqyrggd67KloHXEHl5Umk9FWvNdzkY0fHeqgf
+ jxm6JEy.mkw_Rl1HKgvkPp9ecE7bJQ0czIgl3qrAVO7ZH5DNFMiRcefnXjj7.DhuaO.l7kHoMSER
+ LjtjmRBujijGfq61UpvG1TonNWnch7S0VDn4lmEOJtdjXgjCwE2VmogJvxMkaF8DuUuaADi2q8sN
+ X54IWNEwdpBAXaa_KEpaDqQnha7qPTJtYoyLIaREgMQfemyudgcOcgYv.AT7aFqDuNJGQwCaUL8R
+ bfVO7PsPmPfTqRLWqcXXgWBY2yOAWXURCT_dMQavTfZ2qn9FiaGiD5I0Fek2CfHZw1Bw3V_IGQZo
+ p9vwwiG1mUbuSgTBKBmiEagK5XhWT.X9Uyl6NrzrR.9J10BN5vC5j35Rgx5oyKmBc5TfEmTEUuYY
+ uAZKGPCtyVeXHMiSx8Q2K6pq6TyZBVDh4b3SYZKQxS0.Bg_T6NOZWOcNk.Qo5H92vNkJC1JF.Zc4
+ 5djF2Xcz7bvZHC_9Tzb5ll0vZRcGH3tY6fwjB4O6roLvrVdJ3kNyGAdOOo36UtZZALrX7xt6gQcw
+ PS3JLKJNHL7UObMONXIRwpFPeOb7dUhrCvalSmf15rCUl4kwqKsDuWvN9LO3kD86OTrPWeixyoRc
+ rl9u7g0vcAiP8yWIofnUhwZTcNjc2exhaDHQFy1IoapkDPv9gSozljlDzCFOmedZbSwFI_UrI_aa
+ KGtBizokxHqbJzcWpdOzlwGiSIG_t1aZDOzlfqBik6kmpvnRl0e4SFitpvSuX2.0Utshbtly9MQz
+ X
+X-Sonic-MF: <ae40515@yahoo.com.tw>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.sg3.yahoo.com with HTTP; Mon, 6 Jun 2022 02:47:17 +0000
+Received: by hermes--canary-production-sg3-5f7658c994-q45vr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3a7a87dc6523ee7d3426ceda942b505a;
+          Mon, 06 Jun 2022 02:47:16 +0000 (UTC)
+From:   Alec Su <ae40515@yahoo.com.tw>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@codeaurora.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        phone-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, y.oudjana@protonmail.com,
+        Alec Su <ae40515@yahoo.com.tw>
+Subject: [PATCH v4 0/2] Add support for Xiaomi Mi 5s Plus
+Date:   Mon,  6 Jun 2022 02:47:04 +0000
+Message-Id: <20220606024706.22861-1-ae40515@yahoo.com.tw>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527025535.3953665-2-pasha.tatashin@soleen.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+References: <20220606024706.22861-1-ae40515.ref@yahoo.com.tw>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/27/22 at 02:55am, Pasha Tatashin wrote:
-> Currently, the maximum file size that is supported is 2G. This may be
-> too small in some cases. For example, kexec_file_load() system call
-> loads initramfs. In some netboot cases initramfs can be rather large.
-> 
-> Allow to use up-to ssize_t bytes. The callers still can limit the
-> maximum file size via buf_size.
+This series adds the device tree for Xiaomi Mi 5s Plus (xiaomi-natrium)
+smartphone which is based on Snapdragon 821 SoC.
 
-If we really met initramfs bigger than 2G, it's reasonable to increase
-the limit. While wondering why we should take sszie_t, but not size_t.
+Changes since v3:
+- Remove the unnecessary properties in the device tree.
+- Correct the supplies in "dsi0" node
+- Add delay properties in "touchscreen" node
 
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  fs/kernel_read_file.c            | 38 ++++++++++++++++----------------
->  include/linux/kernel_read_file.h | 32 +++++++++++++--------------
->  include/linux/limits.h           |  1 +
->  3 files changed, 36 insertions(+), 35 deletions(-)
-> 
-> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-> index 1b07550485b9..5d826274570c 100644
-> --- a/fs/kernel_read_file.c
-> +++ b/fs/kernel_read_file.c
-> @@ -29,15 +29,15 @@
->   * change between calls to kernel_read_file().
->   *
->   * Returns number of bytes read (no single read will be bigger
-> - * than INT_MAX), or negative on error.
-> + * than SSIZE_MAX), or negative on error.
->   *
->   */
-> -int kernel_read_file(struct file *file, loff_t offset, void **buf,
-> -		     size_t buf_size, size_t *file_size,
-> -		     enum kernel_read_file_id id)
-> +ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
-> +			 size_t buf_size, size_t *file_size,
-> +			 enum kernel_read_file_id id)
->  {
->  	loff_t i_size, pos;
-> -	size_t copied;
-> +	ssize_t copied;
->  	void *allocated = NULL;
->  	bool whole_file;
->  	int ret;
-> @@ -58,7 +58,7 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
->  		goto out;
->  	}
->  	/* The file is too big for sane activities. */
-> -	if (i_size > INT_MAX) {
-> +	if (i_size > SSIZE_MAX) {
->  		ret = -EFBIG;
->  		goto out;
->  	}
-> @@ -124,12 +124,12 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
->  }
->  EXPORT_SYMBOL_GPL(kernel_read_file);
->  
-> -int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
-> -			       size_t buf_size, size_t *file_size,
-> -			       enum kernel_read_file_id id)
-> +ssize_t kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
-> +				   size_t buf_size, size_t *file_size,
-> +				   enum kernel_read_file_id id)
->  {
->  	struct file *file;
-> -	int ret;
-> +	ssize_t ret;
->  
->  	if (!path || !*path)
->  		return -EINVAL;
-> @@ -144,14 +144,14 @@ int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
->  }
->  EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
->  
-> -int kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> -				      void **buf, size_t buf_size,
-> -				      size_t *file_size,
-> -				      enum kernel_read_file_id id)
-> +ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> +					  void **buf, size_t buf_size,
-> +					  size_t *file_size,
-> +					  enum kernel_read_file_id id)
->  {
->  	struct file *file;
->  	struct path root;
-> -	int ret;
-> +	ssize_t ret;
->  
->  	if (!path || !*path)
->  		return -EINVAL;
-> @@ -171,12 +171,12 @@ int kernel_read_file_from_path_initns(const char *path, loff_t offset,
->  }
->  EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
->  
-> -int kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
-> -			     size_t buf_size, size_t *file_size,
-> -			     enum kernel_read_file_id id)
-> +ssize_t kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
-> +				 size_t buf_size, size_t *file_size,
-> +				 enum kernel_read_file_id id)
->  {
->  	struct fd f = fdget(fd);
-> -	int ret = -EBADF;
-> +	ssize_t ret = -EBADF;
->  
->  	if (!f.file || !(f.file->f_mode & FMODE_READ))
->  		goto out;
-> diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
-> index 575ffa1031d3..90451e2e12bd 100644
-> --- a/include/linux/kernel_read_file.h
-> +++ b/include/linux/kernel_read_file.h
-> @@ -35,21 +35,21 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
->  	return kernel_read_file_str[id];
->  }
->  
-> -int kernel_read_file(struct file *file, loff_t offset,
-> -		     void **buf, size_t buf_size,
-> -		     size_t *file_size,
-> -		     enum kernel_read_file_id id);
-> -int kernel_read_file_from_path(const char *path, loff_t offset,
-> -			       void **buf, size_t buf_size,
-> -			       size_t *file_size,
-> -			       enum kernel_read_file_id id);
-> -int kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> -				      void **buf, size_t buf_size,
-> -				      size_t *file_size,
-> -				      enum kernel_read_file_id id);
-> -int kernel_read_file_from_fd(int fd, loff_t offset,
-> -			     void **buf, size_t buf_size,
-> -			     size_t *file_size,
-> -			     enum kernel_read_file_id id);
-> +ssize_t kernel_read_file(struct file *file, loff_t offset,
-> +			 void **buf, size_t buf_size,
-> +			 size_t *file_size,
-> +			 enum kernel_read_file_id id);
-> +ssize_t kernel_read_file_from_path(const char *path, loff_t offset,
-> +				   void **buf, size_t buf_size,
-> +				   size_t *file_size,
-> +				   enum kernel_read_file_id id);
-> +ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> +					  void **buf, size_t buf_size,
-> +					  size_t *file_size,
-> +					  enum kernel_read_file_id id);
-> +ssize_t kernel_read_file_from_fd(int fd, loff_t offset,
-> +				 void **buf, size_t buf_size,
-> +				 size_t *file_size,
-> +				 enum kernel_read_file_id id);
->  
->  #endif /* _LINUX_KERNEL_READ_FILE_H */
-> diff --git a/include/linux/limits.h b/include/linux/limits.h
-> index b568b9c30bbf..f6bcc9369010 100644
-> --- a/include/linux/limits.h
-> +++ b/include/linux/limits.h
-> @@ -7,6 +7,7 @@
->  #include <vdso/limits.h>
->  
->  #define SIZE_MAX	(~(size_t)0)
-> +#define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
->  #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
->  
->  #define U8_MAX		((u8)~0U)
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
-> 
+Changes since v2:
+- Rename the node "synaptics" to "touchscreen".
+
+Changes since v1:
+- Adjust the sequence of the patches in this series.
+- Remove the unnecessary line and properties in the device tree.
+- Rename the nodes contain underscores.
+
+Alec Su (2):
+  dt-bindings: arm: qcom: Document xiaomi,natrium board
+  arm64: dts: qcom: msm8996-xiaomi-natrium: Add support for Xiaomi Mi 5s
+    Plus
+
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/msm8996-xiaomi-natrium.dts  | 414 ++++++++++++++++++
+ 3 files changed, 416 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts
+
+-- 
+2.35.3
 

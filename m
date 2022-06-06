@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12E953EDFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0080E53EE00
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbiFFSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S231909AbiFFSnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiFFSm6 (ORCPT
+        with ESMTP id S231888AbiFFSnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:42:58 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA831A04B0;
-        Mon,  6 Jun 2022 11:42:56 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id y12so13160322ior.7;
-        Mon, 06 Jun 2022 11:42:56 -0700 (PDT)
+        Mon, 6 Jun 2022 14:43:20 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1BC1A40A3;
+        Mon,  6 Jun 2022 11:43:17 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id z197so8976307iof.1;
+        Mon, 06 Jun 2022 11:43:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=v3EH5Ud1ia9pHiXc/1x/9CrXiVNDXe9p4RQEE8BsW8Q=;
-        b=Y/OlMJxtYbBr5dzdc0wqjMrus9HBqMaZ0SYltdJsaZMwA5S1jq5L8EDKEOUBtT/RPs
-         oeXlbK5YhftlffQlcizY9BlqA3Z58rpPo0U19zJUeklBO2kg8yuX9dWA8MMl+vGNhxDK
-         2FY8mdWMWvQzggP7pIghtGgpLfkTPAz1O/YNV+20LaGsksF5lvs1h02QkT+x9PBx3xYZ
-         bKAcOnWJgJ1BJepe3en1ofqAelF5FKNSszKp8mlxRooljZPbrlJCxA6zJyUjkgt0oOM/
-         kgVDVvlUV4Xg4bxFM9nHOsj1mTwzI8oP+2UXMRP2sy8rrZ97dsAsGOHMOc/9hgcLJo8o
-         uD9Q==
-X-Gm-Message-State: AOAM532+tMxeZIDLyK9ZRwMBNbY6n3FgNn6BDeO3dC5M9b28VVoyZxFr
-        DtipEhVsiWx7Z+E9tgCDVw==
-X-Google-Smtp-Source: ABdhPJykicPbd4l5VuYUBNpWEqEgIVCiwbp7IDshM5LUKwNUsZqLKJeDp22MIGU2/tVKIHbiM8QZBg==
-X-Received: by 2002:a02:ba82:0:b0:331:5aaf:e4b0 with SMTP id g2-20020a02ba82000000b003315aafe4b0mr13777880jao.196.1654540975731;
-        Mon, 06 Jun 2022 11:42:55 -0700 (PDT)
+        bh=2PpScDK9InjEA+0LXDJ1p0bncij3zNYp1MEn2KZze60=;
+        b=TJA4Kzj4mPhhq7yKZO16CH4FngoxzHiuGj3USoa6nvm1Dwx3zofbn3ul2Rd+/+GETi
+         WzYJQzuNAUT0010vFme/+saV1FV/XOM58IKi7nPcAakio+NRO5XQqK1eVtzsbWToIgAt
+         sWscr+gutSzkClMx1093P5QDkJZ/2hzh1pywN3QgdLniQjCogaKcTsEQs9DNeJEXtbx4
+         et71qCNWNfbvpEcfKsukraqXDNYsHBveCcxhfvTHpu41E2w1dwSFaH67F0iWz8gPP0J8
+         wzE9eJ5QDtsSutumVs9C4cmwdskwYPh1EQWRJod4PzuLXZGbvFVSxx9eXlabavklImwx
+         Yd3A==
+X-Gm-Message-State: AOAM533YaFWQaL7BgS9cSjXItdeQ5ZGQuf9tlTlWoSamoiG7zzb66fMD
+        yd9+bkDPtUrg5Nn59EEAMA==
+X-Google-Smtp-Source: ABdhPJyhQvMgE3DYDH7FpUZJUYJ5/OzroiARX1AIg/ONPtV7oOfWFJ8c1at7jLoW/BI2shOWiqRPcA==
+X-Received: by 2002:a05:6638:1608:b0:331:c83a:cc24 with SMTP id x8-20020a056638160800b00331c83acc24mr1100640jas.143.1654540997049;
+        Mon, 06 Jun 2022 11:43:17 -0700 (PDT)
 Received: from xps15.herring.priv ([64.188.179.251])
-        by smtp.googlemail.com with ESMTPSA id q2-20020a5d87c2000000b0065a47e16f53sm5908060ios.37.2022.06.06.11.42.54
+        by smtp.googlemail.com with ESMTPSA id i12-20020a02a0cc000000b0032b3a781747sm5894939jah.11.2022.06.06.11.43.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 11:42:55 -0700 (PDT)
+        Mon, 06 Jun 2022 11:43:16 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: input: Convert adc-keys to DT schema
-Date:   Mon,  6 Jun 2022 13:42:42 -0500
-Message-Id: <20220606184243.1057145-1-robh@kernel.org>
+        Brian Norris <briannorris@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Alexandre Courbot <acourbot@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] regulator: dt-bindings: Convert pwm-regulator to DT schema
+Date:   Mon,  6 Jun 2022 13:43:09 -0500
+Message-Id: <20220606184310.1057797-1-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,196 +62,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the adc-keys binding to DT schema format.
+Convert the pwm-regulator binding to DT schema format.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/input/adc-keys.txt    |  67 ------------
- .../devicetree/bindings/input/adc-keys.yaml   | 103 ++++++++++++++++++
- 2 files changed, 103 insertions(+), 67 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/adc-keys.txt
- create mode 100644 Documentation/devicetree/bindings/input/adc-keys.yaml
+ .../bindings/regulator/pwm-regulator.txt      |  92 -------------
+ .../bindings/regulator/pwm-regulator.yaml     | 126 ++++++++++++++++++
+ 2 files changed, 126 insertions(+), 92 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/regulator/pwm-regulator.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
 
-diff --git a/Documentation/devicetree/bindings/input/adc-keys.txt b/Documentation/devicetree/bindings/input/adc-keys.txt
+diff --git a/Documentation/devicetree/bindings/regulator/pwm-regulator.txt b/Documentation/devicetree/bindings/regulator/pwm-regulator.txt
 deleted file mode 100644
-index 6c8be6a9ace2..000000000000
---- a/Documentation/devicetree/bindings/input/adc-keys.txt
+index 3d78d507e29f..000000000000
+--- a/Documentation/devicetree/bindings/regulator/pwm-regulator.txt
 +++ /dev/null
-@@ -1,67 +0,0 @@
--ADC attached resistor ladder buttons
--------------------------------------
+@@ -1,92 +0,0 @@
+-Bindings for the Generic PWM Regulator
+-======================================
+-
+-Currently supports 2 modes of operation:
+-
+-Voltage Table:		When in this mode, a voltage table (See below) of
+-			predefined voltage <=> duty-cycle values must be
+-			provided via DT. Limitations are that the regulator can
+-			only operate at the voltages supplied in the table.
+-			Intermediary duty-cycle values which would normally
+-			allow finer grained voltage selection are ignored and
+-			rendered useless.  Although more control is given to
+-			the user if the assumptions made in continuous-voltage
+-			mode do not reign true.
+-
+-Continuous Voltage:	This mode uses the regulator's maximum and minimum
+-			supplied voltages specified in the
+-			regulator-{min,max}-microvolt properties to calculate
+-			appropriate duty-cycle values.  This allows for a much
+-			more fine grained solution when compared with
+-			voltage-table mode above.  This solution does make an
+-			assumption that a %50 duty-cycle value will cause the
+-			regulator voltage to run at half way between the
+-			supplied max_uV and min_uV values.
 -
 -Required properties:
-- - compatible: "adc-keys"
-- - io-channels: Phandle to an ADC channel
-- - io-channel-names = "buttons";
-- - keyup-threshold-microvolt: Voltage above or equal to which all the keys are
--			      considered up.
+---------------------
+-- compatible:		Should be "pwm-regulator"
+-
+-- pwms:			PWM specification (See: ../pwm/pwm.txt)
+-
+-Only required for Voltage Table Mode:
+-- voltage-table: 	Voltage and Duty-Cycle table consisting of 2 cells
+-			    First cell is voltage in microvolts (uV)
+-			    Second cell is duty-cycle in percent (%)
+-
+-Optional properties for Continuous mode:
+-- pwm-dutycycle-unit:	Integer value encoding the duty cycle unit. If not
+-			defined, <100> is assumed, meaning that
+-			pwm-dutycycle-range contains values expressed in
+-			percent.
+-
+-- pwm-dutycycle-range:	Should contain 2 entries. The first entry is encoding
+-			the dutycycle for regulator-min-microvolt and the
+-			second one the dutycycle for regulator-max-microvolt.
+-			Duty cycle values are expressed in pwm-dutycycle-unit.
+-			If not defined, <0 100> is assumed.
+-
+-NB: To be clear, if voltage-table is provided, then the device will be used
+-in Voltage Table Mode.  If no voltage-table is provided, then the device will
+-be used in Continuous Voltage Mode.
 -
 -Optional properties:
--	- poll-interval: Poll interval time in milliseconds
--	- autorepeat: Boolean, Enable auto repeat feature of Linux input
--	  subsystem.
+---------------------
+-- enable-gpios:		GPIO to use to enable/disable the regulator
 -
--Each button (key) is represented as a sub-node of "adc-keys":
+-Any property defined as part of the core regulator binding can also be used.
+-(See: ../regulator/regulator.txt)
 -
--Required subnode-properties:
--	- label: Descriptive name of the key.
--	- linux,code: Keycode to emit.
--	- press-threshold-microvolt: voltage above or equal to which this key is
--				     considered pressed.
--
--No two values of press-threshold-microvolt may be the same.
--All values of press-threshold-microvolt must be less than
--keyup-threshold-microvolt.
--
--Example:
--
--#include <dt-bindings/input/input.h>
--
--	adc-keys {
--		compatible = "adc-keys";
--		io-channels = <&lradc 0>;
--		io-channel-names = "buttons";
--		keyup-threshold-microvolt = <2000000>;
--
--		button-up {
--			label = "Volume Up";
--			linux,code = <KEY_VOLUMEUP>;
--			press-threshold-microvolt = <1500000>;
--		};
--
--		button-down {
--			label = "Volume Down";
--			linux,code = <KEY_VOLUMEDOWN>;
--			press-threshold-microvolt = <1000000>;
--		};
--
--		button-enter {
--			label = "Enter";
--			linux,code = <KEY_ENTER>;
--			press-threshold-microvolt = <500000>;
--		};
+-Continuous Voltage With Enable GPIO Example:
+-	pwm_regulator {
+-		compatible = "pwm-regulator";
+-		pwms = <&pwm1 0 8448 0>;
+-		enable-gpios = <&gpio0 23 GPIO_ACTIVE_HIGH>;
+-		regulator-min-microvolt = <1016000>;
+-		regulator-max-microvolt = <1114000>;
+-		regulator-name = "vdd_logic";
+-		/* unit == per-mille */
+-		pwm-dutycycle-unit = <1000>;
+-		/*
+-		 * Inverted PWM logic, and the duty cycle range is limited
+-		 * to 30%-70%.
+-		 */
+-		pwm-dutycycle-range = <700 300>; /* */
 -	};
 -
--+--------------------------------+------------------------+
--| 2.000.000 <= value             | no key pressed         |
--+--------------------------------+------------------------+
--| 1.500.000 <= value < 2.000.000 | KEY_VOLUMEUP pressed   |
--+--------------------------------+------------------------+
--| 1.000.000 <= value < 1.500.000 | KEY_VOLUMEDOWN pressed |
--+--------------------------------+------------------------+
--|   500.000 <= value < 1.000.000 | KEY_ENTER pressed      |
--+--------------------------------+------------------------+
--|              value <   500.000 | no key pressed         |
--+--------------------------------+------------------------+
-diff --git a/Documentation/devicetree/bindings/input/adc-keys.yaml b/Documentation/devicetree/bindings/input/adc-keys.yaml
+-Voltage Table Example:
+-	pwm_regulator {
+-		compatible = "pwm-regulator";
+-		pwms = <&pwm1 0 8448 0>;
+-		regulator-min-microvolt = <1016000>;
+-		regulator-max-microvolt = <1114000>;
+-		regulator-name = "vdd_logic";
+-
+-			      /* Voltage Duty-Cycle */
+-		voltage-table = <1114000 0>,
+-				<1095000 10>,
+-				<1076000 20>,
+-				<1056000 30>,
+-				<1036000 40>,
+-				<1016000 50>;
+-	};
+diff --git a/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
 new file mode 100644
-index 000000000000..a3a1af9550bc
+index 000000000000..0332fec48a88
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/input/adc-keys.yaml
-@@ -0,0 +1,103 @@
++++ b/Documentation/devicetree/bindings/regulator/pwm-regulator.yaml
+@@ -0,0 +1,126 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/input/adc-keys.yaml#
++$id: http://devicetree.org/schemas/regulator/pwm-regulator.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: ADC attached resistor ladder buttons
++title: Bindings for the Generic PWM Regulator
 +
 +maintainers:
-+  - Heinrich Schuchardt <xypron.glpk@gmx.de>
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++  - Brian Norris <briannorris@chromium.org>
++  - Lee Jones <lee.jones@linaro.org>
++  - Alexandre Courbot <acourbot@nvidia.com>
++
++description: |
++  Currently supports 2 modes of operation:
++
++  Voltage Table:
++    When in this mode, a voltage table (See below) of predefined voltage <=>
++    duty-cycle values must be provided via DT. Limitations are that the
++    regulator can only operate at the voltages supplied in the table.
++    Intermediary duty-cycle values which would normally allow finer grained
++    voltage selection are ignored and rendered useless.  Although more control
++    is given to the user if the assumptions made in continuous-voltage mode do
++    not reign true.
++
++  Continuous Voltage:
++    This mode uses the regulator's maximum and minimum supplied voltages
++    specified in the regulator-{min,max}-microvolt properties to calculate
++    appropriate duty-cycle values.  This allows for a much more fine grained
++    solution when compared with voltage-table mode above.  This solution does
++    make an assumption that a %50 duty-cycle value will cause the regulator
++    voltage to run at half way between the supplied max_uV and min_uV values.
++
++  If voltage-table is provided, then the device will be used in Voltage Table
++  Mode.  If no voltage-table is provided, then the device will be used in
++  Continuous Voltage Mode.
 +
 +allOf:
-+  - $ref: /schemas/input/input.yaml#
++  - $ref: regulator.yaml#
 +
 +properties:
 +  compatible:
-+    const: adc-keys
++    const: pwm-regulator
 +
-+  io-channels:
++  pwms:
 +    maxItems: 1
 +
-+  io-channel-names:
-+    const: buttons
++  voltage-table:
++    description: Voltage and Duty-Cycle table.
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    items:
++      items:
++        - description: voltage in microvolts (uV)
++        - description: duty-cycle in percent (%)
 +
-+  keyup-threshold-microvolt:
++  enable-gpios:
++    description: Regulator enable GPIO
++    maxItems: 1
++
++   # Optional properties for Continuous mode:
++  pwm-dutycycle-unit:
 +    description:
-+      Voltage above or equal to which all the keys are considered up.
++      Integer value encoding the duty cycle unit. If not
++        defined, <100> is assumed, meaning that
++        pwm-dutycycle-range contains values expressed in
++        percent.
++    default: 100
 +
-+patternProperties:
-+  '^button-':
-+    type: object
-+    additionalProperties: false
++  pwm-dutycycle-range:
 +    description:
-+      Each button (key) is represented as a sub-node.
-+
-+    properties:
-+      label: true
-+
-+      linux,code:
-+        description: Keycode to emit.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      press-threshold-microvolt:
-+        description:
-+          Voltage above or equal to which this key is considered pressed. No
-+          two values of press-threshold-microvolt may be the same. All values
-+          of press-threshold-microvolt must be less than
-+          keyup-threshold-microvolt.
-+
-+    required:
-+      - label
-+      - linux,code
-+      - press-threshold-microvolt
++      Should contain 2 entries. The first entry is encoding
++        the dutycycle for regulator-min-microvolt and the
++        second one the dutycycle for regulator-max-microvolt.
++        Duty cycle values are expressed in pwm-dutycycle-unit.
++        If not defined, <0 100> is assumed.
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    items:
++      - description: the dutycycle for regulator-min-microvolt
++      - description: the dutycycle for regulator-max-microvolt
++    default: [ 0 100 ]
 +
 +required:
 +  - compatible
-+  - io-channels
-+  - io-channel-names
-+  - keyup-threshold-microvolt
++  - pwms
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/input/input.h>
-+    // +--------------------------------+------------------------+
-+    // | 2.000.000 <= value             | no key pressed         |
-+    // +--------------------------------+------------------------+
-+    // | 1.500.000 <= value < 2.000.000 | KEY_VOLUMEUP pressed   |
-+    // +--------------------------------+------------------------+
-+    // | 1.000.000 <= value < 1.500.000 | KEY_VOLUMEDOWN pressed |
-+    // +--------------------------------+------------------------+
-+    // |   500.000 <= value < 1.000.000 | KEY_ENTER pressed      |
-+    // +--------------------------------+------------------------+
-+    // |              value <   500.000 | no key pressed         |
-+    // +--------------------------------+------------------------+
++    #include <dt-bindings/gpio/gpio.h>
 +
-+    adc-keys {
-+        compatible = "adc-keys";
-+        io-channels = <&lradc 0>;
-+        io-channel-names = "buttons";
-+        keyup-threshold-microvolt = <2000000>;
++    // Continuous Voltage With Enable GPIO Example:
++    regulator {
++        compatible = "pwm-regulator";
++        pwms = <&pwm1 0 8448 0>;
++        enable-gpios = <&gpio0 23 GPIO_ACTIVE_HIGH>;
++        regulator-min-microvolt = <1016000>;
++        regulator-max-microvolt = <1114000>;
++        regulator-name = "vdd_logic";
++        /* unit == per-mille */
++        pwm-dutycycle-unit = <1000>;
++        /*
++        * Inverted PWM logic, and the duty cycle range is limited
++        * to 30%-70%.
++        */
++        pwm-dutycycle-range = <700 300>; /* */
++    };
 +
-+        button-up {
-+            label = "Volume Up";
-+            linux,code = <KEY_VOLUMEUP>;
-+            press-threshold-microvolt = <1500000>;
-+        };
++  - |
++    // Voltage Table Example:
++    regulator {
++        compatible = "pwm-regulator";
++        pwms = <&pwm1 0 8448 0>;
++        regulator-min-microvolt = <1016000>;
++        regulator-max-microvolt = <1114000>;
++        regulator-name = "vdd_logic";
 +
-+        button-down {
-+            label = "Volume Down";
-+            linux,code = <KEY_VOLUMEDOWN>;
-+            press-threshold-microvolt = <1000000>;
-+        };
-+
-+        button-enter {
-+            label = "Enter";
-+            linux,code = <KEY_ENTER>;
-+            press-threshold-microvolt = <500000>;
-+        };
++                /* Voltage Duty-Cycle */
++        voltage-table = <1114000 0>,
++            <1095000 10>,
++            <1076000 20>,
++            <1056000 30>,
++            <1036000 40>,
++            <1016000 50>;
 +    };
 +...
 -- 

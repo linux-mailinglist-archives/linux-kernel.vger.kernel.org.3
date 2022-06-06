@@ -2,308 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D199253E7EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F310F53E680
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239931AbiFFOgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
+        id S239802AbiFFOeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbiFFOgS (ORCPT
+        with ESMTP id S239732AbiFFOeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:36:18 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E9112E32A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:36:11 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id g13-20020a9d6b0d000000b0060b13026e0dso10886467otp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D9soskDv6KXVPHCaTa4CNNvs92+O4+arQnAcZVRZbT0=;
-        b=qBquZDqP7VN6yh7Mp0E/g0yyjt5kNSP8AK3EnE54P/q3yE3LlMoH2/TEmIg2UJQnWU
-         /Fqmnmsrc3D+Ljh2XgbU8/RjSZg+lG58HAstpsi6q6hW4k8kqkq4Bc4LetEO5flXiTZ1
-         bV8to5CFT3LbggX0tH+FgaWAzs+KPxVsO29F7lwhHtUKEtmkJkcVtINQyAp67s9UuN2n
-         45cS26ygVyD9OZGNrb65rdSchWZxmSvBZEdHQ3uphO3uoYuq2sRzVJ9sINYPnT5KGvtr
-         T0uYdpVF+UUK9X069Wmm2ynwH7Vmtx0vExFcopTEg9+8Pz8y5YkV2ihO32DMv9KJKoqb
-         xPJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D9soskDv6KXVPHCaTa4CNNvs92+O4+arQnAcZVRZbT0=;
-        b=lGLXr+stBnuKyrKZILvMUjgbm5tj/2fafmhL1GptuuPuoX1AvJHbQ4TvTLbTBVTESO
-         IJ0hGx7KZQo+wkb3vhPoiA5dRLIqYKp+ExxnXv9lIX01oUj4sg9lgBMCuZxgHLJ08XG2
-         S9NaHZtxHcC4eGotj4FRN9pSk2sC771i825/wim8d7K9sNHiT+xDEEH9bcI/mE0pY0po
-         pj586fbve6KbvdqVq2qlh6XD+R8kxBhytGvd7AnFHhEqBMvkiFY3/NrBMLUXbw7UpM5u
-         lZX6f7g8dIqADavRfqqzqDdqgaqAQhcQtSZeCxP9+wJ9SChH1/8CQGwGKRmRLK9lrjYs
-         MU1Q==
-X-Gm-Message-State: AOAM530nAQcCTWJSBO/JABYxVJ4gFRY97o+Gy5Cz9ET4WrF2g5gPOX/T
-        FCXYCSi+ZoFNEO52rtjOAPpxow==
-X-Google-Smtp-Source: ABdhPJz6P2zs40Kr7rXerX3QlSpEo4I+NPEWZJBS7kHMKTpI2K63060Uy3lUZZaayRlZWc6OnQM0og==
-X-Received: by 2002:a9d:129:0:b0:60b:23b5:1659 with SMTP id 38-20020a9d0129000000b0060b23b51659mr9942070otu.26.1654526170952;
-        Mon, 06 Jun 2022 07:36:10 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id u13-20020a056871008d00b000f5d4e5b9a0sm6942791oaa.2.2022.06.06.07.36.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 07:36:10 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH 2/5] gpio: 104-idi-48: Implement and utilize register structures
-Date:   Mon,  6 Jun 2022 10:33:17 -0400
-Message-Id: <0a893282333f195a208aa8c9fa3f38e447452abd.1654525394.git.william.gray@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1654525394.git.william.gray@linaro.org>
-References: <cover.1654525394.git.william.gray@linaro.org>
+        Mon, 6 Jun 2022 10:34:12 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDC42D1FE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:34:10 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:34356)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nyDo0-00D2LX-5K; Mon, 06 Jun 2022 08:34:08 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:60040 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nyDny-007IX0-Uu; Mon, 06 Jun 2022 08:34:07 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Hao Wu <guoyuanchao1202@gmail.com>
+Cc:     brauner@kernel.org, keescook@chromium.org, axboe@kernel.dk,
+        peterz@infradead.org, elver@google.com, tglx@linutronix.de,
+        legion@kernel.org, linux-kernel@vger.kernel.org
+References: <20220223133540.24230-1-guoyuanchao1202@gmail.com>
+Date:   Mon, 06 Jun 2022 09:33:17 -0500
+In-Reply-To: <20220223133540.24230-1-guoyuanchao1202@gmail.com> (Hao Wu's
+        message of "Wed, 23 Feb 2022 21:35:40 +0800")
+Message-ID: <878rq96evm.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nyDny-007IX0-Uu;;;mid=<878rq96evm.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/tCTIH6sFgbMpYmO8+BYSCq+lVTT7M1/Q=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Hao Wu <guoyuanchao1202@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 527 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 11 (2.1%), b_tie_ro: 10 (1.8%), parse: 0.89
+        (0.2%), extract_message_metadata: 3.9 (0.7%), get_uri_detail_list:
+        1.82 (0.3%), tests_pri_-1000: 3.8 (0.7%), tests_pri_-950: 1.44 (0.3%),
+        tests_pri_-900: 1.03 (0.2%), tests_pri_-90: 83 (15.8%), check_bayes:
+        81 (15.4%), b_tokenize: 8 (1.5%), b_tok_get_all: 9 (1.7%),
+        b_comp_prob: 4.0 (0.8%), b_tok_touch_all: 56 (10.6%), b_finish: 1.11
+        (0.2%), tests_pri_0: 403 (76.5%), check_dkim_signature: 0.62 (0.1%),
+        check_dkim_adsp: 2.7 (0.5%), poll_dns_idle: 0.84 (0.2%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 7 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v1] signal.c: repeatedly set the TIF_SIGPENDING flag
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reduce magic numbers and improve code readability by implementing and
-utilizing named register data structures.
+Hao Wu <guoyuanchao1202@gmail.com> writes:
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/gpio/gpio-104-idi-48.c | 128 ++++++++++++++++-----------------
- 1 file changed, 63 insertions(+), 65 deletions(-)
+> The recalc_sigpending_and_wake() function calls recalc_sigpending_tsk() and signal_wake_up(),
+> both of which set the TIF_SIGPENDING flag, so when recalc_sigpending_tsk() returns true,
+> the TIF_SIGPENDING flag will be set twice.
+>
+> Maybe we can take away the set TIF_SIGPENDING logic from recalc_sigpending_tsk(),
+> so that recalc_sigpending_tsk() just determines whether the TIF_SIGPENDING flag needs to be set,
+> and the actual set TIF_SIGPENDING flag logic is executed outside.
+>
+> kernel/signal.c:175: recalc_sigpending_and_wake()
+> kernel/signal.c:154: recalc_sigpending_tsk()
 
-diff --git a/drivers/gpio/gpio-104-idi-48.c b/drivers/gpio/gpio-104-idi-48.c
-index 9521ece3ebef..1f8c556d9013 100644
---- a/drivers/gpio/gpio-104-idi-48.c
-+++ b/drivers/gpio/gpio-104-idi-48.c
-@@ -20,6 +20,7 @@
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/spinlock.h>
-+#include <linux/types.h>
- 
- #define IDI_48_EXTENT 8
- #define MAX_NUM_IDI_48 max_num_isa_dev(IDI_48_EXTENT)
-@@ -33,13 +34,28 @@ static unsigned int irq[MAX_NUM_IDI_48];
- module_param_hw_array(irq, uint, irq, NULL, 0);
- MODULE_PARM_DESC(irq, "ACCES 104-IDI-48 interrupt line numbers");
- 
-+/**
-+ * struct idi_48_reg - device register structure
-+ * @port0:	Port 0 Inputs
-+ * @unused:	Unused
-+ * @port1:	Port 1 Inputs
-+ * @irq:	Read: IRQ Status Register/IRQ Clear
-+ *		Write: IRQ Enable/Disable
-+ */
-+struct idi_48_reg {
-+	u8 port0[3];
-+	u8 unused;
-+	u8 port1[3];
-+	u8 irq;
-+};
-+
- /**
-  * struct idi_48_gpio - GPIO device private data structure
-  * @chip:	instance of the gpio_chip
-  * @lock:	synchronization lock to prevent I/O race conditions
-  * @ack_lock:	synchronization lock to prevent IRQ handler race conditions
-  * @irq_mask:	input bits affected by interrupts
-- * @base:	base port address of the GPIO device
-+ * @reg:	I/O address offset for the device registers
-  * @cos_enb:	Change-Of-State IRQ enable boundaries mask
-  */
- struct idi_48_gpio {
-@@ -47,7 +63,7 @@ struct idi_48_gpio {
- 	raw_spinlock_t lock;
- 	spinlock_t ack_lock;
- 	unsigned char irq_mask[6];
--	void __iomem *base;
-+	struct idi_48_reg __iomem *reg;
- 	unsigned char cos_enb;
- };
- 
-@@ -64,39 +80,38 @@ static int idi_48_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
- static int idi_48_gpio_get(struct gpio_chip *chip, unsigned offset)
- {
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
--	unsigned i;
--	static const unsigned int register_offset[6] = { 0, 1, 2, 4, 5, 6 };
--	void __iomem *port_addr;
--	unsigned mask;
--
--	for (i = 0; i < 48; i += 8)
--		if (offset < i + 8) {
--			port_addr = idi48gpio->base + register_offset[i / 8];
--			mask = BIT(offset - i);
--
--			return !!(ioread8(port_addr) & mask);
--		}
--
--	/* The following line should never execute since offset < 48 */
--	return 0;
-+	struct idi_48_reg __iomem *const reg = idi48gpio->reg;
-+	const unsigned long boundary = offset / 8;
-+	const unsigned long group = boundary / 3;
-+	u8 __iomem *const port_addr = group ? reg->port1 : reg->port0;
-+	const unsigned long in_port = boundary - (group * 3);
-+	const unsigned long mask = BIT(offset % 8);
-+
-+	return !!(ioread8(port_addr + in_port) & mask);
- }
- 
- static int idi_48_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
- 	unsigned long *bits)
- {
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
-+	struct idi_48_reg __iomem *const reg = idi48gpio->reg;
- 	unsigned long offset;
- 	unsigned long gpio_mask;
--	static const size_t ports[] = { 0, 1, 2, 4, 5, 6 };
--	void __iomem *port_addr;
-+	unsigned long boundary;
-+	unsigned long group;
-+	unsigned long in_port;
-+	u8 __iomem *port_addr;
- 	unsigned long port_state;
- 
- 	/* clear bits array to a clean slate */
- 	bitmap_zero(bits, chip->ngpio);
- 
--	for_each_set_clump8(offset, gpio_mask, mask, ARRAY_SIZE(ports) * 8) {
--		port_addr = idi48gpio->base + ports[offset / 8];
--		port_state = ioread8(port_addr) & gpio_mask;
-+	for_each_set_clump8(offset, gpio_mask, mask, chip->ngpio) {
-+		boundary = offset / 8;
-+		group = boundary / 3;
-+		port_addr = group ? reg->port1 : reg->port0;
-+		in_port = boundary - (group * 3);
-+		port_state = ioread8(port_addr + in_port) & gpio_mask;
- 
- 		bitmap_set_value8(bits, port_state, offset);
- 	}
-@@ -113,30 +128,21 @@ static void idi_48_irq_mask(struct irq_data *data)
- 	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
- 	const unsigned offset = irqd_to_hwirq(data);
--	unsigned i;
--	unsigned mask;
--	unsigned boundary;
-+	const unsigned long boundary = offset / 8;
-+	const unsigned long mask = BIT(offset % 8);
- 	unsigned long flags;
- 
--	for (i = 0; i < 48; i += 8)
--		if (offset < i + 8) {
--			mask = BIT(offset - i);
--			boundary = i / 8;
--
--			idi48gpio->irq_mask[boundary] &= ~mask;
--
--			if (!idi48gpio->irq_mask[boundary]) {
--				idi48gpio->cos_enb &= ~BIT(boundary);
--
--				raw_spin_lock_irqsave(&idi48gpio->lock, flags);
-+	idi48gpio->irq_mask[boundary] &= ~mask;
- 
--				iowrite8(idi48gpio->cos_enb, idi48gpio->base + 7);
-+	/* Exit early if there are still input lines with IRQ unmasked */
-+	if (idi48gpio->irq_mask[boundary])
-+		return;
- 
--				raw_spin_unlock_irqrestore(&idi48gpio->lock, flags);
--			}
-+	idi48gpio->cos_enb &= ~BIT(boundary);
- 
--			return;
--		}
-+	raw_spin_lock_irqsave(&idi48gpio->lock, flags);
-+	iowrite8(idi48gpio->cos_enb, &idi48gpio->reg->irq);
-+	raw_spin_unlock_irqrestore(&idi48gpio->lock, flags);
- }
- 
- static void idi_48_irq_unmask(struct irq_data *data)
-@@ -144,32 +150,24 @@ static void idi_48_irq_unmask(struct irq_data *data)
- 	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
- 	const unsigned offset = irqd_to_hwirq(data);
--	unsigned i;
--	unsigned mask;
--	unsigned boundary;
-+	const unsigned long boundary = offset / 8;
-+	const unsigned long mask = BIT(offset % 8);
- 	unsigned prev_irq_mask;
- 	unsigned long flags;
- 
--	for (i = 0; i < 48; i += 8)
--		if (offset < i + 8) {
--			mask = BIT(offset - i);
--			boundary = i / 8;
--			prev_irq_mask = idi48gpio->irq_mask[boundary];
--
--			idi48gpio->irq_mask[boundary] |= mask;
-+	prev_irq_mask = idi48gpio->irq_mask[boundary];
- 
--			if (!prev_irq_mask) {
--				idi48gpio->cos_enb |= BIT(boundary);
-+	idi48gpio->irq_mask[boundary] |= mask;
- 
--				raw_spin_lock_irqsave(&idi48gpio->lock, flags);
-+	/* Exit early if IRQ was already unmasked for this boundary */
-+	if (prev_irq_mask)
-+		return;
- 
--				iowrite8(idi48gpio->cos_enb, idi48gpio->base + 7);
-+	idi48gpio->cos_enb |= BIT(boundary);
- 
--				raw_spin_unlock_irqrestore(&idi48gpio->lock, flags);
--			}
--
--			return;
--		}
-+	raw_spin_lock_irqsave(&idi48gpio->lock, flags);
-+	iowrite8(idi48gpio->cos_enb, &idi48gpio->reg->irq);
-+	raw_spin_unlock_irqrestore(&idi48gpio->lock, flags);
- }
- 
- static int idi_48_irq_set_type(struct irq_data *data, unsigned flow_type)
-@@ -204,7 +202,7 @@ static irqreturn_t idi_48_irq_handler(int irq, void *dev_id)
- 
- 	raw_spin_lock(&idi48gpio->lock);
- 
--	cos_status = ioread8(idi48gpio->base + 7);
-+	cos_status = ioread8(&idi48gpio->reg->irq);
- 
- 	raw_spin_unlock(&idi48gpio->lock);
- 
-@@ -250,8 +248,8 @@ static int idi_48_irq_init_hw(struct gpio_chip *gc)
- 	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(gc);
- 
- 	/* Disable IRQ by default */
--	iowrite8(0, idi48gpio->base + 7);
--	ioread8(idi48gpio->base + 7);
-+	iowrite8(0, &idi48gpio->reg->irq);
-+	ioread8(&idi48gpio->reg->irq);
- 
- 	return 0;
- }
-@@ -273,8 +271,8 @@ static int idi_48_probe(struct device *dev, unsigned int id)
- 		return -EBUSY;
- 	}
- 
--	idi48gpio->base = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
--	if (!idi48gpio->base)
-+	idi48gpio->reg = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
-+	if (!idi48gpio->reg)
- 		return -ENOMEM;
- 
- 	idi48gpio->chip.label = name;
--- 
-2.36.1
+I just saw this.
 
+I agree that it is unfortunate that recalc_sigpending_and_wake sets
+TIF_SIGPENDING twice.
+
+Looking at the code only force_sig_info_to_task calls
+recalc_sigpending_and_wake.  I have some work underway that removes the
+need to call recalc_sigpending in force_sig_info_to_task so I believe
+that will resolve the matter.
+
+Regardless of changes I have planned force_sig_info_to_task appears to
+be the proper place to resolve this issue.  It looks like
+complete_signal called from __send_signal_locked called from
+send_signal_locked called from force_sig_info_to_task calls
+signal_wake_up if that is needed at all.  So I believe the issue you are
+seeing could be solved be simply replacing recalc_sigpending_and_wake
+with recalc_sigpending_tsk.
+
+Some more analysis might reveal and even nicer clean up.  If
+sending the signal is always going to call signal_wake_up calling
+recalc_sigpending_tsk might not even be necessary.
+
+Good spotting of a rough spot in the code.  I don't think your proposed
+change is the way we should go about fixing it.
+
+Eric
+>
+> Signed-off-by: Hao Wu <guoyuanchao1202@gmail.com>
+> ---
+>  kernel/signal.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 9b04631acde8..6c5a00cd7e9a 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -157,7 +157,6 @@ static bool recalc_sigpending_tsk(struct task_struct *t)
+>  	    PENDING(&t->pending, &t->blocked) ||
+>  	    PENDING(&t->signal->shared_pending, &t->blocked) ||
+>  	    cgroup_task_frozen(t)) {
+> -		set_tsk_thread_flag(t, TIF_SIGPENDING);
+>  		return true;
+>  	}
+> @@ -181,8 +180,11 @@ void recalc_sigpending_and_wake(struct task_struct *t)
+>  void recalc_sigpending(void)
+>  {
+> -	if (!recalc_sigpending_tsk(current) && !freezing(current))
+> +	if (recalc_sigpending_tsk(current)) {
+> +		set_tsk_thread_flag(t, TIF_SIGPENDING);
+> +	} else if (!freezing(current)) {
+>  		clear_thread_flag(TIF_SIGPENDING);
+> +	}
+>  }
+>  EXPORT_SYMBOL(recalc_sigpending);
+> @@ -2325,7 +2327,9 @@ static void ptrace_stop(int exit_code, int why, int clear_code, kernel_siginfo_t
+>  	 * So check for any that we should take before resuming user mode.
+>  	 * This sets TIF_SIGPENDING, but never clears it.
+>  	 */
+> -	recalc_sigpending_tsk(current);
+> +	if (recalc_sigpending_tsk(current)) {
+> +		set_tsk_thread_flag(t, TIF_SIGPENDING);
+> +	}
+>  }
+>  static void ptrace_do_notify(int signr, int exit_code, int why)
+> 2.32.0

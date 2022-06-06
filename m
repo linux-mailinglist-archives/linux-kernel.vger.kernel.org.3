@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3879153EA6D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FC053E7AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbiFFKlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S234237AbiFFKqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234110AbiFFKl3 (ORCPT
+        with ESMTP id S234244AbiFFKqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:41:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8D337AAD;
-        Mon,  6 Jun 2022 03:41:23 -0700 (PDT)
-X-UUID: d0bd998342f8456386e86a98878ab3f1-20220606
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:50314f12-4639-419c-a74f-fd6e80fa176d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:1e28c2ad-3171-4dd4-a2d9-73b846daf167,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: d0bd998342f8456386e86a98878ab3f1-20220606
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1547484081; Mon, 06 Jun 2022 18:41:19 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 6 Jun 2022 18:41:17 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 6 Jun 2022 18:41:17 +0800
-Message-ID: <3f02705349535c8a28451233a5f5fc152ac8fa81.camel@mediatek.com>
-Subject: Re: [PATCH v1 05/15] remoteproc: mediatek: Add SCP core 1 driver
- for dual-core scp
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "Brian Norris" <briannorris@chromium.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <weishunc@google.com>
-Date:   Mon, 6 Jun 2022 18:41:17 +0800
-In-Reply-To: <4062e8be-3ac7-c6e5-dc15-bb11bd6051fc@collabora.com>
-References: <20220601112201.15510-1-tinghan.shen@mediatek.com>
-         <20220601112201.15510-6-tinghan.shen@mediatek.com>
-         <dd12145b-bbb3-b771-b8f7-075ea20bee17@collabora.com>
-         <fe9fae165443f0db55f2bac2bbe214f3b018052d.camel@mediatek.com>
-         <4062e8be-3ac7-c6e5-dc15-bb11bd6051fc@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 6 Jun 2022 06:46:15 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EADDD19C0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:46:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id s12so20896490ejx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=GPYQ+AuyiK9k5AoDNUEqPMRN9dkEbEVU3yU8yAlgQoU=;
+        b=BEv/JTxRgpGr7BGlfYF0U0qsD54SzLKZzQkeX5W/aGHpqjBXxHNmd0E4Gj5UVWAJyX
+         BDYIhO/7JRo43hEmkPXy/6XwVNk/Jb7jJx8KkBtEiyqGRjrDacUR1ZMjjSDd50K+1rHo
+         hM7ihbV1mYd3vwkKEMGEvuLCMeAIGPNrND5jrOwTgOsT3XzOLqql8lOVC1kUi4bAgVgF
+         NQQuzxXQzxDeAQqgAZuS8Vw1TDlqpI4/F3Yje1H0tUCsxRKr2tNfMGSk+7TN/hZbVByV
+         WAv15G7nbkKPF0Uu3oGPvIamY+2p8Ek6iCmbOoyzbS7svPnnVHsdgwjPE6neMlakC+tz
+         Np1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GPYQ+AuyiK9k5AoDNUEqPMRN9dkEbEVU3yU8yAlgQoU=;
+        b=k8qfs9utJ+ok/y/t7JYQ8kpJwIjPj9nG6M/dp9tC/1RLMkrd0QEPbpZMSRp7iUvrmZ
+         biQo5GCJULQhFnwLaYAyz5AJ9dNagz7uzEuD1Dg6f4T1olNeyPdSFY0smHXpcs9/JUbY
+         JC6tGSUVUL8CG06IS7uwROAPOpE2PzPeXQEFDXJHBh7qb10O2VXMLqfQYIfbfxy8IT8R
+         SCZpfYH/Qh6pTgROrLCn+a4/NFjoVKhjfiVVy+7DVoL2UGivI0JTJU22VnqtNeYLMId2
+         +aS+FfBfamyJIf/ssjZTFaGxizP1z4CV9ImFvm1ADYif8ytZyooGG7iEt4YYjwqRzX2V
+         4nIg==
+X-Gm-Message-State: AOAM533o2j+9JFa3C3DpyvDvR1ylPXG++OCdBOD7+/UAqoNO6WDz3HfI
+        M7i/31Nrn5PUNsDl+FZ9+w1grA==
+X-Google-Smtp-Source: ABdhPJw3Gcs+m6/c2jbbElb142U1e3voZcEH6hO7Gp5nRMsTCw9B4WCDP0CMjSTAGUBINsW4ooXnqw==
+X-Received: by 2002:a17:907:60d4:b0:708:850:bc91 with SMTP id hv20-20020a17090760d400b007080850bc91mr21580631ejc.102.1654512369943;
+        Mon, 06 Jun 2022 03:46:09 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c24-20020a056402159800b0042617ba63c2sm8422723edv.76.2022.06.06.03.46.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 03:46:09 -0700 (PDT)
+Message-ID: <80637186-e3ef-14c1-78e5-bfa6deec595a@linaro.org>
+Date:   Mon, 6 Jun 2022 12:46:08 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/1] nfc: nfcmrvl: Fix memory leak in
+ nfcmrvl_play_deferred
+Content-Language: en-US
+To:     Xiaohui Zhang <ruc_zhangxiaohui@163.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220605081455.34610-1-ruc_zhangxiaohui@163.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220605081455.34610-1-ruc_zhangxiaohui@163.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,68 +75,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 12:08 +0200, AngeloGioacchino Del Regno wrote:
-> Il 06/06/22 11:52, Tinghan Shen ha scritto:
-> > On Mon, 2022-06-06 at 11:15 +0200, AngeloGioacchino Del Regno wrote:
-> > > Il 01/06/22 13:21, Tinghan Shen ha scritto:
-> > > > MT8195 SCP is a dual-core processor. The mtk_scp.c driver only controls
-> > > > SCP core 0. This patch adds a basic driver to control the another core.
-> > > > 
-> > > > Core 1 and core 0 of the SCP are housed in the same subsys.They see
-> > > > registers and memory in the same way.
-> > > > 
-> > > > Core 1 of the SCP features its own set of core configuration registers,
-> > > > interrupt controller, timers, and DMAs. The rest of the peripherals
-> > > > in this subsystem are shared by core 0 and core 1.
-> > > > 
-> > > > As for memory, core 1 has its own cache memory, and the SCP SRAM is shared
-> > > > by core 0 and core 1.
-> > > > 
-> > > 
-> > > Hello Tinghan,
-> > > 
-> > > checking all the patches that are introducing support for the secondary SCP core,
-> > > it's clear that you're practically reusing *most of* mtk_scp in mtk_scp_dual.
-> > > 
-> > > I don't think that adding a new configuration option for MTK_SCP_DUALCORE (nor a
-> > > new file just for that) is a good idea... the code is "short enough" so you should
-> > > really just add support for multi-core SCP in mtk_scp.c instead.
-> > > 
-> > > After doing so, I have a hunch that we'll be able to reduce the size of this
-> > > implementation even more, as I see literally too much common code :-)
-> > > 
-> > 
-> > Hi Angelo,
-> > 
-> > Thanks for your review.
-> > 
-> > This series has 2 new files, mtk_scp_dual.c and mtk_scp_subdev.c.
-> > Is your advice to merge both files into mtk_scp.c,
-> > or to merely merge mtk_scp_dual.c to mtk_scp.c?
-> > 
-> > Thanks,
-> > TingHan
-> > 
-> > 
-> > 
+On 05/06/2022 10:14, Xiaohui Zhang wrote:
+> From: xiaohuizhang98 <ruc_zhangxiaohui@163.com>
 > 
-> I suggest to merge both into mtk_scp.c and commonize/generalize functions inside
-> of there as much as possible... including the removal of #if IS_ENABLED(...)
-> macro usages, as you can simply check that during runtime by setting a bool
-> variable to true when it's dual-core.
+> We detected a suspected bug with our code clone detection tool.
 > 
-> Let's do this first step.
-> I'll give you a more exhaustive review on v2, when this main step is done.
+> Similar to the handling of play_deferred in commit 19cfe912c37b
+> ("Bluetooth: btusb: Fix memory leak in play_deferred"), we thought
+> a patch might be needed here as well.
 > 
-> Cheers,
-> Angelo
+> Currently usb_submit_urb is called directly to submit deferred tx
+> urbs after unanchor them.
+> 
+> So the usb_giveback_urb_bh would failed to unref it in usb_unanchor_urb
+> and cause memory leak.
+> 
+> Put those urbs in tx_anchor to avoid the leak, and also fix the error
+> handling.
+> 
+> Signed-off-by: xiaohuizhang98 <ruc_zhangxiaohui@163.com>
 
-Hi Angelo,
+This name still does not match your name used in email.
 
-Ok, I'll merge these files and send next version.
-
-
-Thanks,
-TingHan
-
-
+Best regards,
+Krzysztof

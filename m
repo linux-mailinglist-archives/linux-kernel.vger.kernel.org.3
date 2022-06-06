@@ -2,44 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FCF53EAA8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F016753EA4A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238009AbiFFM4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S238597AbiFFNOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237991AbiFFM4n (ORCPT
+        with ESMTP id S238623AbiFFNOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:56:43 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E307735A80;
-        Mon,  6 Jun 2022 05:56:41 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LGtk21XPvz1K9CP;
-        Mon,  6 Jun 2022 20:54:50 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 20:56:35 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <eajames@linux.ibm.com>,
-        <joel@jms.id.au>, <penberg@kernel.org>,
-        <akpm@linux-foundation.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <william.xuanziyang@huawei.com>
-Subject: [PATCH] hwmon: (occ) Delete unnecessary NULL check
-Date:   Mon, 6 Jun 2022 21:14:01 +0800
-Message-ID: <20220606131401.4053036-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 6 Jun 2022 09:14:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB481AD81;
+        Mon,  6 Jun 2022 06:14:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28EEE6122B;
+        Mon,  6 Jun 2022 13:14:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4D5C34115;
+        Mon,  6 Jun 2022 13:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654521254;
+        bh=YDX4NNlOVpqDCWCFK0MqZGOJ//FD8OgInNrhbDMDRqc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YZHN5+ZGwp6uasf+gER256E64FyixZ8PUrwizVGOgvJvGpU2xeNHI40K4fdEBG58I
+         fFg2tqQnfNhKqhI+j/47ZsK4JZMYVZdb3xas9xFas1a7Eh7oLj5F4R7QggFus7Y+29
+         ocvKdTbDa+ZcvQCEj+KqZKoyxMv+R50hhKI+QwUmACNxLmwzkYyrwOgIc9JIo2N8cB
+         5+DRYMMuzrfc4rMWw4sgE1mjbeipPPkRVtjJe3OXuclQR6semuYsTfB4NHqNekHmkR
+         MTTseK7TD+RQaGbgmrZ1OFWnAWCEhd0MRt3Sf/3UuDvnL9Sv7Xe9dpZAhQgCZrP6hO
+         6bRSdf2xU5V1w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nyCYe-00FuK3-5c; Mon, 06 Jun 2022 14:14:12 +0100
+Date:   Mon, 06 Jun 2022 14:14:11 +0100
+Message-ID: <87sfoi3pek.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Chao-ying Fu <cfu@wavecomp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+Subject: Re: [PATCH v2 11/12] MIPS: Report cluster in /proc/cpuinfo
+In-Reply-To: <20220525121030.16054-12-Dragan.Mladjenovic@syrmia.com>
+References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
+        <20220525121030.16054-12-Dragan.Mladjenovic@syrmia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Dragan.Mladjenovic@syrmia.com, tsbogend@alpha.franken.de, cfu@wavecomp.com, daniel.lezcano@linaro.org, geert@linux-m68k.org, gerg@kernel.org, hauke@hauke-m.de, ilya.lipnitskiy@gmail.com, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, paulburton@kernel.org, peterz@infradead.org, fancer.lancer@gmail.com, tglx@linutronix.de, yangtiezhu@loongson.cn, dragan.mladjenovic@syrmia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,41 +79,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvfree(NULL) is safe. NULL check before kvfree() is not needed.
-Delete them to simplify the code.
+On Wed, 25 May 2022 13:10:29 +0100,
+Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com> wrote:
+> 
+> From: Paul Burton <paulburton@kernel.org>
+> 
+> When >= CM3.5 output cluster number.
+> 
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+> 
+> diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+> index bb43bf850314..a66e7705315d 100644
+> --- a/arch/mips/kernel/proc.c
+> +++ b/arch/mips/kernel/proc.c
+> @@ -12,6 +12,7 @@
+>  #include <asm/cpu.h>
+>  #include <asm/cpu-features.h>
+>  #include <asm/idle.h>
+> +#include <asm/mips-cps.h>
+>  #include <asm/mipsregs.h>
+>  #include <asm/processor.h>
+>  #include <asm/prom.h>
+> @@ -282,6 +283,8 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>  	seq_printf(m, "kscratch registers\t: %d\n",
+>  		      hweight8(cpu_data[n].kscratch_mask));
+>  	seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
+> +	if (mips_cm_revision() >= CM_REV_CM3_5)
+> +		seq_printf(m, "cluster\t\t\t: %d\n", cpu_cluster(&cpu_data[n]));
+>  	seq_printf(m, "core\t\t\t: %d\n", cpu_core(&cpu_data[n]));
+>  
+>  #if defined(CONFIG_MIPS_MT_SMP) || defined(CONFIG_CPU_MIPSR6)
 
-Generated by coccinelle script:
-	scripts/coccinelle/free/ifnullfree.cocci
+This will break userspace. Please don't do that.
 
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/hwmon/occ/p9_sbe.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+	M.
 
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 42fc7b97bb34..01405ae2f9bd 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
- 	mutex_lock(&ctx->sbe_error_lock);
- 	if (!ctx->sbe_error) {
- 		if (resp_len > ctx->ffdc_size) {
--			if (ctx->ffdc)
--				kvfree(ctx->ffdc);
-+			kvfree(ctx->ffdc);
- 			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
- 			if (!ctx->ffdc) {
- 				ctx->ffdc_len = 0;
-@@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
- 	ctx->sbe = NULL;
- 	occ_shutdown(occ);
- 
--	if (ctx->ffdc)
--		kvfree(ctx->ffdc);
-+	kvfree(ctx->ffdc);
- 
- 	return 0;
- }
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.

@@ -2,176 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8A753E88F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9882453E7A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241542AbiFFQTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 12:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S241683AbiFFQUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 12:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241429AbiFFQTL (ORCPT
+        with ESMTP id S241663AbiFFQT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 12:19:11 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AA11DAF15
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 09:19:10 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id q21so29972666ejm.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 09:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YaI0g8cUivOx96ChYxLm99Kiy6nUc3V/ruLcuNQVvVU=;
-        b=pDpF4wAUHXj2HlsodBz/+GqJm33nIH6Zvrsv77r1RCrOj6STgjoR7+2GVxwnxUjnQL
-         cNWnDA6xDOY8yxHVp0tKjuZpfxdmDGEYk5z8bacYrDMx2XgKFsGFivG3q5AIWNeN/u9+
-         ihPdAh1i/1PSQzvuZjbEpv5WvgPO+6JNxA8iNEF3aP9/WV0zoABNvd0JpvtbXuunbctz
-         8XMYp6YQrZA6JIAnReLeiG4Jeoz1pGpZQb1oDN3grHB8Vr5lAL/sih5lyzzg6pKzXCwG
-         48syNDdXmb6K19hhi7ekwr6jD1VCexjCUKYvWPlNRHtbqzOiLc4uro0lgNt5pG2k7Up+
-         eUzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YaI0g8cUivOx96ChYxLm99Kiy6nUc3V/ruLcuNQVvVU=;
-        b=gU0CJ1oswMG1J4Oam+iQxHuYZe1I/+S22j+zD9/qmpf5oetCi0M3Cx5i9VRl9qjkgr
-         rPKGDBTBoOJGnl97cIw6pma/RcT+WAaQbIlkTkGOa0v3LJFhVB615IqGav48wI2kwy2W
-         5Vk2DQFTXKulc6aV3R4gnMOQV/Q8uqTc88Vr2TtQoSY9JItbZJE5RVLyDYzye77bnwqO
-         GJgexz2HZPwWGB8+HdHYtsqe4RB5Gxxxu/LEYuzEEVb6G1HGW0PuQQBDy920UmzVJFRW
-         uuNu0o66s21dVW4jL8JWaHW3I1OU2ewp01+CQ6mGLIw8WUb9KKg9QbeY+ozFcNtAf00n
-         1l4A==
-X-Gm-Message-State: AOAM532abYCMR5QbF19NFojKWVKOHxrlxq4EuO7lxCSW0AIdJegSIXFI
-        ddwaly2eece0QK2KIYtHXWs1njmpEVyo/8U5eFAeJw==
-X-Google-Smtp-Source: ABdhPJxgrdnu3Q5uPdwC77Uc+wTlcIOC/3m3ouGaWoL9iDpazMz6g9UQ/0XHdqGhTGU+ALRSeSys1aLANW5r3Jt16uQ=
-X-Received: by 2002:a17:906:4d50:b0:70d:afd4:1e63 with SMTP id
- b16-20020a1709064d5000b0070dafd41e63mr17720036ejv.618.1654532348927; Mon, 06
- Jun 2022 09:19:08 -0700 (PDT)
+        Mon, 6 Jun 2022 12:19:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFD2924AC86;
+        Mon,  6 Jun 2022 09:19:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF11E1595;
+        Mon,  6 Jun 2022 09:19:57 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.37.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 79FB63F73B;
+        Mon,  6 Jun 2022 09:19:54 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 17:19:42 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] bitops: define gen_test_bit() the same way as the
+ rest of functions
+Message-ID: <Yp4pEULDFq13A9Wp@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220606114908.962562-1-alexandr.lobakin@intel.com>
+ <20220606114908.962562-4-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-References: <20220606141051.285823-1-tzungbi@kernel.org> <20220606141051.285823-13-tzungbi@kernel.org>
-In-Reply-To: <20220606141051.285823-13-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 6 Jun 2022 09:18:57 -0700
-Message-ID: <CABXOdTe-9gu+mPZp+drKknJysoRS3krO_KSxTfO90+8i2ooWDw@mail.gmail.com>
-Subject: Re: [PATCH 12/13] platform/chrome: cros_ec_proto: arrange get_host_event_wake_mask()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606114908.962562-4-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> - cros_ec_get_host_event_wake_mask() is a private (static) function.
->   Rename it to get_host_event_wake_mask().
->
-Same as before - I still prefer to have prefixes. Also, this is a bit
-of point-of-view thing, so I'd rather leave function names alone
-unless there is a good reason to change them. Otherwise we might end
-up with sequences of function-name-rename patches for no good reason
-besides someone mot liking the existing names.
+On Mon, Jun 06, 2022 at 01:49:04PM +0200, Alexander Lobakin wrote:
+> Currently, the generic test_bit() function is defined as a one-liner
+> and in case with constant bitmaps the compiler is unable to optimize
+> it to a constant. At the same time, gen_test_and_*_bit() are being
+> optimized pretty good.
+> Define gen_test_bit() the same way as they are defined.
+> 
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-Thanks,
-Guenter
+Regardless of whether compilers prefer this, I think it's nicer to have the
+structure consistent with the rest of the functions, so FWIW:
 
-> - Join multiple lines into one if it can fit in 100 columns.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
 > ---
->  drivers/platform/chrome/cros_ec_proto.c      | 9 ++++-----
->  drivers/platform/chrome/cros_ec_proto_test.c | 8 ++++----
->  2 files changed, 8 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 91c945c9911f..1622e24747c9 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -230,7 +230,7 @@ int cros_ec_check_result(struct cros_ec_device *ec_dev,
->  EXPORT_SYMBOL(cros_ec_check_result);
->
->  /*
-> - * cros_ec_get_host_event_wake_mask
-> + * get_host_event_wake_mask
->   *
->   * Get the mask of host events that cause wake from suspend.
->   *
-> @@ -242,7 +242,7 @@ EXPORT_SYMBOL(cros_ec_check_result);
->   * the caller has ec_dev->lock mutex, or the caller knows there is
->   * no other command in progress.
->   */
-> -static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint32_t *mask)
-> +static int get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint32_t *mask)
+>  include/asm-generic/bitops/generic-non-atomic.h | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
+> index 7a60adfa6e7d..202d8a3b40e1 100644
+> --- a/include/asm-generic/bitops/generic-non-atomic.h
+> +++ b/include/asm-generic/bitops/generic-non-atomic.h
+> @@ -118,7 +118,11 @@ gen___test_and_change_bit(unsigned int nr, volatile unsigned long *addr)
+>  static __always_inline int
+>  gen_test_bit(unsigned int nr, const volatile unsigned long *addr)
 >  {
->         struct cros_ec_command *msg;
->         struct ec_response_host_event_mask *r;
-> @@ -498,7 +498,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->         ec_dev->host_sleep_v1 = (ret > 0 && (ver_mask & EC_VER_MASK(1)));
->
->         /* Get host event wake mask. */
-> -       ret = cros_ec_get_host_event_wake_mask(ec_dev, &ec_dev->host_event_wake_mask);
-> +       ret = get_host_event_wake_mask(ec_dev, &ec_dev->host_event_wake_mask);
->         if (ret < 0) {
->                 /*
->                  * If the EC doesn't support EC_CMD_HOST_EVENT_GET_WAKE_MASK,
-> @@ -522,8 +522,7 @@ int cros_ec_query_all(struct cros_ec_device *ec_dev)
->                  * other errors.
->                  */
->                 if (ret != -EOPNOTSUPP)
-> -                       dev_err(ec_dev->dev,
-> -                               "failed to retrieve wake mask: %d\n", ret);
-> +                       dev_err(ec_dev->dev, "failed to retrieve wake mask: %d\n", ret);
->         }
->
->         return 0;
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index 7d73aeb99d1d..f63196289f54 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -239,7 +239,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
->                 data->version_mask = BIT(1);
->         }
->
-> -       /* For cros_ec_get_host_event_wake_mask(). */
-> +       /* For get_host_event_wake_mask(). */
->         {
->                 struct ec_response_host_event_mask *data;
->
-> @@ -326,7 +326,7 @@ static void cros_ec_proto_test_query_all_normal(struct kunit *test)
->                 KUNIT_EXPECT_TRUE(test, ec_dev->host_sleep_v1);
->         }
->
-> -       /* For cros_ec_get_host_event_wake_mask(). */
-> +       /* For get_host_event_wake_mask(). */
->         {
->                 mock = cros_kunit_ec_xfer_mock_next();
->                 KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> @@ -915,7 +915,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
->                 KUNIT_ASSERT_PTR_NE(test, mock, NULL);
->         }
->
-> -       /* For cros_ec_get_host_event_wake_mask(). */
-> +       /* For get_host_event_wake_mask(). */
->         {
->                 mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND,
->                                                     sizeof(struct ec_response_host_event_mask));
-> @@ -976,7 +976,7 @@ static void cros_ec_proto_test_query_all_default_wake_mask(struct kunit *test)
->                 KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
->         }
->
-> -       /* For cros_ec_get_host_event_wake_mask(). */
-> +       /* For get_host_event_wake_mask(). */
->         {
->                 u32 mask;
->
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+> -	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> +	const unsigned long *p = (const unsigned long *)addr + BIT_WORD(nr);
+> +	unsigned long mask = BIT_MASK(nr);
+> +	unsigned long val = *p;
+> +
+> +	return !!(val & mask);
+>  }
+>  
+>  #endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
+> -- 
+> 2.36.1
+> 

@@ -2,131 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6ED53E0D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A669D53E0B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 08:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiFFF3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 01:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S229735AbiFFF32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 01:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiFFF2k (ORCPT
+        with ESMTP id S230061AbiFFF2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 01:28:40 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348FB15894B;
-        Sun,  5 Jun 2022 22:26:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id m25so11289048lji.11;
-        Sun, 05 Jun 2022 22:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=zc/BM4GS1deZPOseA9eQ1lDUVrP10O3L44lbLiYjtN4=;
-        b=WfMUkiB++a8lTicSUCIf6khGYZnXKmpITWncoBuKUvCNDiDR4bNDkMOHWeBp69Xht4
-         6ergkuIGvga7ERsmBmLbvp7OwbeWIrj5MQL+5l7qwUQXjGHhbv/Q6EPndg/H40Q84HtQ
-         wpkUGlwxhC05PnMoJ8KQrUouNIYHo5q2PUmlYq7Gz2xsV9EbymrNtcYm4fU1rpTEDzQ1
-         BP8lKRj960a8H+1bCFyymYtEqZOqXEuv7dusbLDdFRtLZOqahhFJc52csPKNbHT8xBao
-         MD61EqRE/0HqhQ/gPbEoj2tLjJiuR53F9ae58C4xgkbCwXcwuPzjzP1IFIQQeTig490s
-         ibkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=zc/BM4GS1deZPOseA9eQ1lDUVrP10O3L44lbLiYjtN4=;
-        b=Gb6DHOr92v2uOhLhMV8yu5cVXIvtN8KFLVsiDXAR57qZ751mj8EDx8WKk1OjH3Y1Rv
-         nB/6opsxvcH5Klq4qrbihFMQOt8wuVCASYt4Ce2zuD9wJYyP49WA72hZBAQjeGP+hbti
-         jmIAp7Ek/8oocRLqsjuaH8/uLwZ70lY8/rLgyVwvbFAitzcFZWXkNHV0RbjZNU58uGCx
-         4hFw7R9SAEoleCBWapDFbURCBrVu6s6a4tQpK1kwBJ41Iup88r5vPdUZNvx5kFmjM/KF
-         CzRmxtrg4/i//ssL8ABsQ+kyxAAZerqfUOyB8uztZ8tXpqmYaRlw1j2TmaWX+jiRHZ5e
-         dvXw==
-X-Gm-Message-State: AOAM530ENXbImK6hw6s25/X9B45lVIm9SzYZixWRjrDO1QsFxFdlU9MD
-        JxYzBYYThUE2CG3bQImJ1MhrDb2lTI4=
-X-Google-Smtp-Source: ABdhPJwOcEoJ5m94o5VmovTTeks+T0EJ/vH213RpahokS5OtgCLMD9LmeICRSw3AEr3Jd5A24Kn1cg==
-X-Received: by 2002:a2e:8752:0:b0:255:6df7:7ad5 with SMTP id q18-20020a2e8752000000b002556df77ad5mr13523255ljj.73.1654493162053;
-        Sun, 05 Jun 2022 22:26:02 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16ee:fa00::1? (dc73szyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::1])
-        by smtp.gmail.com with ESMTPSA id x2-20020a05651c024200b002556fd0c336sm2164571ljn.78.2022.06.05.22.26.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 22:26:00 -0700 (PDT)
-Message-ID: <5f34b6d6-c2dd-44f9-c1bc-fe1deb336334@gmail.com>
-Date:   Mon, 6 Jun 2022 08:25:58 +0300
+        Mon, 6 Jun 2022 01:28:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3B5F5D0D
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 22:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654493247; x=1686029247;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UfzaDoYlmDPCg7MXaycEV0UEOKo3JUX+3RfdY7kBXd4=;
+  b=ne/hJ/XpdzmeUyKSSC8Us7eggcTnvinJX7ZY1Kv+yHCKR/V6eO0f2sEv
+   czVa5YEZO98h1lJYh3iktxX408ZPfjUQSaU3e5oUA87PlAMJPebCTYzjb
+   5kmfBVFZScRGSqsQ2iz9g2vLzG7d4XXy1bXIZfvWFZu/yiqdsdWd/WKGG
+   Q8+S7ewRimIuI+sdU14jebAa0DOR8kFZSCqzaDkbLtPTmlpk2lqEGpf6W
+   MS7lzUrDDnwJFi0HZiM7obRDLjGZpzN+aW5EelqK9vqeyV4alyxY/9+5P
+   scgNpgQZz3C/YZ3CUitbGgOcLHHztxoDBjFP5ZVZWumbVqeLbLFwJ0lHW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="276776782"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="276776782"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 22:26:59 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="635415251"
+Received: from xingguom-mobl.ccr.corp.intel.com ([10.254.213.116])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2022 22:26:51 -0700
+Message-ID: <65919df6b3302741780ff6fa69e497af06a9825e.camel@intel.com>
+Subject: Re: [RFC PATCH v4 7/7] mm/demotion: Demote pages according to
+ allocation fallback order
+From:   Ying Huang <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Greg Thelen <gthelen@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Mon, 06 Jun 2022 13:26:44 +0800
+In-Reply-To: <a7d3829e-8bc5-d7a8-5e9e-a7943bb50740@linux.ibm.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+         <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+         <20220527122528.129445-8-aneesh.kumar@linux.ibm.com>
+         <b102d5773bffd6391283773044f756e810c1f044.camel@intel.com>
+         <046c373a-f30b-091d-47a1-e28bfb7e9394@linux.ibm.com>
+         <9f6e60cc8be3cbde4871458c612c5c31d2a9e056.camel@intel.com>
+         <a7d3829e-8bc5-d7a8-5e9e-a7943bb50740@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Michael Trimarchi <michael@amarulasolutions.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-amarula@amarulasolutions.com, Marek Vasut <marex@denx.de>
-References: <20220605165703.1565234-1-michael@amarulasolutions.com>
- <20220605165703.1565234-3-michael@amarulasolutions.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [RFC PATCH 2/3] clk: bd718x7: Enable the possibility to mark the
- clock as critical
-In-Reply-To: <20220605165703.1565234-3-michael@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-On 6/5/22 19:57, Michael Trimarchi wrote:
-> If the clock is used to generate the osc_32k, we need to mark
-> as critical. clock-critical has no binding description at the moment
-> but it's defined in linux kernel
+On Mon, 2022-06-06 at 09:37 +0530, Aneesh Kumar K V wrote:
+> On 6/6/22 6:13 AM, Ying Huang wrote:
+> > On Fri, 2022-06-03 at 20:39 +0530, Aneesh Kumar K V wrote:
+> > > On 6/2/22 1:05 PM, Ying Huang wrote:
+> > > > On Fri, 2022-05-27 at 17:55 +0530, Aneesh Kumar K.V wrote:
+> > > > > From: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > > > > 
+> > > > > currently, a higher tier node can only be demoted to selected
+> > > > > nodes on the next lower tier as defined by the demotion path,
+> > > > > not any other node from any lower tier.  This strict, hard-coded
+> > > > > demotion order does not work in all use cases (e.g. some use cases
+> > > > > may want to allow cross-socket demotion to another node in the same
+> > > > > demotion tier as a fallback when the preferred demotion node is out
+> > > > > of space). This demotion order is also inconsistent with the page
+> > > > > allocation fallback order when all the nodes in a higher tier are
+> > > > > out of space: The page allocation can fall back to any node from any
+> > > > > lower tier, whereas the demotion order doesn't allow that currently.
+> > > > > 
+> > > > > This patch adds support to get all the allowed demotion targets mask
+> > > > > for node, also demote_page_list() function is modified to utilize this
+> > > > > allowed node mask by filling it in migration_target_control structure
+> > > > > before passing it to migrate_pages().
+> > > > 
+> > > 
+> > > ...
+> > > 
+> > > > >     * Take pages on @demote_list and attempt to demote them to
+> > > > >     * another node.  Pages which are not demoted are left on
+> > > > > @@ -1481,6 +1464,19 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
+> > > > >    {
+> > > > >    	int target_nid = next_demotion_node(pgdat->node_id);
+> > > > >    	unsigned int nr_succeeded;
+> > > > > +	nodemask_t allowed_mask;
+> > > > > +
+> > > > > +	struct migration_target_control mtc = {
+> > > > > +		/*
+> > > > > +		 * Allocate from 'node', or fail quickly and quietly.
+> > > > > +		 * When this happens, 'page' will likely just be discarded
+> > > > > +		 * instead of migrated.
+> > > > > +		 */
+> > > > > +		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) | __GFP_NOWARN |
+> > > > > +			__GFP_NOMEMALLOC | GFP_NOWAIT,
+> > > > > +		.nid = target_nid,
+> > > > > +		.nmask = &allowed_mask
+> > > > > +	};
+> > > > 
+> > > > IMHO, we should try to allocate from preferred node firstly (which will
+> > > > kick kswapd of the preferred node if necessary).  If failed, we will
+> > > > fallback to all allowed node.
+> > > > 
+> > > > As we discussed as follows,
+> > > > 
+> > > > https://lore.kernel.org/lkml/69f2d063a15f8c4afb4688af7b7890f32af55391.camel@intel.com/
+> > > > 
+> > > > That is, something like below,
+> > > > 
+> > > > static struct page *alloc_demote_page(struct page *page, unsigned long node)
+> > > > {
+> > > > 	struct page *page;
+> > > > 	nodemask_t allowed_mask;
+> > > > 	struct migration_target_control mtc = {
+> > > > 		/*
+> > > > 		 * Allocate from 'node', or fail quickly and quietly.
+> > > > 		 * When this happens, 'page' will likely just be discarded
+> > > > 		 * instead of migrated.
+> > > > 		 */
+> > > > 		.gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) |
+> > > > 			    __GFP_THISNODE  | __GFP_NOWARN |
+> > > > 			    __GFP_NOMEMALLOC | GFP_NOWAIT,
+> > > > 		.nid = node
+> > > > 	};
+> > > > 
+> > > > 	page = alloc_migration_target(page, (unsigned long)&mtc);
+> > > > 	if (page)
+> > > > 		return page;
+> > > > 
+> > > > 	mtc.gfp_mask &= ~__GFP_THISNODE;
+> > > > 	mtc.nmask = &allowed_mask;
+> > > > 
+> > > > 	return alloc_migration_target(page, (unsigned long)&mtc);
+> > > > }
+> > > 
+> > > I skipped doing this in v5 because I was not sure this is really what we
+> > > want.
+> > 
+> > I think so.  And this is the original behavior.  We should keep the
+> > original behavior as much as possible, then make changes if necessary.
+> > 
 > 
-> bd71847: pmic@4b {
-> ...
-> 	rohm,reset-snvs-powered;
+> That is the reason I split the new page allocation as a separate patch. 
+> Previous discussion on this topic didn't conclude on whether we really 
+> need to do the above or not
+> https://lore.kernel.org/lkml/CAAPL-u9endrWf_aOnPENDPdvT-2-YhCAeJ7ONGckGnXErTLOfQ@mail.gmail.com/
+
+Please check the later email in the thread you referenced.  Both Wei and
+me agree that the use case needs to be supported.  We just didn't reach
+concensus about how to implement it.  If you think Wei's solution is
+better (referenced as below), you can try to do that too.  Although I
+think my proposed implementation is much simpler.
+
+"
+This is true with the current allocation code. But I think we can make
+some changes for demotion allocations. For example, we can add a
+GFP_DEMOTE flag and update the allocation function to wake up kswapd
+when this flag is set and we need to fall back to another node.
+"
+
+> Based on the above I looked at avoiding GFP_THISNODE allocation. If you 
+> have experiment results that suggest otherwise can you share? I could 
+> summarize that in the commit message for better description of why 
+> GFP_THISNODE enforcing is needed.
+
+Why?  GFP_THISNODE is just the first step.  We will fallback to
+allocation without it if necessary.
+
+Best Regards,
+Huang, Ying
+
+> > > I guess we can do this as part of the change that is going to
+> > > introduce the usage of memory policy for the allocation?
+> > 
+> > Like the memory allocation policy, the default policy should be local
+> > preferred.  We shouldn't force users to use explicit memory policy for
+> > that.
+> > 
+> > And the added code isn't complex.
+> > 
 > 
-> 	#clock-cells = <0>;
-> 	clock-critical = <1>;
-> 	clocks = <&osc_32k 0>;
-> 	clock-output-names = "clk-32k-out";
-> ...
-> }
-> 
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->   drivers/clk/clk-bd718x7.c | 4 ++++
+> -aneesh
 
-//snip
 
-> @@ -100,6 +101,9 @@ static int bd71837_clk_probe(struct platform_device *pdev)
->   
->   	parent_clk = of_clk_get_parent_name(parent->of_node, 0);
->   
-> +	of_clk_detect_critical(dev->of_node, 0, &flags);
-
-Purely judging the kerneldoc for of_clk_detect_critical - you may have 
-hard time getting this accepted.
-
-I think you're working on a very valid problem though. Maybe you could 
-see if you could align your effort with Marek?
-
-https://lore.kernel.org/all/20220517235919.200375-1-marex@denx.de/T/#m52d6d0831bf43d5f293e35cb27f3021f278d0564
-
-Best Regards
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));

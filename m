@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4B953F05B
+	by mail.lfdr.de (Postfix) with ESMTP id B602553F05C
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 22:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbiFFUnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 16:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
+        id S234372AbiFFUnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 16:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiFFUmc (ORCPT
+        with ESMTP id S233931AbiFFUmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 16:42:32 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999FCED737
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:38:52 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id i66so21215273oia.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:38:52 -0700 (PDT)
+        Mon, 6 Jun 2022 16:42:47 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC247122959
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 13:38:53 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id x11-20020a4a800b000000b0041a5b6d7c42so2877945oof.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 13:38:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mqR3X/F3Pv3CiLzjWRVRYnBoua48jzxnCD1fH10NX1o=;
-        b=IdlaCmhNQV92UfWSRiLtS5CoqgLmkwQZd9jIk90nIai7D8mxkN9zkeAfCZLuGPsiEW
-         gv3d4QSRbn9bLGKaRaKAu0mA9tZUlPahF8DyMngNzdPIdWCThtFmsPMTyAUHbYgv/Avo
-         DUHpowpgnEM++fz+bTQugavl+BBGsStliPD7jeODDJZKSq0qyudYIFRkmwhXcd3Z4MFg
-         lLYrn9s0lm/UUKoLK09ukii5DspA9LqsDpobune5GaxWg2VTZq4l/RoUgeeMjYnl7dzq
-         La24GcfP2kg7dsxR7dSvG0gohuhv8iIWZMSiT8pkDSIH5E9haQelFYWQKXef1uAj0ZbM
-         agRg==
+        bh=ffXa0Srpu9DUG1vR5Q2Yy9d85Kw9mLdPILu27FpkxDY=;
+        b=PIUQ+iLu7lzRky4kxfFQyAkAzQG8t/ZxMGdARewq0AfvvwOIfUACOftWXw6JLRqzta
+         ovkqGdhOaaC7OXmICULWuNsDwNVpAQjVSDmiSNBcyo0YnuJaFoVdqDQqZHJP/zJfFHlz
+         UhmrX6t2ZLw9j6WCqF4kuuEM1ARneVZ5dWVYGIfM2Xjqwz8i3yWd6FVw2JsU0iVT6iCG
+         Eazq+wGYTalQdbcowHFu+keOUVcLeL2dXpoj4efct6/yz4YN4NeLxHmyedGADbIAi8dT
+         ybafNlI/J0uJjdpXIW2xfMnF8G7tpElR36Fl4dL5g0HMXUGKAHTwgiLkXr0mjpCCBJKR
+         SANw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mqR3X/F3Pv3CiLzjWRVRYnBoua48jzxnCD1fH10NX1o=;
-        b=ac30AKGmYtLi+rf4zyCa7dc7+LT6dtsAENGZ9EDUuR2m66yC+sWnpmnzepz2MMkij+
-         Kctlxz8ZmyZeaUMoRGNLs+Z5OHwGw6JQXCzMJOBZnB0jYF9o8LXSeIc6gVO4pnkI1zEe
-         3/sKvn2JWsO7wPSQ7ziJoq+0uHfitAif/1vieUU8ox99ClIISll9UfFD+5+pypZZry83
-         x9jbqgpDFG86Rh60mwiu7xCpTVWVMp/Yop9mrX+rSEBs6SUjXFYZWJj8Vm4yu2n0tTBS
-         5+3sKo2M+ucvYL+oW/70LpYw4ZRBB7Cu9DdcbQ34CJqm6WS6gWAYpct6vPy4kLTvZYv5
-         Fe+Q==
-X-Gm-Message-State: AOAM530h4VhnIYOiczfvOSu2n/tTWBpKnaIXhzb9uOg+Bn8vdrt4ZSgE
-        IeRLwlduR298/J//urniMjDQnQJInw==
-X-Google-Smtp-Source: ABdhPJzyOUqEiHvMYNpcIZyc7v1oJuOZpS/iz0xSZ2Ghr+wXo6osxkaehPKnhPHE1ZBiR7Rlef2fEg==
-X-Received: by 2002:a05:6808:1825:b0:32b:a1e9:fdb6 with SMTP id bh37-20020a056808182500b0032ba1e9fdb6mr31104546oib.73.1654547931735;
-        Mon, 06 Jun 2022 13:38:51 -0700 (PDT)
+        bh=ffXa0Srpu9DUG1vR5Q2Yy9d85Kw9mLdPILu27FpkxDY=;
+        b=2KE1Dg8tQx7ldKy4+X3C1lTB6IbXBR80eY/KRP0ZDzSldO87IUyN6zvVrwLgcNYI0j
+         g9y4xp0Iq/HlMfBkHegyB1y2E9mM1ZuHBH9eolZrW75K/4jmKnRJaq4YJamtWLwqT77Z
+         1NRtobK+gFSTXRlWnaf3l+hA5usiCkXeH4QeJDgoFDjXEBSN9/wviLHXdNVz8GcUzXw1
+         HoVHWoH6UqU76QmwHZWTDKLpSxRBE07AEFzn/7a8y2SUrgr2tvnOFr8VlNwR72rRqW18
+         W9/KDCnvqJSsehG5kXl0ndkB0uJqED624hBwSpgkmk7JRInnzTjqkafmeTn2BuHo87LE
+         LZoQ==
+X-Gm-Message-State: AOAM530S/VMLe7UYVSXoHz43GKou1ZPKjt5kPLqcdaqIapdeETqdCvo4
+        wPvKzw7eZynRh4h02G5hcLJeqHaj+Q==
+X-Google-Smtp-Source: ABdhPJzFIdb/tmerI3hQmpnIL3gi5FSrZcMbhq86a4TB5s3AKiP+u4uGgt2JKuSEkthc0exRIOWthQ==
+X-Received: by 2002:a4a:11c7:0:b0:41a:c989:659e with SMTP id 190-20020a4a11c7000000b0041ac989659emr10821998ooc.38.1654547932953;
+        Mon, 06 Jun 2022 13:38:52 -0700 (PDT)
 Received: from citadel.. (174-084-153-250.res.spectrum.com. [174.84.153.250])
-        by smtp.gmail.com with ESMTPSA id j22-20020a056808035600b0032e3cca8561sm4327188oie.21.2022.06.06.13.38.50
+        by smtp.gmail.com with ESMTPSA id j22-20020a056808035600b0032e3cca8561sm4327188oie.21.2022.06.06.13.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 13:38:51 -0700 (PDT)
+        Mon, 06 Jun 2022 13:38:52 -0700 (PDT)
 From:   Brian Gerst <brgerst@gmail.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
@@ -57,9 +57,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         "Eric W . Biederman" <ebiederm@xmission.com>,
         Brian Gerst <brgerst@gmail.com>
-Subject: [PATCH 4/8] x86: Remove __USER32_DS
-Date:   Mon,  6 Jun 2022 16:37:58 -0400
-Message-Id: <20220606203802.158958-5-brgerst@gmail.com>
+Subject: [PATCH 5/8] x86/signal: Merge get_sigframe()
+Date:   Mon,  6 Jun 2022 16:37:59 -0400
+Message-Id: <20220606203802.158958-6-brgerst@gmail.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220606203802.158958-1-brgerst@gmail.com>
 References: <20220606203802.158958-1-brgerst@gmail.com>
@@ -75,140 +75,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace all users with the equivalent __USER_DS, which will make merging
-native and compat code simpler.
+Adapt the native get_sigframe() function so that the compat signal code
+can use it.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 ---
- arch/x86/entry/entry_64_compat.S |  4 ++--
- arch/x86/ia32/ia32_signal.c      | 14 +++++++-------
- arch/x86/include/asm/elf.h       |  4 ----
- arch/x86/include/asm/segment.h   |  1 -
- arch/x86/xen/xen-asm.S           |  8 ++++----
- 5 files changed, 13 insertions(+), 18 deletions(-)
+ arch/x86/ia32/ia32_signal.c        | 34 -------------
+ arch/x86/include/asm/sighandling.h |  4 ++
+ arch/x86/kernel/signal.c           | 80 ++++++++++++++----------------
+ 3 files changed, 42 insertions(+), 76 deletions(-)
 
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index d1052742ad0c..cd51d1f70382 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -59,7 +59,7 @@ SYM_CODE_START(entry_SYSENTER_compat)
- 	movq	PER_CPU_VAR(cpu_current_top_of_stack), %rsp
- 
- 	/* Construct struct pt_regs on stack */
--	pushq	$__USER32_DS		/* pt_regs->ss */
-+	pushq	$__USER_DS		/* pt_regs->ss */
- 	pushq	$0			/* pt_regs->sp = 0 (placeholder) */
- 
- 	/*
-@@ -192,7 +192,7 @@ SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
- 	ANNOTATE_NOENDBR
- 
- 	/* Construct struct pt_regs on stack */
--	pushq	$__USER32_DS		/* pt_regs->ss */
-+	pushq	$__USER_DS		/* pt_regs->ss */
- 	pushq	%r8			/* pt_regs->sp */
- 	pushq	%r11			/* pt_regs->flags */
- 	pushq	$__USER32_CS		/* pt_regs->cs */
 diff --git a/arch/x86/ia32/ia32_signal.c b/arch/x86/ia32/ia32_signal.c
-index b67e27685d46..a78885e3e85d 100644
+index a78885e3e85d..e28421f53d44 100644
 --- a/arch/x86/ia32/ia32_signal.c
 +++ b/arch/x86/ia32/ia32_signal.c
-@@ -212,7 +212,7 @@ static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
- 	if (ksig->ka.sa.sa_flags & SA_ONSTACK)
- 		sp = sigsp(sp, ksig);
- 	/* This is the legacy signal stack switching. */
--	else if (regs->ss != __USER32_DS &&
-+	else if (regs->ss != __USER_DS &&
- 		!(ksig->ka.sa.sa_flags & SA_RESTORER) &&
- 		 ksig->ka.sa.sa_restorer)
- 		sp = (unsigned long) ksig->ka.sa.sa_restorer;
-@@ -284,11 +284,11 @@ int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
- 	regs->dx = 0;
- 	regs->cx = 0;
+@@ -196,40 +196,6 @@ do {									\
+ 		goto label;						\
+ } while(0)
  
--	loadsegment(ds, __USER32_DS);
--	loadsegment(es, __USER32_DS);
-+	loadsegment(ds, __USER_DS);
-+	loadsegment(es, __USER_DS);
- 
- 	regs->cs = __USER32_CS;
--	regs->ss = __USER32_DS;
-+	regs->ss = __USER_DS;
- 
- 	return 0;
- Efault:
-@@ -361,11 +361,11 @@ int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
- 	regs->dx = (unsigned long) &frame->info;
- 	regs->cx = (unsigned long) &frame->uc;
- 
--	loadsegment(ds, __USER32_DS);
--	loadsegment(es, __USER32_DS);
-+	loadsegment(ds, __USER_DS);
-+	loadsegment(es, __USER_DS);
- 
- 	regs->cs = __USER32_CS;
--	regs->ss = __USER32_DS;
-+	regs->ss = __USER_DS;
- 
- 	return 0;
- Efault:
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index cb0ff1055ab1..be8b58da63b9 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -152,10 +152,6 @@ do {						\
- 	(elf_check_arch_ia32(x) ||					\
- 	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64))
- 
--#if __USER32_DS != __USER_DS
--# error "The following code assumes __USER32_DS == __USER_DS"
--#endif
+-/*
+- * Determine which stack to use..
+- */
+-static void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
+-				 size_t frame_size,
+-				 void __user **fpstate)
+-{
+-	unsigned long sp, fx_aligned, math_size;
 -
- static inline void elf_common_init(struct thread_struct *t,
- 				   struct pt_regs *regs, const u16 ds)
+-	/* Default to using normal stack */
+-	sp = regs->sp;
+-
+-	/* This is the X/Open sanctioned signal stack switching.  */
+-	if (ksig->ka.sa.sa_flags & SA_ONSTACK)
+-		sp = sigsp(sp, ksig);
+-	/* This is the legacy signal stack switching. */
+-	else if (regs->ss != __USER_DS &&
+-		!(ksig->ka.sa.sa_flags & SA_RESTORER) &&
+-		 ksig->ka.sa.sa_restorer)
+-		sp = (unsigned long) ksig->ka.sa.sa_restorer;
+-
+-	sp = fpu__alloc_mathframe(sp, 1, &fx_aligned, &math_size);
+-	*fpstate = (struct _fpstate_32 __user *) sp;
+-	if (!copy_fpstate_to_sigframe(*fpstate, (void __user *)fx_aligned,
+-				      math_size))
+-		return (void __user *) -1L;
+-
+-	sp -= frame_size;
+-	/* Align the stack pointer according to the i386 ABI,
+-	 * i.e. so that on function entry ((sp + 4) & 15) == 0. */
+-	sp = ((sp + 4) & -16ul) - 4;
+-	return (void __user *) sp;
+-}
+-
+ int ia32_setup_frame(struct ksignal *ksig, struct pt_regs *regs)
  {
-diff --git a/arch/x86/include/asm/segment.h b/arch/x86/include/asm/segment.h
-index 2e7890dd58a4..e056c29dfcda 100644
---- a/arch/x86/include/asm/segment.h
-+++ b/arch/x86/include/asm/segment.h
-@@ -210,7 +210,6 @@
- #define __KERNEL_DS			(GDT_ENTRY_KERNEL_DS*8)
- #define __USER32_CS			(GDT_ENTRY_DEFAULT_USER32_CS*8 + 3)
- #define __USER_DS			(GDT_ENTRY_DEFAULT_USER_DS*8 + 3)
--#define __USER32_DS			__USER_DS
- #define __USER_CS			(GDT_ENTRY_DEFAULT_USER_CS*8 + 3)
- #define __CPUNODE_SEG			(GDT_ENTRY_CPUNODE*8 + 3)
+ 	compat_sigset_t *set = (compat_sigset_t *) sigmask_to_save();
+diff --git a/arch/x86/include/asm/sighandling.h b/arch/x86/include/asm/sighandling.h
+index 65e667279e0f..c9e9784efe38 100644
+--- a/arch/x86/include/asm/sighandling.h
++++ b/arch/x86/include/asm/sighandling.h
+@@ -15,4 +15,8 @@
  
-diff --git a/arch/x86/xen/xen-asm.S b/arch/x86/xen/xen-asm.S
-index caa9bc2fa100..350174cf9d71 100644
---- a/arch/x86/xen/xen-asm.S
-+++ b/arch/x86/xen/xen-asm.S
-@@ -262,10 +262,10 @@ SYM_CODE_START(xen_syscall32_target)
+ void signal_fault(struct pt_regs *regs, void __user *frame, char *where);
+ 
++void __user *
++get_sigframe(struct ksignal *ksig, struct pt_regs *regs, size_t frame_size,
++	     void __user **fpstate);
++
+ #endif /* _ASM_X86_SIGHANDLING_H */
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 489a0859afd2..890ca0523570 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -48,6 +48,23 @@
+ #include <asm/sigframe.h>
+ #include <asm/signal.h>
+ 
++static inline int is_ia32_compat_frame(struct ksignal *ksig)
++{
++	return IS_ENABLED(CONFIG_IA32_EMULATION) &&
++		ksig->ka.sa.sa_flags & SA_IA32_ABI;
++}
++
++static inline int is_ia32_frame(struct ksignal *ksig)
++{
++	return IS_ENABLED(CONFIG_X86_32) || is_ia32_compat_frame(ksig);
++}
++
++static inline int is_x32_frame(struct ksignal *ksig)
++{
++	return IS_ENABLED(CONFIG_X86_X32_ABI) &&
++		ksig->ka.sa.sa_flags & SA_X32_ABI;
++}
++
+ #ifdef CONFIG_X86_64
+ /*
+  * If regs->ss will cause an IRET fault, change it.  Otherwise leave it
+@@ -223,24 +240,12 @@ do {									\
+ /*
+  * Determine which stack to use..
+  */
+-static unsigned long align_sigframe(unsigned long sp)
+-{
+-#ifdef CONFIG_X86_32
+-	/*
+-	 * Align the stack pointer according to the i386 ABI,
+-	 * i.e. so that on function entry ((sp + 4) & 15) == 0.
+-	 */
+-	sp = ((sp + 4) & -FRAME_ALIGNMENT) - 4;
+-#else /* !CONFIG_X86_32 */
+-	sp = round_down(sp, FRAME_ALIGNMENT) - 8;
+-#endif
+-	return sp;
+-}
+-
+-static void __user *
+-get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
++void __user *
++get_sigframe(struct ksignal *ksig, struct pt_regs *regs, size_t frame_size,
+ 	     void __user **fpstate)
+ {
++	struct k_sigaction *ka = &ksig->ka;
++	int ia32_frame = is_ia32_frame(ksig);
+ 	/* Default to using normal stack */
+ 	bool nested_altstack = on_sig_stack(regs->sp);
+ 	bool entering_altstack = false;
+@@ -249,7 +254,7 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+ 	unsigned long buf_fx = 0;
+ 
+ 	/* redzone */
+-	if (IS_ENABLED(CONFIG_X86_64))
++	if (!ia32_frame)
+ 		sp -= 128;
+ 
+ 	/* This is the X/Open sanctioned signal stack switching.  */
+@@ -263,7 +268,7 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+ 			sp = current->sas_ss_sp + current->sas_ss_size;
+ 			entering_altstack = true;
+ 		}
+-	} else if (IS_ENABLED(CONFIG_X86_32) &&
++	} else if (ia32_frame &&
+ 		   !nested_altstack &&
+ 		   regs->ss != __USER_DS &&
+ 		   !(ka->sa.sa_flags & SA_RESTORER) &&
+@@ -273,11 +278,19 @@ get_sigframe(struct k_sigaction *ka, struct pt_regs *regs, size_t frame_size,
+ 		entering_altstack = true;
+ 	}
+ 
+-	sp = fpu__alloc_mathframe(sp, IS_ENABLED(CONFIG_X86_32),
+-				  &buf_fx, &math_size);
++	sp = fpu__alloc_mathframe(sp, ia32_frame, &buf_fx, &math_size);
+ 	*fpstate = (void __user *)sp;
+ 
+-	sp = align_sigframe(sp - frame_size);
++	sp -= frame_size;
++
++	if (ia32_frame)
++		/*
++		 * Align the stack pointer according to the i386 ABI,
++		 * i.e. so that on function entry ((sp + 4) & 15) == 0.
++		 */
++		sp = ((sp + 4) & -FRAME_ALIGNMENT) - 4;
++	else
++		sp = round_down(sp, FRAME_ALIGNMENT) - 8;
  
  	/*
- 	 * Neither Xen nor the kernel really knows what the old SS and
--	 * CS were.  The kernel expects __USER32_DS and __USER32_CS, so
-+	 * CS were.  The kernel expects __USER_DS and __USER32_CS, so
- 	 * report those values even though Xen will guess its own values.
- 	 */
--	movq $__USER32_DS, 4*8(%rsp)
-+	movq $__USER_DS, 4*8(%rsp)
- 	movq $__USER32_CS, 1*8(%rsp)
+ 	 * If we are on the alternate signal stack and would overflow it, don't.
+@@ -331,7 +344,7 @@ __setup_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 	void __user *restorer;
+ 	void __user *fp = NULL;
  
- 	jmp entry_SYSCALL_compat_after_hwframe
-@@ -284,10 +284,10 @@ SYM_CODE_START(xen_sysenter_target)
+-	frame = get_sigframe(&ksig->ka, regs, sizeof(*frame), &fp);
++	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
  
- 	/*
- 	 * Neither Xen nor the kernel really knows what the old SS and
--	 * CS were.  The kernel expects __USER32_DS and __USER32_CS, so
-+	 * CS were.  The kernel expects __USER_DS and __USER32_CS, so
- 	 * report those values even though Xen will guess its own values.
- 	 */
--	movq $__USER32_DS, 4*8(%rsp)
-+	movq $__USER_DS, 4*8(%rsp)
- 	movq $__USER32_CS, 1*8(%rsp)
+ 	if (!user_access_begin(frame, sizeof(*frame)))
+ 		return -EFAULT;
+@@ -386,7 +399,7 @@ static int __setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 	void __user *restorer;
+ 	void __user *fp = NULL;
  
- 	jmp entry_SYSENTER_compat_after_hwframe
+-	frame = get_sigframe(&ksig->ka, regs, sizeof(*frame), &fp);
++	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
+ 
+ 	if (!user_access_begin(frame, sizeof(*frame)))
+ 		return -EFAULT;
+@@ -469,7 +482,7 @@ static int __setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 	if (!(ksig->ka.sa.sa_flags & SA_RESTORER))
+ 		return -EFAULT;
+ 
+-	frame = get_sigframe(&ksig->ka, regs, sizeof(struct rt_sigframe), &fp);
++	frame = get_sigframe(ksig, regs, sizeof(struct rt_sigframe), &fp);
+ 	uc_flags = frame_uc_flags(regs);
+ 
+ 	if (!user_access_begin(frame, sizeof(*frame)))
+@@ -572,7 +585,7 @@ static int x32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 	if (!(ksig->ka.sa.sa_flags & SA_RESTORER))
+ 		return -EFAULT;
+ 
+-	frame = get_sigframe(&ksig->ka, regs, sizeof(*frame), &fp);
++	frame = get_sigframe(ksig, regs, sizeof(*frame), &fp);
+ 
+ 	uc_flags = frame_uc_flags(regs);
+ 
+@@ -742,23 +755,6 @@ unsigned long get_sigframe_size(void)
+ 	return max_frame_size;
+ }
+ 
+-static inline int is_ia32_compat_frame(struct ksignal *ksig)
+-{
+-	return IS_ENABLED(CONFIG_IA32_EMULATION) &&
+-		ksig->ka.sa.sa_flags & SA_IA32_ABI;
+-}
+-
+-static inline int is_ia32_frame(struct ksignal *ksig)
+-{
+-	return IS_ENABLED(CONFIG_X86_32) || is_ia32_compat_frame(ksig);
+-}
+-
+-static inline int is_x32_frame(struct ksignal *ksig)
+-{
+-	return IS_ENABLED(CONFIG_X86_X32_ABI) &&
+-		ksig->ka.sa.sa_flags & SA_X32_ABI;
+-}
+-
+ static int
+ setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ {
 -- 
 2.35.3
 

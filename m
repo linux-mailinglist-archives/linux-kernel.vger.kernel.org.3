@@ -2,133 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EEB53E3BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD99D53E2EB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 10:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiFFHuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 03:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S231468AbiFFHuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 03:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiFFHuL (ORCPT
+        with ESMTP id S231483AbiFFHuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 03:50:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180A52ED7E;
-        Mon,  6 Jun 2022 00:50:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D4B611B8;
-        Mon,  6 Jun 2022 07:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F406C3411C;
-        Mon,  6 Jun 2022 07:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654501809;
-        bh=+PxN/7lvs+ASkg1d8jxQyQDR3Lobei2q0DKdDD97ktw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pwhUPAgaA9QhCiYGxDCk9eaj+IbeH14pxMoRfl/UTuwE4GXzoYOBl4rA6IAUn3UFj
-         Lwqs+cP1bZszz57GB4GEvJ0hK3haysGkh1X7amUqlumPRQGwOC8DCOiDVNJa3ll4sy
-         IRy0KfTytHS1YUq5kNx42jRzpmuSgsGn3/1mua3vv2pwYM/6XmbMBc1VOYjMc2EYPw
-         LQhRzq4eChFBoN8NeV37mnWAWY8evcKp2k9uEzD3+AIKugyzMS8gm4KxRxhbQVPnFQ
-         ASj/eKEU1SvqU9NfY6FNot0pOndtpCe2iN7Dz/J/Wv8ojapA5qChLQo92lcvhwP+/G
-         YzmIL0X/RVLOw==
-Date:   Mon, 6 Jun 2022 08:50:02 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] gpio: Fix kernel-doc comments to nested union
-Message-ID: <20220606085002.714b7e98@sal.lan>
-In-Reply-To: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
-References: <27612e81-d843-d161-ecd2-c653c7d5bae9@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 6 Jun 2022 03:50:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885BDB41D4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 00:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HPxHfG/UDxYj0oyJrzzEbK9o4LGHULeUwDrGsln6nJ0=; b=l86XAKhUWNGhIFaLw0lQV9B3IH
+        WxUjDPk3Xsa0F1oUwNdgazNtu+z98w/Ybo1JCpWphHo2DDAw+XETdERrsD5RZNoVsWRikF1xjGDUY
+        3V3sz883b4fH21ZoY7JFU1/sPyiRPhzTDBirUZibgFLt3ddPM9/HcrIVPhLx4ugtRtD1m5jKdtPhx
+        Il2PDQ42+0210Ffv7KYmRc9ocCx0oy61LeMab42M8/90f8sithyIQJtAlhByLYSwGFUbGnchIa6Ue
+        2a55iC8fe+XWjpdZbouAz+p4+ibIEhYl0XTqvLjR/eIxFdtLFBikK0pjK6v7tKrtbIPL0M0uZf5ZN
+        Rs8K2TGQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ny7V8-00HZxE-Dc; Mon, 06 Jun 2022 07:50:14 +0000
+Date:   Mon, 6 Jun 2022 00:50:14 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        akpm@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        hch@infradead.org, arnd@arndb.de, anshuman.khandual@arm.com
+Subject: Re: [PATCH v4 2/6] mm: ioremap: Use more sensibly name in
+ ioremap_prot()
+Message-ID: <Yp2xtsMaULU4dZJt@infradead.org>
+References: <20220606074815.139265-1-wangkefeng.wang@huawei.com>
+ <20220606074815.139265-3-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606074815.139265-3-wangkefeng.wang@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 6 Jun 2022 13:44:24 +0900
-Akira Yokosawa <akiyks@gmail.com> escreveu:
-
-> Commit 48ec13d36d3f ("gpio: Properly document parent data union")
-> is supposed to have fixed a warning from "make htmldocs" regarding
-> kernel-doc comments to union members.  However, the same warning
-> still remains [1].
+On Mon, Jun 06, 2022 at 03:48:11PM +0800, Kefeng Wang wrote:
+> Use more meaningful and sensibly naming phys_addr
+> instead addr in ioremap_prot().
 > 
-> Fix the issue by following the example found in section "Nested
-> structs/unions" of Documentation/doc-guide/kernel-doc.rst.
-> 
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: 48ec13d36d3f ("gpio: Properly document parent data union")
-> Link: https://lore.kernel.org/r/20220606093302.21febee3@canb.auug.org.au/ [1]
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Joey Gouly <joey.gouly@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 > ---
->  include/linux/gpio/driver.h | 29 ++++++++++++++++-------------
->  1 file changed, 16 insertions(+), 13 deletions(-)
+>  include/asm-generic/io.h |  2 +-
+>  mm/ioremap.c             | 12 ++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-> index b1e0f1f8ee2e..54c3c6506503 100644
-> --- a/include/linux/gpio/driver.h
-> +++ b/include/linux/gpio/driver.h
-> @@ -167,21 +167,24 @@ struct gpio_irq_chip {
->  	 */
->  	irq_flow_handler_t parent_handler;
+> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+> index 7ce93aaf69f8..e6ffa2519f08 100644
+> --- a/include/asm-generic/io.h
+> +++ b/include/asm-generic/io.h
+> @@ -964,7 +964,7 @@ static inline void iounmap(volatile void __iomem *addr)
+>  #elif defined(CONFIG_GENERIC_IOREMAP)
+>  #include <linux/pgtable.h>
 >  
-> -	/**
-> -	 * @parent_handler_data:
-> -	 *
-> -	 * If @per_parent_data is false, @parent_handler_data is a single
-> -	 * pointer used as the data associated with every parent interrupt.
-> -	 *
-> -	 * @parent_handler_data_array:
-> -	 *
-> -	 * If @per_parent_data is true, @parent_handler_data_array is
-> -	 * an array of @num_parents pointers, and is used to associate
-> -	 * different data for each parent. This cannot be NULL if
-> -	 * @per_parent_data is true.
-> -	 */
->  	union {
-> +		/**
-> +		 * @parent_handler_data:
-> +		 *
-> +		 * If @per_parent_data is false, @parent_handler_data is a
-> +		 * single pointer used as the data associated with every
-> +		 * parent interrupt.
-> +		 */
->  		void *parent_handler_data;
-> +
-> +		/**
-> +		 * @parent_handler_data_array:
-> +		 *
-> +		 * If @per_parent_data is true, @parent_handler_data_array is
-> +		 * an array of @num_parents pointers, and is used to associate
-> +		 * different data for each parent. This cannot be NULL if
-> +		 * @per_parent_data is true.
-> +		 */
->  		void **parent_handler_data_array;
->  	};
+> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
+> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot);
 
-Yeah, kernel-doc expects inlined comments to be just before each
-declaration like the above.
+This adds an overly long line now.
 
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
+> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size, unsigned long prot)
 
-Regards,
-Mauro
+Same here.

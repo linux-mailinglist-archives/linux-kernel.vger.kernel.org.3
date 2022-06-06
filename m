@@ -2,56 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D94253E659
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0537453E8D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbiFFKWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S233941AbiFFKZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbiFFKWv (ORCPT
+        with ESMTP id S233953AbiFFKXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:22:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1639262CE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:22:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC7C71042;
-        Mon,  6 Jun 2022 03:22:48 -0700 (PDT)
-Received: from bogus (unknown [10.57.9.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40B5D3F66F;
-        Mon,  6 Jun 2022 03:22:46 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 11:21:59 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
- core/thread from /cpu-map
-Message-ID: <20220606102159.dduxmvq4m2fm6gks@bogus>
-References: <20220525081416.3306043-8-sudeep.holla@arm.com>
- <20220525081416.3306043-9-sudeep.holla@arm.com>
- <20220525081416.3306043-10-sudeep.holla@arm.com>
- <20220525081416.3306043-11-sudeep.holla@arm.com>
- <20220525081416.3306043-12-sudeep.holla@arm.com>
- <20220525081416.3306043-13-sudeep.holla@arm.com>
- <20220525081416.3306043-14-sudeep.holla@arm.com>
- <20220525081416.3306043-15-sudeep.holla@arm.com>
- <20220525081416.3306043-16-sudeep.holla@arm.com>
- <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
+        Mon, 6 Jun 2022 06:23:31 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F19ACE25
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:23:29 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id u12so28009102eja.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4fC528rYEB+48Rn1G1nDF3sqdpbIgh93bu5dw33pZWc=;
+        b=lIkxI9ub3el5LZsSbt11MryA5NFGSmjCuEc4lVH5mavFbJ+HQl63gfjY8yhEUEcpCk
+         CsCAJSEsMv8ddLTJ284kZ0XYdgVMN6ythE4vuRyBEtVF4cDzf5gqyvcyPhB0eVMHz2o+
+         Xrv64MZ5Ci2ghoqtKmPq7E6jEgMCA41nwWmBmAO2lXvKkdbqwYVZAUv4zaaUQSjVluzr
+         lBlBIqkIc870WLd7CDtuTUlc52LPw68hLUd7AiMEb5vcojbAZGILNJWWVuESnnYXRJV2
+         wye3BEv9t++3wvPMRcf0IfQhKU4IW6nZM4AcI65fu5OMhTurawTaVy1FVPldOhy+3VLn
+         +aCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4fC528rYEB+48Rn1G1nDF3sqdpbIgh93bu5dw33pZWc=;
+        b=Vh3vgLsP5uCvugQCNo4lS85qLOFTHCvDaDXbEPR2agh32imDq1hoERiypVcgRBTd8J
+         kfpU3kmhCV26qrn1MPddJkcKo3nR4SnnqjqzMJ/PWIgNQpTFQYoxokl7TbJa/CJTGjar
+         i+4rrbj91lIqpmFwNSBJ60PV94CaexOIVXu11wWGdojycTbiMwm3sT6JmaMj0AQCgj0S
+         QyiGoFY8akmyrFfR2W76FIh++no8Ahq6d8mqVSXOT25Aqd8fXS5GxxJrOSnkS0UVj7SW
+         XLhicT1sW5oHEnyZhLO+jaW/0YQtys7Xh3xjVWGp4t0dwHwOdJk3+NnFeGDnvqS4TTAz
+         kFOQ==
+X-Gm-Message-State: AOAM530Ii8o2VSaugtzQDRQ597STXpGNiZ1z3dMhJQnr9nhlsRw4rcj6
+        NIhcvVbiNy9g4UHivmV2tg4FqQ==
+X-Google-Smtp-Source: ABdhPJxJV4zEbNNhKx5pPCIohTcPcFDBcwVmuGZ/60/VBMrh+TCuOm/Wpi+s93Bbm/FS4taCh9d6Rg==
+X-Received: by 2002:a17:906:1109:b0:711:d8fe:fe56 with SMTP id h9-20020a170906110900b00711d8fefe56mr850929eja.261.1654511007645;
+        Mon, 06 Jun 2022 03:23:27 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id iy18-20020a170907819200b006fec9cf9237sm5161850ejc.130.2022.06.06.03.23.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 03:23:27 -0700 (PDT)
+Message-ID: <5ddc30ca-df6d-d31d-e500-2faebc0f32f6@linaro.org>
+Date:   Mon, 6 Jun 2022 12:23:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>
+References: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+ <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p2>
+ <20220603023452epcms2p22b81cfd1ee4866d5a6663c089ded6eac@epcms2p2>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220603023452epcms2p22b81cfd1ee4866d5a6663c089ded6eac@epcms2p2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,160 +92,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 02:30:04PM +0200, Dietmar Eggemann wrote:
-> On 25/05/2022 10:14, Sudeep Holla wrote:
-> > Let us set the cluster identifier as parsed from the device tree
-> > cluster nodes within /cpu-map.
-> > 
-> > We don't support nesting of clusters yet as there are no real hardware
-> > to support clusters of clusters.
-> > 
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/base/arch_topology.c | 13 ++++++++-----
-> >  1 file changed, 8 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > index b8f0d72908c8..5f4f148a7769 100644
-> > --- a/drivers/base/arch_topology.c
-> > +++ b/drivers/base/arch_topology.c
-> > @@ -492,7 +492,7 @@ static int __init get_cpu_for_node(struct device_node *node)
-> >  }
-> >  
-> >  static int __init parse_core(struct device_node *core, int package_id,
-> > -			     int core_id)
-> > +			     int cluster_id, int core_id)
-> >  {
-> >  	char name[20];
-> >  	bool leaf = true;
-> > @@ -508,6 +508,7 @@ static int __init parse_core(struct device_node *core, int package_id,
-> >  			cpu = get_cpu_for_node(t);
-> >  			if (cpu >= 0) {
-> >  				cpu_topology[cpu].package_id = package_id;
-> > +				cpu_topology[cpu].cluster_id = cluster_id;
-> >  				cpu_topology[cpu].core_id = core_id;
-> >  				cpu_topology[cpu].thread_id = i;
-> >  			} else if (cpu != -ENODEV) {
-> > @@ -529,6 +530,7 @@ static int __init parse_core(struct device_node *core, int package_id,
-> >  		}
-> >  
-> >  		cpu_topology[cpu].package_id = package_id;
-> > +		cpu_topology[cpu].cluster_id = cluster_id;
+On 03/06/2022 04:34, Wangseok Lee wrote:
+> Add support Axis, ARTPEC-8 SoC.
+> ARTPEC-8 is the SoC platform of Axis Communications.
+> This is based on arm64 and support GEN4 & 2lane.
+> This PCIe controller is based on DesignWare Hardware core
+> and uses DesignWare core functions to implement the driver.
 > 
-> I'm still not convinced that this is the right thing to do. Let's take
-> the juno board as an example here. And I guess our assumption should be
-> that we want to make CONFIG_SCHED_CLUSTER a default option, like
-> CONFIG_SCHED_MC is. Simply to avoid a unmanageable zoo of config-option
-> combinations.
->
+> changes since v1 :
+> improvement review comment of Krzysztof on driver code.
+> -debug messages for probe or other functions.
+> -Inconsistent coding style (different indentation in structure members).
+> -Inconsistent code (artpec8_pcie_get_subsystem_resources() gets device
+>   from pdev and from pci so you have two same pointers;
+>   or artpec8_pcie_get_ep_mem_resources() stores dev 
+>   as local variable but uses instead pdev->dev).
+> -Not using devm_platform_ioremap_resource().
+> -Printing messages in interrupt handlers.
+> -Several local/static structures or array are not const.
+> 
+> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+> ---
+>  drivers/pci/controller/dwc/Kconfig        |  31 ++
+>  drivers/pci/controller/dwc/Makefile       |   1 +
+>  drivers/pci/controller/dwc/pcie-artpec8.c | 864 ++++++++++++++++++++++++++++++
+>  3 files changed, 896 insertions(+)
+>  create mode 100644 drivers/pci/controller/dwc/pcie-artpec8.c
+> 
+> diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
+> index 62ce3ab..4aa6da8 100644
+> --- a/drivers/pci/controller/dwc/Kconfig
+> +++ b/drivers/pci/controller/dwc/Kconfig
+> @@ -222,6 +222,37 @@ config PCIE_ARTPEC6_EP
+>  	  Enables support for the PCIe controller in the ARTPEC-6 SoC to work in
+>  	  endpoint mode. This uses the DesignWare core.
+>  
+> +config PCIE_ARTPEC8
+> +	bool "Axis ARTPEC-8 PCIe controller"
+> +
+> +config PCIE_ARTPEC8_HOST
+> +	bool "Axis ARTPEC-8 PCIe controller Host Mode"
+> +	depends on ARCH_ARTPEC
 
-Agreed on the config part.
+|| COMPILE_TEST
+and test it
 
-> (1) Scheduler Domains (SDs) w/o CONFIG_SCHED_CLUSTER:
->
-> MC  <-- !!!
-> DIE
->
-> (2) SDs w/ CONFIG_SCHED_CLUSTER:
->
-> CLS <-- !!!
-> DIE
->
+> +	depends on PCI_MSI_IRQ_DOMAIN
+> +	depends on PCI_ENDPOINT
+> +	select PCI_EPF_TEST
+> +	select PCIE_DW_HOST
+> +	select PCIE_ARTPEC8
+> +	help
+> +	  Say 'Y' here to enable support for the PCIe controller in the
+> +	  ARTPEC-8 SoC to work in host mode.
+> +	  This PCIe controller is based on DesignWare Hardware core.
+> +	  And uses DesignWare core functions to implement the driver.
+> +
+> +config PCIE_ARTPEC8_EP
+> +	bool "Axis ARTPEC-8 PCIe controller Endpoint Mode"
+> +	depends on ARCH_ARTPEC
 
-Yes I have seen this.
+|| COMPILE_TEST
+and test it
 
-> In (2) MC gets degenerated in sd_parent_degenerate() since CLS and MC
-> cpumasks are equal and MC does not have any additional flags compared to
-> CLS.
-> I'm not convinced that we can change the degeneration rules without
-> destroying other scenarios of the scheduler so that here MC stays and
-> CLS gets removed instead.
->
 
-Why ? Are you suggesting that we shouldn't present the hardware cluster
-to the topology because of the above reason ? If so, sorry that is not a
-valid reason. We could add login to return NULL or appropriate value
-needed in cpu_clustergroup_mask id it matches MC level mask if we can't
-deal that in generic scheduler code. But the topology code can't be
-compromised for that reason as it is user visible.
+> +	depends on PCI_ENDPOINT
+> +	depends on PCI_ENDPOINT_CONFIGFS
+> +	select PCI_EPF_TEST
+> +	select PCIE_DW_EP
+> +	select PCIE_ARTPEC8
+> +	help
+> +	  Say 'Y' here to enable support for the PCIe controller in the
+> +	  ARTPEC-8 SoC to work in endpoint mode.
+> +	  This PCIe controller is based on DesignWare Hardware core.
+> +	  And uses DesignWare core functions to implement the driver.
+> +
+>  config PCIE_ROCKCHIP_DW_HOST
+>  	bool "Rockchip DesignWare PCIe controller"
+>  	select PCIE_DW
+> diff --git a/drivers/pci/controller/dwc/Makefile b/drivers/pci/controller/dwc/Makefile
+> index 8ba7b67..b361022 100644
+> --- a/drivers/pci/controller/dwc/Makefile
+> +++ b/drivers/pci/controller/dwc/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_PCIE_TEGRA194) += pcie-tegra194.o
+>  obj-$(CONFIG_PCIE_UNIPHIER) += pcie-uniphier.o
+>  obj-$(CONFIG_PCIE_UNIPHIER_EP) += pcie-uniphier-ep.o
+>  obj-$(CONFIG_PCIE_VISCONTI_HOST) += pcie-visconti.o
+> +obj-$(CONFIG_PCIE_ARTPEC8) += pcie-artpec8.o
 
-> Even though MC and CLS are doing the same right now from the perspective
-> of the scheduler, we should also see MC and not CLS under (2). CLS only
-> makes sense longer term if the scheduler also makes use of it (next to
-> MC) in the wakeup-path for instance. Especially when this happens, a
-> platform should always construct the same scheduler domain hierarchy, no
-> matter which CONFIG_SCHED_XXX options are enabled.
->
->
-> You can see this in update_siblings_masks()
->
->     if (last_level_cache_is_shared)
->         set llc_sibling
->
->     if (cpuid_topo->package_id != cpu_topo->package_id)
->         continue
->
->     set core_sibling
->
->   If llc cache and socket boundaries are congruent, llc_sibling and
->   core_sibling are the same.
->
->     if (cpuid_topo->cluster_id != cpu_topo->cluster_id)
->         continue
->
->     set cluster_sibling
->
->   Now we potentially set clusters. Since socket=0 is by default and we
->   use the existing juno.dts, the cluster nodes end up being congruent to
->   the llc cache cpumasks as well.
->
+This does not look properly ordered. Usually entries should not be added
+at the end.
 
-Correct and I see no problems as it matches what the hardware is. So I am
-not expecting any change in any cpumasks there as they all are aligned with
-the hardware.
+>  
+>  # The following drivers are for devices that use the generic ACPI
+>  # pci_root.c driver but don't support standard ECAM config access.
+> diff --git a/drivers/pci/controller/dwc/pcie-artpec8.c b/drivers/pci/controller/dwc/pcie-artpec8.c
+> new file mode 100644
+> index 0000000..d9ae9bf
+> --- /dev/null
+> +++ b/drivers/pci/controller/dwc/pcie-artpec8.c
+> @@ -0,0 +1,864 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * PCIe controller driver for Axis ARTPEC-8 SoC
+> + *
+> + * Copyright (C) 2019 Samsung Electronics Co., Ltd.
+> + *		http://www.samsung.com
+> + *
+> + * Author: Jaeho Cho <jaeho79.cho@samsung.com>
+> + * This file is based on driver/pci/controller/dwc/pci-exynos.c
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/module.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/resource.h>
+> +#include <linux/types.h>
+> +#include <linux/phy/phy.h>
+> +
+> +#include "pcie-designware.h"
+> +
+> +#define to_artpec8_pcie(x)	dev_get_drvdata((x)->dev)
+> +
+> +/* Gen3 Control Register */
+> +#define PCIE_GEN3_RELATED_OFF		0x890
+> +/* Disables equilzation feature */
+> +#define PCIE_GEN3_EQUALIZATION_DISABLE	(0x1 << 16)
+> +#define PCIE_GEN3_EQ_PHASE_2_3		(0x1 << 9)
+> +#define PCIE_GEN3_RXEQ_PH01_EN		(0x1 << 12)
+> +#define PCIE_GEN3_RXEQ_RGRDLESS_RXTS	(0x1 << 13)
+> +
+> +#define FAST_LINK_MODE			(7)
+> +
+> +/* PCIe ELBI registers */
+> +#define PCIE_IRQ0_STS			0x000
+> +#define PCIE_IRQ1_STS			0x004
+> +#define PCIE_IRQ2_STS			0x008
+> +#define PCIE_IRQ5_STS			0x00C
+> +#define PCIE_IRQ0_EN			0x010
+> +#define PCIE_IRQ1_EN			0x014
+> +#define PCIE_IRQ2_EN			0x018
+> +#define PCIE_IRQ5_EN			0x01C
+> +#define IRQ_MSI_ENABLE			BIT(20)
+> +#define PCIE_APP_LTSSM_ENABLE		0x054
+> +#define PCIE_ELBI_LTSSM_ENABLE		0x1
+> +#define PCIE_ELBI_CXPL_DEBUG_00_31	0x2C8
+> +#define PCIE_ELBI_CXPL_DEBUG_32_63	0x2CC
+> +#define PCIE_ELBI_SMLH_LINK_UP		BIT(4)
+> +#define PCIE_ARTPEC8_DEVICE_TYPE	0x080
+> +#define DEVICE_TYPE_EP			0x0
+> +#define DEVICE_TYPE_LEG_EP		0x1
+> +#define DEVICE_TYPE_RC			0x4
+> +#define PCIE_ELBI_SLV_AWMISC		0x828
+> +#define PCIE_ELBI_SLV_ARMISC		0x820
+> +#define PCIE_ELBI_SLV_DBI_ENABLE	BIT(21)
+> +#define LTSSM_STATE_MASK		0x3f
+> +#define LTSSM_STATE_L0			0x11
+> +
+> +/* FSYS SYSREG Offsets */
+> +#define FSYS_PCIE_CON			0x424
+> +#define PCIE_PERSTN			BIT(5)
+> +#define FSYS_PCIE_DBI_ADDR_CON		0x428
+> +#define FSYS_PCIE_DBI_ADDR_OVR_CDM	0x00
+> +#define FSYS_PCIE_DBI_ADDR_OVR_SHADOW	0x12
+> +#define FSYS_PCIE_DBI_ADDR_OVR_ATU	0x36
+> +
+> +/* PMU SYSCON Offsets */
+> +#define PMU_SYSCON_PCIE_ISOLATION	0x3200
+> +
+> +/* BUS P/S SYSCON Offsets */
+> +#define BUS_SYSCON_BUS_PATH_ENABLE	0x0
+> +
+> +int artpec8_pcie_dbi_addr_con[] = {
 
-> The problem is that we code `llc cache` and `DT cluster nodes` as the
-> same thing in juno.dts. 
+1. I think I pointed before the need to constify everything which is const.
+2. Missing static
+3. definitions of static variables go after type declarations.
 
-Why is that a problem ? If so, blame hardware and deal with it as we have to
-😄 as usual we get all sorts of topology.
+> +	FSYS_PCIE_DBI_ADDR_CON
+> +};
+> +
+> +struct artpec8_pcie {
+> +	struct dw_pcie			*pci;
+> +	struct clk			*pipe_clk;
+> +	struct clk			*dbi_clk;
+> +	struct clk			*mstr_clk;
+> +	struct clk			*slv_clk;
 
-> `Cluster0/1` are congruent with the llc information, although they should 
-> be actually `socket0/1` right now.
+Not really...  Just use clk_bulk_api.
 
-That was complete non-sense and wrong. Boot and check in ACPI mode.
+> +	const struct artpec8_pcie_pdata	*pdata;
+> +	void __iomem			*elbi_base;
+> +	struct regmap			*sysreg;
+> +	struct regmap			*pmu_syscon;
+> +	struct regmap			*bus_s_syscon;
+> +	struct regmap			*bus_p_syscon;
+> +	enum dw_pcie_device_mode	mode;
+> +	int				link_id;
+> +	/* For Generic PHY Framework */
 
-> But we can't set-up a cpu-map with a `socketX` containing `coreY` directly.
-> And then we use llc_sibling and cluster_sibling in two different SD
-> cpumask functions (cpu_coregroup_mask() and cpu_clustergroup_mask()).
->
+Skip comment, it's obvious.
 
-We just need to deal with that. How is that dealt today with ACPI. My
-changes are making these aligned with ACPI. If something is broken as
-per you understanding with ACPI, then that needs fixing. The topology
-presented and parsed by ACPI is correct and we are aligning DT with that.
-There is no question on that.
+> +	struct phy			*phy;
+> +};
+> +
 
-> Remember, CONFIG_SCHED_CLUSTER was introduced in ACPI/PPTT as a cpumask
-> which is a subset of the cpumasks of CONFIG_SCHED_MC.
->
+> +	/* fsys sysreg regmap handle */
+> +	artpec8_ctrl->sysreg =
+> +		syscon_regmap_lookup_by_phandle(dev->of_node,
+> +			"samsung,fsys-sysreg");
 
-But that change also introduced cluster masks into the topology which again
-aligns with my changes.
+NAK.
 
-> IMHO we probably could just introduce your changes w/o setting `cpu-map
-> cluster nodes` in DT for now. We would just have to make sure that for
-> all `*.dts` affected, the `llc cache` info can take over the old role of
-> the `cluster nodes`. In this case e.g. Juno ends up with MC, DIE no
-> matter if CONFIG_SCHED_CLUSTER is set or not.
+Usage of undocumented properties. Every property must be documented.
 
-Sure I can agree with that if Juno ACPI is not broken. But I am sure it is
-broken based on your argument above. If it is, that needs fixing and this
-series just gets topology parsing in both ACPI and DT aligned, nothing
-more or nothing less. In the process it may be introducing clusters, but
-if it is not dealt correctly in ACPI, then it won't be in DT too and needs
-fixing anyways.
+Since you do not want to merge it with existing drivers (and more people
+insist on that: https://lore.kernel.org/all/Ym+u9yYrV9mxkyWX@matsya/ ),
+I am actually considering to NAK entire set if you do not post a user of
+this - DTS. Mainly because we cannot verify how does that user look like
+and such changes are sneaked in.
 
---
-Regards,
-Sudeep
+Best regards,
+Krzysztof

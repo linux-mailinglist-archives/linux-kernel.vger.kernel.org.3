@@ -2,53 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CCA53E916
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8776353E785
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbiFFJzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 05:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S233121AbiFFJz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 05:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbiFFJzE (ORCPT
+        with ESMTP id S233038AbiFFJz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 05:55:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CA0110C33B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:55:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D501F1596;
-        Mon,  6 Jun 2022 02:55:03 -0700 (PDT)
-Received: from bogus (unknown [10.57.9.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B21D3F66F;
-        Mon,  6 Jun 2022 02:55:02 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 10:54:15 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 07/16] arch_topology: Use the last level cache
- information from the cacheinfo
-Message-ID: <20220606095415.n26cugm2bo7d3rud@bogus>
-References: <20220525081416.3306043-1-sudeep.holla@arm.com>
- <20220525081416.3306043-2-sudeep.holla@arm.com>
- <20220525081416.3306043-3-sudeep.holla@arm.com>
- <20220525081416.3306043-4-sudeep.holla@arm.com>
- <20220525081416.3306043-5-sudeep.holla@arm.com>
- <20220525081416.3306043-6-sudeep.holla@arm.com>
- <20220525081416.3306043-7-sudeep.holla@arm.com>
- <20220525081416.3306043-8-sudeep.holla@arm.com>
- <0bf199a0-251d-323c-974a-bfd4e26f4cce@arm.com>
+        Mon, 6 Jun 2022 05:55:26 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EB7111BAD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 02:55:22 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id x17so19123100wrg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 02:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/HGBwVcm94G6hJzxxoyTgU9jvYkuG8KyARLPoR4g984=;
+        b=sSIY/sq3tJH+ruvIsuQApXH81UhkfbHOfABcA9lRdOXBMbUsWyeFwDFrglxz8GfoFY
+         QmStVG7kQyI/Q+/6pzQ1jyZY82gcQ94oe3qAb4fzAxkirKGmyAUaoqUUXub2FoGcDeKV
+         S/Wm7MMIB0Gh1CQX3FHGnak7oG6MzRuQNup0KHkoXlknAeFpQTqPF8kWakz2k1lHJoxZ
+         dthp0Z3elQaJG1D3TE/Vs4VI3xS7Hn4Pu8rhIoTTWWgEf0GTiaogaHkE4OCPgIBPe8BV
+         1InWXF/vn+LEpsxPD/Vb9arMdS+o9J/eS52eFzf2SzeGhMRIomxC+4FZ1I5qKCu7/UsL
+         xuAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/HGBwVcm94G6hJzxxoyTgU9jvYkuG8KyARLPoR4g984=;
+        b=j71o23TNlVhfqtveeUt4XCuwA+qVrVBv+yQYt1Iauh7YyScpocB3qtoI3zc8wiRNl0
+         X10yQWzx/LmdDavvMzp/uaovOdGX9bVgqt+emPN8ZVmSUgRqx5ffk8vN2lzxUnf66W7Q
+         UOz40oh865IGiHCqNZlWTkWBYBEyjdqk4H1w/4MN1GECdfY3KgRJ/ZZCX/UNn4/Lxv1S
+         boW8YAgSo4/um8w83F+QMXOLMXE+tNZB/zWtSJB8aEroeTLnHghLL6sPLq0u6enCM1v/
+         fwTqjTpm5eCsdn5xzX/zutTSOpwOjaOnrXIncaSzK/Efzl0x4kel5kcqsFAUeiwYz5jk
+         c0sA==
+X-Gm-Message-State: AOAM532OvssvjKMCIkHqFZhYDoNi8SLEwaRV1MqCTM6gpM69/CeWGpMR
+        ceUlP9ualvv8hXCWgX6e7SGFzw==
+X-Google-Smtp-Source: ABdhPJxFMRPPs4LSY3Kcwnsvn2fgmQxO/3GAT/dfFczxe2I21JguLlXbCT27NpSSDOKSGZaQZm8pJA==
+X-Received: by 2002:a05:6000:2a9:b0:210:2530:be32 with SMTP id l9-20020a05600002a900b002102530be32mr21432918wry.153.1654509321248;
+        Mon, 06 Jun 2022 02:55:21 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id o10-20020adfeaca000000b0020c5253d8c2sm14659609wrn.14.2022.06.06.02.55.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 02:55:20 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 10:55:03 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Leon Luo <leonl@leopardimaging.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH 4/6] mfd: max77714: update Luca Ceresoli's e-mail address
+Message-ID: <Yp3O92gg9LiIzQTX@google.com>
+References: <20220603155727.1232061-1-luca@lucaceresoli.net>
+ <20220603155727.1232061-4-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0bf199a0-251d-323c-974a-bfd4e26f4cce@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220603155727.1232061-4-luca@lucaceresoli.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,53 +84,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 04:26:00PM +0200, Dietmar Eggemann wrote:
-> On 25/05/2022 10:14, Sudeep Holla wrote:
-> > The cacheinfo is now initialised early along with the CPU topology
-> > initialisation. Instead of relying on the LLC ID information parsed
-> > separately only with ACPI PPTT elsewhere, migrate to use the similar
-> > information from the cacheinfo.
-> > 
-> > This is generic for both DT and ACPI systems. The ACPI LLC ID information
-> > parsed separately can now be removed from arch specific code.
-> > 
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/base/arch_topology.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > index 765723448b10..4c486e4e6f2f 100644
-> > --- a/drivers/base/arch_topology.c
-> > +++ b/drivers/base/arch_topology.c
-> > @@ -663,7 +663,8 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
-> >  		/* not numa in package, lets use the package siblings */
-> >  		core_mask = &cpu_topology[cpu].core_sibling;
-> >  	}
-> > -	if (cpu_topology[cpu].llc_id != -1) {
-> > +
-> > +	if (last_level_cache_is_valid(cpu)) {
-> >  		if (cpumask_subset(&cpu_topology[cpu].llc_sibling, core_mask))
-> >  			core_mask = &cpu_topology[cpu].llc_sibling;
-> >  	}
-> > @@ -694,7 +695,7 @@ void update_siblings_masks(unsigned int cpuid)
-> >  	for_each_online_cpu(cpu) {
-> >  		cpu_topo = &cpu_topology[cpu];
-> >  
-> > -		if (cpu_topo->llc_id != -1 && cpuid_topo->llc_id == cpu_topo->llc_id) {
-> > +		if (last_level_cache_is_shared(cpu, cpuid)) {
-> >  			cpumask_set_cpu(cpu, &cpuid_topo->llc_sibling);
-> >  			cpumask_set_cpu(cpuid, &cpu_topo->llc_sibling);
-> >  		}
-> 
-> I tested v3 on a Kunpeng920 (w/o CONFIG_NUMA) and it looks
-> like that last_level_cache_is_shared() isn't working as
-> expected.
->
+On Fri, 03 Jun 2022, Luca Ceresoli wrote:
 
-Thanks a lot for detailed instrumentation, I am unable to identify why it is
-not working though. I will take a deeper look later.
+> My Bootlin address is preferred from now on.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> ---
+>  drivers/mfd/max77714.c       | 4 ++--
+>  include/linux/mfd/max77714.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+
+Applied, thanks.
 
 -- 
-Regards,
-Sudeep
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC7753F24E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC9553F253
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 01:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbiFFXBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 19:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S232476AbiFFXFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 19:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbiFFXBs (ORCPT
+        with ESMTP id S232378AbiFFXFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 19:01:48 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48F9E9E1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:01:47 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-edeb6c3642so21007392fac.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 16:01:47 -0700 (PDT)
+        Mon, 6 Jun 2022 19:05:16 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EE29FEA
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 16:05:14 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id l9-20020a056830268900b006054381dd35so11811985otu.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 16:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fvJVapmaiR5ta4tTtII1xFa6y7+0Xioffnfwf7wnw+o=;
-        b=HwC38GPisP9Qe5N9Dxjshw2xLsFj/bl7lBR3ynQu0FQ7+euFbaZ4T5LHEJTbtOy9nP
-         BxVGWlZjVH9N61c1ipVWuELIgXqPdtkyFpp5mvrcgbRHH43iQlWFwO3gQt8ZJmCgafGX
-         XbkDBMefGP17Rwm0IO0esP26Irjo99G+nZfW/Y9GtdQXArM9KHm1+qU1rWAkDq+tca8C
-         WcfaNA0aDM1QPVoF0AHIQrQoj1rXtqsxwqzoxJDD7cLFncOZesV0lidUDmsw+2thVrrk
-         58Px0WoB3DMhAR4Bx5fCtrWY/SSkfvMt7nMO2zI99Ptey5kl5gUXfA9gwoP101qMDhLB
-         tBHQ==
+        bh=/Gf/XuQlnrCjV08KAe5I+CdEOdoNW4OlHyRl/hczIyw=;
+        b=RoJbrLvaMyL3TNZSGqeRwFOHCQiUF/dZovxTI8CZamCwS9em1FOvAl3lUUycrpi2H/
+         33Y8aCRdReJvwgF6IeyGVRFaPU058F+k87WJYU43ROg2DS7Vxx6/67z8oiyNr32rse0H
+         Iv7O+ff16d5RPZytV8XapZFr5Mfi7xnHwBfvzqF4vsDc5YxBptI8SV639vG0WDgPDg1I
+         IY9L9il/m9a53GRo+rpmdLhAELS4NMLtEDh5AFivT1mwSeUEtlNN63U/S8wGRx1PBAYT
+         VGgFC5c7mDLsqkyKFQVSeNYot7KHPQQTCw6ZjvnZ1oPM2imAFudla5sb4Btkn0exBIT8
+         ATGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fvJVapmaiR5ta4tTtII1xFa6y7+0Xioffnfwf7wnw+o=;
-        b=RmTx3jXKMv+imMl25yQVKOUMwMUxyJV74pwWSH/xcw6LRaEO5Aw8sQ2a4NFgU4gyn9
-         TbGoOLaTXt+nV3auYMaCPy9NhFYBYH6zPTtQOq3fOp5HQ08UMEMLg5WAAQJA+6bIXHIP
-         aGIY9M5wC4hGdsOWMIpek5URsu1u5IuyL3kdPTtFHzZgoZAwB/1JNQSDBTBB4EkZ71+x
-         RIpQr3SWlAO7HsYU+clqTiPtD5mrScvaTBuzdI8yslQIV7hGZc8HWk4y9qZCDMj4LEpN
-         Mc893ZP7OnJU2+WivbFk2lsiaqDWe7jTRDzW+1gfO7Kidt+0JgHtY+94qGJoy5NVZZ8s
-         k1HQ==
-X-Gm-Message-State: AOAM532hZNmpPUDXM7rRCX2LY3PJZwIRm1Whlz+fhuYwiLRjxU51SDt1
-        uaDTey4l0IGrJeQvO5klseFsWyFzb41iRYU9AH8c5Q==
-X-Google-Smtp-Source: ABdhPJxrmQDiRqVFb0RjkQcmEcjZ5kSWb8NBWoQZdMJUK94PfICLEPcP0PP3w5mCrrSeyWS7P5i6N07Wf5m9xFcwErg=
-X-Received: by 2002:a05:6870:891f:b0:f3:3811:3e30 with SMTP id
- i31-20020a056870891f00b000f338113e30mr24252893oao.269.1654556506633; Mon, 06
- Jun 2022 16:01:46 -0700 (PDT)
+        bh=/Gf/XuQlnrCjV08KAe5I+CdEOdoNW4OlHyRl/hczIyw=;
+        b=1TAdrmM4PspB5gx8oye3eyUpTkKE/ujXWMgLYtKXTduxAykOUlqj6jlTQu3uZhqg0E
+         +5/OuiEkJDDfPcsIugwWf/WDu6PZjuiH/gyKwvaJMy6Z1ciT2o+ucPX0go7WgeJJ6F5I
+         6ESFhVk540v9dxYHUsoMHDp9grWPgYZuYBcmUYkOT+UPRNbx46qPiRQM5x/IHwGkxqlr
+         2nfpiVAGIjdc3cE0O87BCYTsV+IlsI9tqnpPr+8qHVQJJAnOHH6BTSVeOJ5AOqzM2GA5
+         8lMtTBvtvb+SY5Nf8pYG4Vqnqfee2T6Z1JzJHd2/UqMrN3izWXm7kFwXNttPKbEJh24y
+         3+8w==
+X-Gm-Message-State: AOAM5329mFS0cURLAlMgkyP85f2ZAUzpPodLInevwEbPpZQaeWMVbnHQ
+        a8pitjHplEsOgjq/PdvkCmfZYUYuHdIgkEC8OpLubQfPMRQ=
+X-Google-Smtp-Source: ABdhPJxaobG+TFd+UMH9XYgpg1jMSz/Wa/dYt6jizxkBMihRMPlW+APjkdsAEQq2EPM9hopFu/e0Ur8w1uhNtHiYh6o=
+X-Received: by 2002:a9d:808:0:b0:60c:37:6fcf with SMTP id 8-20020a9d0808000000b0060c00376fcfmr2158290oty.75.1654556713409;
+ Mon, 06 Jun 2022 16:05:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220602142620.3196-1-santosh.shukla@amd.com>
-In-Reply-To: <20220602142620.3196-1-santosh.shukla@amd.com>
+References: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
+In-Reply-To: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
 From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 6 Jun 2022 16:01:35 -0700
-Message-ID: <CALMp9eTh9aZ_Ps0HehAuNfZqYmCS72RKyfAP3Pe_u08N9F8ZLw@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Virtual NMI feature
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Mon, 6 Jun 2022 16:05:02 -0700
+Message-ID: <CALMp9eQS6e=utUK5heRXH4G4hev7u6XHs+PWV994R-zszz8_RQ@mail.gmail.com>
+Subject: Re: [PATCH v6 00/17] Introducing AMD x2AVIC and hybrid-AVIC modes
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com, mlevitsk@redhat.com, seanjc@google.com,
+        joro@8bytes.org, jon.grimm@amd.com, wei.huang2@amd.com,
+        terry.bowman@amd.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -71,65 +68,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 7:26 AM Santosh Shukla <santosh.shukla@amd.com> wrote:
+On Thu, May 19, 2022 at 3:32 AM Suravee Suthikulpanit
+<suravee.suthikulpanit@amd.com> wrote:
 >
-> Currently, NMI is delivered to the guest using the Event Injection
-> mechanism [1]. The Event Injection mechanism does not block the delivery
-> of subsequent NMIs. So the Hypervisor needs to track the NMI delivery
-> and its completion(by intercepting IRET) before sending a new NMI.
+> Introducing support for AMD x2APIC virtualization. This feature is
+> indicated by the CPUID Fn8000_000A EDX[14], and it can be activated
+> by setting bit 31 (enable AVIC) and bit 30 (x2APIC mode) of VMCB
+> offset 60h.
 >
-> Virtual NMI (VNMI) allows the hypervisor to inject the NMI into the guest
-> w/o using Event Injection mechanism meaning not required to track the
-> guest NMI and intercepting the IRET. To achieve that,
-> VNMI feature provides virtualized NMI and NMI_MASK capability bits in
-> VMCB intr_control -
-> V_NMI(11) - Indicates whether a virtual NMI is pending in the guest.
-> V_NMI_MASK(12) - Indicates whether virtual NMI is masked in the guest.
-> V_NMI_ENABLE(26) - Enables the NMI virtualization feature for the guest.
+> With x2AVIC support, the guest local APIC can be fully virtualized in
+> both xAPIC and x2APIC modes, and the mode can be changed during runtime.
+> For example, when AVIC is enabled, the hypervisor set VMCB bit 31
+> to activate AVIC for each vCPU. Then, it keeps track of each vCPU's
+> APIC mode, and updates VMCB bit 30 to enable/disable x2APIC
+> virtualization mode accordingly.
 >
-> When Hypervisor wants to inject NMI, it will set V_NMI bit, Processor will
-> clear the V_NMI bit and Set the V_NMI_MASK which means the Guest is
-> handling NMI, After the guest handled the NMI, The processor will clear
-> the V_NMI_MASK on the successful completion of IRET instruction
-> Or if VMEXIT occurs while delivering the virtual NMI.
+> Besides setting bit VMCB bit 30 and 31, for x2AVIC, kvm_amd driver needs
+> to disable interception for the x2APIC MSR range to allow AVIC hardware
+> to virtualize register accesses.
 >
-> To enable the VNMI capability, Hypervisor need to program
-> V_NMI_ENABLE bit 1.
+> This series also introduce a partial APIC virtualization (hybrid-AVIC)
+> mode, where APIC register accesses are trapped (i.e. not virtualized
+> by hardware), but leverage AVIC doorbell for interrupt injection.
+> This eliminates need to disable x2APIC in the guest on system without
+> x2AVIC support. (Note: suggested by Maxim)
 >
-> The presence of this feature is indicated via the CPUID function
-> 0x8000000A_EDX[25].
+> Testing for v5:
+>   * Test partial AVIC mode by launching a VM with x2APIC mode
+>   * Tested booting a Linux VM with x2APIC physical and logical modes upto 512 vCPUs.
+>   * Test the following nested SVM test use cases:
 >
-> Testing -
-> * Used qemu's `inject_nmi` for testing.
-> * tested with and w/o AVIC case.
-> * tested with kvm-unit-test
+>              L0     |    L1   |   L2
+>        ----------------------------------
+>                AVIC |    APIC |    APIC
+>                AVIC |    APIC |  x2APIC
+>         hybrid-AVIC |  x2APIC |    APIC
+>         hybrid-AVIC |  x2APIC |  x2APIC
+>              x2AVIC |    APIC |    APIC
+>              x2AVIC |    APIC |  x2APIC
+>              x2AVIC |  x2APIC |    APIC
+>              x2AVIC |  x2APIC |  x2APIC
 >
-> Thanks,
-> Santosh
-> [1] https://www.amd.com/system/files/TechDocs/40332.pdf - APM Vol2,
-> ch-15.20 - "Event Injection".
+> Changes from v5:
+> (https://lore.kernel.org/lkml/20220518162652.100493-1-suravee.suthikulpanit@amd.com/T/#t)
+>   * Re-order patch 16 to 10
+>   * Patch 11: Update commit message
 >
-> Santosh Shukla (7):
->   x86/cpu: Add CPUID feature bit for VNMI
->   KVM: SVM: Add VNMI bit definition
->   KVM: SVM: Add VNMI support in get/set_nmi_mask
->   KVM: SVM: Report NMI not allowed when Guest busy handling VNMI
->   KVM: SVM: Add VNMI support in inject_nmi
->   KVM: nSVM: implement nested VNMI
->   KVM: SVM: Enable VNMI feature
+> Changes from v4:
+> (https://lore.kernel.org/lkml/20220508023930.12881-5-suravee.suthikulpanit@amd.com/T/)
+>   * Patch  3: Move enum_avic_modes definition to svm.h
+>   * Patch 10: Rename avic_set_x2apic_msr_interception to
+>               svm_set_x2apic_msr_interception and move it to svm.c
+>               to simplify the struct svm_direct_access_msrs declaration.
+>   * Patch 16: New from Maxim
+>   * Patch 17: New from Maxim
 >
->  arch/x86/include/asm/cpufeatures.h |  1 +
->  arch/x86/include/asm/svm.h         |  7 +++++
->  arch/x86/kvm/svm/nested.c          |  8 +++++
->  arch/x86/kvm/svm/svm.c             | 47 ++++++++++++++++++++++++++++--
->  arch/x86/kvm/svm/svm.h             |  1 +
->  5 files changed, 62 insertions(+), 2 deletions(-)
+> Best Regards,
+> Suravee
+>
+> Maxim Levitsky (2):
+>   KVM: x86: nSVM: always intercept x2apic msrs
+>   KVM: x86: nSVM: optimize svm_set_x2apic_msr_interception
+>
+> Suravee Suthikulpanit (15):
+>   x86/cpufeatures: Introduce x2AVIC CPUID bit
+>   KVM: x86: lapic: Rename [GET/SET]_APIC_DEST_FIELD to
+>     [GET/SET]_XAPIC_DEST_FIELD
+>   KVM: SVM: Detect X2APIC virtualization (x2AVIC) support
+>   KVM: SVM: Update max number of vCPUs supported for x2AVIC mode
+>   KVM: SVM: Update avic_kick_target_vcpus to support 32-bit APIC ID
+>   KVM: SVM: Do not support updating APIC ID when in x2APIC mode
+>   KVM: SVM: Adding support for configuring x2APIC MSRs interception
+>   KVM: x86: Deactivate APICv on vCPU with APIC disabled
+>   KVM: SVM: Refresh AVIC configuration when changing APIC mode
+>   KVM: SVM: Introduce logic to (de)activate x2AVIC mode
+>   KVM: SVM: Do not throw warning when calling avic_vcpu_load on a
+>     running vcpu
+>   KVM: SVM: Introduce hybrid-AVIC mode
+>   KVM: x86: Warning APICv inconsistency only when vcpu APIC mode is
+>     valid
+>   KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible
+>   KVM: SVM: Add AVIC doorbell tracepoint
+>
+>  arch/x86/hyperv/hv_apic.c          |   2 +-
+>  arch/x86/include/asm/apicdef.h     |   4 +-
+>  arch/x86/include/asm/cpufeatures.h |   1 +
+>  arch/x86/include/asm/kvm_host.h    |   1 -
+>  arch/x86/include/asm/svm.h         |  16 ++-
+>  arch/x86/kernel/apic/apic.c        |   2 +-
+>  arch/x86/kernel/apic/ipi.c         |   2 +-
+>  arch/x86/kvm/lapic.c               |   6 +-
+>  arch/x86/kvm/svm/avic.c            | 178 ++++++++++++++++++++++++++---
+>  arch/x86/kvm/svm/nested.c          |   5 +
+>  arch/x86/kvm/svm/svm.c             |  75 ++++++++----
+>  arch/x86/kvm/svm/svm.h             |  25 +++-
+>  arch/x86/kvm/trace.h               |  18 +++
+>  arch/x86/kvm/x86.c                 |   8 +-
+>  14 files changed, 291 insertions(+), 52 deletions(-)
 >
 > --
 > 2.25.1
 
-When will we see vNMI support in silicon? Genoa?
+When will we see this feature in silicon?
 
-Where is this feature officially documented? Is there an AMD64
-equivalent of the "Intel Architecture Instruction Set Extensions and
-Future Features" manual?
+Where is the official documentation?

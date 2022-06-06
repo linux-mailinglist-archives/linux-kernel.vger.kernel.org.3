@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2FC53DFA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B7053DFAC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352109AbiFFCXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S1352142AbiFFC3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbiFFCXi (ORCPT
+        with ESMTP id S238215AbiFFC3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:23:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9694A39169
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654482216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=38NW0xbv/uJqASyMqvIrv2AbqCaKbFs4cnQyydaHSDI=;
-        b=Rnhfot6sfGsuBF4w2DSvESh3M8IcCd5o1fp27MSg1syEHFyXWOT8PZhsGnkLSlITDoFNS6
-        WqRccY7nADgT/CNrxpce2uXxpV1Xd91Z/X9URcGxX5pY4s9isSobDn4DwVEcVTAqZfCdAS
-        XPjxvrdTjw7DTeQA9LgrnljDbUXVMpM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-8-Sfiw-fDnNtSxzjEdGc1gpw-1; Sun, 05 Jun 2022 22:23:28 -0400
-X-MC-Unique: Sfiw-fDnNtSxzjEdGc1gpw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9ACE93C02B60;
-        Mon,  6 Jun 2022 02:23:27 +0000 (UTC)
-Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 91E691415100;
-        Mon,  6 Jun 2022 02:23:23 +0000 (UTC)
-Date:   Mon, 6 Jun 2022 10:23:17 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] blk-cgroup: Optimize blkcg_rstat_flush()
-Message-ID: <Yp1lFYc578SkraF/@T590>
-References: <20220602192020.166940-1-longman@redhat.com>
- <20220602192020.166940-4-longman@redhat.com>
- <YprYgdV0IxAeJZsz@T590>
- <ee754359-cefd-7d4b-7861-1405860bba9b@redhat.com>
- <Yp1atoLkZPvA1Zd3@T590>
- <c9ab0e91-76db-430f-272c-558c269d62ce@redhat.com>
+        Sun, 5 Jun 2022 22:29:21 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923E1205CB;
+        Sun,  5 Jun 2022 19:29:20 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id bo5so11639799pfb.4;
+        Sun, 05 Jun 2022 19:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5MRSPo2LMU2au8whrm6/ap69ATqtiqPRY+8IYbaTsN4=;
+        b=Qbnz6zlcTv8r3+4N/i7vGr87pZSaOpX9C79HwHGWLzyDBus6J7G0Wzuym/1mlynGmr
+         rSlJqUU2Xal1+QoOx/dnymJTvQUtEs6hm74OlAb/88XKQiqH2xgrVfLx8FP2b02EHNYX
+         QFf5/g62JKNqf7Cct0X+TBGmbPOvJKLXq7590Z2DSHIygcuYKSIh/50xtucoFa2Op4lA
+         Nt76fKvhaJlh/ElO692toyfMfwBrTF1BOZhLfuDTPHcfL2zJJFzPbOMHVjprFBzSA/3t
+         i3OJhO28a2oryGF1qqbhzkDOlSAl/tn71+Qkr5BFaRQDVSfN+oUAMWuGWEwIgrTMQxR6
+         1QdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5MRSPo2LMU2au8whrm6/ap69ATqtiqPRY+8IYbaTsN4=;
+        b=CuLnER91C/MhJNzmiWMIraG3wcvB65VjUAyEvzlOhxDqcZMk9062ji8+kSvTHvNMbB
+         OCv8PIuysb891KYttKKiLipuSRKMYU1jm33je3WsCYsT6ROBBARaGZy3zElyCfNs1b/G
+         VsDuk61/U/kP0WkozvvSACIpmCA4lRnsGDBN/tdO3XfTNN9flEc0BXdHQKclBeYWk4pZ
+         X6Kj4uJX4Of4tEEZiMBUertlVaCp4bwy2c7Q5yrPeXv6HrnzgwEAk30cJh/kl0+r6YG+
+         7Vwk5pMJbQlyW4EAdmFQMk295vpRMy0yknYg0NvmTpwjR6pAyFsdVn6s5OC9B07kK/uQ
+         JUbw==
+X-Gm-Message-State: AOAM531xqJrqfbB8vWGS58LiteTNHaCml2uZL1eHB8NJlxXyojfD7Gxk
+        ZEhQERrN6xTaARElNUjw9e4=
+X-Google-Smtp-Source: ABdhPJwYfhsVLjqLklnHuWKFE3wn5J5YchEj2hzgmdxGnnWmtW83W9BsyDUVULlu4RDayDoHwsna0A==
+X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr18404105pgw.223.1654482560074;
+        Sun, 05 Jun 2022 19:29:20 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.81])
+        by smtp.gmail.com with ESMTPSA id ca16-20020a056a00419000b00518d06efbc8sm651656pfb.98.2022.06.05.19.29.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jun 2022 19:29:19 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, nhorman@tuxdriver.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH net-next v4 0/3] reorganize the code of the enum skb_drop_reason
+Date:   Mon,  6 Jun 2022 10:24:33 +0800
+Message-Id: <20220606022436.331005-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9ab0e91-76db-430f-272c-558c269d62ce@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 09:59:50PM -0400, Waiman Long wrote:
-> On 6/5/22 21:39, Ming Lei wrote:
-> > On Sun, Jun 05, 2022 at 07:15:27PM -0400, Waiman Long wrote:
-> > > On 6/3/22 23:58, Ming Lei wrote:
-> > > 
-> > > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > > > index abec50f31fe6..8c4f204dbf5b 100644
-> > > > --- a/mm/memcontrol.c
-> > > > +++ b/mm/memcontrol.c
-> > > > @@ -622,7 +622,7 @@ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
-> > > >    {
-> > > >    	unsigned int x;
-> > > > -	cgroup_rstat_updated(memcg->css.cgroup, smp_processor_id());
-> > > > +	cgroup_rstat_updated(memcg->css.cgroup, smp_processor_id(), NULL);
-> > > >    	x = __this_cpu_add_return(stats_updates, abs(val));
-> > > >    	if (x > MEMCG_CHARGE_BATCH) {
-> > > I think the rstat set of functions are doing that already. So flush will
-> > > only call CPUs that have called cgroup_rstat_updated() before. However, one
-> > Yeah, I guess the detail is in cgroup_rstat_cpu_pop_updated(), but the
-> > percpu lock(raw_spin_lock_irqsave) is still required, and cgroup_rstat_cpu_pop_updated()
-> > is still called even through there isn't any update on this CPU.
-> Yes, I think we may need to add a bitmask of what controllers have updates
-> in cgroup_rstat_cpu structure.
-> > 
-> > > deficiency that I am aware of is that there is no bitmap of which controller
-> > > have update. The problem that I saw in cgroup v2 is that in a cgroup with
-> > > both memory controller and block controller enabled, a
-> > > cgroup_rstat_updated() call from memory cgroup later causes the rstat
-> > > function to call into block cgroup flush method even though there is no
-> > > update in the block controller. This is an area that needs improvement.
-> > > 
-> > > Your code does allow the block controller to be aware of that and avoid
-> > > further action, but I think it has to be done in the rstat code to be
-> > > applicable to all controllers instead of just specific to block controller.
-> > I guess it can be done by adding one percpu variable to 'struct cgroup'.
-> > 
-> > > There is another problem that this approach. Suppose the system have 20
-> > > block devices and one of them has an IO operation. Now the flush method
-> > > still needs to iterate all the 20 blkg's to do an update. The block
-> > > controller is kind of special that the number of per-cgroup IO stats depends
-> > > on the number of block devices present. Other controllers just have one set
-> > > of stats per cgroup.
-> > Yeah, and this one is really blkio specific issue, and your patch does
-> > cover this one. Maybe you can add one callback to
-> > cgroup_rstat_updated(), so the "blkg_iostat_set" instance is added into
-> > percpu list under percpu lock of cgroup_rstat_cpu_lock, then the lockless
-> > list isn't needed.
-> 
-> The rstat API is generic. It may not be a good idea to put controller
-> specific information into it. Yes, cgroup_rstat_cpu_lock is taken at the
-> read side (flush). It may not taken on the write side (update). So it may
+From: Menglong Dong <imagedong@tencent.com>
 
-Both cgroup_rstat_flush_locked()/cgroup_rstat_updated() take the percpu
-cgroup_rstat_cpu_lock, so the new invented lockless list can be
-replaced with plain list.
+The code of skb_drop_reason is a little wild, let's reorganize them.
+Three things and three patches:
 
-Thanks,
-Ming
+1) Move the enum 'skb_drop_reason' and related function to the standalone
+   header 'dropreason.h', as Jakub Kicinski suggested, as the skb drop
+   reasons are getting more and more.
+
+2) use auto-generation to generate the source file that convert enum
+   skb_drop_reason to string.
+
+3) make the comment of skb drop reasons kernel-doc style.
+
+Changes since v3:
+3/3: remove some useless comment (Jakub Kicinski)
+
+Changes since v2:
+2/3: - add new line in the end of .gitignore
+     - fix awk warning by make '\;' to ';', as ';' is not need to be
+       escaped
+     - export 'drop_reasons' in skbuff.c
+
+Changes since v1:
+1/3: move dropreason.h from include/linux/ to include/net/ (Jakub Kicinski)
+2/3: generate source file instead of header file for drop reasons string
+     array (Jakub Kicinski)
+3/3: use inline comment (Jakub Kicinski)
+
+Menglong Dong (3):
+  net: skb: move enum skb_drop_reason to standalone header file
+  net: skb: use auto-generation to convert skb drop reason to string
+  net: dropreason: reformat the comment fo skb drop reasons
+
+ include/linux/skbuff.h     | 179 +-------------------------
+ include/net/dropreason.h   | 256 +++++++++++++++++++++++++++++++++++++
+ include/trace/events/skb.h |  89 +------------
+ net/core/.gitignore        |   1 +
+ net/core/Makefile          |  23 +++-
+ net/core/drop_monitor.c    |  13 --
+ net/core/skbuff.c          |   3 +
+ 7 files changed, 284 insertions(+), 280 deletions(-)
+ create mode 100644 include/net/dropreason.h
+ create mode 100644 net/core/.gitignore
+
+-- 
+2.36.1
 

@@ -2,85 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C6C53E9D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935F353EB9F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240787AbiFFPhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S240925AbiFFPhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240867AbiFFPhQ (ORCPT
+        with ESMTP id S240923AbiFFPhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:37:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877221C13C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:37:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654529835; x=1686065835;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/xJVlrzvB0ZyAOelEUbAeApqQ9bzGpQ7WVJHyZbehPg=;
-  b=K5xJ1vs1TnQCICeCalHzlHE1Oo05n+vCAA1LKeDUtuwWqKpPQ8gj4Gi6
-   +eFmlh9JXf73Ko6RUP8HyejsfchJakOhqTc0nAfVAz2/h9Omp0Tai/0nL
-   XsWnC5dkGPHm4DkRxzK19KrYqF9ddXYGY+y3pI3b6Whdaj+oljNWmylU6
-   V6VtyrotH3SO7dlYhsMro53vLeCAr8ZWpBakjx0OTgbQq6sB1T0TyvvHi
-   +Ld7r6wm0vFjoEqNe6kw2g/OhVLjbnDPa7chYc3GieBxxALxznHq1pN+A
-   8fZzjnbQi3bI5zOe59w8fohJRDUwIJf+AlL5KwOEUh/hI48VxvAsbhJ4r
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="363008346"
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="363008346"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 08:37:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
-   d="scan'208";a="825879988"
-Received: from kplovato-mobl1.amr.corp.intel.com (HELO [10.212.186.68]) ([10.212.186.68])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 08:37:14 -0700
-Message-ID: <0f8417ab-a0f8-82d9-c075-594e5f5fd835@intel.com>
-Date:   Mon, 6 Jun 2022 08:37:13 -0700
+        Mon, 6 Jun 2022 11:37:42 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD66120BE6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:37:40 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fu3so28220138ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 08:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TPOApYvb6Wxwe5KarWLI1DK2xlnELfMdmLjwPBhUFmY=;
+        b=xrtvxq07G0Balt8gqFW0xfBnb/KqOGRnSXQmweTC1TqHRtRmMB5Bh3SvoaPCjDVZAl
+         P/aPuE1HqZbPccP4zpOozDQ9Gq9/m5EvyK7WlkVZX4c1s9eK/NG2S3AjSAcEIOfVOjaQ
+         736slRtSeLnDfPGFQLrS1Fqyv3hmnkGTRWxg+UIjmMUXXCP13AIhHnFlGyJBerj6kcUn
+         05eA8tuaZvVdnTvXm0Q9jc20DHMXiNmttyvKF6udj6REH04kfJ/lUQAMRvhTIsumMwlM
+         IH+2UF009KRW9/MJSIKfUEiw++VZFKtsS3FSjqjUZHETbMSyq8CkbvciVrO3ki2IhNZJ
+         1reQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TPOApYvb6Wxwe5KarWLI1DK2xlnELfMdmLjwPBhUFmY=;
+        b=ClMRkQWma3RoppdAmXYCDd4pf7pJlTMa2XuR67tIIIpoHQCnFQK2Btzl8AcYmf5quB
+         E66VLbN3x2cAcvNupxTeIxPV7/+nMiD/nGTUf+AfU+bBL3oR7aPpv8TiRKxtsT7+Z0Zr
+         cbCdMs5cGzff4Au37TzfRt+6sXD5j67NiowiE+E2I+bvBELlwP1gci+Gcrq5wp74ys6d
+         Twk960k0us7om+W2c3MBPEL89LholA3Su7F6VbKGSN2PR1BZtOKeLorxjg/kKBcOvk1Z
+         ZERR7VB6d55OiCRrLlz7hO69bHo5Zi73reQIMQAe6ApDQq/ipvH4rDwXA7/ZqONmjwvq
+         Rxsw==
+X-Gm-Message-State: AOAM532rE1fT5e9fYbIXEPmKncg4CR4zPZOCQRtjOwkgJp29nuCMjYNz
+        kBW1qRL8PLErjrvU0UqwhtvONw==
+X-Google-Smtp-Source: ABdhPJyTldoWxgNbTyUfoG0DE5atMlvTxvy7y3jeS4TIndwvgOwStVK1T0DxwBIHX1tbTfm5woE5lw==
+X-Received: by 2002:a17:907:724a:b0:6ff:2ed0:960 with SMTP id ds10-20020a170907724a00b006ff2ed00960mr22376130ejc.480.1654529859405;
+        Mon, 06 Jun 2022 08:37:39 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id e26-20020a1709062c1a00b00711d88ae162sm669769ejh.24.2022.06.06.08.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 08:37:38 -0700 (PDT)
+Message-ID: <8bd4323e-9005-6a15-b94b-c49427fffa68@linaro.org>
+Date:   Mon, 6 Jun 2022 17:37:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 2/3] x86: Remove vendor checks from
- prefer_mwait_c1_over_halt
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 19/23] MAINTAINERS: update maxim,max77693.yaml reference
 Content-Language: en-US
-To:     Zhang Rui <rui.zhang@intel.com>, Wyes Karny <wyes.karny@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Lewis.Carroll@amd.com, Mario.Limonciello@amd.com,
-        gautham.shenoy@amd.com, Ananth.Narayan@amd.com, bharata@amd.com,
-        len.brown@intel.com, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, chang.seok.bae@intel.com,
-        keescook@chromium.org, metze@samba.org, zhengqi.arch@bytedance.com,
-        mark.rutland@arm.com, puwen@hygon.cn, rafael.j.wysocki@intel.com,
-        andrew.cooper3@citrix.com, jing2.liu@intel.com,
-        jmattson@google.com, pawan.kumar.gupta@linux.intel.com
-References: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
- <67ca737f7cdabfc75f930cf59b49d910d8c491d6.1653324016.git-series.wyes.karny@amd.com>
- <1cc1af5000ceb5197c3b266ac82e7770d771a7b4.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1cc1af5000ceb5197c3b266ac82e7770d771a7b4.camel@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
+References: <cover.1654529011.git.mchehab@kernel.org>
+ <6a87dfb278765465d82ad4641a42ae4de0ded392.1654529011.git.mchehab@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6a87dfb278765465d82ad4641a42ae4de0ded392.1654529011.git.mchehab@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 05:50, Zhang Rui wrote:
-> I couldn't evaluate the impact to other vendors, but at least for
-> Intel platforms,
+On 06/06/2022 17:25, Mauro Carvalho Chehab wrote:
+> Changeset b38213c6118b ("dt-bindings: mfd: maxim,max77693: Convert to dtschema")
+> renamed: Documentation/devicetree/bindings/mfd/max77693.txt
+> to: Documentation/devicetree/bindings/mfd/maxim,max77693.yaml.
 > 
-> Test-by: Zhang Rui <rui.zhang@intel.com>
+> Update its cross-reference accordingly.
+> 
+> Fixes: b38213c6118b ("dt-bindings: mfd: maxim,max77693: Convert to dtschema")
 
-I you mean:
+I look at that commit and it performs proper update of Maintainers file.
+It is not the commit which introduced the issue, so the fixes tag is wrong.
 
-Tested-by: Zhang Rui <rui.zhang@intel.com>
+The commit which introduced the issue is I think within Lee's branches:
 
-right?
+Fixes: afb67df31a8c ("Merge branches 'ib-mfd-hwmon-regulator-5.18',
+'ib-mfd-iio-5.18', 'ib-mfd-led-power-regulator-5.18',
+'ib-mfd-mediatek-mt6366-5.18', 'ib-mfd-rtc-watchdog-5.18' and
+'ib-mfd-spi-dt-5.18' into ibs-for-mfd-merged")
+
+
+
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+> 
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
+> 
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a11aa7ebb6af..dc64a23d0bdc 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12118,7 +12118,7 @@ F:	Documentation/devicetree/bindings/*/maxim,max77686.yaml
+>  F:	Documentation/devicetree/bindings/*/maxim,max77693.yaml
+>  F:	Documentation/devicetree/bindings/*/maxim,max77843.yaml
+>  F:	Documentation/devicetree/bindings/clock/maxim,max77686.txt
+> -F:	Documentation/devicetree/bindings/mfd/max77693.txt
+> +F:	Documentation/devicetree/bindings/mfd/maxim,max77693.yaml
+
+This "+" is not correct. The entry is already properly covered.
+
+Just remove the max77693.txt.
+
+
+Best regards,
+Krzysztof

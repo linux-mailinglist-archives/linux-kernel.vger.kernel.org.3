@@ -2,136 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D674553EAFC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A46E53EB6A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241064AbiFFPoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 11:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S241096AbiFFPp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 11:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241059AbiFFPoQ (ORCPT
+        with ESMTP id S240981AbiFFPpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:44:16 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6FECC15D;
-        Mon,  6 Jun 2022 08:44:15 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id ay16-20020a056820151000b0041b71517844so958763oob.4;
-        Mon, 06 Jun 2022 08:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Dyxrxglk8UzaHWlu8Ip8w2vSs7l7OGlq6jwwOsQ960=;
-        b=BwrNGtzgFqc5GBs+deBOcDtRAxLlmSKd/PBfifxCqtEON0K0Xetx9idzSHIQMwV5SA
-         9f2Lh+l8E89eWdqBoG0wndpJIL4MrXW9B2Z0988Ek2KK4sF5EGuuyAq7HZD0Ne+AbimE
-         TGNYT2BK0SktuwFMDQip7/3ArorHNXsQ8yuWySv1otJ8/qyNvpJFPgCcDTeyh864sVq2
-         pezAVQqrB9W5SXgH36eWHugxjPI8TZTv1DBDpYyrqYQtjH202Y//b+rcc6ABMSaFiOMf
-         ndiybo/ZM8ybLw47HKBm7WsJk1HwxEB1xnxOEWc3TAD7Aao8nS5QOyvldisyxMopaGZ1
-         0IUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Dyxrxglk8UzaHWlu8Ip8w2vSs7l7OGlq6jwwOsQ960=;
-        b=YbO5WgRttcIfuy2Bv8noKDYE6981tpEhEjrKjiFhsJMKHfhp5bq+gq/JtbzdRZjiZw
-         HRGxiD/J1MciCb3OqnRNWXFyy04cdKUOTt7H4Br7pEOVkQ730ojiqVkUWYyhlZ7ryqpj
-         jjh2+TgS+5kw6Bje0jP0Tv3afsP4PMJGQuepYkXuqEtOVIkbUqGV5ZL2cNZLrBVdNwUf
-         PcYWgXPhjSRzufdoLfSbp3oBtnMwXXMfcWUQANR4sfrTWdaGcjIw7HR6IWGDr6ES4Xkq
-         jyeIzyrf8XRrC3A2+REaANYf//VZQncdlhtlOWmjXS9FeKdsdFpOWYxDadEBtSz7QrLk
-         4ItQ==
-X-Gm-Message-State: AOAM532u87Q1gIsH0w2ZUHS8uzpWABiAKMQ/vX/uMT9KbWN1GXcPsu5L
-        58kY5pJ/3aAqyJwlsPJNXaE=
-X-Google-Smtp-Source: ABdhPJy1zCj2ZN6ndVK4A6V4NXnjLvRe27BQH9UEBJSslBjosstbd4cuAI508h2hMmqaKojcUerFng==
-X-Received: by 2002:a4a:4f16:0:b0:41b:6f0e:4acc with SMTP id c22-20020a4a4f16000000b0041b6f0e4accmr4734194oob.33.1654530254919;
-        Mon, 06 Jun 2022 08:44:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m4-20020a9d6084000000b0060b1f3924c3sm8318726otj.44.2022.06.06.08.44.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 08:44:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <451ad3f1-e365-e136-fa1b-c7bb0b05a15f@roeck-us.net>
-Date:   Mon, 6 Jun 2022 08:44:11 -0700
+        Mon, 6 Jun 2022 11:45:12 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C691F2324
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 08:45:09 -0700 (PDT)
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 8D66D83AF6;
+        Mon,  6 Jun 2022 17:45:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1654530306;
+        bh=AqZOOnLJGuceB2TSU+9Eh0CvtWhy1P7vm+Mht3l7hBE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EldHzQj9W37KS4B3Zp8Zck7vsRweKlwHZBqX5t6x/0i2aE2k/IrYCAjxSSBNUMM5N
+         IowMxYrBgfQKidisX14n1e1fCmxLgt7gHyvnBmnUvnkOhREPgIzRDGNuQ0XT+plVim
+         O6MctON9jXkVi+OZHzO1QWsoIk1DkD4ysCKE+rpmT2Gf0ZtZvybaJDdy2VWAsWkApa
+         Un388u3mEJ3tosql9AdazMmCw0m4h5zGnfc6lRcXM24aDW6HRmwRk91zGfnw6npLrX
+         oqzto8tBGKVGnLy22ZFLkfqId62VHwf1ZrYwTm7Tx8ylYwdJ02yvZ50F4SKEYgCZxz
+         AUPC+XXFb9nxg==
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Lukasz Majewski <lukma@denx.de>
+Subject: [PATCH 1/3] ASoC: wm8940: Remove warning when no plat data
+Date:   Mon,  6 Jun 2022 17:44:39 +0200
+Message-Id: <20220606154441.20848-1-lukma@denx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 03/23] dt-bindings: arm: update vexpress-config.yaml
- references
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1654529011.git.mchehab@kernel.org>
- <7020edd9e183652249fc95bf61a1055cc342a4dc.1654529011.git.mchehab@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <7020edd9e183652249fc95bf61a1055cc342a4dc.1654529011.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 08:25, Mauro Carvalho Chehab wrote:
-> Changeset 7e8339b5162f ("dt-bindings: arm: convert vexpress-config to DT schema")
-> renamed: Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
-> to: Documentation/devicetree/bindings/arm/vexpress-config.yaml.
-> 
-> Update the cross-references accordingly.
-> 
-> Fixes: 7e8339b5162f ("dt-bindings: arm: convert vexpress-config to DT schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+The lack of platform data in the contemporary Linux
+shall not be the reason to display warnings to the
+kernel logs.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+---
+ sound/soc/codecs/wm8940.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
-> 
->   Documentation/devicetree/bindings/hwmon/vexpress.txt     | 2 +-
->   Documentation/devicetree/bindings/regulator/vexpress.txt | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/vexpress.txt b/Documentation/devicetree/bindings/hwmon/vexpress.txt
-> index 9c27ed694bbb..4a4df4ffc460 100644
-> --- a/Documentation/devicetree/bindings/hwmon/vexpress.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/vexpress.txt
-> @@ -9,7 +9,7 @@ Requires node properties:
->   	"arm,vexpress-power"
->   	"arm,vexpress-energy"
->   - "arm,vexpress-sysreg,func" when controlled via vexpress-sysreg
-> -  (see Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
-> +  (see Documentation/devicetree/bindings/arm/vexpress-config.yaml
->     for more details)
->   
->   Optional node properties:
-> diff --git a/Documentation/devicetree/bindings/regulator/vexpress.txt b/Documentation/devicetree/bindings/regulator/vexpress.txt
-> index d775f72487aa..1c2e92c7831e 100644
-> --- a/Documentation/devicetree/bindings/regulator/vexpress.txt
-> +++ b/Documentation/devicetree/bindings/regulator/vexpress.txt
-> @@ -4,7 +4,7 @@ Versatile Express voltage regulators
->   Requires node properties:
->   - "compatible" value: "arm,vexpress-volt"
->   - "arm,vexpress-sysreg,func" when controlled via vexpress-sysreg
-> -  (see Documentation/devicetree/bindings/arm/vexpress-sysreg.txt
-> +  (see Documentation/devicetree/bindings/arm/vexpress-config.yaml
->     for more details)
->   
->   Required regulator properties:
+diff --git a/sound/soc/codecs/wm8940.c b/sound/soc/codecs/wm8940.c
+index 440d048ef0c0..7cea54720436 100644
+--- a/sound/soc/codecs/wm8940.c
++++ b/sound/soc/codecs/wm8940.c
+@@ -709,9 +709,7 @@ static int wm8940_probe(struct snd_soc_component *component)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (!pdata)
+-		dev_warn(component->dev, "No platform data supplied\n");
+-	else {
++	if (pdata) {
+ 		reg = snd_soc_component_read(component, WM8940_OUTPUTCTL);
+ 		ret = snd_soc_component_write(component, WM8940_OUTPUTCTL, reg | pdata->vroi);
+ 		if (ret < 0)
+-- 
+2.20.1
 

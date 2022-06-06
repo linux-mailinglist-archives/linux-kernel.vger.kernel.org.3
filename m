@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59FA53E765
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7416453EC39
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbiFFOot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S240017AbiFFOow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239973AbiFFOop (ORCPT
+        with ESMTP id S239996AbiFFOot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:44:45 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E646750455
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:44:43 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a10so12983162pju.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:44:43 -0700 (PDT)
+        Mon, 6 Jun 2022 10:44:49 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CF050E1E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:44:48 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 7so12281320pga.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4unt6PUqjlwmajoQtsGt030sfPAmI7QPMB4lAchbRI4=;
-        b=NTfisVuYf6vYip3A6oX/MtlyiOevTjc09L/PPyG1XEp9uKlhU2KdJP3HX7Z9A7j2kU
-         Axic04KC7h61W3hKt9ubEiMliDseLMGQX9su3bO3oO12PbhU8u9n/KQxY5TMDEMJfPPV
-         pZskzj9G1d75GXBTlQx/2LKlBRUs9ycTX3pDERNcrz3zs3kFwWM3vKqEb0eRfnPKcjZb
-         CxcVrKkRXdZ9OSesmTiJtMM41eA6wZ7wRRUnpqqR55FCd9K8IOhBjG+yM8dOQTgTj6rn
-         7DN/bPNAmSc2oanW8TKkOKur5wQXG2M+CgUZJCSI8wdZcRyETB3GWLlqSDINvwfitYu2
-         NK7A==
+        bh=FSeMlanFh2svXxaNRkwpD5s2Jt4O19S77leAuNHNOlo=;
+        b=WyES++Ws5th4dbIFtc9TyfPnVGRjm9A3RdjviwsyL5TUR4voWiPOI22jrHtE09OkBU
+         DB+COkkoaryb+TiQZ8xREwMtrGSURLJrFyTgtXUQNFZbZEfpjsjkbjPa7D+NWdMxrza/
+         q2pkY393zj9G0k1PphbRqD9U+mf+3uki0YsQb5R7CEi/eJI80836tIn1Kxg75f2WpIpv
+         WyzJ1dSJac/oaOmhRLav/5soBFC4jFYdf0CeMxQiIJMUAStPMaDy91HC527UWwZ0HU1J
+         QKpTvnc7W4mtU/KWP8N23cUBky5PJ7zCEIMhwYdA42u1+Dh5du2Oct1oi2XEIvyWxO8R
+         ofRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4unt6PUqjlwmajoQtsGt030sfPAmI7QPMB4lAchbRI4=;
-        b=T0sWWtNIpb7k+QerVSYrV6FpZGAQxz4ONNISKYUKWQ2d5VTQQPtDf7Bj0+PW4TspPi
-         ocMqSmOadf1gRHChDXIoEmFxN/YEvGpxfCVHhnNIfnOjsYPHrIFIdhkokfdzdDudQPa4
-         I+kMkgwwv/BbrUkjlaSwazw0eJuVaSyLQcyhoUphwelnH23aq3yKR9hB0vTXsgoTw7KO
-         JxVp1RuoJxbf7DrHTCkbTwpA6bC8WMTWvLRxF7UWSPcglHr63p4Yd5Lj0OIBkJNdGici
-         kwbMXN0tDt97MRJqpiXUUsC5zeJmHiZTdJfIXdw3Ny2+pxEuruIE4XQ2D8HmjSOH4nYS
-         1OAw==
-X-Gm-Message-State: AOAM533putVJAb+3im4EO7O5LlSynTFVxDMwYfgO+Xqe1NMQAZda5YDz
-        5sUjhuaVVs8x0Tn9Oei7wG+HTgHupMI=
-X-Google-Smtp-Source: ABdhPJxA1hqQGmk44f5+1g/UktQNwXxazNTajiocBnQlcpf7qSvFY3fXZhU05jEne4jYVkuUdbUC/Q==
-X-Received: by 2002:a17:90a:6747:b0:1e6:6a5b:f040 with SMTP id c7-20020a17090a674700b001e66a5bf040mr29353109pjm.134.1654526683263;
-        Mon, 06 Jun 2022 07:44:43 -0700 (PDT)
+        bh=FSeMlanFh2svXxaNRkwpD5s2Jt4O19S77leAuNHNOlo=;
+        b=hAXLJoN6hOjiAZDhY5YJdJIqWv0nYBprnppsTLSRsD2K5ALDAa7nNRyVS8AW9mT7K8
+         Ii28Bt6SJly4W5Xo/uE1naGqukqU7ZqJr23ftpl/hqwcxNtPahYP8hFOyjAkkkWZaoPo
+         iideA0rQ2kRhr1T01l44qKxhNFFpEn01YbZp+O5NQPCMRrrUqRymlB803duOexDn4nZ0
+         WPIv6ih+EA17in0Ya5RHSnIYol+JaPpFL4RxB2t5hnbOJVaMF2EGXkXfvxtwok49JnxT
+         vFNAKxGERKn+3ibN/1UvzgjXVOPxqTFv9rzqrsEjEXbFumaetvRh6QNSHLY4Up6pWuM5
+         Md1g==
+X-Gm-Message-State: AOAM532/okrTXmj11rr4DXFwfRaS1cnnEOSlsORWNafPzpNXkojm8Us1
+        A26C4YRnr7jdGcVNDpqR6lr81RQN+Mo=
+X-Google-Smtp-Source: ABdhPJyhjn8JL5F/rkrJLtDcxn01B4M7DGyI+z+JnIQ91v9wV1926Nh2e1nU3mcEEbgLJbfF5Sg9MA==
+X-Received: by 2002:a05:6a00:1488:b0:51b:e7a2:9181 with SMTP id v8-20020a056a00148800b0051be7a29181mr16324623pfu.31.1654526687214;
+        Mon, 06 Jun 2022 07:44:47 -0700 (PDT)
 Received: from localhost ([198.11.178.15])
-        by smtp.gmail.com with ESMTPSA id g196-20020a6252cd000000b0051b9e224623sm11394200pfb.141.2022.06.06.07.44.42
+        by smtp.gmail.com with ESMTPSA id r10-20020a170902ea4a00b00163e459be9asm3624550plg.136.2022.06.06.07.44.46
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:44:42 -0700 (PDT)
+        Mon, 06 Jun 2022 07:44:46 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -59,9 +59,9 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V3 4/7] x86/entry: Add arch/x86/entry/entry64.c for C entry code
-Date:   Mon,  6 Jun 2022 22:45:06 +0800
-Message-Id: <20220606144509.617611-5-jiangshanlai@gmail.com>
+Subject: [PATCH V3 5/7] x86/entry: Add the C verion of SWITCH_TO_KERNEL_CR3 as switch_to_kernel_cr3()
+Date:   Mon,  6 Jun 2022 22:45:07 +0800
+Message-Id: <20220606144509.617611-6-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220606144509.617611-1-jiangshanlai@gmail.com>
 References: <20220606144509.617611-1-jiangshanlai@gmail.com>
@@ -79,67 +79,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-Add a C file "entry64.c" to deposit C entry code for traps and faults
-which will be as the same logic as the existing ASM code in entry_64.S.
+Add the C version switch_to_kernel_cr3() which implements the macro
+SWITCH_TO_KERNEL_CR3() in arch/x86/entry/calling.h.
 
-The file is as low level as entry_64.S and its code can be running in
-the environments that the GS base is a user controlled value, or
-the CR3 is the KPTI user CR3 or both.
+No functional difference intended.
 
-All the code in this file should not be instrumentable.  Many instrument
-facilities can be disabled by per-function attributes which are included
-in the macro __noinstr_section.  But stack-protector can not be disabled
-function-granularly by some compliers.  So stack-protector is disabled
-for the whole file in Makefile.
+Note:
+The compiler generates "AND $0xe7,%ah" (3 bytes) for the code
+"cr3 = user_cr3 & ~PTI_USER_PGTABLE_AND_PCID_MASK" while the ASM code in
+SWITCH_TO_KERNEL_CR3() results "AND $0xffffffffffffe7ff,%rax" (6 bytes).
 
-Suggested-by: Joerg Roedel <jroedel@suse.de>
+The compiler generates lengthier code for "cr3 |= X86_CR3_PCID_NOFLUSH"
+because it uses "MOVABS+OR" (13 bytes) rather than a single
+"BTS" (5 bytes).
+
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/entry/Makefile  |  3 ++-
- arch/x86/entry/entry64.c | 14 ++++++++++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/entry/entry64.c
+ arch/x86/entry/entry64.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/arch/x86/entry/Makefile b/arch/x86/entry/Makefile
-index 7fec5dcf6438..792f7009ff32 100644
---- a/arch/x86/entry/Makefile
-+++ b/arch/x86/entry/Makefile
-@@ -10,13 +10,14 @@ KCOV_INSTRUMENT := n
- CFLAGS_REMOVE_common.o		= $(CC_FLAGS_FTRACE)
- 
- CFLAGS_common.o			+= -fno-stack-protector
-+CFLAGS_entry64.o		+= -fno-stack-protector
- 
- obj-y				:= entry_$(BITS).o thunk_$(BITS).o syscall_$(BITS).o
- obj-y				+= common.o
-+obj-$(CONFIG_X86_64)		+= entry64.o
- 
- obj-y				+= vdso/
- obj-y				+= vsyscall/
- 
- obj-$(CONFIG_IA32_EMULATION)	+= entry_64_compat.o syscall_32.o
- obj-$(CONFIG_X86_X32_ABI)	+= syscall_x32.o
--
 diff --git a/arch/x86/entry/entry64.c b/arch/x86/entry/entry64.c
-new file mode 100644
-index 000000000000..ace73861c2a0
---- /dev/null
+index ace73861c2a0..bd77cc8373ce 100644
+--- a/arch/x86/entry/entry64.c
 +++ b/arch/x86/entry/entry64.c
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ *  Copyright (C) 1991, 1992  Linus Torvalds
-+ *  Copyright (C) 2000, 2001, 2002  Andi Kleen SuSE Labs
-+ *  Copyright (C) 2000  Pavel Machek <pavel@suse.cz>
-+ *  Copyright (C) 2022 Lai Jiangshan, Ant Group
-+ *
-+ * Handle entries and exits for hardware traps and faults.
-+ *
-+ * It is as low level as entry_64.S and its code can be running in the
-+ * environments that the GS base is a user controlled value, or the CR3
-+ * is the PTI user CR3 or both.
-+ */
-+#include <asm/traps.h>
+@@ -12,3 +12,27 @@
+  * is the PTI user CR3 or both.
+  */
+ #include <asm/traps.h>
++
++#ifdef CONFIG_PAGE_TABLE_ISOLATION
++static __always_inline void pti_switch_to_kernel_cr3(unsigned long user_cr3)
++{
++	/*
++	 * Clear PCID and "PAGE_TABLE_ISOLATION bit", point CR3
++	 * at kernel pagetables:
++	 */
++	unsigned long cr3 = user_cr3 & ~PTI_USER_PGTABLE_AND_PCID_MASK;
++
++	if (static_cpu_has(X86_FEATURE_PCID))
++		cr3 |= X86_CR3_PCID_NOFLUSH;
++
++	native_write_cr3(cr3);
++}
++
++static __always_inline void switch_to_kernel_cr3(void)
++{
++	if (static_cpu_has(X86_FEATURE_PTI))
++		pti_switch_to_kernel_cr3(__native_read_cr3());
++}
++#else
++static __always_inline void switch_to_kernel_cr3(void) {}
++#endif
 -- 
 2.19.1.6.gb485710b
 

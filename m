@@ -2,32 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1099B53DF9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83F753DFA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 04:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352071AbiFFCLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Jun 2022 22:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S1352104AbiFFCPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Jun 2022 22:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240339AbiFFCLK (ORCPT
+        with ESMTP id S232360AbiFFCPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Jun 2022 22:11:10 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614DB2F389
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Jun 2022 19:11:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VFPqycH_1654481463;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VFPqycH_1654481463)
+        Sun, 5 Jun 2022 22:15:42 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2332D366A4;
+        Sun,  5 Jun 2022 19:15:39 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VFPsTeZ_1654481735;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VFPsTeZ_1654481735)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 06 Jun 2022 10:11:04 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, joseph.qi@linux.alibaba.com
-Subject: [PATCH] MAINTAINERS: erofs: add myself as reviewer
-Date:   Mon,  6 Jun 2022 10:11:03 +0800
-Message-Id: <20220606021103.89211-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+          Mon, 06 Jun 2022 10:15:37 +0800
+Date:   Mon, 6 Jun 2022 10:15:35 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Subject: Re: [RFC PATCH] ubd: add io_uring based userspace block driver
+Message-ID: <Yp1jRw6kiUf5jCrW@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Ming Lei <ming.lei@redhat.com>,
+        Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+References: <20220509092312.254354-1-ming.lei@redhat.com>
+ <20220530070700.GF1363@bug>
+ <YpgsTojc4mVKghZA@T590>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YpgsTojc4mVKghZA@T590>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
@@ -38,26 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Glad to contribute the fscache mode to erofs. Sincerely I recommend
-myself as the reviewer to maintain these codes.
+On Thu, Jun 02, 2022 at 11:19:42AM +0800, Ming Lei wrote:
+> Hello Pavel,
+> 
+> On Mon, May 30, 2022 at 09:07:00AM +0200, Pavel Machek wrote:
+> > Hi!
+> > 
+> > > This is the driver part of userspace block driver(ubd driver), the other
+> > > part is userspace daemon part(ubdsrv)[1].
+> > 
+> > > @@ -0,0 +1,1193 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > +/*
+> > > + * Userspace block device - block device which IO is handled from userspace
+> > > + *
+> > > + * Take full use of io_uring passthrough command for communicating with
+> > > + * ubd userspace daemon(ubdsrvd) for handling basic IO request.
+> > 
+> > > +
+> > > +static inline unsigned int ubd_req_build_flags(struct request *req)
+> > > +{
+> > ...
+> > > +	if (req->cmd_flags & REQ_SWAP)
+> > > +		flags |= UBD_IO_F_SWAP;
+> > > +
+> > > +	return flags;
+> > > +}
+> > 
+> > Does it work? How do you guarantee operation will be deadlock-free with swapping and
+> > writebacks going on?
+> 
+> The above is just for providing command flags to user side, so that the
+> user side can understand/handle the request better.
+> 
+> prtrl(PR_SET_IO_FLUSHER) has been merged for avoiding the deadlock.
+>
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+I've pointed out a case before that (I think) PR_SET_IO_FLUSHER doesn't work:
+https://lore.kernel.org/all/YhbYOeMUv5+U1XdQ@B-P7TQMD6M-0146.local
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1309e1496c23..6cd8b3631cc0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7388,6 +7388,7 @@ EROFS FILE SYSTEM
- M:	Gao Xiang <xiang@kernel.org>
- M:	Chao Yu <chao@kernel.org>
- R:	Yue Hu <huyue2@coolpad.com>
-+R:	Jeffle Xu <jefflexu@linux.alibaba.com>
- L:	linux-erofs@lists.ozlabs.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git
--- 
-2.27.0
+I don't think handling writeback in the userspace under the direct reclaim
+context is _safe_ honestly. Because userspace program can call any system
+call under direct reclaim, which can interconnect to another process context
+and wait for it. yet I don't look into ubd implementation.
 
+Thanks,
+Gao Xiang

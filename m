@@ -2,127 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DE353EA3F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1F953E5F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiFFKQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 06:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S233648AbiFFKPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 06:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiFFKO5 (ORCPT
+        with ESMTP id S233991AbiFFKPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 06:14:57 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62E515A420;
-        Mon,  6 Jun 2022 03:12:43 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id q15so11141392wrc.11;
-        Mon, 06 Jun 2022 03:12:43 -0700 (PDT)
+        Mon, 6 Jun 2022 06:15:01 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682EDA98A1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 03:14:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id v25so18123715eda.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 03:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Kc9pss6M5EdVd6bDsVFlb4mRLyBK68pzKpY9UHLCNLQ=;
-        b=PAsde7FE0eY245VPPyo/QV2ScdBZkyuRErqW696uwoJ7Xglgd7Vi4eX5uTqdz81P9y
-         ty2d2NjBH975NDBE/zAw4mearKzN63EVJEe9t1TwxJdnqjrrQ3vdulAk8+vCSk4MnOJb
-         S8L0cG4I98kMCbq0utiJxVNuFq5Ju8ijqzJB8oGpok6vXSL5J8JpZp5wNB5Hq8IaXK7U
-         9GVM+jtZ4EZdKLZUeGhAu5wy/0KrekP138W1lkRMCEDAczdSi5zydgVJGxxa96dBWNw5
-         fZcDOazXnTMSK8xuhAEM8YXkk+xd1nf1ZmZp6DRbTTFlDMi1QjjhMjfY1k94P+3kwWUl
-         z1Kw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BkH5Y5j/4diyxC4BxZO4A1oyviqTC8HdJoLfxxc2uC0=;
+        b=JDHsJs2As/HiUSVG6Jc2zao2gEZhqwTSDMAMoS2looKDYr21f49v97yHQ3pV4sMDqy
+         vRYp+WFd9g346m2ZlrUsuhtg4/R1e/PlRZnlZWXR6/G6WMCeUFALGba/oXPHraJaQWVW
+         i61aJMJyXm6nyUEgf93zRqoM8eW39gQdUcSeytyM5aWqQfBMogZF032e6xDIOcfTee4q
+         m3NDN+uypgctVRFXqBuY0gcbzUmlMFnF8ctPfFO4+6QuW+hNutDv1ZJjwxSfqhgvWTNw
+         njEeEbwWKlFC2HG4JStkfHlMv5zdhf1jq+I6+SQte0KNn37clYLikv64rk2NZK/Bgsw9
+         OXcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Kc9pss6M5EdVd6bDsVFlb4mRLyBK68pzKpY9UHLCNLQ=;
-        b=T54815JEF12I5ibGoa63UKtdyS7WJCerDReZN/kyAZCngsX6bTL3m5LtkGakeom52H
-         KnIPK8uBT9c1REWzhFDAO1BL9ZY25ToDRqSDrY1b3BArpu7XmosY2qovSe3C+seBFsiz
-         nHWOszK+TzN8ot2KHBy6t/B4YGBoMHr4Byds1CREMR91NZPhwerx/RqWGfSX8j9MCJDp
-         agJCtAKczxrCaLaL1/MAurOpW131tE7xgTmmh1MN6dDiCP7lJnh4/+7ijWUidwkAYQvR
-         Bjx8rDhTUUcDt0exisvw64UxkZpt/8ZeKzESpcPojwMDzynCfjcEcBScvDW+fFGUc1Hp
-         3yeQ==
-X-Gm-Message-State: AOAM5333Lb7Ra3vrh/kSZdob22RpFvN47WcUAiWU3TtpBTvbTLCEIOYn
-        MVVp2O5O8IU/qaQNeAY8ZYNS+RF8xOBo8A==
-X-Google-Smtp-Source: ABdhPJxfzuPe49YNxWdW/gGPul24wHOZAPedrL65hAqJIBMCmHrfWfuPReHDT2XMFXFZF2kwTBccdg==
-X-Received: by 2002:adf:dd8e:0:b0:213:bbe1:ba56 with SMTP id x14-20020adfdd8e000000b00213bbe1ba56mr15223637wrl.559.1654510362390;
-        Mon, 06 Jun 2022 03:12:42 -0700 (PDT)
-Received: from elementary ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id j3-20020a5d4643000000b002103a7c5c91sm14484690wrs.43.2022.06.06.03.12.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 03:12:42 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 12:12:37 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanberzl@gmail.com, dlatypov@google.com,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v3 0/4] Add support for XP-PEN Deco L
-Message-ID: <20220606101237.GA939277@elementary>
-References: <20220531181246.190729-1-jose.exposito89@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BkH5Y5j/4diyxC4BxZO4A1oyviqTC8HdJoLfxxc2uC0=;
+        b=TTAAYzVh+8KP8kKAUaMJSOlXixmG+R0/DJP99Sy0RdpAQyBu8yMnf0GNhv0C3rjLYq
+         qNg3hURjgcP8N+WoIgYvvKvDrh5AtkZW0yqz14h0RxUxy2rK4btjTw2pY7MqyXdotquc
+         WJZ1EY+olcpLZ2Dyxde5VsBGLxe6y4h5jLoXf0yMTdysxWhON/vEmodsPI9FjijX/WgE
+         w6fWQ6kxxrDMU/iHhow7yu8xtnLzrl0+nRGJk4RbkoBXFKmrr0BQTYBeFRmjtyXUmUL8
+         KAE8nKgQ+XfhzgTXzvJzLbEzKqygosP90XJv9wKtWOtRVpK8o1hD3ggi6cZUqH2MK0Ki
+         y1Lw==
+X-Gm-Message-State: AOAM5324RLdj2VbWq0+ZwQFwz8G/R+Ccgin5AhaSGyiry2NZ9iXYQqAK
+        h96imEM5Wi3UeJriJv4MYXvUbgUlc8jKeA==
+X-Google-Smtp-Source: ABdhPJyihbUPMb1yzM0sumOLqAsH/9XFxEOokF/wNE+hvrWNaIwgvk2Az0zFUc4w0QtiT60n6ZBIug==
+X-Received: by 2002:a05:6402:3899:b0:42d:d79e:acef with SMTP id fd25-20020a056402389900b0042dd79eacefmr25822942edb.12.1654510461646;
+        Mon, 06 Jun 2022 03:14:21 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a26-20020a1709062b1a00b006f3ef214db4sm5268472ejg.26.2022.06.06.03.14.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 03:14:21 -0700 (PDT)
+Message-ID: <45aa26be-625e-47eb-c21f-92497e60b6dd@linaro.org>
+Date:   Mon, 6 Jun 2022 12:14:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220531181246.190729-1-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: phy: Add ARTPEC-8 PCIe phy
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>
+References: <20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+ <CGME20220603015431epcms2p6203908cebe6a320854136559a32b54cb@epcms2p6>
+ <20220603023158epcms2p6949f6cd93926b9e811e1b4d52fbef91b@epcms2p6>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220603023158epcms2p6949f6cd93926b9e811e1b4d52fbef91b@epcms2p6>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 03/06/2022 04:31, Wangseok Lee wrote:
+> Add description to support Axis, ARTPEC-8 SoC.
+> ARTPEC-8 is the SoC platform of Axis Communications
+> and PCIe phy is designed based on SAMSUNG PHY.
 
-On Tue, May 31, 2022 at 08:12:42PM +0200, José Expósito wrote:
-> Hello everyone,
+This does not look like wrapped in Linux commit style.
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
 > 
-> This patchset adds support for the UGEE XP-PEN Deco L tablet.
-> This device belongs to a family of tablets that must receive a chunk of
-> magic data in order to be enabled (named UGEE v2 internally).
->
-> [...]
->
+> changes since v1 :
+> -'make dt_binding_check' result improvement
+> -Add the missing property list
+> -Align the indentation of continued lines/entries
+> 
+> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
 > ---
+>  .../bindings/phy/axis,artpec8-pcie-phy.yaml        | 70 ++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
 > 
-> v1 - Initial version
-> https://lore.kernel.org/linux-input/20220518224702.1409327-1-jose.exposito89@gmail.com/
-> 
-> v2 - Fix some errors reported by the kernel test robot:
-> 
->  - Add MODULE_DESCRIPTION/LICENSE/AUTHOR to hid-uclogic-rdesc-test.c
->  - Remove unused variable in uclogic_params_ugee_v2_init
->  - Add sparse __force anotation in the result of cpu_to_le16
->  - Add DISABLE_STRUCTLEAK_PLUGIN for KUnit tests
-> 
-> https://lore.kernel.org/linux-input/20220518224702.1409327-1-jose.exposito89@gmail.com/T/
-> 
-> v3 - This version:
-> 
->  - Improve Kconfig message
->  - Add .kunitconfig. Thanks to Daniel Latypov for suggesting it in an
->    unrelated patch:
->    https://lore.kernel.org/dri-devel/CAGS_qxpV2SsihEdgXZ6+7N0dxLmdRANq+qE4iUZ2aNrf6vuLYg@mail.gmail.com/
+> diff --git a/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
+> new file mode 100644
+> index 0000000..ab9766f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/axis,artpec8-pcie-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARTPEC-8 SoC PCIe PHY Device Tree Bindings
 
-As mentioned in the v3 changelog, I'm working on a DRM patch including
-a few KUnit tests [1].
+Same comment as patch #1.
 
-Some interesting highlights from the comments there:
+> +
+> +maintainers:
+> +  - Jesper Nilsson <jesper.nilsson@axis.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: axis,artpec8-pcie-phy
+> +
+> +  reg:
+> +    items:
+> +      - description: PHY registers.
+> +      - description: PHY coding sublayer registers.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: phy
+> +      - const: pcs
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  clocks:
+> +    items:
+> +      - description: PCIe PHY reference clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref_clk
 
-- It looks like the maintainers prefer to include a single symbol [2]
-to enable all tests in the subsystem.
+Same comment as patch #1.
 
-Jiří, Benjamin, how would you like to handle it? Would you prefer to
-have a symbol for each test (HID_UCLOGIC_KUNIT_TEST)? Or a symbol for
-all tests (HID_KUNIT_TEST)?
+> +
+> +  num-lanes:
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - "#phy-cells"
+> +  - clocks
+> +  - clock-names
+> +  - num-lanes
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    artpec8 {
 
-- DISABLE_STRUCTLEAK_PLUGIN is not required [3]. I'd also need to
-remove it here.
+Same comment as patch #1.
 
-Jose
 
-[1] https://lore.kernel.org/dri-devel/20220530102017.471865-1-jose.exposito89@gmail.com/T/
-[2] https://lore.kernel.org/dri-devel/CABVgOSkCxu2xBnxwc6mO2AQaqzTbDf53PJzT2QvZNyLeumt5hg@mail.gmail.com/
-[3] https://lore.kernel.org/dri-devel/CAGS_qxpFO4ixW=08ZcdcD9J1kU=B3mwoBJkPW8AKu0sKs8aKfA@mail.gmail.com/
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        pcie_phy: pcie-phy@16c80000 {
+> +            compatible = "axis,artpec8-pcie-phy";
+> +            reg = <0x0 0x16c80000 0x0 0x2000>,
+> +                  <0x0 0x16c90000 0x0 0x1000>;
+> +            reg-names = "phy", "pcs";
+> +            #phy-cells = <0>;
+> +            clocks = <&clock_cmu_fsys 53>;
+> +            clock-names = "ref_clk";
+> +            num-lanes = <2>;
+> +        };
+> +    };
+> +...
+
+
+Best regards,
+Krzysztof

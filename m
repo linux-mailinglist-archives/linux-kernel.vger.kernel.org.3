@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35D453F181
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD3C53F19C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbiFFVS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S234443AbiFFVW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiFFVSu (ORCPT
+        with ESMTP id S233735AbiFFVWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 17:18:50 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EE5BA99D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:18:47 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id m82so21346608oif.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 14:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YCcSuhuQ1vWwVJ0SW2RVYIVh/aSNB0orFLVM+U8ftCM=;
-        b=aX4csWQi3E97IZVp7kfPFWT4t/uQQ91msNCIDdET7namQno4hrb4pgmbFaFuMwHnuv
-         cXGC0QOHEtB0M57d4JOcViNU0H7E26JpSpsGUfaWgPOOG4ZdEzVhVrkzb7keqvhywz07
-         sNcXZ7jGIGSgw0YBGR5yF33qWulsfzMkje4N/Dzc3GthV6QgHzW6dTLj1UvCKURBEuN1
-         Ftl8yWjme7AaNT+w8CvIIna4/la7QBc1oZbqdgXn8RsUzfBTOtUSvlvBEAyQXL5kWxFL
-         e6VCROspeDsXUiIYU56QKDUcYYE6x9kLNhFe/qybielxQS/UxXZIA+twBUSCirrNoiYh
-         mMVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YCcSuhuQ1vWwVJ0SW2RVYIVh/aSNB0orFLVM+U8ftCM=;
-        b=uBErJwgHDe8zAokFGzbuBurvrMEgWHp/mhCENt6cCDKts+XILWijX1kRyZBsEddkoR
-         pGM44n4qHCU3d/Vp+vdt9nrl1WQWeC+L4RJhjbXZ9vXOu0b7ayArAMT6a24Q8un70Gky
-         gEexqIvyOtFHjrdKQbYqIn8QwQ4TVgUdxLiX3uTTAYjhsJ4vXf0OrbWNDME89Kz9XaFO
-         XzGr7U/bCtBpPdezrCEFhlG6+2+UsxhvHdw6Gk3Z7VHvETlISm0lQ3eDCT+ZYgM+T4C8
-         UGUSgCPfjJpOIcE6vsltkwoLBWkfN76WMZ4GDEj0M1dEw54zgHplf67hC1w1jaZ9jJJf
-         ZiYQ==
-X-Gm-Message-State: AOAM530XDzbbwVDvF8PfBkKNdIlgNb0mIwjqHkqymAVnUIrVdt/qu6OA
-        DQ7XoCbKMa7tB2U6j3fDUkCrOA==
-X-Google-Smtp-Source: ABdhPJzO7TM8BK3G8gYvkXfPhVHXVafWnK1DvN0BUm2+eoHuppcoSnE9n+Wv7V4l1pdwHAEcaSAg9w==
-X-Received: by 2002:aca:304f:0:b0:32e:8381:fa69 with SMTP id w76-20020aca304f000000b0032e8381fa69mr5698715oiw.289.1654550326658;
-        Mon, 06 Jun 2022 14:18:46 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e28-20020a544f1c000000b0032c18f04800sm9126744oiy.1.2022.06.06.14.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 14:18:46 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: gdsc: Bump parent usage count when GDSC is found enabled
-Date:   Mon,  6 Jun 2022 14:21:12 -0700
-Message-Id: <20220606212112.3617731-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 6 Jun 2022 17:22:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D538C41639;
+        Mon,  6 Jun 2022 14:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654550542; x=1686086542;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fZWy41IS0oX4SxFeiVDkn3d5ODJpu5kkeb11YjqwGkc=;
+  b=ndLWxXKFhEU8piBgOyq0JACz/cQBx9V+4hgbiD3HgTv69by2EfUb6Kjl
+   iotNAj3NvqRQCuS2B95Ie/5ifE38MXdkU67AcSI8HafmniwaGjXYOmvmf
+   WUaxNhV69rjBxU+K2zsInzyOBNLUqxjwzNEPNdPDMZejNefexbu4DMUak
+   2+uzGTlxed6e8YS3hAJrKi9gfXRc3qckGwNNdSIvfRDpuwVb7q1EuOous
+   iFom4UwffclTL9odO5pvElMXsDkxG5AFuou6wuBoY/gCg1FaAmZPKrqbc
+   DCuHHgfyK0pBKy9Dub6GE8VAgw3jO+pwDOXj2wG2aie83slmOR0P8DcaS
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="275469222"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="275469222"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 14:22:22 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="583883549"
+Received: from yantem-mobl9.amr.corp.intel.com (HELO [10.212.24.154]) ([10.212.24.154])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 14:22:21 -0700
+Message-ID: <15fd77de-9c6e-2e48-be4e-bae4abd7bb96@linux.intel.com>
+Date:   Mon, 6 Jun 2022 16:22:20 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [RFC PATCH v2 5/5] ASoC: apple: Add macaudio machine driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, asahi@lists.linux.dev,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+References: <20220606191910.16580-1-povik+lin@cutebit.org>
+ <20220606191910.16580-6-povik+lin@cutebit.org>
+ <8e1641d0-b081-6301-db94-2c026166079a@linux.intel.com>
+ <ED93F42F-5406-4D4F-B996-86F683EC09ED@cutebit.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <ED93F42F-5406-4D4F-B996-86F683EC09ED@cutebit.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +72,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a GDSC is found to be enabled at boot the pm_runtime state will
-be unbalanced as the GDSC is later turned off. Fix this by increasing
-the usage counter on the power-domain, in line with how we handled the
-regulator state.
 
-Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/clk/qcom/gdsc.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 44520efc6c72..a1fa7c4cff60 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -420,6 +420,9 @@ static int gdsc_init(struct gdsc *sc)
- 				return ret;
- 		}
- 
-+		/* ...and the power-domain */
-+		gdsc_pm_runtime_get(sc);
-+
- 		/*
- 		 * Votable GDSCs can be ON due to Vote from other masters.
- 		 * If a Votable GDSC is ON, make sure we have a Vote.
--- 
-2.35.1
+On 6/6/22 15:46, Martin Povišer wrote:
+> (I am having trouble delivering mail to linux.intel.com, so I reply to the list
+> and CC at least...)
+> 
+>> On 6. 6. 2022, at 22:02, Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com> wrote:
+>>
+>>
+>>> + * Virtual FE/BE Playback Topology
+>>> + * -------------------------------
+>>> + *
+>>> + * The platform driver has independent frontend and backend DAIs with the
+>>> + * option of routing backends to any of the frontends. The platform
+>>> + * driver configures the routing based on DPCM couplings in ASoC runtime
+>>> + * structures, which in turn is determined from DAPM paths by ASoC. But the
+>>> + * platform driver doesn't supply relevant DAPM paths and leaves that up for
+>>> + * the machine driver to fill in. The filled-in virtual topology can be
+>>> + * anything as long as a particular backend isn't connected to more than one
+>>> + * frontend at any given time. (The limitation is due to the unsupported case
+>>> + * of reparenting of live BEs.)
+>>> + *
+>>> + * The DAPM routing that this machine-level driver makes up has two use-cases
+>>> + * in mind:
+>>> + *
+>>> + * - Using a single PCM for playback such that it conditionally sinks to either
+>>> + *   speakers or headphones based on the plug-in state of the headphones jack.
+>>> + *   All the while making the switch transparent to userspace. This has the
+>>> + *   drawback of requiring a sample stream suited for both speakers and
+>>> + *   headphones, which is hard to come by on machines where tailored DSP for
+>>> + *   speakers in userspace is desirable or required.
+>>> + *
+>>> + * - Driving the headphones and speakers from distinct PCMs, having userspace
+>>> + *   bridge the difference and apply different signal processing to the two.
+>>> + *
+>>> + * In the end the topology supplied by this driver looks like this:
+>>> + *
+>>> + *  PCMs (frontends)                   I2S Port Groups (backends)
+>>> + *  ────────────────                   ──────────────────────────
+>>> + *
+>>> + *  ┌──────────┐       ┌───────────────► ┌─────┐     ┌──────────┐
+>>> + *  │ Primary  ├───────┤                 │ Mux │ ──► │ Speakers │
+>>> + *  └──────────┘       │    ┌──────────► └─────┘     └──────────┘
+>>> + *                ┌─── │ ───┘             ▲
+>>> + *  ┌──────────┐  │    │                  │
+>>> + *  │Secondary ├──┘    │     ┌────────────┴┐
+>>> + *  └──────────┘       ├────►│Plug-in Demux│
+>>> + *                     │     └────────────┬┘
+>>> + *                     │                  │
+>>> + *                     │                  ▼
+>>> + *                     │                 ┌─────┐     ┌──────────┐
+>>> + *                     └───────────────► │ Mux │ ──► │Headphones│
+>>> + *                                       └─────┘     └──────────┘
+>>> + */
+>>
+>> In Patch2, the 'clusters' are described as front-ends, with I2S as
+>> back-ends. Here the PCMs are described as front-ends, but there's no
+>> mention of clusters. Either one of the two descriptions is outdated, or
+>> there's something missing to help reconcile the two pieces of information?
+> 
+> Both descriptions should be in sync. Maybe I don’t know the proper
+> terminology. In both cases the frontend is meant to be the actual I2S
+> transceiver unit, and backend the I2S port on the SoC’s periphery,
+> which can be routed to any of transceiver units. (Multiple ports can
+> be routed to the same unit, which means the ports will have the same
+> clocks and data line -- that's a configuration we need to support to
+> drive some of the speaker arrays, hence the backend/frontend
+> distinction).
+> 
+> Maybe I am using 'PCM' in a confusing way here? What I meant is a
+> subdevice that’s visible from userspace, because I have seen it used
+> that way in ALSA codebase.
 
+Yes, I think most people familiar with DPCM would take the 'PCM
+frontend' as some sort of generic DMA transfer from system memory, while
+the 'back end' is more the actual serial link. In your case, the
+front-end is already very low-level and tied to I2S already. I think
+that's fine, it's just that using different terms for 'cluster' and
+'PCM' in different patches could lead to confusions.
+
+>>> +static int macaudio_get_runtime_mclk_fs(struct snd_pcm_substream *substream)
+>>> +{
+>>> +	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+>>> +	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(rtd->card);
+>>> +	struct snd_soc_dpcm *dpcm;
+>>> +
+>>> +	/*
+>>> +	 * If this is a FE, look it up in link_props directly.
+>>> +	 * If this is a BE, look it up in the respective FE.
+>>> +	 */
+>>> +	if (!rtd->dai_link->no_pcm)
+>>> +		return ma->link_props[rtd->dai_link->id].mclk_fs;
+>>> +
+>>> +	for_each_dpcm_fe(rtd, substream->stream, dpcm) {
+>>> +		int fe_id = dpcm->fe->dai_link->id;
+>>> +
+>>> +		return ma->link_props[fe_id].mclk_fs;
+>>> +	}
+>>
+>> I am not sure what the concept of mclk would mean for a front-end? This
+>> is typically very I2S-specific, i.e. a back-end property, no?
+> 
+> Right, that’s a result of the confusion from above. Hope I cleared it up
+> somehow. The frontend already decides the clocks and data serialization,
+> hence mclk/fs is a frontend-prop here.
+
+What confuses me in this code is that it looks possible that the front-
+and back-end could have different mclk values? I think a comment is
+missing that the values are identical, it's just that there's a
+different way to access it depending on the link type?
+
+
+>>> +static int macaudio_be_init(struct snd_soc_pcm_runtime *rtd)
+>>> +{
+>>> +	struct snd_soc_card *card = rtd->card;
+>>> +	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(card);
+>>> +	struct macaudio_link_props *props = &ma->link_props[rtd->dai_link->id];
+>>> +	struct snd_soc_dai *dai;
+>>> +	int i, ret;
+>>> +
+>>> +	ret = macaudio_be_assign_tdm(rtd);
+>>> +	if (ret < 0)
+>>> +		return ret;
+>>> +
+>>> +	if (props->is_headphones) {
+>>> +		for_each_rtd_codec_dais(rtd, i, dai)
+>>> +			snd_soc_component_set_jack(dai->component, &ma->jack, NULL);
+>>> +	}
+>>
+>> this is weird, set_jack() is invoked by the ASoC core. You shouldn't
+>> need to do this?
+> 
+> That’s interesting. Where would it be invoked? How does ASoC know which codec
+> it attaches to?
+
+sorry, my comment was partly invalid.
+
+set_jack() is invoked in the machine driver indeed, what I found strange
+is that you may have different codecs handling the jack? What is the
+purpose of that loop?
+
+
+>>> +static int macaudio_jack_event(struct notifier_block *nb, unsigned long event,
+>>> +				void *data);
+>>> +
+>>> +static struct notifier_block macaudio_jack_nb = {
+>>> +	.notifier_call = macaudio_jack_event,
+>>> +};
+>>
+>> why is this needed? we have already many ways of dealing with the jack
+>> events (dare I say too many ways?).
+> 
+> Because I want to update the DAPM paths based on the jack status,
+> specifically I want to set macaudio_plugin_demux. I don’t know how
+> else it could be done.
+
+I don't know either but I have never seen notifier blocks being used. I
+would think there are already ways to do this with DAPM events.
+
+
+>>> +static int macaudio_jack_event(struct notifier_block *nb, unsigned long event,
+>>> +				void *data)
+>>> +{
+>>> +	struct snd_soc_jack *jack = data;
+>>> +	struct macaudio_snd_data *ma = snd_soc_card_get_drvdata(jack->card);
+>>> +
+>>> +	ma->jack_plugin_state = !!event;
+>>> +
+>>> +	if (!ma->plugin_demux_kcontrol)
+>>> +		return 0;
+>>> +
+>>> +	snd_soc_dapm_mux_update_power(&ma->card.dapm, ma->plugin_demux_kcontrol,
+>>> +				      ma->jack_plugin_state,
+>>> +				      (struct soc_enum *) &macaudio_plugin_demux_enum, NULL);
+>>
+>> the term 'plugin' can be understood in many ways by different audio
+>> folks. 'plugin' is usually the term used for processing libraries (VST,
+>> LADSPA, etc). I think here you meant 'jack control'?
+> 
+> So ‘jack control’ would be understood as the jack plugged/unplugged status?
+
+The 'Headphone Jack' or 'Headset Mic Jack' kcontrols typically track the
+status. Other terms are 'jack detection'. "plugin" is not a very common
+term here.

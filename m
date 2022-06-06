@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F8853EBE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60D253E888
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239935AbiFFOoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 10:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S239967AbiFFOoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 10:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239910AbiFFOof (ORCPT
+        with ESMTP id S239938AbiFFOok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 10:44:35 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0232C50074
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:44:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b135so12852471pfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:44:33 -0700 (PDT)
+        Mon, 6 Jun 2022 10:44:40 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B5D5007C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 07:44:38 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so12731150pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 07:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OkYs0lk3nHyAZKJDGCn/29siMwWnrfKmu5gV1SS4NfQ=;
-        b=M8NSMNiAVGRL+nc2mCIZaZ52gNNlHv8ElkKTH8jMWhW6xYbpoJqgWNTveOmWj+1VvN
-         5Pxw/X7rDUCCWrK1Lwtx+GnHB4eRtniUw6zQyhdkyFaOYKRknod5kLfZ+gglaM1Jqkg5
-         FSmzdu/P7mLn7MDh8T3Bma2ZSKZySHLfNnoJgHM/WCQHuIokrSAR+VlZ67ouch65D4B/
-         5kfFTTUK7MEXauaF7F71rJUaVFpwnHYP1XJ4Z7bg2zcgWDcY7GccWB7cOvKbySi+pkQP
-         Zut6wSD1y0/SOXFnEVM5ZZaBfmzs+UUGCCpXYJb1muBe/pAGDHdBMmWy+RQGMgsdRbgk
-         xx2Q==
+        bh=QPVmCWUy/pAelwn42xkgA5+/zRNQTu28RGMt2EDlrN0=;
+        b=EzHN8U2F/StCuXhufFA3sJ4pReqdTjATzKpSNQpYATgle7+Xx5SwhvaduKMju9mWbW
+         Q2rrzMoiOmo5KAkaW9v2Ci3cFVvNopWOcGj1FSWcw3prj7l9T5cD3y7uoFAdIRlBJhFZ
+         hB3Tjj6Xgo9KDIRlYoW5torY4HWJLyeOVpmm7U89YGMleBnndBjZ9bZwpPGbF6N7MMhX
+         fqkOpA7bJfIpHitAcQ6cQbGpSgddMTjJCeUgr61gipobhiH4d7gMlJMYfDi/PhDv1VYY
+         GQ769Wj5w1zo5sMC5xqy/sIrFyLGIoTXAYvf+nt+Il+uS0frxrJJhv4hMaBzjZrTQFbK
+         GoPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OkYs0lk3nHyAZKJDGCn/29siMwWnrfKmu5gV1SS4NfQ=;
-        b=MawyNES1m55mgst1rIGJ4vnpGhr3083aFepyJ8iZ20AKeJcSKjEQkgLUJmSS3ou4Wy
-         ljSxJnY801z8X/UkjMTsq9IRncMAa2Lfrd/sBm33bTO9z4nkj3fO4F43Vo7/VOM3zIZn
-         BfHjzAhxDTXs3wsvquNuRzRw7oVLCmHQv6biw1hW+dSTsriU5fG35ZP1emfT6p8x7fPS
-         7lQ+Rm32tUGXHRKXAggR2jhaYIHiMmtHz4IC6zTev2wRNpycci3bQ/PPsHcLIj7T4VfW
-         Sz2xMeIkFzFv2HiuapDHDMAoJKKqN7v0Cq98h224yvPP0Ok2dfMI/o0MRLVYtW7yCPG5
-         CspA==
-X-Gm-Message-State: AOAM531HaaWNkJf5R9iqXvbrHqtQHhEixq0vKBuVYlJn9OdiMYtz86TA
-        FZmkLl0oddDmg4WghLCjUGAfrcigy5Q=
-X-Google-Smtp-Source: ABdhPJyRBekBNDNM20UyEIByz6XPcXR4ORScgmrN+JyQ3HZtrYfwDUB208Oyc/OPFI3sE8yVlbazDA==
-X-Received: by 2002:a65:6d87:0:b0:3fd:a62e:dc0a with SMTP id bc7-20020a656d87000000b003fda62edc0amr6427969pgb.286.1654526673290;
-        Mon, 06 Jun 2022 07:44:33 -0700 (PDT)
+        bh=QPVmCWUy/pAelwn42xkgA5+/zRNQTu28RGMt2EDlrN0=;
+        b=JpFm9Yxrg8eBvkAyD2nZfXkTkjR0gwUKkLufs9/7GzFqkaq2e3J7cIMgQoAoF+JWJ5
+         OKxlAPEe02vT/om5SOgeAhmnnN54iQUKdQ1iXqHkOyEXwE0slKPYnHf49Gf//W5S/SRE
+         qyBOXo2nxbBgKGQ/sfRUHN//qsbz7CIiIibOpgawgiLQFWH2n/Ug5DiR5PNdv97LvY8+
+         cJgtsJ11xIPe8xqyJAg+dpNhqSa22YYdVSQ+qh/Fnt0Y4UJ8hul17Yu7NFVfxI4Ql4D8
+         os4TgYahyzl27kKgeLSjuR8eCP2sIJkeuJWRAC6GV2/f5j+thTnDBZ+TGCH9s+jJF8dT
+         nBuw==
+X-Gm-Message-State: AOAM5330/kiaX/wPBXKT4lTXjM6WCbIj3RWrPZNOrIjx4h56uFVG0iVJ
+        ynMYkdevFM+543kUq4h9HO/jMBbr/UU=
+X-Google-Smtp-Source: ABdhPJxqzFYGQCX5s0AGPOo9uaQDZnY9Ixd1ApPz41KU0QnpUFmS5yShfSvUde4QtlcWBdxbi9a+sg==
+X-Received: by 2002:a17:90b:947:b0:1e8:9bd0:5420 with SMTP id dw7-20020a17090b094700b001e89bd05420mr217080pjb.32.1654526678292;
+        Mon, 06 Jun 2022 07:44:38 -0700 (PDT)
 Received: from localhost ([198.11.178.15])
-        by smtp.gmail.com with ESMTPSA id iw22-20020a170903045600b0015e8d4eb2afsm10666584plb.249.2022.06.06.07.44.32
+        by smtp.gmail.com with ESMTPSA id iy9-20020a170903130900b0015e8d4eb243sm7228775plb.141.2022.06.06.07.44.37
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Jun 2022 07:44:32 -0700 (PDT)
+        Mon, 06 Jun 2022 07:44:37 -0700 (PDT)
 From:   Lai Jiangshan <jiangshanlai@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Borislav Petkov <bp@alien8.de>,
@@ -58,10 +58,12 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH V3 2/7] x86/entry: Move PTI_USER_* to arch/x86/include/asm/processor-flags.h
-Date:   Mon,  6 Jun 2022 22:45:04 +0800
-Message-Id: <20220606144509.617611-3-jiangshanlai@gmail.com>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        Brian Gerst <brgerst@gmail.com>
+Subject: [PATCH V3 3/7] x86: Mark __native_read_cr3() & native_write_cr3() as __always_inline
+Date:   Mon,  6 Jun 2022 22:45:05 +0800
+Message-Id: <20220606144509.617611-4-jiangshanlai@gmail.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
 In-Reply-To: <20220606144509.617611-1-jiangshanlai@gmail.com>
 References: <20220606144509.617611-1-jiangshanlai@gmail.com>
@@ -79,72 +81,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-These constants will be also used in C file.
+Mark __native_read_cr3() & native_write_cr3() as __always_inline to
+ensure they are not instrumentable and in the .entry.text section if
+the caller is not instrumentable and in the .entry.text section.
 
-Move them to arch/x86/include/asm/processor-flags.h which already has
-a kin X86_CR3_PTI_PCID_USER_BIT defined.
+It prepares for __native_read_cr3() and native_write_cr3() to be used
+in the C entry code for handling KPTI.
 
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 ---
- arch/x86/entry/calling.h               | 10 ----------
- arch/x86/include/asm/processor-flags.h | 15 +++++++++++++++
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/special_insns.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
-index 29b36e9e4e74..331a44994cc0 100644
---- a/arch/x86/entry/calling.h
-+++ b/arch/x86/entry/calling.h
-@@ -142,16 +142,6 @@ For 32-bit we have the following conventions - kernel is built with
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index 45b18eb94fa1..dbaee50abb3c 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -42,14 +42,14 @@ static __always_inline void native_write_cr2(unsigned long val)
+ 	asm volatile("mov %0,%%cr2": : "r" (val) : "memory");
+ }
  
- #ifdef CONFIG_PAGE_TABLE_ISOLATION
+-static inline unsigned long __native_read_cr3(void)
++static __always_inline unsigned long __native_read_cr3(void)
+ {
+ 	unsigned long val;
+ 	asm volatile("mov %%cr3,%0\n\t" : "=r" (val) : __FORCE_ORDER);
+ 	return val;
+ }
  
--/*
-- * PAGE_TABLE_ISOLATION PGDs are 8k.  Flip bit 12 to switch between the two
-- * halves:
-- */
--#define PTI_USER_PGTABLE_BIT		PAGE_SHIFT
--#define PTI_USER_PGTABLE_MASK		(1 << PTI_USER_PGTABLE_BIT)
--#define PTI_USER_PCID_BIT		X86_CR3_PTI_PCID_USER_BIT
--#define PTI_USER_PCID_MASK		(1 << PTI_USER_PCID_BIT)
--#define PTI_USER_PGTABLE_AND_PCID_MASK  (PTI_USER_PCID_MASK | PTI_USER_PGTABLE_MASK)
--
- .macro SET_NOFLUSH_BIT	reg:req
- 	bts	$X86_CR3_PCID_NOFLUSH_BIT, \reg
- .endm
-diff --git a/arch/x86/include/asm/processor-flags.h b/arch/x86/include/asm/processor-flags.h
-index 02c2cbda4a74..4dd2fbbc861a 100644
---- a/arch/x86/include/asm/processor-flags.h
-+++ b/arch/x86/include/asm/processor-flags.h
-@@ -4,6 +4,7 @@
- 
- #include <uapi/asm/processor-flags.h>
- #include <linux/mem_encrypt.h>
-+#include <asm/page_types.h>
- 
- #ifdef CONFIG_VM86
- #define X86_VM_MASK	X86_EFLAGS_VM
-@@ -50,7 +51,21 @@
- #endif
- 
- #ifdef CONFIG_PAGE_TABLE_ISOLATION
-+
- # define X86_CR3_PTI_PCID_USER_BIT	11
-+
-+#ifdef CONFIG_X86_64
-+/*
-+ * PAGE_TABLE_ISOLATION PGDs are 8k.  Flip bit 12 to switch between the two
-+ * halves:
-+ */
-+#define PTI_USER_PGTABLE_BIT		PAGE_SHIFT
-+#define PTI_USER_PGTABLE_MASK		(1 << PTI_USER_PGTABLE_BIT)
-+#define PTI_USER_PCID_BIT		X86_CR3_PTI_PCID_USER_BIT
-+#define PTI_USER_PCID_MASK		(1 << PTI_USER_PCID_BIT)
-+#define PTI_USER_PGTABLE_AND_PCID_MASK  (PTI_USER_PCID_MASK | PTI_USER_PGTABLE_MASK)
-+#endif
-+
- #endif
- 
- #endif /* _ASM_X86_PROCESSOR_FLAGS_H */
+-static inline void native_write_cr3(unsigned long val)
++static __always_inline void native_write_cr3(unsigned long val)
+ {
+ 	asm volatile("mov %0,%%cr3": : "r" (val) : "memory");
+ }
 -- 
 2.19.1.6.gb485710b
 

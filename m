@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B7C53EA3A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329E453E758
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237788AbiFFMtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 08:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S237853AbiFFMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 08:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237786AbiFFMtg (ORCPT
+        with ESMTP id S237822AbiFFMuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 08:49:36 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C7913324C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:49:33 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LGtZQ127lzjXPS;
-        Mon,  6 Jun 2022 20:48:14 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 20:49:31 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 6 Jun 2022 20:49:31 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Subject: [PATCH] ARM: Mark the FDT_FIXED sections as shareable
-Date:   Mon, 6 Jun 2022 20:48:57 +0800
-Message-ID: <20220606124858.384-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 6 Jun 2022 08:50:12 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D492629EF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 05:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654519810; x=1686055810;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FkmXCaYNkRThvFgMKuWjh06x8owMuJed4czDVnJeMlc=;
+  b=iXLN/6C3kIzDEyyVkSOxWfGa2wcJa0VkiqWuqydJZ5lfPLC2Fy375A8+
+   ns1+avM+4Fac9LDBux/BuEvMc/d2pyLGqJ5j1olCvxQ7cGR19pwAlcU7D
+   /UN/6TC9lh+pioGSChhsZOdPfMmloNtfXB7CqckNmYQPVlHC1dTCOMpN1
+   3zmoKoLeXLxdUBq0JrcLhvfgU9C1+xtdHUKof34jaQ+hQ5DGtZctUb9F1
+   uZKratCn3KBVHWRfPlFUwC6WwXq03zhBAn0kZopW7UKy2OMcEv/ciHbdi
+   ewIzexW6jGdEpeI79LKqaYiqCt6NwWro51WdmHkflVG1JFse7/2/Hp44G
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="337566094"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="337566094"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 05:50:10 -0700
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="614344563"
+Received: from hongyao1-mobl.ccr.corp.intel.com ([10.249.175.193])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 05:50:03 -0700
+Message-ID: <1cc1af5000ceb5197c3b266ac82e7770d771a7b4.camel@intel.com>
+Subject: Re: [PATCH v4 2/3] x86: Remove vendor checks from
+ prefer_mwait_c1_over_halt
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Wyes Karny <wyes.karny@amd.com>, linux-kernel@vger.kernel.org
+Cc:     Lewis.Carroll@amd.com, Mario.Limonciello@amd.com,
+        gautham.shenoy@amd.com, Ananth.Narayan@amd.com, bharata@amd.com,
+        len.brown@intel.com, x86@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, chang.seok.bae@intel.com,
+        keescook@chromium.org, metze@samba.org, zhengqi.arch@bytedance.com,
+        mark.rutland@arm.com, puwen@hygon.cn, rafael.j.wysocki@intel.com,
+        andrew.cooper3@citrix.com, jing2.liu@intel.com,
+        jmattson@google.com, pawan.kumar.gupta@linux.intel.com
+Date:   Mon, 06 Jun 2022 20:50:01 +0800
+In-Reply-To: <67ca737f7cdabfc75f930cf59b49d910d8c491d6.1653324016.git-series.wyes.karny@amd.com>
+References: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
+         <67ca737f7cdabfc75f930cf59b49d910d8c491d6.1653324016.git-series.wyes.karny@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,136 +69,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
-region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
-which contains fdt. But it only reserves the exact physical memory that
-fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
-speculative read access can bring the RAM content from non-fdt zone into
-cache, PIPT makes it to be hit by subsequently read access through
-shareable mapping(such as linear mapping), and the cache consistency
-between cores is lost due to non-shareable property.
+On Mon, 2022-05-23 at 22:25 +0530, Wyes Karny wrote:
+> Remove vendor checks from prefer_mwait_c1_over_halt function. Restore
+> the decision tree to support MWAIT C1 as the default idle state based
+> on
+> CPUID checks as done by Thomas Gleixner in
+> commit 09fd4b4ef5bc ("x86: use cpuid to check MWAIT support for C1")
+> 
+> The decision tree is removed in
+> commit 69fb3676df33 ("x86 idle: remove mwait_idle() and "idle=mwait"
+> cmdline param")
+> 
+> Prefer MWAIT when the following conditions are satisfied:
+>     1. CPUID_Fn00000001_ECX [Monitor] should be set
+>     2. CPUID_Fn00000005 should be supported
+>     3. If CPUID_Fn00000005_ECX [EMX] is set then there should be
+>        at least one C1 substate available, indicated by
+>        CPUID_Fn00000005_EDX [MWaitC1SubStates] bits.
+> 
+> Otherwise use HLT for default_idle function.
+> 
+> HPC customers who want to optimize for lower latency are known to
+> disable Global C-States in the BIOS. In fact, some vendors allow
+> choosing a BIOS 'performance' profile which explicitly disables
+> C-States.  In this scenario, the cpuidle driver will not be loaded
+> and
+> the kernel will continue with the default idle state chosen at boot
+> time. On AMD systems currently the default idle state is HLT which
+> has
+> a higher exit latency compared to MWAIT.
+> 
+> The reason for the choice of HLT over MWAIT on AMD systems is:
+> 
+> 1. Families prior to 10h didn't support MWAIT
+> 2. Families 10h-15h supported MWAIT, but not MWAIT C1. Hence it was
+>    preferable to use HLT as the default state on these systems.
+> 
+> However, AMD Family 17h onwards supports MWAIT as well as MWAIT C1.
+> And
+> it is preferable to use MWAIT as the default idle state on these
+> systems, as it has lower exit latencies.
+> 
+> The below table represents the exit latency for HLT and MWAIT on AMD
+> Zen 3 system. Exit latency is measured by issuing a wakeup (IPI) to
+> other CPU and measuring how many clock cycles it took to
+> wakeup.  Each
+> iteration measures 10K wakeups by pinning source and destination.
+> 
+> HLT:
+> 
+> 25.0000th percentile  :      1900 ns
+> 50.0000th percentile  :      2000 ns
+> 75.0000th percentile  :      2300 ns
+> 90.0000th percentile  :      2500 ns
+> 95.0000th percentile  :      2600 ns
+> 99.0000th percentile  :      2800 ns
+> 99.5000th percentile  :      3000 ns
+> 99.9000th percentile  :      3400 ns
+> 99.9500th percentile  :      3600 ns
+> 99.9900th percentile  :      5900 ns
+>   Min latency         :      1700 ns
+>   Max latency         :      5900 ns
+> Total Samples      9999
+> 
+> MWAIT:
+> 
+> 25.0000th percentile  :      1400 ns
+> 50.0000th percentile  :      1500 ns
+> 75.0000th percentile  :      1700 ns
+> 90.0000th percentile  :      1800 ns
+> 95.0000th percentile  :      1900 ns
+> 99.0000th percentile  :      2300 ns
+> 99.5000th percentile  :      2500 ns
+> 99.9000th percentile  :      3200 ns
+> 99.9500th percentile  :      3500 ns
+> 99.9900th percentile  :      4600 ns
+>   Min latency         :      1200 ns
+>   Max latency         :      4600 ns
+> Total Samples      9997
+> 
+> Improvement (99th percentile): 21.74%
+> 
+> Below is another result for context_switch2 micro-benchmark, which
+> brings out the impact of improved wakeup latency through increased
+> context-switches per second.
+> 
+> Link: https://ozlabs.org/~anton/junkcode/context_switch2.c
+> 
+> with HLT:
+> -------------------------------
+> 50.0000th percentile  :  190184
+> 75.0000th percentile  :  191032
+> 90.0000th percentile  :  192314
+> 95.0000th percentile  :  192520
+> 99.0000th percentile  :  192844
+> MIN  :  190148
+> MAX  :  192852
+> 
+> with MWAIT:
+> -------------------------------
+> 50.0000th percentile  :  277444
+> 75.0000th percentile  :  278268
+> 90.0000th percentile  :  278888
+> 95.0000th percentile  :  279164
+> 99.0000th percentile  :  280504
+> MIN  :  273278
+> MAX  :  281410
+> 
+> Improvement(99th percentile): ~ 45.46%
+> 
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 
-|<---------FDT_FIXED_SIZE------>|
-|                               |
- -------------------------------
-| <non-fdt> | <fdt> | <non-fdt> |
- -------------------------------
+I couldn't evaluate the impact to other vendors, but at least for Intel
+platforms,
 
-1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
-   into the cache.
-2. CoreB write <non-fdt> to update data through linear mapping. CoreA
-   received the notification to invalid the corresponding cachelines, but
-   the property non-shareable makes it to be ignored.
-3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
-   is read.
+Test-by: Zhang Rui <rui.zhang@intel.com>
 
-To eliminate this risk, mark the MT_ROM sections as shareable.
-
-The other user of MT_ROM is XIP_KERNEL. XIP allows the kernel to run from
-flash to save RAM space. Not sure if anyone is still using XIP in order to
-save a little memory and not care about performance degradation. Add a new
-memory type MT_ROM_XIP to be compatible with it.
-
-BTW: Another solution is to memblock_reserve() all the sections that fdt
-spans, but this will waste 2-4MiB memory.
-
-Here's an example:
-  list_del corruption. prev->next should be c0ecbf74, but was c08410dc
-  kernel BUG at lib/list_debug.c:53!
-  ... ...
-  PC is at __list_del_entry_valid+0x58/0x98
-  LR is at __list_del_entry_valid+0x58/0x98
-  psr: 60000093
-  sp : c0ecbf30  ip : 00000000  fp : 00000001
-  r10: c08410d0  r9 : 00000001  r8 : c0825e0c
-  r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
-  r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
-  ... ...
-  Stack: (0xc0ecbf30 to 0xc0ecc000)
-  bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
-  bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
-  bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
-  ... ...                                           <  next     prev  >
-  (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
-  (__list_del_entry) from (finish_swait+0x60/0x7c)
-  (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
-  (rcu_gp_kthread) from (kthread+0x14c/0x15c)
-  (kthread) from (ret_from_fork+0x14/0x24)
-
-The faulty list node to be deleted is a local variable, its address is
-c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
-before lib/list_debug.c:53 is c08410dc. A large amount of printing results
-in swapping out the cacheline containing the old data(MT_ROM mapping is
-read only, so the cacheline cannot be dirty), and the subsequent dump
-operation obtains new data from the DDR.
-
-Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- arch/arm/include/asm/mach/map.h | 1 +
- arch/arm/mm/mmu.c               | 9 ++++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
-index 92282558caf7cdb..0100f95c8104b3c 100644
---- a/arch/arm/include/asm/mach/map.h
-+++ b/arch/arm/include/asm/mach/map.h
-@@ -28,6 +28,7 @@ enum {
- 	MT_MEMORY_RWX,
- 	MT_MEMORY_RW,
- 	MT_ROM,
-+	MT_ROM_XIP,
- 	MT_MEMORY_RWX_NONCACHED,
- 	MT_MEMORY_RW_DTCM,
- 	MT_MEMORY_RWX_ITCM,
-diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-index 5e2be37a198e29e..a707eac189b1d6d 100644
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -300,6 +300,10 @@ static struct mem_type mem_types[] __ro_after_init = {
- 		.prot_sect = PMD_TYPE_SECT,
- 		.domain    = DOMAIN_KERNEL,
- 	},
-+	[MT_ROM_XIP] = {
-+		.prot_sect = PMD_TYPE_SECT,
-+		.domain    = DOMAIN_KERNEL,
-+	},
- 	[MT_MEMORY_RWX_NONCACHED] = {
- 		.prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
- 				L_PTE_MT_BUFFERABLE,
-@@ -566,6 +570,7 @@ static void __init build_mem_type_table(void)
- 		 * from SVC mode and no access from userspace.
- 		 */
- 		mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
-+		mem_types[MT_ROM_XIP].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
- 		mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
- 		mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
- #endif
-@@ -590,6 +595,7 @@ static void __init build_mem_type_table(void)
- 			mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
- 			mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
- 			mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
-+			mem_types[MT_ROM].prot_sect |= PMD_SECT_S;
- 		}
- 	}
- 
-@@ -650,6 +656,7 @@ static void __init build_mem_type_table(void)
- 	mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
- 	mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
- 	mem_types[MT_ROM].prot_sect |= cp->pmd;
-+	mem_types[MT_ROM_XIP].prot_sect |= cp->pmd;
- 
- 	switch (cp->pmd) {
- 	case PMD_SECT_WT:
-@@ -1372,7 +1379,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
- 	map.pfn = __phys_to_pfn(CONFIG_XIP_PHYS_ADDR & SECTION_MASK);
- 	map.virtual = MODULES_VADDR;
- 	map.length = ((unsigned long)_exiprom - map.virtual + ~SECTION_MASK) & SECTION_MASK;
--	map.type = MT_ROM;
-+	map.type = MT_ROM_XIP;
- 	create_mapping(&map);
- #endif
- 
--- 
-2.25.1
+> ---
+>  arch/x86/include/asm/mwait.h |  1 +
+>  arch/x86/kernel/process.c    | 35 +++++++++++++++++++++++++---------
+> -
+>  2 files changed, 26 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/mwait.h
+> b/arch/x86/include/asm/mwait.h
+> index 29dd27b5a339..3a8fdf881313 100644
+> --- a/arch/x86/include/asm/mwait.h
+> +++ b/arch/x86/include/asm/mwait.h
+> @@ -13,6 +13,7 @@
+>  #define MWAIT_SUBSTATE_SIZE		4
+>  #define MWAIT_HINT2CSTATE(hint)		(((hint) >>
+> MWAIT_SUBSTATE_SIZE) & MWAIT_CSTATE_MASK)
+>  #define MWAIT_HINT2SUBSTATE(hint)	((hint) & MWAIT_CSTATE_MASK)
+> +#define MWAIT_C1_SUBSTATE_MASK  0xf0
+>  
+>  #define CPUID_MWAIT_LEAF		5
+>  #define CPUID5_ECX_EXTENSIONS_SUPPORTED 0x1
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index 4e0178b066c5..7bf4d73c9522 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -813,28 +813,43 @@ static void amd_e400_idle(void)
+>  }
+>  
+>  /*
+> - * Intel Core2 and older machines prefer MWAIT over HALT for C1.
+> - * We can't rely on cpuidle installing MWAIT, because it will not
+> load
+> - * on systems that support only C1 -- so the boot default must be
+> MWAIT.
+> + * Prefer MWAIT over HALT if MWAIT is supported, MWAIT_CPUID leaf
+> + * exists and whenever MONITOR/MWAIT extensions are present there is
+> at
+> + * least one C1 substate.
+>   *
+> - * Some AMD machines are the opposite, they depend on using HALT.
+> - *
+> - * So for default C1, which is used during boot until cpuidle loads,
+> - * use MWAIT-C1 on Intel HW that has it, else use HALT.
+> + * Do not prefer MWAIT if MONITOR instruction has a bug or
+> idle=nomwait
+> + * is passed to kernel commandline parameter.
+>   */
+>  static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
+>  {
+> +	u32 eax, ebx, ecx, edx;
+> +
+>  	/* User has disallowed the use of MWAIT. Fallback to HALT */
+>  	if (boot_option_idle_override == IDLE_NOMWAIT)
+>  		return 0;
+>  
+> -	if (c->x86_vendor != X86_VENDOR_INTEL)
+> +	/* MWAIT is not supported on this platform. Fallback to HALT */
+> +	if (!cpu_has(c, X86_FEATURE_MWAIT))
+>  		return 0;
+>  
+> -	if (!cpu_has(c, X86_FEATURE_MWAIT) ||
+> boot_cpu_has_bug(X86_BUG_MONITOR))
+> +	/* Monitor has a bug. Fallback to HALT */
+> +	if (boot_cpu_has_bug(X86_BUG_MONITOR))
+>  		return 0;
+>  
+> -	return 1;
+> +	cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
+> +
+> +	/*
+> +	 * If MWAIT extensions are not available, it is safe to use
+> MWAIT
+> +	 * with EAX=0, ECX=0.
+> +	 */
+> +	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED))
+> +		return 1;
+> +
+> +	/*
+> +	 * If MWAIT extensions are available, there should be at least
+> one
+> +	 * MWAIT C1 substate present.
+> +	 */
+> +	return (edx & MWAIT_C1_SUBSTATE_MASK);
+>  }
+>  
+>  /*
 

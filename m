@@ -2,194 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0A553EC17
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F6E53ECAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 19:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbiFFNgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 09:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S239018AbiFFNjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 09:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238867AbiFFNgT (ORCPT
+        with ESMTP id S239014AbiFFNj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 09:36:19 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A5221E0CF;
-        Mon,  6 Jun 2022 06:36:18 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id a10so12181057ioe.9;
-        Mon, 06 Jun 2022 06:36:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aJMNgSVQO447NKXH868O96uQGEnseJ7a42xNt19YMwo=;
-        b=Hdig9MPg1pttcdAxCE1UFDsTRZcY5ZcgxjWM4M+2UPe8uGuk3BUSzN0ew5dKb7jyrr
-         5U9GfgJA+sMJbjY+jy9AvV8H4gt+kGGBh4pkXyxKaaT4flnKpAai25EUvbcWpKQUtWZN
-         2zSX3z0M28OjKlRD3YIM3gDdejHNpoSbDSj15brDgbGR18HSMz9f2vQuHcdb6xTA+m9t
-         MXy2z86jYmSMdHbVA/EBbwUjL732r7WFKxCZe1ZrL1zwcw838MssgEXoqULFTk2+vpUn
-         q0iiI7mbk51rduvJSkFXCDw57YwhgNOOgl3jwequ8VX+XLMaVU/I2jaOnBM3tu4kLqyF
-         0a5g==
-X-Gm-Message-State: AOAM532whhonm4sK9K3QrTTH6PXb8tOoLBvwlwT9QOX0f7R20LR7wp6u
-        W1H1EY1l5YrFHvE6JELZeQ==
-X-Google-Smtp-Source: ABdhPJyoIGcPS/tcQCUeUiTpd10BgFpTIxTSxmM6wQT++mb2LRlADkkBEpMSvmUjbTnpBQkuyzwdPA==
-X-Received: by 2002:a6b:3115:0:b0:660:d5f1:e3b6 with SMTP id j21-20020a6b3115000000b00660d5f1e3b6mr11581406ioa.99.1654522577516;
-        Mon, 06 Jun 2022 06:36:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id y16-20020a02bb10000000b003314a583804sm5678560jan.20.2022.06.06.06.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 06:36:16 -0700 (PDT)
-Received: (nullmailer pid 601560 invoked by uid 1000);
-        Mon, 06 Jun 2022 13:36:15 -0000
-Date:   Mon, 6 Jun 2022 08:36:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: mtd: partitions: Document new
- dynamic-partition nodes
-Message-ID: <20220606133615.GA564610-robh@kernel.org>
-References: <20220518233258.5483-1-ansuelsmth@gmail.com>
- <20220518233258.5483-2-ansuelsmth@gmail.com>
- <20220601210655.GA380852-robh@kernel.org>
- <629a91f8.1c69fb81.371aa.1d32@mx.google.com>
+        Mon, 6 Jun 2022 09:39:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2056.outbound.protection.outlook.com [40.107.92.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78607248505
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 06:39:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z0KDgrOwBR+8Ty1GahEvAQP2IXxxqNZ4lhNMSE5zTdu5QmVMdTVe+FthNyj1CGS0Kn+7P28uaoQN0P3yATBjtTlV57AxHpKk26EEEU+MAxwq7qbOO9EsLmzr1V/5blSvjVbpDCNPjLTmL2Zo10bLjjbriMgX9RnjN54jnuE0IV3nnUWJcSc2tmxIh31AfYfmeHGs3NR+HubsMuynE5V6EPtt7CnnOQ8H/YB3HduGQaR/zwef/Z4Fn4bQlGfGCBPPSr5QVR6918NUq4Ha2H/x80+OMXtZ7q2wbMLM8vqJrfRE/iejUFj7HlyBWJTEDdqJ6UKWAhqzjF1RzRuN//z22A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KORMxSlQAfDCxdTt5dGQ3CudAG1Qj65LvPBS7X4cmKM=;
+ b=L6Z9QG0oOlNSXDejof+S8ytrbXI3AqkRIz/Eew6svc2DxPcFqwd2KEsI1Ahsd4B7Nl8glY7PbAP5ir68jSz8TmCeuHvRUaMtE+ONxncBJZmPWEOlJNYB7YXY995gZLZ7NsP/DC+C0sMe/gGbdhSTGvnPwwlSQ52mMmd4ohymRgWYFE6llbEmgF6+jvZ/5F8UypBNCJvq/lk3heVhCgnqlpiwq2vB/brvZdwAcSP26BXboZ8sm82VpzYQ6pdNX59fuhNYI7R9XK2vDopDC/PXx79yaW2fVDdrxRBscoKpAjjK9w6KtKI/faP7tToibxlkczSxu/dcpkL8IuHKauETcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KORMxSlQAfDCxdTt5dGQ3CudAG1Qj65LvPBS7X4cmKM=;
+ b=iAhHndm74qwP0h83mEOtYqJtYJHESDET2xoThhZVb+gNI38beACtvWbe95c8fO1jhFC48RPezL1pc7AfAoD2Zy2Nwg+CrgYCTct2NFDC+kO5AWbrY2reBDqivLSGSTORqz1KxzRQYZZOCbJRGSqyabYTMvRmTscEpzrDe74S//o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
+ by DM5PR1201MB0249.namprd12.prod.outlook.com (2603:10b6:4:57::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.18; Mon, 6 Jun
+ 2022 13:39:25 +0000
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::d978:617e:55a3:cfd]) by IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::d978:617e:55a3:cfd%5]) with mapi id 15.20.5314.015; Mon, 6 Jun 2022
+ 13:39:24 +0000
+Message-ID: <ff70d135-a280-1dc2-9f9f-f4b35e499abc@amd.com>
+Date:   Mon, 6 Jun 2022 19:09:08 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v5 3/9] mm/demotion: Move memory demotion related code
+Content-Language: en-US
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+ <20220603134237.131362-4-aneesh.kumar@linux.ibm.com>
+From:   Bharata B Rao <bharata@amd.com>
+In-Reply-To: <20220603134237.131362-4-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0174.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:de::15) To IA1PR12MB6434.namprd12.prod.outlook.com
+ (2603:10b6:208:3ae::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <629a91f8.1c69fb81.371aa.1d32@mx.google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 81b16024-997a-4ed0-5bdc-08da47c1f821
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0249:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB024929487936B75561A5BF76B0A29@DM5PR1201MB0249.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lbOKepzTwYWhQPL7z5KNNiLKfoy+9ox43T+Tejw3NdpeRGIMbzz5dNw8Iyjt0f5LwH34LCUS+g2/ofkn8OG3mm/kHVrjnQh1Fg0jFEVb1OzBUz6AsrPUv8TERpDWOiTr8ufxNFRqM8g0F0G3BCW1lTkiwvPNPfu9CrXAYY35OFsAkR4LtTQzGg72T+Z5z3QvMEG5c5GU2zp8VmKG3oIKO57VhQ6GCSjy31IfQXen9zCgYAz5gcvORpm0HTDYYofOpqM78PeBPGYK2MEeOfb3kp6y+xJlNj0bXQAaKiCQjFX94aQI1LtuJrB6j3g+SQ20Sbc64bCQfxSLPYzxrzTuc9MjME1WTwGFt60PPXjNVSnODRX85DzWNkBeZZr3HP2fI64+xly2HhVklipnj35lEO00oKprw1YTifRFqU+je4ChCM65b3rp+Xi+14xvW+ZbtK/Vsb6zDuLnGzlE1Pad0pPfeYyJC6vg+WxmAm6QSBVQq/HOeFR3uOynvwo2WAnjA7ix5uOkGP8gipShQZrORLkczKoMRkENg3izZxZN7SA3bZfr1MGBqu/J4v5OYRVbm5xShuzA40MDHD2cOHhYsy4za/KQYutugIxM/FON9qXMxGfz9XHoaQVYmukf0vkV+oln2EmTJlVoEJgl81MJn4IU7666gNszUa3O/jpJgyjrox/RBuFHl0e590o3bGWSYH1YTCnHItsd/kb0pYtk5CVBBE8zSHDSxEJ6NKQrkDE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(26005)(2906002)(6666004)(38100700002)(53546011)(6512007)(54906003)(558084003)(36756003)(316002)(86362001)(31696002)(66476007)(4326008)(2616005)(7416002)(8676002)(31686004)(66946007)(6486002)(66556008)(5660300002)(186003)(508600001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFVKNGhEaTdEWUoyaHRBcUYzL0cyN29HU1RMLzRsdXRDVUJnbjhPMlcvRlJ3?=
+ =?utf-8?B?L01XQm9lRzdGR3BCZGFJZUdEZ20xN3pQWE5OYThOQ0lvenIvVVR5dzIybERT?=
+ =?utf-8?B?SzZnb29rdUVhWFIvU3hIQ0orL2FoaWtyM1pPNXFkVkc1c1QvVkQzSkdnVFM2?=
+ =?utf-8?B?Si9oL2lQQWhXTDU4UTNoUU84Wm90MHp3UFlsOEY2d3dZeHRyQUZVRHdFNmx2?=
+ =?utf-8?B?b1hOUHRBaXhHaytib1lpYkFRVER5WHRidXlnaWIvYUN3elV5d0NCWDBETi8v?=
+ =?utf-8?B?TDBjQUEwVlM4RHNpVHgrNzVkUzEvRkJrYUZCQ3NwWHZ2MnRkR0J3TDVBZmR3?=
+ =?utf-8?B?bW1GRiszNWg0UkU5aGFCcjJJS1hPZDErdHo5dTNVUHZCSFY0cUtjRUJ5WXVU?=
+ =?utf-8?B?cFVXc2NlVk0rbVNTSlRJWGg4dEljS3p2Zk1SZzlFZERWQlo5bjU1eldDcnlM?=
+ =?utf-8?B?RDIvN2FQeHhNK0kvd3ltTkZ2OCs0UXhveXplWnNoRHJ0SjRBVmVuVW14dVZr?=
+ =?utf-8?B?RVFLRnhUekpRR1Z2M1RKOWY1Tnl3aE9oRlVvUjE4UW8yL2JETERBekZDa0po?=
+ =?utf-8?B?M1JXZXova3FKWWJNMDRpU3RHSlZ0aFRmRWJRUnU0U2ZuUGtXdWd1QlNXV0hm?=
+ =?utf-8?B?YmxFZW4vY1FaVE52cUFTODRSV2M4ekFBMTdmVEt5OVlLYXVzSFdxMDNESVlR?=
+ =?utf-8?B?bmM4ZStidzkvUlpYOFZhbm1PQTVpaTBjVmNmUG9PdEhBN0EvcHNUUUZROWlS?=
+ =?utf-8?B?dWltMDZGcDN5eXZKZm95UnhaUHBOaExuaUtjaTZQbzBFb0oraHJVaXNiNTFN?=
+ =?utf-8?B?UGlwU0RCU3dWR1M0aGtYSG9yN2lwaEJFcld3d3J4cnFwSFhjUTNFSUt2bi9D?=
+ =?utf-8?B?WnNTUFJpSnR2L2dBdllBRGlRSlVNSkdkVkF3YWNUaFd2Ti8renJSSUxPdGtB?=
+ =?utf-8?B?MVlxUFdFcy9BTkpoclhpblJCVkthdHc1RzYxdStIN21TZ1pvRTBGZlhKV1VD?=
+ =?utf-8?B?V255a3Nla2RQaHVENkJSVGgwWEpacFByUmIwc29DeVp3bjhXelpzU3dIWHlO?=
+ =?utf-8?B?K0h5YS9xVmVKODdreWNHVzk4elhKZlFicWp0TXJVK0dVYTliNE8wNlUwejBN?=
+ =?utf-8?B?RFN1SU9jWkdWTEFlQ2dnYkNvK2NYSVRzTTFBMnlLMmhCL0dUaGxkVnAwWnc2?=
+ =?utf-8?B?MlZGSXJza0U2OWxRRy9BSGh6RnhUK2I1L29ERmsxeTVCcExnMHBsWjhPMjRn?=
+ =?utf-8?B?YTFRVDluTlBYU2pDTWg2YTA1OVNOeTdhNWxwcEsvOHVJT3NzM3VaSUtyV3h1?=
+ =?utf-8?B?WHljejJ5WHJmcC82SitUODV5YVQyZHhOcmMxUUxRMGxsaElueEdPYkkwSlhq?=
+ =?utf-8?B?aVlReHRGd0dYTzhIS1QxY2VINGNDbHp3TDlmLzlNUFZyeFJaWnNvcTZ0UXBo?=
+ =?utf-8?B?eUtzaFc1eGxmZ21VMzRkZGplL3hZdjVKRnNTT2xIclBLM1NkRHc3RThpVHJ4?=
+ =?utf-8?B?ay9ZdnVSblZCQXNJRUZnbEZManl2L3dVaUM0UUpKWDdzZHVveFRXNWZPWjRK?=
+ =?utf-8?B?MnI2S1dHOEQ3SWVNdjh4UEZ3RUQ2cFAzUldXWXBXQ1RaQ2gyU0ZuK1dsWTU5?=
+ =?utf-8?B?SkJRak1EWFJzbDkzTSt3STBmclZhSWgyZnBYMmxSRk9jd0g0UldkeXFGYUdx?=
+ =?utf-8?B?V2xHU0Q5Q0ViVWtlUzNMdmFGdUFJUUtZaUp0TXYwMGtTejM3eEFiemJmNXE1?=
+ =?utf-8?B?YWxrS21zWk1PODBtL0tJSmRKY2NpenZZSVAzTDRuaGUyaitXYUduOXNqdFMr?=
+ =?utf-8?B?RlY4M3c1SVdjYVVHUG81dmVuMEl1clRCYUdnVElHdEtrREUwQWQ2b0dPMjZV?=
+ =?utf-8?B?dC94VFQ3WWRybFJZTVhXUVFWSGVIcDJ6a3UrdXpVTTAySXhORlU2eXRsQ1hU?=
+ =?utf-8?B?Rld5aWpPa0czdVQrK2NyWGZUS0xJcHJOWk9IRFB5ZjdMdUh4ZVJMWEhIekth?=
+ =?utf-8?B?Z2hrOWtya3MxMFZ2S0Q1aXZvTU5kQWR2VVcybk9NRHRLWjNNTVZreTRlSk5X?=
+ =?utf-8?B?Nkx6L0JQbUlLc1AzclU3N1Zza3d5aVpXOHkzYVVuMHZVSlJtTStHdVlIeXBN?=
+ =?utf-8?B?aUt0cFVVZ1lSa2I5cC9pdktuYnpGRkFwQU5Ka3N3NzVHZjJLS1EybWhIaEZ1?=
+ =?utf-8?B?NGM4N3N1SDdNbW1IejZ0MWhFbXg5MXdZMXUzQWdIOXJaeXdQSXE1ZVErV1dm?=
+ =?utf-8?B?YjJkOFlTQnlxUVN5ZmtxakUwNEtyL0pwenU5dnM2THcxSXdTRk12cUQ2bWdo?=
+ =?utf-8?B?MlVxUU9KZ053RU9Na1cwcCtOTnNqbG1yUld1LzNOcmlwTHlBRFNIUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81b16024-997a-4ed0-5bdc-08da47c1f821
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2022 13:39:24.8072
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LINZ4t8uSsSzna2knWAqSg7qsUov50L0MCcAT3YmjxhD//bPEdy9aAkDi6NONGC4eskF6LKQSEKAuoJ0rkZ6gA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0249
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 04, 2022 at 12:57:58AM +0200, Ansuel Smith wrote:
-> On Wed, Jun 01, 2022 at 04:06:55PM -0500, Rob Herring wrote:
-> > On Thu, May 19, 2022 at 01:32:57AM +0200, Ansuel Smith wrote:
-> > > Document new dynamic-partition nodes used to provide an OF node for
-> > > partition registred at runtime by parsers. This is required for nvmem
-> > > system to declare and detect nvmem-cells.
-> > > 
-> > > With these special partitions, the reg / offset is not required.
-> > > The label binding is used to match the partition allocated by the
-> > > parser at runtime and the parser will provide reg and offset of the mtd.
-> > > 
-> > > NVMEM will use the data from the parser and provide the NVMEM cells
-> > > declared in the DTS, "connecting" the dynamic partition with a
-> > > static declaration of cells in them.
-> > > 
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../mtd/partitions/dynamic-partition.yaml     | 57 +++++++++++++++++++
-> > >  .../mtd/partitions/qcom,smem-part.yaml        |  4 ++
-> > >  2 files changed, 61 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
-> > > new file mode 100644
-> > > index 000000000000..f57d7b9cae7f
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
-> > > @@ -0,0 +1,57 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/mtd/partitions/dynamic-partition.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Dynamic Partition
-> > > +
-> > > +description: |
-> > > +  This binding describes a single flash partition that is dynamically allocated
-> > > +  by a dedicated parser that is not a fixed-partition parser.
-> > > +
-> > > +  Each child of the parser partition node is then compared and if a match with
-> > > +  the provided label is found then the OF node is assigned.
-> > > +
-> > > +  These special partition definition can be used to give a dynamic partition
-> > > +  an OF node to declare NVMEM cells. An example is declaring the partition
-> > > +  label and all the NVMEM cells in it. The parser will detect the correct reg
-> > > +  and offset and the NVMEM will register the cells in it based on the data
-> > > +  extracted by the parser.
-> > > +
-> > > +maintainers:
-> > > +  - Ansuel Smith <ansuelsmth@gmail.com>
-> > > +
-> > > +properties:
-> > > +  label:
-> > > +    description: The label / name for the partition assigned by the parser at
-> > > +      runtime. This is needed for sybsystem like NVMEM to define cells and
-> > 
-> > typo
-> > 
-> > > +      register with this OF node.
-> > > +
-> > > +required:
-> > > +  - label
-> > > +
-> > > +additionalProperties: true
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    flash {
-> > > +      partitions {
-> > > +        compatible = "qcom,smem-part";
-> > > +
-> > > +        partition-art {
-> > > +          compatible = "nvmem-cells";
-> > > +          #address-cells = <1>;
-> > > +          #size-cells = <1>;
-> > > +          label = "0:art";
-> > > +
-> > > +          macaddr_art_0: macaddr@0 {
-> > > +            reg = <0x0 0x6>;
-> > > +          };
-> > > +
-> > > +          macaddr_art_6: macaddr@6 {
-> > > +            reg = <0x6 0x6>;
-> > > +          };
-> > 
-> > There's a problem with the schema structure for this which is a common 
-> > problem where we have parent and child nodes with parent defined 
-> > properties in the child nodes (label in this case). The issue is that 
-> > there is not a single schema applied to the child node which contains 
-> > all possible properties sub-node names. This is necessary to check for 
-> > extra, undocumented properties using unevaluatedProperties. The creation 
-> > of spi-periphera-props.yaml is an example of how to address this. I 
-> > suspect that all the partition schemas may need similar restructuring.
-> > 
-> > The nvmem-cells schema may happen to already have 'label', so it happens 
-> > to work (that and unevaluatedProperties is probably missing in places).
-> > 
-> > Given this schema is really just one property which is already 
-> > documented for 'partition' nodes, all we really need is to say is if 
-> > 'reg' is not present, then 'label' is required:
-> > 
-> > if:
-> >   not:
-> >     required: [ reg ]
-> > then:
-> >   required: [ label ]
-> > 
-> >
-> 
-> Just to make sure. The correct way to implement this would be drop the
-> current dynamic-partition schema and expand the partition.yaml with the
-> additional if and the extra stuff in the description.
-> Wanted to keep the 2 thing separated but if necessary I will follow this
-> path.
+On 6/3/2022 7:12 PM, Aneesh Kumar K.V wrote:
+> This move memory demotion related code to mm/demotion.c.
 
-Yes. I agree separate would have been nice documentation wise, 
-but the schema has ended having such a small difference it doesn't 
-make sense anymore.
+*mm/memory-tiers.c
 
-Rob
+> No functional change in this patch.
+
+Regards,
+Bharata.

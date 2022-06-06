@@ -2,240 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AB853F1D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E5553F1E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 23:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbiFFVo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 17:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S234363AbiFFV43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 17:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbiFFVob (ORCPT
+        with ESMTP id S231853AbiFFV41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 17:44:31 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801E57A817
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 14:44:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id u18so13200793plb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 14:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yPXZCZEMUQaqYwKbEzwy4HUgqvcP6p/dfhKRtiPq7Hw=;
-        b=JhXbAthDaDChPe0CIE4lyCWV2sCMXUskpdnFfr0MSsPjrEj6BkRL0mh0lH3+QrxtSK
-         EenH1GV5UxsPW8wRBeB676I26nUwYNyy94grGsy5diUQYVvPnd44oNlg7fZdm7x4uOG6
-         GIb46aOwj5teb0/tSJ0XYsOqw+loQfIs6+8RldDC9kP/ogs6bRtwqDrtRVN3G2f8jzIL
-         oJbi95NWG0ZA1uTgB5GJxIstWMhDTTzkDHR1Mi7qJ9MVQGLULQyLixJbiyhWH630r56+
-         zV+o2dt6Pr/AV5Sh+k3eIMVFA4SjiiZros8bZtNrYeNBlcZ/VwZEx/OIXCs/JU61QD7p
-         FzKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yPXZCZEMUQaqYwKbEzwy4HUgqvcP6p/dfhKRtiPq7Hw=;
-        b=7iSNjM/uR+bCV+6Cyv08gQPZZShRDMeBFiWHVrrrhZkWDgv4CaN1AgoC9XLV6QpHaX
-         OiV65rK4Jp+gyGGuVSH/6FYYgrRHvaqHnrA4vrIKhBJuxOqXAvF6pjTMFstlB0pJjSKx
-         GNmYvZTt2xAz4mPs7ZAA0HdR5OPhD9zyRNyiw8w28HRB2A+Kavc1Afc7JBvNg2xWII4q
-         HJyCa1Lo5+vPN6yOJO6xdlEaBQsJbUiIep5nDgMQaIZiDtwIEXCvNh25W83N/1UQoAaz
-         QlwE6EClg48lT4YtBqrnSwrWrptJz7u/cfC8aNIwWj6M0bwploAJoxd3LGDSAaS30x8f
-         7Qww==
-X-Gm-Message-State: AOAM532xs1nIWGzIGOSf9dw4WjdlWufhEiWPqNp+sZ1XfaX82Rk6B8gc
-        t39PM4K2CUN5UeJcPkNu+eA=
-X-Google-Smtp-Source: ABdhPJyDZQtvOLvDSpVY2YEfud++1wRn/OaNDsUtVpZmzEHtUgNOTteY+F+x1j6onYQEtMIS01ebLQ==
-X-Received: by 2002:a17:902:c2c1:b0:161:c6af:278e with SMTP id c1-20020a170902c2c100b00161c6af278emr26163480pla.151.1654551870055;
-        Mon, 06 Jun 2022 14:44:30 -0700 (PDT)
-Received: from localhost.biz ([8.25.197.27])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170903100400b0016397da033csm10881675plb.62.2022.06.06.14.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 14:44:29 -0700 (PDT)
-From:   Yang Shi <shy828301@gmail.com>
-To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [v3 PATCH 7/7] mm: khugepaged: reorg some khugepaged helpers
-Date:   Mon,  6 Jun 2022 14:44:14 -0700
-Message-Id: <20220606214414.736109-8-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20220606214414.736109-1-shy828301@gmail.com>
-References: <20220606214414.736109-1-shy828301@gmail.com>
+        Mon, 6 Jun 2022 17:56:27 -0400
+X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 14:56:24 PDT
+Received: from vps87552.serveur-vps.net (vps87552.serveur-vps.net [31.207.38.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AA25F252;
+        Mon,  6 Jun 2022 14:56:24 -0700 (PDT)
+Received: from vps87552.serveur-vps.net (localhost [127.0.0.1])
+        (Authenticated sender: offre-valable_pourtous@adiegroup24.com)
+        by vps87552.serveur-vps.net (Postfix) with ESMTPA id 833437081FD;
+        Mon,  6 Jun 2022 23:47:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=adiegroup24.com;
+        s=default; t=1654552073; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=hI96B4AvQ94OtQD5c66/SHmG3wRTtyUZYZfeujzxVPM=;
+        b=XLCzvx9AHRL5xq7R0GvIT7nMBso+E/jQfmmObmPrMJMSVUmHvY2Ijc+/2ZsTxaF6rszykZ
+        0HskBjNPc0Rvgk3C6bvi2YfXzNY7U28+UXVKTCOm54g/G52exA3LwxI2BY77U6QY4U0M3g
+        z8DeJ61uSRmALOA50Q9u1rhYwZg9dJhpQ5D0qafNLEWFtSrRpzOx0HD3b4FQW7+cvdUhZt
+        4L7qywHUNZsdLsehBuQRpvsjiANPJmpscPw9zJcoKjwQX9CNA2h0nUH7ur5wgD891VkOBJ
+        o2AzMXFC/w6acsYcGMml0oQosywZOdWHudJBrB/6KJ5mx70DEkt1JcMtrxz6JA==
 MIME-Version: 1.0
+Date:   Mon, 06 Jun 2022 23:47:52 +0200
+From:   =?UTF-8?Q?Gelegenheit_f=C3=BCr_alle?= 
+        <offre-valable_pourtous@adiegroup24.com>
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?Gelegenheit_f=C3=BCr_alle?=
+Reply-To: noellepaul000@gmail.com
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <867f7a60a74cdb09cf1f35b2cb1a4bdc@adiegroup24.com>
+X-Sender: offre-valable_pourtous@adiegroup24.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam: Yes
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [noellepaul000[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The khugepaged_{enabled|always|req_madv} are not khugepaged only
-anymore, move them to huge_mm.h and rename to hugepage_flags_xxx, and
-remove khugepaged_req_madv due to no users.
 
-Also move khugepaged_defrag to khugepaged.c since its only caller is in
-that file, it doesn't have to be in a header file.
 
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
- include/linux/huge_mm.h    |  8 ++++++++
- include/linux/khugepaged.h | 17 +----------------
- mm/huge_memory.c           |  4 ++--
- mm/khugepaged.c            | 18 +++++++++++-------
- 4 files changed, 22 insertions(+), 25 deletions(-)
-
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index d478e8875023..ce2d05ee4816 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -116,6 +116,14 @@ extern struct kobj_attribute shmem_enabled_attr;
- 
- extern unsigned long transparent_hugepage_flags;
- 
-+#define hugepage_flags_enabled()					       \
-+	(transparent_hugepage_flags &				       \
-+	 ((1<<TRANSPARENT_HUGEPAGE_FLAG) |		       \
-+	  (1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG)))
-+#define hugepage_flags_always()				\
-+	(transparent_hugepage_flags &			\
-+	 (1<<TRANSPARENT_HUGEPAGE_FLAG))
-+
- /*
-  * The vma size has to be large enough to hold an aligned HPAGE_PMD_SIZE area.
-  */
-diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-index e047be601268..9c3b56132eba 100644
---- a/include/linux/khugepaged.h
-+++ b/include/linux/khugepaged.h
-@@ -24,20 +24,6 @@ static inline void collapse_pte_mapped_thp(struct mm_struct *mm,
- }
- #endif
- 
--#define khugepaged_enabled()					       \
--	(transparent_hugepage_flags &				       \
--	 ((1<<TRANSPARENT_HUGEPAGE_FLAG) |		       \
--	  (1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG)))
--#define khugepaged_always()				\
--	(transparent_hugepage_flags &			\
--	 (1<<TRANSPARENT_HUGEPAGE_FLAG))
--#define khugepaged_req_madv()					\
--	(transparent_hugepage_flags &				\
--	 (1<<TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG))
--#define khugepaged_defrag()					\
--	(transparent_hugepage_flags &				\
--	 (1<<TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG))
--
- static inline void khugepaged_fork(struct mm_struct *mm, struct mm_struct *oldmm)
- {
- 	if (test_bit(MMF_VM_HUGEPAGE, &oldmm->flags))
-@@ -53,8 +39,7 @@ static inline void khugepaged_exit(struct mm_struct *mm)
- static inline void khugepaged_enter(struct vm_area_struct *vma,
- 				   unsigned long vm_flags)
- {
--	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
--	    khugepaged_enabled()) {
-+	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags)) {
- 		if (hugepage_vma_check(vma, vm_flags, false, false))
- 			__khugepaged_enter(vma->vm_mm);
- 	}
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index b95786ada466..866b98a39496 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -102,11 +102,11 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
- 	if (!in_pf && shmem_file(vma->vm_file))
- 		return shmem_huge_enabled(vma);
- 
--	if (!khugepaged_enabled())
-+	if (!hugepage_flags_enabled())
- 		return false;
- 
- 	/* THP settings require madvise. */
--	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
-+	if (!(vm_flags & VM_HUGEPAGE) && !hugepage_flags_always())
- 		return false;
- 
- 	/* Only regular file is valid */
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index ab6183c5489f..2523c085625a 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -472,7 +472,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
- 			  unsigned long vm_flags)
- {
- 	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
--	    khugepaged_enabled()) {
-+	    hugepage_flags_enabled()) {
- 		if (hugepage_vma_check(vma, vm_flags, false, false))
- 			__khugepaged_enter(vma->vm_mm);
- 	}
-@@ -763,6 +763,10 @@ static bool khugepaged_scan_abort(int nid)
- 	return false;
- }
- 
-+#define khugepaged_defrag()					\
-+	(transparent_hugepage_flags &				\
-+	 (1<<TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG))
-+
- /* Defrag for khugepaged will enter direct reclaim/compaction if necessary */
- static inline gfp_t alloc_hugepage_khugepaged_gfpmask(void)
- {
-@@ -860,7 +864,7 @@ static struct page *khugepaged_alloc_hugepage(bool *wait)
- 			khugepaged_alloc_sleep();
- 		} else
- 			count_vm_event(THP_COLLAPSE_ALLOC);
--	} while (unlikely(!hpage) && likely(khugepaged_enabled()));
-+	} while (unlikely(!hpage) && likely(hugepage_flags_enabled()));
- 
- 	return hpage;
- }
-@@ -2173,7 +2177,7 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
- static int khugepaged_has_work(void)
- {
- 	return !list_empty(&khugepaged_scan.mm_head) &&
--		khugepaged_enabled();
-+		hugepage_flags_enabled();
- }
- 
- static int khugepaged_wait_event(void)
-@@ -2238,7 +2242,7 @@ static void khugepaged_wait_work(void)
- 		return;
- 	}
- 
--	if (khugepaged_enabled())
-+	if (hugepage_flags_enabled())
- 		wait_event_freezable(khugepaged_wait, khugepaged_wait_event());
- }
- 
-@@ -2269,7 +2273,7 @@ static void set_recommended_min_free_kbytes(void)
- 	int nr_zones = 0;
- 	unsigned long recommended_min;
- 
--	if (!khugepaged_enabled()) {
-+	if (!hugepage_flags_enabled()) {
- 		calculate_min_free_kbytes();
- 		goto update_wmarks;
- 	}
-@@ -2319,7 +2323,7 @@ int start_stop_khugepaged(void)
- 	int err = 0;
- 
- 	mutex_lock(&khugepaged_mutex);
--	if (khugepaged_enabled()) {
-+	if (hugepage_flags_enabled()) {
- 		if (!khugepaged_thread)
- 			khugepaged_thread = kthread_run(khugepaged, NULL,
- 							"khugepaged");
-@@ -2345,7 +2349,7 @@ int start_stop_khugepaged(void)
- void khugepaged_min_free_kbytes_update(void)
- {
- 	mutex_lock(&khugepaged_mutex);
--	if (khugepaged_enabled() && khugepaged_thread)
-+	if (hugepage_flags_enabled() && khugepaged_thread)
- 		set_recommended_min_free_kbytes();
- 	mutex_unlock(&khugepaged_mutex);
- }
 -- 
-2.26.3
-
+Wir sind ein Geldverleihdienst zwischen Privatpersonen, der jedem hilft,
+der einen Kredit benötigt. Wir können Ihnen einen Kredit zwischen 1000
+€ und 25.000.000 € mit einem festen Zinssatz von 1,5 % gewähren.
+Erhalten Sie einen Kredit, um Ihre Schulden zu begleichen, Ihre Projekte
+durchzuführen, Ihr Traumhaus oder Auto zu kaufen. Wir bieten das 
+Darlehen
+jedem an, der zu unseren Bedingungen zurückzahlen kann. Sie müssen einen
+Kredit aufnehmen: Finanzierung * Wohnungsbaudarlehen * 
+Investitionsdarlehen
+* Autokredit * Konsolidierungsschuld * Kreditlinie * Hypothekendarlehen 
+*
+Kreditablösung * Privatdarlehen. Sie sind aktenkundig, haben Bankverbot
+und werden von Banken nicht bevorzugt oder noch besser, Sie haben ein
+Projekt und brauchen eine Finanzierung, eine schlechte Kreditakte oder
+brauchen Geld, um Rechnungen zu bezahlen E-Mail:: 
+noellepaul000@gmail.com

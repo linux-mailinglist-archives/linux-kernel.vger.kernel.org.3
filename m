@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E338353EE39
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129E353EE3D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Jun 2022 20:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbiFFS5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 14:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S231697AbiFFS7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 14:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbiFFS5i (ORCPT
+        with ESMTP id S231641AbiFFS71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 14:57:38 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B49220D8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 11:57:37 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id w20so3110577lfa.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 11:57:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nIz93hX2PQ4fhuhp1jMpyp0wJt0SBYcIreMeL3lWdNY=;
-        b=PRIGkpN6xE0WkLxBRa2NL7ikMvENhq0/W55wukWNbpiU5svpBNZQqC3XEupJcPPfWc
-         8oppZyUKGVgquZiSnv7aXlI71ZyA1ATmq3KM6WsUkuXABCAhWKZgSHOmOsT4/8+npwnV
-         dm1E6BMsMN8PeZlNbmP2wTeSsOYhopNqqKCjafSDXtQgKgvFDV8TnCLqvTVYHJQqCgiw
-         UnfNTnPTzdEFtr9VD2VM3K1a/ylB90PlmfekQovRqINRFzVjmOJVDycsUy0URUX0P+Io
-         MVdDg8BuazsCqpyUpeO3UtMWBfNuLkCaFmWyhwje5onPTPKLjkC67pyPAQYWfiQmYOdD
-         rebw==
+        Mon, 6 Jun 2022 14:59:27 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE31AAFB3C;
+        Mon,  6 Jun 2022 11:59:25 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id n144so134683iod.4;
+        Mon, 06 Jun 2022 11:59:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nIz93hX2PQ4fhuhp1jMpyp0wJt0SBYcIreMeL3lWdNY=;
-        b=CrJDyJdMsWcRNDqwQxiwe9N/z4QHclIwB31QiJUb77ATtmBz8DM/USz6wgBqONgeZo
-         rhrbn5UabDdww0Cr2yIXr4kBZ6xmW5Bdst+VSl/UBzpJEfiYaSp0RO9dvEFU87PCxRZL
-         d6tPK2hfhB1CEgPoeCk8eA5i4g4qYKc6ve9VppAEXEtQ9moNM+beiCfTfCM7rQEBknty
-         FG9r0IdyH/7kxmVd6lvb/EY3gorM1WHjfp2buYUKdc7SErMTr0bYVnb6Sr6wA/nrZXKr
-         3rKHfmiZPrhpaiqG8WZNvGTPWguse7+4stW7opDR8zViukATLS8ez99fW01WmDmlJXFB
-         yVxw==
-X-Gm-Message-State: AOAM530iTsZn+mRX7gOAxb9CV2PuUSNtbR5eu30JKyoJBnCo7Bzj2ZYU
-        jedpSER0PSYhxT8cVxHLMhg=
-X-Google-Smtp-Source: ABdhPJzx4OHSkLUGA6dbuYoqvNRaBXgj04jBulDxf8sYwpXbDWn+W3PyS0m2Ljm3XH7+T+DHSX6jhw==
-X-Received: by 2002:a05:6512:e90:b0:477:cc44:9813 with SMTP id bi16-20020a0565120e9000b00477cc449813mr16943484lfb.226.1654541855259;
-        Mon, 06 Jun 2022 11:57:35 -0700 (PDT)
-Received: from [192.168.1.11] ([94.103.229.27])
-        by smtp.gmail.com with ESMTPSA id w10-20020ac2442a000000b0047255d211b2sm2953285lfl.225.2022.06.06.11.57.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 11:57:34 -0700 (PDT)
-Message-ID: <5d57d0f5-06bd-5e3a-2cb9-d8ae531e453e@gmail.com>
-Date:   Mon, 6 Jun 2022 21:57:32 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LBCu0rHUuV6/ftfk4QrcN/2mnb7WuKbppJnFTxyjW94=;
+        b=nwnRN47R8roUVlUIUAOh/EgLE6E9Lvtk84fNSNA10m+0NHYtJTrTwMjvhstpmz/Tax
+         56cX7I886Q8yhdZLBxWWGteKFB5PESsldSdY2C5+NZGDtkIEE6CgPlVY/do9HccR7xVY
+         dc1hCzuyY4mGqdZ5X9jPtXx28nClimi3wQ1fmryamAnAREAaebtUlA9TkSRE2dqm0mVl
+         6700YmXg5v38XHZMLIJkCwgxslhU+Zb/3/VM/IlReIUJfJRBBKa1KhuajwS7AvzSH463
+         dQSeZX9Bt/MfDxWGtnKdaOZj+qTFXVIz+9Df4i/IgMgJpegV+PEVLKLwpz+bwJtN7gbI
+         wqOA==
+X-Gm-Message-State: AOAM532mgY9EYbCJxjyiri7okz+rFPKR20gP2HV4ImwUebjmJnQQ+WIg
+        RZ65B2Cir/poAju1vBedtg==
+X-Google-Smtp-Source: ABdhPJweHrdLUcsa2RnGGF2haYRcX1atBS2HmAwJzesZ7+Tb0tRZgHJ+InjfDtx4dsAxjBZfbip76A==
+X-Received: by 2002:a05:6638:3787:b0:331:aaf5:950c with SMTP id w7-20020a056638378700b00331aaf5950cmr4180577jal.118.1654541965156;
+        Mon, 06 Jun 2022 11:59:25 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n5-20020a056e02100500b002d5366820acsm1585158ilj.18.2022.06.06.11.59.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 11:59:24 -0700 (PDT)
+Received: (nullmailer pid 1080359 invoked by uid 1000);
+        Mon, 06 Jun 2022 18:59:23 -0000
+Date:   Mon, 6 Jun 2022 13:59:23 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 0/8] pinctrl/arm: dt-bindings: deprecate header with
+ register constants
+Message-ID: <20220606185923.GA900292-robh@kernel.org>
+References: <20220605160508.134075-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/4] staging: r8188eu: add error handling of rtw_read8
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        straube.linux@gmail.com, dan.carpenter@oracle.com,
-        fmdefrancesco@gmail.com, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <cover.1652994483.git.paskripkin@gmail.com>
- <541ab3341093a8f6bff1cf8e8aa0c7e247ff4833.1652994483.git.paskripkin@gmail.com>
- <Yp2VMecmrET9Mu3P@kroah.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <Yp2VMecmrET9Mu3P@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220605160508.134075-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 6/6/22 08:48, Greg KH wrote:
->> -	rtw_read8(padapter, REG_FMETHR);
->> +	/* FIXME: should this read be removed? */
->> +	res = rtw_read8(padapter, REG_FMETHR, &reg);
->> +	(void)res;
+On Sun, Jun 05, 2022 at 06:05:00PM +0200, Krzysztof Kozlowski wrote:
+> Hi,
 > 
-> What is that?  We don't do "empty" lines like this in the kernel for no
-> good reason.  If the return value must be checked, then that's fine, but
-> don't do it this way.  Shouldn't the function itself return an error?
+> Merging
+> =======
+> 1. I plan to take the DTS changes (patches 1-6) via Samsung SoC tree.
+> 2. The driver change (patch 7) can go independently via pinctrl tree or via my
+>    Samsung pinctrl tree.
+> 3. The final bindings patch 8 will wait for next release, to avoid any cross
+>    tree merges or warnings.
 > 
-> And reading a value is sometimes required by hardware in order to have
-> the write call go through.  But that's for PCI devices, not normally USB
-> devices, but we could be wrong.  I wouldn't put a FIXME in here unless
-> you have some plan for how to eventually solve it, otherwise someone
-> might just drop it without knowing why the FIXME was ever added.
+> Changes since v2
+> ================
+> 1. Split last bindings patch per driver changes and bindings.
+> 2. Add tags.
 > 
+> Changes since v1
+> ================
+> 1. Correct title (in the comment) of each header (Chanho).
+> 2. Patch #7: Adjust warning message.
+> 3. Add tags.
 > 
-
-Ok, I will just make this function return an error. Thanks
-
-[snip]
-
->>  
->> diff --git a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
->> index b944c8071a3b..a5b7980dfcee 100644
->> --- a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
->> +++ b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
->> @@ -463,6 +463,7 @@ void _PHY_SaveADDARegisters(struct adapter *adapt, u32 *ADDAReg, u32 *ADDABackup
->>  	}
->>  }
->>  
->> +/* FIXME: return an error to caller */
+> Description
+> ===========
+> The Samsung pin controller drivers were always expecting DTS to use raw
+> register values for pin configuration (e.g. pull up/down, drive strength).  DTS
+> had these values hard-coded all over, so at some point we decided for
+> convenience to move them to dt-bindings header.  Less code duplication, some
+> meaning added to raw number, etc.
 > 
-> When are these FIXME going to be resolved?  I don't like adding them for
-> no good reason.
+> However these constants do not fit the purpose of bindings.  They do not
+> provide any abstraction, any hardware and driver independent ID.  With minor
+> exceptions, the Linux drivers actually do not use the bindings header at
+> all.  Because of this "dt-bindings ID" approach, these constants were re-used
+> between chips, e.g. Exynos ones in S5PV210.  These does not make much sense
+> because the values between Exynos and S5PV210 (or S3C24xx) are not related.  If
+> it was an abstraction ID, this would be fine. But it's not.
 > 
+> Clean this up by:
+> 1. Moving the constants to DTS-local headers.
+> 2. Deprecating the bindings header.
+> 
+> Tested by comparing DTBs (dtx_diff, fdtdump).
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (8):
+>   ARM: dts: s3c2410: use local header for pinctrl register values
+>   ARM: dts: s3c64xx: use local header for pinctrl register values
+>   ARM: dts: s5pv210: use local header for pinctrl register values
+>   ARM: dts: exynos: use local header for pinctrl register values
+>   arm64: dts: exynos: use local header for pinctrl register values
+>   arm64: dts: fsd: use local header for pinctrl register values
+>   pinctrl: samsung: do not use bindings header with constants
+>   dt-bindings: pinctrl: samsung: deprecate header with register
+>     constants
 
-After this series will go in. I really don't want to make this series 
-huge, since ideally read errors should be passed up to callers. This 
-driver has a lot of very deep call-chains, so fixing them in one series 
-is just unreal
+For the series:
 
-I have a plan to address these FIXMEs, that's why I've planted them.
+Acked-by: Rob Herring <robh@kernel.org>
 
-
-thanks for review,
-
-
-With regards,
-Pavel Skripkin

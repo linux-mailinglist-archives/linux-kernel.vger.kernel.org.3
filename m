@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1825054180A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397CF540ED5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378593AbiFGVIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S1353861AbiFGSzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359206AbiFGUJj (ORCPT
+        with ESMTP id S1352791AbiFGSRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:09:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F6916ABC9;
-        Tue,  7 Jun 2022 11:27:03 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDE213CA17;
+        Tue,  7 Jun 2022 10:52:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EDE8B82367;
-        Tue,  7 Jun 2022 18:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD3DC385A5;
-        Tue,  7 Jun 2022 18:27:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 057AAB8236F;
+        Tue,  7 Jun 2022 17:52:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75925C385A5;
+        Tue,  7 Jun 2022 17:52:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626421;
-        bh=kxJo4mL558H5JGkgGUuEbvjo9SuUGP3ePttDj3kdMFs=;
+        s=korg; t=1654624359;
+        bh=Fz+mdtALI1lCwdc+1/YXjrbj9w82Y3UPUFerJeEZOzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lizKcrJY8Jp9gFZHAYhAmRLCzXImUOR3olo0obyVF9TcTvGCTK2wt1mJ5aOsnPB09
-         g1nyixDF5cIg5BIOR1ed0eHYZRNUi8e1SeSEVhx7l0w270NRpTbf62mZi64Uu3p6Wo
-         zLn7fNo+8hztzDzxTUphhpbiM61qD1BiX3odHJBc=
+        b=kKzscmKqfXqrnN4EmLMzIJ8PMNhc8ZHG8bV+aOR8j3WwcSkKfijujPOf14ASqzoQ7
+         8G6YX0CB6L+2Lv9OWH4kry2qmQlF2c+gAjS3au8WzAQILCV1irt5UU3qZ73z/GzzG3
+         L2UWOrXGUxpWcMJNoZHxt9lINxAMOKIbVhSidT7Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, ThinerLogoer <logoerthiner1@163.com>,
-        Deren Wu <deren.wu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 371/772] mt76: mt7921: fix kernel crash at mt7921_pci_remove
+        stable@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 298/667] regulator: qcom_smd: Fix up PM8950 regulator configuration
 Date:   Tue,  7 Jun 2022 18:59:23 +0200
-Message-Id: <20220607164959.946984989@linuxfoundation.org>
+Message-Id: <20220607164943.715457451@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+From: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-[ Upstream commit ad483ed9dd5193a54293269c852a29051813b7bd ]
+[ Upstream commit b11b3d21a94d66bc05d1142e0b210bfa316c62be ]
 
-The crash log shown it is possible that mt7921_irq_handler is called while
-devm_free_irq is being handled so mt76_free_device need to be postponed
-until devm_free_irq is completed to solve the crash we free the mt76 device
-too early.
+Following changes have been made:
 
-[ 9299.339655] BUG: kernel NULL pointer dereference, address: 0000000000000008
-[ 9299.339705] #PF: supervisor read access in kernel mode
-[ 9299.339735] #PF: error_code(0x0000) - not-present page
-[ 9299.339768] PGD 0 P4D 0
-[ 9299.339786] Oops: 0000 [#1] SMP PTI
-[ 9299.339812] CPU: 1 PID: 1624 Comm: prepare-suspend Not tainted 5.15.14-1.fc32.qubes.x86_64 #1
-[ 9299.339863] Hardware name: Xen HVM domU, BIOS 4.14.3 01/20/2022
-[ 9299.339901] RIP: 0010:mt7921_irq_handler+0x1e/0x70 [mt7921e]
-[ 9299.340048] RSP: 0018:ffffa81b80c27cb0 EFLAGS: 00010082
-[ 9299.340081] RAX: 0000000000000000 RBX: ffff98a4cb752020 RCX: ffffffffa96211c5
-[ 9299.340123] RDX: 0000000000000000 RSI: 00000000000d4204 RDI: ffff98a4cb752020
-[ 9299.340165] RBP: ffff98a4c28a62a4 R08: ffff98a4c37a96c0 R09: 0000000080150011
-[ 9299.340207] R10: 0000000040000000 R11: 0000000000000000 R12: ffff98a4c4eaa080
-[ 9299.340249] R13: ffff98a4c28a6360 R14: ffff98a4cb752020 R15: ffff98a4c28a6228
-[ 9299.340297] FS: 00007260840d3740(0000) GS:ffff98a4ef700000(0000) knlGS:0000000000000000
-[ 9299.340345] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 9299.340383] CR2: 0000000000000008 CR3: 0000000004c56001 CR4: 0000000000770ee0
-[ 9299.340432] PKRU: 55555554
-[ 9299.340449] Call Trace:
-[ 9299.340467] <TASK>
-[ 9299.340485] __free_irq+0x221/0x350
-[ 9299.340527] free_irq+0x30/0x70
-[ 9299.340553] devm_free_irq+0x55/0x80
-[ 9299.340579] mt7921_pci_remove+0x2f/0x40 [mt7921e]
-[ 9299.340616] pci_device_remove+0x3b/0xa0
-[ 9299.340651] __device_release_driver+0x17a/0x240
-[ 9299.340686] device_driver_detach+0x3c/0xa0
-[ 9299.340714] unbind_store+0x113/0x130
-[ 9299.340740] kernfs_fop_write_iter+0x124/0x1b0
-[ 9299.340775] new_sync_write+0x15c/0x1f0
-[ 9299.340806] vfs_write+0x1d2/0x270
-[ 9299.340831] ksys_write+0x67/0xe0
-[ 9299.340857] do_syscall_64+0x3b/0x90
-[ 9299.340887] entry_SYSCALL_64_after_hwframe+0x44/0xae
+- S5, L4, L18, L20 and L21 were removed (S5 is managed by
+SPMI, whereas the rest seems not to exist [or at least it's blocked
+by Sony Loire /MSM8956/ RPM firmware])
 
-Fixes: 5c14a5f944b9 ("mt76: mt7921: introduce mt7921e support")
-Reported-by: ThinerLogoer <logoerthiner1@163.com>
-Signed-off-by: Deren Wu <deren.wu@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+- Supply maps have were adjusted to reflect regulator changes.
+
+Fixes: e44adca5fa25 ("regulator: qcom_smd: Add PM8950 regulators")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Link: https://lore.kernel.org/r/20220430163753.609909-1-konrad.dybcio@somainline.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/regulator/qcom_smd-regulator.c | 35 +++++++++++++-------------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-index 18c8f5cbd96c..2dec9750c6aa 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-@@ -118,7 +118,6 @@ static void mt7921e_unregister_device(struct mt7921_dev *dev)
- 	mt7921_mcu_exit(dev);
+diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+index b6287f7e78f4..eb974b9c0b19 100644
+--- a/drivers/regulator/qcom_smd-regulator.c
++++ b/drivers/regulator/qcom_smd-regulator.c
+@@ -926,32 +926,31 @@ static const struct rpm_regulator_data rpm_pm8950_regulators[] = {
+ 	{ "s2", QCOM_SMD_RPM_SMPA, 2, &pm8950_hfsmps, "vdd_s2" },
+ 	{ "s3", QCOM_SMD_RPM_SMPA, 3, &pm8950_hfsmps, "vdd_s3" },
+ 	{ "s4", QCOM_SMD_RPM_SMPA, 4, &pm8950_hfsmps, "vdd_s4" },
+-	{ "s5", QCOM_SMD_RPM_SMPA, 5, &pm8950_ftsmps2p5, "vdd_s5" },
++	/* S5 is managed via SPMI. */
+ 	{ "s6", QCOM_SMD_RPM_SMPA, 6, &pm8950_hfsmps, "vdd_s6" },
  
- 	tasklet_disable(&dev->irq_tasklet);
--	mt76_free_device(&dev->mt76);
- }
- 
- static u32 __mt7921_reg_addr(struct mt7921_dev *dev, u32 addr)
-@@ -354,6 +353,7 @@ static void mt7921_pci_remove(struct pci_dev *pdev)
- 
- 	mt7921e_unregister_device(dev);
- 	devm_free_irq(&pdev->dev, pdev->irq, dev);
-+	mt76_free_device(&dev->mt76);
- 	pci_free_irq_vectors(pdev);
- }
+ 	{ "l1", QCOM_SMD_RPM_LDOA, 1, &pm8950_ult_nldo, "vdd_l1_l19" },
+ 	{ "l2", QCOM_SMD_RPM_LDOA, 2, &pm8950_ult_nldo, "vdd_l2_l23" },
+ 	{ "l3", QCOM_SMD_RPM_LDOA, 3, &pm8950_ult_nldo, "vdd_l3" },
+-	{ "l4", QCOM_SMD_RPM_LDOA, 4, &pm8950_ult_pldo, "vdd_l4_l5_l6_l7_l16" },
+-	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pm8950_pldo_lv, "vdd_l4_l5_l6_l7_l16" },
+-	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pm8950_pldo_lv, "vdd_l4_l5_l6_l7_l16" },
+-	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pm8950_pldo_lv, "vdd_l4_l5_l6_l7_l16" },
++	/* L4 seems not to exist. */
++	{ "l5", QCOM_SMD_RPM_LDOA, 5, &pm8950_pldo_lv, "vdd_l5_l6_l7_l16" },
++	{ "l6", QCOM_SMD_RPM_LDOA, 6, &pm8950_pldo_lv, "vdd_l5_l6_l7_l16" },
++	{ "l7", QCOM_SMD_RPM_LDOA, 7, &pm8950_pldo_lv, "vdd_l5_l6_l7_l16" },
+ 	{ "l8", QCOM_SMD_RPM_LDOA, 8, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
+ 	{ "l9", QCOM_SMD_RPM_LDOA, 9, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
+ 	{ "l10", QCOM_SMD_RPM_LDOA, 10, &pm8950_ult_nldo, "vdd_l9_l10_l13_l14_l15_l18"},
+-	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22"},
+-	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22"},
+-	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
+-	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
+-	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
+-	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pm8950_ult_pldo, "vdd_l4_l5_l6_l7_l16"},
+-	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22"},
+-	{ "l18", QCOM_SMD_RPM_LDOA, 18, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18"},
+-	{ "l19", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l1_l19"},
+-	{ "l20", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l20"},
+-	{ "l21", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l21"},
+-	{ "l22", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l8_l11_l12_l17_l22"},
+-	{ "l23", QCOM_SMD_RPM_LDOA, 18, &pm8950_pldo, "vdd_l2_l23"},
++	{ "l11", QCOM_SMD_RPM_LDOA, 11, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
++	{ "l12", QCOM_SMD_RPM_LDOA, 12, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
++	{ "l13", QCOM_SMD_RPM_LDOA, 13, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
++	{ "l14", QCOM_SMD_RPM_LDOA, 14, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
++	{ "l15", QCOM_SMD_RPM_LDOA, 15, &pm8950_ult_pldo, "vdd_l9_l10_l13_l14_l15_l18" },
++	{ "l16", QCOM_SMD_RPM_LDOA, 16, &pm8950_ult_pldo, "vdd_l5_l6_l7_l16" },
++	{ "l17", QCOM_SMD_RPM_LDOA, 17, &pm8950_ult_pldo, "vdd_l8_l11_l12_l17_l22" },
++	/* L18 seems not to exist. */
++	{ "l19", QCOM_SMD_RPM_LDOA, 19, &pm8950_pldo, "vdd_l1_l19" },
++	/* L20 & L21 seem not to exist. */
++	{ "l22", QCOM_SMD_RPM_LDOA, 22, &pm8950_pldo, "vdd_l8_l11_l12_l17_l22" },
++	{ "l23", QCOM_SMD_RPM_LDOA, 23, &pm8950_pldo, "vdd_l2_l23" },
+ 	{}
+ };
  
 -- 
 2.35.1

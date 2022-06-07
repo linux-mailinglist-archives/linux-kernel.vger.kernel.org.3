@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041BC5419BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BFB5411CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380466AbiFGV0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S1357478AbiFGTmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377480AbiFGUdZ (ORCPT
+        with ESMTP id S1354364AbiFGSq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E621E4B59;
-        Tue,  7 Jun 2022 11:35:15 -0700 (PDT)
+        Tue, 7 Jun 2022 14:46:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6762C237FF;
+        Tue,  7 Jun 2022 11:00:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF18B61579;
-        Tue,  7 Jun 2022 18:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5D18C385A2;
-        Tue,  7 Jun 2022 18:35:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA897B82182;
+        Tue,  7 Jun 2022 18:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C83C34115;
+        Tue,  7 Jun 2022 18:00:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626912;
-        bh=MwkXSTXX1SoxGg296H8rRNoP2hCJWyFATvvvYG9Rq2Q=;
+        s=korg; t=1654624853;
+        bh=d7M/rrGTQxwwpheykmHfdAUrTOWJWEeOlwizrmgwhOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tXVR3fuyAHg6ECIPP154vO3C3DjW5GzZApIRxRbGi9I1lf3pspkwmaE6NalBnAl8X
-         MGv8lzAfewZdmv6J27RMpALMeAAQWqgxM7z6juzrk17fCE4ABynuEk+QGw01rzsrSp
-         kck645mP52YFC3tI8IXbW5sKE+RQk41mL+pHh3Ts=
+        b=QSMqcAvx/YVtkoq6fWKyobII3QM4Fsb0FEah+3pPJqVXLDO2hObhLVRvEoKu8Gk3C
+         1F5+ZzUrA9Ko+9/0Nj0lsmdiRfqk6AyZXO2dyeWic5IQLrYIERi1CrZIYzAkjslXf+
+         g7dAO2JfBy+xZeoeEgpBRJ1v6rAJ42Bnwj1DUxZs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kajol Jain <kjain@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 548/772] powerpc/perf: Fix the threshold compare group constraint for power10
+Subject: [PATCH 5.15 475/667] Input: stmfts - do not leave device disabled in stmfts_input_open
 Date:   Tue,  7 Jun 2022 19:02:20 +0200
-Message-Id: <20220607165005.111530900@linuxfoundation.org>
+Message-Id: <20220607164948.949856048@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,111 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kajol Jain <kjain@linux.ibm.com>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit 505d31650ba96d6032313480fdb566d289a4698c ]
+[ Upstream commit 5f76955ab1e43e5795a9631b22ca4f918a0ae986 ]
 
-Thresh compare bits for a event is used to program thresh compare
-field in Monitor Mode Control Register A (MMCRA: 8-18 bits for power10).
-When scheduling events as a group, all events in that group should
-match value in threshold bits. Otherwise event open for the sibling
-events should fail. But in the current code, incase thresh compare bits are
-not valid, we are not failing in group_constraint function which can result
-in invalid group schduling.
+The commit 26623eea0da3 attempted to deal with potential leak of runtime
+PM counter when opening the touchscreen device, however it ended up
+erroneously dropping the counter in the case of successfully enabling the
+device.
 
-Fix the issue by returning -1 incase event is threshold and threshold
-compare value is not valid in group_constraint function.
+Let's address this by using pm_runtime_resume_and_get() and then executing
+pm_runtime_put_sync() only when we fail to send "sense on" command to the
+device.
 
-Patch also fixes the p10_thresh_cmp_val function to return -1,
-incase threshold bits are not valid and changes corresponding check in
-is_thresh_cmp_valid function to return false only when the thresh_cmp
-value is less then 0.
-
-Thresh control bits in the event code is used to program thresh_ctl
-field in Monitor Mode Control Register A (MMCRA: 48-55). In below example,
-the scheduling of group events PM_MRK_INST_CMPL (3534401e0) and
-PM_THRESH_MET (34340101ec) is expected to fail as both event
-request different thresh control bits.
-
-Result before the patch changes:
-
-[command]# perf stat -e "{r35340401e0,r34340101ec}" sleep 1
-
- Performance counter stats for 'sleep 1':
-
-             8,482      r35340401e0
-                 0      r34340101ec
-
-       1.001474838 seconds time elapsed
-
-       0.001145000 seconds user
-       0.000000000 seconds sys
-
-Result after the patch changes:
-
-[command]# perf stat -e "{r35340401e0,r34340101ec}" sleep 1
-
- Performance counter stats for 'sleep 1':
-
-     <not counted>      r35340401e0
-   <not supported>      r34340101ec
-
-       1.001499607 seconds time elapsed
-
-       0.000204000 seconds user
-       0.000760000 seconds sys
-
-Fixes: 82d2c16b350f7 ("powerpc/perf: Adds support for programming of Thresholding in P10")
-Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
-Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220506061015.43916-1-kjain@linux.ibm.com
+Fixes: 26623eea0da3 ("Input: stmfts - fix reference leak in stmfts_input_open")
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/isa207-common.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/input/touchscreen/stmfts.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/perf/isa207-common.c b/arch/powerpc/perf/isa207-common.c
-index 4037ea652522..8f0ecf99c96e 100644
---- a/arch/powerpc/perf/isa207-common.c
-+++ b/arch/powerpc/perf/isa207-common.c
-@@ -108,7 +108,7 @@ static void mmcra_sdar_mode(u64 event, unsigned long *mmcra)
- 		*mmcra |= MMCRA_SDAR_MODE_TLB;
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
+index 72e0b767e1ba..c175d44c52f3 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -337,13 +337,15 @@ static int stmfts_input_open(struct input_dev *dev)
+ 	struct stmfts_data *sdata = input_get_drvdata(dev);
+ 	int err;
+ 
+-	err = pm_runtime_get_sync(&sdata->client->dev);
+-	if (err < 0)
+-		goto out;
++	err = pm_runtime_resume_and_get(&sdata->client->dev);
++	if (err)
++		return err;
+ 
+ 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
+-	if (err)
+-		goto out;
++	if (err) {
++		pm_runtime_put_sync(&sdata->client->dev);
++		return err;
++	}
+ 
+ 	mutex_lock(&sdata->mutex);
+ 	sdata->running = true;
+@@ -366,9 +368,7 @@ static int stmfts_input_open(struct input_dev *dev)
+ 				 "failed to enable touchkey\n");
+ 	}
+ 
+-out:
+-	pm_runtime_put_noidle(&sdata->client->dev);
+-	return err;
++	return 0;
  }
  
--static u64 p10_thresh_cmp_val(u64 value)
-+static int p10_thresh_cmp_val(u64 value)
- {
- 	int exp = 0;
- 	u64 result = value;
-@@ -139,7 +139,7 @@ static u64 p10_thresh_cmp_val(u64 value)
- 		 * exponent is also zero.
- 		 */
- 		if (!(value & 0xC0) && exp)
--			result = 0;
-+			result = -1;
- 		else
- 			result = (exp << 8) | value;
- 	}
-@@ -187,7 +187,7 @@ static bool is_thresh_cmp_valid(u64 event)
- 	unsigned int cmp, exp;
- 
- 	if (cpu_has_feature(CPU_FTR_ARCH_31))
--		return p10_thresh_cmp_val(event) != 0;
-+		return p10_thresh_cmp_val(event) >= 0;
- 
- 	/*
- 	 * Check the mantissa upper two bits are not zero, unless the
-@@ -502,7 +502,8 @@ int isa207_get_constraint(u64 event, unsigned long *maskp, unsigned long *valp,
- 			value |= CNST_THRESH_CTL_SEL_VAL(event >> EVENT_THRESH_SHIFT);
- 			mask  |= p10_CNST_THRESH_CMP_MASK;
- 			value |= p10_CNST_THRESH_CMP_VAL(p10_thresh_cmp_val(event_config1));
--		}
-+		} else if (event_is_threshold(event))
-+			return -1;
- 	} else if (cpu_has_feature(CPU_FTR_ARCH_300))  {
- 		if (event_is_threshold(event) && is_thresh_cmp_valid(event)) {
- 			mask  |= CNST_THRESH_MASK;
+ static void stmfts_input_close(struct input_dev *dev)
 -- 
 2.35.1
 

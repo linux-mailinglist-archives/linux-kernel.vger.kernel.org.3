@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96E2540C02
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F8A541655
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351675AbiFGScj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S1377125AbiFGUuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347964AbiFGSCn (ORCPT
+        with ESMTP id S1358020AbiFGTv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:43 -0400
+        Tue, 7 Jun 2022 15:51:28 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB83910173A;
-        Tue,  7 Jun 2022 10:47:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F758CCE7;
+        Tue,  7 Jun 2022 11:19:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27C8FB82340;
-        Tue,  7 Jun 2022 17:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FDA1C36B01;
-        Tue,  7 Jun 2022 17:46:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C32CB8237D;
+        Tue,  7 Jun 2022 18:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A67C385A5;
+        Tue,  7 Jun 2022 18:19:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624018;
-        bh=k0V0CGh24QZpI6yNSYhiwQtHgkrRzv0OACgWzWYIktE=;
+        s=korg; t=1654625983;
+        bh=rZ2OXPCITf7LRFHCb0HH1soMLzMUo8JEpL8zp4zSYqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/sutQSg1tAjTrBPOvZPM/VXnPd05/a/ejSEXoAuIhugEzAseY2dL7quTIZ24kS3c
-         6aoZLVCR1+6paxaKdIWSX9wic6X2AeQgqFvSzAqiUY4i7gvW6jEJvLfn1o9pxhTXZZ
-         26Fmlcg//LdQBDvb0gI6Hrcekjn3mTndcQlhZK9I=
+        b=USlYvuf9x/KvX+i/Vs8kAYBe9Y78GKIxwg76e2J+f73fcdsMjxwriYkqR+XLoIva6
+         s5VAy4oHHA1+39RWsgHijsZH6QY6Z/lMFfZ8YNjMtmZ0Nr6TCGi7za9CBqOrodxE92
+         o5KOsEqbivkCRCy4ahOS35eqe41RkbWwcLo/XyI8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pierre Gondois <pierre.gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 134/667] ACPI: CPPC: Assume no transition latency if no PCCT
-Date:   Tue,  7 Jun 2022 18:56:39 +0200
-Message-Id: <20220607164938.841664272@linuxfoundation.org>
+Subject: [PATCH 5.17 208/772] powerpc/rtas: Keep MSR[RI] set when calling RTAS
+Date:   Tue,  7 Jun 2022 18:56:40 +0200
+Message-Id: <20220607164955.162505805@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,94 +56,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+From: Laurent Dufour <ldufour@linux.ibm.com>
 
-[ Upstream commit 6380b7b2b29da9d9c5ab2d4a265901cd93ba3696 ]
+[ Upstream commit b6b1c3ce06ca438eb24e0f45bf0e63ecad0369f5 ]
 
-The transition_delay_us (struct cpufreq_policy) is currently defined
-as:
-  Preferred average time interval between consecutive invocations of
-  the driver to set the frequency for this policy.  To be set by the
-  scaling driver (0, which is the default, means no preference).
-The transition_latency represents the amount of time necessary for a
-CPU to change its frequency.
+RTAS runs in real mode (MSR[DR] and MSR[IR] unset) and in 32-bit big
+endian mode (MSR[SF,LE] unset).
 
-A PCCT table advertises mutliple values:
-- pcc_nominal: Expected latency to process a command, in microseconds
-- pcc_mpar: The maximum number of periodic requests that the subspace
-  channel can support, reported in commands per minute. 0 indicates no
-  limitation.
-- pcc_mrtt: The minimum amount of time that OSPM must wait after the
-  completion of a command before issuing the next command,
-  in microseconds.
-cppc_get_transition_latency() allows to get the max of them.
+The change in MSR is done in enter_rtas() in a relatively complex way,
+since the MSR value could be hardcoded.
 
-commit d4f3388afd48 ("cpufreq / CPPC: Set platform specific
-transition_delay_us") allows to select transition_delay_us based on
-the platform, and fallbacks to cppc_get_transition_latency()
-otherwise.
+Furthermore, a panic has been reported when hitting the watchdog interrupt
+while running in RTAS, this leads to the following stack trace:
 
-If _CPC objects are not using PCC channels (no PPCT table), the
-transition_delay_us is set to CPUFREQ_ETERNAL, leading to really long
-periods between frequency updates (~4s).
+  watchdog: CPU 24 Hard LOCKUP
+  watchdog: CPU 24 TB:997512652051031, last heartbeat TB:997504470175378 (15980ms ago)
+  ...
+  Supported: No, Unreleased kernel
+  CPU: 24 PID: 87504 Comm: drmgr Kdump: loaded Tainted: G            E  X    5.14.21-150400.71.1.bz196362_2-default #1 SLE15-SP4 (unreleased) 0d821077ef4faa8dfaf370efb5fdca1fa35f4e2c
+  NIP:  000000001fb41050 LR: 000000001fb4104c CTR: 0000000000000000
+  REGS: c00000000fc33d60 TRAP: 0100   Tainted: G            E  X     (5.14.21-150400.71.1.bz196362_2-default)
+  MSR:  8000000002981000 <SF,VEC,VSX,ME>  CR: 48800002  XER: 20040020
+  CFAR: 000000000000011c IRQMASK: 1
+  GPR00: 0000000000000003 ffffffffffffffff 0000000000000001 00000000000050dc
+  GPR04: 000000001ffb6100 0000000000000020 0000000000000001 000000001fb09010
+  GPR08: 0000000020000000 0000000000000000 0000000000000000 0000000000000000
+  GPR12: 80040000072a40a8 c00000000ff8b680 0000000000000007 0000000000000034
+  GPR16: 000000001fbf6e94 000000001fbf6d84 000000001fbd1db0 000000001fb3f008
+  GPR20: 000000001fb41018 ffffffffffffffff 000000000000017f fffffffffffff68f
+  GPR24: 000000001fb18fe8 000000001fb3e000 000000001fb1adc0 000000001fb1cf40
+  GPR28: 000000001fb26000 000000001fb460f0 000000001fb17f18 000000001fb17000
+  NIP [000000001fb41050] 0x1fb41050
+  LR [000000001fb4104c] 0x1fb4104c
+  Call Trace:
+  Instruction dump:
+  XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+  XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+  Oops: Unrecoverable System Reset, sig: 6 [#1]
+  LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+  ...
+  Supported: No, Unreleased kernel
+  CPU: 24 PID: 87504 Comm: drmgr Kdump: loaded Tainted: G            E  X    5.14.21-150400.71.1.bz196362_2-default #1 SLE15-SP4 (unreleased) 0d821077ef4faa8dfaf370efb5fdca1fa35f4e2c
+  NIP:  000000001fb41050 LR: 000000001fb4104c CTR: 0000000000000000
+  REGS: c00000000fc33d60 TRAP: 0100   Tainted: G            E  X     (5.14.21-150400.71.1.bz196362_2-default)
+  MSR:  8000000002981000 <SF,VEC,VSX,ME>  CR: 48800002  XER: 20040020
+  CFAR: 000000000000011c IRQMASK: 1
+  GPR00: 0000000000000003 ffffffffffffffff 0000000000000001 00000000000050dc
+  GPR04: 000000001ffb6100 0000000000000020 0000000000000001 000000001fb09010
+  GPR08: 0000000020000000 0000000000000000 0000000000000000 0000000000000000
+  GPR12: 80040000072a40a8 c00000000ff8b680 0000000000000007 0000000000000034
+  GPR16: 000000001fbf6e94 000000001fbf6d84 000000001fbd1db0 000000001fb3f008
+  GPR20: 000000001fb41018 ffffffffffffffff 000000000000017f fffffffffffff68f
+  GPR24: 000000001fb18fe8 000000001fb3e000 000000001fb1adc0 000000001fb1cf40
+  GPR28: 000000001fb26000 000000001fb460f0 000000001fb17f18 000000001fb17000
+  NIP [000000001fb41050] 0x1fb41050
+  LR [000000001fb4104c] 0x1fb4104c
+  Call Trace:
+  Instruction dump:
+  XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+  XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+  ---[ end trace 3ddec07f638c34a2 ]---
 
-If the desired_reg, where performance requests are written, is in
-SystemMemory or SystemIo ACPI address space, there is no delay
-in requests. So return 0 instead of CPUFREQ_ETERNAL, leading to
-transition_delay_us being set to LATENCY_MULTIPLIER us (1000 us).
+This happens because MSR[RI] is unset when entering RTAS but there is no
+valid reason to not set it here.
 
-This patch also adds two macros to check the address spaces.
+RTAS is expected to be called with MSR[RI] as specified in PAPR+ section
+"7.2.1 Machine State":
 
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+  R1–7.2.1–9. If called with MSR[RI] equal to 1, then RTAS must protect
+  its own critical regions from recursion by setting the MSR[RI] bit to
+  0 when in the critical regions.
+
+Fixing this by reviewing the way MSR is compute before calling RTAS. Now a
+hardcoded value meaning real mode, 32 bits big endian mode and Recoverable
+Interrupt is loaded. In the case MSR[S] is set, it will remain set while
+entering RTAS as only urfid can unset it (thanks Fabiano).
+
+In addition a check is added in do_enter_rtas() to detect calls made with
+MSR[RI] unset, as we are forcing it on later.
+
+This patch has been tested on the following machines:
+Power KVM Guest
+  P8 S822L (host Ubuntu kernel 5.11.0-49-generic)
+PowerVM LPAR
+  P8 9119-MME (FW860.A1)
+  p9 9008-22L (FW950.00)
+  P10 9080-HEX (FW1010.00)
+
+Suggested-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220504101244.12107-1-ldufour@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/cppc_acpi.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ arch/powerpc/kernel/entry_64.S | 24 ++++++++++++------------
+ arch/powerpc/kernel/rtas.c     |  9 +++++++++
+ 2 files changed, 21 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 71b87c16f92d..ed1341030684 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -100,6 +100,16 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
- 				(cpc)->cpc_entry.reg.space_id ==	\
- 				ACPI_ADR_SPACE_PLATFORM_COMM)
+diff --git a/arch/powerpc/kernel/entry_64.S b/arch/powerpc/kernel/entry_64.S
+index 9581906b5ee9..da18f83ef883 100644
+--- a/arch/powerpc/kernel/entry_64.S
++++ b/arch/powerpc/kernel/entry_64.S
+@@ -330,22 +330,22 @@ _GLOBAL(enter_rtas)
+ 	clrldi	r4,r4,2			/* convert to realmode address */
+        	mtlr	r4
  
-+/* Check if a CPC register is in SystemMemory */
-+#define CPC_IN_SYSTEM_MEMORY(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&	\
-+				(cpc)->cpc_entry.reg.space_id ==	\
-+				ACPI_ADR_SPACE_SYSTEM_MEMORY)
+-	li	r0,0
+-	ori	r0,r0,MSR_EE|MSR_SE|MSR_BE|MSR_RI
+-	andc	r0,r6,r0
+-	
+-        li      r9,1
+-        rldicr  r9,r9,MSR_SF_LG,(63-MSR_SF_LG)
+-	ori	r9,r9,MSR_IR|MSR_DR|MSR_FE0|MSR_FE1|MSR_FP|MSR_RI|MSR_LE
+-	andc	r6,r0,r9
+-
+ __enter_rtas:
+-	sync				/* disable interrupts so SRR0/1 */
+-	mtmsrd	r0			/* don't get trashed */
+-
+ 	LOAD_REG_ADDR(r4, rtas)
+ 	ld	r5,RTASENTRY(r4)	/* get the rtas->entry value */
+ 	ld	r4,RTASBASE(r4)		/* get the rtas->base value */
 +
-+/* Check if a CPC register is in SystemIo */
-+#define CPC_IN_SYSTEM_IO(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&	\
-+				(cpc)->cpc_entry.reg.space_id ==	\
-+				ACPI_ADR_SPACE_SYSTEM_IO)
++	/*
++	 * RTAS runs in 32-bit big endian real mode, but leave MSR[RI] on as we
++	 * may hit NMI (SRESET or MCE) while in RTAS. RTAS should disable RI in
++	 * its critical regions (as specified in PAPR+ section 7.2.1). MSR[S]
++	 * is not impacted by RFI_TO_KERNEL (only urfid can unset it). So if
++	 * MSR[S] is set, it will remain when entering RTAS.
++	 */
++	LOAD_REG_IMMEDIATE(r6, MSR_ME | MSR_RI)
 +
- /* Evaluates to True if reg is a NULL register descriptor */
- #define IS_NULL_REG(reg) ((reg)->space_id ==  ACPI_ADR_SPACE_SYSTEM_MEMORY && \
- 				(reg)->address == 0 &&			\
-@@ -1378,6 +1388,9 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
-  * transition latency for performance change requests. The closest we have
-  * is the timing information from the PCCT tables which provides the info
-  * on the number and frequency of PCC commands the platform can handle.
-+ *
-+ * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
-+ * then assume there is no latency.
-  */
- unsigned int cppc_get_transition_latency(int cpu_num)
++	li      r0,0
++	mtmsrd  r0,1                    /* disable RI before using SRR0/1 */
+ 	
+ 	mtspr	SPRN_SRR0,r5
+ 	mtspr	SPRN_SRR1,r6
+diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
+index 1f42aabbbab3..6bc89d9ccf63 100644
+--- a/arch/powerpc/kernel/rtas.c
++++ b/arch/powerpc/kernel/rtas.c
+@@ -49,6 +49,15 @@ void enter_rtas(unsigned long);
+ 
+ static inline void do_enter_rtas(unsigned long args)
  {
-@@ -1403,7 +1416,9 @@ unsigned int cppc_get_transition_latency(int cpu_num)
- 		return CPUFREQ_ETERNAL;
++	unsigned long msr;
++
++	/*
++	 * Make sure MSR[RI] is currently enabled as it will be forced later
++	 * in enter_rtas.
++	 */
++	msr = mfmsr();
++	BUG_ON(!(msr & MSR_RI));
++
+ 	enter_rtas(args);
  
- 	desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
--	if (!CPC_IN_PCC(desired_reg))
-+	if (CPC_IN_SYSTEM_MEMORY(desired_reg) || CPC_IN_SYSTEM_IO(desired_reg))
-+		return 0;
-+	else if (!CPC_IN_PCC(desired_reg))
- 		return CPUFREQ_ETERNAL;
- 
- 	if (pcc_ss_id < 0)
+ 	srr_regs_clobbered(); /* rtas uses SRRs, invalidate */
 -- 
 2.35.1
 

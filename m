@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99051540C5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C12154161F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352767AbiFGSfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S1357978AbiFGUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350792AbiFGSBZ (ORCPT
+        with ESMTP id S1354466AbiFGTmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:01:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8D814CDC4;
-        Tue,  7 Jun 2022 10:43:37 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E60931DC8;
+        Tue,  7 Jun 2022 11:17:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C814B822A6;
-        Tue,  7 Jun 2022 17:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5809C385A5;
-        Tue,  7 Jun 2022 17:43:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50A1C60A21;
+        Tue,  7 Jun 2022 18:17:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E74C385A2;
+        Tue,  7 Jun 2022 18:17:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623813;
-        bh=Xrh9+IX1jDtfZYsCVm1bWZVVFlKh6NLJ2whgIr5FrpM=;
+        s=korg; t=1654625873;
+        bh=sm8MbBlNG5K6X9hLCmzFjLBYl5czMKscsEUm5HoPOMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pkRJ+O5o+frHeVt1vg9BVOewLx6hQRQrUJ4JP0eYYSrLhiNJLMvbdvAR31Piu8u1S
-         SPsBaECn5TWxsZCnUw+/k3CNFr5AnRj/91KtV4ei+UzPGWyWEiNo3foqQSd2Zcg8lt
-         nFKniFax8MwKQwYcPNu/7MwV+37ChwZjU1SvxotM=
+        b=uclkpbLgGwMDu+8cKHb2tkcU4v0md7XI039ssj9EUvdxXxEzOt3N50HZLjeAdcBSC
+         anQjXmf3A16vwuZtaUdQoQTMWysI2TA/mGZUDbG/GvYwEV48N0rYzdlMZLk436xnkO
+         m92+uSGG1QIzlfMtFynunq+wocjPB6WgUC97Q48I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 102/667] ASoC: tscs454: Add endianness flag in snd_soc_component_driver
-Date:   Tue,  7 Jun 2022 18:56:07 +0200
-Message-Id: <20220607164937.880756172@linuxfoundation.org>
+Subject: [PATCH 5.17 176/772] eth: tg3: silence the GCC 12 array-bounds warning
+Date:   Tue,  7 Jun 2022 18:56:08 +0200
+Message-Id: <20220607164954.226644987@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit ff69ec96b87dccb3a29edef8cec5d4fefbbc2055 ]
+[ Upstream commit 9dec850fd7c210a04b4707df8e6c95bfafdd6a4b ]
 
-The endianness flag is used on the CODEC side to specify an
-ambivalence to endian, typically because it is lost over the hardware
-link. This device receives audio over an I2S DAI and as such should
-have endianness applied.
+GCC 12 currently generates a rather inconsistent warning:
 
-A fixup is also required to use the width directly rather than relying
-on the format in hw_params, now both little and big endian would be
-supported. It is worth noting this changes the behaviour of S24_LE to
-use a word length of 24 rather than 32. This would appear to be a
-correction since the fact S24_LE is stored as 32 bits should not be
-presented over the bus.
+drivers/net/ethernet/broadcom/tg3.c:17795:51: warning: array subscript 5 is above array bounds of ‘struct tg3_napi[5]’ [-Warray-bounds]
+17795 |                 struct tg3_napi *tnapi = &tp->napi[i];
+      |                                           ~~~~~~~~^~~
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220504170905.332415-26-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+i is guaranteed < tp->irq_max which in turn is either 1 or 5.
+There are more loops like this one in the driver, but strangely
+GCC 12 dislikes only this single one.
+
+Silence this silliness for now.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/tscs454.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/broadcom/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/sound/soc/codecs/tscs454.c b/sound/soc/codecs/tscs454.c
-index 43220bb36701..c27ca9a273e1 100644
---- a/sound/soc/codecs/tscs454.c
-+++ b/sound/soc/codecs/tscs454.c
-@@ -3120,18 +3120,17 @@ static int set_aif_sample_format(struct snd_soc_component *component,
- 	unsigned int width;
- 	int ret;
- 
--	switch (format) {
--	case SNDRV_PCM_FORMAT_S16_LE:
-+	switch (snd_pcm_format_width(format)) {
-+	case 16:
- 		width = FV_WL_16;
- 		break;
--	case SNDRV_PCM_FORMAT_S20_3LE:
-+	case 20:
- 		width = FV_WL_20;
- 		break;
--	case SNDRV_PCM_FORMAT_S24_3LE:
-+	case 24:
- 		width = FV_WL_24;
- 		break;
--	case SNDRV_PCM_FORMAT_S24_LE:
--	case SNDRV_PCM_FORMAT_S32_LE:
-+	case 32:
- 		width = FV_WL_32;
- 		break;
- 	default:
-@@ -3326,6 +3325,7 @@ static const struct snd_soc_component_driver soc_component_dev_tscs454 = {
- 	.num_dapm_routes = ARRAY_SIZE(tscs454_intercon),
- 	.controls =	tscs454_snd_controls,
- 	.num_controls = ARRAY_SIZE(tscs454_snd_controls),
-+	.endianness = 1,
- };
- 
- #define TSCS454_RATES SNDRV_PCM_RATE_8000_96000
+diff --git a/drivers/net/ethernet/broadcom/Makefile b/drivers/net/ethernet/broadcom/Makefile
+index 0ddfb5b5d53c..2e6c5f258a1f 100644
+--- a/drivers/net/ethernet/broadcom/Makefile
++++ b/drivers/net/ethernet/broadcom/Makefile
+@@ -17,3 +17,8 @@ obj-$(CONFIG_BGMAC_BCMA) += bgmac-bcma.o bgmac-bcma-mdio.o
+ obj-$(CONFIG_BGMAC_PLATFORM) += bgmac-platform.o
+ obj-$(CONFIG_SYSTEMPORT) += bcmsysport.o
+ obj-$(CONFIG_BNXT) += bnxt/
++
++# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
++ifndef KBUILD_EXTRA_WARN
++CFLAGS_tg3.o += -Wno-array-bounds
++endif
 -- 
 2.35.1
 

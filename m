@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D395418A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E295405CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379922AbiFGVNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S1346829AbiFGR3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376629AbiFGUQ5 (ORCPT
+        with ESMTP id S1346888AbiFGRZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:57 -0400
+        Tue, 7 Jun 2022 13:25:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EDF1CF173;
-        Tue,  7 Jun 2022 11:29:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A989110AC6;
+        Tue,  7 Jun 2022 10:23:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0B3661435;
-        Tue,  7 Jun 2022 18:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAA8C385A2;
-        Tue,  7 Jun 2022 18:29:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAF4D60DBA;
+        Tue,  7 Jun 2022 17:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9983C385A5;
+        Tue,  7 Jun 2022 17:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626577;
-        bh=TMGAqEloyoxU4WWgbjXsB23jfVXybmE1fmgBgQzaYfw=;
+        s=korg; t=1654622611;
+        bh=0W2U+U9TrnGFvN5vWdzDj81w5VtmT57fNeeoKVQJu6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rRxtqJhgL6phvhmVpWOhC2pTe8688zRWF9XfuXFQOxshfazEBJGQzJz/HFFsOEh3D
-         mpxv39fWMvT4ZNYU0hZ/f7YIzXfjOvsTzmdSwlm8SGAFebMewllLSLSVByWvlJqpBX
-         CoyMVyEAE5j4/50mQS8gevd+ICNkANm4eIw0fnsc=
+        b=Mehz/povVLXlqkGT4Ek/XFa+XNoMIQdFtszYPPwXCreaqErMDn4taPZlJlRhigD0i
+         iFZ1rjDG6q0KVIh/SWKGxdBu/3JjZAKb2NoJdb8o/IYEkQx+BTTHQhZiua93Q/4Jdg
+         jbq/FmqFovWvbFqFJ/TkF+MmpVTVQ9bnYD2+fZHw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yake Yang <yake.yang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 387/772] Bluetooth: btmtksdio: fix use-after-free at btmtksdio_recv_event
+Subject: [PATCH 5.10 122/452] ath11k: acquire ab->base_lock in unassign when finding the peer by addr
 Date:   Tue,  7 Jun 2022 18:59:39 +0200
-Message-Id: <20220607165000.418114487@linuxfoundation.org>
+Message-Id: <20220607164912.195471591@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit 0fab6361c4ba17d1b43a991bef4238a3c1754d35 ]
+[ Upstream commit 2db80f93869d491be57cbc2b36f30d0d3a0e5bde ]
 
-We should not access skb buffer data anymore after hci_recv_frame was
-called.
+ath11k_peer_find_by_addr states via lockdep that ab->base_lock must be
+held when calling that function in order to protect the list. All
+callers except ath11k_mac_op_unassign_vif_chanctx have that lock
+acquired when calling ath11k_peer_find_by_addr. That lock is also not
+transitively held by a path towards ath11k_mac_op_unassign_vif_chanctx.
+The solution is to acquire the lock when calling
+ath11k_peer_find_by_addr inside ath11k_mac_op_unassign_vif_chanctx.
 
-[   39.634809] BUG: KASAN: use-after-free in btmtksdio_recv_event+0x1b0
-[   39.634855] Read of size 1 at addr ffffff80cf28a60d by task kworker
-[   39.634962] Call trace:
-[   39.634974]  dump_backtrace+0x0/0x3b8
-[   39.634999]  show_stack+0x20/0x2c
-[   39.635016]  dump_stack_lvl+0x60/0x78
-[   39.635040]  print_address_description+0x70/0x2f0
-[   39.635062]  kasan_report+0x154/0x194
-[   39.635079]  __asan_report_load1_noabort+0x44/0x50
-[   39.635099]  btmtksdio_recv_event+0x1b0/0x1c4
-[   39.635129]  btmtksdio_txrx_work+0x6cc/0xac4
-[   39.635157]  process_one_work+0x560/0xc5c
-[   39.635177]  worker_thread+0x7ec/0xcc0
-[   39.635195]  kthread+0x2d0/0x3d0
-[   39.635215]  ret_from_fork+0x10/0x20
-[   39.635247] Allocated by task 0:
-[   39.635260] (stack is not available)
-[   39.635281] Freed by task 2392:
-[   39.635295]  kasan_save_stack+0x38/0x68
-[   39.635319]  kasan_set_track+0x28/0x3c
-[   39.635338]  kasan_set_free_info+0x28/0x4c
-[   39.635357]  ____kasan_slab_free+0x104/0x150
-[   39.635374]  __kasan_slab_free+0x18/0x28
-[   39.635391]  slab_free_freelist_hook+0x114/0x248
-[   39.635410]  kfree+0xf8/0x2b4
-[   39.635427]  skb_free_head+0x58/0x98
-[   39.635447]  skb_release_data+0x2f4/0x410
-[   39.635464]  skb_release_all+0x50/0x60
-[   39.635481]  kfree_skb+0xc8/0x25c
-[   39.635498]  hci_event_packet+0x894/0xca4 [bluetooth]
-[   39.635721]  hci_rx_work+0x1c8/0x68c [bluetooth]
-[   39.635925]  process_one_work+0x560/0xc5c
-[   39.635951]  worker_thread+0x7ec/0xcc0
-[   39.635970]  kthread+0x2d0/0x3d0
-[   39.635990]  ret_from_fork+0x10/0x20
-[   39.636021] The buggy address belongs to the object at ffffff80cf28a600
-                which belongs to the cache kmalloc-512 of size 512
-[   39.636039] The buggy address is located 13 bytes inside of
-                512-byte region [ffffff80cf28a600, ffffff80cf28a800)
+I am currently working on a static analyser to detect missing locks and
+this was a reported case. I manually verified the report by looking at
+the code, but I do not have real hardware so this is compile tested
+only.
 
-Fixes: 9aebfd4a2200 ("Bluetooth: mediatek: add support for MediaTek MT7663S and MT7668S SDIO devices")
-Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 701e48a43e15 ("ath11k: add packet log support for QCA6390")
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220314215253.92658-1-dossche.niels@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/btmtksdio.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index ecf29cfa7d79..411676ad0c6b 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -368,6 +368,7 @@ static int btmtksdio_recv_event(struct hci_dev *hdev, struct sk_buff *skb)
- {
- 	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
- 	struct hci_event_hdr *hdr = (void *)skb->data;
-+	u8 evt = hdr->evt;
- 	int err;
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index cc9122f42024..b2928a5cf72e 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -5325,6 +5325,7 @@ ath11k_mac_op_unassign_vif_chanctx(struct ieee80211_hw *hw,
+ 	struct ath11k *ar = hw->priv;
+ 	struct ath11k_base *ab = ar->ab;
+ 	struct ath11k_vif *arvif = (void *)vif->drv_priv;
++	struct ath11k_peer *peer;
+ 	int ret;
  
- 	/* When someone waits for the WMT event, the skb is being cloned
-@@ -385,7 +386,7 @@ static int btmtksdio_recv_event(struct hci_dev *hdev, struct sk_buff *skb)
- 	if (err < 0)
- 		goto err_free_skb;
+ 	mutex_lock(&ar->conf_mutex);
+@@ -5336,9 +5337,13 @@ ath11k_mac_op_unassign_vif_chanctx(struct ieee80211_hw *hw,
+ 	WARN_ON(!arvif->is_started);
  
--	if (hdr->evt == HCI_EV_WMT) {
-+	if (evt == HCI_EV_WMT) {
- 		if (test_and_clear_bit(BTMTKSDIO_TX_WAIT_VND_EVT,
- 				       &bdev->tx_state)) {
- 			/* Barrier to sync with other CPUs */
+ 	if (ab->hw_params.vdev_start_delay &&
+-	    arvif->vdev_type == WMI_VDEV_TYPE_MONITOR &&
+-	    ath11k_peer_find_by_addr(ab, ar->mac_addr))
+-		ath11k_peer_delete(ar, arvif->vdev_id, ar->mac_addr);
++	    arvif->vdev_type == WMI_VDEV_TYPE_MONITOR) {
++		spin_lock_bh(&ab->base_lock);
++		peer = ath11k_peer_find_by_addr(ab, ar->mac_addr);
++		spin_unlock_bh(&ab->base_lock);
++		if (peer)
++			ath11k_peer_delete(ar, arvif->vdev_id, ar->mac_addr);
++	}
+ 
+ 	ret = ath11k_mac_vdev_stop(arvif);
+ 	if (ret)
 -- 
 2.35.1
 

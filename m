@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F655412CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB519541196
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358159AbiFGTv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S1353923AbiFGTi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354265AbiFGSqv (ORCPT
+        with ESMTP id S1354291AbiFGSqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:46:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB2D118020;
-        Tue,  7 Jun 2022 11:00:30 -0700 (PDT)
+        Tue, 7 Jun 2022 14:46:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3861059F3;
+        Tue,  7 Jun 2022 11:00:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2530B61866;
-        Tue,  7 Jun 2022 18:00:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FD9C34115;
-        Tue,  7 Jun 2022 18:00:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7CB0ACE243D;
+        Tue,  7 Jun 2022 18:00:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D55C385A5;
+        Tue,  7 Jun 2022 18:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624829;
-        bh=AFtAHfC/KbuuNV46TdvKwid6qZzeWaijsvBa9IoGvxk=;
+        s=k20201202; t=1654624834;
+        bh=5bjCs0Jb6YhCJb+AC+LjaNtTWCV4wyc3dEm0P48ZKAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O8/QWVjUDKuiuAk+GxsrGkLZKrdbswi6dQyxShfIR6pCMskvaFCJMw68zfW/pm9kg
-         ASxQC73XQ58Ome2Z+gpTy3HuOrd5dxAVNoZCvEjUL+QSSIHbjm9mfbviBPgauvbKkc
-         9njE4CvrCMHeJBBi3cgj2LcwhVHLvY9t44cnL+TWzhNdb8GMP2tkWilIek14U0Ho+/
-         elLbn0AyTAId0Kw3UfrLpLihJ1ftGXxRSltrFGMeilL5Uk2sE+X7jM7Kqio6+lU1T+
-         8IxOjuE50YxC1KGZWUM6U4ePBWV54jUN44M5P5yhzcQget9PkfIcKHVatW8CGMVLb8
-         FlalKNa8pTmrg==
+        b=tWv8Svhs75Y11i5Bfg7E7f3U/WU2a/b+s2vUqbaSU0kLbs55ioxg70QVudk0Ia0c+
+         A+b/Xyey3kVUMoCD90FtfDxweonn7aiDxujY1Q5N9XBgju9O4pZcS+jDLQMNWRoAkT
+         vAFAezphoCXioGQvOJYi4j7XbCpmgKA2MKjS6ljet9gAiiBTpRWhxbEpUoJXXfHZrZ
+         RDwMY4NxDVHyPGtW9uLFxXUtYrqZaEpHA0+YUxB547+ln4vY0c9H0OLOt3P3X7WBhN
+         Je52rAYOkn3OEATpTYsvyEockGoNEOqZA/hCDXsBpc2V+LVhdyliRYCJX3FSQz2t+7
+         QI4zTuYTSwd9g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Duoming Zhou <duoming@zju.edu.cn>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, baihaowen@meizu.com,
-        dave@stgolabs.net, wangborong@cdjrlc.com, len.baker@gmx.com,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 06/34] drivers: staging: rtl8192u: Fix deadlock in ieee80211_beacons_stop()
-Date:   Tue,  7 Jun 2022 13:59:41 -0400
-Message-Id: <20220607180011.481266-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, dan.carpenter@oracle.com,
+        baihaowen@meizu.com, paskripkin@gmail.com, wjsota@gmail.com,
+        edumazet@google.com, yangyingliang@huawei.com, len.baker@gmx.com,
+        dave@stgolabs.net, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.4 07/34] drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
+Date:   Tue,  7 Jun 2022 13:59:42 -0400
+Message-Id: <20220607180011.481266-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220607180011.481266-1-sashal@kernel.org>
 References: <20220607180011.481266-1-sashal@kernel.org>
@@ -61,40 +62,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 806c7b53414934ba2a39449b31fd1a038e500273 ]
+[ Upstream commit 9b6bdbd9337de3917945847bde262a34a87a6303 ]
 
-There is a deadlock in ieee80211_beacons_stop(), which is shown below:
+There is a deadlock in rtllib_beacons_stop(), which is shown
+below:
 
    (Thread 1)              |      (Thread 2)
-                           | ieee80211_send_beacon()
-ieee80211_beacons_stop()   |  mod_timer()
+                           | rtllib_send_beacon()
+rtllib_beacons_stop()      |  mod_timer()
  spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | ieee80211_send_beacon_cb()
+ ...                       | rtllib_send_beacon_cb()
  del_timer_sync()          |  spin_lock_irqsave() //(2)
  (wait timer to stop)      |  ...
 
-We hold ieee->beacon_lock in position (1) of thread 1 and use
-del_timer_sync() to wait timer to stop, but timer handler
+We hold ieee->beacon_lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
 also need ieee->beacon_lock in position (2) of thread 2.
-As a result, ieee80211_beacons_stop() will block forever.
+As a result, rtllib_beacons_stop() will block forever.
 
 This patch extracts del_timer_sync() from the protection of
 spin_lock_irqsave(), which could let timer handler to obtain
 the needed lock.
 
 Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417135407.109536-1-duoming@zju.edu.cn
+Link: https://lore.kernel.org/r/20220417141641.124388-1-duoming@zju.edu.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c | 2 +-
+ drivers/staging/rtl8192e/rtllib_softmac.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
-index 33a6af7aad22..a869694337f7 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c
-@@ -528,9 +528,9 @@ static void ieee80211_beacons_stop(struct ieee80211_device *ieee)
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+index 4ff8fd694c60..0154f5791b12 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+@@ -651,9 +651,9 @@ static void rtllib_beacons_stop(struct rtllib_device *ieee)
  	spin_lock_irqsave(&ieee->beacon_lock, flags);
  
  	ieee->beacon_txing = 0;
@@ -102,9 +104,9 @@ index 33a6af7aad22..a869694337f7 100644
  
  	spin_unlock_irqrestore(&ieee->beacon_lock, flags);
 +	del_timer_sync(&ieee->beacon_timer);
+ 
  }
  
- void ieee80211_stop_send_beacons(struct ieee80211_device *ieee)
 -- 
 2.35.1
 

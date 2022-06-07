@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BBD541F9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B989B541FC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385940AbiFGWrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S1385951AbiFGWr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380683AbiFGViQ (ORCPT
+        with ESMTP id S1380851AbiFGViQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:38:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EDB17FC0E;
-        Tue,  7 Jun 2022 12:05:25 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEDE1C13A;
+        Tue,  7 Jun 2022 12:05:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D5B6B823AF;
-        Tue,  7 Jun 2022 19:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE920C385A2;
-        Tue,  7 Jun 2022 19:05:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78435617EE;
+        Tue,  7 Jun 2022 19:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849F4C385A2;
+        Tue,  7 Jun 2022 19:05:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628723;
-        bh=S3TbxDKomXjqsFipStdTUFmVt6naxHpuRLRutjjre40=;
+        s=korg; t=1654628725;
+        bh=Whr85xBJzYK0FWJhwzET+EpOWlc68uR+NHnFIy1/Ln8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PeLgcj2uYENw4sH9cJ2l8EapWR9igAQqjgxLkBXALWRbmAtEwfAo9/xFw6y/B6Tfm
-         S7116BVb3bRFxnyb15RoDGX7oh0FJZJQNTdYBVKCqyqdycwGZiAPl1Z1k3eh1zjNDr
-         /9W1w0KYqtOWp36rSjdGkIsjMdqm7r1VTozhy6mc=
+        b=1vHMLFaMAKNoMUmufzO+LZ0KJhvjvNMsg+HtCBwU+a1ObRr+ZpQrAvpv62QMgeW+8
+         lUuREANm2icpYl66d3EssrGGrEdzZwe3bK44iAbXx1wWVLZ8Y672UnFvmHnvBFoJhe
+         gqnUrplXln30JVICLjrxSK9NBQlY6xDwqczDslss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
         Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 432/879] mt76: mt7921: Fix the error handling path of mt7921_pci_probe()
-Date:   Tue,  7 Jun 2022 18:59:10 +0200
-Message-Id: <20220607165015.410054029@linuxfoundation.org>
+Subject: [PATCH 5.18 433/879] mt76: mt7915: fix possible uninitialized pointer dereference in mt7986_wmac_gpio_setup
+Date:   Tue,  7 Jun 2022 18:59:11 +0200
+Message-Id: <20220607165015.438710968@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,48 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 4e90db5e21eb3bb272fe47386dc3506755e209e9 ]
+[ Upstream commit 9bd6823f5a64b6465708b244eecc9b7dd4b01bfc ]
 
-In case of error, some resources must be freed, as already done above and
-below the devm_kmemdup() and __mt7921e_mcu_drv_pmctrl() calls added in the
-commit in Fixes:.
+Add default case for type switch in mt7986_wmac_gpio_setup routine in
+order to avoid a possible uninitialized pointer dereference.
 
-Fixes: 602cc0c9618a ("mt76: mt7921e: fix possible probe failure after reboot")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Fixes: 99ad32a4ca3a2 ("mt76: mt7915: add support for MT7986")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/pci.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7915/soc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-index 1a01d025bbe5..062e2b422478 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
-@@ -302,8 +302,10 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
- 	dev->bus_ops = dev->mt76.bus;
- 	bus_ops = devm_kmemdup(dev->mt76.dev, dev->bus_ops, sizeof(*bus_ops),
- 			       GFP_KERNEL);
--	if (!bus_ops)
--		return -ENOMEM;
-+	if (!bus_ops) {
-+		ret = -ENOMEM;
-+		goto err_free_dev;
-+	}
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/soc.c b/drivers/net/wireless/mediatek/mt76/mt7915/soc.c
+index 3028c02cb840..be448d471b03 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/soc.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/soc.c
+@@ -210,6 +210,8 @@ static int mt7986_wmac_gpio_setup(struct mt7915_dev *dev)
+ 		if (IS_ERR_OR_NULL(state))
+ 			return -EINVAL;
+ 		break;
++	default:
++		return -EINVAL;
+ 	}
  
- 	bus_ops->rr = mt7921_rr;
- 	bus_ops->wr = mt7921_wr;
-@@ -312,7 +314,7 @@ static int mt7921_pci_probe(struct pci_dev *pdev,
- 
- 	ret = __mt7921e_mcu_drv_pmctrl(dev);
- 	if (ret)
--		return ret;
-+		goto err_free_dev;
- 
- 	mdev->rev = (mt7921_l1_rr(dev, MT_HW_CHIPID) << 16) |
- 		    (mt7921_l1_rr(dev, MT_HW_REV) & 0xff);
+ 	ret = pinctrl_select_state(pinctrl, state);
 -- 
 2.35.1
 

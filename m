@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FCA54178D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3264C540593
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377794AbiFGVDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S1346563AbiFGR06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352980AbiFGUCX (ORCPT
+        with ESMTP id S1346106AbiFGRV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:02:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4F71C14CC;
-        Tue,  7 Jun 2022 11:25:21 -0700 (PDT)
+        Tue, 7 Jun 2022 13:21:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E971C1078BC;
+        Tue,  7 Jun 2022 10:21:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 470EC60C1A;
-        Tue,  7 Jun 2022 18:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE4EC385A2;
-        Tue,  7 Jun 2022 18:25:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F8360920;
+        Tue,  7 Jun 2022 17:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C90C385A5;
+        Tue,  7 Jun 2022 17:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626317;
-        bh=NBSceq6uO3g8F5OgwQ3chol+ONy6+vsRb+EPZbZlLzM=;
+        s=korg; t=1654622480;
+        bh=Maymb1M0ojyJFMRqarHeva5kqwx2BGWP3YxckPlwec4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A4o0Nn0s7ETj6MTD0UiUdIPlzFb6oML5pE/EUSoulsxpRPDlyyYwjKXRlJW5uwyeb
-         TS4ElcQjqCIf3VnVfq5ZnlFuj1qJHnaWTh7CmIP+c+OmTfcEDvRrmVHR91B4/mSvmN
-         31iC5nAd90EdHHHHwUb0/omeiNpSSBJrst3tssgw=
+        b=LFntFB7W4ZE9RbsreL1dGGtnJ481U5Zbou49esroJ6eCr6AOC4j37shSBxpLJY39P
+         voVxAQkzTPahFNl3ALL37gHvrhPJGmlr0jrwrhuhP7Vu5FEVv2G4yI5rNUeMrqKQuf
+         P0yZN84RA4Y3NO2bZn9Q3D9m8G0kfvdeTg1Zfo2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, SeongJae Park <sj@kernel.org>,
-        Yuanchu Xie <yuanchu@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Mike Travis <mike.travis@hpe.com>,
+        Steve Wahl <steve.wahl@hpe.com>, Borislav Petkov <bp@suse.de>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 298/772] selftests/damon: add damon to selftests root Makefile
+Subject: [PATCH 5.10 033/452] x86/platform/uv: Update TSC sync state for UV5
 Date:   Tue,  7 Jun 2022 18:58:10 +0200
-Message-Id: <20220607164957.805165705@linuxfoundation.org>
+Message-Id: <20220607164909.535612789@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuanchu Xie <yuanchu@google.com>
+From: Mike Travis <mike.travis@hpe.com>
 
-[ Upstream commit 678f0cdc572c5fda940cb038d70eebb8d818adc8 ]
+[ Upstream commit bb3ab81bdbd53f88f26ffabc9fb15bd8466486ec ]
 
-Currently the damon selftests are not built with the rest of the
-selftests. We add damon to the list of targets.
+The UV5 platform synchronizes the TSCs among all chassis, and will not
+proceed to OS boot without achieving synchronization.  Previous UV
+platforms provided a register indicating successful synchronization.
+This is no longer available on UV5.  On this platform TSC_ADJUST
+should not be reset by the kernel.
 
-Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-Reviewed-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Mike Travis <mike.travis@hpe.com>
+Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20220406195149.228164-3-steve.wahl@hpe.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/apic/x2apic_uv_x.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d08fe4cfe811..ffe453760a12 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += clone3
- TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-+TARGETS += damon
- TARGETS += drivers/dma-buf
- TARGETS += efivarfs
- TARGETS += exec
+diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
+index 40f466de8924..9c283562dfd4 100644
+--- a/arch/x86/kernel/apic/x2apic_uv_x.c
++++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+@@ -199,7 +199,13 @@ static void __init uv_tsc_check_sync(void)
+ 	int mmr_shift;
+ 	char *state;
+ 
+-	/* Different returns from different UV BIOS versions */
++	/* UV5 guarantees synced TSCs; do not zero TSC_ADJUST */
++	if (!is_uv(UV2|UV3|UV4)) {
++		mark_tsc_async_resets("UV5+");
++		return;
++	}
++
++	/* UV2,3,4, UV BIOS TSC sync state available */
+ 	mmr = uv_early_read_mmr(UVH_TSC_SYNC_MMR);
+ 	mmr_shift =
+ 		is_uv2_hub() ? UVH_TSC_SYNC_SHIFT_UV2K : UVH_TSC_SYNC_SHIFT;
 -- 
 2.35.1
 

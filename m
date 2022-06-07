@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CC0541E0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F216541626
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382178AbiFGWXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S1376639AbiFGUqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380748AbiFGVQ4 (ORCPT
+        with ESMTP id S1356449AbiFGTnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F9A49F17;
-        Tue,  7 Jun 2022 11:57:13 -0700 (PDT)
+        Tue, 7 Jun 2022 15:43:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F8A52B0A;
+        Tue,  7 Jun 2022 11:18:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1AE76159D;
-        Tue,  7 Jun 2022 18:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F22A4C385A5;
-        Tue,  7 Jun 2022 18:57:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06B7460A21;
+        Tue,  7 Jun 2022 18:18:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14562C385A2;
+        Tue,  7 Jun 2022 18:18:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628232;
-        bh=Kp9lSNG9ZMRLzWcdumWHugzb7Zr7YUX0zq3Ss2UvdWA=;
+        s=korg; t=1654625890;
+        bh=Io4HhJb+Cz16sRUnVJbOtBv6IWiQnhJuRY59WG07j+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JA4f6WaNqku7BL5owwsO1oeZ/Wu9GepcUPt7xlVEj2o87fheIH7TelIiV045rWY/m
-         VuS7UJV0Jw4QiV7QraratfKORWYAi+S3D/MVduJz8fyNjk6jU9/5c8QsNHiOpkk4Y+
-         TZ8ouy7KMOZF4kAIr1ynD2BBfYUFm56+p6CLJ/ec=
+        b=jFEVpAeqpIBW439GeZ57gq3WmWUKHE0jViaff0T6sTKH1dx0d89ZglZ3bxfkLr2lN
+         jZnypNlIn7om6ao3lXf09Ucbv7queB7wlncuzfaPJU2wL9aMFlJnK8EqQLB2DJhiJ9
+         7BrXFi+D/OCVk53ZODm9PvTBNxacczymaWlMHt78=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Arunpravin <Arunpravin.PaneerSelvam@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 255/879] drm/selftests: missing error code in igt_buddy_alloc_smoke()
-Date:   Tue,  7 Jun 2022 18:56:13 +0200
-Message-Id: <20220607165010.251403464@linuxfoundation.org>
+Subject: [PATCH 5.17 182/772] IB/rdmavt: add missing locks in rvt_ruc_loopback
+Date:   Tue,  7 Jun 2022 18:56:14 +0200
+Message-Id: <20220607164954.401847183@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit 016d1ca3f6ad05676fd9e418715ddce1f4ab5a73 ]
+[ Upstream commit 22cbc6c2681a0a4fe76150270426e763d52353a4 ]
 
-Set the error code to -ENOMEM if drm_random_order() fails.
+The documentation of the function rvt_error_qp says both r_lock and
+s_lock need to be held when calling that function.
+It also asserts using lockdep that both of those locks are held.
+rvt_error_qp is called form rvt_send_cq, which is called from
+rvt_qp_complete_swqe, which is called from rvt_send_complete, which is
+called from rvt_ruc_loopback in two places. Both of these places do not
+hold r_lock. Fix this by acquiring a spin_lock of r_lock in both of
+these places.
+The r_lock acquiring cannot be added in rvt_qp_complete_swqe because
+some of its other callers already have r_lock acquired.
 
-Fixes: e6ff5ef81170 ("drm/selftests: add drm buddy smoke testcase")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Arunpravin <Arunpravin.PaneerSelvam@amd.com>
-Signed-off-by: Christian König <christian.koenig@amd.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220307125458.GA16710@kili
+Link: https://lore.kernel.org/r/20220228195144.71946-1-dossche.niels@gmail.com
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/selftests/test-drm_buddy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/infiniband/sw/rdmavt/qp.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/selftests/test-drm_buddy.c b/drivers/gpu/drm/selftests/test-drm_buddy.c
-index 913cbd7eae04..aca0c491040f 100644
---- a/drivers/gpu/drm/selftests/test-drm_buddy.c
-+++ b/drivers/gpu/drm/selftests/test-drm_buddy.c
-@@ -488,8 +488,10 @@ static int igt_buddy_alloc_smoke(void *arg)
- 	}
+diff --git a/drivers/infiniband/sw/rdmavt/qp.c b/drivers/infiniband/sw/rdmavt/qp.c
+index 8ef112f883a7..3acab569fbb9 100644
+--- a/drivers/infiniband/sw/rdmavt/qp.c
++++ b/drivers/infiniband/sw/rdmavt/qp.c
+@@ -2775,7 +2775,7 @@ void rvt_qp_iter(struct rvt_dev_info *rdi,
+ EXPORT_SYMBOL(rvt_qp_iter);
  
- 	order = drm_random_order(mm.max_order + 1, &prng);
--	if (!order)
-+	if (!order) {
-+		err = -ENOMEM;
- 		goto out_fini;
-+	}
+ /*
+- * This should be called with s_lock held.
++ * This should be called with s_lock and r_lock held.
+  */
+ void rvt_send_complete(struct rvt_qp *qp, struct rvt_swqe *wqe,
+ 		       enum ib_wc_status status)
+@@ -3134,7 +3134,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
+ 	rvp->n_loop_pkts++;
+ flush_send:
+ 	sqp->s_rnr_retry = sqp->s_rnr_retry_cnt;
++	spin_lock(&sqp->r_lock);
+ 	rvt_send_complete(sqp, wqe, send_status);
++	spin_unlock(&sqp->r_lock);
+ 	if (local_ops) {
+ 		atomic_dec(&sqp->local_ops_pending);
+ 		local_ops = 0;
+@@ -3188,7 +3190,9 @@ void rvt_ruc_loopback(struct rvt_qp *sqp)
+ 	spin_unlock_irqrestore(&qp->r_lock, flags);
+ serr_no_r_lock:
+ 	spin_lock_irqsave(&sqp->s_lock, flags);
++	spin_lock(&sqp->r_lock);
+ 	rvt_send_complete(sqp, wqe, send_status);
++	spin_unlock(&sqp->r_lock);
+ 	if (sqp->ibqp.qp_type == IB_QPT_RC) {
+ 		int lastwqe;
  
- 	for (i = 0; i <= mm.max_order; ++i) {
- 		struct drm_buddy_block *block;
 -- 
 2.35.1
 

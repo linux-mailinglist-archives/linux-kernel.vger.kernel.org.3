@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E685E541962
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1855410FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359354AbiFGVVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S1356271AbiFGTbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376516AbiFGU06 (ORCPT
+        with ESMTP id S1353450AbiFGSlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:26:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAFD17D391;
-        Tue,  7 Jun 2022 11:32:47 -0700 (PDT)
+        Tue, 7 Jun 2022 14:41:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E1818629C;
+        Tue,  7 Jun 2022 10:58:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D17861500;
-        Tue,  7 Jun 2022 18:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876CCC385A2;
-        Tue,  7 Jun 2022 18:32:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AF69B8236C;
+        Tue,  7 Jun 2022 17:58:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDEC5C34115;
+        Tue,  7 Jun 2022 17:58:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626765;
-        bh=Fj/fW43wd9kwqA+LnYirM/9rZBHeydYkYqpZlhxcRNs=;
+        s=korg; t=1654624706;
+        bh=zH/pSgAZjZwfNYbHLmOYRBuLfI0NNzWZ3BELSFKBlck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qNjHIeUX1pAhZt0CC/Xy7ZTeEzBBIPfnaFwrJulO2nL3ZKapdcTvV99lynlCKiOLE
-         dyFmRr7CPVSMHB2wb6hWwOIbvGC34xfT6vKNvquDFVrMYtGUElgGyjDJQdatQ+KpM3
-         z1hMXA2PzV6uzfdg5wex+YR0Sif7+qaXCPBRdCiw=
+        b=YO2e98vTN2LKZTeTxMqnm/9PdtUbZMVWjNKZ2PIsCSvt137RJ0TzbuIBL26d2Vf/R
+         wSwWjqIFqhNDzb2e2Lq53Yw9git8pUKtpgmVbPv4oDkizEqXmX9RiXUseLR8kXmwC5
+         D5CIi1Oe4g2XRNAfTezp5jT6A6Dowpg1rsFcGdrU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, QintaoShen <unSimple1993@163.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 496/772] soc: bcm: Check for NULL return of devm_kzalloc()
+Subject: [PATCH 5.15 423/667] soc: bcm: Check for NULL return of devm_kzalloc()
 Date:   Tue,  7 Jun 2022 19:01:28 +0200
-Message-Id: <20220607165003.599524223@linuxfoundation.org>
+Message-Id: <20220607164947.418341271@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
-index 7bbe46ea5f94..9407cac47fdb 100644
+index 774465c119be..2ac20084e5a5 100644
 --- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
 +++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
-@@ -312,6 +312,9 @@ static int bcm_pmb_probe(struct platform_device *pdev)
+@@ -314,6 +314,9 @@ static int bcm_pmb_probe(struct platform_device *pdev)
  	for (e = table; e->name; e++) {
  		struct bcm_pmb_pm_domain *pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
  

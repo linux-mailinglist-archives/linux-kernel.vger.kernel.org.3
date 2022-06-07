@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C62E540CF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131DA5416C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350410AbiFGSm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S1378048AbiFGUz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349725AbiFGSNa (ORCPT
+        with ESMTP id S1358892AbiFGTxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:13:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06296159045;
-        Tue,  7 Jun 2022 10:49:00 -0700 (PDT)
+        Tue, 7 Jun 2022 15:53:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E486CF4E;
+        Tue,  7 Jun 2022 11:22:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 375246174D;
-        Tue,  7 Jun 2022 17:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40ACFC385A5;
-        Tue,  7 Jun 2022 17:48:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32EA460DDF;
+        Tue,  7 Jun 2022 18:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C6AFC3411C;
+        Tue,  7 Jun 2022 18:22:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624120;
-        bh=F0A7Mei65SjzfGTW7VaoiqeahFKopUN+Ep+hIZ0R9ks=;
+        s=korg; t=1654626178;
+        bh=o0MfHiFg0qTpc2nNL/SOYVQq3GUqMujoqpOGgasXE9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hveC7wSEXDFVl9SvWr0P1SPCDDloFQjypgMwUvGci0MmzOGJkxx3ueZYn6wnfHULe
-         qL1Ij2/9z0fkBny7bNJ8XxmD1uVgsqTemMQRuvV7PsWrjkqpXC7Tn8bbHlmjn1V/EF
-         fw+t3Uucn+ayOda917ivZOqYemMwzvPf7UjQjKek=
+        b=yG/psrwqxt2lyJFV3lUQSXFj3qIJpMVAVInpFKQatwwp9wwMPXddQZ7z2WWmVN5JQ
+         vvQShthmD0wDO3jKyR6t3g0Z8eglTyoG9Zr323ONhJF6c/WNFvdl0AVO+BEGCdiOoV
+         CQ9K5qo3u1XgzSQXNKc0df1PG+TxSaNwnFYO3ikc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 211/667] net: dsa: mt7530: 1G can also support 1000BASE-X link mode
+        stable@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 284/772] printk: wake waiters for safe and NMI contexts
 Date:   Tue,  7 Jun 2022 18:57:56 +0200
-Message-Id: <20220607164941.125976406@linuxfoundation.org>
+Message-Id: <20220607164957.394816652@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,67 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit 66f862563ed68717dfd84e808ca12705ed275ced ]
+[ Upstream commit 5341b93dea8c39d7612f7a227015d4b1d5cf30db ]
 
-When using an external PHY connected using RGMII to mt7531 port 5, the
-PHY can be used to used support 1000BASE-X connections. Moreover, if
-1000BASE-T is supported, then we should allow 1000BASE-X as well, since
-which are supported is a property of the PHY.
+When printk() is called from safe or NMI contexts, it will directly
+store the record (vprintk_store()) and then defer the console output.
+However, defer_console_output() only causes console printing and does
+not wake any waiters of new records.
 
-Therefore, it makes no sense to exclude this from the linkmodes when
-1000BASE-T is supported.
+Wake waiters from defer_console_output() so that they also are aware
+of the new records from safe and NMI contexts.
 
-Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-Tested-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 03fc7f9c99c1 ("printk/nmi: Prevent deadlock when accessing the main log buffer in NMI")
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220421212250.565456-6-john.ogness@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mt7530.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ kernel/printk/printk.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index ca9e171cb2bb..be5c9cca8084 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -2527,13 +2527,7 @@ static void mt7531_sgmii_validate(struct mt7530_priv *priv, int port,
- 	/* Port5 supports ethier RGMII or SGMII.
- 	 * Port6 supports SGMII only.
- 	 */
--	switch (port) {
--	case 5:
--		if (mt7531_is_rgmii_port(priv, port))
--			break;
--		fallthrough;
--	case 6:
--		phylink_set(supported, 1000baseX_Full);
-+	if (port == 6) {
- 		phylink_set(supported, 2500baseX_Full);
- 		phylink_set(supported, 2500baseT_Full);
- 	}
-@@ -2901,8 +2895,6 @@ static void
- mt7530_mac_port_validate(struct dsa_switch *ds, int port,
- 			 unsigned long *supported)
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 8964b1db2745..4f344e7b2878 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -743,7 +743,7 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 		 * prepare_to_wait_event() pairs with the full memory barrier
+ 		 * within wq_has_sleeper().
+ 		 *
+-		 * This pairs with wake_up_klogd:A.
++		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		ret = wait_event_interruptible(log_wait,
+ 				prb_read_valid(prb,
+@@ -1521,7 +1521,7 @@ static int syslog_print(char __user *buf, int size)
+ 		 * prepare_to_wait_event() pairs with the full memory barrier
+ 		 * within wq_has_sleeper().
+ 		 *
+-		 * This pairs with wake_up_klogd:A.
++		 * This pairs with __wake_up_klogd:A.
+ 		 */
+ 		len = wait_event_interruptible(log_wait,
+ 				prb_read_valid(prb, seq, NULL)); /* LMM(syslog_print:A) */
+@@ -3267,7 +3267,7 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
+ static DEFINE_PER_CPU(struct irq_work, wake_up_klogd_work) =
+ 	IRQ_WORK_INIT_LAZY(wake_up_klogd_work_func);
+ 
+-void wake_up_klogd(void)
++static void __wake_up_klogd(int val)
  {
--	if (port == 5)
--		phylink_set(supported, 1000baseX_Full);
+ 	if (!printk_percpu_data_ready())
+ 		return;
+@@ -3284,22 +3284,26 @@ void wake_up_klogd(void)
+ 	 *
+ 	 * This pairs with devkmsg_read:A and syslog_print:A.
+ 	 */
+-	if (wq_has_sleeper(&log_wait)) { /* LMM(wake_up_klogd:A) */
+-		this_cpu_or(printk_pending, PRINTK_PENDING_WAKEUP);
++	if (wq_has_sleeper(&log_wait) || /* LMM(__wake_up_klogd:A) */
++	    (val & PRINTK_PENDING_OUTPUT)) {
++		this_cpu_or(printk_pending, val);
+ 		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+ 	}
+ 	preempt_enable();
  }
  
- static void mt7531_mac_port_validate(struct dsa_switch *ds, int port,
-@@ -2939,8 +2931,10 @@ mt753x_phylink_validate(struct dsa_switch *ds, int port,
- 	}
+-void defer_console_output(void)
++void wake_up_klogd(void)
+ {
+-	if (!printk_percpu_data_ready())
+-		return;
++	__wake_up_klogd(PRINTK_PENDING_WAKEUP);
++}
  
- 	/* This switch only supports 1G full-duplex. */
--	if (state->interface != PHY_INTERFACE_MODE_MII)
-+	if (state->interface != PHY_INTERFACE_MODE_MII) {
- 		phylink_set(mask, 1000baseT_Full);
-+		phylink_set(mask, 1000baseX_Full);
-+	}
+-	preempt_disable();
+-	this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
+-	irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+-	preempt_enable();
++void defer_console_output(void)
++{
++	/*
++	 * New messages may have been added directly to the ringbuffer
++	 * using vprintk_store(), so wake any waiters as well.
++	 */
++	__wake_up_klogd(PRINTK_PENDING_WAKEUP | PRINTK_PENDING_OUTPUT);
+ }
  
- 	priv->info->mac_port_validate(ds, port, mask);
- 
+ void printk_trigger_flush(void)
 -- 
 2.35.1
 

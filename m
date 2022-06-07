@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEF05410E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC5554079B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355520AbiFGTaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
+        id S1348345AbiFGRtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353228AbiFGSgf (ORCPT
+        with ESMTP id S1347774AbiFGRbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:36:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043AD17FC1B;
-        Tue,  7 Jun 2022 10:57:59 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EE410657D;
+        Tue,  7 Jun 2022 10:28:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6733D61866;
-        Tue,  7 Jun 2022 17:57:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758B8C34115;
-        Tue,  7 Jun 2022 17:57:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3544DB822B4;
+        Tue,  7 Jun 2022 17:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A854C34119;
+        Tue,  7 Jun 2022 17:28:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624678;
-        bh=J+EiPkbTkUARIhtRcWQ1RBFMSqLDADiHh+yA9lwlvps=;
+        s=korg; t=1654622899;
+        bh=bnC/VCIS7BIABmog3mI9+0G2S4kzHMNGL4Vs99xiCqI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MO06cQKhLEB/g0vQWluWMjEAfpqcrGgxUTbFouKrE6enRC8+hmq19JLRlaXmMOaFc
-         7Jwy7WcBHdn4+XD9IwWY5+Fhxfx1S1o3tFx18esfmKj0fCQuN0S7Bog8OQI3+uTx5I
-         1uh/qMcNdasSBsvlQMSs1KV8CGW562w2htbFJnrM=
+        b=XAi8VRcFzWoq+nyOjezwPP6DDZk4F4xwwY6dsPRXL7L7pxE+h4uHIHCD3I9Hzy437
+         oLBO5Lk4LHmLywIDE6Q9HqofUZEevj4GhNw2skr5c4UrZNe4I8HuVYrcp6DiAdXFjO
+         EgonDBBAu5oMU7/yO4H56UX8vkRtQifUkvfDLn3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 414/667] pinctrl: bcm2835: implement hook for missing gpio-ranges
-Date:   Tue,  7 Jun 2022 19:01:19 +0200
-Message-Id: <20220607164947.156234071@linuxfoundation.org>
+Subject: [PATCH 5.10 223/452] m68k: math-emu: Fix dependencies of math emulation support
+Date:   Tue,  7 Jun 2022 19:01:20 +0200
+Message-Id: <20220607164915.209112129@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
 
-[ Upstream commit d2b67744fd99b06555b7e4d67302ede6c7c6a638 ]
+[ Upstream commit ed6bc6bf0a7d75e80eb1df883c09975ebb74e590 ]
 
-The commit c8013355ead6 ("ARM: dts: gpio-ranges property is now required")
-fixed the GPIO probing issues caused by "pinctrl: bcm2835: Change init
-order for gpio hogs". This changed only the kernel DTS files. Unfortunately
-it isn't guaranteed that these files are shipped to all users.
+If CONFIG_M54xx=y, CONFIG_MMU=y, and CONFIG_M68KFPU_EMU=y:
 
-So implement the necessary backward compatibility for BCM2835 and
-BCM2711 platform.
+    {standard input}:272: Error: invalid instruction for this architecture; needs 68000 or higher (68000 [68ec000, 68hc000, 68hc001, 68008, 68302, 68306, 68307, 68322, 68356], 68010, 68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060], cpu32 [68330, 68331, 68332, 68333, 68334, 68336, 68340, 68341, 68349, 68360], fidoa [fido]) -- statement `sub.b %d1,%d3' ignored
+    {standard input}:609: Error: invalid instruction for this architecture; needs 68020 or higher (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040], 68060 [68ec060]) -- statement `bfextu 4(%a1){%d0,#8},%d0' ignored
+    {standard input}:752: Error: operands mismatch -- statement `mulu.l 4(%a0),%d3:%d0' ignored
+    {standard input}:1155: Error: operands mismatch -- statement `divu.l %d0,%d3:%d7' ignored
 
-Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220409095129.45786-3-stefan.wahren@i2se.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+The math emulation support code is intended for 68020 and higher, and
+uses several instructions or instruction modes not available on coldfire
+or 68000.
+
+Originally, the dependency of M68KFPU_EMU on MMU was fine, as MMU
+support was only available on 68020 or higher.  But this assumption
+was broken by the introduction of MMU support for M547x and M548x.
+
+Drop the dependency on MMU, as the code should work fine on 68020 and up
+without MMU (which are not yet supported by Linux, though).
+Add dependencies on M68KCLASSIC (to rule out Coldfire) and FPU (kernel
+has some type of floating-point support --- be it hardware or software
+emulated, to rule out anything below 68020).
+
+Fixes: 1f7034b9616e6f14 ("m68k: allow ColdFire 547x and 548x CPUs to be built with MMU enabled")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Greg Ungerer <gerg@linux-m68k.org>
+Link: https://lore.kernel.org/r/18c34695b7c95107f60ccca82a4ff252f3edf477.1652446117.git.geert@linux-m68k.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/bcm/pinctrl-bcm2835.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/m68k/Kconfig.cpu | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-index cb339299adf9..a2938995c7c1 100644
---- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-+++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-@@ -351,6 +351,22 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
- 	return pinctrl_gpio_direction_output(chip->base + offset);
- }
+diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+index c17205da47fe..936cd9619bf0 100644
+--- a/arch/m68k/Kconfig.cpu
++++ b/arch/m68k/Kconfig.cpu
+@@ -312,7 +312,7 @@ comment "Processor Specific Options"
  
-+static int bcm2835_of_gpio_ranges_fallback(struct gpio_chip *gc,
-+					   struct device_node *np)
-+{
-+	struct pinctrl_dev *pctldev = of_pinctrl_get(np);
-+
-+	of_node_put(np);
-+
-+	if (!pctldev)
-+		return 0;
-+
-+	gpiochip_add_pin_range(gc, pinctrl_dev_get_devname(pctldev), 0, 0,
-+			       gc->ngpio);
-+
-+	return 0;
-+}
-+
- static const struct gpio_chip bcm2835_gpio_chip = {
- 	.label = MODULE_NAME,
- 	.owner = THIS_MODULE,
-@@ -365,6 +381,7 @@ static const struct gpio_chip bcm2835_gpio_chip = {
- 	.base = -1,
- 	.ngpio = BCM2835_NUM_GPIOS,
- 	.can_sleep = false,
-+	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
- };
- 
- static const struct gpio_chip bcm2711_gpio_chip = {
-@@ -381,6 +398,7 @@ static const struct gpio_chip bcm2711_gpio_chip = {
- 	.base = -1,
- 	.ngpio = BCM2711_NUM_GPIOS,
- 	.can_sleep = false,
-+	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
- };
- 
- static void bcm2835_gpio_irq_handle_bank(struct bcm2835_pinctrl *pc,
+ config M68KFPU_EMU
+ 	bool "Math emulation support"
+-	depends on MMU
++	depends on M68KCLASSIC && FPU
+ 	help
+ 	  At some point in the future, this will cause floating-point math
+ 	  instructions to be emulated by the kernel on machines that lack a
 -- 
 2.35.1
 

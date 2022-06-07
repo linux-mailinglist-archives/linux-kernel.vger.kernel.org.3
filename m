@@ -2,148 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE0853F567
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 06:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16E753F56C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236739AbiFGE5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 00:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S236705AbiFGFBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 01:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236696AbiFGE5W (ORCPT
+        with ESMTP id S236614AbiFGFAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 00:57:22 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD14D305;
-        Mon,  6 Jun 2022 21:57:11 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2574v7O9026512;
-        Mon, 6 Jun 2022 23:57:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654577827;
-        bh=Cdif7KJdXOI98yjbTpb3S7eZDYdMM1OYv04stK4sVrU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=iI2Rc4xhelfcpTnSIXQp5+UOJy0nPmtnGyDlyw0nVemyv9CnammsXK8Dn3XpCLjiR
-         Gs4Vo8T5WRf2hBciLgV2ouSf/pFcNXokDGtZLYB1tt2iOQNexfGlwZv795f3C1P7Ds
-         MIEhqYvNFRQjkOd2VCGhf4hYsRX/Re1K4W9Q68OA=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2574v7rR030522
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Jun 2022 23:57:07 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
- Jun 2022 23:57:07 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 6 Jun 2022 23:57:07 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2574v6Ll111771;
-        Mon, 6 Jun 2022 23:57:06 -0500
-From:   Puranjay Mohan <p-mohan@ti.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
-        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
-        <kishon@ti.com>, <robh@kernel.org>
-Subject: [PATCH v5 6/6] remoteproc: pru: add support for configuring GPMUX based on client setup
-Date:   Tue, 7 Jun 2022 10:26:50 +0530
-Message-ID: <20220607045650.4999-7-p-mohan@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220607045650.4999-1-p-mohan@ti.com>
-References: <20220607045650.4999-1-p-mohan@ti.com>
+        Tue, 7 Jun 2022 01:00:45 -0400
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C9EAFB19
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 22:00:41 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id yRKRntRriL5fDyRKSnPDgo; Tue, 07 Jun 2022 07:00:39 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 07 Jun 2022 07:00:39 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <a85c4f87-c87f-784f-7db3-0b83570f82da@wanadoo.fr>
+Date:   Tue, 7 Jun 2022 07:00:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 5/5] crypto: aspeed: add HACE crypto driver
+Content-Language: fr
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Johnny Huang <johnny_huang@aspeedtech.com>
+References: <20220606064935.1458903-1-neal_liu@aspeedtech.com>
+ <20220606064935.1458903-6-neal_liu@aspeedtech.com>
+ <ef2fc6ab-e487-1f95-dceb-fd190f064ac2@wanadoo.fr>
+ <HK0PR06MB3202DFD70F7BA5090A14ACB780A59@HK0PR06MB3202.apcprd06.prod.outlook.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <HK0PR06MB3202DFD70F7BA5090A14ACB780A59@HK0PR06MB3202.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tero Kristo <t-kristo@ti.com>
+Le 07/06/2022 à 05:53, Neal Liu a écrit :
+>> Le 06/06/2022 à 08:49, Neal Liu a écrit :
+>>> Add HACE crypto driver to support symmetric-key encryption and
+>>> decryption with multiple modes of operation.
+>>>
+>>> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+>>> Signed-off-by: Johnny Huang <johnny_huang@aspeedtech.com>
+>>> ---
+>>
+>> [...]
+>>
+>>> +static int aspeed_sk_transfer_sg(struct aspeed_hace_dev *hace_dev) {
+>>> +	struct aspeed_engine_crypto *crypto_engine =
+>> &hace_dev->crypto_engine;
+>>> +	struct device *dev = hace_dev->dev;
+>>> +	struct aspeed_cipher_reqctx *rctx;
+>>> +	struct skcipher_request *req;
+>>> +
+>>> +	CIPHER_DBG(hace_dev, "\n");
+>>> +
+>>> +	req = skcipher_request_cast(crypto_engine->areq);
+>>> +	rctx = skcipher_request_ctx(req);
+>>> +
+>>> +	if (req->src == req->dst) {
+>>> +		dma_unmap_sg(dev, req->src, rctx->src_nents,
+>> DMA_BIDIRECTIONAL);
+>>> +
+>>
+>> Unneeded empty line.
+> 
+> Okay !
+> 
+>>
+>>> +	} else {
+>>> +		dma_unmap_sg(dev, req->src, rctx->src_nents, DMA_TO_DEVICE);
+>>> +		dma_unmap_sg(dev, req->dst, rctx->dst_nents,
+>> DMA_FROM_DEVICE);
+>>> +	}
+>>> +
+>>> +	return aspeed_sk_complete(hace_dev, 0); }
+>>> +
+>>
+>> [...]
+>>
+>>> +static int aspeed_sk_start_sg(struct aspeed_hace_dev *hace_dev) {
+>>> +	struct aspeed_engine_crypto *crypto_engine =
+>> &hace_dev->crypto_engine;
+>>> +	struct aspeed_sg_list *src_list, *dst_list;
+>>> +	dma_addr_t src_dma_addr, dst_dma_addr;
+>>> +	struct aspeed_cipher_reqctx *rctx;
+>>> +	struct skcipher_request *req;
+>>> +	struct scatterlist *s;
+>>> +	int src_sg_len;
+>>> +	int dst_sg_len;
+>>> +	int total, i;
+>>> +	int rc;
+>>> +
+>>> +	CIPHER_DBG(hace_dev, "\n");
+>>> +
+>>> +	req = skcipher_request_cast(crypto_engine->areq);
+>>> +	rctx = skcipher_request_ctx(req);
+>>> +
+>>> +	rctx->enc_cmd |= HACE_CMD_DES_SG_CTRL |
+>> HACE_CMD_SRC_SG_CTRL |
+>>> +			 HACE_CMD_AES_KEY_HW_EXP |
+>> HACE_CMD_MBUS_REQ_SYNC_EN;
+>>> +
+>>> +	/* BIDIRECTIONAL */
+>>> +	if (req->dst == req->src) {
+>>> +		src_sg_len = dma_map_sg(hace_dev->dev, req->src,
+>>> +					rctx->src_nents, DMA_BIDIRECTIONAL);
+>>> +		dst_sg_len = src_sg_len;
+>>> +		if (!src_sg_len) {
+>>> +			dev_warn(hace_dev->dev, "dma_map_sg() src error\n");
+>>> +			return -EINVAL;
+>>> +		}
+>>> +
+>>> +	} else {
+>>> +		src_sg_len = dma_map_sg(hace_dev->dev, req->src,
+>>> +					rctx->src_nents, DMA_TO_DEVICE);
+>>> +		if (!src_sg_len) {
+>>> +			dev_warn(hace_dev->dev, "dma_map_sg() src error\n");
+>>> +			return -EINVAL;
+>>> +		}
+>>> +
+>>> +		dst_sg_len = dma_map_sg(hace_dev->dev, req->dst,
+>>> +					rctx->dst_nents, DMA_FROM_DEVICE);
+>>> +		if (!dst_sg_len) {
+>>> +			dev_warn(hace_dev->dev, "dma_map_sg() dst error\n");
+>>> +			rc = -EINVAL;
+>>> +			goto free_req_src;
+>>
+>> Should we realy call dma_unmap_sg() if dma_map_sg() fails?
+> 
+> This error handling is unmap() the above buffer (req->src), not really this buffer (req->dst).
+> I think it should.
 
-Client device node property ti,pruss-gp-mux-sel can now be used to
-configure the GPMUX config value for PRU.
+You are right, I missread it. Sorry for the noise.
 
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-[s-anna@ti.com: simplify the pru id usage]
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
----
-V4->v5
-* This patch was included in v4 and had some checkpatch errors that have
-  been resolved in v5
----
- drivers/remoteproc/pru_rproc.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+> 
+>>
+>>> +		}
+>>> +	}
+>>> +
+>>> +	src_list = (struct aspeed_sg_list *)crypto_engine->cipher_addr;
+>>> +	src_dma_addr = crypto_engine->cipher_dma_addr;
+>>> +	total = req->cryptlen;
+>>> +
+>>> +	for_each_sg(req->src, s, src_sg_len, i) {
+>>> +		src_list[i].phy_addr = sg_dma_address(s);
+>>> +
+>>> +		/* last sg list */
+>>> +		if (sg_dma_len(s) >= total) {
+>>> +			src_list[i].len = total;
+>>> +			src_list[i].len |= BIT(31);
+>>> +			total = 0;
+>>> +			break;
+>>> +		}
+>>> +
+>>> +		src_list[i].len = sg_dma_len(s);
+>>> +		total -= src_list[i].len;
+>>> +	}
+>>> +
+>>> +	if (total != 0)
+>>> +		return -EINVAL;
+>>
+>> goto free_req_src; ?
+> 
+> Yes, I miss this part. I'll revise it in next patch, thanks.
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 2977eb50631b..f2c6c55f0f20 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -123,6 +123,7 @@ struct pru_private_data {
-  * @dbg_single_step: debug state variable to set PRU into single step mode
-  * @dbg_continuous: debug state variable to restore PRU execution mode
-  * @evt_count: number of mapped events
-+ * @gpmux_save: saved value for gpmux config
-  */
- struct pru_rproc {
- 	int id;
-@@ -141,6 +142,7 @@ struct pru_rproc {
- 	u32 dbg_single_step;
- 	u32 dbg_continuous;
- 	u8 evt_count;
-+	u8 gpmux_save;
- };
- 
- static inline u32 pru_control_read_reg(struct pru_rproc *pru, unsigned int reg)
-@@ -250,6 +252,7 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	struct device *dev;
- 	const char *fw_name;
- 	int ret;
-+	u32 mux;
- 
- 	try_module_get(THIS_MODULE);
- 
-@@ -273,6 +276,22 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 
- 	mutex_unlock(&pru->lock);
- 
-+	ret = pruss_cfg_get_gpmux(pru->pruss, pru->id, &pru->gpmux_save);
-+	if (ret) {
-+		dev_err(dev, "failed to get cfg gpmux: %d\n", ret);
-+		goto err;
-+	}
-+
-+	ret = of_property_read_u32_index(np, "ti,pruss-gp-mux-sel", index,
-+					 &mux);
-+	if (!ret) {
-+		ret = pruss_cfg_set_gpmux(pru->pruss, pru->id, mux);
-+		if (ret) {
-+			dev_err(dev, "failed to set cfg gpmux: %d\n", ret);
-+			goto err;
-+		}
-+	}
-+
- 	if (pru_id)
- 		*pru_id = pru->id;
- 
-@@ -310,6 +329,7 @@ void pru_rproc_put(struct rproc *rproc)
- 
- 	pru = rproc->priv;
- 
-+	pruss_cfg_set_gpmux(pru->pruss, pru->id, pru->gpmux_save);
- 	pru_rproc_set_firmware(rproc, NULL);
- 
- 	mutex_lock(&pru->lock);
--- 
-2.17.1
+There is another one below...
+
+> 
+>>
+>>> +
+>>> +	if (req->dst == req->src) {
+>>> +		dst_list = src_list;
+>>> +		dst_dma_addr = src_dma_addr;
+>>> +
+>>> +	} else {
+>>> +		dst_list = (struct aspeed_sg_list *)crypto_engine->dst_sg_addr;
+>>> +		dst_dma_addr = crypto_engine->dst_sg_dma_addr;
+>>> +		total = req->cryptlen;
+>>> +
+>>> +		for_each_sg(req->dst, s, dst_sg_len, i) {
+>>> +			dst_list[i].phy_addr = sg_dma_address(s);
+>>> +
+>>> +			/* last sg list */
+>>> +			if (sg_dma_len(s) >= total) {
+>>> +				dst_list[i].len = total;
+>>> +				dst_list[i].len |= BIT(31);
+>>> +				total = 0;
+>>> +				break;
+>>> +			}
+>>> +
+>>> +			dst_list[i].len = sg_dma_len(s);
+>>> +			total -= dst_list[i].len;
+>>> +		}
+>>> +
+>>> +		dst_list[dst_sg_len].phy_addr = 0;
+>>> +		dst_list[dst_sg_len].len = 0;
+>>> +	}
+>>> +
+>>> +	if (total != 0)
+>>> +		return -EINVAL;
+
+... here.
+
+>>> +
+>>> +	crypto_engine->resume = aspeed_sk_transfer_sg;
+>>> +
+>>> +	/* Dummy read for barriers */
+>>> +	readl(src_list);
+>>> +	readl(dst_list);
+>>> +
+>>> +	/* Trigger engines */
+>>> +	ast_hace_write(hace_dev, src_dma_addr, ASPEED_HACE_SRC);
+>>> +	ast_hace_write(hace_dev, dst_dma_addr, ASPEED_HACE_DEST);
+>>> +	ast_hace_write(hace_dev, req->cryptlen, ASPEED_HACE_DATA_LEN);
+>>> +	ast_hace_write(hace_dev, rctx->enc_cmd, ASPEED_HACE_CMD);
+>>> +
+>>> +	return -EINPROGRESS;
+>>> +
+>>> +free_req_src:
+>>> +	dma_unmap_sg(hace_dev->dev, req->src, rctx->src_nents,
+>>> +DMA_TO_DEVICE);
+>>> +
+>>> +	return rc;
+>>> +}
+>>> +
+>>
+>> [...]
+>>
+>>> +static int aspeed_aes_setkey(struct crypto_skcipher *cipher, const u8 *key,
+>>> +			     unsigned int keylen)
+>>> +{
+>>> +	struct aspeed_cipher_ctx *ctx = crypto_skcipher_ctx(cipher);
+>>> +	struct aspeed_hace_dev *hace_dev = ctx->hace_dev;
+>>> +	struct crypto_aes_ctx gen_aes_key;
+>>> +
+>>> +	CIPHER_DBG(hace_dev, "keylen: %d bits\n", (keylen * 8));
+>>> +
+>>> +	if (keylen != AES_KEYSIZE_128 && keylen != AES_KEYSIZE_192 &&
+>>> +	    keylen != AES_KEYSIZE_256)
+>>> +		return -EINVAL;
+>>> +
+>>> +	if (ctx->hace_dev->version == AST2500_VERSION) {
+>>> +		aes_expandkey(&gen_aes_key, key, keylen);
+>>> +		memcpy(ctx->key, gen_aes_key.key_enc, AES_MAX_KEYLENGTH);
+>>> +
+>>
+>> Unneeded empty line
+> 
+> Okay !
+> 
+>>
+>>> +	} else {
+>>> +		memcpy(ctx->key, key, keylen);
+>>> +	}
+>>> +
+>>> +	ctx->key_len = keylen;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>
+>> [...]
+>>
+>>> +	crypto_engine->cipher_ctx =
+>>> +		dma_alloc_coherent(&pdev->dev,
+>>> +				   PAGE_SIZE,
+>>> +				   &crypto_engine->cipher_ctx_dma,
+>>> +				   GFP_KERNEL);
+>>> +	if (!crypto_engine->cipher_ctx) {
+>>> +		dev_err(&pdev->dev, "Failed to allocate cipher ctx dma\n");
+>>> +		rc = -ENOMEM;
+>>> +		goto free_hash_src;
+>>> +	}
+>>> +
+>>> +	crypto_engine->cipher_addr =
+>>> +		dma_alloc_coherent(&pdev->dev,
+>>> +				   ASPEED_CRYPTO_SRC_DMA_BUF_LEN,
+>>> +				   &crypto_engine->cipher_dma_addr,
+>>> +				   GFP_KERNEL);
+>>> +	if (!crypto_engine->cipher_addr) {
+>>> +		dev_err(&pdev->dev, "Failed to allocate cipher addr dma\n");
+>>> +		rc = -ENOMEM;
+>>> +		goto free_cipher_ctx;
+>>> +	}
+>>> +
+>>> +	if (hace_dev->version == AST2600_VERSION) {
+>>> +		crypto_engine->dst_sg_addr =
+>>> +			dma_alloc_coherent(&pdev->dev,
+>>> +					   ASPEED_CRYPTO_DST_DMA_BUF_LEN,
+>>> +					   &crypto_engine->dst_sg_dma_addr,
+>>> +					   GFP_KERNEL);
+>>> +		if (!crypto_engine->dst_sg_addr) {
+>>> +			dev_err(&pdev->dev, "Failed to allocate dst_sg dma\n");
+>>> +			rc = -ENOMEM;
+>>> +			goto free_cipher_addr;
+>>> +		}
+>>> +	}
+>>> +
+>>>    	rc = aspeed_hace_register(hace_dev);
+>>>    	if (rc) {
+>>>    		dev_err(&pdev->dev, "Failed to register algs, rc:0x%x\n", rc);
+>>
+>> I guess that the new dma_alloc_coherent() just a few lines above should also
+>> be undone in error hanfling path if aspeed_hace_register() fails?
+> 
+> I'll remove the return value (rc) since it's useless here. So no need error handling on this part.
+> I'll revise it in next patch, thanks.
+> 
+>>
+>>> @@ -179,6 +282,18 @@ static int aspeed_hace_probe(struct
+>>> platform_device *pdev)
+>>>
+>>>    	return 0;
+>>>
+>>> +free_cipher_addr:
+>>> +	dma_free_coherent(&pdev->dev, ASPEED_CRYPTO_SRC_DMA_BUF_LEN,
+>>> +			  crypto_engine->cipher_addr,
+>>> +			  crypto_engine->cipher_dma_addr);
+>>> +free_cipher_ctx:
+>>> +	dma_free_coherent(&pdev->dev, PAGE_SIZE,
+>>> +			  crypto_engine->cipher_ctx,
+>>> +			  crypto_engine->cipher_ctx_dma);
+>>> +free_hash_src:
+>>> +	dma_free_coherent(&pdev->dev, ASPEED_HASH_SRC_DMA_BUF_LEN,
+>>> +			  hash_engine->ahash_src_addr,
+>>> +			  hash_engine->ahash_src_dma_addr);
+>>>    end:
+>>>    	clk_disable_unprepare(hace_dev->clk);
+>>>    	return rc;
 

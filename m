@@ -2,135 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A433542201
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8642A5423B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbiFHBs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S1443524AbiFHBAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575397AbiFGX1G (ORCPT
+        with ESMTP id S1575789AbiFGX1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:27:06 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D39840BA6C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:39:25 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id y85so6619710iof.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DMYMqyjnC+Pa1f9t3aRd7d9q29f2hRwNi8wYEpJotmk=;
-        b=h4EOnSJW5qlumjyDRpOGgdjQoOyB4Q+O6l59N39UQahjkhxDl4VSySl01hMTwc9zRT
-         EfuDzgEVqg/pBp3s4lQPkvko7HQkMiBmLEgZ1AEo0N7Phwb0v+fDY90LCrvAPcCNaH2r
-         O3L623yMARWhJhFoBgQ8IewDspFlSDu0Jp5ag=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DMYMqyjnC+Pa1f9t3aRd7d9q29f2hRwNi8wYEpJotmk=;
-        b=TQOfrQNt6BIVCAefIxOM9uAYyJaAq2Z2820hJbCcHB+8vcYm3pjM6zu/wolANk8sRi
-         pw7LFfPNIHCyhAwbCBMZMKVqdQFua0hzdZL70XsM97797T53sp0BtJTvWl9jKPsR+uqz
-         nbVl9/fzOI+hU/Rdjd4pk0Rc25wb3pO3R7MVxI4zZnFEykznHBCJgjrh7EWdNvUhTcwd
-         ViXv0bOujRp3rqmX6HF3MoIwkDvFJF55BNgasBeJino8aW0NaEkp++kgn0PAJNPxrI6l
-         18GbQjNsJWvzJVKgd7jhmi2Vh7qrGvfsHfck/+l4GrDAVQoBrN0oqZ+w4KhlcBhlPfX0
-         PHTw==
-X-Gm-Message-State: AOAM531XWd47azGJAjnPpoirOc/R/AdHMRb98CrqrzqX4MeaEI7SN8AT
-        wG+7YSRUMzGchXDWFUV/o3q2Zw==
-X-Google-Smtp-Source: ABdhPJx4JWLAS1RWT5TFeTIfGK6vW9bn00rsuVLiTtAdQU1cno64ZEk4yj+YCiecaRL9yWnI7GLMpg==
-X-Received: by 2002:a05:6638:1495:b0:331:c58a:301 with SMTP id j21-20020a056638149500b00331c58a0301mr4212898jak.134.1654637962472;
-        Tue, 07 Jun 2022 14:39:22 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id e1-20020a022101000000b0032b3a78179csm7086269jaa.96.2022.06.07.14.39.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 14:39:22 -0700 (PDT)
-Subject: Re: [Bug Report] - kselftest build fails if output directory is first
- level sub-directory
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
- <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a9470bfc-bddc-6aa6-0043-d49eb57611fe@linuxfoundation.org>
-Date:   Tue, 7 Jun 2022 15:39:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 7 Jun 2022 19:27:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C4D33EAB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=x1/V+C9sI/TeUp1PDWZRs88Rbfjxw1JeJjRTekUqC/U=; b=ieiS9PtuJaMPPKIbvSaI4HoSk9
+        4AitW1/BHdonVgVihs/0NP4se3DZY1B/NTL7pgOU8kte1RdgxaURb5RW6cb2HzQc2eOTI7J8vkOe7
+        FE8DT9j4rsbm04PAzsdakyOPBf1WtCI6VjgsRetCjKF4HmE5212LaAXfzv5kYCJqkRryzuxQbrf7A
+        r3/tnoQMHbHJOPMQcsL/dZFeaG7oVUoRh+Sy6F0r+zINpFRsdd0P5BljryiRIePgJgPDuhP/Qcg12
+        EJ/3kETrqTs9r8oKENnhquAacD7t3Kz9gebGlp3eyg5ScrkRL5tfBa3oszk45ec4ELXPwn52QHQdm
+        EFJdU75A==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nygvh-00C134-2G; Tue, 07 Jun 2022 21:40:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C8315302E95;
+        Tue,  7 Jun 2022 23:39:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8CC71202B5DB0; Tue,  7 Jun 2022 23:39:58 +0200 (CEST)
+Date:   Tue, 7 Jun 2022 23:39:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jing-Ting Wu <jing-ting.wu@mediatek.com>
+Cc:     Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>, tglx@linutronix.de,
+        wsd_upstream@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Jonathan.JMChen@mediatek.com,
+        "chris.redpath@arm.com" <chris.redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Donnefort <vdonnefort@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: [PATCH] sched: Fix balance_push() vs __sched_setscheduler()
+Message-ID: <Yp/Frp7BMp9E5dSp@hirez.programming.kicks-ass.net>
+References: <4a0aa13c99ffd6aea6426f83314aa2a91bc8933f.camel@mediatek.com>
+ <20220519134706.GH2578@worktop.programming.kicks-ass.net>
+ <52eea711b8ce3151ff73bfb0289cc9da0e8c4a10.camel@mediatek.com>
+ <ba7ddde1829ee9eedcd6673f923d731d60719dc5.camel@mediatek.com>
+ <78f3347e01a5c46975b9029f93deea2b31bb8393.camel@mediatek.com>
+ <Yp+3xFMrypvHcLua@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yp+3xFMrypvHcLua@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/22 11:15 AM, Masahiro Yamada wrote:
-> On Sat, May 21, 2022 at 3:44 PM Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->>
->> Hello,
->>
->> kselftest can be built using the kernel's top most Makefile without
->> using kselftest's Makefile directly. But there is bug in the top most
->> Makefile. The build fails if the specified output directory is first
->> level sub-directory. Here is a example to reproduce this bug:
->>
->> make kselftest-all O=build
->>
->> "The Make is working in a wrong directory, that is why the relative path
->> does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
->>
->> It should be noted that the build works in some other combinations:
->> make kselftest-all (works)
->> make kselftest-all O=/tmp (works)
->> make kselftest-all O=build/build2 (works)
->>
->> My unsuccessful attempt to fix this bug can be found here:
->> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
->>
->> Thanks,
->> Muhammad Usama Anjum
-> 
-> 
-> This problem starts from the bad design of the kselftest framework.
-> I did some research before. I think I can fix the root cause but
-> currently I do not have enough time to do it.
-> 
-> 
-> KBUILD_ABS_SRCTREE is a user-interface to request
-> Kbuild to use the absolute path.
-> If it is forced in the top Makefile, users have no way to
-> negate it.
-> It is true that using the absolute path is a quick work-around
-> because you do not need to care about the current working directory.
-> 
-> If you insist on it,  just go ahead.  It is just two line changes.
-> Once the issue is fixed in a better way, your patch can be reverted easily.
-> 
-> 
-> 
+On Tue, Jun 07, 2022 at 10:40:36PM +0200, Peter Zijlstra wrote:
+> On Fri, Jun 03, 2022 at 12:15:51AM +0800, Jing-Ting Wu wrote:
 
-Why don't we work on fixing it the wright way? I would rather go that
-route than using short rem fixes.
+> > The patch is helpful to the syndrome, passed stability test over 10
+> > days so far. (as-is: < 48 hours failed)
+> 
+> Excellent, let me go write a Changelog for it, or something.
 
-Usama, would you be interested in working on a proper fix as recommended
-by Masahiro?
+How's this then?
 
-thanks,
--- Shuah
+---
+Subject: sched: Fix balance_push() vs __sched_setscheduler()
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Tue Jun 7 22:41:55 CEST 2022
+
+The purpose of balance_push() is to act as a filter on task selection
+in the case of CPU hotplug, specifically when taking the CPU out.
+
+It does this by (ab)using the balance callback infrastructure, with
+the express purpose of keeping all the unlikely/odd cases in a single
+place.
+
+In order to serve it's purpose, the balance_push_callback needs to be
+(exclusively) on the callback list at all times (noting that the
+callback always places itself back on the list the moment it runs,
+also noting that when the CPU goes down, regular balancing concerns
+are moot, so ignoring them is fine).
+
+And here-in lies the problem, __sched_setscheduler()'s use of
+splice_balance_callbacks() takes the callbacks off the list across a
+lock-break, making it possible for, an interleaving, __schedule() to
+see an empty list and not get filtered.
+
+Reported-by: Jing-Ting Wu <jing-ting.wu@mediatek.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Jing-Ting Wu <jing-ting.wu@mediatek.com>
+Link: https://lkml.kernel.org/r/20220519134706.GH2578@worktop.programming.kicks-ass.net
+---
+ kernel/sched/core.c |   36 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
+
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4798,25 +4798,55 @@ static void do_balance_callbacks(struct
+ 
+ static void balance_push(struct rq *rq);
+ 
++/*
++ * balance_push_callback is a right abuse of the callback interface and plays
++ * by significantly different rules.
++ *
++ * Where the normal balance_callback's purpose is to be ran in the same context
++ * that queued it (only later, when it's safe to drop rq->lock again),
++ * balance_push_callback is specifically targeted at __schedule().
++ *
++ * This abuse is tolerated because it places all the unlikely/odd cases behind
++ * a single test, namely: rq->balance_callback == NULL.
++ */
+ struct callback_head balance_push_callback = {
+ 	.next = NULL,
+ 	.func = (void (*)(struct callback_head *))balance_push,
+ };
+ 
+-static inline struct callback_head *splice_balance_callbacks(struct rq *rq)
++static inline struct callback_head *
++__splice_balance_callbacks(struct rq *rq, bool split)
+ {
+ 	struct callback_head *head = rq->balance_callback;
+ 
++	if (likely(!head))
++		return NULL;
++
+ 	lockdep_assert_rq_held(rq);
+-	if (head)
++	/*
++	 * Must not take balance_push_callback off the list when
++	 * splace_balance_callbac() and balance_callbacks() are not
++	 * in the same rq->lock section.
++	 *
++	 * In that case it would be possible for __schedule() to interleave
++	 * and observe the list empty.
++	 */
++	if (split && head == &balance_push_callback)
++		head = NULL;
++	else
+ 		rq->balance_callback = NULL;
+ 
+ 	return head;
+ }
+ 
++static inline struct callback_head *splice_balance_callbacks(struct rq *rq)
++{
++	return __splice_balance_callbacks(rq, true);
++}
++
+ static void __balance_callbacks(struct rq *rq)
+ {
+-	do_balance_callbacks(rq, splice_balance_callbacks(rq));
++	do_balance_callbacks(rq, __splice_balance_callbacks(rq, false));
+ }
+ 
+ static inline void balance_callbacks(struct rq *rq, struct callback_head *head)

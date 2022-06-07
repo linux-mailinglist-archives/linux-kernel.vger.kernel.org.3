@@ -2,247 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012FF53F74F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6312453F75C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbiFGHfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
+        id S237695AbiFGHhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiFGHfW (ORCPT
+        with ESMTP id S231790AbiFGHhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:35:22 -0400
-Received: from p3plwbeout15-03.prod.phx3.secureserver.net (p3plsmtp15-03-2.prod.phx3.secureserver.net [173.201.193.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253160BBB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:35:18 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.145])
-        by :WBEOUT: with ESMTP
-        id yTkDnHTqFg7ZlyTkEnGQxR; Tue, 07 Jun 2022 00:35:18 -0700
-X-CMAE-Analysis: v=2.4 cv=a//1SWeF c=1 sm=1 tr=0 ts=629effb6
- a=7e6w4QD8YWtpVJ/7+iiidw==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=JPEYwPQDsx4A:10 a=JfrnYn6hAAAA:8
- a=cm27Pg_UAAAA:8 a=FXvPX3liAAAA:8 a=t7CeM3EgAAAA:8 a=VwQbUJbxAAAA:8
- a=gozxAr8Rxt5D4kyEU7QA:9 a=QEXdDO2ut3YA:10 a=1CNFftbPRP8L7MoqJWF3:22
- a=xmb-EsYY8bH0VWELuYED:22 a=UObqyxdv-6Yh2QiB9mM_:22 a=FdTzh2GWekK77mhwV6Dw:22
- a=AjGcO6oz07-iQ99wixmX:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  yTkDnHTqFg7Zl
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp01.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1nyTk9-0003Xi-M1; Tue, 07 Jun 2022 08:35:17 +0100
-Message-ID: <31ed17e7-29d1-55e8-cb09-a750ab80da15@squashfs.org.uk>
-Date:   Tue, 7 Jun 2022 08:35:10 +0100
+        Tue, 7 Jun 2022 03:37:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E3A69CF5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654587427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=poSLf3SQpSQVqGAvfY9ZUAc4mDsdNw09sPQoA12+Xn0=;
+        b=YMXDPYhHSo5UtuDRyjIQCMB+U1qGqawwkT5S/aM9ZwBO/lvX4lrOAkDJwtP338h21Mizdw
+        8ZrR9IP2DFsPtpIFSnMNjGhMRfSCnuNmZje/uGz5AclzcedlVgpOSaew/HzOlufNsgZTRI
+        262nayNCQln+8JT++NpONnp8NsfXCCg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445-ehM1xmErMaSCB0V9Uf0CEQ-1; Tue, 07 Jun 2022 03:36:25 -0400
+X-MC-Unique: ehM1xmErMaSCB0V9Uf0CEQ-1
+Received: by mail-wr1-f69.google.com with SMTP id e9-20020a5d5949000000b00216ffb6df18so1818672wri.14
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 00:36:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=poSLf3SQpSQVqGAvfY9ZUAc4mDsdNw09sPQoA12+Xn0=;
+        b=KoPLmX/tNqbs6sncQ3e+qQYvdUZq4MzqBnbbCL+1iHAn67A+JdzMUptm49cUNwjvYX
+         f3V9lRJ6EbJ7PxiXDTFrwvqSROKxmKG7hHyzhRuxUraSd7zabg7Nk6KZpfHeePXGxewk
+         xhbRrSX+rsZOyEFLr90J+5PalmcDMiubtWgb5k5iN/UNQVdL2F3AHh31nWhyl8v40+lx
+         DuaB7c89wbEYmrvkN/WhP3BY+5fv24xxTsYHcq94p8tofuApu7occ5CwcB9zSFpkmgqq
+         wjZYLQBRM+1F2DFWmIlHVaUSa4SPTeGVEFWnq0q1wcnSV0StRlUwzaHF8rcrI+9ROrbm
+         wwGA==
+X-Gm-Message-State: AOAM532RLziXceBggtviUBzkhk7JnvH6E8BXmnIbSwOketY4NFTIqdPk
+        TWF5koriacpfRlDlTCPx22vrUm6UfZTeNd3yewGpc2JESXJTkZlD9fGxWYOuSb4Fx8Z92xtdDoU
+        gF1VfZYyhrkl3T99H1rWOaEn7
+X-Received: by 2002:a05:600c:4ec9:b0:397:750a:798a with SMTP id g9-20020a05600c4ec900b00397750a798amr56010320wmq.169.1654587384024;
+        Tue, 07 Jun 2022 00:36:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz/TT1zDaD6ih4ST/0Z6l6/VJexv/LUjWrit9gRiSM2S633qB8aLjqIdjv8Hs+falCUt0H+YA==
+X-Received: by 2002:a05:600c:4ec9:b0:397:750a:798a with SMTP id g9-20020a05600c4ec900b00397750a798amr56010293wmq.169.1654587383789;
+        Tue, 07 Jun 2022 00:36:23 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:500:4c8d:4886:f874:7b6f? (p200300cbc70905004c8d4886f8747b6f.dip0.t-ipconnect.de. [2003:cb:c709:500:4c8d:4886:f874:7b6f])
+        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b0039c235fb6a5sm19943141wms.8.2022.06.07.00.36.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 00:36:22 -0700 (PDT)
+Message-ID: <e4d017a4-556d-bb5f-9830-a8843591bc8d@redhat.com>
+Date:   Tue, 7 Jun 2022 09:36:21 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 3/3] squashfs: implement readahead
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Xiongwei Song <Xiongwei.Song@windriver.com>
-Cc:     Zheng Liang <zhengliang6@huawei.com>,
-        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
-        Miao Xie <miaoxie@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
-        "squashfs-devel @ lists . sourceforge . net" 
-        <squashfs-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org
-References: <20220601103922.1338320-1-hsinyi@chromium.org>
- <20220601103922.1338320-4-hsinyi@chromium.org>
- <CGME20220603125421eucas1p17da286a3e7f2d4759aa4c7639dd62f75@eucas1p1.samsung.com>
- <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <c017d992-2746-045b-47c8-c5b9c3025f1a@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 15/20] balloon: Convert to migrate_folio
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-aio@kvack.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-mm@kvack.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org,
+        virtualization@lists.linux-foundation.org
+References: <20220606204050.2625949-1-willy@infradead.org>
+ <20220606204050.2625949-16-willy@infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220606204050.2625949-16-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfGwJrZcAmJiVw4SQzSorIGvTYoP8Ng9Fc8C1qZ2c8WCA3wTTufIq7AJ/RgsZsYtTkp1IQcjWai8uLQ6QN2hl8W9A0G6fVGElhMR9biqCLE7RpiyW8O2/
- 9usqtE3vi7Wkae2oI213/1X6Hw1phrrvXXbGPACw54Yp+gBZBOaAyRXpfcEEHr2FhLmN0VKqY3sAz5U4fpiatTZKV2+uQZe4vlo=
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/06/2022 13:54, Marek Szyprowski wrote:
-> Hi,
+On 06.06.22 22:40, Matthew Wilcox (Oracle) wrote:
+> This is little more than changing the types over; there's no real work
+> being done in this function.
 > 
-> On 01.06.2022 12:39, Hsin-Yi Wang wrote:
->> Implement readahead callback for squashfs. It will read datablocks
->> which cover pages in readahead request. For a few cases it will
->> not mark page as uptodate, including:
->> - file end is 0.
->> - zero filled blocks.
->> - current batch of pages isn't in the same datablock or not enough in a
->>     datablock.
->> - decompressor error.
->> Otherwise pages will be marked as uptodate. The unhandled pages will be
->> updated by readpage later.
->>
->> Suggested-by: Matthew Wilcox <willy@infradead.org>
->> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
->> Reported-by: Matthew Wilcox <willy@infradead.org>
->> Reported-by: Phillip Lougher <phillip@squashfs.org.uk>
->> Reported-by: Xiongwei Song <Xiongwei.Song@windriver.com>
->> ---
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  mm/balloon_compaction.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
 > 
-> This patch landed recently in linux-next as commit 95f7a26191de
-> ("squashfs: implement readahead"). I've noticed that it causes serious
-> issues on my test systems (various ARM 32bit and 64bit based boards).
-> The easiest way to observe is udev timeout 'waiting for /dev to be fully
-> populated' and prolonged booting time. I'm using squashfs for deploying
-> kernel modules via initrd. Reverting aeefca9dfae7 & 95f7a26191deon on
-> top of the next-20220603 fixes the issue.
-> 
-> Let me know how I can help debugging this issue. There is no hurry
-> though, because the next week I will be on holidays.
+> diff --git a/mm/balloon_compaction.c b/mm/balloon_compaction.c
+> index 4b8eab4b3f45..3f75b876ad76 100644
+> --- a/mm/balloon_compaction.c
+> +++ b/mm/balloon_compaction.c
+> @@ -230,11 +230,10 @@ static void balloon_page_putback(struct page *page)
+>  
+>  
+>  /* move_to_new_page() counterpart for a ballooned page */
+> -static int balloon_page_migrate(struct address_space *mapping,
+> -		struct page *newpage, struct page *page,
+> -		enum migrate_mode mode)
+> +static int balloon_migrate_folio(struct address_space *mapping,
+> +		struct folio *dst, struct folio *src, enum migrate_mode mode)
+>  {
+> -	struct balloon_dev_info *balloon = balloon_page_device(page);
+> +	struct balloon_dev_info *balloon = balloon_page_device(&src->page);
+>  
+>  	/*
+>  	 * We can not easily support the no copy case here so ignore it as it
+> @@ -244,14 +243,14 @@ static int balloon_page_migrate(struct address_space *mapping,
+>  	if (mode == MIGRATE_SYNC_NO_COPY)
+>  		return -EINVAL;
+>  
+> -	VM_BUG_ON_PAGE(!PageLocked(page), page);
+> -	VM_BUG_ON_PAGE(!PageLocked(newpage), newpage);
+> +	VM_BUG_ON_FOLIO(!folio_test_locked(src), src);
+> +	VM_BUG_ON_FOLIO(!folio_test_locked(dst), dst);
+>  
+> -	return balloon->migratepage(balloon, newpage, page, mode);
+> +	return balloon->migratepage(balloon, &dst->page, &src->page, mode);
+>  }
+>  
+>  const struct address_space_operations balloon_aops = {
+> -	.migratepage = balloon_page_migrate,
+> +	.migrate_folio = balloon_migrate_folio,
+>  	.isolate_page = balloon_page_isolate,
+>  	.putback_page = balloon_page_putback,
+>  };
 
-Hi Marek,
+I assume you're working on conversion of the other callbacks as well,
+because otherwise, this ends up looking a bit inconsistent and confusing :)
 
-Can you supply an example Squashfs filesystem and script that
-reproduces the slow-down?  Failing that, can you supply a copy
-of your initrd/root-filesystem that can be run under emulation
-to reproduce the issue? (I don't have any modern ARM embedded
-systems).
+Change LGTM.
 
-Again failing that, are you happy to test some debug code?
+-- 
+Thanks,
 
-Thanks
-
-Phillip (Squashfs maintainer and author).
-
-> 
->> v3->v4: Fix a few variable type and their locations.
->> v3: https://lore.kernel.org/lkml/20220523065909.883444-4-hsinyi@chromium.org/
->> v2: https://lore.kernel.org/lkml/20220517082650.2005840-4-hsinyi@chromium.org/
->> v1: https://lore.kernel.org/lkml/20220516105100.1412740-3-hsinyi@chromium.org/
->> ---
->>    fs/squashfs/file.c | 97 +++++++++++++++++++++++++++++++++++++++++++++-
->>    1 file changed, 96 insertions(+), 1 deletion(-)
->>
->> diff --git a/fs/squashfs/file.c b/fs/squashfs/file.c
->> index a8e495d8eb86..df7ad4b3e99c 100644
->> --- a/fs/squashfs/file.c
->> +++ b/fs/squashfs/file.c
->> @@ -39,6 +39,7 @@
->>    #include "squashfs_fs_sb.h"
->>    #include "squashfs_fs_i.h"
->>    #include "squashfs.h"
->> +#include "page_actor.h"
->>    
->>    /*
->>     * Locate cache slot in range [offset, index] for specified inode.  If
->> @@ -495,7 +496,101 @@ static int squashfs_read_folio(struct file *file, struct folio *folio)
->>    	return 0;
->>    }
->>    
->> +static void squashfs_readahead(struct readahead_control *ractl)
->> +{
->> +	struct inode *inode = ractl->mapping->host;
->> +	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
->> +	size_t mask = (1UL << msblk->block_log) - 1;
->> +	unsigned short shift = msblk->block_log - PAGE_SHIFT;
->> +	loff_t start = readahead_pos(ractl) &~ mask;
->> +	size_t len = readahead_length(ractl) + readahead_pos(ractl) - start;
->> +	struct squashfs_page_actor *actor;
->> +	unsigned int nr_pages = 0;
->> +	struct page **pages;
->> +	int i, file_end = i_size_read(inode) >> msblk->block_log;
->> +	unsigned int max_pages = 1UL << shift;
->> +
->> +	readahead_expand(ractl, start, (len | mask) + 1);
->> +
->> +	if (file_end == 0)
->> +		return;
->> +
->> +	pages = kmalloc_array(max_pages, sizeof(void *), GFP_KERNEL);
->> +	if (!pages)
->> +		return;
->> +
->> +	actor = squashfs_page_actor_init_special(pages, max_pages, 0);
->> +	if (!actor)
->> +		goto out;
->> +
->> +	for (;;) {
->> +		pgoff_t index;
->> +		int res, bsize;
->> +		u64 block = 0;
->> +		unsigned int expected;
->> +
->> +		nr_pages = __readahead_batch(ractl, pages, max_pages);
->> +		if (!nr_pages)
->> +			break;
->> +
->> +		if (readahead_pos(ractl) >= i_size_read(inode) ||
->> +		    nr_pages < max_pages)
->> +			goto skip_pages;
->> +
->> +		index = pages[0]->index >> shift;
->> +		if ((pages[nr_pages - 1]->index >> shift) != index)
->> +			goto skip_pages;
->> +
->> +		expected = index == file_end ?
->> +			   (i_size_read(inode) & (msblk->block_size - 1)) :
->> +			    msblk->block_size;
->> +
->> +		bsize = read_blocklist(inode, index, &block);
->> +		if (bsize == 0)
->> +			goto skip_pages;
->> +
->> +		res = squashfs_read_data(inode->i_sb, block, bsize, NULL,
->> +					 actor);
->> +
->> +		if (res == expected) {
->> +			int bytes;
->> +
->> +			/* Last page may have trailing bytes not filled */
->> +			bytes = res % PAGE_SIZE;
->> +			if (bytes) {
->> +				void *pageaddr;
->> +
->> +				pageaddr = kmap_atomic(pages[nr_pages - 1]);
->> +				memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
->> +				kunmap_atomic(pageaddr);
->> +			}
->> +
->> +			for (i = 0; i < nr_pages; i++)
->> +				SetPageUptodate(pages[i]);
->> +		}
->> +
->> +		for (i = 0; i < nr_pages; i++) {
->> +			unlock_page(pages[i]);
->> +			put_page(pages[i]);
->> +		}
->> +	}
->> +
->> +	kfree(actor);
->> +	kfree(pages);
->> +	return;
->> +
->> +skip_pages:
->> +	for (i = 0; i < nr_pages; i++) {
->> +		unlock_page(pages[i]);
->> +		put_page(pages[i]);
->> +	}
->> +
->> +	kfree(actor);
->> +out:
->> +	kfree(pages);
->> +}
->>    
->>    const struct address_space_operations squashfs_aops = {
->> -	.read_folio = squashfs_read_folio
->> +	.read_folio = squashfs_read_folio,
->> +	.readahead = squashfs_readahead
->>    };
-> 
-> Best regards
+David / dhildenb
 

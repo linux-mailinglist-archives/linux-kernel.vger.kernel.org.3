@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38401542569
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1075423E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388536AbiFHAc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S1377288AbiFHAeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382756AbiFGVvw (ORCPT
+        with ESMTP id S1382793AbiFGVvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8048F23D5FD;
-        Tue,  7 Jun 2022 12:09:25 -0700 (PDT)
+        Tue, 7 Jun 2022 17:51:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB8623E82B;
+        Tue,  7 Jun 2022 12:09:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C3BC618D6;
-        Tue,  7 Jun 2022 19:09:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6C7C385A2;
-        Tue,  7 Jun 2022 19:09:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 474F3B81F6D;
+        Tue,  7 Jun 2022 19:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8213C3411C;
+        Tue,  7 Jun 2022 19:09:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628964;
-        bh=0VYyAQ2udBMl6TW3hWYknv3XLOr7ZmsuQTyd3In4K4c=;
+        s=korg; t=1654628973;
+        bh=3WkLGgrPgXyt6niNQshuTYXlUyoQOPiPks9fVvqPlt0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QBkGgHSeF3jGEP5nAWJ677jnQMkmk/lwHQg3xCJ8q9hSNFTThmc+MuC90IEoskkFD
-         dEg43F1auVo+nTQSTDs9DOfq43sBF6XLpIEfJOYi/DwKOtyrbCJYuYjQqThdHUfEoI
-         5H2zhaBw+Rlg91BLEDGya0/VxarF7lmtzS4alA2I=
+        b=s5SwWJcSkBfxuJyijW4LCgLX3Zs5bSVuPyl4QL/opX0QWlsYp/aDYP4RuEa9VoGQt
+         x1yyDXu8zYTPl5Ve2n5+8oPClnUnKDLrkOudRtygMLqfbBMFL0cIoi/N2tOS1aR/Nk
+         j+BmiQsMjOUsOWNmx8x9aNWYd/dcg8NwzfbE031k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
+        stable@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 520/879] rxrpc: Dont let ack.previousPacket regress
-Date:   Tue,  7 Jun 2022 19:00:38 +0200
-Message-Id: <20220607165017.972830189@linuxfoundation.org>
+Subject: [PATCH 5.18 523/879] dpaa2-eth: retrieve the virtual address before dma_unmap
+Date:   Tue,  7 Jun 2022 19:00:41 +0200
+Message-Id: <20220607165018.057656305@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,83 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Ioana Ciornei <ioana.ciornei@nxp.com>
 
-[ Upstream commit 81524b6312535897707f2942695da1d359a5e56b ]
+[ Upstream commit 06d129946a71f3159b3b40ee95549183edf2c79d ]
 
-The previousPacket field in the rx ACK packet should never go backwards -
-it's now the highest DATA sequence number received, not the last on
-received (it used to be used for out of sequence detection).
+The TSO header was DMA unmapped before the virtual address was retrieved
+and then used to free the buffer. This meant that we were actually
+removing the DMA map and then trying to search for it to help in
+retrieving the virtual address. This lead to a invalid virtual address
+being used in the kfree call.
 
-Fixes: 248f219cb8bc ("rxrpc: Rewrite the data and ack handling code")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
+Fix this by calling dpaa2_iova_to_virt() prior to the dma_unmap call.
+
+[  487.231819] Unable to handle kernel paging request at virtual address fffffd9807000008
+
+(...)
+
+[  487.354061] Hardware name: SolidRun LX2160A Honeycomb (DT)
+[  487.359535] pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  487.366485] pc : kfree+0xac/0x304
+[  487.369799] lr : kfree+0x204/0x304
+[  487.373191] sp : ffff80000c4eb120
+[  487.376493] x29: ffff80000c4eb120 x28: ffff662240c46400 x27: 0000000000000001
+[  487.383621] x26: 0000000000000001 x25: ffff662246da0cc0 x24: ffff66224af78000
+[  487.390748] x23: ffffad184f4ce008 x22: ffffad1850185000 x21: ffffad1838d13cec
+[  487.397874] x20: ffff6601c0000000 x19: fffffd9807000000 x18: 0000000000000000
+[  487.405000] x17: ffffb910cdc49000 x16: ffffad184d7d9080 x15: 0000000000004000
+[  487.412126] x14: 0000000000000008 x13: 000000000000ffff x12: 0000000000000000
+[  487.419252] x11: 0000000000000004 x10: 0000000000000001 x9 : ffffad184d7d927c
+[  487.426379] x8 : 0000000000000000 x7 : 0000000ffffffd1d x6 : ffff662240a94900
+[  487.433505] x5 : 0000000000000003 x4 : 0000000000000009 x3 : ffffad184f4ce008
+[  487.440632] x2 : ffff662243eec000 x1 : 0000000100000100 x0 : fffffc0000000000
+[  487.447758] Call trace:
+[  487.450194]  kfree+0xac/0x304
+[  487.453151]  dpaa2_eth_free_tx_fd.isra.0+0x33c/0x3e0 [fsl_dpaa2_eth]
+[  487.459507]  dpaa2_eth_tx_conf+0x100/0x2e0 [fsl_dpaa2_eth]
+[  487.464989]  dpaa2_eth_poll+0xdc/0x380 [fsl_dpaa2_eth]
+
+Fixes: 3dc709e0cd47 ("dpaa2-eth: add support for software TSO")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215886
+Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rxrpc/ar-internal.h | 4 ++--
- net/rxrpc/input.c       | 4 +++-
- net/rxrpc/output.c      | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index cc1fe6d00eca..4ba51e6d3d85 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -679,7 +679,7 @@ struct rxrpc_call {
- 	/* Receive-phase ACK management (ACKs we send). */
- 	u8			ackr_reason;	/* reason to ACK */
- 	rxrpc_serial_t		ackr_serial;	/* serial of packet being ACK'd */
--	rxrpc_seq_t		ackr_prev_seq;	/* previous sequence number received */
-+	rxrpc_seq_t		ackr_highest_seq; /* Higest sequence number received */
- 	rxrpc_seq_t		ackr_consumed;	/* Highest packet shown consumed */
- 	rxrpc_seq_t		ackr_seen;	/* Highest packet shown seen */
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index 4b047255d928..766391310d1b 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -1097,6 +1097,7 @@ static void dpaa2_eth_free_tx_fd(struct dpaa2_eth_priv *priv,
+ 	u32 fd_len = dpaa2_fd_get_len(fd);
+ 	struct dpaa2_sg_entry *sgt;
+ 	int should_free_skb = 1;
++	void *tso_hdr;
+ 	int i;
  
-@@ -694,7 +694,7 @@ struct rxrpc_call {
- 	/* Transmission-phase ACK management (ACKs we've received). */
- 	ktime_t			acks_latest_ts;	/* Timestamp of latest ACK received */
- 	rxrpc_seq_t		acks_first_seq;	/* first sequence number received */
--	rxrpc_seq_t		acks_prev_seq;	/* previous sequence number received */
-+	rxrpc_seq_t		acks_prev_seq;	/* Highest previousPacket received */
- 	rxrpc_seq_t		acks_lowest_nak; /* Lowest NACK in the buffer (or ==tx_hard_ack) */
- 	rxrpc_seq_t		acks_lost_top;	/* tx_top at the time lost-ack ping sent */
- 	rxrpc_serial_t		acks_lost_ping;	/* Serial number of probe ACK */
-diff --git a/net/rxrpc/input.c b/net/rxrpc/input.c
-index 3da33b5c13b2..680b984ef87f 100644
---- a/net/rxrpc/input.c
-+++ b/net/rxrpc/input.c
-@@ -453,7 +453,6 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 	    !rxrpc_receiving_reply(call))
- 		goto unlock;
+ 	fd_addr = dpaa2_fd_get_addr(fd);
+@@ -1136,9 +1137,10 @@ static void dpaa2_eth_free_tx_fd(struct dpaa2_eth_priv *priv,
+ 							priv->tx_data_offset);
  
--	call->ackr_prev_seq = seq0;
- 	hard_ack = READ_ONCE(call->rx_hard_ack);
+ 			/* Unmap and free the header */
++			tso_hdr = dpaa2_iova_to_virt(priv->iommu_domain, dpaa2_sg_get_addr(sgt));
+ 			dma_unmap_single(dev, dpaa2_sg_get_addr(sgt), TSO_HEADER_SIZE,
+ 					 DMA_TO_DEVICE);
+-			kfree(dpaa2_iova_to_virt(priv->iommu_domain, dpaa2_sg_get_addr(sgt)));
++			kfree(tso_hdr);
  
- 	nr_subpackets = sp->nr_subpackets;
-@@ -534,6 +533,9 @@ static void rxrpc_input_data(struct rxrpc_call *call, struct sk_buff *skb)
- 			ack_serial = serial;
- 		}
- 
-+		if (after(seq0, call->ackr_highest_seq))
-+			call->ackr_highest_seq = seq0;
-+
- 		/* Queue the packet.  We use a couple of memory barriers here as need
- 		 * to make sure that rx_top is perceived to be set after the buffer
- 		 * pointer and that the buffer pointer is set after the annotation and
-diff --git a/net/rxrpc/output.c b/net/rxrpc/output.c
-index a45c83f22236..46aae9b7006f 100644
---- a/net/rxrpc/output.c
-+++ b/net/rxrpc/output.c
-@@ -89,7 +89,7 @@ static size_t rxrpc_fill_out_ack(struct rxrpc_connection *conn,
- 	pkt->ack.bufferSpace	= htons(8);
- 	pkt->ack.maxSkew	= htons(0);
- 	pkt->ack.firstPacket	= htonl(hard_ack + 1);
--	pkt->ack.previousPacket	= htonl(call->ackr_prev_seq);
-+	pkt->ack.previousPacket	= htonl(call->ackr_highest_seq);
- 	pkt->ack.serial		= htonl(serial);
- 	pkt->ack.reason		= reason;
- 	pkt->ack.nAcks		= top - hard_ack;
+ 			/* Unmap the other SG entries for the data */
+ 			for (i = 1; i < swa->tso.num_sg; i++)
 -- 
 2.35.1
 

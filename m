@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD51542341
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD77C542353
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242901AbiFHCR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S1388961AbiFHB2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390383AbiFHBuW (ORCPT
+        with ESMTP id S1379706AbiFGWRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 21:50:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4F11973DA;
-        Tue,  7 Jun 2022 12:20:06 -0700 (PDT)
+        Tue, 7 Jun 2022 18:17:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4FA2629F3;
+        Tue,  7 Jun 2022 12:20:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0389CE24B7;
-        Tue,  7 Jun 2022 19:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7331C385A5;
-        Tue,  7 Jun 2022 19:20:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32D89B823D4;
+        Tue,  7 Jun 2022 19:20:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1582C385A2;
+        Tue,  7 Jun 2022 19:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629602;
-        bh=OZOS/pHplCASWNPmT8U8e9P9qYz6jNCQYk6G30jMRTk=;
+        s=korg; t=1654629605;
+        bh=JxY/VihCn/5qC+b37PZXge5+aQpv5S/03KtLqKxk3nM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cl1pK9eSMuqrJ9/hHtniglVrs+VhLlYKsMZcy0QJVHiWDy1OBbVRNMEdYjse0CWoa
-         gmFdN1e8V9V47y5PKgIra01+YYfKmCkYRaU7PGq4jtDHj8NFr/yUX69ffQ7uslch79
-         mroeGuyIXioPgk+/7Srm5lSOA1tsooMfUBhVXBz4=
+        b=HpchsDhFe1XYzDN+iO2UUJ4GT+VwFmiUsvF37wQRJQ+yLqpucOGbr4rch7YoldmCy
+         jxTeaBNsw43DRoW7YJ2G81GzADZHUh/9RAAH2207Mdy+aEa01L/feIq4ptzg111cvn
+         f8tZC9b2iF+CSOhxum008SUZ6bGA1UK67jk+ShXI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.18 749/879] tracing: Have event format check not flag %p* on __get_dynamic_array()
-Date:   Tue,  7 Jun 2022 19:04:27 +0200
-Message-Id: <20220607165024.602410761@linuxfoundation.org>
+Subject: [PATCH 5.18 750/879] tracing: Fix potential double free in create_var_ref()
+Date:   Tue,  7 Jun 2022 19:04:28 +0200
+Message-Id: <20220607165024.630935231@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,56 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
 
-commit 499f12168aebd6da8fa32c9b7d6203ca9b5eb88d upstream.
+commit 99696a2592bca641eb88cc9a80c90e591afebd0f upstream.
 
-The print fmt check against trace events to make sure that the format does
-not use pointers that may be freed from the time of the trace to the time
-the event is read, gives a false positive on %pISpc when reading data that
-was saved in __get_dynamic_array() when it is perfectly fine to do so, as
-the data being read is on the ring buffer.
+In create_var_ref(), init_var_ref() is called to initialize the fields
+of variable ref_field, which is allocated in the previous function call
+to create_hist_field(). Function init_var_ref() allocates the
+corresponding fields such as ref_field->system, but frees these fields
+when the function encounters an error. The caller later calls
+destroy_hist_field() to conduct error handling, which frees the fields
+and the variable itself. This results in double free of the fields which
+are already freed in the previous function.
 
-Link: https://lore.kernel.org/all/20220407144524.2a592ed6@canb.auug.org.au/
+Fix this by storing NULL to the corresponding fields when they are freed
+in init_var_ref().
 
-Cc: stable@vger.kernel.org
-Fixes: 5013f454a352c ("tracing: Add check of trace event print fmts for dereferencing pointers")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lkml.kernel.org/r/20220425063739.3859998-1-keitasuzuki.park@sslab.ics.keio.ac.jp
+
+Fixes: 067fe038e70f ("tracing: Add variable reference handling to hist triggers")
+CC: stable@vger.kernel.org
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Reviewed-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_events.c |   13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ kernel/trace/trace_events_hist.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -392,12 +392,6 @@ static void test_event_printk(struct tra
- 			if (!(dereference_flags & (1ULL << arg)))
- 				goto next_arg;
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -2093,8 +2093,11 @@ static int init_var_ref(struct hist_fiel
+ 	return err;
+  free:
+ 	kfree(ref_field->system);
++	ref_field->system = NULL;
+ 	kfree(ref_field->event_name);
++	ref_field->event_name = NULL;
+ 	kfree(ref_field->name);
++	ref_field->name = NULL;
  
--			/* Check for __get_sockaddr */;
--			if (str_has_prefix(fmt + i, "__get_sockaddr(")) {
--				dereference_flags &= ~(1ULL << arg);
--				goto next_arg;
--			}
--
- 			/* Find the REC-> in the argument */
- 			c = strchr(fmt + i, ',');
- 			r = strstr(fmt + i, "REC->");
-@@ -413,7 +407,14 @@ static void test_event_printk(struct tra
- 				a = strchr(fmt + i, '&');
- 				if ((a && (a < r)) || test_field(r, call))
- 					dereference_flags &= ~(1ULL << arg);
-+			} else if ((r = strstr(fmt + i, "__get_dynamic_array(")) &&
-+				   (!c || r < c)) {
-+				dereference_flags &= ~(1ULL << arg);
-+			} else if ((r = strstr(fmt + i, "__get_sockaddr(")) &&
-+				   (!c || r < c)) {
-+				dereference_flags &= ~(1ULL << arg);
- 			}
-+
- 		next_arg:
- 			i--;
- 			arg++;
+ 	goto out;
+ }
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184CD5419C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CAC5411B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378559AbiFGVZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S1357730AbiFGTmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359600AbiFGU3g (ORCPT
+        with ESMTP id S1353974AbiFGSqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:29:36 -0400
+        Tue, 7 Jun 2022 14:46:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129F91DF103;
-        Tue,  7 Jun 2022 11:34:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01AE18DAE9;
+        Tue,  7 Jun 2022 10:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F9E961578;
-        Tue,  7 Jun 2022 18:34:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94134C385A2;
-        Tue,  7 Jun 2022 18:34:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ADEF618E5;
+        Tue,  7 Jun 2022 17:59:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D4FCC36B00;
+        Tue,  7 Jun 2022 17:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626851;
-        bh=UxbhR46gJUd+PJemqjtAXlkwz/NFwLdLTfbOQ5t3pJ4=;
+        s=korg; t=1654624791;
+        bh=gdWMOUDKVAqi6yCejsLZGzwhdUsyVmA79NthQ2UU4Xs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y8Ro7JHv3GdOf1dZ5B03pqk4sMpyatgK1G2iU8JO1x8wnOqKhh3CLFN6cvZWDGdNM
-         gQzfXhQnMJ09tAtQR7djHewNUAxwRDPZL5sX6zc3gcH8z4k2rXdCOCjb4LxtKcvpPr
-         7zbDoQrlwRba5k0bVslfkA1xhzByLWLNxLkyLGJg=
+        b=GLCpCRAQr421UQQiteHvU4tAE0VuPSV827F6a2mhuscFh+wikJ8ih+DKHOOqLZ+bR
+         w7McxenPan0lc3jkCJDK3LJA54FRLjfh8iUECfYwVagbJOKQZQagypOkmCMtEqUKPk
+         /z5K79p5JV6fZHmQrn94OoLp6AKN8ojwjFHA1SbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 528/772] module: fix [e_shstrndx].sh_size=0 OOB access
+Subject: [PATCH 5.15 455/667] crypto: sun8i-ss - handle zero sized sg
 Date:   Tue,  7 Jun 2022 19:02:00 +0200
-Message-Id: <20220607165004.532150453@linuxfoundation.org>
+Message-Id: <20220607164948.359558265@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Dobriyan <adobriyan@gmail.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 391e982bfa632b8315235d8be9c0a81374c6a19c ]
+[ Upstream commit c149e4763d28bb4c0e5daae8a59f2c74e889f407 ]
 
-It is trivial to craft a module to trigger OOB access in this line:
+sun8i-ss does not handle well the possible zero sized sg.
 
-	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
-
-BUG: unable to handle page fault for address: ffffc90000aa0fff
-PGD 100000067 P4D 100000067 PUD 100066067 PMD 10436f067 PTE 0
-Oops: 0000 [#1] PREEMPT SMP PTI
-CPU: 7 PID: 1215 Comm: insmod Not tainted 5.18.0-rc5-00007-g9bf578647087-dirty #10
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
-RIP: 0010:load_module+0x19b/0x2391
-
-Fixes: ec2a29593c83 ("module: harden ELF info handling")
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-[rebased patch onto modules-next]
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Fixes: d9b45418a917 ("crypto: sun8i-ss - support hash algorithms")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/module.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/module.c b/kernel/module.c
-index 46a5c2ed1928..740323cff545 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3033,6 +3033,10 @@ static int elf_validity_check(struct load_info *info)
- 	 * strings in the section safe.
- 	 */
- 	info->secstrings = (void *)info->hdr + strhdr->sh_offset;
-+	if (strhdr->sh_size == 0) {
-+		pr_err("empty section name table\n");
-+		goto no_exec;
-+	}
- 	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
- 		pr_err("ELF Spec violation: section name table isn't null terminated\n");
- 		goto no_exec;
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
+index 1a71ed49d233..ca4f280af35d 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
+@@ -380,13 +380,21 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
+ 	}
+ 
+ 	len = areq->nbytes;
+-	for_each_sg(areq->src, sg, nr_sgs, i) {
++	sg = areq->src;
++	i = 0;
++	while (len > 0 && sg) {
++		if (sg_dma_len(sg) == 0) {
++			sg = sg_next(sg);
++			continue;
++		}
+ 		rctx->t_src[i].addr = sg_dma_address(sg);
+ 		todo = min(len, sg_dma_len(sg));
+ 		rctx->t_src[i].len = todo / 4;
+ 		len -= todo;
+ 		rctx->t_dst[i].addr = addr_res;
+ 		rctx->t_dst[i].len = digestsize / 4;
++		sg = sg_next(sg);
++		i++;
+ 	}
+ 	if (len > 0) {
+ 		dev_err(ss->dev, "remaining len %d\n", len);
 -- 
 2.35.1
 

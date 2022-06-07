@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1E253F9F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9844353F95A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239795AbiFGJho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S239245AbiFGJQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239794AbiFGJhg (ORCPT
+        with ESMTP id S239182AbiFGJQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:37:36 -0400
-Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64042A404
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:37:34 -0700 (PDT)
-Received: from [10.28.39.121] (10.28.39.121) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 7 Jun 2022
- 17:37:32 +0800
-Message-ID: <e06acb65-50fe-46e6-a302-0238c902d1a2@amlogic.com>
-Date:   Tue, 7 Jun 2022 17:37:31 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 5/5] mtd: rawnand: meson: not support legacy clock
-Content-Language: en-US
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        <linux-mtd@lists.infradead.org>
-CC:     kernel test robot <lkp@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
+        Tue, 7 Jun 2022 05:16:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3EDB0D00;
+        Tue,  7 Jun 2022 02:16:44 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LHPmC185MzRp5T;
+        Tue,  7 Jun 2022 17:13:31 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 17:16:42 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 17:16:40 +0800
+From:   Wupeng Ma <mawupeng1@huawei.com>
+To:     <corbet@lwn.net>, <will@kernel.org>, <ardb@kernel.org>,
+        <catalin.marinas@arm.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <dvhart@infradead.org>, <andy@infradead.org>, <rppt@kernel.org>,
+        <akpm@linux-foundation.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <paulmck@kernel.org>, <keescook@chromium.org>,
+        <songmuchun@bytedance.com>, <rdunlap@infradead.org>,
+        <damien.lemoal@opensource.wdc.com>, <swboyd@chromium.org>,
+        <wei.liu@kernel.org>, <robin.murphy@arm.com>, <david@redhat.com>,
+        <mawupeng1@huawei.com>, <anshuman.khandual@arm.com>,
+        <thunder.leizhen@huawei.com>, <wangkefeng.wang@huawei.com>,
+        <gpiccoli@igalia.com>, <chenhuacai@kernel.org>,
+        <geert@linux-m68k.org>, <chenzhou10@huawei.com>,
+        <vijayb@linux.microsoft.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20220607064731.13367-1-liang.yang@amlogic.com>
- <20220607064731.13367-6-liang.yang@amlogic.com>
- <791b3e4e-7348-997a-0ead-136739ec10bf@baylibre.com>
-From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <791b3e4e-7348-997a-0ead-136739ec10bf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.28.39.121]
-X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
- (10.28.11.5)
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v3 0/6] introduce mirrored memory support for arm64
+Date:   Tue, 7 Jun 2022 17:37:59 +0800
+Message-ID: <20220607093805.1354256-1-mawupeng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,41 +67,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+From: Ma Wupeng <mawupeng1@huawei.com>
 
-On 2022/6/7 15:12, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Hi,
-> 
-> On 07/06/2022 08:47, Liang Yang wrote:
->> meson NFC driver use common clock interfaces. so the test robot report
->> some errors once using the legacy clock with HAVE_LEGACY_CLK on.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
->> ---
->>   drivers/mtd/nand/raw/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
->> index 67b7cb67c030..5169412a4af4 100644
->> --- a/drivers/mtd/nand/raw/Kconfig
->> +++ b/drivers/mtd/nand/raw/Kconfig
->> @@ -395,7 +395,7 @@ config MTD_NAND_STM32_FMC2
->>   config MTD_NAND_MESON
->>       tristate "Support for NAND controller on Amlogic's Meson SoCs"
->> -    depends on ARCH_MESON || COMPILE_TEST
->> +    depends on ARCH_MESON || COMPILE_TEST || !HAVE_LEGACY_CLK
-> 
-> I think depending on CCF would be better than excluding legacy clock.
->
-indeed. i will use COMMON_CLK later. thanks.
+Commit b05b9f5f9dcf ("x86, mirror: x86 enabling - find mirrored memory ranges")
+introduced mirrored memory support for x86. This support rely on UEFI to
+report mirrored memory address ranges.  See UEFI 2.5 spec pages 157-158:
 
->>       select MFD_SYSCON
->>       help
->>         Enables support for NAND controller on Amlogic's Meson SoCs.
-> 
-> Neil
-> 
-> .
+  http://www.uefi.org/sites/default/files/resources/UEFI%202_5.pdf
+
+Memory mirroring is a technique used to separate memory into two separate
+channels, usually on a memory device, like a server. In memory mirroring,
+one channel is copied to another to create redundancy. This method makes
+input/output (I/O) registers and memory appear with more than one address
+range because the same physical byte is accessible at more than one
+address. Using memory mirroring, higher memory reliability and a higher
+level of memory consolidation are possible.
+
+These EFI memory regions have various attributes, and the "mirrored"
+attribute is one of them. The physical memory region whose descriptors
+in EFI memory map has EFI_MEMORY_MORE_RELIABLE attribute (bit: 16) are
+mirrored. The address range mirroring feature of the kernel arranges such
+mirrored regions into normal zones and other regions into movable zones.
+
+Arm64 can support this too. So mirrored memory support is added to support
+arm64.
+
+The main purpose of this patch set is to introduce mirrored support for
+arm64 and we have already fixed the problems we had which is shown in
+patch #5 to patch #8 and try to bring total isolation in patch #9 which
+will disable mirror feature if kernelcore is not specified.
+
+In order to test this support in arm64:
+- patch this patch set
+- add kernelcore=mirror in kernel parameter
+- start you kernel
+
+Patch #1-#2 introduce mirrored memory support form arm64.
+Patch #3-#5 fix some bugs for arm64 if memory reliable is enabled.
+Patch #6 disable mirror feature if kernelcore is not specified.
+
+Thanks to Ard Biesheuvel's hard work [1], now kernel will perfer mirrored
+memory if kaslr is enabled.
+
+[1] https://lore.kernel.org/linux-arm-kernel/CAMj1kXEPVEzMgOM4+Yj6PxHA-jFuDOAUdDJSiSxy_XaP4P7LSw@mail.gmail.com/T/
+
+Changelog since v2:
+- remove efi_fake_mem support
+- remove Commit ("remove some redundant code in ia64 efi_init") since
+  efi_print_memmap() is not public
+- add mirror flag back on initrd memory
+
+Changelog since v1:
+- update changelog in cover letter
+- use PHYS_PFN in patch #7
+
+Ma Wupeng (6):
+  efi: Make efi_find_mirror() public
+  arm64/mirror: arm64 enabling - find mirrored memory ranges
+  mm: Ratelimited mirrored memory related warning messages
+  mm: Demote warning message in vmemmap_verify() to debug level
+  mm: Add mirror flag back on initrd memory
+  efi: Disable mirror feature if kernelcore is not specified
+
+ .../admin-guide/kernel-parameters.txt         |  2 +-
+ arch/arm64/kernel/setup.c                     |  1 +
+ arch/arm64/mm/init.c                          |  9 +++++++
+ arch/x86/include/asm/efi.h                    |  4 ---
+ arch/x86/platform/efi/efi.c                   | 23 ----------------
+ drivers/firmware/efi/efi.c                    | 26 +++++++++++++++++++
+ include/linux/efi.h                           |  3 +++
+ include/linux/memblock.h                      |  1 +
+ include/linux/mm.h                            |  2 ++
+ mm/memblock.c                                 | 24 +++++++++++++++--
+ mm/page_alloc.c                               |  2 +-
+ mm/sparse-vmemmap.c                           |  2 +-
+ 12 files changed, 67 insertions(+), 32 deletions(-)
+
+-- 
+2.25.1
+

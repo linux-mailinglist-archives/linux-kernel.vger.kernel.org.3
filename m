@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168AA541FBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918F6541FB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386193AbiFGWsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S1386725AbiFGWtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381298AbiFGVk0 (ORCPT
+        with ESMTP id S1381304AbiFGVk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:40:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252F91C4F25;
-        Tue,  7 Jun 2022 12:06:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2003C232379;
+        Tue,  7 Jun 2022 12:06:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE6B617EE;
-        Tue,  7 Jun 2022 19:06:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF862C385A2;
-        Tue,  7 Jun 2022 19:06:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F066617DA;
+        Tue,  7 Jun 2022 19:06:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB508C385A2;
+        Tue,  7 Jun 2022 19:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628780;
-        bh=zQFcd0tZBj3/kM6RE7wQSDtna4ihg2M5PCf88aQNVFQ=;
+        s=korg; t=1654628794;
+        bh=wXml3vOeHTe2aPhXSByfJUBg4hzCXWKnW4+DgntOpHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O0iQPt4vPqO544Gzj+Le0yJhI6VPA2b9Orf+w0DNk0Av/CkN6vAezx8WVzSE4Nu08
-         68fxWQes1iMoSyTdFsuzdca/SKTEFqaAiZDcSSrwyIIDfPz2/ZK3IpQdGm9r/zWrbK
-         6YVwuBQuw7tRMigeh4Elw/YKB1aUBQLshNc6JT0I=
+        b=D8h9eeSWYvamRFXthoFfu2XooO8kURGeHAXBkXYsSzt4pDAjPicrGsS7YEVj+N3mC
+         lj/C9pgvWQ1ltljXEsRxXpxOKZktD/L/AhYymnNJhQ7twZECADeJDuViVNLdDfVSq5
+         ZPdiEpU9lHTQ3FrkuVcNkbs1kKcUQemrMlpDtNZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 416/879] HID: amd_sfh: Modify the hid name
-Date:   Tue,  7 Jun 2022 18:58:54 +0200
-Message-Id: <20220607165014.934803153@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 417/879] ASoC: fsl: Fix refcount leak in imx_sgtl5000_probe
+Date:   Tue,  7 Jun 2022 18:58:55 +0200
+Message-Id: <20220607165014.964887113@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,34 +56,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 10f865cdcf37d26ae5e9595a7b4f9e06538e84e5 ]
+[ Upstream commit 41cd312dfe980af869c3503b4d38e62ed20dd3b7 ]
 
-Modifying the amd-sfh hid name to meaningful name.
+of_find_i2c_device_by_node() takes a reference,
+In error paths, we should call put_device() to drop
+the reference to aviod refount leak.
 
-Fixes: 4b2c53d93a4b ("SFH:Transport Driver to add support of AMD Sensor Fusion Hub (SFH)")
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Fixes: 81e8e4926167 ("ASoC: fsl: add sgtl5000 clock support for imx-sgtl5000")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Link: https://lore.kernel.org/r/20220511065803.3957-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/amd-sfh-hid/amd_sfh_hid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/fsl/imx-sgtl5000.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-index 6e487e41f4dd..e2a9679e32be 100644
---- a/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_hid.c
-@@ -144,7 +144,7 @@ int amdtp_hid_probe(u32 cur_hid_dev, struct amdtp_cl_data *cli_data)
- 	hid->bus = BUS_AMD_SFH;
- 	hid->vendor = AMD_SFH_HID_VENDOR;
- 	hid->product = AMD_SFH_HID_PRODUCT;
--	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdtp",
-+	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X", "hid-amdsfh",
- 		 hid->vendor, hid->product);
+diff --git a/sound/soc/fsl/imx-sgtl5000.c b/sound/soc/fsl/imx-sgtl5000.c
+index 8daced42d55e..580a0d963f0e 100644
+--- a/sound/soc/fsl/imx-sgtl5000.c
++++ b/sound/soc/fsl/imx-sgtl5000.c
+@@ -120,19 +120,19 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
+ 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data) {
+ 		ret = -ENOMEM;
+-		goto fail;
++		goto put_device;
+ 	}
  
- 	rc = hid_add_device(hid);
+ 	comp = devm_kzalloc(&pdev->dev, 3 * sizeof(*comp), GFP_KERNEL);
+ 	if (!comp) {
+ 		ret = -ENOMEM;
+-		goto fail;
++		goto put_device;
+ 	}
+ 
+ 	data->codec_clk = clk_get(&codec_dev->dev, NULL);
+ 	if (IS_ERR(data->codec_clk)) {
+ 		ret = PTR_ERR(data->codec_clk);
+-		goto fail;
++		goto put_device;
+ 	}
+ 
+ 	data->clk_frequency = clk_get_rate(data->codec_clk);
+@@ -158,10 +158,10 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
+ 	data->card.dev = &pdev->dev;
+ 	ret = snd_soc_of_parse_card_name(&data->card, "model");
+ 	if (ret)
+-		goto fail;
++		goto put_device;
+ 	ret = snd_soc_of_parse_audio_routing(&data->card, "audio-routing");
+ 	if (ret)
+-		goto fail;
++		goto put_device;
+ 	data->card.num_links = 1;
+ 	data->card.owner = THIS_MODULE;
+ 	data->card.dai_link = &data->dai;
+@@ -174,7 +174,7 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
+ 	ret = devm_snd_soc_register_card(&pdev->dev, &data->card);
+ 	if (ret) {
+ 		dev_err_probe(&pdev->dev, ret, "snd_soc_register_card failed\n");
+-		goto fail;
++		goto put_device;
+ 	}
+ 
+ 	of_node_put(ssi_np);
+@@ -182,6 +182,8 @@ static int imx_sgtl5000_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
++put_device:
++	put_device(&codec_dev->dev);
+ fail:
+ 	if (data && !IS_ERR(data->codec_clk))
+ 		clk_put(data->codec_clk);
 -- 
 2.35.1
 

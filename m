@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D5E54224F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA3F5422E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390924AbiFHBvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S1443655AbiFHBAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383010AbiFGWEv (ORCPT
+        with ESMTP id S1383158AbiFGWFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:04:51 -0400
+        Tue, 7 Jun 2022 18:05:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7905F19593E;
-        Tue,  7 Jun 2022 12:16:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1D419594A;
+        Tue,  7 Jun 2022 12:16:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36217B8233E;
-        Tue,  7 Jun 2022 19:16:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B4BC385A2;
-        Tue,  7 Jun 2022 19:16:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15E2BB823CA;
+        Tue,  7 Jun 2022 19:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73593C385A2;
+        Tue,  7 Jun 2022 19:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629375;
-        bh=dXJ1pkdkNPOA/d6G70SJbl2KnK0Y7faw7WYS0q2pHnQ=;
+        s=korg; t=1654629388;
+        bh=b1g1fws0lCsOl10pEsDk3as04zJl0512CLXA21q35DY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BXwW8+D992L0S+mmb/XR0W9ZD8N8LHscCwk0JFRXQYm4Ks0JA6bIjDRtvOz6QSqy5
-         epDIe8bTQz9efNn8aLNocK+8mgsiWcSjAN0Euc/GwNYxTZvIv3A8dC+ZJ1wSaHbUpm
-         Gv8IPbV41HTpSyZtBse9lvpf+Pl4gciUOiVhvQf8=
+        b=HTzPwQhSa5ZElVoIp24FjoKQmbQ+trwyFQRuf0KriS0fSKpyU4S2fzl89TgxIHuKn
+         gei99Px6/g6gTsyuFKy1MzCOmLQUQire33KT3Fhex1xZnvcQzOXYQ2CDDENoiVg57F
+         pWA3buCRbkNSH6l4/x3sT4gs3g5Ce/KGzPMSYU1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yunfei Wang <yf.wang@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 667/879] iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
-Date:   Tue,  7 Jun 2022 19:03:05 +0200
-Message-Id: <20220607165022.211174343@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 671/879] iommu/arm-smmu-v3-sva: Fix mm use-after-free
+Date:   Tue,  7 Jun 2022 19:03:09 +0200
+Message-Id: <20220607165022.326261425@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,103 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yong Wu <yong.wu@mediatek.com>
+From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-[ Upstream commit 0e5a3f2e630b28e88e018655548212ef8eb4dfcb ]
+[ Upstream commit cbd23144f7662b00bcde32a938c4a4057e476d68 ]
 
-Add a mutex to protect the data in the structure mtk_iommu_data,
-like ->"m4u_group" ->"m4u_dom". For the internal data, we should
-protect it in ourselves driver. Add a mutex for this.
-This could be a fix for the multi-groups support.
+We currently call arm64_mm_context_put() without holding a reference to
+the mm, which can result in use-after-free. Call mmgrab()/mmdrop() to
+ensure the mm only gets freed after we unpinned the ASID.
 
-Fixes: c3045f39244e ("iommu/mediatek: Support for multi domains")
-Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Link: https://lore.kernel.org/r/20220503071427.2285-8-yong.wu@mediatek.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: 32784a9562fb ("iommu/arm-smmu-v3: Implement iommu_sva_bind/unbind()")
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+Link: https://lore.kernel.org/r/20220426130444.300556-1-jean-philippe@linaro.org
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/mtk_iommu.c | 13 +++++++++++--
- drivers/iommu/mtk_iommu.h |  2 ++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 81b8db450eac..3413cc98e57e 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -464,15 +464,16 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 		dom->data = data;
- 	}
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index c623dae1e115..1ef7bbb4acf3 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -6,6 +6,7 @@
+ #include <linux/mm.h>
+ #include <linux/mmu_context.h>
+ #include <linux/mmu_notifier.h>
++#include <linux/sched/mm.h>
+ #include <linux/slab.h>
  
-+	mutex_lock(&data->mutex);
- 	if (!data->m4u_dom) { /* Initialize the M4U HW */
- 		ret = pm_runtime_resume_and_get(m4udev);
- 		if (ret < 0)
--			return ret;
-+			goto err_unlock;
+ #include "arm-smmu-v3.h"
+@@ -96,9 +97,14 @@ static struct arm_smmu_ctx_desc *arm_smmu_alloc_shared_cd(struct mm_struct *mm)
+ 	struct arm_smmu_ctx_desc *cd;
+ 	struct arm_smmu_ctx_desc *ret = NULL;
  
- 		ret = mtk_iommu_hw_init(data);
- 		if (ret) {
- 			pm_runtime_put(m4udev);
--			return ret;
-+			goto err_unlock;
- 		}
- 		data->m4u_dom = dom;
- 		writel(dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK,
-@@ -480,9 +481,14 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
- 
- 		pm_runtime_put(m4udev);
- 	}
-+	mutex_unlock(&data->mutex);
- 
- 	mtk_iommu_config(data, dev, true, domid);
- 	return 0;
++	/* Don't free the mm until we release the ASID */
++	mmgrab(mm);
 +
-+err_unlock:
-+	mutex_unlock(&data->mutex);
-+	return ret;
+ 	asid = arm64_mm_context_get(mm);
+-	if (!asid)
+-		return ERR_PTR(-ESRCH);
++	if (!asid) {
++		err = -ESRCH;
++		goto out_drop_mm;
++	}
+ 
+ 	cd = kzalloc(sizeof(*cd), GFP_KERNEL);
+ 	if (!cd) {
+@@ -165,6 +171,8 @@ static struct arm_smmu_ctx_desc *arm_smmu_alloc_shared_cd(struct mm_struct *mm)
+ 	kfree(cd);
+ out_put_context:
+ 	arm64_mm_context_put(mm);
++out_drop_mm:
++	mmdrop(mm);
+ 	return err < 0 ? ERR_PTR(err) : ret;
  }
  
- static void mtk_iommu_detach_device(struct iommu_domain *domain,
-@@ -622,6 +628,7 @@ static struct iommu_group *mtk_iommu_device_group(struct device *dev)
- 	if (domid < 0)
- 		return ERR_PTR(domid);
- 
-+	mutex_lock(&data->mutex);
- 	group = data->m4u_group[domid];
- 	if (!group) {
- 		group = iommu_group_alloc();
-@@ -630,6 +637,7 @@ static struct iommu_group *mtk_iommu_device_group(struct device *dev)
- 	} else {
- 		iommu_group_ref_get(group);
+@@ -173,6 +181,7 @@ static void arm_smmu_free_shared_cd(struct arm_smmu_ctx_desc *cd)
+ 	if (arm_smmu_free_asid(cd)) {
+ 		/* Unpin ASID */
+ 		arm64_mm_context_put(cd->mm);
++		mmdrop(cd->mm);
+ 		kfree(cd);
  	}
-+	mutex_unlock(&data->mutex);
- 	return group;
  }
- 
-@@ -910,6 +918,7 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 	}
- 
- 	platform_set_drvdata(pdev, data);
-+	mutex_init(&data->mutex);
- 
- 	ret = iommu_device_sysfs_add(&data->iommu, dev, NULL,
- 				     "mtk-iommu.%pa", &ioaddr);
-diff --git a/drivers/iommu/mtk_iommu.h b/drivers/iommu/mtk_iommu.h
-index b742432220c5..5e8da947affc 100644
---- a/drivers/iommu/mtk_iommu.h
-+++ b/drivers/iommu/mtk_iommu.h
-@@ -80,6 +80,8 @@ struct mtk_iommu_data {
- 
- 	struct dma_iommu_mapping	*mapping; /* For mtk_iommu_v1.c */
- 
-+	struct mutex			mutex; /* Protect m4u_group/m4u_dom above */
-+
- 	struct list_head		list;
- 	struct mtk_smi_larb_iommu	larb_imu[MTK_LARB_NR_MAX];
- };
 -- 
 2.35.1
 

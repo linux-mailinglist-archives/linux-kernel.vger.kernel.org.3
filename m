@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3906354125B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781AC54086F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357794AbiFGTrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S1349028AbiFGR6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354596AbiFGSrT (ORCPT
+        with ESMTP id S1347270AbiFGRig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C338DB0;
-        Tue,  7 Jun 2022 11:02:24 -0700 (PDT)
+        Tue, 7 Jun 2022 13:38:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5200330569;
+        Tue,  7 Jun 2022 10:33:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5ECDB82182;
-        Tue,  7 Jun 2022 18:02:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C20F8C385A5;
-        Tue,  7 Jun 2022 18:02:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57E16B822B4;
+        Tue,  7 Jun 2022 17:32:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEEE6C34115;
+        Tue,  7 Jun 2022 17:32:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624942;
-        bh=sgwjSb0S/z/eQgKcVypW68oc31OgMlRsNapyvUhlqSE=;
+        s=korg; t=1654623161;
+        bh=QaBLpXvVZZrFl1X5v6hzQGyuNtnzNjh2StDhRAR2WBY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tbBRd+iwbJUMKaDr/5DMSvF3MhDqF3wW+No/ab1TSDEVHLsmF+QGdq4d/JQo1UTFi
-         irL1TfGxTqiRRToEJmr+DktSptPlfsh3K4fj1yU22hyVPf+WKkvXoi51gbtPrOrEFb
-         2qEglI/brfXRBRb7M/Sh6lg5QD5f0GaV+ELvpM40=
+        b=tsU3S1NpgAeUZdvv/GhanE3SCX59IJ0RG9u/cHml+yYYVlkEKS7FYuFOu8Py2Kz9o
+         MgL2v3aNpz0NHa6NmzMr/oyYjKSDgy0Skw+qmKVis4aAhn2IocumiXpVW5spwEdF5Z
+         7fgceKHtFTRutXvF35uPVtEk/YIKsmP/+nm03E/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 482/667] iommu/mediatek: Add list_del in mtk_iommu_remove
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 290/452] pinctrl: mvebu: Fix irq_of_parse_and_map() return value
 Date:   Tue,  7 Jun 2022 19:02:27 +0200
-Message-Id: <20220607164949.158751496@linuxfoundation.org>
+Message-Id: <20220607164917.192273312@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yong Wu <yong.wu@mediatek.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit ee55f75e4bcade81d253163641b63bef3e76cac4 ]
+[ Upstream commit 71bc7cf3be65bab441e03667cf215c557712976c ]
 
-Lack the list_del in the mtk_iommu_remove, and remove
-bus_set_iommu(*, NULL) since there may be several iommu HWs.
-we can not bus_set_iommu null when one iommu driver unbind.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-This could be a fix for mt2712 which support 2 M4U HW and list them.
-
-Fixes: 7c3a2ec02806 ("iommu/mediatek: Merge 2 M4U HWs into one iommu domain")
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Link: https://lore.kernel.org/r/20220503071427.2285-6-yong.wu@mediatek.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: 2f227605394b ("pinctrl: armada-37xx: Add irqchip support")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220422105339.78810-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/mtk_iommu.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index cf4e33db6a2d..2285507d3354 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -954,8 +954,7 @@ static int mtk_iommu_remove(struct platform_device *pdev)
- 	iommu_device_sysfs_remove(&data->iommu);
- 	iommu_device_unregister(&data->iommu);
+diff --git a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+index 5cb018f98800..85a0052bb0e6 100644
+--- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
++++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
+@@ -781,7 +781,7 @@ static int armada_37xx_irqchip_register(struct platform_device *pdev,
+ 	for (i = 0; i < nr_irq_parent; i++) {
+ 		int irq = irq_of_parse_and_map(np, i);
  
--	if (iommu_present(&platform_bus_type))
--		bus_set_iommu(&platform_bus_type, NULL);
-+	list_del(&data->list);
- 
- 	clk_disable_unprepare(data->bclk);
- 	device_link_remove(data->smicomm_dev, &pdev->dev);
+-		if (irq < 0)
++		if (!irq)
+ 			continue;
+ 		girq->parents[i] = irq;
+ 	}
 -- 
 2.35.1
 

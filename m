@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88CF53FA89
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0303F53FA9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240356AbiFGJ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S240375AbiFGJ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240276AbiFGJ4M (ORCPT
+        with ESMTP id S240387AbiFGJ6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:56:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D813EE733E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654595770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPcrVbGSfC2d9bGnlJDvNet18sRYkg2g/ox43s88aXY=;
-        b=dqFhhRaY2DLlVF7XMlqXUfh3vbMzXHoa9hihcTdf/POqlsCYMSgV8CzfX76g1zIQ07LGPX
-        6WHs6lSi0Sf9Ykh45l+L9j7FiXgJ4gVCdJ/nculHXY+gqr5m8q4breY9poKFEVj0eR9wZw
-        KZjfA4D1syW466Ao7ela76zwl04WFLY=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-_OO9tEeGO_-jfXmT3Op4Tw-1; Tue, 07 Jun 2022 05:56:08 -0400
-X-MC-Unique: _OO9tEeGO_-jfXmT3Op4Tw-1
-Received: by mail-qk1-f197.google.com with SMTP id k13-20020a05620a414d00b006a6e4dc1dfcso662911qko.19
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:56:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=hPcrVbGSfC2d9bGnlJDvNet18sRYkg2g/ox43s88aXY=;
-        b=YSD++PZqlmjnBYUk8PsFwXM1Kmf4bVW27DSY9arUDE+0nlsqX+aWjf7xeEPAdEumbK
-         LHoz0HwlFl3AVM1AICZmr3c+v5Pcs+MuBS+jOKh7vntgb6KQR1WXCIvVs6wJl3qyelsG
-         jWrO9TKywZcxXFXqUw3PZZ/e2f39db3W7fev7TeGQGKPqrhiNh/9r3Y/oxy+vg8jJMHe
-         5dVi5hrLKUQG0rCBHhpNmnMVbi1TTu0C1pZH4fG4Xcq2dy2vSIb0aQJqr0bXQ+J8La+U
-         KnEz6vpylh9iEtqbJVuYYiC6n77MXgaqL4+3NfDn7BIjjiuy9DMDi3H4+ukXcYamLpm6
-         fmRg==
-X-Gm-Message-State: AOAM530FLvmG4Cp8FF+MCJlc/QfD04fdKPpTc0fE2xvXwih8QtqFxksd
-        J4BAXblNhhpu5pNOK5T18/pxrWaaFYDAbvZ/eDalR+VQAjROmz6lPA4OR+7YyRifBbh0IZXQ4bj
-        2B5hF5FFwANPBgY5D0yshK+q+
-X-Received: by 2002:a37:917:0:b0:6a6:9a14:b542 with SMTP id 23-20020a370917000000b006a69a14b542mr14626086qkj.562.1654595767101;
-        Tue, 07 Jun 2022 02:56:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxGn1pnO3L/l5/swG8TZlg+GJyHc7lm8NxVbWhcbgeMs61jMxFKA3z/PBHvttTea5vJ/1bMlQ==
-X-Received: by 2002:a37:917:0:b0:6a6:9a14:b542 with SMTP id 23-20020a370917000000b006a69a14b542mr14626069qkj.562.1654595766859;
-        Tue, 07 Jun 2022 02:56:06 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id d127-20020a37b485000000b0069fc13ce257sm12793643qkf.136.2022.06.07.02.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:56:06 -0700 (PDT)
-Message-ID: <e249bd60cef49706e39cc619876e26c90d88ecb0.camel@redhat.com>
-Subject: Re: [PATCH v6 20/38] KVM: nVMX: hyper-v: Cache VP assist page in
- 'struct kvm_vcpu_hv'
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 12:56:02 +0300
-In-Reply-To: <20220606083655.2014609-21-vkuznets@redhat.com>
-References: <20220606083655.2014609-1-vkuznets@redhat.com>
-         <20220606083655.2014609-21-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 7 Jun 2022 05:58:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA67C5D66C;
+        Tue,  7 Jun 2022 02:58:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 508EEB81E76;
+        Tue,  7 Jun 2022 09:58:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A077FC34119;
+        Tue,  7 Jun 2022 09:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654595879;
+        bh=8DV3QorSxkeJRTn5hPB/RoqUQHP9TqR0CTiN1ZWTd7s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PHF4JmLsS4wcyUwv3x/x5naQH4qzhoLntzhoE4++JsHKkk5oRm1ubNBYHFmUUK4OH
+         iR+S4ZdVd5h1GZj3pDsVb8H3blhhjgI9jxWigqHchP9TvxLtZd1L5LUXq+1McQ1Kjc
+         /TypvtfiL61k+ym5ggOG9nzgpbAYj7dcyUhEIGHwOD5Y3xQIXYszMHYVZYCgwFCYJI
+         D0ylC6ifHylo4JMxwk+FBj/ub/F01XYkl3rr6hx4ouvK7ZRAW6UDz3Z11uGKXW4HVg
+         Zmyfw7qQ1l4DjD5JBk+WFkQCkT6Q+TniyZvbCoxyFB3g/JVkxTTC3RbHYkbwyh19JD
+         2ItrIHMhfSv4A==
+Date:   Tue, 7 Jun 2022 12:56:03 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: Re: [PATCH v5 2/3] tpm: Add tpm_tis_verify_crc to the
+ tpm_tis_phy_ops protocol layer
+Message-ID: <Yp8gsy2vv4Y0luYQ@iki.fi>
+References: <20220603143532.8202-1-Alexander.Steffen@infineon.com>
+ <20220603143532.8202-3-Alexander.Steffen@infineon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603143532.8202-3-Alexander.Steffen@infineon.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,159 +58,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
-> In preparation to enabling L2 TLB flush, cache VP assist page in
-> 'struct kvm_vcpu_hv'. While on it, rename nested_enlightened_vmentry()
-> to nested_get_evmptr() and make it return eVMCS GPA directly.
+On Fri, Jun 03, 2022 at 04:35:31PM +0200, Alexander Steffen wrote:
+> Some TPMs, e.g. those implementing the I2C variant of TIS, can verify
+> data transfers to/from the FIFO with a CRC. The CRC is calculated over
+> the entirety of the FIFO register. Since the phy_ops layer is not aware
+> when the core layer is done reading/writing the FIFO, CRC verification
+> must be triggered from the core layer. To this end, add an optional
+> phy_ops API call.
 > 
-> No functional change intended.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Co-developed-by: Johannes Holland <johannes.holland@infineon.com>
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> Change-Id: I43716c8d45f62c0fcdaabfc3366f8deb89fd1f32
+
+Strip off Change-Id.
+
 > ---
->  arch/x86/include/asm/kvm_host.h |  2 ++
->  arch/x86/kvm/hyperv.c           | 10 ++++++----
->  arch/x86/kvm/hyperv.h           |  3 +--
->  arch/x86/kvm/vmx/evmcs.c        | 21 +++++++--------------
->  arch/x86/kvm/vmx/evmcs.h        |  2 +-
->  arch/x86/kvm/vmx/nested.c       |  6 +++---
->  6 files changed, 20 insertions(+), 24 deletions(-)
+>  drivers/char/tpm/tpm_tis_core.c | 14 ++++++++++++++
+>  drivers/char/tpm/tpm_tis_core.h | 10 ++++++++++
+>  2 files changed, 24 insertions(+)
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index f9a34af0a5cc..e62db76c8d37 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -650,6 +650,8 @@ struct kvm_vcpu_hv {
->         /* Preallocated buffer for handling hypercalls passing sparse vCPU set */
->         u64 sparse_banks[HV_MAX_SPARSE_VCPU_BANKS];
->  
-> +       struct hv_vp_assist_page vp_assist_page;
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index dc56b976d816..757623bacfd5 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -289,6 +289,7 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>  	int size = 0;
+>  	int status;
+>  	u32 expected;
+> +	int rc;
+>  
+>  	if (count < TPM_HEADER_SIZE) {
+>  		size = -EIO;
+> @@ -328,6 +329,13 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>  		goto out;
+>  	}
+>  
+> +	rc = tpm_tis_verify_crc(priv, (size_t)size, buf);
+> +	if (rc < 0) {
+> +		dev_err(&chip->dev, "CRC mismatch for response.\n");
+> +		size = rc;
+> +		goto out;
+> +	}
 > +
->         struct {
->                 u64 pa_page_gpa;
->                 u64 vm_id;
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 4396d75588d8..91310774c0b9 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -903,13 +903,15 @@ bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu)
->  }
->  EXPORT_SYMBOL_GPL(kvm_hv_assist_page_enabled);
->  
-> -bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu,
-> -                           struct hv_vp_assist_page *assist_page)
-> +bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu)
->  {
-> -       if (!kvm_hv_assist_page_enabled(vcpu))
-> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+>  out:
+>  	tpm_tis_ready(chip);
+>  	return size;
+> @@ -443,6 +451,12 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+>  	if (rc < 0)
+>  		return rc;
+>  
+> +	rc = tpm_tis_verify_crc(priv, len, buf);
+> +	if (rc < 0) {
+> +		dev_err(&chip->dev, "CRC mismatch for command.\n");
+> +		return rc;
+> +	}
 > +
-> +       if (!hv_vcpu || !kvm_hv_assist_page_enabled(vcpu))
->                 return false;
+>  	/* go and do it */
+>  	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+>  	if (rc < 0)
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 6c203f36b8a1..66a5a13cd1df 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -121,6 +121,8 @@ struct tpm_tis_phy_ops {
+>  			  u8 *result, enum tpm_tis_io_mode mode);
+>  	int (*write_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
+>  			   const u8 *value, enum tpm_tis_io_mode mode);
+> +	int (*verify_crc)(struct tpm_tis_data *data, size_t len,
+> +			  const u8 *value);
+>  };
+>  
+>  static inline int tpm_tis_read_bytes(struct tpm_tis_data *data, u32 addr,
+> @@ -188,6 +190,14 @@ static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
+>  	return rc;
+>  }
+>  
+> +static inline int tpm_tis_verify_crc(struct tpm_tis_data *data, size_t len,
+> +				     const u8 *value)
+> +{
+> +	if (!data->phy_ops->verify_crc)
+> +		return 0;
+
+I think it would be more readable to have one empty line here.
+
+> +	return data->phy_ops->verify_crc(data, len, value);
+> +}
 > +
->         return !kvm_read_guest_cached(vcpu->kvm, &vcpu->arch.pv_eoi.data,
-> -                                     assist_page, sizeof(*assist_page));
-> +                                     &hv_vcpu->vp_assist_page, sizeof(struct hv_vp_assist_page));
->  }
->  EXPORT_SYMBOL_GPL(kvm_hv_get_assist_page);
->  
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index 2aa6fb7fc599..139beb55b781 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -105,8 +105,7 @@ int kvm_hv_activate_synic(struct kvm_vcpu *vcpu, bool dont_zero_synic_pages);
->  void kvm_hv_vcpu_uninit(struct kvm_vcpu *vcpu);
->  
->  bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu);
-> -bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu,
-> -                           struct hv_vp_assist_page *assist_page);
-> +bool kvm_hv_get_assist_page(struct kvm_vcpu *vcpu);
->  
->  static inline struct kvm_vcpu_hv_stimer *to_hv_stimer(struct kvm_vcpu *vcpu,
->                                                       int timer_index)
-> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
-> index 805afc170b5b..7cd7b16942c6 100644
-> --- a/arch/x86/kvm/vmx/evmcs.c
-> +++ b/arch/x86/kvm/vmx/evmcs.c
-> @@ -307,24 +307,17 @@ __init void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf)
->  }
->  #endif
->  
-> -bool nested_enlightened_vmentry(struct kvm_vcpu *vcpu, u64 *evmcs_gpa)
-> +u64 nested_get_evmptr(struct kvm_vcpu *vcpu)
->  {
-> -       struct hv_vp_assist_page assist_page;
-> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->  
-> -       *evmcs_gpa = -1ull;
-> +       if (unlikely(!kvm_hv_get_assist_page(vcpu)))
-> +               return EVMPTR_INVALID;
->  
-> -       if (unlikely(!kvm_hv_get_assist_page(vcpu, &assist_page)))
-> -               return false;
-> +       if (unlikely(!hv_vcpu->vp_assist_page.enlighten_vmentry))
-> +               return EVMPTR_INVALID;
->  
-> -       if (unlikely(!assist_page.enlighten_vmentry))
-> -               return false;
-> -
-> -       if (unlikely(!evmptr_is_valid(assist_page.current_nested_vmcs)))
-> -               return false;
-> -
-> -       *evmcs_gpa = assist_page.current_nested_vmcs;
-> -
-> -       return true;
-> +       return hv_vcpu->vp_assist_page.current_nested_vmcs;
->  }
->  
->  uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
-> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-> index 584741b85eb6..22d238b36238 100644
-> --- a/arch/x86/kvm/vmx/evmcs.h
-> +++ b/arch/x86/kvm/vmx/evmcs.h
-> @@ -239,7 +239,7 @@ enum nested_evmptrld_status {
->         EVMPTRLD_ERROR,
->  };
->  
-> -bool nested_enlightened_vmentry(struct kvm_vcpu *vcpu, u64 *evmcs_gpa);
-> +u64 nested_get_evmptr(struct kvm_vcpu *vcpu);
->  uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu);
->  int nested_enable_evmcs(struct kvm_vcpu *vcpu,
->                         uint16_t *vmcs_version);
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 4a827b3d929a..87bff81f7f3e 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -1995,7 +1995,8 @@ static enum nested_evmptrld_status nested_vmx_handle_enlightened_vmptrld(
->         if (likely(!vmx->nested.enlightened_vmcs_enabled))
->                 return EVMPTRLD_DISABLED;
->  
-> -       if (!nested_enlightened_vmentry(vcpu, &evmcs_gpa)) {
-> +       evmcs_gpa = nested_get_evmptr(vcpu);
-> +       if (!evmptr_is_valid(evmcs_gpa)) {
->                 nested_release_evmcs(vcpu);
->                 return EVMPTRLD_DISABLED;
->         }
-> @@ -5084,7 +5085,6 @@ static int handle_vmclear(struct kvm_vcpu *vcpu)
->         struct vcpu_vmx *vmx = to_vmx(vcpu);
->         u32 zero = 0;
->         gpa_t vmptr;
-> -       u64 evmcs_gpa;
->         int r;
->  
->         if (!nested_vmx_check_permission(vcpu))
-> @@ -5110,7 +5110,7 @@ static int handle_vmclear(struct kvm_vcpu *vcpu)
->          * vmx->nested.hv_evmcs but this shouldn't be a problem.
->          */
->         if (likely(!vmx->nested.enlightened_vmcs_enabled ||
-> -                  !nested_enlightened_vmentry(vcpu, &evmcs_gpa))) {
-> +                  !evmptr_is_valid(nested_get_evmptr(vcpu)))) {
->                 if (vmptr == vmx->nested.current_vmptr)
->                         nested_release_vmcs12(vcpu);
->  
+>  static inline bool is_bsw(void)
+>  {
+>  #ifdef CONFIG_X86
+> -- 
+> 2.25.1
+> 
 
+Other than that LGTM.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
-
+BR, Jarkko

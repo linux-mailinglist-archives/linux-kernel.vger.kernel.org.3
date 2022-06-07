@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D09A5423A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1C954270E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444946AbiFHBId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
+        id S229703AbiFHDSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 23:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380777AbiFGW15 (ORCPT
+        with ESMTP id S1345151AbiFHDOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:27:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97A4272341;
-        Tue,  7 Jun 2022 12:23:29 -0700 (PDT)
+        Tue, 7 Jun 2022 23:14:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079FA272370;
+        Tue,  7 Jun 2022 12:23:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9FB460B09;
-        Tue,  7 Jun 2022 19:23:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56F6C385A2;
-        Tue,  7 Jun 2022 19:23:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57069B823CA;
+        Tue,  7 Jun 2022 19:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C59B8C36B00;
+        Tue,  7 Jun 2022 19:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629808;
-        bh=gdjgGA3jTeWt39F5XYCk+VKfrnsbIggp1l16MZwXDVM=;
+        s=korg; t=1654629811;
+        bh=wICu+zwIpk9cOz0cgVef/aClc+PUiwlFhp12DqvOPWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vf2zvPlWej4IcNIOzyS3tYhEcNaqJtIbLVy1w5v8REoAhXEcUMGnLWB43uDWioorV
-         U3TKJ8PxpNjGb8S5AZS5iJ3YeGMD5m29VqcKHJCwe9OS+GUfRlxjwUW385rzWpVYTJ
-         7x/ttEPc2DE2gIYT8v0U/2Xyg0+PcdX7U4VwUlgc=
+        b=jWcwJSjkD/FwRDx6Ly8pB3O4hjwc8/dOQPzpg0Q6RipmiqDtj41RxB56iTMUtVIvo
+         QX0Ti87+rEJa9Gu1v8+LGW0SpnPLpMVbyWALbyVUz9af3McyBqvaJOQ3EttfAsZ8RP
+         Pqch06YCUB3jAwyvmExHE/dSbJWJmIPTfIaNc+ZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunchul Lee <hyc.lee@gmail.com>,
-        Yufan Chen <wiz.chen@gmail.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.18 824/879] ksmbd: fix outstanding credits related bugs
-Date:   Tue,  7 Jun 2022 19:05:42 +0200
-Message-Id: <20220607165026.772893494@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.18 825/879] iommu/msm: Fix an incorrect NULL check on list iterator
+Date:   Tue,  7 Jun 2022 19:05:43 +0200
+Message-Id: <20220607165026.801495263@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,73 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hyunchul Lee <hyc.lee@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 376b9133826865568167b4091ef92a68c4622b87 upstream.
+commit 8b9ad480bd1dd25f4ff4854af5685fa334a2f57a upstream.
 
-outstanding credits must be initialized to 0,
-because it means the sum of credits consumed by
-in-flight requests.
-And outstanding credits must be compared with
-total credits in smb2_validate_credit_charge(),
-because total credits are the sum of credits
-granted by ksmbd.
+The bug is here:
+	if (!iommu || iommu->dev->of_node != spec->np) {
 
-This patch fix the following error,
-while frametest with Windows clients:
+The list iterator value 'iommu' will *always* be set and non-NULL by
+list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element is found (in fact,
+it will point to a invalid structure object containing HEAD).
 
-Limits exceeding the maximum allowable outstanding requests,
-given : 128, pending : 8065
+To fix the bug, use a new value 'iter' as the list iterator, while use
+the old value 'iommu' as a dedicated variable to point to the found one,
+and remove the unneeded check for 'iommu->dev->of_node != spec->np'
+outside the loop.
 
-Fixes: b589f5db6d4a ("ksmbd: limits exceeding the maximum allowable outstanding requests")
 Cc: stable@vger.kernel.org
-Signed-off-by: Hyunchul Lee <hyc.lee@gmail.com>
-Reported-by: Yufan Chen <wiz.chen@gmail.com>
-Tested-by: Yufan Chen <wiz.chen@gmail.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: f78ebca8ff3d6 ("iommu/msm: Add support for generic master bindings")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220501132823.12714-1-xiam0nd.tong@gmail.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/connection.c |    2 +-
- fs/ksmbd/smb2misc.c   |    2 +-
- fs/ksmbd/smb_common.c |    4 +++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ drivers/iommu/msm_iommu.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/fs/ksmbd/connection.c
-+++ b/fs/ksmbd/connection.c
-@@ -62,7 +62,7 @@ struct ksmbd_conn *ksmbd_conn_alloc(void
- 	atomic_set(&conn->req_running, 0);
- 	atomic_set(&conn->r_count, 0);
- 	conn->total_credits = 1;
--	conn->outstanding_credits = 1;
-+	conn->outstanding_credits = 0;
+--- a/drivers/iommu/msm_iommu.c
++++ b/drivers/iommu/msm_iommu.c
+@@ -610,16 +610,19 @@ static void insert_iommu_master(struct d
+ static int qcom_iommu_of_xlate(struct device *dev,
+ 			       struct of_phandle_args *spec)
+ {
+-	struct msm_iommu_dev *iommu;
++	struct msm_iommu_dev *iommu = NULL, *iter;
+ 	unsigned long flags;
+ 	int ret = 0;
  
- 	init_waitqueue_head(&conn->req_running_q);
- 	INIT_LIST_HEAD(&conn->conns_list);
---- a/fs/ksmbd/smb2misc.c
-+++ b/fs/ksmbd/smb2misc.c
-@@ -338,7 +338,7 @@ static int smb2_validate_credit_charge(s
- 		ret = 1;
- 	}
- 
--	if ((u64)conn->outstanding_credits + credit_charge > conn->vals->max_credits) {
-+	if ((u64)conn->outstanding_credits + credit_charge > conn->total_credits) {
- 		ksmbd_debug(SMB, "Limits exceeding the maximum allowable outstanding requests, given : %u, pending : %u\n",
- 			    credit_charge, conn->outstanding_credits);
- 		ret = 1;
---- a/fs/ksmbd/smb_common.c
-+++ b/fs/ksmbd/smb_common.c
-@@ -140,8 +140,10 @@ int ksmbd_verify_smb_message(struct ksmb
- 
- 	hdr = work->request_buf;
- 	if (*(__le32 *)hdr->Protocol == SMB1_PROTO_NUMBER &&
--	    hdr->Command == SMB_COM_NEGOTIATE)
-+	    hdr->Command == SMB_COM_NEGOTIATE) {
-+		work->conn->outstanding_credits++;
- 		return 0;
+ 	spin_lock_irqsave(&msm_iommu_lock, flags);
+-	list_for_each_entry(iommu, &qcom_iommu_devices, dev_node)
+-		if (iommu->dev->of_node == spec->np)
++	list_for_each_entry(iter, &qcom_iommu_devices, dev_node) {
++		if (iter->dev->of_node == spec->np) {
++			iommu = iter;
+ 			break;
++		}
 +	}
  
- 	return -EINVAL;
- }
+-	if (!iommu || iommu->dev->of_node != spec->np) {
++	if (!iommu) {
+ 		ret = -ENODEV;
+ 		goto fail;
+ 	}
 
 

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39BF5405AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1D7540EA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346708AbiFGR2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        id S1354760AbiFGS4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346276AbiFGRYN (ORCPT
+        with ESMTP id S1352421AbiFGSRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9C1237F3;
-        Tue,  7 Jun 2022 10:22:14 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A1E2C104;
+        Tue,  7 Jun 2022 10:52:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DD22609D0;
-        Tue,  7 Jun 2022 17:22:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66301C385A5;
-        Tue,  7 Jun 2022 17:22:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B0D2CE21CD;
+        Tue,  7 Jun 2022 17:52:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 089BDC34115;
+        Tue,  7 Jun 2022 17:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622533;
-        bh=q3FO7MlqX4yOW38jHvst9iqmjOErdiMvJMatUfrN1P0=;
+        s=korg; t=1654624321;
+        bh=xJEmcH7BdIMe2MshrxICDjoyR5Wr/24nzN4gOgNNMsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T93hcIX0ssHcEbOtg8J+0FRoPTSYTj25UrClmgEV84A/ncNoquIW7xSqjHyZdnLZM
-         zjHTcQzgPUsIVshBbJn66HxLJ2iogtjbsQvGU0dJZmp5Bv0M7nwaQ7OzZ3qVHHLTLM
-         yiWv748lrQYIVGYOxJFlqgBcd2xR9pPE86khtDsY=
+        b=LNiX1X+yZvm7nBZhP03S29uo2DRYNCbm4qpgSvySMpJsVYhsE9OhxBsyylYWVudPa
+         KK0oW60pntKjoz9DG0NUPZc+HgCsQ67KV+b9JWBFWztmatmyv+7oSx9Imy08DJPHZN
+         acoqr5X04Gaw4ZMlAa7R0cYSYrk/yUd/Sc95GL4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeffrey Altman <jaltman@auristor.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 093/452] rxrpc, afs: Fix selection of abort codes
+        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 285/667] x86/mm: Cleanup the control_va_addr_alignment() __setup handler
 Date:   Tue,  7 Jun 2022 18:59:10 +0200
-Message-Id: <20220607164911.330557975@linuxfoundation.org>
+Message-Id: <20220607164943.328825135@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,112 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit de696c4784f0706884458893c5a6c39b3a3ff65c ]
+[ Upstream commit 1ef64b1e89e6d4018da46e08ffc32779a31160c7 ]
 
-The RX_USER_ABORT code should really only be used to indicate that the user
-of the rxrpc service (ie. userspace) implicitly caused a call to be aborted
-- for instance if the AF_RXRPC socket is closed whilst the call was in
-progress.  (The user may also explicitly abort a call and specify the abort
-code to use).
+Clean up control_va_addr_alignment():
 
-Change some of the points of generation to use other abort codes instead:
+a. Make '=' required instead of optional (as documented).
+b. Print a warning if an invalid option value is used.
+c. Return 1 from the __setup handler when an invalid option value is
+   used. This prevents the kernel from polluting init's (limited)
+   environment space with the entire string.
 
- (1) Abort the call with RXGEN_SS_UNMARSHAL or RXGEN_CC_UNMARSHAL if we see
-     ENOMEM and EFAULT during received data delivery and abort with
-     RX_CALL_DEAD in the default case.
-
- (2) Abort with RXGEN_SS_MARSHAL if we get ENOMEM whilst trying to send a
-     reply.
-
- (3) Abort with RX_CALL_DEAD if we stop hearing from the peer if we had
-     heard from the peer and abort with RX_CALL_TIMEOUT if we hadn't.
-
- (4) Abort with RX_CALL_DEAD if we try to disconnect a call that's not
-     completed successfully or been aborted.
-
-Reported-by: Jeffrey Altman <jaltman@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: dfb09f9b7ab0 ("x86, amd: Avoid cache aliasing penalties on AMD family 15h")
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220315001045.7680-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/afs/rxrpc.c          | 8 +++++---
- net/rxrpc/call_event.c  | 4 ++--
- net/rxrpc/conn_object.c | 2 +-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+ arch/x86/kernel/sys_x86_64.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
-index 8be709cb8542..efe0fb3ad8bd 100644
---- a/fs/afs/rxrpc.c
-+++ b/fs/afs/rxrpc.c
-@@ -572,6 +572,8 @@ static void afs_deliver_to_call(struct afs_call *call)
- 		case -ENODATA:
- 		case -EBADMSG:
- 		case -EMSGSIZE:
-+		case -ENOMEM:
-+		case -EFAULT:
- 			abort_code = RXGEN_CC_UNMARSHAL;
- 			if (state != AFS_CALL_CL_AWAIT_REPLY)
- 				abort_code = RXGEN_SS_UNMARSHAL;
-@@ -579,7 +581,7 @@ static void afs_deliver_to_call(struct afs_call *call)
- 						abort_code, ret, "KUM");
- 			goto local_abort;
- 		default:
--			abort_code = RX_USER_ABORT;
-+			abort_code = RX_CALL_DEAD;
- 			rxrpc_kernel_abort_call(call->net->socket, call->rxcall,
- 						abort_code, ret, "KER");
- 			goto local_abort;
-@@ -871,7 +873,7 @@ void afs_send_empty_reply(struct afs_call *call)
- 	case -ENOMEM:
- 		_debug("oom");
- 		rxrpc_kernel_abort_call(net->socket, call->rxcall,
--					RX_USER_ABORT, -ENOMEM, "KOO");
-+					RXGEN_SS_MARSHAL, -ENOMEM, "KOO");
- 		fallthrough;
- 	default:
- 		_leave(" [error]");
-@@ -913,7 +915,7 @@ void afs_send_simple_reply(struct afs_call *call, const void *buf, size_t len)
- 	if (n == -ENOMEM) {
- 		_debug("oom");
- 		rxrpc_kernel_abort_call(net->socket, call->rxcall,
--					RX_USER_ABORT, -ENOMEM, "KOO");
-+					RXGEN_SS_MARSHAL, -ENOMEM, "KOO");
- 	}
- 	_leave(" [error]");
+diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
+index 660b78827638..8cc653ffdccd 100644
+--- a/arch/x86/kernel/sys_x86_64.c
++++ b/arch/x86/kernel/sys_x86_64.c
+@@ -68,9 +68,6 @@ static int __init control_va_addr_alignment(char *str)
+ 	if (*str == 0)
+ 		return 1;
+ 
+-	if (*str == '=')
+-		str++;
+-
+ 	if (!strcmp(str, "32"))
+ 		va_align.flags = ALIGN_VA_32;
+ 	else if (!strcmp(str, "64"))
+@@ -80,11 +77,11 @@ static int __init control_va_addr_alignment(char *str)
+ 	else if (!strcmp(str, "on"))
+ 		va_align.flags = ALIGN_VA_32 | ALIGN_VA_64;
+ 	else
+-		return 0;
++		pr_warn("invalid option value: 'align_va_addr=%s'\n", str);
+ 
+ 	return 1;
  }
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index 22e05de5d1ca..e426f6831aab 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -377,9 +377,9 @@ void rxrpc_process_call(struct work_struct *work)
- 		if (test_bit(RXRPC_CALL_RX_HEARD, &call->flags) &&
- 		    (int)call->conn->hi_serial - (int)call->rx_serial > 0) {
- 			trace_rxrpc_call_reset(call);
--			rxrpc_abort_call("EXP", call, 0, RX_USER_ABORT, -ECONNRESET);
-+			rxrpc_abort_call("EXP", call, 0, RX_CALL_DEAD, -ECONNRESET);
- 		} else {
--			rxrpc_abort_call("EXP", call, 0, RX_USER_ABORT, -ETIME);
-+			rxrpc_abort_call("EXP", call, 0, RX_CALL_TIMEOUT, -ETIME);
- 		}
- 		set_bit(RXRPC_CALL_EV_ABORT, &call->events);
- 		goto recheck_state;
-diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
-index 3bcbe0665f91..3ef05a0e90ad 100644
---- a/net/rxrpc/conn_object.c
-+++ b/net/rxrpc/conn_object.c
-@@ -184,7 +184,7 @@ void __rxrpc_disconnect_call(struct rxrpc_connection *conn,
- 			chan->last_type = RXRPC_PACKET_TYPE_ABORT;
- 			break;
- 		default:
--			chan->last_abort = RX_USER_ABORT;
-+			chan->last_abort = RX_CALL_DEAD;
- 			chan->last_type = RXRPC_PACKET_TYPE_ABORT;
- 			break;
- 		}
+-__setup("align_va_addr", control_va_addr_alignment);
++__setup("align_va_addr=", control_va_addr_alignment);
+ 
+ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+ 		unsigned long, prot, unsigned long, flags,
 -- 
 2.35.1
 

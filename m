@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEEE54230D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEF754232E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378804AbiFHBtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S1387213AbiFHBh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383641AbiFGWGF (ORCPT
+        with ESMTP id S1382686AbiFGWEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7716019595B;
-        Tue,  7 Jun 2022 12:16:49 -0700 (PDT)
+        Tue, 7 Jun 2022 18:04:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D453025025A;
+        Tue,  7 Jun 2022 12:14:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F86618EC;
-        Tue,  7 Jun 2022 19:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1505DC385A2;
-        Tue,  7 Jun 2022 19:16:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87236B823C6;
+        Tue,  7 Jun 2022 19:14:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6906C385A5;
+        Tue,  7 Jun 2022 19:14:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629408;
-        bh=BUUyuJwqsmQ8ppwNkzVju8FLysHPnnjZRg/0W7ctp2w=;
+        s=korg; t=1654629291;
+        bh=Qf0riGe9jag1RYINbAwIoHFgerM8YVcYGRZBgOZVPGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rn9/RqC8NPobfc98cJ811h3yVaUeCELZhnTfRZzWTdFcfJX3KXJeFgclZ4BCkw5dh
-         x84YajPMFrDE9GcBQsXeudYHz3qBY1ENWTnvrm0ob8WaUwnZ33xlA9WQ5gsNs8j3YQ
-         kQy/lwr0fOnz03MhE4eGV5ucED6jDFcludvhlDII=
+        b=R0q1OAIDTASiJVC6Fb3FK8+5VPgj6Yn33g7vq8d0FtLaj8OOUenBIJoOBP3UzxEgE
+         /DAMTDTnP4wUQT333YTYP/2owt/pCZqoWe/D6y/eKepZpkzg2CwuJBOm5VPmuK2H0y
+         Q24VuAkGsmFGEQplPbh+RvHyY+CIa9UcYsAGzkDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Badger <ebadger@purestorage.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ashok Raj <ashok.raj@intel.com>,
+        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 630/879] PCI/AER: Clear MULTI_ERR_COR/UNCOR_RCV bits
-Date:   Tue,  7 Jun 2022 19:02:28 +0200
-Message-Id: <20220607165021.136028307@linuxfoundation.org>
+Subject: [PATCH 5.18 631/879] KVM: PPC: Book3S HV: Fix vcore_blocked tracepoint
+Date:   Tue,  7 Jun 2022 19:02:29 +0200
+Message-Id: <20220607165021.164568507@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,86 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+From: Fabiano Rosas <farosas@linux.ibm.com>
 
-[ Upstream commit 203926da2bff8e172200a2f11c758987af112d4a ]
+[ Upstream commit ad55bae7dc364417434b69dd6c30104f20d0f84d ]
 
-When a Root Port or Root Complex Event Collector receives an error Message
-e.g., ERR_COR, it sets PCI_ERR_ROOT_COR_RCV in the Root Error Status
-register and logs the Requester ID in the Error Source Identification
-register.  If it receives a second ERR_COR Message before software clears
-PCI_ERR_ROOT_COR_RCV, hardware sets PCI_ERR_ROOT_MULTI_COR_RCV and the
-Requester ID is lost.
+We removed most of the vcore logic from the P9 path but there's still
+a tracepoint that tried to dereference vc->runner.
 
-In the following scenario, PCI_ERR_ROOT_MULTI_COR_RCV was never cleared:
-
-  - hardware receives ERR_COR message
-  - hardware sets PCI_ERR_ROOT_COR_RCV
-  - aer_irq() entered
-  - aer_irq(): status = pci_read_config_dword(PCI_ERR_ROOT_STATUS)
-  - aer_irq(): now status == PCI_ERR_ROOT_COR_RCV
-  - hardware receives second ERR_COR message
-  - hardware sets PCI_ERR_ROOT_MULTI_COR_RCV
-  - aer_irq(): pci_write_config_dword(PCI_ERR_ROOT_STATUS, status)
-  - PCI_ERR_ROOT_COR_RCV is cleared; PCI_ERR_ROOT_MULTI_COR_RCV is set
-  - aer_irq() entered again
-  - aer_irq(): status = pci_read_config_dword(PCI_ERR_ROOT_STATUS)
-  - aer_irq(): now status == PCI_ERR_ROOT_MULTI_COR_RCV
-  - aer_irq() exits because PCI_ERR_ROOT_COR_RCV not set
-  - PCI_ERR_ROOT_MULTI_COR_RCV is still set
-
-The same problem occurred with ERR_NONFATAL/ERR_FATAL Messages and
-PCI_ERR_ROOT_UNCOR_RCV and PCI_ERR_ROOT_MULTI_UNCOR_RCV.
-
-Fix the problem by queueing an AER event and clearing the Root Error Status
-bits when any of these bits are set:
-
-  PCI_ERR_ROOT_COR_RCV
-  PCI_ERR_ROOT_UNCOR_RCV
-  PCI_ERR_ROOT_MULTI_COR_RCV
-  PCI_ERR_ROOT_MULTI_UNCOR_RCV
-
-See the bugzilla link for details from Eric about how to reproduce this
-problem.
-
-[bhelgaas: commit log, move repro details to bugzilla]
-Fixes: e167bfcaa4cd ("PCI: aerdrv: remove magical ROOT_ERR_STATUS_MASKS")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215992
-Link: https://lore.kernel.org/r/20220418150237.1021519-1-sathyanarayanan.kuppuswamy@linux.intel.com
-Reported-by: Eric Badger <ebadger@purestorage.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+Fixes: ecb6a7207f92 ("KVM: PPC: Book3S HV P9: Remove most of the vcore logic")
+Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220328215831.320409-1-farosas@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/pcie/aer.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/powerpc/kvm/book3s_hv.c | 8 ++++----
+ arch/powerpc/kvm/trace_hv.h  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index 9fa1f97e5b27..7952e5efd6cf 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -101,6 +101,11 @@ struct aer_stats {
- #define ERR_COR_ID(d)			(d & 0xffff)
- #define ERR_UNCOR_ID(d)			(d >> 16)
+diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+index 43af871383c2..aef0a6b423d8 100644
+--- a/arch/powerpc/kvm/book3s_hv.c
++++ b/arch/powerpc/kvm/book3s_hv.c
+@@ -4233,13 +4233,13 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+ 	start_wait = ktime_get();
  
-+#define AER_ERR_STATUS_MASK		(PCI_ERR_ROOT_UNCOR_RCV |	\
-+					PCI_ERR_ROOT_COR_RCV |		\
-+					PCI_ERR_ROOT_MULTI_COR_RCV |	\
-+					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
-+
- static int pcie_aer_disable;
- static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
+ 	vc->vcore_state = VCORE_SLEEPING;
+-	trace_kvmppc_vcore_blocked(vc, 0);
++	trace_kvmppc_vcore_blocked(vc->runner, 0);
+ 	spin_unlock(&vc->lock);
+ 	schedule();
+ 	finish_rcuwait(&vc->wait);
+ 	spin_lock(&vc->lock);
+ 	vc->vcore_state = VCORE_INACTIVE;
+-	trace_kvmppc_vcore_blocked(vc, 1);
++	trace_kvmppc_vcore_blocked(vc->runner, 1);
+ 	++vc->runner->stat.halt_successful_wait;
  
-@@ -1196,7 +1201,7 @@ static irqreturn_t aer_irq(int irq, void *context)
- 	struct aer_err_source e_src = {};
+ 	cur = ktime_get();
+@@ -4619,9 +4619,9 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 			if (kvmppc_vcpu_check_block(vcpu))
+ 				break;
  
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
--	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
-+	if (!(e_src.status & AER_ERR_STATUS_MASK))
- 		return IRQ_NONE;
+-			trace_kvmppc_vcore_blocked(vc, 0);
++			trace_kvmppc_vcore_blocked(vcpu, 0);
+ 			schedule();
+-			trace_kvmppc_vcore_blocked(vc, 1);
++			trace_kvmppc_vcore_blocked(vcpu, 1);
+ 		}
+ 		finish_rcuwait(wait);
+ 	}
+diff --git a/arch/powerpc/kvm/trace_hv.h b/arch/powerpc/kvm/trace_hv.h
+index 38cd0ed0a617..32e2cb5811cc 100644
+--- a/arch/powerpc/kvm/trace_hv.h
++++ b/arch/powerpc/kvm/trace_hv.h
+@@ -409,9 +409,9 @@ TRACE_EVENT(kvmppc_run_core,
+ );
  
- 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_ERR_SRC, &e_src.id);
+ TRACE_EVENT(kvmppc_vcore_blocked,
+-	TP_PROTO(struct kvmppc_vcore *vc, int where),
++	TP_PROTO(struct kvm_vcpu *vcpu, int where),
+ 
+-	TP_ARGS(vc, where),
++	TP_ARGS(vcpu, where),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(int,	n_runnable)
+@@ -421,8 +421,8 @@ TRACE_EVENT(kvmppc_vcore_blocked,
+ 	),
+ 
+ 	TP_fast_assign(
+-		__entry->runner_vcpu = vc->runner->vcpu_id;
+-		__entry->n_runnable  = vc->n_runnable;
++		__entry->runner_vcpu = vcpu->vcpu_id;
++		__entry->n_runnable  = vcpu->arch.vcore->n_runnable;
+ 		__entry->where       = where;
+ 		__entry->tgid	     = current->tgid;
+ 	),
 -- 
 2.35.1
 

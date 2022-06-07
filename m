@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BD2541DA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B97541D6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383061AbiFGWSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S1384254AbiFGWOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379974AbiFGVLV (ORCPT
+        with ESMTP id S1379986AbiFGVLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AA2217346;
-        Tue,  7 Jun 2022 11:52:42 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B26131F17;
+        Tue,  7 Jun 2022 11:52:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 83BB6CE2424;
-        Tue,  7 Jun 2022 18:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735E2C385A2;
-        Tue,  7 Jun 2022 18:52:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A6E4B81F6D;
+        Tue,  7 Jun 2022 18:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38863C385A2;
+        Tue,  7 Jun 2022 18:52:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627958;
-        bh=lYHN3M9R/cWlaC8P7t69WHiCUtqTwEPDM2IyLMD+e50=;
+        s=korg; t=1654627962;
+        bh=2u3HzTx97D8KukJGqGjYi4/l3+1TkIRnHr/uNhU+Aow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D6siFhsoDZ3XsQcYQQ9EOHAgNHDQoyNuH/47vuBvduLd4yKPmApuqU9P+7HIgmvQS
-         vUMWYIdMNvSh0k2e1TW2O3chOUCYcJyb7bGNCxlXI/V43YtfTEPKGsIy2Bu7Gk90mG
-         o2DfU5mFJWciyInSum69Q6ZGXJLolaJTkKfNkzDk=
+        b=qesJY5Upl78/YcXh7FYhI20WSCEPDqagh8gvEhEoUTT0sdrRqfFaLIq0ZfvfO30si
+         FELmgivSaC3mc8BdtTr8d9/b7HHrB+9Kw3DlD51duUTgbC2cg8vnkWcwUyDXjwoa+m
+         qkDZpr6RCUqrdrYKr1GZUeq0NLkS3fYHgOtC/XRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Steven Price <steven.price@arm.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 114/879] ASoC: Intel: bytcr_rt5640: Add quirk for the HP Pro Tablet 408
-Date:   Tue,  7 Jun 2022 18:53:52 +0200
-Message-Id: <20220607165006.010992767@linuxfoundation.org>
+Subject: [PATCH 5.18 115/879] drm/plane: Move range check for format_count earlier
+Date:   Tue,  7 Jun 2022 18:53:53 +0200
+Message-Id: <20220607165006.039995895@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,50 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Steven Price <steven.price@arm.com>
 
-[ Upstream commit ce216cfa84a4e1c23b105e652c550bdeaac9e922 ]
+[ Upstream commit 4b674dd69701c2e22e8e7770c1706a69f3b17269 ]
 
-Add a quirk for the HP Pro Tablet 408, this BYTCR tablet has no CHAN
-package in its ACPI tables and uses SSP0-AIF1 rather then SSP0-AIF2 which
-is the default for BYTCR devices.
+While the check for format_count > 64 in __drm_universal_plane_init()
+shouldn't be hit (it's a WARN_ON), in its current position it will then
+leak the plane->format_types array and fail to call
+drm_mode_object_unregister() leaking the modeset identifier. Move it to
+the start of the function to avoid allocating those resources in the
+first place.
 
-It also uses DMIC1 for the internal mic rather then the default IN3
-and it uses JD2 rather then the default JD1 for jack-detect.
-
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=211485
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20220427134918.527381-1-hdegoede@redhat.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
+Link: https://lore.kernel.org/dri-devel/20211203102815.38624-1-steven.price@arm.com/
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/intel/boards/bytcr_rt5640.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/gpu/drm/drm_plane.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/sound/soc/intel/boards/bytcr_rt5640.c b/sound/soc/intel/boards/bytcr_rt5640.c
-index d76a505052fb..f81ae742faa7 100644
---- a/sound/soc/intel/boards/bytcr_rt5640.c
-+++ b/sound/soc/intel/boards/bytcr_rt5640.c
-@@ -773,6 +773,18 @@ static const struct dmi_system_id byt_rt5640_quirk_table[] = {
- 					BYT_RT5640_OVCD_SF_0P75 |
- 					BYT_RT5640_MCLK_EN),
- 	},
-+	{	/* HP Pro Tablet 408 */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "HP Pro Tablet 408"),
-+		},
-+		.driver_data = (void *)(BYT_RT5640_DMIC1_MAP |
-+					BYT_RT5640_JD_SRC_JD2_IN4N |
-+					BYT_RT5640_OVCD_TH_1500UA |
-+					BYT_RT5640_OVCD_SF_0P75 |
-+					BYT_RT5640_SSP0_AIF1 |
-+					BYT_RT5640_MCLK_EN),
-+	},
- 	{	/* HP Stream 7 */
- 		.matches = {
- 			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
+diff --git a/drivers/gpu/drm/drm_plane.c b/drivers/gpu/drm/drm_plane.c
+index bf0daa8d9bbd..726f2f163c26 100644
+--- a/drivers/gpu/drm/drm_plane.c
++++ b/drivers/gpu/drm/drm_plane.c
+@@ -247,6 +247,13 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+ 	if (WARN_ON(config->num_total_plane >= 32))
+ 		return -EINVAL;
+ 
++	/*
++	 * First driver to need more than 64 formats needs to fix this. Each
++	 * format is encoded as a bit and the current code only supports a u64.
++	 */
++	if (WARN_ON(format_count > 64))
++		return -EINVAL;
++
+ 	WARN_ON(drm_drv_uses_atomic_modeset(dev) &&
+ 		(!funcs->atomic_destroy_state ||
+ 		 !funcs->atomic_duplicate_state));
+@@ -268,13 +275,6 @@ static int __drm_universal_plane_init(struct drm_device *dev,
+ 		return -ENOMEM;
+ 	}
+ 
+-	/*
+-	 * First driver to need more than 64 formats needs to fix this. Each
+-	 * format is encoded as a bit and the current code only supports a u64.
+-	 */
+-	if (WARN_ON(format_count > 64))
+-		return -EINVAL;
+-
+ 	if (format_modifiers) {
+ 		const uint64_t *temp_modifiers = format_modifiers;
+ 
 -- 
 2.35.1
 

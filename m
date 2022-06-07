@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CFE5405C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74686540D68
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346742AbiFGR2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S1353827AbiFGSsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346250AbiFGRYL (ORCPT
+        with ESMTP id S1352414AbiFGSRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3424610D93E;
-        Tue,  7 Jun 2022 10:22:08 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362592494D;
+        Tue,  7 Jun 2022 10:51:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A24C3B8220C;
-        Tue,  7 Jun 2022 17:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDD9C385A5;
-        Tue,  7 Jun 2022 17:22:04 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A3668CE2422;
+        Tue,  7 Jun 2022 17:51:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA0DC385A5;
+        Tue,  7 Jun 2022 17:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622525;
-        bh=C0kxJt/ZStRMOdCA/r6r6TzCrcndSVTKFCqLNI3DauA=;
+        s=korg; t=1654624316;
+        bh=wKp8HDsungbWvC983amotRgL7FLHO8cc43t/Whwxl/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qyONZYHJ1c0WTp3S1DVZY+sUMvBU3h/6VD2ZzpxhutmS2G8u0E/O6vvpNK/f8SBAm
-         8cInZ7IX5IMdopPEyEIuPiFSpULFlX8xLt5ahv5DYYCOyIt3M8AzOsn5dXE9wDSiFj
-         gFQU79PuPhM6n9WVhrkipdMz2epoZBWDzDSkq9Ug=
+        b=eNSjbtvNX2hMu7yzYdzJXvbVD15BWnHOY/2UmUw9onTqcmpVQBilvbjKe3ed92c8s
+         o6lC+EVC3Ft9W2v/bUkqScDD4YOqxP4d1YROEA8FTWnUMUKRIaBXkUGAPt7QfQRkhz
+         UGptONRIWvpDvnKpDrif7KXBWonlyj70kCZHKpik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 090/452] x86/microcode: Add explicit CPU vendor dependency
-Date:   Tue,  7 Jun 2022 18:59:07 +0200
-Message-Id: <20220607164911.240275140@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 283/667] irqchip/aspeed-i2c-ic: Fix irq_of_parse_and_map() return value
+Date:   Tue,  7 Jun 2022 18:59:08 +0200
+Message-Id: <20220607164943.269924221@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 9c55d99e099bd7aa6b91fce8718505c35d5dfc65 ]
+[ Upstream commit 50f0f26e7c8665763d0d7d3372dbcf191f94d077 ]
 
-Add an explicit dependency to the respective CPU vendor so that the
-respective microcode support for it gets built only when that support is
-enabled.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/8ead0da9-9545-b10d-e3db-7df1a1f219e4@infradead.org
+Fixes: f48e699ddf70 ("irqchip/aspeed-i2c-ic: Add I2C IRQ controller for Aspeed")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220423094227.33148-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/Kconfig | 4 ++--
+ drivers/irqchip/irq-aspeed-i2c-ic.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index db95ac482e0e..ed713840d469 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1321,7 +1321,7 @@ config MICROCODE
+diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c b/drivers/irqchip/irq-aspeed-i2c-ic.c
+index a47db16ff960..9c9fc3e2967e 100644
+--- a/drivers/irqchip/irq-aspeed-i2c-ic.c
++++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
+@@ -77,8 +77,8 @@ static int __init aspeed_i2c_ic_of_init(struct device_node *node,
+ 	}
  
- config MICROCODE_INTEL
- 	bool "Intel microcode loading support"
--	depends on MICROCODE
-+	depends on CPU_SUP_INTEL && MICROCODE
- 	default MICROCODE
- 	help
- 	  This options enables microcode patch loading support for Intel
-@@ -1333,7 +1333,7 @@ config MICROCODE_INTEL
+ 	i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
+-	if (i2c_ic->parent_irq < 0) {
+-		ret = i2c_ic->parent_irq;
++	if (!i2c_ic->parent_irq) {
++		ret = -EINVAL;
+ 		goto err_iounmap;
+ 	}
  
- config MICROCODE_AMD
- 	bool "AMD microcode loading support"
--	depends on MICROCODE
-+	depends on CPU_SUP_AMD && MICROCODE
- 	help
- 	  If you select this option, microcode patch loading support for AMD
- 	  processors will be enabled.
 -- 
 2.35.1
 

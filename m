@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5811541826
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DB95418A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358400AbiFGVJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
+        id S1379860AbiFGVN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359441AbiFGULj (ORCPT
+        with ESMTP id S1376741AbiFGURF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:11:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FCD186286;
-        Tue,  7 Jun 2022 11:27:33 -0700 (PDT)
+        Tue, 7 Jun 2022 16:17:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D68178551;
+        Tue,  7 Jun 2022 11:29:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84813B822C0;
-        Tue,  7 Jun 2022 18:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB5CC3411F;
-        Tue,  7 Jun 2022 18:27:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FABE60906;
+        Tue,  7 Jun 2022 18:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42531C385A5;
+        Tue,  7 Jun 2022 18:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626451;
-        bh=t3KgDBoRNahgs6xF79gygq+QwA6KZlOibgIuhdnAiuw=;
+        s=korg; t=1654626590;
+        bh=ehigRDV6aEkOO9FKdsssfVJZiCfIdcxMdf6rVapXAdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cMLKnttC9y06ukD+1cviekqyjJepK36KNW/TWWekZSaLaE4xfFRc3WzMnEB01zvNJ
-         LOoisquvvzPJFQlzoIzh1/uuFhp/JSIlvuhxNa6PAfE1QZIPY2EdM4eLFUfUDYMsy6
-         Kmm3EeTrPk4EvBGyVoHQFzhJB4+Hc4QqYuIePQu0=
+        b=IttNesU8sboTU0FX+nCtoJelAbMNC5SvA1iA4FyLVWep7MqswO+ynk7tXv5TJHiKX
+         fvpFk174iuRTQmM0NkhhlLFjUV/pycuKPhstBKZnlMO6UpsMiMGbXxOeS+1wCaTje3
+         RhHfvVbY99XnbLQLWzW5As9XnGhaDNY7eSW4zB2c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 381/772] media: atmel: atmel-sama5d2-isc: fix wrong mask in YUYV format check
-Date:   Tue,  7 Jun 2022 18:59:33 +0200
-Message-Id: <20220607165000.243088983@linuxfoundation.org>
+Subject: [PATCH 5.17 382/772] media: hantro: HEVC: Fix tile info buffer value computation
+Date:   Tue,  7 Jun 2022 18:59:34 +0200
+Message-Id: <20220607165000.272882696@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -58,38 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 
-[ Upstream commit 91f49b80983f7bffdea9498209b2b896231ac776 ]
+[ Upstream commit d7f4149df818463c1d7094b35db6ebd79f46c7bd ]
 
-While this does not happen in production, this check should be done
-versus the mask, as checking with the YCYC value may not include
-some bits that may be set.
-It is correct and safe to check the whole mask.
+Use pps->column_width_minus1[j] + 1 as value for the tile info buffer
+instead of pps->column_width_minus1[j + 1].
+The patch fixes DBLK_E_VIXS_2, DBLK_F_VIXS_2, DBLK_G_VIXS_2,
+SAO_B_MediaTek_5, TILES_A_Cisco_2 and TILES_B_Cisco_1 tests in fluster.
 
-Fixes: 123aaf816b95 ("media: atmel: atmel-sama5d2-isc: fix YUYV format")
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Fixes: cb5dd5a0fa51 ("media: hantro: Introduce G2/HEVC decoder")
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 2 +-
+ drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index 949035cdb846..a1fd240c6aeb 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -267,7 +267,7 @@ static void isc_sama5d2_config_rlp(struct isc_device *isc)
- 	 * Thus, if the YCYC mode is selected, replace it with the
- 	 * sama5d2-compliant mode which is YYCC .
- 	 */
--	if ((rlp_mode & ISC_RLP_CFG_MODE_YCYC) == ISC_RLP_CFG_MODE_YCYC) {
-+	if ((rlp_mode & ISC_RLP_CFG_MODE_MASK) == ISC_RLP_CFG_MODE_YCYC) {
- 		rlp_mode &= ~ISC_RLP_CFG_MODE_MASK;
- 		rlp_mode |= ISC_RLP_CFG_MODE_YYCC;
- 	}
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index fab326389261..13602e051a06 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -60,7 +60,7 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+ 					no_chroma = 1;
+ 				for (j = 0, tmp_w = 0; j < num_tile_cols - 1; j++) {
+ 					tmp_w += pps->column_width_minus1[j] + 1;
+-					*p++ = pps->column_width_minus1[j + 1];
++					*p++ = pps->column_width_minus1[j] + 1;
+ 					*p++ = h;
+ 					if (i == 0 && h == 1 && ctb_size == 16)
+ 						no_chroma = 1;
 -- 
 2.35.1
 

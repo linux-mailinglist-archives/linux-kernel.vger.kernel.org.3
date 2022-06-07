@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1718A540CB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB935541712
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351799AbiFGSiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S1377316AbiFGU6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345455AbiFGSGr (ORCPT
+        with ESMTP id S1358688AbiFGTwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:06:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0786532C4;
-        Tue,  7 Jun 2022 10:47:54 -0700 (PDT)
+        Tue, 7 Jun 2022 15:52:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95221A7766;
+        Tue,  7 Jun 2022 11:22:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64BED6172C;
-        Tue,  7 Jun 2022 17:47:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E4BC385A5;
-        Tue,  7 Jun 2022 17:47:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E6BE6116C;
+        Tue,  7 Jun 2022 18:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C56C385A2;
+        Tue,  7 Jun 2022 18:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624073;
-        bh=XCDoPkFzi2GCk4nu12Lh9MawcZyFKsIFhVf1GdmdXU0=;
+        s=korg; t=1654626126;
+        bh=Nr0GsDq1lPZMXGHdCvbllxG6r0A1j6M+21zI00WBKGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SWSM5QVuGNjgP7e4iJL59e3t2UwEhFvk8abftnLYLQqDWJeBH47kwf6d9J50X0gi1
-         V2qzP8cSmfakJu8tvkZxFfKHNNVlKQLCgueqx8MthO9WaHDHtct17LSJAPZ7+USdDL
-         ivIv6BhTzPoLL8sdC9yiCc7kLGyWEQ5PUtK4OODU=
+        b=ctlsUSirH5dS8zxDCoHKWNw8SwUQIl5tppQZPbkoAQzXz02/wvWcJ8TI4z4IrcHMZ
+         9hPzxA7NNGPm6KmYtL1QC5RObcof47XGmx/umRPnK6XBw8Ysvw2UCUS5wZGsHStBZz
+         9WYTZzfkmX8LwSzV+S4VW8wDNGzL6by/B5XqYDds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 195/667] ASoC: mediatek: Fix error handling in mt8173_max98090_dev_probe
+Subject: [PATCH 5.17 268/772] drbd: fix duplicate array initializer
 Date:   Tue,  7 Jun 2022 18:57:40 +0200
-Message-Id: <20220607164940.649896871@linuxfoundation.org>
+Message-Id: <20220607164956.922459075@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +56,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 4f4e0454e226de3bf4efd7e7924d1edc571c52d5 ]
+[ Upstream commit 33cb0917bbe241dd17a2b87ead63514c1b7e5615 ]
 
-Call of_node_put(platform_node) to avoid refcount leak in
-the error path.
+There are two initializers for P_RETRY_WRITE:
 
-Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
-Fixes: 493433785df0 ("ASoC: mediatek: mt8173: fix device_node leak")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220404092903.26725-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+drivers/block/drbd/drbd_main.c:3676:22: warning: initialized field overwritten [-Woverride-init]
+
+Remove the first one since it was already ignored by the compiler
+and reorder the list to match the enum definition. As P_ZEROES had
+no entry, add that one instead.
+
+Fixes: 036b17eaab93 ("drbd: Receiving part for the PROTOCOL_UPDATE packet")
+Fixes: f31e583aa2c2 ("drbd: introduce P_ZEROES (REQ_OP_WRITE_ZEROES on the "wire")")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Link: https://lore.kernel.org/r/20220406190715.1938174-2-christoph.boehmwalder@linbit.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-max98090.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/block/drbd/drbd_main.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-index 3bdd4931316c..5f39e810e27a 100644
---- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-@@ -167,7 +167,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 	if (!codec_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	for_each_card_prelinks(card, i, dai_link) {
- 		if (dai_link->codecs->name)
-@@ -182,6 +183,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 			__func__, ret);
- 
- 	of_node_put(codec_node);
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index 416f4f48f69b..8d17dd647187 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -3609,9 +3609,8 @@ const char *cmdname(enum drbd_packet cmd)
+ 	 * when we want to support more than
+ 	 * one PRO_VERSION */
+ 	static const char *cmdnames[] = {
 +
-+put_platform_node:
- 	of_node_put(platform_node);
- 	return ret;
- }
+ 		[P_DATA]	        = "Data",
+-		[P_WSAME]	        = "WriteSame",
+-		[P_TRIM]	        = "Trim",
+ 		[P_DATA_REPLY]	        = "DataReply",
+ 		[P_RS_DATA_REPLY]	= "RSDataReply",
+ 		[P_BARRIER]	        = "Barrier",
+@@ -3622,7 +3621,6 @@ const char *cmdname(enum drbd_packet cmd)
+ 		[P_DATA_REQUEST]	= "DataRequest",
+ 		[P_RS_DATA_REQUEST]     = "RSDataRequest",
+ 		[P_SYNC_PARAM]	        = "SyncParam",
+-		[P_SYNC_PARAM89]	= "SyncParam89",
+ 		[P_PROTOCOL]            = "ReportProtocol",
+ 		[P_UUIDS]	        = "ReportUUIDs",
+ 		[P_SIZES]	        = "ReportSizes",
+@@ -3630,6 +3628,7 @@ const char *cmdname(enum drbd_packet cmd)
+ 		[P_SYNC_UUID]           = "ReportSyncUUID",
+ 		[P_AUTH_CHALLENGE]      = "AuthChallenge",
+ 		[P_AUTH_RESPONSE]	= "AuthResponse",
++		[P_STATE_CHG_REQ]       = "StateChgRequest",
+ 		[P_PING]		= "Ping",
+ 		[P_PING_ACK]	        = "PingAck",
+ 		[P_RECV_ACK]	        = "RecvAck",
+@@ -3640,23 +3639,25 @@ const char *cmdname(enum drbd_packet cmd)
+ 		[P_NEG_DREPLY]	        = "NegDReply",
+ 		[P_NEG_RS_DREPLY]	= "NegRSDReply",
+ 		[P_BARRIER_ACK]	        = "BarrierAck",
+-		[P_STATE_CHG_REQ]       = "StateChgRequest",
+ 		[P_STATE_CHG_REPLY]     = "StateChgReply",
+ 		[P_OV_REQUEST]          = "OVRequest",
+ 		[P_OV_REPLY]            = "OVReply",
+ 		[P_OV_RESULT]           = "OVResult",
+ 		[P_CSUM_RS_REQUEST]     = "CsumRSRequest",
+ 		[P_RS_IS_IN_SYNC]	= "CsumRSIsInSync",
++		[P_SYNC_PARAM89]	= "SyncParam89",
+ 		[P_COMPRESSED_BITMAP]   = "CBitmap",
+ 		[P_DELAY_PROBE]         = "DelayProbe",
+ 		[P_OUT_OF_SYNC]		= "OutOfSync",
+-		[P_RETRY_WRITE]		= "RetryWrite",
+ 		[P_RS_CANCEL]		= "RSCancel",
+ 		[P_CONN_ST_CHG_REQ]	= "conn_st_chg_req",
+ 		[P_CONN_ST_CHG_REPLY]	= "conn_st_chg_reply",
+ 		[P_PROTOCOL_UPDATE]	= "protocol_update",
++		[P_TRIM]	        = "Trim",
+ 		[P_RS_THIN_REQ]         = "rs_thin_req",
+ 		[P_RS_DEALLOCATED]      = "rs_deallocated",
++		[P_WSAME]	        = "WriteSame",
++		[P_ZEROES]		= "Zeroes",
+ 
+ 		/* enum drbd_packet, but not commands - obsoleted flags:
+ 		 *	P_MAY_IGNORE
 -- 
 2.35.1
 

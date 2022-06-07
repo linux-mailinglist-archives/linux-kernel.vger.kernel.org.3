@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7245D540535
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A72540F5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346214AbiFGRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S1353158AbiFGTGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345674AbiFGRUi (ORCPT
+        with ESMTP id S1352092AbiFGSQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:20:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8581053E6;
-        Tue,  7 Jun 2022 10:20:37 -0700 (PDT)
+        Tue, 7 Jun 2022 14:16:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7CCBCB7;
+        Tue,  7 Jun 2022 10:50:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6712E60A21;
-        Tue,  7 Jun 2022 17:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72676C385A5;
-        Tue,  7 Jun 2022 17:20:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B9B76159C;
+        Tue,  7 Jun 2022 17:50:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9908EC385A5;
+        Tue,  7 Jun 2022 17:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622436;
-        bh=YFNLJObT+99Vqbj49NVedidIb5fj3R9QH0Uzdy2Y1ZE=;
+        s=korg; t=1654624228;
+        bh=pLy5mbLjgbIXtXDaMp4Ql07BTWTauNKxrvjdn4BfG6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W9jOsEJeccOA8aZrNeVg0ChnaWKlz292nfHIpSR5yNx1gOCxCcNpXpi+1O+zdo6vb
-         HfX4wKHqoBpLULI1tXR7PxFm2u0OUn2ThFCdXnOcOmL+yyFAElJPUh5WBB9iM/Wu9y
-         6OKbjWrfhOkICDNz0Pce3CqzqrAyva3ks/H76atE=
+        b=1jV7/stqhOKmEYn2iiNh3Qeb2K/DmZdn0xH9gW0ar8L8mKjdd68GKuGLSsQntjUro
+         edm+XOvHzdSRHrmO7YllUWN3HvngA0hOvHgN+LgkG9zER9jHcfM81I1HzdbaangA4g
+         UNqvV4GPv+njhGULydqF3t6dLFpplMneUuRiT96Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
-        Abhishek Kumar <kuabhs@chromium.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 057/452] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
-Date:   Tue,  7 Jun 2022 18:58:34 +0200
-Message-Id: <20220607164910.246645088@linuxfoundation.org>
+Subject: [PATCH 5.15 250/667] drm/msm/hdmi: switch to drm_bridge_connector
+Date:   Tue,  7 Jun 2022 18:58:35 +0200
+Message-Id: <20220607164942.282971596@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,112 +57,463 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Kumar <kuabhs@chromium.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit b72a4aff947ba807177bdabb43debaf2c66bee05 ]
+[ Upstream commit caa24223463dfd75702a24daac13c93edb4aafac ]
 
-Double free crash is observed when FW recovery(caused by wmi
-timeout/crash) is followed by immediate suspend event. The FW recovery
-is triggered by ath10k_core_restart() which calls driver clean up via
-ath10k_halt(). When the suspend event occurs between the FW recovery,
-the restart worker thread is put into frozen state until suspend completes.
-The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
-The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
-called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
-thread because of its frozen state), causing the crash.
+Merge old hdmi_bridge and hdmi_connector implementations. Use
+drm_bridge_connector instead.
 
-To fix this, during the suspend flow, skip call to ath10k_halt() in
-ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
-Also, for driver state ATH10K_STATE_RESTARTING, call
-ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
-ath10k_wait_for_suspend() is skipped later in
-[ath10k_halt() > ath10k_core_stop()] for the driver state
-ATH10K_STATE_RESTARTING.
-
-The frozen restart worker thread will be cancelled during resume when the
-device comes out of suspend.
-
-Below is the crash stack for reference:
-
-[  428.469167] ------------[ cut here ]------------
-[  428.469180] kernel BUG at mm/slub.c:4150!
-[  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-[  428.469219] Workqueue: events_unbound async_run_entry_fn
-[  428.469230] RIP: 0010:kfree+0x319/0x31b
-[  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
-[  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
-[  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
-[  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
-[  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  428.469285] Call Trace:
-[  428.469295]  ? dma_free_attrs+0x5f/0x7d
-[  428.469320]  ath10k_core_stop+0x5b/0x6f
-[  428.469336]  ath10k_halt+0x126/0x177
-[  428.469352]  ath10k_stop+0x41/0x7e
-[  428.469387]  drv_stop+0x88/0x10e
-[  428.469410]  __ieee80211_suspend+0x297/0x411
-[  428.469441]  rdev_suspend+0x6e/0xd0
-[  428.469462]  wiphy_suspend+0xb1/0x105
-[  428.469483]  ? name_show+0x2d/0x2d
-[  428.469490]  dpm_run_callback+0x8c/0x126
-[  428.469511]  ? name_show+0x2d/0x2d
-[  428.469517]  __device_suspend+0x2e7/0x41b
-[  428.469523]  async_suspend+0x1f/0x93
-[  428.469529]  async_run_entry_fn+0x3d/0xd1
-[  428.469535]  process_one_work+0x1b1/0x329
-[  428.469541]  worker_thread+0x213/0x372
-[  428.469547]  kthread+0x150/0x15f
-[  428.469552]  ? pr_cont_work+0x58/0x58
-[  428.469558]  ? kthread_blkcg+0x31/0x31
-
-Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
-Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
-Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
-Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
-Reviewed-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20211015001100.4193241-2-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/mac.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/Makefile                  |   2 +-
+ drivers/gpu/drm/msm/hdmi/hdmi.c               |  12 +-
+ drivers/gpu/drm/msm/hdmi/hdmi.h               |  19 ++-
+ drivers/gpu/drm/msm/hdmi/hdmi_bridge.c        |  81 ++++++++-
+ .../msm/hdmi/{hdmi_connector.c => hdmi_hpd.c} | 154 ++----------------
+ 5 files changed, 109 insertions(+), 159 deletions(-)
+ rename drivers/gpu/drm/msm/hdmi/{hdmi_connector.c => hdmi_hpd.c} (63%)
 
-diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
-index b59d482d9c23..b61cd275fbda 100644
---- a/drivers/net/wireless/ath/ath10k/mac.c
-+++ b/drivers/net/wireless/ath/ath10k/mac.c
-@@ -5170,13 +5170,29 @@ static int ath10k_start(struct ieee80211_hw *hw)
- static void ath10k_stop(struct ieee80211_hw *hw)
- {
- 	struct ath10k *ar = hw->priv;
-+	u32 opt;
+diff --git a/drivers/gpu/drm/msm/Makefile b/drivers/gpu/drm/msm/Makefile
+index 904535eda0c4..91b09cda8a9c 100644
+--- a/drivers/gpu/drm/msm/Makefile
++++ b/drivers/gpu/drm/msm/Makefile
+@@ -19,7 +19,7 @@ msm-y := \
+ 	hdmi/hdmi.o \
+ 	hdmi/hdmi_audio.o \
+ 	hdmi/hdmi_bridge.o \
+-	hdmi/hdmi_connector.o \
++	hdmi/hdmi_hpd.o \
+ 	hdmi/hdmi_i2c.o \
+ 	hdmi/hdmi_phy.o \
+ 	hdmi/hdmi_phy_8960.o \
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+index 94f948ef279d..d5a80fa3e625 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+@@ -8,6 +8,8 @@
+ #include <linux/of_irq.h>
+ #include <linux/of_gpio.h>
  
- 	ath10k_drain_tx(ar);
++#include <drm/drm_bridge_connector.h>
++
+ #include <sound/hdmi-codec.h>
+ #include "hdmi.h"
  
- 	mutex_lock(&ar->conf_mutex);
- 	if (ar->state != ATH10K_STATE_OFF) {
--		if (!ar->hw_rfkill_on)
--			ath10k_halt(ar);
-+		if (!ar->hw_rfkill_on) {
-+			/* If the current driver state is RESTARTING but not yet
-+			 * fully RESTARTED because of incoming suspend event,
-+			 * then ath10k_halt() is already called via
-+			 * ath10k_core_restart() and should not be called here.
-+			 */
-+			if (ar->state != ATH10K_STATE_RESTARTING) {
-+				ath10k_halt(ar);
-+			} else {
-+				/* Suspending here, because when in RESTARTING
-+				 * state, ath10k_core_stop() skips
-+				 * ath10k_wait_for_suspend().
-+				 */
-+				opt = WMI_PDEV_SUSPEND_AND_DISABLE_INTR;
-+				ath10k_wait_for_suspend(ar, opt);
-+			}
-+		}
- 		ar->state = ATH10K_STATE_OFF;
+@@ -41,7 +43,7 @@ static irqreturn_t msm_hdmi_irq(int irq, void *dev_id)
+ 	struct hdmi *hdmi = dev_id;
+ 
+ 	/* Process HPD: */
+-	msm_hdmi_connector_irq(hdmi->connector);
++	msm_hdmi_hpd_irq(hdmi->bridge);
+ 
+ 	/* Process DDC: */
+ 	msm_hdmi_i2c_irq(hdmi->i2c);
+@@ -302,7 +304,7 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
+ 		goto fail;
  	}
- 	mutex_unlock(&ar->conf_mutex);
+ 
+-	hdmi->connector = msm_hdmi_connector_init(hdmi);
++	hdmi->connector = drm_bridge_connector_init(hdmi->dev, encoder);
+ 	if (IS_ERR(hdmi->connector)) {
+ 		ret = PTR_ERR(hdmi->connector);
+ 		DRM_DEV_ERROR(dev->dev, "failed to create HDMI connector: %d\n", ret);
+@@ -310,6 +312,8 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
+ 		goto fail;
+ 	}
+ 
++	drm_connector_attach_encoder(hdmi->connector, hdmi->encoder);
++
+ 	hdmi->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
+ 	if (hdmi->irq < 0) {
+ 		ret = hdmi->irq;
+@@ -326,7 +330,9 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
+ 		goto fail;
+ 	}
+ 
+-	ret = msm_hdmi_hpd_enable(hdmi->connector);
++	drm_bridge_connector_enable_hpd(hdmi->connector);
++
++	ret = msm_hdmi_hpd_enable(hdmi->bridge);
+ 	if (ret < 0) {
+ 		DRM_DEV_ERROR(&hdmi->pdev->dev, "failed to enable HPD: %d\n", ret);
+ 		goto fail;
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.h b/drivers/gpu/drm/msm/hdmi/hdmi.h
+index d0b84f0abee1..8d2706bec3b9 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.h
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.h
+@@ -114,6 +114,13 @@ struct hdmi_platform_config {
+ 	struct hdmi_gpio_data gpios[HDMI_MAX_NUM_GPIO];
+ };
+ 
++struct hdmi_bridge {
++	struct drm_bridge base;
++	struct hdmi *hdmi;
++	struct work_struct hpd_work;
++};
++#define to_hdmi_bridge(x) container_of(x, struct hdmi_bridge, base)
++
+ void msm_hdmi_set_mode(struct hdmi *hdmi, bool power_on);
+ 
+ static inline void hdmi_write(struct hdmi *hdmi, u32 reg, u32 data)
+@@ -230,13 +237,11 @@ void msm_hdmi_audio_set_sample_rate(struct hdmi *hdmi, int rate);
+ struct drm_bridge *msm_hdmi_bridge_init(struct hdmi *hdmi);
+ void msm_hdmi_bridge_destroy(struct drm_bridge *bridge);
+ 
+-/*
+- * hdmi connector:
+- */
+-
+-void msm_hdmi_connector_irq(struct drm_connector *connector);
+-struct drm_connector *msm_hdmi_connector_init(struct hdmi *hdmi);
+-int msm_hdmi_hpd_enable(struct drm_connector *connector);
++void msm_hdmi_hpd_irq(struct drm_bridge *bridge);
++enum drm_connector_status msm_hdmi_bridge_detect(
++		struct drm_bridge *bridge);
++int msm_hdmi_hpd_enable(struct drm_bridge *bridge);
++void msm_hdmi_hpd_disable(struct hdmi_bridge *hdmi_bridge);
+ 
+ /*
+  * i2c adapter for ddc:
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_bridge.c b/drivers/gpu/drm/msm/hdmi/hdmi_bridge.c
+index 6e380db9287b..efcfdd70a02e 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi_bridge.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi_bridge.c
+@@ -5,17 +5,16 @@
+  */
+ 
+ #include <linux/delay.h>
++#include <drm/drm_bridge_connector.h>
+ 
++#include "msm_kms.h"
+ #include "hdmi.h"
+ 
+-struct hdmi_bridge {
+-	struct drm_bridge base;
+-	struct hdmi *hdmi;
+-};
+-#define to_hdmi_bridge(x) container_of(x, struct hdmi_bridge, base)
+-
+ void msm_hdmi_bridge_destroy(struct drm_bridge *bridge)
+ {
++	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
++
++	msm_hdmi_hpd_disable(hdmi_bridge);
+ }
+ 
+ static void msm_hdmi_power_on(struct drm_bridge *bridge)
+@@ -259,14 +258,76 @@ static void msm_hdmi_bridge_mode_set(struct drm_bridge *bridge,
+ 		msm_hdmi_audio_update(hdmi);
+ }
+ 
++static struct edid *msm_hdmi_bridge_get_edid(struct drm_bridge *bridge,
++		struct drm_connector *connector)
++{
++	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
++	struct hdmi *hdmi = hdmi_bridge->hdmi;
++	struct edid *edid;
++	uint32_t hdmi_ctrl;
++
++	hdmi_ctrl = hdmi_read(hdmi, REG_HDMI_CTRL);
++	hdmi_write(hdmi, REG_HDMI_CTRL, hdmi_ctrl | HDMI_CTRL_ENABLE);
++
++	edid = drm_get_edid(connector, hdmi->i2c);
++
++	hdmi_write(hdmi, REG_HDMI_CTRL, hdmi_ctrl);
++
++	hdmi->hdmi_mode = drm_detect_hdmi_monitor(edid);
++
++	return edid;
++}
++
++static enum drm_mode_status msm_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
++		const struct drm_display_info *info,
++		const struct drm_display_mode *mode)
++{
++	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
++	struct hdmi *hdmi = hdmi_bridge->hdmi;
++	const struct hdmi_platform_config *config = hdmi->config;
++	struct msm_drm_private *priv = bridge->dev->dev_private;
++	struct msm_kms *kms = priv->kms;
++	long actual, requested;
++
++	requested = 1000 * mode->clock;
++	actual = kms->funcs->round_pixclk(kms,
++			requested, hdmi_bridge->hdmi->encoder);
++
++	/* for mdp5/apq8074, we manage our own pixel clk (as opposed to
++	 * mdp4/dtv stuff where pixel clk is assigned to mdp/encoder
++	 * instead):
++	 */
++	if (config->pwr_clk_cnt > 0)
++		actual = clk_round_rate(hdmi->pwr_clks[0], actual);
++
++	DBG("requested=%ld, actual=%ld", requested, actual);
++
++	if (actual != requested)
++		return MODE_CLOCK_RANGE;
++
++	return 0;
++}
++
+ static const struct drm_bridge_funcs msm_hdmi_bridge_funcs = {
+ 		.pre_enable = msm_hdmi_bridge_pre_enable,
+ 		.enable = msm_hdmi_bridge_enable,
+ 		.disable = msm_hdmi_bridge_disable,
+ 		.post_disable = msm_hdmi_bridge_post_disable,
+ 		.mode_set = msm_hdmi_bridge_mode_set,
++		.mode_valid = msm_hdmi_bridge_mode_valid,
++		.get_edid = msm_hdmi_bridge_get_edid,
++		.detect = msm_hdmi_bridge_detect,
+ };
+ 
++static void
++msm_hdmi_hotplug_work(struct work_struct *work)
++{
++	struct hdmi_bridge *hdmi_bridge =
++		container_of(work, struct hdmi_bridge, hpd_work);
++	struct drm_bridge *bridge = &hdmi_bridge->base;
++
++	drm_bridge_hpd_notify(bridge, drm_bridge_detect(bridge));
++}
+ 
+ /* initialize bridge */
+ struct drm_bridge *msm_hdmi_bridge_init(struct hdmi *hdmi)
+@@ -283,11 +344,17 @@ struct drm_bridge *msm_hdmi_bridge_init(struct hdmi *hdmi)
+ 	}
+ 
+ 	hdmi_bridge->hdmi = hdmi;
++	INIT_WORK(&hdmi_bridge->hpd_work, msm_hdmi_hotplug_work);
+ 
+ 	bridge = &hdmi_bridge->base;
+ 	bridge->funcs = &msm_hdmi_bridge_funcs;
++	bridge->ddc = hdmi->i2c;
++	bridge->type = DRM_MODE_CONNECTOR_HDMIA;
++	bridge->ops = DRM_BRIDGE_OP_HPD |
++		DRM_BRIDGE_OP_DETECT |
++		DRM_BRIDGE_OP_EDID;
+ 
+-	ret = drm_bridge_attach(hdmi->encoder, bridge, NULL, 0);
++	ret = drm_bridge_attach(hdmi->encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+ 	if (ret)
+ 		goto fail;
+ 
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_connector.c b/drivers/gpu/drm/msm/hdmi/hdmi_hpd.c
+similarity index 63%
+rename from drivers/gpu/drm/msm/hdmi/hdmi_connector.c
+rename to drivers/gpu/drm/msm/hdmi/hdmi_hpd.c
+index 58707a1f3878..c3a236bb952c 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi_connector.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi_hpd.c
+@@ -11,13 +11,6 @@
+ #include "msm_kms.h"
+ #include "hdmi.h"
+ 
+-struct hdmi_connector {
+-	struct drm_connector base;
+-	struct hdmi *hdmi;
+-	struct work_struct hpd_work;
+-};
+-#define to_hdmi_connector(x) container_of(x, struct hdmi_connector, base)
+-
+ static void msm_hdmi_phy_reset(struct hdmi *hdmi)
+ {
+ 	unsigned int val;
+@@ -139,10 +132,10 @@ static void enable_hpd_clocks(struct hdmi *hdmi, bool enable)
+ 	}
+ }
+ 
+-int msm_hdmi_hpd_enable(struct drm_connector *connector)
++int msm_hdmi_hpd_enable(struct drm_bridge *bridge)
+ {
+-	struct hdmi_connector *hdmi_connector = to_hdmi_connector(connector);
+-	struct hdmi *hdmi = hdmi_connector->hdmi;
++	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
++	struct hdmi *hdmi = hdmi_bridge->hdmi;
+ 	const struct hdmi_platform_config *config = hdmi->config;
+ 	struct device *dev = &hdmi->pdev->dev;
+ 	uint32_t hpd_ctrl;
+@@ -202,9 +195,9 @@ int msm_hdmi_hpd_enable(struct drm_connector *connector)
+ 	return ret;
+ }
+ 
+-static void hdp_disable(struct hdmi_connector *hdmi_connector)
++void msm_hdmi_hpd_disable(struct hdmi_bridge *hdmi_bridge)
+ {
+-	struct hdmi *hdmi = hdmi_connector->hdmi;
++	struct hdmi *hdmi = hdmi_bridge->hdmi;
+ 	const struct hdmi_platform_config *config = hdmi->config;
+ 	struct device *dev = &hdmi->pdev->dev;
+ 	int i, ret = 0;
+@@ -233,19 +226,10 @@ static void hdp_disable(struct hdmi_connector *hdmi_connector)
+ 	}
+ }
+ 
+-static void
+-msm_hdmi_hotplug_work(struct work_struct *work)
+-{
+-	struct hdmi_connector *hdmi_connector =
+-		container_of(work, struct hdmi_connector, hpd_work);
+-	struct drm_connector *connector = &hdmi_connector->base;
+-	drm_helper_hpd_irq_event(connector->dev);
+-}
+-
+-void msm_hdmi_connector_irq(struct drm_connector *connector)
++void msm_hdmi_hpd_irq(struct drm_bridge *bridge)
+ {
+-	struct hdmi_connector *hdmi_connector = to_hdmi_connector(connector);
+-	struct hdmi *hdmi = hdmi_connector->hdmi;
++	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
++	struct hdmi *hdmi = hdmi_bridge->hdmi;
+ 	uint32_t hpd_int_status, hpd_int_ctrl;
+ 
+ 	/* Process HPD: */
+@@ -268,7 +252,7 @@ void msm_hdmi_connector_irq(struct drm_connector *connector)
+ 			hpd_int_ctrl |= HDMI_HPD_INT_CTRL_INT_CONNECT;
+ 		hdmi_write(hdmi, REG_HDMI_HPD_INT_CTRL, hpd_int_ctrl);
+ 
+-		queue_work(hdmi->workq, &hdmi_connector->hpd_work);
++		queue_work(hdmi->workq, &hdmi_bridge->hpd_work);
+ 	}
+ }
+ 
+@@ -299,11 +283,11 @@ static enum drm_connector_status detect_gpio(struct hdmi *hdmi)
+ 			connector_status_disconnected;
+ }
+ 
+-static enum drm_connector_status hdmi_connector_detect(
+-		struct drm_connector *connector, bool force)
++enum drm_connector_status msm_hdmi_bridge_detect(
++		struct drm_bridge *bridge)
+ {
+-	struct hdmi_connector *hdmi_connector = to_hdmi_connector(connector);
+-	struct hdmi *hdmi = hdmi_connector->hdmi;
++	struct hdmi_bridge *hdmi_bridge = to_hdmi_bridge(bridge);
++	struct hdmi *hdmi = hdmi_bridge->hdmi;
+ 	const struct hdmi_platform_config *config = hdmi->config;
+ 	struct hdmi_gpio_data hpd_gpio = config->gpios[HPD_GPIO_INDEX];
+ 	enum drm_connector_status stat_gpio, stat_reg;
+@@ -337,115 +321,3 @@ static enum drm_connector_status hdmi_connector_detect(
+ 
+ 	return stat_gpio;
+ }
+-
+-static void hdmi_connector_destroy(struct drm_connector *connector)
+-{
+-	struct hdmi_connector *hdmi_connector = to_hdmi_connector(connector);
+-
+-	hdp_disable(hdmi_connector);
+-
+-	drm_connector_cleanup(connector);
+-
+-	kfree(hdmi_connector);
+-}
+-
+-static int msm_hdmi_connector_get_modes(struct drm_connector *connector)
+-{
+-	struct hdmi_connector *hdmi_connector = to_hdmi_connector(connector);
+-	struct hdmi *hdmi = hdmi_connector->hdmi;
+-	struct edid *edid;
+-	uint32_t hdmi_ctrl;
+-	int ret = 0;
+-
+-	hdmi_ctrl = hdmi_read(hdmi, REG_HDMI_CTRL);
+-	hdmi_write(hdmi, REG_HDMI_CTRL, hdmi_ctrl | HDMI_CTRL_ENABLE);
+-
+-	edid = drm_get_edid(connector, hdmi->i2c);
+-
+-	hdmi_write(hdmi, REG_HDMI_CTRL, hdmi_ctrl);
+-
+-	hdmi->hdmi_mode = drm_detect_hdmi_monitor(edid);
+-	drm_connector_update_edid_property(connector, edid);
+-
+-	if (edid) {
+-		ret = drm_add_edid_modes(connector, edid);
+-		kfree(edid);
+-	}
+-
+-	return ret;
+-}
+-
+-static int msm_hdmi_connector_mode_valid(struct drm_connector *connector,
+-				 struct drm_display_mode *mode)
+-{
+-	struct hdmi_connector *hdmi_connector = to_hdmi_connector(connector);
+-	struct hdmi *hdmi = hdmi_connector->hdmi;
+-	const struct hdmi_platform_config *config = hdmi->config;
+-	struct msm_drm_private *priv = connector->dev->dev_private;
+-	struct msm_kms *kms = priv->kms;
+-	long actual, requested;
+-
+-	requested = 1000 * mode->clock;
+-	actual = kms->funcs->round_pixclk(kms,
+-			requested, hdmi_connector->hdmi->encoder);
+-
+-	/* for mdp5/apq8074, we manage our own pixel clk (as opposed to
+-	 * mdp4/dtv stuff where pixel clk is assigned to mdp/encoder
+-	 * instead):
+-	 */
+-	if (config->pwr_clk_cnt > 0)
+-		actual = clk_round_rate(hdmi->pwr_clks[0], actual);
+-
+-	DBG("requested=%ld, actual=%ld", requested, actual);
+-
+-	if (actual != requested)
+-		return MODE_CLOCK_RANGE;
+-
+-	return 0;
+-}
+-
+-static const struct drm_connector_funcs hdmi_connector_funcs = {
+-	.detect = hdmi_connector_detect,
+-	.fill_modes = drm_helper_probe_single_connector_modes,
+-	.destroy = hdmi_connector_destroy,
+-	.reset = drm_atomic_helper_connector_reset,
+-	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+-	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+-};
+-
+-static const struct drm_connector_helper_funcs msm_hdmi_connector_helper_funcs = {
+-	.get_modes = msm_hdmi_connector_get_modes,
+-	.mode_valid = msm_hdmi_connector_mode_valid,
+-};
+-
+-/* initialize connector */
+-struct drm_connector *msm_hdmi_connector_init(struct hdmi *hdmi)
+-{
+-	struct drm_connector *connector = NULL;
+-	struct hdmi_connector *hdmi_connector;
+-
+-	hdmi_connector = kzalloc(sizeof(*hdmi_connector), GFP_KERNEL);
+-	if (!hdmi_connector)
+-		return ERR_PTR(-ENOMEM);
+-
+-	hdmi_connector->hdmi = hdmi;
+-	INIT_WORK(&hdmi_connector->hpd_work, msm_hdmi_hotplug_work);
+-
+-	connector = &hdmi_connector->base;
+-
+-	drm_connector_init_with_ddc(hdmi->dev, connector,
+-				    &hdmi_connector_funcs,
+-				    DRM_MODE_CONNECTOR_HDMIA,
+-				    hdmi->i2c);
+-	drm_connector_helper_add(connector, &msm_hdmi_connector_helper_funcs);
+-
+-	connector->polled = DRM_CONNECTOR_POLL_CONNECT |
+-			DRM_CONNECTOR_POLL_DISCONNECT;
+-
+-	connector->interlace_allowed = 0;
+-	connector->doublescan_allowed = 0;
+-
+-	drm_connector_attach_encoder(connector, hdmi->encoder);
+-
+-	return connector;
+-}
 -- 
 2.35.1
 

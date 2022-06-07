@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5E1542674
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6574354229F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389779AbiFHAgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S1389607AbiFHAvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382740AbiFGVvv (ORCPT
+        with ESMTP id S1382875AbiFGVwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:51:51 -0400
+        Tue, 7 Jun 2022 17:52:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB14227CFF;
-        Tue,  7 Jun 2022 12:09:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E12223F22D;
+        Tue,  7 Jun 2022 12:09:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B8D3B82182;
-        Tue,  7 Jun 2022 19:09:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71B2C34115;
-        Tue,  7 Jun 2022 19:09:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20B58B823AE;
+        Tue,  7 Jun 2022 19:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84890C385A2;
+        Tue,  7 Jun 2022 19:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628959;
-        bh=fZ092IcvSUIN4gS+C79ycWxMkz1HT7br/u2yNYt1EfM=;
+        s=korg; t=1654628989;
+        bh=0Fo+vnLS+m2NgyDYTXErJyrh2tt8kExYo9NWHnEnXzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ihuZSHlkEEWyTUtD5b6NFqjvdLhSApoXjfurQ1LhIEDsTNjiNMjmQz8Ry7oMouGKk
-         swAUmBFtfIMApZQK8HCgwYszSa+b/AkSMnFUkuIEJ5r8wqGen3MTljHxbJDkHRYnLe
-         scCP5vftus8fxBGaOIq8DeN0AB8uD+DGp32CdqLE=
+        b=Srv2o0r9w4f2RIWaltIY1ofVM3XKfdCnM25uLFH7y4LabN8xJV+naZNbW276eBOru
+         iyRtVDwYm7pOZqenaXN6OY8QvcLjPjQjROvs4jPZOekC9rWsqLZBhy6X5O37kjOZtM
+         91lsyCPV4ItfY4n/bc7AOQAYFwF7XEsmuklLh18A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 501/879] platform/x86: intel_cht_int33fe: Set driver data
-Date:   Tue,  7 Jun 2022 19:00:19 +0200
-Message-Id: <20220607165017.416217287@linuxfoundation.org>
+Subject: [PATCH 5.18 502/879] PM: domains: Fix initialization of genpds next_wakeup
+Date:   Tue,  7 Jun 2022 19:00:20 +0200
+Message-Id: <20220607165017.445605712@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,37 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 3ce827bf9cfecaf2cbfd9a9d44f0db9f40882780 ]
+[ Upstream commit 622d9b5577f19a6472db21df042fea8f5fefe244 ]
 
-Module removal fails because cht_int33fe_typec_remove()
-tries to access driver data that does not exist. Fixing by
-assigning the data at the end of probe.
+In the genpd governor we walk the list of child-domains to take into
+account their next_wakeup. If the child-domain itself, doesn't have a
+governor assigned to it, we can end up using the next_wakeup value before
+it has been properly initialized. To prevent a possible incorrect behaviour
+in the governor, let's initialize next_wakeup to KTIME_MAX.
 
-Fixes: 915623a80b5a ("platform/x86: intel_cht_int33fe: Switch to DMI modalias based loading")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519122103.78546-1-heikki.krogerus@linux.intel.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: c79aa080fb0f ("PM: domains: use device's next wakeup to determine domain idle state")
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/intel/chtwc_int33fe.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/base/power/domain.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
-index 0de509fbf020..c52ac23e2331 100644
---- a/drivers/platform/x86/intel/chtwc_int33fe.c
-+++ b/drivers/platform/x86/intel/chtwc_int33fe.c
-@@ -389,6 +389,8 @@ static int cht_int33fe_typec_probe(struct platform_device *pdev)
- 		goto out_unregister_fusb302;
- 	}
- 
-+	platform_set_drvdata(pdev, data);
-+
- 	return 0;
- 
- out_unregister_fusb302:
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 1ee878d126fd..f0e4b0ea93e8 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -1997,6 +1997,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 	genpd->device_count = 0;
+ 	genpd->max_off_time_ns = -1;
+ 	genpd->max_off_time_changed = true;
++	genpd->next_wakeup = KTIME_MAX;
+ 	genpd->provider = NULL;
+ 	genpd->has_provider = false;
+ 	genpd->accounting_time = ktime_get();
 -- 
 2.35.1
 

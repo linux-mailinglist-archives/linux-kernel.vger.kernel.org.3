@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABCB540348
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E0A540347
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344734AbiFGQCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S1344723AbiFGQCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344712AbiFGQCb (ORCPT
+        with ESMTP id S230479AbiFGQCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:02:31 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3C62A422
+        Tue, 7 Jun 2022 12:02:30 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F29D2A27D
         for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:02:28 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so8254335iov.9
+Received: by mail-il1-f197.google.com with SMTP id j5-20020a922005000000b002d1c2659644so14055798ile.8
         for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 09:02:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=6pazMwnEZdGqok3Ss4M7H81NmMHYzu+I9eFPPS07dLg=;
-        b=SQKWj6oPwUnPkogWwTuEcbfnkPMNX5Me2+Swr3kS40NApAZ7HApXY77HThuJSqC1AO
-         vXp0Am2Tor4JNTmoL0oWIDgqoW0KqQVhRxVIJDBvJFoWRQWIRmpQ5gnUQDpo6jVaGy4k
-         TVOA7R/TLKSmTISxGWetW+QTnRbt3nCbC5RRaoe5QsGYKV8/mW+BTDN0x3MMCtGo1qWe
-         G0baeteGTGM5rFf97axyTCjpbj41qjTzBaeWpb3uWr6EI8Gr/tDu/6Hvpjw/32ASUdfX
-         2twzCTOCrpJlzIJeiiUv1ryj2+RA/616i9eQY+GFsfPPRjSoV/gxUuUJ5EQUvQPIpMKw
-         N0Sw==
-X-Gm-Message-State: AOAM533vfeTg/9eapjRc0XWcFZW7dOKcYLUF0/C0SWvh+hPlkkbCX2gc
-        c/XI2fcQCxSMSxMqHwyleGcBTyb7JIr8L/3sEqAx/zKIKJ9/
-X-Google-Smtp-Source: ABdhPJzUmyNxH7TM3sxBGRC7S9rgG1s2eC16WiwDyPCi+wnWEaNJi2cTZkfhEY54u5b/ywAP4YIW3BsboMHmWxzJpNFtnEcK4zDT
+        bh=IEUba6C2Ihq/2Tns72RO0/Y4e5C0VkJ5Wuu4phMe/Nw=;
+        b=xUsTOtqJ4Jqrii/Nz9pPV+4eLGDBzKXhHFxZsw3v0+lVy8l7viBYgZr3wcQgJ8fvin
+         l3uIGJQhE/JZIjyiLPTYLEQHKdlPaI2evZb9PqqJ7CcQQhdA4oKcxkvCaWBwn4b5Nq4C
+         Jz9O/5huTAYPukRbQ5qWlzNWQkXRLuiELXBQ8jVAtwPo3GZXQZAPzh+cwM0dTnv/4WA4
+         wtzRE1DuzjmMB7/to+NXEbzawg5gJIY4Hg0pNY4d0r32tBdedFfxdrBV1Cv81qh6FoYQ
+         FyaWBelSJeUHEVdwINzSopgtQ8qYDYJVBo1zksup2uoA03dyT+BFYakr8VeM2cz8PM6H
+         8fkw==
+X-Gm-Message-State: AOAM532jps1SOCoTR+sX1EeghofLwLpq5/auVjoiamTVTwBOWz0B7eIn
+        aypcIUcbtYFcC617BDDOD7ZxMWcuBBGtfd2nuNKi/Q+p+IUq
+X-Google-Smtp-Source: ABdhPJy5q1ACsUxN+sdx4Eb9gEMdW3zjZTzhvZMXea2Sf3wytVE74zPN96EV78BQ+p3a4t17eqDpDHpSGVvE9P5soTX7jePvhTws
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c22:b0:2d1:abab:8806 with SMTP id
- m2-20020a056e021c2200b002d1abab8806mr16151700ilh.300.1654617747661; Tue, 07
+X-Received: by 2002:a92:ca0e:0:b0:2d3:dc52:35e9 with SMTP id
+ j14-20020a92ca0e000000b002d3dc5235e9mr16719697ils.44.1654617747402; Tue, 07
  Jun 2022 09:02:27 -0700 (PDT)
 Date:   Tue, 07 Jun 2022 09:02:27 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000016aa8805e0ddb7db@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in mas_find
-From:   syzbot <syzbot+53a201cf0c3cd0082a4e@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Message-ID: <00000000000012b9cf05e0ddb75f@google.com>
+Subject: [syzbot] KASAN: use-after-free Write in snd_rawmidi_kernel_write1
+From:   syzbot <syzbot+8569b906285a4215278d@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -57,25 +57,25 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    1cfd968b58a1 Add linux-next specific files for 20220603
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11e69f1ff00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7da8386e3742814f
-dashboard link: https://syzkaller.appspot.com/bug?extid=53a201cf0c3cd0082a4e
+HEAD commit:    952923ddc011 Merge tag 'pull-18-rc1-work.namei' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=158076dbf00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3096247591885bfa
+dashboard link: https://syzkaller.appspot.com/bug?extid=8569b906285a4215278d
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+53a201cf0c3cd0082a4e@syzkaller.appspotmail.com
+Reported-by: syzbot+8569b906285a4215278d@syzkaller.appspotmail.com
 
 ==================================================================
-BUG: KASAN: use-after-free in ma_dead_node lib/maple_tree.c:532 [inline]
-BUG: KASAN: use-after-free in mas_next_entry lib/maple_tree.c:4638 [inline]
-BUG: KASAN: use-after-free in mas_find+0xada/0xce0 lib/maple_tree.c:5874
-Read of size 8 at addr ffff888023d1c800 by task syz-executor.5/3458
+==================================================================
+BUG: KASAN: use-after-free in instrument_copy_from_user include/linux/instrumented.h:135 [inline]
+BUG: KASAN: use-after-free in _copy_from_user+0x12a/0x170 lib/usercopy.c:15
+Write of size 4096 at addr ffff8880280e2000 by task syz-executor.2/8284
 
-CPU: 0 PID: 3458 Comm: syz-executor.5 Not tainted 5.18.0-next-20220603-syzkaller #0
+CPU: 1 PID: 8284 Comm: syz-executor.2 Not tainted 5.18.0-syzkaller-13842-g952923ddc011 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 Call Trace:
  <TASK>
@@ -84,54 +84,59 @@ Call Trace:
  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
  print_report mm/kasan/report.c:429 [inline]
  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- ma_dead_node lib/maple_tree.c:532 [inline]
- mas_next_entry lib/maple_tree.c:4638 [inline]
- mas_find+0xada/0xce0 lib/maple_tree.c:5874
- userfaultfd_release+0x239/0x670 fs/userfaultfd.c:879
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_copy_from_user include/linux/instrumented.h:135 [inline]
+ _copy_from_user+0x12a/0x170 lib/usercopy.c:15
+ copy_from_user include/linux/uaccess.h:152 [inline]
+ snd_rawmidi_kernel_write1+0x361/0x870 sound/core/rawmidi.c:1486
+ snd_rawmidi_write+0x273/0xb90 sound/core/rawmidi.c:1555
+ vfs_write+0x269/0xac0 fs/read_write.c:589
+ ksys_write+0x1e8/0x250 fs/read_write.c:644
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f11c7089109
+RIP: 0033:0x7fe46fa89109
 Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f11c8259168 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007f11c719c030 RCX: 00007f11c7089109
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007f11c70e308d R08: 0000000000000000 R09: 0000000000000000
+RSP: 002b:00007fe470c0a168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007fe46fb9bf60 RCX: 00007fe46fa89109
+RDX: 00000000fffffd2c RSI: 0000000020000000 RDI: 0000000000000004
+RBP: 00007fe46fae308d R08: 0000000000000000 R09: 0000000000000000
 R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe6d2c0bdf R14: 00007f11c8259300 R15: 0000000000022000
+R13: 00007fe4700cfb1f R14: 00007fe470c0a300 R15: 0000000000022000
  </TASK>
 
-Allocated by task 3457:
+Allocated by task 8284:
  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
  kasan_set_track mm/kasan/common.c:45 [inline]
  set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:750 [inline]
- kmem_cache_alloc_bulk+0x39f/0x720 mm/slub.c:3728
- mt_alloc_bulk lib/maple_tree.c:151 [inline]
- mas_alloc_nodes+0x2b0/0x6b0 lib/maple_tree.c:1244
- mas_preallocate+0xfb/0x270 lib/maple_tree.c:5586
- __vma_adjust+0x226/0x1900 mm/mmap.c:762
- vma_adjust include/linux/mm.h:2659 [inline]
- __split_vma+0x295/0x530 mm/mmap.c:2315
- do_mas_align_munmap+0x2c0/0xf00 mm/mmap.c:2412
- do_mas_munmap+0x202/0x2c0 mm/mmap.c:2569
- do_munmap+0xc3/0x100 mm/mmap.c:2583
- move_vma+0x776/0xf60 mm/mremap.c:701
- mremap_to mm/mremap.c:859 [inline]
- __do_sys_mremap+0xe68/0x1540 mm/mremap.c:970
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc_node include/linux/slab.h:623 [inline]
+ kvmalloc_node+0x3e/0x190 mm/util.c:613
+ kvmalloc include/linux/slab.h:750 [inline]
+ kvzalloc include/linux/slab.h:758 [inline]
+ snd_rawmidi_runtime_create sound/core/rawmidi.c:162 [inline]
+ open_substream+0x340/0x8b0 sound/core/rawmidi.c:306
+ rawmidi_open_priv+0x591/0x6f0 sound/core/rawmidi.c:357
+ snd_rawmidi_open+0x49f/0xb60 sound/core/rawmidi.c:455
+ snd_open+0x21f/0x460 sound/core/sound.c:169
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x4a1/0x11f0 fs/open.c:848
+ do_open fs/namei.c:3520 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3653
+ do_filp_open+0x1aa/0x400 fs/namei.c:3680
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1278
+ do_sys_open fs/open.c:1294 [inline]
+ __do_sys_openat fs/open.c:1310 [inline]
+ __se_sys_openat fs/open.c:1305 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1305
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Freed by task 3458:
+Freed by task 8283:
  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
  kasan_set_track+0x21/0x30 mm/kasan/common.c:45
  kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
@@ -141,14 +146,13 @@ Freed by task 3458:
  slab_free_hook mm/slub.c:1727 [inline]
  slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
  slab_free mm/slub.c:3507 [inline]
- kmem_cache_free_bulk mm/slub.c:3654 [inline]
- kmem_cache_free_bulk+0x2c0/0xb60 mm/slub.c:3641
- mt_free_bulk lib/maple_tree.c:157 [inline]
- mas_destroy+0x394/0x5c0 lib/maple_tree.c:5690
- mas_store_prealloc+0xec/0x150 lib/maple_tree.c:5571
- __vma_adjust+0x6d7/0x1900 mm/mmap.c:832
- vma_merge+0x39f/0x950 mm/mmap.c:1141
- userfaultfd_release+0x4c5/0x670 fs/userfaultfd.c:888
+ kfree+0xd6/0x4d0 mm/slub.c:4555
+ kvfree+0x42/0x50 mm/util.c:655
+ snd_rawmidi_runtime_free sound/core/rawmidi.c:176 [inline]
+ close_substream.part.0+0x185/0x720 sound/core/rawmidi.c:528
+ close_substream sound/core/rawmidi.c:507 [inline]
+ rawmidi_release_priv+0x192/0x270 sound/core/rawmidi.c:547
+ snd_rawmidi_release+0x5e/0xf0 sound/core/rawmidi.c:578
  __fput+0x277/0x9d0 fs/file_table.c:317
  task_work_run+0xdd/0x1a0 kernel/task_work.c:177
  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
@@ -159,47 +163,55 @@ Freed by task 3458:
  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
  entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-The buggy address belongs to the object at ffff888023d1c800
- which belongs to the cache maple_node of size 256
+The buggy address belongs to the object at ffff8880280e2000
+ which belongs to the cache kmalloc-4k of size 4096
 The buggy address is located 0 bytes inside of
- 256-byte region [ffff888023d1c800, ffff888023d1c900)
+ 4096-byte region [ffff8880280e2000, ffff8880280e3000)
 
 The buggy address belongs to the physical page:
-page:ffffea00008f4700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x23d1c
-head:ffffea00008f4700 order:1 compound_mapcount:0 compound_pincount:0
+page:ffffea0000a03800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x280e0
+head:ffffea0000a03800 order:3 compound_mapcount:0 compound_pincount:0
 flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea0001c8b880 dead000000000002 ffff88801184fdc0
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888011842140
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
 page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 28727, tgid 28727 (sed), ts 1369208986499, free_ts 1341001205352
- prep_new_page mm/page_alloc.c:2460 [inline]
- get_page_from_freelist+0xa64/0x3d10 mm/page_alloc.c:4279
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5503
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 3912, tgid 3912 (udevd), ts 388242276639, free_ts 388232231340
+ prep_new_page mm/page_alloc.c:2456 [inline]
+ get_page_from_freelist+0x1290/0x3b70 mm/page_alloc.c:4198
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5426
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
  alloc_slab_page mm/slub.c:1797 [inline]
  allocate_slab+0x26c/0x3c0 mm/slub.c:1942
  new_slab mm/slub.c:2002 [inline]
  ___slab_alloc+0x985/0xd90 mm/slub.c:3002
- kmem_cache_alloc_bulk+0x21c/0x720 mm/slub.c:3704
- mt_alloc_bulk lib/maple_tree.c:151 [inline]
- mas_alloc_nodes+0x2b0/0x6b0 lib/maple_tree.c:1244
- mas_preallocate+0xfb/0x270 lib/maple_tree.c:5586
- __vma_adjust+0x226/0x1900 mm/mmap.c:762
- vma_adjust include/linux/mm.h:2659 [inline]
- __split_vma+0x443/0x530 mm/mmap.c:2312
- do_mas_align_munmap+0x9f6/0xf00 mm/mmap.c:2433
- do_mas_munmap+0x202/0x2c0 mm/mmap.c:2569
- mmap_region+0x219/0x1bf0 mm/mmap.c:2617
- do_mmap+0x825/0xf60 mm/mmap.c:1493
- vm_mmap_pgoff+0x1b7/0x290 mm/util.c:520
- ksys_mmap_pgoff+0x40d/0x5a0 mm/mmap.c:1539
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
+ slab_alloc_node mm/slub.c:3180 [inline]
+ slab_alloc mm/slub.c:3222 [inline]
+ __kmalloc+0x318/0x350 mm/slub.c:4413
+ kmalloc include/linux/slab.h:605 [inline]
+ tomoyo_realpath_from_path+0xc3/0x620 security/tomoyo/realpath.c:254
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x272/0x380 security/tomoyo/file.c:771
+ tomoyo_file_open security/tomoyo/tomoyo.c:320 [inline]
+ tomoyo_file_open+0x9d/0xc0 security/tomoyo/tomoyo.c:315
+ security_file_open+0x45/0xb0 security/security.c:1645
+ do_dentry_open+0x349/0x11f0 fs/open.c:835
+ do_open fs/namei.c:3520 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3653
+ do_filp_open+0x1aa/0x400 fs/namei.c:3680
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1278
+ do_sys_open fs/open.c:1294 [inline]
+ __do_sys_openat fs/open.c:1310 [inline]
+ __se_sys_openat fs/open.c:1305 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1305
 page last free stack trace:
  reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1375 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1425
- free_unref_page_prepare mm/page_alloc.c:3311 [inline]
- free_unref_page+0x19/0x7b0 mm/page_alloc.c:3426
+ free_pages_prepare mm/page_alloc.c:1371 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
+ free_unref_page_prepare mm/page_alloc.c:3343 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3438
+ __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2521
  qlink_free mm/kasan/quarantine.c:168 [inline]
  qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
  kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
@@ -210,25 +222,28 @@ page last free stack trace:
  slab_alloc mm/slub.c:3222 [inline]
  __kmalloc+0x200/0x350 mm/slub.c:4413
  kmalloc include/linux/slab.h:605 [inline]
- tomoyo_realpath_from_path+0xc3/0x620 security/tomoyo/realpath.c:254
+ kzalloc include/linux/slab.h:733 [inline]
+ tomoyo_encode2.part.0+0xe9/0x3a0 security/tomoyo/realpath.c:45
+ tomoyo_encode2 security/tomoyo/realpath.c:31 [inline]
+ tomoyo_encode+0x28/0x50 security/tomoyo/realpath.c:80
+ tomoyo_realpath_from_path+0x186/0x620 security/tomoyo/realpath.c:288
  tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_perm+0x21b/0x400 security/tomoyo/file.c:822
- security_inode_getattr+0xcf/0x140 security/security.c:1344
- vfs_getattr fs/stat.c:157 [inline]
- vfs_statx+0x16a/0x390 fs/stat.c:232
- vfs_fstatat+0x8c/0xb0 fs/stat.c:255
- __do_sys_newfstatat+0x91/0x110 fs/stat.c:425
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
+ tomoyo_check_open_permission+0x272/0x380 security/tomoyo/file.c:771
+ tomoyo_file_open security/tomoyo/tomoyo.c:320 [inline]
+ tomoyo_file_open+0x9d/0xc0 security/tomoyo/tomoyo.c:315
+ security_file_open+0x45/0xb0 security/security.c:1645
+ do_dentry_open+0x349/0x11f0 fs/open.c:835
+ do_open fs/namei.c:3520 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3653
+ do_filp_open+0x1aa/0x400 fs/namei.c:3680
 
 Memory state around the buggy address:
- ffff888023d1c700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888023d1c780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888023d1c800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880280e1f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880280e1f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880280e2000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
                    ^
- ffff888023d1c880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888023d1c900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880280e2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880280e2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 ==================================================================
 
 

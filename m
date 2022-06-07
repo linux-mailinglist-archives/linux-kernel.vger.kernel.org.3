@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197A9541E4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EBA541E6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381959AbiFGW2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S1382633AbiFGWaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378479AbiFGVTC (ORCPT
+        with ESMTP id S1352155AbiFGVTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:19:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818322445B;
-        Tue,  7 Jun 2022 11:59:31 -0700 (PDT)
+        Tue, 7 Jun 2022 17:19:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCF6224470;
+        Tue,  7 Jun 2022 11:59:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6552CCE247C;
-        Tue,  7 Jun 2022 18:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B74AC34115;
-        Tue,  7 Jun 2022 18:59:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5922B8239A;
+        Tue,  7 Jun 2022 18:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DD6C385A2;
+        Tue,  7 Jun 2022 18:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628349;
-        bh=xTzq9ap8H1ICIVQA5jMVvngsvaOqHvDOplS/ac4gl0k=;
+        s=korg; t=1654628352;
+        bh=oMvoq6PzZoULewxmpDNz8DT3BADsI6X0K8E2Um8Lppo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WIM32K0rdFBwyTgb5Il7mZYdtZemxx93fo0MSthl6NB9n4IkvI4pf5kTSfbtzEgIJ
-         86XUgObFJALV+I2/nDmyNyN6sNfxHEjmopO/bxSLululXf6f7VAwiSysAnQTDYHkq0
-         X3qfCfhTo3t+qN04NcmoXB5+efQk/1yZ3XSWCIcM=
+        b=rTdzhQQYOaFuSy2sSRjxUOS3rRDwOk4cfDG+lWbfhTzdVIc+Ngpp8F7WrTcDnGJhs
+         UCpQdFj7R0qxxQ4Y5gsbXBkyWpejGUyf+Ukl30SMjz/yH8xYL70/U679wm0SMsY5Ty
+         QZFjjThcFPeJxMqhdilrtSIKOJ/2mTB8/nG5NRsk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Davide Caratti <dcaratti@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
         Mat Martineau <mathew.j.martineau@linux.intel.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 298/879] mptcp: reset the packet scheduler on incoming MP_PRIO
-Date:   Tue,  7 Jun 2022 18:56:56 +0200
-Message-Id: <20220607165011.497008039@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>,
+        Davide Caratti <dcaratti@redhat.com>
+Subject: [PATCH 5.18 299/879] mptcp: reset the packet scheduler on PRIO change
+Date:   Tue,  7 Jun 2022 18:56:57 +0200
+Message-Id: <20220607165011.526491992@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -59,85 +59,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit 43f5b111d1ff16161ce60e19aeddb999cb6f0b01 ]
+[ Upstream commit 0e203c324752e13d22624ab7ffafe934fa06ab50 ]
 
-When an incoming MP_PRIO option changes the backup
-status of any subflow, we need to reset the packet
-scheduler status, or the next send could keep using
-the previously selected subflow, without taking in account
-the new priorities.
+Similar to the previous patch, for priority changes
+requested by the local PM.
 
-Reported-by: Davide Caratti <dcaratti@redhat.com>
-Fixes: 40453a5c61f4 ("mptcp: add the incoming MP_PRIO support")
+Reported-and-suggested-by: Davide Caratti <dcaratti@redhat.com>
+Fixes: 067065422fcd ("mptcp: add the outgoing MP_PRIO support")
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/pm.c       | 19 +++++++++++++++----
- net/mptcp/protocol.c |  2 ++
- net/mptcp/protocol.h |  1 +
- 3 files changed, 18 insertions(+), 4 deletions(-)
+ net/mptcp/pm_netlink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index aa51b100e033..4d6a61acc487 100644
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -261,14 +261,25 @@ void mptcp_pm_rm_addr_received(struct mptcp_sock *msk,
- 	spin_unlock_bh(&pm->lock);
- }
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index b5e8de6f7507..e3dcc5501579 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -727,6 +727,8 @@ static int mptcp_pm_nl_mp_prio_send_ack(struct mptcp_sock *msk,
+ 		if (!addresses_equal(&local, addr, addr->port))
+ 			continue;
  
--void mptcp_pm_mp_prio_received(struct sock *sk, u8 bkup)
-+void mptcp_pm_mp_prio_received(struct sock *ssk, u8 bkup)
- {
--	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(sk);
-+	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
-+	struct sock *sk = subflow->conn;
-+	struct mptcp_sock *msk;
- 
- 	pr_debug("subflow->backup=%d, bkup=%d\n", subflow->backup, bkup);
--	subflow->backup = bkup;
-+	msk = mptcp_sk(sk);
-+	if (subflow->backup != bkup) {
-+		subflow->backup = bkup;
-+		mptcp_data_lock(sk);
-+		if (!sock_owned_by_user(sk))
++		if (subflow->backup != bkup)
 +			msk->last_snd = NULL;
-+		else
-+			__set_bit(MPTCP_RESET_SCHEDULER,  &msk->cb_flags);
-+		mptcp_data_unlock(sk);
-+	}
- 
--	mptcp_event(MPTCP_EVENT_SUB_PRIORITY, mptcp_sk(subflow->conn), sk, GFP_ATOMIC);
-+	mptcp_event(MPTCP_EVENT_SUB_PRIORITY, msk, ssk, GFP_ATOMIC);
- }
- 
- void mptcp_pm_mp_fail_received(struct sock *sk, u64 fail_seq)
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 2a9335ce5df1..8f54293c1d88 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -3102,6 +3102,8 @@ static void mptcp_release_cb(struct sock *sk)
- 			__mptcp_set_connected(sk);
- 		if (__test_and_clear_bit(MPTCP_ERROR_REPORT, &msk->cb_flags))
- 			__mptcp_error_report(sk);
-+		if (__test_and_clear_bit(MPTCP_RESET_SCHEDULER, &msk->cb_flags))
-+			msk->last_snd = NULL;
- 	}
- 
- 	__mptcp_update_rmem(sk);
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 5655a63aa6a8..9ac63fa4866e 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -124,6 +124,7 @@
- #define MPTCP_RETRANSMIT	4
- #define MPTCP_FLUSH_JOIN_LIST	5
- #define MPTCP_CONNECTED		6
-+#define MPTCP_RESET_SCHEDULER	7
- 
- static inline bool before64(__u64 seq1, __u64 seq2)
- {
+ 		subflow->backup = bkup;
+ 		subflow->send_mp_prio = 1;
+ 		subflow->request_bkup = bkup;
 -- 
 2.35.1
 

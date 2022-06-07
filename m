@@ -2,149 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C9654006D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433E154006C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244952AbiFGNri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S244907AbiFGNrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243711AbiFGNr3 (ORCPT
+        with ESMTP id S230134AbiFGNr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:47:29 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773D11FCE9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:47:26 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d14so15265905wra.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yHEkZ4f8EPJnKRi58/HD9Y5sbQwKZUo9tMe5hK1B3uM=;
-        b=ZttsjQv7dTxM63O5dpFy+spl2V91d5GksN6LFZwJuX9es1h8Uh0FVbttGTeJgnG8yb
-         YtFzpHjwqCymygxIscwrSWSfW5DLQnE3gcjcVO6BjJanguQcwTIdR/SUrR0y5wHdm8yo
-         /me+Y0e6AmnyJxFOf8YCvttFgOiQQarJ67oXzHT8d0I+m3vCPdV1dmhq8ahLDCw8Y/N7
-         rlWxQfe1eT04lBiUXnGgmWnWQQunbVA9tszlviIM5q7qo1wlPAAuYJIg+daCq6JHwmMD
-         pU8VRSrJ98cdUXy39Fx8k5m0H/K3eDdIl7PSQqz8PVMt214ECT9CVLEV6t+QypBBp8FV
-         DnwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yHEkZ4f8EPJnKRi58/HD9Y5sbQwKZUo9tMe5hK1B3uM=;
-        b=aD++X3QhFVoMNOf6Gl/3vcA6Zla4prixQjv9m8I33zwzwozcMXHa5G7ByXmkNr05b1
-         ksQkxgfZVmxN/73+Fre6jSZTk9VLKO5CoQc1jjmp1WNTvdJGBGVCT4VGiFx63PI//xzM
-         bd3OXF2w7VUcBL4CoyQA4lfX9Qu7auAVnZPqv9+MNUl0z3QOqomcEdVrcyCF7oNXgTxy
-         Oy+ab2Na6sMPYH4JeesQUYSb9zuwH3zP5+0EsEB8QWUU+YgFdNPtOqZaDCcMjJ+3/r8I
-         hMOaCKkENC74KYHjIfuaKqSwJbcyMDk9OiZaBCP3THSQec5q7TUd4q6FTTEmJGkjMqgb
-         f7uA==
-X-Gm-Message-State: AOAM530OvvXT9WActzA0EZv8Phd7kbaszit0vvCpe8hwuotMm0bQ8kuI
-        Mc9r8x9CBnNOEHzhIHsoU7dGrg==
-X-Google-Smtp-Source: ABdhPJzzQfep8a5zTJFgnsRLIjY9+/W6fqSitNbXiSv+k+J3uaniR58mvoMKm18jhKL42gVSkwAO0w==
-X-Received: by 2002:a5d:5c07:0:b0:218:544d:4347 with SMTP id cc7-20020a5d5c07000000b00218544d4347mr2153991wrb.107.1654609644928;
-        Tue, 07 Jun 2022 06:47:24 -0700 (PDT)
-Received: from joneslee-l.cable.virginm.net (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id d6-20020adff846000000b0020c5253d8d2sm18280401wrq.30.2022.06.07.06.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 06:47:24 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, stable@kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 1/1] Bluetooth: Use chan_list_lock to protect the whole put/destroy invokation
-Date:   Tue,  7 Jun 2022 14:47:09 +0100
-Message-Id: <20220607134709.373344-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+        Tue, 7 Jun 2022 09:47:27 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2F21A390;
+        Tue,  7 Jun 2022 06:47:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654609645; x=1686145645;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=PJdnobkYo/Zla5LJJXMvO7fy98qmm6tAkYvl7osPsnE=;
+  b=Ru/KYz3CPzVjM9bjAXni1ef8Y7/i2ZTV5RkgqMOnH2v/bEOGcMdieXsA
+   hW1j9bEdEUThD256PwofPGHAsoazM5Yw9U5ITv47um3PGBZHYg69eOKZN
+   2ENGjbayYuyeqa6ZhyszmiyhAqvRiA+uBk8wXE0vMxCoC6eT29v68MsqD
+   qqeJBZkHyRK8nl6YigUkf/CKjQ/9B0uHtKR+RQQS+aXG+KnMaTxgoVhNh
+   sVuxNRNR+I0qVtbvbux76wmWWPYk8Dtv7hV52uX0ig2raIzAism05GPzx
+   LE7O2fcpjPzjeXgAMbu9+9qKLSG6bQDgCb8XKvDm035RAy1A2VXhSzUO5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="302083520"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="302083520"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:47:24 -0700
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="636131988"
+Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:47:23 -0700
+Date:   Tue, 7 Jun 2022 16:47:20 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 10/36] tty/vt: consolemap: introduce UNI_*() macros
+In-Reply-To: <20220607104946.18710-10-jslaby@suse.cz>
+Message-ID: <2e2623a0-4b9f-f15d-78e0-d6e335bdcdff@linux.intel.com>
+References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-10-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change prevents a use-after-free caused by one of the worker
-threads starting up (see below) *after* the final channel reference
-has been put() during sock_close() but *before* the references to the
-channel have been destroyed.
+On Tue, 7 Jun 2022, Jiri Slaby wrote:
 
-  refcount_t: increment on 0; use-after-free.
-  BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
-  Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
+> The code currently does shift, OR, and AND logic directly in the code.
+> It is not much obvious what happens there. Therefore define four macros
+> for that purpose and use them in the code. We use GENMASK() so that it
+> is clear which bits serve what purpose:
+> - UNI_GLYPH: bits  0.. 5
+> - UNI_ROW:   bits  6..10
+> - UNI_DIR:   bits 11..31
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+>  drivers/tty/vt/consolemap.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
+> index 016c1a0b4290..e5fd225e87bd 100644
+> --- a/drivers/tty/vt/consolemap.c
+> +++ b/drivers/tty/vt/consolemap.c
+> @@ -190,6 +190,11 @@ static int inv_translate[MAX_NR_CONSOLES];
+>  #define UNI_DIR_ROWS	32U
+>  #define UNI_ROW_GLYPHS	64U
+>  
+> +#define UNI_DIR(uni)		( (uni)                   >> 11)
+> +#define UNI_ROW(uni)		(((uni) & GENMASK(10, 6)) >>  6)
 
-  CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.234-00003-g1fb6d0bd49a4-dirty #28
-  Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google Inc. MSM sm8150 Flame DVT (DT)
-  Workqueue: hci0 hci_rx_work
-  Call trace:
-   dump_backtrace+0x0/0x378
-   show_stack+0x20/0x2c
-   dump_stack+0x124/0x148
-   print_address_description+0x80/0x2e8
-   __kasan_report+0x168/0x188
-   kasan_report+0x10/0x18
-   __asan_load4+0x84/0x8c
-   refcount_dec_and_test+0x20/0xd0
-   l2cap_chan_put+0x48/0x12c
-   l2cap_recv_frame+0x4770/0x6550
-   l2cap_recv_acldata+0x44c/0x7a4
-   hci_acldata_packet+0x100/0x188
-   hci_rx_work+0x178/0x23c
-   process_one_work+0x35c/0x95c
-   worker_thread+0x4cc/0x960
-   kthread+0x1a8/0x1c4
-   ret_from_fork+0x10/0x18
+This is opencoding what FIELD_GET() does. Maybe just define these as 
+masks and use FIELD_GET in the code below.
 
-Cc: stable@kernel.org
-Cc: Marcel Holtmann <marcel@holtmann.org>
-Cc: Johan Hedberg <johan.hedberg@gmail.com>
-Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-bluetooth@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- net/bluetooth/l2cap_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +#define UNI_GLYPH(uni)		( (uni) & GENMASK( 5, 0))
+> +#define UNI(dir, row, glyph)	(((dir) << 11) | ((row) << 6) | (glyph))
+>
+>  /**
+>   * struct uni_pagedict -- unicode directory
+>   *
+> @@ -265,7 +270,7 @@ static void set_inverse_trans_unicode(struct vc_data *conp,
+>  				glyph = p2[k];
+>  				if (glyph >= 0 && glyph < MAX_GLYPH
+>  					       && q[glyph] < 32)
+> -					q[glyph] = (i << 11) | (j << 6) | k;
+> +					q[glyph] = UNI(i, j, k);
+>  			}
+>  		}
+>  	}
+> @@ -497,7 +502,7 @@ con_insert_unipair(struct uni_pagedict *p, u_short unicode, u_short fontpos)
+>  	int i, n;
+>  	u16 **p1, *p2;
+>  
+> -	n = unicode >> 11;
+> +	n = UNI_DIR(unicode);
+>  	p1 = p->uni_pgdir[n];
+>  	if (!p1) {
+>  		p1 = p->uni_pgdir[n] = kmalloc_array(UNI_DIR_ROWS,
+> @@ -508,7 +513,7 @@ con_insert_unipair(struct uni_pagedict *p, u_short unicode, u_short fontpos)
+>  			p1[i] = NULL;
+>  	}
+>  
+> -	n = (unicode >> 6) & 0x1f;
+> +	n = UNI_ROW(unicode);
+>  	p2 = p1[n];
+>  	if (!p2) {
+>  		p2 = p1[n] = kmalloc_array(UNI_ROW_GLYPHS, sizeof(u16), GFP_KERNEL);
+> @@ -518,7 +523,7 @@ con_insert_unipair(struct uni_pagedict *p, u_short unicode, u_short fontpos)
+>  		memset(p2, 0xff, UNI_ROW_GLYPHS * sizeof(u16));
+>  	}
+>  
+> -	p2[unicode & 0x3f] = fontpos;
+> +	p2[UNI_GLYPH(unicode)] = fontpos;
+>  	
+>  	p->sum += (fontpos << 20U) + unicode;
+>  
+> @@ -788,7 +793,7 @@ int con_get_unimap(struct vc_data *vc, ushort ct, ushort __user *uct, struct uni
+>  						continue;
+>  					if (ect < ct) {
+>  						unilist[ect].unicode =
+> -							(i<<11) | (j<<6) | k;
+> +							UNI(i, j, k);
+>  						unilist[ect].fontpos = *p2;
+>  					}
+>  					ect++;
+> @@ -857,9 +862,9 @@ conv_uni_to_pc(struct vc_data *conp, long ucs)
+>  		return -3;
+>  
+>  	p = *conp->vc_uni_pagedir_loc;
+> -	if ((p1 = p->uni_pgdir[ucs >> 11]) &&
+> -	    (p2 = p1[(ucs >> 6) & 0x1f]) &&
+> -	    (h = p2[ucs & 0x3f]) < MAX_GLYPH)
+> +	if ((p1 = p->uni_pgdir[UNI_DIR(ucs)]) &&
+> +	    (p2 = p1[UNI_ROW(ucs)]) &&
+> +	    (h = p2[UNI_GLYPH(ucs)]) < MAX_GLYPH)
+>  		return h;
+>  
+>  	return -4;		/* not found */
+> 
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index ae78490ecd3d4..82279c5919fd8 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
- 
- 	BT_DBG("chan %p", chan);
- 
--	write_lock(&chan_list_lock);
- 	list_del(&chan->global_l);
--	write_unlock(&chan_list_lock);
- 
- 	kfree(chan);
- }
-@@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
- {
- 	BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
- 
-+	write_lock(&chan_list_lock);
- 	kref_put(&c->kref, l2cap_chan_destroy);
-+	write_unlock(&chan_list_lock);
- }
- EXPORT_SYMBOL_GPL(l2cap_chan_put);
- 
 -- 
-2.36.1.255.ge46751e96f-goog
+ i.
 

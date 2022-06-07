@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBC6541AB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB885541372
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377943AbiFGVhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
+        id S1358721AbiFGUCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377697AbiFGUmy (ORCPT
+        with ESMTP id S1353105AbiFGS7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:42:54 -0400
+        Tue, 7 Jun 2022 14:59:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF40A1F0FE6;
-        Tue,  7 Jun 2022 11:38:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A2314E953;
+        Tue,  7 Jun 2022 11:04:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52989612E9;
-        Tue,  7 Jun 2022 18:38:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62674C385A5;
-        Tue,  7 Jun 2022 18:38:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96FD9617B4;
+        Tue,  7 Jun 2022 18:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E15C34119;
+        Tue,  7 Jun 2022 18:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627121;
-        bh=U4xY6fxAoWIW9KAO3EHotdreBJ7H3vxGqQ+Su3514kA=;
+        s=korg; t=1654625061;
+        bh=OcWhrdsFQIgNPCqf/QrOHTOvPgdXZMIducRNLcG6Qdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ll5/7ccwQgIAiYd24OCNZNlGdKCtwoiHuosrXkInO1Aql41uUFLpRN/kGo5gCwU8g
-         8LWRukE/FBdEM/oaZD9l0aY55A9YhV1CHBWYectUvz90EpUDRLzlG+neSJBBTbsFWN
-         CG2VqXIf+8xBKB3crcasT5krrq68Q/3qY399fXWA=
+        b=kXvpvoWU68TCz+XPz30lRXnMkShO+9by5NDxpXVPhYGpsdG85ddkGOSl1S+CfWl2W
+         nyN21HNJRJWleXFn2bSQaNPFcudOGCjDzhWnTNggV3C2ILERQRozMFa0krYQTqpyHk
+         1nAKf91t0Fq5/ke9vaeEJeVCQInICpNamHhqudYA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: =?UTF-8?q?=5BPATCH=205=2E17=20625/772=5D=20fs-writeback=3A=20writeback=5Fsb=5Finodes=EF=BC=9ARecalculate=20wrote=20according=20skipped=20pages?=
+        stable@vger.kernel.org,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.15 552/667] tracing: Initialize integer variable to prevent garbage return value
 Date:   Tue,  7 Jun 2022 19:03:37 +0200
-Message-Id: <20220607165007.353519474@linuxfoundation.org>
+Message-Id: <20220607164951.256161571@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,151 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Gautam Menghani <gautammenghani201@gmail.com>
 
-commit 68f4c6eba70df70a720188bce95c85570ddfcc87 upstream.
+commit 154827f8e53d8c492b3fb0cb757fbcadb5d516b5 upstream.
 
-Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
-writeback_inodes_wb()") has us holding a plug during wb_writeback, which
-may cause a potential ABBA dead lock:
+Initialize the integer variable to 0 to fix the clang scan warning:
+Undefined or garbage value returned to caller
+[core.uninitialized.UndefReturn]
+        return ret;
 
-    wb_writeback		fat_file_fsync
-blk_start_plug(&plug)
-for (;;) {
-  iter i-1: some reqs have been added into plug->mq_list  // LOCK A
-  iter i:
-    progress = __writeback_inodes_wb(wb, work)
-    . writeback_sb_inodes // fat's bdev
-    .   __writeback_single_inode
-    .   . generic_writepages
-    .   .   __block_write_full_page
-    .   .   . . 	    __generic_file_fsync
-    .   .   . . 	      sync_inode_metadata
-    .   .   . . 	        writeback_single_inode
-    .   .   . . 		  __writeback_single_inode
-    .   .   . . 		    fat_write_inode
-    .   .   . . 		      __fat_write_inode
-    .   .   . . 		        sync_dirty_buffer	// fat's bdev
-    .   .   . . 			  lock_buffer(bh)	// LOCK B
-    .   .   . . 			    submit_bh
-    .   .   . . 			      blk_mq_get_tag	// LOCK A
-    .   .   . trylock_buffer(bh)  // LOCK B
-    .   .   .   redirty_page_for_writepage
-    .   .   .     wbc->pages_skipped++
-    .   .   --wbc->nr_to_write
-    .   wrote += write_chunk - wbc.nr_to_write  // wrote > 0
-    .   requeue_inode
-    .     redirty_tail_locked
-    if (progress)    // progress > 0
-      continue;
-  iter i+1:
-      queue_io
-      // similar process with iter i, infinite for-loop !
-}
-blk_finish_plug(&plug)   // flush plug won't be called
+Link: https://lkml.kernel.org/r/20220522061826.1751-1-gautammenghani201@gmail.com
 
-Above process triggers a hungtask like:
-[  399.044861] INFO: task bb:2607 blocked for more than 30 seconds.
-[  399.046824]       Not tainted 5.18.0-rc1-00005-gefae4d9eb6a2-dirty
-[  399.051539] task:bb              state:D stack:    0 pid: 2607 ppid:
-2426 flags:0x00004000
-[  399.051556] Call Trace:
-[  399.051570]  __schedule+0x480/0x1050
-[  399.051592]  schedule+0x92/0x1a0
-[  399.051602]  io_schedule+0x22/0x50
-[  399.051613]  blk_mq_get_tag+0x1d3/0x3c0
-[  399.051640]  __blk_mq_alloc_requests+0x21d/0x3f0
-[  399.051657]  blk_mq_submit_bio+0x68d/0xca0
-[  399.051674]  __submit_bio+0x1b5/0x2d0
-[  399.051708]  submit_bio_noacct+0x34e/0x720
-[  399.051718]  submit_bio+0x3b/0x150
-[  399.051725]  submit_bh_wbc+0x161/0x230
-[  399.051734]  __sync_dirty_buffer+0xd1/0x420
-[  399.051744]  sync_dirty_buffer+0x17/0x20
-[  399.051750]  __fat_write_inode+0x289/0x310
-[  399.051766]  fat_write_inode+0x2a/0xa0
-[  399.051783]  __writeback_single_inode+0x53c/0x6f0
-[  399.051795]  writeback_single_inode+0x145/0x200
-[  399.051803]  sync_inode_metadata+0x45/0x70
-[  399.051856]  __generic_file_fsync+0xa3/0x150
-[  399.051880]  fat_file_fsync+0x1d/0x80
-[  399.051895]  vfs_fsync_range+0x40/0xb0
-[  399.051929]  __x64_sys_fsync+0x18/0x30
-
-In my test, 'need_resched()' (which is imported by 590dca3a71 "fs-writeback:
-unplug before cond_resched in writeback_sb_inodes") in function
-'writeback_sb_inodes()' seldom comes true, unless cond_resched() is deleted
-from write_cache_pages().
-
-Fix it by correcting wrote number according number of skipped pages
-in writeback_sb_inodes().
-
-Goto Link to find a reproducer.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215837
-Cc: stable@vger.kernel.org # v4.3
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220510133805.1988292-1-chengzhihao1@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Cc: stable@vger.kernel.org
+Fixes: 8993665abcce ("tracing/boot: Support multiple handlers for per-event histogram")
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fs-writeback.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ kernel/trace/trace_boot.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1816,11 +1816,12 @@ static long writeback_sb_inodes(struct s
- 	};
- 	unsigned long start_time = jiffies;
- 	long write_chunk;
--	long wrote = 0;  /* count both pages and inodes */
-+	long total_wrote = 0;  /* count both pages and inodes */
+--- a/kernel/trace/trace_boot.c
++++ b/kernel/trace/trace_boot.c
+@@ -300,7 +300,7 @@ trace_boot_hist_add_handlers(struct xbc_
+ {
+ 	struct xbc_node *node;
+ 	const char *p, *handler;
+-	int ret;
++	int ret = 0;
  
- 	while (!list_empty(&wb->b_io)) {
- 		struct inode *inode = wb_inode(wb->b_io.prev);
- 		struct bdi_writeback *tmp_wb;
-+		long wrote;
+ 	handler = xbc_node_get_data(hnode);
  
- 		if (inode->i_sb != sb) {
- 			if (work->sb) {
-@@ -1896,7 +1897,9 @@ static long writeback_sb_inodes(struct s
- 
- 		wbc_detach_inode(&wbc);
- 		work->nr_pages -= write_chunk - wbc.nr_to_write;
--		wrote += write_chunk - wbc.nr_to_write;
-+		wrote = write_chunk - wbc.nr_to_write - wbc.pages_skipped;
-+		wrote = wrote < 0 ? 0 : wrote;
-+		total_wrote += wrote;
- 
- 		if (need_resched()) {
- 			/*
-@@ -1919,7 +1922,7 @@ static long writeback_sb_inodes(struct s
- 		tmp_wb = inode_to_wb_and_lock_list(inode);
- 		spin_lock(&inode->i_lock);
- 		if (!(inode->i_state & I_DIRTY_ALL))
--			wrote++;
-+			total_wrote++;
- 		requeue_inode(inode, tmp_wb, &wbc);
- 		inode_sync_complete(inode);
- 		spin_unlock(&inode->i_lock);
-@@ -1933,14 +1936,14 @@ static long writeback_sb_inodes(struct s
- 		 * bail out to wb_writeback() often enough to check
- 		 * background threshold and other termination conditions.
- 		 */
--		if (wrote) {
-+		if (total_wrote) {
- 			if (time_is_before_jiffies(start_time + HZ / 10UL))
- 				break;
- 			if (work->nr_pages <= 0)
- 				break;
- 		}
- 	}
--	return wrote;
-+	return total_wrote;
- }
- 
- static long __writeback_inodes_wb(struct bdi_writeback *wb,
 
 

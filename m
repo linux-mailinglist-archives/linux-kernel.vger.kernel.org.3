@@ -2,292 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6246F53F8DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C79F53F8E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238758AbiFGI4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
+        id S238754AbiFGI5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236629AbiFGI4L (ORCPT
+        with ESMTP id S236629AbiFGI5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:56:11 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E13D7715;
-        Tue,  7 Jun 2022 01:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654592170; x=1686128170;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TNjuxlNqjf4QqyCj82B4tS5ErRzaVWZCJ6/e6HR0xyA=;
-  b=WDQSf84AAhZW3WdNkCBW4Q//0GzpuCpCaaR9wX0Pl4J6Lf3xDSUfgFdr
-   HSJ5jR7EMWGo7+mo8ZhsnawV0JD2d82yyUIcotau3Gyl3MgW3Bc1almYt
-   EdFltooZJcgCRKs/OG+w/8M8MVYVSXDMweHkPiI2m7BmrfiF92iDDhIvk
-   N56UuNg/k6DWZ/8/QZ2VnAbXYb883580+7PkmUGOn/voSi2tCxFEFWK3X
-   ep4ZDCMq+wxCL0L2ItC+ukKxYQgZCC8jt0KP912lqslAgf+rndE/69Ryi
-   yGqaIU/YMlAZmdEugdp9pasWLmg/AKAyEt0+F6WAr62RQ9DP0ROBlQket
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="302075521"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="302075521"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 01:56:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="636033838"
-Received: from bdgardin-mobl1.ger.corp.intel.com (HELO [10.213.217.225]) ([10.213.217.225])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 01:56:06 -0700
-Message-ID: <8559b6f0-0322-9232-7000-534087e786fe@linux.intel.com>
-Date:   Tue, 7 Jun 2022 09:56:02 +0100
+        Tue, 7 Jun 2022 04:57:05 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A999D7715;
+        Tue,  7 Jun 2022 01:57:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AWH6dTz//RHf3YR0uklX8Vx3gnfyvcYROyAp5mmxnyNEbTjPZDZHuMzZBcxAdyJLv+cz9LWovlvxzvt0HFnpQQL65tN4wfg5G/E9PhFmUC/tczV3yZwQnKhHGi8ffLsApOqvNWwMc9+YAqVM5Bqnu4WY0mcFeS5SgbU8oAe3N0N49WD4w9hH5Y8ziCmRktB3qSjxATzFfbWW4bOusbZU2IQHyOOmrQAapjWTiCWjt2Q6zC1zgjFN8xC/5bJ4NDU/DhmdvZn4KZPYxR8R7Kj3lDgd+8koHTyXuL7P3XEhQYVL9WKZlMjzxSAgW2g5hOPnX2FvHQwjXRKfOqIzNs2PBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YobFsZHJGNZ+57CrHpH2ArWEqdlmn+6oe2O1k+uU5SA=;
+ b=GVveU68RXIElN1An+kG3qDGEMoLLZKllpuCVdXAgsLC8xBQLgx5wZUKDFek2REectFLK7JWg5THtBsNdFXg50YQIGDbfmblKrw3ri71KKYmJdRUxvXqedhDfBDIH1kYEZBgc+LozIVganpCQjWLXR+CNKhjTJqFd4n9p+SSd+rvogVim0Oq5Y6gc96gBoFN4KYRnSW+CYdkYQmQlo/kukpopKmLuEOgd08g3teVE/gmj1bJoRnUTHxEk11aZNLMDKRCziUbD4J/IzoFFnIZ95Qj6JjsK8Nrx71exhSfzcrLMUk2aK5laMmMbTY3CK9kGGUVhkfbxoFAiqKLCv/TiqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YobFsZHJGNZ+57CrHpH2ArWEqdlmn+6oe2O1k+uU5SA=;
+ b=LD4/UWpB2LdkXkcvN00k8NrolnCB+S+FJeCOxj6yKK0LeCgkfODApnNaLBaMFbJYJj3UcbPKRmTDhsyVFhg/dsbiKBCyBAb9ECdCDlCL9jZOFxXHgCpQ5vpxD7chNZu8B+ZGMJpF+wFrX016AgGYehjfor3LpnB/c/HGLK1sDEY=
+Received: from SA9PR13CA0165.namprd13.prod.outlook.com (2603:10b6:806:28::20)
+ by MWHPR02MB2608.namprd02.prod.outlook.com (2603:10b6:300:43::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Tue, 7 Jun
+ 2022 08:57:02 +0000
+Received: from SN1NAM02FT0045.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:28:cafe::83) by SA9PR13CA0165.outlook.office365.com
+ (2603:10b6:806:28::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.6 via Frontend
+ Transport; Tue, 7 Jun 2022 08:57:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0045.mail.protection.outlook.com (10.97.5.234) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5314.12 via Frontend Transport; Tue, 7 Jun 2022 08:57:01 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 7 Jun 2022 01:57:00 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 7 Jun 2022 01:57:00 -0700
+Envelope-to: git@xilinx.com,
+ wg@grandegger.com,
+ mkl@pengutronix.de,
+ davem@davemloft.net,
+ edumazet@google.com,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.18] (port=44264 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1nyV1H-0007h1-T3; Tue, 07 Jun 2022 01:57:00 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <edumazet@google.com>, <appana.durga.rao@xilinx.com>,
+        <sgoud@xilinx.com>, <michal.simek@xilinx.com>
+CC:     <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>
+Subject: [PATCH V2 0/2] xilinx_can: Update on xilinx can
+Date:   Tue, 7 Jun 2022 14:26:52 +0530
+Message-ID: <20220607085654.4178-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/2] drm/msm: Expose client engine utilization via
- fdinfo
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220606195432.1888346-1-robdclark@gmail.com>
- <20220606195432.1888346-2-robdclark@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220606195432.1888346-2-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4bcfd2f7-03b8-4dc0-7d04-08da4863afea
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2608:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR02MB2608A98DFBC0E5769BF2C9EDAFA59@MWHPR02MB2608.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VQ9QCrbgDCWooHJZu30IY8x+UmroPOZIP7IOVvjZqPC5+x+ZXPtcp/kankwKm+98yW0FXgeILjbL9Fl+edP7XxupuVd2B7OfSUdakjC87Mk5jXIdj0ygzbNoE6e7kJovVsEpurZSGODCycXOpK+OQK6X/Br+bLkvLWHuzpd74Q4Y2E3uFSq4nkKr0LioGW4nN+TJt+lvpEpDWQHb6SJW6YG0dzbCscN2daFuVdzkRrmOZvwXwcdFu069nnrJuIinslSGl1Kt+AvpjQKIMyIddm2XUCyKgPKaNYIJaZIeg/RToDbPJ/guc1uS3VouyLpQcp2IzMbQcNEuPglN7HPJOiFtTQtmSTeruG4L+cQbOFyMD4BD4bjuV/WDALgv0mGjoflgBNJEty50bx2l785t2o+bE7jTofaUt7bR/Evi7jWxZcSXud7wx2eDZArqbHMW7RDZBso3RQzzSQr9YfE+pMTyRlz1lA0YvWSBnBLQdnhxG5Vfn6C0DOzVM9AmGRlYvM7C69Te365vkSTnBvd6aOrO7R7FE1R31JmvN3E7cRXa751cUcgA06/A0gluKQJgoeaubpLbMhTqrWtVL1OdKBA0hCNaIAPZu7fC2sbcluRQ4WzW42rEi8IFAiaozjHKI1JWR1aBIzYtzrWzQShTejJs5CAY9v4ImrILgFuqR0gfwZxfX6O3BtvsbNfo09U4cucFR1Q3nKy7tU01LjjoYQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(83380400001)(70206006)(1076003)(54906003)(8676002)(70586007)(6636002)(316002)(426003)(2616005)(186003)(47076005)(336012)(110136005)(107886003)(9786002)(6666004)(2906002)(7696005)(26005)(40460700003)(36756003)(508600001)(4744005)(7416002)(8936002)(5660300002)(4326008)(44832011)(36860700001)(7636003)(356005)(82310400005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 08:57:01.5595
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bcfd2f7-03b8-4dc0-7d04-08da4863afea
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0045.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2608
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series addresses
+1) Reverts the limiting CANFD brp_min to 2.
+2) Adds TDC support for Xilinx can driver.
 
-On 06/06/2022 20:54, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Similar to AMD commit
-> 874442541133 ("drm/amdgpu: Add show_fdinfo() interface"), using the
-> infrastructure added in previous patches, we add basic client info
-> and GPU engine utilisation for msm.
-> 
-> Example output:
-> 
-> 	# cat /proc/`pgrep glmark2`/fdinfo/6
-> 	pos:	0
-> 	flags:	02400002
-> 	mnt_id:	21
-> 	ino:	162
-> 	drm-driver:	msm
-> 	drm-client-id:	7
-> 	drm-engine-gpu:	1734371319 ns
-> 	drm-cycles-gpu:	1153645024
-> 	drm-maxfreq-gpu:	800000000 Hz
-> 
-> See also: https://patchwork.freedesktop.org/patch/468505/
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   Documentation/gpu/drm-usage-stats.rst | 21 +++++++++++++++++++++
->   drivers/gpu/drm/msm/msm_drv.c         | 19 ++++++++++++++++++-
->   drivers/gpu/drm/msm/msm_gpu.c         | 21 +++++++++++++++++++--
->   drivers/gpu/drm/msm/msm_gpu.h         | 19 +++++++++++++++++++
->   4 files changed, 77 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
-> index 6c9f166a8d6f..60e5cc9c13ad 100644
-> --- a/Documentation/gpu/drm-usage-stats.rst
-> +++ b/Documentation/gpu/drm-usage-stats.rst
-> @@ -105,6 +105,27 @@ object belong to this client, in the respective memory region.
->   Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
->   indicating kibi- or mebi-bytes.
->   
-> +- drm-cycles-<str> <uint>
-> +
-> +Engine identifier string must be the same as the one specified in the
-> +drm-engine-<str> tag and shall contain the number of busy cycles for the given
-> +engine.
-> +
-> +Values are not required to be constantly monotonic if it makes the driver
-> +implementation easier, but are required to catch up with the previously reported
-> +larger value within a reasonable period. Upon observing a value lower than what
-> +was previously read, userspace is expected to stay with that larger previous
-> +value until a monotonic update is seen.
-> +
-> +- drm-maxfreq-<str> <uint> [Hz|MHz|KHz]
-> +
-> +Engine identifier string must be the same as the one specified in the
-> +drm-engine-<str> tag and shall contain the maxium frequence for the given
+Srinivas Neeli (2):
+  Revert "can: xilinx_can: Limit CANFD brp to 2"
+  can: xilinx_can: Add Transmitter delay compensation (TDC) feature
+    support
 
-maximum frequency
+ drivers/net/can/xilinx_can.c | 50 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 45 insertions(+), 5 deletions(-)
 
-> +engine.  Taken together with drm-cycles-<str>, this can be used to calculate
-> +percentage utilization of the engine, whereas drm-engine-<str> only refects
+-- 
+2.25.1
 
-reflects
-
-> +time active without considering what frequency the engine is operating as a
-> +percentage of it's maximum frequency.
-
-Cycles vs max freq sounds very useful. My reservations is that how come 
-the idea hasn't happened in the CPU world. Or maybe it has and I am 
-un-informed?
-
-In any case, if going with this I think we need to clarify the text that 
-the value should reflect the current soft limit, where the driver 
-supports that, in case it has been set to lower than the maximum 
-frequency hardware can support. I am thinking about avoiding "my gpu 
-cannot hit 100%" support incidents in cases when user/admin lowered the 
-soft limit for some reason. Possibly does not apply to msm but can apply 
-to i915, if we decided to export the same data.
-
-No other gotchas come to mind at the moment.
-
-Regards,
-
-Tvrtko
-
-> +
->   ===============================
->   Driver specific implementations
->   ===============================
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index 14ab9a627d8b..57a66093e671 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -948,7 +948,24 @@ static const struct drm_ioctl_desc msm_ioctls[] = {
->   	DRM_IOCTL_DEF_DRV(MSM_SUBMITQUEUE_QUERY, msm_ioctl_submitqueue_query, DRM_RENDER_ALLOW),
->   };
->   
-> -DEFINE_DRM_GEM_FOPS(fops);
-> +static void msm_fop_show_fdinfo(struct seq_file *m, struct file *f)
-> +{
-> +	struct drm_file *file = f->private_data;
-> +	struct drm_device *dev = file->minor->dev;
-> +	struct msm_drm_private *priv = dev->dev_private;
-> +	struct drm_printer p = drm_seq_file_printer(m);
-> +
-> +	if (!priv->gpu)
-> +		return;
-> +
-> +	msm_gpu_show_fdinfo(priv->gpu, file->driver_priv, &p);
-> +}
-> +
-> +static const struct file_operations fops = {
-> +	.owner = THIS_MODULE,
-> +	DRM_GEM_FOPS,
-> +	.show_fdinfo = msm_fop_show_fdinfo,
-> +};
->   
->   static const struct drm_driver msm_driver = {
->   	.driver_features    = DRIVER_GEM |
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> index eb8a6663f309..333a9a299b41 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> @@ -4,6 +4,8 @@
->    * Author: Rob Clark <robdclark@gmail.com>
->    */
->   
-> +#include "drm/drm_drv.h"
-> +
->   #include "msm_gpu.h"
->   #include "msm_gem.h"
->   #include "msm_mmu.h"
-> @@ -146,6 +148,16 @@ int msm_gpu_pm_suspend(struct msm_gpu *gpu)
->   	return 0;
->   }
->   
-> +void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
-> +			 struct drm_printer *p)
-> +{
-> +	drm_printf(p, "drm-driver:\t%s\n", gpu->dev->driver->name);
-> +	drm_printf(p, "drm-client-id:\t%u\n", ctx->seqno);
-> +	drm_printf(p, "drm-engine-gpu:\t%llu ns\n", ctx->elapsed_ns);
-> +	drm_printf(p, "drm-cycles-gpu:\t%llu\n", ctx->cycles);
-> +	drm_printf(p, "drm-maxfreq-gpu:\t%lu Hz\n", gpu->fast_rate);
-> +}
-> +
->   int msm_gpu_hw_init(struct msm_gpu *gpu)
->   {
->   	int ret;
-> @@ -652,7 +664,7 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
->   {
->   	int index = submit->seqno % MSM_GPU_SUBMIT_STATS_COUNT;
->   	volatile struct msm_gpu_submit_stats *stats;
-> -	u64 elapsed, clock = 0;
-> +	u64 elapsed, clock = 0, cycles;
->   	unsigned long flags;
->   
->   	stats = &ring->memptrs->stats[index];
-> @@ -660,12 +672,17 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
->   	elapsed = (stats->alwayson_end - stats->alwayson_start) * 10000;
->   	do_div(elapsed, 192);
->   
-> +	cycles = stats->cpcycles_end - stats->cpcycles_start;
-> +
->   	/* Calculate the clock frequency from the number of CP cycles */
->   	if (elapsed) {
-> -		clock = (stats->cpcycles_end - stats->cpcycles_start) * 1000;
-> +		clock = cycles * 1000;
->   		do_div(clock, elapsed);
->   	}
->   
-> +	submit->queue->ctx->elapsed_ns += elapsed;
-> +	submit->queue->ctx->cycles     += cycles;
-> +
->   	trace_msm_gpu_submit_retired(submit, elapsed, clock,
->   		stats->alwayson_start, stats->alwayson_end);
->   
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> index 6def00883046..4911943ba53b 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.h
-> +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> @@ -361,6 +361,22 @@ struct msm_file_private {
->   	/** cmdline: Overridden task cmdline, see MSM_PARAM_CMDLINE */
->   	char *cmdline;
->   
-> +	/**
-> +	 * elapsed:
-> +	 *
-> +	 * The total (cumulative) elapsed time GPU was busy with rendering
-> +	 * from this context in ns.
-> +	 */
-> +	uint64_t elapsed_ns;
-> +
-> +	/**
-> +	 * cycles:
-> +	 *
-> +	 * The total (cumulative) GPU cycles elapsed attributed to this
-> +	 * context.
-> +	 */
-> +	uint64_t cycles;
-> +
->   	/**
->   	 * entities:
->   	 *
-> @@ -544,6 +560,9 @@ static inline void gpu_write64(struct msm_gpu *gpu, u32 lo, u32 hi, u64 val)
->   int msm_gpu_pm_suspend(struct msm_gpu *gpu);
->   int msm_gpu_pm_resume(struct msm_gpu *gpu);
->   
-> +void msm_gpu_show_fdinfo(struct msm_gpu *gpu, struct msm_file_private *ctx,
-> +			 struct drm_printer *p);
-> +
->   int msm_submitqueue_init(struct drm_device *drm, struct msm_file_private *ctx);
->   struct msm_gpu_submitqueue *msm_submitqueue_get(struct msm_file_private *ctx,
->   		u32 id);

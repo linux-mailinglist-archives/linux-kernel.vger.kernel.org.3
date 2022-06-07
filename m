@@ -2,35 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCCB5400B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 16:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AB1540466
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245112AbiFGOGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 10:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S1345454AbiFGRJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245080AbiFGOGc (ORCPT
+        with ESMTP id S1345442AbiFGRJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:06:32 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBD77A456;
-        Tue,  7 Jun 2022 07:06:31 -0700 (PDT)
-X-UUID: a9a47d3a242d4318be3c2b9eb43b7a7e-20220607
+        Tue, 7 Jun 2022 13:09:31 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD185A15C;
+        Tue,  7 Jun 2022 10:09:29 -0700 (PDT)
+X-UUID: e2da1a5048054ebda342996bb87e28c2-20220608
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:b1113a88-ed15-414b-947b-840f974a7474,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:417ef5e4-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+X-CID-O-INFO: VERSION:1.1.5,REQID:3c3c21dc-8b5e-46e4-b9d0-c56b7e996abc,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:2a19b09,CLOUDID:3236f9e4-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
         ,QS:0,BEC:nil
-X-UUID: a9a47d3a242d4318be3c2b9eb43b7a7e-20220607
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-UUID: e2da1a5048054ebda342996bb87e28c2-20220608
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 770820792; Tue, 07 Jun 2022 22:06:10 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 402892439; Wed, 08 Jun 2022 01:09:22 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Tue, 7 Jun 2022 17:09:22 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
  Tue, 7 Jun 2022 22:06:06 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -45,15 +48,17 @@ CC:     <khilman@kernel.org>, <djakov@kernel.org>,
         <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Johnson Wang <johnson.wang@mediatek.com>
-Subject: [PATCH v7 0/2] Introduce MediaTek CCI devfreq driver
-Date:   Tue, 7 Jun 2022 22:05:54 +0800
-Message-ID: <20220607140556.6278-1-johnson.wang@mediatek.com>
+Subject: [PATCH v7 1/2] dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+Date:   Tue, 7 Jun 2022 22:05:55 +0800
+Message-ID: <20220607140556.6278-2-johnson.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220607140556.6278-1-johnson.wang@mediatek.com>
+References: <20220607140556.6278-1-johnson.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,71 +66,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Cache Coherent Interconnect (CCI) is the management of cache
-coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
-scaling clock frequency and supply voltage of CCI. CCI uses the same
-input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
+Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
 
-This series depends on:
-Chanwoo's repo: kernel/git/chanwoo/linux.git
-branch: devfreq-testing
-[1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
-[2]: PM / devfreq: Add cpu based scaling support to passive governor
-[3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
-[4]: PM / devfreq: passive: Update frequency when start governor
-
-Changes in v7:
-- remove the 'ret' printing from dev_err_probe().
-
-Changes in v6:
-- Remove unnecessary "goto" statement.
-
-Changes in v5:
-- Modify some binding description.
-- Remove pre_voltage member.
-- Not to enable/disable intermediate clock.
-- Not to "put" resources that using devm_ variants.
-
-Resend v4:
-- CC interconnect maintainer.
-- Change sign-off sequence in commit message.
-
-Changes in v4:
-- Add a maintainer in the binding document.
-- Modify clock description.
-- Add binding document into MAINTAINERS.
-- Replace format specifier %d with %ld.
-
-Changes in v3:
-- Move binding document to 'interconnect' and rename it.
-- Add COMPILE_TEST dependence symbol.
-- Remove need_voltage_tracking variable.
-- Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
-- Add an interation limit in the while() loop.
-- Replace 'cci_dev' with 'dev'
-- Replace old_* with pre_*
-- Remove of_match_ptr()
-- Use module_platform_driver()
-
-Changes in v2:
-- Take MT8183 as example in binding document.
-- Use dev_err() instead of pr_err().
-- Use 'goto' statement to handle error case.
-- Clean up driver code.
-
-Johnson Wang (2):
-  dt-bindings: interconnect: Add MediaTek CCI dt-bindings
-  PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
-
- .../bindings/interconnect/mediatek,cci.yaml   | 140 ++++++
+Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Georgi Djakov <djakov@kernel.org>
+---
+ .../bindings/interconnect/mediatek,cci.yaml   | 141 ++++++++++++++++++
  MAINTAINERS                                   |   1 +
- drivers/devfreq/Kconfig                       |  10 +
- drivers/devfreq/Makefile                      |   1 +
- drivers/devfreq/mtk-cci-devfreq.c             | 474 ++++++++++++++++++
- 5 files changed, 626 insertions(+)
+ 2 files changed, 142 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
- create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
 
+diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+new file mode 100644
+index 000000000000..449c7c988229
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+@@ -0,0 +1,141 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/mediatek,cci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek Cache Coherent Interconnect (CCI) frequency and voltage scaling
++
++maintainers:
++  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
++  - Johnson Wang <johnson.wang@mediatek.com>
++
++description: |
++  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine used by
++  MT8183 and MT8186 SoCs to scale the frequency and adjust the voltage in
++  hardware. It can also optimize the voltage to reduce the power consumption.
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt8183-cci
++      - mediatek,mt8186-cci
++
++  clocks:
++    items:
++      - description:
++          The multiplexer for clock input of the bus.
++      - description:
++          A parent of "bus" clock which is used as an intermediate clock source
++          when the original clock source (PLL) is under transition and not
++          stable yet.
++
++  clock-names:
++    items:
++      - const: cci
++      - const: intermediate
++
++  operating-points-v2: true
++  opp-table: true
++
++  proc-supply:
++    description:
++      Phandle of the regulator for CCI that provides the supply voltage.
++
++  sram-supply:
++    description:
++      Phandle of the regulator for sram of CCI that provides the supply
++      voltage. When it is present, the implementation needs to do
++      "voltage tracking" to step by step scale up/down Vproc and Vsram to fit
++      SoC specific needs. When absent, the voltage scaling flow is handled by
++      hardware, hence no software "voltage tracking" is needed.
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - operating-points-v2
++  - proc-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/mt8183-clk.h>
++    cci: cci {
++        compatible = "mediatek,mt8183-cci";
++        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
++                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
++        clock-names = "cci", "intermediate";
++        operating-points-v2 = <&cci_opp>;
++        proc-supply = <&mt6358_vproc12_reg>;
++    };
++
++    cci_opp: opp-table-cci {
++        compatible = "operating-points-v2";
++        opp-shared;
++        opp2_00: opp-273000000 {
++            opp-hz = /bits/ 64 <273000000>;
++            opp-microvolt = <650000>;
++        };
++        opp2_01: opp-338000000 {
++            opp-hz = /bits/ 64 <338000000>;
++            opp-microvolt = <687500>;
++        };
++        opp2_02: opp-403000000 {
++            opp-hz = /bits/ 64 <403000000>;
++            opp-microvolt = <718750>;
++        };
++        opp2_03: opp-463000000 {
++            opp-hz = /bits/ 64 <463000000>;
++            opp-microvolt = <756250>;
++        };
++        opp2_04: opp-546000000 {
++            opp-hz = /bits/ 64 <546000000>;
++            opp-microvolt = <800000>;
++        };
++        opp2_05: opp-624000000 {
++            opp-hz = /bits/ 64 <624000000>;
++            opp-microvolt = <818750>;
++        };
++        opp2_06: opp-689000000 {
++            opp-hz = /bits/ 64 <689000000>;
++            opp-microvolt = <850000>;
++        };
++        opp2_07: opp-767000000 {
++            opp-hz = /bits/ 64 <767000000>;
++            opp-microvolt = <868750>;
++        };
++        opp2_08: opp-845000000 {
++            opp-hz = /bits/ 64 <845000000>;
++            opp-microvolt = <893750>;
++        };
++        opp2_09: opp-871000000 {
++            opp-hz = /bits/ 64 <871000000>;
++            opp-microvolt = <906250>;
++        };
++        opp2_10: opp-923000000 {
++            opp-hz = /bits/ 64 <923000000>;
++            opp-microvolt = <931250>;
++        };
++        opp2_11: opp-962000000 {
++            opp-hz = /bits/ 64 <962000000>;
++            opp-microvolt = <943750>;
++        };
++        opp2_12: opp-1027000000 {
++            opp-hz = /bits/ 64 <1027000000>;
++            opp-microvolt = <975000>;
++        };
++        opp2_13: opp-1092000000 {
++            opp-hz = /bits/ 64 <1092000000>;
++            opp-microvolt = <1000000>;
++        };
++        opp2_14: opp-1144000000 {
++            opp-hz = /bits/ 64 <1144000000>;
++            opp-microvolt = <1025000>;
++        };
++        opp2_15: opp-1196000000 {
++            opp-hz = /bits/ 64 <1196000000>;
++            opp-microvolt = <1050000>;
++        };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b54288db77aa..2800ddceb54c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5757,6 +5757,7 @@ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+ F:	Documentation/devicetree/bindings/devfreq/
++F:	Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+ F:	drivers/devfreq/
+ F:	include/linux/devfreq.h
+ F:	include/trace/events/devfreq.h
 -- 
 2.18.0
 

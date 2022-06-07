@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943C2540D04
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8E25416D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344825AbiFGSoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S1378314AbiFGU4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350821AbiFGSOo (ORCPT
+        with ESMTP id S1358947AbiFGTxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:14:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D319215A743;
-        Tue,  7 Jun 2022 10:49:09 -0700 (PDT)
+        Tue, 7 Jun 2022 15:53:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C5F32EDC;
+        Tue,  7 Jun 2022 11:23:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E2526170B;
-        Tue,  7 Jun 2022 17:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60F6AC34115;
-        Tue,  7 Jun 2022 17:48:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 328A9B8237D;
+        Tue,  7 Jun 2022 18:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE4CC385A2;
+        Tue,  7 Jun 2022 18:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624128;
-        bh=W6/rJm2x4jEKbutBT4nzL4yNQLM+3X+Q8xBE+50Ah1c=;
+        s=korg; t=1654626186;
+        bh=zmVLlQpTiH15ShWxpAuNa8u5VbIpjW9gJqgWwSjyFMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VkIVpwjuoONSoIL7oa2qH6Uq2s8ViL+i7eoDdZ6hAtr84O30gwA73tjnMjpYdz5PY
-         qqp0YijmIHcL2krCQwXQi1JPh25fGWKaeUsnBinR7/QkvzVVHsf9RhCb4Y0druGjvf
-         ecLMC0p8slKSKzv/Bt2txHtrJcz5JhXRHTS9qDPI=
+        b=q4epXaNUwnj9ees8I6JLNrZ3Q4fp87rtMwkDYlmQAzsWIFbDso21G3Tvh6tyrHUs6
+         buojrHAnuUo3jeKoZ5fzZ01v9nEdULaDt2DMDJlBmLBs476XJbdWr0qckqMRmGwn7Z
+         1fxZHxH3vbAXJA5J3kzU63/GgGLFwqjvgiQFbReM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 213/667] NFC: NULL out the dev->rfkill to prevent UAF
+Subject: [PATCH 5.17 286/772] media: i2c: max9286: Use "maxim,gpio-poc" property
 Date:   Tue,  7 Jun 2022 18:57:58 +0200
-Message-Id: <20220607164941.184698223@linuxfoundation.org>
+Message-Id: <20220607164957.453846572@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,148 +57,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Jacopo Mondi <jacopo+renesas@jmondi.org>
 
-[ Upstream commit 1b0e81416a24d6e9b8c2341e22e8bf48f8b8bfc9 ]
+[ Upstream commit c9352df7139bc5be6642ebc8a78b40477ab32acd ]
 
-Commit 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-assumes the device_is_registered() in function nfc_dev_up() will help
-to check when the rfkill is unregistered. However, this check only
-take effect when device_del(&dev->dev) is done in nfc_unregister_device().
-Hence, the rfkill object is still possible be dereferenced.
+The 'maxim,gpio-poc' property is used when the remote camera
+power-over-coax is controlled by one of the MAX9286 gpio lines,
+to instruct the driver about which line to use and what the line
+polarity is.
 
-The crash trace in latest kernel (5.18-rc2):
+Add to the max9286 driver support for parsing the newly introduced
+property and use it if available in place of the usual supply, as it is
+not possible to establish one as consumer of the max9286 gpio
+controller.
 
-[   68.760105] ==================================================================
-[   68.760330] BUG: KASAN: use-after-free in __lock_acquire+0x3ec1/0x6750
-[   68.760756] Read of size 8 at addr ffff888009c93018 by task fuzz/313
-[   68.760756]
-[   68.760756] CPU: 0 PID: 313 Comm: fuzz Not tainted 5.18.0-rc2 #4
-[   68.760756] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[   68.760756] Call Trace:
-[   68.760756]  <TASK>
-[   68.760756]  dump_stack_lvl+0x57/0x7d
-[   68.760756]  print_report.cold+0x5e/0x5db
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  kasan_report+0xbe/0x1c0
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  __lock_acquire+0x3ec1/0x6750
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? register_lock_class+0x18d0/0x18d0
-[   68.760756]  lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? mutex_lock_io_nested+0x12c0/0x12c0
-[   68.760756]  ? nla_get_range_signed+0x540/0x540
-[   68.760756]  ? _raw_spin_lock_irqsave+0x4e/0x50
-[   68.760756]  _raw_spin_lock_irqsave+0x39/0x50
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  rfkill_blocked+0xe/0x60
-[   68.760756]  nfc_dev_up+0x84/0x260
-[   68.760756]  nfc_genl_dev_up+0x90/0xe0
-[   68.760756]  genl_family_rcv_msg_doit+0x1f4/0x2f0
-[   68.760756]  ? genl_family_rcv_msg_attrs_parse.constprop.0+0x230/0x230
-[   68.760756]  ? security_capable+0x51/0x90
-[   68.760756]  genl_rcv_msg+0x280/0x500
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? nfc_genl_dev_down+0xe0/0xe0
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  netlink_rcv_skb+0x11b/0x340
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? netlink_ack+0x9c0/0x9c0
-[   68.760756]  ? netlink_deliver_tap+0x136/0xb00
-[   68.760756]  genl_rcv+0x1f/0x30
-[   68.760756]  netlink_unicast+0x430/0x710
-[   68.760756]  ? memset+0x20/0x40
-[   68.760756]  ? netlink_attachskb+0x740/0x740
-[   68.760756]  ? __build_skb_around+0x1f4/0x2a0
-[   68.760756]  netlink_sendmsg+0x75d/0xc00
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  sock_sendmsg+0xdf/0x110
-[   68.760756]  __sys_sendto+0x19e/0x270
-[   68.760756]  ? __ia32_sys_getpeername+0xa0/0xa0
-[   68.760756]  ? fd_install+0x178/0x4c0
-[   68.760756]  ? fd_install+0x195/0x4c0
-[   68.760756]  ? kernel_fpu_begin_mask+0x1c0/0x1c0
-[   68.760756]  __x64_sys_sendto+0xd8/0x1b0
-[   68.760756]  ? lockdep_hardirqs_on+0xbf/0x130
-[   68.760756]  ? syscall_enter_from_user_mode+0x1d/0x50
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756] RIP: 0033:0x7f67fb50e6b3
-...
-[   68.760756] RSP: 002b:00007f67fa91fe90 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
-[   68.760756] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f67fb50e6b3
-[   68.760756] RDX: 000000000000001c RSI: 0000559354603090 RDI: 0000000000000003
-[   68.760756] RBP: 00007f67fa91ff00 R08: 00007f67fa91fedc R09: 000000000000000c
-[   68.760756] R10: 0000000000000000 R11: 0000000000000293 R12: 00007ffe824d496e
-[   68.760756] R13: 00007ffe824d496f R14: 00007f67fa120000 R15: 0000000000000003
+If the new property is present, no gpio controller is registered and
+'poc-supply' is ignored.
 
-[   68.760756]  </TASK>
-[   68.760756]
-[   68.760756] Allocated by task 279:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  __kasan_kmalloc+0x81/0xa0
-[   68.760756]  rfkill_alloc+0x7f/0x280
-[   68.760756]  nfc_register_device+0xa3/0x1a0
-[   68.760756]  nci_register_device+0x77a/0xad0
-[   68.760756]  nfcmrvl_nci_register_dev+0x20b/0x2c0
-[   68.760756]  nfcmrvl_nci_uart_open+0xf2/0x1dd
-[   68.760756]  nci_uart_tty_ioctl+0x2c3/0x4a0
-[   68.760756]  tty_ioctl+0x764/0x1310
-[   68.760756]  __x64_sys_ioctl+0x122/0x190
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756]
-[   68.760756] Freed by task 314:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  kasan_set_track+0x21/0x30
-[   68.760756]  kasan_set_free_info+0x20/0x30
-[   68.760756]  __kasan_slab_free+0x108/0x170
-[   68.760756]  kfree+0xb0/0x330
-[   68.760756]  device_release+0x96/0x200
-[   68.760756]  kobject_put+0xf9/0x1d0
-[   68.760756]  nfc_unregister_device+0x77/0x190
-[   68.760756]  nfcmrvl_nci_unregister_dev+0x88/0xd0
-[   68.760756]  nci_uart_tty_close+0xdf/0x180
-[   68.760756]  tty_ldisc_kill+0x73/0x110
-[   68.760756]  tty_ldisc_hangup+0x281/0x5b0
-[   68.760756]  __tty_hangup.part.0+0x431/0x890
-[   68.760756]  tty_release+0x3a8/0xc80
-[   68.760756]  __fput+0x1f0/0x8c0
-[   68.760756]  task_work_run+0xc9/0x170
-[   68.760756]  exit_to_user_mode_prepare+0x194/0x1a0
-[   68.760756]  syscall_exit_to_user_mode+0x19/0x50
-[   68.760756]  do_syscall_64+0x48/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+In order to maximize code re-use, break out the max9286 gpio handling
+function so that they can be used by the gpio controller through the
+gpio-consumer API, or directly by the driver code.
 
-This patch just add the null out of dev->rfkill to make sure such
-dereference cannot happen. This is safe since the device_lock() already
-protect the check/write from data race.
+Wrap the power up and power down routines to their own function to
+be able to use either the gpio line directly or the supply. This will
+make it easier to control the remote camera power at run time.
 
-Fixes: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/nfc/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/max9286.c | 120 +++++++++++++++++++++++++++---------
+ 1 file changed, 90 insertions(+), 30 deletions(-)
 
-diff --git a/net/nfc/core.c b/net/nfc/core.c
-index 5b286e1e0a6f..6ff3e10ff8e3 100644
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -1166,6 +1166,7 @@ void nfc_unregister_device(struct nfc_dev *dev)
- 	if (dev->rfkill) {
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
-+		dev->rfkill = NULL;
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index eb2b8e42335b..c572eec54044 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -15,6 +15,7 @@
+ #include <linux/fwnode.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
++#include <linux/gpio/machine.h>
+ #include <linux/i2c.h>
+ #include <linux/i2c-mux.h>
+ #include <linux/module.h>
+@@ -168,6 +169,8 @@ struct max9286_priv {
+ 	u32 init_rev_chan_mv;
+ 	u32 rev_chan_mv;
+ 
++	u32 gpio_poc[2];
++
+ 	struct v4l2_ctrl_handler ctrls;
+ 	struct v4l2_ctrl *pixelrate;
+ 
+@@ -1025,20 +1028,27 @@ static int max9286_setup(struct max9286_priv *priv)
+ 	return 0;
+ }
+ 
+-static void max9286_gpio_set(struct gpio_chip *chip,
+-			     unsigned int offset, int value)
++static int max9286_gpio_set(struct max9286_priv *priv, unsigned int offset,
++			    int value)
+ {
+-	struct max9286_priv *priv = gpiochip_get_data(chip);
+-
+ 	if (value)
+ 		priv->gpio_state |= BIT(offset);
+ 	else
+ 		priv->gpio_state &= ~BIT(offset);
+ 
+-	max9286_write(priv, 0x0f, MAX9286_0X0F_RESERVED | priv->gpio_state);
++	return max9286_write(priv, 0x0f,
++			     MAX9286_0X0F_RESERVED | priv->gpio_state);
+ }
+ 
+-static int max9286_gpio_get(struct gpio_chip *chip, unsigned int offset)
++static void max9286_gpiochip_set(struct gpio_chip *chip,
++				 unsigned int offset, int value)
++{
++	struct max9286_priv *priv = gpiochip_get_data(chip);
++
++	max9286_gpio_set(priv, offset, value);
++}
++
++static int max9286_gpiochip_get(struct gpio_chip *chip, unsigned int offset)
+ {
+ 	struct max9286_priv *priv = gpiochip_get_data(chip);
+ 
+@@ -1057,13 +1067,10 @@ static int max9286_register_gpio(struct max9286_priv *priv)
+ 	gpio->owner = THIS_MODULE;
+ 	gpio->ngpio = 2;
+ 	gpio->base = -1;
+-	gpio->set = max9286_gpio_set;
+-	gpio->get = max9286_gpio_get;
++	gpio->set = max9286_gpiochip_set;
++	gpio->get = max9286_gpiochip_get;
+ 	gpio->can_sleep = true;
+ 
+-	/* GPIO values default to high */
+-	priv->gpio_state = BIT(0) | BIT(1);
+-
+ 	ret = devm_gpiochip_add_data(dev, gpio, priv);
+ 	if (ret)
+ 		dev_err(dev, "Unable to create gpio_chip\n");
+@@ -1071,6 +1078,70 @@ static int max9286_register_gpio(struct max9286_priv *priv)
+ 	return ret;
+ }
+ 
++static int max9286_parse_gpios(struct max9286_priv *priv)
++{
++	struct device *dev = &priv->client->dev;
++	int ret;
++
++	/* GPIO values default to high */
++	priv->gpio_state = BIT(0) | BIT(1);
++
++	/*
++	 * Parse the "gpio-poc" vendor property. If the property is not
++	 * specified the camera power is controlled by a regulator.
++	 */
++	ret = of_property_read_u32_array(dev->of_node, "maxim,gpio-poc",
++					 priv->gpio_poc, 2);
++	if (ret == -EINVAL) {
++		/*
++		 * If gpio lines are not used for the camera power, register
++		 * a gpio controller for consumers.
++		 */
++		ret = max9286_register_gpio(priv);
++		if (ret)
++			return ret;
++
++		priv->regulator = devm_regulator_get(dev, "poc");
++		if (IS_ERR(priv->regulator)) {
++			return dev_err_probe(dev, PTR_ERR(priv->regulator),
++					     "Unable to get PoC regulator (%ld)\n",
++					     PTR_ERR(priv->regulator));
++		}
++
++		return 0;
++	}
++
++	/* If the property is specified make sure it is well formed. */
++	if (ret || priv->gpio_poc[0] > 1 ||
++	    (priv->gpio_poc[1] != GPIO_ACTIVE_HIGH &&
++	     priv->gpio_poc[1] != GPIO_ACTIVE_LOW)) {
++		dev_err(dev, "Invalid 'gpio-poc' property\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int max9286_poc_enable(struct max9286_priv *priv, bool enable)
++{
++	int ret;
++
++	/* If the regulator is not available, use gpio to control power. */
++	if (!priv->regulator)
++		ret = max9286_gpio_set(priv, priv->gpio_poc[0],
++				       enable ^ priv->gpio_poc[1]);
++	else if (enable)
++		ret = regulator_enable(priv->regulator);
++	else
++		ret = regulator_disable(priv->regulator);
++
++	if (ret < 0)
++		dev_err(&priv->client->dev, "Unable to turn power %s\n",
++			enable ? "on" : "off");
++
++	return ret;
++}
++
+ static int max9286_init(struct device *dev)
+ {
+ 	struct max9286_priv *priv;
+@@ -1080,17 +1151,14 @@ static int max9286_init(struct device *dev)
+ 	client = to_i2c_client(dev);
+ 	priv = i2c_get_clientdata(client);
+ 
+-	/* Enable the bus power. */
+-	ret = regulator_enable(priv->regulator);
+-	if (ret < 0) {
+-		dev_err(&client->dev, "Unable to turn PoC on\n");
++	ret = max9286_poc_enable(priv, true);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	ret = max9286_setup(priv);
+ 	if (ret) {
+ 		dev_err(dev, "Unable to setup max9286\n");
+-		goto err_regulator;
++		goto err_poc_disable;
  	}
- 	dev->shutting_down = true;
- 	device_unlock(&dev->dev);
+ 
+ 	/*
+@@ -1100,7 +1168,7 @@ static int max9286_init(struct device *dev)
+ 	ret = max9286_v4l2_register(priv);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register with V4L2\n");
+-		goto err_regulator;
++		goto err_poc_disable;
+ 	}
+ 
+ 	ret = max9286_i2c_mux_init(priv);
+@@ -1116,8 +1184,8 @@ static int max9286_init(struct device *dev)
+ 
+ err_v4l2_register:
+ 	max9286_v4l2_unregister(priv);
+-err_regulator:
+-	regulator_disable(priv->regulator);
++err_poc_disable:
++	max9286_poc_enable(priv, false);
+ 
+ 	return ret;
+ }
+@@ -1288,18 +1356,10 @@ static int max9286_probe(struct i2c_client *client)
+ 	 */
+ 	max9286_configure_i2c(priv, false);
+ 
+-	ret = max9286_register_gpio(priv);
++	ret = max9286_parse_gpios(priv);
+ 	if (ret)
+ 		goto err_powerdown;
+ 
+-	priv->regulator = devm_regulator_get(&client->dev, "poc");
+-	if (IS_ERR(priv->regulator)) {
+-		ret = PTR_ERR(priv->regulator);
+-		dev_err_probe(&client->dev, ret,
+-			      "Unable to get PoC regulator\n");
+-		goto err_powerdown;
+-	}
+-
+ 	ret = max9286_parse_dt(priv);
+ 	if (ret)
+ 		goto err_powerdown;
+@@ -1326,7 +1386,7 @@ static int max9286_remove(struct i2c_client *client)
+ 
+ 	max9286_v4l2_unregister(priv);
+ 
+-	regulator_disable(priv->regulator);
++	max9286_poc_enable(priv, false);
+ 
+ 	gpiod_set_value_cansleep(priv->gpiod_pwdn, 0);
+ 
 -- 
 2.35.1
 

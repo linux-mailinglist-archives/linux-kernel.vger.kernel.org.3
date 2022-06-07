@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9297540CC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BB454171A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353080AbiFGSkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
+        id S1377534AbiFGU6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349411AbiFGSLg (ORCPT
+        with ESMTP id S1358775AbiFGTxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:11:36 -0400
+        Tue, 7 Jun 2022 15:53:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0640111B8E;
-        Tue,  7 Jun 2022 10:48:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740252B25E;
+        Tue,  7 Jun 2022 11:22:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC7B96171C;
-        Tue,  7 Jun 2022 17:48:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 096EDC385A5;
-        Tue,  7 Jun 2022 17:48:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDE1060DB7;
+        Tue,  7 Jun 2022 18:22:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1371C385A2;
+        Tue,  7 Jun 2022 18:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624087;
-        bh=Fip7iQDSr+SZ/arPL1+2akkIFJzGJcippf1XA2GNJk8=;
+        s=korg; t=1654626146;
+        bh=Q0WqdpuerdelIGApzLLq8ngnGEkv8eTzVhis2qaV8ZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hnF/RbGqt2s+tIai2lEn8jiaPGJ77VhsMRrfcV7b4ORqnSk5v+8HPwgVobZug27ec
-         /+lyAMgS4j0FtT2+fJMgsAWuqoMYR7fKfqCLuKZbgzCv7wq0R/Zy/rChBUiFN2Hd5Z
-         6CiRfkupkPjaMkp2FPbU2PTTfl525msKGc98eqTY=
+        b=egRtGxge0glboQWOv07Hm6wvqmz4i6dRGeMo3EYrXyL8vayJ+7dAcJxPQQ7yfVLPr
+         pvvR4BxTRGWLt2SRexTN9cBEEtSNKNq07j6Y0tbWJ04F2tbuz5VrzIlw5p2Hoh6atC
+         XlHqlvQHiz5AWGXnMCth9AJpbPaKEDdVh3eVnHIE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 200/667] drm/vc4: hvs: Reset muxes at probe time
-Date:   Tue,  7 Jun 2022 18:57:45 +0200
-Message-Id: <20220607164940.798855017@linuxfoundation.org>
+Subject: [PATCH 5.17 274/772] drm/bridge: Fix error handling in analogix_dp_probe
+Date:   Tue,  7 Jun 2022 18:57:46 +0200
+Message-Id: <20220607164957.101269427@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,87 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 8514e6b1f40319e31ac4aa3fbf606796786366c9 ]
+[ Upstream commit 9f15930bb2ef9f031d62ffc49629cbae89137733 ]
 
-By default, the HVS driver will force the HVS output 3 to be muxed to
-the HVS channel 2. However, the Transposer can only be assigned to the
-HVS channel 2, so whenever we try to use the writeback connector, we'll
-mux its associated output (Output 2) to the channel 2.
+In the error handling path, the clk_prepare_enable() function
+call should be balanced by a corresponding 'clk_disable_unprepare()'
+call, as already done in the remove function.
 
-This leads to both the output 2 and 3 feeding from the same channel,
-which is explicitly discouraged in the documentation.
-
-In order to avoid this, let's reset all the output muxes to their reset
-value.
-
-Fixes: 87ebcd42fb7b ("drm/vc4: crtc: Assign output to channel automatically")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220328153659.2382206-2-maxime@cerno.tech
+Fixes: 3424e3a4f844 ("drm: bridge: analogix/dp: split exynos dp driver to bridge directory")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220420011644.25730-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_hvs.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ .../gpu/drm/bridge/analogix/analogix_dp_core.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
-index c8cae10500b9..9d88bfb50c9b 100644
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -605,6 +605,7 @@ static int vc4_hvs_bind(struct device *dev, struct device *master, void *data)
- 	struct vc4_hvs *hvs = NULL;
- 	int ret;
- 	u32 dispctrl;
-+	u32 reg;
+diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+index b7d2e4449cfa..7fe19c56f792 100644
+--- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+@@ -1698,8 +1698,10 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
  
- 	hvs = devm_kzalloc(&pdev->dev, sizeof(*hvs), GFP_KERNEL);
- 	if (!hvs)
-@@ -676,6 +677,26 @@ static int vc4_hvs_bind(struct device *dev, struct device *master, void *data)
+ 	dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR(dp->reg_base))
+-		return ERR_CAST(dp->reg_base);
++	if (IS_ERR(dp->reg_base)) {
++		ret = PTR_ERR(dp->reg_base);
++		goto err_disable_clk;
++	}
  
- 	vc4->hvs = hvs;
+ 	dp->force_hpd = of_property_read_bool(dev->of_node, "force-hpd");
  
-+	reg = HVS_READ(SCALER_DISPECTRL);
-+	reg &= ~SCALER_DISPECTRL_DSP2_MUX_MASK;
-+	HVS_WRITE(SCALER_DISPECTRL,
-+		  reg | VC4_SET_FIELD(0, SCALER_DISPECTRL_DSP2_MUX));
+@@ -1711,7 +1713,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 	if (IS_ERR(dp->hpd_gpiod)) {
+ 		dev_err(dev, "error getting HDP GPIO: %ld\n",
+ 			PTR_ERR(dp->hpd_gpiod));
+-		return ERR_CAST(dp->hpd_gpiod);
++		ret = PTR_ERR(dp->hpd_gpiod);
++		goto err_disable_clk;
+ 	}
+ 
+ 	if (dp->hpd_gpiod) {
+@@ -1731,7 +1734,8 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 
+ 	if (dp->irq == -ENXIO) {
+ 		dev_err(&pdev->dev, "failed to get irq\n");
+-		return ERR_PTR(-ENODEV);
++		ret = -ENODEV;
++		goto err_disable_clk;
+ 	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, dp->irq,
+@@ -1740,11 +1744,15 @@ analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
+ 					irq_flags, "analogix-dp", dp);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to request irq\n");
+-		return ERR_PTR(ret);
++		goto err_disable_clk;
+ 	}
+ 	disable_irq(dp->irq);
+ 
+ 	return dp;
 +
-+	reg = HVS_READ(SCALER_DISPCTRL);
-+	reg &= ~SCALER_DISPCTRL_DSP3_MUX_MASK;
-+	HVS_WRITE(SCALER_DISPCTRL,
-+		  reg | VC4_SET_FIELD(3, SCALER_DISPCTRL_DSP3_MUX));
-+
-+	reg = HVS_READ(SCALER_DISPEOLN);
-+	reg &= ~SCALER_DISPEOLN_DSP4_MUX_MASK;
-+	HVS_WRITE(SCALER_DISPEOLN,
-+		  reg | VC4_SET_FIELD(3, SCALER_DISPEOLN_DSP4_MUX));
-+
-+	reg = HVS_READ(SCALER_DISPDITHER);
-+	reg &= ~SCALER_DISPDITHER_DSP5_MUX_MASK;
-+	HVS_WRITE(SCALER_DISPDITHER,
-+		  reg | VC4_SET_FIELD(3, SCALER_DISPDITHER_DSP5_MUX));
-+
- 	dispctrl = HVS_READ(SCALER_DISPCTRL);
- 
- 	dispctrl |= SCALER_DISPCTRL_ENABLE;
-@@ -683,10 +704,6 @@ static int vc4_hvs_bind(struct device *dev, struct device *master, void *data)
- 		    SCALER_DISPCTRL_DISPEIRQ(1) |
- 		    SCALER_DISPCTRL_DISPEIRQ(2);
- 
--	/* Set DSP3 (PV1) to use HVS channel 2, which would otherwise
--	 * be unused.
--	 */
--	dispctrl &= ~SCALER_DISPCTRL_DSP3_MUX_MASK;
- 	dispctrl &= ~(SCALER_DISPCTRL_DMAEIRQ |
- 		      SCALER_DISPCTRL_SLVWREIRQ |
- 		      SCALER_DISPCTRL_SLVRDEIRQ |
-@@ -700,7 +717,6 @@ static int vc4_hvs_bind(struct device *dev, struct device *master, void *data)
- 		      SCALER_DISPCTRL_DSPEISLUR(1) |
- 		      SCALER_DISPCTRL_DSPEISLUR(2) |
- 		      SCALER_DISPCTRL_SCLEIRQ);
--	dispctrl |= VC4_SET_FIELD(2, SCALER_DISPCTRL_DSP3_MUX);
- 
- 	HVS_WRITE(SCALER_DISPCTRL, dispctrl);
++err_disable_clk:
++	clk_disable_unprepare(dp->clock);
++	return ERR_PTR(ret);
+ }
+ EXPORT_SYMBOL_GPL(analogix_dp_probe);
  
 -- 
 2.35.1

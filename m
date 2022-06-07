@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65BD541D71
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8243541D7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384117AbiFGWOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S1384779AbiFGWQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380094AbiFGVL3 (ORCPT
+        with ESMTP id S1380111AbiFGVLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:29 -0400
+        Tue, 7 Jun 2022 17:11:30 -0400
 Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC2A217639;
-        Tue,  7 Jun 2022 11:53:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40281217890;
+        Tue,  7 Jun 2022 11:53:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654627989; x=1686163989;
+  t=1654627994; x=1686163994;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=DJX1fTXVl6qyeFmIlJ6koAYNPAMtDi8XGkKfp/5Rjkk=;
-  b=OCHIyRs9DtIpE3t6KEdc/Sn6Pj4wgi7d8G0+H6n7SRoJZGft383hbNly
-   IbUtL7MU99R8ipjARhLUzWttPDQHhgcp2Ajzkf6j1+HfY/AMdSn86wL19
-   ubHqOKvF8IMThdDk4PuNAy4tAC3iFaRF54DBB7df+BDWHJKxCmon5U4LS
-   g=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 11:53:07 -0700
+  bh=B/QLFtyjZWjzsp19lvnKhc+TE8eim40eLeEgUFfICJY=;
+  b=JM/CpygC8Mc8T2HvdJSdvO9m8XsMLblKotJQ/vLKK/1NBfSZZ8Un+ME3
+   UTDAdJBXaV/qEcbx0PSANR1FiLPrBaIAN5fpT6rmhXGSy78R+lYuClQL3
+   ulaZvLiHfJHKgpx6v+hgP8oJ9XQIDb0vohHtBvyQTfxtlBMaDyxNbP3+/
+   I=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 07 Jun 2022 11:53:11 -0700
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 07 Jun 2022 11:53:06 -0700
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 07 Jun 2022 11:53:09 -0700
 X-QCInternal: smtphost
 Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 08 Jun 2022 00:22:52 +0530
+  by ironmsg01-blr.qualcomm.com with ESMTP; 08 Jun 2022 00:22:53 +0530
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id 898523F76; Wed,  8 Jun 2022 00:22:51 +0530 (+0530)
+        id 957823F74; Wed,  8 Jun 2022 00:22:52 +0530 (+0530)
 From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         gregkh@linuxfoundation.org, jirislaby@kernel.org,
@@ -43,9 +43,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
 Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
         swboyd@chromium.org,
         Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH 1/2] serial: core: Introduce callback for start_rx and do stop_rx in suspend only if this callback implementation is present.
-Date:   Wed,  8 Jun 2022 00:22:44 +0530
-Message-Id: <1654627965-1461-2-git-send-email-quic_vnivarth@quicinc.com>
+Subject: [PATCH 2/2] tty: serial: qcom-geni-serial: Implement start_rx callback
+Date:   Wed,  8 Jun 2022 00:22:45 +0530
+Message-Id: <1654627965-1461-3-git-send-email-quic_vnivarth@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1654627965-1461-1-git-send-email-quic_vnivarth@quicinc.com>
 References: <1654627965-1461-1-git-send-email-quic_vnivarth@quicinc.com>
@@ -59,62 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In suspend sequence there is a need to perform stop_rx during suspend
-sequence to prevent any asynchronous data over rx line. However this
-can cause problem to drivers which dont do re-start_rx during set_termios.
+In suspend sequence stop_rx will be performed only if implementation for
+start_rx callback is present.
 
-Add new callback start_rx and perform stop_rx only when implementation of
-start_rx is present. Also add call to start_rx in resume sequence so that
-drivers who come across this problem can make use of this framework.
+Set qcom_geni_serial_start_rx as callback for start_rx so that stop_rx is
+performed.
 
-Fixes: c9d2325cdb92 ("serial: core: Do stop_rx in suspend path for console if console_suspend is disabled")
 Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
 ---
- drivers/tty/serial/serial_core.c | 9 ++++++---
- include/linux/serial_core.h      | 1 +
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ drivers/tty/serial/qcom_geni_serial.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 9a85b41..338ebad 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -2214,11 +2214,12 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
- 	/*
- 	 * Nothing to do if the console is not suspending
- 	 * except stop_rx to prevent any asynchronous data
--	 * over RX line. Re-start_rx, when required, is
--	 * done by set_termios in resume sequence
-+	 * over RX line. However ensure that we will be
-+	 * able to Re-start_rx later.
- 	 */
- 	if (!console_suspend_enabled && uart_console(uport)) {
--		uport->ops->stop_rx(uport);
-+		if (uport->ops->start_rx)
-+			uport->ops->stop_rx(uport);
- 		goto unlock;
- 	}
- 
-@@ -2310,6 +2311,8 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
- 		if (console_suspend_enabled)
- 			uart_change_pm(state, UART_PM_STATE_ON);
- 		uport->ops->set_termios(uport, &termios, NULL);
-+		if (!console_suspend_enabled && uport->ops->start_rx)
-+			uport->ops->start_rx(uport);
- 		if (console_suspend_enabled)
- 			console_start(uport->cons);
- 	}
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index cbd5070..657a0fc 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -45,6 +45,7 @@ struct uart_ops {
- 	void		(*unthrottle)(struct uart_port *);
- 	void		(*send_xchar)(struct uart_port *, char ch);
- 	void		(*stop_rx)(struct uart_port *);
-+	void		(*start_rx)(struct uart_port *);
- 	void		(*enable_ms)(struct uart_port *);
- 	void		(*break_ctl)(struct uart_port *, int ctl);
- 	int		(*startup)(struct uart_port *);
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index 4733a23..f8f9506 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -1306,6 +1306,7 @@ static const struct uart_ops qcom_geni_console_pops = {
+ 	.stop_tx = qcom_geni_serial_stop_tx,
+ 	.start_tx = qcom_geni_serial_start_tx,
+ 	.stop_rx = qcom_geni_serial_stop_rx,
++	.start_rx = qcom_geni_serial_start_rx,
+ 	.set_termios = qcom_geni_serial_set_termios,
+ 	.startup = qcom_geni_serial_startup,
+ 	.request_port = qcom_geni_serial_request_port,
 -- 
 Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 

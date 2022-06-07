@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB79D541855
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E80540668
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379629AbiFGVKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S1347338AbiFGRe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359468AbiFGUNE (ORCPT
+        with ESMTP id S1347114AbiFGRZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:13:04 -0400
+        Tue, 7 Jun 2022 13:25:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9177F1C7EE2;
-        Tue,  7 Jun 2022 11:28:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2B21091A2;
+        Tue,  7 Jun 2022 10:24:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5921612EC;
-        Tue,  7 Jun 2022 18:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B26C385A2;
-        Tue,  7 Jun 2022 18:28:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01A5260DDA;
+        Tue,  7 Jun 2022 17:24:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13139C385A5;
+        Tue,  7 Jun 2022 17:24:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626490;
-        bh=T6MiXZpB06tcLxMbXmqVOWVYpW3czv+bImNQtA0WiII=;
+        s=korg; t=1654622644;
+        bh=6uPA5McGTpqd5J8zNC48J/r6flQs3dTkxrg0JPGFxGA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dAgSdHLEC2J/5tO48ZaTWJUPSHq5U8YNvaZ6cdwW0Rxsh+zeJozH9RI4hTZFZaDVP
-         5ajahaSKtaXZi6ToYTk+Hng6IhUQJi7v6v7YEvImMTwMpCd74eEqljqR+agWvUQGeu
-         Z5XjFDsJppSCJ7+yDH3Y6eGoUY7ezraxekjl+ss4=
+        b=Rm1pHFdFAQbPrjxQe0FcD0+krRCcf6kZ9kwqU7c8guN1hNa1Xh4WbkeFtCp3yqDqP
+         bshUblUx9gF5OMCxN1zOE9GQCuD75f/iKWFTGWPo9GwuihXYYovDhU/cOaOO1gR9yq
+         yvFLitE4MQS9obslCP7EXF8opJasrkrbNSxRdSKU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 398/772] sctp: read sk->sk_bound_dev_if once in sctp_rcv()
+Subject: [PATCH 5.10 133/452] drm/vc4: txp: Dont set TXP_VSTART_AT_EOF
 Date:   Tue,  7 Jun 2022 18:59:50 +0200
-Message-Id: <20220607165000.738234353@linuxfoundation.org>
+Message-Id: <20220607164912.525025973@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,47 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit a20ea298071f46effa3aaf965bf9bb34c901db3f ]
+[ Upstream commit 234998df929f14d00cbf2f1e81a7facb69fd9266 ]
 
-sctp_rcv() reads sk->sk_bound_dev_if twice while the socket
-is not locked. Another cpu could change this field under us.
+The TXP_VSTART_AT_EOF will generate a second VSTART signal to the HVS.
+However, the HVS waits for VSTART to enable the FIFO and will thus start
+filling the FIFO before the start of the frame.
 
-Fixes: 0fd9a65a76e8 ("[SCTP] Support SO_BINDTODEVICE socket option on incoming packets.")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: Vlad Yasevich <vyasevich@gmail.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+This leads to corruption at the beginning of the first frame, and
+content from the previous frame at the beginning of the next frames.
+
+Since one VSTART is enough, let's get rid of it.
+
+Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://lore.kernel.org/r/20220328153659.2382206-3-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/input.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/vc4/vc4_txp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sctp/input.c b/net/sctp/input.c
-index 90e12bafdd48..4f43afa8678f 100644
---- a/net/sctp/input.c
-+++ b/net/sctp/input.c
-@@ -92,6 +92,7 @@ int sctp_rcv(struct sk_buff *skb)
- 	struct sctp_chunk *chunk;
- 	union sctp_addr src;
- 	union sctp_addr dest;
-+	int bound_dev_if;
- 	int family;
- 	struct sctp_af *af;
- 	struct net *net = dev_net(skb->dev);
-@@ -169,7 +170,8 @@ int sctp_rcv(struct sk_buff *skb)
- 	 * If a frame arrives on an interface and the receiving socket is
- 	 * bound to another interface, via SO_BINDTODEVICE, treat it as OOTB
- 	 */
--	if (sk->sk_bound_dev_if && (sk->sk_bound_dev_if != af->skb_iif(skb))) {
-+	bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
-+	if (bound_dev_if && (bound_dev_if != af->skb_iif(skb))) {
- 		if (transport) {
- 			sctp_transport_put(transport);
- 			asoc = NULL;
+diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
+index d13502ae973d..d4e750cf3c02 100644
+--- a/drivers/gpu/drm/vc4/vc4_txp.c
++++ b/drivers/gpu/drm/vc4/vc4_txp.c
+@@ -295,7 +295,7 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
+ 	if (WARN_ON(i == ARRAY_SIZE(drm_fmts)))
+ 		return;
+ 
+-	ctrl = TXP_GO | TXP_VSTART_AT_EOF | TXP_EI |
++	ctrl = TXP_GO | TXP_EI |
+ 	       VC4_SET_FIELD(0xf, TXP_BYTE_ENABLE) |
+ 	       VC4_SET_FIELD(txp_fmts[i], TXP_FORMAT);
+ 
 -- 
 2.35.1
 

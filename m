@@ -2,126 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B6853F849
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9472353F845
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiFGIfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S232187AbiFGIgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238240AbiFGIfK (ORCPT
+        with ESMTP id S231558AbiFGIgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:35:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E6CC6E44
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:35:08 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nyUfm-0006dl-1V; Tue, 07 Jun 2022 10:34:46 +0200
-Message-ID: <3d42d774-5e12-f983-d6a1-7f644285b509@pengutronix.de>
-Date:   Tue, 7 Jun 2022 10:34:38 +0200
+        Tue, 7 Jun 2022 04:36:00 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2984C6E44
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:35:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] security:trusted_tpm2: Fix memory leak in
- tpm2_key_encode()
-Content-Language: en-US
-To:     Jianglei Nie <niejianglei2021@163.com>, jejb@linux.ibm.com,
-        jarkko@kernel.org, zohar@linux.ibm.com, dhowells@redhat.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220607074650.432834-1-niejianglei2021@163.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220607074650.432834-1-niejianglei2021@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1654590957;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R7MJnysJhv2VicTlFbpSnJaDDTP55UbDLG13pjV5TKo=;
+        b=pOUun0HAJt+xrnztwOzQLzcAN8/1Xyjh073hiDp/G9vamf3ljV26azZCPGtxiFZYYD6ZXe
+        /4bOLNFAcghNbYmS4u2M101aBx5P9Hw0Cm2y0G5gInhuRehAd+We/TKdchNEfqsgE4mYfr
+        307wqws5QSPixn4BpqIVG3queAENb8I=
+Date:   Tue, 07 Jun 2022 08:35:56 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <9150a4ffa0ff94ab4697d615c60ed9b4@linux.dev>
+Subject: Re: [PATCH] sched/deadline: Use proc_douintvec_minmax() limit
+ minimum value
+To:     "Daniel Bristot de Oliveira" <bristot@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, bsegall@google.com, vschneid@redhat.com,
+        rostedt@goodmis.org, mgorman@suse.de, vincent.guittot@linaro.org
+In-Reply-To: <46b7ca44-a338-e1c1-e005-326e89576211@redhat.com>
+References: <46b7ca44-a338-e1c1-e005-326e89576211@redhat.com>
+ <20220513024109.648471-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jianglei,
-
-On 07.06.22 09:46, Jianglei Nie wrote:
-> The function allocates a memory chunk for scratch by kmalloc(), but
-> it is never freed through the function, which leads to a memory leak.
-> Handle those cases with kfree().
-
-Thanks for your patch.
-
-Shouldn't you free scratch before successful return too?
-
-I haven't looked too deeply, but it looks like scratch is indeed
-scratch space and data written to it are memcpy'd elsewhere before
-the function returns and no pointer derived from it survives after
-function return.
-
-If this is indeed the case, consider also to switch this to a goto out.
-
-Cheers,
-Ahmad
-  
-
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  security/keys/trusted-keys/trusted_tpm2.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> index 0165da386289..dc9efd6c8b14 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -57,8 +57,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  		unsigned char bool[3], *w = bool;
->  		/* tag 0 is emptyAuth */
->  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
-> -		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-> +		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-> +			kfree(scratch);
->  			return PTR_ERR(w);
-> +		}
->  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
->  	}
->  
-> @@ -69,8 +71,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  	 * trigger, so if it does there's something nefarious going on
->  	 */
->  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-> -		 "BUG: scratch buffer is too small"))
-> +		 "BUG: scratch buffer is too small")) {
-> +		kfree(scratch);
->  		return -EINVAL;
-> +	}
->  
->  	work = asn1_encode_integer(work, end_work, options->keyhandle);
->  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-> @@ -79,8 +83,10 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  	work1 = payload->blob;
->  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
->  				     scratch, work - scratch);
-> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-> +		kfree(scratch);
->  		return PTR_ERR(work1);
-> +	}
->  
->  	return work1 - payload->blob;
->  }
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+June 7, 2022 3:55 PM, "Daniel Bristot de Oliveira" <bristot@redhat.com> w=
+rote:=0A=0A> Hi Yajun=0A> =0A> On 5/13/22 04:41, Yajun Deng wrote:=0A> =
+=0A>> proc_dointvec() is not applicable for unsigned integer, use=0A>> pr=
+oc_douintvec_minmax() limit minimum value.=0A> =0A> I understand your pat=
+ch, but your log message is somehow incomplete.=0A> =0A> Could you expand=
+ on that, showing the problem using an example, and then how you=0A> see =
+it fixed?=0A> =0A=0AThis patch isn't a fix. It's just an optimization for=
+ match data and proc_handler in struct ctl_table.=0A=0A> Also, could you =
+please add the Fixes: tag so this patch can land on stable trees?=0A> =0A=
+=0AThis statement 'if (period < min || period > max)' in __checkparam_dl(=
+) will work fine even if there hasn't this patch.=0ASo this patch may not=
+ need land on stable trees.=0A=0A> -- Daniel

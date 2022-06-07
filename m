@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B464540436
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D8154055F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345304AbiFGQ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S1346503AbiFGRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344350AbiFGQ6z (ORCPT
+        with ESMTP id S1345942AbiFGRVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:58:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B3FFF3395;
-        Tue,  7 Jun 2022 09:58:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D96A314BF;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A4FF23F800;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-From:   Yoan Picchi <yoan.picchi@arm.com>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 2/2] Removes the x86 dependency on the QAT drivers
-Date:   Tue,  7 Jun 2022 16:58:40 +0000
-Message-Id: <20220607165840.66931-3-yoan.picchi@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220607165840.66931-1-yoan.picchi@arm.com>
-References: <20220607165840.66931-1-yoan.picchi@arm.com>
+        Tue, 7 Jun 2022 13:21:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607D310654C;
+        Tue,  7 Jun 2022 10:20:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF786009B;
+        Tue,  7 Jun 2022 17:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 010BBC385A5;
+        Tue,  7 Jun 2022 17:20:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654622453;
+        bh=4XChG8Mn9Ckp+o5xpIAJPICimju0Ixs9wovnr8tIqy0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Tsfjnsy0jIzN707/xPC9xCUvKd6Ah1Gsh8KZs9DxvdO2fZYMfpLCwll+Qp4iDoiXc
+         ey/endWYF+43NEYWA+bEgdH37s6Nq+ElW6Ci0/tQtxb90JQR3WH8qO8Fdd0fYJ5Qzy
+         TLDk+z9kCJw/P2vsi3AEY4FNTZLVOnvIO/pxc0rY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 063/452] mlxsw: spectrum_dcb: Do not warn about priority changes
+Date:   Tue,  7 Jun 2022 18:58:40 +0200
+Message-Id: <20220607164910.427782715@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,82 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This dependency looks outdated. After the previous patch, we have been able
-to use this driver to encrypt some data and to create working VF on arm64.
-We have not tested it yet on any big endian machine, hence the new dependency
+From: Petr Machata <petrm@nvidia.com>
 
-Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
+[ Upstream commit b6b584562cbe7dc357083459d6dd5b171e12cadb ]
+
+The idea behind the warnings is that the user would get warned in case when
+more than one priority is configured for a given DSCP value on a netdevice.
+
+The warning is currently wrong, because dcb_ieee_getapp_mask() returns
+the first matching entry, not all of them, and the warning will then claim
+that some priority is "current", when in fact it is not.
+
+But more importantly, the warning is misleading in general. Consider the
+following commands:
+
+ # dcb app flush dev swp19 dscp-prio
+ # dcb app add dev swp19 dscp-prio 24:3
+ # dcb app replace dev swp19 dscp-prio 24:2
+
+The last command will issue the following warning:
+
+ mlxsw_spectrum3 0000:07:00.0 swp19: Ignoring new priority 2 for DSCP 24 in favor of current value of 3
+
+The reason is that the "replace" command works by first adding the new
+value, and then removing all old values. This is the only way to make the
+replacement without causing the traffic to be prioritized to whatever the
+chip defaults to. The warning is issued in response to adding the new
+priority, and then no warning is shown when the old priority is removed.
+The upshot is that the canonical way to change traffic prioritization
+always produces a warning about ignoring the new priority, but what gets
+configured is in fact what the user intended.
+
+An option to just emit warning every time that the prioritization changes
+just to make it clear that it happened is obviously unsatisfactory.
+
+Therefore, in this patch, remove the warnings.
+
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/qat/Kconfig | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/drivers/crypto/qat/Kconfig b/drivers/crypto/qat/Kconfig
-index 4b90c0f22b03..afc28059274e 100644
---- a/drivers/crypto/qat/Kconfig
-+++ b/drivers/crypto/qat/Kconfig
-@@ -17,7 +17,7 @@ config CRYPTO_DEV_QAT
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+index 5f92b1691360..aff6d4f35cd2 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+@@ -168,8 +168,6 @@ static int mlxsw_sp_dcbnl_ieee_setets(struct net_device *dev,
+ static int mlxsw_sp_dcbnl_app_validate(struct net_device *dev,
+ 				       struct dcb_app *app)
+ {
+-	int prio;
+-
+ 	if (app->priority >= IEEE_8021QAZ_MAX_TCS) {
+ 		netdev_err(dev, "APP entry with priority value %u is invalid\n",
+ 			   app->priority);
+@@ -183,17 +181,6 @@ static int mlxsw_sp_dcbnl_app_validate(struct net_device *dev,
+ 				   app->protocol);
+ 			return -EINVAL;
+ 		}
+-
+-		/* Warn about any DSCP APP entries with the same PID. */
+-		prio = fls(dcb_ieee_getapp_mask(dev, app));
+-		if (prio--) {
+-			if (prio < app->priority)
+-				netdev_warn(dev, "Choosing priority %d for DSCP %d in favor of previously-active value of %d\n",
+-					    app->priority, app->protocol, prio);
+-			else if (prio > app->priority)
+-				netdev_warn(dev, "Ignoring new priority %d for DSCP %d in favor of current value of %d\n",
+-					    app->priority, app->protocol, prio);
+-		}
+ 		break;
  
- config CRYPTO_DEV_QAT_DH895xCC
- 	tristate "Support for Intel(R) DH895xCC"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) DH895xcc with Intel(R) QuickAssist Technology
-@@ -28,7 +28,7 @@ config CRYPTO_DEV_QAT_DH895xCC
- 
- config CRYPTO_DEV_QAT_C3XXX
- 	tristate "Support for Intel(R) C3XXX"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) C3xxx with Intel(R) QuickAssist Technology
-@@ -39,7 +39,7 @@ config CRYPTO_DEV_QAT_C3XXX
- 
- config CRYPTO_DEV_QAT_C62X
- 	tristate "Support for Intel(R) C62X"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) C62x with Intel(R) QuickAssist Technology
-@@ -50,7 +50,7 @@ config CRYPTO_DEV_QAT_C62X
- 
- config CRYPTO_DEV_QAT_4XXX
- 	tristate "Support for Intel(R) QAT_4XXX"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select CRYPTO_DEV_QAT
- 	help
- 	  Support for Intel(R) QuickAssist Technology QAT_4xxx
-@@ -61,7 +61,7 @@ config CRYPTO_DEV_QAT_4XXX
- 
- config CRYPTO_DEV_QAT_DH895xCCVF
- 	tristate "Support for Intel(R) DH895xCC Virtual Function"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select PCI_IOV
- 	select CRYPTO_DEV_QAT
- 
-@@ -74,7 +74,7 @@ config CRYPTO_DEV_QAT_DH895xCCVF
- 
- config CRYPTO_DEV_QAT_C3XXXVF
- 	tristate "Support for Intel(R) C3XXX Virtual Function"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select PCI_IOV
- 	select CRYPTO_DEV_QAT
- 	help
-@@ -86,7 +86,7 @@ config CRYPTO_DEV_QAT_C3XXXVF
- 
- config CRYPTO_DEV_QAT_C62XVF
- 	tristate "Support for Intel(R) C62X Virtual Function"
--	depends on X86 && PCI
-+	depends on PCI && !CPU_BIG_ENDIAN
- 	select PCI_IOV
- 	select CRYPTO_DEV_QAT
- 	help
+ 	case IEEE_8021QAZ_APP_SEL_ETHERTYPE:
 -- 
-2.25.1
+2.35.1
+
+
 

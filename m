@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A0654223F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1EDF542323
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443337AbiFHA54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S1443092AbiFHCBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1578040AbiFGXb1 (ORCPT
+        with ESMTP id S1588847AbiFGXzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:31:27 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5414351A2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:00:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 7 Jun 2022 19:55:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05E632509F7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654639264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bMoHrYtckfc4pwaLoUCwp8YR9pNNBcpYBih/HMrWY2U=;
+        b=WoaJ3nuOliRY6bl+dXdNOuaSFgE6jE7NLallflqX+iY3C+l0mXYGN+yUbfWmdGFys+B8tf
+        KBOmmetJ1U0GMTPHKsNqVtGRH1EWqOcm6FzHrac4oVC2BgqYBE16S4CTqYKv4IKI7V8VzM
+        bQnll1YuE4O/FmZMrzXVUFT9XsiLfRA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-V_ZYYpPZOn6FNOhZnUMt-g-1; Tue, 07 Jun 2022 18:01:01 -0400
+X-MC-Unique: V_ZYYpPZOn6FNOhZnUMt-g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 22E9ACE2018
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 22:00:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CD3C385A2;
-        Tue,  7 Jun 2022 22:00:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654639200;
-        bh=8sL/rpVGiBwSPrjgFyVx4IBH9TqPDfomNd6mM8hy9kU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YyEmDOruYF7lVaZO4mPnA3SXKSgcKPOjb3an5AivFk4EHvhDPF0FP5i78f89hDw42
-         WQh31V72ZEffZrfbpmy7yrLeeHt/26dVf29QXB0juYr2UiuWp/21DT4UlVdrOdeaEl
-         xdHSPld+OLAEZ6A0kLMws3s6L7gq0297zHXhPM5w=
-Date:   Tue, 7 Jun 2022 14:59:59 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     HORIGUCHI =?UTF-8?B?TkFPWUE=?= (=?UTF-8?B?5aCA5Y+jIOebtOS5nw==?=) 
-        <naoya.horiguchi@nec.com>, zhenwei pi <pizhenwei@bytedance.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Wu Fengguang <fengguang.wu@intel.com>
-Subject: Re: [PATCH] mm/memory-failure: don't allow to unpoison hw corrupted
- page
-Message-Id: <20220607145959.785e54c752f373bcc283732b@linux-foundation.org>
-In-Reply-To: <5e7abb3f-56e7-0343-a678-749b6f5238a2@redhat.com>
-References: <20220604103229.3378591-1-pizhenwei@bytedance.com>
-        <20220604115616.b7d5912ac5a37db608f67b78@linux-foundation.org>
-        <584eedd3-9369-9df1-39e2-62e331abdcc0@bytedance.com>
-        <20220606043202.GA1328953@hori.linux.bs1.fc.nec.co.jp>
-        <3b58adbf-a8b2-8dba-71a7-123ba3850c10@bytedance.com>
-        <20220606091503.GA1337789@hori.linux.bs1.fc.nec.co.jp>
-        <5e7abb3f-56e7-0343-a678-749b6f5238a2@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B28A1C161AF;
+        Tue,  7 Jun 2022 22:01:01 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.9.106])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 04CF11415100;
+        Tue,  7 Jun 2022 22:01:01 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id BB16D220882; Tue,  7 Jun 2022 18:01:00 -0400 (EDT)
+Date:   Tue, 7 Jun 2022 18:01:00 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu,
+        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v4 1/1] Allow non-extending parallel direct writes on the
+ same file.
+Message-ID: <Yp/KnF0oSIsk0SYd@redhat.com>
+References: <20220605072201.9237-1-dharamhans87@gmail.com>
+ <20220605072201.9237-2-dharamhans87@gmail.com>
+ <Yp/CYjONZHoekSVA@redhat.com>
+ <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,39 +67,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 14:36:00 +0200 David Hildenbrand <david@redhat.com> wrote:
-
-> On 06.06.22 11:15, HORIGUCHI NAOYA(堀口 直也) wrote:
-> >>>    [  917.864266]  <TASK>
-> >>>    [  917.864961]  clear_huge_page+0x147/0x270
-> >>>    [  917.866236]  hugetlb_fault+0x440/0xad0
-> >>>    [  917.867366]  handle_mm_fault+0x270/0x290
-> >>>    [  917.868532]  do_user_addr_fault+0x1c3/0x680
-> >>>    [  917.869768]  exc_page_fault+0x6c/0x160
-> >>>    [  917.870912]  ? asm_exc_page_fault+0x8/0x30
-> >>>    [  917.872082]  asm_exc_page_fault+0x1e/0x30
-> >>>    [  917.873220] RIP: 0033:0x7f2aeb8ba367
-> >>>
-> >>> I don't think of a workaround for this now ...
-> >>>
-> >>
-> >> Could you please tell me how to reproduce this issue?
-> > 
-> > You are familiar with qemu-monitor-command, so the following procedure
-> > should work for you:
-> > 
-> >   - run a process using hugepages on your VM,
-> >   - check the guest physical address of the hugepage (page-types.c is helpful for this),
-> >   - inject a MCE with virsh qemu-monitor-command on the guest physical address, then
-> >   - unpoison the injected physical address.
+On Tue, Jun 07, 2022 at 11:42:16PM +0200, Bernd Schubert wrote:
 > 
-> That's triggered via debugfs / HWPOISON_INJECT, right?
 > 
-> That's a DEBUG_KERNEL option, so I'm not 100% sure if we really want to
-> cc stable.
+> On 6/7/22 23:25, Vivek Goyal wrote:
+> > On Sun, Jun 05, 2022 at 12:52:00PM +0530, Dharmendra Singh wrote:
+> > > From: Dharmendra Singh <dsingh@ddn.com>
+> > > 
+> > > In general, as of now, in FUSE, direct writes on the same file are
+> > > serialized over inode lock i.e we hold inode lock for the full duration
+> > > of the write request. I could not found in fuse code a comment which
+> > > clearly explains why this exclusive lock is taken for direct writes.
+> > > 
+> > > Following might be the reasons for acquiring exclusive lock but not
+> > > limited to
+> > > 1) Our guess is some USER space fuse implementations might be relying
+> > >     on this lock for seralization.
+> > 
+> > Hi Dharmendra,
+> > 
+> > I will just try to be devil's advocate. So if this is server side
+> > limitation, then it is possible that fuse client's isize data in
+> > cache is stale. For example, filesystem is shared between two
+> > clients.
+> > 
+> > - File size is 4G as seen by client A.
+> > - Client B truncates the file to 2G.
+> > - Two processes in client A, try to do parallel direct writes and will
+> >    be able to proceed and server will get two parallel writes both
+> >    extending file size.
+> > 
+> > I can see that this can happen with virtiofs with cache=auto policy.
+> > 
+> > IOW, if this is a fuse server side limitation, then how do you ensure
+> > that fuse kernel's i_size definition is not stale.
+> 
+> Hi Vivek,
+> 
+> I'm sorry, to be sure, can you explain where exactly a client is located for
+> you? For us these are multiple daemons linked to libufse - which you seem to
+> call 'server' Typically these clients are on different machines. And servers
+> are for us on the other side of the network - like an NFS server.
 
-Sure, it's hardly a must-have.  But let's also take the patch
-complexity&risk into account.  This is one dang simple patch.
+Hi Bernd,
 
-Or is it.  Should these things be happening outside mf_mutex?  What the
-heck is the role of mf_mutex anyway?
+Agreed, terminology is little confusing. I am calling "fuse kernel" as
+client and fuse daemon (user space) as server. This server in turn might
+be the client to another network filesystem and real files might be
+served by that server on network.
+
+So for simple virtiofs case, There can be two fuse daemons (virtiofsd
+instances) sharing same directory (either on local filesystem or on
+a network filesystem).
+
+> 
+> So now while I'm not sure what you mean with 'client', I'm wondering about
+> two generic questions
+> 
+> a) I need to double check, but we were under the assumption the code in
+> question is a direct-io code path. I assume cache=auto would use the page
+> cache and should not be effected?
+
+By default cache=auto use page cache but if application initiates a
+direct I/O, it should use direct I/O path.
+
+> 
+> b) How would the current lock help for distributed clients? Or multiple fuse
+> daemons (what you seem to call server) per local machine?
+
+I thought that current lock is trying to protect fuse kernel side and
+assumed fuse server (daemon linked to libfuse) can handle multiple
+parallel writes. Atleast that's how I thought about the things. I might
+be wrong. I am not sure.
+
+> 
+> For a single vfs mount point served by fuse, truncate should take the
+> exclusive lock and parallel writes the shared lock - I don't see a problem
+> here either.
+
+Agreed that this does not seem like a problem from fuse kernel side. I was
+just questioning that where parallel direct writes become a problem. And
+answer I heard was that it probably is fuse server (daemon linked with
+libfuse) which is expecting the locking. And if that's the case, this
+patch is not fool proof. It is possible that file got truncated from
+a different client (from a different fuse daemon linked with libfuse).
+
+So say A is first fuse daemon and B is another fuse daemon. Both are
+clients to some network file system as NFS.
+
+- Fuse kernel for A, sees file size as 4G.
+- fuse daemon B truncates the file to size 2G.
+- Fuse kernel for A, has stale cache, and can send two parallel writes
+  say at 3G and 3.5G offset.
+- Fuser daemon A might not like it.(Assuming this is fuse daemon/user
+  space side limitation).
+
+I hope I am able to explain my concern. I am not saying that this patch
+is not good. All I am saying that fuse daemon (user space) can not rely
+on that it will never get two parallel direct writes which can be beyond
+the file size. If fuse kernel cache is stale, it can happen. Just trying
+to set the expectations right.
+
+Thanks
+Vivek
+

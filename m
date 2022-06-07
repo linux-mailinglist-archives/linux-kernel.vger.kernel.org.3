@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4955C541BB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79257541BBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383203AbiFGVwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S1383605AbiFGVxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377130AbiFGU5d (ORCPT
+        with ESMTP id S1377506AbiFGU7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:57:33 -0400
+        Tue, 7 Jun 2022 16:59:43 -0400
 Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C395201FF3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:44:21 -0700 (PDT)
-X-ASG-Debug-ID: 1654627459-1cf43917f3396680001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id ytKMQdwzzCTN1huP; Tue, 07 Jun 2022 14:44:19 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BB366C8A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:45:00 -0700 (PDT)
+X-ASG-Debug-ID: 1654627498-1cf43917f33966c0001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id QrVV0e8kIBE4Cwz7; Tue, 07 Jun 2022 14:44:58 -0400 (EDT)
 X-Barracuda-Envelope-From: tonyb@cybernetics.com
 X-ASG-Whitelist: Client
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=ko90FEQrFc3kr/EXmZEbhsh++NujIvq49Z2hdvGupnI=;
+        bh=btLFiUXlrqByYR1DIyy+G6nrdsPdAmYyLow6+1WajEE=;
         h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=WUGhF+zc7hcw6JoFhMVn
-        sGaBwqMKrtT0LAsXqUcUj76iU06x+W8kn/yVArt8p4dHAKYUv4FvRp/bnqdKNITJ8eZ4h4+G4cdWa
-        MiUopTVPkmkKCknVE11Zis2M2WKnboszBLWCavFSHLU31NMgSYjzMIvvxF7fzNbz4pg+2PoWvM=
+        Content-Language:Subject:MIME-Version:Date:Message-ID; b=kMCkFAqaqzd846YJ+lfv
+        P4h/NJYwHpSNVC1LQlF8sCQD9tdRu8eU6Qyj6nA3UeEKS+Q9SlxZQGnGHONgBLNRjIqoLyhLGMtJU
+        PX5uv5AZczFROzSnYLENhV5Gvejwrk80VJPKT5Zp3M2xPaJ0IR+U/zBt+GENsvWIAsbrV1uxdI=
 Received: from [10.157.2.224] (HELO [192.168.200.1])
   by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 11859456; Tue, 07 Jun 2022 14:44:19 -0400
-Message-ID: <06f83492-1eaf-16c4-31b0-1f148995ee59@cybernetics.com>
-Date:   Tue, 7 Jun 2022 14:44:18 -0400
+  with ESMTPS id 11859466; Tue, 07 Jun 2022 14:44:58 -0400
+Message-ID: <b1100f23-7a75-c5a0-851c-42d62554efa2@cybernetics.com>
+Date:   Tue, 7 Jun 2022 14:44:58 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: [PATCH v6 07/11] dmapool: ignore init_on_free when DMAPOOL_DEBUG
- enabled
+Subject: [PATCH v6 08/11] dmapool: speedup DMAPOOL_DEBUG with init_on_alloc
 Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v6 07/11] dmapool: ignore init_on_free when DMAPOOL_DEBUG
- enabled
+X-ASG-Orig-Subj: [PATCH v6 08/11] dmapool: speedup DMAPOOL_DEBUG with init_on_alloc
 From:   Tony Battersby <tonyb@cybernetics.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
@@ -51,11 +49,11 @@ In-Reply-To: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1654627459
+X-Barracuda-Start-Time: 1654627498
 X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
 X-Barracuda-BRTS-Status: 1
 X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 1450
+X-Barracuda-Scan-Msg-Size: 688
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,47 +63,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two cases:
-
-1) In the normal case that the memory is being freed correctly, then
-DMAPOOL_DEBUG will memset the memory anyway, so speed thing up by
-avoiding a double-memset of the same memory.
-
-2) In the abnormal case that DMAPOOL_DEBUG detects that a driver passes
-incorrect parameters to dma_pool_free() (e.g. double-free, invalid
-free, mismatched vaddr/dma, etc.), then that is a kernel bug, and we
-don't want to clear the passed-in possibly-invalid memory pointer
-because we can't be sure that the memory is really free.  So don't clear
-it just because init_on_free=1.
+Avoid double-memset of the same allocated memory in dma_pool_alloc()
+when both DMAPOOL_DEBUG is enabled and init_on_alloc=1.
 
 Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
 ---
- mm/dmapool.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ mm/dmapool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/dmapool.c b/mm/dmapool.c
-index facdb3571976..44038089a41a 100644
+index 44038089a41a..c7ec38cb4631 100644
 --- a/mm/dmapool.c
 +++ b/mm/dmapool.c
-@@ -406,8 +406,6 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
+@@ -356,7 +356,7 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
+ 			break;
+ 		}
  	}
- 
- 	offset = vaddr - page->vaddr;
--	if (want_init_on_free())
--		memset(vaddr, 0, pool->size);
- #ifdef	DMAPOOL_DEBUG
- 	if ((dma - page->dma) != offset) {
- 		spin_unlock_irqrestore(&pool->lock, flags);
-@@ -452,6 +450,9 @@ void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t dma)
- 			goto freelist_corrupt;
- 	}
- 	memset(vaddr, POOL_POISON_FREED, pool->size);
-+#else
-+	if (want_init_on_free())
-+		memset(vaddr, 0, pool->size);
+-	if (!(mem_flags & __GFP_ZERO))
++	if (!want_init_on_alloc(mem_flags))
+ 		memset(retval, POOL_POISON_ALLOCATED, pool->size);
  #endif
- 
- 	page->in_use--;
+ 	spin_unlock_irqrestore(&pool->lock, flags);
 -- 
 2.25.1
 

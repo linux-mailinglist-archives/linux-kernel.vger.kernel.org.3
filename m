@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AA5541845
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E195540E79
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379410AbiFGVJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        id S1354992AbiFGS5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359562AbiFGUMO (ORCPT
+        with ESMTP id S1352389AbiFGSRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:12:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7AF5519;
-        Tue,  7 Jun 2022 11:27:46 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB9DF59C;
+        Tue,  7 Jun 2022 10:51:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9969A611B9;
-        Tue,  7 Jun 2022 18:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A77E2C385A5;
-        Tue,  7 Jun 2022 18:27:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F3FCB8233E;
+        Tue,  7 Jun 2022 17:51:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057FDC385A5;
+        Tue,  7 Jun 2022 17:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626465;
-        bh=QxkPBRlgWuBK974BuGqdmJ+CavTtshWMMqWkEePZrJg=;
+        s=korg; t=1654624291;
+        bh=4crKvbaRKfRDh58CHafqCLlcae/1alFJ2GNdRhB1c08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LwXlXjZb1WEVJUeSOQJ3B55Ui1Eo/XvTTc5OP7yMlwlKBaw3YziCgn+uT8/M71wKh
-         9weqIVqN4EmyqrX9rCvhFA4pUoxqyvK9BCN2cuiKF1e1BGXHw4dLBEC7THWgMN3ij8
-         FjOnacoGH0muTE2VV8jmBgd4HWGcMaZcWJSKbQBU=
+        b=CnaitzvPB3EMxYq/hfkLU10T9JDT/StjLYkksdYox4UZbPmiLU2vHRHolMmY+f3rs
+         zOrWRGtTqjRkQimwu22x5mNoDQtfjI5XGygxU4ENaYMSotFwhNKAFso4SKC9BTduri
+         ki5eGajXxOv7LzjGMC0xi4vdRk8fLh6YaOf5YHi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 347/772] selftests/bpf: Prevent skeleton generation race
-Date:   Tue,  7 Jun 2022 18:58:59 +0200
-Message-Id: <20220607164959.247201198@linuxfoundation.org>
+Subject: [PATCH 5.15 275/667] kunit: fix debugfs code to use enum kunit_status, not bool
+Date:   Tue,  7 Jun 2022 18:59:00 +0200
+Message-Id: <20220607164943.034042715@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Daniel Latypov <dlatypov@google.com>
 
-[ Upstream commit 1e2666e029e5cc2b81dbd7c85af5bcc8c80524e0 ]
+[ Upstream commit 38289a26e1b8a37755f3e07056ca416c1ee2a2e8 ]
 
-Prevent "classic" and light skeleton generation rules from stomping on
-each other's toes due to the use of the same <obj>.linked{1,2,3}.o
-naming pattern. There is no coordination and synchronizataion between
-.skel.h and .lskel.h rules, so they can easily overwrite each other's
-intermediate object files, leading to errors like:
+Commit 6d2426b2f258 ("kunit: Support skipped tests") switched to using
+`enum kunit_status` to track the result of running a test/suite since we
+now have more than just pass/fail.
 
-  /bin/sh: line 1: 170928 Bus error               (core dumped)
-  /data/users/andriin/linux/tools/testing/selftests/bpf/tools/sbin/bpftool gen skeleton
-  /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.linked3.o
-  name test_ksyms_weak
-  > /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h
-  make: *** [Makefile:507: /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h] Error 135
-  make: *** Deleting file '/data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h'
+This callsite wasn't updated, silently converting to enum to a bool and
+then back.
 
-Fix by using different suffix for light skeleton rule.
-
-Fixes: c48e51c8b07a ("bpf: selftests: Add selftests for module kfunc support")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220509004148.1801791-2-andrii@kernel.org
+Fixes: 6d2426b2f258 ("kunit: Support skipped tests")
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ lib/kunit/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 42ffc24e9e71..dbd95de87e88 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -407,11 +407,11 @@ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index b71db0abc12b..1048ef1b8d6e 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -52,7 +52,7 @@ static void debugfs_print_result(struct seq_file *seq,
+ static int debugfs_print_results(struct seq_file *seq, void *v)
+ {
+ 	struct kunit_suite *suite = (struct kunit_suite *)seq->private;
+-	bool success = kunit_suite_has_succeeded(suite);
++	enum kunit_status success = kunit_suite_has_succeeded(suite);
+ 	struct kunit_case *test_case;
  
- $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
--	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
--	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$<
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o)
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o)
-+	$(Q)diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
-+	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.llinked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
- 
- $(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
+ 	if (!suite || !suite->log)
 -- 
 2.35.1
 

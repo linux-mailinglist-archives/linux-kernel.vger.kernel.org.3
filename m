@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41681541FA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8658542002
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387019AbiFGWtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S1443995AbiFHAE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381413AbiFGVkm (ORCPT
+        with ESMTP id S1357201AbiFGVq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:40:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B8E23281B;
-        Tue,  7 Jun 2022 12:06:52 -0700 (PDT)
+        Tue, 7 Jun 2022 17:46:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A26237C8F;
+        Tue,  7 Jun 2022 12:07:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BA9A6184D;
-        Tue,  7 Jun 2022 19:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 811E4C385A2;
-        Tue,  7 Jun 2022 19:06:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2585861768;
+        Tue,  7 Jun 2022 19:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD9EC385A5;
+        Tue,  7 Jun 2022 19:07:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628810;
-        bh=WEl8kOHUEiPWdwBDQUAps0GyCtZmVnhXRwz9neMn+oc=;
+        s=korg; t=1654628871;
+        bh=VW9StuK/MuTT44RE+bcIPvKLk3UTKI9aPZ2cW+nfRCw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ws5kc7DwCwjMiztbcTMwetGxL1v/Ez5RQ4z57KLarbf7mDC355H7Tfz8SDahrVmzD
-         m6Icd2UOmYfA01XjO0Nyuj0GVkakOIBKOlcAezyznbqaWtwqVCtH7cshbnTI7itIX2
-         BvnQLtPkQo3O8j6cMsZVV6jALcfaKiBUbQtOJYf0=
+        b=y3GAtwy4pV+bhVp7pdzTgyU8gMy/HYCrEQjAADpenWKwnWrgrc8gdQljlSny4ErzR
+         14v1HkO3WwwmA1SEESMQzFoCQcDmEAFHOfdLjwjJekcpHykseAqt/Sx/YJZJzYJYL9
+         rMdf0/Gjjz3DEpQrQOPOJ4cuLjJIykYNUsTHpxto=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yake Yang <yake.yang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Yunfei Dong <yunfei.dong@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 457/879] Bluetooth: btmtksdio: fix possible FW initialization failure
-Date:   Tue,  7 Jun 2022 18:59:35 +0200
-Message-Id: <20220607165016.136929533@linuxfoundation.org>
+Subject: [PATCH 5.18 459/879] media: mediatek: vcodec: Fix v4l2 compliance decoder cmd test fail
+Date:   Tue,  7 Jun 2022 18:59:37 +0200
+Message-Id: <20220607165016.196501276@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,59 +58,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+From: Yunfei Dong <yunfei.dong@mediatek.com>
 
-[ Upstream commit 7469720563e01f479ec5afe06bd6f440f965d523 ]
+[ Upstream commit 08a83828825cbf3bc2c9f582a4cd4da9f40c77d6 ]
 
-According to FW advised sequence, mt7921s need to re-acquire privilege
-immediately after the firmware download is complete before normal running.
-Otherwise, it is still possible the bus may be stuck in an abnormal status
-that causes FW initialization failure in the current driver.
+Will return -EINVAL using standard framework api when test stateless
+decoder with cmd VIDIOC_(TRY)DECODER_CMD. Disable them to adjust v4l2
+compliance test for user driver(GStreamer/Chrome) won't use decoder cmd.
 
-Fixes: 752aea58489f ("Bluetooth: mt7921s: fix bus hang with wrong privilege")
-Co-developed-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Yake Yang <yake.yang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/btmtksdio.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ .../media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 13 +------------
+ .../platform/mediatek/vcodec/mtk_vcodec_dec_drv.c   |  3 +++
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index 4ae6631a7c29..5d13c1f61bd3 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -864,6 +864,14 @@ static int mt79xx_setup(struct hci_dev *hdev, const char *fwname)
- 		return err;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 130ecef2e766..c8ee5e2b4f69 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -47,14 +47,7 @@ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
+ static int vidioc_try_decoder_cmd(struct file *file, void *priv,
+ 				struct v4l2_decoder_cmd *cmd)
+ {
+-	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
+-
+-	/* Use M2M stateless helper if relevant */
+-	if (ctx->dev->vdec_pdata->uses_stateless_api)
+-		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
+-								cmd);
+-	else
+-		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
++	return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
+ }
+ 
+ 
+@@ -69,10 +62,6 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Use M2M stateless helper if relevant */
+-	if (ctx->dev->vdec_pdata->uses_stateless_api)
+-		return v4l2_m2m_ioctl_stateless_decoder_cmd(file, priv, cmd);
+-
+ 	mtk_v4l2_debug(1, "decoder cmd=%u", cmd->cmd);
+ 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
+ 				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index 128edcf541e1..fe7b2f1739b1 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -400,6 +400,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
  	}
  
-+	err = btmtksdio_fw_pmctrl(bdev);
-+	if (err < 0)
-+		return err;
+ 	if (dev->vdec_pdata->uses_stateless_api) {
++		v4l2_disable_ioctl(vfd_dec, VIDIOC_DECODER_CMD);
++		v4l2_disable_ioctl(vfd_dec, VIDIOC_TRY_DECODER_CMD);
 +
-+	err = btmtksdio_drv_pmctrl(bdev);
-+	if (err < 0)
-+		return err;
-+
- 	/* Enable Bluetooth protocol */
- 	wmt_params.op = BTMTK_WMT_FUNC_CTRL;
- 	wmt_params.flag = 0;
-@@ -1109,14 +1117,6 @@ static int btmtksdio_setup(struct hci_dev *hdev)
- 		if (err < 0)
- 			return err;
- 
--		err = btmtksdio_fw_pmctrl(bdev);
--		if (err < 0)
--			return err;
--
--		err = btmtksdio_drv_pmctrl(bdev);
--		if (err < 0)
--			return err;
--
- 		/* Enable SCO over I2S/PCM */
- 		err = btmtksdio_sco_setting(hdev);
- 		if (err < 0) {
+ 		dev->mdev_dec.dev = &pdev->dev;
+ 		strscpy(dev->mdev_dec.model, MTK_VCODEC_DEC_NAME,
+ 			sizeof(dev->mdev_dec.model));
 -- 
 2.35.1
 

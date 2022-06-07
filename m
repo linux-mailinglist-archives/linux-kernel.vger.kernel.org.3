@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2B8541825
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E30B5405EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379206AbiFGVJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S1346964AbiFGRcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359207AbiFGUJj (ORCPT
+        with ESMTP id S1346614AbiFGRZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:09:39 -0400
+        Tue, 7 Jun 2022 13:25:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A41216ABDE;
-        Tue,  7 Jun 2022 11:27:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE69C10F342;
+        Tue,  7 Jun 2022 10:22:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEC72B81FF8;
-        Tue,  7 Jun 2022 18:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508F5C385A2;
-        Tue,  7 Jun 2022 18:27:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10898B822B8;
+        Tue,  7 Jun 2022 17:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3B2C385A5;
+        Tue,  7 Jun 2022 17:22:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626423;
-        bh=/5rQ7ewDoC/Eso2+1Trr7JRLy65QvGDpVxwx+TL4Axk=;
+        s=korg; t=1654622575;
+        bh=iyThD/MBHbgXsTFdOZBbPX0irFoHYzqWmNcfYxFjHWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pdy3JSqbAkvqkRjl20wwlufD30PxjmwxuQd2C+HvspgtHZz/odxxsWlde1k+xBm1Y
-         tKG4zLGeaVCO2vF38tquM453uKSLnzr/UCQ7F8pTIIruMsmeFvzE1CC0uR99AEjxr0
-         jQqh2SlSpYStka5u6QFvBCslV3h71U/vx/TP6kiU=
+        b=LUMNgd0slMyDiZ03CJY6EQanuATlV+qm80XfSdrtlFSevhcKpSs4p21vsSVdIRfjb
+         dq/56DMzOXZb+B4o+3uugkKRloGIt7pCb/uGCTpeP4zJ+GMhIKaLgCBPb12JVrNWGZ
+         nSfB1O1CpSKp2BWXklZMlB9LPtBJ2tq5oAlzYMe8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        stable@vger.kernel.org,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        qianfan <qianfanguijin@163.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 372/772] mt76: do not attempt to reorder received 802.3 packets without agg session
+Subject: [PATCH 5.10 107/452] fat: add ratelimit to fat*_ent_bread()
 Date:   Tue,  7 Jun 2022 18:59:24 +0200
-Message-Id: <20220607164959.976474564@linuxfoundation.org>
+Message-Id: <20220607164911.746024743@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
 
-[ Upstream commit 3968a66475b40691c37b5e6c76975f699671e10e ]
+[ Upstream commit 183c3237c928109d2008c0456dff508baf692b20 ]
 
-Fixes potential latency / packet drop issues in cases where a BA session has
-not (yet) been established.
+fat*_ent_bread() can be the cause of too many report on I/O error path.
+So use fat_msg_ratelimit() instead.
 
-Fixes: e195dad14115 ("mt76: add support for 802.3 rx frames")
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lkml.kernel.org/r/87bkxogfeq.fsf@mail.parknet.co.jp
+Signed-off-by: OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Reported-by: qianfan <qianfanguijin@163.com>
+Tested-by: qianfan <qianfanguijin@163.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/agg-rx.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/fat/fatent.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/agg-rx.c b/drivers/net/wireless/mediatek/mt76/agg-rx.c
-index 72622220051b..6c8b44194579 100644
---- a/drivers/net/wireless/mediatek/mt76/agg-rx.c
-+++ b/drivers/net/wireless/mediatek/mt76/agg-rx.c
-@@ -162,8 +162,9 @@ void mt76_rx_aggr_reorder(struct sk_buff *skb, struct sk_buff_head *frames)
- 	if (!sta)
- 		return;
+diff --git a/fs/fat/fatent.c b/fs/fat/fatent.c
+index f7e3304b7802..353735032947 100644
+--- a/fs/fat/fatent.c
++++ b/fs/fat/fatent.c
+@@ -93,7 +93,8 @@ static int fat12_ent_bread(struct super_block *sb, struct fat_entry *fatent,
+ err_brelse:
+ 	brelse(bhs[0]);
+ err:
+-	fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)", (llu)blocknr);
++	fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
++			  (llu)blocknr);
+ 	return -EIO;
+ }
  
--	if (!status->aggr && !(status->flag & RX_FLAG_8023)) {
--		mt76_rx_aggr_check_ctl(skb, frames);
-+	if (!status->aggr) {
-+		if (!(status->flag & RX_FLAG_8023))
-+			mt76_rx_aggr_check_ctl(skb, frames);
- 		return;
+@@ -106,8 +107,8 @@ static int fat_ent_bread(struct super_block *sb, struct fat_entry *fatent,
+ 	fatent->fat_inode = MSDOS_SB(sb)->fat_inode;
+ 	fatent->bhs[0] = sb_bread(sb, blocknr);
+ 	if (!fatent->bhs[0]) {
+-		fat_msg(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
+-		       (llu)blocknr);
++		fat_msg_ratelimit(sb, KERN_ERR, "FAT read failed (blocknr %llu)",
++				  (llu)blocknr);
+ 		return -EIO;
  	}
- 
+ 	fatent->nr_bhs = 1;
 -- 
 2.35.1
 

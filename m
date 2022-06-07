@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45861541AB4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6488541985
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380603AbiFGVfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S1378045AbiFGVWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376630AbiFGU1F (ORCPT
+        with ESMTP id S1376644AbiFGU1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 16:27:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1FB32EEB;
-        Tue,  7 Jun 2022 11:33:00 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9A3113A07;
+        Tue,  7 Jun 2022 11:33:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 60F70CE240B;
-        Tue,  7 Jun 2022 18:32:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1ECC3411C;
-        Tue,  7 Jun 2022 18:32:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7239B82188;
+        Tue,  7 Jun 2022 18:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3838DC385A2;
+        Tue,  7 Jun 2022 18:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626776;
-        bh=bvLMl4oc4CmowC0jo7HxPPsbIvcD3IDxy/Ab5Uayt4M=;
+        s=korg; t=1654626779;
+        bh=Kw55ogd+UksAEvHHk1V0dss2Rjc0d6qyG+RxuJsUNVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qvjHBQrZ/BUy9yefrJrUPK+WPzSNVjifhAI6/k0RXVcbat6mtCTyLJWNx7VjSGf+K
-         Bcn7HwHBFKyOb8EdhZrNUXJXBX7WMkckGsYO2nSeMmMB2fk6xiJ+26pHB0HNCrIYOh
-         xE+saIvq5/wt1f0/tE0Rx322gw75wS0WwSyqLAfE=
+        b=CzhAnysWMV42aJFvqgsT5SZVXEwnTRFcCkU4i+a+17FiYOr4XRsV+FJ7qi/eL+Pcr
+         LVpWCCja7OZsH2rQmiX/BvHArNsjEzy2Nda4KnHriQ6bufI26z/bmA40cxJE2s+AkK
+         GlMYx8xcwXhYtPK6w6YXqdpLAec78hJC738G1idI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 499/772] ASoC: sh: rz-ssi: Release the DMA channels in rz_ssi_probe() error path
-Date:   Tue,  7 Jun 2022 19:01:31 +0200
-Message-Id: <20220607165003.686169970@linuxfoundation.org>
+Subject: [PATCH 5.17 500/772] firmware: arm_scmi: Fix list protocols enumeration in the base protocol
+Date:   Tue,  7 Jun 2022 19:01:32 +0200
+Message-Id: <20220607165003.715302037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,67 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Cristian Marussi <cristian.marussi@arm.com>
 
-[ Upstream commit 767e6f26204d3f5406630e86b720d01818b8616d ]
+[ Upstream commit 8009120e0354a67068e920eb10dce532391361d0 ]
 
-DMA channels requested by rz_ssi_dma_request() in rz_ssi_probe() were
-never released in the error path apart from one place. This patch fixes
-this issue by calling rz_ssi_release_dma_channels() in the error path.
+While enumerating protocols implemented by the SCMI platform using
+BASE_DISCOVER_LIST_PROTOCOLS, the number of returned protocols is
+currently validated in an improper way since the check employs a sum
+between unsigned integers that could overflow and cause the check itself
+to be silently bypassed if the returned value 'loop_num_ret' is big
+enough.
 
-Fixes: 26ac471c5354 ("ASoC: sh: rz-ssi: Add SSI DMAC support")
-Reported-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Link: https://lore.kernel.org/r/20220426074922.13319-4-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fix the validation avoiding the addition.
+
+Link: https://lore.kernel.org/r/20220330150551.2573938-4-cristian.marussi@arm.com
+Fixes: b6f20ff8bd94 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/rz-ssi.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/firmware/arm_scmi/base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/sh/rz-ssi.c b/sound/soc/sh/rz-ssi.c
-index 3b55444a1b58..6d794eaaf4c3 100644
---- a/sound/soc/sh/rz-ssi.c
-+++ b/sound/soc/sh/rz-ssi.c
-@@ -982,14 +982,18 @@ static int rz_ssi_probe(struct platform_device *pdev)
+diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
+index f5219334fd3a..3fe172c03c24 100644
+--- a/drivers/firmware/arm_scmi/base.c
++++ b/drivers/firmware/arm_scmi/base.c
+@@ -197,7 +197,7 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
+ 			break;
  
- 	/* Error Interrupt */
- 	ssi->irq_int = platform_get_irq_byname(pdev, "int_req");
--	if (ssi->irq_int < 0)
-+	if (ssi->irq_int < 0) {
-+		rz_ssi_release_dma_channels(ssi);
- 		return ssi->irq_int;
-+	}
- 
- 	ret = devm_request_irq(&pdev->dev, ssi->irq_int, &rz_ssi_interrupt,
- 			       0, dev_name(&pdev->dev), ssi);
--	if (ret < 0)
-+	if (ret < 0) {
-+		rz_ssi_release_dma_channels(ssi);
- 		return dev_err_probe(&pdev->dev, ret,
- 				     "irq request error (int_req)\n");
-+	}
- 
- 	if (!rz_ssi_is_dma_enabled(ssi)) {
- 		/* Tx and Rx interrupts (pio only) */
-@@ -1017,13 +1021,16 @@ static int rz_ssi_probe(struct platform_device *pdev)
- 	}
- 
- 	ssi->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
--	if (IS_ERR(ssi->rstc))
-+	if (IS_ERR(ssi->rstc)) {
-+		rz_ssi_release_dma_channels(ssi);
- 		return PTR_ERR(ssi->rstc);
-+	}
- 
- 	reset_control_deassert(ssi->rstc);
- 	pm_runtime_enable(&pdev->dev);
- 	ret = pm_runtime_resume_and_get(&pdev->dev);
- 	if (ret < 0) {
-+		rz_ssi_release_dma_channels(ssi);
- 		pm_runtime_disable(ssi->dev);
- 		reset_control_assert(ssi->rstc);
- 		return dev_err_probe(ssi->dev, ret, "pm_runtime_resume_and_get failed\n");
+ 		loop_num_ret = le32_to_cpu(*num_ret);
+-		if (tot_num_ret + loop_num_ret > MAX_PROTOCOLS_IMP) {
++		if (loop_num_ret > MAX_PROTOCOLS_IMP - tot_num_ret) {
+ 			dev_err(dev, "No. of Protocol > MAX_PROTOCOLS_IMP");
+ 			break;
+ 		}
 -- 
 2.35.1
 

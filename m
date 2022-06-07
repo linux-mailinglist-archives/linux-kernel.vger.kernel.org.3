@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175F0541F19
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6582454051D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358779AbiFGWml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S1346011AbiFGRWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380721AbiFGVbM (ORCPT
+        with ESMTP id S1346065AbiFGRUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:31:12 -0400
+        Tue, 7 Jun 2022 13:20:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1750622AE68;
-        Tue,  7 Jun 2022 12:03:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF901059D7;
+        Tue,  7 Jun 2022 10:20:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E008C617EE;
-        Tue,  7 Jun 2022 19:03:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C73C385A5;
-        Tue,  7 Jun 2022 19:03:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D237618D8;
+        Tue,  7 Jun 2022 17:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2879DC385A5;
+        Tue,  7 Jun 2022 17:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628603;
-        bh=9ngSOdPjjAPA6F7lCapsC6DrE+l8vaNY0CBrFpoeEAU=;
+        s=korg; t=1654622414;
+        bh=55EFUHYI6iK3HJOyWc8Wq0BuBvU2+I+Lp1UrneWLr+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rZ54PyqYmwSVvrf5Nm14oo4COFkJF+sFeokLY7DTQIztz0PcY3s6nOmd8vLBn0vjs
-         Qb4Bw9oALDlFhBkAQmctlk4z/ivgUkFNvOxyKrNaAggOQhEA0eLV/Z8jaKDck+HSob
-         VeyWEEzrOUP3gB9PHUGtmTjPl0wBNLZ93uNgGgqQ=
+        b=rE0Yfuh75UE3K96ds6joi4lfOBLg2e4fdjbCuXQWajKzUxFgvyjUZrLTRIxsqunTk
+         epdOC/24jqEgnxo3PspVNh/hGwo/fD9VVAkObKkWYfs6PTDAzp7Q3NiDqlYl16zynl
+         ndoA791WeSAsWvAoPyABtIXcyswDLC0OxVv8e1rs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 389/879] irqchip/aspeed-scu-ic: Fix irq_of_parse_and_map() return value
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 050/452] scsi: megaraid: Fix error check return value of register_chrdev()
 Date:   Tue,  7 Jun 2022 18:58:27 +0200
-Message-Id: <20220607165014.156089559@linuxfoundation.org>
+Message-Id: <20220607164910.040116134@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit f03a9670d27d23fe734a456f16e2579b21ec02b4 ]
+[ Upstream commit c5acd61dbb32b6bda0f3a354108f2b8dcb788985 ]
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+If major equals 0, register_chrdev() returns an error code when it fails.
+This function dynamically allocates a major and returns its number on
+success, so we should use "< 0" to check it instead of "!".
 
-Fixes: 04f605906ff0 ("irqchip: Add Aspeed SCU interrupt controller")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220423094227.33148-2-krzysztof.kozlowski@linaro.org
+Link: https://lore.kernel.org/r/20220418105755.2558828-1-lv.ruyi@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-aspeed-scu-ic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/megaraid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-aspeed-scu-ic.c b/drivers/irqchip/irq-aspeed-scu-ic.c
-index 18b77c3e6db4..279e92cf0b16 100644
---- a/drivers/irqchip/irq-aspeed-scu-ic.c
-+++ b/drivers/irqchip/irq-aspeed-scu-ic.c
-@@ -157,8 +157,8 @@ static int aspeed_scu_ic_of_init_common(struct aspeed_scu_ic *scu_ic,
+diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
+index 80f546976c7e..daffa36988ae 100644
+--- a/drivers/scsi/megaraid.c
++++ b/drivers/scsi/megaraid.c
+@@ -4634,7 +4634,7 @@ static int __init megaraid_init(void)
+ 	 * major number allocation.
+ 	 */
+ 	major = register_chrdev(0, "megadev_legacy", &megadev_fops);
+-	if (!major) {
++	if (major < 0) {
+ 		printk(KERN_WARNING
+ 				"megaraid: failed to register char device\n");
  	}
- 
- 	irq = irq_of_parse_and_map(node, 0);
--	if (irq < 0) {
--		rc = irq;
-+	if (!irq) {
-+		rc = -EINVAL;
- 		goto err;
- 	}
- 
 -- 
 2.35.1
 

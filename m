@@ -2,280 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA995421A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4365423B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390105AbiFHAvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S1389091AbiFHBFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382415AbiFGWCh (ORCPT
+        with ESMTP id S1382115AbiFGVqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:02:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DAE724F78F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654629196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zg8yBeGSpujFygwxJkzWzOm3xQkMe4291lxPHo3F32k=;
-        b=cPnnwl+5V+tSPT+Q2hTe6UP+jztvA3LJzfT4ZtJeWi+jQMTGaaRIlci+Yd1MrIcsOT2XbA
-        yF87nVToso2LsYqULOhTATzI2tSUh3XuPU8/QrZQbcPw1hcPWumxCUw9OwZ5GY27dkYV7O
-        VJgrmIiN6LgAtSsG0qeC62s1khOVcUs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-OpJeuyOkPzCxxg239vDSeQ-1; Tue, 07 Jun 2022 15:13:12 -0400
-X-MC-Unique: OpJeuyOkPzCxxg239vDSeQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A7222999B56;
-        Tue,  7 Jun 2022 19:11:46 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.9.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 91FDE412CA4C;
-        Tue,  7 Jun 2022 19:11:17 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org
-Cc:     Wayne Lin <Wayne.Lin@amd.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC 07/18] drm/display/dp_mst: Add helper for finding payloads in atomic MST state
-Date:   Tue,  7 Jun 2022 15:07:04 -0400
-Message-Id: <20220607190715.1331124-8-lyude@redhat.com>
-In-Reply-To: <20220607190715.1331124-1-lyude@redhat.com>
-References: <20220607190715.1331124-1-lyude@redhat.com>
+        Tue, 7 Jun 2022 17:46:33 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EA4235B15
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:07:48 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id v19so500085uae.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s58JyYfxjJZK+xBks84yqht9lKqAP2iTqEYGVHfv2fA=;
+        b=UniKPp2fwri4mGTTugBIeQ1NZBedToPyxhulFcbp+XWVAnwR5PUv5ooePbH/zWikdq
+         6FaFxdOB4iEIsUrcTX9Qm4jCxkNTtmM6YKlPmKISkWBzbViQ2rTzilpDo+Iz9nowKLFJ
+         WmejIqLXPDwqBVm9B+sGT+TwXPzscXlYaRIvkFA7RNeTqNgz7kP6U+d+Mi1FDaQt+MrA
+         UiCKot2InqF/Xaqatw80AlYd7gtH10a85bDH2ZXIa0NKfAVKksTZaxf1/l+Yk1jbOveM
+         MIAHxHTJmYsEMuYg4W58T1eg1cbE513Klo79bfZpVLgYtgZuYtoWI37VAmFSLRKiTWYb
+         8MHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s58JyYfxjJZK+xBks84yqht9lKqAP2iTqEYGVHfv2fA=;
+        b=Yb+e1zPy6WnYS60dcR5dVcjHZRgb5Hy6rK7tdS9s99AMwM3lpA6hs1CoFdRBGgaNOg
+         DNZ+wn39ifx3op7rt9gQEALr/E+tlMk1H6BrV59qH0IrcTy/2CgnnracGjoCX6YJdie6
+         LmhDQdds1S7eX2hklESX8SkMn7gczoog5nhPzSWSUnf8+GPvEhzvuaj2vdJP0A8h7xqn
+         Pncv6N1NM0GxxznPtmrqf4v/LW/niqBFXL9uFxdLTY/02duBEa7dPT1BcfGVGU/JbbSR
+         e+GAN1/t/rx439fQogVORcoi/8hDeHQsV82Yp8fHeZ4G91NwLHXxEftWRp3JQGMzRXXE
+         Frmw==
+X-Gm-Message-State: AOAM5304KPlyL8LHLXjifa0DYyYpm5DcTbMK4iS//qmz28LNHKq0Yu4z
+        t+kFcJgfP8ynSYl22vj4sOtpeq9gJKxjl1eAgE65tQ==
+X-Google-Smtp-Source: ABdhPJzS0mtcx5OOOAWXsJb2eTSprTdFF5fKfwZ/5n8eY041PP99y8PgkVi5+GKdcmJEaZnwyH4Uqru8wQ1EJ+a7ziU=
+X-Received: by 2002:ab0:2008:0:b0:352:2b3a:6bce with SMTP id
+ v8-20020ab02008000000b003522b3a6bcemr37171732uak.19.1654628867656; Tue, 07
+ Jun 2022 12:07:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220518014632.922072-1-yuzhao@google.com> <20220518014632.922072-8-yuzhao@google.com>
+ <CAGsJ_4yboZEY9OfyujPxBa_AEuGM3OAq5y_L9gvzSMUv70BxeQ@mail.gmail.com> <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
+In-Reply-To: <CAGsJ_4w3S_8Kaw2GyB3hg7b4N_D+6yBO7D6qmgxD9Fqz3_dhAg@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 7 Jun 2022 13:07:11 -0600
+Message-ID: <CAOUHufbi7h6siHdnhsAEiXaCoNrUs9bUnEihYouE4CNMt-Zd_w@mail.gmail.com>
+Subject: Re: [PATCH v11 07/14] mm: multi-gen LRU: exploit locality in rmap
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>, huzhanyuan@oppo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already open-code this quite often, and will be iterating through
-payloads even more once we've moved all of the payload tracking into the
-atomic state. So, let's add a helper for doing this.
+On Tue, Jun 7, 2022 at 1:37 AM Barry Song <21cnbao@gmail.com> wrote:
+>
+> On Mon, Jun 6, 2022 at 9:25 PM Barry Song <21cnbao@gmail.com> wrote:
+> >
+> > On Wed, May 18, 2022 at 4:49 PM Yu Zhao <yuzhao@google.com> wrote:
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Cc: Wayne Lin <Wayne.Lin@amd.com>
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
-Cc: Jani Nikula <jani.nikula@intel.com>
-Cc: Imre Deak <imre.deak@intel.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Sean Paul <sean@poorly.run>
----
- drivers/gpu/drm/display/drm_dp_mst_topology.c | 109 ++++++++----------
- 1 file changed, 45 insertions(+), 64 deletions(-)
+...
 
-diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-index ec52f91b1f0e..0bc2c7a90c37 100644
---- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-+++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-@@ -1737,6 +1737,19 @@ drm_dp_mst_dump_port_topology_history(struct drm_dp_mst_port *port) {}
- #define save_port_topology_ref(port, type)
- #endif
- 
-+static struct drm_dp_mst_atomic_payload *
-+drm_atomic_get_mst_payload_state(struct drm_dp_mst_topology_state *state,
-+				 struct drm_dp_mst_port *port)
-+{
-+	struct drm_dp_mst_atomic_payload *payload;
-+
-+	list_for_each_entry(payload, &state->payloads, next)
-+		if (payload->port == port)
-+			return payload;
-+
-+	return NULL;
-+}
-+
- static void drm_dp_destroy_mst_branch_device(struct kref *kref)
- {
- 	struct drm_dp_mst_branch *mstb =
-@@ -4381,39 +4394,31 @@ int drm_dp_atomic_find_time_slots(struct drm_atomic_state *state,
- 				  int pbn_div)
- {
- 	struct drm_dp_mst_topology_state *topology_state;
--	struct drm_dp_mst_atomic_payload *pos, *payload = NULL;
--	int prev_slots, prev_bw, req_slots;
-+	struct drm_dp_mst_atomic_payload *payload = NULL;
-+	int prev_slots = 0, prev_bw = 0, req_slots;
- 
- 	topology_state = drm_atomic_get_mst_topology_state(state, mgr);
- 	if (IS_ERR(topology_state))
- 		return PTR_ERR(topology_state);
- 
- 	/* Find the current allocation for this port, if any */
--	list_for_each_entry(pos, &topology_state->payloads, next) {
--		if (pos->port == port) {
--			payload = pos;
--			prev_slots = payload->time_slots;
--			prev_bw = payload->pbn;
--
--			/*
--			 * This should never happen, unless the driver tries
--			 * releasing and allocating the same timeslot allocation,
--			 * which is an error
--			 */
--			if (WARN_ON(!prev_slots)) {
--				drm_err(mgr->dev,
--					"cannot allocate and release time slots on [MST PORT:%p] in the same state\n",
--					port);
--				return -EINVAL;
--			}
-+	payload = drm_atomic_get_mst_payload_state(topology_state, port);
-+	if (payload) {
-+		prev_slots = payload->time_slots;
-+		prev_bw = payload->pbn;
- 
--			break;
-+		/*
-+		 * This should never happen, unless the driver tries
-+		 * releasing and allocating the same timeslot allocation,
-+		 * which is an error
-+		 */
-+		if (WARN_ON(!prev_slots)) {
-+			drm_err(mgr->dev,
-+				"cannot allocate and release time slots on [MST PORT:%p] in the same state\n",
-+				port);
-+			return -EINVAL;
- 		}
- 	}
--	if (!payload) {
--		prev_slots = 0;
--		prev_bw = 0;
--	}
- 
- 	if (pbn_div <= 0)
- 		pbn_div = mgr->pbn_div;
-@@ -4474,30 +4479,24 @@ int drm_dp_atomic_release_time_slots(struct drm_atomic_state *state,
- 				     struct drm_dp_mst_port *port)
- {
- 	struct drm_dp_mst_topology_state *topology_state;
--	struct drm_dp_mst_atomic_payload *pos;
--	bool found = false;
-+	struct drm_dp_mst_atomic_payload *payload;
- 
- 	topology_state = drm_atomic_get_mst_topology_state(state, mgr);
- 	if (IS_ERR(topology_state))
- 		return PTR_ERR(topology_state);
- 
--	list_for_each_entry(pos, &topology_state->payloads, next) {
--		if (pos->port == port) {
--			found = true;
--			break;
--		}
--	}
--	if (WARN_ON(!found)) {
-+	payload = drm_atomic_get_mst_payload_state(topology_state, port);
-+	if (WARN_ON(!payload)) {
- 		drm_err(mgr->dev, "No payload for [MST PORT:%p] found in mst state %p\n",
- 			port, &topology_state->base);
- 		return -EINVAL;
- 	}
- 
--	drm_dbg_atomic(mgr->dev, "[MST PORT:%p] TU %d -> 0\n", port, pos->time_slots);
--	if (pos->time_slots) {
-+	drm_dbg_atomic(mgr->dev, "[MST PORT:%p] TU %d -> 0\n", port, payload->time_slots);
-+	if (payload->time_slots) {
- 		drm_dp_mst_put_port_malloc(port);
--		pos->time_slots = 0;
--		pos->pbn = 0;
-+		payload->time_slots = 0;
-+		payload->pbn = 0;
- 	}
- 
- 	return 0;
-@@ -5194,18 +5193,8 @@ drm_dp_mst_atomic_check_port_bw_limit(struct drm_dp_mst_port *port,
- 		return 0;
- 
- 	if (drm_dp_mst_is_end_device(port->pdt, port->mcs)) {
--		bool found = false;
--
--		list_for_each_entry(payload, &state->payloads, next) {
--			if (payload->port != port)
--				continue;
--			if (!payload->pbn)
--				return 0;
--
--			found = true;
--			break;
--		}
--		if (!found)
-+		payload = drm_atomic_get_mst_payload_state(state, port);
-+		if (!payload)
- 			return 0;
- 
- 		/*
-@@ -5360,34 +5349,26 @@ int drm_dp_mst_atomic_enable_dsc(struct drm_atomic_state *state,
- 				 bool enable)
- {
- 	struct drm_dp_mst_topology_state *mst_state;
--	struct drm_dp_mst_atomic_payload *pos;
--	bool found = false;
-+	struct drm_dp_mst_atomic_payload *payload;
- 	int time_slots = 0;
- 
- 	mst_state = drm_atomic_get_mst_topology_state(state, port->mgr);
--
- 	if (IS_ERR(mst_state))
- 		return PTR_ERR(mst_state);
- 
--	list_for_each_entry(pos, &mst_state->payloads, next) {
--		if (pos->port == port) {
--			found = true;
--			break;
--		}
--	}
--
--	if (!found) {
-+	payload = drm_atomic_get_mst_payload_state(mst_state, port);
-+	if (!payload) {
- 		drm_dbg_atomic(state->dev,
- 			       "[MST PORT:%p] Couldn't find payload in mst state %p\n",
- 			       port, mst_state);
- 		return -EINVAL;
- 	}
- 
--	if (pos->dsc_enabled == enable) {
-+	if (payload->dsc_enabled == enable) {
- 		drm_dbg_atomic(state->dev,
- 			       "[MST PORT:%p] DSC flag is already set to %d, returning %d time slots\n",
--			       port, enable, pos->time_slots);
--		time_slots = pos->time_slots;
-+			       port, enable, payload->time_slots);
-+		time_slots = payload->time_slots;
- 	}
- 
- 	if (enable) {
-@@ -5399,7 +5380,7 @@ int drm_dp_mst_atomic_enable_dsc(struct drm_atomic_state *state,
- 			return -EINVAL;
- 	}
- 
--	pos->dsc_enabled = enable;
-+	payload->dsc_enabled = enable;
- 
- 	return time_slots;
- }
--- 
-2.35.3
+> I can't really explain why we are getting a random app/java vm crash in monkey
+> test by using ptep_test_and_clear_young() only in lru_gen_look_around() on an
+> armv8-a machine without hardware PTE young support.
+>
+> Moving to  ptep_clear_flush_young() in look_around can make the random
+> hang disappear according to zhanyuan(Cc-ed).
 
+This sounds too familiar -- let me ask again: was the following commit
+included during the test?
+
+  07509e10dcc7 arm64: pgtable: Fix pte_accessible()
+
+If not, it will cause exactly the problem you described. And what
+about this one?
+
+  e914d8f00391 mm: fix unexpected zeroed page mapping with zram swap
+
+Missing it also causes userspace memory corruption on Android, i.e.,
+random app crashes.
+
+> On x86, ptep_clear_flush_young() is exactly ptep_test_and_clear_young()
+> after
+>  'commit b13b1d2d8692 ("x86/mm: In the PTE swapout page reclaim case clear
+> the accessed bit instead of flushing the TLB")'
+>
+> But on arm64, they are different. according to Will's comments in this
+> thread which
+> tried to make arm64 same with x86,
+> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1793881.html
+>
+> "
+> This is blindly copied from x86 and isn't true for us: we don't invalidate
+> the TLB on context switch. That means our window for keeping the stale
+> entries around is potentially much bigger and might not be a great idea.
+>
+> If we roll a TLB invalidation routine without the trailing DSB, what sort of
+> performance does that get you?
+> "
+> We shouldn't think ptep_clear_flush_young() is safe enough in LRU to
+> clear PTE young? Any comments from Will?
+>
+> >
+> > btw, lru_gen_look_around() has already included 'address', are we doing
+> > pte check for 'address' twice here?
+
+Explained in the previous reply. Hope that clarifies things.

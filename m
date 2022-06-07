@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB16541EBD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3D95415D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381187AbiFGWd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S1377583AbiFGUma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380307AbiFGVQE (ORCPT
+        with ESMTP id S1357696AbiFGTmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D11157E8E;
-        Tue,  7 Jun 2022 11:55:00 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120231B6FD2;
+        Tue,  7 Jun 2022 11:15:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9AC77CE1D50;
-        Tue,  7 Jun 2022 18:54:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83456C385A2;
-        Tue,  7 Jun 2022 18:54:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 148AD60B25;
+        Tue,  7 Jun 2022 18:15:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22029C385A5;
+        Tue,  7 Jun 2022 18:15:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628096;
-        bh=jAuNF6M+3PV9HonytzGTV1kYObV5ikBT2owp1pOQg1U=;
+        s=korg; t=1654625752;
+        bh=7sCeoZZwV5ejs/MqSjcIaa9b6s3lSn4F1fmw+Hfrqx0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eEFjN7f2Lk9jTr5hQpBd/m3Qnjo5B6WsdGlhNosW9Vp+rePVmsBtN/hH6HOpklIpg
-         MVViYT/kgpGEt68Xw4FSCzpNHATWoZHoABXospJZSzZwa/lxjSc6grJI1Tdx8TFtcF
-         uM6sI0OIYH3bjVFc8LLPQd8KUim3vlf3ChNMacXU=
+        b=pU0ddyczvMHrnEUhG6LLw7GeSsVMgNEvcjihYZC9Sm6R8dLIdxLC6DajAhkphWLUy
+         Z1oqAevXUdQZlf4nSDIfnHsqT/nYCUBQBVpJ6BkYR51VEKunv3mxcuqyDldnvdQqD1
+         l9vwaTX4BFce+913ZTO9p2iWy4p8JDrKz2/8u/ig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Jian-Hong Pan <jhp@endlessos.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 206/879] linux/types.h: reinstate "__bitwise__" macro for user space use
+Subject: [PATCH 5.17 132/772] ACPI: PM: Block ASUS B1400CEAE from suspend to idle by default
 Date:   Tue,  7 Jun 2022 18:55:24 +0200
-Message-Id: <20220607165008.829694453@linuxfoundation.org>
+Message-Id: <20220607164952.932947872@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit caa28984163cb63ea0be4cb8dbf05defdc7303f9 ]
+[ Upstream commit d52848620de00cde4a3a5df908e231b8c8868250 ]
 
-Commit c724c866bb70 ("linux/types.h: remove unnecessary __bitwise__")
-was right that there are no users of __bitwise__ in the kernel, but it
-turns out there are user space users of it that do expect it.
+ASUS B1400CEAE fails to resume from suspend to idle by default.  This was
+bisected back to commit df4f9bc4fb9c ("nvme-pci: add support for ACPI
+StorageD3Enable property") but this is a red herring to the problem.
 
-It is, after all, in the uapi directory, so user space usage is to be
-expected.
+Before this commit the system wasn't getting into deepest sleep state.
+Presumably this commit is allowing entry into deepest sleep state as
+advertised by firmware, but there are some other problems related to
+the wakeup.
 
-Instead of reverting the commit completely, let's just clarify the
-situation so that it doesn't happen again, and have some in-code
-explanations for why that "__bitwise__" still exists.
+As it is confirmed the system works properly with S3, set the default for
+this system to S3.
 
-Reported-by: Jiri Slaby <jirislaby@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>
-Link: https://lore.kernel.org/all/b5c0a68d-8387-4909-beea-f70ab9e6e3d5@kernel.org/
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: Jian-Hong Pan <jhp@endlessos.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215742
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Tested-by: Jian-Hong Pan <jhp@endlessos.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/types.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/acpi/sleep.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-index c4dc597f3dcf..308433be33c2 100644
---- a/include/uapi/linux/types.h
-+++ b/include/uapi/linux/types.h
-@@ -26,6 +26,9 @@
- #define __bitwise
- #endif
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index d4fbea91ab6b..8a5cb115fea8 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -373,6 +373,18 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "20GGA00L00"),
+ 		},
+ 	},
++	/*
++	 * ASUS B1400CEAE hangs on resume from suspend (see
++	 * https://bugzilla.kernel.org/show_bug.cgi?id=215742).
++	 */
++	{
++	.callback = init_default_s3,
++	.ident = "ASUS B1400CEAE",
++	.matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
++		DMI_MATCH(DMI_PRODUCT_NAME, "ASUS EXPERTBOOK B1400CEAE"),
++		},
++	},
+ 	{},
+ };
  
-+/* The kernel doesn't use this legacy form, but user space does */
-+#define __bitwise__ __bitwise
-+
- typedef __u16 __bitwise __le16;
- typedef __u16 __bitwise __be16;
- typedef __u32 __bitwise __le32;
 -- 
 2.35.1
 

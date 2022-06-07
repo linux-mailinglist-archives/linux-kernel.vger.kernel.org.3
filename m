@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17687540CE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4835F5416CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349411AbiFGSmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S1377736AbiFGUy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350082AbiFGSMx (ORCPT
+        with ESMTP id S1358843AbiFGTxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:12:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEC0110985;
-        Tue,  7 Jun 2022 10:48:54 -0700 (PDT)
+        Tue, 7 Jun 2022 15:53:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20E1B7812;
+        Tue,  7 Jun 2022 11:22:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14A0961789;
-        Tue,  7 Jun 2022 17:48:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4B6C3411C;
-        Tue,  7 Jun 2022 17:48:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B5C4B8233E;
+        Tue,  7 Jun 2022 18:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B31C385A5;
+        Tue,  7 Jun 2022 18:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624101;
-        bh=OfpDucA+meciRfZXXHe2/e6CRQkH5VCUTVwXmkHiZOA=;
+        s=korg; t=1654626157;
+        bh=MmpBioifs0BNQI5G7S95OQb3TvJ6CY1hahXbcEzOFWw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pVASiZUts9IoiTPWq2lQE+cAdS+X360wGBUpzg0pu06d9fQ43lRVHoOI52CkNpLlB
-         a0/xPDSmu9FBmoXRDBEuCrHskRETUTQrvTMrE3/5Srs+QAHDcdPYfDlfV/zyvtliXQ
-         4Vi6gxu4+d/K6oBZIjUh98MQdEnvE+bAmnZy3uWY=
+        b=Ink6A3DJ5RKGK38HmazNFyoqNPDmaW7UMJgE3/NOUwLuyBPhGk0paeIHGm1v/Xnbj
+         E95BbAyRKDJiWp27jDpFQH/nIp8CahdvG/4sERxgl1KVQNIbeZBKv0wEwVf5ye+APy
+         iBnHyA1OuQiMguSBj+zd9IwimEgNAdqm0S/g99To=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ben Segall <bsegall@google.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 204/667] x86/PCI: Fix ALi M1487 (IBC) PIRQ router link value interpretation
-Date:   Tue,  7 Jun 2022 18:57:49 +0200
-Message-Id: <20220607164940.917403992@linuxfoundation.org>
+Subject: [PATCH 5.17 278/772] sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
+Date:   Tue,  7 Jun 2022 18:57:50 +0200
+Message-Id: <20220607164957.217172204@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +58,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Chengming Zhou <zhouchengming@bytedance.com>
 
-[ Upstream commit 4969e223b109754c2340a26bba9b1cf44f0cba9b ]
+[ Upstream commit 64eaf50731ac0a8c76ce2fedd50ef6652aabc5ff ]
 
-Fix an issue with commit 1ce849c75534 ("x86/PCI: Add support for the ALi
-M1487 (IBC) PIRQ router") and correct ALi M1487 (IBC) PIRQ router link
-value (`pirq' cookie) interpretation according to findings in the BIOS.
+Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
+change to use rq_clock_pelt() instead of rq_clock_task(), we should also
+use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
+accounting to get correct cfs_rq_clock_pelt() of throttled cfs_rq. And
+rename throttled_clock_task(_time) to be clock_pelt rather than clock_task.
 
-Credit to Nikolai Zhubr for the detective work as to the bit layout.
-
-Fixes: 1ce849c75534 ("x86/PCI: Add support for the ALi M1487 (IBC) PIRQ router")
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203310013270.44113@angie.orcam.me.uk
+Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Ben Segall <bsegall@google.com>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/r/20220408115309.81603-1-zhouchengming@bytedance.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/pci/irq.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ kernel/sched/fair.c  | 8 ++++----
+ kernel/sched/pelt.h  | 4 ++--
+ kernel/sched/sched.h | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index 97b63e35e152..21c4bc41741f 100644
---- a/arch/x86/pci/irq.c
-+++ b/arch/x86/pci/irq.c
-@@ -253,6 +253,15 @@ static void write_pc_conf_nybble(u8 base, u8 index, u8 val)
- 	pc_conf_set(reg, x);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 2f461f059278..95bcf0a8767f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4793,8 +4793,8 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+ 
+ 	cfs_rq->throttle_count--;
+ 	if (!cfs_rq->throttle_count) {
+-		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
+-					     cfs_rq->throttled_clock_task;
++		cfs_rq->throttled_clock_pelt_time += rq_clock_pelt(rq) -
++					     cfs_rq->throttled_clock_pelt;
+ 
+ 		/* Add cfs_rq with load or one or more already running entities to the list */
+ 		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
+@@ -4811,7 +4811,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
+ 
+ 	/* group is entering throttled state, stop time */
+ 	if (!cfs_rq->throttle_count) {
+-		cfs_rq->throttled_clock_task = rq_clock_task(rq);
++		cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
+ 		list_del_leaf_cfs_rq(cfs_rq);
+ 	}
+ 	cfs_rq->throttle_count++;
+@@ -5255,7 +5255,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
+ 	pcfs_rq = tg->parent->cfs_rq[cpu];
+ 
+ 	cfs_rq->throttle_count = pcfs_rq->throttle_count;
+-	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
++	cfs_rq->throttled_clock_pelt = rq_clock_pelt(cpu_rq(cpu));
  }
  
-+/*
-+ * FinALi pirq rules are as follows:
-+ *
-+ * - bit 0 selects between INTx Routing Table Mapping Registers,
-+ *
-+ * - bit 3 selects the nibble within the INTx Routing Table Mapping Register,
-+ *
-+ * - bits 7:4 map to bits 3:0 of the PCI INTx Sensitivity Register.
-+ */
- static int pirq_finali_get(struct pci_dev *router, struct pci_dev *dev,
- 			   int pirq)
+ /* conditionally throttle active cfs_rq's from put_prev_entity() */
+diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
+index c336f5f481bc..4ff2ed4f8fa1 100644
+--- a/kernel/sched/pelt.h
++++ b/kernel/sched/pelt.h
+@@ -145,9 +145,9 @@ static inline u64 rq_clock_pelt(struct rq *rq)
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
  {
-@@ -260,11 +269,13 @@ static int pirq_finali_get(struct pci_dev *router, struct pci_dev *dev,
- 		0, 9, 3, 10, 4, 5, 7, 6, 0, 11, 0, 12, 0, 14, 0, 15
- 	};
- 	unsigned long flags;
-+	u8 index;
- 	u8 x;
+ 	if (unlikely(cfs_rq->throttle_count))
+-		return cfs_rq->throttled_clock_task - cfs_rq->throttled_clock_task_time;
++		return cfs_rq->throttled_clock_pelt - cfs_rq->throttled_clock_pelt_time;
  
-+	index = (pirq & 1) << 1 | (pirq & 8) >> 3;
- 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
--	x = irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1)];
-+	x = irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index)];
- 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
- 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
- 	return x;
-@@ -278,13 +289,15 @@ static int pirq_finali_set(struct pci_dev *router, struct pci_dev *dev,
- 	};
- 	u8 val = irqmap[irq];
- 	unsigned long flags;
-+	u8 index;
+-	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_task_time;
++	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
+ }
+ #else
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 3887f4aea160..8c0dfeadef70 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -618,8 +618,8 @@ struct cfs_rq {
+ 	s64			runtime_remaining;
  
- 	if (!val)
- 		return 0;
- 
-+	index = (pirq & 1) << 1 | (pirq & 8) >> 3;
- 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
--	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1, val);
-+	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index, val);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
- 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
- 	return 1;
-@@ -293,7 +306,7 @@ static int pirq_finali_set(struct pci_dev *router, struct pci_dev *dev,
- static int pirq_finali_lvl(struct pci_dev *router, struct pci_dev *dev,
- 			   int pirq, int irq)
- {
--	u8 mask = ~(1u << (pirq - 1));
-+	u8 mask = ~((pirq & 0xf0u) >> 4);
- 	unsigned long flags;
- 	u8 trig;
- 
+ 	u64			throttled_clock;
+-	u64			throttled_clock_task;
+-	u64			throttled_clock_task_time;
++	u64			throttled_clock_pelt;
++	u64			throttled_clock_pelt_time;
+ 	int			throttled;
+ 	int			throttle_count;
+ 	struct list_head	throttled_list;
 -- 
 2.35.1
 

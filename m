@@ -2,75 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D9253F8A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBE553F8A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238527AbiFGIuu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Jun 2022 04:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S238555AbiFGIwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238794AbiFGIuL (ORCPT
+        with ESMTP id S237656AbiFGIv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:50:11 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923C1F04;
-        Tue,  7 Jun 2022 01:49:41 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id w2so30005219ybi.7;
-        Tue, 07 Jun 2022 01:49:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rntn/tCRx1lKBz+y/6qXmacJXp7/iYXkar6tLR/7k/M=;
-        b=RSiU2YF/CtlT3NCxAWRTTViQ0i0Iw7rv6GOipEAQermpmGbgnKLZLaYYkvQ2sbnD1R
-         tM3QcRvOtJPDS6m00koskGV4sAjX0/xKOd5UGE2/7IgSAcYUM+RtmLQKgBvcNGr4Mejv
-         Sx5QMzLWhZ3d1hLAfmUJuLtCgMwqxLBK2Y0NRNV+iPRz0L41RcKlWk/ffe4JL5PbLdWj
-         F7BPZRjRKk0xrxouW5luQipbl3VDvCocYGW6sEpweqnwXvznMHIyCoDBQYie/VqGZsnB
-         6m4ENEHhpmuMzjqp6y3T8ZLmPGSuTpNXTjotIVCfv9bPX/0h+qxA1XPVmERX5+gjq1j+
-         vwQw==
-X-Gm-Message-State: AOAM5321TVgzX+aeIYP5rX2m66eujlf0PhsSaaSa+fB+nR+pqSImMo8Q
-        leDoMaxHoeL264CG8QJ/TyiJJWwVLORNE7O2/olYx8EJ+HI=
-X-Google-Smtp-Source: ABdhPJwWWRPNwbUCUePbec/w4+tOfNMuOQ+dvHHeMqQL11PvXfqLmCR/ywlVEJb7EpGz0GBcU5Z6C0Ln7Bi4GtQfjdI=
-X-Received: by 2002:a25:9841:0:b0:663:eaf2:4866 with SMTP id
- k1-20020a259841000000b00663eaf24866mr291844ybo.381.1654591780761; Tue, 07 Jun
- 2022 01:49:40 -0700 (PDT)
+        Tue, 7 Jun 2022 04:51:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D10D6819;
+        Tue,  7 Jun 2022 01:51:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BC7961751;
+        Tue,  7 Jun 2022 08:51:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44206C34119;
+        Tue,  7 Jun 2022 08:51:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="VaEEqfo2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654591913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6g6+8Ruy1eC3mY4X+0ZwjQnZhj0RCq9Li4nXIU0hk1E=;
+        b=VaEEqfo2ryZDpLOYbqy03slCBPDcz+0rV3RXndesPN9s133iYXEBbuZG6G22jKllrX68RS
+        Hn8qcMr/btCR15OmOz09lxyUMVQ0WLkJ9sHGQc5OF8LbJLlwvAKNXLKZOR48V5TRKgXAZQ
+        6A6PDYfMgLaDdzL1JPXii7ynGbTrVrg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d04700b3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 7 Jun 2022 08:51:53 +0000 (UTC)
+Received: by mail-yb1-f169.google.com with SMTP id r1so1421643ybd.4;
+        Tue, 07 Jun 2022 01:51:52 -0700 (PDT)
+X-Gm-Message-State: AOAM533+Nbm74GpmtU39dl2MA0BoOKc5vJbBrXcZrTFiwgnC+/qi1To1
+        FQjTxVdMn2sW0Kuear8ra+GEjtZDW2FjUiAiujY=
+X-Google-Smtp-Source: ABdhPJx/0jo73YmT00K9s4V5Uk8ug6NH5MZS357wEqwyV7CIL0wSWjYgDJqdLxWPuXQtriXQZzWf2IbxBjDYFlTZULI=
+X-Received: by 2002:a25:83c2:0:b0:65c:bc75:800b with SMTP id
+ v2-20020a2583c2000000b0065cbc75800bmr28996456ybm.373.1654591912021; Tue, 07
+ Jun 2022 01:51:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <2e8666f3-1bd9-8610-6b72-e56e669d3484@hartkopp.net>
- <CAMZ6RqKWUyf6dZmxG809-yvjg5wbLwPSLtEfv-MgPpJ5ra=iGQ@mail.gmail.com> <20220607071305.olsrshjqtmkrp5et@pengutronix.de>
-In-Reply-To: <20220607071305.olsrshjqtmkrp5et@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 7 Jun 2022 17:49:29 +0900
-Message-ID: <CAMZ6RqK9cN9y3gtMCBc-NYmGT15ArvHU60KK6RyWp9dkA+WNLA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Max Staudt <max@enpas.org>, netdev <netdev@vger.kernel.org>
+References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
+ <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com> <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
+In-Reply-To: <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 7 Jun 2022 10:51:41 +0200
+X-Gmail-Original-Message-ID: <CAHmME9rJif3ydZuFJcSjPxkGMofZkbu2PXcHBF23OWVgGQ4c+A@mail.gmail.com>
+Message-ID: <CAHmME9rJif3ydZuFJcSjPxkGMofZkbu2PXcHBF23OWVgGQ4c+A@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
+To:     Phil Elwell <phil@raspberrypi.com>
+Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 7 Jun. 2022 at 16:13, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 07.06.2022 11:49:30, Vincent MAILHOL wrote:
-> [...]
-> > So I think that the diagram is correct. Maybe rephrasing the cover
-> > letter as below would address your concerns?
->
-> BTW: I got the OK from Jakub to send PR with merges.
->
-> If you think the cover letter needs rephrasing, send a new series and
-> I'm going to force push that over can-next/master. After that let's
-> consider can-next/master as fast-forward only.
+Hi Phil,
 
-I will first wait for Oliver’s feedback. Once we are aligned, I can do
-the v6 and I really hope that would be the last one.
+On Tue, Jun 7, 2022 at 10:47 AM Phil Elwell <phil@raspberrypi.com> wrote:
+> Thanks for the quick response, but that doesn't work for me either. Let me say
+> again that I'm on a downstream kernel (rpi-5.15.y) so this may not be a
+> universal problem, but merging either of these fixing patches would be fatal for us.
+
+Alright, thanks. And I'm guessing you don't currently have a problem
+*without* either of the fixing patches, because your device tree
+doesn't use rng-seed. Is that right?
+
+In anycase, I sent in a revert to get all the static branch stuff out
+of stable -- https://lore.kernel.org/stable/20220607084005.666059-1-Jason@zx2c4.com/
+-- so the "urgency" of this should decrease and we can fix this as
+normal during the 5.19 cycle. But with that said, I do want to get
+this fixed as soon as possible still. I'll be back at my desk tonight
+and will finally have access to real hardware again. Are you hitting
+this by loading a 32bit kernel on a raspi4? Or running a 32bit kernel
+on the raspi1? Or some other combo?
+
+Jason

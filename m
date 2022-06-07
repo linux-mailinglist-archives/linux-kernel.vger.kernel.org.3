@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380CC54188C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0704540FC6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379417AbiFGVMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S1353770AbiFGTMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359867AbiFGUQe (ORCPT
+        with ESMTP id S1351682AbiFGSYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72121CC5FE;
-        Tue,  7 Jun 2022 11:28:49 -0700 (PDT)
+        Tue, 7 Jun 2022 14:24:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E7EBA94;
+        Tue,  7 Jun 2022 10:54:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 843B8B82340;
-        Tue,  7 Jun 2022 18:28:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E543BC385A5;
-        Tue,  7 Jun 2022 18:28:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9695D61782;
+        Tue,  7 Jun 2022 17:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D65DC3411C;
+        Tue,  7 Jun 2022 17:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626526;
-        bh=8u13nwC0KRxpH1h7yubblY7q75GV9x6q2Kt9AaWhl6Y=;
+        s=korg; t=1654624471;
+        bh=z9mF0vJTOcJM8P1H/x/lKWNpzNoK2T2OoNZu9lJkCpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GhRVoUAHW3XMRWQwcQWuXjnYAme9jgCkf0o9ME/wLIEBLw2sdV2lk8XORyP3ysb2L
-         4SOuv/KnRDkZHLGWxkAUaPcneox/lbkJYo9JpVNgZB9XAc9NyhcEf8UewPCF+WLM5y
-         mJTWh4ASYDpvfMMizR8eANK3HKPng8PZ04KqNxt4=
+        b=obKFz0lOQcm/Vl3kTnZ0rVIkb1Fz4XkR6pGFrfNNwtrRDuSgiuwALUxsaszqHVo03
+         Qdo26+9AgQOZ3thebxZYCx0q/qV/eBuz2gJqVTxubexzffFiyS55Hu24xi4awE/WKD
+         lwzk1YoJqr1np6W3wpdu2o6GWZ/CuNZ/qqdn5jjg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>,
-        Lukas Czerner <lczerner@redhat.com>,
+        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 410/772] ext4: reject the commit option on ext2 filesystems
-Date:   Tue,  7 Jun 2022 19:00:02 +0200
-Message-Id: <20220607165001.087835245@linuxfoundation.org>
+Subject: [PATCH 5.15 338/667] media: ov7670: remove ov7670_power_off from ov7670_remove
+Date:   Tue,  7 Jun 2022 19:00:03 +0200
+Message-Id: <20220607164944.902771201@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit cb8435dc8ba33bcafa41cf2aa253794320a3b8df ]
+[ Upstream commit 5bf19572e31375368f19edd2dbb2e0789518bb99 ]
 
-The 'commit' option is only applicable for ext3 and ext4 filesystems,
-and has never been accepted by the ext2 filesystem driver, so the ext4
-driver shouldn't allow it on ext2 filesystems.
+In ov7670_probe, it always invokes ov7670_power_off() no matter
+the execution is successful or failed. So we cannot invoke it
+agiain in ov7670_remove().
 
-This fixes a failure in xfstest ext4/053.
+Fix this by removing ov7670_power_off from ov7670_remove.
 
-Fixes: 8dc0aa8cf0f7 ("ext4: check incompatible mount options while mounting ext2/3")
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
-Reviewed-by: Lukas Czerner <lczerner@redhat.com>
-Link: https://lore.kernel.org/r/20220510183232.172615-1-ebiggers@kernel.org
+Fixes: 030f9f682e66 ("media: ov7670: control clock along with power")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/i2c/ov7670.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index fe30f483c59f..32e5e76049c1 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1913,6 +1913,7 @@ static const struct mount_opts {
- 	 MOPT_EXT4_ONLY | MOPT_CLEAR},
- 	{Opt_warn_on_error, EXT4_MOUNT_WARN_ON_ERROR, MOPT_SET},
- 	{Opt_nowarn_on_error, EXT4_MOUNT_WARN_ON_ERROR, MOPT_CLEAR},
-+	{Opt_commit, 0, MOPT_NO_EXT2},
- 	{Opt_nojournal_checksum, EXT4_MOUNT_JOURNAL_CHECKSUM,
- 	 MOPT_EXT4_ONLY | MOPT_CLEAR},
- 	{Opt_journal_checksum, EXT4_MOUNT_JOURNAL_CHECKSUM,
+diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
+index 196746423116..1be2c0e5bdc1 100644
+--- a/drivers/media/i2c/ov7670.c
++++ b/drivers/media/i2c/ov7670.c
+@@ -2017,7 +2017,6 @@ static int ov7670_remove(struct i2c_client *client)
+ 	v4l2_async_unregister_subdev(sd);
+ 	v4l2_ctrl_handler_free(&info->hdl);
+ 	media_entity_cleanup(&info->sd.entity);
+-	ov7670_power_off(sd);
+ 	return 0;
+ }
+ 
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099EA5418C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D43054052B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379969AbiFGVO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S1346144AbiFGRWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376473AbiFGUQt (ORCPT
+        with ESMTP id S1346008AbiFGRUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:16:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0551CE7B6;
-        Tue,  7 Jun 2022 11:29:13 -0700 (PDT)
+        Tue, 7 Jun 2022 13:20:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CA11059E1;
+        Tue,  7 Jun 2022 10:20:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 59282CE2452;
-        Tue,  7 Jun 2022 18:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676CCC385A2;
-        Tue,  7 Jun 2022 18:24:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E38CB822AF;
+        Tue,  7 Jun 2022 17:20:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8076CC385A5;
+        Tue,  7 Jun 2022 17:20:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626248;
-        bh=IZMxjjab0MeqFDPuBR/inMNlodIgWB0ahUKVDgWxLpw=;
+        s=korg; t=1654622402;
+        bh=ugnEVQkrWoGa9gsUsWHCqnSwM+7baB/jOEkY17+HwqE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g3F0FPIbrJPvDVgndqB1EPlJrRBzTDOObzM2q4Da7CWhyRwndUKBYQeJwxaRoYrbV
-         2tjlICaTOCvhFq5kojKwtyH8pvhVxYrzb063K60I9vm8x+/75Hg89SWYICUsjmJGDd
-         GpHS2diTeDxFdLLiddi9G9jmjFT8pIeoCihUdVd0=
+        b=ibQ01rOpHuMHxGoUjlNqga0dP3IkcxcjHHBmIMRBQH+qU9u5FCK393S6PRl1J3CmV
+         AvGqRSDPz1lwKy3tR7UYjUBxFR9l6/ctXbRmIqpw/6RAe6JKg8Ab6CIvgPiP2ob7EN
+         VvXe2ViGFvTD3II3oP7klIocmy/e974kPP4abFhw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 311/772] x86/speculation: Add missing prototype for unpriv_ebpf_notify()
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 046/452] media: cx25821: Fix the warning when removing the module
 Date:   Tue,  7 Jun 2022 18:58:23 +0200
-Message-Id: <20220607164958.191727742@linuxfoundation.org>
+Message-Id: <20220607164909.920941751@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 2147c438fde135d6c145a96e373d9348e7076f7f ]
+[ Upstream commit 2203436a4d24302871617373a7eb21bc17e38762 ]
 
-Fix the following warnings seen with "make W=1":
+When removing the module, we will get the following warning:
 
-  kernel/sysctl.c:183:13: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
-    183 | void __weak unpriv_ebpf_notify(int new_state)
-        |             ^~~~~~~~~~~~~~~~~~
+[   14.746697] remove_proc_entry: removing non-empty directory 'irq/21', leaking at least 'cx25821[1]'
+[   14.747449] WARNING: CPU: 4 PID: 368 at fs/proc/generic.c:717 remove_proc_entry+0x389/0x3f0
+[   14.751611] RIP: 0010:remove_proc_entry+0x389/0x3f0
+[   14.759589] Call Trace:
+[   14.759792]  <TASK>
+[   14.759975]  unregister_irq_proc+0x14c/0x170
+[   14.760340]  irq_free_descs+0x94/0xe0
+[   14.760640]  mp_unmap_irq+0xb6/0x100
+[   14.760937]  acpi_unregister_gsi_ioapic+0x27/0x40
+[   14.761334]  acpi_pci_irq_disable+0x1d3/0x320
+[   14.761688]  pci_disable_device+0x1ad/0x380
+[   14.762027]  ? _raw_spin_unlock_irqrestore+0x2d/0x60
+[   14.762442]  ? cx25821_shutdown+0x20/0x9f0 [cx25821]
+[   14.762848]  cx25821_finidev+0x48/0xc0 [cx25821]
+[   14.763242]  pci_device_remove+0x92/0x240
 
-  arch/x86/kernel/cpu/bugs.c:659:6: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
-    659 | void unpriv_ebpf_notify(int new_state)
-        |      ^~~~~~~~~~~~~~~~~~
+Fix this by freeing the irq before call pci_disable_device().
 
-Fixes: 44a3918c8245 ("x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/5689d065f739602ececaee1e05e68b8644009608.1650930000.git.jpoimboe@redhat.com
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/bpf.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/pci/cx25821/cx25821-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2f7e00e7af37..e78113f25b71 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2064,6 +2064,8 @@ void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
- 				       struct net_device *netdev);
- bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
+diff --git a/drivers/media/pci/cx25821/cx25821-core.c b/drivers/media/pci/cx25821/cx25821-core.c
+index 285047b32c44..a3d45287a534 100644
+--- a/drivers/media/pci/cx25821/cx25821-core.c
++++ b/drivers/media/pci/cx25821/cx25821-core.c
+@@ -1340,11 +1340,11 @@ static void cx25821_finidev(struct pci_dev *pci_dev)
+ 	struct cx25821_dev *dev = get_cx25821(v4l2_dev);
  
-+void unpriv_ebpf_notify(int new_state);
-+
- #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
- int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
+ 	cx25821_shutdown(dev);
+-	pci_disable_device(pci_dev);
  
+ 	/* unregister stuff */
+ 	if (pci_dev->irq)
+ 		free_irq(pci_dev->irq, dev);
++	pci_disable_device(pci_dev);
+ 
+ 	cx25821_dev_unregister(dev);
+ 	v4l2_device_unregister(v4l2_dev);
 -- 
 2.35.1
 

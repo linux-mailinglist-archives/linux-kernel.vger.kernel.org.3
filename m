@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F02541FF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BC5541FED
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385199AbiFGWpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S1385349AbiFGWpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352049AbiFGVcp (ORCPT
+        with ESMTP id S1379767AbiFGVdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF5A17A88B;
-        Tue,  7 Jun 2022 12:04:14 -0700 (PDT)
+        Tue, 7 Jun 2022 17:33:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3215C22CEFD;
+        Tue,  7 Jun 2022 12:04:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1936661787;
-        Tue,  7 Jun 2022 19:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E9BC385A5;
-        Tue,  7 Jun 2022 19:04:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 814C3B823AF;
+        Tue,  7 Jun 2022 19:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E76C385A2;
+        Tue,  7 Jun 2022 19:04:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628653;
-        bh=z738e8BO/UJzm9zIi0Uml3nSYGvE+UB3QROE2NXxJmA=;
+        s=korg; t=1654628656;
+        bh=QJPm2YlDollzSuo4wj5sT5ts8zA9rU3NK1m5esGJIOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mi8uqq72aLpQc898sKeKyaeHIgD0rr+SIL3ectcBMvobQZ19tTuXqBnAUAWk1lpXv
-         UuVtvJbEF9nsRSK1NuZ0etl6ALP8LKC9Ng2bbY9PwvAU6INe1nsAsu+Gee0CnE+3VF
-         8lOuJbLLNt7yNE+fcNfVpaP0AY7vEtNYQQMV1rWo=
+        b=jovxa03Vr+cgqw3zhq+F0Xm8eMWoRGbBYdedqLwe2Tv8bYK1ppBCdOX5e3yWj7H/F
+         Ep6qu3+b2FR5f6cFnJRlcjwrGzS8VCzZA5rcuB7upZe1WopzF9XHeQbbm7pt2ljdli
+         YS7aSF4SQbCKM8X4Z3sHrBQWJejwTgSYSl4HtnxA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 406/879] selftests/bpf: Prevent skeleton generation race
-Date:   Tue,  7 Jun 2022 18:58:44 +0200
-Message-Id: <20220607165014.646932607@linuxfoundation.org>
+Subject: [PATCH 5.18 407/879] Revert "cpufreq: Fix possible race in cpufreq online error path"
+Date:   Tue,  7 Jun 2022 18:58:45 +0200
+Message-Id: <20220607165014.676893477@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,56 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit 1e2666e029e5cc2b81dbd7c85af5bcc8c80524e0 ]
+[ Upstream commit 85f0e42bd65d01b351d561efb38e584d4c596553 ]
 
-Prevent "classic" and light skeleton generation rules from stomping on
-each other's toes due to the use of the same <obj>.linked{1,2,3}.o
-naming pattern. There is no coordination and synchronizataion between
-.skel.h and .lskel.h rules, so they can easily overwrite each other's
-intermediate object files, leading to errors like:
+This reverts commit f346e96267cd76175d6c201b40f770c0116a8a04.
 
-  /bin/sh: line 1: 170928 Bus error               (core dumped)
-  /data/users/andriin/linux/tools/testing/selftests/bpf/tools/sbin/bpftool gen skeleton
-  /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.linked3.o
-  name test_ksyms_weak
-  > /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h
-  make: *** [Makefile:507: /data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h] Error 135
-  make: *** Deleting file '/data/users/andriin/linux/tools/testing/selftests/bpf/test_ksyms_weak.skel.h'
+The commit tried to fix a possible real bug but it made it even worse.
+The fix was simply buggy as now an error out to out_offline_policy or
+out_exit_policy will try to release a semaphore which was never taken in
+the first place. This works fine only if we failed late, i.e. via
+out_destroy_policy.
 
-Fix by using different suffix for light skeleton rule.
-
-Fixes: c48e51c8b07a ("bpf: selftests: Add selftests for module kfunc support")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220509004148.1801791-2-andrii@kernel.org
+Fixes: f346e96267cd ("cpufreq: Fix possible race in cpufreq online error path")
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/cpufreq/cpufreq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3820608faf57..a15c47d2fa73 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -415,11 +415,11 @@ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 233e8af48848..fbaa8e6c7d23 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1534,6 +1534,8 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
  
- $(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
--	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
--	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked1.o) $$<
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked2.o) $$(<:.o=.llinked1.o)
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.llinked3.o) $$(<:.o=.llinked2.o)
-+	$(Q)diff $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
-+	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.llinked3.o) name $$(notdir $$(<:.o=_lskel)) > $$@
++	up_write(&policy->rwsem);
++
+ out_offline_policy:
+ 	if (cpufreq_driver->offline)
+ 		cpufreq_driver->offline(policy);
+@@ -1542,9 +1544,6 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->exit)
+ 		cpufreq_driver->exit(policy);
  
- $(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
+-	cpumask_clear(policy->cpus);
+-	up_write(&policy->rwsem);
+-
+ out_free_policy:
+ 	cpufreq_policy_free(policy);
+ 	return ret;
 -- 
 2.35.1
 

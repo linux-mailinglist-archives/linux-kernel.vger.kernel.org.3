@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F2A5408C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0B8541ABF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345574AbiFGSC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
+        id S1380426AbiFGVhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348021AbiFGRoC (ORCPT
+        with ESMTP id S1357573AbiFGUnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:44:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450CE131285;
-        Tue,  7 Jun 2022 10:35:16 -0700 (PDT)
+        Tue, 7 Jun 2022 16:43:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C631F2F25;
+        Tue,  7 Jun 2022 11:39:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 019FDB822B1;
-        Tue,  7 Jun 2022 17:34:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6293AC385A5;
-        Tue,  7 Jun 2022 17:34:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 368FC60B3D;
+        Tue,  7 Jun 2022 18:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B58FC385A2;
+        Tue,  7 Jun 2022 18:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623271;
-        bh=4wRWzy3p19GdBvnR9eGQdts8dH82lsq8gegBhMb89GA=;
+        s=korg; t=1654627113;
+        bh=z16glOCFgiD3g2TkfWOUF6DAFKVA0fXskdcPq/Fr26U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IgmyaIbpiVnQVmqPE6TSWjOjKgnDyy8rwPi/oYzAwfxrPsgCXYTqbWJfuVbC5oQdQ
-         cpdldzC3EYYG+57UjhpzcnwKdio9Wwks6NNQFUpO/YKwuoYuFMIA7IDMbEQQg6ttJ5
-         oxSUzKZK68L3FkSNs4Li2wjkQnmGyP6ylEtch44I=
+        b=yyR4xq9eOeLPJ/Aq5iZsAAvdPmNnmLfbBz2nTHSAdVZt1unfJnhvKIaFpSmesSle0
+         uhMQjnpclipKIabfkghkzRi9hxXZspUCSIwBDgv6rlIpuTbQoJq8OtTtZ5QurjbppT
+         kLQma1PRBSOwaWMH3adqPyF0nONIqoXcx7WBNpf8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 357/452] bfq: Update cgroup information before merging bio
+        stable@vger.kernel.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.17 622/772] iwlwifi: mvm: fix assert 1F04 upon reconfig
 Date:   Tue,  7 Jun 2022 19:03:34 +0200
-Message-Id: <20220607164919.203206244@linuxfoundation.org>
+Message-Id: <20220607165007.263895548@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
 
-commit ea591cd4eb270393810e7be01feb8fde6a34fbbe upstream.
+commit 9d096e3d3061dbf4ee10e2b59fc2c06e05bdb997 upstream.
 
-When the process is migrated to a different cgroup (or in case of
-writeback just starts submitting bios associated with a different
-cgroup) bfq_merge_bio() can operate with stale cgroup information in
-bic. Thus the bio can be merged to a request from a different cgroup or
-it can result in merging of bfqqs for different cgroups or bfqqs of
-already dead cgroups and causing possible use-after-free issues. Fix the
-problem by updating cgroup information in bfq_merge_bio().
+When we reconfig we must not send the MAC_POWER command that relates to
+a MAC that was not yet added to the firmware.
 
-CC: stable@vger.kernel.org
-Fixes: e21b7a0b9887 ("block, bfq: add full hierarchical scheduling and cgroups support")
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-4-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Ignore those in the iterator.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20220517120044.ed2ffc8ce732.If786e19512d0da4334a6382ea6148703422c7d7b@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/bfq-iosched.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/power.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2227,10 +2227,17 @@ static bool bfq_bio_merge(struct request
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
+@@ -563,6 +563,9 @@ static void iwl_mvm_power_get_vifs_itera
+ 	struct iwl_power_vifs *power_iterator = _data;
+ 	bool active = mvmvif->phy_ctxt && mvmvif->phy_ctxt->id < NUM_PHY_CTX;
  
- 	spin_lock_irq(&bfqd->lock);
- 
--	if (bic)
-+	if (bic) {
-+		/*
-+		 * Make sure cgroup info is uptodate for current process before
-+		 * considering the merge.
-+		 */
-+		bfq_bic_update_cgroup(bic, bio);
++	if (!mvmvif->uploaded)
++		return;
 +
- 		bfqd->bio_bfqq = bic_to_bfqq(bic, op_is_sync(bio->bi_opf));
--	else
-+	} else {
- 		bfqd->bio_bfqq = NULL;
-+	}
- 	bfqd->bio_bic = bic;
- 
- 	ret = blk_mq_sched_try_merge(q, bio, nr_segs, &free);
+ 	switch (ieee80211_vif_type_p2p(vif)) {
+ 	case NL80211_IFTYPE_P2P_DEVICE:
+ 		break;
 
 

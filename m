@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1216554260A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8686254249C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355474AbiFHAtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S230324AbiFHAnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382792AbiFGWEh (ORCPT
+        with ESMTP id S1382798AbiFGWEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 18:04:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C688250694;
-        Tue,  7 Jun 2022 12:15:45 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F6125069A;
+        Tue,  7 Jun 2022 12:15:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AF63B8233E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 124D361846;
+        Tue,  7 Jun 2022 19:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20081C385A2;
         Tue,  7 Jun 2022 19:15:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60256C385A2;
-        Tue,  7 Jun 2022 19:15:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629342;
-        bh=h7iFGRANW2OaT8ExBuyx2KGOZq68ixyMEhTw8ubdLHI=;
+        s=korg; t=1654629345;
+        bh=bZ/gkPK6FV5YKNITi2OCbXEZcm6VBFXIXhsjV92dqrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hzKV6qqPdXAZMIc2zU8F+v/U4MBew0o3VG69P3b1uRnycSUwXKtMuKC1p9rBrSpZx
-         MtoAVbbfG//hnUsBnvhhgEBE3FOg6nZZRXlxBl2FoQ7mnVRqxwRWHP6qhMOX16fCsM
-         osI45tiuCIoqZ5ZMKC7sATq09vOzCU+G1KW39Nm4=
+        b=i1PfjqkW6xsWtYxrPD7QKvuQI1nrwjvbw06D2cjCx1lcJikW0PUFK2asuIumAjcAE
+         w2hTo6i779pp8S4j8EFVTAQ3AgJB9zlDFU2SeAdvOVzi+7btIsM7YUOAKa6mPUotBh
+         Hq36nroxxK9OB2/nJGrpNjFuJCZSoobXOhi4eHQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 657/879] OPP: call of_node_put() on error path in _bandwidth_supported()
-Date:   Tue,  7 Jun 2022 19:02:55 +0200
-Message-Id: <20220607165021.915516608@linuxfoundation.org>
+        stable@vger.kernel.org, Jayesh Choudhary <j-choudhary@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 658/879] dmaengine: ti: k3-psil-am62: Update PSIL thread for saul.
+Date:   Tue,  7 Jun 2022 19:02:56 +0200
+Message-Id: <20220607165021.944736373@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -47,7 +46,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,38 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jayesh Choudhary <j-choudhary@ti.com>
 
-[ Upstream commit 907ed123b9d096c73e9361f6cd4097f0691497f2 ]
+[ Upstream commit b21fe492a3a9831c315eb456cf5480c9490eaeef ]
 
-This code does not call of_node_put(opp_np) if of_get_next_available_child()
-returns NULL.  But it should.
+Correct the RX PSIL thread for sa3ul.
 
-Fixes: 45679f9b508f ("opp: Don't parse icc paths unnecessarily")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+Fixes: 5ac6bfb587772 ("dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data")
+Link: https://lore.kernel.org/r/20220421065323.16378-1-j-choudhary@ti.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/opp/of.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/ti/k3-psil-am62.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 440ab5a03df9..95b184fc3372 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -437,11 +437,11 @@ static int _bandwidth_supported(struct device *dev, struct opp_table *opp_table)
- 
- 	/* Checking only first OPP is sufficient */
- 	np = of_get_next_available_child(opp_np, NULL);
-+	of_node_put(opp_np);
- 	if (!np) {
- 		dev_err(dev, "OPP table empty\n");
- 		return -EINVAL;
- 	}
--	of_node_put(opp_np);
- 
- 	prop = of_find_property(np, "opp-peak-kBps", NULL);
- 	of_node_put(np);
+diff --git a/drivers/dma/ti/k3-psil-am62.c b/drivers/dma/ti/k3-psil-am62.c
+index d431e2033237..2b6fd6e37c61 100644
+--- a/drivers/dma/ti/k3-psil-am62.c
++++ b/drivers/dma/ti/k3-psil-am62.c
+@@ -70,10 +70,10 @@
+ /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
+ static struct psil_ep am62_src_ep_map[] = {
+ 	/* SAUL */
+-	PSIL_SAUL(0x7500, 20, 35, 8, 35, 0),
+-	PSIL_SAUL(0x7501, 21, 35, 8, 36, 0),
+-	PSIL_SAUL(0x7502, 22, 43, 8, 43, 0),
+-	PSIL_SAUL(0x7503, 23, 43, 8, 44, 0),
++	PSIL_SAUL(0x7504, 20, 35, 8, 35, 0),
++	PSIL_SAUL(0x7505, 21, 35, 8, 36, 0),
++	PSIL_SAUL(0x7506, 22, 43, 8, 43, 0),
++	PSIL_SAUL(0x7507, 23, 43, 8, 44, 0),
+ 	/* PDMA_MAIN0 - SPI0-3 */
+ 	PSIL_PDMA_XY_PKT(0x4302),
+ 	PSIL_PDMA_XY_PKT(0x4303),
 -- 
 2.35.1
 

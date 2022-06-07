@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71756540692
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6625418CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346711AbiFGRg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S1380230AbiFGVP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347166AbiFGRaH (ORCPT
+        with ESMTP id S1355030AbiFGURZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57D5108A80;
-        Tue,  7 Jun 2022 10:25:58 -0700 (PDT)
+        Tue, 7 Jun 2022 16:17:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0D1D05AB;
+        Tue,  7 Jun 2022 11:30:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B9766141D;
-        Tue,  7 Jun 2022 17:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38603C36AFF;
-        Tue,  7 Jun 2022 17:25:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FAA4612E9;
+        Tue,  7 Jun 2022 18:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5CBC385A5;
+        Tue,  7 Jun 2022 18:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622757;
-        bh=DrIiPpMyur8d0DVsLb71NwvOM01mDrmNo4xX57fS2nI=;
+        s=korg; t=1654626601;
+        bh=1uQfHZyEVzAhNvhs2p8gXdX2bJGCq69ZMlYZfgFCGHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rf0yH6ZrvxHLmQVVFEW7P4Pzjnpd27WZS2+FLFulGU0nGF5vt0CLk/IqB16MGO0K8
-         TwW93nekjBcebvh1mZa8bkoo8iTFoJ+xrOOG4eWfi5ZxF+lmu0Zh/XRIZ6qnnykyRM
-         ELBAuJOrkcKeyxA++OcCpN4KDvdnjfXVbfLkuIyw=
+        b=wK0BWJfOu0pVPxMFiv3lIvjDY05g2OyxXRHGPVHMaePNsiBxml7ZFHX++htmKL6+O
+         5x537SeeQoAH7okcT+56Bx7tTzPuGocUXlEKRmtm/l2lxqc8HZR1W68phArflaV034
+         B0VA8kyu+dy3UPV+AoZf5KiNIl2pdnWNo6i/b1Xg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 173/452] drm/msm/disp/dpu1: set vbif hw config to NULL to avoid use after memory free during pm runtime resume
+Subject: [PATCH 5.17 438/772] rxrpc: Fix listen() setting the bar too high for the prealloc rings
 Date:   Tue,  7 Jun 2022 19:00:30 +0200
-Message-Id: <20220607164913.717262423@linuxfoundation.org>
+Message-Id: <20220607165001.907688517@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vinod Polimera <quic_vpolimer@quicinc.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit fa5186b279ecf44b14fb435540d2065be91cb1ed ]
+[ Upstream commit 88e22159750b0d55793302eeed8ee603f5c1a95c ]
 
-BUG: Unable to handle kernel paging request at virtual address 006b6b6b6b6b6be3
+AF_RXRPC's listen() handler lets you set the backlog up to 32 (if you bump
+up the sysctl), but whilst the preallocation circular buffers have 32 slots
+in them, one of them has to be a dead slot because we're using CIRC_CNT().
 
-Call trace:
-  dpu_vbif_init_memtypes+0x40/0xb8
-  dpu_runtime_resume+0xcc/0x1c0
-  pm_generic_runtime_resume+0x30/0x44
-  __genpd_runtime_resume+0x68/0x7c
-  genpd_runtime_resume+0x134/0x258
-  __rpm_callback+0x98/0x138
-  rpm_callback+0x30/0x88
-  rpm_resume+0x36c/0x49c
-  __pm_runtime_resume+0x80/0xb0
-  dpu_core_irq_uninstall+0x30/0xb0
-  dpu_irq_uninstall+0x18/0x24
-  msm_drm_uninit+0xd8/0x16c
+This means that listen(rxrpc_sock, 32) will cause an oops when the socket
+is closed because rxrpc_service_prealloc_one() allocated one too many calls
+and rxrpc_discard_prealloc() won't then be able to get rid of them because
+it'll think the ring is empty.  rxrpc_release_calls_on_socket() then tries
+to abort them, but oopses because call->peer isn't yet set.
 
-Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/483255/
-Link: https://lore.kernel.org/r/1650857213-30075-1-git-send-email-quic_vpolimer@quicinc.com
-[DB: fixed Fixes tag]
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fix this by setting the maximum backlog to RXRPC_BACKLOG_MAX - 1 to match
+the ring capacity.
+
+ BUG: kernel NULL pointer dereference, address: 0000000000000086
+ ...
+ RIP: 0010:rxrpc_send_abort_packet+0x73/0x240 [rxrpc]
+ Call Trace:
+  <TASK>
+  ? __wake_up_common_lock+0x7a/0x90
+  ? rxrpc_notify_socket+0x8e/0x140 [rxrpc]
+  ? rxrpc_abort_call+0x4c/0x60 [rxrpc]
+  rxrpc_release_calls_on_socket+0x107/0x1a0 [rxrpc]
+  rxrpc_release+0xc9/0x1c0 [rxrpc]
+  __sock_release+0x37/0xa0
+  sock_close+0x11/0x20
+  __fput+0x89/0x240
+  task_work_run+0x59/0x90
+  do_exit+0x319/0xaa0
+
+Fixes: 00e907127e6f ("rxrpc: Preallocate peers, conns and calls for incoming service requests")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lists.infradead.org/pipermail/linux-afs/2022-March/005079.html
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/rxrpc/sysctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 08e082d0443a..b05ff46d773d 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -678,8 +678,10 @@ static void _dpu_kms_hw_destroy(struct dpu_kms *dpu_kms)
- 		for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
- 			u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
+diff --git a/net/rxrpc/sysctl.c b/net/rxrpc/sysctl.c
+index 540351d6a5f4..555e0910786b 100644
+--- a/net/rxrpc/sysctl.c
++++ b/net/rxrpc/sysctl.c
+@@ -12,7 +12,7 @@
  
--			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx])
-+			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx]) {
- 				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[vbif_idx]);
-+				dpu_kms->hw_vbif[vbif_idx] = NULL;
-+			}
- 		}
- 	}
- 
+ static struct ctl_table_header *rxrpc_sysctl_reg_table;
+ static const unsigned int four = 4;
+-static const unsigned int thirtytwo = 32;
++static const unsigned int max_backlog = RXRPC_BACKLOG_MAX - 1;
+ static const unsigned int n_65535 = 65535;
+ static const unsigned int n_max_acks = RXRPC_RXTX_BUFF_SIZE - 1;
+ static const unsigned long one_jiffy = 1;
+@@ -89,7 +89,7 @@ static struct ctl_table rxrpc_sysctl_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= (void *)&four,
+-		.extra2		= (void *)&thirtytwo,
++		.extra2		= (void *)&max_backlog,
+ 	},
+ 	{
+ 		.procname	= "rx_window_size",
 -- 
 2.35.1
 

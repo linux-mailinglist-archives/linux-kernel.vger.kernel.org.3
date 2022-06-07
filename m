@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4922A5413DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA16540984
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359078AbiFGUIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S1347815AbiFGSJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354965AbiFGTL4 (ORCPT
+        with ESMTP id S1349037AbiFGRu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:11:56 -0400
+        Tue, 7 Jun 2022 13:50:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89EAAE5E;
-        Tue,  7 Jun 2022 11:07:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCA1139AE4;
+        Tue,  7 Jun 2022 10:37:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDEC617B4;
-        Tue,  7 Jun 2022 18:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3162AC385A5;
-        Tue,  7 Jun 2022 18:07:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FBA61529;
+        Tue,  7 Jun 2022 17:37:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F02C385A5;
+        Tue,  7 Jun 2022 17:37:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625230;
-        bh=Xj4t98qVdkLPZQTS7OXQAoSx8M/pu0ePvUGCBZ8pXgU=;
+        s=korg; t=1654623448;
+        bh=MLkY1OvX2VTXtWkd4B2hKU9SxPB0F0RJYdX5ADWhvgw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hDbfrtwUheLwm2zJzHTQSg8QWlV7Ur7sjjtvD84OOh6pARzwEdEp7qFbh3i40QdNH
-         0qL8RYU1UiuqSg1RQAFswPUhuZb1I8RFxjW5xP6PK5GIwk7dmSA1EYYeD+jdddMkb7
-         JmvEFnAqgjw5AOsWOdVKl7zKPfWbN9zjOMzXQqKE=
+        b=XMVsQ/u6i8Rn/k4yYXeOySuJ4G29v9mVVFZ4KtISPfvbQYX6MWfFwazRmGPQhZrN/
+         TK0SuJSaF0H+I0n0SCOO+1XLaiq647zxANGVe/KJPdKE59tS/p0M5S20J6LOVu54Ic
+         0DZu7U7oDKOYx/WEl8lPp5GV4pVdy7oZBjWx8p1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.15 572/667] samples/landlock: Add clang-format exceptions
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Lyude Paul <lyude@redhat.com>
+Subject: [PATCH 5.10 380/452] drm/nouveau/clk: Fix an incorrect NULL check on list iterator
 Date:   Tue,  7 Jun 2022 19:03:57 +0200
-Message-Id: <20220607164951.849348590@linuxfoundation.org>
+Message-Id: <20220607164919.889007817@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 9805a722db071e1772b80e6e0ff33f35355639ac upstream.
+commit 1c3b2a27def609473ed13b1cd668cb10deab49b4 upstream.
 
-In preparation to a following commit, add clang-format on and
-clang-format off stanzas around constant definitions.  This enables to
-keep aligned values, which is much more readable than packed
-definitions.
+The bug is here:
+	if (nvkm_cstate_valid(clk, cstate, max_volt, clk->temp))
+		return cstate;
 
-Link: https://lore.kernel.org/r/20220506160513.523257-7-mic@digikod.net
+The list iterator value 'cstate' will *always* be set and non-NULL
+by list_for_each_entry_from_reverse(), so it is incorrect to assume
+that the iterator value will be unchanged if the list is empty or no
+element is found (In fact, it will be a bogus pointer to an invalid
+structure object containing the HEAD). Also it missed a NULL check
+at callsite and may lead to invalid memory access after that.
+
+To fix this bug, just return 'encoder' when found, otherwise return
+NULL. And add the NULL check.
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Fixes: 1f7f3d91ad38a ("drm/nouveau/clk: Respect voltage limits in nvkm_cstate_prog")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220327075824.11806-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- samples/landlock/sandboxer.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/samples/landlock/sandboxer.c
-+++ b/samples/landlock/sandboxer.c
-@@ -70,11 +70,15 @@ static int parse_path(char *env_path, co
- 	return num_paths;
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
+@@ -135,10 +135,10 @@ nvkm_cstate_find_best(struct nvkm_clk *c
+ 
+ 	list_for_each_entry_from_reverse(cstate, &pstate->list, head) {
+ 		if (nvkm_cstate_valid(clk, cstate, max_volt, clk->temp))
+-			break;
++			return cstate;
+ 	}
+ 
+-	return cstate;
++	return NULL;
  }
  
-+/* clang-format off */
-+
- #define ACCESS_FILE ( \
- 	LANDLOCK_ACCESS_FS_EXECUTE | \
- 	LANDLOCK_ACCESS_FS_WRITE_FILE | \
- 	LANDLOCK_ACCESS_FS_READ_FILE)
- 
-+/* clang-format on */
-+
- static int populate_ruleset(
- 		const char *const env_var, const int ruleset_fd,
- 		const __u64 allowed_access)
-@@ -139,6 +143,8 @@ out_free_name:
- 	return ret;
- }
- 
-+/* clang-format off */
-+
- #define ACCESS_FS_ROUGHLY_READ ( \
- 	LANDLOCK_ACCESS_FS_EXECUTE | \
- 	LANDLOCK_ACCESS_FS_READ_FILE | \
-@@ -156,6 +162,8 @@ out_free_name:
- 	LANDLOCK_ACCESS_FS_MAKE_BLOCK | \
- 	LANDLOCK_ACCESS_FS_MAKE_SYM)
- 
-+/* clang-format on */
-+
- int main(const int argc, char *const argv[], char *const *const envp)
- {
- 	const char *cmd_path;
+ static struct nvkm_cstate *
+@@ -169,6 +169,8 @@ nvkm_cstate_prog(struct nvkm_clk *clk, s
+ 	if (!list_empty(&pstate->list)) {
+ 		cstate = nvkm_cstate_get(clk, pstate, cstatei);
+ 		cstate = nvkm_cstate_find_best(clk, pstate, cstate);
++		if (!cstate)
++			return -EINVAL;
+ 	} else {
+ 		cstate = &pstate->base;
+ 	}
 
 

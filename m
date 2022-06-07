@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C840540D83
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985115417DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353940AbiFGSsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S1379580AbiFGVGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352398AbiFGSRG (ORCPT
+        with ESMTP id S1358641AbiFGUHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:17:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112672126F;
-        Tue,  7 Jun 2022 10:51:45 -0700 (PDT)
+        Tue, 7 Jun 2022 16:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCA91C4B0C;
+        Tue,  7 Jun 2022 11:26:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8871B80B66;
-        Tue,  7 Jun 2022 17:51:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A434C385A5;
-        Tue,  7 Jun 2022 17:51:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BEFA611B9;
+        Tue,  7 Jun 2022 18:26:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D88C34115;
+        Tue,  7 Jun 2022 18:26:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624302;
-        bh=XNm2g0S/w5PkuuKuHkkXAlx5lsE5JPWtVLHfP2/aKY0=;
+        s=korg; t=1654626362;
+        bh=bkChc6VIB6JtzS4Rga/CFkQ8bKYrPOAxs2A1bHKiS9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CAo33G0SwnnUzLth3hjHU0jttrWXmbFOpPE3hwgQc5//kQiqbi448XAUX1FMCjKxF
-         nz7SC2jgIpHqRauNsiYmGb7B74C2OHjFUepCMASDN9lpXf+drdvV28anjoMRCbsfXS
-         Qx7bttv1lHBLBaJG8SKG8wD89hAfAIc2Wa4OEWUg=
+        b=xkUK9EWM+ajCcCu/MWvJSM7Va5h6nJjYvoSWrnGUkwox5rcSR7kxKzvdmyWcJ4R0k
+         /GNKGfMIPZw39kjU+E4p1KZp+TMtBzuwKkiGMwGlFSCX38k8ubUO5H76PUDE65KmHf
+         SugnOaFcR3mzU5LoNon5bG4bTCthd3wXoo8O3e88=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 279/667] virtio_blk: fix the discard_granularity and discard_alignment queue limits
+        stable@vger.kernel.org, Baochen Qiang <quic_bqiang@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 352/772] ath11k: Dont check arvif->is_started before sending management frames
 Date:   Tue,  7 Jun 2022 18:59:04 +0200
-Message-Id: <20220607164943.154750724@linuxfoundation.org>
+Message-Id: <20220607164959.392543958@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Baochen Qiang <quic_bqiang@quicinc.com>
 
-[ Upstream commit 62952cc5bccd89b76d710de1d0b43244af0f2903 ]
+[ Upstream commit 355333a217541916576351446b5832fec7930566 ]
 
-The discard_alignment queue limit is named a bit misleading means the
-offset into the block device at which the discard granularity starts.
+Commit 66307ca04057 ("ath11k: fix mgmt_tx_wmi cmd sent to FW for
+deleted vdev") wants both of below two conditions are true before
+sending management frames:
 
-On the other hand the discard_sector_alignment from the virtio 1.1 looks
-similar to what Linux uses as discard granularity (even if not very well
-described):
+1: ar->allocated_vdev_map & (1LL << arvif->vdev_id)
+2: arvif->is_started
 
-  "discard_sector_alignment can be used by OS when splitting a request
-   based on alignment. "
+Actually the second one is not necessary because with the first one
+we can make sure the vdev is present.
 
-And at least qemu does set it to the discard granularity.
+Also use ar->conf_mutex to synchronize vdev delete and mgmt. TX.
 
-So stop setting the discard_alignment and use the virtio
-discard_sector_alignment to set the discard granularity.
+This issue is found in case of Passpoint scenario where ath11k
+needs to send action frames before vdev is started.
 
-Fixes: 1f23816b8eb8 ("virtio_blk: add discard and write zeroes support")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-Link: https://lore.kernel.org/r/20220418045314.360785-5-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fix it by removing the second condition.
+
+Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-01720.1-QCAHSPSWPL_V1_V2_SILICONZ_LITE-1
+
+Fixes: 66307ca04057 ("ath11k: fix mgmt_tx_wmi cmd sent to FW for deleted vdev")
+Signed-off-by: Baochen Qiang <quic_bqiang@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220506013614.1580274-3-quic_bqiang@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/virtio_blk.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-index c0b8a26892a5..c05138a28475 100644
---- a/drivers/block/virtio_blk.c
-+++ b/drivers/block/virtio_blk.c
-@@ -855,11 +855,12 @@ static int virtblk_probe(struct virtio_device *vdev)
- 		blk_queue_io_opt(q, blk_size * opt_io_size);
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 16b45b742f9d..d46f53061d61 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -5515,8 +5515,8 @@ static void ath11k_mgmt_over_wmi_tx_work(struct work_struct *work)
+ 		}
  
- 	if (virtio_has_feature(vdev, VIRTIO_BLK_F_DISCARD)) {
--		q->limits.discard_granularity = blk_size;
--
- 		virtio_cread(vdev, struct virtio_blk_config,
- 			     discard_sector_alignment, &v);
--		q->limits.discard_alignment = v ? v << SECTOR_SHIFT : 0;
-+		if (v)
-+			q->limits.discard_granularity = v << SECTOR_SHIFT;
-+		else
-+			q->limits.discard_granularity = blk_size;
+ 		arvif = ath11k_vif_to_arvif(skb_cb->vif);
+-		if (ar->allocated_vdev_map & (1LL << arvif->vdev_id) &&
+-		    arvif->is_started) {
++		mutex_lock(&ar->conf_mutex);
++		if (ar->allocated_vdev_map & (1LL << arvif->vdev_id)) {
+ 			ret = ath11k_mac_mgmt_tx_wmi(ar, arvif, skb);
+ 			if (ret) {
+ 				ath11k_warn(ar->ab, "failed to tx mgmt frame, vdev_id %d :%d\n",
+@@ -5534,6 +5534,7 @@ static void ath11k_mgmt_over_wmi_tx_work(struct work_struct *work)
+ 				    arvif->is_started);
+ 			ath11k_mgmt_over_wmi_tx_drop(ar, skb);
+ 		}
++		mutex_unlock(&ar->conf_mutex);
+ 	}
+ }
  
- 		virtio_cread(vdev, struct virtio_blk_config,
- 			     max_discard_sectors, &v);
 -- 
 2.35.1
 

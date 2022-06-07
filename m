@@ -2,115 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13CD542055
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09AE542067
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385871AbiFHAWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S1385828AbiFHAZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359353AbiFGWbv (ORCPT
+        with ESMTP id S1385920AbiFGWmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:31:51 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CF627B9AF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:25:16 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id bo5so16359991pfb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:25:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=szR7r+mhCiyllPHOYpWCvCcgEkcODKa3DHmlzg25Uuc=;
-        b=YxOVYFIXNDL2R9Bp5NP7sFBCXOpoBOSoM2+6V+lnOBnYxPPzfDjs2/v/oTsXj4uhLS
-         078BRiHzhGwm+ESUcmIhulF8W4QCV6GSulm+/klLNoOsu0JbpU1VZvx/TBp4Fen3EBH7
-         /jj0leaQxRcNbCpvW6hZMD8BLq397vAcPTfDhJe3C26YNJoQkrv87gKE/wcOPh7xxi5o
-         QCRIdWFaPOS4K/eIwD87pekU6QM+YI/CHK5K6Gic1G7v7fGKPzWBpaF3tvNwt42+LPJk
-         KsE7eVpzhBKnfe7hGrCKvIZU5E3bMVAAdH8DHASpfdSkoz6ia8Lr61B9+lKpxySWVQM/
-         emBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=szR7r+mhCiyllPHOYpWCvCcgEkcODKa3DHmlzg25Uuc=;
-        b=PStEOTEH5NEZobwrIDyqwvMj32WsEc9d8nSkXhWBsx/r2yR6007R6jiqiVZgtYPmnh
-         pWxHs46DSH5zrjRiMa8Zc1r0u6eBKa70Fg2YOq9VdvkOhg9HySAFZ2M4xIcwkGMPPb4b
-         FnhsU2c/NN11CtwmOf7BwpOqL5AhMcB+VYlr/wEWjYUXVViP1pNCRrQouB9b5wJ3P394
-         lGws4gMnbss5Ok8RDBP+TdLPViXUz9f5nXKcpUb1B7hhIfU/RSmVIE+v3sa39QcX2Sk1
-         ZD0mBNNLr5iRlQ1DOt0hNF/g6c2Mhqs4R+j76qVbV/Sl4oE6aVgIGJVUnmHc6UF0ObjA
-         qCSQ==
-X-Gm-Message-State: AOAM532GHuUBjFW/w9iTDZG0jf+iXFt2EWGWuK5VFp7xwZsu8VrUGdsO
-        d94U5WN4Rlqd+/CWZKycxC3Xlw39Mgc=
-X-Google-Smtp-Source: ABdhPJxjqDVgqTFmIHkJXehL20yGslGE4u+0x03+g4O9N4M8WM3QfKusenD1lbiI3tyXzFjnFuTgcg==
-X-Received: by 2002:a05:6a00:88f:b0:510:7a49:b72f with SMTP id q15-20020a056a00088f00b005107a49b72fmr30639671pfj.21.1654629915579;
-        Tue, 07 Jun 2022 12:25:15 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:fa4d])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170902d34500b0015ef27092aasm12865936plk.190.2022.06.07.12.25.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 12:25:14 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 7 Jun 2022 09:25:13 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Christian Koenig <Christian.Koenig@amd.com>
-Subject: Re: [PATCH] Revert "workqueue: remove unused cancel_work()"
-Message-ID: <Yp+mGaY+Ga/wX2h2@slm.duckdns.org>
-References: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
- <CAJhGHyBQ60Lh3WZCa+2cE4T36t3vjNxYTBCxS7J0xhZr8Eb2wg@mail.gmail.com>
- <e1e2e63d-a1a9-12ad-97a7-a3771210edda@amd.com>
- <CAJhGHyC7VLM1PnXMu2zmdX=xtSNKo6VGO5p0AkUnaaMsuZytpA@mail.gmail.com>
- <045157bb-31a0-2d76-18b7-4272fab218ef@gmail.com>
- <YodIquufXzK581gw@slm.duckdns.org>
- <8df16635-658b-b381-9a40-3544828910fc@amd.com>
- <Yp+HXowR9nTig331@slm.duckdns.org>
- <CADnq5_OquY8A_nMsCcwMxvDL3r0WzYAxFdrGNzYsKEP7q-Xg7g@mail.gmail.com>
+        Tue, 7 Jun 2022 18:42:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36F9F290B24
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654630421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0L+WDYL2ErSdyIk/wXgdKER6Al4H5aQXP9OvHKSvcc=;
+        b=ZW8ya4pWtENVlsEIoNfEwkFPHrvL2zFfR3ERsLPH0fciTBpnUIrmZKSK+rf6dELlUq6WUR
+        Gux3SW6a8ufvjzmVzuBIgMG+GtdDlq03nGFf576OrR49dbV2pz0vGbEeKvRGGLkMZwbG11
+        vCx6ZX5twaH7oWIoaMu7IJ6p4ipfxTc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-QkFO80RyM62Il9JS0DAv-w-1; Tue, 07 Jun 2022 15:33:37 -0400
+X-MC-Unique: QkFO80RyM62Il9JS0DAv-w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 143933C11056;
+        Tue,  7 Jun 2022 19:30:55 +0000 (UTC)
+Received: from emerald.redhat.com (unknown [10.22.9.252])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B61852143A29;
+        Tue,  7 Jun 2022 19:29:54 +0000 (UTC)
+From:   Lyude Paul <lyude@redhat.com>
+To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Cc:     Wayne Lin <Wayne.Lin@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Claudio Suarez <cssk@net-c.es>, Roman Li <Roman.Li@amd.com>,
+        Ian Chen <ian.chen@amd.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wenjing Liu <wenjing.liu@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Jimmy Kizito <Jimmy.Kizito@amd.com>,
+        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
+        Eric Yang <Eric.Yang2@amd.com>, jinzh <jinzh@github.amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Michael Strauss <michael.strauss@amd.com>,
+        "Shen, George" <George.Shen@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RESEND RFC 01/18] drm/amdgpu/dc/mst: Rename dp_mst_stream_allocation(_table)
+Date:   Tue,  7 Jun 2022 15:29:16 -0400
+Message-Id: <20220607192933.1333228-2-lyude@redhat.com>
+In-Reply-To: <20220607192933.1333228-1-lyude@redhat.com>
+References: <20220607192933.1333228-1-lyude@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADnq5_OquY8A_nMsCcwMxvDL3r0WzYAxFdrGNzYsKEP7q-Xg7g@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 01:39:01PM -0400, Alex Deucher wrote:
-> On Tue, Jun 7, 2022 at 1:14 PM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > On Sat, May 21, 2022 at 12:04:00AM -0400, Andrey Grodzovsky wrote:
-> > > From 78df30cc97f10c885f5159a293e6afe2348aa60c Mon Sep 17 00:00:00 2001
-> > > From: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-> > > Date: Thu, 19 May 2022 09:47:28 -0400
-> > > Subject: Revert "workqueue: remove unused cancel_work()"
-> > >
-> > > This reverts commit 6417250d3f894e66a68ba1cd93676143f2376a6f.
-> > >
-> > > amdpgu need this function in order to prematurly stop pending
-> > > reset works when another reset work already in progress.
-> > >
-> > > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-> >
-> > Applied to wq/for-5.19-fixes.
-> 
-> Could we take it through the drm tree so we can include it with
-> Andrey's patches that depend on it?
+Just to make this more clear to outside contributors that these are
+DC-specific structs, as this also threw me into a loop a number of times
+before I figured out the purpose of this.
 
-Oh sure, please go ahead. Imma revert from my tree.
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Cc: Wayne Lin <Wayne.Lin@amd.com>
+Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+---
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c |  9 ++++-----
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c         | 10 +++++-----
+ drivers/gpu/drm/amd/display/dc/dm_helpers.h           |  4 ++--
+ .../gpu/drm/amd/display/include/link_service_types.h  | 11 ++++++++---
+ 4 files changed, 19 insertions(+), 15 deletions(-)
 
- Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+index 7c799ddc1d27..1bd70d306c22 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+@@ -153,9 +153,8 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
+ 	return result;
+ }
+ 
+-static void get_payload_table(
+-		struct amdgpu_dm_connector *aconnector,
+-		struct dp_mst_stream_allocation_table *proposed_table)
++static void get_payload_table(struct amdgpu_dm_connector *aconnector,
++			      struct dc_dp_mst_stream_allocation_table *proposed_table)
+ {
+ 	int i;
+ 	struct drm_dp_mst_topology_mgr *mst_mgr =
+@@ -177,7 +176,7 @@ static void get_payload_table(
+ 			mst_mgr->payloads[i].payload_state ==
+ 					DP_PAYLOAD_REMOTE) {
+ 
+-			struct dp_mst_stream_allocation *sa =
++			struct dc_dp_mst_stream_allocation *sa =
+ 					&proposed_table->stream_allocations[
+ 						proposed_table->stream_count];
+ 
+@@ -201,7 +200,7 @@ void dm_helpers_dp_update_branch_info(
+ bool dm_helpers_dp_mst_write_payload_allocation_table(
+ 		struct dc_context *ctx,
+ 		const struct dc_stream_state *stream,
+-		struct dp_mst_stream_allocation_table *proposed_table,
++		struct dc_dp_mst_stream_allocation_table *proposed_table,
+ 		bool enable)
+ {
+ 	struct amdgpu_dm_connector *aconnector;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link.c b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
+index a789ea8af27f..db0f5158a0c2 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link.c
+@@ -3424,7 +3424,7 @@ static void update_mst_stream_alloc_table(
+ 	struct dc_link *link,
+ 	struct stream_encoder *stream_enc,
+ 	struct hpo_dp_stream_encoder *hpo_dp_stream_enc, // TODO: Rename stream_enc to dio_stream_enc?
+-	const struct dp_mst_stream_allocation_table *proposed_table)
++	const struct dc_dp_mst_stream_allocation_table *proposed_table)
+ {
+ 	struct link_mst_stream_allocation work_table[MAX_CONTROLLER_NUM] = { 0 };
+ 	struct link_mst_stream_allocation *dc_alloc;
+@@ -3586,7 +3586,7 @@ enum dc_status dc_link_allocate_mst_payload(struct pipe_ctx *pipe_ctx)
+ {
+ 	struct dc_stream_state *stream = pipe_ctx->stream;
+ 	struct dc_link *link = stream->link;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	struct fixed31_32 avg_time_slots_per_mtp;
+ 	struct fixed31_32 pbn;
+ 	struct fixed31_32 pbn_per_slot;
+@@ -3691,7 +3691,7 @@ enum dc_status dc_link_reduce_mst_payload(struct pipe_ctx *pipe_ctx, uint32_t bw
+ 	struct fixed31_32 avg_time_slots_per_mtp;
+ 	struct fixed31_32 pbn;
+ 	struct fixed31_32 pbn_per_slot;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	uint8_t i;
+ 	enum act_return_status ret;
+ 	const struct link_hwss *link_hwss = get_link_hwss(link, &pipe_ctx->link_res);
+@@ -3779,7 +3779,7 @@ enum dc_status dc_link_increase_mst_payload(struct pipe_ctx *pipe_ctx, uint32_t
+ 	struct fixed31_32 pbn;
+ 	struct fixed31_32 pbn_per_slot;
+ 	struct link_encoder *link_encoder = link->link_enc;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	uint8_t i;
+ 	enum act_return_status ret;
+ 	const struct link_hwss *link_hwss = get_link_hwss(link, &pipe_ctx->link_res);
+@@ -3855,7 +3855,7 @@ static enum dc_status deallocate_mst_payload(struct pipe_ctx *pipe_ctx)
+ {
+ 	struct dc_stream_state *stream = pipe_ctx->stream;
+ 	struct dc_link *link = stream->link;
+-	struct dp_mst_stream_allocation_table proposed_table = {0};
++	struct dc_dp_mst_stream_allocation_table proposed_table = {0};
+ 	struct fixed31_32 avg_time_slots_per_mtp = dc_fixpt_from_int(0);
+ 	int i;
+ 	bool mst_mode = (link->type == dc_connection_mst_branch);
+diff --git a/drivers/gpu/drm/amd/display/dc/dm_helpers.h b/drivers/gpu/drm/amd/display/dc/dm_helpers.h
+index fb6a2d7b6470..8173f4b80424 100644
+--- a/drivers/gpu/drm/amd/display/dc/dm_helpers.h
++++ b/drivers/gpu/drm/amd/display/dc/dm_helpers.h
+@@ -33,7 +33,7 @@
+ #include "dc_types.h"
+ #include "dc.h"
+ 
+-struct dp_mst_stream_allocation_table;
++struct dc_dp_mst_stream_allocation_table;
+ struct aux_payload;
+ enum aux_return_code_type;
+ 
+@@ -77,7 +77,7 @@ void dm_helpers_dp_update_branch_info(
+ bool dm_helpers_dp_mst_write_payload_allocation_table(
+ 		struct dc_context *ctx,
+ 		const struct dc_stream_state *stream,
+-		struct dp_mst_stream_allocation_table *proposed_table,
++		struct dc_dp_mst_stream_allocation_table *proposed_table,
+ 		bool enable);
+ 
+ /*
+diff --git a/drivers/gpu/drm/amd/display/include/link_service_types.h b/drivers/gpu/drm/amd/display/include/link_service_types.h
+index 447a56286dd0..91bffc5bf52c 100644
+--- a/drivers/gpu/drm/amd/display/include/link_service_types.h
++++ b/drivers/gpu/drm/amd/display/include/link_service_types.h
+@@ -245,8 +245,13 @@ union dpcd_training_lane_set {
+ };
+ 
+ 
++/* AMD's copy of various payload data for MST. We have two copies of the payload table (one in DRM,
++ * one in DC) since DRM's MST helpers can't be accessed here. This stream allocation table should
++ * _ONLY_ be filled out from DM and then passed to DC, do NOT use these for _any_ kind of atomic
++ * state calculations in DM, or you will break something.
++ */
+ /* DP MST stream allocation (payload bandwidth number) */
+-struct dp_mst_stream_allocation {
++struct dc_dp_mst_stream_allocation {
+ 	uint8_t vcp_id;
+ 	/* number of slots required for the DP stream in
+ 	 * transport packet */
+@@ -254,11 +259,11 @@ struct dp_mst_stream_allocation {
+ };
+ 
+ /* DP MST stream allocation table */
+-struct dp_mst_stream_allocation_table {
++struct dc_dp_mst_stream_allocation_table {
+ 	/* number of DP video streams */
+ 	int stream_count;
+ 	/* array of stream allocations */
+-	struct dp_mst_stream_allocation stream_allocations[MAX_CONTROLLER_NUM];
++	struct dc_dp_mst_stream_allocation stream_allocations[MAX_CONTROLLER_NUM];
+ };
+ 
+ #endif /*__DAL_LINK_SERVICE_TYPES_H__*/
 -- 
-tejun
+2.35.3
+

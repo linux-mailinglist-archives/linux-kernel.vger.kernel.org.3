@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3E754139E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6E6541BA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358164AbiFGUDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S1382343AbiFGVvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353812AbiFGTDF (ORCPT
+        with ESMTP id S239238AbiFGUuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:03:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9291510F37E;
-        Tue,  7 Jun 2022 11:05:15 -0700 (PDT)
+        Tue, 7 Jun 2022 16:50:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0931F77C9;
+        Tue,  7 Jun 2022 11:39:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67791B82348;
-        Tue,  7 Jun 2022 18:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF56C385A5;
-        Tue,  7 Jun 2022 18:05:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4208F6160D;
+        Tue,  7 Jun 2022 18:39:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B666C385A5;
+        Tue,  7 Jun 2022 18:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625103;
-        bh=3e3MjhpOnvt1LNai8auIyjHSKvnda4V2yFAqU1f0W3U=;
+        s=korg; t=1654627162;
+        bh=Y7bGGQGgAnOtggXaJ/RbS4mp+x0NVOu+MyhGWKdtdRc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Du9208aLSy+A7cJQlEBQyqtN5pRT/0laQwb+mV7ex8vjdjinJVx8tg1lxdZB5oFuP
-         os3jjmEXOKIcq63wF//vJsyowCAUer+G6hJRICPBJUJ6yY3hnyLnCfkQhP/fs9I2x+
-         mE0C3MneVp91AidzE6kA+ZwNzrMQDQ1GIxvb2TYc=
+        b=foO/Oge4/UPCRB6xpJQ/orMViCCvCnVDthuabE6SbYWo25mSlzOK/flb5s9pkgzG1
+         vBKhMAEPISHAAQR52OfkUhYyldhJ9ffdP76PpoA2acdKAaZfDAK8Axzz+UO6Yf6l3j
+         bZdRYcDFUoXa5EWhism1OK5f1cn0uMvS+b/g1QcI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 565/667] scsi: dc395x: Fix a missing check on list iterator
-Date:   Tue,  7 Jun 2022 19:03:50 +0200
-Message-Id: <20220607164951.640440564@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.17 639/772] ext4: fix race condition between ext4_write and ext4_convert_inline_data
+Date:   Tue,  7 Jun 2022 19:03:51 +0200
+Message-Id: <20220607165007.890812659@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +55,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit 036a45aa587a10fa2abbd50fbd0f6c4cfc44f69f upstream.
+commit f87c7a4b084afc13190cbb263538e444cb2b392a upstream.
 
-The bug is here:
+Hulk Robot reported a BUG_ON:
+ ==================================================================
+ EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
+ block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
+ kernel BUG at fs/ext4/ext4_jbd2.c:53!
+ invalid opcode: 0000 [#1] SMP KASAN PTI
+ CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
+ RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
+ RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
+ [...]
+ Call Trace:
+  ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
+  generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
+  ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
+  ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
+  do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
+  do_iter_write+0x107/0x430 fs/read_write.c:861
+  vfs_writev fs/read_write.c:934 [inline]
+  do_pwritev+0x1e5/0x380 fs/read_write.c:1031
+ [...]
+ ==================================================================
 
-	p->target_id, p->target_lun);
+Above issue may happen as follows:
+           cpu1                     cpu2
+__________________________|__________________________
+do_pwritev
+ vfs_writev
+  do_iter_write
+   ext4_file_write_iter
+    ext4_buffered_write_iter
+     generic_perform_write
+      ext4_da_write_begin
+                           vfs_fallocate
+                            ext4_fallocate
+                             ext4_convert_inline_data
+                              ext4_convert_inline_data_nolock
+                               ext4_destroy_inline_data_nolock
+                                clear EXT4_STATE_MAY_INLINE_DATA
+                               ext4_map_blocks
+                                ext4_ext_map_blocks
+                                 ext4_mb_new_blocks
+                                  ext4_mb_regular_allocator
+                                   ext4_mb_good_group_nolock
+                                    ext4_mb_init_group
+                                     ext4_mb_init_cache
+                                      ext4_mb_generate_buddy  --> error
+       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+                                ext4_restore_inline_data
+                                 set EXT4_STATE_MAY_INLINE_DATA
+       ext4_block_write_begin
+      ext4_da_write_end
+       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+       ext4_write_inline_data_end
+        handle=NULL
+        ext4_journal_stop(handle)
+         __ext4_journal_stop
+          ext4_put_nojournal(handle)
+           ref_cnt = (unsigned long)handle
+           BUG_ON(ref_cnt == 0)  ---> BUG_ON
 
-The list iterator 'p' will point to a bogus position containing HEAD if the
-list is empty or no element is found. This case must be checked before any
-use of the iterator, otherwise it will lead to an invalid memory access.
+The lock held by ext4_convert_inline_data is xattr_sem, but the lock
+held by generic_perform_write is i_rwsem. Therefore, the two locks can
+be concurrent.
 
-To fix this bug, add a check. Use a new variable 'iter' as the list
-iterator, and use the original variable 'p' as a dedicated pointer to point
-to the found element.
+To solve above issue, we add inode_lock() for ext4_convert_inline_data().
+At the same time, move ext4_convert_inline_data() in front of
+ext4_punch_hole(), remove similar handling from ext4_punch_hole().
 
-Link: https://lore.kernel.org/r/20220414040231.2662-1-xiam0nd.tong@gmail.com
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
 Cc: stable@vger.kernel.org
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220428134031.4153381-1-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/dc395x.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ fs/ext4/extents.c |   10 ++++++----
+ fs/ext4/inode.c   |    9 ---------
+ 2 files changed, 6 insertions(+), 13 deletions(-)
 
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -3590,10 +3590,19 @@ static struct DeviceCtlBlk *device_alloc
- #endif
- 	if (dcb->target_lun != 0) {
- 		/* Copy settings */
--		struct DeviceCtlBlk *p;
--		list_for_each_entry(p, &acb->dcb_list, list)
--			if (p->target_id == dcb->target_id)
-+		struct DeviceCtlBlk *p = NULL, *iter;
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -4694,15 +4694,17 @@ long ext4_fallocate(struct file *file, i
+ 		     FALLOC_FL_INSERT_RANGE))
+ 		return -EOPNOTSUPP;
+ 
++	inode_lock(inode);
++	ret = ext4_convert_inline_data(inode);
++	inode_unlock(inode);
++	if (ret)
++		goto exit;
 +
-+		list_for_each_entry(iter, &acb->dcb_list, list)
-+			if (iter->target_id == dcb->target_id) {
-+				p = iter;
- 				break;
-+			}
-+
-+		if (!p) {
-+			kfree(dcb);
-+			return NULL;
-+		}
-+
- 		dprintkdbg(DBG_1, 
- 		       "device_alloc: <%02i-%i> copy from <%02i-%i>\n",
- 		       dcb->target_id, dcb->target_lun,
+ 	if (mode & FALLOC_FL_PUNCH_HOLE) {
+ 		ret = ext4_punch_hole(file, offset, len);
+ 		goto exit;
+ 	}
+ 
+-	ret = ext4_convert_inline_data(inode);
+-	if (ret)
+-		goto exit;
+-
+ 	if (mode & FALLOC_FL_COLLAPSE_RANGE) {
+ 		ret = ext4_collapse_range(file, offset, len);
+ 		goto exit;
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -3958,15 +3958,6 @@ int ext4_punch_hole(struct file *file, l
+ 
+ 	trace_ext4_punch_hole(inode, offset, length, 0);
+ 
+-	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+-	if (ext4_has_inline_data(inode)) {
+-		filemap_invalidate_lock(mapping);
+-		ret = ext4_convert_inline_data(inode);
+-		filemap_invalidate_unlock(mapping);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	/*
+ 	 * Write out all dirty pages to avoid race conditions
+ 	 * Then release them.
 
 

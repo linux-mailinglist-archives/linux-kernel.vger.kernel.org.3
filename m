@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F1D5409C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D99541437
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345581AbiFGSNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
+        id S1358237AbiFGUOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350134AbiFGRvy (ORCPT
+        with ESMTP id S1355501AbiFGTUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C9F140842;
-        Tue,  7 Jun 2022 10:39:33 -0700 (PDT)
+        Tue, 7 Jun 2022 15:20:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BFC19B6A2;
+        Tue,  7 Jun 2022 11:08:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD66C6137B;
-        Tue,  7 Jun 2022 17:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE0EC385A5;
-        Tue,  7 Jun 2022 17:38:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05945B82349;
+        Tue,  7 Jun 2022 18:08:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73273C385A5;
+        Tue,  7 Jun 2022 18:08:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623535;
-        bh=S7uKAmP/+PNLArLh5VL0b5w5QReWlFwAZEUTq6J66eE=;
+        s=korg; t=1654625321;
+        bh=dCeVzC/jF/iTDOn+inmUhCo29O8Nt84UucMF/ifylBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aS2BBO1kr9ZqrKVV1Fp1/GTg/NkbSAieE5ks7iKkFiCD+771TalcjLfDqZomS/kpr
-         sFdUyewkATyLuhwVD3QHJC5bevu7TH53q5QDe4bZ0SKd+bpqrhAN33EpDi22nOX+7+
-         kAoNfExWM3uxkNOOqAbPNoA0190O8EupsAlxrfyo=
+        b=cjbSV9jqyItMamlWkqaPjBEh6Zm85sG7IAE7az1sFboaBlh59IqyYl+/ZQ6eXCGYJ
+         7fLaXNBcRglBs7s1xuKsg501AElGoiiJa0IL42w7RX/Smec/1biam84ig9Jz0ObL/U
+         0Bc9AVBDtN5owTaSlAfokUgBfxMOQ8WlSc+hQ22o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>, Coly Li <colyli@suse.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 452/452] md: bcache: check the return value of kzalloc() in detached_dev_do_request()
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.15 644/667] dt-bindings: gpio: altera: correct interrupt-cells
 Date:   Tue,  7 Jun 2022 19:05:09 +0200
-Message-Id: <20220607164922.040566998@linuxfoundation.org>
+Message-Id: <20220607164953.970633780@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
+commit 3a21c3ac93aff7b4522b152399df8f6a041df56d upstream.
 
-The function kzalloc() in detached_dev_do_request() can fail, so its
-return value should be checked.
+update documentation to correctly state the interrupt-cells to be 2.
 
-Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: Coly Li <colyli@suse.de>
-Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Cc: stable@vger.kernel.org
+Fixes: 4fd9bbc6e071 ("drivers/gpio: Altera soft IP GPIO driver devicetree binding")
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/bcache/request.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/gpio/gpio-altera.txt |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/md/bcache/request.c
-+++ b/drivers/md/bcache/request.c
-@@ -1109,6 +1109,12 @@ static void detached_dev_do_request(stru
- 	 * which would call closure_get(&dc->disk.cl)
- 	 */
- 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-+	if (!ddip) {
-+		bio->bi_status = BLK_STS_RESOURCE;
-+		bio->bi_end_io(bio);
-+		return;
-+	}
-+
- 	ddip->d = d;
- 	/* Count on the bcache device */
- 	ddip->start_time = part_start_io_acct(d->disk, &ddip->part, bio);
+--- a/Documentation/devicetree/bindings/gpio/gpio-altera.txt
++++ b/Documentation/devicetree/bindings/gpio/gpio-altera.txt
+@@ -9,8 +9,9 @@ Required properties:
+   - The second cell is reserved and is currently unused.
+ - gpio-controller : Marks the device node as a GPIO controller.
+ - interrupt-controller: Mark the device node as an interrupt controller
+-- #interrupt-cells : Should be 1. The interrupt type is fixed in the hardware.
++- #interrupt-cells : Should be 2. The interrupt type is fixed in the hardware.
+   - The first cell is the GPIO offset number within the GPIO controller.
++  - The second cell is the interrupt trigger type and level flags.
+ - interrupts: Specify the interrupt.
+ - altr,interrupt-type: Specifies the interrupt trigger type the GPIO
+   hardware is synthesized. This field is required if the Altera GPIO controller
+@@ -38,6 +39,6 @@ gpio_altr: gpio@ff200000 {
+ 	altr,interrupt-type = <IRQ_TYPE_EDGE_RISING>;
+ 	#gpio-cells = <2>;
+ 	gpio-controller;
+-	#interrupt-cells = <1>;
++	#interrupt-cells = <2>;
+ 	interrupt-controller;
+ };
 
 

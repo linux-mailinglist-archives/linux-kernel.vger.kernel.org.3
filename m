@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D811542396
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D5C5425FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391697AbiFHB51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
+        id S1443413AbiFHCCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1588470AbiFGXyl (ORCPT
+        with ESMTP id S1588471AbiFGXyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 19:54:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D14E96FF;
-        Tue,  7 Jun 2022 16:09:55 -0700 (PDT)
-Date:   Tue, 07 Jun 2022 23:09:52 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9954DEAB87;
+        Tue,  7 Jun 2022 16:09:57 -0700 (PDT)
+Date:   Tue, 07 Jun 2022 23:09:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1654643394;
+        s=2020; t=1654643395;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dPtbavvWbpS7D7tQA2mHOL1BkRlP5Uv7lAoc3YHVg04=;
-        b=nxJI3qMF2EzpyqqTD8K6BZxPqOoAptV7F3Jrbt+1JxEWQYfZQfrrJGBN3M4z5Lwge7Mdam
-        UF0oCKTcFl8nJ9duQNV8D+s0ggs4YH8O5TBqBlTtNoMa0i4Nx9pNhVKgbHM2ikTt5R7SzB
-        pEpL1o2INu7OaCRPBILjvIqOpJZmsMGmhsJYQnIF4Fg537RZabMMwq9OcAuTOXUCDoIIc9
-        MizjeurkocdCLuxQJnphtZJvyow9TNfuhc0hxeZIfPD3nr00asR/4fpEDMnFiJFKviTlkf
-        fkWHkhQJoIspFzzKQNQqbir6vWFd4bEKcqdIZzGMDKjdOGlknRp0xMe5GhcJtg==
+        bh=31knJ3QXB3grtazMt+b9bY3U/ZDckeFhNjGn1EuvTFE=;
+        b=MJl5K8k3SMYaWkE2ICZFiDKbyUZBhahVnqp8FEBFA6di3TbE7fD/a4SnWV9ApTYPUJFP54
+        zRVLyR2ao8emN+QzJWwhVPo506TqscDDCAexUiVGC9TcAkPrExJ037JOhMycGB2EVh++Yl
+        v+SL6c/1Az5w3dSEH09U4cj7w184tsSQaIfC45WFQgyv+13YUgZ7EeX9jeXyjLh+fFEvlZ
+        cKXzW30wKK8m5FxwjQIhnqAKGTzDKEk+d4McQa3FgIiJjBZqCAxjGnkW3b6SneXpm//ElP
+        Qcsl4NKs47N6Hp0BpFEiyXj8REFihViFgDY9LMgFo5Y3+LM7JxR/nebANOx40A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1654643394;
+        s=2020e; t=1654643395;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dPtbavvWbpS7D7tQA2mHOL1BkRlP5Uv7lAoc3YHVg04=;
-        b=Wo3Sp00UT3ZpFCyVn+uwJxxrggurJSA46NHn9T9gIG2lDUpnh1T+0+4IBmiGzy2+ASyyHZ
-        BpL2qfI4DRSULbAA==
+        bh=31knJ3QXB3grtazMt+b9bY3U/ZDckeFhNjGn1EuvTFE=;
+        b=HjKXp4gN6EUcqfASdXpyxbNTMkYrFFF/GNXtIJ2YNPgW76mBis3OVoy0Jh7VVMJTpICXPO
+        UuoY4aA9fIvGneBQ==
 From:   "tip-bot2 for Ira Weiny" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/pkeys: Clarify PKRU_AD_KEY macro
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Ira Weiny <ira.weiny@intel.com>, x86@kernel.org,
+Subject: [tip: x86/mm] Documentation/protection-keys: Clean up documentation
+ for User Space pkeys
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220419170649.1022246-3-ira.weiny@intel.com>
-References: <20220419170649.1022246-3-ira.weiny@intel.com>
+In-Reply-To: <20220419170649.1022246-2-ira.weiny@intel.com>
+References: <20220419170649.1022246-2-ira.weiny@intel.com>
 MIME-Version: 1.0
-Message-ID: <165464339203.4207.2085449999144025922.tip-bot2@tip-bot2>
+Message-ID: <165464339351.4207.13791430848488231130.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,66 +68,83 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     54ee1844047c1df015ab2679a4f55564a3aa1fa1
-Gitweb:        https://git.kernel.org/tip/54ee1844047c1df015ab2679a4f55564a3aa1fa1
+Commit-ID:     f8c1d4ca55177326adad1fdc6bf602423a507542
+Gitweb:        https://git.kernel.org/tip/f8c1d4ca55177326adad1fdc6bf602423a507542
 Author:        Ira Weiny <ira.weiny@intel.com>
-AuthorDate:    Tue, 19 Apr 2022 10:06:07 -07:00
+AuthorDate:    Tue, 19 Apr 2022 10:06:06 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 07 Jun 2022 16:06:33 -07:00
+CommitterDate: Tue, 07 Jun 2022 16:06:22 -07:00
 
-x86/pkeys: Clarify PKRU_AD_KEY macro
+Documentation/protection-keys: Clean up documentation for User Space pkeys
 
-When changing the PKRU_AD_KEY macro to be used for PKS the name came
-into question.[1]
+The documentation for user space pkeys was a bit dated including things
+such as Amazon and distribution testing information which is irrelevant
+now.
 
-The intent of PKRU_AD_KEY is to set an initial value for the PKRU
-register but that is just a mask value.
+Update the documentation.  This also streamlines adding the Supervisor
+pkey documentation later on.
 
-Clarify this by changing the name to PKRU_AD_MASK().
-
-NOTE the checkpatch errors are ignored for the init_pkru_value to align
-the values in the code.
-
-[1] https://lore.kernel.org/lkml/eff862e2-bfaa-9e12-42b5-a12467d72a22@intel.com/
-
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220419170649.1022246-3-ira.weiny@intel.com
+Link: https://lkml.kernel.org/r/20220419170649.1022246-2-ira.weiny@intel.com
 ---
- arch/x86/mm/pkeys.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ Documentation/core-api/protection-keys.rst | 44 ++++++++++-----------
+ 1 file changed, 21 insertions(+), 23 deletions(-)
 
-diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index e44e938..7418c36 100644
---- a/arch/x86/mm/pkeys.c
-+++ b/arch/x86/mm/pkeys.c
-@@ -110,7 +110,7 @@ int __arch_override_mprotect_pkey(struct vm_area_struct *vma, int prot, int pkey
- 	return vma_pkey(vma);
- }
+diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
+index ec575e7..bf28ac0 100644
+--- a/Documentation/core-api/protection-keys.rst
++++ b/Documentation/core-api/protection-keys.rst
+@@ -4,31 +4,29 @@
+ Memory Protection Keys
+ ======================
  
--#define PKRU_AD_KEY(pkey)	(PKRU_AD_BIT << ((pkey) * PKRU_BITS_PER_PKEY))
-+#define PKRU_AD_MASK(pkey)	(PKRU_AD_BIT << ((pkey) * PKRU_BITS_PER_PKEY))
+-Memory Protection Keys for Userspace (PKU aka PKEYs) is a feature
+-which is found on Intel's Skylake (and later) "Scalable Processor"
+-Server CPUs. It will be available in future non-server Intel parts
+-and future AMD processors.
+-
+-For anyone wishing to test or use this feature, it is available in
+-Amazon's EC2 C5 instances and is known to work there using an Ubuntu
+-17.04 image.
+-
+-Memory Protection Keys provides a mechanism for enforcing page-based
+-protections, but without requiring modification of the page tables
+-when an application changes protection domains.  It works by
+-dedicating 4 previously ignored bits in each page table entry to a
+-"protection key", giving 16 possible keys.
+-
+-There is also a new user-accessible register (PKRU) with two separate
+-bits (Access Disable and Write Disable) for each key.  Being a CPU
+-register, PKRU is inherently thread-local, potentially giving each
++Memory Protection Keys provide a mechanism for enforcing page-based
++protections, but without requiring modification of the page tables when an
++application changes protection domains.
++
++Pkeys Userspace (PKU) is a feature which can be found on:
++        * Intel server CPUs, Skylake and later
++        * Intel client CPUs, Tiger Lake (11th Gen Core) and later
++        * Future AMD CPUs
++
++Pkeys work by dedicating 4 previously Reserved bits in each page table entry to
++a "protection key", giving 16 possible keys.
++
++Protections for each key are defined with a per-CPU user-accessible register
++(PKRU).  Each of these is a 32-bit register storing two bits (Access Disable
++and Write Disable) for each of 16 keys.
++
++Being a CPU register, PKRU is inherently thread-local, potentially giving each
+ thread a different set of protections from every other thread.
  
- /*
-  * Make the default PKRU value (at execve() time) as restrictive
-@@ -118,11 +118,14 @@ int __arch_override_mprotect_pkey(struct vm_area_struct *vma, int prot, int pkey
-  * in the process's lifetime will not accidentally get access
-  * to data which is pkey-protected later on.
-  */
--u32 init_pkru_value = PKRU_AD_KEY( 1) | PKRU_AD_KEY( 2) | PKRU_AD_KEY( 3) |
--		      PKRU_AD_KEY( 4) | PKRU_AD_KEY( 5) | PKRU_AD_KEY( 6) |
--		      PKRU_AD_KEY( 7) | PKRU_AD_KEY( 8) | PKRU_AD_KEY( 9) |
--		      PKRU_AD_KEY(10) | PKRU_AD_KEY(11) | PKRU_AD_KEY(12) |
--		      PKRU_AD_KEY(13) | PKRU_AD_KEY(14) | PKRU_AD_KEY(15);
-+u32 init_pkru_value = PKRU_AD_MASK( 1) | PKRU_AD_MASK( 2) |
-+		      PKRU_AD_MASK( 3) | PKRU_AD_MASK( 4) |
-+		      PKRU_AD_MASK( 5) | PKRU_AD_MASK( 6) |
-+		      PKRU_AD_MASK( 7) | PKRU_AD_MASK( 8) |
-+		      PKRU_AD_MASK( 9) | PKRU_AD_MASK(10) |
-+		      PKRU_AD_MASK(11) | PKRU_AD_MASK(12) |
-+		      PKRU_AD_MASK(13) | PKRU_AD_MASK(14) |
-+		      PKRU_AD_MASK(15);
+-There are two new instructions (RDPKRU/WRPKRU) for reading and writing
+-to the new register.  The feature is only available in 64-bit mode,
+-even though there is theoretically space in the PAE PTEs.  These
+-permissions are enforced on data access only and have no effect on
+-instruction fetches.
++There are two instructions (RDPKRU/WRPKRU) for reading and writing to the
++register.  The feature is only available in 64-bit mode, even though there is
++theoretically space in the PAE PTEs.  These permissions are enforced on data
++access only and have no effect on instruction fetches.
  
- static ssize_t init_pkru_read_file(struct file *file, char __user *user_buf,
- 			     size_t count, loff_t *ppos)
+ Syscalls
+ ========

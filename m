@@ -2,170 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F10653F428
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 04:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581DD53F43C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 04:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236139AbiFGCyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 22:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S236157AbiFGC7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 22:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236121AbiFGCyi (ORCPT
+        with ESMTP id S236141AbiFGC7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 22:54:38 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2113.outbound.protection.outlook.com [40.107.215.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D5869CF0;
-        Mon,  6 Jun 2022 19:54:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y1ySGHFqLYENy0XqdsWLfMVfl4lA06M4BhYZhIAtKcin/MjNaK0gxyP6DyPLpYwrBb9zHF64Vr+uF6lSIamoogilfPj/Nfqk/tmwv5ThPV53AOiyR6kSkaIzGj/BjJDryqN0xBXIJMmhf4dRP/Kb08BMGJRgLnVer1XNepqqeuVEbeOW65S5X8IImCvw2+8/lf+UtfqhavFssw0tNhivZS2N3CpBNUfSDzPLRA4NTZyay5uKXwka7pByATL9+hw2uomWr3OLN8y38dIb0+vuyK4boaDPNoJB4omHJOCpXTUOL6079d3uiHWKG65ydXNCZPgyodBn0XSuKxFsiaDLmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sZGJ+ljrpCuvzuuIF7UmE+ORF0WJW1tLtjyG9rOl4qU=;
- b=inH3Vz2trc8rHiGE1J+qmnOCo/y6FN4I1Vi6WvwcwxN3QrT85Wt0Gx1RQOWcCo0x0noymvbNiL+PP/RD8kG9elkpXxid91QB3K6hbrkzQnCUyTX3vE6kG9K02Q+8bwfZQSYpVfRmEpoatIqCVcfUILMtOfEbU2HdqSqu89fWcUWBCCcdraSI+6xVsThFakIUokLmzKeK9ByFc2AS8Bl8UvFUUiQugStvDArAKd/QUDlC3JJpYFQxwWbfPi9ND7Y/UrqQAFyO2kBIkFGv6cD1YNZ6jifMgEz3KzFxq/xko5s5xjxhtoLYZERp/wBndqDHgmh126hLuT85FQrT0xLvoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sZGJ+ljrpCuvzuuIF7UmE+ORF0WJW1tLtjyG9rOl4qU=;
- b=zGNrPyOf5KKa1h4WnIZ7gR4y/Gm8aflBTgYy3PTsSQsb8t9otbV9niwJ1uj5IdH2+PE73aZyDRz7WsppdArrZZIglzjPPn+nBTOF30qHcnydm+5XLm88jPD1FGUB3k95z3NDs0Y7cfziQEfzpXbWSZQaTqNeMtWIVzYAoY/1m1HlRupF+BwwJ/l/F4R5CFeAaRRwXfqvSmIzH5RKjpfatGkh/mDtu0C6VVh+m2pHuq5611HGAE9UYkCvEInDuNnCUrPJLVCIIct/UP3FOINJJ2HXHm6iV9rS+1BmunKofHpss0vITjFiReexxZ/lLC8fN9tI36z5QvUA9r5KGneTeg==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by HK0PR06MB2755.apcprd06.prod.outlook.com (2603:1096:203:5b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.12; Tue, 7 Jun
- 2022 02:54:30 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 02:54:30 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-CC:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v2 1/5] crypto: aspeed: Add HACE hash driver
-Thread-Topic: [PATCH v2 1/5] crypto: aspeed: Add HACE hash driver
-Thread-Index: AQHYeXGeSzQOPdHyakaer71NgsLgsa1CeN2AgADH69A=
-Date:   Tue, 7 Jun 2022 02:54:30 +0000
-Message-ID: <HK0PR06MB32024E97321424748A5532A380A59@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220606064935.1458903-1-neal_liu@aspeedtech.com>
- <20220606064935.1458903-2-neal_liu@aspeedtech.com>
- <d0366136-428f-3af2-996e-a3d168b570e3@infradead.org>
-In-Reply-To: <d0366136-428f-3af2-996e-a3d168b570e3@infradead.org>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cce81a39-2e57-42e6-466d-08da48310afa
-x-ms-traffictypediagnostic: HK0PR06MB2755:EE_
-x-microsoft-antispam-prvs: <HK0PR06MB2755D7E3D61B312711DDA27880A59@HK0PR06MB2755.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dt4epmeJlrBVmnADidwk5eCrELtL49G5bUPd+gl5v+CLPwWaCEQzZBYjwqy0b3MffbsWo3o4UNUUj0JE3K7BnI8DyIlMTDT9uiT5z3uzgc7+zMSfl6Q+EIqW0vTk2qGmwlQnCsdObcZtxcohfCmCWsgr4+UD1fdgxfbtlT4972LGIX5LwUUut0yS11jfzquU6Trac7qu9uAMyxQioBBW8bDbJMpLFQwDhk/hCPlTAdFuphXLS2hONIYXc1cJCAIGxxX2VSZQfBmxwWlRykKjqRu5j5feaZqh05zaHMSJ2JMqvvjCjz0olGwbSZY85AZ1+p36G3PW//kHnpb/Ua0IuuAMUdHZAux66yvCFcilWpaN7SVjADdupfuxOzwy8GVXNb0aMB5wG60QDCaZxjrX3cfn8+StpuMgznboT6A9atMcCjIxTz5bfhHlZFx0qHw0uuE8ZhIY7QzyYKZMHRhqoCJt7VAWyvGYu2tVGaqIr5JEhy27i47RQvGfsqb2AelhC/cY+FCBgVm7HMeB/gHiK1FaSOGtFk+EyGMlkP0td5AI48sWvdNUOySnrPI6gnzzpe7gQ38lI76ZiKbQ+F8ve8JLvlq4vANehK0S4d4g+d3jM2sdOWGm3a9392/A925ZTVy8lEZOh7lmhocez7c5OBpJOxLhJQVr1NJwjHheWRORoJBvcX7Y39ZGKZ3rSFp5pTX01EjJ/N+s5s09cPJ2EQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(64756008)(52536014)(55016003)(508600001)(107886003)(7416002)(8676002)(8936002)(186003)(316002)(26005)(38070700005)(122000001)(83380400001)(9686003)(54906003)(110136005)(6636002)(66556008)(66446008)(66476007)(71200400001)(5660300002)(2906002)(66946007)(33656002)(38100700002)(53546011)(6506007)(7696005)(4326008)(86362001)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bW9mcTFwZ3l6SDBqSkJmcEFKbjhyZ2l3VjlvUjQ4Q0lJbys1ajFVZlZwQnJY?=
- =?utf-8?B?OEl6V21XczQ3ZGZkZUIzRCtNNllVcitzbFJUTlJpR3Rjck0vMkNEeE1hbHNj?=
- =?utf-8?B?dEw4M3VnL3pBQnZsSi9YbVJENkFRUFN1bFlFTmhxdjg1M2ZZRjVqYUJVWEdl?=
- =?utf-8?B?cThNSzRNYVNIclRWM0x0bGVUb3RnTDFqL2FoVlBiWUI4eGFvUys0a0xRZXA4?=
- =?utf-8?B?VXVLWldJN2VCbXQ0NkZsb0VXdittVkE2enp4WWE3N1F1aVpQWG8wZGh6aXli?=
- =?utf-8?B?TDN5RTBqZUlFMC9JUFRQaUZGQk1rOFNqU1Z3ZDBhNFR5djF1aG9HVjl3YW5n?=
- =?utf-8?B?Z0Zsa1ZHOFdSK0wvSGdERm5PK2o0VWxBNDhGZHZHbHdqd0h3ZEVPWGdHTFlZ?=
- =?utf-8?B?SnB2bHN0T3dLeDNqeENidWFrdVFna0l3cjgzNXlkWUdDMVdRelphVmpoT3Ur?=
- =?utf-8?B?UTB1a0JMb3IwZ2UxUUswYi9FdC81SVRJOWQwNjc0a0FYSmFSYmkxZFpkZ1hB?=
- =?utf-8?B?cERqYlRoNWZYeUwvRDNMaWNaK2lzZUxicG4vRlBlRlErUFUyNlRxTzdXNnBK?=
- =?utf-8?B?RjU2aUNRVXdWRHlXdEpMNVFNM3NndXhQY0ZnY0JmS2xaRUtlZ2dGZnAyb25r?=
- =?utf-8?B?bCtPdUZwa21vaURwN1B5NmZoZW9IK1N4QWRvVTJxSUFZWTQ5a1ZuMVRuYWR3?=
- =?utf-8?B?OXhHQlFhQ2tiTmtkZzJLOUVIV1U2VjJ6VXVBVlljLzIzeHVBR0VpMjlHa3RI?=
- =?utf-8?B?NWRGZE9ZNDJZVjhUYUpzdnl1QXlQaDZDaVpiVzh5d3JHcWVXbWlScFRVditn?=
- =?utf-8?B?eExISGZrVjZselc0MFRvU2ErWDVqRUY2Um9zbmFIUC84alhDM05tSWFuUVB5?=
- =?utf-8?B?MEdtK3FvdmNEZjNyTFY2bGp2UEc1SENlNWM0WDlGWERBdnoxTWJ6MTU4ZUNV?=
- =?utf-8?B?U1QwRDRsZExndGRhUmVKT1k2aDZ6blZoM2gvNFM2UEV3NkhRRC9lUTdiVXFw?=
- =?utf-8?B?RERxL1B4SFNDclhTQ3FrQXZtRys4RXUrVDBzYzlxMVoycWhoMHlmVGIvQmpM?=
- =?utf-8?B?NkI0UkVBSGxaMEdhNTd2NWhBelJVWnprM2dKRGlaWHdJR0ZLTU9zOXdSZ1dr?=
- =?utf-8?B?eUV6Qk1ORlk0a2VGVXJCMngwODU2dURFT3JJZVFkTzBsV2lXbkNlSnhnMUhE?=
- =?utf-8?B?N1VHeDVXUml4Mng2RFR6L1JFcmhrZFd6WHdyUnhsQUhxSUtNUVJzSTUrUEls?=
- =?utf-8?B?RzFVNU1kUTZnNjUvUFNTc0oxNVZRdW14bDVOcFlLbG9KRnNQamppekR6bkN3?=
- =?utf-8?B?WWJMV1hjMjBublBHaGdQRDZnT2tQQ0MvckZMNHp3WHlOd1dlSVZKYXNncGRP?=
- =?utf-8?B?OUJUdFFRc25JNHZyVnNsNTl1VldDV2QyeThaRFBPcE5YdHUwQ0pVcms1aDlQ?=
- =?utf-8?B?K01lMGs2RGdwM2sxNEtDeXNlOHliRFNQSTZzMmJFOUFVeFloZC9ZYTVLRGZ2?=
- =?utf-8?B?RnRNd1c5WFd4QVZYek5xWXM4YnJNcWl5U0xEVXdMZEN2R3R0Smk2elh1NVBs?=
- =?utf-8?B?S3F5SmRkRE9JTE5vNUlaN3diT3JoWHpZS2RUMG5Qai9ZMVRJamd3UDNMcTA2?=
- =?utf-8?B?NWlGcDhMM3ZuSlRTN3pTM2NFZlFhaFFWMnNyYXoveDI0SXc3bkxtWkg3Uzkr?=
- =?utf-8?B?bjRBODNaOXAxZFNLZnVlS2x2V2NZQ2NJNjdqVE1PN3h3aHBPM1dhMG9HSlVS?=
- =?utf-8?B?R0NIVWRHQWFIRHV6SnZaVitDOHJIWmROVVk5SExFd2lSSEpCSmtuTjR4NnVp?=
- =?utf-8?B?SkNHTmhuclhiSmxhU3Nkc3F6LzMxQ3JBVkhXS0pxTnZ1WE5OVS9FSlBjTHNB?=
- =?utf-8?B?WkdNdURjNGpSTmNrUTQ1K1Q4eGpQQmRyUEtDNnk2TVZxc3NJRnNHTjFYTGpI?=
- =?utf-8?B?WUFQTkZLMStOcU0xaUdwdDg0bHpiRmt6d1J2bWoreWFibG5ZUDI1cmRPODhL?=
- =?utf-8?B?ZjRBOUZKZmNwb1l0SyszaEVFeXJUY1ZKMEtGWjlRbWN5ZUdrNHZ0N3k1cWZT?=
- =?utf-8?B?TXhGaSsxLzBoQWhiREVMVDdXQTRDaVBmSjVPL29yWVFycnpyb2pncnY0Ympz?=
- =?utf-8?B?TGg5QWJTMERvNG4yVHBTYUhrYjJQL0dEV2lmdHVDRnNpSWJQTG5lbmZOZk5T?=
- =?utf-8?B?a0pXMjd4NVM4UE1uaXB1VzJ0c3h3b1Y0aEw4L0JvZk15UUZBdDhsemZHSmRp?=
- =?utf-8?B?OHlZUkpzSWVrREEzRmtoSmlOelRweGYwck0vMllYc24zT3FXcFZRM0FhS1la?=
- =?utf-8?B?WWo0cWhCM3lVTEJwYTQzNnZDNzdPTVVBeEF5bUxLdHdwQUxjVlFoUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 6 Jun 2022 22:59:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD4DAE61
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 19:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654570782; x=1686106782;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GMvv2QN3movH56Birwa1BAzXblpRL4s926UwU7wjY8s=;
+  b=lxG2VuIlolLCVMzTcCYBV8hmxF3TgN+jnMI26kVQJu8fVh2o/R9vwBOw
+   oVdVMOiMME1kvr6iRMrflJyNvKltcYJm8FnaCmFe26mltTxk4PUyOc6yC
+   PhK5C16BwWP9q8M1V3Jde68orlXELdXa6JUN8b2FZHLMikXkqTcLQpPDy
+   wxxVmv4UGzwKti/Y0SmEbtKMNHRmU5AKP+Teq/F8TTnNjpkSwnSV3ofhV
+   EkvXUA+aGKLyud0GgmN6Q3arHse/7bwsBncml03TYKtH+ClO8tDFYOAGS
+   JWepg3iyKC+ciJuQCR6PzZdAG5VVALACOnnjp2RRdwYqH7cdAdr2d8VZD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="264917036"
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="264917036"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 19:59:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="709302113"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 Jun 2022 19:59:38 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nyPRS-000DGv-2s;
+        Tue, 07 Jun 2022 02:59:38 +0000
+Date:   Tue, 7 Jun 2022 10:59:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miles Hu <milehu@codeaurora.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Aloka Dixit <alokad@codeaurora.org>,
+        Lavanya Suresh <lavaks@codeaurora.org>,
+        Pradeep Chitrapu <pradeepc@codeaurora.org>,
+        Venkateswara Naralasetty <vnaralas@codeaurora.org>,
+        Jouni Malinen <jouni@codeaurora.org>
+Subject: drivers/net/wireless/ath/ath11k/mac.c:1889:29: warning:
+ 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0
+Message-ID: <202206071043.lpcglnsK-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cce81a39-2e57-42e6-466d-08da48310afa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2022 02:54:30.0805
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6WRNdqCWGQ9E5i/dQXDoz/Ik+X9plxqP46uFDup1wZ6YseiomzQTJh/fI8VjU42z5oxTaaEyvZ154Sv+5ilgzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2755
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBIaSwNCj4gDQo+IE9uIDYvNS8yMiAyMzo0OSwgTmVhbCBMaXUgd3JvdGU6DQo+ID4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvY3J5cHRvL2FzcGVlZC9LY29uZmlnDQo+ID4gYi9kcml2ZXJzL2NyeXB0
-by9hc3BlZWQvS2NvbmZpZyBuZXcgZmlsZSBtb2RlIDEwMDY0NCBpbmRleA0KPiA+IDAwMDAwMDAw
-MDAwMC4uMTdiODAwMjg2YTUxDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2RyaXZlcnMv
-Y3J5cHRvL2FzcGVlZC9LY29uZmlnDQo+ID4gQEAgLTAsMCArMSwyMiBAQA0KPiA+ICtjb25maWcg
-Q1JZUFRPX0RFVl9BU1BFRUQNCj4gPiArCXRyaXN0YXRlICJTdXBwb3J0IGZvciBBc3BlZWQgY3J5
-cHRvZ3JhcGhpYyBlbmdpbmUgZHJpdmVyIg0KPiA+ICsJZGVwZW5kcyBvbiBBUkNIX0FTUEVFRA0K
-PiA+ICsJaGVscA0KPiA+ICsJSGFzaCBhbmQgQ3J5cHRvIEVuZ2luZSAoSEFDRSkgaXMgZGVzaWdu
-ZWQgdG8gYWNjZWxlcmF0ZSB0aGUNCj4gPiArCXRocm91Z2hwdXQgb2YgaGFzaCBkYXRhIGRpZ2Vz
-dCwgZW5jcnlwdGlvbiBhbmQgZGVjcnlwdGlvbi4NCj4gPiArDQo+ID4gKwlTZWxlY3QgeSBoZXJl
-IHRvIGhhdmUgc3VwcG9ydCBmb3IgdGhlIGNyeXB0b2dyYXBoaWMgZHJpdmVyDQo+ID4gKwlhdmFp
-bGFibGUgb24gQXNwZWVkIFNvQy4NCj4gDQo+IEFsbCBvZiB0aGUgaGVscCB0ZXh0IGFib3ZlIChm
-b2xsb3dpbmcgdGhlICdoZWxwJyBsaW5lKSBzaG91bGQgYmUgaW5kZW50ZWQgd2l0aA0KPiBvbmUg
-dGFiICsgMiBzcGFjZXMsIGFzIGlzIGRvbmUgaW4gdGhlIGhlbHAgdGV4dCBiZWxvdyBoZXJlLg0K
-PiANCj4gPiArDQo+ID4gK2NvbmZpZyBDUllQVE9fREVWX0FTUEVFRF9IQUNFX0hBU0gNCj4gPiAr
-ICAgICAgICBib29sICJFbmFibGUgQVNQRUVEIEhhc2ggJiBDcnlwdG8gRW5naW5lIChIQUNFKSBo
-YXNoIg0KPiA+ICsgICAgICAgIGRlcGVuZHMgb24gQ1JZUFRPX0RFVl9BU1BFRUQNCj4gDQo+IFRo
-ZSAyIGxpbmVzIGFib3ZlIHNob3VsZCBiZSBpbmRlbnRlZCB3aXRoIG9uZSB0YWIgaW5zdGVhZCBv
-ZiBtdWx0aXBsZSBzcGFjZXMuDQo+IA0KDQpUaGFua3MgZm9yIHRoZSBub3RpY2UuIEknbGwgcmV2
-aXNlIGl0IGluIG5leHQgcGF0Y2guDQoNCj4gPiArCXNlbGVjdCBDUllQVE9fU0hBMQ0KPiA+ICsJ
-c2VsZWN0IENSWVBUT19TSEEyNTYNCj4gPiArCXNlbGVjdCBDUllQVE9fU0hBNTEyDQo+ID4gKwlz
-ZWxlY3QgQ1JZUFRPX0hNQUMNCj4gPiArCWhlbHANCj4gPiArCSAgU2VsZWN0IGhlcmUgdG8gZW5h
-YmxlIEFTUEVFRCBIYXNoICYgQ3J5cHRvIEVuZ2luZSAoSEFDRSkNCj4gPiArCSAgaGFzaCBkcml2
-ZXIuDQo+ID4gKwkgIFN1cHBvcnRzIG11bHRpcGxlIG1lc3NhZ2UgZGlnZXN0IHN0YW5kYXJkcywg
-aW5jbHVkaW5nDQo+ID4gKwkgIFNIQS0xLCBTSEEtMjI0LCBTSEEtMjU2LCBTSEEtMzg0LCBTSEEt
-NTEyLCBhbmQgc28gb24uDQo+IA0KPiAtLQ0KPiB+UmFuZHkNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f2906aa863381afb0015a9eb7fefad885d4e5a56
+commit: 61fe43e7216df6e9a912d831aafc7142fa20f280 ath11k: add support for setting fixed HE rate/gi/ltf
+date:   8 months ago
+config: arm64-sof-customedconfig-memory-debug-defconfig (https://download.01.org/0day-ci/archive/20220607/202206071043.lpcglnsK-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61fe43e7216df6e9a912d831aafc7142fa20f280
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 61fe43e7216df6e9a912d831aafc7142fa20f280
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/ath/ath11k/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In function 'ath11k_peer_assoc_h_he',
+       inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2232:2:
+>> drivers/net/wireless/ath/ath11k/mac.c:1889:29: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0 [-Wstringop-overread]
+    1889 |                         v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_peer_assoc_prepare':
+   drivers/net/wireless/ath/ath11k/mac.c:1889:29: note: referencing argument 2 of type 'const u16 *' {aka 'const short unsigned int *'}
+   drivers/net/wireless/ath/ath11k/mac.c:1706:12: note: in a call to function 'ath11k_peer_assoc_h_he_limit'
+    1706 | static u16 ath11k_peer_assoc_h_he_limit(u16 tx_mcs_set,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'ath11k_peer_assoc_h_he',
+       inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2232:2:
+   drivers/net/wireless/ath/ath11k/mac.c:1902:21: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0 [-Wstringop-overread]
+    1902 |                 v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_peer_assoc_prepare':
+   drivers/net/wireless/ath/ath11k/mac.c:1902:21: note: referencing argument 2 of type 'const u16 *' {aka 'const short unsigned int *'}
+   drivers/net/wireless/ath/ath11k/mac.c:1706:12: note: in a call to function 'ath11k_peer_assoc_h_he_limit'
+    1706 | static u16 ath11k_peer_assoc_h_he_limit(u16 tx_mcs_set,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'ath11k_peer_assoc_h_he',
+       inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2232:2:
+   drivers/net/wireless/ath/ath11k/mac.c:1915:21: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0 [-Wstringop-overread]
+    1915 |                 v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_peer_assoc_prepare':
+   drivers/net/wireless/ath/ath11k/mac.c:1915:21: note: referencing argument 2 of type 'const u16 *' {aka 'const short unsigned int *'}
+   drivers/net/wireless/ath/ath11k/mac.c:1706:12: note: in a call to function 'ath11k_peer_assoc_h_he_limit'
+    1706 | static u16 ath11k_peer_assoc_h_he_limit(u16 tx_mcs_set,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'ath11k_peer_assoc_h_he',
+       inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2232:2:
+   drivers/net/wireless/ath/ath11k/mac.c:1915:21: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0 [-Wstringop-overread]
+    1915 |                 v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_peer_assoc_prepare':
+   drivers/net/wireless/ath/ath11k/mac.c:1915:21: note: referencing argument 2 of type 'const u16 *' {aka 'const short unsigned int *'}
+   drivers/net/wireless/ath/ath11k/mac.c:1706:12: note: in a call to function 'ath11k_peer_assoc_h_he_limit'
+    1706 | static u16 ath11k_peer_assoc_h_he_limit(u16 tx_mcs_set,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'ath11k_peer_assoc_h_he',
+       inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2232:2:
+   drivers/net/wireless/ath/ath11k/mac.c:1915:21: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0 [-Wstringop-overread]
+    1915 |                 v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_peer_assoc_prepare':
+   drivers/net/wireless/ath/ath11k/mac.c:1915:21: note: referencing argument 2 of type 'const u16 *' {aka 'const short unsigned int *'}
+   drivers/net/wireless/ath/ath11k/mac.c:1706:12: note: in a call to function 'ath11k_peer_assoc_h_he_limit'
+    1706 | static u16 ath11k_peer_assoc_h_he_limit(u16 tx_mcs_set,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'ath11k_peer_assoc_h_he',
+       inlined from 'ath11k_peer_assoc_prepare' at drivers/net/wireless/ath/ath11k/mac.c:2232:2:
+   drivers/net/wireless/ath/ath11k/mac.c:1902:21: warning: 'ath11k_peer_assoc_h_he_limit' reading 16 bytes from a region of size 0 [-Wstringop-overread]
+    1902 |                 v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_peer_assoc_prepare':
+   drivers/net/wireless/ath/ath11k/mac.c:1902:21: note: referencing argument 2 of type 'const u16 *' {aka 'const short unsigned int *'}
+   drivers/net/wireless/ath/ath11k/mac.c:1706:12: note: in a call to function 'ath11k_peer_assoc_h_he_limit'
+    1706 | static u16 ath11k_peer_assoc_h_he_limit(u16 tx_mcs_set,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/ath11k_peer_assoc_h_he_limit +1889 drivers/net/wireless/ath/ath11k/mac.c
+
+  1761	
+  1762	static void ath11k_peer_assoc_h_he(struct ath11k *ar,
+  1763					   struct ieee80211_vif *vif,
+  1764					   struct ieee80211_sta *sta,
+  1765					   struct peer_assoc_params *arg)
+  1766	{
+  1767		struct ath11k_vif *arvif = (void *)vif->drv_priv;
+  1768		struct cfg80211_chan_def def;
+  1769		const struct ieee80211_sta_he_cap *he_cap = &sta->he_cap;
+  1770		u8 ampdu_factor;
+  1771		enum nl80211_band band;
+  1772		u16 *he_mcs_mask;
+  1773		u8 max_nss, he_mcs;
+  1774		u16 he_tx_mcs = 0, v = 0;
+  1775		int i, he_nss, nss_idx;
+  1776		bool user_rate_valid = true;
+  1777	
+  1778		if (WARN_ON(ath11k_mac_vif_chan(vif, &def)))
+  1779			return;
+  1780	
+  1781		if (!he_cap->has_he)
+  1782			return;
+  1783	
+  1784		band = def.chan->band;
+  1785		he_mcs_mask = arvif->bitrate_mask.control[band].he_mcs;
+  1786	
+  1787		if (ath11k_peer_assoc_h_he_masked(he_mcs_mask))
+  1788			return;
+  1789	
+  1790		arg->he_flag = true;
+  1791	
+  1792		memcpy_and_pad(&arg->peer_he_cap_macinfo,
+  1793			       sizeof(arg->peer_he_cap_macinfo),
+  1794			       he_cap->he_cap_elem.mac_cap_info,
+  1795			       sizeof(he_cap->he_cap_elem.mac_cap_info),
+  1796			       0);
+  1797		memcpy_and_pad(&arg->peer_he_cap_phyinfo,
+  1798			       sizeof(arg->peer_he_cap_phyinfo),
+  1799			       he_cap->he_cap_elem.phy_cap_info,
+  1800			       sizeof(he_cap->he_cap_elem.phy_cap_info),
+  1801			       0);
+  1802		arg->peer_he_ops = vif->bss_conf.he_oper.params;
+  1803	
+  1804		/* the top most byte is used to indicate BSS color info */
+  1805		arg->peer_he_ops &= 0xffffff;
+  1806	
+  1807		/* As per section 26.6.1 11ax Draft5.0, if the Max AMPDU Exponent Extension
+  1808		 * in HE cap is zero, use the arg->peer_max_mpdu as calculated while parsing
+  1809		 * VHT caps(if VHT caps is present) or HT caps (if VHT caps is not present).
+  1810		 *
+  1811		 * For non-zero value of Max AMPDU Extponent Extension in HE MAC caps,
+  1812		 * if a HE STA sends VHT cap and HE cap IE in assoc request then, use
+  1813		 * MAX_AMPDU_LEN_FACTOR as 20 to calculate max_ampdu length.
+  1814		 * If a HE STA that does not send VHT cap, but HE and HT cap in assoc
+  1815		 * request, then use MAX_AMPDU_LEN_FACTOR as 16 to calculate max_ampdu
+  1816		 * length.
+  1817		 */
+  1818		ampdu_factor = u8_get_bits(he_cap->he_cap_elem.mac_cap_info[3],
+  1819					   IEEE80211_HE_MAC_CAP3_MAX_AMPDU_LEN_EXP_MASK);
+  1820	
+  1821		if (ampdu_factor) {
+  1822			if (sta->vht_cap.vht_supported)
+  1823				arg->peer_max_mpdu = (1 << (IEEE80211_HE_VHT_MAX_AMPDU_FACTOR +
+  1824							    ampdu_factor)) - 1;
+  1825			else if (sta->ht_cap.ht_supported)
+  1826				arg->peer_max_mpdu = (1 << (IEEE80211_HE_HT_MAX_AMPDU_FACTOR +
+  1827							    ampdu_factor)) - 1;
+  1828		}
+  1829	
+  1830		if (he_cap->he_cap_elem.phy_cap_info[6] &
+  1831		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT) {
+  1832			int bit = 7;
+  1833			int nss, ru;
+  1834	
+  1835			arg->peer_ppet.numss_m1 = he_cap->ppe_thres[0] &
+  1836						  IEEE80211_PPE_THRES_NSS_MASK;
+  1837			arg->peer_ppet.ru_bit_mask =
+  1838				(he_cap->ppe_thres[0] &
+  1839				 IEEE80211_PPE_THRES_RU_INDEX_BITMASK_MASK) >>
+  1840				IEEE80211_PPE_THRES_RU_INDEX_BITMASK_POS;
+  1841	
+  1842			for (nss = 0; nss <= arg->peer_ppet.numss_m1; nss++) {
+  1843				for (ru = 0; ru < 4; ru++) {
+  1844					u32 val = 0;
+  1845					int i;
+  1846	
+  1847					if ((arg->peer_ppet.ru_bit_mask & BIT(ru)) == 0)
+  1848						continue;
+  1849					for (i = 0; i < 6; i++) {
+  1850						val >>= 1;
+  1851						val |= ((he_cap->ppe_thres[bit / 8] >>
+  1852							 (bit % 8)) & 0x1) << 5;
+  1853						bit++;
+  1854					}
+  1855					arg->peer_ppet.ppet16_ppet8_ru3_ru0[nss] |=
+  1856									val << (ru * 6);
+  1857				}
+  1858			}
+  1859		}
+  1860	
+  1861		if (he_cap->he_cap_elem.mac_cap_info[0] & IEEE80211_HE_MAC_CAP0_TWT_RES)
+  1862			arg->twt_responder = true;
+  1863		if (he_cap->he_cap_elem.mac_cap_info[0] & IEEE80211_HE_MAC_CAP0_TWT_REQ)
+  1864			arg->twt_requester = true;
+  1865	
+  1866		he_nss =  ath11k_mac_max_he_nss(he_mcs_mask);
+  1867	
+  1868		if (he_nss > sta->rx_nss) {
+  1869			user_rate_valid = false;
+  1870			for (nss_idx = sta->rx_nss - 1; nss_idx >= 0; nss_idx--) {
+  1871				if (he_mcs_mask[nss_idx]) {
+  1872					user_rate_valid = true;
+  1873					break;
+  1874				}
+  1875			}
+  1876		}
+  1877	
+  1878		if (!user_rate_valid) {
+  1879			ath11k_dbg(ar->ab, ATH11K_DBG_MAC, "mac setting he range mcs value to peer supported nss %d for peer %pM\n",
+  1880				   sta->rx_nss, sta->addr);
+  1881			he_mcs_mask[sta->rx_nss - 1] = he_mcs_mask[he_nss - 1];
+  1882		}
+  1883	
+  1884		switch (sta->bandwidth) {
+  1885		case IEEE80211_STA_RX_BW_160:
+  1886			if (he_cap->he_cap_elem.phy_cap_info[0] &
+  1887			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G) {
+  1888				v = le16_to_cpu(he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+> 1889				v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+  1890				arg->peer_he_rx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80_80] = v;
+  1891	
+  1892				v = le16_to_cpu(he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+  1893				arg->peer_he_tx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80_80] = v;
+  1894	
+  1895				arg->peer_he_mcs_count++;
+  1896				he_tx_mcs = v;
+  1897			}
+  1898			v = le16_to_cpu(he_cap->he_mcs_nss_supp.rx_mcs_160);
+  1899			arg->peer_he_rx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_160] = v;
+  1900	
+  1901			v = le16_to_cpu(he_cap->he_mcs_nss_supp.tx_mcs_160);
+  1902			v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+  1903			arg->peer_he_tx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_160] = v;
+  1904	
+  1905			arg->peer_he_mcs_count++;
+  1906			if (!he_tx_mcs)
+  1907				he_tx_mcs = v;
+  1908			fallthrough;
+  1909	
+  1910		default:
+  1911			v = le16_to_cpu(he_cap->he_mcs_nss_supp.rx_mcs_80);
+  1912			arg->peer_he_rx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80] = v;
+  1913	
+  1914			v = le16_to_cpu(he_cap->he_mcs_nss_supp.tx_mcs_80);
+  1915			v = ath11k_peer_assoc_h_he_limit(v, he_mcs_mask);
+  1916			arg->peer_he_tx_mcs_set[WMI_HECAP_TXRX_MCS_NSS_IDX_80] = v;
+  1917	
+  1918			arg->peer_he_mcs_count++;
+  1919			if (!he_tx_mcs)
+  1920				he_tx_mcs = v;
+  1921			break;
+  1922		}
+  1923	
+  1924		/* Calculate peer NSS capability from HE capabilities if STA
+  1925		 * supports HE.
+  1926		 */
+  1927		for (i = 0, max_nss = 0, he_mcs = 0; i < NL80211_HE_NSS_MAX; i++) {
+  1928			he_mcs = he_tx_mcs >> (2 * i) & 3;
+  1929	
+  1930			/* In case of fixed rates, MCS Range in he_tx_mcs might have
+  1931			 * unsupported range, with he_mcs_mask set, so check either of them
+  1932			 * to find nss.
+  1933			 */
+  1934			if (he_mcs != IEEE80211_HE_MCS_NOT_SUPPORTED ||
+  1935			    he_mcs_mask[i])
+  1936				max_nss = i + 1;
+  1937		}
+  1938		arg->peer_nss = min(sta->rx_nss, max_nss);
+  1939	
+  1940		ath11k_dbg(ar->ab, ATH11K_DBG_MAC,
+  1941			   "mac he peer %pM nss %d mcs cnt %d\n",
+  1942			   sta->addr, arg->peer_nss, arg->peer_he_mcs_count);
+  1943	}
+  1944	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

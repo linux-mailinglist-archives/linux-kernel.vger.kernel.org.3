@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1429E541A86
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62BD5412C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378070AbiFGVeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
+        id S1357850AbiFGTvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376751AbiFGUgm (ORCPT
+        with ESMTP id S1354505AbiFGSrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:36:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A41F132A39;
-        Tue,  7 Jun 2022 11:38:01 -0700 (PDT)
+        Tue, 7 Jun 2022 14:47:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C964E7892C;
+        Tue,  7 Jun 2022 11:01:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F6F061564;
-        Tue,  7 Jun 2022 18:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C46C385A2;
-        Tue,  7 Jun 2022 18:37:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86F9FB82340;
+        Tue,  7 Jun 2022 18:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFC1C385A5;
+        Tue,  7 Jun 2022 18:01:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627071;
-        bh=lnzJyWD5Iju1jLJes8+CZ8ONeHKG3GLp2Af/HR1ee1k=;
+        s=korg; t=1654624895;
+        bh=bz52bsbaM6Hv1aMArof1Cr4y5A+L8T1VCZm51MIedRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGa+LXcXeqvCY2lY7p//BRGEExMjrrFmI+gZrZFVttGyU1KiuMicOoye2HhZ2YBeQ
-         BdPlzt4r12tkFiO0m+00TSpndT6FBqTg5958XnOezZZXi5dJfaRPkmkAHY163wIG//
-         bOb5uWVBqnLSgfFDOoAAPhHOMZ2+AoBz8Q2UCZ5M=
+        b=gkPm6bQA1bVCpM59FgJDsC4BsWcUEo1xZtsuFL7THN+ydj5xZWWDZRBOognq3Y/I+
+         8gs9Y0mp2qm7sMOwo62kaKVKVkCbpFe77Sg3WU7CmI11a2PJDnXCKpEyNE8QiAn4LD
+         cvb4+ZIsdIRCzlHdF7xSerpvhedzZgxht2KFrWG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 566/772] riscv: Fixup difference with defconfig
+Subject: [PATCH 5.15 493/667] NFS: Do not report EINTR/ERESTARTSYS as mapping errors
 Date:   Tue,  7 Jun 2022 19:02:38 +0200
-Message-Id: <20220607165005.633594256@linuxfoundation.org>
+Message-Id: <20220607164949.485255350@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 72f045d19f25f19be6d7682d5b1d948e20580817 ]
+[ Upstream commit cea9ba7239dcc84175041174304c6cdeae3226e5 ]
 
-Let's follow the origin patch's spirit:
+If the attempt to flush data was interrupted due to a local signal, then
+just requeue the writes back for I/O.
 
-The only difference between rv32_defconfig and defconfig is that
-rv32_defconfig has  CONFIG_ARCH_RV32I=y.
-
-This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
-
-Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Link: https://lore.kernel.org/r/20220405071314.3225832-9-guoren@kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Fixes: 6fbda89b257f ("NFS: Replace custom error reporting mechanism with generic one")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/nfs/write.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 7d81102cffd4..c6ca1b9cbf71 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -154,3 +154,7 @@ PHONY += rv64_randconfig
- rv64_randconfig:
- 	$(Q)$(MAKE) KCONFIG_ALLCONFIG=$(srctree)/arch/riscv/configs/64-bit.config \
- 		-f $(srctree)/Makefile randconfig
-+
-+PHONY += rv32_defconfig
-+rv32_defconfig:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile defconfig 32-bit.config
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index d21b25511499..daaa4f56b074 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -1419,7 +1419,7 @@ static void nfs_async_write_error(struct list_head *head, int error)
+ 	while (!list_empty(head)) {
+ 		req = nfs_list_entry(head->next);
+ 		nfs_list_remove_request(req);
+-		if (nfs_error_is_fatal(error))
++		if (nfs_error_is_fatal_on_server(error))
+ 			nfs_write_error(req, error);
+ 		else
+ 			nfs_redirty_request(req);
 -- 
 2.35.1
 

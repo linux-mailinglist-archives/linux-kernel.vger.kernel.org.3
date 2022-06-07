@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E12541CD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2003541CDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383494AbiFGWFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S1383533AbiFGWFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378993AbiFGVEe (ORCPT
+        with ESMTP id S1378680AbiFGVE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:04:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800C0703D1;
-        Tue,  7 Jun 2022 11:49:04 -0700 (PDT)
+        Tue, 7 Jun 2022 17:04:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03386B2EB6;
+        Tue,  7 Jun 2022 11:49:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63E9A612F2;
-        Tue,  7 Jun 2022 18:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697D5C385A2;
-        Tue,  7 Jun 2022 18:49:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD7CDB8220B;
+        Tue,  7 Jun 2022 18:49:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33693C385A2;
+        Tue,  7 Jun 2022 18:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627743;
-        bh=8n4OgktZlvppTMNUSoL4V5FRUeTebTWR5ynJTOiyTVk=;
+        s=korg; t=1654627746;
+        bh=/bRe3fMWLujieOuRXkmsKWSwKCr2pPGcp3HWPp9ylT8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aa1vBW9hbSbaoU3mCjIITOledednbXshrn8pH85VolWwWoq3tBM51PE2XZZ6JL8bL
-         S5MV9yMVHbqXKX0PljFBL/8IY9dmW4UZvMSnBhc6DdA8GlvsUx8AtBrIvhAloU7FOs
-         YEVH1TTcK0IniqgNcY/JEl8aRgjIuWha9dSduIW4=
+        b=q22QvVumIZnpU+l0S6I6WXn1Z5nFUlssDzzNtVsAQN9/DCwPcwP4CSQmJoLPgTy4Q
+         ySCGc0f93EpIoIgc11EKWRC99oAWQjdkk++N46JebvzLwy/QOP8w2vQaT/3khayDSG
+         j89qAHj5A7Q3XiHKty4R2F9XMEONT6WOaNe9Qfho=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        stable@vger.kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 078/879] rcu-tasks: Handle sparse cpu_possible_mask in rcu_tasks_invoke_cbs()
-Date:   Tue,  7 Jun 2022 18:53:16 +0200
-Message-Id: <20220607165004.954494734@linuxfoundation.org>
+Subject: [PATCH 5.18 079/879] rcu: Make TASKS_RUDE_RCU select IRQ_WORK
+Date:   Tue,  7 Jun 2022 18:53:17 +0200
+Message-Id: <20220607165004.983480542@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,39 +57,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paul E. McKenney <paulmck@kernel.org>
 
-[ Upstream commit ab2756ea6b74987849b44ad0e33c3cfec159033b ]
+[ Upstream commit 46e861be589881e0905b9ade3d8439883858721c ]
 
-If the cpu_possible_mask is sparse (for example, if bits are set only for
-CPUs 0, 4, 8, ...), then rcu_tasks_invoke_cbs() will access per-CPU data
-for a CPU not in cpu_possible_mask.  It makes these accesses while doing
-a workqueue-based binary search for non-empty callback lists.  Although
-this search must pass through CPUs not represented in cpu_possible_mask,
-it has no need to check the callback list for such CPUs.
+The TASKS_RUDE_RCU does not select IRQ_WORK, which can result in build
+failures for kernels that do not otherwise select IRQ_WORK.  This commit
+therefore causes the TASKS_RUDE_RCU Kconfig option to select IRQ_WORK.
 
-This commit therefore changes the rcu_tasks_invoke_cbs() function's
-binary search so as to only check callback lists for CPUs present in
-cpu_possible_mask.
-
-Reported-by: Eric Dumazet <edumazet@google.com>
+Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/tasks.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/rcu/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index b43320b149d2..00ff0896fb00 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -460,7 +460,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
- 		}
- 	}
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index bf8e341e75b4..f559870fbf8b 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -86,6 +86,7 @@ config TASKS_RCU
  
--	if (rcu_segcblist_empty(&rtpcp->cblist))
-+	if (rcu_segcblist_empty(&rtpcp->cblist) || !cpu_possible(cpu))
- 		return;
- 	raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
- 	rcu_segcblist_advance(&rtpcp->cblist, rcu_seq_current(&rtp->tasks_gp_seq));
+ config TASKS_RUDE_RCU
+ 	def_bool 0
++	select IRQ_WORK
+ 	help
+ 	  This option enables a task-based RCU implementation that uses
+ 	  only context switch (including preemption) and user-mode
 -- 
 2.35.1
 

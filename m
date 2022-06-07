@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30650540828
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A86C541A2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349382AbiFGR4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S1377990AbiFGVcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347820AbiFGRft (ORCPT
+        with ESMTP id S1378183AbiFGUez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5705710D936;
-        Tue,  7 Jun 2022 10:31:46 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B111EB407;
+        Tue,  7 Jun 2022 11:37:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A609ACE23D0;
-        Tue,  7 Jun 2022 17:31:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC08FC385A5;
-        Tue,  7 Jun 2022 17:31:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E416EB82349;
+        Tue,  7 Jun 2022 18:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED74C341C0;
+        Tue,  7 Jun 2022 18:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623103;
-        bh=zeFraWsJc3yTSgQb3pzJ/B6qVY2pED3bey0qvc0sm3I=;
+        s=korg; t=1654627060;
+        bh=d7M/rrGTQxwwpheykmHfdAUrTOWJWEeOlwizrmgwhOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+hhhYTfxFCWMFajhAyNgISCpaZKOH0acg4+JMXf16dwOgmEH+orPUhrq1WVuFUi3
-         IeBIftfhEFn3SPVWB9n2O1OpoBP7g8D5dyjdgMJZGqoyHHpOe9nXFC6sxL9FGJpVbD
-         ouitPWEkBDcp3aB9bUfopCziQEH2G/no2PHGaPDM=
+        b=OGOtOdV/QC/OmdD7lih1kkFaudcnrVgA2ZTqzWOFjCMmVPQ1Od3/hfhBYb/AH/vuh
+         C0p90qJDszZbtF2Zj+CWVABKGnE+nRkYjfDLN0JWDvAUwnDWnZuMsxNUwLvYdkK9Ez
+         19TvgsRCP78SaNzKCIMbKxASWmUgFA28qhcfTQjA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Zhbanov <izh1979@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 297/452] powerpc/4xx/cpm: Fix return value of __setup() handler
+Subject: [PATCH 5.17 562/772] Input: stmfts - do not leave device disabled in stmfts_input_open
 Date:   Tue,  7 Jun 2022 19:02:34 +0200
-Message-Id: <20220607164917.405891843@linuxfoundation.org>
+Message-Id: <20220607165005.518300768@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit 5bb99fd4090fe1acfdb90a97993fcda7f8f5a3d6 ]
+[ Upstream commit 5f76955ab1e43e5795a9631b22ca4f918a0ae986 ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
+The commit 26623eea0da3 attempted to deal with potential leak of runtime
+PM counter when opening the touchscreen device, however it ended up
+erroneously dropping the counter in the case of successfully enabling the
+device.
 
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings.
+Let's address this by using pm_runtime_resume_and_get() and then executing
+pm_runtime_put_sync() only when we fail to send "sense on" command to the
+device.
 
-Also, error return codes don't mean anything to obsolete_checksetup() --
-only non-zero (usually 1) or zero. So return 1 from cpm_powersave_off().
-
-Fixes: d164f6d4f910 ("powerpc/4xx: Add suspend and idle support")
-Reported-by: Igor Zhbanov <izh1979@gmail.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220502192941.20955-1-rdunlap@infradead.org
+Fixes: 26623eea0da3 ("Input: stmfts - fix reference leak in stmfts_input_open")
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/4xx/cpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/touchscreen/stmfts.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/platforms/4xx/cpm.c b/arch/powerpc/platforms/4xx/cpm.c
-index ae8b812c9202..2481e78c0423 100644
---- a/arch/powerpc/platforms/4xx/cpm.c
-+++ b/arch/powerpc/platforms/4xx/cpm.c
-@@ -327,6 +327,6 @@ late_initcall(cpm_init);
- static int __init cpm_powersave_off(char *arg)
- {
- 	cpm.powersave_off = 1;
--	return 0;
-+	return 1;
+diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
+index 72e0b767e1ba..c175d44c52f3 100644
+--- a/drivers/input/touchscreen/stmfts.c
++++ b/drivers/input/touchscreen/stmfts.c
+@@ -337,13 +337,15 @@ static int stmfts_input_open(struct input_dev *dev)
+ 	struct stmfts_data *sdata = input_get_drvdata(dev);
+ 	int err;
+ 
+-	err = pm_runtime_get_sync(&sdata->client->dev);
+-	if (err < 0)
+-		goto out;
++	err = pm_runtime_resume_and_get(&sdata->client->dev);
++	if (err)
++		return err;
+ 
+ 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
+-	if (err)
+-		goto out;
++	if (err) {
++		pm_runtime_put_sync(&sdata->client->dev);
++		return err;
++	}
+ 
+ 	mutex_lock(&sdata->mutex);
+ 	sdata->running = true;
+@@ -366,9 +368,7 @@ static int stmfts_input_open(struct input_dev *dev)
+ 				 "failed to enable touchkey\n");
+ 	}
+ 
+-out:
+-	pm_runtime_put_noidle(&sdata->client->dev);
+-	return err;
++	return 0;
  }
- __setup("powersave=off", cpm_powersave_off);
+ 
+ static void stmfts_input_close(struct input_dev *dev)
 -- 
 2.35.1
 

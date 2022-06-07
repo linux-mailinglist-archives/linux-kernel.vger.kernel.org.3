@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDD3542202
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0CD542486
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390808AbiFHAgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S1387595AbiFHAaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384193AbiFGVyO (ORCPT
+        with ESMTP id S1384228AbiFGVyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:54:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F3A249308;
-        Tue,  7 Jun 2022 12:13:09 -0700 (PDT)
+        Tue, 7 Jun 2022 17:54:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7684334BA5;
+        Tue,  7 Jun 2022 12:13:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34E3BB8237B;
-        Tue,  7 Jun 2022 19:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D41BC385A2;
-        Tue,  7 Jun 2022 19:13:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF916190D;
+        Tue,  7 Jun 2022 19:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BD9C385A2;
+        Tue,  7 Jun 2022 19:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629185;
-        bh=WDi9eZKrDjNID0ZsV7FKg95K6kjV/su4UXky+RTVxQQ=;
+        s=korg; t=1654629188;
+        bh=aUkYZA2RdSkilF75ZvUyPDbWjfQsE3ogg5hPbwbWvtk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xnwghS/UT82E3L2xFdeF4W6T+g74lLAqb2Zr7leLhbhFw1EfajpLHEuRsdZ94DA2I
-         FGI9Xgf/tz1PfxXJl/P5no9yaEDwVaYAlCCUcuXyjopnF2uKgUpoa0/DOwoCnZ3dhY
-         /PJWQ2acFltySjt/Zx57HhtP2ThzjjoZFg1cU39I=
+        b=qmi265/1NwHVJBR4twAQjlfqedz44UMLhlZ4F/XWsXHEty+siQ9bcXjfKDYF/uc9y
+         ZqKQk7lZLqOHIRog7dJXbYftM1WleXqWZxvV0H6EzyhAjOF9J47Bie6DAxGNDKg4w6
+         /8plghkCi6tCpbnRZ9JwhnHqd3Ly70b9bBEm5dwE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        syzbot+bdd6e38a1ed5ee58d8bd@syzkaller.appspotmail.com,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        "Soheil Hassas Yeganeh" <soheil@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Sridhar Samudrala" <sridhar.samudrala@intel.com>,
-        Alexander Duyck <alexander.h.duyck@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 5.18 601/879] list: fix a data-race around ep->rdllist
-Date:   Tue,  7 Jun 2022 19:01:59 +0200
-Message-Id: <20220607165020.297489097@linuxfoundation.org>
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 602/879] drm/msm/dpu: fix error check return value of irq_of_parse_and_map()
+Date:   Tue,  7 Jun 2022 19:02:00 +0200
+Message-Id: <20220607165020.326178256@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -62,111 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit d679ae94fdd5d3ab00c35078f5af5f37e068b03d ]
+[ Upstream commit 95093595914c17f32e1d6228b4db06fab8cebd35 ]
 
-ep_poll() first calls ep_events_available() with no lock held and checks
-if ep->rdllist is empty by list_empty_careful(), which reads
-rdllist->prev.  Thus all accesses to it need some protection to avoid
-store/load-tearing.
+The irq_of_parse_and_map() function returns 0 on failure, and does not
+return a negative value anyhow, so never enter this conditional branch.
 
-Note INIT_LIST_HEAD_RCU() already has the annotation for both prev
-and next.
-
-Commit bf3b9f6372c4 ("epoll: Add busy poll support to epoll with socket
-fds.") added the first lockless ep_events_available(), and commit
-c5a282e9635e ("fs/epoll: reduce the scope of wq lock in epoll_wait()")
-made some ep_events_available() calls lockless and added single call under
-a lock, finally commit e59d3c64cba6 ("epoll: eliminate unnecessary lock
-for zero timeout") made the last ep_events_available() lockless.
-
-BUG: KCSAN: data-race in do_epoll_wait / do_epoll_wait
-
-write to 0xffff88810480c7d8 of 8 bytes by task 1802 on cpu 0:
- INIT_LIST_HEAD include/linux/list.h:38 [inline]
- list_splice_init include/linux/list.h:492 [inline]
- ep_start_scan fs/eventpoll.c:622 [inline]
- ep_send_events fs/eventpoll.c:1656 [inline]
- ep_poll fs/eventpoll.c:1806 [inline]
- do_epoll_wait+0x4eb/0xf40 fs/eventpoll.c:2234
- do_epoll_pwait fs/eventpoll.c:2268 [inline]
- __do_sys_epoll_pwait fs/eventpoll.c:2281 [inline]
- __se_sys_epoll_pwait+0x12b/0x240 fs/eventpoll.c:2275
- __x64_sys_epoll_pwait+0x74/0x80 fs/eventpoll.c:2275
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-read to 0xffff88810480c7d8 of 8 bytes by task 1799 on cpu 1:
- list_empty_careful include/linux/list.h:329 [inline]
- ep_events_available fs/eventpoll.c:381 [inline]
- ep_poll fs/eventpoll.c:1797 [inline]
- do_epoll_wait+0x279/0xf40 fs/eventpoll.c:2234
- do_epoll_pwait fs/eventpoll.c:2268 [inline]
- __do_sys_epoll_pwait fs/eventpoll.c:2281 [inline]
- __se_sys_epoll_pwait+0x12b/0x240 fs/eventpoll.c:2275
- __x64_sys_epoll_pwait+0x74/0x80 fs/eventpoll.c:2275
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0xffff88810480c7d0 -> 0xffff888103c15098
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 1 PID: 1799 Comm: syz-fuzzer Tainted: G        W         5.17.0-rc7-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Link: https://lkml.kernel.org/r/20220322002653.33865-3-kuniyu@amazon.co.jp
-Fixes: e59d3c64cba6 ("epoll: eliminate unnecessary lock for zero timeout")
-Fixes: c5a282e9635e ("fs/epoll: reduce the scope of wq lock in epoll_wait()")
-Fixes: bf3b9f6372c4 ("epoll: Add busy poll support to epoll with socket fds.")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Reported-by: syzbot+bdd6e38a1ed5ee58d8bd@syzkaller.appspotmail.com
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc: Kuniyuki Iwashima <kuni1840@gmail.com>
-Cc: "Soheil Hassas Yeganeh" <soheil@google.com>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: "Sridhar Samudrala" <sridhar.samudrala@intel.com>
-Cc: Alexander Duyck <alexander.h.duyck@intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/483291/
+Link: https://lore.kernel.org/r/20220425090947.3498897-1-lv.ruyi@zte.com.cn
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/list.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/list.h b/include/linux/list.h
-index 0f7d8ec5b4ed..0df13cb03028 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -35,7 +35,7 @@
- static inline void INIT_LIST_HEAD(struct list_head *list)
- {
- 	WRITE_ONCE(list->next, list);
--	list->prev = list;
-+	WRITE_ONCE(list->prev, list);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index c8089678f733..c95bacd4f458 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -1244,7 +1244,7 @@ static int dpu_bind(struct device *dev, struct device *master, void *data)
+ 
+ 	priv->kms = &dpu_kms->base;
+ 
+-	return ret;
++	return 0;
  }
  
- #ifdef CONFIG_DEBUG_LIST
-@@ -306,7 +306,7 @@ static inline int list_empty(const struct list_head *head)
- static inline void list_del_init_careful(struct list_head *entry)
- {
- 	__list_del_entry(entry);
--	entry->prev = entry;
-+	WRITE_ONCE(entry->prev, entry);
- 	smp_store_release(&entry->next, entry);
- }
- 
-@@ -326,7 +326,7 @@ static inline void list_del_init_careful(struct list_head *entry)
- static inline int list_empty_careful(const struct list_head *head)
- {
- 	struct list_head *next = smp_load_acquire(&head->next);
--	return list_is_head(next, head) && (next == head->prev);
-+	return list_is_head(next, head) && (next == READ_ONCE(head->prev));
- }
- 
- /**
+ static void dpu_unbind(struct device *dev, struct device *master, void *data)
 -- 
 2.35.1
 

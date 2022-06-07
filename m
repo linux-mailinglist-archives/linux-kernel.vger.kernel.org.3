@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D7C542295
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA025422C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382367AbiFHB4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S1443437AbiFHCC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1588209AbiFGXyT (ORCPT
+        with ESMTP id S1588336AbiFGXyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:54:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A268BAF304;
-        Tue,  7 Jun 2022 16:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4987B82455;
-        Tue,  7 Jun 2022 23:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EB8C3411C;
-        Tue,  7 Jun 2022 23:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1654642821;
-        bh=SWeesriEZ4fpvNTKN1uebhuYgwpzgJTdbmuGMFiYqdU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aJS4LTAjEVx5s7WjkKVl8rRkm1KNwC5Pr7QhxoVWzTkhfbPXXHr/q4LShQLPF2Psc
-         tHkC3UWx7dR8DHz5jXQJgTQvoA1AMnpgWJ5FZkZ9/YDY+Db/1LJ2PloyHJir1oX2MG
-         CgN7azoapYTzzcBr5g2qTdS2aJfmmNEFwa+JIrok=
-Date:   Tue, 7 Jun 2022 16:00:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev
-Subject: Re: [syzbot] WARNING: locking bug in truncate_inode_pages_final
-Message-Id: <20220607160020.c088f4d29929310f2a3c1c32@linux-foundation.org>
-In-Reply-To: <0000000000000cf8be05e0d65e09@google.com>
-References: <0000000000000cf8be05e0d65e09@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 7 Jun 2022 19:54:33 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A3020BFC
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:02:29 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-f33f0f5b1dso25069778fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 16:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9B6aSW7/Chcjnv4G5NHTXNMSE1cO1o2NilpL530hfJE=;
+        b=UlsEOc61ALqNpzKAz2HjvqRmjxqokvcSEG4XAv8lVCgrtEtaSy+mDRBUL/SaGq73t2
+         0aqDl6dM/TdZeo9eTdUaJK2zgiYJ3Im9GhGoTEaKWtsqEbuDTZoaJGejHZ8Kv4mfZBNQ
+         R/gxCRTWmqIGSuA9SDuBg+ZkEfCwd70OIGOSMZ+5Ooy3Yf6VTLOH9jFY6kT6IMySx8W1
+         g6DBEpe84GF2hYsCtaWegVedDAlA6JlQ9O5PDZgew/p0FEWjyGwdev6YtnMaJR0cmfL2
+         2DyhrrIFEqDIzFHwpbMragkl4x2AfAVe5j1rlEj+HNh5a+6XkmXoFA2PJmpp0sjBP+sc
+         n2uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9B6aSW7/Chcjnv4G5NHTXNMSE1cO1o2NilpL530hfJE=;
+        b=YraU8JsfjT5IsOcybPvs9auNdS5booxO2cgAFtOfW3/m6vnot1jN4xvltXHMOHsW1t
+         VAAkt9twntnHYXJ7ve4Awt2AZnuoNH1fwWhHp3wh7UKKhOdRR+AJ4XQ1m32ZRjqVOyZx
+         NP3NkcCXkFO41sy8G7RUBN0yFDlGfnSmJXfSgilUseA5Oxg+sBE5zrFTYlRGNe9LLa6j
+         vjFjgThmfE9MpbwgM6nk6BPICJzfHMU0PsrAXTlyVffTPyOwwvTcQ7Og5HB9bwdLUaWD
+         joLDpSshuQMoDkFcH8hZCRBYHeCTRRGMYtPMTM69bvese9ErqIOAgzYI0y2TvaL0S6UR
+         9t0Q==
+X-Gm-Message-State: AOAM532e/XAa5Us8B6JYClzJxo6iby1j3ZTSMYBUnfpGLzlgpZqTnuo0
+        u46xLBbOn2UL6itlo0UCJM+Wtg==
+X-Google-Smtp-Source: ABdhPJwBw13NfSGhhxI1OscL7/lZqhKpxazhnJYLV7KwjIuP1RdS1jLVKqkXTETUKnAIAO30zlZ2fw==
+X-Received: by 2002:a05:6870:3046:b0:fc:f47d:4c7d with SMTP id u6-20020a056870304600b000fcf47d4c7dmr781932oau.199.1654642948445;
+        Tue, 07 Jun 2022 16:02:28 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056830440800b0060aeccf6b44sm10415723otv.41.2022.06.07.16.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 16:02:27 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 16:04:51 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] phy: qcom-qmp: Add USB4 5NM QMP combo PHY
+ registers
+Message-ID: <Yp/ZkxNltUgE79nC@ripper>
+References: <20220607213543.4057620-1-bjorn.andersson@linaro.org>
+ <20220607213543.4057620-4-bjorn.andersson@linaro.org>
+ <d9658f54-e594-8f0e-071e-ef627285d281@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d9658f54-e594-8f0e-071e-ef627285d281@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,107 +78,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lots of cc's added.
+On Tue 07 Jun 15:24 PDT 2022, Dmitry Baryshkov wrote:
 
-On Tue, 07 Jun 2022 00:16:29 -0700 syzbot <syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com> wrote:
-
-> Hello,
-
-Thanks.
-
-> syzbot found the following issue on:
-
-Oh dear.
-
-> HEAD commit:    d1dc87763f40 assoc_array: Fix BUG_ON during garbage collect
-
-I think this bisection is wrong.
-
-I sure hope it's wrong - that patch went straight from the mailing list
-into mainline and two days later was added to what appears to be every
--stable kernel we own.  It spent no time in -next except for a week or
-so when I was sitting on an earlier version.
-
-But I think the bisection is wrong.  I don't see how d1dc87763f40 can
-affect ntfs3 and pagecache truncate.
-
-Does that testcase even use the security keyrings code?  I'd be
-suspicious of ntfs3 here.
-
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14979947f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c51cd24814bb5665
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2c93b863a7698df84bad
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> On 08/06/2022 00:35, Bjorn Andersson wrote:
+> > Add all registers defines from qcom,usb4-5nm-qmp-combo.h of the msm-5.4
+> > kernel. Offsets are adjusted to be relative to each sub-block, as we
+> > describe the individual pieces in the upstream kernel and "v5_5NM" are
+> > injected in the defines to not collide with existing constants.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> > 
+> > Changes since v1:
+> > - New patch
+> > 
+> >   .../qualcomm/phy-qcom-usb4-5nm-qmp-combo.h    | 1547 +++++++++++++++++
+> >   1 file changed, 1547 insertions(+)
+> >   create mode 100644 drivers/phy/qualcomm/phy-qcom-usb4-5nm-qmp-combo.h
+> > 
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-usb4-5nm-qmp-combo.h b/drivers/phy/qualcomm/phy-qcom-usb4-5nm-qmp-combo.h
+> > new file mode 100644
+> > index 000000000000..7be8a50269ec
+> > --- /dev/null
+> > +++ b/drivers/phy/qualcomm/phy-qcom-usb4-5nm-qmp-combo.h
+> > @@ -0,0 +1,1547 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> > + */
+> > +
+> > +#ifndef PHY_QCOM_V5_5NM_QMP_COMBO_USB4_H
+> > +#define PHY_QCOM_V5_5NM_QMP_COMBO_USB4_H
+> > +
+> > +/* USB4-USB3-DP Combo PHY register offsets */
+> > +/* Module: USB43DP_COM_USB43DP_COM_USB4_USB3_DP_COM */
+> > +#define USB43DP_V5_5NM_COM_PHY_MODE_CTRL				0x00
+> > +#define USB43DP_V5_5NM_COM_SW_RESET					0x04
+> > +#define USB43DP_V5_5NM_COM_POWER_DOWN_CTRL				0x08
+> > +#define USB43DP_V5_5NM_COM_SWI_CTRL					0x0c
+> > +#define USB43DP_V5_5NM_COM_TYPEC_CTRL					0x10
+> > +#define USB43DP_V5_5NM_COM_TYPEC_PWRDN_CTRL				0x14
+> > +#define USB43DP_V5_5NM_COM_DP_BIST_CFG_0				0x18
+> > +#define USB43DP_V5_5NM_COM_RESET_OVRD_CTRL1				0x1c
+> > +#define USB43DP_V5_5NM_COM_RESET_OVRD_CTRL2				0x20
+> > +#define USB43DP_V5_5NM_COM_DBG_CLK_MUX_CTRL				0x24
+> > +#define USB43DP_V5_5NM_COM_TYPEC_STATUS					0x28
+> > +#define USB43DP_V5_5NM_COM_PLACEHOLDER_STATUS				0x2c
+> > +#define USB43DP_V5_5NM_COM_REVISION_ID0					0x30
+> > +#define USB43DP_V5_5NM_COM_REVISION_ID1					0x34
+> > +#define USB43DP_V5_5NM_COM_REVISION_ID2					0x38
+> > +#define USB43DP_V5_5NM_COM_REVISION_ID3					0x3c
 > 
-> Unfortunately, I don't have any reproducer for this issue yet.
+> QPHY_V5_DP_COM_foo ?
+> 
 
-Confused.  How is it possible to do a git-bisect without a reproducer?
+My first version of the QMP patch used V5 defines and USB worked
+sometimes. So I hacked up a thing to dump the phy sequences of the
+downstream and upstream kernels, compared the magic numbers and then
+tried to fit suitable constants.
 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2c93b863a7698df84bad@syzkaller.appspotmail.com
+But it obviously was a waste of time and I would have to make up a
+different naming scheme for the ones that doesn't match the existing
+constants - when we could just use the autogenerated files that exist in
+the downstream kernels.
+
+[..]
+> > +#define USB43DP_V5_5NM_QSERDES_TXA_DEBUG_BUS1				0xf0
+> > +#define USB43DP_V5_5NM_QSERDES_TXA_DEBUG_BUS2				0xf4
+> > +#define USB43DP_V5_5NM_QSERDES_TXA_DEBUG_BUS3				0xf8
+> > +#define USB43DP_V5_5NM_QSERDES_TXA_TX_BKUP_RO_BUS			0xfc
 > 
-> ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
-> ntfs3: loop3: Different NTFS' sector size (2048) and media sector size (512)
-> ------------[ cut here ]------------
-> releasing a pinned lock
-> WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 __lock_release kernel/locking/lockdep.c:5349 [inline]
-> WARNING: CPU: 2 PID: 21856 at kernel/locking/lockdep.c:5349 lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
-> Modules linked in:
-> CPU: 2 PID: 21856 Comm: syz-executor.3 Not tainted 5.18.0-syzkaller-11972-gd1dc87763f40 #0
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-> RIP: 0010:__lock_release kernel/locking/lockdep.c:5349 [inline]
-> RIP: 0010:lock_release+0x6a9/0x780 kernel/locking/lockdep.c:5685
-> Code: 68 00 e9 5a fa ff ff 4c 89 f7 e8 f2 3d 68 00 e9 36 fc ff ff e8 78 3d 68 00 e9 f5 fb ff ff 48 c7 c7 e0 9a cc 89 e8 d1 84 d3 07 <0f> 0b e9 87 fb ff ff e8 3b b3 18 08 48 c7 c7 4c 44 bb 8d e8 4f 3d
-> RSP: 0018:ffffc90003497a00 EFLAGS: 00010082
-> RAX: 0000000000000000 RBX: ffff88801e742c48 RCX: 0000000000000000
-> RDX: 0000000000040000 RSI: ffffffff81601908 RDI: fffff52000692f32
-> RBP: 1ffff92000692f42 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000080000001 R11: 0000000000000001 R12: ffff88804fb22498
-> R13: 0000000000000002 R14: ffff88801e742c18 R15: ffff88801e7421c0
-> FS:  00007f64be4cb700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f64be4cc000 CR3: 00000000669a7000 CR4: 0000000000150ee0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:157 [inline]
->  _raw_spin_unlock_irq+0x12/0x40 kernel/locking/spinlock.c:202
->  spin_unlock_irq include/linux/spinlock.h:399 [inline]
->  truncate_inode_pages_final+0x5f/0x80 mm/truncate.c:484
->  ntfs_evict_inode+0x16/0xa0 fs/ntfs3/inode.c:1750
->  evict+0x2ed/0x6b0 fs/inode.c:664
->  iput_final fs/inode.c:1744 [inline]
->  iput.part.0+0x562/0x820 fs/inode.c:1770
->  iput+0x58/0x70 fs/inode.c:1760
->  ntfs_fill_super+0x2d66/0x3730 fs/ntfs3/super.c:1180
->  get_tree_bdev+0x440/0x760 fs/super.c:1292
->  vfs_get_tree+0x89/0x2f0 fs/super.c:1497
->  do_new_mount fs/namespace.c:3040 [inline]
->  path_mount+0x1320/0x1fa0 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f64bd28a63a
-> Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f64be4caf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-> RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f64bd28a63a
-> RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f64be4cafe0
-> RBP: 00007f64be4cb020 R08: 00007f64be4cb020 R09: 0000000020000000
-> R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-> R13: 0000000020000100 R14: 00007f64be4cafe0 R15: 000000002007a980
->  </TASK>
+> QSERDES_V5_20_TX_foo ? This looks compatible with the 4 registers that we
+> have in the header, but I can not verify the rest of registers
 > 
+
+Exactly the point I was making in my reply to the other patch.
+
+Per the documentation this is version 5.0.0, but these register offsets
+happens to match the 5.20 defines that we have...
+
+> > +
+> > +/* Module: USB43DP_QSERDES_RXA_USB43DP_QSERDES_RXA_USB4_USB3_DP_QMP_RX */
+[..]
+> > +#define USB43DP_V5_5NM_QSERDES_RXA_RX_BKUP_READ_BUS3_STATUS		0x3e8
+
+And these, doesn't match either V5 or V5_20.
+
+[..]
+> > +#define USB43DP_V5_5NM_QSERDES_TXB_TX_BKUP_RO_BUS			0xfc
 > 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> What is the difference between _TXA_ and _TXB_ ?
 > 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+Nothing, I just don't want us to mess around with these files if we can
+get them dumped from the register documentation.
+
+> > +
+[..]
+> > +
+> > +/* Module: USB3_PCS_MISC_USB3_PCS_MISC_USB3_PCS_MISC */
+> > +#define USB3_V5_5NM_PCS_MISC_TYPEC_CTRL					0x00
+> > +#define USB3_V5_5NM_PCS_MISC_TYPEC_PWRDN_CTRL				0x04
+> > +#define USB3_V5_5NM_PCS_MISC_PCS_MISC_CONFIG1				0x08
+> > +#define USB3_V5_5NM_PCS_MISC_CLAMP_ENABLE				0x0c
+> > +#define USB3_V5_5NM_PCS_MISC_TYPEC_STATUS				0x10
+> > +#define USB3_V5_5NM_PCS_MISC_PLACEHOLDER_STATUS				0x14
+> 
+> QPHY_V4_PCS_MISC (or v5)
+> 
+
+Perhaps, but then we're just making up those prefixes and hoping for the
+best.
+
+[..]
+> > +#define USB3_V5_5NM_PCS_EQ_CONFIG2					0x1e0
+> > +#define USB3_V5_5NM_PCS_EQ_CONFIG3					0x1e4
+> > +#define USB3_V5_5NM_PCS_EQ_CONFIG4					0x1E8
+> > +#define USB3_V5_5NM_PCS_EQ_CONFIG5					0x1EC
+> 
+> This looks like both QPHY_V4_PCS and QPHY_V5_PCS. Most probably we should
+> merge them together and add these defines.
+> 
+
+Exactly, all these defines looks like defines we already have and if you
+pick the wrong one you end up with things not working - or in my case
+something that worked sometimes.
+
+> > +
+> > +/* Module: USB3_PCS_USB3_USB3_PCS_USB3_USB3_PCS_USB3 */
+[..]
+> > +#define USB3_V5_5NM_PCS_USB3_RXTERMINATION_DLY_SEL			0x60
+> 
+> Again, QPHY_V5_PCS_USB w/o the 0x300 offset
+> 
+
+Yeah, that extra region needs to be added to the binding and driver.
+
+Regards,
+Bjorn

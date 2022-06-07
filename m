@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3834153FECC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D198053FECF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243722AbiFGMbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S243733AbiFGMcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243461AbiFGMbV (ORCPT
+        with ESMTP id S243133AbiFGMcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:31:21 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4157EC4EB9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:31:19 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id me5so34343456ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0bVBZIpTbV1NVEDZVAeiBc+vcx1NnNChCpdEL4H7wUg=;
-        b=fEsNEyiVyn4LQ4vSljRmJJFYlOirmhQAdjjRVQ5sjPc2lZDUwqXiEZSkjZeXl7O8D0
-         2rPoTTajTVEaV5zR3AKyzJpZJtBX/O/cScXf0hDJvIbYd5Hzpt3R+xG6SuDavZN4r5Vd
-         MM/l79Yr1wWODXoyP5K0dUcxjRh2/CA3TJtJQ7Hh/AT+YWGWx0/DF57NdpMeVdIzngz4
-         rAU4i2tmrZf6z/+eypOS0wKWko1BJ5LHXP9gzI49GWcYduRfwMY2c0Zz4rZVgjxhUBl8
-         MOEzf4xkxvPEKMt6/naZlPLhXM8YdTk9dbH2ihTyFPw1O1MBsTmkCMRIm+tUiNDIAgTI
-         vMkA==
+        Tue, 7 Jun 2022 08:32:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D8F4DB1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654605131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ANIP068Q0mpb/xLRKoLbXp2Q0bL3F9C9hqR31yN4fgA=;
+        b=cp9fnpaytGnC5EaZY30nJhZ4sMcVNs6ce63tR1P/Rb1nhvGujKiZ62a6gCN3LvMJoETtfg
+        gFAK1U465SwtT0Q9HY0n0pqg0trxxx47DIdLYUSEyn662NMmal1U8Ctybqf9wh8urhNq54
+        TZDX+KUGJF0pnGEYrLLyrjJ3YDMf0Ds=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-168-nHvFmEDcPgaxI5X6ZeO9Bw-1; Tue, 07 Jun 2022 08:32:08 -0400
+X-MC-Unique: nHvFmEDcPgaxI5X6ZeO9Bw-1
+Received: by mail-qt1-f200.google.com with SMTP id c1-20020ac81101000000b002f9219952f0so13803860qtj.15
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:32:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0bVBZIpTbV1NVEDZVAeiBc+vcx1NnNChCpdEL4H7wUg=;
-        b=oQ6TJr7hy8NGQABzFY8HuDZkK/FSOs+8syG2Az397PFaJvLk1Ae85Wdus4j40GBAsO
-         wGn4GoyrXpIdEwOxjUXqBnVjVNW0igAwBY9VaoCktuPrkexPsvV2NzNMjILbslG+H+rr
-         6JpoR3Sltr8JX3zdLBvLmamchqyID2866gxH5FN4ZzU/VOkTkeXR+g6P8xE4uV5XPduM
-         Nco/zmuvwbayXdHzk6TOVdxDRCm5UF0oB6yxTXP7JO/JPK+Fg2OkuHQ0stqKfe+cMjul
-         yUnpKvLutxvsxndZaVmp2v4t2HjUoAtHlbFnLyjTSTsy3dGUH7clz5h1hPI6jHGDRnF/
-         tO+w==
-X-Gm-Message-State: AOAM531fOVTMHf2p1NIVEMAjvLj7c/5RYTXhZfJ3twLlt9fLvNVFon7A
-        5h6LW2nq37OAfp41w004tcGW/w==
-X-Google-Smtp-Source: ABdhPJyJTPqtj65zaAKLcpzOo+Oyji+7r+MmVERsSyki9/O0672e5B8VTsFaRPkDbVji7Ok6efqskA==
-X-Received: by 2002:a17:907:3f04:b0:6e8:4b0e:438d with SMTP id hq4-20020a1709073f0400b006e84b0e438dmr26317862ejc.391.1654605077853;
-        Tue, 07 Jun 2022 05:31:17 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q6-20020a1709060f8600b00711edab7622sm24387ejj.40.2022.06.07.05.31.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:31:17 -0700 (PDT)
-Message-ID: <cf79be5d-deb8-09f6-0f17-3c3639e670e5@linaro.org>
-Date:   Tue, 7 Jun 2022 14:31:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: remoteproc: qcom: q6v5: fix example
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=ANIP068Q0mpb/xLRKoLbXp2Q0bL3F9C9hqR31yN4fgA=;
+        b=eSwzbq/DUDMvyBaOtnStKZiZtKxZ0wfthENrIA7YDC1jrluDoDV8NfuaL0KwgJZlb5
+         sDlwkFh3ZBaitQ32kZR7tzBEMwOHPYcw2Qog9onRCraCYyQ3XTTkyZgHVaYr5jYo0yyu
+         S8PJOuSnfsP0ZpJAUE/jWRiAdp+BpEnlHN2JebihaVMBU+80XWLzMI7ckVw85YaYsM/p
+         ahzLzUHS8CUN8dmIuTws+N3a4nNxAlI0edXgp17IfyFcyOFzJVokFGDVe64/pk9yEpXy
+         5w5p72x6rR//XXyjwqN/u1htD6HKbX0tPC5nIUeKQuowTznmzPg5P473fKfcEvs6U1B9
+         +/hg==
+X-Gm-Message-State: AOAM531z1B6PoTMrCeIXc2U8Q8wV6QEZYS/FUAdS64Athucgz1u4P6M4
+        UupQ6zSMN0ZiBbSBORNEcG1dSYssO47DsY5bwgcsIEBII6MmzFaBInc1jTTFvcgPZa4MpkmPa0Z
+        /dpgkhTp+SYOydBELeW7eU2Sf
+X-Received: by 2002:a0c:f911:0:b0:465:3bef:4699 with SMTP id v17-20020a0cf911000000b004653bef4699mr20609182qvn.111.1654605127645;
+        Tue, 07 Jun 2022 05:32:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxAmnEscpLoS4SpG191ElQwv6uk00aXYwAdm24AqlPzMdN/j2XL170KAdBJbh1UhMVtqJ0Lug==
+X-Received: by 2002:a0c:f911:0:b0:465:3bef:4699 with SMTP id v17-20020a0cf911000000b004653bef4699mr20609144qvn.111.1654605127181;
+        Tue, 07 Jun 2022 05:32:07 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id bt4-20020ac86904000000b00304febfc2ddsm14585qtb.56.2022.06.07.05.32.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 05:32:06 -0700 (PDT)
+Message-ID: <72b2c30861566c366deff686e965db53694e8f8f.camel@redhat.com>
+Subject: Re: [PATCH 1/7] x86/cpu: Add CPUID feature bit for VNMI
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220606132324.1497349-1-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220606132324.1497349-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Date:   Tue, 07 Jun 2022 15:32:03 +0300
+In-Reply-To: <20220602142620.3196-2-santosh.shukla@amd.com>
+References: <20220602142620.3196-1-santosh.shukla@amd.com>
+         <20220602142620.3196-2-santosh.shukla@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,16 +84,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 15:23, Luca Weiss wrote:
-> Use the node in the examples that is present in msm8974.dtsi, which uses
-> proper flags for the interrupts and add required 'xo' clock among
-> others.
+On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
+> VNMI feature allows the hypervisor to inject NMI into the guest w/o
+> using Event injection mechanism, The benefit of using VNMI over the
+> event Injection that does not require tracking the Guest's NMI state and
+> intercepting the IRET for the NMI completion. VNMI achieves that by
+> exposing 3 capability bits in VMCB intr_cntrl which helps with
+> virtualizing NMI injection and NMI_Masking.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> The presence of this feature is indicated via the CPUID function
+> 0x8000000A_EDX[25].
+> 
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> ---
+>  arch/x86/include/asm/cpufeatures.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 393f2bbb5e3a..c8775b25856b 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -346,6 +346,7 @@
+>  #define X86_FEATURE_V_VMSAVE_VMLOAD    (15*32+15) /* Virtual VMSAVE VMLOAD */
+>  #define X86_FEATURE_VGIF               (15*32+16) /* Virtual GIF */
+>  #define X86_FEATURE_V_SPEC_CTRL                (15*32+20) /* Virtual SPEC_CTRL */
+> +#define X86_FEATURE_V_NMI              (15*32+25) /* Virtual NMI */
+>  #define X86_FEATURE_SVME_ADDR_CHK      (15*32+28) /* "" SVME addr check */
+>  
+>  /* Intel-defined CPU features, CPUID level 0x00000007:0 (ECX), word 16 */
 
+I also think that AMD should publish some sort of a 'future ISA' spec like Intel does,
+so that we could avoid mistakes in reviweing the code.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Other than that:
 
-
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 Best regards,
-Krzysztof
+	Maxim Levitsky
+

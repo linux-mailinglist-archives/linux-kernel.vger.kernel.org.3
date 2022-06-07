@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADC65407B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CFF5419BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349942AbiFGRvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S1380294AbiFGV0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347481AbiFGRfS (ORCPT
+        with ESMTP id S1377235AbiFGUdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E865010F374;
-        Tue,  7 Jun 2022 10:30:46 -0700 (PDT)
+        Tue, 7 Jun 2022 16:33:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B8C1E3018;
+        Tue,  7 Jun 2022 11:34:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA69D6152A;
-        Tue,  7 Jun 2022 17:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B7AC385A5;
-        Tue,  7 Jun 2022 17:30:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3FA7B8237E;
+        Tue,  7 Jun 2022 18:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E967C385A2;
+        Tue,  7 Jun 2022 18:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623022;
-        bh=20MCyB5rMbOhS6tJ+rz1pmkEOBZUeaGMgtx6VftxxMI=;
+        s=korg; t=1654626868;
+        bh=VYBd86LMk5jOSS/MImRpk2S/tWG5Gbn3PLa2ExIOctg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lVzkVs1WmEfV8ILFMGDEZDc8o9c43zBz+GIy+S9Fvf6Isu/gCb9le4+bWuPs5nniI
-         Y048C1RqT9xt4qyg8VmQjmG3yX3Aqng/4aYPyZwyMj8qO7+vONVXrupSg47ljwCEUZ
-         BTMVkQVHNPt212S5hiADy0+I+2K5cnbqc8LS+KEA=
+        b=Ol7Ttr1jFFxoInvsx2YmgOx3lkxHk5oOBbt/le8aQjKjnHGOrjImCnH84DN7Hh0ZC
+         XQltW4j9zvIcH9/YQlZx85CVlLrkiRZJAS5A2RCXf+ZuBlPxCQd1WngColrrfOtCCG
+         A5DNVsstAwvK6u1EkRb1kRAqogL3SIbybdYI7OpE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 267/452] soc: qcom: llcc: Add MODULE_DEVICE_TABLE()
-Date:   Tue,  7 Jun 2022 19:02:04 +0200
-Message-Id: <20220607164916.508371672@linuxfoundation.org>
+Subject: [PATCH 5.17 533/772] ARM: dts: at91: sama7g5: remove interrupt-parent from gic node
+Date:   Tue,  7 Jun 2022 19:02:05 +0200
+Message-Id: <20220607165004.676260230@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit 5334a3b12a7233b31788de60d61bfd890059d783 ]
+[ Upstream commit b7e86ef7afd128577ff7bb0db0ae82d27d7ed7ad ]
 
-The llcc-qcom driver can be compiled as a module, but lacks
-MODULE_DEVICE_TABLE() and will therefore not be loaded automatically.
-Fix this.
+interrupt-parent is not to be used as a boolean property.
+It is already present in the DT in the proper way it's supposed to be used:
+interrupt-parent = <&gic>;
 
-Fixes: a3134fb09e0b ("drivers: soc: Add LLCC driver")
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220408213336.581661-3-bjorn.andersson@linaro.org
+This is also reported by dtbs_check:
+arch/arm/boot/dts/at91-sama7g5ek.dtb: interrupt-controller@e8c11000: interrupt-parent: True is not of type 'array'
+	From schema: /.local/lib/python3.8/site-packages/dtschema/schemas/interrupts.yaml
+
+Fixes: 7540629e2fc7 ("ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220503133127.64320-1-eugen.hristev@microchip.com
+Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/llcc-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/sama7g5.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 70fbe70c6213..2e06f48d683d 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -496,6 +496,7 @@ static const struct of_device_id qcom_llcc_of_match[] = {
- 	{ .compatible = "qcom,sdm845-llcc", .data = &sdm845_cfg },
- 	{ }
- };
-+MODULE_DEVICE_TABLE(of, qcom_llcc_of_match);
- 
- static struct platform_driver qcom_llcc_driver = {
- 	.driver = {
+diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+index 22520cdd37fc..46c96a3d7992 100644
+--- a/arch/arm/boot/dts/sama7g5.dtsi
++++ b/arch/arm/boot/dts/sama7g5.dtsi
+@@ -626,7 +626,6 @@
+ 			#interrupt-cells = <3>;
+ 			#address-cells = <0>;
+ 			interrupt-controller;
+-			interrupt-parent;
+ 			reg = <0xe8c11000 0x1000>,
+ 				<0xe8c12000 0x2000>;
+ 		};
 -- 
 2.35.1
 

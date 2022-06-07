@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A30541385
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CDA541A9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358335AbiFGUAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S1380309AbiFGVfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353972AbiFGSzT (ORCPT
+        with ESMTP id S1376332AbiFGUjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:55:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF38314B2C5;
-        Tue,  7 Jun 2022 11:03:56 -0700 (PDT)
+        Tue, 7 Jun 2022 16:39:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D417414B2E5;
+        Tue,  7 Jun 2022 11:38:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1F966171C;
-        Tue,  7 Jun 2022 18:03:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F94C3411F;
-        Tue,  7 Jun 2022 18:03:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99CE5B8237E;
+        Tue,  7 Jun 2022 18:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BCFC385A5;
+        Tue,  7 Jun 2022 18:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625036;
-        bh=sfIrPoe/Tw/3gsCBONHPPZdTzRMV+EyfeA3glh9/G5M=;
+        s=korg; t=1654627094;
+        bh=FjpVwRVNYYlAGn7k/OHLaxc52wPen+gS9TwWMFYhhXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mVmN7p6FgjHw6gyHKX+RTx7/vmQIDkiMGPirOMmeex1ffrutq7jtLzRjCHW5eci4b
-         HlTI7fSXeTuPAP/lbMZ5UndDdenBDk50gCIruy4//QKuUBm905ZtdRJZkIpTMGUc4C
-         2QvvQY1a/SVyHGA+k8k1IktCoblhvD4Z+6NX7ukA=
+        b=q8DH7MF/DKLab7tRQrpkuxOS9KbddWcsscS8rzhh8gpjt2Hr/10ZFLicZmj47k4SH
+         l5rXm0iexvddNerNHaUfvUtiedpCwwJ+qXn6WdD+7OvdhcabPlT8Zb2bxZnpVwFmfR
+         pIaig3VnHUQDrpSlawSwxXIgslVrOovHQmEVmJjs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 5.15 543/667] ext4: fix warning in ext4_handle_inode_extension
+        stable@vger.kernel.org, stable@kernel.org,
+        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.17 616/772] f2fs: fix fallocate to use file_modified to update permissions consistently
 Date:   Tue,  7 Jun 2022 19:03:28 +0200
-Message-Id: <20220607164950.982259385@linuxfoundation.org>
+Message-Id: <20220607165007.090617196@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,107 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Chao Yu <chao@kernel.org>
 
-commit f4534c9fc94d22383f187b9409abb3f9df2e3db3 upstream.
+commit 958ed92922028ec67f504dcdc72bfdfd0f43936a upstream.
 
-We got issue as follows:
-EXT4-fs error (device loop0) in ext4_reserve_inode_write:5741: Out of memory
-EXT4-fs error (device loop0): ext4_setattr:5462: inode #13: comm syz-executor.0: mark_inode_dirty error
-EXT4-fs error (device loop0) in ext4_setattr:5519: Out of memory
-EXT4-fs error (device loop0): ext4_ind_map_blocks:595: inode #13: comm syz-executor.0: Can't allocate blocks for non-extent mapped inodes with bigalloc
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 4361 at fs/ext4/file.c:301 ext4_file_write_iter+0x11c9/0x1220
-Modules linked in:
-CPU: 1 PID: 4361 Comm: syz-executor.0 Not tainted 5.10.0+ #1
-RIP: 0010:ext4_file_write_iter+0x11c9/0x1220
-RSP: 0018:ffff924d80b27c00 EFLAGS: 00010282
-RAX: ffffffff815a3379 RBX: 0000000000000000 RCX: 000000003b000000
-RDX: ffff924d81601000 RSI: 00000000000009cc RDI: 00000000000009cd
-RBP: 000000000000000d R08: ffffffffbc5a2c6b R09: 0000902e0e52a96f
-R10: ffff902e2b7c1b40 R11: ffff902e2b7c1b40 R12: 000000000000000a
-R13: 0000000000000001 R14: ffff902e0e52aa10 R15: ffffffffffffff8b
-FS:  00007f81a7f65700(0000) GS:ffff902e3bc80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffff600400 CR3: 000000012db88001 CR4: 00000000003706e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- do_iter_readv_writev+0x2e5/0x360
- do_iter_write+0x112/0x4c0
- do_pwritev+0x1e5/0x390
- __x64_sys_pwritev2+0x7e/0xa0
- do_syscall_64+0x37/0x50
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
+This patch tries to fix permission consistency issue as all other
+mainline filesystems.
 
-Above issue may happen as follows:
-Assume
-inode.i_size=4096
-EXT4_I(inode)->i_disksize=4096
+Since the initial introduction of (posix) fallocate back at the turn of
+the century, it has been possible to use this syscall to change the
+user-visible contents of files.  This can happen by extending the file
+size during a preallocation, or through any of the newer modes (punch,
+zero, collapse, insert range).  Because the call can be used to change
+file contents, we should treat it like we do any other modification to a
+file -- update the mtime, and drop set[ug]id privileges/capabilities.
 
-step 1: set inode->i_isize = 8192
-ext4_setattr
-  if (attr->ia_size != inode->i_size)
-    EXT4_I(inode)->i_disksize = attr->ia_size;
-    rc = ext4_mark_inode_dirty
-       ext4_reserve_inode_write
-          ext4_get_inode_loc
-            __ext4_get_inode_loc
-              sb_getblk --> return -ENOMEM
-   ...
-   if (!error)  ->will not update i_size
-     i_size_write(inode, attr->ia_size);
-Now:
-inode.i_size=4096
-EXT4_I(inode)->i_disksize=8192
+The VFS function file_modified() does all this for us if pass it a
+locked inode, so let's make fallocate drop permissions correctly.
 
-step 2: Direct write 4096 bytes
-ext4_file_write_iter
- ext4_dio_write_iter
-   iomap_dio_rw ->return error
- if (extend)
-   ext4_handle_inode_extension
-     WARN_ON_ONCE(i_size_read(inode) < EXT4_I(inode)->i_disksize);
-->Then trigger warning.
-
-To solve above issue, if mark inode dirty failed in ext4_setattr just
-set 'EXT4_I(inode)->i_disksize' with old value.
-
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Link: https://lore.kernel.org/r/20220326065351.761952-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Cc: stable@kernel.org
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c |    4 ++++
+ fs/f2fs/file.c |    4 ++++
  1 file changed, 4 insertions(+)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -5364,6 +5364,7 @@ int ext4_setattr(struct user_namespace *
- 	if (attr->ia_valid & ATTR_SIZE) {
- 		handle_t *handle;
- 		loff_t oldsize = inode->i_size;
-+		loff_t old_disksize;
- 		int shrink = (attr->ia_size < inode->i_size);
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1774,6 +1774,10 @@ static long f2fs_fallocate(struct file *
  
- 		if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))) {
-@@ -5437,6 +5438,7 @@ int ext4_setattr(struct user_namespace *
- 					inode->i_sb->s_blocksize_bits);
+ 	inode_lock(inode);
  
- 			down_write(&EXT4_I(inode)->i_data_sem);
-+			old_disksize = EXT4_I(inode)->i_disksize;
- 			EXT4_I(inode)->i_disksize = attr->ia_size;
- 			rc = ext4_mark_inode_dirty(handle, inode);
- 			if (!error)
-@@ -5448,6 +5450,8 @@ int ext4_setattr(struct user_namespace *
- 			 */
- 			if (!error)
- 				i_size_write(inode, attr->ia_size);
-+			else
-+				EXT4_I(inode)->i_disksize = old_disksize;
- 			up_write(&EXT4_I(inode)->i_data_sem);
- 			ext4_journal_stop(handle);
- 			if (error)
++	ret = file_modified(file);
++	if (ret)
++		goto out;
++
+ 	if (mode & FALLOC_FL_PUNCH_HOLE) {
+ 		if (offset >= inode->i_size)
+ 			goto out;
 
 

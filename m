@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF0053FBBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE84653FBC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241522AbiFGKpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S241414AbiFGKpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241415AbiFGKpY (ORCPT
+        with ESMTP id S241449AbiFGKpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:45:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B1FE64C3;
-        Tue,  7 Jun 2022 03:45:23 -0700 (PDT)
+        Tue, 7 Jun 2022 06:45:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84833ED72C;
+        Tue,  7 Jun 2022 03:45:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E7AA61319;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 397A1B81F02;
+        Tue,  7 Jun 2022 10:45:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FAA3C385A5;
         Tue,  7 Jun 2022 10:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1780BC3411E;
-        Tue,  7 Jun 2022 10:45:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598722;
-        bh=H7439HAhKBiBU5PJ0wEYhH+/aj2uOXs88io1cN6Ww+I=;
+        s=k20201202; t=1654598725;
+        bh=MpaIdGbaKAMBLJfa7jevH3NryJ/FF1rB5km3FqsCypk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IZJSFxF3NIi3cewoR1VlvJQkQVHSUj3nrlHYEWLewWIaLDLl3OCLisXwJk8+U6N7k
-         xAbXEtMyKf/faeh1lawU5kwfT3E6Wy0rTQ5QERHAt6NVjJ1DdVKsNtwmmB4eXkZumX
-         s0qkSMeKyQbAiOT5ozjwAxPlyPDV7Zg+to24SS0nvp7oex+F10NyB+ax9Vn5ShVvzK
-         Z8te27GrRgIwob/Vi5X2zadr+Q2ACUKhB7gIN56o+pBApMCXIO8IYkSbX8jz5zYd0m
-         MMukOD4clitxdcEa2BeAq79ezlu9vZ9bFljGbxJpy3pQ63EFOdkNheKmQL3yMnzbUJ
-         c5nRjaoG4seVw==
+        b=aWZvLnCXNcZk7SwWw2ChEM3DWON75dXOgbPugmTAyNwp7ROOhIZxRO2RQSkV2Kqb4
+         uRFokkW1iMplAJjN2TojScugvWjd7nvDluhm+KdNPXmrhB94/P3yFuleLxa3P3ox9K
+         rHLJsD7VPK4xP2E22Y5Jekg1UCqMLSlrcDlJPHAAEQDAYAQJHlQdzAtoBs77T46SKG
+         7YyWkdty4tRz8t85Jod/xSwFQc04CE5lvdUJ18J+SZo9jhLbb9JV0w8fiB5/Im28pX
+         xuPdtLcr9Rs0XIrpiMUVtcvFHEGGKtkP4xT1IRvpbfd9O9vzycEXIZyYnx8u2F15hI
+         zkGHTj5Zs0Nmg==
 From:   Mark Brown <broonie@kernel.org>
-To:     olivier.moysan@foss.st.com, Julia.Lawall@inria.fr
-Cc:     linux-arm-kernel@lists.infradead.org, arnaud.pouliquen@foss.st.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        kernel-janitors@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        alexandre.torgue@foss.st.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, linux-kernel@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org
-In-Reply-To: <20220521111145.81697-76-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-76-Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] ASoC: stm32: dfsdm: fix typo in comment
-Message-Id: <165459871980.301808.7235614685174421255.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:45:19 +0100
+To:     Julia.Lawall@inria.fr, Liam Girdwood <lgirdwood@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org
+In-Reply-To: <20220521111145.81697-79-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-79-Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] ASoC: amd: acp: fix typo in comment
+Message-Id: <165459872329.301808.12651579852525968637.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:45:23 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,7 +55,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:11:26 +0200, Julia Lawall wrote:
+On Sat, 21 May 2022 13:11:29 +0200, Julia Lawall wrote:
 > Spelling mistake (triple letters) in comment.
 > Detected with the help of Coccinelle.
 > 
@@ -71,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: stm32: dfsdm: fix typo in comment
-      commit: 2685d5046962f018b1a155b3eef316562414638b
+[1/1] ASoC: amd: acp: fix typo in comment
+      commit: b661a848a50c0cc3e0b79795c74469d7b50ff4ac
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

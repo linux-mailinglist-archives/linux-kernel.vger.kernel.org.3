@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFF6540677
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8AE541869
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347659AbiFGRfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S1379744AbiFGVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346415AbiFGR1u (ORCPT
+        with ESMTP id S1359572AbiFGUPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:27:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE56113FB7;
-        Tue,  7 Jun 2022 10:24:21 -0700 (PDT)
+        Tue, 7 Jun 2022 16:15:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DC91C8665;
+        Tue,  7 Jun 2022 11:28:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD050B822AF;
-        Tue,  7 Jun 2022 17:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F99C385A5;
-        Tue,  7 Jun 2022 17:24:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6770C6131C;
+        Tue,  7 Jun 2022 18:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70437C3411C;
+        Tue,  7 Jun 2022 18:28:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622658;
-        bh=c7Bux8gORtIUyKX+nEOcBp7LJR8TG4CjpwtkMuws2Hw=;
+        s=korg; t=1654626506;
+        bh=PGpBVVFXYWAfjYtRkA7TYJ3yh3f7UZ35lMQ9PxdCqxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ltSIyk5d6fmZhFWcIhp65a+cYH4IGw21s12tekMKl0hZok6DZBolKyuY2RxAelhpj
-         Jf6w4J3NS0VGmLcI96Iwl/RPF7g72ChhPFGswbwZGHvqljea615J34nGrM+RLGEoWB
-         5d4yZ2A+8gNPjJpJlr9HZae9mLG/8JvhubNRDNro=
+        b=U51kyZZAvRSgMUilEWK6kin7vYFp4229vTUFOfTZ37hRXxxShcqwcRiWUwHFzBPdJ
+         dYNj3jwtz7oA+XC2CoeHQiZ2ZQ/20etTlJiSC/WGZtoVKVD3WPvGVzFF5LQYTgBGOV
+         lBAvfse9S8ZZjigW1GkWORLhNUcpzyPSFmJ6h+jc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Liviu Dudau <liviu.dudau@arm.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 138/452] drm/komeda: Fix an undefined behavior bug in komeda_plane_add()
+Subject: [PATCH 5.17 403/772] media: i2c: ov5648: fix wrong pointer passed to IS_ERR() and PTR_ERR()
 Date:   Tue,  7 Jun 2022 18:59:55 +0200
-Message-Id: <20220607164912.671974322@linuxfoundation.org>
+Message-Id: <20220607165000.885405602@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit f5e284bb74ab296f98122673c7ecd22028b2c200 ]
+[ Upstream commit a6dd5265c21c28d0a782befe41a97c347e78f22f ]
 
-In komeda_plane_add(), komeda_get_layer_fourcc_list() is assigned to
-formats and used in drm_universal_plane_init().
-drm_universal_plane_init() passes formats to
-__drm_universal_plane_init(). __drm_universal_plane_init() further
-passes formats to memcpy() as src parameter, which could lead to an
-undefined behavior bug on failure of komeda_get_layer_fourcc_list().
+IS_ERR() and PTR_ERR() use wrong pointer, it should be
+sensor->dovdd, fix it.
 
-Fix this bug by adding a check of formats.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_KOMEDA=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 61f1c4a8ab75 ("drm/komeda: Attach komeda_dev to DRM-KMS")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Liviu Dudau <liviu.dudau@arm.com>
-Link: https://lore.kernel.org/dri-devel/20211201033704.32054-1-zhou1615@umn.edu
+Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/arm/display/komeda/komeda_plane.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/i2c/ov5648.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-index a5f57b38d193..bc3f42e915e9 100644
---- a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-+++ b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-@@ -264,6 +264,10 @@ static int komeda_plane_add(struct komeda_kms_dev *kms,
+diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
+index ef8b52dc9401..bb3666fc5618 100644
+--- a/drivers/media/i2c/ov5648.c
++++ b/drivers/media/i2c/ov5648.c
+@@ -2498,9 +2498,9 @@ static int ov5648_probe(struct i2c_client *client)
  
- 	formats = komeda_get_layer_fourcc_list(&mdev->fmt_tbl,
- 					       layer->layer_type, &n_formats);
-+	if (!formats) {
-+		kfree(kplane);
-+		return -ENOMEM;
-+	}
+ 	/* DOVDD: digital I/O */
+ 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
+-	if (IS_ERR(sensor->dvdd)) {
++	if (IS_ERR(sensor->dovdd)) {
+ 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
+-		ret = PTR_ERR(sensor->dvdd);
++		ret = PTR_ERR(sensor->dovdd);
+ 		goto error_endpoint;
+ 	}
  
- 	err = drm_universal_plane_init(&kms->base, plane,
- 			get_possible_crtcs(kms, c->pipeline),
 -- 
 2.35.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA90554201D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124B454205E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357084AbiFHAQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S236137AbiFHAX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381770AbiFGWSk (ORCPT
+        with ESMTP id S1383757AbiFGWZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:18:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE35C2629C6;
-        Tue,  7 Jun 2022 12:20:24 -0700 (PDT)
+        Tue, 7 Jun 2022 18:25:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2899426EEBF;
+        Tue,  7 Jun 2022 12:22:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0834B82182;
-        Tue,  7 Jun 2022 19:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4CBC385A2;
-        Tue,  7 Jun 2022 19:20:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE713609D0;
+        Tue,  7 Jun 2022 19:22:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82C7C385A2;
+        Tue,  7 Jun 2022 19:22:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629621;
-        bh=qbauNjF61MCv+D9NJt4OXenPxXHOClS2n7guB7XxnK0=;
+        s=korg; t=1654629772;
+        bh=9E8DLy1jXcYjYN0wqF0KZRXbQUMR5XhMKZCP7s2JCPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVTdz6GNZDwismMNVSVJCMwenkQF4auIMjFA7gotlSZZD/RvnSBWTaj0g+chnUHP1
-         mSjRCos7ufp133/QVksJvC5mTtJ69K5DbwT/FZRkJEHtK1aT9KkNaxaozKKwqHPqlb
-         v4tOYoLAyxDUm+7mGSs9iY50bjPl55XQELo3vOn8=
+        b=lEjvzEqzSsrZTeAiG93YqHKJHj3wi96zXe2r6D1PytjGLCl8tyY+4y/zVDuC173zi
+         g8163PfgXtd84hCQKXwGRqqkV+nyGFQ7ImPbCxAdtGDAKQ8CCaDjUvatlNLsNWONaw
+         eEHBfdtlMCOEmn7whRwKHelSKGcPLlzfVEM5OZno=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.18 756/879] PCI: qcom: Fix runtime PM imbalance on probe errors
-Date:   Tue,  7 Jun 2022 19:04:34 +0200
-Message-Id: <20220607165024.806157230@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>
+Subject: [PATCH 5.18 761/879] s390/perf: obtain sie_block from the right address
+Date:   Tue,  7 Jun 2022 19:04:39 +0200
+Message-Id: <20220607165024.953078037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,48 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Nico Boehr <nrb@linux.ibm.com>
 
-commit 87d83b96c8d6c6c2d2096bd0bdba73bcf42b8ef0 upstream.
+commit c9bfb460c3e4da2462e16b0f0b200990b36b1dd2 upstream.
 
-Drop the leftover pm_runtime_disable() calls from the late probe error
-paths that would, for example, prevent runtime PM from being reenabled
-after a probe deferral.
+Since commit 1179f170b6f0 ("s390: fix fpu restore in entry.S"), the
+sie_block pointer is located at empty1[1], but in sie_block() it was
+taken from empty1[0].
 
-Link: https://lore.kernel.org/r/20220401133854.10421-2-johan+linaro@kernel.org
-Fixes: 6e5da6f7d824 ("PCI: qcom: Fix error handling in runtime PM support")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc: stable@vger.kernel.org      # 4.20
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+This leads to a random pointer being dereferenced, possibly causing
+system crash.
+
+This problem can be observed when running a simple guest with an endless
+loop and recording the cpu-clock event:
+
+  sudo perf kvm --guestvmlinux=<guestkernel> --guest top -e cpu-clock
+
+With this fix, the correct guest address is shown.
+
+Fixes: 1179f170b6f0 ("s390: fix fpu restore in entry.S")
+Cc: stable@vger.kernel.org
+Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ arch/s390/kernel/perf_event.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1621,17 +1621,14 @@ static int qcom_pcie_probe(struct platfo
- 	pp->ops = &qcom_pcie_dw_ops;
+--- a/arch/s390/kernel/perf_event.c
++++ b/arch/s390/kernel/perf_event.c
+@@ -30,7 +30,7 @@ static struct kvm_s390_sie_block *sie_bl
+ 	if (!stack)
+ 		return NULL;
  
- 	ret = phy_init(pcie->phy);
--	if (ret) {
--		pm_runtime_disable(&pdev->dev);
-+	if (ret)
- 		goto err_pm_runtime_put;
--	}
+-	return (struct kvm_s390_sie_block *) stack->empty1[0];
++	return (struct kvm_s390_sie_block *)stack->empty1[1];
+ }
  
- 	platform_set_drvdata(pdev, pcie);
- 
- 	ret = dw_pcie_host_init(pp);
- 	if (ret) {
- 		dev_err(dev, "cannot initialize host\n");
--		pm_runtime_disable(&pdev->dev);
- 		goto err_pm_runtime_put;
- 	}
- 
+ static bool is_in_guest(struct pt_regs *regs)
 
 

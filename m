@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F30541AA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BEF54072B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380947AbiFGVgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S1347750AbiFGRne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376372AbiFGU03 (ORCPT
+        with ESMTP id S1347894AbiFGRbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:26:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE4F1D7878;
-        Tue,  7 Jun 2022 11:32:38 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD5D11CA11;
+        Tue,  7 Jun 2022 10:28:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 099AD611B9;
-        Tue,  7 Jun 2022 18:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D44C385A2;
-        Tue,  7 Jun 2022 18:32:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5E5EACE23D0;
+        Tue,  7 Jun 2022 17:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59409C385A5;
+        Tue,  7 Jun 2022 17:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626757;
-        bh=8x8o8T4Mzids+cK+jsJa0aKz+pwiyZUUfGh3jcLvHU0=;
+        s=korg; t=1654622919;
+        bh=oDouO6mdzAYWxTehzPqDRU0dUj+dYy6VSS2XFOUZUd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WfQThdyE/0myvCzEULieQDbaU/4QX6CdXHVJcgFWMYRgki3CGmKo9BD60UZNXScil
-         cZRiVVtDlqGWK2RMHkKLbK02fvXxVkM9O+P/UWOMipM/Nd4lfSBmRFlhTN+Iy8a68+
-         AsrNUijyOAZr/wjSeLgaa8VlFHXC3lo9dD6L0twI=
+        b=i4maBtHIs1mmVQJImZV5T1KmfrET9mSq+tARX5xEwbI0ZTuzvXrs22jibmfoD0rvl
+         QuK6A+raUXpB2BL/5z1LUd9UhoDYBkhTqu1uAueKPfhjVXoMR89Roxz/CmWS+Jlwwj
+         4LnWkNc30UCHDTWUzpGEUybmVQwRP39/tgelljCk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hari Bathini <hbathini@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Cai Huoqing <caihuoqing@baidu.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 493/772] powerpc/fadump: fix PT_LOAD segment for boot memory area
-Date:   Tue,  7 Jun 2022 19:01:25 +0200
-Message-Id: <20220607165003.511876313@linuxfoundation.org>
+Subject: [PATCH 5.10 229/452] media: staging: media: rkvdec: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Tue,  7 Jun 2022 19:01:26 +0200
+Message-Id: <20220607164915.386816447@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,60 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hari Bathini <hbathini@linux.ibm.com>
+From: Cai Huoqing <caihuoqing@baidu.com>
 
-[ Upstream commit 15eb77f873255cf9f4d703b63cfbd23c46579654 ]
+[ Upstream commit 5a3683d60e56f4faa9552d3efafd87ef106dd393 ]
 
-Boot memory area is setup as separate PT_LOAD segment in the vmcore
-as it is moved by f/w, on crash, to a destination address provided by
-the kernel. Having separate PT_LOAD segment helps in handling the
-different physical address and offset for boot memory area in the
-vmcore.
+Use the devm_platform_ioremap_resource() helper instead of
+calling platform_get_resource() and devm_ioremap_resource()
+separately
 
-Commit ced1bf52f477 ("powerpc/fadump: merge adjacent memory ranges to
-reduce PT_LOAD segements") inadvertly broke this pre-condition for
-cases where some of the first kernel memory is available adjacent to
-boot memory area. This scenario is rare but possible when memory for
-fadump could not be reserved adjacent to boot memory area owing to
-memory hole or such. Reading memory from a vmcore exported in such
-scenario provides incorrect data.  Fix it by ensuring no other region
-is folded into boot memory area.
-
-Fixes: ced1bf52f477 ("powerpc/fadump: merge adjacent memory ranges to reduce PT_LOAD segements")
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220406093839.206608-2-hbathini@linux.ibm.com
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/fadump.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/kernel/fadump.c b/arch/powerpc/kernel/fadump.c
-index d03e488cfe9c..a32d6871de75 100644
---- a/arch/powerpc/kernel/fadump.c
-+++ b/arch/powerpc/kernel/fadump.c
-@@ -861,7 +861,6 @@ static int fadump_alloc_mem_ranges(struct fadump_mrange_info *mrange_info)
- 				       sizeof(struct fadump_memory_range));
- 	return 0;
- }
--
- static inline int fadump_add_mem_range(struct fadump_mrange_info *mrange_info,
- 				       u64 base, u64 end)
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index a7788e7a9542..e384ea8d7280 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -1000,7 +1000,6 @@ static const char * const rkvdec_clk_names[] = {
+ static int rkvdec_probe(struct platform_device *pdev)
  {
-@@ -880,7 +879,12 @@ static inline int fadump_add_mem_range(struct fadump_mrange_info *mrange_info,
- 		start = mem_ranges[mrange_info->mem_range_cnt - 1].base;
- 		size  = mem_ranges[mrange_info->mem_range_cnt - 1].size;
+ 	struct rkvdec_dev *rkvdec;
+-	struct resource *res;
+ 	unsigned int i;
+ 	int ret, irq;
  
--		if ((start + size) == base)
-+		/*
-+		 * Boot memory area needs separate PT_LOAD segment(s) as it
-+		 * is moved to a different location at the time of crash.
-+		 * So, fold only if the region is not boot memory area.
-+		 */
-+		if ((start + size) == base && start >= fw_dump.boot_mem_top)
- 			is_adjacent = true;
- 	}
- 	if (!is_adjacent) {
+@@ -1032,8 +1031,7 @@ static int rkvdec_probe(struct platform_device *pdev)
+ 	 */
+ 	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	rkvdec->regs = devm_ioremap_resource(&pdev->dev, res);
++	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rkvdec->regs))
+ 		return PTR_ERR(rkvdec->regs);
+ 
 -- 
 2.35.1
 

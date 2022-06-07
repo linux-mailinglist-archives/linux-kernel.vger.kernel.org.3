@@ -2,95 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78221541742
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41492541762
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379229AbiFGVCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S1378705AbiFGVBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357940AbiFGT7C (ORCPT
+        with ESMTP id S1357020AbiFGT6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:59:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 379A61BBAD8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654626234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P4f3wHn7jIrIURtw341a5ADfTmzk5i8t59cyMFQz5Qc=;
-        b=Xw4HHWK9BFohqfbyqXsndyNgX19ayI7Gri9nvVyAhnDSAS69b3VGCx5V+2JkJo2Pm6n78f
-        eOdI75AOMO6uAafiZiDTCndifelG6JaNCAf8WoiJt5UZ9yJRsS5kMvG62DbTJNUVKqbBy3
-        1S7frUjuyDro36D10+XguV9r3j4lLVc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-356-SAisHlqNP5WsHUtNi6HY6Q-1; Tue, 07 Jun 2022 14:23:53 -0400
-X-MC-Unique: SAisHlqNP5WsHUtNi6HY6Q-1
-Received: by mail-wr1-f70.google.com with SMTP id c16-20020a5d4cd0000000b00213b1d4a96cso3618521wrt.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:23:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P4f3wHn7jIrIURtw341a5ADfTmzk5i8t59cyMFQz5Qc=;
-        b=f3JxSlTgPlQAjXLF6kkXcs9ymkWH9K2VLFf2599DLbTDayOylkYBPqKw53bStqJJyV
-         H9bAxz+XMPNcBfWukeX4Uq5p2k1lzr3wZqhdbLhoROulaCryz+TonjHw94x7cqiILvTq
-         S6dHmmbTzY5/L4ptQpRQSaQU16KVH5BE7V+0PH7Bv7H3JAHAFfuwe6XYa9YSyE5oWGpg
-         2iBMqXEygJq3GGKoIHRVI9Fb4D/DGg4znPQoZCSleNlIr46l0iCL0HLSdnXzU+zYg3yy
-         yFk18Ym3quGuThEQYwm44ayZ0Ft/Jw7n/VzSFfzkEvyjD7j1towRo6nK45ebdlslBpGc
-         y1wA==
-X-Gm-Message-State: AOAM5318VWDgIIFfOqor/eGuvsm/EiA10iXNYGOViot8QLtoEe6GIN3/
-        +v9AT/G/QEKUnIwWfhx9m9oyV1XN13oTa0zE7Qd1GyDbW2jDzthFXGCAnmlLOXQcvnHcpnj8nid
-        HHSvmHtFv19k6rKQ76XQnF59iUcIPEQV9tI16HzCatU/0ZOWWgqwBcnhNY+hnq51bmxSZKgsPBB
-        4=
-X-Received: by 2002:a05:6000:711:b0:217:371e:b7ff with SMTP id bs17-20020a056000071100b00217371eb7ffmr16261836wrb.127.1654626232103;
-        Tue, 07 Jun 2022 11:23:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx/N4WjMmddIXMJgSScZ/qUGCGSnIp6UQDq474dS3NmqfffRft8Ws4ePchj9FzlpDpPJ0DOSA==
-X-Received: by 2002:a05:6000:711:b0:217:371e:b7ff with SMTP id bs17-20020a056000071100b00217371eb7ffmr16261787wrb.127.1654626231742;
-        Tue, 07 Jun 2022 11:23:51 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05600c4f4800b003942a244f51sm28267502wmq.42.2022.06.07.11.23.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 11:23:51 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laszlo Ersek <lersek@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>, kvm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        kernel test robot <lkp@intel.com>,
-        Jens Frederich <jfrederich@gmail.com>,
-        Jon Nettleton <jon.nettleton@gmail.com>,
-        linux-staging@lists.linux.dev,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v6 5/5] fbdev: Make registered_fb[] private to fbmem.c
-Date:   Tue,  7 Jun 2022 20:23:38 +0200
-Message-Id: <20220607182338.344270-6-javierm@redhat.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607182338.344270-1-javierm@redhat.com>
-References: <20220607182338.344270-1-javierm@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 7 Jun 2022 15:58:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AEA4B84C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:24:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 436CDB82380
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 18:24:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8D3C385A2;
+        Tue,  7 Jun 2022 18:24:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654626258;
+        bh=WQze2jI4iLnLMMFgWUExS0e2SHPtgx75puArLYQyzlY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=yNSqos55DIOrQcDPFBGRPyBCr/BoKJ6v2elSgDa9VbxpUZXDxHDJcfc7OVVYp7dyF
+         bnVDWVaOXXUxUBpoikT79XhshrnvuF5VRvM6hOZLCK89Nt7J+njfb2Q0U/q2/8ulwl
+         zjBNPDzDoryS04iD9Nd7dG+GfVOJJCzmCkHtAAg8=
+Date:   Tue, 7 Jun 2022 11:24:17 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     <willy@infradead.org>, <markhemm@googlemail.com>,
+        <hughd@google.com>, <rientjes@google.com>, <surenb@google.com>,
+        <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND V5,2/2] mm: shmem: implement
+ POSIX_FADV_[WILL|DONT]NEED for shmem
+Message-Id: <20220607112417.5b47a5f55f20fe1f6cfb14e6@linux-foundation.org>
+In-Reply-To: <7584364f-3aaf-282a-0a67-d8329a3415dc@quicinc.com>
+References: <cover.1648706231.git.quic_charante@quicinc.com>
+        <c2f7242faffd41f46120f82079256ece26b92bf0.1648706231.git.quic_charante@quicinc.com>
+        <20220531142135.666b1fcf506e4a327af98ff9@linux-foundation.org>
+        <7584364f-3aaf-282a-0a67-d8329a3415dc@quicinc.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,88 +58,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Vetter <daniel.vetter@ffwll.ch>
+On Tue, 7 Jun 2022 20:22:34 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
 
-Well except when the olpc dcon fbdev driver is enabled, that thing
-digs around in there in rather unfixable ways.
+> > Is there an actual userspace/driver combination which will use this? 
+> > Has the new feature been tested in such an arrangement?  And if so,
+> > which driver(s)?
+> > 
+> 
+> Currently my organization is using this setup where it does makes use of
+> the shmem infrastructure to allocate the pages and its fd is passed to
+> the user. The user is now deciding on when to reclaim these pages to
+> free up the memory through already presented vfs_fadvise(DONTNEED)
+> system call and bringing back them through vfs_fadvise(WILLNEED), when
 
-Cc oldc_dcon maintainers as fyi.
+OK, thanks.  Please capture all these thoughts in the [0/n] changelog,
+leave it a few days for reviewer input then resend and I'll take a
+closer look.
 
-v2: I typoed the config name (0day)
-
-Cc: kernel test robot <lkp@intel.com>
-Cc: Jens Frederich <jfrederich@gmail.com>
-Cc: Jon Nettleton <jon.nettleton@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-staging@lists.linux.dev
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc: linux-fbdev@vger.kernel.org
-Cc: Zheyu Ma <zheyuma97@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
-
-(no changes since v1)
-
- drivers/video/fbdev/core/fbmem.c | 8 ++++++--
- include/linux/fb.h               | 7 +++----
- 2 files changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index e0720fef0ee6..bdb08b665b43 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -50,10 +50,14 @@
- static DEFINE_MUTEX(registration_lock);
- 
- struct fb_info *registered_fb[FB_MAX] __read_mostly;
--EXPORT_SYMBOL(registered_fb);
--
- int num_registered_fb __read_mostly;
-+#if IS_ENABLED(CONFIG_FB_OLPC_DCON)
-+EXPORT_SYMBOL(registered_fb);
- EXPORT_SYMBOL(num_registered_fb);
-+#endif
-+#define for_each_registered_fb(i)		\
-+	for (i = 0; i < FB_MAX; i++)		\
-+		if (!registered_fb[i]) {} else
- 
- bool fb_center_logo __read_mostly;
- 
-diff --git a/include/linux/fb.h b/include/linux/fb.h
-index bbe1e4571899..c563e24b6293 100644
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -632,16 +632,15 @@ extern int fb_get_color_depth(struct fb_var_screeninfo *var,
- extern int fb_get_options(const char *name, char **option);
- extern int fb_new_modelist(struct fb_info *info);
- 
-+#if IS_ENABLED(CONFIG_FB_OLPC_DCON)
- extern struct fb_info *registered_fb[FB_MAX];
-+
- extern int num_registered_fb;
-+#endif
- extern bool fb_center_logo;
- extern int fb_logo_count;
- extern struct class *fb_class;
- 
--#define for_each_registered_fb(i)		\
--	for (i = 0; i < FB_MAX; i++)		\
--		if (!registered_fb[i]) {} else
--
- static inline void lock_fb_info(struct fb_info *info)
- {
- 	mutex_lock(&info->lock);
--- 
-2.36.1
-
+The patches don't seem to be getting a lot of traction.

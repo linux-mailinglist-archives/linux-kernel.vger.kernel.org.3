@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA08541EF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDD254170F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351539AbiFGWiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S1376716AbiFGU6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378915AbiFGVZK (ORCPT
+        with ESMTP id S1358751AbiFGTxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:25:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E2150B55;
-        Tue,  7 Jun 2022 12:01:24 -0700 (PDT)
+        Tue, 7 Jun 2022 15:53:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60640AF1D3;
+        Tue,  7 Jun 2022 11:22:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D382BB82391;
-        Tue,  7 Jun 2022 19:01:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33704C385A2;
-        Tue,  7 Jun 2022 19:01:21 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4967BCE244E;
+        Tue,  7 Jun 2022 18:22:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43967C385A2;
+        Tue,  7 Jun 2022 18:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628481;
-        bh=lhnAK8GVnElKCHUghsb5MIHXsJdX26TqwL3hlYiF/f4=;
+        s=korg; t=1654626137;
+        bh=seCFZk7YL+TVjD/DOD0zsxuIbf6/QXBn7zKIHdKSTeo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fACDrYqZjxAjwZ9InRmmxeVld22sJLIMeXJS4SXzv2oJTrQoBttx4y09OrBAslYCw
-         bvhHAUaX+TUX7P5eCDxQAABxTTXrBHZW5uQyEeLuvvEhcL7IY+5TS6XPklZe+Z7+RU
-         B6tMfTsPBuu6gTTV7WjfVtBLCUxWZeXhYN9FpA7c=
+        b=rbc+7LbVTmh2DvBoVKj9FBnFe0lrLH0YfLBSK+UXH2hB/YxLVBtsbKTIOmLZO3xBg
+         ClyeE/lblN6dN2sPbjxk8Ea6axratLC3eq6tQJ3i91mj7fNDafoF/dFXWOlsrJqttS
+         JD6zUdqRoDM4md8oC/W8/dyKLtSPJ/0w8yiT3YTY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 345/879] drm/panel: simple: Add missing bus flags for Innolux G070Y2-L01
+Subject: [PATCH 5.17 271/772] mtd: rawnand: denali: Use managed device resources
 Date:   Tue,  7 Jun 2022 18:57:43 +0200
-Message-Id: <20220607165012.874995703@linuxfoundation.org>
+Message-Id: <20220607164957.011556358@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,39 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 0f73a559f916b618c0c05186bd644c90cc9e9695 ]
+[ Upstream commit 3a745b51cddafade99aaea1b93aad31e9614e230 ]
 
-The DE signal is active high on this display, fill in the missing bus_flags.
-This aligns panel_desc with its display_timing .
+All of the resources used by this driver has managed interfaces, so use
+them. Otherwise we will get the following splat:
 
-Fixes: a5d2ade627dca ("drm/panel: simple: Add support for Innolux G070Y2-L01")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Christoph Fritz <chf.fritz@googlemail.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220406093627.18011-1-marex@denx.de
+[    4.472703] denali-nand-pci 0000:00:05.0: timeout while waiting for irq 0x1000
+[    4.474071] denali-nand-pci: probe of 0000:00:05.0 failed with error -5
+[    4.473538] nand: No NAND device found
+[    4.474068] BUG: unable to handle page fault for address: ffffc90005000410
+[    4.475169] #PF: supervisor write access in kernel mode
+[    4.475579] #PF: error_code(0x0002) - not-present page
+[    4.478362] RIP: 0010:iowrite32+0x9/0x50
+[    4.486068] Call Trace:
+[    4.486269]  <IRQ>
+[    4.486443]  denali_isr+0x15b/0x300 [denali]
+[    4.486788]  ? denali_direct_write+0x50/0x50 [denali]
+[    4.487189]  __handle_irq_event_percpu+0x161/0x3b0
+[    4.487571]  handle_irq_event+0x7d/0x1b0
+[    4.487884]  handle_fasteoi_irq+0x2b0/0x770
+[    4.488219]  __common_interrupt+0xc8/0x1b0
+[    4.488549]  common_interrupt+0x9a/0xc0
+
+Fixes: 93db446a424c ("mtd: nand: move raw NAND related code to the raw/ subdir")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220411125808.958276-1-zheyuma97@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panel/panel-simple.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/nand/raw/denali_pci.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index a34f4198a534..00b9e1d22087 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2029,6 +2029,7 @@ static const struct panel_desc innolux_g070y2_l01 = {
- 		.unprepare = 800,
- 	},
- 	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
- 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
- };
+diff --git a/drivers/mtd/nand/raw/denali_pci.c b/drivers/mtd/nand/raw/denali_pci.c
+index 20c085a30adc..de7e722d3826 100644
+--- a/drivers/mtd/nand/raw/denali_pci.c
++++ b/drivers/mtd/nand/raw/denali_pci.c
+@@ -74,22 +74,21 @@ static int denali_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		return ret;
+ 	}
  
+-	denali->reg = ioremap(csr_base, csr_len);
++	denali->reg = devm_ioremap(denali->dev, csr_base, csr_len);
+ 	if (!denali->reg) {
+ 		dev_err(&dev->dev, "Spectra: Unable to remap memory region\n");
+ 		return -ENOMEM;
+ 	}
+ 
+-	denali->host = ioremap(mem_base, mem_len);
++	denali->host = devm_ioremap(denali->dev, mem_base, mem_len);
+ 	if (!denali->host) {
+ 		dev_err(&dev->dev, "Spectra: ioremap failed!");
+-		ret = -ENOMEM;
+-		goto out_unmap_reg;
++		return -ENOMEM;
+ 	}
+ 
+ 	ret = denali_init(denali);
+ 	if (ret)
+-		goto out_unmap_host;
++		return ret;
+ 
+ 	nsels = denali->nbanks;
+ 
+@@ -117,10 +116,6 @@ static int denali_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 
+ out_remove_denali:
+ 	denali_remove(denali);
+-out_unmap_host:
+-	iounmap(denali->host);
+-out_unmap_reg:
+-	iounmap(denali->reg);
+ 	return ret;
+ }
+ 
+@@ -129,8 +124,6 @@ static void denali_pci_remove(struct pci_dev *dev)
+ 	struct denali_controller *denali = pci_get_drvdata(dev);
+ 
+ 	denali_remove(denali);
+-	iounmap(denali->reg);
+-	iounmap(denali->host);
+ }
+ 
+ static struct pci_driver denali_pci_driver = {
 -- 
 2.35.1
 

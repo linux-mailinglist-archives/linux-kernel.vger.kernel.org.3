@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139405419E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463375407B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378900AbiFGVZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S1349523AbiFGRvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359527AbiFGU24 (ORCPT
+        with ESMTP id S1345104AbiFGReA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:56 -0400
+        Tue, 7 Jun 2022 13:34:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A36C1DE8C4;
-        Tue,  7 Jun 2022 11:34:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6E6106341;
+        Tue,  7 Jun 2022 10:30:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E324B612EC;
-        Tue,  7 Jun 2022 18:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9BE3C385A2;
-        Tue,  7 Jun 2022 18:34:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7B0160C7C;
+        Tue,  7 Jun 2022 17:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021DCC34115;
+        Tue,  7 Jun 2022 17:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626846;
-        bh=vunQDCvuQuaj6mRDAwxLJ/9p0HZBW9BBYRrbU+3Ge+4=;
+        s=korg; t=1654623005;
+        bh=TEyi3OH9X77Dmi3sI/sc/3+TjArekS69CqgUMczDuug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1lhq9m65IxCDE8JpzTAG09PMsabZiJBYe4ljtL2pIJwO6ua2pXGv78D6iKXovb5RA
-         HcCsx5DCPeuJLRqop9MvGfzPehr3wzxcrUko2AP3ZRXUPnf2LtLezeHnhmJnmQF19H
-         ekAN4prr1I8krKUDs5n7AleuWz11eHD7gRTuwJjA=
+        b=oeGiFoilIXkFCvEKGg1MVqaIkdiE7O/VWBgCgJ9yuaniCa6f9ENOKxALZ7HM+gLkB
+         LXpp0dEC3NeJIqq3AhG8Y2iqazemXmTUyO50NF53qTiXFta6MenggRmEkvAeMhWlyZ
+         UomPHaa4Q9QZIdkSxQoOKM/+svmfCVnWJHg2tye8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 526/772] PCI: mediatek-gen3: Assert resets to ensure expected init state
-Date:   Tue,  7 Jun 2022 19:01:58 +0200
-Message-Id: <20220607165004.473525111@linuxfoundation.org>
+Subject: [PATCH 5.10 262/452] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
+Date:   Tue,  7 Jun 2022 19:01:59 +0200
+Message-Id: <20220607164916.361415353@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1d565935e3b9ccc682631e0bc6e415a7f48295d9 ]
+[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
 
-The controller may have been left out of reset by the bootloader,
-in which case, before the powerup sequence, the controller will be
-found preconfigured with values that were set before booting the
-kernel: this produces a controller failure, with the result of
-a failure during the mtk_pcie_startup_port() sequence as the PCIe
-link never gets up.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-To ensure that we get a clean start in an expected state, assert
-both the PHY and MAC resets before executing the controller
-power-up sequence.
-
-Link: https://lore.kernel.org/r/20220404144858.92390-1-angelogioacchino.delregno@collabora.com
-Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-mediatek-gen3.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/soc/qcom/smsm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index 7705d61fba4c..0e27a49ae0c2 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -838,6 +838,14 @@ static int mtk_pcie_setup(struct mtk_gen3_pcie *pcie)
- 	if (err)
- 		return err;
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index c428d0f78816..6564f15c5319 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -359,6 +359,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
+ 		return 0;
  
-+	/*
-+	 * The controller may have been left out of reset by the bootloader
-+	 * so make sure that we get a clean start by asserting resets here.
-+	 */
-+	reset_control_assert(pcie->phy_reset);
-+	reset_control_assert(pcie->mac_reset);
-+	usleep_range(10, 20);
-+
- 	/* Don't touch the hardware registers before power up */
- 	err = mtk_pcie_power_up(pcie);
- 	if (err)
+ 	host->ipc_regmap = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(host->ipc_regmap))
+ 		return PTR_ERR(host->ipc_regmap);
+ 
 -- 
 2.35.1
 

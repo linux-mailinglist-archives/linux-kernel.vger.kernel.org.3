@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DA054028F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F47540293
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344226AbiFGPeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S1344149AbiFGPfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344150AbiFGPeD (ORCPT
+        with ESMTP id S236428AbiFGPfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:34:03 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A135C038E;
-        Tue,  7 Jun 2022 08:34:02 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-138-163.dynamic.spd-mgts.ru [109.252.138.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1DF06601A26;
-        Tue,  7 Jun 2022 16:33:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654616040;
-        bh=1OHF6wl6ehs/wRC7M/8ORoOFTl8MMQfJ9asXXd+gmRE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aEIUXUrg6wlcmhJWW9Dpq0CD51JiB4Gk+im588kYV1D7mO9ub6yKFVwNOXpZVJ2wM
-         opGS/8b5tqT6A+Qs0IOWZkFwx79fas7g7J+6UFuPd62KDBH4Udp9hStEJ+Rda/cqwS
-         /URMw8PUaP1oUBVHs2Yv4T39A3FIsYQBzAsp8bo0QFJ3mZ0J+ykNSYh0VcCXFnvq3G
-         IOXQEb+tEfv6oiz2y9m8bvih3N0zkAqVp0jlIZFmtAilcr0aTfPA8jEpZx7IeH9ey7
-         VUWWcHduvM3mB3xQmqfjKAk9sBAsGQj/TYmOnhe4+/BKszV79pAEu3Vi5r8hO/X1HA
-         L4he4Zd+PxFGA==
-Message-ID: <382d50a2-8e47-5e0f-726b-f077be5b8bc6@collabora.com>
-Date:   Tue, 7 Jun 2022 18:33:55 +0300
+        Tue, 7 Jun 2022 11:35:38 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A3F68B0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:35:37 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id q15so6393205wmj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=UzAFOh0dSi5b7YcRWFXZow4QCyM7X3zyC4kDiKLs6oA=;
+        b=T5kR40O4jIf93Fzt2vVjHZsWJdRsDbXUsWf+mvn1wIXbxiVgaP5IefQAlFt7hUxPLw
+         rUHJnaENpHIaQQ5LD5GYbGFLr/ivNwinMXUz3J/LMQc0uSeEv5klV5kQgxojKKCrqT6K
+         z8O5hGcPPFVeRibn0sn6StjcyJugXjVuKtNDos/NoE4mFB64LDwtgd4zef/99rLnWwm4
+         vQIC98SKhKJePLMpRBVse3kuDKRKqQvLkTE3ABXMs6kjiVEwmUQzkVohuwLxerT1z9sa
+         0mFV7MhEypGwD8gH/3TNX6QqtchzS5h+UoteVBwLpPaJlUYlXl00HMEKhepD5Y/Nbv7U
+         0HvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UzAFOh0dSi5b7YcRWFXZow4QCyM7X3zyC4kDiKLs6oA=;
+        b=KoOPofzppR8d9uNdWmKWPECihdYxS5wHZlzE+xqMsNXzg9bT8+AmKNKtZQQKEzTu7D
+         4rLmPlDpoUY7UsM7ackeMG6efIv6Sqq/+1LuICPi4eBstr3Ux/0c0Xgj4ET50PuhzFjQ
+         e4Es5XY39ui9/31DEkDo6kpzdUXmnKwSLxVtzq+Pf99z4n0J4p+ltrCg1RWBnjxo+75X
+         hjv9iHk4d5P3BQatMVp3/kIIjWvtcEBUpKHSKOUtDPbKMay0FwXjeSqeTLQL2ZPb8fxi
+         yyomucloD62uOzdtkw0kpx1sB3AykZA0ZSaTUlrSJbAkcOHRBWAYu+/PqDe0XHBiOJ57
+         EfdA==
+X-Gm-Message-State: AOAM531Mq4gYJYfEoV0OT6r/GMswypySUnLvckKBf7DMWkeqzRbHHjO3
+        rDgafE6ao+jz5ySPT1ZcpItR/Q==
+X-Google-Smtp-Source: ABdhPJy6bavYQeyfic2q5zoBbUISR1gSP0m3TPaWhyrDKXYy9SywIwfxjCPR6erasubUzeaAz8h6gQ==
+X-Received: by 2002:a05:600c:2054:b0:39c:3f73:3552 with SMTP id p20-20020a05600c205400b0039c3f733552mr23997611wmg.15.1654616135853;
+        Tue, 07 Jun 2022 08:35:35 -0700 (PDT)
+Received: from [192.168.187.211] ([86.12.200.143])
+        by smtp.gmail.com with ESMTPSA id s13-20020a5d6a8d000000b0020c5253d8f7sm18217141wru.67.2022.06.07.08.35.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 08:35:35 -0700 (PDT)
+Message-ID: <25c1a57e-af67-ebc8-ab13-6532bf6e6e75@raspberrypi.com>
+Date:   Tue, 7 Jun 2022 16:35:32 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v6 17/22] drm/shmem-helper: Add generic memory shrinker
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        dri-devel@lists.freedesktop.org,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Steven Price <steven.price@arm.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        virtualization@lists.linux-foundation.org,
-        Chia-I Wu <olvaffe@gmail.com>, linux-media@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        linaro-mm-sig@lists.linaro.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        linux-tegra@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        amd-gfx@lists.freedesktop.org,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Qiang Yu <yuq825@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
- <20220526235040.678984-18-dmitry.osipenko@collabora.com>
- <CAKMK7uHQ+iMkXtrsCWiJL9X1AM9Xkq-wNmj=hhfnenf0r9717g@mail.gmail.com>
- <2aedbd68-cb4b-157c-1ddb-dbdb9348d2fe@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <2aedbd68-cb4b-157c-1ddb-dbdb9348d2fe@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
+ <CAHmME9o6R2RRdwzB9f+464xH+Aw-9wx2dm=ZsQYFbTk_-66yJw@mail.gmail.com>
+ <8c3fe744-0181-043a-3af9-dd00165a6356@raspberrypi.com>
+ <Yp9rc1G6xfTSSUjF@zx2c4.com>
+From:   Phil Elwell <phil@raspberrypi.com>
+In-Reply-To: <Yp9rc1G6xfTSSUjF@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 13:57, Christian König wrote:
-> Am 05.06.22 um 18:47 schrieb Daniel Vetter:
->> On Fri, 27 May 2022 at 01:55, Dmitry Osipenko
->> <dmitry.osipenko@collabora.com> wrote:
->>> Introduce a common DRM SHMEM shrinker framework that allows to reduce
->>> code duplication among DRM drivers by replacing theirs custom shrinker
->>> implementations with the generic shrinker.
->>>
->>> In order to start using DRM SHMEM shrinker drivers should:
->>>
->>> 1. Implement new evict() shmem object callback.
->>> 2. Register shrinker using drm_gem_shmem_shrinker_register(drm_device).
->>> 3. Use drm_gem_shmem_set_purgeable(shmem) and alike API functions to
->>>     activate shrinking of shmem GEMs.
->>>
->>> This patch is based on a ideas borrowed from Rob's Clark MSM shrinker,
->>> Thomas' Zimmermann variant of SHMEM shrinker and Intel's i915 shrinker.
->>>
->>> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
->>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->> So I guess I get a price for being blind since forever, because this
->> thing existed since at least 2013. I just stumbled over
->> llist_lru.[hc], a purpose built list helper for shrinkers. I think we
->> should try to adopt that so that our gpu shrinkers look more like
->> shrinkers for everything else.
+Jason,
+
+On 07/06/2022 16:14, Jason A. Donenfeld wrote:
+> Hey again,
 > 
-> What the heck are you talking about?
+> On Tue, Jun 07, 2022 at 10:15:27AM +0100, Phil Elwell wrote:
+>> On 07/06/2022 09:43, Jason A. Donenfeld wrote:
+>>> Hi Phil,
+>>>
+>>> On Tue, Jun 7, 2022 at 10:29 AM Phil Elwell <phil@raspberrypi.com> wrote:
+>>>>
+>>>> This patch is fatal for me in the downstream Raspberry Pi kernel - it locks up
+>>>> on boot even before the earlycon output is available. Hacking jump_label_init to
+>>>> skip the jump_entry for "crng_is_ready" allows it to boot, but is likely to have
+>>>> consequences further down the line.
+>>>
+>>> Also, reading this a few times, I'm not 100% sure I understand what
+>>> you did to hack around this and why that works. Think you could paste
+>>> your hackpatch just out of interest to the discussion (but obviously
+>>> not to be applied)?
+>>
+>> This is the minimal version of my workaround patch that at least allows the
+>> board to boot. Bear in mind that it was written with no previous knowledge of
+>> jump labels and was arrived at by iteratively bisecting the list of jump_labels
+>> until the first dangerous one was found, then later working out that there was
+>> only one.
 > 
-> I can't find any llist_lru.[hc] in the linux kernel sources.
+> Looks like this patch fails due to CONFIG_STRICT_KERNEL_RWX.
+> Investigating deeper now, but that for starters seems to be the
+> differentiating factor between my prior test rig and one that reproduces
+> the error. I assume your raspi also sets CONFIG_STRICT_KERNEL_RWX.
 
-I think Daniel meant this:
+Yes, it does, as does multi_v7_defconfig.
 
-https://elixir.bootlin.com/linux/v5.19-rc1/source/include/linux/list_lru.h
-
-https://elixir.bootlin.com/linux/v5.19-rc1/source/mm/list_lru.c
-
-
--- 
-Best regards,
-Dmitry
+Phil

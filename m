@@ -2,284 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B845421F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E368542240
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243057AbiFHCEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S235757AbiFHBy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385944AbiFHAWJ (ORCPT
+        with ESMTP id S1586886AbiFGXwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 20:22:09 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2052.outbound.protection.outlook.com [40.107.96.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CBC12B019;
-        Tue,  7 Jun 2022 15:42:28 -0700 (PDT)
+        Tue, 7 Jun 2022 19:52:05 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2088.outbound.protection.outlook.com [40.107.101.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86EF2914C3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 15:43:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HGUy9Z3KPXQwvNjDwnnNe0OScGEozgTyCMZmPuU2G3JInpZy6BMIiFTYUVptERWp04gurLTHnDLC73Cm9oQfzvr/wfZA53hD3tm74O0ciJfhBDBHFSfDJ9+faMyWlHH3cYa3IGNewNiqsnKveUpXw4rHiQHJ3bcgUfTTIZWX9Ety2sPoWNu0OBTOe9H5enfZgp09+srC+NqVlf6m+bqbDTgZ+hj1IDVYFCFzTvCyey5/thKRUFveCNDeJcTqwxCyBSB8bT5CX66iIqkEi2fa0hBBHrDeQQ/bBTXP/iu7TES7NBKTudgounSb3zIDqey476hkhS0Xmqe5JVfKMu+2Kw==
+ b=L0SQ2RsDsSaMJDavlYOQ6ZqI9prh6cHBwCumln8MSO2+xdSnTFuvuNgpeeUYGIDVgF24Gw5NNE3SjoazyMfnTp/S+ltMeUkFNIqUgiOsFM8Ro8XtjGUbBoAGqzuxF7RTEcLfTBWHhnFbHX66BuFc2hQgezx4xoRlZT+98RkurXa/FO4h6vpFBVU2h9JGShMDc1MT4uIMgwvEwJvHj3A8Nb9jm0GqS0SMoeQutVyBPonq1Y9YZN4SpcMa6oK53XpnZ4Rmt/+siHnXJwaRtnRWmMlkpG9wmIonCtSC/bmraR40kUPsLg+rZfftsZMiTe+GMqhP/io2M2nLWaB8HAJkGQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZxhH89H/for469fzbR7GqtC2C7haBhc2Rh9SoTJCrCM=;
- b=KV+IaL7txfeKOGH6aqUAvTnW/2BFllf/micqzlIjvLvZAfCE7Wf8+6JFZEW/QDOzTaotcpuCuruzF6VvSAa/Jv50va8SkmgSI5MC3JVWyaJgtASy9UQsIfu6WJyOdwDW9Ycf31rYYTtZWbH5WDmZs7XkwJxUq5ta85nwJhBWfEilLzlLMqUkjG/DSykNwl5a0+s3O6p+SGe2J38pDTXXDThLGz6v7za9rppbdIDDBoJK5mF1F8UdQDqUGxHuSUllU/dfCslu0bLzkXgJqQRbvrFzHHUNxsjPDyEIm2raZ80G9Rfg4d9UfJcfMUeTcNb4JnSCKjusTRZuhadnIjWfZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
- header.d=ddn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
+ bh=5UNFOd4SSFIUFxj1Gmk/oGwGtlL9Jec/tgbwZ3VVBAY=;
+ b=b89xjf/IfOK5Xl/cYRdvApHnsmjCWvrqBAkloqoJ4dLH4UuFQT/oa5iMvq5BC8tOEAlJ4NR5lI+crjfd1V/76J09KxmEwzxiu6BNIlyBPGI9PsyP38SRVpeqzxUmF+P6bJDM94Ez2dfIoAtSeGFFoqimjXE14KclXhwqgu9vDZHvEjXTP4ouenktykL61IYBXZpMjMC9Zeolyy9nJTYyXrbpTJq/bb/o0F6Sd9kNv23EnegX64AtnR8Vs77UVkAGu+e4JWychmmGJ2ThgTLYP3woKN57lB2QrV/NC7D6kuKeIexQxBFgb67Z2GI26GRnGLU8NJftApD9xw3l7Sry7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZxhH89H/for469fzbR7GqtC2C7haBhc2Rh9SoTJCrCM=;
- b=rCB6kRXWTuUxlrfC7/fE2GE/oK4EgSGB9/a0NszRHXNF6aw1dCmYKTFl4RiTfq3fJklcVG27sbkVjkR1hDEqBIcAEhciTFt2QJV3uw7npcJBxBXqoP+OtxVl4Dx1MlqsCqLXXy9KQmROBVylzRxlNb+AeSzvbgZrLLn5XOVDJwQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ddn.com;
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com (2603:10b6:4:aa::29)
- by MW3PR19MB4171.namprd19.prod.outlook.com (2603:10b6:303:45::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 22:42:26 +0000
-Received: from DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::3994:ad08:1a41:d93a]) by DM5PR1901MB2037.namprd19.prod.outlook.com
- ([fe80::3994:ad08:1a41:d93a%7]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 22:42:26 +0000
-Message-ID: <3d189ccc-437e-d9c0-e9f1-b4e0d2012e3c@ddn.com>
-Date:   Wed, 8 Jun 2022 00:42:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 1/1] Allow non-extending parallel direct writes on the
- same file.
-Content-Language: en-US
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
-References: <20220605072201.9237-1-dharamhans87@gmail.com>
- <20220605072201.9237-2-dharamhans87@gmail.com> <Yp/CYjONZHoekSVA@redhat.com>
- <34dd96b3-e253-de4e-d5d3-a49bc1990e6f@ddn.com> <Yp/KnF0oSIsk0SYd@redhat.com>
-From:   Bernd Schubert <bschubert@ddn.com>
-In-Reply-To: <Yp/KnF0oSIsk0SYd@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PR1P264CA0055.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:2ca::11) To DM5PR1901MB2037.namprd19.prod.outlook.com
- (2603:10b6:4:aa::29)
+ bh=5UNFOd4SSFIUFxj1Gmk/oGwGtlL9Jec/tgbwZ3VVBAY=;
+ b=kNQIrqZ61ldxl6bAp2aBirP2nA9r9hpd0avHHS+tMEDUYaGxEH+G+dB4R1pThErWnrLsuXk/9dbhB7SBouS02DvkmpCQ03a3iewvT+PcZVE1yBuMITclomaSroD1Drf//jpQ968VaremrrlkImFREyDdIeOXuMfVceHPiQxR7MU=
+Received: from BN6PR1201CA0023.namprd12.prod.outlook.com
+ (2603:10b6:405:4c::33) by BL0PR02MB4578.namprd02.prod.outlook.com
+ (2603:10b6:208:49::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Tue, 7 Jun
+ 2022 22:43:18 +0000
+Received: from BN1NAM02FT054.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:405:4c:cafe::80) by BN6PR1201CA0023.outlook.office365.com
+ (2603:10b6:405:4c::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13 via Frontend
+ Transport; Tue, 7 Jun 2022 22:43:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT054.mail.protection.outlook.com (10.13.2.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Tue, 7 Jun 2022 22:43:17 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 7 Jun 2022 15:43:16 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 7 Jun 2022 15:43:16 -0700
+Envelope-to: linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.19.3.14] (port=38018 helo=xsjtanmays50.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <tanmay.shah@xilinx.com>)
+        id 1nyhuu-000DnG-Dy; Tue, 07 Jun 2022 15:43:16 -0700
+From:   Tanmay Shah <tanmay.shah@xilinx.com>
+To:     <michal.simek@xilinx.com>, <abhyuday.godhasara@xilinx.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tanmay Shah <tanmay.shah@xilinx.com>
+Subject: [PATCH v2] firmware: xilinx: Add TF_A_PM_REGISTER_SGI SMC call
+Date:   Tue, 7 Jun 2022 15:42:54 -0700
+Message-ID: <20220607224253.54919-1-tanmay.shah@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a9ad60ca-f2ac-44d0-3cfb-08da48d6fe9a
-X-MS-TrafficTypeDiagnostic: MW3PR19MB4171:EE_
-X-Microsoft-Antispam-PRVS: <MW3PR19MB41718A1DB393567126952E3FB5A59@MW3PR19MB4171.namprd19.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 47769c96-35d1-40d2-c8fa-08da48d71d9c
+X-MS-TrafficTypeDiagnostic: BL0PR02MB4578:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR02MB457844E525CEC68DB4518E10CAA59@BL0PR02MB4578.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A62LKZkkQUipXuMjgwsqqMcHC1rlktCSQxGrMc6fTZwP9RzNrMqqA7DOQXJwlq+3a4tAuvUDRfiTWWxTuR0eXUFYjs6tQW6UND/iwohX/Dx1UgVESi4O9iclXVbrGxar0Cy9QtK56YcTJpyvSgsTzewhb53kdMrxshnrACKt4dMcuoWD91383gKbjNGt5fyhpXW2qPfYbO23gC3nO15XExEpse2FhP1MlRPnEgScJyRPt+KA4sIVAkPb2p6oUzHralZ5fsBBu4rW7AD9mAVgkkb5432BfRjzCP3b4TkhyO4+VYnakNGNi9IsJfhCVoZP0WwTO/31XQoO+6ZFWfUmo3/aU1ncIahY41kJWkmuOwIqLDyp6Q8tAWQrKavaYQOamN2F2LBVy2iLXMoBJIG4gbv60HXsKFNcFaMQF3Rx79KTGjVTNkyhNnrjFAu78mTaaBScQGzTaF/4RwKLbcDuMzAS10gANL6OA5whmPnGqfhM0HMGC/NBqBYHjQ32jHqCwygAASuX5/Du2wZ0FGWRD42aXcSm9brRXcZwGbXnLUZnk/WOJOi0+W/CF9C0wN1MOlkw5FA+4ew5Ti+yGGBOPLKVfWcsdYCFq+f5c7vag7zPZ+vk0IaMNLDWy0MgULwZJwtwzzjcrfWJEWGDE4esTrRuSFJPpMC9l/nGB2fRhbT1EzDJwhs64JEP6PTkYlrCAmmmuz+4GTOC09UHma7sqijZwGMmRjtx//y690+86DcreodXgPu8yQqm76vAfahw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1901MB2037.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(2906002)(4326008)(66476007)(6506007)(6512007)(38100700002)(6486002)(66946007)(6666004)(66556008)(86362001)(508600001)(31696002)(53546011)(6916009)(83380400001)(54906003)(31686004)(316002)(8676002)(5660300002)(186003)(36756003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjhZNEJ5Ym9XQktGZlZzZkJhVSt2RDNSRG13aGhMangxR1p5OVA2T0VtWFdI?=
- =?utf-8?B?UWlmV2hLZXg1ZlVOQkV3SjVsbzh2Yjh4aitPY0pPcGhYbE4rK3FLNzVFOEdx?=
- =?utf-8?B?YmhLemtBQnhsbElwaTNuNVR3SkJxaWRIOTdhVEp4ejNleURTdWp6amRRelJ5?=
- =?utf-8?B?akRVZk9EVFBKUk5hSUtYUXJDRkF0Y3gveTNrUXRYbm1yUHdrM2tiOUhRV2ds?=
- =?utf-8?B?ZFFrVDFlQzQzSGJsUHROWnJ3WjNWdG9hMk9ESTI5NDloZDkzWWRqMlMvN0N2?=
- =?utf-8?B?VGJBV0xENnVGWEl6ZTFvSmZFN2g2bWdXMDBPbWhnbEJKcURiSFJQMVZtcWdu?=
- =?utf-8?B?L01GeCs4Q3VLY3ZlNDNKTkRPTmVDUUplcmVNbnI4R2JaSDV0aW41K29CL3Nw?=
- =?utf-8?B?UEYxZzFGNHQ1K2pzRnR6V0o4L09UZG04TE1qRXlTZmlDa1EyVVNLZG9MdnNs?=
- =?utf-8?B?RTRQcWZTemozR3NuaHo3eFpKWGplSkJEbEJ0b0c2bktPbzkyb2VWRUZCTzJ6?=
- =?utf-8?B?RmpGKzNIODF2WDlQTlY5Qmp2VVF3QUZPYzcwcTJEc1Roei9WbjhvRGlqQjdz?=
- =?utf-8?B?YUVGbGFlMUgzbTk3bFE4aUt4UHFZN0k1RHdjdWNwTnFLaDlyRDhYTWNEU29s?=
- =?utf-8?B?TGI4ek5iQkM3aGRtZVBObGpRYmt1Tm50TUE5Y3BWcDRWaHZiVTZXV2tWS29i?=
- =?utf-8?B?RjFDc2FWMFpvMjQzRlIrSFNEajVIdmJmWktwdDdXemZ6eXIzVFY1bG1KbG15?=
- =?utf-8?B?YzFidm94anYyOXp3NHVXZmFTc2c4UzVwVHIzc3ZCTElJRmZadG9wUTVoSUpu?=
- =?utf-8?B?MkxnK0I4cW1LLytIaGZXOFViWkMwZzdKZHpQaFJtRkdXYWhVb2FuQUJZcXk1?=
- =?utf-8?B?dUNrSzdMMDNkdUNHajBhWGcwNEpwenhZSnlqYUxSQVJzWlFDUU92dTlxbXN5?=
- =?utf-8?B?UWhFV012ZFlFM0M1RVB6UzNKQnhIUEUyaThhakwwamo0SUptL2wrRFR1bExv?=
- =?utf-8?B?KzU0Y3I0a21ZNm9EU2hybVE0WE1JUkRyM1d3Q3ljUE9XYjVhTFAvMk1NcmVy?=
- =?utf-8?B?anluRTRxZ2w2OTY3QVZrYlBmVzNwWkhramRVTFNqODlDOGxjRHU3eVB5ODhQ?=
- =?utf-8?B?SjVvUVFoUXA3SmZCUW9WTSt1RUFDVUpJTXlHcXZISm8zaFhYRi9hTWpIYW9V?=
- =?utf-8?B?MjQ5UTdteGpoc0NhWXYwS2hkdG5wczlSdFFQYW9MS0UveXRQc3dPUzkweEZI?=
- =?utf-8?B?S01jbHdJcDQreXJvYW1XdG5QZjk3WkRXLytTL3JjUUJabEtsdy9CYkJzTGpE?=
- =?utf-8?B?Z3gzRU8rYWthQ3Nyb3l1cUZXeGczUmZWTUZuYlRHdlBPMmxKSXZMVFRnRFlM?=
- =?utf-8?B?RVNaTUN6RnQxNVRRTDAxZklsb0FNcmR4WTZQR0laNTFsUGFzeEhZRWZrU2FM?=
- =?utf-8?B?bkViSTNsL0hybEhWYnRYZENpK3U4U3QwVS96YStRbnZ1RlNKRFV5VldxREUv?=
- =?utf-8?B?TWxLQUY5OER0THpranFacHF0QkVsTXZJSW83SlAzQWtlYUJXaDhHc2NocVFI?=
- =?utf-8?B?SDlVWFFvSVdzVGtWLzZkb1IrU2xhTzNGRmNJOUZvbUt0dDBHNXU0a1hpT1Fy?=
- =?utf-8?B?d2J1RTJYWXAzM2xNaEswQWM2ZFFzb2ZkK0JlMm5GTEVpVlhkNjFKRVhGV0U0?=
- =?utf-8?B?NWw1MXIyelh0UkRWN2djS1Rsei9zSEpHTmJJWUdxZU1Id3NJVFlXQ3ZIZVJI?=
- =?utf-8?B?WTg0Tm1VSXpUUCtma1V2eWRINjR2aTVEN0tRbEM3eGIybC9sSDA5TkdraG9Q?=
- =?utf-8?B?RzYwaWUzTlk3VVV3TUZTY3Y0SGdkRkR1MTBJSDM2Y1poODl1QXNPeWJhS3l1?=
- =?utf-8?B?cm1ucCtpWldHdnppc0tRZXRMSFNSQkhWRjlCRldERzhCek5ic2ZQeGp1TENj?=
- =?utf-8?B?bVMyeExwYlhGam0rRHhMU0UyU2dEcExYcVA2RERvOTNDaTdueXlGYzNsckhi?=
- =?utf-8?B?dWY1UWdQR3dYdmxvTEZqdWxGUHk2L0RqYXlRKzNmYk5hZHFyeEFmVG5iU2V1?=
- =?utf-8?B?UTFmR2w3L0pOaXFBTnh5L2NqSGg5dUFhWDJvdEdZc3dKS1FBaFo1RmQzYnZJ?=
- =?utf-8?B?bmNGNEc4cjlyMFdQd2lvMXpXOVdPQ1ozL2JPSTZxbE1SM3Y4akVIN0NidmtU?=
- =?utf-8?B?Lzlxd1dRSkd6MW1ydlhqVFplSGZJUmRCeGlVbzR3dkMyUzNjRnE3V0FaTWtq?=
- =?utf-8?B?bHVtUk9RRzd0Rjl4L01vRDRsUXZDRXVNYlhqSGI5dDJRdXBoVGQvcmZyaUhO?=
- =?utf-8?B?VXVDMmp5N3FnZnJUTWlCWi9ENzMxbTkzT3pZWi9MTFdDOFFOQ3IxZkNaa3Jy?=
- =?utf-8?Q?zy1z7zAhiRzRZGFSSzrt1EsYBiiaAdvTVdmKT+RsRg8Lw?=
-X-MS-Exchange-AntiSpam-MessageData-1: MF3RGBkvn49QjA==
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9ad60ca-f2ac-44d0-3cfb-08da48d6fe9a
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1901MB2037.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 22:42:25.9318
+X-Microsoft-Antispam-Message-Info: 0T1vxmQLpX3EC4LGsfJLEDQdp+KrjJ+C34dzx6ewYu7cO0hY/O7HNqV0fWEcrv5QPGJaL4RrYf2NSzd7zjdc1JM1Qq0e9VxOXVk2gINsOK7zsAAjYkZoUa7t4EEcRjeRpzzW69G9kgCfwT4izXxjoiWd0obODssyajZnFlJt9agbpd8PWPTvSwQE9oVlOJlt/FYCOEQ4fCfdqHdmdI3P9Vayq/dOg0T+0xvYiPhQjqFcNColgC/11/Q8cVYO0G2YievzXVgDkZ/ynLWxTBRhyrhr9s9RNjVVlh+wTK4/OTRWYkmD4vGnCfiCm+Lb8ZAX3jalfTdzgvHdK3GuwiaddWjGuUGvpQ2DJNcfRMKa2pX1Zhn6aH7exXDAe/Jej7cOx8faEUWwxhoA30fpHG0HmiJuPZiSk4SvDZnpWZo6GMwWcwa1YHekZ5cWHf1oD5/sHwXpCXEfEaDjaWSW85EeTEhddcLqCoqW4BF1uy6rSXAEjo8JWLkUCIW7SNkLPGxV6PeBm3MT9DLGYd0Y8L3zdjLKq0IkNXcoSiMD3X8h7XrwTCe7N8eUGM+gWUp+dz+Znjwi1bmRvHa5a3VC+1MQuyc1GzNWKRGYYduZJF8R1DIk3gRLeWYsk6nBUrKT5Qv87wG0rG1V9t6EETTCJ8XY01nNy3Eoe4YmW7WcH1b+wwsJS0qRm1KfYQI0er86oPYlWY8yaDUSmRMxBsgHg6eONg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(70206006)(83380400001)(336012)(426003)(186003)(1076003)(107886003)(36860700001)(8936002)(508600001)(5660300002)(47076005)(40460700003)(9786002)(82310400005)(26005)(36756003)(356005)(7696005)(6666004)(110136005)(316002)(2616005)(7636003)(2906002)(54906003)(8676002)(4326008)(6636002)(70586007)(44832011)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 22:43:17.6766
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: giF690Iwv272828VpLK0iY/OAwB+2Xz2BlsxKhy5lt1qCkT9IO7V2yZv5ME8RURnExDYSMv1qg0zNGhpgHHyGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR19MB4171
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47769c96-35d1-40d2-c8fa-08da48d71d9c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT054.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB4578
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+SGI interrupt register and reset is performed by EEMI ioctl
+IOCTL_REGISTER_SGI. However, this is not correct use of EEMI call.
+SGI registration functionality does not qualify as energy management
+activity and so shouldn't be mapped to EEMI call.
 
+This new call will replace IOCTL_REGISTER_SGI and will  be handled by TF-A
+specific handler in TF-A. To maintain backward compatibility for a while
+firmware driver will still use IOCTL_REGISTER_SGI as fallback strategy if
+new call fails or is not supported by TF-A.
 
-On 6/8/22 00:01, Vivek Goyal wrote:
-> On Tue, Jun 07, 2022 at 11:42:16PM +0200, Bernd Schubert wrote:
->>
->>
->> On 6/7/22 23:25, Vivek Goyal wrote:
->>> On Sun, Jun 05, 2022 at 12:52:00PM +0530, Dharmendra Singh wrote:
->>>> From: Dharmendra Singh <dsingh@ddn.com>
->>>>
->>>> In general, as of now, in FUSE, direct writes on the same file are
->>>> serialized over inode lock i.e we hold inode lock for the full duration
->>>> of the write request. I could not found in fuse code a comment which
->>>> clearly explains why this exclusive lock is taken for direct writes.
->>>>
->>>> Following might be the reasons for acquiring exclusive lock but not
->>>> limited to
->>>> 1) Our guess is some USER space fuse implementations might be relying
->>>>      on this lock for seralization.
->>>
->>> Hi Dharmendra,
->>>
->>> I will just try to be devil's advocate. So if this is server side
->>> limitation, then it is possible that fuse client's isize data in
->>> cache is stale. For example, filesystem is shared between two
->>> clients.
->>>
->>> - File size is 4G as seen by client A.
->>> - Client B truncates the file to 2G.
->>> - Two processes in client A, try to do parallel direct writes and will
->>>     be able to proceed and server will get two parallel writes both
->>>     extending file size.
->>>
->>> I can see that this can happen with virtiofs with cache=auto policy.
->>>
->>> IOW, if this is a fuse server side limitation, then how do you ensure
->>> that fuse kernel's i_size definition is not stale.
->>
->> Hi Vivek,
->>
->> I'm sorry, to be sure, can you explain where exactly a client is located for
->> you? For us these are multiple daemons linked to libufse - which you seem to
->> call 'server' Typically these clients are on different machines. And servers
->> are for us on the other side of the network - like an NFS server.
-> 
-> Hi Bernd,
-> 
-> Agreed, terminology is little confusing. I am calling "fuse kernel" as
-> client and fuse daemon (user space) as server. This server in turn might
-> be the client to another network filesystem and real files might be
-> served by that server on network.
-> 
-> So for simple virtiofs case, There can be two fuse daemons (virtiofsd
-> instances) sharing same directory (either on local filesystem or on
-> a network filesystem).
+This new design also helps to make TF-A as pass through layer for EEMI
+calls. So we don't have to maintain PM_IOCTL as EEMI API ID in TF-A.
 
-So the combination of fuse-kernel + fuse-daemon == vfs mount.
+Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+---
 
-> 
->>
->> So now while I'm not sure what you mean with 'client', I'm wondering about
->> two generic questions
->>
->> a) I need to double check, but we were under the assumption the code in
->> question is a direct-io code path. I assume cache=auto would use the page
->> cache and should not be effected?
-> 
-> By default cache=auto use page cache but if application initiates a
-> direct I/O, it should use direct I/O path.
+Changes in v2:
+  - fix commit tag. add new line before signed-off tag
 
-Ok, so we are on the same page regarding direct-io.
+ drivers/firmware/xilinx/zynqmp.c        | 16 +++++++++++++++-
+ drivers/soc/xilinx/xlnx_event_manager.c |  5 ++---
+ include/linux/firmware/xlnx-zynqmp.h    |  7 +++++++
+ 3 files changed, 24 insertions(+), 4 deletions(-)
 
-> 
->>
->> b) How would the current lock help for distributed clients? Or multiple fuse
->> daemons (what you seem to call server) per local machine?
-> 
-> I thought that current lock is trying to protect fuse kernel side and
-> assumed fuse server (daemon linked to libfuse) can handle multiple
-> parallel writes. Atleast that's how I thought about the things. I might
-> be wrong. I am not sure.
-> 
->>
->> For a single vfs mount point served by fuse, truncate should take the
->> exclusive lock and parallel writes the shared lock - I don't see a problem
->> here either.
-> 
-> Agreed that this does not seem like a problem from fuse kernel side. I was
-> just questioning that where parallel direct writes become a problem. And
-> answer I heard was that it probably is fuse server (daemon linked with
-> libfuse) which is expecting the locking. And if that's the case, this
-> patch is not fool proof. It is possible that file got truncated from
-> a different client (from a different fuse daemon linked with libfuse).
-> 
-> So say A is first fuse daemon and B is another fuse daemon. Both are
-> clients to some network file system as NFS.
-> 
-> - Fuse kernel for A, sees file size as 4G.
-> - fuse daemon B truncates the file to size 2G.
-> - Fuse kernel for A, has stale cache, and can send two parallel writes
->    say at 3G and 3.5G offset.
+diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+index 7977a494a651..d1f652802181 100644
+--- a/drivers/firmware/xilinx/zynqmp.c
++++ b/drivers/firmware/xilinx/zynqmp.c
+@@ -2,7 +2,7 @@
+ /*
+  * Xilinx Zynq MPSoC Firmware layer
+  *
+- *  Copyright (C) 2014-2021 Xilinx, Inc.
++ *  Copyright (C) 2014-2022 Xilinx, Inc.
+  *
+  *  Michal Simek <michal.simek@xilinx.com>
+  *  Davorin Mista <davorin.mista@aggios.com>
+@@ -340,6 +340,20 @@ int zynqmp_pm_invoke_fn(u32 pm_api_id, u32 arg0, u32 arg1,
+ static u32 pm_api_version;
+ static u32 pm_tz_version;
+ 
++int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
++{
++	int ret;
++
++	ret = zynqmp_pm_invoke_fn(TF_A_PM_REGISTER_SGI, sgi_num, reset, 0, 0,
++				  NULL);
++	if (!ret)
++		return ret;
++
++	/* try old implementation as fallback strategy if above fails */
++	return zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_REGISTER_SGI, sgi_num,
++				   reset, NULL);
++}
++
+ /**
+  * zynqmp_pm_get_api_version() - Get version number of PMU PM firmware
+  * @version:	Returned version value
+diff --git a/drivers/soc/xilinx/xlnx_event_manager.c b/drivers/soc/xilinx/xlnx_event_manager.c
+index 5dcb7665fe22..2de082765bef 100644
+--- a/drivers/soc/xilinx/xlnx_event_manager.c
++++ b/drivers/soc/xilinx/xlnx_event_manager.c
+@@ -647,8 +647,7 @@ static int xlnx_event_manager_probe(struct platform_device *pdev)
+ 	cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "soc/event:starting",
+ 			  xlnx_event_cpuhp_start, xlnx_event_cpuhp_down);
+ 
+-	ret = zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_REGISTER_SGI, sgi_num,
+-				  0, NULL);
++	ret = zynqmp_pm_register_sgi(sgi_num, 0);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "SGI %d Registration over TF-A failed with %d\n", sgi_num, ret);
+ 		xlnx_event_cleanup_sgi(pdev);
+@@ -681,7 +680,7 @@ static int xlnx_event_manager_remove(struct platform_device *pdev)
+ 		kfree(eve_data);
+ 	}
+ 
+-	ret = zynqmp_pm_invoke_fn(PM_IOCTL, 0, IOCTL_REGISTER_SGI, 0, 1, NULL);
++	ret = zynqmp_pm_register_sgi(0, 1);
+ 	if (ret)
+ 		dev_err(&pdev->dev, "SGI unregistration over TF-A failed with %d\n", ret);
+ 
+diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+index 1ec73d5352c3..cbde3b1fa414 100644
+--- a/include/linux/firmware/xlnx-zynqmp.h
++++ b/include/linux/firmware/xlnx-zynqmp.h
+@@ -34,6 +34,7 @@
+ #define PM_API_VERSION_2	2
+ 
+ /* ATF only commands */
++#define TF_A_PM_REGISTER_SGI		0xa04
+ #define PM_GET_TRUSTZONE_VERSION	0xa03
+ #define PM_SET_SUSPEND_MODE		0xa02
+ #define GET_CALLBACK_DATA		0xa01
+@@ -468,6 +469,7 @@ int zynqmp_pm_feature(const u32 api_id);
+ int zynqmp_pm_is_function_supported(const u32 api_id, const u32 id);
+ int zynqmp_pm_set_feature_config(enum pm_feature_config_id id, u32 value);
+ int zynqmp_pm_get_feature_config(enum pm_feature_config_id id, u32 *payload);
++int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
+ #else
+ static inline int zynqmp_pm_get_api_version(u32 *version)
+ {
+@@ -733,6 +735,11 @@ static inline int zynqmp_pm_get_feature_config(enum pm_feature_config_id id,
+ {
+ 	return -ENODEV;
+ }
++
++static inline int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset)
++{
++	return -ENODEV;
++}
+ #endif
+ 
+ #endif /* __FIRMWARE_ZYNQMP_H__ */
 
-I guess you mean inode cache, not data cache, as this is direct-io. But 
-now why would we need to worry about any cache here, if this is 
-direct-io - the application writes without going into any cache and at 
-the same time a truncate happens? The current kernel side lock would not 
-help here, but a distrubuted lock is needed to handle this correctly?
+base-commit: 73d0e32571a0786151eb72634f1a4c5891166176
+-- 
+2.25.1
 
-int fd = open(path, O_WRONLY | O_DIRECT);
-
-clientA: pwrite(fd, buf, 100G, 0) -> takes a long time
-clientB: ftruncate(fd, 0)
-
-I guess on a local file system that will result in a zero size file. On 
-different fuse mounts (without a DLM) or NFS, undefined behavior.
-
-
-> - Fuser daemon A might not like it.(Assuming this is fuse daemon/user
->    space side limitation).
-
-I think there are two cases for the fuser daemons:
-
-a) does not have a distributed lock - just needs to handle the writes, 
-the local kernel lock does not protect against distributed races. I 
-guess most of these file systems can enable parallel writes, unless the 
-kernel lock is used to handle userspace thread synchronization.
-
-b) has a distributed lock - needs a callback to fuse kernel to inform 
-the kernel to invalidate all data.
-
-At DDN we have both of them, a) is in production, the successor b) is 
-being worked on. We might come back with more patches for more callbacks 
-for the DLM - I'm not sure yet.
-
-
-> 
-> I hope I am able to explain my concern. I am not saying that this patch
-> is not good. All I am saying that fuse daemon (user space) can not rely
-> on that it will never get two parallel direct writes which can be beyond
-> the file size. If fuse kernel cache is stale, it can happen. Just trying
-> to set the expectations right.
-
-
-I don't see an issue yet. Regarding virtiofs, does it have a distributed 
-lock manager (DLM)? I guess not?
-
-
-Thanks,
-Bernd

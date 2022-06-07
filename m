@@ -2,98 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4B153F823
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDF053F824
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238163AbiFGI1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S238177AbiFGI2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiFGI1s (ORCPT
+        with ESMTP id S238169AbiFGI2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:27:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B842C673
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:27:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 839CB143D;
-        Tue,  7 Jun 2022 01:27:46 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D36A3F73B;
-        Tue,  7 Jun 2022 01:27:44 -0700 (PDT)
-Message-ID: <c183ab0d-24db-3191-bfd1-a390162cd53c@arm.com>
-Date:   Tue, 7 Jun 2022 10:27:28 +0200
+        Tue, 7 Jun 2022 04:28:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2AF62FE63
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654590478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tokJJ7z8KnX5/xUJtCDdcremg3FcOkmF1aZGy9Uoj8o=;
+        b=XNKGMPs+ig+tlhg0g/MegTBjeNhi/nqup6H6npJLUipZHfC++sAqGpLfEec/S8OwUD0FDY
+        npk405t8R0+wE2CSlT5xFahGPdVSpVpP0hBmHKmiQrK6GYewEyrE+YzkoRNos9BqY39n4V
+        EdkQff0g3o5X9qTKQsyqr1XRCaCL/xw=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-6A9FhzhMP7OStRZOtAnL0g-1; Tue, 07 Jun 2022 04:27:57 -0400
+X-MC-Unique: 6A9FhzhMP7OStRZOtAnL0g-1
+Received: by mail-qv1-f69.google.com with SMTP id z10-20020ad4414a000000b004644d6dafe3so10381725qvp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 01:27:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=tokJJ7z8KnX5/xUJtCDdcremg3FcOkmF1aZGy9Uoj8o=;
+        b=pGUsmBHH+t5t3TTohBriLs5l4rp+8yaWSXpkTvHSHv3iIcBkGOmXET7z1BclG88sQ1
+         UitormKSmany95H+tkOcByy+2jqBj8wwsOHpRiY46v9FUlovaqI5SvaAMe8Tv0vTvzVS
+         yIYDLwc4lqCmknoFvPs5HPOEejofxxDaIW0UC/zIYItwLzkpqfcqLdX9XS9bcj3V+YGQ
+         7A+dyAYOzHvXOGFgcJHTDXShF+iYdGg6BPDZCdC1StoYZYctUGX2TY+NyZCXsLDWYRSx
+         yB09riPSgKQtHq3rigoDBIiuITixx1urLUnZgw3QV9qMwpYjqOaKyFCQEwxTxS6Nhm9F
+         pO+Q==
+X-Gm-Message-State: AOAM533e9Gm3ckHtTrb+7f02nnOWYg9N8cq+3H0vXhs3caAMN0MArKad
+        y2QR5pPRSWz4degFbfZ0PwudgyUEizXl86fp97sbeAft+c2e7fgKeLLPYVohcfycTtPnWZFDHKx
+        9E07FBVT5clTeHgMPpnOkXhtr
+X-Received: by 2002:a05:622a:c1:b0:304:b748:be14 with SMTP id p1-20020a05622a00c100b00304b748be14mr21644598qtw.182.1654590476163;
+        Tue, 07 Jun 2022 01:27:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxYah24x0VgOYzu07uB9wF/h9PM2w8gnqiibtJ3BRf/4OuyXKuw3Fh41+pKXVewotjs0unuCQ==
+X-Received: by 2002:a05:622a:c1:b0:304:b748:be14 with SMTP id p1-20020a05622a00c100b00304b748be14mr21644590qtw.182.1654590475858;
+        Tue, 07 Jun 2022 01:27:55 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id bk3-20020a05620a1a0300b006a6ba92d852sm4923540qkb.83.2022.06.07.01.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 01:27:55 -0700 (PDT)
+Message-ID: <05805d134048e7e993850eb9cf0be56a0c2ae4c6.camel@redhat.com>
+Subject: Re: [PATCH] KVM: x86: SVM: fix nested PAUSE filtering when L0
+ intercepts PAUSE
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Date:   Tue, 07 Jun 2022 11:27:52 +0300
+In-Reply-To: <20220531175837.295988-1-pbonzini@redhat.com>
+References: <20220531175837.295988-1-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] sched/fair: static cpumasks for load balance
-Content-Language: en-US
-To:     Bing Huang <huangbing@kylinos.cn>, peterz@infradead.org
-Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
-        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
-        mgorman@suse.de, mingo@redhat.com, rostedt@goodmis.org,
-        vincent.guittot@linaro.org
-References: <20220602030135.398697-1-huangbing@kylinos.cn>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220602030135.398697-1-huangbing@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2022 05:01, Bing Huang wrote:
-> The both cpu mask load_balance_mask and select_idle_mask just only used
-> in fair.c, but allocation in core.c in CONFIG_CPUMASK_OFFSTACK=y case,
-> and global via declare per cpu variations. More or less, it looks wired.
-
-Maybe you can change this into:
-
-sched/fair: Make per-cpu cpumasks static
-
-load_balance_mask and select_idle_mask are only used in fair.c. Make
-them static and move their allocation into init_sched_fair_class().
-
-Replace kzalloc_node() with zalloc_cpumask_var_node() to get rid of the
-CONFIG_CPUMASK_OFFSTACK #ifdef and to align with per-cpu cpumask
-allocation for RT (local_cpu_mask in init_sched_rt_class()) and DL
-class (local_cpu_mask_dl in init_sched_dl_class()).
-
-> Co-developed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-
-You can remove the `Co-developed-by`. I was just reviewing the patch and
-gave suggestions.
-
-[...]
-
-> @@ -11841,6 +11841,15 @@ void show_numa_stats(struct task_struct *p, struct seq_file *m)
->  __init void init_sched_fair_class(void)
->  {
->  #ifdef CONFIG_SMP
-> +	int i;
+On Tue, 2022-05-31 at 13:58 -0400, Paolo Bonzini wrote:
+> Commit 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0
+> doesn't intercept PAUSE") introduced passthrough support for nested
+> pause
+> filtering, (when the host doesn't intercept PAUSE) (either disabled
+> with
+> kvm module param, or disabled with '-overcommit cpu-pm=on')
+> 
+> Before this commit, L1 KVM didn't intercept PAUSE at all; afterwards,
+> the feature was exposed as supported by KVM cpuid unconditionally,
+> thus
+> if L1 could try to use it even when the L0 KVM can't really support
+> it.
+> 
+> In this case the fallback caused KVM to intercept each PAUSE
+> instruction;
+> in some cases, such intercept can slow down the nested guest so much
+> that it can fail to boot.  Instead, before the problematic commit KVM
+> was already setting both thresholds to 0 in vmcb02, but after the
+> first
+> userspace VM exit shrink_ple_window was called and would reset the
+> pause_filter_count to the default value.
+> 
+> To fix this, change the fallback strategy - ignore the guest
+> threshold
+> values, but use/update the host threshold values unless the guest
+> specifically requests disabling PAUSE filtering (either simple or
+> advanced).
+> 
+> Also fix a minor bug: on nested VM exit, when PAUSE filter counter
+> were copied back to vmcb01, a dirty bit was not set.
+> 
+> Thanks a lot to Suravee Suthikulpanit for debugging this!
+> 
+> Fixes: 74fd41ed16fd ("KVM: x86: nSVM: support PAUSE filtering when L0
+> doesn't intercept PAUSE")
+> Reported-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Co-developed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Message-Id: <20220518072709.730031-1-mlevitsk@redhat.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/svm/nested.c | 39 +++++++++++++++++++++----------------
+> --
+>  arch/x86/kvm/svm/svm.c    |  4 ++--
+>  2 files changed, 23 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 6d0233a2469e..88da8edbe1e1 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -642,6 +642,8 @@ static void nested_vmcb02_prepare_control(struct
+> vcpu_svm *svm,
+>         struct kvm_vcpu *vcpu = &svm->vcpu;
+>         struct vmcb *vmcb01 = svm->vmcb01.ptr;
+>         struct vmcb *vmcb02 = svm->nested.vmcb02.ptr;
+> +       u32 pause_count12;
+> +       u32 pause_thresh12;
+>  
+>         /*
+>          * Filled at exit: exit_code, exit_code_hi, exit_info_1,
+> exit_info_2,
+> @@ -721,27 +723,25 @@ static void
+> nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+>         if (!nested_vmcb_needs_vls_intercept(svm))
+>                 vmcb02->control.virt_ext |=
+> VIRTUAL_VMLOAD_VMSAVE_ENABLE_MASK;
+>  
+> +       pause_count12 = svm->pause_filter_enabled ? svm-
+> >nested.ctl.pause_filter_count : 0;
+> +       pause_thresh12 = svm->pause_threshold_enabled ? svm-
+> >nested.ctl.pause_filter_thresh : 0;
+>         if (kvm_pause_in_guest(svm->vcpu.kvm)) {
+> -               /* use guest values since host doesn't use them */
+> -               vmcb02->control.pause_filter_count =
+> -                               svm->pause_filter_enabled ?
+> -                               svm->nested.ctl.pause_filter_count :
+> 0;
+> +               /* use guest values since host doesn't intercept
+> PAUSE */
+> +               vmcb02->control.pause_filter_count = pause_count12;
+> +               vmcb02->control.pause_filter_thresh = pause_thresh12;
+>  
+> -               vmcb02->control.pause_filter_thresh =
+> -                               svm->pause_threshold_enabled ?
+> -                               svm->nested.ctl.pause_filter_thresh :
+> 0;
+> -
+> -       } else if (!vmcb12_is_intercept(&svm->nested.ctl,
+> INTERCEPT_PAUSE)) {
+> -               /* use host values when guest doesn't use them */
+> +       } else {
+> +               /* start from host values otherwise */
+>                 vmcb02->control.pause_filter_count = vmcb01-
+> >control.pause_filter_count;
+>                 vmcb02->control.pause_filter_thresh = vmcb01-
+> >control.pause_filter_thresh;
+> -       } else {
+> -               /*
+> -                * Intercept every PAUSE otherwise and
+> -                * ignore both host and guest values
+> -                */
+> -               vmcb02->control.pause_filter_count = 0;
+> -               vmcb02->control.pause_filter_thresh = 0;
 > +
-> +	for_each_possible_cpu(i) {
-> +		zalloc_cpumask_var_node(&per_cpu(load_balance_mask, i),
-> +								GFP_KERNEL, cpu_to_node(i));
-> +		zalloc_cpumask_var_node(&per_cpu(select_idle_mask, i),
-> +								GFP_KERNEL, cpu_to_node(i));
+> +               /* ... but ensure filtering is disabled if so
+> requested.  */
+> +               if (vmcb12_is_intercept(&svm->nested.ctl,
+> INTERCEPT_PAUSE)) {
+> +                       if (!pause_count12)
+> +                               vmcb02->control.pause_filter_count =
+> 0;
+> +                       if (!pause_thresh12)
+> +                               vmcb02->control.pause_filter_thresh =
+> 0;
+> +               }
+>         }
+>  
+>         nested_svm_transition_tlb_flush(vcpu);
+> @@ -1003,8 +1003,11 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+>         vmcb12->control.event_inj         = svm-
+> >nested.ctl.event_inj;
+>         vmcb12->control.event_inj_err     = svm-
+> >nested.ctl.event_inj_err;
+>  
+> -       if (!kvm_pause_in_guest(vcpu->kvm) && vmcb02-
+> >control.pause_filter_count)
+> +       if (!kvm_pause_in_guest(vcpu->kvm)) {
+>                 vmcb01->control.pause_filter_count = vmcb02-
+> >control.pause_filter_count;
+> +               vmcb_mark_dirty(vmcb01, VMCB_INTERCEPTS);
+> +
+> +       }
+>  
+>         nested_svm_copy_common_state(svm->nested.vmcb02.ptr, svm-
+> >vmcb01.ptr);
+>  
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 1bd42e7dfa36..4aea82f668fb 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -956,7 +956,7 @@ static void grow_ple_window(struct kvm_vcpu
+> *vcpu)
+>         struct vmcb_control_area *control = &svm->vmcb->control;
+>         int old = control->pause_filter_count;
+>  
+> -       if (kvm_pause_in_guest(vcpu->kvm) || !old)
+> +       if (kvm_pause_in_guest(vcpu->kvm))
+>                 return;
+>  
+>         control->pause_filter_count = __grow_ple_window(old,
+> @@ -977,7 +977,7 @@ static void shrink_ple_window(struct kvm_vcpu
+> *vcpu)
+>         struct vmcb_control_area *control = &svm->vmcb->control;
+>         int old = control->pause_filter_count;
+>  
+> -       if (kvm_pause_in_guest(vcpu->kvm) || !old)
+> +       if (kvm_pause_in_guest(vcpu->kvm))
+>                 return;
+>  
+>         control->pause_filter_count =
 
-@@ -11815,9 +11815,9 @@ __init void init_sched_fair_class(void)
- 
-        for_each_possible_cpu(i) {
-                zalloc_cpumask_var_node(&per_cpu(load_balance_mask, i),
--                                                               GFP_KERNEL, cpu_to_node(i));
-+                                       GFP_KERNEL, cpu_to_node(i));
-                zalloc_cpumask_var_node(&per_cpu(select_idle_mask, i),
--                                                               GFP_KERNEL, cpu_to_node(i));
-+                                       GFP_KERNEL, cpu_to_node(i));
-        }
+Thank you Paolo!
 
-[...]
+Best regards,
+	Maxim Levitsky
 
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+

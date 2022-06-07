@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F497541B76
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40925409CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377683AbiFGVr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
+        id S1350075AbiFGSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378002AbiFGUvQ (ORCPT
+        with ESMTP id S1348843AbiFGRuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6E11FDEA2;
-        Tue,  7 Jun 2022 11:41:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:50:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0163213745B;
+        Tue,  7 Jun 2022 10:37:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 316D061295;
-        Tue,  7 Jun 2022 18:41:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E8DC385A2;
-        Tue,  7 Jun 2022 18:41:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCF7BB822B4;
+        Tue,  7 Jun 2022 17:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243FBC36AFF;
+        Tue,  7 Jun 2022 17:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627273;
-        bh=5or48Sd0+2qQPDKl+woFHQA/id1AA8D8c0YmSyWFprU=;
+        s=korg; t=1654623434;
+        bh=MCyqNc5GkcQ3T8dHRVOrLPgKjXI9EWbq4KoFeNZbSFM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zXXxSVLTqOQfNEpAaMgmvJfx+IzRIEtzZHZbihO/2xoA+LB7tJDVT+4H4/kixqkZk
-         OODr5D7U+wEmLA01N4abCbvC2ozKkt7a+HuJ5in56nH8NygYgdv6cOW7HkyCnvyOrw
-         VbNJBkF4cE0qy9H/McbmVMPQ0SlAiEsjZCAVfVvA=
+        b=R15D2mKM4KFN8MlAek41cbE78xTwAvhBZWqlUR2TLZTcgeCSz9BFnUjNFe1RHjAyl
+         jKDvCJmPxBgjPFCtOSM+mgvX8+Nedry4ihjq0hXyKPDlJqCYScgXdLpam00zDu2jMx
+         n7MFSqItZ63ttW33rp78ThhqP8L4ZMLVEBzx6m4Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.17 679/772] selftests/landlock: Extend access right tests to directories
+        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 5.10 414/452] serial: pch: dont overwrite xmit->buf[0] by x_char
 Date:   Tue,  7 Jun 2022 19:04:31 +0200
-Message-Id: <20220607165009.065451258@linuxfoundation.org>
+Message-Id: <20220607164920.893868139@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,80 +53,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Jiri Slaby <jslaby@suse.cz>
 
-commit d18955d094d09a220cf8f533f5e896a2fe31575a upstream.
+commit d9f3af4fbb1d955bbaf872d9e76502f6e3e803cb upstream.
 
-Make sure that all filesystem access rights can be tied to directories.
+When x_char is to be sent, the TX path overwrites whatever is in the
+circular buffer at offset 0 with x_char and sends it using
+pch_uart_hal_write(). I don't understand how this was supposed to work
+if xmit->buf[0] already contained some character. It must have been
+lost.
 
-Rename layout1.file_access_rights to layout1.file_and_dir_access_rights
-to reflect this change.
+Remove this whole pop_tx_x() concept and do the work directly in the
+callers. (Without printing anything using dev_dbg().)
 
-Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-6-mic@digikod.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Cc: <stable@vger.kernel.org>
+Fixes: 3c6a483275f4 (Serial: EG20T: add PCH_UART driver)
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220503080808.28332-1-jslaby@suse.cz
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   30 +++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ drivers/tty/serial/pch_uart.c |   27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -418,11 +418,12 @@ TEST_F_FORK(layout1, inval)
- 
- /* clang-format on */
- 
--TEST_F_FORK(layout1, file_access_rights)
-+TEST_F_FORK(layout1, file_and_dir_access_rights)
- {
- 	__u64 access;
- 	int err;
--	struct landlock_path_beneath_attr path_beneath = {};
-+	struct landlock_path_beneath_attr path_beneath_file = {},
-+					  path_beneath_dir = {};
- 	struct landlock_ruleset_attr ruleset_attr = {
- 		.handled_access_fs = ACCESS_ALL,
- 	};
-@@ -432,20 +433,33 @@ TEST_F_FORK(layout1, file_access_rights)
- 	ASSERT_LE(0, ruleset_fd);
- 
- 	/* Tests access rights for files. */
--	path_beneath.parent_fd = open(file1_s1d2, O_PATH | O_CLOEXEC);
--	ASSERT_LE(0, path_beneath.parent_fd);
-+	path_beneath_file.parent_fd = open(file1_s1d2, O_PATH | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath_file.parent_fd);
-+
-+	/* Tests access rights for directories. */
-+	path_beneath_dir.parent_fd =
-+		open(dir_s1d2, O_PATH | O_DIRECTORY | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath_dir.parent_fd);
-+
- 	for (access = 1; access <= ACCESS_LAST; access <<= 1) {
--		path_beneath.allowed_access = access;
-+		path_beneath_dir.allowed_access = access;
-+		ASSERT_EQ(0, landlock_add_rule(ruleset_fd,
-+					       LANDLOCK_RULE_PATH_BENEATH,
-+					       &path_beneath_dir, 0));
-+
-+		path_beneath_file.allowed_access = access;
- 		err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
--					&path_beneath, 0);
--		if ((access | ACCESS_FILE) == ACCESS_FILE) {
-+					&path_beneath_file, 0);
-+		if (access & ACCESS_FILE) {
- 			ASSERT_EQ(0, err);
- 		} else {
- 			ASSERT_EQ(-1, err);
- 			ASSERT_EQ(EINVAL, errno);
- 		}
- 	}
--	ASSERT_EQ(0, close(path_beneath.parent_fd));
-+	ASSERT_EQ(0, close(path_beneath_file.parent_fd));
-+	ASSERT_EQ(0, close(path_beneath_dir.parent_fd));
-+	ASSERT_EQ(0, close(ruleset_fd));
+--- a/drivers/tty/serial/pch_uart.c
++++ b/drivers/tty/serial/pch_uart.c
+@@ -628,22 +628,6 @@ static int push_rx(struct eg20t_port *pr
+ 	return 0;
  }
  
- TEST_F_FORK(layout1, unknown_access_rights)
+-static int pop_tx_x(struct eg20t_port *priv, unsigned char *buf)
+-{
+-	int ret = 0;
+-	struct uart_port *port = &priv->port;
+-
+-	if (port->x_char) {
+-		dev_dbg(priv->port.dev, "%s:X character send %02x (%lu)\n",
+-			__func__, port->x_char, jiffies);
+-		buf[0] = port->x_char;
+-		port->x_char = 0;
+-		ret = 1;
+-	}
+-
+-	return ret;
+-}
+-
+ static int dma_push_rx(struct eg20t_port *priv, int size)
+ {
+ 	int room;
+@@ -893,9 +877,10 @@ static unsigned int handle_tx(struct eg2
+ 
+ 	fifo_size = max(priv->fifo_size, 1);
+ 	tx_empty = 1;
+-	if (pop_tx_x(priv, xmit->buf)) {
+-		pch_uart_hal_write(priv, xmit->buf, 1);
++	if (port->x_char) {
++		pch_uart_hal_write(priv, &port->x_char, 1);
+ 		port->icount.tx++;
++		port->x_char = 0;
+ 		tx_empty = 0;
+ 		fifo_size--;
+ 	}
+@@ -950,9 +935,11 @@ static unsigned int dma_handle_tx(struct
+ 	}
+ 
+ 	fifo_size = max(priv->fifo_size, 1);
+-	if (pop_tx_x(priv, xmit->buf)) {
+-		pch_uart_hal_write(priv, xmit->buf, 1);
++
++	if (port->x_char) {
++		pch_uart_hal_write(priv, &port->x_char, 1);
+ 		port->icount.tx++;
++		port->x_char = 0;
+ 		fifo_size--;
+ 	}
+ 
 
 

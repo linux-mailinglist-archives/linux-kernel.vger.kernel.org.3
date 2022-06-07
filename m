@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8571A541A4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942CD5408F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378756AbiFGVcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S1349615AbiFGSEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378175AbiFGUez (ORCPT
+        with ESMTP id S1348668AbiFGRpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3CE1EA86E;
-        Tue,  7 Jun 2022 11:37:41 -0700 (PDT)
+        Tue, 7 Jun 2022 13:45:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686B7132A09;
+        Tue,  7 Jun 2022 10:35:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A364BCE23F1;
-        Tue,  7 Jun 2022 18:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90629C385A2;
-        Tue,  7 Jun 2022 18:37:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 498EE614BC;
+        Tue,  7 Jun 2022 17:35:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 359D8C385A5;
+        Tue,  7 Jun 2022 17:35:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627057;
-        bh=wXIZJawWrOCnO9b2OaTQyjOEM/LeOCNedPaXi6O7/l4=;
+        s=korg; t=1654623324;
+        bh=jcHJD8ju3Rz+1Q/aZpacFYt41zZ5+xpft/qwCJ7JCgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nWU2mNZvGmk2KNPVqh+Us33cd+CnVdvyaoV4Oh1dE9kC6p9eStoIFiKgC6J7tpoLW
-         8QdaKoP0lZN9Y5Fw7kH5ptDGhvxpdFltuVLwGJJVCYvQgju+q4dGViggdiRG+POfaM
-         SW26ij2GANbevqanSajsz+1nwgUDL3iIhmW1xZQQ=
+        b=FdP9nZB/7z+kyGzLSJqaxPn+uy2HTrogAiRqWAoLZzgGREcMtFJUULpsxaq9WUoXA
+         4YdSwmYk5q4b5mDCdcfLCl4UHWFocYEu0mzsrlLFmtYSru32hG5wft4JcCW7v1X5kr
+         sMnCmt8sdsbtyF6myR+w10+9Hl3BDH4wiI2WEE3A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Daniel Bristot de Oliveria <bristot@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        John Kacur <jkacur@redhat.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 600/772] rtla: Dont overwrite existing directory mode
-Date:   Tue,  7 Jun 2022 19:03:12 +0200
-Message-Id: <20220607165006.622107220@linuxfoundation.org>
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 336/452] dmaengine: stm32-mdma: fix chan initialization in stm32_mdma_irq_handler()
+Date:   Tue,  7 Jun 2022 19:03:13 +0200
+Message-Id: <20220607164918.571540078@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,50 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Kacur <jkacur@redhat.com>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-[ Upstream commit 39c3d84cb5b52792a7323a338334d8d65b2dbe3f ]
+[ Upstream commit da3b8ddb464bd49b6248d00ca888ad751c9e44fd ]
 
-The mode on /usr/bin is often 555 these days,
-but make install on rtla overwrites this with 755
+The parameter to pass back to the handler function when irq has been
+requested is a struct stm32_mdma_device pointer, not a struct
+stm32_mdma_chan pointer.
+Even if chan is reinit later in the function, remove this wrong
+initialization.
 
-Fix this by preserving the current directory if it exists.
-
-Link: https://lkml.kernel.org/r/8c294a6961080a1970fd8b73f7bcf1e3984579e2.1651247710.git.bristot@kernel.org
-Link: https://lore.kernel.org/r/20220402043939.6962-1-jkacur@redhat.com
-
-Cc: Daniel Bristot de Oliveria <bristot@redhat.com>
-Fixes: 79ce8f43ac5a ("rtla: Real-Time Linux Analysis tool")
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: John Kacur <jkacur@redhat.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20220504155322.121431-3-amelie.delaunay@foss.st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/tracing/rtla/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/dma/stm32-mdma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 5a1eda617992..4b635d4de018 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -23,6 +23,7 @@ $(call allow-override,LD_SO_CONF_PATH,/etc/ld.so.conf.d/)
- $(call allow-override,LDCONFIG,ldconfig)
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index 4ec6f5b69f56..9d54746c422c 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -1344,7 +1344,7 @@ static void stm32_mdma_xfer_end(struct stm32_mdma_chan *chan)
+ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
+ {
+ 	struct stm32_mdma_device *dmadev = devid;
+-	struct stm32_mdma_chan *chan = devid;
++	struct stm32_mdma_chan *chan;
+ 	u32 reg, id, ccr, ien, status;
  
- INSTALL	=	install
-+MKDIR	=	mkdir
- FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
- 		-fasynchronous-unwind-tables -fstack-clash-protection
- WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
-@@ -68,7 +69,7 @@ static: $(OBJ)
- 
- .PHONY: install
- install: doc_install
--	$(INSTALL) -d -m 755 $(DESTDIR)$(BINDIR)
-+	$(MKDIR) -p $(DESTDIR)$(BINDIR)
- 	$(INSTALL) rtla -m 755 $(DESTDIR)$(BINDIR)
- 	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
- 	@test ! -f $(DESTDIR)$(BINDIR)/osnoise || rm $(DESTDIR)$(BINDIR)/osnoise
+ 	/* Find out which channel generates the interrupt */
 -- 
 2.35.1
 

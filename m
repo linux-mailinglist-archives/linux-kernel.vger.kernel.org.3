@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E54A5421F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A79D5425C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234427AbiFHBc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S1391231AbiFHAh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383880AbiFGWGo (ORCPT
+        with ESMTP id S1383737AbiFGWGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:06:44 -0400
+        Tue, 7 Jun 2022 18:06:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA6D195976;
-        Tue,  7 Jun 2022 12:17:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41D196A98;
+        Tue,  7 Jun 2022 12:17:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D3EB6192F;
-        Tue,  7 Jun 2022 19:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D84C385A2;
-        Tue,  7 Jun 2022 19:17:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A44F6192F;
+        Tue,  7 Jun 2022 19:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C8BC385A2;
+        Tue,  7 Jun 2022 19:17:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629450;
-        bh=+7xftkGjyf+e5zg4DgvqH+lSjN974cPn3Aj+rSWqdhw=;
+        s=korg; t=1654629452;
+        bh=6oCEsGrH4yCyfhP7SrWq+do8nPz28zA/Cu2zTNcGrHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h2koyuUbLehMc2Vhtb15rsQ/cp9RuRj91HP6wLbK5f0kT3q7ND3raPaAtGur13NEp
-         JUx4N1ESdCUTFvS7htmWWikgvRFee05IeNCx3ioa242eoKclYbQKcjhFXCp1dzvg+m
-         +nHmGFYvjk5Ckhm6BoHvgsD+orSzymY+xtko0wuE=
+        b=HlnepKPparM/cb27mRvM5OusKxt3rX1VN4VsUk7GbMf1i1BvL/1fkesVQNrjmeUJW
+         XL0UI5JPu6KebaC7JNCHnU+VMAfymQDfLCispKXWjtulBg5U2fQTRmOBQN/bWbvf0q
+         9sx0otLS02dxA9iVhiMqJGzfv7nFsKaUn6kDAgFk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 695/879] MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
-Date:   Tue,  7 Jun 2022 19:03:33 +0200
-Message-Id: <20220607165023.019728967@linuxfoundation.org>
+Subject: [PATCH 5.18 696/879] perf build: Fix btf__load_from_kernel_by_id() feature check
+Date:   Tue,  7 Jun 2022 19:03:34 +0200
+Message-Id: <20220607165023.049031152@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,98 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+From: Jiri Olsa <jolsa@kernel.org>
 
-[ Upstream commit 7e4fd16b38923028b01d3dbadf4ca973d885c53e ]
+[ Upstream commit 73534617dfa3c4cd95fe5ffaeff5315e9ffc2de6 ]
 
-kernel test robot reports a build error used with clang compiler and
-mips-randconfig [1]:
+The btf__load_from_kernel_by_id() only takes one arg, not two.
 
-    ld.lld: error: undefined symbol: pci_remap_iospace
+Committer notes:
 
-we can see the following configs in the mips-randconfig file:
+I tested it just with an older libbpf, one where
+btf__load_from_kernel_by_id() wasn't introduced yet.
 
-    CONFIG_RALINK=y
-    CONFIG_SOC_MT7620=y
-    CONFIG_PCI_DRIVERS_LEGACY=y
-    CONFIG_PCI=y
+A test with a newer dynamic libbpf would fail because the
+btf__load_from_kernel_by_id() is there, but takes just one arg.
 
-CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
-arch/mips/include/asm/mach-ralink/spaces.h header file:
-
-    #define pci_remap_iospace pci_remap_iospace
-
-CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
-built due to pci_remap_iospace is defined under CONFIG_RALINK.
-
-    #ifndef pci_remap_iospace
-    int pci_remap_iospace(const struct resource *res, ...)
-
-    $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
-    00004cc8 <devm_pci_remap_iospace>:
-        4d18:	10400008 	beqz	v0,4d3c <devm_pci_remap_iospace+0x74>
-        4d2c:	1040000c 	beqz	v0,4d60 <devm_pci_remap_iospace+0x98>
-        4d70:	1000fff3 	b	4d40 <devm_pci_remap_iospace+0x78>
-
-In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
-in arch/mips/pci/pci-generic.c is not built too.
-
-    #ifdef pci_remap_iospace
-    int pci_remap_iospace(const struct resource *res, ...)
-
-For the above reasons, undefined reference pci_remap_iospace() looks like
-reasonable.
-
-Here are simple steps to reproduce used with gcc and defconfig:
-
-    cd mips.git
-    make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
-    make menuconfig        # set PCI
-    make
-
-there exists the following build error:
-
-      LD      vmlinux.o
-      MODPOST vmlinux.symvers
-      MODINFO modules.builtin.modinfo
-      GEN     modules.builtin
-      LD      .tmp_vmlinux.kallsyms1
-    drivers/pci/pci.o: In function `devm_pci_remap_iospace':
-    pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
-    Makefile:1158: recipe for target 'vmlinux' failed
-    make: *** [vmlinux] Error 1
-
-Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
-error, with this patch, no build error remains. This patch is similar with
-commit e538e8649892 ("MIPS: asm: pci: define arch-specific
-'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
-
-[1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
-
-Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 0ae065a5d265bc5a ("perf build: Fix check for btf__load_from_kernel_by_id() in libbpf")
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Thomas Richter <tmricht@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Link: http://lore.kernel.org/linux-perf-users/YozLKby7ITEtchC9@krava
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
- 1 file changed, 2 insertions(+)
+ .../build/feature/test-libbpf-btf__load_from_kernel_by_id.c  | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-index f7af11ea2d61..a9f0570d0f04 100644
---- a/arch/mips/include/asm/mach-ralink/spaces.h
-+++ b/arch/mips/include/asm/mach-ralink/spaces.h
-@@ -6,7 +6,9 @@
- #define PCI_IOSIZE	SZ_64K
- #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+diff --git a/tools/build/feature/test-libbpf-btf__load_from_kernel_by_id.c b/tools/build/feature/test-libbpf-btf__load_from_kernel_by_id.c
+index f7c084428735..a17647f7d5a4 100644
+--- a/tools/build/feature/test-libbpf-btf__load_from_kernel_by_id.c
++++ b/tools/build/feature/test-libbpf-btf__load_from_kernel_by_id.c
+@@ -1,7 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <bpf/libbpf.h>
++#include <bpf/btf.h>
  
-+#ifdef CONFIG_PCI_DRIVERS_GENERIC
- #define pci_remap_iospace pci_remap_iospace
-+#endif
- 
- #include <asm/mach-generic/spaces.h>
- #endif
+ int main(void)
+ {
+-	return btf__load_from_kernel_by_id(20151128, NULL);
++	btf__load_from_kernel_by_id(20151128);
++	return 0;
+ }
 -- 
 2.35.1
 

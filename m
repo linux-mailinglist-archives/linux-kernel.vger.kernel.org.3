@@ -2,176 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197FE53F794
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BBE53F79B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237890AbiFGHrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 03:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S237916AbiFGHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 03:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiFGHrQ (ORCPT
+        with ESMTP id S237902AbiFGHsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 03:47:16 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553E5D8;
-        Tue,  7 Jun 2022 00:47:12 -0700 (PDT)
-X-UUID: 54eab18635594d2d9b7003c83070b772-20220607
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:7be55fc0-ff08-4e14-85f1-1cc70b81aeb2,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:7be55fc0-ff08-4e14-85f1-1cc70b81aeb2,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:a2a4e8e4-2ba2-4dc1-b6c5-11feb6c769e0,C
-        OID:f74822fd2579,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 54eab18635594d2d9b7003c83070b772-20220607
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 460672927; Tue, 07 Jun 2022 15:47:09 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 7 Jun 2022 15:47:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 7 Jun 2022 15:47:07 +0800
-Message-ID: <f791f46c6307a18818574cb7fb8653bcc84aa9ad.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Tue, 7 Jun 2022 15:47:07 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 7 Jun 2022 03:48:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD506929E;
+        Tue,  7 Jun 2022 00:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654588114;
+        bh=XYARkqqaVqftLCqlQUQeDaR5u91Hn+J10YMbU4qU9lI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=aaDhxrBZiU8ke+OssL/f4KmK+EvroqqN5BazzLkRXc4yMfKheYXz4pEFA59Xw+yab
+         UfKtHvUrBTQkSmUdIQ+tqHuxfZPanLB6AlNnzJsBXvj5RrNPZA7gqna6LAD/gJZR06
+         LAJ5zhnxiMbhTP5taz/QYaVQo8qoWtDXzLmkyqOo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.123.67] ([62.143.94.109]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1fii-1nnjPG1Yl6-0124IT; Tue, 07
+ Jun 2022 09:48:34 +0200
+Message-ID: <7657a50f-20c0-9ad0-aecb-5b3e71feb18c@gmx.de>
+Date:   Tue, 7 Jun 2022 09:48:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] dt-bindings: input: Convert adc-keys to DT schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20220606184243.1057145-1-robh@kernel.org>
+From:   Heinrich Schuchardt <xypron.glpk@gmx.de>
+In-Reply-To: <20220606184243.1057145-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:I3YB0lPaJUOplx/vQSPeHGrtDco826MdF1hF1rUuKn3lzH5qILv
+ Kz671t5zpPHDFolDtg7q+QWzW8o1OoLhtXH8zkJrWvU2XxrmOKCWMJ9IOEq9uLmCEV7hwK4
+ Otv/QOnJ+eVUOeQEJSa8XEDfDBj1h64voFHz72OhMTKYbdS83kdJiSmlvDLi5vrzTzo2YAj
+ ivQq5wamhdNzlfPZ8lBGg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:p0NOTkT/fgY=:NVIzx0j8BCwuY+DFtAGDkp
+ FbExGYS/rBzpWs5t1sd+FOB2OqMl5YSeP/EjiFjrlszqXToRjY+xCLvqWypE7WG+eTJuXzi1M
+ PIjfRGyGe+VRg5P7A2D0TkKbsxR4YUn6rEJzIXvCGA9ZlJ57xkxuOowWvaqzPtLiYPUdGCLD4
+ nRIO5+u5u0+UUSynnnFk+NcKq+Yelda4ajhj1CqACydpIFXetCIDfnpTtDXNtdz0vEXuWbQwF
+ 1kUOhf/nqs+VF4e9ZWoOVSvhYCwabeiNzm/L1Pc0dwuZRzHXre8Zu5JTLMRy7ZgIPE6/yvfhQ
+ 0Af/MYwXyCDXibViPAA4IOFWf3ieQSDTFcvDkR0xo0XEBYdpSMGV/f5fdHxEpV8UVYXWtWkel
+ MKNC9m3trHrTz62cJX9lMOv1B9MN8gbKl/WVvyQP77ffEDPl0t9K5jTLLzvYv6plVvHgS3fnF
+ 13btvpP9bOyVimjJtwKpsUNJOM1ppXPQ8v+WacreXFP2T0X43WPJSmIlhjVUTKkh4Ucx1dfG2
+ Bh8zg0rryOEilVeU4Wu/YYzmSMggP6iezmG5OVn8qdQM0WcPIbg71iyJP7aeL56ZwyA5kbdvd
+ dNwrHH23IwVlISKc0qKrjfy3aHnkuNeodbUoz6c0zg0V5ilJI4+T2EDQlJjN1Q+rwTFkVWhPL
+ 9+WdcJnJrHRTBbIkC3Qy9UAMxnl0ztl8GPVsu3mlHgLpD+fDI7ip/caglr9V9tkuk305WnOwO
+ bIBsPhF/JKKo/aifAX7FFB7iPN9V6kN4Fj+q7vUvDdUAvbJTLzaklzFoUpgxchQ4IQmtXhuLr
+ dopUQfy8CRL2L/UfAvb/5i1e6BxEu4gHfltsEoc9RD0QzR9UJFvF15Jjt585fxs0LdJaShOeC
+ ZpsG9YHNgfAaI9lszZUXk6Zv9pC3DVb8oylI0bE6hfJQ1kmOdmJCFdGErW7SzTmwDJWupRWG0
+ q5D4m5CJaV1p0zlOLDd0D3D/tERUBC6rKRiNoYdzusWxMdx8XL/wxaDzna9if0cdNKJ7gHpfc
+ J1HmkA9ZDR4i1a6ibY91VoGIG8B0ijTb4tzkW7IoV/RbmA/Bcxa9iqsb3JM8Kq/gZr9gL7GfC
+ zcXGNRwRMru03bTrEHF92ncTnez4mJwSiR+1Ek5SVUSndoC8VyEH3+9Pg==
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
-
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+On 6/6/22 20:42, Rob Herring wrote:
+> Convert the adc-keys binding to DT schema format.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
+>   .../devicetree/bindings/input/adc-keys.txt    |  67 ------------
+>   .../devicetree/bindings/input/adc-keys.yaml   | 103 ++++++++++++++++++
+>   2 files changed, 103 insertions(+), 67 deletions(-)
+>   delete mode 100644 Documentation/devicetree/bindings/input/adc-keys.tx=
+t
+>   create mode 100644 Documentation/devicetree/bindings/input/adc-keys.ya=
+ml
+>
+> diff --git a/Documentation/devicetree/bindings/input/adc-keys.txt b/Docu=
+mentation/devicetree/bindings/input/adc-keys.txt
+> deleted file mode 100644
+> index 6c8be6a9ace2..000000000000
+> --- a/Documentation/devicetree/bindings/input/adc-keys.txt
+> +++ /dev/null
+> @@ -1,67 +0,0 @@
+> -ADC attached resistor ladder buttons
+> -------------------------------------
+> -
+> -Required properties:
+> - - compatible: "adc-keys"
+> - - io-channels: Phandle to an ADC channel
+> - - io-channel-names =3D "buttons";
+> - - keyup-threshold-microvolt: Voltage above or equal to which all the k=
+eys are
+> -			      considered up.
+> -
+> -Optional properties:
+> -	- poll-interval: Poll interval time in milliseconds
+> -	- autorepeat: Boolean, Enable auto repeat feature of Linux input
+> -	  subsystem.
+> -
+> -Each button (key) is represented as a sub-node of "adc-keys":
+> -
+> -Required subnode-properties:
+> -	- label: Descriptive name of the key.
+> -	- linux,code: Keycode to emit.
+> -	- press-threshold-microvolt: voltage above or equal to which this key =
+is
+> -				     considered pressed.
+> -
+> -No two values of press-threshold-microvolt may be the same.
+> -All values of press-threshold-microvolt must be less than
+> -keyup-threshold-microvolt.
+> -
+> -Example:
+> -
+> -#include <dt-bindings/input/input.h>
+> -
+> -	adc-keys {
+> -		compatible =3D "adc-keys";
+> -		io-channels =3D <&lradc 0>;
+> -		io-channel-names =3D "buttons";
+> -		keyup-threshold-microvolt =3D <2000000>;
+> -
+> -		button-up {
+> -			label =3D "Volume Up";
+> -			linux,code =3D <KEY_VOLUMEUP>;
+> -			press-threshold-microvolt =3D <1500000>;
+> -		};
+> -
+> -		button-down {
+> -			label =3D "Volume Down";
+> -			linux,code =3D <KEY_VOLUMEDOWN>;
+> -			press-threshold-microvolt =3D <1000000>;
+> -		};
+> -
+> -		button-enter {
+> -			label =3D "Enter";
+> -			linux,code =3D <KEY_ENTER>;
+> -			press-threshold-microvolt =3D <500000>;
+> -		};
+> -	};
+> -
+> -+--------------------------------+------------------------+
+> -| 2.000.000 <=3D value             | no key pressed         |
+> -+--------------------------------+------------------------+
+> -| 1.500.000 <=3D value < 2.000.000 | KEY_VOLUMEUP pressed   |
+> -+--------------------------------+------------------------+
+> -| 1.000.000 <=3D value < 1.500.000 | KEY_VOLUMEDOWN pressed |
+> -+--------------------------------+------------------------+
+> -|   500.000 <=3D value < 1.000.000 | KEY_ENTER pressed      |
+> -+--------------------------------+------------------------+
+> -|              value <   500.000 | no key pressed         |
+> -+--------------------------------+------------------------+
+> diff --git a/Documentation/devicetree/bindings/input/adc-keys.yaml b/Doc=
+umentation/devicetree/bindings/input/adc-keys.yaml
+> new file mode 100644
+> index 000000000000..a3a1af9550bc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/adc-keys.yaml
+> @@ -0,0 +1,103 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/adc-keys.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ADC attached resistor ladder buttons
+> +
+> +maintainers:
+> +  - Heinrich Schuchardt <xypron.glpk@gmx.de>
 
-[snip]
+Thanks for converting to yaml.
+
+I only contributed a single patch. I am not a maintainer. Please, remove
+that line.
+
+scripts/get_maintainer.pl
+Documentation/devicetree/bindings/input/adc-keys.txt yields
+Dmitry Torokhov <dmitry.torokhov@gmail.com> (maintainer:INPUT (KEYBOARD,
+MOUSE, JOYSTICK, TOUCHSCREEN)...)
+
+It would be preferable to have a single reference point for
+maintainership: file /MAINTAINERS.
+
+
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/input/input.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: adc-keys
+> +
+> +  io-channels:
+> +    maxItems: 1
+
+Please, add a description to each property.
 
 > +
-> +static int mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
-> +{
-> +	ssize_t ret;
-> +	u8 sink_count;
-> +	bool locked;
-> +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
-> +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
-> +	u32 link_status_reg = DP_LANE0_1_STATUS;
+> +  io-channel-names:
+> +    const: buttons
 > +
-> +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
-> &sink_count);
-> +	if (ret < 0) {
-> +		drm_err(mtk_dp->drm_dev, "Read sink count failed:
-> %ld\n", ret);
-> +		return ret;
-> +	}
+> +  keyup-threshold-microvolt:
+> +    description:
+> +      Voltage above or equal to which all the keys are considered up.
 > +
-> +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
-> link_status,
-> +			       sizeof(link_status));
-> +	if (!ret) {
-> +		drm_err(mtk_dp->drm_dev, "Read link status failed:
-> %ld\n",
-> +			ret);
-> +		return ret;
-> +	}
+> +patternProperties:
+> +  '^button-':
+> +    type: object
+> +    additionalProperties: false
+> +    description:
+> +      Each button (key) is represented as a sub-node.
 > +
-> +	locked = drm_dp_channel_eq_ok(link_status,
-> +				      mtk_dp->train_info.lane_count);
-> +	if (!locked && mtk_dp->train_state >
-> MTK_DP_TRAIN_STATE_TRAINING_PRE)
+> +    properties:
+> +      label: true
 
-Before enter this function, mtk_dp->train_state is set to
-MTK_DP_TRAIN_STATE_STARTUP, so this never happen, drop this.
+Please, add a description.
 
-> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING_PRE;
 > +
-> +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
-> +		drm_dp_dpcd_writeb(&mtk_dp->aux,
-> DP_DEVICE_SERVICE_IRQ_VECTOR,
-> +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
-> +
-> +	if (DP_GET_SINK_COUNT(sink_count) &&
-> +	    (link_status[2] & DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
-> +		mtk_dp->train_info.check_cap_count = 0;
-> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_CHECKEDID;
+> +      linux,code:
+> +        description: Keycode to emit.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
 
-Why change state from MTK_DP_TRAIN_STATE_STARTUP to
-MTK_DP_TRAIN_STATE_CHECKEDID? In mtk_dp_train_handler(),
-mtk_dp_parse_capabilities() is true then change to
-MTK_DP_TRAIN_STATE_CHECKEDID. Give a reason why these two are
-different.
+Unfortunately usable values are only defined in
+include/uapi/linux/input-event-codes.h up to now. Please, consider
+adding that link to the description.
 
-Regards,
-CK
+It is unclear to me if using values above KEY_MAX (=3D0x2ff) could make
+sense of should be forbidden by this yaml file.
 
-> +		msleep(20);
-> +	}
+For interoperability of device-trees with other operating systems we
+should have a yaml file defining an enum with used values and their meanin=
+g.
+
 > +
-> +	return 0;
-> +}
+> +      press-threshold-microvolt:
+> +        description:
+> +          Voltage above or equal to which this key is considered presse=
+d. No
+> +          two values of press-threshold-microvolt may be the same. All =
+values
+> +          of press-threshold-microvolt must be less than
+> +          keyup-threshold-microvolt.
 > +
+> +    required:
+> +      - label
+
+Property label is not used in our the driver code. It only exists for
+human readability. Why is it marked as required? Stripping the labels
+would reduce the DT size.
+
+Best regards
+
+Heinrich
+
+> +      - linux,code
+> +      - press-threshold-microvolt
+> +
+> +required:
+> +  - compatible
+> +  - io-channels
+> +  - io-channel-names
+> +  - keyup-threshold-microvolt
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/input/input.h>
+> +    // +--------------------------------+------------------------+
+> +    // | 2.000.000 <=3D value             | no key pressed         |
+> +    // +--------------------------------+------------------------+
+> +    // | 1.500.000 <=3D value < 2.000.000 | KEY_VOLUMEUP pressed   |
+> +    // +--------------------------------+------------------------+
+> +    // | 1.000.000 <=3D value < 1.500.000 | KEY_VOLUMEDOWN pressed |
+> +    // +--------------------------------+------------------------+
+> +    // |   500.000 <=3D value < 1.000.000 | KEY_ENTER pressed      |
+> +    // +--------------------------------+------------------------+
+> +    // |              value <   500.000 | no key pressed         |
+> +    // +--------------------------------+------------------------+
+> +
+> +    adc-keys {
+> +        compatible =3D "adc-keys";
+> +        io-channels =3D <&lradc 0>;
+> +        io-channel-names =3D "buttons";
+> +        keyup-threshold-microvolt =3D <2000000>;
+> +
+> +        button-up {
+> +            label =3D "Volume Up";
+> +            linux,code =3D <KEY_VOLUMEUP>;
+> +            press-threshold-microvolt =3D <1500000>;
+> +        };
+> +
+> +        button-down {
+> +            label =3D "Volume Down";
+> +            linux,code =3D <KEY_VOLUMEDOWN>;
+> +            press-threshold-microvolt =3D <1000000>;
+> +        };
+> +
+> +        button-enter {
+> +            label =3D "Enter";
+> +            linux,code =3D <KEY_ENTER>;
+> +            press-threshold-microvolt =3D <500000>;
+> +        };
+> +    };
+> +...
 

@@ -2,76 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B4A53F943
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D11553F94C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbiFGJPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        id S239168AbiFGJQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbiFGJPc (ORCPT
+        with ESMTP id S239213AbiFGJQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:15:32 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500AA6CAA9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:15:29 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id k19so23206743wrd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=s+usQNQe61fUNXtftBnDDPOoqNzLMBH21NqyRZq7YLo=;
-        b=QcJFOZkr6N0djzaiBVtwqiI34B4U1YPZDK+qqBxhWRvksqYGTnrdJ2l7ks6TzStesp
-         CLefRAOdeVlWHQFXzog5tGhwMpXNRIK8rxeKr1KewPQnqDMI/TEosM2Oyidtx2FgNDkv
-         heHtFS1yJhRiiNE1d2ZfRmVJmmpFVWPWDGsMQ8KTW/BxHe6NXSsxnEnkGR9y2I+xCAN/
-         lYcVSSYtJoV2uSRZHEGaN8h+805AB5fGDQUfR352OQi25LWIjK+XwZ9DoHNTGmMZxafM
-         rpdEA4LHFHBvqNW58ewZc2pwQN0+fcihCYVyXmOThiBzZpJGeS04EYqcHU9AEy3Vk76M
-         fiZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s+usQNQe61fUNXtftBnDDPOoqNzLMBH21NqyRZq7YLo=;
-        b=xJkD+70L8lGetxUOIz5gJ5cXheJ24hjYHrvsvMw36tMfJvzMDSZI8/NfHYKwkjI23S
-         OiLxR/EV+nNi8O9YhCOgB5JaQI1OZ17CuIetcxiU+Kq4dV3XsN4pTgQ8UCVrxdQODUso
-         Waxa0gv/uUchoTan6/BYK65/Lg6qfceBYR1MzsYr8MEmlfQFyvvfJbwFkbKLUJIwt6cz
-         VatF9mjnnowSLNstF9prayZJMAzpL1Zaj8UU0x5lNIwdH8L0zxE+XVSG0mY9rQTaXgMD
-         eESvNRUiv0EYKncIZ/qHc60emmV2nUSjiHXsbsiAT5zWRHrmb5PH+IvQ5LQG0UTP8Zsb
-         fQIg==
-X-Gm-Message-State: AOAM53087U3cpCJtH5nFIkqXDi5X6Jh+vbC8KlAaJ9GM9XkBuH/Ohz7l
-        TDZP/ajYd1gsWW4T2aZqGwCvZw==
-X-Google-Smtp-Source: ABdhPJxHljRDXDB6metlo+Ntzo/NbEmYZujGJW4daxhb1Oxt07a0tqGsmnY141RzHKXAo+xezbaUFw==
-X-Received: by 2002:adf:fe0c:0:b0:218:4312:1230 with SMTP id n12-20020adffe0c000000b0021843121230mr7830352wrr.223.1654593327814;
-        Tue, 07 Jun 2022 02:15:27 -0700 (PDT)
-Received: from ?IPV6:2a00:1098:3142:14:901f:dbcb:c1e4:e4b8? ([2a00:1098:3142:14:901f:dbcb:c1e4:e4b8])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c3b8500b0039c4e2ff7cfsm6411598wms.43.2022.06.07.02.15.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 02:15:27 -0700 (PDT)
-Message-ID: <8c3fe744-0181-043a-3af9-dd00165a6356@raspberrypi.com>
-Date:   Tue, 7 Jun 2022 10:15:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9o6R2RRdwzB9f+464xH+Aw-9wx2dm=ZsQYFbTk_-66yJw@mail.gmail.com>
-From:   Phil Elwell <phil@raspberrypi.com>
-In-Reply-To: <CAHmME9o6R2RRdwzB9f+464xH+Aw-9wx2dm=ZsQYFbTk_-66yJw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 7 Jun 2022 05:16:35 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C8168215D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:16:33 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 9B31C1E80D55;
+        Tue,  7 Jun 2022 17:16:14 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id OCc8k__xCFKU; Tue,  7 Jun 2022 17:16:11 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id AA1791E80CB8;
+        Tue,  7 Jun 2022 17:16:11 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com
+Cc:     ionela.voinescu@arm.com, linux-kernel@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] x86: topology_update_die_map function removes unused return values
+Date:   Tue,  7 Jun 2022 17:16:10 +0800
+Message-Id: <20220607091610.495912-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,101 +44,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2022 09:43, Jason A. Donenfeld wrote:
-> Hi Phil,
-> 
-> On Tue, Jun 7, 2022 at 10:29 AM Phil Elwell <phil@raspberrypi.com> wrote:
->>
->> This patch is fatal for me in the downstream Raspberry Pi kernel - it locks up
->> on boot even before the earlycon output is available. Hacking jump_label_init to
->> skip the jump_entry for "crng_is_ready" allows it to boot, but is likely to have
->> consequences further down the line.
-> 
-> Also, reading this a few times, I'm not 100% sure I understand what
-> you did to hack around this and why that works. Think you could paste
-> your hackpatch just out of interest to the discussion (but obviously
-> not to be applied)?
+Change the return value of the topology_update_die_map function to
+void to remove the BUG_ON check and reduce eAX register calls.
 
-This is the minimal version of my workaround patch that at least allows the 
-board to boot. Bear in mind that it was written with no previous knowledge of 
-jump labels and was arrived at by iteratively bisecting the list of jump_labels 
-until the first dangerous one was found, then later working out that there was 
-only one.
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ arch/x86/include/asm/topology.h | 6 +++---
+ arch/x86/kernel/cpu/common.c    | 2 +-
+ arch/x86/kernel/smpboot.c       | 3 +--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-index b156e152d6b48..7b053521f7216 100644
---- a/kernel/jump_label.c
-+++ b/kernel/jump_label.c
-@@ -466,6 +466,7 @@ void __init jump_label_init(void)
-         struct jump_entry *iter_stop = __stop___jump_table;
-         struct static_key *key = NULL;
-         struct jump_entry *iter;
-+       int iter_count = 0;
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index eabfb44b63ed..b641f81cb61f 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -137,7 +137,7 @@ static inline int topology_max_smt_threads(void)
+ }
+ 
+ void topology_update_package_map(unsigned int apicid, unsigned int cpu);
+-int topology_update_die_map(unsigned int dieid, unsigned int cpu);
++void topology_update_die_map(unsigned int dieid, unsigned int cpu);
+ int topology_phys_to_logical_pkg(unsigned int pkg);
+ int topology_phys_to_logical_die(unsigned int die, unsigned int cpu);
+ bool topology_is_primary_thread(unsigned int cpu);
+@@ -146,8 +146,8 @@ bool topology_smt_supported(void);
+ #define topology_max_packages()			(1)
+ static inline void
+ topology_update_package_map(unsigned int apicid, unsigned int cpu) { }
+-static inline int
+-topology_update_die_map(unsigned int dieid, unsigned int cpu) { return 0; }
++static inline void
++topology_update_die_map(unsigned int dieid, unsigned int cpu) { }
+ static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
+ static inline int topology_phys_to_logical_die(unsigned int die,
+ 		unsigned int cpu) { return 0; }
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 22d19a1feafd..6850df297dfd 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1674,7 +1674,7 @@ static void validate_apic_and_package_id(struct cpuinfo_x86 *c)
+ 		       cpu, apicid, c->initial_apicid);
+ 	}
+ 	topology_update_package_map(c->phys_proc_id, cpu);
+-	BUG_ON(topology_update_die_map(c->cpu_die_id, cpu));
++	topology_update_die_map(c->cpu_die_id, cpu);
+ #else
+ 	c->logical_proc_id = 0;
+ #endif
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 20c67cca245b..febec77252e8 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -349,7 +349,7 @@ void topology_update_package_map(unsigned int pkg, unsigned int cpu)
+  * @die:	The die id as retrieved via CPUID
+  * @cpu:	The cpu for which this is updated
+  */
+-int topology_update_die_map(unsigned int die, unsigned int cpu)
++void topology_update_die_map(unsigned int die, unsigned int cpu)
+ {
+ 	int new;
+ 
+@@ -365,7 +365,6 @@ int topology_update_die_map(unsigned int die, unsigned int cpu)
+ 	}
+ found:
+ 	cpu_data(cpu).logical_die_id = new;
+-	return 0;
+ }
+ 
+ void __init smp_store_boot_cpu_info(void)
+-- 
+2.18.2
 
-         /*
-          * Since we are initializing the static_key.enabled field with
-@@ -499,7 +500,9 @@ void __init jump_label_init(void)
-                         continue;
-
-                 key = iterk;
--               static_key_set_entries(key, iter);
-+               iter_count++;
-+               if (iter_count != 1083)
-+                       static_key_set_entries(key, iter);
-         }
-         static_key_initialized = true;
-         jump_label_unlock();
-
-I'm sure this could be rewritten in a less fragile manner making reference to 
-crng_is_ready directly, but this is where I got to yesterday.
-
-Ha! I just proved the patch's fragility by switching from a Pi 2 to a Pi 4,
-so the saner version is:
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index ca17a658c2147..ca7c8a67b8314 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -79,7 +79,7 @@ static enum {
-         CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
-         CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
-  } crng_init __read_mostly = CRNG_EMPTY;
--static DEFINE_STATIC_KEY_FALSE(crng_is_ready);
-+DEFINE_STATIC_KEY_FALSE(crng_is_ready);
-  #define crng_ready() (static_branch_likely(&crng_is_ready) || crng_init >= 
-CRNG_READY)
-  /* Various types of waiters for crng_init->CRNG_READY transition. */
-  static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
-
-
-diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-index b156e152d6b48..b79de9da036fd 100644
---- a/kernel/jump_label.c
-+++ b/kernel/jump_label.c
-@@ -484,6 +484,7 @@ void __init jump_label_init(void)
-         jump_label_sort_entries(iter_start, iter_stop);
-
-         for (iter = iter_start; iter < iter_stop; iter++) {
-+               extern struct static_key_false crng_is_ready;
-                 struct static_key *iterk;
-                 bool in_init;
-
-@@ -499,7 +500,8 @@ void __init jump_label_init(void)
-                         continue;
-
-                 key = iterk;
--               static_key_set_entries(key, iter);
-+               if (key != &crng_is_ready.key)
-+                       static_key_set_entries(key, iter);
-         }
-         static_key_initialized = true;
-         jump_label_unlock();
-
-And to answer your questions from the other thread:
-
-* Without any fixing patches we see the warning messages because we are using 
-rng-seed in DT.
-
-* I've seen the problem on a Pi 2 and a Pi 4 running 32-bit kernels.
-
-Phil

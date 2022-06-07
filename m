@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30930540716
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4620154191D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240702AbiFGRmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S1377870AbiFGVSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347596AbiFGRaw (ORCPT
+        with ESMTP id S1359344AbiFGUWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:52 -0400
+        Tue, 7 Jun 2022 16:22:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6D4FF5AE;
-        Tue,  7 Jun 2022 10:27:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5F2144FFB;
+        Tue,  7 Jun 2022 11:31:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78EC9B822B0;
-        Tue,  7 Jun 2022 17:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9BBC385A5;
-        Tue,  7 Jun 2022 17:27:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFE05B82349;
+        Tue,  7 Jun 2022 18:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50087C385A2;
+        Tue,  7 Jun 2022 18:31:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622855;
-        bh=f15wNlRoY4rStJEgJPLKlAn0P6gzOzR/k90BBXc8Atk=;
+        s=korg; t=1654626687;
+        bh=3/Sd1TFgFMuNHHWqfNjOIDCUnuVWqpZeYGhR3MVlMEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kRNTOM63kj/fkrmDxCpK7gnXZjmu1wlIF2atS2UJpxL16CrQClTFh8G+0aDAiaHkS
-         i6FhHC/iyoVubKnv9J6uxFSXF1gEHzZIiYqOKjGwIURJTVWIdEDLtdiqs2MW4vKzHy
-         Lo6iGDHyPyxa5XQAB7vSMDhrahDzj905PMp+TkO4=
+        b=yX6hh1Sqm0rpTrf/VSw1Sf5i60uCFiIhLoModFCLqEmtWFiLxO3nBRC9g9dGlNgFy
+         wUDSSVMy+kXEX0AV0PUQRQ4DqjrUwAwUvHTs1OyvLGRoebk5j1TsSIUA/CkOi/rV9z
+         QuHP1RI55LxA7uhG5ZHQ0hjef8Xj2a/OwBy9lPdM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
+        stable@vger.kernel.org, Chenyi Qiang <chenyi.qiang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 200/452] perf/amd/ibs: Use interrupt regs ip for stack unwinding
-Date:   Tue,  7 Jun 2022 19:00:57 +0200
-Message-Id: <20220607164914.523627774@linuxfoundation.org>
+Subject: [PATCH 5.17 466/772] KVM: nVMX: Clear IDT vectoring on nested VM-Exit for double/triple fault
+Date:   Tue,  7 Jun 2022 19:00:58 +0200
+Message-Id: <20220607165002.730503757@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +56,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ravi Bangoria <ravi.bangoria@amd.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
+[ Upstream commit 9bd1f0efa859b61950d109b32ff8d529cc33a3ad ]
 
-IbsOpRip is recorded when IBS interrupt is triggered. But there is
-a skid from the time IBS interrupt gets triggered to the time the
-interrupt is presented to the core. Meanwhile processor would have
-moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
-recorded as part of the interrupt regs. This causes issues while
-unwinding stack using the ORC unwinder as it needs consistent rip,
-rsp and rbp. Fix this by using rip from interrupt regs instead of
-IbsOpRip for stack unwinding.
+Clear the IDT vectoring field in vmcs12 on next VM-Exit due to a double
+or triple fault.  Per the SDM, a VM-Exit isn't considered to occur during
+event delivery if the exit is due to an intercepted double fault or a
+triple fault.  Opportunistically move the default clearing (no event
+"pending") into the helper so that it's more obvious that KVM does indeed
+handle this case.
 
-Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
-Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
+Note, the double fault case is worded rather wierdly in the SDM:
+
+  The original event results in a double-fault exception that causes the
+  VM exit directly.
+
+Temporarily ignoring injected events, double faults can _only_ occur if
+an exception occurs while attempting to deliver a different exception,
+i.e. there's _always_ an original event.  And for injected double fault,
+while there's no original event, injected events are never subject to
+interception.
+
+Presumably the SDM is calling out that a the vectoring info will be valid
+if a different exit occurs after a double fault, e.g. if a #PF occurs and
+is intercepted while vectoring #DF, then the vectoring info will show the
+double fault.  In other words, the clause can simply be read as:
+
+  The VM exit is caused by a double-fault exception.
+
+Fixes: 4704d0befb07 ("KVM: nVMX: Exiting from L2 to L1")
+Cc: Chenyi Qiang <chenyi.qiang@intel.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220407002315.78092-4-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/x86/kvm/vmx/nested.c | 32 ++++++++++++++++++++++++++++----
+ arch/x86/kvm/vmx/vmcs.h   |  5 +++++
+ 2 files changed, 33 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index 780d89d2ae32..8a85658a24cc 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -312,6 +312,16 @@ static int perf_ibs_init(struct perf_event *event)
- 	hwc->config_base = perf_ibs->msr;
- 	hwc->config = config;
- 
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack. Setting _EARLY flag
-+	 * makes sure we unwind call-stack before perf sample rip is set to
-+	 * IbsOpRip.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
-+
- 	return 0;
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 2992db28c644..d795ac816aec 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3695,12 +3695,34 @@ vmcs12_guest_cr4(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12)
  }
  
-@@ -692,6 +702,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
- 		data.raw = &raw;
- 	}
+ static void vmcs12_save_pending_event(struct kvm_vcpu *vcpu,
+-				      struct vmcs12 *vmcs12)
++				      struct vmcs12 *vmcs12,
++				      u32 vm_exit_reason, u32 exit_intr_info)
+ {
+ 	u32 idt_vectoring;
+ 	unsigned int nr;
  
+-	if (vcpu->arch.exception.injected) {
 +	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack.
++	 * Per the SDM, VM-Exits due to double and triple faults are never
++	 * considered to occur during event delivery, even if the double/triple
++	 * fault is the result of an escalating vectoring issue.
++	 *
++	 * Note, the SDM qualifies the double fault behavior with "The original
++	 * event results in a double-fault exception".  It's unclear why the
++	 * qualification exists since exits due to double fault can occur only
++	 * while vectoring a different exception (injected events are never
++	 * subject to interception), i.e. there's _always_ an original event.
++	 *
++	 * The SDM also uses NMI as a confusing example for the "original event
++	 * causes the VM exit directly" clause.  NMI isn't special in any way,
++	 * the same rule applies to all events that cause an exit directly.
++	 * NMI is an odd choice for the example because NMIs can only occur on
++	 * instruction boundaries, i.e. they _can't_ occur during vectoring.
 +	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		data.callchain = perf_callchain(event, iregs);
++	if ((u16)vm_exit_reason == EXIT_REASON_TRIPLE_FAULT ||
++	    ((u16)vm_exit_reason == EXIT_REASON_EXCEPTION_NMI &&
++	     is_double_fault(exit_intr_info))) {
++		vmcs12->idt_vectoring_info_field = 0;
++	} else if (vcpu->arch.exception.injected) {
+ 		nr = vcpu->arch.exception.nr;
+ 		idt_vectoring = nr | VECTORING_INFO_VALID_MASK;
+ 
+@@ -3733,6 +3755,8 @@ static void vmcs12_save_pending_event(struct kvm_vcpu *vcpu,
+ 			idt_vectoring |= INTR_TYPE_EXT_INTR;
+ 
+ 		vmcs12->idt_vectoring_info_field = idt_vectoring;
++	} else {
++		vmcs12->idt_vectoring_info_field = 0;
+ 	}
+ }
+ 
+@@ -4219,8 +4243,8 @@ static void prepare_vmcs12(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+ 		 * Transfer the event that L0 or L1 may wanted to inject into
+ 		 * L2 to IDT_VECTORING_INFO_FIELD.
+ 		 */
+-		vmcs12->idt_vectoring_info_field = 0;
+-		vmcs12_save_pending_event(vcpu, vmcs12);
++		vmcs12_save_pending_event(vcpu, vmcs12,
++					  vm_exit_reason, exit_intr_info);
+ 
+ 		vmcs12->vm_exit_intr_info = exit_intr_info;
+ 		vmcs12->vm_exit_instruction_len = vmcs_read32(VM_EXIT_INSTRUCTION_LEN);
+diff --git a/arch/x86/kvm/vmx/vmcs.h b/arch/x86/kvm/vmx/vmcs.h
+index e325c290a816..2b9d7a7e83f7 100644
+--- a/arch/x86/kvm/vmx/vmcs.h
++++ b/arch/x86/kvm/vmx/vmcs.h
+@@ -104,6 +104,11 @@ static inline bool is_breakpoint(u32 intr_info)
+ 	return is_exception_n(intr_info, BP_VECTOR);
+ }
+ 
++static inline bool is_double_fault(u32 intr_info)
++{
++	return is_exception_n(intr_info, DF_VECTOR);
++}
 +
- 	throttle = perf_event_overflow(event, &data, &regs);
- out:
- 	if (throttle) {
+ static inline bool is_page_fault(u32 intr_info)
+ {
+ 	return is_exception_n(intr_info, PF_VECTOR);
 -- 
 2.35.1
 

@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4195853F313
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 02:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97D153F31A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 02:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235482AbiFGAuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 20:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S235484AbiFGAyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 20:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiFGAut (ORCPT
+        with ESMTP id S231290AbiFGAys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 20:50:49 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 324A6BA559;
-        Mon,  6 Jun 2022 17:50:48 -0700 (PDT)
-Received: from [192.168.87.104] (unknown [50.47.106.71])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 87E1320BE625;
-        Mon,  6 Jun 2022 17:50:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 87E1320BE625
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1654563047;
-        bh=mNIWq9mEXLrb2v1fqG+qEYhLSaH2HfCn23YiIjp/ozs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MmasGyKFt3+ENYRwLKiFpoiehKjYBtnkFGsVFLDwFYkPbHgu4xCmT9g3LpBW98z80
-         QZqERPjYGTiFrDX5ozdsaBbkYtYsVNQW2IAFvxy8LczsPaFDWcNSo+EoVpO3wT/ykY
-         tQ2GxmhBC/gs2UkznfLjNQ6TI1QR9WyzwWInZ7lc=
-Message-ID: <bba832ec-ea64-71db-385a-ab9816e7239c@linux.microsoft.com>
-Date:   Mon, 6 Jun 2022 17:50:45 -0700
+        Mon, 6 Jun 2022 20:54:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A119165A1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 17:54:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0C5860B5A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 00:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68125C385A9;
+        Tue,  7 Jun 2022 00:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654563286;
+        bh=gmk4fKRSp3bwlEUvDrKNNUCOS51VOk9isFdfb+Hkvo8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WKosIKHyxThYRiWu0vnxKEf7INJoR2jurTks+bSWE1PJWWArPfP0Vyx5Sj6m1xeXi
+         ncXyZs7yEGnXFXeuyBZW+8QszMBqc1DadQx5rsP2IJd9LHKc5B5s3lBgPH8AqDjJnS
+         XrMc0v0CytceX+f4KUvuC9WL1lAn9SvXRDbaZabyFEYVCX3NlACKRIqBxNS2jrsJll
+         EQpgs/M1kl1+fGsyrDOJd85R0M6KX+YduoNM1fS6Dy/q13Jl4DhhFcGtv4ahQPXCgS
+         MhWG3T8SpoUkNQCQ89oC04LZnsJwpFDRfV+Gfypo7KBA9/09KPuIbIBOXu32dfA7aM
+         zU+u67OoLyg9A==
+Date:   Tue, 7 Jun 2022 00:54:43 +0000
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Guenter Roeck <groeck@google.com>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 02/13] platform/chrome: cros_ec_proto: add Kunit tests
+ for cros_ec_query_all()
+Message-ID: <Yp6h08cYtUgat1cQ@google.com>
+References: <20220606141051.285823-1-tzungbi@kernel.org>
+ <20220606141051.285823-3-tzungbi@kernel.org>
+ <CABXOdTdT0EtVoO6JmD0RdsmGvAXF3ERRwJATO01dU8+CtO7ofg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/5] ARM: dts: aspeed: Add HACE device controller node
-Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        BMC-SW@aspeedtech.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220606064935.1458903-1-neal_liu@aspeedtech.com>
- <20220606064935.1458903-4-neal_liu@aspeedtech.com>
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-In-Reply-To: <20220606064935.1458903-4-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-22.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABXOdTdT0EtVoO6JmD0RdsmGvAXF3ERRwJATO01dU8+CtO7ofg@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,27 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/2022 11:49 PM, Neal Liu wrote:
-> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-> index 3d5ce9da42c3..371d2a6b56ef 100644
-> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-> @@ -304,6 +304,14 @@ apb {
->   			#size-cells = <1>;
->   			ranges;
->   
-> +			hace: crypto@1e6d0000 {
-> +				compatible = "aspeed,ast2600-hace";
-> +				reg = <0x1e6d0000 0x200>;
-> +				interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
-> +				clocks = <&syscon ASPEED_CLK_GATE_YCLK>;
-> +				resets = <&syscon ASPEED_RESET_HACE>;
+On Mon, Jun 06, 2022 at 08:18:41AM -0700, Guenter Roeck wrote:
+> On Mon, Jun 6, 2022 at 7:12 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+> > +static void cros_ec_proto_test_query_all_pretest(struct kunit *test)
+> > +{
+> > +       struct cros_ec_proto_test_priv *priv = test->priv;
+> > +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> > +
+> > +       /*
+> > +        * cros_ec_query_all() will free din and dout and allocate them again to fit the usage by
+> > +        * calling devm_kfree() and devm_kzalloc().  Set them to NULL as they aren't managed by
+> > +        * ec_dev->dev.
+> > +        */
+> > +       ec_dev->din = NULL;
+> > +       ec_dev->dout = NULL;
+> > +}
+> > +
+> > +static void cros_ec_proto_test_query_all_normal(struct kunit *test)
+> > +{
+[...]
+> > +       cros_ec_proto_test_query_all_pretest(test);
+> > +       ret = cros_ec_query_all(ec_dev);
+> 
+> Wouldn't it be better to implement a post_test function and have it
+> call devm_kfree() if it is really necessary to release ->din and
+> ->dout here ?
+> 
+> Either case, I am not convinced that clearing / releasing din and dout
+> is really needed. The device pointer should not change, after all, and
+> either the next call to cros_ec_query_all() will release the pointers,
+> or unloading the driver will do it.
 
-Shouldn't the left side be also 'crypto', see existing crypto nodes in 
-arch/arm64/dts for example.
+The `din` and `dout` are not managed by `ec_dev->dev` but statically
+initializing in cros_ec_proto_test_init()(see below).
 
-			crypto: crypto@1e6d0000 {
-				...
+cros_ec_proto_test_query_all_pretest() sets them to NULL to get rid of the
+following warning (as devres_destroy() in devm_kfree() returns -ENOENT):
+WARNING: CPU: 0 PID: 27 at drivers/base/devres.c:1058 devm_kfree
 
-Regards,
-Dhananjay
+Oops, I just realized qemu still generated yet another warning:
+Device '(null)' does not have a release() function, it is broken and ...
+Will fix it in next version.
+
+[...]
+> >  static int cros_ec_proto_test_init(struct kunit *test)
+> >  {
+> >         struct cros_ec_proto_test_priv *priv;
+> > @@ -188,24 +902,48 @@ static int cros_ec_proto_test_init(struct kunit *test)
+> >         ec_dev->din = (u8 *)priv->din;
+> >         ec_dev->din_size = ARRAY_SIZE(priv->din);
+> >         ec_dev->proto_version = EC_HOST_REQUEST_VERSION;
+> > +       ec_dev->dev = kunit_kzalloc(test, sizeof(*ec_dev->dev), GFP_KERNEL);
+> > +       if (!ec_dev->dev)
+> > +               return -ENOMEM;
+> > +       device_initialize(ec_dev->dev);
+> > +       ec_dev->cmd_xfer = cros_kunit_ec_xfer_mock;
+> > +       ec_dev->pkt_xfer = cros_kunit_ec_xfer_mock;
+> >
+> >         priv->msg = (struct cros_ec_command *)priv->_msg;
+> >
+> > +       cros_kunit_mock_reset();
+> > +
+> >         return 0;
+> >  }

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE1E541F9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D823541FF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387047AbiFGWtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        id S1385785AbiFGWqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381409AbiFGVkm (ORCPT
+        with ESMTP id S1381124AbiFGVgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:40:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1518232A41;
-        Tue,  7 Jun 2022 12:06:50 -0700 (PDT)
+        Tue, 7 Jun 2022 17:36:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44772163F4C;
+        Tue,  7 Jun 2022 12:04:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A47EB8220B;
-        Tue,  7 Jun 2022 19:06:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A77A1C385A2;
-        Tue,  7 Jun 2022 19:06:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8F65B8233E;
+        Tue,  7 Jun 2022 19:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB14C34115;
+        Tue,  7 Jun 2022 19:04:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628808;
-        bh=Z7yu1bDK0mC1xruvohs/rezvFKpeCucwSrm7QYxW3E0=;
+        s=korg; t=1654628689;
+        bh=pGs7DucsfOyXb3V7w2Exptx3i43BThzarD4FoLRpck0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VDJxY3e9gLYQQHpFpkR/MURYvI7KsG9dbyVF6c7gwHEgmUq7KJe0D07kjIXkOJOjQ
-         uiGnE1CnUCchQbEoxpZQrM3UJoEHc1Guixc9n1w3Qf5edL5iwo1bQw+KtkKOg7oEe7
-         piV10xFV2jCq/WwSS7L9xPOltsgAvnx3xa8b8F7g=
+        b=pm43wSLkfAMCnxjKG27kyl364CM5RAcjuJhsECzPNGScuMZZWcWGr6uC1I+C73Lud
+         05CimDAQyl1XsOpMto3fZuzYkpEt1185mq45XVu7zkF6rEmYJz2AIC9sWu2ycUkC+P
+         ewyJpzSDpxtmuGY95pzD5uwuQrJgaUJrgswSnSdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         James Smart <jsmart2021@gmail.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 412/879] scsi: lpfc: Fix element offset in __lpfc_sli_release_iocbq_s4()
-Date:   Tue,  7 Jun 2022 18:58:50 +0200
-Message-Id: <20220607165014.821351437@linuxfoundation.org>
+Subject: [PATCH 5.18 413/879] scsi: lpfc: Fix dmabuf ptr assignment in lpfc_ct_reject_event()
+Date:   Tue,  7 Jun 2022 18:58:51 +0200
+Message-Id: <20220607165014.849610239@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,37 +58,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 84c6f99e39074d45f75986e42ca28e27c140fd0d ]
+[ Upstream commit 596fc8adb171dce3751a359018e2ade612af8d97 ]
 
-The prior commit that moved from iocb elements to explicit wqe elements
-missed a name change.
+Upon driver receipt of a CT cmd for type = 0xFA (Management Server) and
+subtype = 0x11 (Fabric Device Management Interface), the driver is
+responding with garbage CT cmd data when it should send a properly formed
+RJT.
 
-Correct __lpfc_sli_release_iocbq_s4() to reference wqe rather than iocb.
+The __lpfc_prep_xmit_seq64_s4() routine was using the wrong buffer for the
+reject.
 
-Link: https://lore.kernel.org/r/20220506035519.50908-2-jsmart2021@gmail.com
-Fixes: a680a9298e7b ("scsi: lpfc: SLI path split: Refactor lpfc_iocbq")
+Fix by converting the routine to use the buffer specified in the bde within
+the wqe rather than the ill-set bmp element.
+
+Link: https://lore.kernel.org/r/20220506035519.50908-6-jsmart2021@gmail.com
+Fixes: 61910d6a5243 ("scsi: lpfc: SLI path split: Refactor CT paths")
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_sli.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 11f907278f09..c307f551d114 100644
+index c307f551d114..331241a71452 100644
 --- a/drivers/scsi/lpfc/lpfc_sli.c
 +++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -1373,7 +1373,7 @@ static void
- __lpfc_sli_release_iocbq_s4(struct lpfc_hba *phba, struct lpfc_iocbq *iocbq)
+@@ -10800,24 +10800,15 @@ __lpfc_sli_prep_xmit_seq64_s4(struct lpfc_iocbq *cmdiocbq,
  {
- 	struct lpfc_sglq *sglq;
--	size_t start_clean = offsetof(struct lpfc_iocbq, iocb);
-+	size_t start_clean = offsetof(struct lpfc_iocbq, wqe);
- 	unsigned long iflag = 0;
- 	struct lpfc_sli_ring *pring;
+ 	union lpfc_wqe128 *wqe;
+ 	struct ulp_bde64 *bpl;
+-	struct ulp_bde64_le *bde;
  
+ 	wqe = &cmdiocbq->wqe;
+ 	memset(wqe, 0, sizeof(*wqe));
+ 
+ 	/* Words 0 - 2 */
+ 	bpl = (struct ulp_bde64 *)bmp->virt;
+-	if (cmdiocbq->cmd_flag & (LPFC_IO_LIBDFC | LPFC_IO_LOOPBACK)) {
+-		wqe->xmit_sequence.bde.addrHigh = bpl->addrHigh;
+-		wqe->xmit_sequence.bde.addrLow = bpl->addrLow;
+-		wqe->xmit_sequence.bde.tus.w = bpl->tus.w;
+-	} else {
+-		bde = (struct ulp_bde64_le *)&wqe->xmit_sequence.bde;
+-		bde->addr_low = cpu_to_le32(putPaddrLow(bmp->phys));
+-		bde->addr_high = cpu_to_le32(putPaddrHigh(bmp->phys));
+-		bde->type_size = cpu_to_le32(bpl->tus.f.bdeSize);
+-		bde->type_size |= cpu_to_le32(ULP_BDE64_TYPE_BDE_64);
+-	}
++	wqe->xmit_sequence.bde.addrHigh = bpl->addrHigh;
++	wqe->xmit_sequence.bde.addrLow = bpl->addrLow;
++	wqe->xmit_sequence.bde.tus.w = bpl->tus.w;
+ 
+ 	/* Word 5 */
+ 	bf_set(wqe_ls, &wqe->xmit_sequence.wge_ctl, last_seq);
 -- 
 2.35.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9F7541D7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313C8541503
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382272AbiFGWRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S1376720AbiFGU1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379963AbiFGVLV (ORCPT
+        with ESMTP id S1355788AbiFGTh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:21 -0400
+        Tue, 7 Jun 2022 15:37:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD9D216832;
-        Tue,  7 Jun 2022 11:52:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6AE1ACE59;
+        Tue,  7 Jun 2022 11:13:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD9A261579;
-        Tue,  7 Jun 2022 18:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F4DC385A2;
-        Tue,  7 Jun 2022 18:52:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4541A60B40;
+        Tue,  7 Jun 2022 18:13:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A5CDC385A5;
+        Tue,  7 Jun 2022 18:13:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627956;
-        bh=SrGB3I3yImzAPCnjAlFIOW+PK3rwCwo9unqbwzwEX88=;
+        s=korg; t=1654625614;
+        bh=TnwKBiTsdywjWBvo4etmkA3PVCDA8nmjb3JIB7ssesM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VdhY1JnQ/+InuNghmeFUBIYHXkPjOkiDAVDnFIvyxPvi6Y6XxwU8l5ah/oNVMullk
-         9J74U0E+BnqXi5eZQ9PcGxKMq74V50jFaoZolFnITmYFzQ/4WkF2otK7HcFJ3kPCsy
-         9TMz6cVxRHAoj2aEQc1lVy6sp/DmELFgXYIbEMLs=
+        b=WWU9uhgAxqO5Sg227jhRmA6RqYCA2zeTj89H/PG+xcwR8vkBH5gUtYCT2Z9rpSYdA
+         MkP08N9OVu1472sW/3v12w1TAEYUi4HBwyvmyOnhzXHVhLdo6jQN7nmNVjPc494U56
+         vIOH/nCyzur2o99Ye1AFcqDUIG2jVO9fopBIevfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Hari Chandrakanthan <quic_haric@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 113/879] ath11k: disable spectral scan during spectral deinit
-Date:   Tue,  7 Jun 2022 18:53:51 +0200
-Message-Id: <20220607165005.982314027@linuxfoundation.org>
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.17 040/772] ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
+Date:   Tue,  7 Jun 2022 18:53:52 +0200
+Message-Id: <20220607164950.206348898@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,104 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hari Chandrakanthan <quic_haric@quicinc.com>
+From: Eric W. Biederman <ebiederm@xmission.com>
 
-[ Upstream commit 161c64de239c7018e0295e7e0520a19f00aa32dc ]
+commit 4a3d2717d140401df7501a95e454180831a0c5af upstream.
 
-When ath11k modules are removed using rmmod with spectral scan enabled,
-crash is observed. Different crash trace is observed for each crash.
+xtensa is the last user of the PT_SINGLESTEP flag.  Changing tsk->ptrace in
+user_enable_single_step and user_disable_single_step without locking could
+potentiallly cause problems.
 
-Send spectral scan disable WMI command to firmware before cleaning
-the spectral dbring in the spectral_deinit API to avoid this crash.
+So use a thread info flag instead of a flag in tsk->ptrace.  Use TIF_SINGLESTEP
+that xtensa already had defined but unused.
 
-call trace from one of the crash observed:
-[ 1252.880802] Unable to handle kernel NULL pointer dereference at virtual address 00000008
-[ 1252.882722] pgd = 0f42e886
-[ 1252.890955] [00000008] *pgd=00000000
-[ 1252.893478] Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-[ 1253.093035] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.4.89 #0
-[ 1253.115261] Hardware name: Generic DT based system
-[ 1253.121149] PC is at ath11k_spectral_process_data+0x434/0x574 [ath11k]
-[ 1253.125940] LR is at 0x88e31017
-[ 1253.132448] pc : [<7f9387b8>]    lr : [<88e31017>]    psr: a0000193
-[ 1253.135488] sp : 80d01bc8  ip : 00000001  fp : 970e0000
-[ 1253.141737] r10: 88e31000  r9 : 970ec000  r8 : 00000080
-[ 1253.146946] r7 : 94734040  r6 : a0000113  r5 : 00000057  r4 : 00000000
-[ 1253.152159] r3 : e18cb694  r2 : 00000217  r1 : 1df1f000  r0 : 00000001
-[ 1253.158755] Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
-[ 1253.165266] Control: 10c0383d  Table: 5e71006a  DAC: 00000055
-[ 1253.172472] Process swapper/0 (pid: 0, stack limit = 0x60870141)
-[ 1253.458055] [<7f9387b8>] (ath11k_spectral_process_data [ath11k]) from [<7f917fdc>] (ath11k_dbring_buffer_release_event+0x214/0x2e4 [ath11k])
-[ 1253.466139] [<7f917fdc>] (ath11k_dbring_buffer_release_event [ath11k]) from [<7f8ea3c4>] (ath11k_wmi_tlv_op_rx+0x1840/0x29cc [ath11k])
-[ 1253.478807] [<7f8ea3c4>] (ath11k_wmi_tlv_op_rx [ath11k]) from [<7f8fe868>] (ath11k_htc_rx_completion_handler+0x180/0x4e0 [ath11k])
-[ 1253.490699] [<7f8fe868>] (ath11k_htc_rx_completion_handler [ath11k]) from [<7f91308c>] (ath11k_ce_per_engine_service+0x2c4/0x3b4 [ath11k])
-[ 1253.502386] [<7f91308c>] (ath11k_ce_per_engine_service [ath11k]) from [<7f9a4198>] (ath11k_pci_ce_tasklet+0x28/0x80 [ath11k_pci])
-[ 1253.514811] [<7f9a4198>] (ath11k_pci_ce_tasklet [ath11k_pci]) from [<8032227c>] (tasklet_action_common.constprop.2+0x64/0xe8)
-[ 1253.526476] [<8032227c>] (tasklet_action_common.constprop.2) from [<803021e8>] (__do_softirq+0x130/0x2d0)
-[ 1253.537756] [<803021e8>] (__do_softirq) from [<80322610>] (irq_exit+0xcc/0xe8)
-[ 1253.547304] [<80322610>] (irq_exit) from [<8036a4a4>] (__handle_domain_irq+0x60/0xb4)
-[ 1253.554428] [<8036a4a4>] (__handle_domain_irq) from [<805eb348>] (gic_handle_irq+0x4c/0x90)
-[ 1253.562321] [<805eb348>] (gic_handle_irq) from [<80301a78>] (__irq_svc+0x58/0x8c)
+Remove the definitions of PT_SINGLESTEP and PT_BLOCKSTEP as they have no more users.
 
-Tested-on: QCN6122 hw1.0 AHB WLAN.HK.2.6.0.1-00851-QCAHKSWPL_SILICONZ-1
-
-Signed-off-by: Hari Chandrakanthan <quic_haric@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/1649396345-349-1-git-send-email-quic_haric@quicinc.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Tested-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Link: https://lkml.kernel.org/r/20220505182645.497868-4-ebiederm@xmission.com
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/ath11k/spectral.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ arch/xtensa/kernel/ptrace.c |    4 ++--
+ arch/xtensa/kernel/signal.c |    4 ++--
+ include/linux/ptrace.h      |    6 ------
+ 3 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/spectral.c b/drivers/net/wireless/ath/ath11k/spectral.c
-index 2b18871d5f7c..516a7b4cd180 100644
---- a/drivers/net/wireless/ath/ath11k/spectral.c
-+++ b/drivers/net/wireless/ath/ath11k/spectral.c
-@@ -212,7 +212,10 @@ static int ath11k_spectral_scan_config(struct ath11k *ar,
- 		return -ENODEV;
+--- a/arch/xtensa/kernel/ptrace.c
++++ b/arch/xtensa/kernel/ptrace.c
+@@ -226,12 +226,12 @@ const struct user_regset_view *task_user
  
- 	arvif->spectral_enabled = (mode != ATH11K_SPECTRAL_DISABLED);
-+
-+	spin_lock_bh(&ar->spectral.lock);
- 	ar->spectral.mode = mode;
-+	spin_unlock_bh(&ar->spectral.lock);
- 
- 	ret = ath11k_wmi_vdev_spectral_enable(ar, arvif->vdev_id,
- 					      ATH11K_WMI_SPECTRAL_TRIGGER_CMD_CLEAR,
-@@ -843,9 +846,6 @@ static inline void ath11k_spectral_ring_free(struct ath11k *ar)
+ void user_enable_single_step(struct task_struct *child)
  {
- 	struct ath11k_spectral *sp = &ar->spectral;
- 
--	if (!sp->enabled)
--		return;
--
- 	ath11k_dbring_srng_cleanup(ar, &sp->rx_ring);
- 	ath11k_dbring_buf_cleanup(ar, &sp->rx_ring);
- }
-@@ -897,15 +897,16 @@ void ath11k_spectral_deinit(struct ath11k_base *ab)
- 		if (!sp->enabled)
- 			continue;
- 
--		ath11k_spectral_debug_unregister(ar);
--		ath11k_spectral_ring_free(ar);
-+		mutex_lock(&ar->conf_mutex);
-+		ath11k_spectral_scan_config(ar, ATH11K_SPECTRAL_DISABLED);
-+		mutex_unlock(&ar->conf_mutex);
- 
- 		spin_lock_bh(&sp->lock);
--
--		sp->mode = ATH11K_SPECTRAL_DISABLED;
- 		sp->enabled = false;
--
- 		spin_unlock_bh(&sp->lock);
-+
-+		ath11k_spectral_debug_unregister(ar);
-+		ath11k_spectral_ring_free(ar);
- 	}
+-	child->ptrace |= PT_SINGLESTEP;
++	set_tsk_thread_flag(child, TIF_SINGLESTEP);
  }
  
--- 
-2.35.1
-
+ void user_disable_single_step(struct task_struct *child)
+ {
+-	child->ptrace &= ~PT_SINGLESTEP;
++	clear_tsk_thread_flag(child, TIF_SINGLESTEP);
+ }
+ 
+ /*
+--- a/arch/xtensa/kernel/signal.c
++++ b/arch/xtensa/kernel/signal.c
+@@ -473,7 +473,7 @@ static void do_signal(struct pt_regs *re
+ 		/* Set up the stack frame */
+ 		ret = setup_frame(&ksig, sigmask_to_save(), regs);
+ 		signal_setup_done(ret, &ksig, 0);
+-		if (current->ptrace & PT_SINGLESTEP)
++		if (test_thread_flag(TIF_SINGLESTEP))
+ 			task_pt_regs(current)->icountlevel = 1;
+ 
+ 		return;
+@@ -499,7 +499,7 @@ static void do_signal(struct pt_regs *re
+ 	/* If there's no signal to deliver, we just restore the saved mask.  */
+ 	restore_saved_sigmask();
+ 
+-	if (current->ptrace & PT_SINGLESTEP)
++	if (test_thread_flag(TIF_SINGLESTEP))
+ 		task_pt_regs(current)->icountlevel = 1;
+ 	return;
+ }
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -46,12 +46,6 @@ extern int ptrace_access_vm(struct task_
+ #define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
+ #define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
+ 
+-/* single stepping state bits (used on ARM and PA-RISC) */
+-#define PT_SINGLESTEP_BIT	31
+-#define PT_SINGLESTEP		(1<<PT_SINGLESTEP_BIT)
+-#define PT_BLOCKSTEP_BIT	30
+-#define PT_BLOCKSTEP		(1<<PT_BLOCKSTEP_BIT)
+-
+ extern long arch_ptrace(struct task_struct *child, long request,
+ 			unsigned long addr, unsigned long data);
+ extern int ptrace_readdata(struct task_struct *tsk, unsigned long src, char __user *dst, int len);
 
 

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4024541772
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C64540D1F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378654AbiFGVDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S1353852AbiFGSqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358524AbiFGUBa (ORCPT
+        with ESMTP id S1352010AbiFGSQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:01:30 -0400
+        Tue, 7 Jun 2022 14:16:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2BE1BFEE8;
-        Tue,  7 Jun 2022 11:25:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236EF1339F2;
+        Tue,  7 Jun 2022 10:50:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BA63611F3;
-        Tue,  7 Jun 2022 18:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156EFC34115;
-        Tue,  7 Jun 2022 18:24:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E8B96146F;
+        Tue,  7 Jun 2022 17:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99995C34119;
+        Tue,  7 Jun 2022 17:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626273;
-        bh=y8K22HlUZzFY2D++dPIwaw10yzNWRo2Ms21xUoJuNjk=;
+        s=korg; t=1654624217;
+        bh=fnG+UK/GdWNYtSgoQqZ5bqzvkDaVX9q79kRygAvrBt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dgavX+49QDWFWTfKpyJE2TR3Omqvh8J8BXJ+PBuptkpjb1w+R9zlTf+tMLtEJgfr8
-         3sFU0UZ9+/+BAL7yXC+aNoMTFgCHOqb4mU7GsTgQdOxrwVK12uFhV0mejaX8A+68Vr
-         nimvgfQbfiac7uM62Aw/mN2zCUMfSryLbXtZthRk=
+        b=cVP5FXk4kZcEE+Qp7ig64F2eZXXQHTU+809tpZDQFylmPu8LU9mdYYhUZy9JHhJVs
+         BArOvboqFl7lk3TqUlsPzheaeZ0JGKVPP1jM1ORURbrbvvWwUKsFmGM8mRSTIalBhM
+         u31V5iK0j12N6AnIUe4dml8xlk3TEBYzNTOKFDao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
+        stable@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 319/772] drm/msm/dsi: fix error checks and return values for DSI xmit functions
+Subject: [PATCH 5.15 246/667] spi: rockchip: fix missing error on unsupported SPI_CS_HIGH
 Date:   Tue,  7 Jun 2022 18:58:31 +0200
-Message-Id: <20220607164958.425058543@linuxfoundation.org>
+Message-Id: <20220607164942.162365016@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-[ Upstream commit f0e7e9ed379c012c4d6b09a09b868accc426223c ]
+[ Upstream commit d5d933f09ac326aebad85bfb787cc786ad477711 ]
 
-As noticed by Dan ([1] an the followup thread) there are multiple issues
-with the return values for MSM DSI command transmission callback. In
-the error case it can easily return a positive value when it should
-have returned a proper error code.
+The hardware (except for the ROCKCHIP_SPI_VER2_TYPE2 version) does not
+support active-high native chip selects. However if such a CS is configured
+the core does not error as it normally should, because the
+'ctlr->use_gpio_descriptors = true' line in rockchip_spi_probe() makes the
+core set SPI_CS_HIGH in ctlr->mode_bits.
 
-This commits attempts to fix these issues both in TX and in RX paths.
+In such a case the spi-rockchip driver operates normally but produces an
+active-low chip select signal without notice.
 
-[1]: https://lore.kernel.org/linux-arm-msm/20211001123617.GH2283@kili/
+There is no provision in the current core code to handle this
+situation. Fix by adding a check in the ctlr->setup function (similarly to
+what spi-atmel.c does).
 
-Fixes: a689554ba6ed ("drm/msm: Initial add DSI connector support")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Tested-by: Marijn Suijten <marijn.suijten@somainline.org>
-Patchwork: https://patchwork.freedesktop.org/patch/480501/
-Link: https://lore.kernel.org/r/20220401231104.967193-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+This cannot be done reading the SPI_CS_HIGH but in ctlr->mode_bits because
+that bit gets always set by the core for master mode (see above).
+
+Fixes: eb1262e3cc8b ("spi: spi-rockchip: use num-cs property and ctlr->enable_gpiods")
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Link: https://lore.kernel.org/r/20220421213251.1077899-1-luca.ceresoli@bootlin.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi_host.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/spi/spi-rockchip.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 3a3f53f0c8ae..9ea07bd541c4 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -1337,10 +1337,10 @@ static int dsi_cmds2buf_tx(struct msm_dsi_host *msm_host,
- 			dsi_get_bpp(msm_host->format) / 8;
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 83da8fdb3c02..b721b62118e1 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -196,6 +196,8 @@ struct rockchip_spi {
  
- 	len = dsi_cmd_dma_add(msm_host, msg);
--	if (!len) {
-+	if (len < 0) {
- 		pr_err("%s: failed to add cmd type = 0x%x\n",
- 			__func__,  msg->type);
--		return -EINVAL;
-+		return len;
- 	}
+ 	bool slave_abort;
+ 	bool cs_inactive; /* spi slave tansmition stop when cs inactive */
++	bool cs_high_supported; /* native CS supports active-high polarity */
++
+ 	struct spi_transfer *xfer; /* Store xfer temporarily */
+ };
  
- 	/* for video mode, do not send cmds more than
-@@ -1359,10 +1359,14 @@ static int dsi_cmds2buf_tx(struct msm_dsi_host *msm_host,
- 	}
+@@ -718,6 +720,11 @@ static int rockchip_spi_setup(struct spi_device *spi)
+ 	struct rockchip_spi *rs = spi_controller_get_devdata(spi->controller);
+ 	u32 cr0;
  
- 	ret = dsi_cmd_dma_tx(msm_host, len);
--	if (ret < len) {
--		pr_err("%s: cmd dma tx failed, type=0x%x, data0=0x%x, len=%d\n",
--			__func__, msg->type, (*(u8 *)(msg->tx_buf)), len);
--		return -ECOMM;
-+	if (ret < 0) {
-+		pr_err("%s: cmd dma tx failed, type=0x%x, data0=0x%x, len=%d, ret=%d\n",
-+			__func__, msg->type, (*(u8 *)(msg->tx_buf)), len, ret);
-+		return ret;
-+	} else if (ret < len) {
-+		pr_err("%s: cmd dma tx failed, type=0x%x, data0=0x%x, ret=%d len=%d\n",
-+			__func__, msg->type, (*(u8 *)(msg->tx_buf)), ret, len);
-+		return -EIO;
- 	}
++	if (!spi->cs_gpiod && (spi->mode & SPI_CS_HIGH) && !rs->cs_high_supported) {
++		dev_warn(&spi->dev, "setup: non GPIO CS can't be active-high\n");
++		return -EINVAL;
++	}
++
+ 	pm_runtime_get_sync(rs->dev);
  
- 	return len;
-@@ -2088,9 +2092,12 @@ int msm_dsi_host_cmd_rx(struct mipi_dsi_host *host,
- 		}
+ 	cr0 = readl_relaxed(rs->regs + ROCKCHIP_SPI_CTRLR0);
+@@ -898,6 +905,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
  
- 		ret = dsi_cmds2buf_tx(msm_host, msg);
--		if (ret < msg->tx_len) {
-+		if (ret < 0) {
- 			pr_err("%s: Read cmd Tx failed, %d\n", __func__, ret);
- 			return ret;
-+		} else if (ret < msg->tx_len) {
-+			pr_err("%s: Read cmd Tx failed, too short: %d\n", __func__, ret);
-+			return -ECOMM;
- 		}
- 
- 		/*
+ 	switch (readl_relaxed(rs->regs + ROCKCHIP_SPI_VERSION)) {
+ 	case ROCKCHIP_SPI_VER2_TYPE2:
++		rs->cs_high_supported = true;
+ 		ctlr->mode_bits |= SPI_CS_HIGH;
+ 		if (ctlr->can_dma && slave_mode)
+ 			rs->cs_inactive = true;
 -- 
 2.35.1
 

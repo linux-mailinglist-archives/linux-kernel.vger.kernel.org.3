@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D764541D85
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55405414F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384630AbiFGWPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S1359339AbiFGUYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379678AbiFGVKt (ORCPT
+        with ESMTP id S1351979AbiFGTcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:10:49 -0400
+        Tue, 7 Jun 2022 15:32:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E13215655;
-        Tue,  7 Jun 2022 11:51:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FF9C5E6A;
+        Tue,  7 Jun 2022 11:12:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B381BB8237F;
-        Tue,  7 Jun 2022 18:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07161C385A5;
-        Tue,  7 Jun 2022 18:51:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43E7AB81F38;
+        Tue,  7 Jun 2022 18:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A718BC385A2;
+        Tue,  7 Jun 2022 18:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627912;
-        bh=2aro4hsaizbmehGAHGgs444aSUzly18lMFz3EQEQqnA=;
+        s=korg; t=1654625566;
+        bh=FQ0KiZojiiCMdSntTJQX+VlNmgl4iS0gWsxYxk6CTm8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KmCk9sDDXAyJHJZ+0akEDbqlU392ixJio9H4PKhhRoCWYNp+KUTGw/opS0QQiQ/nw
-         hlap3czSpPWuhN1c9RzFcqqi3IyOCFdAzDHy7im0woAaqwneMVFJO8uo44ufgUIDWf
-         HHEKyfZA2F38Tzf8im0juUkzTreGJgQQ10AvX4hw=
+        b=Ekpx1raWIwZRC8jH4/w9N1Nd1XcG58MU8tCKdyG8r6BdtXXDZY9v4HNywrT828LP9
+         er6mCRRukXeKnTiOLjzENd29vENTqTLf13B6vD+vxDjhefJxMe2+PWf1A8tVdSoYwm
+         Dar9DNrLkXDRB6kLgkVQNHfNZ4zsd5mxUFdQ/NAc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, Mike Travis <mike.travis@hpe.com>,
+        Steve Wahl <steve.wahl@hpe.com>, Borislav Petkov <bp@suse.de>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 137/879] drm/tegra: gem: Do not try to dereference ERR_PTR()
+Subject: [PATCH 5.17 063/772] x86/platform/uv: Update TSC sync state for UV5
 Date:   Tue,  7 Jun 2022 18:54:15 +0200
-Message-Id: <20220607165006.680667412@linuxfoundation.org>
+Message-Id: <20220607164950.896055261@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+From: Mike Travis <mike.travis@hpe.com>
 
-[ Upstream commit cb7e1abc2c73633e1eefa168ab2dad6e838899c9 ]
+[ Upstream commit bb3ab81bdbd53f88f26ffabc9fb15bd8466486ec ]
 
-When mapping the DMA-BUF attachment fails, map->sgt will be an ERR_PTR-
-encoded error code and the cleanup code would try to free that memory,
-which obviously would fail.
+The UV5 platform synchronizes the TSCs among all chassis, and will not
+proceed to OS boot without achieving synchronization.  Previous UV
+platforms provided a register indicating successful synchronization.
+This is no longer available on UV5.  On this platform TSC_ADJUST
+should not be reset by the kernel.
 
-Zero out that pointer after extracting the error code when this happens
-so that kfree() can do the right thing.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Mike Travis <mike.travis@hpe.com>
+Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20220406195149.228164-3-steve.wahl@hpe.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/tegra/gem.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/apic/x2apic_uv_x.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
-index 0063403ab5e1..7c7dd84e6db8 100644
---- a/drivers/gpu/drm/tegra/gem.c
-+++ b/drivers/gpu/drm/tegra/gem.c
-@@ -88,6 +88,7 @@ static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_
- 		if (IS_ERR(map->sgt)) {
- 			dma_buf_detach(buf, map->attach);
- 			err = PTR_ERR(map->sgt);
-+			map->sgt = NULL;
- 			goto free;
- 		}
+diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
+index f5a48e66e4f5..a6e9c2794ef5 100644
+--- a/arch/x86/kernel/apic/x2apic_uv_x.c
++++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+@@ -199,7 +199,13 @@ static void __init uv_tsc_check_sync(void)
+ 	int mmr_shift;
+ 	char *state;
  
+-	/* Different returns from different UV BIOS versions */
++	/* UV5 guarantees synced TSCs; do not zero TSC_ADJUST */
++	if (!is_uv(UV2|UV3|UV4)) {
++		mark_tsc_async_resets("UV5+");
++		return;
++	}
++
++	/* UV2,3,4, UV BIOS TSC sync state available */
+ 	mmr = uv_early_read_mmr(UVH_TSC_SYNC_MMR);
+ 	mmr_shift =
+ 		is_uv2_hub() ? UVH_TSC_SYNC_SHIFT_UV2K : UVH_TSC_SYNC_SHIFT;
 -- 
 2.35.1
 

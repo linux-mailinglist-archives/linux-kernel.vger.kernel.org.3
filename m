@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B02540FA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9CD540545
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355176AbiFGTLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        id S1346042AbiFGRX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351429AbiFGSQV (ORCPT
+        with ESMTP id S1345892AbiFGRTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C558C15FE05;
-        Tue,  7 Jun 2022 10:49:32 -0700 (PDT)
+        Tue, 7 Jun 2022 13:19:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A2310655B;
+        Tue,  7 Jun 2022 10:19:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A31D61732;
-        Tue,  7 Jun 2022 17:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C14C34115;
-        Tue,  7 Jun 2022 17:49:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B950CE2018;
+        Tue,  7 Jun 2022 17:19:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03389C385A5;
+        Tue,  7 Jun 2022 17:19:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624167;
-        bh=qoPbMV8oPXml9N7dYYeY2+90OzfkkdGHN6XcgA1S0kQ=;
+        s=korg; t=1654622380;
+        bh=h5AovMHNrphRh3GRAEmI+lNlr/lUNp2IIUmw0LBz/SQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wpcqDoEi0bn2NFKOADe4XcBWZDekxS3PyoE2Ys7xb6SD+aOB1dCQsOmRV0fd6KjOP
-         /uQYmH6zSuORYKxflmlvC1HQMjEpax5zLlrN492hgKnBC/k6kY729BoRsMVe+hgV3M
-         KICtGoxMZoHVdVFFhIukFjA+IlLC23uptQLTzIV4=
+        b=KgSdtulzd9mWwlBsAp5GU+AqOwNtD7T2fgI/26c6GNhyV4w/zsg68g5jn48QhYvcl
+         QRkshJWTijRCYmU6ra/XBWum3c/Hspa+0YSbR6HlcQetplqCD7oW+DqbY3IGQ1NJNA
+         UqUgNn/GgLZm0ZGAg58aFFQDGuKZDM2Z14xtQ3UE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 230/667] cpufreq: Fix possible race in cpufreq online error path
-Date:   Tue,  7 Jun 2022 18:58:15 +0200
-Message-Id: <20220607164941.686333872@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 039/452] ALSA: jack: Access input_dev under mutex
+Date:   Tue,  7 Jun 2022 18:58:16 +0200
+Message-Id: <20220607164909.713914601@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,89 +57,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
 
-[ Upstream commit f346e96267cd76175d6c201b40f770c0116a8a04 ]
+[ Upstream commit 1b6a6fc5280e97559287b61eade2d4b363e836f2 ]
 
-When cpufreq online fails, the policy->cpus mask is not cleared and
-policy->rwsem is released too early, so the driver can be invoked
-via the cpuinfo_cur_freq sysfs attribute while its ->offline() or
-->exit() callbacks are being run.
+It is possible when using ASoC that input_dev is unregistered while
+calling snd_jack_report, which causes NULL pointer dereference.
+In order to prevent this serialize access to input_dev using mutex lock.
 
-Take policy->clk as an example:
-
-static int cpufreq_online(unsigned int cpu)
-{
-  ...
-  // policy->cpus != 0 at this time
-  down_write(&policy->rwsem);
-  ret = cpufreq_add_dev_interface(policy);
-  up_write(&policy->rwsem);
-
-  return 0;
-
-out_destroy_policy:
-	for_each_cpu(j, policy->real_cpus)
-		remove_cpu_dev_symlink(policy, get_cpu_device(j));
-    up_write(&policy->rwsem);
-...
-out_exit_policy:
-  if (cpufreq_driver->exit)
-    cpufreq_driver->exit(policy);
-      clk_put(policy->clk);
-      // policy->clk is a wild pointer
-...
-                                    ^
-                                    |
-                            Another process access
-                            __cpufreq_get
-                              cpufreq_verify_current_freq
-                                cpufreq_generic_get
-                                  // acces wild pointer of policy->clk;
-                                    |
-                                    |
-out_offline_policy:                 |
-  cpufreq_policy_free(policy);      |
-    // deleted here, and will wait for no body reference
-    cpufreq_policy_put_kobj(policy);
-}
-
-Address this by modifying cpufreq_online() to release policy->rwsem
-in the error path after the driver callbacks have run and to clear
-policy->cpus before releasing the semaphore.
-
-Fixes: 7106e02baed4 ("cpufreq: release policy->rwsem on error")
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-[ rjw: Subject and changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Link: https://lore.kernel.org/r/20220412091628.3056922-1-amadeuszx.slawinski@linux.intel.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/cpufreq.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/sound/jack.h |  1 +
+ sound/core/jack.c    | 34 +++++++++++++++++++++++++++-------
+ 2 files changed, 28 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index cddf7e13c232..502245710ee0 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1528,8 +1528,6 @@ static int cpufreq_online(unsigned int cpu)
- 	for_each_cpu(j, policy->real_cpus)
- 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+diff --git a/include/sound/jack.h b/include/sound/jack.h
+index 9eb2b5ec1ec4..78f3619f3de9 100644
+--- a/include/sound/jack.h
++++ b/include/sound/jack.h
+@@ -62,6 +62,7 @@ struct snd_jack {
+ 	const char *id;
+ #ifdef CONFIG_SND_JACK_INPUT_DEV
+ 	struct input_dev *input_dev;
++	struct mutex input_dev_lock;
+ 	int registered;
+ 	int type;
+ 	char name[100];
+diff --git a/sound/core/jack.c b/sound/core/jack.c
+index dc2e06ae2414..45e28db6ea38 100644
+--- a/sound/core/jack.c
++++ b/sound/core/jack.c
+@@ -34,8 +34,11 @@ static int snd_jack_dev_disconnect(struct snd_device *device)
+ #ifdef CONFIG_SND_JACK_INPUT_DEV
+ 	struct snd_jack *jack = device->device_data;
  
--	up_write(&policy->rwsem);
--
- out_offline_policy:
- 	if (cpufreq_driver->offline)
- 		cpufreq_driver->offline(policy);
-@@ -1538,6 +1536,9 @@ static int cpufreq_online(unsigned int cpu)
- 	if (cpufreq_driver->exit)
- 		cpufreq_driver->exit(policy);
+-	if (!jack->input_dev)
++	mutex_lock(&jack->input_dev_lock);
++	if (!jack->input_dev) {
++		mutex_unlock(&jack->input_dev_lock);
+ 		return 0;
++	}
  
-+	cpumask_clear(policy->cpus);
-+	up_write(&policy->rwsem);
+ 	/* If the input device is registered with the input subsystem
+ 	 * then we need to use a different deallocator. */
+@@ -44,6 +47,7 @@ static int snd_jack_dev_disconnect(struct snd_device *device)
+ 	else
+ 		input_free_device(jack->input_dev);
+ 	jack->input_dev = NULL;
++	mutex_unlock(&jack->input_dev_lock);
+ #endif /* CONFIG_SND_JACK_INPUT_DEV */
+ 	return 0;
+ }
+@@ -82,8 +86,11 @@ static int snd_jack_dev_register(struct snd_device *device)
+ 	snprintf(jack->name, sizeof(jack->name), "%s %s",
+ 		 card->shortname, jack->id);
+ 
+-	if (!jack->input_dev)
++	mutex_lock(&jack->input_dev_lock);
++	if (!jack->input_dev) {
++		mutex_unlock(&jack->input_dev_lock);
+ 		return 0;
++	}
+ 
+ 	jack->input_dev->name = jack->name;
+ 
+@@ -108,6 +115,7 @@ static int snd_jack_dev_register(struct snd_device *device)
+ 	if (err == 0)
+ 		jack->registered = 1;
+ 
++	mutex_unlock(&jack->input_dev_lock);
+ 	return err;
+ }
+ #endif /* CONFIG_SND_JACK_INPUT_DEV */
+@@ -228,9 +236,11 @@ int snd_jack_new(struct snd_card *card, const char *id, int type,
+ 		return -ENOMEM;
+ 	}
+ 
+-	/* don't creat input device for phantom jack */
+-	if (!phantom_jack) {
+ #ifdef CONFIG_SND_JACK_INPUT_DEV
++	mutex_init(&jack->input_dev_lock);
 +
- out_free_policy:
- 	cpufreq_policy_free(policy);
- 	return ret;
++	/* don't create input device for phantom jack */
++	if (!phantom_jack) {
+ 		int i;
+ 
+ 		jack->input_dev = input_allocate_device();
+@@ -248,8 +258,8 @@ int snd_jack_new(struct snd_card *card, const char *id, int type,
+ 				input_set_capability(jack->input_dev, EV_SW,
+ 						     jack_switch_types[i]);
+ 
+-#endif /* CONFIG_SND_JACK_INPUT_DEV */
+ 	}
++#endif /* CONFIG_SND_JACK_INPUT_DEV */
+ 
+ 	err = snd_device_new(card, SNDRV_DEV_JACK, jack, &ops);
+ 	if (err < 0)
+@@ -289,10 +299,14 @@ EXPORT_SYMBOL(snd_jack_new);
+ void snd_jack_set_parent(struct snd_jack *jack, struct device *parent)
+ {
+ 	WARN_ON(jack->registered);
+-	if (!jack->input_dev)
++	mutex_lock(&jack->input_dev_lock);
++	if (!jack->input_dev) {
++		mutex_unlock(&jack->input_dev_lock);
+ 		return;
++	}
+ 
+ 	jack->input_dev->dev.parent = parent;
++	mutex_unlock(&jack->input_dev_lock);
+ }
+ EXPORT_SYMBOL(snd_jack_set_parent);
+ 
+@@ -340,6 +354,8 @@ EXPORT_SYMBOL(snd_jack_set_key);
+ 
+ /**
+  * snd_jack_report - Report the current status of a jack
++ * Note: This function uses mutexes and should be called from a
++ * context which can sleep (such as a workqueue).
+  *
+  * @jack:   The jack to report status for
+  * @status: The current status of the jack
+@@ -359,8 +375,11 @@ void snd_jack_report(struct snd_jack *jack, int status)
+ 					    status & jack_kctl->mask_bits);
+ 
+ #ifdef CONFIG_SND_JACK_INPUT_DEV
+-	if (!jack->input_dev)
++	mutex_lock(&jack->input_dev_lock);
++	if (!jack->input_dev) {
++		mutex_unlock(&jack->input_dev_lock);
+ 		return;
++	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(jack->key); i++) {
+ 		int testbit = SND_JACK_BTN_0 >> i;
+@@ -379,6 +398,7 @@ void snd_jack_report(struct snd_jack *jack, int status)
+ 	}
+ 
+ 	input_sync(jack->input_dev);
++	mutex_unlock(&jack->input_dev_lock);
+ #endif /* CONFIG_SND_JACK_INPUT_DEV */
+ }
+ EXPORT_SYMBOL(snd_jack_report);
 -- 
 2.35.1
 

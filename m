@@ -2,134 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5DD53FB11
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5536853FB12
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240887AbiFGKTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S240897AbiFGKTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240860AbiFGKTH (ORCPT
+        with ESMTP id S240905AbiFGKTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:19:07 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFE5C4EA4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:19:06 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id s12so26993060ejx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:19:06 -0700 (PDT)
+        Tue, 7 Jun 2022 06:19:30 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA39EBE92
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:19:27 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-30c2f288f13so170041327b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 03:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=DsUpTMVy3AnG06ab2HPPYE6VPm25Tedt2mleq6KKBcw=;
-        b=YdhxfcSLxgl5quF03WbNK6wkuNUs9PTKhWbsyexhtLgio/sN8KQsplvki7OGuZQPYc
-         AcIzCRNxBtlRZCge0qVA8w8H9d3sJJfP1QMWh2PFlN1dy11H08WSsj84SLYBPaRgL5OA
-         7zAJ8omIL4h/2a0YMd2ViN2Vd5VBEQtfWM0E0K4b6nfLtP5swa4Vub5/Gny4pBAyyjBT
-         6qshPumCh6ioxwGJv+Yq7O5TAZqL55uUH72fLKxDmjU/Z5wbXVDKe4U7BhbC1bDNG9pe
-         u42TTBR4w7VAaQJGiwhDYVFQUeWgzaehR/mdcsC598DKAZmFT95WINl3dxB4t7A5tHAa
-         jKgg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FL/UAS4bQAWgbLIprGtoSAT6rD1oU9uh25nWrLBVWyU=;
+        b=FS5YDsuS2FHiC5HezMtUXuVfIkymf1wecm4Gbym5lxt8lglm/3xmLFBaHtV6+HI5wB
+         e6e2DMmxKgKXGz1P0moSs0V/HADxcdP4Qe3YDHa6Fa32jQUrsWyN7i99lArY56MpYzxN
+         1S0SGq8dpUOIRJrlLXoKTRbMnLSkiQbp4aGRgCpQmO9atYkCtscbCZceo/a5uV5hVA0I
+         b2SBKSK6+sy56nj8Qn2FubBLEvBjanIDOAGr17lrOtgol440nkRAALCRqmm25HS4p2Vz
+         hYk+1vxm/b+xo/rvs/VQZ9ntDCdiITpFp+sCk0HFXn6n09QOHCQ6QrUUuHyU/YkQQRxr
+         v70w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=DsUpTMVy3AnG06ab2HPPYE6VPm25Tedt2mleq6KKBcw=;
-        b=prGhhfYOO77BIRRbSS0wXchCPbo2RTs6eRKCKtLHbAtifzFhrLm1Z/b+g8YldhJSuo
-         YxQQD/c0AdibUXbSlasGb8es+4q3rgoDynmtkukyRWozCESzttYNTv/2K8FshMpNCofG
-         PWvERXs8pDjvHUInfLIAJxJ/Lv6ht6LC4BGtv5dDvlTIVDPOLR1vjRNlxFLUFWahzIqZ
-         PMbNAOoMmSwMWeUxxml8VybX3/CVdQoJFjhPGc2hEE7RC3GbumMH9aJpnPBvA5mOtGiq
-         E76a3VFWOvmcMcVg8iOAVQwuNJLnC84CA6rS3TvhRcjoe5XpD0NsUFhEcQSKd/V/GxM6
-         aKng==
-X-Gm-Message-State: AOAM531Ac4K4tSL2oCK/guqk5kMMh6zv4f0n508zXmyCdSPXEJ7bVSFi
-        w5/7GE5r7Y5MzmVrZY8Wvy6dHoQuxxhKdAzHbm0=
-X-Google-Smtp-Source: ABdhPJwZYtPL5KrJIJE40P8FImp7osFHq7HbJIZpCxJItPN9iWqz/KSZT0c9XlQ7sN/FgARqpks279rEple0xXc+icE=
-X-Received: by 2002:a17:906:9b96:b0:711:d21c:1b0b with SMTP id
- dd22-20020a1709069b9600b00711d21c1b0bmr7843778ejc.365.1654597145678; Tue, 07
- Jun 2022 03:19:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FL/UAS4bQAWgbLIprGtoSAT6rD1oU9uh25nWrLBVWyU=;
+        b=dbt4NaL8TGJvqYQaB039+3IkskuT3xIon+IxaFULWMHgnrb2+lR3WrmLpzMsI78ZAo
+         FXSRHiwUs+LFJtFLrdpXspKJoQixrav78anF597AEyhWGdpKO3uTsocs3WNcQaDegfeO
+         wGIGlxzT6ZmKgLURefniefwRthuXguXvMxyp8ykQ8oPfEgWLS+bGQ8/Dn5z5EdIitZdT
+         vLkvDwWTxcZyr+2hu7VQIrNuFFAGWKXHum+D3hLVo3wwDe7+PwTS5DxJbKSfWWGnXUQ6
+         wKqEwmH9OY6h0osrB2BWX+O4h1TqAnrdEtdjQULoP/ApMlydVLOkCeqaOjuPBpKvDxBr
+         X+aQ==
+X-Gm-Message-State: AOAM533U7Zz8/TnKwWzZ37AH4H0GjC2TuSazm3ZmK6Bxb7usJl/1X67h
+        A80e/7G+q3RV+zbfVUdoFrVOkY/E0pdaxwUybk7R958rz75WWQ==
+X-Google-Smtp-Source: ABdhPJwTlfX4/yt38cyd8nB1rH50UsF611jeTqSE+Vd2N9PXULgwLicRFox22IGpZU1L9ojt9wHni/ekr8MGO/x0fZI=
+X-Received: by 2002:a81:6357:0:b0:30f:dbe5:b8ff with SMTP id
+ x84-20020a816357000000b0030fdbe5b8ffmr28720416ywb.67.1654597166370; Tue, 07
+ Jun 2022 03:19:26 -0700 (PDT)
 MIME-Version: 1.0
-Sender: mrsaijheidi7@gmail.com
-Received: by 2002:a50:2490:0:0:0:0:0 with HTTP; Tue, 7 Jun 2022 03:19:05 -0700 (PDT)
-From:   Mrs Lila Haber <mrslilahabe2016@gmail.com>
-Date:   Tue, 7 Jun 2022 10:19:05 +0000
-X-Google-Sender-Auth: e9qzvkfdVBGrMR5PhYEWJSv55J8
-Message-ID: <CADXrVCo0h77ibwugLsci8EMsp3p+FjOCO5f_G_HKvYciFZpJBg@mail.gmail.com>
-Subject: Dear Child of God
-To:     undisclosed-recipients:;
+References: <20220523155140.2878563-1-vdonnefort@google.com>
+ <20220523155140.2878563-3-vdonnefort@google.com> <72bd6945-c167-65ba-6f81-fad2768972dc@arm.com>
+ <Yp3JZIokwFxT+X6M@google.com> <CAKfTPtD6TpaJoz37Xv2_1Cc8ij_XGFjDTwA+TvN3ddiASkYc4g@mail.gmail.com>
+ <Yp8ico+B8USmi7fY@google.com>
+In-Reply-To: <Yp8ico+B8USmi7fY@google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 7 Jun 2022 12:19:14 +0200
+Message-ID: <CAKfTPtC1OQVLpHm3Qmj0bD0fZKp76DQf9tNruNMG57u4yv42sQ@mail.gmail.com>
+Subject: Re: [PATCH v9 2/7] sched/fair: Decay task PELT values during wakeup migration
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,
-        MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:641 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7579]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsaijheidi7[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsaijheidi7[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  1.6 RISK_FREE No risk!
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Child of God,
+On Tue, 7 Jun 2022 at 12:03, Vincent Donnefort <vdonnefort@google.com> wrote:
+>
+> [...]
+>
+> > > >
+> > > > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > > > > index bf4a0ec98678..97bc26e5c8af 100644
+> > > > > --- a/kernel/sched/sched.h
+> > > > > +++ b/kernel/sched/sched.h
+> > > > > @@ -648,6 +648,10 @@ struct cfs_rq {
+> > > > >     int                     runtime_enabled;
+> > > > >     s64                     runtime_remaining;
+> > > > >
+> > > > > +   u64                     throttled_pelt_idle;
+> > > > > +#ifndef CONFIG_64BIT
+> > > > > +   u64                     throttled_pelt_idle_copy;
+> > > > > +#endif
+> > > > >     u64                     throttled_clock;
+> > > > >     u64                     throttled_clock_pelt;
+> > > > >     u64                     throttled_clock_pelt_time;
+> > > > > @@ -1020,6 +1024,12 @@ struct rq {
+> > > > >     u64                     clock_task ____cacheline_aligned;
+> > > > >     u64                     clock_pelt;
+> > > > >     unsigned long           lost_idle_time;
+> > > > > +   u64                     clock_pelt_idle;
+> > > > > +   u64                     enter_idle;
+> > > > > +#ifndef CONFIG_64BIT
+> > > > > +   u64                     clock_pelt_idle_copy;
+> > > > > +   u64                     enter_idle_copy;
+> > > > > +#endif
+> > > > >
+> > > > >     atomic_t                nr_iowait;
+> > > >
+> > > > `throttled_pelt_idle`, `clock_pelt_idle` and `enter_idle` are clock
+> > > > snapshots when cfs_rq resp. rq go idle. But the naming does not really
+> > > > show this relation. And this makes reading those equations rather difficult.
+> > > >
+> > > > What about something like `throttled_clock_pelt_time_enter_idle`,
+> > > > `clock_pelt_enter_idle`, `clock_enter_idle`? Especially the first one is
+> > > > too long but something which shows that those are clock snapshots when
+> > > > enter idle would IMHO augment readability in migrate_se_pelt_lag().
+> > >
+> > > What if I drop the "enter"?
+> > >
+> > >  clock_idle;
+> > >  clock_pelt_idle;
+> > >  throttled_clock_pelt_time_idle;
+> >
+> > and you can even remove the _time for throttled_clock_pelt_idle
+> >
+>
+> Hum, "throttled_clock_pelt" already exists, while what we really snapshot is
+> "throttled_clock_pelt_time".
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day and compliments of the
-seasons, i know this letter will definitely come to you as a huge
-surprise, but I implore you to take the time to go through it
-carefully as the decision you make will go off a long way to determine
-my future and continued existence. I am Mrs Lila Haber aging widow of
-57 years old suffering from long time illness.I have some funds I
-inherited from my late husband, the sum of (7.2Million Dollars) and I
-needed a very honest and God fearing who can withdraw this money then
-use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
-CHARITY WORKS. I found your email address from the internet after
-honest prayers to the LORD to bring me a helper and i decided to
-contact you if you may be willing and interested to handle these trust
-funds in good faith before anything happens to me.
-
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the SECURITY COMPANY issued
-to me as next of kin for immediate transfer of the money to your
-account in your country, to start the good work of God, I want you to
-use the 25/percent of the total amount to help yourself in doing the
-project. I am desperately in keen need of assistance and I have
-summoned up courage to contact you for this task, you must not fail me
-and the millions of the poor people in our todays WORLD. This is no
-stolen money and there are no dangers involved,100% RISK FREE with
-full legal proof. Please if you would be able to use the funds for the
-Charity works kindly let me know immediately.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-
-Please kindly respond quickly for further details.
-
-Warmest Regards,
-Mrs Lila Haber
+What is snapshot is throttled_clock_pelt when entering idle so my
+proposal of "throttled_clock_pelt_idle"
+throttled_clock_pelt_idle doesn't exist and reflect  that it's
+throttled_clock_pelt when cfs_rq enter idle just like clock_pelt_idle
+reflect clock_pelt when entering idle

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B4B541007
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3976E540FFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355398AbiFGTPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S1355468AbiFGTQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352553AbiFGS0R (ORCPT
+        with ESMTP id S1352734AbiFGS0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:26:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891CD16F91D;
-        Tue,  7 Jun 2022 10:54:55 -0700 (PDT)
+        Tue, 7 Jun 2022 14:26:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D407617064E;
+        Tue,  7 Jun 2022 10:54:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3D276CE2422;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ADB1611FE;
+        Tue,  7 Jun 2022 17:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C20C3411F;
         Tue,  7 Jun 2022 17:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57053C3411C;
-        Tue,  7 Jun 2022 17:54:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624473;
-        bh=PGpBVVFXYWAfjYtRkA7TYJ3yh3f7UZ35lMQ9PxdCqxo=;
+        s=korg; t=1654624476;
+        bh=5xT3StTozomk97q9GLO+zUdJSdBYW8t8IqqxoDMYyhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWPETTRJmu7Ot8nnJsMH8nXwvy50aoxWBtxCaX9htEO7LGSfN/exiP5sa8KoKYtTd
-         G6seW6XdpmN1mdcslO2gMWdOlLRR/xp8qEWESEU55ipvzpkqckz/e7I/8K9mRgt+Db
-         ETddn7/TKKa/AA0P25xeTI4AZFNU1926EjrxbAYY=
+        b=lOAlYUpazYFejpVc/6MUyZLJag2fCfEAVlBASHU7+6zwn8WMdo9LYNc1WqmDsX0P0
+         GLIqsRwT0F/Fqd4Y+v0rOTXUmBCE6ZeVmh2CLb6mtsugafEmEv6j3Ri78X2C+iH2Td
+         XJKfzI2q3L5e+NMGaDfRORCW17pSqUOHaPYekdbU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Cai Huoqing <caihuoqing@baidu.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 339/667] media: i2c: ov5648: fix wrong pointer passed to IS_ERR() and PTR_ERR()
-Date:   Tue,  7 Jun 2022 19:00:04 +0200
-Message-Id: <20220607164944.931757902@linuxfoundation.org>
+Subject: [PATCH 5.15 340/667] media: staging: media: rkvdec: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Tue,  7 Jun 2022 19:00:05 +0200
+Message-Id: <20220607164944.960879411@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -57,38 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Cai Huoqing <caihuoqing@baidu.com>
 
-[ Upstream commit a6dd5265c21c28d0a782befe41a97c347e78f22f ]
+[ Upstream commit 5a3683d60e56f4faa9552d3efafd87ef106dd393 ]
 
-IS_ERR() and PTR_ERR() use wrong pointer, it should be
-sensor->dovdd, fix it.
+Use the devm_platform_ioremap_resource() helper instead of
+calling platform_get_resource() and devm_ioremap_resource()
+separately
 
-Fixes: e43ccb0a045f ("media: i2c: Add support for the OV5648 image sensor")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov5648.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/ov5648.c b/drivers/media/i2c/ov5648.c
-index ef8b52dc9401..bb3666fc5618 100644
---- a/drivers/media/i2c/ov5648.c
-+++ b/drivers/media/i2c/ov5648.c
-@@ -2498,9 +2498,9 @@ static int ov5648_probe(struct i2c_client *client)
+diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+index 3f3f96488d74..4fd4a2907da7 100644
+--- a/drivers/staging/media/rkvdec/rkvdec.c
++++ b/drivers/staging/media/rkvdec/rkvdec.c
+@@ -967,7 +967,6 @@ static const char * const rkvdec_clk_names[] = {
+ static int rkvdec_probe(struct platform_device *pdev)
+ {
+ 	struct rkvdec_dev *rkvdec;
+-	struct resource *res;
+ 	unsigned int i;
+ 	int ret, irq;
  
- 	/* DOVDD: digital I/O */
- 	sensor->dovdd = devm_regulator_get(dev, "dovdd");
--	if (IS_ERR(sensor->dvdd)) {
-+	if (IS_ERR(sensor->dovdd)) {
- 		dev_err(dev, "cannot get DOVDD (digital I/O) regulator\n");
--		ret = PTR_ERR(sensor->dvdd);
-+		ret = PTR_ERR(sensor->dovdd);
- 		goto error_endpoint;
- 	}
+@@ -999,8 +998,7 @@ static int rkvdec_probe(struct platform_device *pdev)
+ 	 */
+ 	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	rkvdec->regs = devm_ioremap_resource(&pdev->dev, res);
++	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rkvdec->regs))
+ 		return PTR_ERR(rkvdec->regs);
  
 -- 
 2.35.1

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08065410F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D420154073C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356015AbiFGTbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S1348126AbiFGRor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351738AbiFGSjD (ORCPT
+        with ESMTP id S1348053AbiFGRba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:39:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9CD18484D;
-        Tue,  7 Jun 2022 10:58:27 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1B411E1F2;
+        Tue,  7 Jun 2022 10:29:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FDD3617A7;
-        Tue,  7 Jun 2022 17:58:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D48AC34119;
-        Tue,  7 Jun 2022 17:58:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6121CB822B5;
+        Tue,  7 Jun 2022 17:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C075EC34115;
+        Tue,  7 Jun 2022 17:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624698;
-        bh=2jA/GTMKTJHBY2Oc4pOOiy4bZGaqPB82S9nyCCUHw2Y=;
+        s=korg; t=1654622947;
+        bh=5/vVnNusKQ1c6xBERbmSxaQIa1cZza04t79AM+OyS9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t9ZvgkFRs15gHm+zASOewDHlcIe/4ugLPehS2on8G0VTqWNrCmK4wNVWLV7wkGtHA
-         FOI++PMNesy0Vc87lwE7Q6o90r27sRwZihdAbZaFcNMSXMDHpQ57An9g2xRb2rHGeg
-         UkM8PgsCzkOZQPHSSm29S2nONCcZD6QExAX5tGH4=
+        b=FUxS53Kpemxi5DamJ6+HqlDSgUAYyayQu3KzGRK1Te/mkEc5xPtVUyxfteI3hER15
+         AXLnLa/xHcZ2AMnekapJ1Q/7GD46q44BZ3gg6aC9G+7hB93YT9cfTtN+iboMvruMif
+         TZ4iHWen9nEFFEFAu7YGANJf7ciTmIbmDjSxFshE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thorsten Scherer <t.scherer@eckelmann.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 394/667] ARM: dts: ci4x10: Adapt to changes in imx6qdl.dtsi regarding fec clocks
-Date:   Tue,  7 Jun 2022 19:00:59 +0200
-Message-Id: <20220607164946.562434947@linuxfoundation.org>
+Subject: [PATCH 5.10 203/452] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
+Date:   Tue,  7 Jun 2022 19:01:00 +0200
+Message-Id: <20220607164914.613882100@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thorsten Scherer <t.scherer@eckelmann.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 3d397a1277853498e8b7b305f2610881357c033f ]
+[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
 
-Commit f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk
-support") added another item to the list of clocks for the fec
-device. As imx6dl-eckelmann-ci4x10.dts only overwrites clocks,
-but not clock-names this resulted in an inconsistency with
-clocks having one item more than clock-names.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
 
-Also overwrite clock-names with the same value as in
-imx6qdl.dtsi. This is a no-op today, but prevents similar
-inconsistencies if the soc file will be changed in a similar way
-in the future.
-
-Signed-off-by: Thorsten Scherer <t.scherer@eckelmann.de>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Fixes: f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk support")
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ sound/soc/mxs/mxs-saif.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-index b4a9523e325b..864dc5018451 100644
---- a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-+++ b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-@@ -297,7 +297,11 @@
- 	phy-mode = "rmii";
- 	phy-reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;
- 	phy-handle = <&phy>;
--	clocks = <&clks IMX6QDL_CLK_ENET>, <&clks IMX6QDL_CLK_ENET>, <&rmii_clk>;
-+	clocks = <&clks IMX6QDL_CLK_ENET>,
-+		 <&clks IMX6QDL_CLK_ENET>,
-+		 <&rmii_clk>,
-+		 <&clks IMX6QDL_CLK_ENET_REF>;
-+	clock-names = "ipg", "ahb", "ptp", "enet_out";
- 	status = "okay";
- 
- 	mdio {
+diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
+index f2eda81985e2..d87ac26999cf 100644
+--- a/sound/soc/mxs/mxs-saif.c
++++ b/sound/soc/mxs/mxs-saif.c
+@@ -764,6 +764,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
+ 		saif->master_id = saif->id;
+ 	} else {
+ 		ret = of_alias_get_id(master, "saif");
++		of_node_put(master);
+ 		if (ret < 0)
+ 			return ret;
+ 		else
 -- 
 2.35.1
 

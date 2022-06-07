@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6485E53F7F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4D453F7F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238079AbiFGIMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S238086AbiFGIMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238080AbiFGILx (ORCPT
+        with ESMTP id S238089AbiFGIMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:11:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880A4CE5C9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654589509; x=1686125509;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JZEVs2K/v9KhGJzmJ5w/yVJ6/pRAy4+qcPit428hTjg=;
-  b=DXVK30ys9ZYhV153/0nt2Jx13ZIjHVsqg3RykTc8kj68wyeLVNry529u
-   FZ9xKVVB4+D2XKr9KPH5+Oq7KJBEQigr5TNpWOxcMRApMnzgXYPduQ4bi
-   Fv0UgEV+WYw61LjE6w2QzaSMdGlhbGRnuxgavyhxQ1V0IHH+7KakxDLpo
-   0buBbMK0KaR4jd0F9H/giAlk6xKiH2cDqAXD9l0YGl0wdHJWC8pvv+DZX
-   2BBixzust1+J4Po2b7mG3aWzt+JG+NxHvAvvX9FgXVmIMGcqLw9UY7v5b
-   yjvLAj296fu5CpgdvlIDdfir5Wx5BfncN7eyQNyMm5pZ4YtHFisRQBThS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="363055602"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="363055602"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 01:11:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="709387738"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 07 Jun 2022 01:11:47 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyUJW-000DUj-UN;
-        Tue, 07 Jun 2022 08:11:46 +0000
-Date:   Tue, 7 Jun 2022 16:11:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-kernel@vger.kernel.org
-Subject: [djwong-xfs:vectorized-scrub 143/367]
- fs/xfs/libxfs/xfs_rmap.c:778:1: warning: declaration does not declare
- anything
-Message-ID: <202206071624.PPgEhxOl-lkp@intel.com>
+        Tue, 7 Jun 2022 04:12:16 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0B4C56;
+        Tue,  7 Jun 2022 01:12:11 -0700 (PDT)
+X-UUID: 8fb8eaf96f42466e8d9402f987ab23a8-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:8559b49c-3dcb-469a-9da5-0f36edc6332d,OB:0,LO
+        B:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:8559b49c-3dcb-469a-9da5-0f36edc6332d,OB:0,LOB:
+        20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:efe1e9e4-2ba2-4dc1-b6c5-11feb6c769e0,C
+        OID:632aa7625d2f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 8fb8eaf96f42466e8d9402f987ab23a8-20220607
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1791805342; Tue, 07 Jun 2022 16:12:05 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 16:12:04 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 16:12:04 +0800
+Message-ID: <ff858934b622e6716dd48bf02d4d57f19358b805.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 16:12:04 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,40 +82,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git vectorized-scrub
-head:   879e09570c469d3320e25aa7f625ded1a2f5c24e
-commit: c4da1521e40e5b2f1094f9d9cad217c773f5641c [143/367] xfs: hook live rmap operations during a repair operation
-config: hexagon-buildonly-randconfig-r008-20220605 (https://download.01.org/0day-ci/archive/20220607/202206071624.PPgEhxOl-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/commit/?id=c4da1521e40e5b2f1094f9d9cad217c773f5641c
-        git remote add djwong-xfs https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git
-        git fetch --no-tags djwong-xfs vectorized-scrub
-        git checkout c4da1521e40e5b2f1094f9d9cad217c773f5641c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/xfs/
+Hi, Rex:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
 
-All warnings (new ones prefixed by >>):
+[snip]
 
->> fs/xfs/libxfs/xfs_rmap.c:778:1: warning: declaration does not declare anything [-Wmissing-declarations]
-   static XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
-   ^~~~~~
-   1 warning generated.
+> +
+> +static int mtk_dp_train_start(struct mtk_dp *mtk_dp)
+> +{
+> +	int ret = 0;
+> +	u8 lane_count;
+> +	u8 link_rate;
+> +	u8 train_limit;
+> +	u8 max_link_rate;
+> +	u8 plug_wait;
+> +
+> +	for (plug_wait = 7; !mtk_dp_plug_state(mtk_dp) && plug_wait >
+> 0;
+> +	     --plug_wait)
+> +		/* Avoid short pulses on the HPD isr */
+> +		usleep_range(1000, 5000);
+> +	if (plug_wait == 0) {
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_DPIDLE;
 
+After return, mtk_dp->train_state would be set to
+MTK_DP_TRAIN_STATE_DPIDLE, so drop this.
 
-vim +778 fs/xfs/libxfs/xfs_rmap.c
+> +		return -ENODEV;
+> +	}
+> +
+> +	link_rate = mtk_dp->rx_cap[1];
+> +	lane_count = mtk_dp->rx_cap[2] & 0x1F;
+> +
+> +	mtk_dp->train_info.link_rate = min(mtk_dp->max_linkrate,
+> link_rate);
+> +	mtk_dp->train_info.lane_count = min(mtk_dp->max_lanes,
+> lane_count);
+> +	link_rate = mtk_dp->train_info.link_rate;
+> +	lane_count = mtk_dp->train_info.lane_count;
+> +
+> +	switch (link_rate) {
+> +	case MTK_DP_LINKRATE_RBR:
+> +	case MTK_DP_LINKRATE_HBR:
+> +	case MTK_DP_LINKRATE_HBR2:
+> +	case MTK_DP_LINKRATE_HBR25:
+> +	case MTK_DP_LINKRATE_HBR3:
+> +		break;
+> +	default:
+> +		mtk_dp->train_info.link_rate = MTK_DP_LINKRATE_HBR3;
+> +		break;
+> +	};
+> +
+> +	max_link_rate = link_rate;
+> +	for (train_limit = 6; train_limit > 0; train_limit--) {
+> +		mtk_dp->train_info.cr_done = false;
+> +		mtk_dp->train_info.eq_done = false;
+> +
+> +		mtk_dp_train_change_mode(mtk_dp);
+> +		ret = mtk_dp_train_flow(mtk_dp, link_rate, lane_count);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (!mtk_dp->train_info.cr_done) {
+> +			switch (link_rate) {
+> +			case MTK_DP_LINKRATE_RBR:
+> +				lane_count = lane_count / 2;
+> +				link_rate = max_link_rate;
+> +				if (lane_count == 0) {
+> +					mtk_dp->train_state =
+> +						MTK_DP_TRAIN_STATE_DPID
+> LE;
 
-   776	
-   777	#ifdef CONFIG_XFS_LIVE_HOOKS
- > 778	static XFS_HOOKS_SWITCH_DEFINE(xfs_rmap_hooks_switch);
-   779	
+After return, mtk_dp->train_state would be set to
+MTK_DP_TRAIN_STATE_DPIDLE, so drop this.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+CK
+
+> +					return -EIO;
+> +				}
+> +				break;
+> +			case MTK_DP_LINKRATE_HBR:
+> +				link_rate = MTK_DP_LINKRATE_RBR;
+> +				break;
+> +			case MTK_DP_LINKRATE_HBR2:
+> +				link_rate = MTK_DP_LINKRATE_HBR;
+> +				break;
+> +			case MTK_DP_LINKRATE_HBR3:
+> +				link_rate = MTK_DP_LINKRATE_HBR2;
+> +				break;
+> +			default:
+> +				return -EINVAL;
+> +			};
+> +		} else if (!mtk_dp->train_info.eq_done) {
+> +			if (lane_count == 0)
+> +				return -EIO;
+> +
+> +			lane_count /= 2;
+> +		} else {
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (train_limit == 0)
+> +		return -ETIMEDOUT;
+> +
+> +	return 0;
+> +}
+> +
+

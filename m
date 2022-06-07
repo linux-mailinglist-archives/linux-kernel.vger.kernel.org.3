@@ -2,153 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D2C53F7C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0B353F7E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbiFGIBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        id S238044AbiFGIH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiFGIBe (ORCPT
+        with ESMTP id S238003AbiFGIH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:01:34 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE1ECC148;
-        Tue,  7 Jun 2022 01:01:30 -0700 (PDT)
-X-UUID: d742e5a3f56f4ec89160624d0e463bdc-20220607
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:5f35ce3b-6f41-4603-a32d-3e26e3b75624,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:5f35ce3b-6f41-4603-a32d-3e26e3b75624,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:69b7737e-c8dc-403a-96e8-6237210dceee,C
-        OID:a9c23a514e78,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: d742e5a3f56f4ec89160624d0e463bdc-20220607
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 298287096; Tue, 07 Jun 2022 16:01:27 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 7 Jun 2022 16:01:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 7 Jun 2022 16:01:25 +0800
-Message-ID: <387fc4f9a65b87467fbff3878ad371bee4552e6e.camel@mediatek.com>
-Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
-        Jitao shi <jitao.shi@mediatek.com>
-CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
-Date:   Tue, 7 Jun 2022 16:01:25 +0800
-In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
-References: <20220523104758.29531-1-granquet@baylibre.com>
-         <20220523104758.29531-19-granquet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 7 Jun 2022 04:07:26 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7616BA441;
+        Tue,  7 Jun 2022 01:07:21 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id y15so12091257qtx.4;
+        Tue, 07 Jun 2022 01:07:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8nGjrTIeofqRJeA4GWWs8vd7hIjiLENiB/8ryQPveu0=;
+        b=DNFR9EZhTaflmlytk8SVGW6fA2NnqGMqXps0BnhcUwhC/n5/VEtkkJzeMdLt3MOJyE
+         zLUHvSHYxLkwaHOe9rQlRX1vRNg9MGLx52IJSSwHszhnCC4+1JLC1w/oJvfb1Evu0Qwn
+         gb6EpEDW3JbmcJ/omJ/06A4FOWkN7Jxo8c4RZmNaKawHw5eES+GF3pH15l6HKojigZGI
+         /vqGO8Bbqo8OeSpBQSs+ETEjuFjKasu69E0QexkuKFWf9zCgYr6yEhIQlTX+QEd6pTY7
+         CtCbVNVwp43RUfztCBpbWIkIlz3qh+8OUVzDaPA6yqW82EwuRaKmm4mPsFvuQpVDitzW
+         xI2g==
+X-Gm-Message-State: AOAM532FbqfMQV7cjAi+3ZX4pRMf8wwg8hIbff6MbLDMDbR/YzB/jFaT
+        EE7vEp/eYbeknYnz0VNASx4Afa5D72+qlA==
+X-Google-Smtp-Source: ABdhPJwTs8QYYzk92z2c+3mHSnKJgN2imVXGdT70UsjlTeykYQrug7B83FJNbMjSiT5ljpVjaVsbQw==
+X-Received: by 2002:ac8:4e82:0:b0:304:efb6:6197 with SMTP id 2-20020ac84e82000000b00304efb66197mr5317481qtp.224.1654589240349;
+        Tue, 07 Jun 2022 01:07:20 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05620a289300b006a6ab259261sm7903280qkp.29.2022.06.07.01.07.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 01:07:20 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-30ec2aa3b6cso166597467b3.11;
+        Tue, 07 Jun 2022 01:07:19 -0700 (PDT)
+X-Received: by 2002:a81:4811:0:b0:30c:8021:4690 with SMTP id
+ v17-20020a814811000000b0030c80214690mr30121193ywa.47.1654589239317; Tue, 07
+ Jun 2022 01:07:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1654529011.git.mchehab@kernel.org> <39b24f99f5b71eb5ac025b438b7eb2a0df2258a1.1654529011.git.mchehab@kernel.org>
+In-Reply-To: <39b24f99f5b71eb5ac025b438b7eb2a0df2258a1.1654529011.git.mchehab@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Jun 2022 10:07:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUPfOjVWkDgthbhxrgyfb8oEjRh61xWxL7=HX0PfCxpHA@mail.gmail.com>
+Message-ID: <CAMuHMdUPfOjVWkDgthbhxrgyfb8oEjRh61xWxL7=HX0PfCxpHA@mail.gmail.com>
+Subject: Re: [PATCH 23/23] arch: m68k: q40: README: drop references to IDE driver
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+Hi Mauro,
 
-On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
-> 
-> It supports the mt8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+Thanks for your patch!
+
+On Mon, Jun 6, 2022 at 5:25 PM Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
+> Since IDE support was deleted by Christoph Hellwig <hch@lst.de>,
+> Jun 16 2021, drop the left-over from README file.
+
+This is only half of the story, cfr. commit 44b1fbc0f5f30e66 ("m68k/q40:
+Replace q40ide driver with pata_falcon and falconide").
+
+> Fixes: b7fb14d3ac63 ("ide: remove the legacy ide driver")
+
+Hence this Fixes tag should be dropped...
+
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 > ---
+>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
+>
+>  arch/m68k/q40/README | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/arch/m68k/q40/README b/arch/m68k/q40/README
+> index a4991d2d8af6..4db6db54d57a 100644
+> --- a/arch/m68k/q40/README
+> +++ b/arch/m68k/q40/README
+> @@ -30,9 +30,7 @@ drivers used by the Q40, apart from the very obvious (console etc.):
+>                      genrtc.c           # RTC
+>                 char/joystick/*         # most of this should work, not
+>                                         # in default config.in
+> -               block/q40ide.c          # startup for ide
+> -                     ide*              # see Documentation/ide/ide.rst
 
-[snip]
+... and the above should be replaced by ata/pata_falcon.c.
+There doesn't seem to be an ATA replacement for Documentation/ide/ide.rst?
 
-> +
-> +static void mtk_dp_state_handler(struct mtk_dp *mtk_dp)
-> +{
-> +	switch (mtk_dp->state) {
+> -                     floppy.c          # normal PC driver, DMA emu in asm/floppy.h
+> +               block/floppy.c          # normal PC driver, DMA emu in asm/floppy.h
+>                                         # and arch/m68k/kernel/entry.S
+>                                         # see drivers/block/README.fd
+>                 net/ne.c
 
-Does mtk_dp->state has any relation with mtk_dp->train_state. If yes,
-mix mtk_dp->state and mtk_dp->train_state into one state. If no, move
-calling mtk_dp_state_handler() out of mtk_dp_train_handler().
+Gr{oetje,eeting}s,
 
-Regards,
-CK
+                        Geert
 
-> +	case MTK_DP_STATE_INITIAL:
-> +		mtk_dp_video_mute(mtk_dp, true);
-> +		mtk_dp->state = MTK_DP_STATE_IDLE;
-> +		break;
-> +
-> +	case MTK_DP_STATE_IDLE:
-> +		if (mtk_dp->train_state == MTK_DP_TRAIN_STATE_NORMAL)
-> +			mtk_dp->state = MTK_DP_STATE_PREPARE;
-> +		break;
-> +
-> +	case MTK_DP_STATE_PREPARE:
-> +		mtk_dp_video_config(mtk_dp);
-> +		mtk_dp_video_enable(mtk_dp, true);
-> +
-> +		mtk_dp->state = MTK_DP_STATE_NORMAL;
-> +		break;
-> +
-> +	case MTK_DP_STATE_NORMAL:
-> +		if (mtk_dp->train_state != MTK_DP_TRAIN_STATE_NORMAL) {
-> +			mtk_dp_video_mute(mtk_dp, true);
-> +			mtk_dp->state = MTK_DP_STATE_IDLE;
-> +		}
-> +		break;
-> +
-> +	default:
-> +		break;
-> +	}
-> +}
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

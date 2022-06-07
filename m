@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AA5541420
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D3A540999
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359451AbiFGUNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S1350220AbiFGSKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356072AbiFGTRz (ORCPT
+        with ESMTP id S1349856AbiFGRvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:17:55 -0400
+        Tue, 7 Jun 2022 13:51:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AD139B87;
-        Tue,  7 Jun 2022 11:08:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05EC13F1F5;
+        Tue,  7 Jun 2022 10:39:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29FD3B82340;
-        Tue,  7 Jun 2022 18:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC36C385A5;
-        Tue,  7 Jun 2022 18:08:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3383BB81F38;
+        Tue,  7 Jun 2022 17:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81488C34115;
+        Tue,  7 Jun 2022 17:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625288;
-        bh=/nt2azIDU63waHlYWHq5Z5MohAVPxSo0yJVmg3AdC48=;
+        s=korg; t=1654623502;
+        bh=eZLploCWWHaF/e5TfqlvMEdXoL+bQn3oW0qOysb6+OM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X5WT5HwK7qt1jFpoSQKAARZnscqo0rE0bCqDx2907rR9lsRGM3K9OSI2bLUN3H/Yd
-         2JtyV7KwjVQStOoZiap49mSjXHtJLY4xl1ByZ2NkZosy1YqnNL0DsuGVKHoJQFCOTN
-         FUMuZo3DBsxIIIMns7QBAIcBgqKeCtj8fsCSyAF0=
+        b=WIIBfbjhPoRSg/hgIhW9/yxODX/jRAytPCEM+fwndQDHqF8yuDP60nbWNS2g3+Scd
+         DD8xVrvIwq2L/WOQfKv1iy0gLkRfmNIh0Q2czbeJiIVOptyW73na6xWAHse1UvdcEL
+         F0HwPGYxTzRikGd8paTSfFwzMZjxbvWOoIH7gusA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.15 633/667] serial: pch: dont overwrite xmit->buf[0] by x_char
+        "yukuai (C)" <yukuai3@huawei.com>, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 441/452] bfq: Avoid merging queues with different parents
 Date:   Tue,  7 Jun 2022 19:04:58 +0200
-Message-Id: <20220607164953.649991079@linuxfoundation.org>
+Message-Id: <20220607164921.704862201@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,79 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Jan Kara <jack@suse.cz>
 
-commit d9f3af4fbb1d955bbaf872d9e76502f6e3e803cb upstream.
+commit c1cee4ab36acef271be9101590756ed0c0c374d9 upstream.
 
-When x_char is to be sent, the TX path overwrites whatever is in the
-circular buffer at offset 0 with x_char and sends it using
-pch_uart_hal_write(). I don't understand how this was supposed to work
-if xmit->buf[0] already contained some character. It must have been
-lost.
+It can happen that the parent of a bfqq changes between the moment we
+decide two queues are worth to merge (and set bic->stable_merge_bfqq)
+and the moment bfq_setup_merge() is called. This can happen e.g. because
+the process submitted IO for a different cgroup and thus bfqq got
+reparented. It can even happen that the bfqq we are merging with has
+parent cgroup that is already offline and going to be destroyed in which
+case the merge can lead to use-after-free issues such as:
 
-Remove this whole pop_tx_x() concept and do the work directly in the
-callers. (Without printing anything using dev_dbg().)
+BUG: KASAN: use-after-free in __bfq_deactivate_entity+0x9cb/0xa50
+Read of size 8 at addr ffff88800693c0c0 by task runc:[2:INIT]/10544
 
-Cc: <stable@vger.kernel.org>
-Fixes: 3c6a483275f4 (Serial: EG20T: add PCH_UART driver)
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220503080808.28332-1-jslaby@suse.cz
+CPU: 0 PID: 10544 Comm: runc:[2:INIT] Tainted: G            E     5.15.2-0.g5fb85fd-default #1 openSUSE Tumbleweed (unreleased) f1f3b891c72369aebecd2e43e4641a6358867c70
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a-rebuilt.opensuse.org 04/01/2014
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0x46/0x5a
+ print_address_description.constprop.0+0x1f/0x140
+ ? __bfq_deactivate_entity+0x9cb/0xa50
+ kasan_report.cold+0x7f/0x11b
+ ? __bfq_deactivate_entity+0x9cb/0xa50
+ __bfq_deactivate_entity+0x9cb/0xa50
+ ? update_curr+0x32f/0x5d0
+ bfq_deactivate_entity+0xa0/0x1d0
+ bfq_del_bfqq_busy+0x28a/0x420
+ ? resched_curr+0x116/0x1d0
+ ? bfq_requeue_bfqq+0x70/0x70
+ ? check_preempt_wakeup+0x52b/0xbc0
+ __bfq_bfqq_expire+0x1a2/0x270
+ bfq_bfqq_expire+0xd16/0x2160
+ ? try_to_wake_up+0x4ee/0x1260
+ ? bfq_end_wr_async_queues+0xe0/0xe0
+ ? _raw_write_unlock_bh+0x60/0x60
+ ? _raw_spin_lock_irq+0x81/0xe0
+ bfq_idle_slice_timer+0x109/0x280
+ ? bfq_dispatch_request+0x4870/0x4870
+ __hrtimer_run_queues+0x37d/0x700
+ ? enqueue_hrtimer+0x1b0/0x1b0
+ ? kvm_clock_get_cycles+0xd/0x10
+ ? ktime_get_update_offsets_now+0x6f/0x280
+ hrtimer_interrupt+0x2c8/0x740
+
+Fix the problem by checking that the parent of the two bfqqs we are
+merging in bfq_setup_merge() is the same.
+
+Link: https://lore.kernel.org/linux-block/20211125172809.GC19572@quack2.suse.cz/
+CC: stable@vger.kernel.org
+Fixes: 430a67f9d616 ("block, bfq: merge bursts of newly-created queues")
+Tested-by: "yukuai (C)" <yukuai3@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220401102752.8599-2-jack@suse.cz
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/pch_uart.c |   27 +++++++--------------------
- 1 file changed, 7 insertions(+), 20 deletions(-)
+ block/bfq-iosched.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -624,22 +624,6 @@ static int push_rx(struct eg20t_port *pr
- 	return 0;
- }
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2509,6 +2509,14 @@ bfq_setup_merge(struct bfq_queue *bfqq,
+ 	if (process_refs == 0 || new_process_refs == 0)
+ 		return NULL;
  
--static int pop_tx_x(struct eg20t_port *priv, unsigned char *buf)
--{
--	int ret = 0;
--	struct uart_port *port = &priv->port;
--
--	if (port->x_char) {
--		dev_dbg(priv->port.dev, "%s:X character send %02x (%lu)\n",
--			__func__, port->x_char, jiffies);
--		buf[0] = port->x_char;
--		port->x_char = 0;
--		ret = 1;
--	}
--
--	return ret;
--}
--
- static int dma_push_rx(struct eg20t_port *priv, int size)
- {
- 	int room;
-@@ -889,9 +873,10 @@ static unsigned int handle_tx(struct eg2
- 
- 	fifo_size = max(priv->fifo_size, 1);
- 	tx_empty = 1;
--	if (pop_tx_x(priv, xmit->buf)) {
--		pch_uart_hal_write(priv, xmit->buf, 1);
-+	if (port->x_char) {
-+		pch_uart_hal_write(priv, &port->x_char, 1);
- 		port->icount.tx++;
-+		port->x_char = 0;
- 		tx_empty = 0;
- 		fifo_size--;
- 	}
-@@ -946,9 +931,11 @@ static unsigned int dma_handle_tx(struct
- 	}
- 
- 	fifo_size = max(priv->fifo_size, 1);
--	if (pop_tx_x(priv, xmit->buf)) {
--		pch_uart_hal_write(priv, xmit->buf, 1);
++	/*
++	 * Make sure merged queues belong to the same parent. Parents could
++	 * have changed since the time we decided the two queues are suitable
++	 * for merging.
++	 */
++	if (new_bfqq->entity.parent != bfqq->entity.parent)
++		return NULL;
 +
-+	if (port->x_char) {
-+		pch_uart_hal_write(priv, &port->x_char, 1);
- 		port->icount.tx++;
-+		port->x_char = 0;
- 		fifo_size--;
- 	}
+ 	bfq_log_bfqq(bfqq->bfqd, bfqq, "scheduling merge with queue %d",
+ 		new_bfqq->pid);
  
 
 

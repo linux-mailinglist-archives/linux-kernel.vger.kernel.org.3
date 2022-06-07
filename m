@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607CD542581
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F7B542259
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232889AbiFHArm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S1391890AbiFHAq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383692AbiFGWGJ (ORCPT
+        with ESMTP id S1383695AbiFGWGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 18:06:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C3525225A;
-        Tue,  7 Jun 2022 12:17:03 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CCB25225D;
+        Tue,  7 Jun 2022 12:17:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2731761931;
-        Tue,  7 Jun 2022 19:17:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC60DC385A2;
-        Tue,  7 Jun 2022 19:17:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB9C1B8237B;
+        Tue,  7 Jun 2022 19:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12862C385A5;
+        Tue,  7 Jun 2022 19:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629422;
-        bh=ohP/jfSBL/ExsqgGs2Zkp69wvFadcqfktgMHUYKIiCM=;
+        s=korg; t=1654629425;
+        bh=+rr6wQg1UXT8+9VQVPiZnQB4JkYD2ZkKEtekqVIyEF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uqdgGuu2TlQY9720tfQC+SnkqohPRixSxft0amQ2aLaA23zaeqY6WwlCfDIRcm3ul
-         qUWRRS2MZ/dYfw6OEUQAB1U8i9T/VI/MO2u3WOU8thGBRtxd4ic8cwdaijeAeAD0T9
-         JVGnynBvAEmxKdct+IGCOPpMjWlCIC6xY/TZmCWM=
+        b=qVaP8LQUeLOISYzQ8HMG9IeH6P9jHE0sj4vT5o7AuEiuXSVIdcOhQZFKxWFzopWV3
+         wZmSwecElJTI/v0gaYuuuNfGuGnMpdCOiPPivDhLogIt15L4IJt/5U4AdEMl88vf3x
+         y5VGPPv05oxSFYf2bl70IFoEScWrEeqnpCno4SKk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 686/879] dmaengine: stm32-mdma: fix chan initialization in stm32_mdma_irq_handler()
-Date:   Tue,  7 Jun 2022 19:03:24 +0200
-Message-Id: <20220607165022.757319089@linuxfoundation.org>
+        stable@vger.kernel.org, "D. Ziegfeld" <dzigg@posteo.de>,
+        =?UTF-8?q?J=C3=B6rg-Volker=20Peetz?= <jvpeetz@web.de>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 687/879] iommu/amd: Increase timeout waiting for GA log enablement
+Date:   Tue,  7 Jun 2022 19:03:25 +0200
+Message-Id: <20220607165022.791728528@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,38 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Joerg Roedel <jroedel@suse.de>
 
-[ Upstream commit da3b8ddb464bd49b6248d00ca888ad751c9e44fd ]
+[ Upstream commit 42bb5aa043382f09bef2cc33b8431be867c70f8e ]
 
-The parameter to pass back to the handler function when irq has been
-requested is a struct stm32_mdma_device pointer, not a struct
-stm32_mdma_chan pointer.
-Even if chan is reinit later in the function, remove this wrong
-initialization.
+On some systems it can take a long time for the hardware to enable the
+GA log of the AMD IOMMU. The current wait time is only 0.1ms, but
+testing showed that it can take up to 14ms for the GA log to enter
+running state after it has been enabled.
 
-Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20220504155322.121431-3-amelie.delaunay@foss.st.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Sometimes the long delay happens when booting the system, sometimes
+only on resume. Adjust the timeout accordingly to not print a warning
+when hardware takes a longer than usual.
+
+There has already been an attempt to fix this with commit
+
+	9b45a7738eec ("iommu/amd: Fix loop timeout issue in iommu_ga_log_enable()")
+
+But that commit was based on some wrong math and did not fix the issue
+in all cases.
+
+Cc: "D. Ziegfeld" <dzigg@posteo.de>
+Cc: Jörg-Volker Peetz <jvpeetz@web.de>
+Fixes: 8bda0cfbdc1a ("iommu/amd: Detect and initialize guest vAPIC log")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20220520102214.12563-1-joro@8bytes.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/stm32-mdma.c | 2 +-
+ drivers/iommu/amd/init.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index 1e6bc22ddae9..f8c8b9d76aad 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -1316,7 +1316,7 @@ static void stm32_mdma_xfer_end(struct stm32_mdma_chan *chan)
- static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
- {
- 	struct stm32_mdma_device *dmadev = devid;
--	struct stm32_mdma_chan *chan = devid;
-+	struct stm32_mdma_chan *chan;
- 	u32 reg, id, ccr, ien, status;
+diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+index b4a798c7b347..d8060503ba51 100644
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -84,7 +84,7 @@
+ #define ACPI_DEVFLAG_LINT1              0x80
+ #define ACPI_DEVFLAG_ATSDIS             0x10000000
  
- 	/* Find out which channel generates the interrupt */
+-#define LOOP_TIMEOUT	100000
++#define LOOP_TIMEOUT	2000000
+ /*
+  * ACPI table definitions
+  *
 -- 
 2.35.1
 

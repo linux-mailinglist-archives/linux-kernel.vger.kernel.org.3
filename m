@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E766554253A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B0D542364
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443279AbiFHCCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S1392491AbiFHB6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1588708AbiFGXy6 (ORCPT
+        with ESMTP id S1588736AbiFGXzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:54:58 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9C41C4230
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:38:53 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id j6so16813064pfe.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 16:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NUegXqW9LzmkBfY7DxTxhaAQ1AhdKbFukAoFdwvxQCA=;
-        b=jPvQidTu5+raLDu+v304vNocGEp644rFe99IjU8FwjuyWQmAVP7dqExs4/o0n61Gee
-         mVlDg24zvBuQ0aq1eNRGWRBDbRA0t88AQsPigABCJwVQBN7BQDMQiZY4+SWFItPL7bnx
-         c8XcftWfQWOwDPuGujynski1qxt0w6FlSaiBXZfyidSZ5YG9JXN7cfwtkneKj87q2Bxn
-         LxoZv2xH3ZL/zKMDoeP/o/WmG/39hKVjjipuyTOpWT/Q8ub1oAtXWFsoTP4qcm45k293
-         +fTjWdLhTzPXqg+uKxqUsq6qcPHYYKLihWJFTO3Nefov4WELS3vYBtY0h1G9qQBRYfU4
-         AjHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NUegXqW9LzmkBfY7DxTxhaAQ1AhdKbFukAoFdwvxQCA=;
-        b=WDXWLFnPWbIhIpOM6GWyrgA3cJv1QtepEib/xzbPtJbX+fPLtAzd7Sx0aBCHD4KUya
-         gA8SB/5sIeHf0LHZLQz9ag31T4fZjD1OoDT6LuFYUsspecmtDVyLLAbkiW11kJ2S1d9r
-         CCynOYq2CgJMAwi6zuNy5/17iI/QPKgCMH5/CTrx7HAtcoHk6EijZHYlIWO1Ls/k2sOb
-         ysOCqENDdXmGuWMSo5mEwHIZ9VPJChcPY4rfj02srUNDAqgOOLXYLKqULol6ZYqZDSbD
-         n4yAIFQA10+tRB3hHzeK5Fv9q4p3oOKcGhe9DwN6wYbqo5Rb00bFbuK4n4/x2HcP7S9K
-         9QWA==
-X-Gm-Message-State: AOAM532K5qdoKBxo7iE3zJsfg7Ispk7h+NStvKb7Sk4IOFTHKW7KKCrb
-        6E2yPE+HDF8D7ez9rzpx4uq86dGovnQOvg==
-X-Google-Smtp-Source: ABdhPJzXCWVCiCTCSz598flQCNLPk337229bVblysUjn6w1K4m4Oppv8XJDTTL+6nU8pj/acNT/3zw==
-X-Received: by 2002:a63:1e49:0:b0:3fd:cf48:3694 with SMTP id p9-20020a631e49000000b003fdcf483694mr9997920pgm.275.1654645132460;
-        Tue, 07 Jun 2022 16:38:52 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s18-20020aa78d52000000b0050dc76281fdsm13366276pfe.215.2022.06.07.16.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 16:38:52 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 23:38:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH 1/1] KVM: MMU: Fix VM entry failure and OOPS for shdaow
- page table
-Message-ID: <Yp/hiOxrOhEuIWj6@google.com>
-References: <20220607074034.7109-1-yuan.yao@intel.com>
- <Yp9nsbNzoIEyJeDv@google.com>
- <20220607233045.a3sz7v2u6cdeg3sb@yy-desk-7060>
+        Tue, 7 Jun 2022 19:55:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68FF18219D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654645202; x=1686181202;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZjlOk8azHhDHFFrQPq91H0uTrw45sF8jDpP42SnJxhM=;
+  b=lr1Tn8qWMU9rVd+Y42dc5t+H5lKvlNeyVICMqarzwZPpO2UNVIhtPXCi
+   79zW43Whu5c7soS3d9uBslqzX64TLAfYwKJnKg4WWWR2WIp/DKtl8pSGA
+   azDKKYjZR+kcgMMSiSUdv7HPfqD97oLuzYn7t2pwmos6PWHe2GxU/+wja
+   ltnqALFa0wgpRpicPVlr5Xug4sEnd+ijXl1iiMTREyMPV3+8qQfnAk/tP
+   VPSBfk6UY6sNdXayCJ6sqMbIxeD4appM4N48SevpqhzEEq2xAz9GY1JS7
+   ZD3HH0ftbPv0w9XMUFjdZl7RhuVyIR9jTgNdazUP22hn1ZU6ZrsMOZ9uC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="276801993"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="276801993"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 16:40:01 -0700
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="579810172"
+Received: from schen9-mobl.amr.corp.intel.com ([10.251.8.166])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 16:40:01 -0700
+Message-ID: <0c2fac38720710aebe2b667807c647e8a5aa5441.camel@linux.intel.com>
+Subject: Re: [PATCH v5 6/9] mm/demotion: Add support for removing node from
+ demotion memory tiers
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Tue, 07 Jun 2022 16:40:00 -0700
+In-Reply-To: <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+         <20220603134237.131362-7-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607233045.a3sz7v2u6cdeg3sb@yy-desk-7060>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022, Yuan Yao wrote:
-> On Tue, Jun 07, 2022 at 02:58:57PM +0000, Sean Christopherson wrote:
-> > Everything below here can be dropped as it's not relevant to the original bug.
-> >
-> > E.g. the entire trace can be trimmed to:
-> 
-> Ah, I thought that the original trace carries most information
-> which maybe useful to other people. Let me trim them as you
-> suggested in V2, thanks.
+On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+> This patch adds the special string "none" as a supported memtier value
+> that we can use to remove a specific node from being using as demotion target.
 
-For bug reports, it's helpful to have the raw trace as the context is useful for
-debug.  But for changelogs, the goal is only to document the failure signature,
-e.g. so that reviewers understand what broke, users that encounter a similar splat
-can find a possible fix, etc...
+And also such node will not participate in promotion.  That is, hot memory in it will
+not be promoted to other nodes.
+
+> 
+> For ex:
+> :/sys/devices/system/node/node1# cat memtier
+> 1
+> :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
+> 1-3
+> :/sys/devices/system/node/node1# echo none > memtier
+> :/sys/devices/system/node/node1#
+> :/sys/devices/system/node/node1# cat memtier
+> :/sys/devices/system/node/node1# cat ../../memtier/memtier1/nodelist
+> 2-3
+> :/sys/devices/system/node/node1#
+> 
+> 
+

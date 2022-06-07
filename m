@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8A753FBC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F97653FBCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbiFGKqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
+        id S234748AbiFGKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241482AbiFGKpp (ORCPT
+        with ESMTP id S241530AbiFGKpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:45:45 -0400
+        Tue, 7 Jun 2022 06:45:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CED7ED734
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:45:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C873ED72F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:45:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1275AB81F05
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34022C34119;
-        Tue,  7 Jun 2022 10:45:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5292B81EF8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0A0C385A5;
+        Tue,  7 Jun 2022 10:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598737;
-        bh=VWwzCqMXrN/G0KyRMlKG4MamL4lgLmSXarbHCk4VCkA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=bgS3geV/mOzLet2UKYeM0PnA/8Xmll1Djy9ySD6xUZ+i+sR+WpVZIRkahpn4Mdo3a
-         cAVRmDT8n0CigHgEDKNvLHkjsKiyPEfpZpcU8fiFLH7hpICXKUuN7nBOjWWLFad4WN
-         vFSY+y9Ps3+fRN5sYJDjizcz4ZzDPaZ5WywyI04soPjf3ZGC7vqha5YhOXLRQ7oXwG
-         kV1sr8hQhJBN0TmyFAbM40CAl9smif3NBJN95EVkB6vv1l95KimNOB7a0ZRG4J9pYC
-         w8DPldUPG9BzMsBMP7GONGRUZqdsZQjPveFamdbhT+BJa5TdPsWIpRu1tQN5Ym7Qgz
-         mH9BBfKjcaFxg==
+        s=k20201202; t=1654598740;
+        bh=tMS1gG3dXMPWf84lcdBNSw3MxsgI83j5BwdlSZTqOaA=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=fSj1nLhWMxGdMrbyxQD622Xxcv9d4lhwS3PvmyWltkid6i7b3ugUjtTYNQ9Gc2VqJ
+         7Nh/qd88jGvpD9J70u5ab46ybKz2OpUxLau3iYDBPrwl1Dj9UWVpld1nrLTgdwBLnt
+         B/Kl3yGmPv/9zut2uRxca/zlmMg8QZf6D9YdhUOtNh73aWRctSII5RstzBKKqZ96vg
+         u/qW2ZDK3NMvLxKL/mrvq/pusJ/s3sdPEVivGeUHDMEk4Ew1XYBdarVjJ/Rlqk+GYy
+         TEqy3U6uNwiq/Y4JXILcrm06XtAp/1852GT+15LJ0aqrYowdrIsQyHPOCffmca/tNe
+         ekQ2oT+q0CgGg==
 From:   Mark Brown <broonie@kernel.org>
-To:     rdunlap@infradead.org, linux-kernel@vger.kernel.org
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Takashi Iwai <tiwai@suse.com>,
-        lkp@intel.com, steve.lee.analog@gmail.com,
+To:     cychiang@chromium.org, chrome-platform@lists.linux.dev,
+        linmq006@gmail.com, Liam Girdwood <lgirdwood@gmail.com>,
+        tzungbi@google.com, Takashi Iwai <tiwai@suse.com>,
+        groeck@chromium.org, enric.balletbo@collabora.com,
+        linux-kernel@vger.kernel.org, bleung@chromium.org,
         Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org
-In-Reply-To: <20220605163123.23537-1-rdunlap@infradead.org>
-References: <20220605163123.23537-1-rdunlap@infradead.org>
-Subject: Re: [PATCH] ASoC: max98390: use linux/gpio/consumer.h to fix build
-Message-Id: <165459873591.301808.2566417791038246308.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:45:35 +0100
+In-Reply-To: <20220603131043.38907-1-linmq006@gmail.com>
+References: <20220603131043.38907-1-linmq006@gmail.com>
+Subject: Re: [PATCH v2] ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_probe
+Message-Id: <165459873804.301808.717161588235185866.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:45:38 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,19 +57,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Jun 2022 09:31:23 -0700, Randy Dunlap wrote:
-> Change the header file to fix build errors in max98390.c:
+On Fri, 3 Jun 2022 17:10:43 +0400, Miaoqian Lin wrote:
+> of_parse_phandle() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not need anymore.
+> Add missing of_node_put() to avoid refcount leak.
 > 
-> ../sound/soc/codecs/max98390.c: In function 'max98390_i2c_probe':
-> ../sound/soc/codecs/max98390.c:1076:22: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
->  1076 |         reset_gpio = devm_gpiod_get_optional(&i2c->dev,
-> ../sound/soc/codecs/max98390.c:1077:55: error: 'GPIOD_OUT_HIGH' undeclared (first use in this function); did you mean 'GPIOF_INIT_HIGH'?
->  1077 |                                              "reset", GPIOD_OUT_HIGH);
-> ../sound/soc/codecs/max98390.c:1077:55: note: each undeclared identifier is reported only once for each function it appears in
-> ../sound/soc/codecs/max98390.c:1083:17: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
->  1083 |                 gpiod_set_value_cansleep(reset_gpio, 0);
 > 
-> [...]
 
 Applied to
 
@@ -75,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: max98390: use linux/gpio/consumer.h to fix build
-      commit: aa7407f807b250eca7697e5fe9a699bc6c2fab71
+[1/1] ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_probe
+      commit: 0a034d93ee929a9ea89f3fa5f1d8492435b9ee6e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

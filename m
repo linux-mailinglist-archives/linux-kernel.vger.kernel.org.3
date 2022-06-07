@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83D5541AA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B65C5408B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380346AbiFGVfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S1350043AbiFGSAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376918AbiFGUks (ORCPT
+        with ESMTP id S1348638AbiFGRlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:40:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EE21EEB80;
-        Tue,  7 Jun 2022 11:38:30 -0700 (PDT)
+        Tue, 7 Jun 2022 13:41:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39638122B7B;
+        Tue,  7 Jun 2022 10:34:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C481B82182;
-        Tue,  7 Jun 2022 18:38:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E969C385A2;
-        Tue,  7 Jun 2022 18:38:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB9FE61582;
+        Tue,  7 Jun 2022 17:34:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C369AC385A5;
+        Tue,  7 Jun 2022 17:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627085;
-        bh=Ef0HGhy+7GGRYGoh67NWrc66shINJ2PSSX4Uj+r6/lM=;
+        s=korg; t=1654623244;
+        bh=8MtkBhfFoEzjUtG7SMEOmQNgxmCT6+7cEhuUCQAMNt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aWkK8YwFkxH4umQq5rgrmy9AFPj3L5bsv9o5vY+2lYAs4vOUdb85840nr+tzz9gac
-         rJJHBHTjcHogUwp++auWj3lBUDhM5YEnxNip0ZTYbMow84ubkS+JeFBiHtcKxoEwPX
-         iA3ojXmw0v91idsuqX4bXXUWdeyA1c0N/q1Rt7Tk=
+        b=V2rUhfupnTmu1zgstzpuJv6eCf5u7byNBF/XLf5ewI6qSq7qaOqUmI53qT6h23GI4
+         jd6PMsxVef1/4LkFuaI9kQo1iW+nagiHe/I6WEpXmDLpKGfgH/MjF8Rej4Yfc9Ed51
+         D3cOSe+ydjfP3hvqPMG1egCbDAovsE7UOTwpQbIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.17 613/772] f2fs: dont need inode lock for system hidden quota
+Subject: [PATCH 5.10 348/452] f2fs: dont need inode lock for system hidden quota
 Date:   Tue,  7 Jun 2022 19:03:25 +0200
-Message-Id: <20220607165007.002611310@linuxfoundation.org>
+Message-Id: <20220607164918.928442901@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,7 +118,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/fs/f2fs/super.c
 +++ b/fs/f2fs/super.c
-@@ -2706,7 +2706,8 @@ int f2fs_quota_sync(struct super_block *
+@@ -2292,7 +2292,8 @@ int f2fs_quota_sync(struct super_block *
  		if (!sb_has_quota_active(sb, cnt))
  			continue;
  
@@ -128,7 +128,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  		/*
  		 * do_quotactl
-@@ -2725,7 +2726,8 @@ int f2fs_quota_sync(struct super_block *
+@@ -2311,7 +2312,8 @@ int f2fs_quota_sync(struct super_block *
  		up_read(&sbi->quota_sem);
  		f2fs_unlock_op(sbi);
  

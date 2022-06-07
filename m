@@ -2,219 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC86A53F9DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E0E53F9E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239626AbiFGJdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        id S239636AbiFGJfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiFGJdn (ORCPT
+        with ESMTP id S233066AbiFGJfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:33:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EEFB1A3AF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654594421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dtAAFPAK9nZ0pTcwBhR9/Qp8U0Xo4Qyrs4+xY7EZesg=;
-        b=hPP3PYKSmBPkKvBopf10SiJHOJY80kO1EtShu+rsdy3eXj+v7zflFtmwJmTpxnIEyN2K5Q
-        j+kiKcnxXY/n5Hd71yuL3aohT3DxHQtWYSTxu0VsteVa79aBfrAfbWxZ1fV+YOh8PaNtpt
-        y/QG0I3NndwLp/f9fmwHoGERYf1d1yE=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-257-SayrG_wsN0i5qYj-CgknEw-1; Tue, 07 Jun 2022 05:33:38 -0400
-X-MC-Unique: SayrG_wsN0i5qYj-CgknEw-1
-Received: by mail-qt1-f197.google.com with SMTP id m6-20020ac866c6000000b002f52f9fb4edso13474244qtp.19
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:33:37 -0700 (PDT)
+        Tue, 7 Jun 2022 05:35:03 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43FF66C88
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:35:01 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id u26so26655248lfd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+9f9l4kafijy5tF7KMskKmJ/qyS50hfAaTAXJIaHigk=;
+        b=ey+7OYgV7aR8YmkHepSIEIvJD6ppZYccI9v3aTw4hBckRyBQaaRSg35vILfF+tJaT5
+         /ro7BEv3Bwyrw05UTpr1XJeS0spWfXfjSUQ/KXG+Cd+uTs6XXjBfIfLtDhLSYR2ruJjU
+         bIkAQEI2fAZiy4V0/ZB3trU4JizsrP74/d5hDbwMq7OqfRejYA8u8JJzOewMEcq0s8h+
+         j3qo07tSzA9nBl21TqcNuK4+DcaV0xuJ3sj7WuPNFsrXymWZJGJGygjUdaDLs8mqt7lN
+         WwYdAt71DyQPFJjTuRVC4tDx53FvSZMlhyoafCcUMbKDzwMBp8w8IWgJ5ppKQM8wH1Le
+         K/Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=dtAAFPAK9nZ0pTcwBhR9/Qp8U0Xo4Qyrs4+xY7EZesg=;
-        b=q1bZILI0ZZXttJO4DUOm/rIyt/uZSxjlEct5/GORivo2kHBlvQ1PLCv5KaEdoLLf0H
-         I+iLAVwwhx/gmCg+a4Uyld/JuJtu/BdvshMvFzm8Odh/fyNx6uGXWjLoz7pAC/MLJCfu
-         3xjAYwvzFh19sJ96bzlYIDZjyMrUXzqCA3wF3i3a+PCk0/IFVJj+RvxYRQYmOxAZHdXb
-         wvpr/9HhLpBF75ePvdfVtR5rq/Gq0gRJWDSle7aMhpvQSpzT59O3KJBeiWwW71Snhx65
-         x1b6fAKiQmlZ33Y6F1FXr1CNH+5s37GYLExMXNs6ZgygGpF/E9UlSAUB6yvI95Kay5VI
-         9pRQ==
-X-Gm-Message-State: AOAM533tPfNxMQ1sfQo2JEnQw5lyIvYXKVgULkF2hIm8ossbH2DczGs0
-        jlaf8JHJtIrA5aD9np/srwPXmmfdA27aG7Gzz3ev6iNmlq3LkBftVMlVcAmh4fnrXEXL+2/5Rlv
-        BBYkLGZhwehlIupAA+PVsHuar
-X-Received: by 2002:ae9:efd4:0:b0:6a6:accc:3923 with SMTP id d203-20020ae9efd4000000b006a6accc3923mr10260015qkg.572.1654594417417;
-        Tue, 07 Jun 2022 02:33:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/A2h0NZXFe/wsfI+gsODxz+WxMmGWQmDh9AIx5IPvHDDRGrmKtpAyqY9up+jjHIBr8QYVFw==
-X-Received: by 2002:ae9:efd4:0:b0:6a6:accc:3923 with SMTP id d203-20020ae9efd4000000b006a6accc3923mr10260002qkg.572.1654594417172;
-        Tue, 07 Jun 2022 02:33:37 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id g20-20020a05620a40d400b006a5d8d96681sm5490218qko.100.2022.06.07.02.33.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+9f9l4kafijy5tF7KMskKmJ/qyS50hfAaTAXJIaHigk=;
+        b=Ps3mw++oMGATLyo1ywnldvcC8qMuDfv+Z/TwcrV9kiQHRLIVe2YEEROjVl8R1gNgQR
+         vG6akY5YwI0OFY2DZ7NQvJmon6LfdSFKZAkjYQD+BtSpALphELz8Rg/3zZ+SqQVuVE6V
+         HHx9PxH9TT2AzTmyXP/0sfVMQdz6xyznAS/HliPOUxEEio3cLeu/7bFMZnBWP+IR3Vrd
+         FJ1BCOCIa2oS9RHqKtK9IWKbZbgA8V0X3WKoJwmTSXUx1bfQnDJ2N5MxJpdu7mo45MDQ
+         iTlbISv3yiNGXKhKN3T4Aa+kyOsTvonxw6cE0c4PnhoWhlYPzUpL8diL2f1hRA1JLiJf
+         2xBQ==
+X-Gm-Message-State: AOAM532ZM5nbZBo7/wzVf3SWN6SpM2BKf6Aj/y9t4OU6zcoOlxECVuM6
+        msVr7NOQx6z50bOdd/lTvCs=
+X-Google-Smtp-Source: ABdhPJwAahIn/7ZioTC+h2QdikezWSd6RqDgg9/Kn/YVckplbfBuxn7u4AcL72Pvhor6li8lMY4eSQ==
+X-Received: by 2002:a05:6512:2143:b0:479:9fd:14dc with SMTP id s3-20020a056512214300b0047909fd14dcmr17936064lfr.505.1654594499850;
+        Tue, 07 Jun 2022 02:34:59 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id r27-20020a2e575b000000b002554a4ebf5fsm2748043ljd.74.2022.06.07.02.34.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:33:36 -0700 (PDT)
-Message-ID: <72303d13380dedcfa273d471b8fc7ebf89fb403f.camel@redhat.com>
-Subject: Re: [PATCH v6 11/38] KVM: x86: hyper-v: Create a separate fifo for
- L2 TLB flush
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 12:33:33 +0300
-In-Reply-To: <20220606083655.2014609-12-vkuznets@redhat.com>
-References: <20220606083655.2014609-1-vkuznets@redhat.com>
-         <20220606083655.2014609-12-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 07 Jun 2022 02:34:59 -0700 (PDT)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH 0/5] Reduce a vmalloc internal lock contention preparation work 
+Date:   Tue,  7 Jun 2022 11:34:44 +0200
+Message-Id: <20220607093449.3100-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
-> To handle L2 TLB flush requests, KVM needs to use a separate fifo from
-> regular (L1) Hyper-V TLB flush requests: e.g. when a request to flush
-> something in L2 is made, the target vCPU can transition from L2 to L1,
-> receive a request to flush a GVA for L1 and then try to enter L2 back.
-> The first request needs to be processed at this point. Similarly,
-> requests to flush GVAs in L1 must wait until L2 exits to L1.
-> 
-> No functional change as KVM doesn't handle L2 TLB flush requests from
-> L2 yet.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  8 +++++++-
->  arch/x86/kvm/hyperv.c           | 11 +++++++----
->  arch/x86/kvm/hyperv.h           | 17 ++++++++++++++---
->  3 files changed, 28 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index cf3748be236d..0e58ab00dff0 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -613,6 +613,12 @@ struct kvm_vcpu_hv_synic {
->   */
->  #define KVM_HV_TLB_FLUSHALL_ENTRY  ((u64)-1)
->  
-> +enum hv_tlb_flush_fifos {
-> +       HV_L1_TLB_FLUSH_FIFO,
-> +       HV_L2_TLB_FLUSH_FIFO,
-> +       HV_NR_TLB_FLUSH_FIFOS,
-> +};
-> +
->  struct kvm_vcpu_hv_tlb_flush_fifo {
->         spinlock_t write_lock;
->         DECLARE_KFIFO(entries, u64, KVM_HV_TLB_FLUSH_FIFO_SIZE);
-> @@ -638,7 +644,7 @@ struct kvm_vcpu_hv {
->                 u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
->         } cpuid_cache;
->  
-> -       struct kvm_vcpu_hv_tlb_flush_fifo tlb_flush_fifo;
-> +       struct kvm_vcpu_hv_tlb_flush_fifo tlb_flush_fifo[HV_NR_TLB_FLUSH_FIFOS];
->  };
->  
->  /* Xen HVM per vcpu emulation context */
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index b347971b3924..32f223bbea6b 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -956,8 +956,10 @@ static int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
->  
->         hv_vcpu->vp_index = vcpu->vcpu_idx;
->  
-> -       INIT_KFIFO(hv_vcpu->tlb_flush_fifo.entries);
-> -       spin_lock_init(&hv_vcpu->tlb_flush_fifo.write_lock);
-> +       for (i = 0; i < HV_NR_TLB_FLUSH_FIFOS; i++) {
-> +               INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
-> +               spin_lock_init(&hv_vcpu->tlb_flush_fifo[i].write_lock);
-> +       }
->  
->         return 0;
->  }
-> @@ -1843,7 +1845,8 @@ static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
->         if (!hv_vcpu)
->                 return;
->  
-> -       tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
-> +       /* kvm_hv_flush_tlb() is not ready to handle requests for L2s yet */
-> +       tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo[HV_L1_TLB_FLUSH_FIFO];
-Yes, as expected here the local var starts to make sense.
->  
->         spin_lock_irqsave(&tlb_flush_fifo->write_lock, flags);
->  
-> @@ -1880,7 +1883,7 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
->                 return;
->         }
->  
-> -       tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
-> +       tlb_flush_fifo = kvm_hv_get_tlb_flush_fifo(vcpu);
->  
->         count = kfifo_out(&tlb_flush_fifo->entries, entries, KVM_HV_TLB_FLUSH_FIFO_SIZE);
->  
-> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
-> index e5b32266ff7d..207d24efdc5a 100644
-> --- a/arch/x86/kvm/hyperv.h
-> +++ b/arch/x86/kvm/hyperv.h
-> @@ -22,6 +22,7 @@
->  #define __ARCH_X86_KVM_HYPERV_H__
->  
->  #include <linux/kvm_host.h>
-> +#include "x86.h"
->  
->  /*
->   * The #defines related to the synthetic debugger are required by KDNet, but
-> @@ -147,16 +148,26 @@ int kvm_vm_ioctl_hv_eventfd(struct kvm *kvm, struct kvm_hyperv_eventfd *args);
->  int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->                      struct kvm_cpuid_entry2 __user *entries);
->  
-> +static inline struct kvm_vcpu_hv_tlb_flush_fifo *kvm_hv_get_tlb_flush_fifo(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +       int i = !is_guest_mode(vcpu) ? HV_L1_TLB_FLUSH_FIFO :
-> +                                      HV_L2_TLB_FLUSH_FIFO;
-> +
-> +       /* KVM does not handle L2 TLB flush requests yet */
-> +       WARN_ON_ONCE(i != HV_L1_TLB_FLUSH_FIFO);
-> +
-> +       return &hv_vcpu->tlb_flush_fifo[i];
-> +}
->  
->  static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
->  {
->         struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
-> -       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->  
-> -       if (!hv_vcpu || !kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
-> +       if (!to_hv_vcpu(vcpu) || !kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
->                 return;
->  
-> -       tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
-> +       tlb_flush_fifo = kvm_hv_get_tlb_flush_fifo(vcpu);
->  
->         kfifo_reset_out(&tlb_flush_fifo->entries);
->  }
+Hi.
 
+This small serias is a preparation work to implement per-cpu vmalloc
+allocation in order to reduce a high internal lock contention. This
+series does not introduce any functional changes, it is only about
+preparation.
 
-Looks great,
+Uladzislau Rezki (Sony) (5):
+  mm/vmalloc: Make link_va()/unlink_va() common to different rb_root
+  mm/vmalloc: Extend __alloc_vmap_area() with extra arguments
+  mm/vmalloc: Initialize VA's list node after unlink
+  mm/vmalloc: Extend __find_vmap_area() with one more argument
+  lib/test_vmalloc: Switch to prandom_u32()
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+ lib/test_vmalloc.c | 15 +++----
+ mm/vmalloc.c       | 98 ++++++++++++++++++++++++++++++++--------------
+ 2 files changed, 76 insertions(+), 37 deletions(-)
 
-Best regards,
-	Maxim Levitsky
+-- 
+2.30.2
 

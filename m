@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08F53FC10
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F8053FC0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241716AbiFGKtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S241864AbiFGKtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241862AbiFGKrd (ORCPT
+        with ESMTP id S241858AbiFGKrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 06:47:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D05F339F;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FBBF33A2;
         Tue,  7 Jun 2022 03:46:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5745B81F0C;
-        Tue,  7 Jun 2022 10:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A377DC34114;
-        Tue,  7 Jun 2022 10:46:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74DE961548;
+        Tue,  7 Jun 2022 10:46:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF2EC36B09;
+        Tue,  7 Jun 2022 10:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654598798;
-        bh=4sLZ5BLxpPRtzF03O8ywJPLV0cvQkKFtC0bybqn9p88=;
+        s=k20201202; t=1654598800;
+        bh=YREEwWrp6e3nyVf/yYzkKPpOi0m8pZQUreKe1nSLxp8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=YsAqwwTHkOJHQEFoeGgkkdlXLhPkJ4VVN4aSFTB+nezqWlrhtLbSdUps1gSJh7JNd
-         ollHT9Slr9ePBNIrDu2awLCK3IEVy30z/DC5VY5pAcxUy6Y86zkVNKvZ0KF3FMQ2ay
-         /ucw+cnOgqgpkUUeqgIFI0/3TSKTPudOGLxM2X4zjzzZRXoGZYaLe3oS5NIjpgDdx2
-         sdKzuljcjm/SP104bdlhY6oqN5OAq1zIPjexWBjhXo+H/cAFIQOU1CWGS0J7KRy/5I
-         RqLz2g0idcCM8GqOc8X3JJ5E0g3bAOCJxvFo9eRyiIBjoEAdBHNUIVKpJ2pgKjyIlC
-         wJxAApMIkjBLg==
+        b=Pn/B68XuAYFXzVB4pO5GQNbLn7+KTv3tRX+nkg2Pd5Pn96kMDmy1KaGVGwgfODwgO
+         PXh23Jh2r6/NbBfZnHedZRuPqTdG48No874CMuNEMgll33yierYLHWDJRaXkvM7ekN
+         NMH3kuIJ3EKRA0OYo/5urTII/7nwcRIH0JS3T3BzI8NqP7b7Xhf5uUb786LK0Z5BZ4
+         jkqO97f0OUiaY2PDEb0YzgiYoa1Uex6pd3FLvhia9iYwiwA+60MzFp9jezIJa82mpH
+         g40HTAsTGxXB/exNOMg4DEEy4n46QxthVpbB1VWaX4qyGgAmLPqc/erT/nh5pAOKG5
+         Vr3R3I7obGdFA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Julia.Lawall@inria.fr
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     linux-arm-kernel@lists.infradead.org, adithya.kv@samsung.com,
         linux-spi@vger.kernel.org
-In-Reply-To: <20220521111145.81697-13-Julia.Lawall@inria.fr>
-References: <20220521111145.81697-13-Julia.Lawall@inria.fr>
-Subject: Re: [PATCH] spi: fix typo in comment
-Message-Id: <165459879738.302078.9645268491215493172.b4-ty@kernel.org>
-Date:   Tue, 07 Jun 2022 11:46:37 +0100
+Cc:     alim.akhtar@samsung.com, linux-kernel@vger.kernel.org,
+        andi@etezian.org, krzysztof.kozlowski@linaro.org,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com
+In-Reply-To: <20220524140132.59300-1-adithya.kv@samsung.com>
+References: <CGME20220524140211epcas5p1b9b61a0ea112beb2327848c37d3ba000@epcas5p1.samsung.com> <20220524140132.59300-1-adithya.kv@samsung.com>
+Subject: Re: [PATCH] spi: s3c64xx: requests spi-dma channel only during data transfer
+Message-Id: <165459879876.302078.13109616236074671922.b4-ty@kernel.org>
+Date:   Tue, 07 Jun 2022 11:46:38 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,11 +56,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 13:10:23 +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+On Tue, 24 May 2022 19:31:32 +0530, Adithya K V wrote:
+> Current s3c64xx SPI driver acquires DMA channel during driver
+> probe and holds on it even when channels are not used
+> (no DMA transfer). This is a problem especially when all the
+> DMA channels are exhausted (as other IPs on the same DMA
+> controller also acquires DMA channel) and if a new IP/Device
+> requests for a DMA channel (on the same DMA controller), it won’t
+> get DMA channel allocated.
+> The said issue can be avoided if s3c64xx driver request and
+> release DMA channel before and after data transfer. Let’s modify
+> the driver to request and release DMA channel before and after
+> DMA mode data transfer.
 > 
-> 
+> [...]
 
 Applied to
 
@@ -66,8 +77,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: fix typo in comment
-      commit: 657f8bd88cb5a968d907fd1c891cee52dc156caa
+[1/1] spi: s3c64xx: requests spi-dma channel only during data transfer
+      commit: f52b03c707444c5a3d1a0b9c5724f93ddc3c588e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

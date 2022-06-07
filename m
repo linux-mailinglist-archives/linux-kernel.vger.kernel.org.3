@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E6D53F2EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 02:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A29253F2F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 02:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235446AbiFGAXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 20:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S235458AbiFGA1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 20:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiFGAXC (ORCPT
+        with ESMTP id S235448AbiFGA1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 20:23:02 -0400
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9222537A9F;
-        Mon,  6 Jun 2022 17:22:57 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 7 Jun 2022 08:22:36
- +0800 (GMT+08:00)
-X-Originating-IP: [106.117.78.144]
-Date:   Tue, 7 Jun 2022 08:22:36 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Brian Norris" <briannorris@chromium.org>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitkarwar@gmail.com, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Subject: Re: [PATCH v5 2/2] mwifiex: fix sleep in atomic context bugs caused
- by dev_coredumpv
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <Yp5D7TRdNJ+bW1ud@google.com>
-References: <cover.1654229964.git.duoming@zju.edu.cn>
- <54f886c2fce5948a8743b9de65d36ec3e8adfaf1.1654229964.git.duoming@zju.edu.cn>
- <Yp5D7TRdNJ+bW1ud@google.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 6 Jun 2022 20:27:04 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C671D19CC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 17:27:03 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id e11so14043711pfj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 17:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wgiMZnLydACwnhKRavqmXkM3KhW0U0vaawv3CX7B558=;
+        b=XwG2oerM4hfnROOVLbvYIF/tEaEmyqlL/x4/kt4BOEW0BDyRVuU18G7CcpEmnRvf7G
+         iQ4ck1OLLRX6lEQZwjFQ9/xdNrSm6iHWQH86G0t/KyxbVM5kt3mNrpChHCi020Av4D4Y
+         6iYQdXH6ESeHIsoRvqdv8AAO/4qZ7oZNWnQMG+yobSG0s+JrOhBTqjGXPzqrASIpGoKp
+         qUEmjN7XITBqdtuDAlasYSGoOsDm/RDfLMy8m2PkRkxl+EGCxehFJmr6xwEdqtsPRdUr
+         XVL1dOy6roAO+z4pjL2IuUle9hImMm486Qpoa4pwaoMRqM4vLD7yQHGUWao9bNN8ZEaN
+         CYQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wgiMZnLydACwnhKRavqmXkM3KhW0U0vaawv3CX7B558=;
+        b=BKwRFO/Vqo5GA6FfgRB9SzU2d1s3xm3JUN9r6XL6MgS6VdYJyfoqsAJ/F7n9HdPLu3
+         Chdw1EVkDcwhdzoUp9wICdXawk01mKHnJbzAtbK8cX0HHTy5S8uiB9XE+fTcHAG7vjB9
+         RcUQVCl+UwxK/22Z8cP/JNPPtOOOONAwHCL20x3KfhtVIitDJRaXdi0vg2DHqA9h33ut
+         +v7Fd7QjJh6ZZyaWbLcUGMjHFaRFeZDriCnSNRfWu3gdXrrYfcOPPEqQOuPEyi50sXc/
+         6ksyFotcVWCoDyOcljGqCrkuiAk5I8ekd6g/vs29VFZTUjGffZQGwDEzbf/aznJuAxwC
+         HELA==
+X-Gm-Message-State: AOAM532UcgqeS6yv+TOgivFmY3Hoo1mUyphfDim9G7W2jvy2TFVqIY/3
+        4Pi0+d7XfAzPyeyFsFGPTam6GA==
+X-Google-Smtp-Source: ABdhPJwnBdZQBmY1zcDbaBIZM38yQjeNlnwWgBabh2he0SZ0vHLyFQ6avY3QsBeiGpQ+8/n6jxk3fw==
+X-Received: by 2002:a63:d34f:0:b0:3fa:8a90:f395 with SMTP id u15-20020a63d34f000000b003fa8a90f395mr23741540pgi.107.1654561622571;
+        Mon, 06 Jun 2022 17:27:02 -0700 (PDT)
+Received: from google.com ([2620:15c:2ce:200:ccc7:2cf6:b776:1e0d])
+        by smtp.gmail.com with ESMTPSA id 69-20020a621648000000b0050dc76281e3sm8590039pfw.189.2022.06.06.17.27.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 17:27:02 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 17:26:58 -0700
+From:   Fangrui Song <maskray@google.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sedat Dilek <sedat.dilek@gmail.com>, llvm@lists.linux.dev,
+        Sebastian Ullrich <sebasti@nullri.ch>
+Subject: Re: [PATCH] perf unwind: Fix uninitialized variable
+Message-ID: <20220607002658.zkbs4c37ihmivcmn@google.com>
+References: <20220607000851.39798-1-irogers@google.com>
 MIME-Version: 1.0
-Message-ID: <75b1682.54b44.1813b8abc1f.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgDXQCBNmp5iXy1fAQ--.32949W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgEOAVZdtaEmjAABs4
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220607000851.39798-1-irogers@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDYgSnVuIDIwMjIgMTE6MTQ6MDUgLTA3MDAgQnJpYW4gd3JvdGU6Cgo+
-IE9uIEZyaSwgSnVuIDAzLCAyMDIyIGF0IDAxOjA5OjM1UE0gKzA4MDAsIER1b21pbmcgWmhvdSB3
-cm90ZToKPiA+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4gdXBs
-b2FkaW5nIGRldmljZSBkdW1wCj4gPiBkYXRhIGluIG13aWZpZXguIFRoZSByb290IGNhdXNlIGlz
-IHRoYXQgZGV2X2NvcmVkdW1wdiBjb3VsZCBub3QKPiA+IGJlIHVzZWQgaW4gYXRvbWljIGNvbnRl
-eHRzLCBiZWNhdXNlIGl0IGNhbGxzIGRldl9zZXRfbmFtZSB3aGljaAo+ID4gaW5jbHVkZSBvcGVy
-YXRpb25zIHRoYXQgbWF5IHNsZWVwLiBUaGUgY2FsbCB0cmVlIHNob3dzIGV4ZWN1dGlvbgo+ID4g
-cGF0aHMgdGhhdCBjb3VsZCBsZWFkIHRvIGJ1Z3M6Cj4gLi4uCj4gPiBGaXhlczogZjVlY2QwMmE4
-YjIwICgibXdpZmlleDogZGV2aWNlIGR1bXAgc3VwcG9ydCBmb3IgdXNiIGludGVyZmFjZSIpCj4g
-PiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0t
-LQo+ID4gQ2hhbmdlcyBpbiB2NToKPiA+ICAgLSBVc2UgZGVsYXllZCB3b3JrIHRvIHJlcGxhY2Ug
-dGltZXIuCj4gPiAKPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL213aWZpZXgvaW5p
-dC5jICAgICAgfCAxMCArKysrKystLS0tCj4gPiAgZHJpdmVycy9uZXQvd2lyZWxlc3MvbWFydmVs
-bC9td2lmaWV4L21haW4uaCAgICAgIHwgIDIgKy0KPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9t
-YXJ2ZWxsL213aWZpZXgvc3RhX2V2ZW50LmMgfCAgNiArKystLS0KPiA+ICAzIGZpbGVzIGNoYW5n
-ZWQsIDEwIGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pCj4gCj4gTG9va3MgZ3JlYXQhIFRo
-YW5rcyBmb3Igd29ya2luZyBvbiB0aGlzLgo+IAo+IFJldmlld2VkLWJ5OiBCcmlhbiBOb3JyaXMg
-PGJyaWFubm9ycmlzQGNocm9taXVtLm9yZz4KPiAKPiBTb21lIHNtYWxsIG5pdHBpY2tzIGJlbG93
-LCBidXQgdGhleSdyZSBkZWZpbml0ZWx5IG5vdCBjcml0aWNhbC4KClRoYW5rIHlvdSBmb3IgeW91
-ciB0aW1lIGFuZCBhcHByb3ZhbCEKCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxl
-c3MvbWFydmVsbC9td2lmaWV4L2luaXQuYyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21hcnZlbGwv
-bXdpZmlleC9pbml0LmMKPiA+IGluZGV4IDg4YzcyZDE4MjdhLi4zNzEzZjNlMzIzZiAxMDA2NDQK
-PiA+IC0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21hcnZlbGwvbXdpZmlleC9pbml0LmMKPiA+
-ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21hcnZlbGwvbXdpZmlleC9pbml0LmMKPiA+IEBA
-IC02Myw5ICs2MywxMSBAQCBzdGF0aWMgdm9pZCB3YWtldXBfdGltZXJfZm4oc3RydWN0IHRpbWVy
-X2xpc3QgKnQpCj4gPiAgCQlhZGFwdGVyLT5pZl9vcHMuY2FyZF9yZXNldChhZGFwdGVyKTsKPiA+
-ICB9Cj4gPiAgCj4gPiAtc3RhdGljIHZvaWQgZndfZHVtcF90aW1lcl9mbihzdHJ1Y3QgdGltZXJf
-bGlzdCAqdCkKPiA+ICtzdGF0aWMgdm9pZCBmd19kdW1wX3dvcmsoc3RydWN0IHdvcmtfc3RydWN0
-ICp3b3JrKQo+ID4gIHsKPiA+IC0Jc3RydWN0IG13aWZpZXhfYWRhcHRlciAqYWRhcHRlciA9IGZy
-b21fdGltZXIoYWRhcHRlciwgdCwgZGV2ZHVtcF90aW1lcik7Cj4gPiArCXN0cnVjdCBtd2lmaWV4
-X2FkYXB0ZXIgKmFkYXB0ZXIgPSBjb250YWluZXJfb2Yod29yaywKPiA+ICsJCQkJCXN0cnVjdCBt
-d2lmaWV4X2FkYXB0ZXIsCj4gPiArCQkJCQlkZXZkdW1wX3dvcmsud29yayk7Cj4gCj4gU3VwZXIg
-bml0cGlja3k6IHRoZSBoYW5naW5nIGluZGVudCBzdHlsZSBzZWVtcyBhIGJpdCBvZmYuIEkgdHlw
-aWNhbGx5Cj4gc2VlIHBlb3BsZSB0cnkgdG8gYWxpZ24gdG8gdGhlIGZpcnN0IGNoYXJhY3RlciBh
-ZnRlciB0aGUgcGFyZW50aGVzaXMsCj4gbGlrZToKPiAKPiAJc3RydWN0IG13aWZpZXhfYWRhcHRl
-ciAqYWRhcHRlciA9IGNvbnRhaW5lcl9vZih3b3JrLAo+IAkJCQkJCSAgICAgICBzdHJ1Y3QgbXdp
-ZmlleF9hZGFwdGVyLAo+IAkJCQkJCSAgICAgICBkZXZkdW1wX3dvcmsud29yayk7Cj4gCj4gSXQn
-cyBub3QgYSBjbGVhcmx5LXNwZWNpZmllZCBzdHlsZSBydWxlIEkgdGhpbmssIHNvIEkgZGVmaW5p
-dGVseQo+IHdvdWxkbid0IGluc2lzdC4KPiAKPiBPbiB0aGUgYnJpZ2h0IHNpZGU6IEkgdGhpbmsg
-dGhlIGNsYW5nLWZvcm1hdCBydWxlcyAoaW4gLmNsYW5nLWZvcm1hdCkKPiBhcmUgZ2V0dGluZyBi
-ZXR0ZXIsIHNvIG9uZSBjYW4gbWFrZSBzb21lIGZvcm1hdHRpbmcgZGVjaXNpb25zIHZpYSB0b29s
-cwo+IGluc3RlYWQgb2Ygb3BpbmlvbiBhbmQgY2xvc2UgcmVhZGluZyEgVW5mb3J0dW5hdGVseSwg
-d2UgcHJvYmFibHkgY2FuJ3QKPiBkbyB0aGF0IGV4dGVuc2l2ZWx5IGFuZCBhdXRvbWF0aWNhbGx5
-LCBiZWNhdXNlIEkgZG91YnQgcGVvcGxlIHdpbGwgbG92ZQo+IGFsbCB0aGUgcmVmb3JtYXR0aW5n
-IGJlY2F1c2Ugb2YgYWxsIHRoZSBleGlzdGluZyBpbmNvbnNpc3RlbnQgc3R5bGUuCj4gCj4gQW55
-d2F5LCB0byBjdXQgdG8gdGhlIGNoYXNlOiBjbGFuZy1mb3JtYXQgY2hvb3NlcyBtb3ZpbmcgdG8g
-YSBuZXcgbGluZToKPiAKPiAJc3RydWN0IG13aWZpZXhfYWRhcHRlciAqYWRhcHRlciA9Cj4gCQlj
-b250YWluZXJfb2Yod29yaywgc3RydWN0IG13aWZpZXhfYWRhcHRlciwgZGV2ZHVtcF93b3JrLndv
-cmspOwo+IAo+IE1vcmUgaW5mbyBpZiB5b3UncmUgaW50ZXJlc3RlZDoKPiBodHRwczovL3d3dy5r
-ZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9wcm9jZXNzL2NsYW5nLWZvcm1hdC5odG1sCj4gCj4g
-PiAgCj4gPiAgCW13aWZpZXhfdXBsb2FkX2RldmljZV9kdW1wKGFkYXB0ZXIpOwo+ID4gIH0KClRo
-YW5rcyBmb3IgeW91ciBzdWdnZXN0aW9ucyEgSSB3aWxsIHVzZSBjbGFuZy1mb3JtYXQgdG8gYWRq
-dXN0IHRoZSBmb3JtYXQuCgo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL21h
-cnZlbGwvbXdpZmlleC9tYWluLmggYi9kcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL213aWZp
-ZXgvbWFpbi5oCj4gPiBpbmRleCAzMzJkZDFjOGRiMy4uNjUzMGM2ZWUzMDggMTAwNjQ0Cj4gPiAt
-LS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL213aWZpZXgvbWFpbi5oCj4gPiArKysg
-Yi9kcml2ZXJzL25ldC93aXJlbGVzcy9tYXJ2ZWxsL213aWZpZXgvbWFpbi5oCj4gPiBAQCAtMTA1
-NSw3ICsxMDU1LDcgQEAgc3RydWN0IG13aWZpZXhfYWRhcHRlciB7Cj4gCj4gTml0cGljazogbWFp
-bi5oIGlzIHByb2JhYmx5IG1pc3NpbmcgYSBsb3Qgb2YgI2luY2x1ZGVzLCBidXQgeW91IGNvdWxk
-Cj4gcHJvYmFibHkgYWRkIDxsaW51eC93b3JrcXVldWUuaD4gd2hpbGUgeW91J3JlIGF0IGl0LgoK
-SSB3aWxsIGFkZCA8bGludXgvd29ya3F1ZXVlLmg+IGluIG1haW4uaC4KCj4gCj4gPiAgCS8qIERl
-dmljZSBkdW1wIGRhdGEvbGVuZ3RoICovCj4gPiAgCXZvaWQgKmRldmR1bXBfZGF0YTsKPiA+ICAJ
-aW50IGRldmR1bXBfbGVuOwo+ID4gLQlzdHJ1Y3QgdGltZXJfbGlzdCBkZXZkdW1wX3RpbWVyOwo+
-ID4gKwlzdHJ1Y3QgZGVsYXllZF93b3JrIGRldmR1bXBfd29yazsKPiA+ICAKPiA+ICAJYm9vbCBp
-Z25vcmVfYnRjb2V4X2V2ZW50czsKPiA+ICB9OwoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3U=
+On 2022-06-06, Ian Rogers wrote:
+>ret may be uninitialized on error goto paths.
+>
+>Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+>Fixes: dc2cf4ca866f ("perf unwind: Fix segbase for ld.lld linked objects")
+>Signed-off-by: Ian Rogers <irogers@google.com>
 
+Thanks. Sorry for my mistake...
+
+Reviewed-by: Fangrui Song <maskray@google.com>
+
+>---
+> tools/perf/util/unwind-libunwind-local.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+>index 37622699c91a..6e5b8cce47bf 100644
+>--- a/tools/perf/util/unwind-libunwind-local.c
+>+++ b/tools/perf/util/unwind-libunwind-local.c
+>@@ -174,7 +174,7 @@ static int elf_section_address_and_offset(int fd, const char *name, u64 *address
+> 	Elf *elf;
+> 	GElf_Ehdr ehdr;
+> 	GElf_Shdr shdr;
+>-	int ret;
+>+	int ret = -1;
+>
+> 	elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
+> 	if (elf == NULL)
+>-- 
+>2.36.1.255.ge46751e96f-goog
+>

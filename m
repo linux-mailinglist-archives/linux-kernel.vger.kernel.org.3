@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D07541FA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30C5541FE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386013AbiFGWrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S1386562AbiFGWtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380750AbiFGVif (ORCPT
+        with ESMTP id S1381400AbiFGVkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:38:35 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9713FC047E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:05:33 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 187so16302273pfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:05:33 -0700 (PDT)
+        Tue, 7 Jun 2022 17:40:42 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EB4232A45
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:06:51 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 129so16760084pgc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:06:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zrwToAbRm/8o4mYKXHsvwuZsdzi56cDWjWGCsMFQCq4=;
-        b=IJmEKjbu0NsIQ2TIKKHgQBPdu95rE+fxg/uNfUr8lhMeiyM3S3ZNsC45sqxk/R9FaT
-         /r8eY4OIvLSDUSY2xX5aGB0rM79qaZ0k5s1ANX+OWkeNYD2rYOnI8ALWyLGqAVuXsJB6
-         i/HNUOWDOs5Bk+bD/8AV47NIeWcKF4/IUypi8=
+        bh=Am5aGfsC1axZlOULyuACem/6+XgiQ9wXJ5AxdoUZZyw=;
+        b=BGOwhJTnVdp3I5vsGAiMaSPty5yVDLkvo0iFxUWaRbLO48HZDG2m2g31IRd/i61RJD
+         cplVpC/n6+a9WUpARLyGuyHaIrbjXSGdtTeLPzgvpeOYyuGy2atgUBjtc6b4N1vAcdt6
+         wabuMv7xZ2cpk1nStoT2ujhjkI+PBH8IM/Bvs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zrwToAbRm/8o4mYKXHsvwuZsdzi56cDWjWGCsMFQCq4=;
-        b=77E3pC4FdmQZYF2FLNULXeBhxlIZu4vBLiiROm8NVageP1DJ6G/pTDKqCvKIVZ4VQV
-         RUDZQa5XI88nWHFoUJn+POsF4WH5VQO6110kZeYoM9zDHtXmxTlgAhr20JkzN6Qo0lrM
-         TbgL3tDHlc6k75m11bU4Kdzpo3oGD/k6C6Lq/hXCz+OlFZ1wMVL6aqYl08Bz9+EIFEdO
-         OHfW0A0/38IXlPdWYcjpkkcIBj9ZvyPgM/7jemHAgM2b5vFAaw6JPZN9Jn0ErDxwPblC
-         L1U9PAupPBZEnKepYmzYpcDS6x/qQCVjrL3P3IQYlOveUTNe016aZy4shVa+2+B8Pyg9
-         5kNw==
-X-Gm-Message-State: AOAM531iM305ykfAYoi9XhZ1qFv3mxS6PnUE0qxkLV2tJC0GLRbYFcR0
-        84ZyrNCjJ99Lc1zVbksQcd5KLL+AstbxDw==
-X-Google-Smtp-Source: ABdhPJyUhy7+cJfaDKfU+dlJllV7FTT99DCfwfNrat7f5aIWF9lfM1q5wj8dxgFa13yBRD3PkrsPDQ==
-X-Received: by 2002:a63:8841:0:b0:3fc:704c:24ff with SMTP id l62-20020a638841000000b003fc704c24ffmr26783832pgd.116.1654628732819;
-        Tue, 07 Jun 2022 12:05:32 -0700 (PDT)
+        bh=Am5aGfsC1axZlOULyuACem/6+XgiQ9wXJ5AxdoUZZyw=;
+        b=2GJPde3jizG2IAtOWu3T5Kk4eZHks4ZHfCHu3wbQYxlHhvNah1kxITxQjHV679XbKI
+         Wyt3nau/T1LchYGyKcSXlIDjX6Zi8lnD5ZQW8vyx+UBkZMlxy8DmlbS27zKst73//eFa
+         vMe8hWR3MeExaK4B2JaiGwGXrvl3HJUw/R/0S6pJQZKPhsmXe3v/+22J6Tx/zfzwtK0r
+         ptC8LYlhELMPOWXaheJDKigCMS7Q203qj5qaynsOo0kyZEHU3Ty+O6Kl9k/ynx+u3NiQ
+         54QEGZab1bjI+4IEwG+MEvgBMXOkKY3zd2GuHwNu1CtSGvE3i3GjyvA/1WjWfwQ6gF9q
+         iecg==
+X-Gm-Message-State: AOAM531RVBYQqjjyv33+0XmAUaHB/TbNzWgBL2O2i5PxXglCERALMHD+
+        JjyuvrJctZo/SyNIoE1Uo2DoH9iyN6id+w==
+X-Google-Smtp-Source: ABdhPJwK88zzGqSUFlf6HNcaHNY6NeEJA3B8fT0RLY7q7mLsnknl0nXD4wTz+3eWL0ef64qxs1Ro+w==
+X-Received: by 2002:a63:2c89:0:b0:3fe:1c0a:75d2 with SMTP id s131-20020a632c89000000b003fe1c0a75d2mr2077597pgs.310.1654628809959;
+        Tue, 07 Jun 2022 12:06:49 -0700 (PDT)
 Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g29-20020aa79ddd000000b0050dc762819esm13236084pfq.120.2022.06.07.12.05.32
+        by smtp.gmail.com with ESMTPSA id g29-20020aa79ddd000000b0050dc762819esm13236084pfq.120.2022.06.07.12.06.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 12:05:32 -0700 (PDT)
+        Tue, 07 Jun 2022 12:06:49 -0700 (PDT)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     bleung@chromium.org, swboyd@chromium.org,
@@ -75,9 +75,9 @@ Cc:     bleung@chromium.org, swboyd@chromium.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Tzung-Bi Shih <tzungbi@google.com>,
         Xin Ji <xji@analogixsemi.com>
-Subject: [PATCH 2/7] usb: typec: mux: Add CONFIG guards for functions
-Date:   Tue,  7 Jun 2022 19:00:20 +0000
-Message-Id: <20220607190131.1647511-3-pmalani@chromium.org>
+Subject: [PATCH 3/7] dt-bindings: usb: Add Type-C switch binding
+Date:   Tue,  7 Jun 2022 19:00:21 +0000
+Message-Id: <20220607190131.1647511-4-pmalani@chromium.org>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
 In-Reply-To: <20220607190131.1647511-1-pmalani@chromium.org>
 References: <20220607190131.1647511-1-pmalani@chromium.org>
@@ -93,71 +93,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some drivers that can use the Type C mux API, but don't have
-to. Introduce CONFIG guards for the mux functions so that drivers can
-include the header file and not run into compilation errors on systems
-which don't have CONFIG_TYPEC enabled. When CONFIG_TYPEC is not enabled,
-the Type C mux functions will be stub versions of the original calls.
+Introduce a binding which represents a component that can control the
+routing of USB Type-C data lines as well as address data line
+orientation (based on CC lines' orientation).
 
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
- include/linux/usb/typec_mux.h | 38 +++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ .../devicetree/bindings/usb/typec-switch.yaml | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
 
-diff --git a/include/linux/usb/typec_mux.h b/include/linux/usb/typec_mux.h
-index ee57781dcf28..758d34ced1f8 100644
---- a/include/linux/usb/typec_mux.h
-+++ b/include/linux/usb/typec_mux.h
-@@ -58,6 +58,8 @@ struct typec_mux_desc {
- 	void *drvdata;
- };
- 
-+#if IS_ENABLED(CONFIG_TYPEC) || IS_MODULE(CONFIG_TYPEC)
+diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+new file mode 100644
+index 000000000000..60a600a63fef
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
- 				       const struct typec_altmode_desc *desc);
- void typec_mux_put(struct typec_mux *mux);
-@@ -76,4 +78,40 @@ void typec_mux_unregister(struct typec_mux_dev *mux);
- void typec_mux_set_drvdata(struct typec_mux_dev *mux, void *data);
- void *typec_mux_get_drvdata(struct typec_mux_dev *mux);
- 
-+#else
++title: USB Type-C Switch
 +
-+struct typec_mux *fwnode_typec_mux_get(struct fwnode_handle *fwnode,
-+				       const struct typec_altmode_desc *desc)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
++maintainers:
++  - Prashant Malani <pmalani@chromium.org>
 +
-+void typec_mux_put(struct typec_mux *mux) {}
++description:
++  A USB Type-C switch represents a component which routes USB Type-C data
++  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
++  Thunderbolt etc.) depending on which mode the Type-C port, port partner
++  and cable are operating in. It can also modify lane routing based on
++  the orientation of a connected Type-C peripheral.
 +
-+int typec_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
-+{
-+	return -EOPNOTSUPP;
-+}
++properties:
++  compatible:
++    items:
++      - enum:
++          - typec-switch
 +
-+static inline struct typec_mux *
-+typec_mux_get(struct device *dev, const struct typec_altmode_desc *desc)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
++  mode-switch:
++    type: boolean
++    description: Specify that this switch can handle alternate mode switching.
 +
-+struct typec_mux *
-+typec_mux_register(struct device *parent, const struct typec_mux_desc *desc)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
-+void typec_mux_unregister(struct typec_mux *mux) {}
++  orientation-switch:
++    type: boolean
++    description: Specify that this switch can handle orientation switching.
 +
-+void typec_mux_set_drvdata(struct typec_mux *mux, void *data) {}
-+void *typec_mux_get_drvdata(struct typec_mux *mux)
-+{
-+	return ERR_PTR(-EOPNOTSUPP);
-+}
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++    description: OF graph binding modelling data lines to the Type-C switch.
 +
-+#endif /* CONFIG_TYPEC */
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Link between the switch and a Type-C connector.
 +
- #endif /* __USB_TYPEC_MUX */
++    required:
++      - port@0
++
++required:
++  - compatible
++  - ports
++
++anyOf:
++  - required:
++      - mode-switch
++  - required:
++      - orientation-switch
++
++additionalProperties: true
++
++examples:
++  - |
++    anx7625 {
++      typecswitch {
++        compatible = "typec-switch";
++        mode-switch;
++        orientation-switch;
++        ports {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          port@0 {
++            reg = <0>;
++            anx_ep: endpoint {
++              remote-endpoint = <&typec_controller>;
++            };
++          };
++        };
++      };
++    };
 -- 
 2.36.1.255.ge46751e96f-goog
 

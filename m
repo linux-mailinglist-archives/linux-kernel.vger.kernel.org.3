@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB1D541AF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981905409AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381636AbiFGVlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S1349686AbiFGSLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378057AbiFGUvX (ORCPT
+        with ESMTP id S1349920AbiFGRvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178B3F5525;
-        Tue,  7 Jun 2022 11:41:36 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB84E13F412;
+        Tue,  7 Jun 2022 10:39:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64AFD615CE;
-        Tue,  7 Jun 2022 18:41:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB06C385A2;
-        Tue,  7 Jun 2022 18:41:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BA92B822B0;
+        Tue,  7 Jun 2022 17:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1291C34119;
+        Tue,  7 Jun 2022 17:38:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627295;
-        bh=6OCOup2jxFyPMio7PTP0EyiHgfEdOVgowN2xRnYuOhg=;
+        s=korg; t=1654623521;
+        bh=E2zvwCkWVBblQ2kmRzhy56yOvgIT3MHqCxsl21Oxql8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r7eAjZmdour0Lip8OzSjfmMlchKhmccZ12OU0S1+bXF1koT59T2tG4Y/dgwMAxcks
-         6IWYohrhjFxBV7UMU7lbxtwEMJoyjA+5ZnY1vDCRTbq42q9jx7CyJf1n/muYbal4if
-         7s2w+iPde6FHe7eMPQVvx978wAI5I6qSqX2pVBe0=
+        b=J/oR/uQgDD9ndWBcKZAVq7BFzLA3s7seSaFQ6pyrF7ZMa3sSVJSEmPR3Uc0R0FaQ/
+         7DdjC3cIL7iNUieHwKhKSQWP32QDIGaKFBLd/m18xA7atqI3z+Blut5USFndP4Ruuo
+         7PM/bXMhXP9Sq+4c3ZCoet6Dd1qZLAShZEEJ0KpM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.17 686/772] landlock: Reduce the maximum number of layers to 16
+        stable@vger.kernel.org, Ondrej Hubsch <ohubsch@purestorage.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.10 421/452] SMB3: EBADF/EIO errors in rename/open caused by race condition in smb2_compound_op
 Date:   Tue,  7 Jun 2022 19:04:38 +0200
-Message-Id: <20220607165009.269728984@linuxfoundation.org>
+Message-Id: <20220607164921.102846323@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,126 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Steve French <stfrench@microsoft.com>
 
-commit 75c542d6c6cc48720376862d5496d51509160dfd upstream.
+commit 0a55cf74ffb5d004b93647e4389096880ce37d6b upstream.
 
-The maximum number of nested Landlock domains is currently 64.  Because
-of the following fix and to help reduce the stack size, let's reduce it
-to 16.  This seems large enough for a lot of use cases (e.g. sandboxed
-init service, spawning a sandboxed SSH service, in nested sandboxed
-containers).  Reducing the number of nested domains may also help to
-discover misuse of Landlock (e.g. creating a domain per rule).
+There is  a race condition in smb2_compound_op:
 
-Add and use a dedicated layer_mask_t typedef to fit with the number of
-layers.  This might be useful when changing it and to keep it consistent
-with the maximum number of layers.
+after_close:
+	num_rqst++;
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-Link: https://lore.kernel.org/r/20220506161102.525323-3-mic@digikod.net
+	if (cfile) {
+		cifsFileInfo_put(cfile); // sends SMB2_CLOSE to the server
+		cfile = NULL;
+
+This is triggered by smb2_query_path_info operation that happens during
+revalidate_dentry. In smb2_query_path_info, get_readable_path is called to
+load the cfile, increasing the reference counter. If in the meantime, this
+reference becomes the very last, this call to cifsFileInfo_put(cfile) will
+trigger a SMB2_CLOSE request sent to the server just before sending this compound
+request – and so then the compound request fails either with EBADF/EIO depending
+on the timing at the server, because the handle is already closed.
+
+In the first scenario, the race seems to be happening between smb2_query_path_info
+triggered by the rename operation, and between “cleanup” of asynchronous writes – while
+fsync(fd) likely waits for the asynchronous writes to complete, releasing the writeback
+structures can happen after the close(fd) call. So the EBADF/EIO errors will pop up if
+the timing is such that:
+1) There are still outstanding references after close(fd) in the writeback structures
+2) smb2_query_path_info successfully fetches the cfile, increasing the refcounter by 1
+3) All writeback structures release the same cfile, reducing refcounter to 1
+4) smb2_compound_op is called with that cfile
+
+In the second scenario, the race seems to be similar – here open triggers the
+smb2_query_path_info operation, and if all other threads in the meantime decrease the
+refcounter to 1 similarly to the first scenario, again SMB2_CLOSE will be sent to the
+server just before issuing the compound request. This case is harder to reproduce.
+
+See https://bugzilla.samba.org/show_bug.cgi?id=15051
+
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Fixes: 8de9e86c67ba ("cifs: create a helper to find a writeable handle by path name")
+Signed-off-by: Ondrej Hubsch <ohubsch@purestorage.com>
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/userspace-api/landlock.rst   |    4 ++--
- security/landlock/fs.c                     |   17 +++++++----------
- security/landlock/limits.h                 |    2 +-
- security/landlock/ruleset.h                |    4 ++++
- tools/testing/selftests/landlock/fs_test.c |    2 +-
- 5 files changed, 15 insertions(+), 14 deletions(-)
+ fs/cifs/smb2inode.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -267,8 +267,8 @@ restrict such paths with dedicated rules
- Ruleset layers
- --------------
+--- a/fs/cifs/smb2inode.c
++++ b/fs/cifs/smb2inode.c
+@@ -371,8 +371,6 @@ smb2_compound_op(const unsigned int xid,
+ 	num_rqst++;
  
--There is a limit of 64 layers of stacked rulesets.  This can be an issue for a
--task willing to enforce a new ruleset in complement to its 64 inherited
-+There is a limit of 16 layers of stacked rulesets.  This can be an issue for a
-+task willing to enforce a new ruleset in complement to its 16 inherited
- rulesets.  Once this limit is reached, sys_landlock_restrict_self() returns
- E2BIG.  It is then strongly suggested to carefully build rulesets once in the
- life of a thread, especially for applications able to launch other applications
---- a/security/landlock/fs.c
-+++ b/security/landlock/fs.c
-@@ -183,10 +183,10 @@ int landlock_append_fs_rule(struct landl
- 
- /* Access-control management */
- 
--static inline u64 unmask_layers(const struct landlock_ruleset *const domain,
--				const struct path *const path,
--				const access_mask_t access_request,
--				u64 layer_mask)
-+static inline layer_mask_t
-+unmask_layers(const struct landlock_ruleset *const domain,
-+	      const struct path *const path, const access_mask_t access_request,
-+	      layer_mask_t layer_mask)
- {
- 	const struct landlock_rule *rule;
- 	const struct inode *inode;
-@@ -212,11 +212,11 @@ static inline u64 unmask_layers(const st
- 	 */
- 	for (i = 0; i < rule->num_layers; i++) {
- 		const struct landlock_layer *const layer = &rule->layers[i];
--		const u64 layer_level = BIT_ULL(layer->level - 1);
-+		const layer_mask_t layer_bit = BIT_ULL(layer->level - 1);
- 
- 		/* Checks that the layer grants access to the full request. */
- 		if ((layer->access & access_request) == access_request) {
--			layer_mask &= ~layer_level;
-+			layer_mask &= ~layer_bit;
- 
- 			if (layer_mask == 0)
- 				return layer_mask;
-@@ -231,12 +231,9 @@ static int check_access_path(const struc
- {
- 	bool allowed = false;
- 	struct path walker_path;
--	u64 layer_mask;
-+	layer_mask_t layer_mask;
- 	size_t i;
- 
--	/* Make sure all layers can be checked. */
--	BUILD_BUG_ON(BITS_PER_TYPE(layer_mask) < LANDLOCK_MAX_NUM_LAYERS);
--
- 	if (!access_request)
- 		return 0;
- 	if (WARN_ON_ONCE(!domain || !path))
---- a/security/landlock/limits.h
-+++ b/security/landlock/limits.h
-@@ -15,7 +15,7 @@
- 
- /* clang-format off */
- 
--#define LANDLOCK_MAX_NUM_LAYERS		64
-+#define LANDLOCK_MAX_NUM_LAYERS		16
- #define LANDLOCK_MAX_NUM_RULES		U32_MAX
- 
- #define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_MAKE_SYM
---- a/security/landlock/ruleset.h
-+++ b/security/landlock/ruleset.h
-@@ -23,6 +23,10 @@ typedef u16 access_mask_t;
- /* Makes sure all filesystem access rights can be stored. */
- static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_FS);
- 
-+typedef u16 layer_mask_t;
-+/* Makes sure all layers can be checked. */
-+static_assert(BITS_PER_TYPE(layer_mask_t) >= LANDLOCK_MAX_NUM_LAYERS);
-+
- /**
-  * struct landlock_layer - Access rights for a given layer
-  */
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -1159,7 +1159,7 @@ TEST_F_FORK(layout1, max_layers)
- 	const int ruleset_fd = create_ruleset(_metadata, ACCESS_RW, rules);
- 
- 	ASSERT_LE(0, ruleset_fd);
--	for (i = 0; i < 64; i++)
-+	for (i = 0; i < 16; i++)
- 		enforce_ruleset(_metadata, ruleset_fd);
- 
- 	for (i = 0; i < 2; i++) {
+ 	if (cfile) {
+-		cifsFileInfo_put(cfile);
+-		cfile = NULL;
+ 		rc = compound_send_recv(xid, ses, server,
+ 					flags, num_rqst - 2,
+ 					&rqst[1], &resp_buftype[1],
 
 

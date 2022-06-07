@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA5B5419F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FC65408B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378482AbiFGV1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S1349491AbiFGSAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377637AbiFGUdz (ORCPT
+        with ESMTP id S1348411AbiFGRkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:55 -0400
+        Tue, 7 Jun 2022 13:40:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C94137C43;
-        Tue,  7 Jun 2022 11:35:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50846B018;
+        Tue,  7 Jun 2022 10:34:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D886156D;
-        Tue,  7 Jun 2022 18:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1D18C385A2;
-        Tue,  7 Jun 2022 18:35:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7748A614AE;
+        Tue,  7 Jun 2022 17:33:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85C77C34115;
+        Tue,  7 Jun 2022 17:33:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626934;
-        bh=ozUGUxXjZ0SLqJrR+0taUaj3gF28+ijUtxbb/5RCXvs=;
+        s=korg; t=1654623191;
+        bh=1GMGT98+przndzzSNbR0Qqjc8joCQ0M2vp1ljX+83FI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hhiuzj1IF8LkZZ3AY76YBVB8Y0vm3lFaOGU28vC5ePsltHD62v3E1vns4ib6xOjyv
-         a6Or/SoHYmLS73yhr2gqdfC4ygDgV7YSJPzbvzsDNF+w5xYzm5uK5MX1BhQof6oz+c
-         wc5XDDD9bP6bJJZdLmzlla5q2KKPbe9Qbl0JYdVI=
+        b=oxnsPTjEbggi8muUX4gOad4VrvL5NrS7mb+rq3NdtZgV/6qSV+iTj17UhUPdXQJBz
+         RWdneC33pk8dhpD+9X9cNWzVNZEOljckGmes9IBjW2gLugwRhw7LxxiraIJC+uHtOJ
+         S9snLH/3jhSsBxH+l2yjvgDHNfQ5kVYxmWHlkkuQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mel Gorman <mel@csn.ul.ie>,
+        Minchan Kim <minchan.kim@gmail.com>,
+        KAMEZAWA Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 555/772] gpio: sim: Use correct order for the parameters of devm_kcalloc()
-Date:   Tue,  7 Jun 2022 19:02:27 +0200
-Message-Id: <20220607165005.314733506@linuxfoundation.org>
+Subject: [PATCH 5.10 291/452] drivers/base/node.c: fix compaction sysfs file leak
+Date:   Tue,  7 Jun 2022 19:02:28 +0200
+Message-Id: <20220607164917.222200219@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-[ Upstream commit c680c6a814a2269427fad9ac417ab16756bceae9 ]
+[ Upstream commit da63dc84befaa9e6079a0bc363ff0eaa975f9073 ]
 
-We should have 'n', then 'size', not the opposite.
-This is harmless because the 2 values are just multiplied, but having
-the correct order silence a (unpublished yet) smatch warning.
+Compaction sysfs file is created via compaction_register_node in
+register_node.  But we forgot to remove it in unregister_node.  Thus
+compaction sysfs file is leaked.  Using compaction_unregister_node to fix
+this issue.
 
-Fixes: cb8c474e79be ("gpio: sim: new testing module")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Link: https://lkml.kernel.org/r/20220401070905.43679-1-linmiaohe@huawei.com
+Fixes: ed4a6d7f0676 ("mm: compaction: add /sys trigger for per-node memory compaction")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Mel Gorman <mel@csn.ul.ie>
+Cc: Minchan Kim <minchan.kim@gmail.com>
+Cc: KAMEZAWA Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>
+Cc: KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-sim.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/base/node.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-index 41c31b10ae84..98109839102f 100644
---- a/drivers/gpio/gpio-sim.c
-+++ b/drivers/gpio/gpio-sim.c
-@@ -314,8 +314,8 @@ static int gpio_sim_setup_sysfs(struct gpio_sim_chip *chip)
- 
- 	for (i = 0; i < num_lines; i++) {
- 		attr_group = devm_kzalloc(dev, sizeof(*attr_group), GFP_KERNEL);
--		attrs = devm_kcalloc(dev, sizeof(*attrs),
--				     GPIO_SIM_NUM_ATTRS, GFP_KERNEL);
-+		attrs = devm_kcalloc(dev, GPIO_SIM_NUM_ATTRS, sizeof(*attrs),
-+				     GFP_KERNEL);
- 		val_attr = devm_kzalloc(dev, sizeof(*val_attr), GFP_KERNEL);
- 		pull_attr = devm_kzalloc(dev, sizeof(*pull_attr), GFP_KERNEL);
- 		if (!attr_group || !attrs || !val_attr || !pull_attr)
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 21965de8538b..5f745c906c33 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -655,6 +655,7 @@ static int register_node(struct node *node, int num)
+  */
+ void unregister_node(struct node *node)
+ {
++	compaction_unregister_node(node);
+ 	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
+ 	node_remove_accesses(node);
+ 	node_remove_caches(node);
 -- 
 2.35.1
 

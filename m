@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AA3541E11
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F42540B22
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381192AbiFGWYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S1352641AbiFGS0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380813AbiFGVQ7 (ORCPT
+        with ESMTP id S1351401AbiFGSCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:16:59 -0400
+        Tue, 7 Jun 2022 14:02:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5916B11C1D;
-        Tue,  7 Jun 2022 11:57:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8492212E83E;
+        Tue,  7 Jun 2022 10:44:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B36CA6159D;
-        Tue,  7 Jun 2022 18:57:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2756C385A2;
-        Tue,  7 Jun 2022 18:57:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1933F6137B;
+        Tue,  7 Jun 2022 17:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A90C34119;
+        Tue,  7 Jun 2022 17:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628262;
-        bh=jgkNuQnH2JVLqt1XUkjKASunCg6Sd0cNwbnANHgb/0Y=;
+        s=korg; t=1654623865;
+        bh=oaBZL2hyxhd+UZS2DfdlG+V550ec/cUrVqckFsJQhfk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iUBvKzLBmaSIJcYPLmoWZfwh4oRAAljJb9ynDrxEtnjk5y0fEGcp4zb1AhL8LjlEH
-         xdV2zgpuB2sk2jRdsQurugJT7KS90UbUhgeZ/Hzqg+foA+lKyPniEpSimM4xy7C6st
-         uEVoRpTgSYdRpFInek3KVq/HmFbLDzuDdJfGw3r0=
+        b=zc9gtrJMeH6WI3/KEeXrr7HVDq8lg1dMM4qQytMILWzz6THduVDJjoxfmrxByWwnI
+         vbCOynPLezW6xLN/bj4AalfrwOPxZL3BCSv4ilO7gbQWET5XK4YP2pXNk503fAtdDk
+         fp1VyjYXa6mNecblub4q1vm4F0pA022ts/gt+xaY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 265/879] drm/ssd130x: Reduce temporary buffer sizes
-Date:   Tue,  7 Jun 2022 18:56:23 +0200
-Message-Id: <20220607165010.541528639@linuxfoundation.org>
+Subject: [PATCH 5.15 119/667] media: ccs-core.c: fix failure to call clk_disable_unprepare
+Date:   Tue,  7 Jun 2022 18:56:24 +0200
+Message-Id: <20220607164938.393361051@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,66 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert@linux-m68k.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 4442ac1af10442d6e7e824fdc226f89ed94d5b53 ]
+[ Upstream commit eca89cf60b040ee2cae693ea72a0364284f3084c ]
 
-ssd130x_clear_screen() allocates a temporary buffer sized to hold one
-byte per pixel, while it only needs to hold one bit per pixel.
+Fixes smatch warning:
 
-ssd130x_fb_blit_rect() allocates a temporary buffer sized to hold one
-byte per pixel for the whole frame buffer, while it only needs to hold
-one bit per pixel for the part that is to be updated.
-Pass dst_pitch to drm_fb_xrgb8888_to_mono(), as we have already
-calculated it anyway.
+drivers/media/i2c/ccs/ccs-core.c:1676 ccs_power_on() warn: 'sensor->ext_clk' from clk_prepare_enable() not released on lines: 1606.
 
-Fixes: a61732e808672cfa ("drm: Add driver for Solomon SSD130x OLED displays")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Javier Martinez Canillas <javierm@redhat.com>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220317081830.1211400-5-geert@linux-m68k.org
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/solomon/ssd130x.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ccs/ccs-core.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/solomon/ssd130x.c b/drivers/gpu/drm/solomon/ssd130x.c
-index 7c99af4ce9dd..38b6c2c14f53 100644
---- a/drivers/gpu/drm/solomon/ssd130x.c
-+++ b/drivers/gpu/drm/solomon/ssd130x.c
-@@ -440,7 +440,8 @@ static void ssd130x_clear_screen(struct ssd130x_device *ssd130x)
- 		.y2 = ssd130x->height,
- 	};
+diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+index 5363f3bcafe3..67bb770ed63f 100644
+--- a/drivers/media/i2c/ccs/ccs-core.c
++++ b/drivers/media/i2c/ccs/ccs-core.c
+@@ -1603,8 +1603,11 @@ static int ccs_power_on(struct device *dev)
+ 			usleep_range(1000, 2000);
+ 		} while (--retry);
  
--	buf = kcalloc(ssd130x->width, ssd130x->height, GFP_KERNEL);
-+	buf = kcalloc(DIV_ROUND_UP(ssd130x->width, 8), ssd130x->height,
-+		      GFP_KERNEL);
- 	if (!buf)
- 		return;
+-		if (!reset)
+-			return -EIO;
++		if (!reset) {
++			dev_err(dev, "software reset failed\n");
++			rval = -EIO;
++			goto out_cci_addr_fail;
++		}
+ 	}
  
-@@ -454,6 +455,7 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
- {
- 	struct ssd130x_device *ssd130x = drm_to_ssd130x(fb->dev);
- 	void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
-+	unsigned int dst_pitch;
- 	int ret = 0;
- 	u8 *buf = NULL;
- 
-@@ -461,11 +463,12 @@ static int ssd130x_fb_blit_rect(struct drm_framebuffer *fb, const struct iosys_m
- 	rect->y1 = round_down(rect->y1, 8);
- 	rect->y2 = min_t(unsigned int, round_up(rect->y2, 8), ssd130x->height);
- 
--	buf = kcalloc(fb->width, fb->height, GFP_KERNEL);
-+	dst_pitch = DIV_ROUND_UP(drm_rect_width(rect), 8);
-+	buf = kcalloc(dst_pitch, drm_rect_height(rect), GFP_KERNEL);
- 	if (!buf)
- 		return -ENOMEM;
- 
--	drm_fb_xrgb8888_to_mono(buf, 0, vmap, fb, rect);
-+	drm_fb_xrgb8888_to_mono(buf, dst_pitch, vmap, fb, rect);
- 
- 	ssd130x_update_rect(ssd130x, buf, rect);
- 
+ 	if (sensor->hwcfg.i2c_addr_alt) {
 -- 
 2.35.1
 

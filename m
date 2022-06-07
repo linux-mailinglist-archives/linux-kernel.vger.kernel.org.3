@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A241541BC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CE4541D0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383895AbiFGVxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S1377999AbiFGWHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378688AbiFGVBo (ORCPT
+        with ESMTP id S1378750AbiFGVBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:01:44 -0400
+        Tue, 7 Jun 2022 17:01:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147E020E6CB;
-        Tue,  7 Jun 2022 11:45:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D0520E6FC;
+        Tue,  7 Jun 2022 11:45:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A55B76168E;
-        Tue,  7 Jun 2022 18:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8BFC385A2;
-        Tue,  7 Jun 2022 18:45:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B60D6156D;
+        Tue,  7 Jun 2022 18:45:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BEC6C385A2;
+        Tue,  7 Jun 2022 18:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627527;
-        bh=YTiQcfVfoUJZDjjvDiV3FiTKkyQKvtmPn1hleT4Vvhw=;
+        s=korg; t=1654627532;
+        bh=NrPlRNLy3VPCTlW9T90w4oVHwZBt8gL5yWLzuJeF2n0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qNtj3cRj7hsqJCrMJRhvR2ZQASGxI8mzTdGrSWw+vZguV9WN+wI5X0FBjbncArFIs
-         JU+FKTDFUx1mJ5jArIFXFvZocquFOnmOuYbPmYE2zWqCc536Ni4nM5Z/z4J5KuFqRm
-         gYrz6DB2nidGY4WwgwprX1GnEk76vYXErrcuMIsg=
+        b=2JyNQXKtjbyxfEOp94jYeKXMZsathdig5iwIOPBgytRmvzFsmBK92et+MqeTMXQW1
+         RMIPY2BNB0vEenYjrauKdj/Bu31Mjn1iR7JneQiaiR8PgjH31h6+NYTl8+WpN2NauR
+         TVKBS9xypp+62GG0QGL/7PcSEJROWbvxAJcVA+V8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>, Coly Li <colyli@suse.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 771/772] md: bcache: check the return value of kzalloc() in detached_dev_do_request()
-Date:   Tue,  7 Jun 2022 19:06:03 +0200
-Message-Id: <20220607165011.739919303@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH 5.17 772/772] tty: n_gsm: Fix packet data hex dump output
+Date:   Tue,  7 Jun 2022 19:06:04 +0200
+Message-Id: <20220607165011.769069408@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,38 +54,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Tony Lindgren <tony@atomide.com>
 
-commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
+commit 925ea0fa5277c1e6bb9e51955ef34eea9736c3d7 upstream.
 
-The function kzalloc() in detached_dev_do_request() can fail, so its
-return value should be checked.
+The module param debug for n_gsm uses KERN_INFO level, but the hexdump
+now uses KERN_DEBUG level. This started after commit 091cb0994edd
+("lib/hexdump: make print_hex_dump_bytes() a nop on !DEBUG builds").
+We now use dynamic_hex_dump() unless DEBUG is set.
 
-Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Signed-off-by: Coly Li <colyli@suse.de>
-Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+This causes no packets to be seen with modprobe n_gsm debug=0x1f unlike
+earlier. Let's fix this by adding gsm_hex_dump_bytes() that calls
+print_hex_dump() with KERN_INFO to match what n_gsm is doing with the
+other debug related output.
+
+Fixes: 091cb0994edd ("lib/hexdump: make print_hex_dump_bytes() a nop on !DEBUG builds")
+Cc: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Link: https://lore.kernel.org/r/20220512131506.1216-1-tony@atomide.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/bcache/request.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/tty/n_gsm.c |   31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
---- a/drivers/md/bcache/request.c
-+++ b/drivers/md/bcache/request.c
-@@ -1107,6 +1107,12 @@ static void detached_dev_do_request(stru
- 	 * which would call closure_get(&dc->disk.cl)
- 	 */
- 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-+	if (!ddip) {
-+		bio->bi_status = BLK_STS_RESOURCE;
-+		bio->bi_end_io(bio);
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -444,6 +444,25 @@ static u8 gsm_encode_modem(const struct
+ 	return modembits;
+ }
+ 
++static void gsm_hex_dump_bytes(const char *fname, const u8 *data,
++			       unsigned long len)
++{
++	char *prefix;
++
++	if (!fname) {
++		print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, data, len,
++			       true);
 +		return;
 +	}
 +
- 	ddip->d = d;
- 	/* Count on the bcache device */
- 	ddip->orig_bdev = orig_bdev;
++	prefix = kasprintf(GFP_KERNEL, "%s: ", fname);
++	if (!prefix)
++		return;
++	print_hex_dump(KERN_INFO, prefix, DUMP_PREFIX_OFFSET, 16, 1, data, len,
++		       true);
++	kfree(prefix);
++}
++
+ /**
+  *	gsm_print_packet	-	display a frame for debug
+  *	@hdr: header to print before decode
+@@ -508,7 +527,7 @@ static void gsm_print_packet(const char
+ 	else
+ 		pr_cont("(F)");
+ 
+-	print_hex_dump_bytes("", DUMP_PREFIX_NONE, data, dlen);
++	gsm_hex_dump_bytes(NULL, data, dlen);
+ }
+ 
+ 
+@@ -698,9 +717,7 @@ static void gsm_data_kick(struct gsm_mux
+ 		}
+ 
+ 		if (debug & 4)
+-			print_hex_dump_bytes("gsm_data_kick: ",
+-					     DUMP_PREFIX_OFFSET,
+-					     gsm->txframe, len);
++			gsm_hex_dump_bytes(__func__, gsm->txframe, len);
+ 		if (gsmld_output(gsm, gsm->txframe, len) <= 0)
+ 			break;
+ 		/* FIXME: Can eliminate one SOF in many more cases */
+@@ -2448,8 +2465,7 @@ static int gsmld_output(struct gsm_mux *
+ 		return -ENOSPC;
+ 	}
+ 	if (debug & 4)
+-		print_hex_dump_bytes("gsmld_output: ", DUMP_PREFIX_OFFSET,
+-				     data, len);
++		gsm_hex_dump_bytes(__func__, data, len);
+ 	return gsm->tty->ops->write(gsm->tty, data, len);
+ }
+ 
+@@ -2525,8 +2541,7 @@ static void gsmld_receive_buf(struct tty
+ 	char flags = TTY_NORMAL;
+ 
+ 	if (debug & 4)
+-		print_hex_dump_bytes("gsmld_receive: ", DUMP_PREFIX_OFFSET,
+-				     cp, count);
++		gsm_hex_dump_bytes(__func__, cp, count);
+ 
+ 	for (; count; count--, cp++) {
+ 		if (fp)
 
 

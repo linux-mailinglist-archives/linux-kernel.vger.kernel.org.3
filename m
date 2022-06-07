@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C06540027
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D44F540028
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244791AbiFGNf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S244814AbiFGNff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbiFGNfY (ORCPT
+        with ESMTP id S244787AbiFGNfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 09:35:24 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560D0C5DB3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:35:21 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id gl15so21387049ejb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:35:21 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD6BC5E6A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:35:22 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id w27so22987866edl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rEEFwb3oB6edXdLTltHDejyT72ppuJHFYFe2MWg11vg=;
-        b=bIMjQj29IXUlWVJWuZoBrJbhkXJO/lJL14jsX7JUB+41BhUq7+HsxquSf57k2tT626
-         8R9TPXdmTFSAxYlvpyxaWpphgpBkF7DA3OdopeMFpjfCJj+D9jRmYW/BwAxIFg6oU8H/
-         ykMoelXY5JuoVEAGTyKI/oJ0h476uMUs1vvUa7zhN51g6R0jualc4p/GJUdCTjXVUZBD
-         6n+L8SfTlkVr8yGiYsKi/4I0tA5u1+PIScUdPQ1UteiBbAVjLbGTCBd1itI8uWt7oToO
-         iT6h9mvLq0BsXTTbNyFlntd41ibrlhRT2W8o+4jKIPr2azFqGTTBWtctdIiZpSqSbJ8+
-         UF3w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xDQbY/64npGudGixqFX4Cr/5hLlk9RCSz25mhEaqA2c=;
+        b=m2ARHIniY851xN8CFtadCNZjqaVeAHydgmzCm+xX+Ru5UzM97CKTsIrQmrwTMuKqoA
+         qq/LVaQlkK5EQKx9mkGt9foUSMiGdVvX/eNmmxL0FG97RgFcZtM9cSu3EEwY+Qp1mc1j
+         RZV++y2nZR0rNieLFBGuwYMnW8Y2s2J9niujersBAyc1ywS3ZcJmy2VIdyxEWZth6Tci
+         DU1hNjr4h1vCNvSj7eQD1T/EJQlxB/Kh5aSEVC8cUnygrJOKBqhURnGT3NlCHtFr02qn
+         59fVxJzsCFKvVR65WJHvsA3fkCZjgwzfO6eti9s61Hld5UvWXtyIS+Xan03FZ4kJYh/j
+         Cw4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rEEFwb3oB6edXdLTltHDejyT72ppuJHFYFe2MWg11vg=;
-        b=IW2TZq31KNbJh2TPxQqwjCUPiKViZSLu5+N0l0DVD7+djH7SeATmLOO0XcCxIJ+FcK
-         UPRLBcIus36CEVn1cvQpkssKQbpFNJV6yC4ivvVUNHVk2V5iyMSfDmsPF4pVmLcnbH3a
-         eB0XTmTGXDzVmhrt0zuYr8tOVWwBLsM4AoAHN69e/Fleea7OE4WPWxL1pguL/ETwku4U
-         Tkcx6jppb/Xm3m6teWzpuhfTOoRPZXo35mmP5+Jwi+Zm06rR9Hk5+hxR5XNoNYGr3loF
-         DRXcTgd3CHukJBB4dvqGLc9b3mTzFovPhJSMIvUwM8oiW48MeTLv6JHDjOlCcO8yjCEm
-         4o1A==
-X-Gm-Message-State: AOAM5309Npp6yQen66H/OuGj7rHfLr8XEmiLXw8dklVRSeRcD8a3BJFe
-        YYNkgivc3eeBaQhX9BNpTP3f0A==
-X-Google-Smtp-Source: ABdhPJxv4p97hVWx1ZCcLvuuZi+pfqT+8mSLYG+g5JynKNhp5Fb/tpKxruM8YdTd5zyvHh0QHk4VEA==
-X-Received: by 2002:a17:907:2cc3:b0:6fa:55f:8805 with SMTP id hg3-20020a1709072cc300b006fa055f8805mr26558728ejc.46.1654608919887;
-        Tue, 07 Jun 2022 06:35:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xDQbY/64npGudGixqFX4Cr/5hLlk9RCSz25mhEaqA2c=;
+        b=HVjBnKlUjMcNfbwTg1dTJdGs6j0as/kKxLG5gjsAtmrDzes0QYn0ptNRouHnH/yiqZ
+         UOW4paFA8uEYLyfztpNIWGkUMXp/rVe6gNEoHV8sfiCSqN4P0ZTmXrWLyOJoj80jdkqa
+         TAS6gMYoWUBGOESMRgoM/rq+NwX+kMRLUUN2t5sMWtguoEAT/VglBtaWb/iv84AFBRA9
+         unIhTtLwoAZWwEcfeC9mPNsEbFp7mIwOvpMaIYp7lEshhgF9W1nslNGd3Q8PMENF5ySN
+         f6tB/aUEg034bDm0UgwTXVHQanrOA2GFCL9PjgRP14kUwqD6TL+iZ9Qvpv/upKog4uxT
+         LOOQ==
+X-Gm-Message-State: AOAM532lO+ZNHAmLswVmGEoSAmQ/P3gOYGtuUpmAJv2xDBtW7HhYrFe5
+        0SZPbyD+w9+kLO930G8HJzCk1Q==
+X-Google-Smtp-Source: ABdhPJz2bmmQ/mb8Z+m00RUNU/4Q9fwi2oEPL0lZSscE/c56c7Vu+nsR2ZqBwPjPSbWamBkIWnA8SA==
+X-Received: by 2002:a05:6402:42c1:b0:42d:fba6:d5c5 with SMTP id i1-20020a05640242c100b0042dfba6d5c5mr33801935edc.295.1654608920839;
+        Tue, 07 Jun 2022 06:35:20 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b0070e1adff390sm5644204ejb.34.2022.06.07.06.35.18
+        by smtp.gmail.com with ESMTPSA id b23-20020a17090630d700b0070e1adff390sm5644204ejb.34.2022.06.07.06.35.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 06:35:19 -0700 (PDT)
+        Tue, 07 Jun 2022 06:35:20 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,15 +57,17 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] dt-bindings: mfd: qcom,tcsr: Convert to dtschema
-Date:   Tue,  7 Jun 2022 15:34:42 +0200
-Message-Id: <20220607133443.182468-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] dt-bindings: mfd: qcom,tcsr: Add qcom,tcsr-mdm9615
+Date:   Tue,  7 Jun 2022 15:34:43 +0200
+Message-Id: <20220607133443.182468-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220607133443.182468-1-krzysztof.kozlowski@linaro.org>
+References: <20220607133443.182468-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,101 +75,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm Top Control and Status Register to DT Schema.
+Document the (already used) TCSR on MDM9615.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/mfd/qcom,tcsr.txt     | 24 ---------
- .../devicetree/bindings/mfd/qcom,tcsr.yaml    | 49 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 24 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/qcom,tcsr.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
+ Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt b/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt
-deleted file mode 100644
-index add61bcc3c74..000000000000
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.txt
-+++ /dev/null
-@@ -1,24 +0,0 @@
--QCOM Top Control and Status Register
--
--Qualcomm devices have a set of registers that provide various control and status
--functions for their peripherals.  This node is intended to allow access to these
--registers via syscon.
--
--Required properties:
--- compatible:	Should contain:
--		"qcom,tcsr-ipq6018", "syscon", "simple-mfd" for IPQ6018
--		"qcom,tcsr-ipq8064", "syscon" for IPQ8064
--		"qcom,tcsr-apq8064", "syscon" for APQ8064
--		"qcom,tcsr-msm8660", "syscon" for MSM8660
--		"qcom,tcsr-msm8953", "syscon" for MSM8953
--		"qcom,tcsr-msm8960", "syscon" for MSM8960
--		"qcom,tcsr-msm8974", "syscon" for MSM8974
--		"qcom,tcsr-apq8084", "syscon" for APQ8084
--		"qcom,tcsr-msm8916", "syscon" for MSM8916
--- reg: Address range for TCSR registers
--
--Example:
--	tcsr: syscon@1a400000 {
--		compatible = "qcom,tcsr-msm8960", "syscon";
--		reg = <0x1a400000 0x100>;
--	};
 diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-new file mode 100644
-index 000000000000..428973f97a72
---- /dev/null
+index 428973f97a72..2f816fd0c9ec 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
 +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/qcom,tcsr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Top Control and Status Register
-+
-+maintainers:
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+
-+description:
-+  Qualcomm devices have a set of registers that provide various control and
-+  status functions for their peripherals.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - qcom,tcsr-apq8064
-+              - qcom,tcsr-apq8084
-+              - qcom,tcsr-ipq8064
-+              - qcom,tcsr-msm8660
-+              - qcom,tcsr-msm8916
-+              - qcom,tcsr-msm8953
-+              - qcom,tcsr-msm8960
-+              - qcom,tcsr-msm8974
-+          - const: syscon
-+      - items:
-+          - const: qcom,tcsr-ipq6018
-+          - const: syscon
-+          - const: simple-mfd
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    syscon@1a400000 {
-+        compatible = "qcom,tcsr-msm8960", "syscon";
-+        reg = <0x1a400000 0x100>;
-+    };
+@@ -21,6 +21,7 @@ properties:
+               - qcom,tcsr-apq8064
+               - qcom,tcsr-apq8084
+               - qcom,tcsr-ipq8064
++              - qcom,tcsr-mdm9615
+               - qcom,tcsr-msm8660
+               - qcom,tcsr-msm8916
+               - qcom,tcsr-msm8953
 -- 
 2.34.1
 

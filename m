@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3741554162D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7D0540B1F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376839AbiFGUrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S1352518AbiFGS0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354422AbiFGToa (ORCPT
+        with ESMTP id S1351327AbiFGSB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:44:30 -0400
+        Tue, 7 Jun 2022 14:01:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7591C6005C;
-        Tue,  7 Jun 2022 11:18:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5DE151FD5;
+        Tue,  7 Jun 2022 10:44:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F6E8611DB;
-        Tue,  7 Jun 2022 18:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40CE2C385A2;
-        Tue,  7 Jun 2022 18:18:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E00E615B8;
+        Tue,  7 Jun 2022 17:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6C3C34115;
+        Tue,  7 Jun 2022 17:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625909;
-        bh=14VVMclWH7GSCZgc1tdjo8Jpgizmf34BnUzG9TLH3Wk=;
+        s=korg; t=1654623854;
+        bh=z0nAyk/VU0ksVU4YbjsvPBgUNPDMbbrVaHL11Of9pZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=astqMyAhrVYu5m2jszLmlDt9zdRowbhnYPnvhrz+pZyDSUO04hbTrxf1/IW5V/zp2
-         CE482ojoRsvEh7Mga3LYn2r4JNeWrz6y7xzO/tq92I0YvU9vmYKW47sGcPyYwWLqun
-         S/00nooFEfBwfZOhCao8HSexyZq8JCtqhn9ADWmo=
+        b=qfZwCPgthLnnCZvBZWTD9plDiEjOY7odNojxcaIWKhmDxxtp7IJ2y8/cWm5pP5Kco
+         rXjpNNazQ9dEwfLXKgW5xJU/eiXv23bacNdt3gdy/Elv2pPxYn7EGa4W3YXIWDaUmQ
+         M+IP1PDf8BtAATnFW4gS7KmTgUDzV4gCcBOHWCr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 188/772] arm64: dts: qcom: msm8994: Fix the cont_splash_mem address
+        =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks+kernel@slashdirt.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 115/667] mt76: fix encap offload ethernet type check
 Date:   Tue,  7 Jun 2022 18:56:20 +0200
-Message-Id: <20220607164954.577015550@linuxfoundation.org>
+Message-Id: <20220607164938.274372469@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Felix Fietkau <nbd@nbd.name>
 
-[ Upstream commit 049c46f31a726bf8d202ff1681661513447fac84 ]
+[ Upstream commit bc98e7fdd80d215b4b55eea001023231eb8ce12e ]
 
-The default memory map places cont_splash_mem at 3401000, which was
-overlooked.. Fix it!
+The driver needs to check if the format is 802.2 vs 802.3 in order to set
+a tx descriptor flag. skb->protocol can't be used, since it may not be properly
+initialized for packets coming in from a packet socket.
+Fix misdetection by checking the ethertype from the skb data instead
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220319174645.340379-9-konrad.dybcio@somainline.org
+Reported-by: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8994.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7915/mac.c | 4 +++-
+ drivers/net/wireless/mediatek/mt76/mt7921/mac.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 215f56daa26c..480bc686e8e8 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -183,8 +183,8 @@
- 			no-map;
- 		};
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+index 7691292526e0..a8a0e6af51f8 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+@@ -799,6 +799,7 @@ mt7915_mac_write_txwi_8023(struct mt7915_dev *dev, __le32 *txwi,
  
--		cont_splash_mem: memory@3800000 {
--			reg = <0 0x03800000 0 0x2400000>;
-+		cont_splash_mem: memory@3401000 {
-+			reg = <0 0x03401000 0 0x2200000>;
- 			no-map;
- 		};
+ 	u8 tid = skb->priority & IEEE80211_QOS_CTL_TID_MASK;
+ 	u8 fc_type, fc_stype;
++	u16 ethertype;
+ 	bool wmm = false;
+ 	u32 val;
  
+@@ -812,7 +813,8 @@ mt7915_mac_write_txwi_8023(struct mt7915_dev *dev, __le32 *txwi,
+ 	val = FIELD_PREP(MT_TXD1_HDR_FORMAT, MT_HDR_FORMAT_802_3) |
+ 	      FIELD_PREP(MT_TXD1_TID, tid);
+ 
+-	if (be16_to_cpu(skb->protocol) >= ETH_P_802_3_MIN)
++	ethertype = get_unaligned_be16(&skb->data[12]);
++	if (ethertype >= ETH_P_802_3_MIN)
+ 		val |= MT_TXD1_ETH_802_3;
+ 
+ 	txwi[1] |= cpu_to_le32(val);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+index 5024ddf07cbc..bef8d4a76ed9 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+@@ -681,6 +681,7 @@ mt7921_mac_write_txwi_8023(struct mt7921_dev *dev, __le32 *txwi,
+ {
+ 	u8 tid = skb->priority & IEEE80211_QOS_CTL_TID_MASK;
+ 	u8 fc_type, fc_stype;
++	u16 ethertype;
+ 	bool wmm = false;
+ 	u32 val;
+ 
+@@ -694,7 +695,8 @@ mt7921_mac_write_txwi_8023(struct mt7921_dev *dev, __le32 *txwi,
+ 	val = FIELD_PREP(MT_TXD1_HDR_FORMAT, MT_HDR_FORMAT_802_3) |
+ 	      FIELD_PREP(MT_TXD1_TID, tid);
+ 
+-	if (be16_to_cpu(skb->protocol) >= ETH_P_802_3_MIN)
++	ethertype = get_unaligned_be16(&skb->data[12]);
++	if (ethertype >= ETH_P_802_3_MIN)
+ 		val |= MT_TXD1_ETH_802_3;
+ 
+ 	txwi[1] |= cpu_to_le32(val);
 -- 
 2.35.1
 

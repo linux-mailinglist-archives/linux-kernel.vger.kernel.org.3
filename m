@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAB254249B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606C2542382
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389313AbiFHBqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S1388023AbiFHAbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380886AbiFGWcT (ORCPT
+        with ESMTP id S1382045AbiFGWcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:32:19 -0400
+        Tue, 7 Jun 2022 18:32:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17E027C255;
-        Tue,  7 Jun 2022 12:25:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3426567;
+        Tue,  7 Jun 2022 12:25:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A765608CD;
-        Tue,  7 Jun 2022 19:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36075C385A2;
-        Tue,  7 Jun 2022 19:25:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84872609D0;
+        Tue,  7 Jun 2022 19:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AD6C385A2;
+        Tue,  7 Jun 2022 19:25:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629932;
-        bh=1ZsatgNjEVp8upoppveFDyy7kk+zXJJA7FqcCTOQW7g=;
+        s=korg; t=1654629937;
+        bh=IIshUkAxO1CZOJEIgBTJRZiO8byvDzZcrFFUf+BgTwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rb8GIgED2YmryeMvBquPlutVwj3M3JzcJwd3rz5ht7pLO83ZCbNiXoqzGISjbHqE+
-         FaoqIRmm+IMt3wiNEHOxNL7TtKmzasOJd9K5nLdZFWWVPdXaYAl/x37H0HeY5Nurw1
-         YpRxhlKFxeGnm8fnIOhqyWVNsN1xlkRFVZpiXdhs=
+        b=hUwXKg62Adlc3jLS3JUGWKjpUzxTbsNtX4u0xHEedl/m5WhMALjauFc3FdBpub6EH
+         olX7zkwuY++SYYLeub4QSXj+w85v0JS3v+wH4uDUISCh0J83B4H4vK7pxdX6YhkQbR
+         Nv81fbvDuSwT0pIi+JdgDn5RhdEArAxXguG/KAtQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
-        Wenpeng Liang <liangwenpeng@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.18 869/879] RDMA/hns: Remove the num_cqc_timer variable
-Date:   Tue,  7 Jun 2022 19:06:27 +0200
-Message-Id: <20220607165028.077895193@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.18 871/879] ext4: only allow test_dummy_encryption when supported
+Date:   Tue,  7 Jun 2022 19:06:29 +0200
+Message-Id: <20220607165028.136774549@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,78 +55,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yixing Liu <liuyixing1@huawei.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit db5dfbf5b201df65c1f5332c4d9d5e7c2f42396b upstream.
+commit 5f41fdaea63ddf96d921ab36b2af4a90ccdb5744 upstream.
 
-The bt number of cqc_timer of HIP09 increases compared with that of HIP08.
-Therefore, cqc_timer_bt_num and num_cqc_timer do not match. As a result,
-the driver may fail to allocate cqc_timer. So the driver needs to uniquely
-uses cqc_timer_bt_num to represent the bt number of cqc_timer.
+Make the test_dummy_encryption mount option require that the encrypt
+feature flag be already enabled on the filesystem, rather than
+automatically enabling it.  Practically, this means that "-O encrypt"
+will need to be included in MKFS_OPTIONS when running xfstests with the
+test_dummy_encryption mount option.  (ext4/053 also needs an update.)
 
-Fixes: 0e40dc2f70cd ("RDMA/hns: Add timer allocation support for hip08")
-Link: https://lore.kernel.org/r/20220429093545.58070-1-liangwenpeng@huawei.com
-Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
-Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Moreover, as long as the preconditions for test_dummy_encryption are
+being tightened anyway, take the opportunity to start rejecting it when
+!CONFIG_FS_ENCRYPTION rather than ignoring it.
+
+The motivation for requiring the encrypt feature flag is that:
+
+- Having the filesystem auto-enable feature flags is problematic, as it
+  bypasses the usual sanity checks.  The specific issue which came up
+  recently is that in kernel versions where ext4 supports casefold but
+  not encrypt+casefold (v5.1 through v5.10), the kernel will happily add
+  the encrypt flag to a filesystem that has the casefold flag, making it
+  unmountable -- but only for subsequent mounts, not the initial one.
+  This confused the casefold support detection in xfstests, causing
+  generic/556 to fail rather than be skipped.
+
+- The xfstests-bld test runners (kvm-xfstests et al.) already use the
+  required mkfs flag, so they will not be affected by this change.  Only
+  users of test_dummy_encryption alone will be affected.  But, this
+  option has always been for testing only, so it should be fine to
+  require that the few users of this option update their test scripts.
+
+- f2fs already requires it (for its equivalent feature flag).
+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+Link: https://lore.kernel.org/r/20220519204437.61645-1-ebiggers@kernel.org
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hns/hns_roce_device.h |    1 -
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c  |    3 +--
- drivers/infiniband/hw/hns/hns_roce_hw_v2.h  |    2 +-
- drivers/infiniband/hw/hns/hns_roce_main.c   |    2 +-
- 4 files changed, 3 insertions(+), 5 deletions(-)
+ fs/ext4/ext4.h  |    6 -----
+ fs/ext4/super.c |   60 +++++++++++++++++++++++++++++++++++---------------------
+ 2 files changed, 38 insertions(+), 28 deletions(-)
 
---- a/drivers/infiniband/hw/hns/hns_roce_device.h
-+++ b/drivers/infiniband/hw/hns/hns_roce_device.h
-@@ -731,7 +731,6 @@ struct hns_roce_caps {
- 	u32		num_pi_qps;
- 	u32		reserved_qps;
- 	int		num_qpc_timer;
--	int		num_cqc_timer;
- 	u32		num_srqs;
- 	u32		max_wqes;
- 	u32		max_srq_wrs;
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-@@ -1965,7 +1965,7 @@ static void set_default_caps(struct hns_
- 	caps->num_mtpts		= HNS_ROCE_V2_MAX_MTPT_NUM;
- 	caps->num_pds		= HNS_ROCE_V2_MAX_PD_NUM;
- 	caps->num_qpc_timer	= HNS_ROCE_V2_MAX_QPC_TIMER_NUM;
--	caps->num_cqc_timer	= HNS_ROCE_V2_MAX_CQC_TIMER_NUM;
-+	caps->cqc_timer_bt_num	= HNS_ROCE_V2_MAX_CQC_TIMER_BT_NUM;
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -1440,12 +1440,6 @@ struct ext4_super_block {
  
- 	caps->max_qp_init_rdma	= HNS_ROCE_V2_MAX_QP_INIT_RDMA;
- 	caps->max_qp_dest_rdma	= HNS_ROCE_V2_MAX_QP_DEST_RDMA;
-@@ -2261,7 +2261,6 @@ static int hns_roce_query_pf_caps(struct
- 	caps->max_rq_sg = roundup_pow_of_two(caps->max_rq_sg);
- 	caps->max_extend_sg	     = le32_to_cpu(resp_a->max_extend_sg);
- 	caps->num_qpc_timer	     = le16_to_cpu(resp_a->num_qpc_timer);
--	caps->num_cqc_timer	     = le16_to_cpu(resp_a->num_cqc_timer);
- 	caps->max_srq_sges	     = le16_to_cpu(resp_a->max_srq_sges);
- 	caps->max_srq_sges = roundup_pow_of_two(caps->max_srq_sges);
- 	caps->num_aeq_vectors	     = resp_a->num_aeq_vectors;
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
-@@ -41,7 +41,7 @@
- #define HNS_ROCE_V2_MAX_SRQ_WR			0x8000
- #define HNS_ROCE_V2_MAX_SRQ_SGE			64
- #define HNS_ROCE_V2_MAX_CQ_NUM			0x100000
--#define HNS_ROCE_V2_MAX_CQC_TIMER_NUM		0x100
-+#define HNS_ROCE_V2_MAX_CQC_TIMER_BT_NUM	0x100
- #define HNS_ROCE_V2_MAX_SRQ_NUM			0x100000
- #define HNS_ROCE_V2_MAX_CQE_NUM			0x400000
- #define HNS_ROCE_V2_MAX_RQ_SGE_NUM		64
---- a/drivers/infiniband/hw/hns/hns_roce_main.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_main.c
-@@ -737,7 +737,7 @@ static int hns_roce_init_hem(struct hns_
- 		ret = hns_roce_init_hem_table(hr_dev, &hr_dev->cqc_timer_table,
- 					      HEM_TYPE_CQC_TIMER,
- 					      hr_dev->caps.cqc_timer_entry_sz,
--					      hr_dev->caps.num_cqc_timer, 1);
-+					      hr_dev->caps.cqc_timer_bt_num, 1);
- 		if (ret) {
- 			dev_err(dev,
- 				"Failed to init CQC timer memory, aborting.\n");
+ #ifdef __KERNEL__
+ 
+-#ifdef CONFIG_FS_ENCRYPTION
+-#define DUMMY_ENCRYPTION_ENABLED(sbi) ((sbi)->s_dummy_enc_policy.policy != NULL)
+-#else
+-#define DUMMY_ENCRYPTION_ENABLED(sbi) (0)
+-#endif
+-
+ /* Number of quota types we support */
+ #define EXT4_MAXQUOTAS 3
+ 
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -2428,11 +2428,12 @@ static int ext4_parse_param(struct fs_co
+ 		ctx->spec |= EXT4_SPEC_DUMMY_ENCRYPTION;
+ 		ctx->test_dummy_enc_arg = kmemdup_nul(param->string, param->size,
+ 						      GFP_KERNEL);
++		return 0;
+ #else
+ 		ext4_msg(NULL, KERN_WARNING,
+-			 "Test dummy encryption mount option ignored");
++			 "test_dummy_encryption option not supported");
++		return -EINVAL;
+ #endif
+-		return 0;
+ 	case Opt_dax:
+ 	case Opt_dax_type:
+ #ifdef CONFIG_FS_DAX
+@@ -2789,12 +2790,44 @@ err_jquota_specified:
+ #endif
+ }
+ 
++static int ext4_check_test_dummy_encryption(const struct fs_context *fc,
++					    struct super_block *sb)
++{
++#ifdef CONFIG_FS_ENCRYPTION
++	const struct ext4_fs_context *ctx = fc->fs_private;
++	const struct ext4_sb_info *sbi = EXT4_SB(sb);
++
++	if (!(ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION))
++		return 0;
++
++	if (!ext4_has_feature_encrypt(sb)) {
++		ext4_msg(NULL, KERN_WARNING,
++			 "test_dummy_encryption requires encrypt feature");
++		return -EINVAL;
++	}
++	/*
++	 * This mount option is just for testing, and it's not worthwhile to
++	 * implement the extra complexity (e.g. RCU protection) that would be
++	 * needed to allow it to be set or changed during remount.  We do allow
++	 * it to be specified during remount, but only if there is no change.
++	 */
++	if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE &&
++	    !sbi->s_dummy_enc_policy.policy) {
++		ext4_msg(NULL, KERN_WARNING,
++			 "Can't set test_dummy_encryption on remount");
++		return -EINVAL;
++	}
++#endif /* CONFIG_FS_ENCRYPTION */
++	return 0;
++}
++
+ static int ext4_check_opt_consistency(struct fs_context *fc,
+ 				      struct super_block *sb)
+ {
+ 	struct ext4_fs_context *ctx = fc->fs_private;
+ 	struct ext4_sb_info *sbi = fc->s_fs_info;
+ 	int is_remount = fc->purpose == FS_CONTEXT_FOR_RECONFIGURE;
++	int err;
+ 
+ 	if ((ctx->opt_flags & MOPT_NO_EXT2) && IS_EXT2_SB(sb)) {
+ 		ext4_msg(NULL, KERN_ERR,
+@@ -2824,20 +2857,9 @@ static int ext4_check_opt_consistency(st
+ 				 "for blocksize < PAGE_SIZE");
+ 	}
+ 
+-#ifdef CONFIG_FS_ENCRYPTION
+-	/*
+-	 * This mount option is just for testing, and it's not worthwhile to
+-	 * implement the extra complexity (e.g. RCU protection) that would be
+-	 * needed to allow it to be set or changed during remount.  We do allow
+-	 * it to be specified during remount, but only if there is no change.
+-	 */
+-	if ((ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION) &&
+-	    is_remount && !sbi->s_dummy_enc_policy.policy) {
+-		ext4_msg(NULL, KERN_WARNING,
+-			 "Can't set test_dummy_encryption on remount");
+-		return -1;
+-	}
+-#endif
++	err = ext4_check_test_dummy_encryption(fc, sb);
++	if (err)
++		return err;
+ 
+ 	if ((ctx->spec & EXT4_SPEC_DATAJ) && is_remount) {
+ 		if (!sbi->s_journal) {
+@@ -5283,12 +5305,6 @@ no_journal:
+ 		goto failed_mount_wq;
+ 	}
+ 
+-	if (DUMMY_ENCRYPTION_ENABLED(sbi) && !sb_rdonly(sb) &&
+-	    !ext4_has_feature_encrypt(sb)) {
+-		ext4_set_feature_encrypt(sb);
+-		ext4_commit_super(sb);
+-	}
+-
+ 	/*
+ 	 * Get the # of file system overhead blocks from the
+ 	 * superblock if present.
 
 

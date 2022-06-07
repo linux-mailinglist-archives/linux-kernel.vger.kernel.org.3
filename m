@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDC1540BC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9944B540BC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352460AbiFGSbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
+        id S1352323AbiFGSay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351985AbiFGSCd (ORCPT
+        with ESMTP id S1351999AbiFGSCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D165DDED4;
-        Tue,  7 Jun 2022 10:46:36 -0700 (PDT)
+        Tue, 7 Jun 2022 14:02:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3865A21B7;
+        Tue,  7 Jun 2022 10:46:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A9DB616B1;
-        Tue,  7 Jun 2022 17:46:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 741E1C385A5;
-        Tue,  7 Jun 2022 17:46:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E39ABB82239;
+        Tue,  7 Jun 2022 17:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D70C385A5;
+        Tue,  7 Jun 2022 17:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623995;
-        bh=WJzjYaTIQ7PBQPp8PTnU5CBeVSbsOqp7md+v/tz9HXU=;
+        s=korg; t=1654623998;
+        bh=djdQ9S61mfxn5Qroahz8b0fLg9sK1orzkaSB+oH7BUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RrJdl2K6kztDhozBTSjXi89gETNZLcUdzLPnlduLzTq+zcUAOlxpEtYYRAl25TFie
-         9RVOf3OzwLltBBMbAyANh1MMxpjFRLxlCWm25Xx3AooIcn4GW1pJs0JXnbBKh7YDiZ
-         R4Z90qyd3gTbB14ojt8OALnVTzAlUMHkQKgu9tPc=
+        b=ml6OafgJpZWHeg4XRsBFrnkF6B9Ob8U4qP2M1o+rmn4+fzFI9l5ttqIRldBGNJdnD
+         hlUaayw4kCtJjL283StH1r2CeJOpm4dB0tNclXD4ZDNnwDhmr4Nb1MhHM14qUozQCI
+         uRxDVncShaKy0wEUOZAiCQDjQUuZsAC4l+QQOkbw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 166/667] ARM: dts: exynos: add atmel,24c128 fallback to Samsung EEPROM
-Date:   Tue,  7 Jun 2022 18:57:11 +0200
-Message-Id: <20220607164939.793711538@linuxfoundation.org>
+        stable@vger.kernel.org, Peng Wu <wupeng58@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 167/667] ARM: hisi: Add missing of_node_put after of_find_compatible_node
+Date:   Tue,  7 Jun 2022 18:57:12 +0200
+Message-Id: <20220607164939.822726029@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -55,43 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Peng Wu <wupeng58@huawei.com>
 
-[ Upstream commit f038e8186fbc5723d7d38c6fa1d342945107347e ]
+[ Upstream commit 9bc72e47d4630d58a840a66a869c56b29554cfe4 ]
 
-The Samsung s524ad0xd1 EEPROM should use atmel,24c128 fallback,
-according to the AT24 EEPROM bindings.
+of_find_compatible_node  will increment the refcount of the returned
+device_node. Calling of_node_put() to avoid the refcount leak
 
-Reported-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220426183443.243113-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+Signed-off-by: Wei Xu <xuwei5@hisilicon.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/exynos5250-smdk5250.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/mach-hisi/platsmp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
-index f042954bdfa5..e4861415a0fe 100644
---- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
-+++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
-@@ -129,7 +129,7 @@
- 	samsung,i2c-max-bus-freq = <20000>;
+diff --git a/arch/arm/mach-hisi/platsmp.c b/arch/arm/mach-hisi/platsmp.c
+index a56cc64deeb8..9ce93e0b6cdc 100644
+--- a/arch/arm/mach-hisi/platsmp.c
++++ b/arch/arm/mach-hisi/platsmp.c
+@@ -67,14 +67,17 @@ static void __init hi3xxx_smp_prepare_cpus(unsigned int max_cpus)
+ 		}
+ 		ctrl_base = of_iomap(np, 0);
+ 		if (!ctrl_base) {
++			of_node_put(np);
+ 			pr_err("failed to map address\n");
+ 			return;
+ 		}
+ 		if (of_property_read_u32(np, "smp-offset", &offset) < 0) {
++			of_node_put(np);
+ 			pr_err("failed to find smp-offset property\n");
+ 			return;
+ 		}
+ 		ctrl_base += offset;
++		of_node_put(np);
+ 	}
+ }
  
- 	eeprom@50 {
--		compatible = "samsung,s524ad0xd1";
-+		compatible = "samsung,s524ad0xd1", "atmel,24c128";
- 		reg = <0x50>;
- 	};
+@@ -160,6 +163,7 @@ static int hip01_boot_secondary(unsigned int cpu, struct task_struct *idle)
+ 	if (WARN_ON(!node))
+ 		return -1;
+ 	ctrl_base = of_iomap(node, 0);
++	of_node_put(node);
  
-@@ -289,7 +289,7 @@
- 	samsung,i2c-max-bus-freq = <20000>;
- 
- 	eeprom@51 {
--		compatible = "samsung,s524ad0xd1";
-+		compatible = "samsung,s524ad0xd1", "atmel,24c128";
- 		reg = <0x51>;
- 	};
- 
+ 	/* set the secondary core boot from DDR */
+ 	remap_reg_value = readl_relaxed(ctrl_base + REG_SC_CTRL);
 -- 
 2.35.1
 

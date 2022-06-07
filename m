@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7301A5418A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE445418B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379711AbiFGVN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S1379016AbiFGVON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376699AbiFGURD (ORCPT
+        with ESMTP id S1376660AbiFGURA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:17:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543861CF933;
-        Tue,  7 Jun 2022 11:29:49 -0700 (PDT)
+        Tue, 7 Jun 2022 16:17:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABB01742BC;
+        Tue,  7 Jun 2022 11:29:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 853656147E;
-        Tue,  7 Jun 2022 18:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA55C385A5;
-        Tue,  7 Jun 2022 18:29:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA263B822C0;
+        Tue,  7 Jun 2022 18:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474F6C385A5;
+        Tue,  7 Jun 2022 18:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626579;
-        bh=YBEeIKFakKoI6TjeL91aCaKu6R+WbdsfFHaDsD3gaxI=;
+        s=korg; t=1654626582;
+        bh=M9t8chD2hNq77zz35xqq4gXAk7I4iMh0mKRYZwsuwFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pnGgMp0FVeYXV7NCEsZ7SuYRnJIv4AFeXS7VuKRKz9i85V4tSTiBv3wBItR6q+rKJ
-         FoMVN8QuHR03CEPqva1tm/KX1OcZDncqL9T2DIGtYbNMCB9B8SkIxpuEpIYNSlAqwO
-         jumGIxdSG6KA8bcJf5DDP0XEI/89/ND9EP0h6RUk=
+        b=XLdy9iRSk/tn2Jj0Y7dokVhEPcmx2jr8Cd3k/tcPmmJCkFZf/v0gqREVsm/cIZpSK
+         xBmJ+vCNYjM0uYOEEYZiVOGTwr3ScRlBjgmSMUY7GA1UMUQBs+KNkTgOK4vxp4dsHm
+         WqVNGS3I5JxRGNcwdFwYG9UfKqdfHf31ZD8eDboI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yunfei Dong <yunfei.dong@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 388/772] media: mediatek: vcodec: Fix v4l2 compliance decoder cmd test fail
-Date:   Tue,  7 Jun 2022 18:59:40 +0200
-Message-Id: <20220607165000.446928187@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 389/772] io_uring: avoid io-wq -EAGAIN looping for !IOPOLL
+Date:   Tue,  7 Jun 2022 18:59:41 +0200
+Message-Id: <20220607165000.476361122@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -58,70 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit 08a83828825cbf3bc2c9f582a4cd4da9f40c77d6 ]
+[ Upstream commit e0deb6a025ae8c850dc8685be39fb27b06c88736 ]
 
-Will return -EINVAL using standard framework api when test stateless
-decoder with cmd VIDIOC_(TRY)DECODER_CMD. Disable them to adjust v4l2
-compliance test for user driver(GStreamer/Chrome) won't use decoder cmd.
+If an opcode handler semi-reliably returns -EAGAIN, io_wq_submit_work()
+might continue busily hammer the same handler over and over again, which
+is not ideal. The -EAGAIN handling in question was put there only for
+IOPOLL, so restrict it to IOPOLL mode only where there is no other
+recourse than to retry as we cannot wait.
 
-Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: def596e9557c9 ("io_uring: support for IO polling")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/f168b4f24181942f3614dd8ff648221736f572e6.1652433740.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c  | 13 +------------
- .../media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c  |  3 +++
- 2 files changed, 4 insertions(+), 12 deletions(-)
+ fs/io_uring.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 2b334a8a81c6..f99771a038b0 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -47,14 +47,7 @@ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
- static int vidioc_try_decoder_cmd(struct file *file, void *priv,
- 				struct v4l2_decoder_cmd *cmd)
- {
--	struct mtk_vcodec_ctx *ctx = fh_to_ctx(priv);
--
--	/* Use M2M stateless helper if relevant */
--	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv,
--								cmd);
--	else
--		return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
-+	return v4l2_m2m_ioctl_try_decoder_cmd(file, priv, cmd);
- }
- 
- 
-@@ -69,10 +62,6 @@ static int vidioc_decoder_cmd(struct file *file, void *priv,
- 	if (ret)
- 		return ret;
- 
--	/* Use M2M stateless helper if relevant */
--	if (ctx->dev->vdec_pdata->uses_stateless_api)
--		return v4l2_m2m_ioctl_stateless_decoder_cmd(file, priv, cmd);
--
- 	mtk_v4l2_debug(1, "decoder cmd=%u", cmd->cmd);
- 	dst_vq = v4l2_m2m_get_vq(ctx->m2m_ctx,
- 				V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-index 40c39e1e596b..4b5cbaf672ab 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-@@ -315,6 +315,9 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 	}
- 
- 	if (dev->vdec_pdata->uses_stateless_api) {
-+		v4l2_disable_ioctl(vfd_dec, VIDIOC_DECODER_CMD);
-+		v4l2_disable_ioctl(vfd_dec, VIDIOC_TRY_DECODER_CMD);
-+
- 		dev->mdev_dec.dev = &pdev->dev;
- 		strscpy(dev->mdev_dec.model, MTK_VCODEC_DEC_NAME,
- 			sizeof(dev->mdev_dec.model));
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index a0680046ff3c..26bf488096b2 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6939,6 +6939,8 @@ static void io_wq_submit_work(struct io_wq_work *work)
+ 		 * wait for request slots on the block side.
+ 		 */
+ 		if (!needs_poll) {
++			if (!(req->ctx->flags & IORING_SETUP_IOPOLL))
++				break;
+ 			cond_resched();
+ 			continue;
+ 		}
 -- 
 2.35.1
 

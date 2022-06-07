@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291C7541BC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35D2541BC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383722AbiFGVxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S1383659AbiFGVx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378493AbiFGVBX (ORCPT
+        with ESMTP id S1378474AbiFGVBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:01:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1BF20E16F;
-        Tue,  7 Jun 2022 11:45:10 -0700 (PDT)
+        Tue, 7 Jun 2022 17:01:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9CE20E17B;
+        Tue,  7 Jun 2022 11:45:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3BB4B82018;
-        Tue,  7 Jun 2022 18:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E40FC385A2;
-        Tue,  7 Jun 2022 18:45:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0852261295;
+        Tue,  7 Jun 2022 18:45:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A3CC385A2;
+        Tue,  7 Jun 2022 18:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627507;
-        bh=P93cyAbJAwdWUFf2HFYq9K7w37mCzMvtd/q/MFN3/kw=;
+        s=korg; t=1654627510;
+        bh=/WUznTYi4+ekIcUEKN6koRodGOYPqPC/ciEieSmX2uo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sI9fJvluDVnV0psyhM9qut5vQ0JFTY6CxHr0geCJHqbkf9YuolyFFVKeeesasIgnV
-         /vKxihzmNFB5UFMKI3byTi40bwbc6lKmkeysQnwtr/+T8dmtOt1vM2/tgywOhSCPSM
-         oMX/++Zxcf4R9rtKN25DRp1KD2SCDctfgPt+184Y=
+        b=W+jE6+IOPUGdsL1q84SLM9F/Bw7oye6O7155f78egdleOWO6/0CfYvEszCpj+Vgjh
+         vd2ZLt3fLX1p0pVVuPsDU+l1LY3hpTwHOX7VKMPe2+Mj0GXNZKHbQKK0mTQAcBeGNV
+         U5ZnxFP0QKeb4KC6zShQeX1NXgQLtM12gR155c0g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 5.17 764/772] MIPS: IP30: Remove incorrect `cpu_has_fpu override
-Date:   Tue,  7 Jun 2022 19:05:56 +0200
-Message-Id: <20220607165011.536143485@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.17 765/772] ext4: only allow test_dummy_encryption when supported
+Date:   Tue,  7 Jun 2022 19:05:57 +0200
+Message-Id: <20220607165011.565988027@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -55,39 +55,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Eric Biggers <ebiggers@google.com>
 
-commit f44b3e74c33fe04defeff24ebcae98c3bcc5b285 upstream.
+commit 5f41fdaea63ddf96d921ab36b2af4a90ccdb5744 upstream.
 
-Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
-kernel parameter non-functional, and also causes a link error:
+Make the test_dummy_encryption mount option require that the encrypt
+feature flag be already enabled on the filesystem, rather than
+automatically enabling it.  Practically, this means that "-O encrypt"
+will need to be included in MKFS_OPTIONS when running xfstests with the
+test_dummy_encryption mount option.  (ext4/053 also needs an update.)
 
-ld: arch/mips/kernel/traps.o: in function `trap_init':
-./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+Moreover, as long as the preconditions for test_dummy_encryption are
+being tightened anyway, take the opportunity to start rejecting it when
+!CONFIG_FS_ENCRYPTION rather than ignoring it.
 
-where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
+The motivation for requiring the encrypt feature flag is that:
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
-Fixes: 7505576d1c1a ("MIPS: add support for SGI Octane (IP30)")
-Cc: stable@vger.kernel.org # v5.5+
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+- Having the filesystem auto-enable feature flags is problematic, as it
+  bypasses the usual sanity checks.  The specific issue which came up
+  recently is that in kernel versions where ext4 supports casefold but
+  not encrypt+casefold (v5.1 through v5.10), the kernel will happily add
+  the encrypt flag to a filesystem that has the casefold flag, making it
+  unmountable -- but only for subsequent mounts, not the initial one.
+  This confused the casefold support detection in xfstests, causing
+  generic/556 to fail rather than be skipped.
+
+- The xfstests-bld test runners (kvm-xfstests et al.) already use the
+  required mkfs flag, so they will not be affected by this change.  Only
+  users of test_dummy_encryption alone will be affected.  But, this
+  option has always been for testing only, so it should be fine to
+  require that the few users of this option update their test scripts.
+
+- f2fs already requires it (for its equivalent feature flag).
+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+Link: https://lore.kernel.org/r/20220519204437.61645-1-ebiggers@kernel.org
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h |    1 -
- 1 file changed, 1 deletion(-)
+ fs/ext4/ext4.h  |    6 -----
+ fs/ext4/super.c |   60 +++++++++++++++++++++++++++++++++++---------------------
+ 2 files changed, 38 insertions(+), 28 deletions(-)
 
---- a/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-@@ -29,7 +29,6 @@
- #define cpu_has_3k_cache		0
- #define cpu_has_4k_cache		1
- #define cpu_has_tx39_cache		0
--#define cpu_has_fpu			1
- #define cpu_has_nofpuex			0
- #define cpu_has_32fpr			1
- #define cpu_has_counter			1
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -1438,12 +1438,6 @@ struct ext4_super_block {
+ 
+ #ifdef __KERNEL__
+ 
+-#ifdef CONFIG_FS_ENCRYPTION
+-#define DUMMY_ENCRYPTION_ENABLED(sbi) ((sbi)->s_dummy_enc_policy.policy != NULL)
+-#else
+-#define DUMMY_ENCRYPTION_ENABLED(sbi) (0)
+-#endif
+-
+ /* Number of quota types we support */
+ #define EXT4_MAXQUOTAS 3
+ 
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -2428,11 +2428,12 @@ static int ext4_parse_param(struct fs_co
+ 		ctx->spec |= EXT4_SPEC_DUMMY_ENCRYPTION;
+ 		ctx->test_dummy_enc_arg = kmemdup_nul(param->string, param->size,
+ 						      GFP_KERNEL);
++		return 0;
+ #else
+ 		ext4_msg(NULL, KERN_WARNING,
+-			 "Test dummy encryption mount option ignored");
++			 "test_dummy_encryption option not supported");
++		return -EINVAL;
+ #endif
+-		return 0;
+ 	case Opt_dax:
+ 	case Opt_dax_type:
+ #ifdef CONFIG_FS_DAX
+@@ -2789,12 +2790,44 @@ err_jquota_specified:
+ #endif
+ }
+ 
++static int ext4_check_test_dummy_encryption(const struct fs_context *fc,
++					    struct super_block *sb)
++{
++#ifdef CONFIG_FS_ENCRYPTION
++	const struct ext4_fs_context *ctx = fc->fs_private;
++	const struct ext4_sb_info *sbi = EXT4_SB(sb);
++
++	if (!(ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION))
++		return 0;
++
++	if (!ext4_has_feature_encrypt(sb)) {
++		ext4_msg(NULL, KERN_WARNING,
++			 "test_dummy_encryption requires encrypt feature");
++		return -EINVAL;
++	}
++	/*
++	 * This mount option is just for testing, and it's not worthwhile to
++	 * implement the extra complexity (e.g. RCU protection) that would be
++	 * needed to allow it to be set or changed during remount.  We do allow
++	 * it to be specified during remount, but only if there is no change.
++	 */
++	if (fc->purpose == FS_CONTEXT_FOR_RECONFIGURE &&
++	    !sbi->s_dummy_enc_policy.policy) {
++		ext4_msg(NULL, KERN_WARNING,
++			 "Can't set test_dummy_encryption on remount");
++		return -EINVAL;
++	}
++#endif /* CONFIG_FS_ENCRYPTION */
++	return 0;
++}
++
+ static int ext4_check_opt_consistency(struct fs_context *fc,
+ 				      struct super_block *sb)
+ {
+ 	struct ext4_fs_context *ctx = fc->fs_private;
+ 	struct ext4_sb_info *sbi = fc->s_fs_info;
+ 	int is_remount = fc->purpose == FS_CONTEXT_FOR_RECONFIGURE;
++	int err;
+ 
+ 	if ((ctx->opt_flags & MOPT_NO_EXT2) && IS_EXT2_SB(sb)) {
+ 		ext4_msg(NULL, KERN_ERR,
+@@ -2824,20 +2857,9 @@ static int ext4_check_opt_consistency(st
+ 				 "for blocksize < PAGE_SIZE");
+ 	}
+ 
+-#ifdef CONFIG_FS_ENCRYPTION
+-	/*
+-	 * This mount option is just for testing, and it's not worthwhile to
+-	 * implement the extra complexity (e.g. RCU protection) that would be
+-	 * needed to allow it to be set or changed during remount.  We do allow
+-	 * it to be specified during remount, but only if there is no change.
+-	 */
+-	if ((ctx->spec & EXT4_SPEC_DUMMY_ENCRYPTION) &&
+-	    is_remount && !sbi->s_dummy_enc_policy.policy) {
+-		ext4_msg(NULL, KERN_WARNING,
+-			 "Can't set test_dummy_encryption on remount");
+-		return -1;
+-	}
+-#endif
++	err = ext4_check_test_dummy_encryption(fc, sb);
++	if (err)
++		return err;
+ 
+ 	if ((ctx->spec & EXT4_SPEC_DATAJ) && is_remount) {
+ 		if (!sbi->s_journal) {
+@@ -5267,12 +5289,6 @@ no_journal:
+ 		goto failed_mount_wq;
+ 	}
+ 
+-	if (DUMMY_ENCRYPTION_ENABLED(sbi) && !sb_rdonly(sb) &&
+-	    !ext4_has_feature_encrypt(sb)) {
+-		ext4_set_feature_encrypt(sb);
+-		ext4_commit_super(sb);
+-	}
+-
+ 	/*
+ 	 * Get the # of file system overhead blocks from the
+ 	 * superblock if present.
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44986542065
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3628542061
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384965AbiFHAZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S1353046AbiFHAYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384241AbiFGVyX (ORCPT
+        with ESMTP id S1382510AbiFGV56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84135E753;
-        Tue,  7 Jun 2022 12:13:14 -0700 (PDT)
+        Tue, 7 Jun 2022 17:57:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737D024CC93;
+        Tue,  7 Jun 2022 12:13:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2864E61912;
-        Tue,  7 Jun 2022 19:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E198C385A2;
-        Tue,  7 Jun 2022 19:13:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23C30B823AE;
+        Tue,  7 Jun 2022 19:13:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936EAC385A5;
+        Tue,  7 Jun 2022 19:13:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629191;
-        bh=q2WfSuGehAysC4oWHH5FcLye7l4l9jfwd2iIF05nmrM=;
+        s=korg; t=1654629235;
+        bh=BosxUKO/27/7KBdUbBO+j64psIFPo88G9Hi6DZud58k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u32Iv/40ppYd+gkCBaEWohdB/Z4HzZMPCQWxK85F3hYlGcDyCtTofmmGCIInQN+tc
-         ROyyn64mNfGM5Cr4ALb+MuPRROwbIArp7//1QXKn7NIPCf165ydLle6jQndPDUiZiZ
-         u/ienbUh4kxTc5OH9G3wQ2VjWIemuvNNySEUVyyA=
+        b=NwgiBwqpsRGjvVkV1v4D6tWjvmiztU3PYCMSyiKC8kk7I0jiC4tYiVwgBekyYTekV
+         NvwoliY7Iz915/9jcs2GNOnYNhYHvqGmBVMu8WzqXbXeNw7aFLKfoGuWCwoPZkVZdH
+         QEQBmAAw2NCcXYFxLECy0sdG/N0GFmFpEmXKCW2k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 603/879] powerpc/8xx: export cpm_setbrg for modules
-Date:   Tue,  7 Jun 2022 19:02:01 +0200
-Message-Id: <20220607165020.354626616@linuxfoundation.org>
+Subject: [PATCH 5.18 617/879] PCI: mediatek-gen3: Assert resets to ensure expected init state
+Date:   Tue,  7 Jun 2022 19:02:15 +0200
+Message-Id: <20220607165020.757146074@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,38 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[ Upstream commit 22f8e625ebabd7ed3185b82b44b4f12fc0402113 ]
+[ Upstream commit 1d565935e3b9ccc682631e0bc6e415a7f48295d9 ]
 
-Fix missing export for a loadable module build:
+The controller may have been left out of reset by the bootloader,
+in which case, before the powerup sequence, the controller will be
+found preconfigured with values that were set before booting the
+kernel: this produces a controller failure, with the result of
+a failure during the mtk_pcie_startup_port() sequence as the PCIe
+link never gets up.
 
-ERROR: modpost: "cpm_setbrg" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
+To ensure that we get a clean start in an expected state, assert
+both the PHY and MAC resets before executing the controller
+power-up sequence.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-[chleroy: Changed Fixes: tag]
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20210122010819.30986-1-rdunlap@infradead.org
+Link: https://lore.kernel.org/r/20220404144858.92390-1-angelogioacchino.delregno@collabora.com
+Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/8xx/cpm1.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pci/controller/pcie-mediatek-gen3.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/powerpc/platforms/8xx/cpm1.c b/arch/powerpc/platforms/8xx/cpm1.c
-index c58b6f1c40e3..3ef5e9fd3a9b 100644
---- a/arch/powerpc/platforms/8xx/cpm1.c
-+++ b/arch/powerpc/platforms/8xx/cpm1.c
-@@ -280,6 +280,7 @@ cpm_setbrg(uint brg, uint rate)
- 		out_be32(bp, (((BRG_UART_CLK_DIV16 / rate) - 1) << 1) |
- 			      CPM_BRG_EN | CPM_BRG_DIV16);
- }
-+EXPORT_SYMBOL(cpm_setbrg);
+diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+index 3e8d70bfabc6..5d9fd36b02d1 100644
+--- a/drivers/pci/controller/pcie-mediatek-gen3.c
++++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+@@ -838,6 +838,14 @@ static int mtk_pcie_setup(struct mtk_gen3_pcie *pcie)
+ 	if (err)
+ 		return err;
  
- struct cpm_ioport16 {
- 	__be16 dir, par, odr_sor, dat, intr;
++	/*
++	 * The controller may have been left out of reset by the bootloader
++	 * so make sure that we get a clean start by asserting resets here.
++	 */
++	reset_control_assert(pcie->phy_reset);
++	reset_control_assert(pcie->mac_reset);
++	usleep_range(10, 20);
++
+ 	/* Don't touch the hardware registers before power up */
+ 	err = mtk_pcie_power_up(pcie);
+ 	if (err)
 -- 
 2.35.1
 

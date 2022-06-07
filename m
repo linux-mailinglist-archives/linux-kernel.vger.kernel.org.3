@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0272A541FAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675BA541FB6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386539AbiFGWtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
+        id S1385735AbiFGWqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381329AbiFGVk1 (ORCPT
+        with ESMTP id S1381123AbiFGVgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:40:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9761318FF18;
-        Tue,  7 Jun 2022 12:06:46 -0700 (PDT)
+        Tue, 7 Jun 2022 17:36:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0971522FE7A;
+        Tue,  7 Jun 2022 12:04:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFF5D61846;
-        Tue,  7 Jun 2022 19:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E73C341D3;
-        Tue,  7 Jun 2022 19:06:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5413B8220B;
+        Tue,  7 Jun 2022 19:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0848DC385A2;
+        Tue,  7 Jun 2022 19:04:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628805;
-        bh=o2wbFfEQvs2eiY4N0Y272HxREAh16iSWwNULUjZBAAI=;
+        s=korg; t=1654628692;
+        bh=kF4kMchGAIVVerdQTWUJCIU85/BMwDOMfqbIBpFUo7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ut2oZ1PyvOy77mRkIebEpifkzaHXJQQai0720S7jQBo3Rl3D3OWlIPKLBPwL0szC4
-         R0NE0j5fgBxek64XsYs0pAPk4MB55qsyGSpedqdPA4UPaJwLaV25pHkRssIJeODH83
-         j5qpqTOMYp+DC9xr98qzgFH/M4GG6uTkCKyB1Kjw=
+        b=eiU8clSXklayVr4frDpLwqiY8jckIWoHcIYzNy1YvpErFN/wzk5j+h0BL8dPNiZGP
+         YYYTfNlQ6LfkEZ/9tUKEkW3fov9uwXM42JiX+vAULl5S/RbnOu62rVyOO5ftmTwPOB
+         TcNw87bsDNYfoZlkKtZg2ani0H9Oq9qBhtrvTjWo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 421/879] PM: EM: Decrement policy counter
-Date:   Tue,  7 Jun 2022 18:58:59 +0200
-Message-Id: <20220607165015.084278018@linuxfoundation.org>
+        stable@vger.kernel.org, Mark ONeill <mao@tumblingdice.co.uk>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 422/879] dma-direct: dont fail on highmem CMA pages in dma_direct_alloc_pages
+Date:   Tue,  7 Jun 2022 18:59:00 +0200
+Message-Id: <20220607165015.114227959@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,40 +54,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre Gondois <Pierre.Gondois@arm.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit c9d8923bfbcb63f15ea6cb2b5c8426fc3d96f643 ]
+[ Upstream commit 92826e967535db2eb117db227b1191aaf98e4bb3 ]
 
-In commit e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq"),
-cpufreq_cpu_get() is called without a cpufreq_cpu_put(), permanently
-increasing the reference counts of the policy struct.
+When dma_direct_alloc_pages encounters a highmem page it just gives up
+currently.  But what we really should do is to try memory using the
+page allocator instead - without this platforms with a global highmem
+CMA pool will fail all dma_alloc_pages allocations.
 
-Decrement the reference count once the policy struct is not used
-anymore.
-
-Fixes: e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq")
-Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-Reviewed-by: Vincent Donnefort <vincent.donnefort@arm.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: efa70f2fdc84 ("dma-mapping: add a new dma_alloc_pages API")
+Reported-by: Mark O'Neill <mao@tumblingdice.co.uk>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/power/energy_model.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/dma/direct.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 0153b0ca7b23..6219aaa454b5 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -259,6 +259,8 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
- 			found++;
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 9743c6ccce1a..3e7f4aab740e 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -115,7 +115,7 @@ static struct page *dma_direct_alloc_swiotlb(struct device *dev, size_t size)
+ }
+ 
+ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+-		gfp_t gfp)
++		gfp_t gfp, bool allow_highmem)
+ {
+ 	int node = dev_to_node(dev);
+ 	struct page *page = NULL;
+@@ -129,9 +129,12 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	gfp |= dma_direct_optimal_gfp_mask(dev, dev->coherent_dma_mask,
+ 					   &phys_limit);
+ 	page = dma_alloc_contiguous(dev, size, gfp);
+-	if (page && !dma_coherent_ok(dev, page_to_phys(page), size)) {
+-		dma_free_contiguous(dev, page, size);
+-		page = NULL;
++	if (page) {
++		if (!dma_coherent_ok(dev, page_to_phys(page), size) ||
++		    (!allow_highmem && PageHighMem(page))) {
++			dma_free_contiguous(dev, page, size);
++			page = NULL;
++		}
  	}
+ again:
+ 	if (!page)
+@@ -189,7 +192,7 @@ static void *dma_direct_alloc_no_mapping(struct device *dev, size_t size,
+ {
+ 	struct page *page;
  
-+	cpufreq_cpu_put(policy);
-+
- 	if (!found)
- 		return;
+-	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
++	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
+ 	if (!page)
+ 		return NULL;
  
+@@ -262,7 +265,7 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
+ 
+ 	/* we always manually zero the memory once we are done */
+-	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
++	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
+ 	if (!page)
+ 		return NULL;
+ 
+@@ -370,19 +373,9 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	if (force_dma_unencrypted(dev) && dma_direct_use_pool(dev, gfp))
+ 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
+ 
+-	page = __dma_direct_alloc_pages(dev, size, gfp);
++	page = __dma_direct_alloc_pages(dev, size, gfp, false);
+ 	if (!page)
+ 		return NULL;
+-	if (PageHighMem(page)) {
+-		/*
+-		 * Depending on the cma= arguments and per-arch setup
+-		 * dma_alloc_contiguous could return highmem pages.
+-		 * Without remapping there is no way to return them here,
+-		 * so log an error and fail.
+-		 */
+-		dev_info(dev, "Rejecting highmem page from CMA.\n");
+-		goto out_free_pages;
+-	}
+ 
+ 	ret = page_address(page);
+ 	if (dma_set_decrypted(dev, ret, size))
 -- 
 2.35.1
 

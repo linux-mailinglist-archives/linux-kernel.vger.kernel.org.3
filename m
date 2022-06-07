@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F77753F6B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 09:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BD553F6B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237362AbiFGG7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S237312AbiFGG7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiFGG7s (ORCPT
+        with ESMTP id S229559AbiFGG7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:59:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52448DFD13
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654585187; x=1686121187;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ugz5Yr2O87wU2aHl3D58metSBL+6GZHntS4uQF/xDd0=;
-  b=VvpqBeZea5OmEP8pAfTPtgkvLKk3ZnlGrn9B4chcDCSZNEXcKeYKTEnG
-   SBypGu9Srydq8piJ/bzodDMQGC5KDIX6Ind7lDvWsMQonVGvpxgOENL/5
-   KYWHBukNdL52HQtByVdLAcqQJZ+uovhWU9oNPehKOLgY1ZVRNQrsLeQ8W
-   wUM5OEtiOyyJQ+jSOXH6DTtie8uRq1Nb3C1Yn50+g97DMD0/BvSyxbhLj
-   2/bh0/nb9zTpO3PIEqEbIJgrNhhQesql2VFPZ/pxO3BwlBCnVAl630SNM
-   BW9Lc+qQKbdK2ISlqVOQ4Uoph8V0n8LhHRrFAnrzDXmJDgvvo23gWMyOs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="277354775"
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="277354775"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 23:59:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,283,1647327600"; 
-   d="scan'208";a="584065425"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Jun 2022 23:59:45 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyTBp-000DRh-3V;
-        Tue, 07 Jun 2022 06:59:45 +0000
-Date:   Tue, 7 Jun 2022 14:58:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [tglx-spdx:2022-batch1 11/25]
- arch/x86/crypto/crc32-pclmul_asm.S:2:2: error: unexpected token at start of
- statement
-Message-ID: <202206071406.DZ8LbAVZ-lkp@intel.com>
+        Tue, 7 Jun 2022 02:59:20 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB4E15FE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:59:17 -0700 (PDT)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6660C3F1A6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1654585155;
+        bh=IsT8hRw/sNvl8bYDkskbd+oZi1y5enJZxvvxqrYnrr4=;
+        h=From:Date:To:Cc:Subject:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=chLaiaBiYJyeJyWb0qyPcnPD2gCuYc3xaRKDY/2W+3oO8OP64l/iQ5XeQvMx9O3RA
+         rPCV35JrwCt1hIENBDGjS2BW94T6lwvTB63vvSU2bnqbm3I9VgYo4cQYNWUQilk20Y
+         3TxI9Th+6n5X9peHNo1mlimzh4HypZXJGR41PHQ5LZ8BSsspZ70DJHPtEoG8LzP0uS
+         nPetqUtnvJBr3dyTNfpxI5/nVJAZmTC+GrLQzMLh+HW2yAAAf6rChpwg06XvXc7hKy
+         q+koA2eKbmPF/l3L0cu+5KL2LpOH04iKykvM+XlYwkn1DZqGdStCg4c/4ye05mKHAR
+         ox7pd5gtRrxVQ==
+Received: by mail-ej1-f70.google.com with SMTP id pv1-20020a170907208100b00710f5f8105cso2598331ejb.17
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 23:59:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version;
+        bh=IsT8hRw/sNvl8bYDkskbd+oZi1y5enJZxvvxqrYnrr4=;
+        b=N3yIuFfI5R8eXxf6xLUeiM0ZGQdqg8Xx5zzr+g/85s00WxkL8ZDUZt3xFOUq5uDDGI
+         27RpRMTwIfRh15ULFSnG293HbAsq9PIHwPyHM0wQaFRCP7wU9L5yIx3PulNev/SqgGT8
+         6H6+FlLQY3S6VPJdrLEoXcSqwqKCgZUp2SeNXGp3S/r8KxFK+N5C1rsd8Sdc//hc8cGK
+         BcuftfMaHHNz3dxQWRIPsj7i48EkSFcNlAnoTEg1XtzlvzDOWZA767Y0N+QXqF7bEQgV
+         G9zPV3TeW8MBlDiYRNNUGkRJ6DG6q40zYAi3d7TDsaSU0O/k40j0LtNgv+dblUCCVwGy
+         3mUw==
+X-Gm-Message-State: AOAM531zHzGMARs9d9QDHCgJQRTddE/vZPIFouFtZHdw8QAsFOPUHuFO
+        jdlJ4CN9T9+3RzoMdPNn4QVx5hfnYKtquxCXHvZ24vgUDPkkCLucBAoBUtb1EfSli6j0HXKXQ4W
+        2YpkDgZOW2x8Gl1k8K6iaT5bMuMM3IgqbmR95uYDD+Q==
+X-Received: by 2002:a05:6402:d0a:b0:425:d455:452 with SMTP id eb10-20020a0564020d0a00b00425d4550452mr31270536edb.259.1654585155042;
+        Mon, 06 Jun 2022 23:59:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyd9i/9BbSQOIg/c0QLsT8DddOAUdP7JtdSIrybDIOeMXXJCPyjEqk2UpdA6PvWtnllmKbnzg==
+X-Received: by 2002:a05:6402:d0a:b0:425:d455:452 with SMTP id eb10-20020a0564020d0a00b00425d4550452mr31270521edb.259.1654585154860;
+        Mon, 06 Jun 2022 23:59:14 -0700 (PDT)
+Received: from smeagol ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id ex1-20020a170907954100b007052b183d51sm7090557ejc.132.2022.06.06.23.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 23:59:13 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+Date:   Tue, 7 Jun 2022 08:59:11 +0200
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Juerg Haefliger <juerg.haefliger@canonical.com>,
+        linux@armlinux.org.uk, alim.akhtar@samsung.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] ARM: s3c: Kconfig: Style cleanups
+Message-ID: <20220607085911.4b0f7f10@smeagol>
+In-Reply-To: <63eabd40-761e-3b4e-c1be-43a12516e1b0@linaro.org>
+References: <20220523064252.11938-1-juergh@canonical.com>
+        <165450679893.60702.4773704114108524411.b4-ty@linaro.org>
+        <63eabd40-761e-3b4e-c1be-43a12516e1b0@linaro.org>
+Organization: Canonical Ltd
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/dzSs=0VGa2QCNMu0FW4QcUo";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,47 +86,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+--Sig_/dzSs=0VGa2QCNMu0FW4QcUo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-First bad commit (maybe != root cause):
+On Mon, 6 Jun 2022 11:14:28 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/linux-spdx.git 2022-batch1
-head:   91ba6750a1ba591f72b2f68e0a209c9cc7c0ace4
-commit: 5de8e209fec395c4e3a43a9554ef3459547f0364 [11/25] treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_179.RULE
-config: x86_64-randconfig-a009 (https://download.01.org/0day-ci/archive/20220607/202206071406.DZ8LbAVZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/linux-spdx.git/commit/?id=5de8e209fec395c4e3a43a9554ef3459547f0364
-        git remote add tglx-spdx https://git.kernel.org/pub/scm/linux/kernel/git/tglx/linux-spdx.git
-        git fetch --no-tags tglx-spdx 2022-batch1
-        git checkout 5de8e209fec395c4e3a43a9554ef3459547f0364
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> On 06/06/2022 11:13, Krzysztof Kozlowski wrote:
+> > On Mon, 23 May 2022 08:42:49 +0200, Juerg Haefliger wrote: =20
+> >> The majority of the Kconfig files use a single tab for basic indentati=
+on
+> >> and a single tab followed by two whitespaces for help text indentation.
+> >> Fix the lines that don't follow this convention.
+> >>
+> >> While at it, add missing trailing comments to endif statements and rep=
+lace
+> >> tabs before comments with whitespaces (which seems to be more common).
+> >>
+> >> [...] =20
+> >=20
+> > Applied, thanks!
+> >=20
+> > [1/3] ARM: s3c: Kconfig: Fix indentation
+> >       https://git.kernel.org/krzk/linux/c/076702da7e8a2472f8ac86f1179dd=
+cc5e90febae
+> > [3/3] ARM: s3c: Kconfig.s3c64xx: Fix indentation
+> >       (no commit info) =20
+>=20
+> ...And dropped. This does not pass checkpatch. Please be sure you run
+> scripts/checkpatch on your contributions.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I did and the check passed but email aliases don't work well in this scenar=
+io.
+Will fix and resubmit.
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/crypto/crc32-pclmul_asm.S:2:2: error: unexpected token at start of statement
-    */
-    ^
+...Juerg
 
 
-vim +2 arch/x86/crypto/crc32-pclmul_asm.S
+> WARNING: From:/Signed-off-by: email address mismatch: 'From: Juerg
+> Haefliger <juerg.haefliger@canonical.com>' !=3D 'Signed-off-by: Juerg
+> Haefliger <juergh@canonical.com>'
+>=20
+>=20
+> Best regards,
+> Krzysztof
 
-78c37d191dd6899 Alexander Boyko 2013-01-10 @2   */
-78c37d191dd6899 Alexander Boyko 2013-01-10  3  
 
-:::::: The code at line 2 was first introduced by commit
-:::::: 78c37d191dd6899d8c219fee597a17d6e3c5d288 crypto: crc32 - add crc32 pclmulqdq implementation and wrappers for table implementation
+--Sig_/dzSs=0VGa2QCNMu0FW4QcUo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-:::::: TO: Alexander Boyko <alexander_boyko@xyratex.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmKe9z8ACgkQD9OLCQum
+QrekSxAAr7orCH7rJvXteTM/jHkBdQCnPsvWgUeCXlACg24BKoLr05vB8yy4RUNG
+PMg5pSZd9xhqJ2eOn8wjzMAKhEL/BRvgUmqKmip+4BLtl0MVwZcykQBD2wqCYS3i
+lALzu45t9X+WV0dDRx2D96Xqp1ycUT1YSIpZ5fVsoZtJz9v0F0F5gJUlwooP8QHX
+SwW83+HQFwjSv5WtaNZaE/+VW4rV5wS0sF0OQ9AfbD3KrZ4w8TcSbLwe3zbAJDK+
+Duso7rtqlmGfSDwBwHz4RjLYwxTvOG4OVjeTfjhaUpHmcumA8FDrH9CAYcEeBk3R
+cX3SxOS1yJn0bkMMDcNQd8m5XjGzX1ZZAZFc/XQ4MCK8jTBdpqjDbemL4qVvKD3X
+7s2BiQzvs75A+rcI4jrItEr4ecIP4HEQDxGmo7VbpJzX0G8dsvywOVmBgwaSBcAW
+iQ176Fa2lqrE+KiMWJVBvnJJ01KmbrsAWzxNBUijjq+OKONfs9oP+3HjjogS3Vts
+3gaVLqr3T9eFA3hWOPtK+WCYG61X8BX0E8KRUSc02BYYynfSPiMMK+pO1nShdcev
+oY9k2TeSr/r/zNfuGPgDPS32AR3xeODGWyYtMuMEnws4rf5eBpdjVYGMB31WRQtM
+s4czehkmQOcqGX/TdbjkRNvMr6jGC+c2KUKvK4hCRpMPcZ9yUUY=
+=stuX
+-----END PGP SIGNATURE-----
+
+--Sig_/dzSs=0VGa2QCNMu0FW4QcUo--

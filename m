@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DBF5413FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAF454098F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359152AbiFGUJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S1349951AbiFGSKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355983AbiFGTRt (ORCPT
+        with ESMTP id S1349131AbiFGRud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:17:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A512987214;
-        Tue,  7 Jun 2022 11:07:51 -0700 (PDT)
+        Tue, 7 Jun 2022 13:50:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4FA13AF13;
+        Tue,  7 Jun 2022 10:37:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D1FB7CE2409;
-        Tue,  7 Jun 2022 18:07:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A484CC385A5;
-        Tue,  7 Jun 2022 18:07:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C15BEB820C3;
+        Tue,  7 Jun 2022 17:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 290CBC34119;
+        Tue,  7 Jun 2022 17:37:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625256;
-        bh=6t31hPtMi89639cmptUFVhkVesP5SdlNMy5GTolPYdg=;
+        s=korg; t=1654623469;
+        bh=OqZ1fM3XT7xiCBk1pwig0hnNmi/cqv4tqNiVLsVyCeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K42FTDupCwt9qe0iZbqziLCxlXIchggWPHy/k9ph4QF2hZA+Zcclg3HtjjPnXOtIH
-         WrEsa/z6AVwf1fL8+Y+YaZks80I6YJd/cpTcSJRRX0XFWtQN+Sesl3KzifuU6BLyg2
-         sy4K7wdIs69JnkFL8sghn6LvuEhZ/3pz3eTPdVAE=
+        b=imLsQ7q6b/R+FiHpbDkJpe3RObs7lMMBOcLXmWRc1egr3d4QXfky/ZNsJQb4GInR3
+         ZdFC3o154oWIgwmMUGycHCQnPdePPOYxsQfxBUiFZYQkYiqkaZ0DnfLM7I5U3q+qYp
+         x673Og6/80RYJbc77UOPJ1EOizN6huHkZYlMgQFQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 622/667] hugetlb: fix huge_pmd_unshare address update
+        stable@vger.kernel.org,
+        Jeffrey Mitchell <jeffrey.mitchell@starlab.io>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Brian Foster <bfoster@redhat.com>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: [PATCH 5.10 430/452] xfs: set inode size after creating symlink
 Date:   Tue,  7 Jun 2022 19:04:47 +0200
-Message-Id: <20220607164953.325343717@linuxfoundation.org>
+Message-Id: <20220607164921.367417409@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Kravetz <mike.kravetz@oracle.com>
+From: Jeffrey Mitchell <jeffrey.mitchell@starlab.io>
 
-commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
+commit 8aa921a95335d0a8c8e2be35a44467e7c91ec3e4 upstream.
 
-The routine huge_pmd_unshare() is passed a pointer to an address
-associated with an area which may be unshared.  If unshare is successful
-this address is updated to 'optimize' callers iterating over huge page
-addresses.  For the optimization to work correctly, address should be
-updated to the last huge page in the unmapped/unshared area.  However, in
-the common case where the passed address is PUD_SIZE aligned, the address
-is incorrectly updated to the address of the preceding huge page.  That
-wastes CPU cycles as the unmapped/unshared range is scanned twice.
+When XFS creates a new symlink, it writes its size to disk but not to the
+VFS inode. This causes i_size_read() to return 0 for that symlink until
+it is re-read from disk, for example when the system is rebooted.
 
-Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
-Fixes: 39dde65c9940 ("shared page table for hugetlb page")
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+I found this inconsistency while protecting directories with eCryptFS.
+The command "stat path/to/symlink/in/ecryptfs" will report "Size: 0" if
+the symlink was created after the last reboot on an XFS root.
+
+Call i_size_write() in xfs_symlink()
+
+Signed-off-by: Jeffrey Mitchell <jeffrey.mitchell@starlab.io>
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Brian Foster <bfoster@redhat.com>
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/hugetlb.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/xfs/xfs_symlink.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6060,7 +6060,14 @@ int huge_pmd_unshare(struct mm_struct *m
- 	pud_clear(pud);
- 	put_page(virt_to_page(ptep));
- 	mm_dec_nr_pmds(mm);
--	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
-+	/*
-+	 * This update of passed address optimizes loops sequentially
-+	 * processing addresses in increments of huge page size (PMD_SIZE
-+	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
-+	 * Update address to the 'last page' in the cleared area so that
-+	 * calling loop can move to first page past this area.
-+	 */
-+	*addr |= PUD_SIZE - PMD_SIZE;
- 	return 1;
- }
+--- a/fs/xfs/xfs_symlink.c
++++ b/fs/xfs/xfs_symlink.c
+@@ -300,6 +300,7 @@ xfs_symlink(
+ 		}
+ 		ASSERT(pathlen == 0);
+ 	}
++	i_size_write(VFS_I(ip), ip->i_d.di_size);
  
+ 	/*
+ 	 * Create the directory entry for the symlink.
 
 

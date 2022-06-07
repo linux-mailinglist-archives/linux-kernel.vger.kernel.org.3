@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD9B540605
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E09540F47
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347095AbiFGRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S1354147AbiFGTFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346173AbiFGRYT (ORCPT
+        with ESMTP id S1352598AbiFGSRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CACF84A24;
-        Tue,  7 Jun 2022 10:22:37 -0700 (PDT)
+        Tue, 7 Jun 2022 14:17:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9514013A2EF;
+        Tue,  7 Jun 2022 10:52:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC0D260907;
-        Tue,  7 Jun 2022 17:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1316C385A5;
-        Tue,  7 Jun 2022 17:22:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C983EB8236C;
+        Tue,  7 Jun 2022 17:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33889C3411C;
+        Tue,  7 Jun 2022 17:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622556;
-        bh=xJh/Ac/Y/NTkDn+/CFSqKcmkRxTM/Tvw41jrvn0dtnk=;
+        s=korg; t=1654624343;
+        bh=N2G7P5kX8WC/LFedJRSAAVNnpl8GrNl/yZz/XNcovSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YsAYJWaWD0OzHYIdttmCRGftvo4H3DUo427PvXIA4Ew2owaQ6Xs+RNimhVNpvBmnG
-         RmiciCLsoKiyX6A0EnS/Oa2ENNksyk+fTzZvSkXhMCuGCaQRI8VpVi2wonJI4AwxlJ
-         FAws9QO3+sPxzKzu+38nZvmCpef5HEyN0it1dbXk=
+        b=1X5CHBmq/dpcPcyNVF1FSz1FGOFGjmuCyVUGWqSxRR94d49W/bYwO22gX6kLXQFIa
+         Bi5RD7NOWDAelrXwsJc6B0h4+OksQerrXsrXBQlcYhgm7IMs17NkUkBGoIgIPnfGS3
+         vwzfML3HOZUtmHpnf7MguVKRAiK+5OoRLb/8WT3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 100/452] arm64: dts: qcom: msm8994: Fix BLSP[12]_DMA channels count
+Subject: [PATCH 5.15 292/667] drm/msm: return an error pointer in msm_gem_prime_get_sg_table()
 Date:   Tue,  7 Jun 2022 18:59:17 +0200
-Message-Id: <20220607164911.536028770@linuxfoundation.org>
+Message-Id: <20220607164943.535767570@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 1ae438d26b620979ed004d559c304d31c42173ae ]
+[ Upstream commit cf575e31611eb6dccf08fad02e57e35b2187704d ]
 
-MSM8994 actually features 24 DMA channels for each BLSP,
-fix it!
+The msm_gem_prime_get_sg_table() needs to return error pointers on
+error.  This is called from drm_gem_map_dma_buf() and returning a
+NULL will lead to a crash in that function.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220319174645.340379-14-konrad.dybcio@somainline.org
+Fixes: ac45146733b0 ("drm/msm: fix msm_gem_prime_get_sg_table()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/485023/
+Link: https://lore.kernel.org/r/YnOmtS5tfENywR9m@kili
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8994.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/msm_gem_prime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 45f9a44326a6..297408b947ff 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -316,7 +316,7 @@
- 			#dma-cells = <1>;
- 			qcom,ee = <0>;
- 			qcom,controlled-remotely;
--			num-channels = <18>;
-+			num-channels = <24>;
- 			qcom,num-ees = <4>;
- 		};
+diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
+index fc94e061d6a7..8a2d94bd5df2 100644
+--- a/drivers/gpu/drm/msm/msm_gem_prime.c
++++ b/drivers/gpu/drm/msm/msm_gem_prime.c
+@@ -17,7 +17,7 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
+ 	int npages = obj->size >> PAGE_SHIFT;
  
-@@ -412,7 +412,7 @@
- 			#dma-cells = <1>;
- 			qcom,ee = <0>;
- 			qcom,controlled-remotely;
--			num-channels = <18>;
-+			num-channels = <24>;
- 			qcom,num-ees = <4>;
- 		};
+ 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
  
+ 	return drm_prime_pages_to_sg(obj->dev, msm_obj->pages, npages);
+ }
 -- 
 2.35.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA877540622
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3245417EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346571AbiFGReD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S1378582AbiFGVHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346365AbiFGRYO (ORCPT
+        with ESMTP id S1359160AbiFGUJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:24:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315E63C492;
-        Tue,  7 Jun 2022 10:22:23 -0700 (PDT)
+        Tue, 7 Jun 2022 16:09:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED58EF053;
+        Tue,  7 Jun 2022 11:26:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A69C860AE5;
-        Tue,  7 Jun 2022 17:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E2FC385A5;
-        Tue,  7 Jun 2022 17:22:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 010E8B81FF8;
+        Tue,  7 Jun 2022 18:26:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6F5C385A2;
+        Tue,  7 Jun 2022 18:26:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622542;
-        bh=ozh1G02jBvU/LggvUu4u7Djg4oaIrmGMdGp9z3bVmYs=;
+        s=korg; t=1654626390;
+        bh=B98y2vdgP+u+2NmnWriGHOnxLlrmvAluSHKWKXdtuxk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EH0GSzosyqXYY3yONcsSsRzvY8eUHIvPH9d33hvCCILod2rujWuDZOolsXmRVbynD
-         0HCwTOSwSV8cF6hWTY4tsAkP4CleZgXwRMBjGVE0VXQiZvm81TayXVi/7kl5EJVUMu
-         MRx5U7gNBz50sk38q5EXCyIY/jlbEm6B4MhUCRpQ=
+        b=gj1uheWA4bj5KCZh1Y2NBmfjcKhtYAqNvevREUboV5sAUjwcn4dWtMW0MnJMyrQkq
+         5dFtWK4TykKDRkMc0FWIHY4Lig9h5t1c+5MfNvktZHpBx8SriJSZcSQwWU5cs7AHnt
+         9OF3mkYEdQ6YsdFBewcOiudLm6TrxYur95791mns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 096/452] gfs2: use i_lock spin_lock for inode qadata
+        stable@vger.kernel.org, Mark ONeill <mao@tumblingdice.co.uk>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 361/772] dma-direct: dont fail on highmem CMA pages in dma_direct_alloc_pages
 Date:   Tue,  7 Jun 2022 18:59:13 +0200
-Message-Id: <20220607164911.419523793@linuxfoundation.org>
+Message-Id: <20220607164959.652585754@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,86 +54,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 5fcff61eea9efd1f4b60e89d2d686b5feaea100f ]
+[ Upstream commit 92826e967535db2eb117db227b1191aaf98e4bb3 ]
 
-Before this patch, functions gfs2_qa_get and _put used the i_rw_mutex to
-prevent simultaneous access to its i_qadata. But i_rw_mutex is now used
-for many other things, including iomap_begin and end, which causes a
-conflict according to lockdep. We cannot just remove the lock since
-simultaneous opens (gfs2_open -> gfs2_open_common -> gfs2_qa_get) can
-then stomp on each others values for i_qadata.
+When dma_direct_alloc_pages encounters a highmem page it just gives up
+currently.  But what we really should do is to try memory using the
+page allocator instead - without this platforms with a global highmem
+CMA pool will fail all dma_alloc_pages allocations.
 
-This patch solves the conflict by using the i_lock spin_lock in the inode
-to prevent simultaneous access.
-
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Fixes: efa70f2fdc84 ("dma-mapping: add a new dma_alloc_pages API")
+Reported-by: Mark O'Neill <mao@tumblingdice.co.uk>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/quota.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ kernel/dma/direct.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-index 6e173ae378c4..ad953ecb5853 100644
---- a/fs/gfs2/quota.c
-+++ b/fs/gfs2/quota.c
-@@ -531,34 +531,42 @@ static void qdsb_put(struct gfs2_quota_data *qd)
-  */
- int gfs2_qa_get(struct gfs2_inode *ip)
- {
--	int error = 0;
- 	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
-+	struct inode *inode = &ip->i_inode;
- 
- 	if (sdp->sd_args.ar_quota == GFS2_QUOTA_OFF)
- 		return 0;
- 
--	down_write(&ip->i_rw_mutex);
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata == NULL) {
--		ip->i_qadata = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
--		if (!ip->i_qadata) {
--			error = -ENOMEM;
--			goto out;
--		}
-+		struct gfs2_qadata *tmp;
-+
-+		spin_unlock(&inode->i_lock);
-+		tmp = kmem_cache_zalloc(gfs2_qadata_cachep, GFP_NOFS);
-+		if (!tmp)
-+			return -ENOMEM;
-+
-+		spin_lock(&inode->i_lock);
-+		if (ip->i_qadata == NULL)
-+			ip->i_qadata = tmp;
-+		else
-+			kmem_cache_free(gfs2_qadata_cachep, tmp);
- 	}
- 	ip->i_qadata->qa_ref++;
--out:
--	up_write(&ip->i_rw_mutex);
--	return error;
-+	spin_unlock(&inode->i_lock);
-+	return 0;
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 50f48e9e4598..0be095579010 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -115,7 +115,7 @@ static struct page *dma_direct_alloc_swiotlb(struct device *dev, size_t size)
  }
  
- void gfs2_qa_put(struct gfs2_inode *ip)
+ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+-		gfp_t gfp)
++		gfp_t gfp, bool allow_highmem)
  {
--	down_write(&ip->i_rw_mutex);
-+	struct inode *inode = &ip->i_inode;
-+
-+	spin_lock(&inode->i_lock);
- 	if (ip->i_qadata && --ip->i_qadata->qa_ref == 0) {
- 		kmem_cache_free(gfs2_qadata_cachep, ip->i_qadata);
- 		ip->i_qadata = NULL;
+ 	int node = dev_to_node(dev);
+ 	struct page *page = NULL;
+@@ -129,9 +129,12 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	gfp |= dma_direct_optimal_gfp_mask(dev, dev->coherent_dma_mask,
+ 					   &phys_limit);
+ 	page = dma_alloc_contiguous(dev, size, gfp);
+-	if (page && !dma_coherent_ok(dev, page_to_phys(page), size)) {
+-		dma_free_contiguous(dev, page, size);
+-		page = NULL;
++	if (page) {
++		if (!dma_coherent_ok(dev, page_to_phys(page), size) ||
++		    (!allow_highmem && PageHighMem(page))) {
++			dma_free_contiguous(dev, page, size);
++			page = NULL;
++		}
  	}
--	up_write(&ip->i_rw_mutex);
-+	spin_unlock(&inode->i_lock);
- }
+ again:
+ 	if (!page)
+@@ -189,7 +192,7 @@ static void *dma_direct_alloc_no_mapping(struct device *dev, size_t size,
+ {
+ 	struct page *page;
  
- int gfs2_quota_hold(struct gfs2_inode *ip, kuid_t uid, kgid_t gid)
+-	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
++	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
+ 	if (!page)
+ 		return NULL;
+ 
+@@ -262,7 +265,7 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
+ 
+ 	/* we always manually zero the memory once we are done */
+-	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
++	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
+ 	if (!page)
+ 		return NULL;
+ 	if (PageHighMem(page)) {
+@@ -370,19 +373,9 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	if (force_dma_unencrypted(dev) && dma_direct_use_pool(dev, gfp))
+ 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
+ 
+-	page = __dma_direct_alloc_pages(dev, size, gfp);
++	page = __dma_direct_alloc_pages(dev, size, gfp, false);
+ 	if (!page)
+ 		return NULL;
+-	if (PageHighMem(page)) {
+-		/*
+-		 * Depending on the cma= arguments and per-arch setup
+-		 * dma_alloc_contiguous could return highmem pages.
+-		 * Without remapping there is no way to return them here,
+-		 * so log an error and fail.
+-		 */
+-		dev_info(dev, "Rejecting highmem page from CMA.\n");
+-		goto out_free_pages;
+-	}
+ 
+ 	ret = page_address(page);
+ 	if (dma_set_decrypted(dev, ret, size))
 -- 
 2.35.1
 

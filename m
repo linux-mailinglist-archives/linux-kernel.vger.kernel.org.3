@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587A541446
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADE8541B3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359536AbiFGUPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S1381377AbiFGVna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355125AbiFGTWL (ORCPT
+        with ESMTP id S1378883AbiFGUwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:22:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0FF67D24;
-        Tue,  7 Jun 2022 11:09:02 -0700 (PDT)
+        Tue, 7 Jun 2022 16:52:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A92396A9;
+        Tue,  7 Jun 2022 11:43:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00F686193C;
-        Tue,  7 Jun 2022 18:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141EDC3411C;
-        Tue,  7 Jun 2022 18:09:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D295BB8237F;
+        Tue,  7 Jun 2022 18:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE32C385A2;
+        Tue,  7 Jun 2022 18:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625341;
-        bh=ODRQG+sRCqh6RBUSnN70/uOk5euMC1g+MOEckd+VAeA=;
+        s=korg; t=1654627397;
+        bh=wTBlXTJ5MWZfhZYl7Q4lW30U1AMhE0MMg3O0zwfWBg0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vpWizjkEnnnK8sBouKrYvdB+viAiM7IKLW3aUxWr5KNDjRIOObJexDGiAIzoSTFNx
-         wTjHPKv0QnKBJhnnf/xwnB53R8FU4nA2DdqYslYqfW9DEcv8pXK/SJlGNg/FyMyiau
-         iTj8y7ixdXrlekCfWh+jMRbvgGeAxTxxVApCh460=
+        b=hbP1Cq1/rAM9jMwFSsh6PU7oWGSGIGpaeCWP3ax2ABiz3vp5P8xBXn2A+RFBwSpKv
+         8v1ItSLpqf+h/77OkuzUGHvqkr8/0Zj2AopzWW8jCcC5AgrwZSysykGvbn39OAVCz1
+         czUtWSz13VKp4lnQd3RA9YYg9zMoYZlflz+lkyPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 650/667] net: ipa: fix page free in ipa_endpoint_replenish_one()
-Date:   Tue,  7 Jun 2022 19:05:15 +0200
-Message-Id: <20220607164954.147888942@linuxfoundation.org>
+        stable@vger.kernel.org, Mel Gorman <mgorman@techsingularity.net>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>, Jan Kara <jack@suse.cz>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.17 724/772] mm/page_alloc: always attempt to allocate at least one page during bulk allocation
+Date:   Tue,  7 Jun 2022 19:05:16 +0200
+Message-Id: <20220607165010.376983668@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +59,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Elder <elder@linaro.org>
+From: Mel Gorman <mgorman@techsingularity.net>
 
-commit 70132763d5d2e94cd185e3aa92ac6a3ba89068fa upstream.
+commit c572e4888ad1be123c1516ec577ad30a700bbec4 upstream.
 
-Currently the (possibly compound) pages used for receive buffers are
-freed using __free_pages().  But according to this comment above the
-definition of that function, that's wrong:
-    If you want to use the page's reference count to decide
-    when to free the allocation, you should allocate a compound
-    page, and use put_page() instead of __free_pages().
+Peter Pavlisko reported the following problem on kernel bugzilla 216007.
 
-Convert the call to __free_pages() in ipa_endpoint_replenish_one()
-to use put_page() instead.
+	When I try to extract an uncompressed tar archive (2.6 milion
+	files, 760.3 GiB in size) on newly created (empty) XFS file system,
+	after first low tens of gigabytes extracted the process hangs in
+	iowait indefinitely. One CPU core is 100% occupied with iowait,
+	the other CPU core is idle (on 2-core Intel Celeron G1610T).
 
-Fixes: 6a606b90153b8 ("net: ipa: allocate transaction in replenish loop")
-Signed-off-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+It was bisected to c9fa563072e1 ("xfs: use alloc_pages_bulk_array() for
+buffers") but XFS is only the messenger.  The problem is that nothing is
+waking kswapd to reclaim some pages at a time the PCP lists cannot be
+refilled until some reclaim happens.  The bulk allocator checks that there
+are some pages in the array and the original intent was that a bulk
+allocator did not necessarily need all the requested pages and it was best
+to return as quickly as possible.
+
+This was fine for the first user of the API but both NFS and XFS require
+the requested number of pages be available before making progress.  Both
+could be adjusted to call the page allocator directly if a bulk allocation
+fails but it puts a burden on users of the API.  Adjust the semantics to
+attempt at least one allocation via __alloc_pages() before returning so
+kswapd is woken if necessary.
+
+It was reported via bugzilla that the patch addressed the problem and that
+the tar extraction completed successfully.  This may also address bug
+215975 but has yet to be confirmed.
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216007
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215975
+Link: https://lkml.kernel.org/r/20220526091210.GC3441@techsingularity.net
+Fixes: 387ba26fb1cb ("mm/page_alloc: add a bulk page allocator")
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Cc: "Darrick J. Wong" <djwong@kernel.org>
+Cc: Dave Chinner <dchinner@redhat.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Jesper Dangaard Brouer <brouer@redhat.com>
+Cc: Chuck Lever <chuck.lever@oracle.com>
+Cc: <stable@vger.kernel.org>	[5.13+]
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ipa/ipa_endpoint.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/page_alloc.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -1049,7 +1049,7 @@ static int ipa_endpoint_replenish_one(st
- err_trans_free:
- 	gsi_trans_free(trans);
- err_free_pages:
--	__free_pages(page, get_order(IPA_RX_BUFFER_SIZE));
-+	put_page(page);
- 
- 	return -ENOMEM;
- }
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5305,8 +5305,8 @@ unsigned long __alloc_pages_bulk(gfp_t g
+ 		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
+ 								pcp, pcp_list);
+ 		if (unlikely(!page)) {
+-			/* Try and get at least one page */
+-			if (!nr_populated)
++			/* Try and allocate at least one page */
++			if (!nr_account)
+ 				goto failed_irq;
+ 			break;
+ 		}
 
 

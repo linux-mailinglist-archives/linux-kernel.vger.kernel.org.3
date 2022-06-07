@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A927540DDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC5F541812
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354174AbiFGSua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S1378816AbiFGVI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352949AbiFGSRr (ORCPT
+        with ESMTP id S1359208AbiFGUJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:17:47 -0400
+        Tue, 7 Jun 2022 16:09:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFDB13F432;
-        Tue,  7 Jun 2022 10:52:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871E01C4F0F;
+        Tue,  7 Jun 2022 11:27:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE431617B4;
-        Tue,  7 Jun 2022 17:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96A8C385A5;
-        Tue,  7 Jun 2022 17:52:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2291361252;
+        Tue,  7 Jun 2022 18:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E32C385A2;
+        Tue,  7 Jun 2022 18:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624369;
-        bh=4FWVvpGIVHGySV3NM6oA2OJC61WladjaOASJ3N08TN0=;
+        s=korg; t=1654626426;
+        bh=r4Cxs6mC/j3Ia4H5h56qzcI8TWV9ryZCS5RxCwnAKOw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RR8pgZcK1C5Y3Hf7xZQqaWOCwoxv/rt/NToXOAFIHaie6LUVM4mc3cQ8tvgYX+9H1
-         1iX8ieRTMRSD5Bh+aeL72vUMP0Zt28bk0CL7vWCAh4jY0oifpdRshGa9QKwgNaX2l5
-         cUh30Jp1ps8R7vxijuIeU/z65eoSbDy93Nxvq59c=
+        b=gON4QeA1WcKS7igaQ4w3hV1G4O2ABIk/Q/xXA1KSWV5TRmaie3a1/qwo8Jj4R0X+S
+         puu/2a0QVYKCrpDd0RWJAZaTnCrXGJ+fnW40/qkvohv/bx/w0zzJvvQ2DfQoUbkfs0
+         m1+l4m2r2NguI632K2LEyUp2Iqf7darbgYssxzRQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 300/667] perf/amd/ibs: Use interrupt regs ip for stack unwinding
+        stable@vger.kernel.org, Ben Greear <greearb@candelatech.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 373/772] mt76: fix tx status related use-after-free race on station removal
 Date:   Tue,  7 Jun 2022 18:59:25 +0200
-Message-Id: <20220607164943.775825567@linuxfoundation.org>
+Message-Id: <20220607165000.006614205@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ravi Bangoria <ravi.bangoria@amd.com>
+From: Felix Fietkau <nbd@nbd.name>
 
-[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
+[ Upstream commit fcfe1b5e162bf473c1d47760962cec8523c00466 ]
 
-IbsOpRip is recorded when IBS interrupt is triggered. But there is
-a skid from the time IBS interrupt gets triggered to the time the
-interrupt is presented to the core. Meanwhile processor would have
-moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
-recorded as part of the interrupt regs. This causes issues while
-unwinding stack using the ORC unwinder as it needs consistent rip,
-rsp and rbp. Fix this by using rip from interrupt regs instead of
-IbsOpRip for stack unwinding.
+There is a small race window where ongoing tx activity can lead to a skb
+getting added to the status tracking idr after that idr has already been
+cleaned up, which will keep the wcid linked in the status poll list.
+Fix this by only adding status skbs if the wcid pointer is still assigned
+in dev->wcid, which gets cleared early by mt76_sta_pre_rcu_remove
 
-Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
-Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
+Fixes: bd1e3e7b693c ("mt76: introduce packet_id idr")
+Tested-by: Ben Greear <greearb@candelatech.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/net/wireless/mediatek/mt76/mac80211.c | 2 ++
+ drivers/net/wireless/mediatek/mt76/tx.c       | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index 367ca899e6e8..2704ec1e42a3 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -304,6 +304,16 @@ static int perf_ibs_init(struct perf_event *event)
- 	hwc->config_base = perf_ibs->msr;
- 	hwc->config = config;
+diff --git a/drivers/net/wireless/mediatek/mt76/mac80211.c b/drivers/net/wireless/mediatek/mt76/mac80211.c
+index 6023ff6dc059..cbda0f57ff9a 100644
+--- a/drivers/net/wireless/mediatek/mt76/mac80211.c
++++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
+@@ -1344,7 +1344,9 @@ void mt76_sta_pre_rcu_remove(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 	struct mt76_wcid *wcid = (struct mt76_wcid *)sta->drv_priv;
  
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack. Setting _EARLY flag
-+	 * makes sure we unwind call-stack before perf sample rip is set to
-+	 * IbsOpRip.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
-+
- 	return 0;
+ 	mutex_lock(&dev->mutex);
++	spin_lock_bh(&dev->status_lock);
+ 	rcu_assign_pointer(dev->wcid[wcid->idx], NULL);
++	spin_unlock_bh(&dev->status_lock);
+ 	mutex_unlock(&dev->mutex);
  }
+ EXPORT_SYMBOL_GPL(mt76_sta_pre_rcu_remove);
+diff --git a/drivers/net/wireless/mediatek/mt76/tx.c b/drivers/net/wireless/mediatek/mt76/tx.c
+index 6b8c9dc80542..ccaf9a31fbc4 100644
+--- a/drivers/net/wireless/mediatek/mt76/tx.c
++++ b/drivers/net/wireless/mediatek/mt76/tx.c
+@@ -120,7 +120,7 @@ mt76_tx_status_skb_add(struct mt76_dev *dev, struct mt76_wcid *wcid,
  
-@@ -687,6 +697,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
- 		data.raw = &raw;
- 	}
+ 	memset(cb, 0, sizeof(*cb));
  
-+	/*
-+	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
-+	 * recorded as part of interrupt regs. Thus we need to use rip from
-+	 * interrupt regs while unwinding call stack.
-+	 */
-+	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-+		data.callchain = perf_callchain(event, iregs);
-+
- 	throttle = perf_event_overflow(event, &data, &regs);
- out:
- 	if (throttle) {
+-	if (!wcid)
++	if (!wcid || !rcu_access_pointer(dev->wcid[wcid->idx]))
+ 		return MT_PACKET_ID_NO_ACK;
+ 
+ 	if (info->flags & IEEE80211_TX_CTL_NO_ACK)
 -- 
 2.35.1
 

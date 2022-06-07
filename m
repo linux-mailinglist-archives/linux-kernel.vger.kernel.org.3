@@ -2,140 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A0E5421C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400505424CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441801AbiFHAxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S229652AbiFHDVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 23:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448881AbiFGXJF (ORCPT
+        with ESMTP id S231867AbiFHDVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:09:05 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A0938237C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:45:06 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id a29so1617768lfk.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 13:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=on30OEe/DO5zamISOEay2WIQIU04GrMtf4oLpYULsi0=;
-        b=qiK8I6WsrgYjyC91chUFuazIMqEbG3bN/GrHqaSMF4F8x6MV8QSOzCE71g3Nm8aqBY
-         GkphlLTEkCrLci6izemxw/C9WRQBv0IXrmoR1/KWbahNRw7cGoDMRwr5A/9l3/GzShi+
-         JRNwJT9PDXB63R0cJa3JnoL1VCWjQ1Cw1KWCrjyLqSoei6nvABDIIIhTw64rVpOQW1Kg
-         q1rMMkLT+fM3bK5K1OUIlEHDQDNblUNPpHV3zEMjJkKkxaj0qLC8V8JO+mZY8C44m+YZ
-         prF8n8lV7evp1UVmD7avSiGmHM86dDosTsCNkBqWSZoZeC8M3ague2Ctr85fdwk5aXGn
-         nRqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=on30OEe/DO5zamISOEay2WIQIU04GrMtf4oLpYULsi0=;
-        b=G47dhc/cSg3dGlsY57hSk20fr8V2wuvv7igG9vdlqTC1GEhTGBDRULOJuc3c3dOOKY
-         13PqW7c2OGtJTw7ZrlfyUzoNFx0PUrRWWplnwUTiJHsVIK7WDPGfNwbKC2tLD6KfblHd
-         tY2DlRJyQRXoE64hsNi9xSrFXjg9s6qTPYWzcnkAGAckH1NExvIUMzyomK8oIVjAvIdH
-         wEPl6Vl4FR3rbb+9GwZs1u4+BCE2M63KBlvgESxg3RGGTxyUneZl3c2HL3/zCjpgKJYI
-         KKjS7tH0b0JGjiG67rTr1mGt968NoTXP/CNqj0gBIfFXjdEvLpqsqn+fzoxrTGwsrMd1
-         SXpw==
-X-Gm-Message-State: AOAM533rDr1syAs+IQT+bAvmEj4Q+ou9yJKHtt92kOUO7DZJjhefm6KB
-        0skGP/MNVGwGViF6bOuwvB+4Dg9x8ljosFUGPHSdiWTyxLP39w==
-X-Google-Smtp-Source: ABdhPJydJnHSMFNA7KkWvxEBYxxyscRFA6vipqsuXxkhyRm5UrhSrOPz9WDL3yIG52KtyuSzUpI+acnnvERqzMf/7Ko=
-X-Received: by 2002:a05:6512:401c:b0:479:7232:5444 with SMTP id
- br28-20020a056512401c00b0047972325444mr2089108lfb.403.1654634701789; Tue, 07
- Jun 2022 13:45:01 -0700 (PDT)
+        Tue, 7 Jun 2022 23:21:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA2826130
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654635181; x=1686171181;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GF8W8B32JQSitdmtnoiXM24ZrzD0GHTMXBlcbGBZU5A=;
+  b=MOyU6ZjUDhogRM7rZ17sGxSCvEVWpWbLOJBPU0mQ9kRDDhsJkPbDrcNE
+   2YknNtTY1lmImCkriwK8XDf5gvylUfRsOUJV69QwQNw8bWAoF2NbhwtrI
+   2p+YZoZIjyPaoir6UvzRDHYMoOeN7pt0KOkBoNXdQQw+oMGLnumXQyzqA
+   SoA7Z/5NF9KR4nbbbVvrnO8Qw0Huoe0w56CyVRk24G0aBYIMRn6WMsH2V
+   Vh/dst5jKlBusb5TC/uaFXgnv6z2QfjWpzcKdY11u+txVlr144MkXBb5u
+   c9273rAHKDeqyd3YmXNOoPe5Es915mgxy45bbxv50mfv5IdXFna3aTdPQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="265383564"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="265383564"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 13:44:34 -0700
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="636329123"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 13:44:33 -0700
+Date:   Tue, 7 Jun 2022 13:44:56 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
+        baolin.wang@linux.alibaba.com
+Subject: Re: [PATCH v4 15/21] x86/resctrl: Abstract __rmid_read()
+Message-ID: <Yp+4yIvRgghnmmz/@fyu1.sc.intel.com>
+References: <20220412124419.30689-1-james.morse@arm.com>
+ <20220412124419.30689-16-james.morse@arm.com>
 MIME-Version: 1.0
-References: <20220607191119.20686-1-jstitt007@gmail.com>
-In-Reply-To: <20220607191119.20686-1-jstitt007@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Jun 2022 13:44:50 -0700
-Message-ID: <CAKwvOdkHb9W1dePaKAuSKv2D0e0uMGLGCZGeakzgD3ZWxf-2iA@mail.gmail.com>
-Subject: Re: [PATCH] net: amd-xgbe: fix clang -Wformat warning
-To:     Justin Stitt <jstitt007@gmail.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412124419.30689-16-james.morse@arm.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 12:11 PM Justin Stitt <jstitt007@gmail.com> wrote:
->
-> see warning:
-> | drivers/net/ethernet/amd/xgbe/xgbe-drv.c:2787:43: warning: format specifies
-> | type 'unsigned short' but the argument has type 'int' [-Wformat]
-> |        netdev_dbg(netdev, "Protocol: %#06hx\n", ntohs(eth->h_proto));
-> |                                      ~~~~~~     ^~~~~~~~~~~~~~~~~~~
->
-> Variadic functions (printf-like) undergo default argument promotion.
-> Documentation/core-api/printk-formats.rst specifically recommends
-> using the promoted-to-type's format flag.
->
-> Also, as per C11 6.3.1.1:
-> (https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1548.pdf)
-> `If an int can represent all values of the original type ..., the
-> value is converted to an int; otherwise, it is converted to an
-> unsigned int. These are called the integer promotions.`
->
-> Since the argument is a u16 it will get promoted to an int and thus it is
-> most accurate to use the %x format specifier here. It should be noted that the
-> `#06` formatting sugar does not alter the promotion rules.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Signed-off-by: Justin Stitt <jstitt007@gmail.com>
+Hi, James,
 
-LGTM; thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On Tue, Apr 12, 2022 at 12:44:13PM +0000, James Morse wrote:
+> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
+> index 71a13c04a846..20c54cbadc0c 100644
+> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
+> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+> @@ -167,9 +167,9 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d,
+>  		memset(am, 0, sizeof(*am));
+>  }
+>  
+> -static u64 __rmid_read(u32 rmid, enum resctrl_event_id eventid)
+> +int resctrl_arch_rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
+>  {
+> -	u64 val;
+> +	u64 msr_val;
+>  
+>  	/*
+>  	 * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is configured
+> @@ -180,14 +180,24 @@ static u64 __rmid_read(u32 rmid, enum resctrl_event_id eventid)
+>  	 * are error bits.
+>  	 */
+>  	wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
+> -	rdmsrl(MSR_IA32_QM_CTR, val);
+> +	rdmsrl(MSR_IA32_QM_CTR, msr_val);
+>  
+> -	return val;
+> +	if (msr_val & RMID_VAL_ERROR)
+> +		return -EIO;
+> +	if (msr_val & RMID_VAL_UNAVAIL)
+> +		return -EINVAL;
+> +
+> +	*val = msr_val;
+> +
+> +	return 0;
+>  }
+>  
+>  static bool rmid_dirty(struct rmid_entry *entry)
+>  {
+> -	u64 val = __rmid_read(entry->rmid, QOS_L3_OCCUP_EVENT_ID);
+> +	u64 val = 0;
+> +
+> +	if (resctrl_arch_rmid_read(entry->rmid, QOS_L3_OCCUP_EVENT_ID, &val))
+> +		return true;
+>  
+>  	return val >= resctrl_cqm_threshold;
+>  }
+> @@ -259,8 +269,8 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
+>  {
+>  	struct rdt_resource *r;
+>  	struct rdt_domain *d;
+> -	int cpu;
+> -	u64 val;
+> +	int cpu, err;
+> +	u64 val = 0;
+>  
+>  	r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
+>  
+> @@ -268,8 +278,10 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
+>  	cpu = get_cpu();
+>  	list_for_each_entry(d, &r->domains, list) {
+>  		if (cpumask_test_cpu(cpu, &d->cpu_mask)) {
+> -			val = __rmid_read(entry->rmid, QOS_L3_OCCUP_EVENT_ID);
+> -			if (val <= resctrl_cqm_threshold)
+> +			err = resctrl_arch_rmid_read(entry->rmid,
+> +						     QOS_L3_OCCUP_EVENT_ID,
+> +						     &val);
+> +			if (err || val <= resctrl_cqm_threshold)
+>  				continue;
+>  		}
+>  
+> @@ -315,19 +327,19 @@ static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int width)
+>  	return chunks >> shift;
+>  }
+>  
+> -static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
+> +static int __mon_event_count(u32 rmid, struct rmid_read *rr)
+>  {
+>  	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(rr->r);
+>  	struct mbm_state *m;
+> -	u64 chunks, tval;
+> +	u64 chunks, tval = 0;
+>  
+>  	if (rr->first)
+>  		resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
+>  
+> -	tval = __rmid_read(rmid, rr->evtid);
+> -	if (tval & (RMID_VAL_ERROR | RMID_VAL_UNAVAIL)) {
+> -		return tval;
+> -	}
+> +	rr->err = resctrl_arch_rmid_read(rmid, rr->evtid, &tval);
+> +	if (rr->err)
+> +		return rr->err;
+> +
+>  	switch (rr->evtid) {
+>  	case QOS_L3_OCCUP_EVENT_ID:
+>  		rr->val += tval;
+> @@ -343,7 +355,7 @@ static u64 __mon_event_count(u32 rmid, struct rmid_read *rr)
+>  		 * Code would never reach here because an invalid
+>  		 * event id would fail the __rmid_read.
+>  		 */
+> -		return RMID_VAL_ERROR;
+> +		return -EINVAL;
+>  	}
+>  
+>  	if (rr->first) {
+> @@ -399,7 +411,7 @@ void mon_event_count(void *info)
+>  	struct rdtgroup *rdtgrp, *entry;
+>  	struct rmid_read *rr = info;
+>  	struct list_head *head;
+> -	u64 ret_val;
+> +	int ret_val;
 
-Don't forget to cc everyone from ./scripts/get_maintainer.pl!
-$ /scripts/get_maintainer.pl
-20220607_jstitt007_net_amd_xgbe_fix_clang_wformat_warning.mbx
-Tom Lendacky <thomas.lendacky@amd.com> (supporter:AMD XGBE DRIVER)
-"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
-Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
-Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS)
-Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
-Nathan Chancellor <nathan@kernel.org> (supporter:CLANG/LLVM BUILD SUPPORT)
-Nick Desaulniers <ndesaulniers@google.com> (supporter:CLANG/LLVM BUILD SUPPORT)
-Tom Rix <trix@redhat.com> (reviewer:CLANG/LLVM BUILD SUPPORT)
-netdev@vger.kernel.org (open list:AMD XGBE DRIVER)
-linux-kernel@vger.kernel.org (open list)
-llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
+Now ret_val's meaning is changed from rmid value to error value.
+I would suggest to name it as "ret" to avoid confusion that this is still a
+returned rmid value.
 
-> ---
->  drivers/net/ethernet/amd/xgbe/xgbe-drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-> index a3593290886f..4d46780fad13 100644
-> --- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-> +++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-> @@ -2784,7 +2784,7 @@ void xgbe_print_pkt(struct net_device *netdev, struct sk_buff *skb, bool tx_rx)
->
->         netdev_dbg(netdev, "Dst MAC addr: %pM\n", eth->h_dest);
->         netdev_dbg(netdev, "Src MAC addr: %pM\n", eth->h_source);
-> -       netdev_dbg(netdev, "Protocol: %#06hx\n", ntohs(eth->h_proto));
-> +       netdev_dbg(netdev, "Protocol: %#06x\n", ntohs(eth->h_proto));
->
->         for (i = 0; i < skb->len; i += 32) {
->                 unsigned int len = min(skb->len - i, 32U);
-> --
-> 2.30.2
->
+>  
+>  	rdtgrp = rr->rgrp;
+>  
+> @@ -419,9 +431,13 @@ void mon_event_count(void *info)
+>  		}
+>  	}
+>  
+> -	/* Report error if none of rmid_reads are successful */
+> -	if (ret_val)
+> -		rr->val = ret_val;
+> +	/*
+> +	 * __mon_event_count() calls for newly created monitor groups may
+> +	 * report -EINVAL/Unavailable if the monitor hasn't seen any traffic.
+> +	 * Discard error if any of the monitor event reads succeeded.
+> +	 */
+> +	if (ret_val == 0)
+> +		rr->err = 0;
+>  }
+>  
 
+Thanks.
 
--- 
-Thanks,
-~Nick Desaulniers
+-Fenghua

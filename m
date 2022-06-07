@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5D75415EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3955540A71
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376355AbiFGUnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
+        id S1351988AbiFGSUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357495AbiFGTmD (ORCPT
+        with ESMTP id S1349222AbiFGR7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C201B4342;
-        Tue,  7 Jun 2022 11:15:14 -0700 (PDT)
+        Tue, 7 Jun 2022 13:59:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53FC11E1F9;
+        Tue,  7 Jun 2022 10:41:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECA06B82374;
-        Tue,  7 Jun 2022 18:15:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57834C385A2;
-        Tue,  7 Jun 2022 18:15:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE8966165B;
+        Tue,  7 Jun 2022 17:41:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F22EFC36B00;
+        Tue,  7 Jun 2022 17:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625711;
-        bh=6Z3XCzEXjQtAZfG+nCO+8RY/1jNooV9Q2m+ygrcTIRs=;
+        s=korg; t=1654623698;
+        bh=DgBDuwEJ5QFPHk8gKKEOqH7tp5/B8gGolTG5gLrNhrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mTHrDlwi+8SfvhesPFErMEp3XOiH5wKNBc+P5gIlyty2qjX0TEjOml7ShwDPoKCw8
-         FwVEEM6dTmihkTHXw3RMw+XS7Nz7atDAugXgD4ezdBO7i0+S29/AQKdZBN/L+h0H/Q
-         a07jx47MZhb6aYfu7uGuWBpRWZXVQTqlGUl4/HwQ=
+        b=AMOMB8l2At2+x+cicuFzjsPJdjyZ7uUVRtxh35kWKYWTlUBIUROKJoKtkNTsYIL2o
+         ppRRjIpXGtWYHVWbouPnNq41/BCP8nI1CipzJxpv0luWiBcMeoEMhyaHK79L+ZAX3w
+         JR0tIdnCm5vTGT1AEmsgi480rRcuI7ohMfC00GbQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hawking Zhang <Hawking.Zhang@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 115/772] drm/amdgpu/psp: move PSP memory alloc from hw_init to sw_init
+        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 042/667] btrfs: fix the error handling for submit_extent_page() for btrfs_do_readpage()
 Date:   Tue,  7 Jun 2022 18:55:07 +0200
-Message-Id: <20220607164952.437997527@linuxfoundation.org>
+Message-Id: <20220607164936.064400090@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,158 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Qu Wenruo <wqu@suse.com>
 
-[ Upstream commit b95b5391684b39695887afb4a13cccee7820f5d6 ]
+commit 10f7f6f879c28f8368d6516ab1ccf3517a1f5d3d upstream.
 
-Memory allocations should be done in sw_init.  hw_init should
-just be hardware programming needed to initialize the IP block.
-This is how most other IP blocks work.  Move the GPU memory
-allocations from psp hw_init to psp sw_init and move the memory
-free to sw_fini.  This also fixes a potential GPU memory leak
-if psp hw_init fails.
+[BUG]
+Test case generic/475 have a very high chance (almost 100%) to hit a fs
+hang, where a data page will never be unlocked and hang all later
+operations.
 
-Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[CAUSE]
+In btrfs_do_readpage(), if we hit an error from submit_extent_page() we
+will try to do the cleanup for our current io range, and exit.
+
+This works fine for PAGE_SIZE == sectorsize cases, but not for subpage.
+
+For subpage btrfs_do_readpage() will lock the full page first, which can
+contain several different sectors and extents:
+
+ btrfs_do_readpage()
+ |- begin_page_read()
+ |  |- btrfs_subpage_start_reader();
+ |     Now the page will have PAGE_SIZE / sectorsize reader pending,
+ |     and the page is locked.
+ |
+ |- end_page_read() for different branches
+ |  This function will reduce subpage readers, and when readers
+ |  reach 0, it will unlock the page.
+
+But when submit_extent_page() failed, we only cleanup the current
+io range, while the remaining io range will never be cleaned up, and the
+page remains locked forever.
+
+[FIX]
+Update the error handling of submit_extent_page() to cleanup all the
+remaining subpage range before exiting the loop.
+
+Please note that, now submit_extent_page() can only fail due to
+sanity check in alloc_new_bio().
+
+Thus regular IO errors are impossible to trigger the error path.
+
+CC: stable@vger.kernel.org # 5.15+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 95 ++++++++++++-------------
- 1 file changed, 47 insertions(+), 48 deletions(-)
+ fs/btrfs/extent_io.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-index dee17a0e1187..786518f7e37b 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-@@ -331,7 +331,39 @@ static int psp_sw_init(void *handle)
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -3727,8 +3727,12 @@ int btrfs_do_readpage(struct page *page,
+ 					 this_bio_flag,
+ 					 force_bio_submit);
+ 		if (ret) {
+-			unlock_extent(tree, cur, cur + iosize - 1);
+-			end_page_read(page, false, cur, iosize);
++			/*
++			 * We have to unlock the remaining range, or the page
++			 * will never be unlocked.
++			 */
++			unlock_extent(tree, cur, end);
++			end_page_read(page, false, cur, end + 1 - cur);
+ 			goto out;
  		}
- 	}
- 
-+	ret = amdgpu_bo_create_kernel(adev, PSP_1_MEG, PSP_1_MEG,
-+				      amdgpu_sriov_vf(adev) ?
-+				      AMDGPU_GEM_DOMAIN_VRAM : AMDGPU_GEM_DOMAIN_GTT,
-+				      &psp->fw_pri_bo,
-+				      &psp->fw_pri_mc_addr,
-+				      &psp->fw_pri_buf);
-+	if (ret)
-+		return ret;
-+
-+	ret = amdgpu_bo_create_kernel(adev, PSP_FENCE_BUFFER_SIZE, PAGE_SIZE,
-+				      AMDGPU_GEM_DOMAIN_VRAM,
-+				      &psp->fence_buf_bo,
-+				      &psp->fence_buf_mc_addr,
-+				      &psp->fence_buf);
-+	if (ret)
-+		goto failed1;
-+
-+	ret = amdgpu_bo_create_kernel(adev, PSP_CMD_BUFFER_SIZE, PAGE_SIZE,
-+				      AMDGPU_GEM_DOMAIN_VRAM,
-+				      &psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
-+				      (void **)&psp->cmd_buf_mem);
-+	if (ret)
-+		goto failed2;
-+
- 	return 0;
-+
-+failed2:
-+	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
-+			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
-+failed1:
-+	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
-+			      &psp->fence_buf_mc_addr, &psp->fence_buf);
-+	return ret;
- }
- 
- static int psp_sw_fini(void *handle)
-@@ -361,6 +393,13 @@ static int psp_sw_fini(void *handle)
- 	kfree(cmd);
- 	cmd = NULL;
- 
-+	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
-+			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
-+	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
-+			      &psp->fence_buf_mc_addr, &psp->fence_buf);
-+	amdgpu_bo_free_kernel(&psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
-+			      (void **)&psp->cmd_buf_mem);
-+
- 	return 0;
- }
- 
-@@ -2391,51 +2430,18 @@ static int psp_load_fw(struct amdgpu_device *adev)
- 	struct psp_context *psp = &adev->psp;
- 
- 	if (amdgpu_sriov_vf(adev) && amdgpu_in_reset(adev)) {
--		psp_ring_stop(psp, PSP_RING_TYPE__KM); /* should not destroy ring, only stop */
--		goto skip_memalloc;
--	}
--
--	if (amdgpu_sriov_vf(adev)) {
--		ret = amdgpu_bo_create_kernel(adev, PSP_1_MEG, PSP_1_MEG,
--						AMDGPU_GEM_DOMAIN_VRAM,
--						&psp->fw_pri_bo,
--						&psp->fw_pri_mc_addr,
--						&psp->fw_pri_buf);
-+		/* should not destroy ring, only stop */
-+		psp_ring_stop(psp, PSP_RING_TYPE__KM);
- 	} else {
--		ret = amdgpu_bo_create_kernel(adev, PSP_1_MEG, PSP_1_MEG,
--						AMDGPU_GEM_DOMAIN_GTT,
--						&psp->fw_pri_bo,
--						&psp->fw_pri_mc_addr,
--						&psp->fw_pri_buf);
--	}
--
--	if (ret)
--		goto failed;
--
--	ret = amdgpu_bo_create_kernel(adev, PSP_FENCE_BUFFER_SIZE, PAGE_SIZE,
--					AMDGPU_GEM_DOMAIN_VRAM,
--					&psp->fence_buf_bo,
--					&psp->fence_buf_mc_addr,
--					&psp->fence_buf);
--	if (ret)
--		goto failed;
--
--	ret = amdgpu_bo_create_kernel(adev, PSP_CMD_BUFFER_SIZE, PAGE_SIZE,
--				      AMDGPU_GEM_DOMAIN_VRAM,
--				      &psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
--				      (void **)&psp->cmd_buf_mem);
--	if (ret)
--		goto failed;
-+		memset(psp->fence_buf, 0, PSP_FENCE_BUFFER_SIZE);
- 
--	memset(psp->fence_buf, 0, PSP_FENCE_BUFFER_SIZE);
--
--	ret = psp_ring_init(psp, PSP_RING_TYPE__KM);
--	if (ret) {
--		DRM_ERROR("PSP ring init failed!\n");
--		goto failed;
-+		ret = psp_ring_init(psp, PSP_RING_TYPE__KM);
-+		if (ret) {
-+			DRM_ERROR("PSP ring init failed!\n");
-+			goto failed;
-+		}
- 	}
- 
--skip_memalloc:
- 	ret = psp_hw_start(psp);
- 	if (ret)
- 		goto failed;
-@@ -2553,13 +2559,6 @@ static int psp_hw_fini(void *handle)
- 	psp_tmr_terminate(psp);
- 	psp_ring_destroy(psp, PSP_RING_TYPE__KM);
- 
--	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
--			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
--	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
--			      &psp->fence_buf_mc_addr, &psp->fence_buf);
--	amdgpu_bo_free_kernel(&psp->cmd_buf_bo, &psp->cmd_buf_mc_addr,
--			      (void **)&psp->cmd_buf_mem);
--
- 	return 0;
- }
- 
--- 
-2.35.1
-
+ 		cur = cur + iosize;
 
 

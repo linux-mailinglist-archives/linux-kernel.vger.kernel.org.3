@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73625407C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBA0541174
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349803AbiFGRvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S1355896AbiFGThn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347429AbiFGRfP (ORCPT
+        with ESMTP id S1354108AbiFGSqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F59710EA56;
-        Tue,  7 Jun 2022 10:30:41 -0700 (PDT)
+        Tue, 7 Jun 2022 14:46:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D6518FA5A;
+        Tue,  7 Jun 2022 11:00:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0F457CE23CE;
-        Tue,  7 Jun 2022 17:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15897C34119;
-        Tue,  7 Jun 2022 17:30:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DE60B8236D;
+        Tue,  7 Jun 2022 18:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58EC7C385A5;
+        Tue,  7 Jun 2022 18:00:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623019;
-        bh=2jA/GTMKTJHBY2Oc4pOOiy4bZGaqPB82S9nyCCUHw2Y=;
+        s=korg; t=1654624802;
+        bh=F+Ejk3TJqvM9iJL5X57Am9LXrVwli2Qkgi0+4c09buY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dCMST/s8Bd1+zDcl+tMjmUgNL+UmMvEFPEC1OjLFnHX+NM8X7VW1KWrtSmdlJ22vd
-         3tbxojjYxXZOzUX011uDW+Y/HWlSirESN8GGJTxxQdYpjQkd1F1Jms1M7d9aFVfGL9
-         SAGUCTt8+gV+dpMGgDTJEbv/wkXLSfVuGBCOmeNU=
+        b=iXWU/oJ6MRWNLW3H+Coe/3IJwTsxAFg9sShc+mO3TvA0WuIueXkBtb+MqaAdQzX37
+         c3tcuKvT/b8u6H8SHBToo37wUbAKvevxv2V7rDHjkJy2Tm+CF5Jhs+S51D9G5Yk2od
+         iEP5YvHzdVKeOrT6YKcufAOL6Ha606f9L8PhTA+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thorsten Scherer <t.scherer@eckelmann.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 266/452] ARM: dts: ci4x10: Adapt to changes in imx6qdl.dtsi regarding fec clocks
-Date:   Tue,  7 Jun 2022 19:02:03 +0200
-Message-Id: <20220607164916.479048330@linuxfoundation.org>
+Subject: [PATCH 5.15 459/667] Input: sparcspkr - fix refcount leak in bbc_beep_probe
+Date:   Tue,  7 Jun 2022 19:02:04 +0200
+Message-Id: <20220607164948.479042560@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thorsten Scherer <t.scherer@eckelmann.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 3d397a1277853498e8b7b305f2610881357c033f ]
+[ Upstream commit c8994b30d71d64d5dcc9bc0edbfdf367171aa96f ]
 
-Commit f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk
-support") added another item to the list of clocks for the fec
-device. As imx6dl-eckelmann-ci4x10.dts only overwrites clocks,
-but not clock-names this resulted in an inconsistency with
-clocks having one item more than clock-names.
+of_find_node_by_path() calls of_find_node_opts_by_path(),
+which returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Also overwrite clock-names with the same value as in
-imx6qdl.dtsi. This is a no-op today, but prevents similar
-inconsistencies if the soc file will be changed in a similar way
-in the future.
-
-Signed-off-by: Thorsten Scherer <t.scherer@eckelmann.de>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Fixes: f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk support")
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 9c1a5077fdca ("input: Rewrite sparcspkr device probing.")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220516081018.42728-1-linmq006@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/input/misc/sparcspkr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-index b4a9523e325b..864dc5018451 100644
---- a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-+++ b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
-@@ -297,7 +297,11 @@
- 	phy-mode = "rmii";
- 	phy-reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;
- 	phy-handle = <&phy>;
--	clocks = <&clks IMX6QDL_CLK_ENET>, <&clks IMX6QDL_CLK_ENET>, <&rmii_clk>;
-+	clocks = <&clks IMX6QDL_CLK_ENET>,
-+		 <&clks IMX6QDL_CLK_ENET>,
-+		 <&rmii_clk>,
-+		 <&clks IMX6QDL_CLK_ENET_REF>;
-+	clock-names = "ipg", "ahb", "ptp", "enet_out";
- 	status = "okay";
+diff --git a/drivers/input/misc/sparcspkr.c b/drivers/input/misc/sparcspkr.c
+index fe43e5557ed7..cdcb7737c46a 100644
+--- a/drivers/input/misc/sparcspkr.c
++++ b/drivers/input/misc/sparcspkr.c
+@@ -205,6 +205,7 @@ static int bbc_beep_probe(struct platform_device *op)
  
- 	mdio {
+ 	info = &state->u.bbc;
+ 	info->clock_freq = of_getintprop_default(dp, "clock-frequency", 0);
++	of_node_put(dp);
+ 	if (!info->clock_freq)
+ 		goto out_free;
+ 
 -- 
 2.35.1
 

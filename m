@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D586541EC2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098E4541660
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382096AbiFGWdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S1378009AbiFGUvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379113AbiFGVUC (ORCPT
+        with ESMTP id S1358471AbiFGTwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:20:02 -0400
+        Tue, 7 Jun 2022 15:52:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9FC169DC9;
-        Tue,  7 Jun 2022 11:59:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A531613F432;
+        Tue,  7 Jun 2022 11:20:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 469EB617A0;
-        Tue,  7 Jun 2022 18:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5859EC385A2;
-        Tue,  7 Jun 2022 18:59:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3264060C1C;
+        Tue,  7 Jun 2022 18:20:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421E2C385A2;
+        Tue,  7 Jun 2022 18:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628382;
-        bh=W6/rJm2x4jEKbutBT4nzL4yNQLM+3X+Q8xBE+50Ah1c=;
+        s=korg; t=1654626038;
+        bh=ooAOo6qzubkyPuV+2dvA1NqN7F60QjHbnl98BMtPDlw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c+0Fi51KFV/dGD1VrGEWbqZk7R1g0ItMthNe3NfbWbP1HOMmY8yZIw/MIJ2ioW1nn
-         RXvzy7gaXmn5qUK2W65Pxn26B4IKts4Sfj6KfvhQ/enw8VCFiOIGx0f3Ktap9NCwyi
-         1M14d9IluYi4H9bpgyC+Z2PA876oGleUF8vM5IuQ=
+        b=jTmKjTo8sUHui0BxU3vLg+H0OIyG7OPqgyyOCJOpr4n/MjGoP9KP2SWaQ4wFLXY5O
+         a3FPbEKOB/3Sq4PvOEZZ7h/1MXP4zYLblbg7cng99CnLXZfygGQNNLc3Gx22amCHNj
+         v0r94zG51a/m9H35/DhfRl0nRDnlC3ctmjzYRLtY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Marek Vasut <marex@denx.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 309/879] NFC: NULL out the dev->rfkill to prevent UAF
+Subject: [PATCH 5.17 235/772] drm: bridge: icn6211: Fix register layout
 Date:   Tue,  7 Jun 2022 18:57:07 +0200
-Message-Id: <20220607165011.816702356@linuxfoundation.org>
+Message-Id: <20220607164955.957449017@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,148 +59,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 1b0e81416a24d6e9b8c2341e22e8bf48f8b8bfc9 ]
+[ Upstream commit 2dcec57b3734029cc1adc5cb872f61e21609eed4 ]
 
-Commit 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-assumes the device_is_registered() in function nfc_dev_up() will help
-to check when the rfkill is unregistered. However, this check only
-take effect when device_del(&dev->dev) is done in nfc_unregister_device().
-Hence, the rfkill object is still possible be dereferenced.
+The chip register layout has nothing to do with MIPI DCS, the registers
+incorrectly marked as MIPI DCS in the driver are regular chip registers
+often with completely different function.
 
-The crash trace in latest kernel (5.18-rc2):
+Fill in the actual register names and bits from [1] and [2] and add the
+entire register layout, since the documentation for this chip is hard to
+come by.
 
-[   68.760105] ==================================================================
-[   68.760330] BUG: KASAN: use-after-free in __lock_acquire+0x3ec1/0x6750
-[   68.760756] Read of size 8 at addr ffff888009c93018 by task fuzz/313
-[   68.760756]
-[   68.760756] CPU: 0 PID: 313 Comm: fuzz Not tainted 5.18.0-rc2 #4
-[   68.760756] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[   68.760756] Call Trace:
-[   68.760756]  <TASK>
-[   68.760756]  dump_stack_lvl+0x57/0x7d
-[   68.760756]  print_report.cold+0x5e/0x5db
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  kasan_report+0xbe/0x1c0
-[   68.760756]  ? __lock_acquire+0x3ec1/0x6750
-[   68.760756]  __lock_acquire+0x3ec1/0x6750
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? register_lock_class+0x18d0/0x18d0
-[   68.760756]  lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  ? mutex_lock_io_nested+0x12c0/0x12c0
-[   68.760756]  ? nla_get_range_signed+0x540/0x540
-[   68.760756]  ? _raw_spin_lock_irqsave+0x4e/0x50
-[   68.760756]  _raw_spin_lock_irqsave+0x39/0x50
-[   68.760756]  ? rfkill_blocked+0xe/0x60
-[   68.760756]  rfkill_blocked+0xe/0x60
-[   68.760756]  nfc_dev_up+0x84/0x260
-[   68.760756]  nfc_genl_dev_up+0x90/0xe0
-[   68.760756]  genl_family_rcv_msg_doit+0x1f4/0x2f0
-[   68.760756]  ? genl_family_rcv_msg_attrs_parse.constprop.0+0x230/0x230
-[   68.760756]  ? security_capable+0x51/0x90
-[   68.760756]  genl_rcv_msg+0x280/0x500
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? lock_acquire+0x1ac/0x4f0
-[   68.760756]  ? nfc_genl_dev_down+0xe0/0xe0
-[   68.760756]  ? lockdep_hardirqs_on_prepare+0x410/0x410
-[   68.760756]  netlink_rcv_skb+0x11b/0x340
-[   68.760756]  ? genl_get_cmd+0x3c0/0x3c0
-[   68.760756]  ? netlink_ack+0x9c0/0x9c0
-[   68.760756]  ? netlink_deliver_tap+0x136/0xb00
-[   68.760756]  genl_rcv+0x1f/0x30
-[   68.760756]  netlink_unicast+0x430/0x710
-[   68.760756]  ? memset+0x20/0x40
-[   68.760756]  ? netlink_attachskb+0x740/0x740
-[   68.760756]  ? __build_skb_around+0x1f4/0x2a0
-[   68.760756]  netlink_sendmsg+0x75d/0xc00
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  ? netlink_unicast+0x710/0x710
-[   68.760756]  sock_sendmsg+0xdf/0x110
-[   68.760756]  __sys_sendto+0x19e/0x270
-[   68.760756]  ? __ia32_sys_getpeername+0xa0/0xa0
-[   68.760756]  ? fd_install+0x178/0x4c0
-[   68.760756]  ? fd_install+0x195/0x4c0
-[   68.760756]  ? kernel_fpu_begin_mask+0x1c0/0x1c0
-[   68.760756]  __x64_sys_sendto+0xd8/0x1b0
-[   68.760756]  ? lockdep_hardirqs_on+0xbf/0x130
-[   68.760756]  ? syscall_enter_from_user_mode+0x1d/0x50
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756] RIP: 0033:0x7f67fb50e6b3
-...
-[   68.760756] RSP: 002b:00007f67fa91fe90 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
-[   68.760756] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f67fb50e6b3
-[   68.760756] RDX: 000000000000001c RSI: 0000559354603090 RDI: 0000000000000003
-[   68.760756] RBP: 00007f67fa91ff00 R08: 00007f67fa91fedc R09: 000000000000000c
-[   68.760756] R10: 0000000000000000 R11: 0000000000000293 R12: 00007ffe824d496e
-[   68.760756] R13: 00007ffe824d496f R14: 00007f67fa120000 R15: 0000000000000003
+[1] https://github.com/rockchip-linux/kernel/blob/develop-4.19/drivers/gpu/drm/bridge/icn6211.c
+[2] https://github.com/tdjastrzebski/ICN6211-Configurator
 
-[   68.760756]  </TASK>
-[   68.760756]
-[   68.760756] Allocated by task 279:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  __kasan_kmalloc+0x81/0xa0
-[   68.760756]  rfkill_alloc+0x7f/0x280
-[   68.760756]  nfc_register_device+0xa3/0x1a0
-[   68.760756]  nci_register_device+0x77a/0xad0
-[   68.760756]  nfcmrvl_nci_register_dev+0x20b/0x2c0
-[   68.760756]  nfcmrvl_nci_uart_open+0xf2/0x1dd
-[   68.760756]  nci_uart_tty_ioctl+0x2c3/0x4a0
-[   68.760756]  tty_ioctl+0x764/0x1310
-[   68.760756]  __x64_sys_ioctl+0x122/0x190
-[   68.760756]  do_syscall_64+0x3b/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   68.760756]
-[   68.760756] Freed by task 314:
-[   68.760756]  kasan_save_stack+0x1e/0x40
-[   68.760756]  kasan_set_track+0x21/0x30
-[   68.760756]  kasan_set_free_info+0x20/0x30
-[   68.760756]  __kasan_slab_free+0x108/0x170
-[   68.760756]  kfree+0xb0/0x330
-[   68.760756]  device_release+0x96/0x200
-[   68.760756]  kobject_put+0xf9/0x1d0
-[   68.760756]  nfc_unregister_device+0x77/0x190
-[   68.760756]  nfcmrvl_nci_unregister_dev+0x88/0xd0
-[   68.760756]  nci_uart_tty_close+0xdf/0x180
-[   68.760756]  tty_ldisc_kill+0x73/0x110
-[   68.760756]  tty_ldisc_hangup+0x281/0x5b0
-[   68.760756]  __tty_hangup.part.0+0x431/0x890
-[   68.760756]  tty_release+0x3a8/0xc80
-[   68.760756]  __fput+0x1f0/0x8c0
-[   68.760756]  task_work_run+0xc9/0x170
-[   68.760756]  exit_to_user_mode_prepare+0x194/0x1a0
-[   68.760756]  syscall_exit_to_user_mode+0x19/0x50
-[   68.760756]  do_syscall_64+0x48/0x90
-[   68.760756]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-This patch just add the null out of dev->rfkill to make sure such
-dereference cannot happen. This is safe since the device_lock() already
-protect the check/write from data race.
-
-Fixes: 3e3b5dfcd16a ("NFC: reorder the logic in nfc_{un,}register_device")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Acked-by: Maxime Ripard <maxime@cerno.tech>
+Fixes: ce517f18944e3 ("drm: bridge: Add Chipone ICN6211 MIPI-DSI to RGB bridge")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+To: dri-devel@lists.freedesktop.org
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220331150509.9838-2-marex@denx.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/nfc/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/bridge/chipone-icn6211.c | 134 ++++++++++++++++++++---
+ 1 file changed, 117 insertions(+), 17 deletions(-)
 
-diff --git a/net/nfc/core.c b/net/nfc/core.c
-index 5b286e1e0a6f..6ff3e10ff8e3 100644
---- a/net/nfc/core.c
-+++ b/net/nfc/core.c
-@@ -1166,6 +1166,7 @@ void nfc_unregister_device(struct nfc_dev *dev)
- 	if (dev->rfkill) {
- 		rfkill_unregister(dev->rfkill);
- 		rfkill_destroy(dev->rfkill);
-+		dev->rfkill = NULL;
- 	}
- 	dev->shutting_down = true;
- 	device_unlock(&dev->dev);
+diff --git a/drivers/gpu/drm/bridge/chipone-icn6211.c b/drivers/gpu/drm/bridge/chipone-icn6211.c
+index a6151db95586..eb26615b2993 100644
+--- a/drivers/gpu/drm/bridge/chipone-icn6211.c
++++ b/drivers/gpu/drm/bridge/chipone-icn6211.c
+@@ -14,8 +14,19 @@
+ #include <linux/of_device.h>
+ #include <linux/regulator/consumer.h>
+ 
+-#include <video/mipi_display.h>
+-
++#define VENDOR_ID		0x00
++#define DEVICE_ID_H		0x01
++#define DEVICE_ID_L		0x02
++#define VERSION_ID		0x03
++#define FIRMWARE_VERSION	0x08
++#define CONFIG_FINISH		0x09
++#define PD_CTRL(n)		(0x0a + ((n) & 0x3)) /* 0..3 */
++#define RST_CTRL(n)		(0x0e + ((n) & 0x1)) /* 0..1 */
++#define SYS_CTRL(n)		(0x10 + ((n) & 0x7)) /* 0..4 */
++#define RGB_DRV(n)		(0x18 + ((n) & 0x3)) /* 0..3 */
++#define RGB_DLY(n)		(0x1c + ((n) & 0x1)) /* 0..1 */
++#define RGB_TEST_CTRL		0x1e
++#define ATE_PLL_EN		0x1f
+ #define HACTIVE_LI		0x20
+ #define VACTIVE_LI		0x21
+ #define VACTIVE_HACTIVE_HI	0x22
+@@ -26,6 +37,95 @@
+ #define VFP			0x27
+ #define VSYNC			0x28
+ #define VBP			0x29
++#define BIST_POL		0x2a
++#define BIST_POL_BIST_MODE(n)		(((n) & 0xf) << 4)
++#define BIST_POL_BIST_GEN		BIT(3)
++#define BIST_POL_HSYNC_POL		BIT(2)
++#define BIST_POL_VSYNC_POL		BIT(1)
++#define BIST_POL_DE_POL			BIT(0)
++#define BIST_RED		0x2b
++#define BIST_GREEN		0x2c
++#define BIST_BLUE		0x2d
++#define BIST_CHESS_X		0x2e
++#define BIST_CHESS_Y		0x2f
++#define BIST_CHESS_XY_H		0x30
++#define BIST_FRAME_TIME_L	0x31
++#define BIST_FRAME_TIME_H	0x32
++#define FIFO_MAX_ADDR_LOW	0x33
++#define SYNC_EVENT_DLY		0x34
++#define HSW_MIN			0x35
++#define HFP_MIN			0x36
++#define LOGIC_RST_NUM		0x37
++#define OSC_CTRL(n)		(0x48 + ((n) & 0x7)) /* 0..5 */
++#define BG_CTRL			0x4e
++#define LDO_PLL			0x4f
++#define PLL_CTRL(n)		(0x50 + ((n) & 0xf)) /* 0..15 */
++#define PLL_CTRL_6_EXTERNAL		0x90
++#define PLL_CTRL_6_MIPI_CLK		0x92
++#define PLL_CTRL_6_INTERNAL		0x93
++#define PLL_REM(n)		(0x60 + ((n) & 0x3)) /* 0..2 */
++#define PLL_DIV(n)		(0x63 + ((n) & 0x3)) /* 0..2 */
++#define PLL_FRAC(n)		(0x66 + ((n) & 0x3)) /* 0..2 */
++#define PLL_INT(n)		(0x69 + ((n) & 0x1)) /* 0..1 */
++#define PLL_REF_DIV		0x6b
++#define PLL_REF_DIV_P(n)		((n) & 0xf)
++#define PLL_REF_DIV_Pe			BIT(4)
++#define PLL_REF_DIV_S(n)		(((n) & 0x7) << 5)
++#define PLL_SSC_P(n)		(0x6c + ((n) & 0x3)) /* 0..2 */
++#define PLL_SSC_STEP(n)		(0x6f + ((n) & 0x3)) /* 0..2 */
++#define PLL_SSC_OFFSET(n)	(0x72 + ((n) & 0x3)) /* 0..3 */
++#define GPIO_OEN		0x79
++#define MIPI_CFG_PW		0x7a
++#define MIPI_CFG_PW_CONFIG_DSI		0xc1
++#define MIPI_CFG_PW_CONFIG_I2C		0x3e
++#define GPIO_SEL(n)		(0x7b + ((n) & 0x1)) /* 0..1 */
++#define IRQ_SEL			0x7d
++#define DBG_SEL			0x7e
++#define DBG_SIGNAL		0x7f
++#define MIPI_ERR_VECTOR_L	0x80
++#define MIPI_ERR_VECTOR_H	0x81
++#define MIPI_ERR_VECTOR_EN_L	0x82
++#define MIPI_ERR_VECTOR_EN_H	0x83
++#define MIPI_MAX_SIZE_L		0x84
++#define MIPI_MAX_SIZE_H		0x85
++#define DSI_CTRL		0x86
++#define DSI_CTRL_UNKNOWN		0x28
++#define DSI_CTRL_DSI_LANES(n)		((n) & 0x3)
++#define MIPI_PN_SWAP		0x87
++#define MIPI_PN_SWAP_CLK		BIT(4)
++#define MIPI_PN_SWAP_D(n)		BIT((n) & 0x3)
++#define MIPI_SOT_SYNC_BIT_(n)	(0x88 + ((n) & 0x1)) /* 0..1 */
++#define MIPI_ULPS_CTRL		0x8a
++#define MIPI_CLK_CHK_VAR	0x8e
++#define MIPI_CLK_CHK_INI	0x8f
++#define MIPI_T_TERM_EN		0x90
++#define MIPI_T_HS_SETTLE	0x91
++#define MIPI_T_TA_SURE_PRE	0x92
++#define MIPI_T_LPX_SET		0x94
++#define MIPI_T_CLK_MISS		0x95
++#define MIPI_INIT_TIME_L	0x96
++#define MIPI_INIT_TIME_H	0x97
++#define MIPI_T_CLK_TERM_EN	0x99
++#define MIPI_T_CLK_SETTLE	0x9a
++#define MIPI_TO_HS_RX_L		0x9e
++#define MIPI_TO_HS_RX_H		0x9f
++#define MIPI_PHY_(n)		(0xa0 + ((n) & 0x7)) /* 0..5 */
++#define MIPI_PD_RX		0xb0
++#define MIPI_PD_TERM		0xb1
++#define MIPI_PD_HSRX		0xb2
++#define MIPI_PD_LPTX		0xb3
++#define MIPI_PD_LPRX		0xb4
++#define MIPI_PD_CK_LANE		0xb5
++#define MIPI_FORCE_0		0xb6
++#define MIPI_RST_CTRL		0xb7
++#define MIPI_RST_NUM		0xb8
++#define MIPI_DBG_SET_(n)	(0xc0 + ((n) & 0xf)) /* 0..9 */
++#define MIPI_DBG_SEL		0xe0
++#define MIPI_DBG_DATA		0xe1
++#define MIPI_ATE_TEST_SEL	0xe2
++#define MIPI_ATE_STATUS_(n)	(0xe3 + ((n) & 0x1)) /* 0..1 */
++#define MIPI_ATE_STATUS_1	0xe4
++#define ICN6211_MAX_REGISTER	MIPI_ATE_STATUS(1)
+ 
+ struct chipone {
+ 	struct device *dev;
+@@ -66,13 +166,13 @@ static void chipone_enable(struct drm_bridge *bridge)
+ 	struct chipone *icn = bridge_to_chipone(bridge);
+ 	struct drm_display_mode *mode = bridge_to_mode(bridge);
+ 
+-	ICN6211_DSI(icn, 0x7a, 0xc1);
++	ICN6211_DSI(icn, MIPI_CFG_PW, MIPI_CFG_PW_CONFIG_DSI);
+ 
+ 	ICN6211_DSI(icn, HACTIVE_LI, mode->hdisplay & 0xff);
+ 
+ 	ICN6211_DSI(icn, VACTIVE_LI, mode->vdisplay & 0xff);
+ 
+-	/**
++	/*
+ 	 * lsb nibble: 2nd nibble of hdisplay
+ 	 * msb nibble: 2nd nibble of vdisplay
+ 	 */
+@@ -95,21 +195,21 @@ static void chipone_enable(struct drm_bridge *bridge)
+ 	ICN6211_DSI(icn, VBP, mode->vtotal - mode->vsync_end);
+ 
+ 	/* dsi specific sequence */
+-	ICN6211_DSI(icn, MIPI_DCS_SET_TEAR_OFF, 0x80);
+-	ICN6211_DSI(icn, MIPI_DCS_SET_ADDRESS_MODE, 0x28);
+-	ICN6211_DSI(icn, 0xb5, 0xa0);
+-	ICN6211_DSI(icn, 0x5c, 0xff);
+-	ICN6211_DSI(icn, MIPI_DCS_SET_COLUMN_ADDRESS, 0x01);
+-	ICN6211_DSI(icn, MIPI_DCS_GET_POWER_SAVE, 0x92);
+-	ICN6211_DSI(icn, 0x6b, 0x71);
+-	ICN6211_DSI(icn, 0x69, 0x2b);
+-	ICN6211_DSI(icn, MIPI_DCS_ENTER_SLEEP_MODE, 0x40);
+-	ICN6211_DSI(icn, MIPI_DCS_EXIT_SLEEP_MODE, 0x98);
++	ICN6211_DSI(icn, SYNC_EVENT_DLY, 0x80);
++	ICN6211_DSI(icn, HFP_MIN, 0x28);
++	ICN6211_DSI(icn, MIPI_PD_CK_LANE, 0xa0);
++	ICN6211_DSI(icn, PLL_CTRL(12), 0xff);
++	ICN6211_DSI(icn, BIST_POL, BIST_POL_DE_POL);
++	ICN6211_DSI(icn, PLL_CTRL(6), PLL_CTRL_6_MIPI_CLK);
++	ICN6211_DSI(icn, PLL_REF_DIV, 0x71);
++	ICN6211_DSI(icn, PLL_INT(0), 0x2b);
++	ICN6211_DSI(icn, SYS_CTRL(0), 0x40);
++	ICN6211_DSI(icn, SYS_CTRL(1), 0x98);
+ 
+ 	/* icn6211 specific sequence */
+-	ICN6211_DSI(icn, 0xb6, 0x20);
+-	ICN6211_DSI(icn, 0x51, 0x20);
+-	ICN6211_DSI(icn, 0x09, 0x10);
++	ICN6211_DSI(icn, MIPI_FORCE_0, 0x20);
++	ICN6211_DSI(icn, PLL_CTRL(1), 0x20);
++	ICN6211_DSI(icn, CONFIG_FINISH, 0x10);
+ 
+ 	usleep_range(10000, 11000);
+ }
 -- 
 2.35.1
 

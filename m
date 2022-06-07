@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDD9541D80
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78010540A0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384816AbiFGWQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S1351192AbiFGSQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380106AbiFGVLa (ORCPT
+        with ESMTP id S1349374AbiFGR4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:11:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62B6217621;
-        Tue,  7 Jun 2022 11:53:10 -0700 (PDT)
+        Tue, 7 Jun 2022 13:56:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905C93614C;
+        Tue,  7 Jun 2022 10:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F10C6176D;
-        Tue,  7 Jun 2022 18:53:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9EDFC385A5;
-        Tue,  7 Jun 2022 18:53:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11029B820C3;
+        Tue,  7 Jun 2022 17:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C8BC385A5;
+        Tue,  7 Jun 2022 17:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627989;
-        bh=1QCkvUVKkSssoNrecKUlG97xKfGrKuMFunKfeuff/Ao=;
+        s=korg; t=1654623590;
+        bh=uYiciictdrSEQB12gEqhK2G+ukdTSz3fit8pE6wltZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTeD/sfuUDCzGdqnWDgmRD1KMA7wsb9hEAzghzIKzf6dr2FL1w4d9L5uJGqmOwM2q
-         ALQDpKQsWAGwz57K4WOp2jBVDcNE/v7Lz5T1HIwIxIg8T4gg+TXoxn1sBaAffh0iHP
-         HRoTvFyeRoYwTzTKLjP/yG+Ss0Kk+qh3iv471ogM=
+        b=I5l4xstNpuhNUVk7H9qZZrqU0Jn8doux1oCHqaruQIAsfgeJ6C/fSStTv+Vvzs5M6
+         wVvdYIUajqEcIBjuTQbHgPFcUXfYhLkmUnNxf3PhvS3KvxG1rv0Gcz9MkTMA5HQ9qI
+         rcmwb8njTFrTlWQRk3gezrxn8k1JB/IX1xMvdFNc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 167/879] media: cec-adap.c: fix is_configuring state
+        stable@vger.kernel.org,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [PATCH 5.15 020/667] fs/ntfs3: Update valid size if -EIOCBQUEUED
 Date:   Tue,  7 Jun 2022 18:54:45 +0200
-Message-Id: <20220607165007.556567139@linuxfoundation.org>
+Message-Id: <20220607164935.401052201@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
 
-[ Upstream commit 59267fc34f4900dcd2ec3295f6be04b79aee2186 ]
+commit 52e00ea6b26e45fb8159e3b57cdde8d3f9bdd8e9 upstream.
 
-If an adapter is trying to claim a free logical address then it is
-in the 'is_configuring' state. If during that process the cable is
-disconnected (HPD goes low, which in turn invalidates the physical
-address), then cec_adap_unconfigure() is called, and that set the
-is_configuring boolean to false, even though the thread that's
-trying to claim an LA is still running.
+Update valid size if write is still in I/O queue.
+Fixes xfstest generic/240
+Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
 
-Don't touch the is_configuring bool in cec_adap_unconfigure(), it
-will eventually be cleared by the thread. By making that change
-the cec_config_log_addr() function also had to change: it was
-aborting if is_configuring became false (since that is what
-cec_adap_unconfigure() did), but that no longer works. Instead
-check if the physical address is invalid. That is a much
-more appropriate check anyway.
-
-This fixes a bug where the the adapter could be disabled even
-though the device was still configuring. This could cause POLL
-transmits to time out.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/cec/core/cec-adap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/ntfs3/inode.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index 2e12331c12a9..01766e744772 100644
---- a/drivers/media/cec/core/cec-adap.c
-+++ b/drivers/media/cec/core/cec-adap.c
-@@ -1278,7 +1278,7 @@ static int cec_config_log_addr(struct cec_adapter *adap,
- 		 * While trying to poll the physical address was reset
- 		 * and the adapter was unconfigured, so bail out.
- 		 */
--		if (!adap->is_configuring)
-+		if (adap->phys_addr == CEC_PHYS_ADDR_INVALID)
- 			return -EINTR;
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -757,6 +757,7 @@ static ssize_t ntfs_direct_IO(struct kio
+ 	loff_t vbo = iocb->ki_pos;
+ 	loff_t end;
+ 	int wr = iov_iter_rw(iter) & WRITE;
++	size_t iter_count = iov_iter_count(iter);
+ 	loff_t valid;
+ 	ssize_t ret;
  
- 		if (err)
-@@ -1335,7 +1335,6 @@ static void cec_adap_unconfigure(struct cec_adapter *adap)
- 	    adap->phys_addr != CEC_PHYS_ADDR_INVALID)
- 		WARN_ON(adap->ops->adap_log_addr(adap, CEC_LOG_ADDR_INVALID));
- 	adap->log_addrs.log_addr_mask = 0;
--	adap->is_configuring = false;
- 	adap->is_configured = false;
- 	cec_flush(adap);
- 	wake_up_interruptible(&adap->kthread_waitq);
-@@ -1527,9 +1526,10 @@ static int cec_config_thread_func(void *arg)
- 	for (i = 0; i < las->num_log_addrs; i++)
- 		las->log_addr[i] = CEC_LOG_ADDR_INVALID;
- 	cec_adap_unconfigure(adap);
-+	adap->is_configuring = false;
- 	adap->kthread_config = NULL;
--	mutex_unlock(&adap->lock);
- 	complete(&adap->config_completion);
-+	mutex_unlock(&adap->lock);
- 	return 0;
- }
+@@ -770,10 +771,13 @@ static ssize_t ntfs_direct_IO(struct kio
+ 				 wr ? ntfs_get_block_direct_IO_W
+ 				    : ntfs_get_block_direct_IO_R);
  
--- 
-2.35.1
-
+-	if (ret <= 0)
++	if (ret > 0)
++		end = vbo + ret;
++	else if (wr && ret == -EIOCBQUEUED)
++		end = vbo + iter_count;
++	else
+ 		goto out;
+ 
+-	end = vbo + ret;
+ 	valid = ni->i_valid;
+ 	if (wr) {
+ 		if (end > valid && !S_ISBLK(inode->i_mode)) {
 
 

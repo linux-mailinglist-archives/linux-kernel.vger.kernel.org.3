@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C61E540933
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5025413B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350940AbiFGSGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S1358142AbiFGUET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349024AbiFGRqm (ORCPT
+        with ESMTP id S1352852AbiFGTGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:46:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9E104C8D;
-        Tue,  7 Jun 2022 10:36:05 -0700 (PDT)
+        Tue, 7 Jun 2022 15:06:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF09946B08;
+        Tue,  7 Jun 2022 11:05:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DAA3B822AD;
-        Tue,  7 Jun 2022 17:36:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93949C385A5;
-        Tue,  7 Jun 2022 17:36:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31DAC6171C;
+        Tue,  7 Jun 2022 18:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D0A8C385A5;
+        Tue,  7 Jun 2022 18:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623363;
-        bh=anXB3R1k7SnZfxkNf0jrOXFiouNniGQO+BdlRmAYfHU=;
+        s=korg; t=1654625145;
+        bh=5eZbs3RUyx8krHHab6EXWvD9mRyJfw/nCvHv1W7UiA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dKRurXy/Mv5r4+WzFBGROtXtBs7yCICCbRN/uuQ3QuyXXSoaNaUwpItuKDEymBSfR
-         WiC1US6NiWDqdwVM8q/xEb93qPR+XwCwTbFVRiZVSq76zx9ZxoXj+LfGdn6WxJsqw0
-         NAXV8Vs16STAKk/zxSMcLzw50Q4lYjuaMj9KC/XM=
+        b=oqSNTRZWuKtriQ04x6J5XQXk8rI6Cik+qPH/aMKSSjZG0d45Ns9NeynW6Dmb4oxVC
+         CWX4F5gyFAfJI5gkRSv9XN9SLoy5O/QWfNY7bVyIjpEJ9ffceLKWP6dSMr3h+RFxof
+         up4BTh6acQD+UqbDDjymzB/HmmNMd/PCvcflQ0bE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.10 391/452] Kconfig: Add option for asm goto w/ tied outputs to workaround clang-13 bug
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.15 583/667] selftests/landlock: Test landlock_create_ruleset(2) argument check ordering
 Date:   Tue,  7 Jun 2022 19:04:08 +0200
-Message-Id: <20220607164920.215056412@linuxfoundation.org>
+Message-Id: <20220607164952.170204250@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit 1aa0e8b144b6474c4914439d232d15bfe883636b upstream.
+commit 6533d0c3a86ee1cc74ff37ac92ca597deb87015c upstream.
 
-Add a config option to guard (future) usage of asm_volatile_goto() that
-includes "tied outputs", i.e. "+" constraints that specify both an input
-and output parameter.  clang-13 has a bug[1] that causes compilation of
-such inline asm to fail, and KVM wants to use a "+m" constraint to
-implement a uaccess form of CMPXCHG[2].  E.g. the test code fails with
+Add inval_create_ruleset_arguments, extension of
+inval_create_ruleset_flags, to also check error ordering for
+landlock_create_ruleset(2).
 
-  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
-  int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
-                            ^
-  <stdin>:1:29: error: unknown token in expression
-  <inline asm>:1:9: note: instantiated into assembly here
-          .long () - .
-                 ^
-  2 errors generated.
+This is similar to the previous commit checking landlock_add_rule(2).
 
-on clang-13, but passes on gcc (with appropriate asm goto support).  The
-bug is fixed in clang-14, but won't be backported to clang-13 as the
-changes are too invasive/risky.
+Test coverage for security/landlock is 94.4% of 504 lines accorging to
+gcc/gcov-11.
 
-gcc also had a similar bug[3], fixed in gcc-11, where gcc failed to
-account for its behavior of assigning two numbers to tied outputs (one
-for input, one for output) when evaluating symbolic references.
-
-[1] https://github.com/ClangBuiltLinux/linux/issues/1512
-[2] https://lore.kernel.org/all/YfMruK8%2F1izZ2VHS@google.com
-[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98096
-
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/r/20220506160820.524344-11-mic@digikod.net
 Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220202004945.2540433-2-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- init/Kconfig |    5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/landlock/base_test.c |   21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -68,6 +68,11 @@ config CC_HAS_ASM_GOTO_OUTPUT
- 	depends on CC_HAS_ASM_GOTO
- 	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
+--- a/tools/testing/selftests/landlock/base_test.c
++++ b/tools/testing/selftests/landlock/base_test.c
+@@ -97,14 +97,17 @@ TEST(abi_version)
+ 	ASSERT_EQ(EINVAL, errno);
+ }
  
-+config CC_HAS_ASM_GOTO_TIED_OUTPUT
-+	depends on CC_HAS_ASM_GOTO_OUTPUT
-+	# Detect buggy gcc and clang, fixed in gcc-11 clang-14.
-+	def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
+-TEST(inval_create_ruleset_flags)
++/* Tests ordering of syscall argument checks. */
++TEST(create_ruleset_checks_ordering)
+ {
+ 	const int last_flag = LANDLOCK_CREATE_RULESET_VERSION;
+ 	const int invalid_flag = last_flag << 1;
++	int ruleset_fd;
+ 	const struct landlock_ruleset_attr ruleset_attr = {
+ 		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
+ 	};
+ 
++	/* Checks priority for invalid flags. */
+ 	ASSERT_EQ(-1, landlock_create_ruleset(NULL, 0, invalid_flag));
+ 	ASSERT_EQ(EINVAL, errno);
+ 
+@@ -119,6 +122,22 @@ TEST(inval_create_ruleset_flags)
+ 		  landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr),
+ 					  invalid_flag));
+ 	ASSERT_EQ(EINVAL, errno);
 +
- config TOOLS_SUPPORT_RELR
- 	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
++	/* Checks too big ruleset_attr size. */
++	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, -1, 0));
++	ASSERT_EQ(E2BIG, errno);
++
++	/* Checks too small ruleset_attr size. */
++	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0, 0));
++	ASSERT_EQ(EINVAL, errno);
++	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 1, 0));
++	ASSERT_EQ(EINVAL, errno);
++
++	/* Checks valid call. */
++	ruleset_fd =
++		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
++	ASSERT_LE(0, ruleset_fd);
++	ASSERT_EQ(0, close(ruleset_fd));
+ }
  
+ /* Tests ordering of syscall argument checks. */
 
 

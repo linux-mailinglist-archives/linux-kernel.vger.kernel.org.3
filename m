@@ -2,116 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1627541B65
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B357541B49
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381916AbiFGVpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S1381840AbiFGVpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378749AbiFGUw0 (ORCPT
+        with ESMTP id S1378864AbiFGUwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:52:26 -0400
-Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206B91ADBF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:42:58 -0700 (PDT)
-X-ASG-Debug-ID: 1654627376-1cf43917f33965e0001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id 9IJWbVWe0kxl8Q4W; Tue, 07 Jun 2022 14:42:56 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=eQM8tN6t62Fopbgjt8uTQgBSZ1EO2wkhvfxABlFtH9o=;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=IixmWpGiaqvQUprEzkz0
-        RLY8E/16bD+CZb7eDVxwsJJx0WhcGJberWRDEq6vXklSwUFj/Uz/gezadInQpSSObCp8dKbeGiBa7
-        w3Y7jLuYeY+HtSBYaVfbLDLoltgTK+A7YCT6QfatyfhhlsxJVy8j/AsCZzK72KxdoC1mOT995M=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 11859435; Tue, 07 Jun 2022 14:42:56 -0400
-Message-ID: <c918d44b-1822-b076-0833-7645a2079809@cybernetics.com>
-Date:   Tue, 7 Jun 2022 14:42:56 -0400
+        Tue, 7 Jun 2022 16:52:38 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9AE2E696
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654627395; x=1686163395;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A/5BMYgNu0Yt+eZ+D/1xw5NF6LjHXm/NfMiYDFkov/E=;
+  b=fz8aDaP64ANsWlhebzZNz0ydhV/mOiheQKp4ixSKXUo8Ty1p2rB2sEvs
+   mEgZHmwrT9EVtjosLpMIr+UC64Ws44c99hVJDACbCfYMtCP6/BgO48ofr
+   DT9idM/1VgsdFTIVqn6li9gwxU6X4Pk/9Upu6aCDFldzvks8+Db2gob8Q
+   +i0Hwjo2mDJgMm8UsKADQpvgt1du16bRjx9X5vspJBmN14lcrTwhgxmfs
+   mBQ0nm7GXBhMf33ETn3mVJGJJrIORpbDIv9a2DLYWr5Hq1kFESHgLo/CH
+   vXWpFSQdpCU4/DGMFwrTvQEqgOiBK5L30bp6mLq5bsGYZNmuDurOfX8nu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="257178716"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="257178716"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 11:43:06 -0700
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="579716176"
+Received: from schen9-mobl.amr.corp.intel.com ([10.251.8.166])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 11:43:05 -0700
+Message-ID: <92649c9a6e0b6931b34aeaaf22c0a1e874484b7f.camel@linux.intel.com>
+Subject: Re: [PATCH v5 1/9] mm/demotion: Add support for explicit memory
+ tiers
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+Date:   Tue, 07 Jun 2022 11:43:05 -0700
+In-Reply-To: <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+References: <20220603134237.131362-1-aneesh.kumar@linux.ibm.com>
+         <20220603134237.131362-2-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: [PATCH v6 05/11] dmapool: improve accuracy of debug statistics
-Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v6 05/11] dmapool: improve accuracy of debug statistics
-From:   Tony Battersby <tonyb@cybernetics.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, kernel-team@fb.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
-In-Reply-To: <340ff8ef-9ff5-7175-c234-4132bbdfc5f7@cybernetics.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1654627376
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 1818
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "total number of blocks in pool" debug statistic currently does not
-take the boundary value into account, so it diverges from the "total
-number of blocks in use" statistic when a boundary is in effect.  Add a
-calculation for the number of blocks per allocation that takes the
-boundary into account, and use it to replace the inaccurate calculation.
+On Fri, 2022-06-03 at 19:12 +0530, Aneesh Kumar K.V wrote:
+> 
+> 
+> The nodes which are part of a specific memory tier can be listed
+> via
+> /sys/devices/system/memtier/memtierN/nodelist
+> 
+> "Rank" is an opaque value. Its absolute value doesn't have any
+> special meaning. But the rank values of different memtiers can be
+> compared with each other to determine the memory tier order.
+> 
+> For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
+> their rank values are 300, 200, 100, then the memory tier order is:
+> memtier0 -> memtier2 -> memtier1, 
 
-This depends on the patch "dmapool: fix boundary comparison" for the
-calculated blks_per_alloc value to be correct.
+Why is memtier2 (rank 100) higher than memtier1 (rank 200)?  Seems like
+the order should be memtier0 -> memtier1 -> memtier2?
+                    (rank 300)  (rank 200)  (rank 100)
 
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
----
+> where memtier0 is the highest tier
+> and memtier1 is the lowest tier.
 
-The added blks_per_alloc value will also be used in the next patch.
+I think memtier2 is the lowest as it has the lowest rank value.
+> 
+> The rank value of each memtier should be unique.
+> 
+> 
+> +
+> +static void memory_tier_device_release(struct device *dev)
+> +{
+> +	struct memory_tier *tier = to_memory_tier(dev);
+> +
 
- mm/dmapool.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Do we need some ref counts on memory_tier?
+If there is another device still using the same memtier,
+free below could cause problem.
 
-diff --git a/mm/dmapool.c b/mm/dmapool.c
-index 122781fe2c03..d3e5a6151fb4 100644
---- a/mm/dmapool.c
-+++ b/mm/dmapool.c
-@@ -47,6 +47,7 @@ struct dma_pool {		/* the pool */
- 	unsigned int size;
- 	unsigned int allocation;
- 	unsigned int boundary;
-+	unsigned int blks_per_alloc;
- 	char name[32];
- 	struct list_head pools;
- };
-@@ -85,8 +86,7 @@ static ssize_t pools_show(struct device *dev, struct device_attribute *attr, cha
- 		/* per-pool info, no real statistics yet */
- 		size += sysfs_emit_at(buf, size, "%-16s %4zu %4zu %4u %2u\n",
- 				      pool->name, blocks,
--				      (size_t) pages *
--				      (pool->allocation / pool->size),
-+				      (size_t) pages * pool->blks_per_alloc,
- 				      pool->size, pages);
- 	}
- 	mutex_unlock(&pools_lock);
-@@ -159,6 +159,9 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
- 	retval->size = size;
- 	retval->boundary = boundary;
- 	retval->allocation = allocation;
-+	retval->blks_per_alloc =
-+		(allocation / boundary) * (boundary / size) +
-+		(allocation % boundary) / size;
- 
- 	INIT_LIST_HEAD(&retval->pools);
- 
--- 
-2.25.1
+> +	kfree(tier);
+> +}
+> +
+> 
+...
+> +static struct memory_tier *register_memory_tier(unsigned int tier)
+> +{
+> +	int error;
+> +	struct memory_tier *memtier;
+> +
+> +	if (tier >= MAX_MEMORY_TIERS)
+> +		return NULL;
+> +
+> +	memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
+> +	if (!memtier)
+> +		return NULL;
+> +
+> +	memtier->dev.id = tier;
+> +	memtier->rank = get_rank_from_tier(tier);
+> +	memtier->dev.bus = &memory_tier_subsys;
+> +	memtier->dev.release = memory_tier_device_release;
+> +	memtier->dev.groups = memory_tier_dev_groups;
+> +
+
+Should you take the mem_tier_lock before you insert to
+memtier-list?
+
+> +	insert_memory_tier(memtier);
+> +
+> +	error = device_register(&memtier->dev);
+> +	if (error) {
+> +		list_del(&memtier->list);
+> +		put_device(&memtier->dev);
+> +		return NULL;
+> +	}
+> +	return memtier;
+> +}
+> +
+> +__maybe_unused // temporay to prevent warnings during bisects
+> +static void unregister_memory_tier(struct memory_tier *memtier)
+> +{
+
+I think we should take mem_tier_lock before modifying memtier->list.
+
+> +	list_del(&memtier->list);
+> +	device_unregister(&memtier->dev);
+> +}
+> +
+> 
+
+Thanks.
+
+Tim
 

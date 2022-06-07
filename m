@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B36541EDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B3E540BA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359630AbiFGWeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S1352901AbiFGSbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378774AbiFGVWi (ORCPT
+        with ESMTP id S1352040AbiFGSCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:22:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0890226548;
-        Tue,  7 Jun 2022 12:00:33 -0700 (PDT)
+        Tue, 7 Jun 2022 14:02:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EEE33368;
+        Tue,  7 Jun 2022 10:46:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 041EAB8239C;
-        Tue,  7 Jun 2022 19:00:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA1CC34115;
-        Tue,  7 Jun 2022 19:00:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 990D261534;
+        Tue,  7 Jun 2022 17:46:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A177EC385A5;
+        Tue,  7 Jun 2022 17:46:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628404;
-        bh=u0uLyzgE+ia6tDIqfwqEGTu45WQk2+LGG1+RdUhBmCU=;
+        s=korg; t=1654624010;
+        bh=nXNs2TKaYBe3HGWE0Y7zWPQB9J0WpS5ZjTFwM5df4Yo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cpCnUYaaP8UR/yD7JaARtLMQrS80cEHV25tGV+gLVBLWH9cBQAf5aycqpCxNuGD4l
-         yWuX8a9La608ePTVUCq3I36YUeIvKq3U8hNpE4Y+CUBpY8DsagUawfEtxEp0Yp0nKb
-         rHaZFu9A3bNZtnIoP/g58E8MPszBi3wvXmbgqg+Q=
+        b=rUHKzGozoHz1doLQLdqlGK06nSYgF85Vd/+t83STQHGL9gsVM7w0TX2vKXhmqHxSh
+         FJM/aQYAm78DRvUa+7FzeamhObYSCfn+oYIvEZhnncU8poY5xph4tE2WOSJ0SMuH8L
+         2zWe8b30agD1yie2EGOHLCBrbzUkAo1ibLRPV7QE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 316/879] target: remove an incorrect unmap zeroes data deduction
-Date:   Tue,  7 Jun 2022 18:57:14 +0200
-Message-Id: <20220607165012.021317087@linuxfoundation.org>
+        stable@vger.kernel.org, Yicong Yang <yangyicong@hisilicon.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Jay Zhou <jianjay.zhou@huawei.com>
+Subject: [PATCH 5.15 170/667] PCI: Avoid pci_dev_lock() AB/BA deadlock with sriov_numvfs_store()
+Date:   Tue,  7 Jun 2022 18:57:15 +0200
+Message-Id: <20220607164939.911914526@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-[ Upstream commit 179d8609d8424529e95021df939ed7b0b82b37f1 ]
+[ Upstream commit a91ee0e9fca9d7501286cfbced9b30a33e52740a ]
 
-For block devices, the SCSI target drivers implements UNMAP as calls to
-blkdev_issue_discard, which does not guarantee zeroing just because
-Write Zeroes is supported.
+The sysfs sriov_numvfs_store() path acquires the device lock before the
+config space access lock:
 
-Note that this does not affect the file backed path which uses
-fallocate to punch holes.
+  sriov_numvfs_store
+    device_lock                 # A (1) acquire device lock
+    sriov_configure
+      vfio_pci_sriov_configure  # (for example)
+        vfio_pci_core_sriov_configure
+          pci_disable_sriov
+            sriov_disable
+              pci_cfg_access_lock
+                pci_wait_cfg    # B (4) wait for dev->block_cfg_access == 0
 
-Fixes: 2237498f0b5c ("target/iblock: Convert WRITE_SAME to blkdev_issue_zeroout")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Link: https://lore.kernel.org/r/20220415045258.199825-2-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Previously, pci_dev_lock() acquired the config space access lock before the
+device lock:
+
+  pci_dev_lock
+    pci_cfg_access_lock
+      dev->block_cfg_access = 1 # B (2) set dev->block_cfg_access = 1
+    device_lock                 # A (3) wait for device lock
+
+Any path that uses pci_dev_lock(), e.g., pci_reset_function(), may
+deadlock with sriov_numvfs_store() if the operations occur in the sequence
+(1) (2) (3) (4).
+
+Avoid the deadlock by reversing the order in pci_dev_lock() so it acquires
+the device lock before the config space access lock, the same as the
+sriov_numvfs_store() path.
+
+[bhelgaas: combined and adapted commit log from Jay Zhou's independent
+subsequent posting:
+https://lore.kernel.org/r/20220404062539.1710-1-jianjay.zhou@huawei.com]
+Link: https://lore.kernel.org/linux-pci/1583489997-17156-1-git-send-email-yangyicong@hisilicon.com/
+Also-posted-by: Jay Zhou <jianjay.zhou@huawei.com>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/target_core_device.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/pci/pci.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index 44bb380e7390..fa866acef5bb 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -850,7 +850,6 @@ bool target_configure_unmap_from_queue(struct se_dev_attrib *attrib,
- 	attrib->unmap_granularity = q->limits.discard_granularity / block_size;
- 	attrib->unmap_granularity_alignment = q->limits.discard_alignment /
- 								block_size;
--	attrib->unmap_zeroes_data = !!(q->limits.max_write_zeroes_sectors);
- 	return true;
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 0380543d10fd..09815cbc18f9 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -5079,18 +5079,18 @@ static int pci_reset_bus_function(struct pci_dev *dev, bool probe)
+ 
+ static void pci_dev_lock(struct pci_dev *dev)
+ {
+-	pci_cfg_access_lock(dev);
+ 	/* block PM suspend, driver probe, etc. */
+ 	device_lock(&dev->dev);
++	pci_cfg_access_lock(dev);
  }
- EXPORT_SYMBOL(target_configure_unmap_from_queue);
+ 
+ /* Return 1 on successful lock, 0 on contention */
+ int pci_dev_trylock(struct pci_dev *dev)
+ {
+-	if (pci_cfg_access_trylock(dev)) {
+-		if (device_trylock(&dev->dev))
++	if (device_trylock(&dev->dev)) {
++		if (pci_cfg_access_trylock(dev))
+ 			return 1;
+-		pci_cfg_access_unlock(dev);
++		device_unlock(&dev->dev);
+ 	}
+ 
+ 	return 0;
+@@ -5099,8 +5099,8 @@ EXPORT_SYMBOL_GPL(pci_dev_trylock);
+ 
+ void pci_dev_unlock(struct pci_dev *dev)
+ {
+-	device_unlock(&dev->dev);
+ 	pci_cfg_access_unlock(dev);
++	device_unlock(&dev->dev);
+ }
+ EXPORT_SYMBOL_GPL(pci_dev_unlock);
+ 
 -- 
 2.35.1
 

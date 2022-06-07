@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148B05422D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F57542617
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiFHDSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 23:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        id S1381680AbiFHBfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239811AbiFHDNg (ORCPT
+        with ESMTP id S1384760AbiFGWQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 23:13:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06278261459;
-        Tue,  7 Jun 2022 12:20:13 -0700 (PDT)
+        Tue, 7 Jun 2022 18:16:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5BD26129E;
+        Tue,  7 Jun 2022 12:20:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1904B823CC;
-        Tue,  7 Jun 2022 19:19:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58949C385A2;
-        Tue,  7 Jun 2022 19:19:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C2916194A;
+        Tue,  7 Jun 2022 19:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB68C385A2;
+        Tue,  7 Jun 2022 19:19:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629579;
-        bh=9+QnkXRRZzVvsY0NGZ3srNE+JQrSn6L0tCzzSNkv4MU=;
+        s=korg; t=1654629582;
+        bh=ctuS+qzsxtX+EZZEbj4SB3xQ5P63NIKytgvwWabwSBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h/vgi+M7FN3N+9DDeuWsR0QH1fAwWvucGrwxgjfpsRvzqhNNrgcs3IM7N/2UIPnH8
-         iNmua2C532UsLO4NOM16o1hkc7srIcxHh66os+zMNUIaG+Ty8OYGvjxfznsgWGg5XQ
-         uFjyvVs6k9ljLYLOI+Mtf6SA828zHpiRH5EVz6ek=
+        b=Obit/vaFHkPFuYffuoQiGkHnCZZI/Hb+A8qfZSRj6Nz1x+gOsGbCHpI5M/5yBRBp+
+         9vcNmdfwi4HvIgnyi9I593YLD2mQDzPtfi+TSWI1uosHcpyWzPOZkoMAMDffgJTpfy
+         UsgUuRYMlAkDrepDmOXwsUvbyFhwVpMsL/e8+Nfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, stable@kernel.org,
-        Ye Bin <yebin10@huawei.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.18 742/879] ext4: fix bug_on in ext4_writepages
-Date:   Tue,  7 Jun 2022 19:04:20 +0200
-Message-Id: <20220607165024.396007902@linuxfoundation.org>
+        Theodore Tso <tytso@mit.edu>,
+        syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
+Subject: [PATCH 5.18 743/879] ext4: filter out EXT4_FC_REPLAY from on-disk superblock field s_state
+Date:   Tue,  7 Jun 2022 19:04:21 +0200
+Message-Id: <20220607165024.425163916@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,107 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-commit ef09ed5d37b84d18562b30cf7253e57062d0db05 upstream.
+commit c878bea3c9d724ddfa05a813f30de3d25a0ba83f upstream.
 
-we got issue as follows:
-EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inode.c:2708!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-RIP: 0010:ext4_writepages+0x1977/0x1c10
-RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_writepages+0x130/0x3a0
- filemap_fdatawrite_wbc+0x83/0xa0
- filemap_flush+0xab/0xe0
- ext4_alloc_da_blocks+0x51/0x120
- __ext4_ioctl+0x1534/0x3210
- __x64_sys_ioctl+0x12c/0x170
- do_syscall_64+0x3b/0x90
+The EXT4_FC_REPLAY bit in sbi->s_mount_state is used to indicate that
+we are in the middle of replay the fast commit journal.  This was
+actually a mistake, since the sbi->s_mount_info is initialized from
+es->s_state.  Arguably s_mount_state is misleadingly named, but the
+name is historical --- s_mount_state and s_state dates back to ext2.
 
-It may happen as follows:
-1. write inline_data inode
-vfs_write
-  new_sync_write
-    ext4_file_write_iter
-      ext4_buffered_write_iter
-        generic_perform_write
-          ext4_da_write_begin
-            ext4_da_write_inline_data_begin -> If inline data size too
-            small will allocate block to write, then mapping will has
-            dirty page
-                ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-2. fallocate
-do_vfs_ioctl
-  ioctl_preallocate
-    vfs_fallocate
-      ext4_fallocate
-        ext4_convert_inline_data
-          ext4_convert_inline_data_nolock
-            ext4_map_blocks -> fail will goto restore data
-            ext4_restore_inline_data
-              ext4_create_inline_data
-              ext4_write_inline_data
-              ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-3. writepages
-__ext4_ioctl
-  ext4_alloc_da_blocks
-    filemap_flush
-      filemap_fdatawrite_wbc
-        do_writepages
-          ext4_writepages
-            if (ext4_has_inline_data(inode))
-              BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+What should have been used is the ext4_{set,clear,test}_mount_flag()
+inline functions, which sets EXT4_MF_* bits in sbi->s_mount_flags.
 
-The root cause of this issue is we destory inline data until call
-ext4_writepages under delay allocation mode.  But there maybe already
-convert from inline to extent.  To solve this issue, we call
-filemap_flush first..
+The problem with using EXT4_FC_REPLAY is that a maliciously corrupted
+superblock could result in EXT4_FC_REPLAY getting set in
+s_mount_state.  This bypasses some sanity checks, and this can trigger
+a BUG() in ext4_es_cache_extent().  As a easy-to-backport-fix, filter
+out the EXT4_FC_REPLAY bit for now.  We should eventually transition
+away from EXT4_FC_REPLAY to something like EXT4_MF_REPLAY.
 
 Cc: stable@kernel.org
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220516122634.1690462-1-yebin10@huawei.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lore.kernel.org/r/20220420192312.1655305-1-phind.uet@gmail.com
+Link: https://lore.kernel.org/r/20220517174028.942119-1-tytso@mit.edu
+Reported-by: syzbot+c7358a3cd05ee786eb31@syzkaller.appspotmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inline.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ fs/ext4/super.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -2005,6 +2005,18 @@ int ext4_convert_inline_data(struct inod
- 	if (!ext4_has_inline_data(inode)) {
- 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
- 		return 0;
-+	} else if (!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)) {
-+		/*
-+		 * Inode has inline data but EXT4_STATE_MAY_INLINE_DATA is
-+		 * cleared. This means we are in the middle of moving of
-+		 * inline data to delay allocated block. Just force writeout
-+		 * here to finish conversion.
-+		 */
-+		error = filemap_flush(inode->i_mapping);
-+		if (error)
-+			return error;
-+		if (!ext4_has_inline_data(inode))
-+			return 0;
- 	}
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -4890,7 +4890,7 @@ static int __ext4_fill_super(struct fs_c
+ 					sbi->s_inodes_per_block;
+ 	sbi->s_desc_per_block = blocksize / EXT4_DESC_SIZE(sb);
+ 	sbi->s_sbh = bh;
+-	sbi->s_mount_state = le16_to_cpu(es->s_state);
++	sbi->s_mount_state = le16_to_cpu(es->s_state) & ~EXT4_FC_REPLAY;
+ 	sbi->s_addr_per_block_bits = ilog2(EXT4_ADDR_PER_BLOCK(sb));
+ 	sbi->s_desc_per_block_bits = ilog2(EXT4_DESC_PER_BLOCK(sb));
  
- 	needed_blocks = ext4_writepage_trans_blocks(inode);
+@@ -6453,7 +6453,8 @@ static int __ext4_remount(struct fs_cont
+ 				if (err)
+ 					goto restore_opts;
+ 			}
+-			sbi->s_mount_state = le16_to_cpu(es->s_state);
++			sbi->s_mount_state = (le16_to_cpu(es->s_state) &
++					      ~EXT4_FC_REPLAY);
+ 
+ 			err = ext4_setup_super(sb, es, 0);
+ 			if (err)
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33C4541535
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4065409F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355788AbiFGU3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S1351517AbiFGSQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356530AbiFGTiu (ORCPT
+        with ESMTP id S1348475AbiFGR4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:38:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4486161C;
-        Tue,  7 Jun 2022 11:14:00 -0700 (PDT)
+        Tue, 7 Jun 2022 13:56:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7B9146751;
+        Tue,  7 Jun 2022 10:40:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51712B82374;
-        Tue,  7 Jun 2022 18:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E90FC34115;
-        Tue,  7 Jun 2022 18:13:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8E31B80B66;
+        Tue,  7 Jun 2022 17:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4C2C385A5;
+        Tue,  7 Jun 2022 17:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625636;
-        bh=dnVq8A+QaRcFBuWkdXsDnNqK0ZQ2F6cv/bJXs+evh2Y=;
+        s=korg; t=1654623579;
+        bh=COKzPOsl7kaNsDvx+z01yEVI+nhAt+B84z1IsdH3tzE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YrD0qkkWfApi3F8vmxRiwefb386vEaM0UXEJQrAgNbNOX8tJDP7VZjp7ZGUilUUNR
-         M17oVJs6ZhLpaJ08qYj/1XAoJXu7Hle7g2v/euVyCdeGTN7cQAIsXAOD3pWA3pN+7Y
-         ueosCbY8oTkakj09UCvAxT4FBE1Pj1cvkpPXoZc0=
+        b=TVATSCL+gqm1tlYo3QGn6+7nfYQ+HgbWnQhOLesfX5Sa35RGmX8ZmHxnryN+uGYmi
+         DJYwffePRCgs9KP3d6B4fIz9T1FPPvPQqLf861J4vQWAjh5LiVQ6xN6q6y01h4TD8U
+         3ZSp731t3xzLoLusd7hGP9w++hWz13wwTKEtYCu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 090/772] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+        stable@vger.kernel.org, Rui Miguel Silva <rui.silva@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.15 017/667] usb: isp1760: Fix out-of-bounds array access
 Date:   Tue,  7 Jun 2022 18:54:42 +0200
-Message-Id: <20220607164951.699328066@linuxfoundation.org>
+Message-Id: <20220607164935.308472856@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
+commit 26ae2c942b5702f2e43d36b2a4389cfb7d616b6a upstream.
 
-When the driver fails to call the dma_set_mask(), the driver will get
-the following splat:
+Running the driver through kasan gives an interesting splat:
 
-[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
-[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
-[   55.856822] Call Trace:
-[   55.860327]  __process_removed_driver+0x3c/0x240
-[   55.861347]  bus_for_each_dev+0x102/0x160
-[   55.861681]  i2c_del_driver+0x2f/0x50
+  BUG: KASAN: global-out-of-bounds in isp1760_register+0x180/0x70c
+  Read of size 20 at addr f1db2e64 by task swapper/0/1
+  (...)
+  isp1760_register from isp1760_plat_probe+0x1d8/0x220
+  (...)
 
-This is because the driver has initialized the i2c related resources
-in cx23885_dev_setup() but not released them in error handling, fix this
-bug by modifying the error path that jumps after failing to call the
-dma_set_mask().
+This happens because the loop reading the regmap fields for the
+different ISP1760 variants look like this:
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  for (i = 0; i < HC_FIELD_MAX; i++) { ... }
+
+Meaning it expects the arrays to be at least HC_FIELD_MAX - 1 long.
+
+However the arrays isp1760_hc_reg_fields[], isp1763_hc_reg_fields[],
+isp1763_hc_volatile_ranges[] and isp1763_dc_volatile_ranges[] are
+dynamically sized during compilation.
+
+Fix this by putting an empty assignment to the [HC_FIELD_MAX]
+and [DC_FIELD_MAX] array member at the end of each array.
+This will make the array one member longer than it needs to be,
+but avoids the risk of overwriting whatever is inside
+[HC_FIELD_MAX - 1] and is simple and intuitive to read. Also
+add comments explaining what is going on.
+
+Fixes: 1da9e1c06873 ("usb: isp1760: move to regmap for register access")
+Cc: stable@vger.kernel.org
+Cc: Rui Miguel Silva <rui.silva@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220516091424.391209-1-linus.walleij@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/isp1760/isp1760-core.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index f8f2ff3b00c3..a07b18f2034e 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -2165,7 +2165,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 	err = dma_set_mask(&pci_dev->dev, 0xffffffff);
- 	if (err) {
- 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
--		goto fail_ctrl;
-+		goto fail_dma_set_mask;
- 	}
+--- a/drivers/usb/isp1760/isp1760-core.c
++++ b/drivers/usb/isp1760/isp1760-core.c
+@@ -251,6 +251,8 @@ static const struct reg_field isp1760_hc
+ 	[HW_DM_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 2, 2),
+ 	[HW_DP_PULLDOWN]	= REG_FIELD(ISP176x_HC_OTG_CTRL, 1, 1),
+ 	[HW_DP_PULLUP]		= REG_FIELD(ISP176x_HC_OTG_CTRL, 0, 0),
++	/* Make sure the array is sized properly during compilation */
++	[HC_FIELD_MAX]		= {},
+ };
  
- 	err = request_irq(pci_dev->irq, cx23885_irq,
-@@ -2173,7 +2173,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 	if (err < 0) {
- 		pr_err("%s: can't get IRQ %d\n",
- 		       dev->name, pci_dev->irq);
--		goto fail_irq;
-+		goto fail_dma_set_mask;
- 	}
+ static const struct reg_field isp1763_hc_reg_fields[] = {
+@@ -321,6 +323,8 @@ static const struct reg_field isp1763_hc
+ 	[HW_DM_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 2, 2),
+ 	[HW_DP_PULLDOWN_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 1, 1),
+ 	[HW_DP_PULLUP_CLEAR]	= REG_FIELD(ISP1763_HC_OTG_CTRL_CLEAR, 0, 0),
++	/* Make sure the array is sized properly during compilation */
++	[HC_FIELD_MAX]		= {},
+ };
  
- 	switch (dev->board) {
-@@ -2195,7 +2195,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
+ static const struct regmap_range isp1763_hc_volatile_ranges[] = {
+@@ -405,6 +409,8 @@ static const struct reg_field isp1761_dc
+ 	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP176x_DC_CHIPID, 16, 31),
+ 	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP176x_DC_CHIPID, 0, 15),
+ 	[DC_SCRATCH]		= REG_FIELD(ISP176x_DC_SCRATCH, 0, 15),
++	/* Make sure the array is sized properly during compilation */
++	[DC_FIELD_MAX]		= {},
+ };
  
- 	return 0;
+ static const struct regmap_range isp1763_dc_volatile_ranges[] = {
+@@ -458,6 +464,8 @@ static const struct reg_field isp1763_dc
+ 	[DC_CHIP_ID_HIGH]	= REG_FIELD(ISP1763_DC_CHIPID_HIGH, 0, 15),
+ 	[DC_CHIP_ID_LOW]	= REG_FIELD(ISP1763_DC_CHIPID_LOW, 0, 15),
+ 	[DC_SCRATCH]		= REG_FIELD(ISP1763_DC_SCRATCH, 0, 15),
++	/* Make sure the array is sized properly during compilation */
++	[DC_FIELD_MAX]		= {},
+ };
  
--fail_irq:
-+fail_dma_set_mask:
- 	cx23885_dev_unregister(dev);
- fail_ctrl:
- 	v4l2_ctrl_handler_free(hdl);
--- 
-2.35.1
-
+ static const struct regmap_config isp1763_dc_regmap_conf = {
 
 

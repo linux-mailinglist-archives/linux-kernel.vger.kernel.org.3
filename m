@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55775418E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE7F5406E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381557AbiFGVRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S1347816AbiFGRkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376305AbiFGUVZ (ORCPT
+        with ESMTP id S1347478AbiFGRas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:21:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9647F2CE2F;
-        Tue,  7 Jun 2022 11:31:05 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1247B111B94;
+        Tue,  7 Jun 2022 10:27:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39E59B822C0;
-        Tue,  7 Jun 2022 18:31:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09D3C385A2;
-        Tue,  7 Jun 2022 18:31:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9939B6127C;
+        Tue,  7 Jun 2022 17:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0988C385A5;
+        Tue,  7 Jun 2022 17:27:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626663;
-        bh=4JIrRICiYrnw1c2ygg9e+MEN7EFrlrJShWuE87GFz/4=;
+        s=korg; t=1654622822;
+        bh=M25JXcvDykKqIPIZeQD3S3WaYhxCDWlKyqcnmgUM6WE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vozf1zHLErwueonZoPX16JoCJolylOyEpwQErwBkzSekB0F1ZYTHL/ZyAtNBV3W9h
-         Rb7gzZ9J3sVmA+K+6lXdzo/E/c2UlpemCBs5uK2q1wttlHjiErijdLWTJ3K+nI4Vi0
-         yf9AtirWfC0j2UMcgos+dts6R6hjub7BhEBfZD1k=
+        b=KGNS18jwW1+h43HNTQjwicbqHMzm+uMrgNVNa9HSewJslCIPHfxri2Nby0fxYtEjD
+         hwbCEQARs7WPCj+GfW0ZqLcIS66mkHf6qcf/rLM4XxF71nmI3hBwdpTyQe4y6yQOa8
+         Av0d3qO015wSEo0KKIeWQ91GITq/FovNPWAob3eQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 458/772] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
-Date:   Tue,  7 Jun 2022 19:00:50 +0200
-Message-Id: <20220607165002.499608612@linuxfoundation.org>
+Subject: [PATCH 5.10 194/452] drm/msm: return an error pointer in msm_gem_prime_get_sg_table()
+Date:   Tue,  7 Jun 2022 19:00:51 +0200
+Message-Id: <20220607164914.345654338@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
+[ Upstream commit cf575e31611eb6dccf08fad02e57e35b2187704d ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+The msm_gem_prime_get_sg_table() needs to return error pointers on
+error.  This is called from drm_gem_map_dma_buf() and returning a
+NULL will lead to a crash in that function.
 
-Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
+Fixes: ac45146733b0 ("drm/msm: fix msm_gem_prime_get_sg_table()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/485023/
+Link: https://lore.kernel.org/r/YnOmtS5tfENywR9m@kili
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smsm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/msm_gem_prime.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
-index ef15d014c03a..9df9bba242f3 100644
---- a/drivers/soc/qcom/smsm.c
-+++ b/drivers/soc/qcom/smsm.c
-@@ -374,6 +374,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
- 		return 0;
+diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
+index 515ef80816a0..8c64ce7288f1 100644
+--- a/drivers/gpu/drm/msm/msm_gem_prime.c
++++ b/drivers/gpu/drm/msm/msm_gem_prime.c
+@@ -17,7 +17,7 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
+ 	int npages = obj->size >> PAGE_SHIFT;
  
- 	host->ipc_regmap = syscon_node_to_regmap(syscon);
-+	of_node_put(syscon);
- 	if (IS_ERR(host->ipc_regmap))
- 		return PTR_ERR(host->ipc_regmap);
+ 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
  
+ 	return drm_prime_pages_to_sg(obj->dev, msm_obj->pages, npages);
+ }
 -- 
 2.35.1
 

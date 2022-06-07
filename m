@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BFE54107E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22645406DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356658AbiFGT2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S1348654AbiFGRlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351721AbiFGSd4 (ORCPT
+        with ESMTP id S1347662AbiFGRa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:33:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25E81483C2;
-        Tue,  7 Jun 2022 10:57:37 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E4119934;
+        Tue,  7 Jun 2022 10:27:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 030A5CE2424;
-        Tue,  7 Jun 2022 17:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0A95C34119;
-        Tue,  7 Jun 2022 17:57:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 698F06127C;
+        Tue,  7 Jun 2022 17:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A18EC34119;
+        Tue,  7 Jun 2022 17:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624654;
-        bh=tXpFV1oq8s2qSwjMPFj5GjP5i35kucSjkrQzFXm++X0=;
+        s=korg; t=1654622871;
+        bh=QcTT9tWSEZAh16mynkwIDPHeS0sPX5L9CulWKauULAU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eGxNaFes9WWENbjjaHskWx6IUxUES1FK6lHfsV4OHrv3fS9Fb6BrypvhNgN+1TEEm
-         LUrPTvGhWp6+EgmjULAkpjI/oZHug+hDKk4YcaMVgQ4jlfUsJe/zOrYiDmciFg0e+k
-         yQ1ljstf1LFrZjAfKw57URxEN8CstU+BxpLno67A=
+        b=LWHnMBxOaR4VWFT2TJoiDb6qtrYSCfeBDEhJRrUy0aPq1vkJZtyfWY1iySPRttHZf
+         OQe1s0WohLmfnLkYBNnZy+vg3EzCx55/8X2y9VvV8JQkbLsqVT4jd/zb9Wy1g4QT4J
+         ntpId6SVPHWML4bpRm22u2Um06wcTAm40HhoLuUo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
+        stable@vger.kernel.org, Michael Rodin <mrodin@de.adit-jv.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 406/667] ARM: dts: stm32: Fix PHY post-reset delay on Avenger96
+Subject: [PATCH 5.10 214/452] media: vsp1: Fix offset calculation for plane cropping
 Date:   Tue,  7 Jun 2022 19:01:11 +0200
-Message-Id: <20220607164946.918592920@linuxfoundation.org>
+Message-Id: <20220607164914.939105163@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Michael Rodin <mrodin@de.adit-jv.com>
 
-[ Upstream commit ef2d90708883f4025a801feb0ba8411a7a4387e1 ]
+[ Upstream commit 5f25abec8f21b7527c1223a354d23c270befddb3 ]
 
-Per KSZ9031RNX PHY datasheet FIGURE 7-5: POWER-UP/POWER-DOWN/RESET TIMING
-Note 2: After the de-assertion of reset, wait a minimum of 100 μs before
-starting programming on the MIIM (MDC/MDIO) interface.
+The vertical subsampling factor is currently not considered in the
+offset calculation for plane cropping done in rpf_configure_partition.
+This causes a distortion (shift of the color plane) when formats with
+the vsub factor larger than 1 are used (e.g. NV12, see
+vsp1_video_formats in vsp1_pipe.c). This commit considers vsub factor
+for all planes except plane 0 (luminance).
 
-Add 1ms post-reset delay to guarantee this figure.
+Drop generalization of the offset calculation to reduce the binary size.
 
-Fixes: 010ca9fe500bf ("ARM: dts: stm32: Add missing ethernet PHY reset on AV96")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
-Cc: linux-stm32@st-md-mailman.stormreply.com
-To: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Fixes: e5ad37b64de9 ("[media] v4l: vsp1: Add cropping support")
+Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+Signed-off-by: LUU HOAI <hoai.luu.ub@renesas.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/vsp1/vsp1_rpf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
-index 6885948f3024..8eb51d84b698 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
-@@ -141,6 +141,7 @@
- 		compatible = "snps,dwmac-mdio";
- 		reset-gpios = <&gpioz 2 GPIO_ACTIVE_LOW>;
- 		reset-delay-us = <1000>;
-+		reset-post-delay-us = <1000>;
+diff --git a/drivers/media/platform/vsp1/vsp1_rpf.c b/drivers/media/platform/vsp1/vsp1_rpf.c
+index 85587c1b6a37..75083cb234fe 100644
+--- a/drivers/media/platform/vsp1/vsp1_rpf.c
++++ b/drivers/media/platform/vsp1/vsp1_rpf.c
+@@ -291,11 +291,11 @@ static void rpf_configure_partition(struct vsp1_entity *entity,
+ 		     + crop.left * fmtinfo->bpp[0] / 8;
  
- 		phy0: ethernet-phy@7 {
- 			reg = <7>;
+ 	if (format->num_planes > 1) {
++		unsigned int bpl = format->plane_fmt[1].bytesperline;
+ 		unsigned int offset;
+ 
+-		offset = crop.top * format->plane_fmt[1].bytesperline
+-		       + crop.left / fmtinfo->hsub
+-		       * fmtinfo->bpp[1] / 8;
++		offset = crop.top / fmtinfo->vsub * bpl
++		       + crop.left / fmtinfo->hsub * fmtinfo->bpp[1] / 8;
+ 		mem.addr[1] += offset;
+ 		mem.addr[2] += offset;
+ 	}
 -- 
 2.35.1
 

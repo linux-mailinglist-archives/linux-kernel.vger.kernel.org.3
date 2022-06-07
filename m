@@ -2,148 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3631053F9F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EF053F36B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 03:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239734AbiFGJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S234893AbiFGBgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 21:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239781AbiFGJgq (ORCPT
+        with ESMTP id S231345AbiFGBga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:36:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AF96E7303
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654594604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TMMeeMzg716+0kOPZ1kJNvGjEZ2CaNLxMnft4GZfeHg=;
-        b=LyTGbruzfIMPJ0Wr8bsONkXhgYqIZjKrEOCT6p4+xHn+PvkigTff440SSf4m520DZhQvSX
-        PMKLLf8WiVtfcw9WBdK3jHYssCH+4a3eyfk8yzPdFnm6QQFLA+sulvSjq0Wm9eO6TdZpiM
-        PNkaZ3eANqi7tcz5OSwW1zncMG0FF/E=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-_eitluRsNH2XWF-hbyOrzg-1; Tue, 07 Jun 2022 05:36:43 -0400
-X-MC-Unique: _eitluRsNH2XWF-hbyOrzg-1
-Received: by mail-qt1-f199.google.com with SMTP id s7-20020ac85cc7000000b00304e11cb41fso8553110qta.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:36:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=TMMeeMzg716+0kOPZ1kJNvGjEZ2CaNLxMnft4GZfeHg=;
-        b=z0V6++8dCCYquPkaozlhpY2Abe9UEp08RHnSCCtDhjTagCFuNKVlASXiM0tCryYtlc
-         7ck/JMVyo+/3my3fcjyW93xBBhqJX/HXc94O3iYt8YJyG+uuG4sJO9HcFtYDgMIJ9S2G
-         ro3Tto9Q7cz45ymbN9geDJ9HZlU2Rv+wjHg60TX3P4pl9gAwLWon0p1V7z1XKca3pYoF
-         vB6UzqbbCa2qsYhgSAIH4xGfQRdS56FMGmxePx1dxZBQ2XKHy24izXTMbLMOisnndBKF
-         3IoztgbBxp4XVg1J4Bx9eS/9YSc7iX2n7okjTDiHMGOrYXGvT1nW5bw4tax4nauhcKl/
-         seDA==
-X-Gm-Message-State: AOAM532f2mf3PQ80NrZFEsu8f+vKmh3fcDOlwLBODC4Nzsu0KnCcclVu
-        W+bm9LJdenUB3oPXFy1rSA1425fUNEWrGIJjPlBIDjlRECmAgWZEFqUR7CLLrInHgDijEet9J/S
-        azU8uX5YF7PMRVM5yks0xs1RA
-X-Received: by 2002:a05:6214:27cc:b0:46b:bc28:7d4f with SMTP id ge12-20020a05621427cc00b0046bbc287d4fmr846708qvb.80.1654594603148;
-        Tue, 07 Jun 2022 02:36:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyxCcLZX3ofJobo0dvjnhTkv9nwj9+XltzUdXK0HEeglyTnAe0VqZK4gyQ2MmA2ovb/JOXvEg==
-X-Received: by 2002:a05:6214:27cc:b0:46b:bc28:7d4f with SMTP id ge12-20020a05621427cc00b0046bbc287d4fmr846702qvb.80.1654594602958;
-        Tue, 07 Jun 2022 02:36:42 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id bm13-20020a05620a198d00b006a6d83fc9efsm1031130qkb.21.2022.06.07.02.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 02:36:42 -0700 (PDT)
-Message-ID: <c89186f11fa1eb3563b791ba68cca4a533aa537f.camel@redhat.com>
-Subject: Re: [PATCH v6 14/38] KVM: nSVM: Keep track of Hyper-V
- hv_vm_id/hv_vp_id
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Jun 2022 12:36:38 +0300
-In-Reply-To: <20220606083655.2014609-15-vkuznets@redhat.com>
-References: <20220606083655.2014609-1-vkuznets@redhat.com>
-         <20220606083655.2014609-15-vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Mon, 6 Jun 2022 21:36:30 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14CECEBB9;
+        Mon,  6 Jun 2022 18:36:29 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHCZm5xMyz1K9Rj;
+        Tue,  7 Jun 2022 09:34:40 +0800 (CST)
+Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 09:36:27 +0800
+Received: from huawei.com (10.67.174.33) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 7 Jun
+ 2022 09:36:27 +0800
+From:   "GONG, Ruiqi" <gongruiqi1@huawei.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+CC:     Kees Cook <keescook@chromium.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Wang Weiyang" <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Gong Ruiqi <gongruiqi1@huawei.com>
+Subject: [RESEND PATCH] smack: Replace kzalloc + strncpy with kstrndup
+Date:   Tue, 7 Jun 2022 17:36:49 +0800
+Message-ID: <20220607093649.928131-1-gongruiqi1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.33]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
-> Similar to nSVM, KVM needs to know L2's VM_ID/VP_ID and Partition
-> assist page address to handle L2 TLB flush requests.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/svm/hyperv.h | 16 ++++++++++++++++
->  arch/x86/kvm/svm/nested.c |  2 ++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
-> index 7d6d97968fb9..8cf702fed7e5 100644
-> --- a/arch/x86/kvm/svm/hyperv.h
-> +++ b/arch/x86/kvm/svm/hyperv.h
-> @@ -9,6 +9,7 @@
->  #include <asm/mshyperv.h>
->  
->  #include "../hyperv.h"
-> +#include "svm.h"
->  
->  /*
->   * Hyper-V uses the software reserved 32 bytes in VMCB
-> @@ -32,4 +33,19 @@ struct hv_enlightenments {
->   */
->  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
->  
-> +static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
-> +{
-> +       struct vcpu_svm *svm = to_svm(vcpu);
-> +       struct hv_enlightenments *hve =
-> +               (struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
-> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +
-> +       if (!hv_vcpu)
-> +               return;
-> +
-> +       hv_vcpu->nested.pa_page_gpa = hve->partition_assist_page;
-> +       hv_vcpu->nested.vm_id = hve->hv_vm_id;
-> +       hv_vcpu->nested.vp_id = hve->hv_vp_id;
-> +}
-> +
->  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 88da8edbe1e1..e8908cc56e22 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -811,6 +811,8 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
->         if (kvm_vcpu_apicv_active(vcpu))
->                 kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
->  
-> +       nested_svm_hv_update_vm_vp_ids(vcpu);
-> +
->         return 0;
->  }
->  
+Simplify the code by using kstrndup instead of kzalloc and strncpy in
+smk_parse_smack(), which meanwhile remove strncpy as [1] suggests.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+[1]: https://github.com/KSPP/linux/issues/90
 
-Best regards,
-	Maxim Levitsky
+Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+---
+
+Resend: fix email issue to make it acceptable by the mailing list
+
+ security/smack/smack_access.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/security/smack/smack_access.c b/security/smack/smack_access.c
+index d2186e2757be..585e5e35710b 100644
+--- a/security/smack/smack_access.c
++++ b/security/smack/smack_access.c
+@@ -465,12 +465,9 @@ char *smk_parse_smack(const char *string, int len)
+ 	if (i == 0 || i >= SMK_LONGLABEL)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	smack = kzalloc(i + 1, GFP_NOFS);
+-	if (smack == NULL)
++	smack = kstrndup(string, i, GFP_NOFS);
++	if (!smack)
+ 		return ERR_PTR(-ENOMEM);
+-
+-	strncpy(smack, string, i);
+-
+ 	return smack;
+ }
+ 
+-- 
+2.25.1
 

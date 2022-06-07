@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C925414A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0ED7541D44
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358534AbiFGUVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S1384380AbiFGWLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355158AbiFGT3X (ORCPT
+        with ESMTP id S1379021AbiFGVIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:29:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F90A1A4093;
-        Tue,  7 Jun 2022 11:11:46 -0700 (PDT)
+        Tue, 7 Jun 2022 17:08:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0D7213283;
+        Tue,  7 Jun 2022 11:50:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E0361903;
-        Tue,  7 Jun 2022 18:11:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAD5C385A2;
-        Tue,  7 Jun 2022 18:11:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF7B612F2;
+        Tue,  7 Jun 2022 18:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7F7C385A2;
+        Tue,  7 Jun 2022 18:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625505;
-        bh=QYPPoscQqoIcHK0tg64TmPO1PWMhQP1qVM9aBWs4vtQ=;
+        s=korg; t=1654627855;
+        bh=0SOjUx1vP3pC5to7NMBxAemGEoK1IKRZDN4I6BH/TuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dgN8THwVZli45bA4eDcCYiKITT3TAEgKZzfUJbLQUhnzzZgV6BeNSAEjgBuNXDPYT
-         Rs3I/yI5Or4qk2H5Vj8VYgqOBt3DDHhNMq4qqat/Wz3KLrGCCHNbLHltez0sd0x0Nq
-         puaA9oJXmGszsxvyXCHDsoNChp0vgzhW5Zs00AGU=
+        b=wZ8fj7K/rSp7e9q6gUUKQ6bWkwXD3YrfqHRJUB1MUEOd+gY3IW7jucABHGpHjjYMd
+         MvUmaiTWiaCTed7Tfhn11zfax2S7pCDN1+K4IX2lxHk55EsBV0eH+vHqSzTGP0F5wN
+         cSN7F1FbSHjJsoELtzM/d8IX5sNmipbkR32zOnac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.17 043/772] btrfs: return correct error number for __extent_writepage_io()
-Date:   Tue,  7 Jun 2022 18:53:55 +0200
-Message-Id: <20220607164950.297303459@linuxfoundation.org>
+        stable@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
+        Abhishek Kumar <kuabhs@chromium.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 118/879] ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+Date:   Tue,  7 Jun 2022 18:53:56 +0200
+Message-Id: <20220607165006.126929640@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,88 +57,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Abhishek Kumar <kuabhs@chromium.org>
 
-commit 44e5801fada6925d2bba1987c7b59cbcc9d0d592 upstream.
+[ Upstream commit b72a4aff947ba807177bdabb43debaf2c66bee05 ]
 
-[BUG]
-If we hit an error from submit_extent_page() inside
-__extent_writepage_io(), we could still return 0 to the caller, and
-even trigger the warning in btrfs_page_assert_not_dirty().
+Double free crash is observed when FW recovery(caused by wmi
+timeout/crash) is followed by immediate suspend event. The FW recovery
+is triggered by ath10k_core_restart() which calls driver clean up via
+ath10k_halt(). When the suspend event occurs between the FW recovery,
+the restart worker thread is put into frozen state until suspend completes.
+The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
+The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
+called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
+thread because of its frozen state), causing the crash.
 
-[CAUSE]
-In __extent_writepage_io(), if we hit an error from
-submit_extent_page(), we will just clean up the range and continue.
+To fix this, during the suspend flow, skip call to ath10k_halt() in
+ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
+Also, for driver state ATH10K_STATE_RESTARTING, call
+ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
+ath10k_wait_for_suspend() is skipped later in
+[ath10k_halt() > ath10k_core_stop()] for the driver state
+ATH10K_STATE_RESTARTING.
 
-This is completely fine for regular PAGE_SIZE == sectorsize, as we can
-only hit one sector in one page, thus after the error we're ensured to
-exit and @ret will be saved.
+The frozen restart worker thread will be cancelled during resume when the
+device comes out of suspend.
 
-But for subpage case, we may have other dirty subpage range in the page,
-and in the next loop, we may succeeded submitting the next range.
+Below is the crash stack for reference:
 
-In that case, @ret will be overwritten, and we return 0 to the caller,
-while we have hit some error.
+[  428.469167] ------------[ cut here ]------------
+[  428.469180] kernel BUG at mm/slub.c:4150!
+[  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[  428.469219] Workqueue: events_unbound async_run_entry_fn
+[  428.469230] RIP: 0010:kfree+0x319/0x31b
+[  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
+[  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
+[  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
+[  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
+[  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  428.469285] Call Trace:
+[  428.469295]  ? dma_free_attrs+0x5f/0x7d
+[  428.469320]  ath10k_core_stop+0x5b/0x6f
+[  428.469336]  ath10k_halt+0x126/0x177
+[  428.469352]  ath10k_stop+0x41/0x7e
+[  428.469387]  drv_stop+0x88/0x10e
+[  428.469410]  __ieee80211_suspend+0x297/0x411
+[  428.469441]  rdev_suspend+0x6e/0xd0
+[  428.469462]  wiphy_suspend+0xb1/0x105
+[  428.469483]  ? name_show+0x2d/0x2d
+[  428.469490]  dpm_run_callback+0x8c/0x126
+[  428.469511]  ? name_show+0x2d/0x2d
+[  428.469517]  __device_suspend+0x2e7/0x41b
+[  428.469523]  async_suspend+0x1f/0x93
+[  428.469529]  async_run_entry_fn+0x3d/0xd1
+[  428.469535]  process_one_work+0x1b1/0x329
+[  428.469541]  worker_thread+0x213/0x372
+[  428.469547]  kthread+0x150/0x15f
+[  428.469552]  ? pr_cont_work+0x58/0x58
+[  428.469558]  ? kthread_blkcg+0x31/0x31
 
-[FIX]
-Introduce @has_error and @saved_ret to record the first error we hit, so
-we will never forget what error we hit.
-
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
+Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
+Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
+Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+Reviewed-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/extent_io.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath10k/mac.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -3898,10 +3898,12 @@ static noinline_for_stack int __extent_w
- 	u64 extent_offset;
- 	u64 block_start;
- 	struct extent_map *em;
-+	int saved_ret = 0;
- 	int ret = 0;
- 	int nr = 0;
- 	u32 opf = REQ_OP_WRITE;
- 	const unsigned int write_flags = wbc_to_write_flags(wbc);
-+	bool has_error = false;
- 	bool compressed;
+diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
+index b11aaee8b8c0..a11b31191d5a 100644
+--- a/drivers/net/wireless/ath/ath10k/mac.c
++++ b/drivers/net/wireless/ath/ath10k/mac.c
+@@ -5339,13 +5339,29 @@ static int ath10k_start(struct ieee80211_hw *hw)
+ static void ath10k_stop(struct ieee80211_hw *hw)
+ {
+ 	struct ath10k *ar = hw->priv;
++	u32 opt;
  
- 	ret = btrfs_writepage_cow_fixup(page);
-@@ -3951,6 +3953,9 @@ static noinline_for_stack int __extent_w
- 		if (IS_ERR_OR_NULL(em)) {
- 			btrfs_page_set_error(fs_info, page, cur, end - cur + 1);
- 			ret = PTR_ERR_OR_ZERO(em);
-+			has_error = true;
-+			if (!saved_ret)
-+				saved_ret = ret;
- 			break;
- 		}
+ 	ath10k_drain_tx(ar);
  
-@@ -4014,6 +4019,10 @@ static noinline_for_stack int __extent_w
- 					 end_bio_extent_writepage,
- 					 0, 0, false);
- 		if (ret) {
-+			has_error = true;
-+			if (!saved_ret)
-+				saved_ret = ret;
-+
- 			btrfs_page_set_error(fs_info, page, cur, iosize);
- 			if (PageWriteback(page))
- 				btrfs_page_clear_writeback(fs_info, page, cur,
-@@ -4027,8 +4036,10 @@ static noinline_for_stack int __extent_w
- 	 * If we finish without problem, we should not only clear page dirty,
- 	 * but also empty subpage dirty bits
- 	 */
--	if (!ret)
-+	if (!has_error)
- 		btrfs_page_assert_not_dirty(fs_info, page);
-+	else
-+		ret = saved_ret;
- 	*nr_ret = nr;
- 	return ret;
- }
+ 	mutex_lock(&ar->conf_mutex);
+ 	if (ar->state != ATH10K_STATE_OFF) {
+-		if (!ar->hw_rfkill_on)
+-			ath10k_halt(ar);
++		if (!ar->hw_rfkill_on) {
++			/* If the current driver state is RESTARTING but not yet
++			 * fully RESTARTED because of incoming suspend event,
++			 * then ath10k_halt() is already called via
++			 * ath10k_core_restart() and should not be called here.
++			 */
++			if (ar->state != ATH10K_STATE_RESTARTING) {
++				ath10k_halt(ar);
++			} else {
++				/* Suspending here, because when in RESTARTING
++				 * state, ath10k_core_stop() skips
++				 * ath10k_wait_for_suspend().
++				 */
++				opt = WMI_PDEV_SUSPEND_AND_DISABLE_INTR;
++				ath10k_wait_for_suspend(ar, opt);
++			}
++		}
+ 		ar->state = ATH10K_STATE_OFF;
+ 	}
+ 	mutex_unlock(&ar->conf_mutex);
+-- 
+2.35.1
+
 
 

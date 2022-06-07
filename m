@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F73353FCE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4325853FCE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 13:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241204AbiFGLIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 07:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S242420AbiFGLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 07:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242572AbiFGLIG (ORCPT
+        with ESMTP id S242615AbiFGLII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:08:06 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5643E106353
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:04:12 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id u12so34450343eja.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 04:04:12 -0700 (PDT)
+        Tue, 7 Jun 2022 07:08:08 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F52E10A607
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 04:04:18 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id u3so23649589wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 04:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NAmf2neLs629T/nRVHI5HTB+vyXOf7pJ9ZDi49K5nLk=;
-        b=Tx+66JhhTLXXvhuPH12RU3NMi3AgYU5ZaOPXHcHcdla6Xbd5Je5c3tJ9+SeyASQMvR
-         vA0GmpKS7lHvTjCEWSB4mBRxwm6TzSAZrqiAEsFfs9rwN6NS+3rpWew64daqsinSi4Yq
-         yyeNVX6oztGraas+LdFFpiNKotXIVm+A/B845XuBnzM3uUXZgP0jrCjgxvZPfTg/C38q
-         z4zSIM2H1x8mlYYuwSlOP8KcvnJ8wDdFvroD1YwQq2NLoBaNF92YAi8C0xn4nu1tnIb6
-         rL8VuA+wp5p9fO0oaUf7eEUSWT2E+2zHxZ31BZYCteifXVmo4PP/8MIz/+CFUomC+0w9
-         IAgA==
+        d=raspberrypi.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=/01LXbrU5z5LnyLvjVjhRw5gO2250QwVl7s1xHwA700=;
+        b=objHCNZ2KHO9DKsSjO8txuN/+/mQ3Au1SYtWJQNggjJdRxrnuZ4+W3rWrIr83s8ODW
+         Bws0deMMR63NQvh0cC8AhlykhECHpnxi0fW7eXM3/rdK+SgeAsemMcHlovWQRAZD7uGR
+         nvQN5mPCsGcImLn/TSRpxfTXSuEjqf/5RqrSUX4xbZ3G2JgVReRkWAwRmmrnhQAEj9NA
+         aGsOmRKCnmYBCMjFFhqDQSrdmORT/Mb3YT+ugzwfcGPSR9Iocyeh7BLPPhUES3qyOGHs
+         5w1KY/5llywB51iAhww7Ss9NFnlLTThZsO/hzYT+wiax+4ghDg4D2dGFLEzL8uY9RScd
+         qSOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NAmf2neLs629T/nRVHI5HTB+vyXOf7pJ9ZDi49K5nLk=;
-        b=J0Ehe6gETOx2O5jZdkd9it9ruEQp8uiBNrySoXcK4c9JSHEkMrq/3pRwpmHdER+lk0
-         uV3CJP9ceZOPDiFH+nEEyhPzK5R33zzLGYgHbuAeuwENxoboaH9xL5lUaMEovi3wHpxg
-         Gg3+f4/KtXSlj5Tn3QO/pZPuSFsRHhWUS7a/5uRghd3fGNwpG16Z5Krgl1qQPGAZY6xF
-         t963DqykKBOngNN7sg7+IWKdLzXX1//r7sfVoMgqU/MV/oOAn9LQ9vec1McSb1gM2fBz
-         dyk7BEIJDyHvtNWHB6XmGCQ3fqIIFi5qvVVwDSBJJ81wtYXSd4QNshgXat/+AfMwZmfP
-         CKXQ==
-X-Gm-Message-State: AOAM530Plzyk5i7TrzBz/D4qjViPc2EsdVCPqILljb/a56wTOyPKExp3
-        p1EH7vmwmvaCTmungrHlq4LJPw==
-X-Google-Smtp-Source: ABdhPJwXWruueK1xUb0aRbK5R62kfSgKnTpTuZZ4wIbzZM6H6YLqXFtaj8w8gIQEgBddbB1H0nvXug==
-X-Received: by 2002:a17:907:7b92:b0:6db:71f1:fc20 with SMTP id ne18-20020a1709077b9200b006db71f1fc20mr25416095ejc.343.1654599850725;
-        Tue, 07 Jun 2022 04:04:10 -0700 (PDT)
-Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k6-20020a1709067ac600b006febce7081bsm7502059ejo.163.2022.06.07.04.04.09
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/01LXbrU5z5LnyLvjVjhRw5gO2250QwVl7s1xHwA700=;
+        b=uVZ1v3hUDoS7kNsohbfoi/0Lzjvm4lfOv2KJ4T97ENwS17PGpN1Igf1n9iHCkXlVxJ
+         oCTHMNTwkccwLRKAMtIEdokLp3qdbP8RjrsFpCtcdZ3zTZfgmxmcYKnsZhf8bFJ7Ts8t
+         Lob97ghGaEIqW3GtTQEnN9E2WcqEkurXSNATsQl/KbyGnHGENM3lkcz4lDoE23BUbq4J
+         cI4KoVkH8q35ZZ8YTS1ajxnUJj7J3j1irsGV34gSRQg/dasX+DTqW2rUYM156YkYyUqL
+         JVjrroLU5rrvqUKKUSJn2XlOAScdj4AEeED77VVrB8GdwfDNz1u9JDK8zvOZ6e5rgkNe
+         becw==
+X-Gm-Message-State: AOAM533mM47+ewSU2AkVu9sbOBLRwF1wvjqmuS5byMmm71UYxtmd+NDs
+        R8ltxL94gMM4Nhdv/r8jWyndfg==
+X-Google-Smtp-Source: ABdhPJzus08UZgzKpQfSWRZXh0KYJWzP4L6nwpadyQuwOPoYoBOiGTsbLG7c7WdWfMKvsvli7OXsVA==
+X-Received: by 2002:a5d:6e07:0:b0:210:3472:c4c7 with SMTP id h7-20020a5d6e07000000b002103472c4c7mr27128795wrz.15.1654599854368;
+        Tue, 07 Jun 2022 04:04:14 -0700 (PDT)
+Received: from ?IPV6:2a00:1098:3142:14:901f:dbcb:c1e4:e4b8? ([2a00:1098:3142:14:901f:dbcb:c1e4:e4b8])
+        by smtp.gmail.com with ESMTPSA id s12-20020a05600c384c00b0039c587342d8sm2102181wmr.3.2022.06.07.04.04.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 04:04:10 -0700 (PDT)
-Message-ID: <0b6fb309-ef83-8dbb-a31f-2397906e2042@linaro.org>
-Date:   Tue, 7 Jun 2022 13:04:09 +0200
+        Tue, 07 Jun 2022 04:04:13 -0700 (PDT)
+Message-ID: <c47c42e3-1d56-5859-a6ad-976a1a3381c6@raspberrypi.com>
+Date:   Tue, 7 Jun 2022 12:04:13 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: hwmon: ti,tmp401: Drop 'items' from
- 'ti,n-factor' property
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Camel Guo <camel.guo@axis.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220606212223.1360395-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220606212223.1360395-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
+ <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com>
+ <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
+ <Yp8WBaqr+sLInNnc@kroah.com>
+From:   Phil Elwell <phil@raspberrypi.com>
+In-Reply-To: <Yp8WBaqr+sLInNnc@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 23:22, Rob Herring wrote:
-> 'ti,n-factor' is a scalar type, so 'items' should not be used as that is
-> for arrays/matrix.
+Hi Greg,
+
+On 07/06/2022 10:10, Greg KH wrote:
+> On Tue, Jun 07, 2022 at 09:47:30AM +0100, Phil Elwell wrote:
+>> Hi Jason,
+>>
+>> On 07/06/2022 09:30, Jason A. Donenfeld wrote:
+>>> Hi Phil,
+>>>
+>>> Thanks for testing this. Can you let me know if v1 of this works?
+>>>
+>>> https://lore.kernel.org/lkml/20220602212234.344394-1-Jason@zx2c4.com/
+>>>
+>>> (I'll also fashion a revert for this part of stable.)
+>>>
+>>> Jason
+>>
+>> Thanks for the quick response, but that doesn't work for me either. Let me
+>> say again that I'm on a downstream kernel (rpi-5.15.y) so this may not be a
+>> universal problem, but merging either of these fixing patches would be fatal
+>> for us.
 > 
-> A pending meta-schema change will catch future cases.
-> 
-> Fixes: bd90c5b93950 ("dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x")
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> I have reports of a "clean" 5.15.45 working just fine on a rpi.
+> Anything special in your tree that isn't upstream yet that might be
+> conflicting with this?  Any chance you can try a kernel.org release
+> instead?
 
+A clean 5.15.45 boots cleanly, whereas a downstream kernel shows the static key 
+warning (but it does go on to boot). The significant difference is that our 
+defconfigs set CONFIG_RANDOM_TRUST_BOOTLOADER=y - defining that on top of 
+multi_v7_defconfig demonstrates the issue on a clean 5.15.45. Conversely, not 
+setting that option in a downstream kernel build avoids the warning, presumably 
+because it takes much longer to accumulate the required entropy.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Phil

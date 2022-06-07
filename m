@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0F0541B16
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017365409A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377848AbiFGVmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
+        id S1350340AbiFGSKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378476AbiFGUwJ (ORCPT
+        with ESMTP id S1349955AbiFGRvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:52:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3502010C6;
-        Tue,  7 Jun 2022 11:42:19 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8693E13F432;
+        Tue,  7 Jun 2022 10:39:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9559B8239B;
-        Tue,  7 Jun 2022 18:42:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33741C385A2;
-        Tue,  7 Jun 2022 18:42:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFD4D615A7;
+        Tue,  7 Jun 2022 17:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B992EC34119;
+        Tue,  7 Jun 2022 17:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627336;
-        bh=/dvj1yLBraTRfb7jibzxDZgOea9b9knsNdoqbo1WkrI=;
+        s=korg; t=1654623500;
+        bh=n5oISyk83ja9vB3obx7iI76Zu1CIB14AI1E3u+TdMDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pDi53xCn3OrM292eNRJqGSQBCXI3X75RZndcNJQPdqAlyNMeIkCMqICefMlAiuYxA
-         R/qMxNJIO0MJXEUFNUDsgQRFrbWTjrx04IrvvrVwPiNTnMDMrU7MahgSvNOCUBVxcH
-         9Mb+LnrJDjeoNZdu0tZnvBUsvzgZSTtPwxmXV9JY=
+        b=nS0vzueQ+bYn0P+JldB6r1ULiyExhkZ87VAygqjB6Up6r/683D/gn7qbFl6r5ujqF
+         +73xEG61S/zU8ThWUuySeQ/shkcJh+4+knf/8nmAFs1YT6zMXwL4XR1kTmpwn8uQgW
+         y1Ev9SyVz+eadHWSx4QKUoUWwBosVKPF/IVNrUbM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Puyou Lu <puyou.lu@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tejun Heo <tj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.17 704/772] lib/string_helpers: fix not adding strarray to devices resource list
-Date:   Tue,  7 Jun 2022 19:04:56 +0200
-Message-Id: <20220607165009.794182134@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH 5.10 440/452] thermal/core: Fix memory leak in the error path
+Date:   Tue,  7 Jun 2022 19:04:57 +0200
+Message-Id: <20220607164921.674881284@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Puyou Lu <puyou.lu@gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-commit cd290a9839cee2f6641558877e707bd373c8f6f1 upstream.
+commit d44616c6cc3e35eea03ecfe9040edfa2b486a059 upstream.
 
-Add allocated strarray to device's resource list. This is a must to
-automatically release strarray when the device disappears.
+Fix the following error:
 
-Without this fix we have a memory leak in the few drivers which use
-devm_kasprintf_strarray().
+ smatch warnings:
+ drivers/thermal/thermal_core.c:1020 __thermal_cooling_device_register() warn: possible memory leak of 'cdev'
 
-Link: https://lkml.kernel.org/r/20220506044409.30066-1-puyou.lu@gmail.com
-Link: https://lkml.kernel.org/r/20220506073623.2679-1-puyou.lu@gmail.com
-Fixes: acdb89b6c87a ("lib/string_helpers: Introduce managed variant of kasprintf_strarray()")
-Signed-off-by: Puyou Lu <puyou.lu@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+by freeing the cdev when exiting the function in the error path.
+
+Fixes: 584837618100 ("thermal/drivers/core: Use a char pointer for the cooling device name")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20210319202257.890848-1-daniel.lezcano@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/string_helpers.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/thermal_core.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/lib/string_helpers.c
-+++ b/lib/string_helpers.c
-@@ -757,6 +757,9 @@ char **devm_kasprintf_strarray(struct de
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-+	ptr->n = n;
-+	devres_add(dev, ptr);
-+
- 	return ptr->array;
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1152,6 +1152,7 @@ out_kfree_type:
+ out_ida_remove:
+ 	ida_simple_remove(&thermal_cdev_ida, id);
+ out_kfree_cdev:
++	kfree(cdev);
+ 	return ERR_PTR(ret);
  }
- EXPORT_SYMBOL_GPL(devm_kasprintf_strarray);
+ 
 
 

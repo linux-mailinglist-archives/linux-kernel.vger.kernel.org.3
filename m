@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF1F5426D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D4B5426EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389719AbiFHAgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S1390672AbiFHBvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384899AbiFGWUs (ORCPT
+        with ESMTP id S1383129AbiFGWTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:20:48 -0400
+        Tue, 7 Jun 2022 18:19:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C08263289;
-        Tue,  7 Jun 2022 12:20:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9FD19762D;
+        Tue,  7 Jun 2022 12:20:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D41B600E1;
-        Tue,  7 Jun 2022 19:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45728C385A2;
-        Tue,  7 Jun 2022 19:20:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2204F60906;
+        Tue,  7 Jun 2022 19:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1B6C341C0;
+        Tue,  7 Jun 2022 19:20:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629632;
-        bh=Rf2BtKigmj85vqHrqvMHp6RrUnAF/AVzeXa9HlfYhMA=;
+        s=korg; t=1654629635;
+        bh=EO8JBHw8FJVtlQsdM5QRvdHxzQHvifwHotLYtOSjkqw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nwwPregZygrhB0sws5UDJ0+FPTVv6btwxsKiOlZw0upx63W7yXTSw3iwM3AiZH0B8
-         KgFL5l+FpqbRrcAmLQlHk+u+RN9WwMfdtOgwjwg1GVcw9KSXqEd432TvUz+N/+QzPP
-         17CcVGuVPR2d0eFYEdsBFP0BhXqWw8d5CBuR0ki8=
+        b=fGm1j5HzJUfR/BJAjzpGSwR4UaOFxfCrR0hgcR7F18XKmk4q7sfMaikdh3LyNZR47
+         wgyCpCEpItQSyqYBrRzvzvdQV28mZo374VYiIsqH4MxT9vHHG0hGxvC/3ZJDESa7mF
+         HYPqwyVmgFROOvliTJOD8ja8X3ElCeRZihjL7cSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.18 759/879] block: Fix potential deadlock in blk_ia_range_sysfs_show()
-Date:   Tue,  7 Jun 2022 19:04:37 +0200
-Message-Id: <20220607165024.895162554@linuxfoundation.org>
+        stable@vger.kernel.org, Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Oscar Salvador <osalvador@suse.de>,
+        Don Dutile <ddutile@redhat.com>,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.18 760/879] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
+Date:   Tue,  7 Jun 2022 19:04:38 +0200
+Message-Id: <20220607165024.924465598@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,58 +59,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
 
-commit 41e46b3c2aa24f755b2ae9ec4ce931ba5f0d8532 upstream.
+commit bbe832b9db2e1ad21522f8f0bf02775fff8a0e0e upstream.
 
-When being read, a sysfs attribute is already protected against removal
-with the kobject node active reference counter. As a result, in
-blk_ia_range_sysfs_show(), there is no need to take the queue sysfs
-lock when reading the value of a range attribute. Using the queue sysfs
-lock in this function creates a potential deadlock situation with the
-disk removal, something that a lockdep signals with a splat when the
-device is removed:
+At present, pages not in the target zone are added to cc->migratepages
+list in isolate_migratepages_block().  As a result, pages may migrate
+between nodes unintentionally.
 
-[  760.703551]  Possible unsafe locking scenario:
-[  760.703551]
-[  760.703554]        CPU0                    CPU1
-[  760.703556]        ----                    ----
-[  760.703558]   lock(&q->sysfs_lock);
-[  760.703565]                                lock(kn->active#385);
-[  760.703573]                                lock(&q->sysfs_lock);
-[  760.703579]   lock(kn->active#385);
-[  760.703587]
-[  760.703587]  *** DEADLOCK ***
+This would be a serious problem for older kernels without commit
+a984226f457f849e ("mm: memcontrol: remove the pgdata parameter of
+mem_cgroup_page_lruvec"), because it can corrupt the lru list by
+handling pages in list without holding proper lru_lock.
 
-Solve this by removing the mutex_lock()/mutex_unlock() calls from
-blk_ia_range_sysfs_show().
+Avoid returning a pfn outside the target zone in the case that it is
+not aligned with a pageblock boundary.  Otherwise
+isolate_migratepages_block() will handle pages not in the target zone.
 
-Fixes: a2247f19ee1c ("block: Add independent access ranges support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Link: https://lore.kernel.org/r/20220603021905.1441419-1-damien.lemoal@opensource.wdc.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Link: https://lkml.kernel.org/r/20220511044300.4069-1-yamamoto.rei@jp.fujitsu.com
+Fixes: 70b44595eafe ("mm, compaction: use free lists to quickly locate a migration source")
+Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Cc: Don Dutile <ddutile@redhat.com>
+Cc: Wonhyuk Yang <vvghjk1234@gmail.com>
+Cc: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-ia-ranges.c |    7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ mm/compaction.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/block/blk-ia-ranges.c
-+++ b/block/blk-ia-ranges.c
-@@ -54,13 +54,8 @@ static ssize_t blk_ia_range_sysfs_show(s
- 		container_of(attr, struct blk_ia_range_sysfs_entry, attr);
- 	struct blk_independent_access_range *iar =
- 		container_of(kobj, struct blk_independent_access_range, kobj);
--	ssize_t ret;
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -1858,6 +1858,8 @@ static unsigned long fast_find_migratebl
  
--	mutex_lock(&iar->queue->sysfs_lock);
--	ret = entry->show(iar, buf);
--	mutex_unlock(&iar->queue->sysfs_lock);
--
--	return ret;
-+	return entry->show(iar, buf);
- }
- 
- static const struct sysfs_ops blk_ia_range_sysfs_ops = {
+ 				update_fast_start_pfn(cc, free_pfn);
+ 				pfn = pageblock_start_pfn(free_pfn);
++				if (pfn < cc->zone->zone_start_pfn)
++					pfn = cc->zone->zone_start_pfn;
+ 				cc->fast_search_fail = 0;
+ 				found_block = true;
+ 				set_pageblock_skip(freepage);
 
 

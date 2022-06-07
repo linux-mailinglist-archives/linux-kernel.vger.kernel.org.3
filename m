@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003E5540C72
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD522541EE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353332AbiFGSg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S1381921AbiFGWhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351007AbiFGSGm (ORCPT
+        with ESMTP id S1378185AbiFGVYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:06:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA61344EF;
-        Tue,  7 Jun 2022 10:47:45 -0700 (PDT)
+        Tue, 7 Jun 2022 17:24:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB98B22737C;
+        Tue,  7 Jun 2022 12:01:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C11C76171B;
-        Tue,  7 Jun 2022 17:47:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18D8C385A5;
-        Tue,  7 Jun 2022 17:47:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56CB1B822C0;
+        Tue,  7 Jun 2022 19:01:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4BAC385A2;
+        Tue,  7 Jun 2022 19:01:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624065;
-        bh=wlau1dshHNRQvKJUZTXil8xlx3EVVAG/4k/WKwapXEA=;
+        s=korg; t=1654628462;
+        bh=FVrfP5okOYiFp2PdmF+vwOD3Sro7fum2Xpfuzlzxw18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q4mfUo1mj5q/vNL1SVAqHiGUp0+wvTYz3vx6d0sM6SUj1hCscbMzSGC3EsFK/hvXv
-         95xUbP52aQcaxUORahqmzwO/PU+xQGSK2WGJ2BfKaZRcMmh+E3wAGIIIZ7zJ0CdBA5
-         19IjEZJtKG0Tfxz2qevXzI1q2FIieHCT8mjIJNdE=
+        b=PHeUAyP46V5CGp7kNUHSJUXO3nFnODjfxBCHFgDPOmvbHpEt1IM35h0F42xx4yYvY
+         2sYNXJimSwvB7i7pmEOVhO+9MauAYK+IlUTfxYwOshi9HvUpH2dWebg7rHWvQ5DoAt
+         fTmVI2iVAMzdBGq73UucotuKQj0D8kulzJ1a5w6M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Marek Vasut <marex@denx.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 192/667] drm: bridge: icn6211: Fix HFP_HSW_HBP_HI and HFP_MIN handling
+Subject: [PATCH 5.18 339/879] media: i2c: max9286: fix kernel oops when removing module
 Date:   Tue,  7 Jun 2022 18:57:37 +0200
-Message-Id: <20220607164940.561410840@linuxfoundation.org>
+Message-Id: <20220607165012.698519167@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,92 +58,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
 
-[ Upstream commit c0ff7a649d62105a9308cc3ac36e52a4669d9cb4 ]
+[ Upstream commit 365ab7ebc24eebb42b9e020aeb440d51af8960cd ]
 
-The HFP_HSW_HBP_HI register must be programmed with 2 LSbits of each
-Horizontal Front Porch/Sync/Back Porch. Currently the driver programs
-this register to 0, which breaks displays with either value above 255.
+When removing the max9286 module we get a kernel oops:
 
-The HFP_MIN register must be set to the same value as HFP_LI, otherwise
-there is visible image distortion, usually in the form of missing lines
-at the bottom of the panel.
+Unable to handle kernel paging request at virtual address 000000aa00000094
+Mem abort info:
+  ESR = 0x96000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000880d85000
+[000000aa00000094] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Modules linked in: fsl_jr_uio caam_jr rng_core libdes caamkeyblob_desc caamhash_desc caamalg_desc crypto_engine max9271 authenc crct10dif_ce mxc_jpeg_encdec
+CPU: 2 PID: 713 Comm: rmmod Tainted: G         C        5.15.5-00057-gaebcd29c8ed7-dirty #5
+Hardware name: Freescale i.MX8QXP MEK (DT)
+pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : i2c_mux_del_adapters+0x24/0xf0
+lr : max9286_remove+0x28/0xd0 [max9286]
+sp : ffff800013a9bbf0
+x29: ffff800013a9bbf0 x28: ffff00080b6da940 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+x23: ffff000801a5b970 x22: ffff0008048b0890 x21: ffff800009297000
+x20: ffff0008048b0f70 x19: 000000aa00000064 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000014 x13: 0000000000000000 x12: ffff000802da49e8
+x11: ffff000802051918 x10: ffff000802da4920 x9 : ffff000800030098
+x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+x5 : 8080808000000000 x4 : 0000000000000000 x3 : 0000000000000000
+x2 : ffffffffffffffff x1 : ffff00080b6da940 x0 : 0000000000000000
+Call trace:
+ i2c_mux_del_adapters+0x24/0xf0
+ max9286_remove+0x28/0xd0 [max9286]
+ i2c_device_remove+0x40/0x110
+ __device_release_driver+0x188/0x234
+ driver_detach+0xc4/0x150
+ bus_remove_driver+0x60/0xe0
+ driver_unregister+0x34/0x64
+ i2c_del_driver+0x58/0xa0
+ max9286_i2c_driver_exit+0x1c/0x490 [max9286]
+ __arm64_sys_delete_module+0x194/0x260
+ invoke_syscall+0x48/0x114
+ el0_svc_common.constprop.0+0xd4/0xfc
+ do_el0_svc+0x2c/0x94
+ el0_svc+0x28/0x80
+ el0t_64_sync_handler+0xa8/0x130
+ el0t_64_sync+0x1a0/0x1a4
 
-Fix this by correctly programming the HFP_HSW_HBP_HI and HFP_MIN registers.
+The Oops happens because the I2C client data does not point to
+max9286_priv anymore but to v4l2_subdev. The change happened in
+max9286_init() which calls v4l2_i2c_subdev_init() later on...
 
-Acked-by: Maxime Ripard <maxime@cerno.tech>
-Fixes: ce517f18944e3 ("drm: bridge: Add Chipone ICN6211 MIPI-DSI to RGB bridge")
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Maxime Ripard <maxime@cerno.tech>
-Cc: Robert Foss <robert.foss@linaro.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-To: dri-devel@lists.freedesktop.org
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220331150509.9838-3-marex@denx.de
+Besides fixing the max9286_remove() function, remove the call to
+i2c_set_clientdata() in max9286_probe(), to avoid confusion, and make
+the necessary changes to max9286_init() so that it doesn't have to use
+i2c_get_clientdata() in order to fetch the pointer to priv.
+
+Fixes: 66d8c9d2422d ("media: i2c: Add MAX9286 driver")
+Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/chipone-icn6211.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ drivers/media/i2c/max9286.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/chipone-icn6211.c b/drivers/gpu/drm/bridge/chipone-icn6211.c
-index eb26615b2993..d7eedf35e841 100644
---- a/drivers/gpu/drm/bridge/chipone-icn6211.c
-+++ b/drivers/gpu/drm/bridge/chipone-icn6211.c
-@@ -34,6 +34,9 @@
- #define HSYNC_LI		0x24
- #define HBP_LI			0x25
- #define HFP_HSW_HBP_HI		0x26
-+#define HFP_HSW_HBP_HI_HFP(n)		(((n) & 0x300) >> 4)
-+#define HFP_HSW_HBP_HI_HS(n)		(((n) & 0x300) >> 6)
-+#define HFP_HSW_HBP_HI_HBP(n)		(((n) & 0x300) >> 8)
- #define VFP			0x27
- #define VSYNC			0x28
- #define VBP			0x29
-@@ -165,6 +168,7 @@ static void chipone_enable(struct drm_bridge *bridge)
+diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
+index d2a4915ed9f7..3684faa72253 100644
+--- a/drivers/media/i2c/max9286.c
++++ b/drivers/media/i2c/max9286.c
+@@ -1147,22 +1147,18 @@ static int max9286_poc_enable(struct max9286_priv *priv, bool enable)
+ 	return ret;
+ }
+ 
+-static int max9286_init(struct device *dev)
++static int max9286_init(struct max9286_priv *priv)
  {
- 	struct chipone *icn = bridge_to_chipone(bridge);
- 	struct drm_display_mode *mode = bridge_to_mode(bridge);
-+	u16 hfp, hbp, hsync;
+-	struct max9286_priv *priv;
+-	struct i2c_client *client;
++	struct i2c_client *client = priv->client;
+ 	int ret;
  
- 	ICN6211_DSI(icn, MIPI_CFG_PW, MIPI_CFG_PW_CONFIG_DSI);
- 
-@@ -180,13 +184,18 @@ static void chipone_enable(struct drm_bridge *bridge)
- 		    ((mode->hdisplay >> 8) & 0xf) |
- 		    (((mode->vdisplay >> 8) & 0xf) << 4));
- 
--	ICN6211_DSI(icn, HFP_LI, mode->hsync_start - mode->hdisplay);
-+	hfp = mode->hsync_start - mode->hdisplay;
-+	hsync = mode->hsync_end - mode->hsync_start;
-+	hbp = mode->htotal - mode->hsync_end;
- 
--	ICN6211_DSI(icn, HSYNC_LI, mode->hsync_end - mode->hsync_start);
+-	client = to_i2c_client(dev);
+-	priv = i2c_get_clientdata(client);
 -
--	ICN6211_DSI(icn, HBP_LI, mode->htotal - mode->hsync_end);
--
--	ICN6211_DSI(icn, HFP_HSW_HBP_HI, 0x00);
-+	ICN6211_DSI(icn, HFP_LI, hfp & 0xff);
-+	ICN6211_DSI(icn, HSYNC_LI, hsync & 0xff);
-+	ICN6211_DSI(icn, HBP_LI, hbp & 0xff);
-+	/* Top two bits of Horizontal Front porch/Sync/Back porch */
-+	ICN6211_DSI(icn, HFP_HSW_HBP_HI,
-+		    HFP_HSW_HBP_HI_HFP(hfp) |
-+		    HFP_HSW_HBP_HI_HS(hsync) |
-+		    HFP_HSW_HBP_HI_HBP(hbp));
+ 	ret = max9286_poc_enable(priv, true);
+ 	if (ret)
+ 		return ret;
  
- 	ICN6211_DSI(icn, VFP, mode->vsync_start - mode->vdisplay);
+ 	ret = max9286_setup(priv);
+ 	if (ret) {
+-		dev_err(dev, "Unable to setup max9286\n");
++		dev_err(&client->dev, "Unable to setup max9286\n");
+ 		goto err_poc_disable;
+ 	}
  
-@@ -196,7 +205,7 @@ static void chipone_enable(struct drm_bridge *bridge)
+@@ -1172,13 +1168,13 @@ static int max9286_init(struct device *dev)
+ 	 */
+ 	ret = max9286_v4l2_register(priv);
+ 	if (ret) {
+-		dev_err(dev, "Failed to register with V4L2\n");
++		dev_err(&client->dev, "Failed to register with V4L2\n");
+ 		goto err_poc_disable;
+ 	}
  
- 	/* dsi specific sequence */
- 	ICN6211_DSI(icn, SYNC_EVENT_DLY, 0x80);
--	ICN6211_DSI(icn, HFP_MIN, 0x28);
-+	ICN6211_DSI(icn, HFP_MIN, hfp & 0xff);
- 	ICN6211_DSI(icn, MIPI_PD_CK_LANE, 0xa0);
- 	ICN6211_DSI(icn, PLL_CTRL(12), 0xff);
- 	ICN6211_DSI(icn, BIST_POL, BIST_POL_DE_POL);
+ 	ret = max9286_i2c_mux_init(priv);
+ 	if (ret) {
+-		dev_err(dev, "Unable to initialize I2C multiplexer\n");
++		dev_err(&client->dev, "Unable to initialize I2C multiplexer\n");
+ 		goto err_v4l2_register;
+ 	}
+ 
+@@ -1333,7 +1329,6 @@ static int max9286_probe(struct i2c_client *client)
+ 	mutex_init(&priv->mutex);
+ 
+ 	priv->client = client;
+-	i2c_set_clientdata(client, priv);
+ 
+ 	priv->gpiod_pwdn = devm_gpiod_get_optional(&client->dev, "enable",
+ 						   GPIOD_OUT_HIGH);
+@@ -1369,7 +1364,7 @@ static int max9286_probe(struct i2c_client *client)
+ 	if (ret)
+ 		goto err_powerdown;
+ 
+-	ret = max9286_init(&client->dev);
++	ret = max9286_init(priv);
+ 	if (ret < 0)
+ 		goto err_cleanup_dt;
+ 
+@@ -1385,7 +1380,7 @@ static int max9286_probe(struct i2c_client *client)
+ 
+ static int max9286_remove(struct i2c_client *client)
+ {
+-	struct max9286_priv *priv = i2c_get_clientdata(client);
++	struct max9286_priv *priv = sd_to_max9286(i2c_get_clientdata(client));
+ 
+ 	i2c_mux_del_adapters(priv->mux);
+ 
 -- 
 2.35.1
 

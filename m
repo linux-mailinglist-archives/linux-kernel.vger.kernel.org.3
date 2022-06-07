@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AB9541CE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69676541CC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382836AbiFGWEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S1382653AbiFGWDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378831AbiFGVBv (ORCPT
+        with ESMTP id S1378839AbiFGVBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:01:51 -0400
+        Tue, 7 Jun 2022 17:01:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D0C20ED6E;
-        Tue,  7 Jun 2022 11:45:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30BE20ED78;
+        Tue,  7 Jun 2022 11:45:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79B35B822C0;
-        Tue,  7 Jun 2022 18:45:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED857C385A2;
-        Tue,  7 Jun 2022 18:45:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BE87B82018;
+        Tue,  7 Jun 2022 18:45:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F68C385A2;
+        Tue,  7 Jun 2022 18:45:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627543;
-        bh=rcBjoiXgO+z+OvXdXoESTU8m02RbV16e9JWR3eqW3Y8=;
+        s=korg; t=1654627546;
+        bh=VWcjbaWEKU8jM7eBzPIHpVL4HsBF647GA3mic0FDKcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K4PxKF+42Zqk2L8Z10unwjjb5TpLHDJKjBsE193liOMwZ3VHFXM9SWbHAkUK64VTu
-         aVNumWTmoCGbBDpH2cFbR9lvUFhiJAxeJHPY9pqIxkcOgQFvb+gUX8p6al05a9Oo64
-         FgLM+6FAxMY4D7g5/mbJrzzLZ7Qt0Su8oRh5gFSM=
+        b=a8qFUc3k+CtLLG57l2/SDFnzJqQO/jR4Hl9DLAZaEYb8MyeZwU6F8btogQAr8R5lx
+         Ocr/EwpsujUiwEfHrCa+FhJ4yF8lt5YF2X+xgDNPmnD8/s6SGUujxFYFh7sWkemeQs
+         uDy3GS0hEeS8ec1IPsmO3O+8Jzj3hTsnciKhAMJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kathiravan T <quic_kathirav@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.17 740/772] arm64: dts: qcom: ipq8074: fix the sleep clock frequency
-Date:   Tue,  7 Jun 2022 19:05:32 +0200
-Message-Id: <20220607165010.841134537@linuxfoundation.org>
+        stable@vger.kernel.org, Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.17 741/772] arm64: tegra: Add missing DFLL reset on Tegra210
+Date:   Tue,  7 Jun 2022 19:05:33 +0200
+Message-Id: <20220607165010.869515890@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -54,33 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kathiravan T <quic_kathirav@quicinc.com>
+From: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
 
-commit f607dd767f5d6800ffbdce5b99ba81763b023781 upstream.
+commit 0017f2c856e21bb900be88469e15dac4f41f4065 upstream.
 
-Sleep clock frequency should be 32768Hz. Lets fix it.
+Commit 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling
+clocks") removed deassertion of reset lines when enabling peripheral
+clocks. This breaks the initialization of the DFLL driver which relied
+on this behaviour.
+
+In order to be able to fix this, add the corresponding reset to the DT.
+Tested on Google Pixel C.
 
 Cc: stable@vger.kernel.org
-Fixes: 41dac73e243d ("arm64: dts: Add ipq8074 SoC and HK01 board support")
-Link: https://lore.kernel.org/all/e2a447f8-6024-0369-f698-2027b6edcf9e@codeaurora.org/
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1644581655-11568-1-git-send-email-quic_kathirav@quicinc.com
+Fixes: 4782c0a5dd88 ("clk: tegra: Don't deassert reset on enabling clocks")
+Signed-off-by: Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/qcom/ipq8074.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -13,7 +13,7 @@
- 	clocks {
- 		sleep_clk: sleep_clk {
- 			compatible = "fixed-clock";
--			clock-frequency = <32000>;
-+			clock-frequency = <32768>;
- 			#clock-cells = <0>;
- 		};
- 
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -1366,8 +1366,9 @@
+ 			 <&tegra_car TEGRA210_CLK_DFLL_REF>,
+ 			 <&tegra_car TEGRA210_CLK_I2C5>;
+ 		clock-names = "soc", "ref", "i2c";
+-		resets = <&tegra_car TEGRA210_RST_DFLL_DVCO>;
+-		reset-names = "dvco";
++		resets = <&tegra_car TEGRA210_RST_DFLL_DVCO>,
++			 <&tegra_car 155>;
++		reset-names = "dvco", "dfll";
+ 		#clock-cells = <0>;
+ 		clock-output-names = "dfllCPU_out";
+ 		status = "disabled";
 
 

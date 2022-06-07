@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675BA541FB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB2A541FB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385735AbiFGWqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S1385770AbiFGWqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381123AbiFGVgc (ORCPT
+        with ESMTP id S1381141AbiFGVgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:36:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0971522FE7A;
-        Tue,  7 Jun 2022 12:04:55 -0700 (PDT)
+        Tue, 7 Jun 2022 17:36:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1899814087F;
+        Tue,  7 Jun 2022 12:04:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5413B8220B;
-        Tue,  7 Jun 2022 19:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0848DC385A2;
-        Tue,  7 Jun 2022 19:04:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85961B823B0;
+        Tue,  7 Jun 2022 19:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DDCC385A2;
+        Tue,  7 Jun 2022 19:04:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628692;
-        bh=kF4kMchGAIVVerdQTWUJCIU85/BMwDOMfqbIBpFUo7w=;
+        s=korg; t=1654628695;
+        bh=ldGhd7bSBWMTDEq9RvkJwTdry4k2qspt5cCyIwrHyVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eiU8clSXklayVr4frDpLwqiY8jckIWoHcIYzNy1YvpErFN/wzk5j+h0BL8dPNiZGP
-         YYYTfNlQ6LfkEZ/9tUKEkW3fov9uwXM42JiX+vAULl5S/RbnOu62rVyOO5ftmTwPOB
-         TcNw87bsDNYfoZlkKtZg2ani0H9Oq9qBhtrvTjWo=
+        b=odDAOy5Q+GORoSe/DdlY2JYPaqLZa+DHLsl+asNtyackLQL4r2uFCILI2nyC30fZz
+         W0KPbSbRdXAClePrh5z6gqz3VzIDQg1yL3UDUCfGn2rxC/UNs29/hmk8VbOXkCZtRV
+         T2vcjbn0WQcjPwdlMsXVI3QaOdUcGVSTXtauQjeI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark ONeill <mao@tumblingdice.co.uk>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 422/879] dma-direct: dont fail on highmem CMA pages in dma_direct_alloc_pages
-Date:   Tue,  7 Jun 2022 18:59:00 +0200
-Message-Id: <20220607165015.114227959@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 423/879] ASoC: samsung: Fix refcount leak in aries_audio_probe
+Date:   Tue,  7 Jun 2022 18:59:01 +0200
+Message-Id: <20220607165015.144184549@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,91 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 92826e967535db2eb117db227b1191aaf98e4bb3 ]
+[ Upstream commit bf4a9b2467b775717d0e9034ad916888e19713a3 ]
 
-When dma_direct_alloc_pages encounters a highmem page it just gives up
-currently.  But what we really should do is to try memory using the
-page allocator instead - without this platforms with a global highmem
-CMA pool will fail all dma_alloc_pages allocations.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+If extcon_find_edev_by_node() fails, it doesn't call of_node_put()
+Calling of_node_put() after extcon_find_edev_by_node() to fix this.
 
-Fixes: efa70f2fdc84 ("dma-mapping: add a new dma_alloc_pages API")
-Reported-by: Mark O'Neill <mao@tumblingdice.co.uk>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 7a3a7671fa6c ("ASoC: samsung: Add driver for Aries boards")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220512043828.496-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/direct.c | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+ sound/soc/samsung/aries_wm8994.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index 9743c6ccce1a..3e7f4aab740e 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -115,7 +115,7 @@ static struct page *dma_direct_alloc_swiotlb(struct device *dev, size_t size)
- }
+diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
+index 5265e546b124..83acbe57b248 100644
+--- a/sound/soc/samsung/aries_wm8994.c
++++ b/sound/soc/samsung/aries_wm8994.c
+@@ -585,10 +585,10 @@ static int aries_audio_probe(struct platform_device *pdev)
  
- static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
--		gfp_t gfp)
-+		gfp_t gfp, bool allow_highmem)
- {
- 	int node = dev_to_node(dev);
- 	struct page *page = NULL;
-@@ -129,9 +129,12 @@ static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
- 	gfp |= dma_direct_optimal_gfp_mask(dev, dev->coherent_dma_mask,
- 					   &phys_limit);
- 	page = dma_alloc_contiguous(dev, size, gfp);
--	if (page && !dma_coherent_ok(dev, page_to_phys(page), size)) {
--		dma_free_contiguous(dev, page, size);
--		page = NULL;
-+	if (page) {
-+		if (!dma_coherent_ok(dev, page_to_phys(page), size) ||
-+		    (!allow_highmem && PageHighMem(page))) {
-+			dma_free_contiguous(dev, page, size);
-+			page = NULL;
-+		}
- 	}
- again:
- 	if (!page)
-@@ -189,7 +192,7 @@ static void *dma_direct_alloc_no_mapping(struct device *dev, size_t size,
- {
- 	struct page *page;
+ 	extcon_np = of_parse_phandle(np, "extcon", 0);
+ 	priv->usb_extcon = extcon_find_edev_by_node(extcon_np);
++	of_node_put(extcon_np);
+ 	if (IS_ERR(priv->usb_extcon))
+ 		return dev_err_probe(dev, PTR_ERR(priv->usb_extcon),
+ 				     "Failed to get extcon device");
+-	of_node_put(extcon_np);
  
--	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
-+	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
- 	if (!page)
- 		return NULL;
- 
-@@ -262,7 +265,7 @@ void *dma_direct_alloc(struct device *dev, size_t size,
- 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
- 
- 	/* we always manually zero the memory once we are done */
--	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO);
-+	page = __dma_direct_alloc_pages(dev, size, gfp & ~__GFP_ZERO, true);
- 	if (!page)
- 		return NULL;
- 
-@@ -370,19 +373,9 @@ struct page *dma_direct_alloc_pages(struct device *dev, size_t size,
- 	if (force_dma_unencrypted(dev) && dma_direct_use_pool(dev, gfp))
- 		return dma_direct_alloc_from_pool(dev, size, dma_handle, gfp);
- 
--	page = __dma_direct_alloc_pages(dev, size, gfp);
-+	page = __dma_direct_alloc_pages(dev, size, gfp, false);
- 	if (!page)
- 		return NULL;
--	if (PageHighMem(page)) {
--		/*
--		 * Depending on the cma= arguments and per-arch setup
--		 * dma_alloc_contiguous could return highmem pages.
--		 * Without remapping there is no way to return them here,
--		 * so log an error and fail.
--		 */
--		dev_info(dev, "Rejecting highmem page from CMA.\n");
--		goto out_free_pages;
--	}
- 
- 	ret = page_address(page);
- 	if (dma_set_decrypted(dev, ret, size))
+ 	priv->adc = devm_iio_channel_get(dev, "headset-detect");
+ 	if (IS_ERR(priv->adc))
 -- 
 2.35.1
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F96D54250E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AEC5422BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391178AbiFHBw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
+        id S233172AbiFHBWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384359AbiFGVy3 (ORCPT
+        with ESMTP id S1382646AbiFGV6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:54:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B224ACAA;
-        Tue,  7 Jun 2022 12:13:28 -0700 (PDT)
+        Tue, 7 Jun 2022 17:58:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBFB19320D;
+        Tue,  7 Jun 2022 12:14:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1932618DF;
-        Tue,  7 Jun 2022 19:13:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0DDEC385A2;
-        Tue,  7 Jun 2022 19:13:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AFF3618EC;
+        Tue,  7 Jun 2022 19:13:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65925C385A2;
+        Tue,  7 Jun 2022 19:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629208;
-        bh=4nRfRgqCNmfZw/yGgV5GDkWCujYWgz6MdPLZdP8DLTc=;
+        s=korg; t=1654629210;
+        bh=RSylWBOT06Wdk23LGMXkHUcaqoN3WSYyyZJD3MPQ8lQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GB2eYzEtyjiYj+wVB/22uzcYg6sAqycdlRlu/17bWvrbe+8DO7gI9veRl+Mt03T/j
-         4NlZtLjnW27qtefKqAMFG9LnPVCdOQDTcBC6AkyHJvM6U1x+ml0r5yOH9VB4ui2Pg5
-         Upiek8VZMO1vkdRrU3e6RUkacdYabhsfweAbto4s=
+        b=Z/ZTYw3bFDAV2g4HwP+zv0tR/tVjBKf2Fx199R7TiQmZ4eFw0Ykyy38X/vqFkpvHe
+         Hi6dpMCpe8n/2ug122evO2gysxGr2m//n3POhkRBmEQwqBUnvvVTIeZ+TbDWdVndBa
+         sPHnWVJERPWEMB0mRNVx3uPYHe0F5nTwMsk35q9I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Zhbanov <izh1979@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Yangyang Li <liyangyang20@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 608/879] powerpc/4xx/cpm: Fix return value of __setup() handler
-Date:   Tue,  7 Jun 2022 19:02:06 +0200
-Message-Id: <20220607165020.497941831@linuxfoundation.org>
+Subject: [PATCH 5.18 609/879] RDMA/hns: Add the detection for CMDQ status in the device initialization process
+Date:   Tue,  7 Jun 2022 19:02:07 +0200
+Message-Id: <20220607165020.527312085@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,42 +56,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Yangyang Li <liyangyang20@huawei.com>
 
-[ Upstream commit 5bb99fd4090fe1acfdb90a97993fcda7f8f5a3d6 ]
+[ Upstream commit e8ea058edc2b225a68b307057a65599625daaebf ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
+CMDQ may fail during HNS ROCEE initialization. The following is the log
+when the execution fails:
 
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings.
+  hns3 0000:bd:00.2: In reset process RoCE client reinit.
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 839
+  hns3 0000:bd:00.2 hns_2: failed to set gid, ret = -11!
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 839
+  <...>
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 839
+  hns3 0000:bd:00.2: CMDQ move tail from 840 to 0
+  hns3 0000:bd:00.2: [cmd]token 14e mailbox 20 timeout.
+  hns3 0000:bd:00.2 hns_2: set HEM step 0 failed!
+  hns3 0000:bd:00.2 hns_2: set HEM address to HW failed!
+  hns3 0000:bd:00.2 hns_2: failed to alloc mtpt, ret = -16.
+  infiniband hns_2: Couldn't create ib_mad PD
+  infiniband hns_2: Couldn't open port 1
+  hns3 0000:bd:00.2: Reset done, RoCE client reinit finished.
 
-Also, error return codes don't mean anything to obsolete_checksetup() --
-only non-zero (usually 1) or zero. So return 1 from cpm_powersave_off().
+However, even if ib_mad client registration failed, ib_register_device()
+still returns success to the driver.
 
-Fixes: d164f6d4f910 ("powerpc/4xx: Add suspend and idle support")
-Reported-by: Igor Zhbanov <izh1979@gmail.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220502192941.20955-1-rdunlap@infradead.org
+In the device initialization process, CMDQ execution fails because HW/FW
+is abnormal. Therefore, if CMDQ fails, the initialization function should
+set CMDQ to a fatal error state and return a failure to the caller.
+
+Fixes: 9a4435375cd1 ("IB/hns: Add driver files for hns RoCE driver")
+Link: https://lore.kernel.org/r/20220429093104.26687-1-liangwenpeng@huawei.com
+Signed-off-by: Yangyang Li <liyangyang20@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/4xx/cpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/hw/hns/hns_roce_device.h |  6 ++++++
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c  | 21 +++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/arch/powerpc/platforms/4xx/cpm.c b/arch/powerpc/platforms/4xx/cpm.c
-index 2571841625a2..1d3bc35ee1a7 100644
---- a/arch/powerpc/platforms/4xx/cpm.c
-+++ b/arch/powerpc/platforms/4xx/cpm.c
-@@ -327,6 +327,6 @@ late_initcall(cpm_init);
- static int __init cpm_powersave_off(char *arg)
- {
- 	cpm.powersave_off = 1;
--	return 0;
-+	return 1;
+diff --git a/drivers/infiniband/hw/hns/hns_roce_device.h b/drivers/infiniband/hw/hns/hns_roce_device.h
+index 3083d6db1d68..8604d16db8c4 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_device.h
++++ b/drivers/infiniband/hw/hns/hns_roce_device.h
+@@ -535,6 +535,11 @@ struct hns_roce_cmd_context {
+ 	u16			busy;
+ };
+ 
++enum hns_roce_cmdq_state {
++	HNS_ROCE_CMDQ_STATE_NORMAL,
++	HNS_ROCE_CMDQ_STATE_FATAL_ERR,
++};
++
+ struct hns_roce_cmdq {
+ 	struct dma_pool		*pool;
+ 	struct semaphore	poll_sem;
+@@ -554,6 +559,7 @@ struct hns_roce_cmdq {
+ 	 * close device, switch into poll mode(non event mode)
+ 	 */
+ 	u8			use_events;
++	enum hns_roce_cmdq_state state;
+ };
+ 
+ struct hns_roce_cmd_mailbox {
+diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+index 2b0cef17ad45..1946ad8410cc 100644
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+@@ -1265,6 +1265,16 @@ static int hns_roce_cmq_csq_done(struct hns_roce_dev *hr_dev)
+ 	return tail == priv->cmq.csq.head;
  }
- __setup("powersave=off", cpm_powersave_off);
+ 
++static void update_cmdq_status(struct hns_roce_dev *hr_dev)
++{
++	struct hns_roce_v2_priv *priv = hr_dev->priv;
++	struct hnae3_handle *handle = priv->handle;
++
++	if (handle->rinfo.reset_state == HNS_ROCE_STATE_RST_INIT ||
++	    handle->rinfo.instance_state == HNS_ROCE_STATE_INIT)
++		hr_dev->cmd.state = HNS_ROCE_CMDQ_STATE_FATAL_ERR;
++}
++
+ static int __hns_roce_cmq_send(struct hns_roce_dev *hr_dev,
+ 			       struct hns_roce_cmq_desc *desc, int num)
+ {
+@@ -1318,6 +1328,8 @@ static int __hns_roce_cmq_send(struct hns_roce_dev *hr_dev,
+ 			 csq->head, tail);
+ 		csq->head = tail;
+ 
++		update_cmdq_status(hr_dev);
++
+ 		ret = -EAGAIN;
+ 	}
+ 
+@@ -1332,6 +1344,9 @@ static int hns_roce_cmq_send(struct hns_roce_dev *hr_dev,
+ 	bool busy;
+ 	int ret;
+ 
++	if (hr_dev->cmd.state == HNS_ROCE_CMDQ_STATE_FATAL_ERR)
++		return -EIO;
++
+ 	if (!v2_chk_mbox_is_avail(hr_dev, &busy))
+ 		return busy ? -EBUSY : 0;
+ 
+@@ -1528,6 +1543,9 @@ static void hns_roce_function_clear(struct hns_roce_dev *hr_dev)
+ {
+ 	int i;
+ 
++	if (hr_dev->cmd.state == HNS_ROCE_CMDQ_STATE_FATAL_ERR)
++		return;
++
+ 	for (i = hr_dev->func_num - 1; i >= 0; i--) {
+ 		__hns_roce_function_clear(hr_dev, i);
+ 		if (i != 0)
+@@ -3000,6 +3018,9 @@ static int v2_wait_mbox_complete(struct hns_roce_dev *hr_dev, u32 timeout,
+ 	mb_st = (struct hns_roce_mbox_status *)desc.data;
+ 	end = msecs_to_jiffies(timeout) + jiffies;
+ 	while (v2_chk_mbox_is_avail(hr_dev, &busy)) {
++		if (hr_dev->cmd.state == HNS_ROCE_CMDQ_STATE_FATAL_ERR)
++			return -EIO;
++
+ 		status = 0;
+ 		hns_roce_cmq_setup_basic_desc(&desc, HNS_ROCE_OPC_QUERY_MB_ST,
+ 					      true);
 -- 
 2.35.1
 

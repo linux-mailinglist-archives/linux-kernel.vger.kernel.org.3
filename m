@@ -2,196 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E429F53F3E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 04:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B910E53F3E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 04:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbiFGCUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 22:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S235847AbiFGC3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 22:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiFGCUs (ORCPT
+        with ESMTP id S233284AbiFGC3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 22:20:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE83811A0D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 19:20:46 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LHDbb59dDzpW2r;
-        Tue,  7 Jun 2022 10:20:27 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 10:20:44 +0800
-Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
- PageMovable check
-To:     David Hildenbrand <david@redhat.com>
-CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
-        <cl@linux.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
-        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>,
-        Minchan Kim <minchan@kernel.org>
-References: <20220425132723.34824-1-linmiaohe@huawei.com>
- <20220425132723.34824-3-linmiaohe@huawei.com>
- <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
- <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
- <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
- <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
- <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
- <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
- <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
- <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
- <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
- <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
- <f6eb98ae-965b-d705-6f7d-c2ee69ce5141@redhat.com>
- <a96fab6c-f986-797f-aeb1-5fb8a1b5a4b8@huawei.com>
- <059fe8fe-bd89-477f-2430-277bb738525b@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4b13e16e-1b66-d49a-da0b-7b29c0be8ace@huawei.com>
-Date:   Tue, 7 Jun 2022 10:20:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 6 Jun 2022 22:29:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F398A32D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 19:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654568981; x=1686104981;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v5oXcANHyW89S52EIMm3FhyHqq8xqZN2FZuxdjut53o=;
+  b=H8+WEODbnpk3jhUv/W/eIpk1YbC92syAcdSOvcVRis/YrDeusFwl/VLv
+   oYqrs08AJjvlnK/eevTmuy+yfOgtwza8owv/sw7Rk8kC0mk6L254H8xbl
+   uBoBjnTu2xZBigDzlz8zSWgYlFYjktOOZU1oxfDf1/UvL1FPnjdlkcI2n
+   AiE4Pt2atRTqdLbFWZP4mv/YKeMhD9EZXkL5GBsx1Z9gbmmsQBe3eTOCY
+   0Gq0XWxSOhYjqH3gTSr3SsfHdLtbQI47O/RKktMT/DgMF+w38wOg6ZEtc
+   aRHOSJsHYi+PgnU2x6IE4W4RCb+ULT6SZ0xDL9QqXuLoDZzP2WkdLUc5Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10370"; a="275479029"
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="275479029"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 19:29:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,282,1647327600"; 
+   d="scan'208";a="532419121"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 06 Jun 2022 19:29:38 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nyOyP-000DG3-Kw;
+        Tue, 07 Jun 2022 02:29:37 +0000
+Date:   Tue, 7 Jun 2022 10:28:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: drivers/gpu/drm/drm_atomic.c:1670:33: error: variable 'obj' set but
+ not used
+Message-ID: <202206071049.pofHsRih-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <059fe8fe-bd89-477f-2430-277bb738525b@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/2 16:47, David Hildenbrand wrote:
-> On 02.06.22 09:40, Miaohe Lin wrote:
->> On 2022/6/1 18:31, David Hildenbrand wrote:
->>> On 31.05.22 14:37, Miaohe Lin wrote:
->>>> On 2022/5/31 19:59, David Hildenbrand wrote:
->>>>> Sorry for the late reply, was on vacation.
->>>>
->>>> That's all right. Hope you have a great time. ;)
->>>>
->>>>>
->>>>>>>>
->>>>>>>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
->>>>>>>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
->>>>>>>> this code block works. Or am I miss something again?
->>>>>>>
->>>>>>> Let's assume the following: page as freed by the owner and we enter
->>>>>>> unmap_and_move().
->>>>>>>
->>>>>>>
->>>>>>> #1: enter unmap_and_move() // page_count is 1
->>>>>>> #2: enter isolate_movable_page() // page_count is 1
->>>>>>> #2: get_page_unless_zero() // page_count is now 2
->>>>>>> #1: if (page_count(page) == 1) { // does not trigger
->>>>>>> #2: put_page(page); // page_count is now 1
->>>>>>> #1: put_page(page); // page_count is now 0 -> freed
->>>>>>>
->>>>>>>
->>>>>>> #1 will trigger __put_page() -> __put_single_page() ->
->>>>>>> __page_cache_release() will not clear the flags because it's not an LRU
->>>>>>> page at that point in time, right (-> isolated)?
->>>>>>
->>>>>> Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
->>>>>> set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
->>>>>> PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
->>>>>> about it. But it seems this is never witnessed?
->>>>>
->>>>> Maybe
->>>>>
->>>>> a) we were lucky so far and didn't trigger it
->>>>> b) the whole code block is dead code because we are missing something
->>>>> c) we are missing something else :)
->>>>
->>>> I think I found the things we missed in another email [1].
->>>> [1]: https://lore.kernel.org/all/948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com/
->>>>
->>>> Paste the main content of [1] here:
->>>>
->>>> "
->>>> There are 3 cases in unmap_and_move:
->>>>
->>>> 1.page is freed through "if (page_count(page) == 1)" code block. This works
->>>> as PG_active and PG_unevictable are cleared here.
->>>>
->>>> 2. Failed to migrate the page. The page won't be release so we don't care about it.
->>>
->>> Right, page is un-isolated.
->>>
->>>>
->>>> 3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
->>>> via folio_migrate_flags():
->>>>
->>>> 	if (folio_test_clear_active(folio)) {
->>>> 		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
->>>> 		folio_set_active(newfolio);
->>>> 	} else if (folio_test_clear_unevictable(folio))
->>>> 		folio_set_unevictable(newfolio);
->>>
->>> Right.
->>>
->>>>
->>>> For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
->>>> It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
->>>> and PG_unevictable.
->>>> "
->>>> Or Am I miss something again? :)
->>>
->>> For #1, I'm still not sure what would happen on a speculative reference.
->>>
->>> It's worth summarizing that
->>>
->>> a) free_pages_prepare() will clear both flags via page->flags &=
->>> ~PAGE_FLAGS_CHECK_AT_PREP;
->>>
->>> b) free_pages_prepare() will bail out if any flag is set in
->>> check_free_page().
->>>
->>> As we've never seen b) in the wild, this certainly has low priority, and
->>> maybe it really cannot happen right now.
->>>
->>> However, maybe really allowing these flags to be set when freeing the
->>> page and removing the "page_count(page) == 1" case from migration code
->>> would be the clean thing to do.
->>
->> IMHO, check_free_page is used to catch possible problem. There's the comment of PAGE_FLAGS_CHECK_AT_FREE:
->>
->> /*
->>  * Flags checked when a page is freed.  Pages being freed should not have
->>  * these flags set.  If they are, there is a problem.
->>  */
->> #define PAGE_FLAGS_CHECK_AT_FREE
->>
->> There might be an assumption: when page is freed, it shouldn't be an active or unevictable page. It should be
->> inactive and evictable. So allowing these flags to be set when freeing the page might not be a good idea?
-> 
-> Yeah, and we'd be lifting that restriction because there is good reason
-> to do so.
-> 
-> Maybe we *could* special case for isolated pages; however, that adds
-> runtime overhead. Of course, we could perform different checks for e.g.,
-> DEBUG_VM vs !DEBUG_VM.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e71e60cd74df9386c3f684c54888f2367050b831
+commit: 97a1f01b3f2f734bd3982aa5639b2b54632f8f7d drm/atomic: Add atomic_print_state to private objects
+date:   10 weeks ago
+config: x86_64-sof-customedconfig-mach-driver-defconfig (https://download.01.org/0day-ci/archive/20220607/202206071049.pofHsRih-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=97a1f01b3f2f734bd3982aa5639b2b54632f8f7d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 97a1f01b3f2f734bd3982aa5639b2b54632f8f7d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/
 
-I found there is one assumption about PG_active and PG_unevictable, i.e. in __folio_clear_lru_flags:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-	/* this shouldn't happen, so leave the flags to bad_page() */
-	if (folio_test_active(folio) && folio_test_unevictable(folio))
-		return;
+All errors (new ones prefixed by >>):
 
-If PG_active and PG_unevictable are both set, this case will be caught in the bad_page() via check_free_page().
-There might be some other assumptions about PG_active and PG_unevictable. So I think it's not safe to lift that
-restriction.
+   drivers/gpu/drm/drm_atomic.c: In function 'drm_atomic_print_new_state':
+>> drivers/gpu/drm/drm_atomic.c:1670:33: error: variable 'obj' set but not used [-Werror=unused-but-set-variable]
+    1670 |         struct drm_private_obj *obj;
+         |                                 ^~~
+   cc1: all warnings being treated as errors
 
-But maybe we could limit this check within DEBUG_VM as you suggested. Am I supposed to do it?
 
-Thanks!
+vim +/obj +1670 drivers/gpu/drm/drm_atomic.c
 
-> 
+  1649	
+  1650	/**
+  1651	 * drm_atomic_print_new_state - prints drm atomic state
+  1652	 * @state: atomic configuration to check
+  1653	 * @p: drm printer
+  1654	 *
+  1655	 * This functions prints the drm atomic state snapshot using the drm printer
+  1656	 * which is passed to it. This snapshot can be used for debugging purposes.
+  1657	 *
+  1658	 * Note that this function looks into the new state objects and hence its not
+  1659	 * safe to be used after the call to drm_atomic_helper_commit_hw_done().
+  1660	 */
+  1661	void drm_atomic_print_new_state(const struct drm_atomic_state *state,
+  1662			struct drm_printer *p)
+  1663	{
+  1664		struct drm_plane *plane;
+  1665		struct drm_plane_state *plane_state;
+  1666		struct drm_crtc *crtc;
+  1667		struct drm_crtc_state *crtc_state;
+  1668		struct drm_connector *connector;
+  1669		struct drm_connector_state *connector_state;
+> 1670		struct drm_private_obj *obj;
+  1671		struct drm_private_state *obj_state;
+  1672		int i;
+  1673	
+  1674		if (!p) {
+  1675			drm_err(state->dev, "invalid drm printer\n");
+  1676			return;
+  1677		}
+  1678	
+  1679		drm_dbg_atomic(state->dev, "checking %p\n", state);
+  1680	
+  1681		for_each_new_plane_in_state(state, plane, plane_state, i)
+  1682			drm_atomic_plane_print_state(p, plane_state);
+  1683	
+  1684		for_each_new_crtc_in_state(state, crtc, crtc_state, i)
+  1685			drm_atomic_crtc_print_state(p, crtc_state);
+  1686	
+  1687		for_each_new_connector_in_state(state, connector, connector_state, i)
+  1688			drm_atomic_connector_print_state(p, connector_state);
+  1689	
+  1690		for_each_new_private_obj_in_state(state, obj, obj_state, i)
+  1691			drm_atomic_private_obj_print_state(p, obj_state);
+  1692	}
+  1693	EXPORT_SYMBOL(drm_atomic_print_new_state);
+  1694	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

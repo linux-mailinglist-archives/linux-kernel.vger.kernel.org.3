@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBADA541341
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E27541A25
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357876AbiFGT5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S1380930AbiFGVb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354666AbiFGSvP (ORCPT
+        with ESMTP id S1378153AbiFGUey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:51:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D7713B2D6;
-        Tue,  7 Jun 2022 11:03:25 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1641EA04D;
+        Tue,  7 Jun 2022 11:37:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98702B82366;
-        Tue,  7 Jun 2022 18:03:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF29C385A5;
-        Tue,  7 Jun 2022 18:03:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 875BE615D2;
+        Tue,  7 Jun 2022 18:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D6CC385A5;
+        Tue,  7 Jun 2022 18:37:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624997;
-        bh=WbZvmYTKoIqanZUhSU0oIidvHFsRIJhdonrohRLhaeE=;
+        s=korg; t=1654627046;
+        bh=DLwWHDiK86MBmRvx35YmuRnwRWDcKIAibL+V2Fw+nPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xngsSYDfe22jPug7aOWhYsx9gmh8EzJ7xmEJJ73V7glTbUbU63kW6fjXANpNKD5CU
-         3nmGjDmQieHc3ZyUvhDz+iJjE/HFIYXGFx/tjzVUJn+EhWHSLXjBdd0qtZqoUNzx0+
-         hNs9hIxs4IkKuNYzX/rftiku9e1If4Q8XrAvuJ24=
+        b=NexCKgDsU2kfjqQPKQXeLVA1Jfp70NLFjtw8D7h7TKhi48U6AMgqHhSvo+G5Q5+42
+         F9PJKF4rSV7bEBOs71HNWmgO+fF3fH8FBWG0qtXwyabskpqUf36zHoq2Rl25OGuaXA
+         ilSfatfvch3jPtZ6b723CCwJ23nSqxdzVEVry8Do=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 488/667] iommu/arm-smmu-v3-sva: Fix mm use-after-free
+        stable@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 561/772] KVM: LAPIC: Drop pending LAPIC timer injection when canceling the timer
 Date:   Tue,  7 Jun 2022 19:02:33 +0200
-Message-Id: <20220607164949.337738699@linuxfoundation.org>
+Message-Id: <20220607165005.489725587@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,70 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-[ Upstream commit cbd23144f7662b00bcde32a938c4a4057e476d68 ]
+[ Upstream commit 619f51da097952194a5d4d6a6c5f9ef3b9d1b25a ]
 
-We currently call arm64_mm_context_put() without holding a reference to
-the mm, which can result in use-after-free. Call mmgrab()/mmdrop() to
-ensure the mm only gets freed after we unpinned the ASID.
+The timer is disarmed when switching between TSC deadline and other modes;
+however, the pending timer is still in-flight, so let's accurately remove
+any traces of the previous mode.
 
-Fixes: 32784a9562fb ("iommu/arm-smmu-v3: Implement iommu_sva_bind/unbind()")
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-Link: https://lore.kernel.org/r/20220426130444.300556-1-jean-philippe@linaro.org
-Signed-off-by: Will Deacon <will@kernel.org>
+Fixes: 4427593258 ("KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch")
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/x86/kvm/lapic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index f763c1430d15..e2e80eb2840c 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -6,6 +6,7 @@
- #include <linux/mm.h>
- #include <linux/mmu_context.h>
- #include <linux/mmu_notifier.h>
-+#include <linux/sched/mm.h>
- #include <linux/slab.h>
- 
- #include "arm-smmu-v3.h"
-@@ -96,9 +97,14 @@ static struct arm_smmu_ctx_desc *arm_smmu_alloc_shared_cd(struct mm_struct *mm)
- 	struct arm_smmu_ctx_desc *cd;
- 	struct arm_smmu_ctx_desc *ret = NULL;
- 
-+	/* Don't free the mm until we release the ASID */
-+	mmgrab(mm);
-+
- 	asid = arm64_mm_context_get(mm);
--	if (!asid)
--		return ERR_PTR(-ESRCH);
-+	if (!asid) {
-+		err = -ESRCH;
-+		goto out_drop_mm;
-+	}
- 
- 	cd = kzalloc(sizeof(*cd), GFP_KERNEL);
- 	if (!cd) {
-@@ -165,6 +171,8 @@ static struct arm_smmu_ctx_desc *arm_smmu_alloc_shared_cd(struct mm_struct *mm)
- 	kfree(cd);
- out_put_context:
- 	arm64_mm_context_put(mm);
-+out_drop_mm:
-+	mmdrop(mm);
- 	return err < 0 ? ERR_PTR(err) : ret;
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 970d5c740b00..dd12c15b69e6 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1508,6 +1508,7 @@ static void cancel_apic_timer(struct kvm_lapic *apic)
+ 	if (apic->lapic_timer.hv_timer_in_use)
+ 		cancel_hv_timer(apic);
+ 	preempt_enable();
++	atomic_set(&apic->lapic_timer.pending, 0);
  }
  
-@@ -173,6 +181,7 @@ static void arm_smmu_free_shared_cd(struct arm_smmu_ctx_desc *cd)
- 	if (arm_smmu_free_asid(cd)) {
- 		/* Unpin ASID */
- 		arm64_mm_context_put(cd->mm);
-+		mmdrop(cd->mm);
- 		kfree(cd);
- 	}
- }
+ static void apic_update_lvtt(struct kvm_lapic *apic)
 -- 
 2.35.1
 

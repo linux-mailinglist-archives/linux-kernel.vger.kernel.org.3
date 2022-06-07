@@ -2,40 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9574C540434
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D94F540564
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345293AbiFGQ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S1346417AbiFGRZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344095AbiFGQ6z (ORCPT
+        with ESMTP id S1345877AbiFGRVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:58:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DA7F1379;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80A89143D;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A9C83F66F;
-        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
-From:   Yoan Picchi <yoan.picchi@arm.com>
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 0/2] Crypto: Remove x86 dependency on QAT drivers
-Date:   Tue,  7 Jun 2022 16:58:38 +0000
-Message-Id: <20220607165840.66931-1-yoan.picchi@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 7 Jun 2022 13:21:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEAE1059D7;
+        Tue,  7 Jun 2022 10:20:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B39D609FA;
+        Tue,  7 Jun 2022 17:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74848C385A5;
+        Tue,  7 Jun 2022 17:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654622447;
+        bh=q6aShHAJlQVWsk/gq5NTtcTJbslhzhx3oIcuqoqOWFQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wF4v/9ZzA6kXXao7GI2a+anXWnQMO11CdotvNlL52ixU5jRW8hACxtGcbW1DnYcIj
+         mCodj8LHkNeedKhnuSV+lMrpHBoen5HKJ8dkPOV+4cW3QAALRuUJRLetx9OiZgLGIW
+         6yfnj2+kgDtgQO25qjXxiYGfls3M6UFPrmmgp6/4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 061/452] net/mlx5: fs, delete the FTE when there are no rules attached to it
+Date:   Tue,  7 Jun 2022 18:58:38 +0200
+Message-Id: <20220607164910.365768511@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,31 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QAT acceleration card can be very helpfull for some tasks like dealing
-with IPSEC but it is currently restricted to be used only on x86 machine.
-Looking at the code we didn't see any reasons why those drivers might not
-work on other architectures. We've successfully built all of them on x86,
-arm64, arm32, mips64, powerpc64, riscv64 and sparc64.
+From: Mark Bloch <mbloch@nvidia.com>
 
-We also have tested the driver with an Intel Corporation C62x Chipset
-QuickAssist Technology (rev 04) PCIe card on an arm64 server. After the numa
-patch, it works with the AF_ALG crypto userland interface, allowing us to
-encrypt some data with cbc for instance. We've also successfully created some
-VF, bound them to DPDK, and used the card this way, thus showing some real
-life usecases of x86 do work on arm64 too.
+[ Upstream commit 7b0c6338597613f465d131bd939a51844a00455a ]
 
-Andre Przywara (1):
-  crypto: qat: replace get_current_node() with numa_node_id()
+When an FTE has no children is means all the rules where removed
+and the FTE can be deleted regardless of the dests_size value.
+While dests_size should be 0 when there are no children
+be extra careful not to leak memory or get firmware syndrome
+if the proper bookkeeping of dests_size wasn't done.
 
-Yoan Picchi (1):
-  Removes the x86 dependency on the QAT drivers
+Signed-off-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/fs_core.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
- drivers/crypto/qat/Kconfig                     | 14 +++++++-------
- drivers/crypto/qat/qat_common/adf_common_drv.h |  5 -----
- drivers/crypto/qat/qat_common/qat_algs.c       |  4 ++--
- drivers/crypto/qat/qat_common/qat_asym_algs.c  |  4 ++--
- 4 files changed, 11 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+index 55772f0cbbf8..15472fb15d7d 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
+@@ -2024,16 +2024,16 @@ void mlx5_del_flow_rules(struct mlx5_flow_handle *handle)
+ 	down_write_ref_node(&fte->node, false);
+ 	for (i = handle->num_rules - 1; i >= 0; i--)
+ 		tree_remove_node(&handle->rule[i]->node, true);
+-	if (fte->dests_size) {
+-		if (fte->modify_mask)
+-			modify_fte(fte);
+-		up_write_ref_node(&fte->node, false);
+-	} else if (list_empty(&fte->node.children)) {
++	if (list_empty(&fte->node.children)) {
+ 		del_hw_fte(&fte->node);
+ 		/* Avoid double call to del_hw_fte */
+ 		fte->node.del_hw_func = NULL;
+ 		up_write_ref_node(&fte->node, false);
+ 		tree_put_node(&fte->node, false);
++	} else if (fte->dests_size) {
++		if (fte->modify_mask)
++			modify_fte(fte);
++		up_write_ref_node(&fte->node, false);
+ 	} else {
+ 		up_write_ref_node(&fte->node, false);
+ 	}
 -- 
-2.25.1
+2.35.1
+
+
 

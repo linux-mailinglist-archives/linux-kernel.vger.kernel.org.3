@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8073253F4B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EAB53F49B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 05:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbiFGDox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 23:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S233614AbiFGDif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 23:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236445AbiFGDo0 (ORCPT
+        with ESMTP id S233296AbiFGDic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 23:44:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9E915FDD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 20:44:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1203C61478
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECCDC385A5;
-        Tue,  7 Jun 2022 03:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654573445;
-        bh=3OMGL+yTwFPdMPpm7sJOFqe0eX9H9gVe0RUbQa9rSWw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LMq/WN9eKmOK/EdjuyyGqFGJ0KfUUOEmOusaPcsqMLvpyOqTYzU9iQqbyDO3lgKI1
-         FBUyQyHxzgaeVndFN9f1kh3l2lLHbStWNbh8LThuN/Uj4VDEg9cDXowFc3FgFdETHX
-         vf4rvRCSJRJncN1otflIpmJByxrf0m/mlWTD25jmmTSIQa3VbGoeT0qCSmSFlCRfi9
-         G+WmKDKDVdrU3A3ebwvXzFlNlDJ+JnVwrqIJlkQS7vAxtQCIaKxzbSDlqzJLFfrGI6
-         rWIE3RKob0pZYsgwWBR42tKrV4NNZmO3HIg8gIPrjzWgEtigHRGFLaXWZNMpJEKi/0
-         jtbxKNAWkre4g==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     David Airlie <airlied@linux.ie>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>, linux-pm@vger.org,
-        linux-pci@vger.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5/5] agp/nvidia: Convert to generic power management
-Date:   Mon,  6 Jun 2022 22:43:40 -0500
-Message-Id: <20220607034340.307318-6-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220607034340.307318-1-helgaas@kernel.org>
-References: <20220607034340.307318-1-helgaas@kernel.org>
+        Mon, 6 Jun 2022 23:38:32 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A551535DE5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 20:38:30 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id fu3so31088955ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 20:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lJ9t0JsMzf9+b8G+NsrCGuGZ2WHm7yJdraWRSfiKGkA=;
+        b=luqlEGHcZ3EsuUaCVY6GMNpFf/WWxyuViWZVeRqUEErf9I9VtVM1lds0X9kadOzOJN
+         cszTD9YoVUoRI7Y7blXJ11oo9McRcIKLzrEKA7N554p76iZLgY8Rd3ITfDBweQcSXSEp
+         ZvIHkSGHIxEHuVqKNxRubd5d5H8shRx58lWHE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lJ9t0JsMzf9+b8G+NsrCGuGZ2WHm7yJdraWRSfiKGkA=;
+        b=7ox13zhroVbkdSeXr+LN9jzawv7DxpYgfEinAdmqUvVoQpDVUKCrW2ZeUOEBK654+l
+         avUf3soxl18Kldsv84eMbpPamBkjZMW0LJlx6TFo9II/wOLgyVWjynqj70I7h0cGfDiD
+         1xO1THX68ehUz/YRENlJJWpA44AjPcS1buQLe594vpRvB9feMPcLzI137xFLtwQ73KEn
+         u1pEzYaZfFdaivX5nZhJ6kl5AsAEUXpB2poBQw/j3rpKbE6N7xG24T2FiwDRvvwODo3R
+         a4jAw9+FTq1tpKlUCM/YhPfzMMU5ooKBvdHlXydUVi2LjAE/27DLeSOgHpqOiGGskhda
+         0YXg==
+X-Gm-Message-State: AOAM5301RBEIcLwIp1WniwqYa2kXlrnvTwPNLyeCWoJKD5/2oH8FhWuD
+        uWPT7KJWvEc6LpwCbSEz+iKDgnokBn5b9ydl8iK4/A==
+X-Google-Smtp-Source: ABdhPJxvmyTN4ySZ5rqR9pOFJ1zEcnVcYm+SktOdEe+JR5rDOKDREJpcaAfPg15x/AOi9cNPiXshMUiWFFvhktMChtw=
+X-Received: by 2002:a17:907:868f:b0:702:f865:55de with SMTP id
+ qa15-20020a170907868f00b00702f86555demr24650686ejc.24.1654573109183; Mon, 06
+ Jun 2022 20:38:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220606152431.1889185-1-hsinyi@chromium.org> <20220606152431.1889185-9-hsinyi@chromium.org>
+ <CAE-0n51Lq381dQW6zw3D0fibdj=Jm4r3uAYG59ySo4CXbx+EpA@mail.gmail.com>
+In-Reply-To: <CAE-0n51Lq381dQW6zw3D0fibdj=Jm4r3uAYG59ySo4CXbx+EpA@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 7 Jun 2022 11:46:24 +0800
+Message-ID: <CAJMQK-hoKB+W4AY8trW-ni145oxde4ot1_z+d6sbxGrbQ6aMig@mail.gmail.com>
+Subject: Re: [PATCH v4 8/8] drm/mediatek: Config orientation property if panel
+ provides it
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Clark <robdclark@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,108 +80,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On Tue, Jun 7, 2022 at 3:16 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Hsin-Yi Wang (2022-06-06 08:24:31)
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > index d9f10a33e6fa..c56282412bfa 100644
+> > --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> > @@ -822,6 +823,12 @@ static int mtk_dsi_encoder_init(struct drm_device *drm, struct mtk_dsi *dsi)
+> >                 ret = PTR_ERR(dsi->connector);
+> >                 goto err_cleanup_encoder;
+> >         }
+> > +
+> > +       /* Read panel orientation */
+> > +       if (dsi->panel)
+> > +               drm_connector_set_panel_orientation(dsi->connector,
+> > +                               drm_panel_get_orientation(dsi->panel));
+> > +
+>
+> It could be simplified like so?
+>
+>         drm_connector_set_orientation_from_panel(dsi->connector, dsi->panel);
+>
+> Then the API could get the orientation if the panel pointer is valid.
+> Does any code need to use/modify the orientation value besides
+> drm_connector_set_panel_orientation()?
+>
 
-Convert agpgart-nvidia from legacy PCI power management to the generic
-power management framework.
+We can add another function to call
+drm_connector_set_orientation_from_panel(), which will be like
 
-Previously agpgart-nvidia used legacy PCI power management, and
-agp_nvidia_suspend() and agp_nvidia_resume() were responsible for both
-device-specific things and generic PCI things:
+void drm_connector_set_orientation_from_panel(connector, panel)
+{
+     if (panel)
+          drm_connector_set_panel_orientation(connector,drm_panel_get_orientation(panel));
+}
 
-  agp_nvidia_suspend
-    pci_save_state                         <-- generic PCI
-    pci_set_power_state(PCI_D3hot)         <-- generic PCI
+Though it's very should but I can add this if this can make the caller
+more convenient.
 
-  agp_nvidia_resume
-    pci_set_power_state(PCI_D0)            <-- generic PCI
-    pci_restore_state                      <-- generic PCI
-    nvidia_configure                       <-- device-specific
-
-Convert to generic power management where the PCI bus PM methods do the
-generic PCI things, and the driver needs only the device-specific part,
-i.e.,
-
-  suspend_devices_and_enter
-    dpm_suspend_start(PMSG_SUSPEND)
-      pci_pm_suspend                       # PCI bus .suspend() method
-        agp_nvidia_suspend                 <-- not needed at all; removed
-    suspend_enter
-      dpm_suspend_noirq(PMSG_SUSPEND)
-        pci_pm_suspend_noirq               # PCI bus .suspend_noirq() method
-          pci_save_state                   <-- generic PCI
-          pci_prepare_to_sleep             <-- generic PCI
-            pci_set_power_state
-    ...
-    dpm_resume_end(PMSG_RESUME)
-      pci_pm_resume                        # PCI bus .resume() method
-        pci_restore_standard_config
-          pci_set_power_state(PCI_D0)      <-- generic PCI
-          pci_restore_state                <-- generic PCI
-        agp_nvidia_resume                  # driver->pm->resume
-          nvidia_configure                 <-- device-specific
-
-Based on 0aeddbd0cb07 ("via-agp: convert to generic power management") by
-Vaibhav Gupta <vaibhavgupta40@gmail.com>.
-
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/char/agp/nvidia-agp.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/char/agp/nvidia-agp.c b/drivers/char/agp/nvidia-agp.c
-index 826dbd06f6bb..d63e90410d23 100644
---- a/drivers/char/agp/nvidia-agp.c
-+++ b/drivers/char/agp/nvidia-agp.c
-@@ -404,28 +404,13 @@ static void agp_nvidia_remove(struct pci_dev *pdev)
- 	agp_put_bridge(bridge);
- }
- 
--#ifdef CONFIG_PM
--static int agp_nvidia_suspend(struct pci_dev *pdev, pm_message_t state)
-+static int __maybe_unused agp_nvidia_resume(struct device *dev)
- {
--	pci_save_state(pdev);
--	pci_set_power_state(pdev, PCI_D3hot);
--
--	return 0;
--}
--
--static int agp_nvidia_resume(struct pci_dev *pdev)
--{
--	/* set power state 0 and restore PCI space */
--	pci_set_power_state(pdev, PCI_D0);
--	pci_restore_state(pdev);
--
- 	/* reconfigure AGP hardware again */
- 	nvidia_configure();
- 
- 	return 0;
- }
--#endif
--
- 
- static const struct pci_device_id agp_nvidia_pci_table[] = {
- 	{
-@@ -449,15 +434,14 @@ static const struct pci_device_id agp_nvidia_pci_table[] = {
- 
- MODULE_DEVICE_TABLE(pci, agp_nvidia_pci_table);
- 
-+static SIMPLE_DEV_PM_OPS(agp_nvidia_pm_ops, NULL, agp_nvidia_resume);
-+
- static struct pci_driver agp_nvidia_pci_driver = {
- 	.name		= "agpgart-nvidia",
- 	.id_table	= agp_nvidia_pci_table,
- 	.probe		= agp_nvidia_probe,
- 	.remove		= agp_nvidia_remove,
--#ifdef CONFIG_PM
--	.suspend	= agp_nvidia_suspend,
--	.resume		= agp_nvidia_resume,
--#endif
-+	.driver.pm	= &agp_nvidia_pm_ops,
- };
- 
- static int __init agp_nvidia_init(void)
--- 
-2.25.1
-
+> >         drm_connector_attach_encoder(dsi->connector, &dsi->encoder);
+> >
+> >         return 0;

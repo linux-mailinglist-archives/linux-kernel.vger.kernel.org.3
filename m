@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCCF541379
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FFF5408BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358067AbiFGUCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S1348449AbiFGSCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353249AbiFGTCA (ORCPT
+        with ESMTP id S1347837AbiFGRof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:02:00 -0400
+        Tue, 7 Jun 2022 13:44:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0768156452;
-        Tue,  7 Jun 2022 11:05:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5381312A5;
+        Tue,  7 Jun 2022 10:35:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7911617B4;
-        Tue,  7 Jun 2022 18:05:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD366C385A5;
-        Tue,  7 Jun 2022 18:04:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74E40614D8;
+        Tue,  7 Jun 2022 17:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85350C385A5;
+        Tue,  7 Jun 2022 17:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625100;
-        bh=lCWrCZpXnrVPvvReCV0rDHoW0MLUbLtzzPP6kZd4AFs=;
+        s=korg; t=1654623321;
+        bh=9DMQ6JgSqIf8HKJKCjCTfDvP43n2npVk0dYewib4UoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sWzsVT85uBcIKr+GI99oLIVUqbFYFiQf1b2g6v8Xaxu9vzcv3biYwClLDlmtcbeBA
-         g6tQF0xzrT6p47DV+wrCrOaHUcanWsm6WWHrWSV0c8E+IP3koR8BhzvbPUA2CDiTJ5
-         BGJPST4dZEv4TQIaCk4Wj/qsmGtRJVlXkEaySs6E=
+        b=JrPXzUvEYFTikIuXLG4PsEzWoWK/1OAEBa1Gw+fIrPhFFAk70f5w+Ro82qyP02Itv
+         fr15fTXEbeOi+MR5POOObLyQLoWpgCiUp4x5wcZ+9ma3WyN2gjDRLydNi0lE6rdpqG
+         x1RKsqLAeA5HUq+KWTEjAJG98aQ5i7qZ8BXAHySE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Junxiao Bi <junxiao.bi@oracle.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <jiangqi903@gmail.com>,
-        Changwei Ge <gechangwei@live.cn>, Gang He <ghe@suse.com>,
-        Jun Piao <piaojun@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.15 564/667] ocfs2: dlmfs: fix error handling of user_dlm_destroy_lock
-Date:   Tue,  7 Jun 2022 19:03:49 +0200
-Message-Id: <20220607164951.611380775@linuxfoundation.org>
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>
+Subject: [PATCH 5.10 373/452] dlm: fix plock invalid read
+Date:   Tue,  7 Jun 2022 19:03:50 +0200
+Message-Id: <20220607164919.680098473@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,189 +55,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Junxiao Bi via Ocfs2-devel <ocfs2-devel@oss.oracle.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-commit 863e0d81b6683c4cbc588ad831f560c90e494bef upstream.
+commit 42252d0d2aa9b94d168241710a761588b3959019 upstream.
 
-When user_dlm_destroy_lock failed, it didn't clean up the flags it set
-before exit.  For USER_LOCK_IN_TEARDOWN, if this function fails because of
-lock is still in used, next time when unlink invokes this function, it
-will return succeed, and then unlink will remove inode and dentry if lock
-is not in used(file closed), but the dlm lock is still linked in dlm lock
-resource, then when bast come in, it will trigger a panic due to
-user-after-free.  See the following panic call trace.  To fix this,
-USER_LOCK_IN_TEARDOWN should be reverted if fail.  And also error should
-be returned if USER_LOCK_IN_TEARDOWN is set to let user know that unlink
-fail.
+This patch fixes an invalid read showed by KASAN. A unlock will allocate a
+"struct plock_op" and a followed send_op() will append it to a global
+send_list data structure. In some cases a followed dev_read() moves it
+to recv_list and dev_write() will cast it to "struct plock_xop" and access
+fields which are only available in those structures. At this point an
+invalid read happens by accessing those fields.
 
-For the case of ocfs2_dlm_unlock failure, besides USER_LOCK_IN_TEARDOWN,
-USER_LOCK_BUSY is also required to be cleared.  Even though spin lock is
-released in between, but USER_LOCK_IN_TEARDOWN is still set, for
-USER_LOCK_BUSY, if before every place that waits on this flag,
-USER_LOCK_IN_TEARDOWN is checked to bail out, that will make sure no flow
-waits on the busy flag set by user_dlm_destroy_lock(), then we can
-simplely revert USER_LOCK_BUSY when ocfs2_dlm_unlock fails.  Fix
-user_dlm_cluster_lock() which is the only function not following this.
+To fix this issue the "callback" field is moved to "struct plock_op" to
+indicate that a cast to "plock_xop" is allowed and does the additional
+"plock_xop" handling if set.
 
-[  941.336392] (python,26174,16):dlmfs_unlink:562 ERROR: unlink
-004fb0000060000b5a90b8c847b72e1, error -16 from destroy
-[  989.757536] ------------[ cut here ]------------
-[  989.757709] kernel BUG at fs/ocfs2/dlmfs/userdlm.c:173!
-[  989.757876] invalid opcode: 0000 [#1] SMP
-[  989.758027] Modules linked in: ksplice_2zhuk2jr_ib_ipoib_new(O)
-ksplice_2zhuk2jr(O) mptctl mptbase xen_netback xen_blkback xen_gntalloc
-xen_gntdev xen_evtchn cdc_ether usbnet mii ocfs2 jbd2 rpcsec_gss_krb5
-auth_rpcgss nfsv4 nfsv3 nfs_acl nfs fscache lockd grace ocfs2_dlmfs
-ocfs2_stack_o2cb ocfs2_dlm ocfs2_nodemanager ocfs2_stackglue configfs bnx2fc
-fcoe libfcoe libfc scsi_transport_fc sunrpc ipmi_devintf bridge stp llc
-rds_rdma rds bonding ib_sdp ib_ipoib rdma_ucm ib_ucm ib_uverbs ib_umad
-rdma_cm ib_cm iw_cm falcon_lsm_serviceable(PE) falcon_nf_netcontain(PE)
-mlx4_vnic falcon_kal(E) falcon_lsm_pinned_13402(E) mlx4_ib ib_sa ib_mad
-ib_core ib_addr xenfs xen_privcmd dm_multipath iTCO_wdt iTCO_vendor_support
-pcspkr sb_edac edac_core i2c_i801 lpc_ich mfd_core ipmi_ssif i2c_core ipmi_si
-ipmi_msghandler
-[  989.760686]  ioatdma sg ext3 jbd mbcache sd_mod ahci libahci ixgbe dca ptp
-pps_core vxlan udp_tunnel ip6_udp_tunnel megaraid_sas mlx4_core crc32c_intel
-be2iscsi bnx2i cnic uio cxgb4i cxgb4 cxgb3i libcxgbi ipv6 cxgb3 mdio
-libiscsi_tcp qla4xxx iscsi_boot_sysfs libiscsi scsi_transport_iscsi wmi
-dm_mirror dm_region_hash dm_log dm_mod [last unloaded:
-ksplice_2zhuk2jr_ib_ipoib_old]
-[  989.761987] CPU: 10 PID: 19102 Comm: dlm_thread Tainted: P           OE
-4.1.12-124.57.1.el6uek.x86_64 #2
-[  989.762290] Hardware name: Oracle Corporation ORACLE SERVER
-X5-2/ASM,MOTHERBOARD,1U, BIOS 30350100 06/17/2021
-[  989.762599] task: ffff880178af6200 ti: ffff88017f7c8000 task.ti:
-ffff88017f7c8000
-[  989.762848] RIP: e030:[<ffffffffc07d4316>]  [<ffffffffc07d4316>]
-__user_dlm_queue_lockres.part.4+0x76/0x80 [ocfs2_dlmfs]
-[  989.763185] RSP: e02b:ffff88017f7cbcb8  EFLAGS: 00010246
-[  989.763353] RAX: 0000000000000000 RBX: ffff880174d48008 RCX:
-0000000000000003
-[  989.763565] RDX: 0000000000120012 RSI: 0000000000000003 RDI:
-ffff880174d48170
-[  989.763778] RBP: ffff88017f7cbcc8 R08: ffff88021f4293b0 R09:
-0000000000000000
-[  989.763991] R10: ffff880179c8c000 R11: 0000000000000003 R12:
-ffff880174d48008
-[  989.764204] R13: 0000000000000003 R14: ffff880179c8c000 R15:
-ffff88021db7a000
-[  989.764422] FS:  0000000000000000(0000) GS:ffff880247480000(0000)
-knlGS:ffff880247480000
-[  989.764685] CS:  e033 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  989.764865] CR2: ffff8000007f6800 CR3: 0000000001ae0000 CR4:
-0000000000042660
-[  989.765081] Stack:
-[  989.765167]  0000000000000003 ffff880174d48040 ffff88017f7cbd18
-ffffffffc07d455f
-[  989.765442]  ffff88017f7cbd88 ffffffff816fb639 ffff88017f7cbd38
-ffff8800361b5600
-[  989.765717]  ffff88021db7a000 ffff88021f429380 0000000000000003
-ffffffffc0453020
-[  989.765991] Call Trace:
-[  989.766093]  [<ffffffffc07d455f>] user_bast+0x5f/0xf0 [ocfs2_dlmfs]
-[  989.766287]  [<ffffffff816fb639>] ? schedule_timeout+0x169/0x2d0
-[  989.766475]  [<ffffffffc0453020>] ? o2dlm_lock_ast_wrapper+0x20/0x20
-[ocfs2_stack_o2cb]
-[  989.766738]  [<ffffffffc045303a>] o2dlm_blocking_ast_wrapper+0x1a/0x20
-[ocfs2_stack_o2cb]
-[  989.767010]  [<ffffffffc0864ec6>] dlm_do_local_bast+0x46/0xe0 [ocfs2_dlm]
-[  989.767217]  [<ffffffffc084f5cc>] ? dlm_lockres_calc_usage+0x4c/0x60
-[ocfs2_dlm]
-[  989.767466]  [<ffffffffc08501f1>] dlm_thread+0xa31/0x1140 [ocfs2_dlm]
-[  989.767662]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.767834]  [<ffffffff816f78ce>] ? __schedule+0x23e/0x810
-[  989.768006]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.768178]  [<ffffffff816f78ce>] ? __schedule+0x23e/0x810
-[  989.768349]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.768521]  [<ffffffff816f78ce>] ? __schedule+0x23e/0x810
-[  989.768693]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.768893]  [<ffffffff816f78ce>] ? __schedule+0x23e/0x810
-[  989.769067]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.769241]  [<ffffffff810ce4d0>] ? wait_woken+0x90/0x90
-[  989.769411]  [<ffffffffc084f7c0>] ? dlm_kick_thread+0x80/0x80 [ocfs2_dlm]
-[  989.769617]  [<ffffffff810a8bbb>] kthread+0xcb/0xf0
-[  989.769774]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.769945]  [<ffffffff816f78da>] ? __schedule+0x24a/0x810
-[  989.770117]  [<ffffffff810a8af0>] ? kthread_create_on_node+0x180/0x180
-[  989.770321]  [<ffffffff816fdaa1>] ret_from_fork+0x61/0x90
-[  989.770492]  [<ffffffff810a8af0>] ? kthread_create_on_node+0x180/0x180
-[  989.770689] Code: d0 00 00 00 f0 45 7d c0 bf 00 20 00 00 48 89 83 c0 00 00
-00 48 89 83 c8 00 00 00 e8 55 c1 8c c0 83 4b 04 10 48 83 c4 08 5b 5d c3 <0f>
-0b 0f 1f 84 00 00 00 00 00 55 48 89 e5 41 55 41 54 53 48 83
-[  989.771892] RIP  [<ffffffffc07d4316>]
-__user_dlm_queue_lockres.part.4+0x76/0x80 [ocfs2_dlmfs]
-[  989.772174]  RSP <ffff88017f7cbcb8>
-[  989.772704] ---[ end trace ebd1e38cebcc93a8 ]---
-[  989.772907] Kernel panic - not syncing: Fatal exception
-[  989.773173] Kernel Offset: disabled
+Example of the KASAN output which showed the invalid read:
 
-Link: https://lkml.kernel.org/r/20220518235224.87100-2-junxiao.bi@oracle.com
-Signed-off-by: Junxiao Bi <junxiao.bi@oracle.com>
-Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc: Mark Fasheh <mark@fasheh.com>
-Cc: Joel Becker <jlbec@evilplan.org>
-Cc: Joseph Qi <jiangqi903@gmail.com>
-Cc: Changwei Ge <gechangwei@live.cn>
-Cc: Gang He <ghe@suse.com>
-Cc: Jun Piao <piaojun@huawei.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+[ 2064.296453] ==================================================================
+[ 2064.304852] BUG: KASAN: slab-out-of-bounds in dev_write+0x52b/0x5a0 [dlm]
+[ 2064.306491] Read of size 8 at addr ffff88800ef227d8 by task dlm_controld/7484
+[ 2064.308168]
+[ 2064.308575] CPU: 0 PID: 7484 Comm: dlm_controld Kdump: loaded Not tainted 5.14.0+ #9
+[ 2064.310292] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+[ 2064.311618] Call Trace:
+[ 2064.312218]  dump_stack_lvl+0x56/0x7b
+[ 2064.313150]  print_address_description.constprop.8+0x21/0x150
+[ 2064.314578]  ? dev_write+0x52b/0x5a0 [dlm]
+[ 2064.315610]  ? dev_write+0x52b/0x5a0 [dlm]
+[ 2064.316595]  kasan_report.cold.14+0x7f/0x11b
+[ 2064.317674]  ? dev_write+0x52b/0x5a0 [dlm]
+[ 2064.318687]  dev_write+0x52b/0x5a0 [dlm]
+[ 2064.319629]  ? dev_read+0x4a0/0x4a0 [dlm]
+[ 2064.320713]  ? bpf_lsm_kernfs_init_security+0x10/0x10
+[ 2064.321926]  vfs_write+0x17e/0x930
+[ 2064.322769]  ? __fget_light+0x1aa/0x220
+[ 2064.323753]  ksys_write+0xf1/0x1c0
+[ 2064.324548]  ? __ia32_sys_read+0xb0/0xb0
+[ 2064.325464]  do_syscall_64+0x3a/0x80
+[ 2064.326387]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 2064.327606] RIP: 0033:0x7f807e4ba96f
+[ 2064.328470] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 39 87 f8 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 7c 87 f8 ff 48
+[ 2064.332902] RSP: 002b:00007ffd50cfe6e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+[ 2064.334658] RAX: ffffffffffffffda RBX: 000055cc3886eb30 RCX: 00007f807e4ba96f
+[ 2064.336275] RDX: 0000000000000040 RSI: 00007ffd50cfe7e0 RDI: 0000000000000010
+[ 2064.337980] RBP: 00007ffd50cfe7e0 R08: 0000000000000000 R09: 0000000000000001
+[ 2064.339560] R10: 000055cc3886eb30 R11: 0000000000000293 R12: 000055cc3886eb80
+[ 2064.341237] R13: 000055cc3886eb00 R14: 000055cc3886f590 R15: 0000000000000001
+[ 2064.342857]
+[ 2064.343226] Allocated by task 12438:
+[ 2064.344057]  kasan_save_stack+0x1c/0x40
+[ 2064.345079]  __kasan_kmalloc+0x84/0xa0
+[ 2064.345933]  kmem_cache_alloc_trace+0x13b/0x220
+[ 2064.346953]  dlm_posix_unlock+0xec/0x720 [dlm]
+[ 2064.348811]  do_lock_file_wait.part.32+0xca/0x1d0
+[ 2064.351070]  fcntl_setlk+0x281/0xbc0
+[ 2064.352879]  do_fcntl+0x5e4/0xfe0
+[ 2064.354657]  __x64_sys_fcntl+0x11f/0x170
+[ 2064.356550]  do_syscall_64+0x3a/0x80
+[ 2064.358259]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 2064.360745]
+[ 2064.361511] Last potentially related work creation:
+[ 2064.363957]  kasan_save_stack+0x1c/0x40
+[ 2064.365811]  __kasan_record_aux_stack+0xaf/0xc0
+[ 2064.368100]  call_rcu+0x11b/0xf70
+[ 2064.369785]  dlm_process_incoming_buffer+0x47d/0xfd0 [dlm]
+[ 2064.372404]  receive_from_sock+0x290/0x770 [dlm]
+[ 2064.374607]  process_recv_sockets+0x32/0x40 [dlm]
+[ 2064.377290]  process_one_work+0x9a8/0x16e0
+[ 2064.379357]  worker_thread+0x87/0xbf0
+[ 2064.381188]  kthread+0x3ac/0x490
+[ 2064.383460]  ret_from_fork+0x22/0x30
+[ 2064.385588]
+[ 2064.386518] Second to last potentially related work creation:
+[ 2064.389219]  kasan_save_stack+0x1c/0x40
+[ 2064.391043]  __kasan_record_aux_stack+0xaf/0xc0
+[ 2064.393303]  call_rcu+0x11b/0xf70
+[ 2064.394885]  dlm_process_incoming_buffer+0x47d/0xfd0 [dlm]
+[ 2064.397694]  receive_from_sock+0x290/0x770 [dlm]
+[ 2064.399932]  process_recv_sockets+0x32/0x40 [dlm]
+[ 2064.402180]  process_one_work+0x9a8/0x16e0
+[ 2064.404388]  worker_thread+0x87/0xbf0
+[ 2064.406124]  kthread+0x3ac/0x490
+[ 2064.408021]  ret_from_fork+0x22/0x30
+[ 2064.409834]
+[ 2064.410599] The buggy address belongs to the object at ffff88800ef22780
+[ 2064.410599]  which belongs to the cache kmalloc-96 of size 96
+[ 2064.416495] The buggy address is located 88 bytes inside of
+[ 2064.416495]  96-byte region [ffff88800ef22780, ffff88800ef227e0)
+[ 2064.422045] The buggy address belongs to the page:
+[ 2064.424635] page:00000000b6bef8bc refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0xef22
+[ 2064.428970] flags: 0xfffffc0000200(slab|node=0|zone=1|lastcpupid=0x1fffff)
+[ 2064.432515] raw: 000fffffc0000200 ffffea0000d68b80 0000001400000014 ffff888001041780
+[ 2064.436110] raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
+[ 2064.439813] page dumped because: kasan: bad access detected
+[ 2064.442548]
+[ 2064.443310] Memory state around the buggy address:
+[ 2064.445988]  ffff88800ef22680: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
+[ 2064.449444]  ffff88800ef22700: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
+[ 2064.452941] >ffff88800ef22780: 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc
+[ 2064.456383]                                                     ^
+[ 2064.459386]  ffff88800ef22800: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+[ 2064.462788]  ffff88800ef22880: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
+[ 2064.466239] ==================================================================
+
+reproducer in python:
+
+import argparse
+import struct
+import fcntl
+import os
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-f', '--file',
+		    help='file to use fcntl, must be on dlm lock filesystem e.g. gfs2')
+
+args = parser.parse_args()
+
+f = open(args.file, 'wb+')
+
+lockdata = struct.pack('hhllhh', fcntl.F_WRLCK,0,0,0,0,0)
+fcntl.fcntl(f, fcntl.F_SETLK, lockdata)
+lockdata = struct.pack('hhllhh', fcntl.F_UNLCK,0,0,0,0,0)
+fcntl.fcntl(f, fcntl.F_SETLK, lockdata)
+
+Fixes: 586759f03e2e ("gfs2: nfs lock support for gfs2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ocfs2/dlmfs/userdlm.c |   16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ fs/dlm/plock.c |   12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
---- a/fs/ocfs2/dlmfs/userdlm.c
-+++ b/fs/ocfs2/dlmfs/userdlm.c
-@@ -433,6 +433,11 @@ again:
+--- a/fs/dlm/plock.c
++++ b/fs/dlm/plock.c
+@@ -23,11 +23,11 @@ struct plock_op {
+ 	struct list_head list;
+ 	int done;
+ 	struct dlm_plock_info info;
++	int (*callback)(struct file_lock *fl, int result);
+ };
+ 
+ struct plock_xop {
+ 	struct plock_op xop;
+-	int (*callback)(struct file_lock *fl, int result);
+ 	void *fl;
+ 	void *file;
+ 	struct file_lock flc;
+@@ -129,19 +129,18 @@ int dlm_posix_lock(dlm_lockspace_t *lock
+ 		/* fl_owner is lockd which doesn't distinguish
+ 		   processes on the nfs client */
+ 		op->info.owner	= (__u64) fl->fl_pid;
+-		xop->callback	= fl->fl_lmops->lm_grant;
++		op->callback	= fl->fl_lmops->lm_grant;
+ 		locks_init_lock(&xop->flc);
+ 		locks_copy_lock(&xop->flc, fl);
+ 		xop->fl		= fl;
+ 		xop->file	= file;
+ 	} else {
+ 		op->info.owner	= (__u64)(long) fl->fl_owner;
+-		xop->callback	= NULL;
  	}
  
- 	spin_lock(&lockres->l_lock);
-+	if (lockres->l_flags & USER_LOCK_IN_TEARDOWN) {
-+		spin_unlock(&lockres->l_lock);
-+		status = -EAGAIN;
-+		goto bail;
-+	}
+ 	send_op(op);
  
- 	/* We only compare against the currently granted level
- 	 * here. If the lock is blocked waiting on a downconvert,
-@@ -595,7 +600,7 @@ int user_dlm_destroy_lock(struct user_lo
- 	spin_lock(&lockres->l_lock);
- 	if (lockres->l_flags & USER_LOCK_IN_TEARDOWN) {
- 		spin_unlock(&lockres->l_lock);
--		return 0;
-+		goto bail;
- 	}
+-	if (xop->callback == NULL) {
++	if (!op->callback) {
+ 		rv = wait_event_interruptible(recv_wq, (op->done != 0));
+ 		if (rv == -ERESTARTSYS) {
+ 			log_debug(ls, "dlm_posix_lock: wait killed %llx",
+@@ -203,7 +202,7 @@ static int dlm_plock_callback(struct plo
+ 	file = xop->file;
+ 	flc = &xop->flc;
+ 	fl = xop->fl;
+-	notify = xop->callback;
++	notify = op->callback;
  
- 	lockres->l_flags |= USER_LOCK_IN_TEARDOWN;
-@@ -609,12 +614,17 @@ int user_dlm_destroy_lock(struct user_lo
- 	}
- 
- 	if (lockres->l_ro_holders || lockres->l_ex_holders) {
-+		lockres->l_flags &= ~USER_LOCK_IN_TEARDOWN;
- 		spin_unlock(&lockres->l_lock);
- 		goto bail;
- 	}
- 
- 	status = 0;
- 	if (!(lockres->l_flags & USER_LOCK_ATTACHED)) {
-+		/*
-+		 * lock is never requested, leave USER_LOCK_IN_TEARDOWN set
-+		 * to avoid new lock request coming in.
-+		 */
- 		spin_unlock(&lockres->l_lock);
- 		goto bail;
- 	}
-@@ -625,6 +635,10 @@ int user_dlm_destroy_lock(struct user_lo
- 
- 	status = ocfs2_dlm_unlock(conn, &lockres->l_lksb, DLM_LKF_VALBLK);
- 	if (status) {
-+		spin_lock(&lockres->l_lock);
-+		lockres->l_flags &= ~USER_LOCK_IN_TEARDOWN;
-+		lockres->l_flags &= ~USER_LOCK_BUSY;
-+		spin_unlock(&lockres->l_lock);
- 		user_log_dlm_error("ocfs2_dlm_unlock", status, lockres);
- 		goto bail;
- 	}
+ 	if (op->info.rv) {
+ 		notify(fl, op->info.rv);
+@@ -436,10 +435,9 @@ static ssize_t dev_write(struct file *fi
+ 		if (op->info.fsid == info.fsid &&
+ 		    op->info.number == info.number &&
+ 		    op->info.owner == info.owner) {
+-			struct plock_xop *xop = (struct plock_xop *)op;
+ 			list_del_init(&op->list);
+ 			memcpy(&op->info, &info, sizeof(info));
+-			if (xop->callback)
++			if (op->callback)
+ 				do_callback = 1;
+ 			else
+ 				op->done = 1;
 
 

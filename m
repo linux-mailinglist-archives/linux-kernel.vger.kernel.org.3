@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BED5413E0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBC2541B3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359010AbiFGUHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S1381416AbiFGVn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245137AbiFGTL0 (ORCPT
+        with ESMTP id S1378030AbiFGUvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:11:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B70194242;
-        Tue,  7 Jun 2022 11:07:06 -0700 (PDT)
+        Tue, 7 Jun 2022 16:51:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4371FDEB0;
+        Tue,  7 Jun 2022 11:41:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B532D618F6;
-        Tue,  7 Jun 2022 18:07:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F82C34119;
-        Tue,  7 Jun 2022 18:07:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89C9F60AD9;
+        Tue,  7 Jun 2022 18:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942C2C385A2;
+        Tue,  7 Jun 2022 18:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625225;
-        bh=s88LYf1pFdDDcHZeXM4fiQIU0i0g0org+rLeRSkBlFg=;
+        s=korg; t=1654627282;
+        bh=J9tuh9jTQAWUyz1dSmwcnH33w65DBg81WLoe1PgnrLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bC8td3iWGd2+bBj4d+PEoUp2JaBuikV7Er6VUl/R5SRCmCo0XepT2gCCYzF1AiAz9
-         K2wGxejlMQpycsXMXBr/zSxtU/cQHVMMhjhBi5W1Be8nsKH//SL7Hpzvxy8FX+C41s
-         dI1iWEO71zOnxDHCxClaJ9ACS2mbt29Kr6HEpFdU=
+        b=ze5mxB+oluwbS1QQMdzArPAQOd95J4UwN/iRRRoEKSh4Boi7KkG0AMn7FDSw/eaHr
+         5DsYpkUO/gcWVyjnx8MH35dsTUtTkwlwDJP6OhcIcQuxP3SaWxE5pV2J4zI2T1HS2q
+         DoF8rwrHzypZWJLqZvMUcAt09cZfFvREIyP+xEt8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kant Fan <kant@allwinnertech.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.15 608/667] thermal: devfreq_cooling: use local ops instead of global ops
-Date:   Tue,  7 Jun 2022 19:04:33 +0200
-Message-Id: <20220607164952.910130081@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.17 682/772] landlock: Change landlock_add_rule(2) argument check ordering
+Date:   Tue,  7 Jun 2022 19:04:34 +0200
+Message-Id: <20220607165009.153976171@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,109 +54,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kant Fan <kant@allwinnertech.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit b947769b8f778db130aad834257fcaca25df2edc upstream.
+commit 589172e5636c4d16c40b90e87543d43defe2d968 upstream.
 
-Fix access illegal address problem in following condition:
+This makes more sense to first check the ruleset FD and then the rule
+attribute.  It will be useful to factor out code for other rule types.
 
-There are multiple devfreq cooling devices in system, some of them has
-EM model but others do not. Energy model ops such as state2power will
-append to global devfreq_cooling_ops when the cooling device with
-EM model is registered. It makes the cooling device without EM model
-also use devfreq_cooling_ops after appending when registered later by
-of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+Add inval_add_rule_arguments tests, extension of empty_path_beneath_attr
+tests, to also check error ordering for landlock_add_rule(2).
 
-The IPA governor regards the cooling devices without EM model as a power
-actor, because they also have energy model ops, and will access illegal
-address at dfc->em_pd when execute cdev->ops->get_requested_power,
-cdev->ops->state2power or cdev->ops->power2state.
-
-Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model and use EM")
-Cc: 5.13+ <stable@vger.kernel.org> # 5.13+
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://lore.kernel.org/r/20220506160820.524344-9-mic@digikod.net
+Cc: stable@vger.kernel.org
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/devfreq_cooling.c |   25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ security/landlock/syscalls.c                 |   22 ++++++++++-------
+ tools/testing/selftests/landlock/base_test.c |   34 +++++++++++++++++++++++++--
+ 2 files changed, 45 insertions(+), 11 deletions(-)
 
---- a/drivers/thermal/devfreq_cooling.c
-+++ b/drivers/thermal/devfreq_cooling.c
-@@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct
- 	struct thermal_cooling_device *cdev;
- 	struct device *dev = df->dev.parent;
- 	struct devfreq_cooling_device *dfc;
-+	struct thermal_cooling_device_ops *ops;
- 	char *name;
- 	int err, num_opps;
+--- a/security/landlock/syscalls.c
++++ b/security/landlock/syscalls.c
+@@ -318,20 +318,24 @@ SYSCALL_DEFINE4(landlock_add_rule, const
+ 	if (flags)
+ 		return -EINVAL;
  
--	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
--	if (!dfc)
-+	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
-+	if (!ops)
- 		return ERR_PTR(-ENOMEM);
+-	if (rule_type != LANDLOCK_RULE_PATH_BENEATH)
+-		return -EINVAL;
+-
+-	/* Copies raw user space buffer, only one type for now. */
+-	res = copy_from_user(&path_beneath_attr, rule_attr,
+-			     sizeof(path_beneath_attr));
+-	if (res)
+-		return -EFAULT;
+-
+ 	/* Gets and checks the ruleset. */
+ 	ruleset = get_ruleset_from_fd(ruleset_fd, FMODE_CAN_WRITE);
+ 	if (IS_ERR(ruleset))
+ 		return PTR_ERR(ruleset);
  
-+	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
-+	if (!dfc) {
-+		err = -ENOMEM;
-+		goto free_ops;
++	if (rule_type != LANDLOCK_RULE_PATH_BENEATH) {
++		err = -EINVAL;
++		goto out_put_ruleset;
 +	}
 +
- 	dfc->devfreq = df;
- 
- 	dfc->em_pd = em_pd_get(dev);
- 	if (dfc->em_pd) {
--		devfreq_cooling_ops.get_requested_power =
-+		ops->get_requested_power =
- 			devfreq_cooling_get_requested_power;
--		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
--		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
-+		ops->state2power = devfreq_cooling_state2power;
-+		ops->power2state = devfreq_cooling_power2state;
- 
- 		dfc->power_ops = dfc_power;
- 
-@@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct
- 	if (!name)
- 		goto remove_qos_req;
- 
--	cdev = thermal_of_cooling_device_register(np, name, dfc,
--						  &devfreq_cooling_ops);
-+	cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
- 	kfree(name);
- 
- 	if (IS_ERR(cdev)) {
-@@ -429,6 +435,8 @@ free_table:
- 	kfree(dfc->freq_table);
- free_dfc:
- 	kfree(dfc);
-+free_ops:
-+	kfree(ops);
- 
- 	return ERR_PTR(err);
++	/* Copies raw user space buffer, only one type for now. */
++	res = copy_from_user(&path_beneath_attr, rule_attr,
++			     sizeof(path_beneath_attr));
++	if (res) {
++		err = -EFAULT;
++		goto out_put_ruleset;
++	}
++
+ 	/*
+ 	 * Informs about useless rule: empty allowed_access (i.e. deny rules)
+ 	 * are ignored in path walks.
+--- a/tools/testing/selftests/landlock/base_test.c
++++ b/tools/testing/selftests/landlock/base_test.c
+@@ -121,20 +121,50 @@ TEST(inval_create_ruleset_flags)
+ 	ASSERT_EQ(EINVAL, errno);
  }
-@@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_reg
- void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+ 
+-TEST(empty_path_beneath_attr)
++/* Tests ordering of syscall argument checks. */
++TEST(add_rule_checks_ordering)
  {
- 	struct devfreq_cooling_device *dfc;
-+	const struct thermal_cooling_device_ops *ops;
- 	struct device *dev;
+ 	const struct landlock_ruleset_attr ruleset_attr = {
+ 		.handled_access_fs = LANDLOCK_ACCESS_FS_EXECUTE,
+ 	};
++	struct landlock_path_beneath_attr path_beneath_attr = {
++		.allowed_access = LANDLOCK_ACCESS_FS_EXECUTE,
++		.parent_fd = -1,
++	};
+ 	const int ruleset_fd =
+ 		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
  
- 	if (IS_ERR_OR_NULL(cdev))
- 		return;
+ 	ASSERT_LE(0, ruleset_fd);
  
-+	ops = cdev->ops;
- 	dfc = cdev->devdata;
- 	dev = dfc->devfreq->dev.parent;
- 
-@@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct t
- 
- 	kfree(dfc->freq_table);
- 	kfree(dfc);
-+	kfree(ops);
+-	/* Similar to struct landlock_path_beneath_attr.parent_fd = 0 */
++	/* Checks invalid flags. */
++	ASSERT_EQ(-1, landlock_add_rule(-1, 0, NULL, 1));
++	ASSERT_EQ(EINVAL, errno);
++
++	/* Checks invalid ruleset FD. */
++	ASSERT_EQ(-1, landlock_add_rule(-1, 0, NULL, 0));
++	ASSERT_EQ(EBADF, errno);
++
++	/* Checks invalid rule type. */
++	ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, 0, NULL, 0));
++	ASSERT_EQ(EINVAL, errno);
++
++	/* Checks invalid rule attr. */
+ 	ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+ 					NULL, 0));
+ 	ASSERT_EQ(EFAULT, errno);
++
++	/* Checks invalid path_beneath.parent_fd. */
++	ASSERT_EQ(-1, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
++					&path_beneath_attr, 0));
++	ASSERT_EQ(EBADF, errno);
++
++	/* Checks valid call. */
++	path_beneath_attr.parent_fd =
++		open("/tmp", O_PATH | O_NOFOLLOW | O_DIRECTORY | O_CLOEXEC);
++	ASSERT_LE(0, path_beneath_attr.parent_fd);
++	ASSERT_EQ(0, landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
++				       &path_beneath_attr, 0));
++	ASSERT_EQ(0, close(path_beneath_attr.parent_fd));
+ 	ASSERT_EQ(0, close(ruleset_fd));
  }
- EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+ 
 
 

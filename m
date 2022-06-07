@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C747954125F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E565D541A45
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357224AbiFGTqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S1354089AbiFGVcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354619AbiFGSrb (ORCPT
+        with ESMTP id S1377937AbiFGUek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FC83617F;
-        Tue,  7 Jun 2022 11:02:35 -0700 (PDT)
+        Tue, 7 Jun 2022 16:34:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE63415A761;
+        Tue,  7 Jun 2022 11:36:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FC90B82354;
-        Tue,  7 Jun 2022 18:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F072C3411C;
-        Tue,  7 Jun 2022 18:02:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A674B82182;
+        Tue,  7 Jun 2022 18:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD650C385A5;
+        Tue,  7 Jun 2022 18:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624953;
-        bh=4LcXyfuHc79a6hvseTmi9YjVx5I21yjNoqRvw/FGBL4=;
+        s=korg; t=1654627011;
+        bh=Ga08/OLnyXNnL8sL9UQF+m5AArZ3XQ4eVArDlX0HBPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xj1x32tNVD8yrtMaMiMKUHVSIT/a9v3nszWtyduVcRLndYbsnR0Yhqn1hCTRPZAeO
-         EMFPRIOqEeViq6rCuAiuVHdx56PMSPjh1qL3nAbcEWfxABAbvEHbhykC4Tkjdxypw0
-         K1UHFJLWLBxn+iXFmbJ8wAlJ5vX5Ynq3bvl5K4/8=
+        b=leEK3YCbvs4AcVbxxL9ri5lhl00ENB81Tvvgaz0VYnoOFKSICN6nCJYYL0PL1Lg31
+         /fKxCKIISp+pXOZcqKAK4kv9Tw0K2xpDQodXflRIL6rvKAFthPICMyviRnDkBIfm3A
+         w+R9sDsD4/paHK1mVGXY8MG1AuplsY99+02x8SRA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 512/667] NFS: Always initialise fattr->label in nfs_fattr_alloc()
+Subject: [PATCH 5.17 585/772] NFSv4/pNFS: Do not fail I/O when we fail to allocate the pNFS layout
 Date:   Tue,  7 Jun 2022 19:02:57 +0200
-Message-Id: <20220607164950.059295195@linuxfoundation.org>
+Message-Id: <20220607165006.185523312@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,33 +58,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit d4a95a7e5a4d3b68b26f70668cf77324a11b5718 ]
+[ Upstream commit 3764a17e31d579cf9b4bd0a69894b577e8d75702 ]
 
-We're about to add a check in nfs_free_fattr() for whether or not the
-label is non-zero.
+Commit 587f03deb69b caused pnfs_update_layout() to stop returning ENOMEM
+when the memory allocation fails, and hence causes it to fall back to
+trying to do I/O through the MDS. There is no guarantee that this will
+fare any better. If we're failing the pNFS layout allocation, then we
+should just redirty the page and retry later.
 
+Reported-by: Olga Kornievskaia <aglo@umich.edu>
+Fixes: 587f03deb69b ("pnfs: refactor send_layoutget")
 Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/inode.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/nfs/pnfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
-index f4f75db7a825..4ed75673adf6 100644
---- a/fs/nfs/inode.c
-+++ b/fs/nfs/inode.c
-@@ -1581,8 +1581,10 @@ struct nfs_fattr *nfs_alloc_fattr(void)
- 	struct nfs_fattr *fattr;
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index 7ddd003ab8b1..9203a17b3f09 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -2000,6 +2000,7 @@ pnfs_update_layout(struct inode *ino,
+ 	lo = pnfs_find_alloc_layout(ino, ctx, gfp_flags);
+ 	if (lo == NULL) {
+ 		spin_unlock(&ino->i_lock);
++		lseg = ERR_PTR(-ENOMEM);
+ 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, lseg,
+ 				 PNFS_UPDATE_LAYOUT_NOMEM);
+ 		goto out;
+@@ -2128,6 +2129,7 @@ pnfs_update_layout(struct inode *ino,
  
- 	fattr = kmalloc(sizeof(*fattr), GFP_NOFS);
--	if (fattr != NULL)
-+	if (fattr != NULL) {
- 		nfs_fattr_init(fattr);
-+		fattr->label = NULL;
-+	}
- 	return fattr;
- }
- EXPORT_SYMBOL_GPL(nfs_alloc_fattr);
+ 	lgp = pnfs_alloc_init_layoutget_args(ino, ctx, &stateid, &arg, gfp_flags);
+ 	if (!lgp) {
++		lseg = ERR_PTR(-ENOMEM);
+ 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, NULL,
+ 					 PNFS_UPDATE_LAYOUT_NOMEM);
+ 		nfs_layoutget_end(lo);
 -- 
 2.35.1
 

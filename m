@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2795423A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A433542201
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390264AbiFHBq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
+        id S240436AbiFHBs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1574447AbiFGXZo (ORCPT
+        with ESMTP id S1575397AbiFGX1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:25:44 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEB03798FF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:18 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so22043098pju.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:18 -0700 (PDT)
+        Tue, 7 Jun 2022 19:27:06 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D39840BA6C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:39:25 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id y85so6619710iof.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+tlXHJz9kisGrwJfIL/WMzkc1MTPDPH2NkDRgofMQXA=;
-        b=CAQl78ghMWdgJpqs5v1tnPv/lepLaq6E6vHOQGSNFpzq0er9j5lbI4PgArppRnxI1i
-         OhUHFhwQFCvy16F1fowJJ0nOReoDaAayxdilL8hHuOdrtYQOZkulXHx7HI4Tqfp0C+OG
-         Vq9dE/RfMBMoIXhW6yIroAQ9UKNnH2hPxxa8k=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DMYMqyjnC+Pa1f9t3aRd7d9q29f2hRwNi8wYEpJotmk=;
+        b=h4EOnSJW5qlumjyDRpOGgdjQoOyB4Q+O6l59N39UQahjkhxDl4VSySl01hMTwc9zRT
+         EfuDzgEVqg/pBp3s4lQPkvko7HQkMiBmLEgZ1AEo0N7Phwb0v+fDY90LCrvAPcCNaH2r
+         O3L623yMARWhJhFoBgQ8IewDspFlSDu0Jp5ag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+tlXHJz9kisGrwJfIL/WMzkc1MTPDPH2NkDRgofMQXA=;
-        b=0pRA/yoGoOIbLO8On/j1kewG9hKy8YihdrTqwxiJbMmGGxJxwOskO5Pv81CHlI04XM
-         ZMbL3FT9UFzYgdwzGV1xTxo5ayCHJ0qP/kQQymm81aaJJZ/NOZHDXurDCJfMOy8o0YPT
-         D61Op/m6sH0zHSVrGiaALLmdw+5qGgaEoU7KLAnS7Pj51xt3GZLWDDxE/vcntUa0fV/A
-         UmRzCtsRnYLZYH6FZeIAElsD0h82CsQPgCN4i7mc2acE8rgX0+beQT4X3mrcWcNiTSdr
-         k+lRd2mp8hfSl7287hFT6W5POn5Z1vYIgR8BbLggVZGDAe/8eqCSgYMxmGKVoZc1/DpA
-         bD4A==
-X-Gm-Message-State: AOAM533tW8EmFZMURwNpkJ522CTkI5r1svH7LcsFGn/A6Pdnt0H1jXY2
-        WX1ml0E3d9S0y4VuyTDaCSfiFw==
-X-Google-Smtp-Source: ABdhPJwOhl2xigdWsk9Ip1jYWJh9CMdZiN68xBIN0cOrLS7fUs1z4TCbxFVDM92Dxke6O0smj4+FAA==
-X-Received: by 2002:a17:902:9b8a:b0:163:d0ad:f9e8 with SMTP id y10-20020a1709029b8a00b00163d0adf9e8mr30304386plp.79.1654637777427;
-        Tue, 07 Jun 2022 14:36:17 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:b689:cc5b:e6ad:930e])
-        by smtp.gmail.com with ESMTPSA id q21-20020a056a00085500b0051874318772sm5823056pfk.201.2022.06.07.14.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 14:36:16 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 14:36:14 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: rockchip: Assign RK3399 VDU clock rate
-Message-ID: <Yp/EzreGUkFIvwhG@google.com>
-References: <20220607141535.1.Idafe043ffc94756a69426ec68872db0645c5d6e2@changeid>
- <253e2771abb13a3e62c07dfb0b420169bb572c2d.camel@collabora.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DMYMqyjnC+Pa1f9t3aRd7d9q29f2hRwNi8wYEpJotmk=;
+        b=TQOfrQNt6BIVCAefIxOM9uAYyJaAq2Z2820hJbCcHB+8vcYm3pjM6zu/wolANk8sRi
+         pw7LFfPNIHCyhAwbCBMZMKVqdQFua0hzdZL70XsM97797T53sp0BtJTvWl9jKPsR+uqz
+         nbVl9/fzOI+hU/Rdjd4pk0Rc25wb3pO3R7MVxI4zZnFEykznHBCJgjrh7EWdNvUhTcwd
+         ViXv0bOujRp3rqmX6HF3MoIwkDvFJF55BNgasBeJino8aW0NaEkp++kgn0PAJNPxrI6l
+         18GbQjNsJWvzJVKgd7jhmi2Vh7qrGvfsHfck/+l4GrDAVQoBrN0oqZ+w4KhlcBhlPfX0
+         PHTw==
+X-Gm-Message-State: AOAM531XWd47azGJAjnPpoirOc/R/AdHMRb98CrqrzqX4MeaEI7SN8AT
+        wG+7YSRUMzGchXDWFUV/o3q2Zw==
+X-Google-Smtp-Source: ABdhPJx4JWLAS1RWT5TFeTIfGK6vW9bn00rsuVLiTtAdQU1cno64ZEk4yj+YCiecaRL9yWnI7GLMpg==
+X-Received: by 2002:a05:6638:1495:b0:331:c58a:301 with SMTP id j21-20020a056638149500b00331c58a0301mr4212898jak.134.1654637962472;
+        Tue, 07 Jun 2022 14:39:22 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id e1-20020a022101000000b0032b3a78179csm7086269jaa.96.2022.06.07.14.39.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 14:39:22 -0700 (PDT)
+Subject: Re: [Bug Report] - kselftest build fails if output directory is first
+ level sub-directory
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+ <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a9470bfc-bddc-6aa6-0043-d49eb57611fe@linuxfoundation.org>
+Date:   Tue, 7 Jun 2022 15:39:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <253e2771abb13a3e62c07dfb0b420169bb572c2d.camel@collabora.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 05:20:41PM -0400, Nicolas Dufresne wrote:
-> Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+On 5/22/22 11:15 AM, Masahiro Yamada wrote:
+> On Sat, May 21, 2022 at 3:44 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Hello,
+>>
+>> kselftest can be built using the kernel's top most Makefile without
+>> using kselftest's Makefile directly. But there is bug in the top most
+>> Makefile. The build fails if the specified output directory is first
+>> level sub-directory. Here is a example to reproduce this bug:
+>>
+>> make kselftest-all O=build
+>>
+>> "The Make is working in a wrong directory, that is why the relative path
+>> does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
+>>
+>> It should be noted that the build works in some other combinations:
+>> make kselftest-all (works)
+>> make kselftest-all O=/tmp (works)
+>> make kselftest-all O=build/build2 (works)
+>>
+>> My unsuccessful attempt to fix this bug can be found here:
+>> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+>>
+>> Thanks,
+>> Muhammad Usama Anjum
+> 
+> 
+> This problem starts from the bad design of the kselftest framework.
+> I did some research before. I think I can fix the root cause but
+> currently I do not have enough time to do it.
+> 
+> 
+> KBUILD_ABS_SRCTREE is a user-interface to request
+> Kbuild to use the absolute path.
+> If it is forced in the top Makefile, users have no way to
+> negate it.
+> It is true that using the absolute path is a quick work-around
+> because you do not need to care about the current working directory.
+> 
+> If you insist on it,  just go ahead.  It is just two line changes.
+> Once the issue is fixed in a better way, your patch can be reverted easily.
+> 
+> 
+> 
 
-Thanks!
+Why don't we work on fixing it the wright way? I would rather go that
+route than using short rem fixes.
 
-> My only doubt was if you really needed to duplicate that setting into gru-
-> scarlet.dtsi, but I've simply assumed the answer is yes, and that you already
-> checked that.
+Usama, would you be interested in working on a proper fix as recommended
+by Masahiro?
 
-I didn't explicitly test without modifying gru-scarlet.dtsi, but the
-unfortunate nature of these long monolithic
-assigned-clocks/assigned-clock-rates properties is that if you want to
-add or override one element in the array, you have to repeat (or
-override) all of them. And because rk3399-gru-scarlet.dtsi already
-overrides some of them, every additional change has to be reflected
-there.
-
-That's why it would be much nicer to be able to distribute the
-assignments to their various consumer nodes, but as noted in the commit
-message (because you mentioned it to me out-of-band ;) ), we can't do
-that.
-
-Regards,
-Brian
+thanks,
+-- Shuah

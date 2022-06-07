@@ -2,695 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81AA542318
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D173542378
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391971AbiFHAvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S1391770AbiFHBw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575230AbiFGX04 (ORCPT
+        with ESMTP id S1579396AbiFGXkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:26:56 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44024096AF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:38:58 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id l81so10211072oif.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:38:58 -0700 (PDT)
+        Tue, 7 Jun 2022 19:40:00 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9025823282D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:41:49 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id d7so10392102iof.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mmhJTrds0AK825mdt0RAOR2S9VJs5ATamOGYxgtTiGE=;
-        b=kgtVED8yCNKTkSolu+HhI4L0ia4bhgC9LPlxsdechqL+fiMDvnqPzY76GC7xcuBJB2
-         +Qle3/2cVItzOrsti8mklUwWCeH5Qw30E3vSbxY0xhf3UN0axpShuqk+onrRIWIQeX2K
-         qzmC5ic6PvIKx3E8PHNVxdlQ2lBioQ2Nj+oCgfP4cD7dQl/RQrztTGupSJxbeR0EoIAE
-         nwVATnJ9WITVxNXa/nCG+xiS6NNxrKqDDPkh7fy0r71uNrAaYrJQ366mQpNzD1EWkYtm
-         90Do+NXb/OGa3nSUZv/ym/KTNl7HCmkrtaKO2LWpL2xxqyuMeVB1+SMpiGI1ryzWgtj0
-         aSQQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Zei+rMtXofDNspSEQfHDdxvw6FwTTwwAkNk8PaYH+Vk=;
+        b=gM1q3haoZ8xcG2m/1cV4QlglIObFRuaOTqfk3ZWzwKu4lYch/pviT5/sn6YWsi2Ful
+         MUyuJNgKwzjHOT4WiD66Cg7h8YfDvPP7TQ5z4caqZ0/iE2nrwwvmyzkjl1ra6qYZwVji
+         +jHM75UnnwV5WsODAILvthjF49P4Hna02u2ZM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mmhJTrds0AK825mdt0RAOR2S9VJs5ATamOGYxgtTiGE=;
-        b=C36lvOzR0eDtLwIG4iRCKGZX/J+K9iUc101K2hPJ73nm3dFmk6PpdrfCkt/OeXUucj
-         2RyOz28nOVczeI0cvOqv/b9E7eLgd0zGLNlyKawvMekO8+tDcvWFeG3ctkTAqhtBqOVY
-         d1Li59usyz8BgOTDg2Ui0jPRb2bvDIGx8JUbFv/WFjIeoaemjVIBtl+1OaRtXNJQoCw6
-         dYbIYSJu3z01sPD6yxz+lltyF9hSc9GmviiqMPF2HKCrd7pi3jYmCW49tqnJMpe8FkLg
-         KhEfCQnbKMy52lY/2To8FRz+sd1WhTonDvuuO7SuXJu+MwKpobwdVaKMJIzUaDKfJZ48
-         fl5w==
-X-Gm-Message-State: AOAM5329l4JPridwVlBNQR6QL1OOUdlKERCVaC+K29iS3v9wEMWK7OZ9
-        1DQMLFEcZWu2USgcgaeruA6D8g==
-X-Google-Smtp-Source: ABdhPJxhCOn4x9ulK4BZABDhXUp2WB1BUMpNTcNNkp4vcQ/D/EW0ImPOa3V3AjWnBjEqapmqHj58nw==
-X-Received: by 2002:a05:6808:1308:b0:32b:a23d:bc05 with SMTP id y8-20020a056808130800b0032ba23dbc05mr571724oiv.145.1654637933525;
-        Tue, 07 Jun 2022 14:38:53 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id cr11-20020a056870ebcb00b000f33a37411dsm8554122oab.26.2022.06.07.14.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 14:38:52 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: qcom: add SA8540P and ADP
-Date:   Tue,  7 Jun 2022 14:41:13 -0700
-Message-Id: <20220607214113.4057684-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
-References: <20220607214113.4057684-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Zei+rMtXofDNspSEQfHDdxvw6FwTTwwAkNk8PaYH+Vk=;
+        b=alIglxgqrGi5V7Xxqi8g0FcY+lCJaPYnLIpOkZ0f1SgeM+MNaKL/5U4Suvwu6dI2bJ
+         0JTNTrm7VJSLIblpt+8iGhtJGp70ZxGdhSkaTEJmCO0nvVqFzkT4jVEG7SV5/zqIhwPa
+         S136ZcH/OjSqpyAMgsh4wNwAvT3apLHWG3awguYuhXEk7ijN/tqDNZZw5pihW1XTtnpq
+         jqQO6DpzSfpCj0Aaq+ZW10p87XT+GDf7x7hJuNBIGW0QFOTdhI0PdRuN9a9+Jw7LmfTB
+         rnItgKYhaCv1m4A9I2jCWOF/O02DDvI3OVNTOOuSzCKP5AmMOK0Kn2U46iRYWBjo7O0r
+         sq0g==
+X-Gm-Message-State: AOAM530eztgRAOO0zxRRJx/WRguxwqeKwSS+PzlvaR2FXwVRED5WYPJS
+        zMyAVSvzpybs0iQcMN+I0q38sDVWRCDvEA==
+X-Google-Smtp-Source: ABdhPJx71niVTJbfk9wp/5WJhlD+JuQVs7tZ8hmuK9HPnLiZYXzVppCBWspGOgJX6/6yZCG6NS2ztA==
+X-Received: by 2002:a05:6638:2105:b0:331:9c7:4e8b with SMTP id n5-20020a056638210500b0033109c74e8bmr17555779jaj.129.1654638108936;
+        Tue, 07 Jun 2022 14:41:48 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g11-20020a02b70b000000b0033136906e1esm7153212jam.18.2022.06.07.14.41.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 14:41:48 -0700 (PDT)
+Subject: Re: [PATCH v2] docs/kselftest: add more guidelines for adding new
+ tests
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     kernel@collabora.com, bagasdotme@gmail.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220521073651.4191910-1-usama.anjum@collabora.com>
+ <e01f90a0-a3c7-c5fd-ae1f-197c6fec525e@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <63fc263d-c06a-2974-298c-5da80322411a@linuxfoundation.org>
+Date:   Tue, 7 Jun 2022 15:41:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e01f90a0-a3c7-c5fd-ae1f-197c6fec525e@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce the Qualcomm SA8540P automotive platform and the SA8295P ADP
-development board.
+On 6/7/22 6:59 AM, Muhammad Usama Anjum wrote:
+> Reminder!
+> 
 
-The SA8540P and SC8280XP are fairly similar, so the SA8540P is built
-ontop of the SC8280XP dtsi to reduce duplication. As more advanced
-features are integrated this might be re-evaluated.
+Remember to avoid top posting.
 
-This initial contribution supports SMP, CPUFreq, cluster idle, UFS, RPMh
-regulators, debug UART, PMICs, remoteprocs (NSPs crashes shortly after
-booting) and USB.
+> On 5/21/22 12:36 PM, Muhammad Usama Anjum wrote:
+>> Improve and add instructions to add new tests. Add build commands to
+>> test before sending the new test patch.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes in v2:
+>> - Updated commit message
+>> - Removed dependence of this patch from other patch
+>> - Updated instructions
+>> ---
+>>   Documentation/dev-tools/kselftest.rst | 27 ++++++++++++++++++++++++++-
+>>   1 file changed, 26 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+>> index a833ecf12fbc1..ee6467ca8293f 100644
+>> --- a/Documentation/dev-tools/kselftest.rst
+>> +++ b/Documentation/dev-tools/kselftest.rst
+>> @@ -208,6 +208,14 @@ In general, the rules for selftests are
+>>   Contributing new tests (details)
+>>   ================================
+>>   
+>> + * In your Makefile, use facilities from lib.mk by including it instead of
+>> +   reinventing the wheel. Specify flags and binaries generation flags on
+>> +   need basis before including lib.mk. ::
+>> +
+>> +    CFLAGS = $(KHDR_INCLUDES)
+>> +    TEST_GEN_PROGS := close_range_test
+>> +    include ../lib.mk
+>> +
+>>    * Use TEST_GEN_XXX if such binaries or files are generated during
+>>      compiling.
+>>   
+>> @@ -230,13 +238,30 @@ Contributing new tests (details)
+>>    * First use the headers inside the kernel source and/or git repo, and then the
+>>      system headers.  Headers for the kernel release as opposed to headers
+>>      installed by the distro on the system should be the primary focus to be able
+>> -   to find regressions.
+>> +   to find regressions. Use KHDR_INCLUDES in Makefile to include headers from
+>> +   the kernel source.
+>>   
+>>    * If a test needs specific kernel config options enabled, add a config file in
+>>      the test directory to enable them.
+>>   
+>>      e.g: tools/testing/selftests/android/config
+>>   
+>> + * Create a .gitignore file inside test directory and add all generated objects
+>> +   in it.
+>> +
+>> + * Add new test name in TARGETS in selftests/Makefile::
+>> +
+>> +    TARGETS += android
+>> +
+>> + * All changes should pass::
+>> +
+>> +    kselftest-{all,install,clean,gen_tar}
+>> +    kselftest-{all,install,clean,gen_tar} O=abo_path
+>> +    kselftest-{all,install,clean,gen_tar} O=rel_path
+>> +    make -C tools/testing/selftests {all,install,clean,gen_tar}
+>> +    make -C tools/testing/selftests {all,install,clean,gen_tar} O=abs_path
+>> +    make -C tools/testing/selftests {all,install,clean,gen_tar} O=rel_path
+>> +
+>>   Test Module
+>>   ===========
+>>   
+> 
 
-The SA8295P ADP contains four PM8450 PMICs, which according to their
-revid are compatible with PM8150. They are defined within the ADP for
-now, to avoid creating additional .dtsi files for PM8150 with just
-addresses changed - and to allow using the labels from the schematics.
+The change looks good to me. I am catching up on patch backlog after the
+merge window and vacation. I can take this through kselftest or if it
+goes through doc tree - here is my
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/Makefile        |   1 +
- arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 434 +++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sa8540p.dtsi    | 133 +++++++
- 3 files changed, 568 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sa8295p-adp.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sa8540p.dtsi
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index ceeae094a59f..2f416b84b71c 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -52,6 +52,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-1000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-new file mode 100644
-index 000000000000..f78203d7bfd2
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-@@ -0,0 +1,434 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/gpio-keys.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include <dt-bindings/spmi/spmi.h>
-+
-+#include "sa8540p.dtsi"
-+
-+/ {
-+	model = "Qualcomm SA8295P ADP";
-+	compatible = "qcom,sa8295p-adp", "qcom,sa8540p";
-+
-+	aliases {
-+		serial0 = &qup2_uart17;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	reserved-memory {
-+	};
-+};
-+
-+&apps_rsc {
-+	pmm8540-a-regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vreg_l3a: ldo3 {
-+			regulator-name = "vreg_l3a";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1208000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l5a: ldo5 {
-+			regulator-name = "vreg_l5a";
-+			regulator-min-microvolt = <912000>;
-+			regulator-max-microvolt = <912000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l7a: ldo7 {
-+			regulator-name = "vreg_l7a";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l13a: ldo13 {
-+			regulator-name = "vreg_l13a";
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+	};
-+
-+	pmm8540-c-regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "c";
-+
-+		vreg_l1c: ldo1 {
-+			regulator-name = "vreg_l1c";
-+			regulator-min-microvolt = <912000>;
-+			regulator-max-microvolt = <912000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l2c: ldo2 {
-+			regulator-name = "vreg_l2c";
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l3c: ldo3 {
-+			regulator-name = "vreg_l3c";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l4c: ldo4 {
-+			regulator-name = "vreg_l4c";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1208000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l6c: ldo6 {
-+			regulator-name = "vreg_l6c";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l7c: ldo7 {
-+			regulator-name = "vreg_l7c";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l10c: ldo10 {
-+			regulator-name = "vreg_l10c";
-+			regulator-min-microvolt = <2504000>;
-+			regulator-max-microvolt = <2504000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l17c: ldo17 {
-+			regulator-name = "vreg_l17c";
-+			regulator-min-microvolt = <2504000>;
-+			regulator-max-microvolt = <2504000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+	};
-+
-+	pmm8540-g-regulators {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "g";
-+
-+		vreg_l3g: ldo3 {
-+			regulator-name = "vreg_l3g";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l7g: ldo7 {
-+			regulator-name = "vreg_l7g";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+
-+		vreg_l8g: ldo8 {
-+			regulator-name = "vreg_l8g";
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <880000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+		};
-+	};
-+};
-+
-+&qup2 {
-+	status = "okay";
-+};
-+
-+&qup2_uart17 {
-+	compatible = "qcom,geni-debug-uart";
-+	status = "okay";
-+};
-+
-+&remoteproc_adsp {
-+	status = "okay";
-+	firmware-name = "qcom/sa8540p/adsp.mbn";
-+};
-+
-+&remoteproc_nsp0 {
-+	status = "okay";
-+	firmware-name = "qcom/sa8540p/cdsp.mbn";
-+};
-+
-+&remoteproc_nsp1 {
-+	status = "okay";
-+	firmware-name = "qcom/sa8540p/cdsp1.mbn";
-+};
-+
-+&spmi_bus {
-+	pm8450a: pmic@0 {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0x0 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450a_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pm8450c: pmic@4 {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0x4 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450c_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pm8450e: pmic@8 {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0x8 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450e_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pm8450g: pmic@c {
-+		compatible = "qcom,pm8150", "qcom,spmi-pmic";
-+		reg = <0xc SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pm8450g_gpios: gpio@c000 {
-+			compatible = "qcom,pm8150-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+};
-+
-+&ufs_mem_hc {
-+	status = "okay";
-+
-+	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l17c>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l6c>;
-+	vccq-max-microamp = <900000>;
-+};
-+
-+&ufs_mem_phy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l8g>;
-+	vdda-pll-supply = <&vreg_l3g>;
-+};
-+
-+&ufs_card_hc {
-+	status = "okay";
-+
-+	reset-gpios = <&tlmm 229 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l10c>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l3c>;
-+	vccq-max-microamp = <900000>;
-+};
-+
-+&ufs_card_phy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l8g>;
-+	vdda-pll-supply = <&vreg_l3g>;
-+};
-+
-+&usb_0 {
-+	status = "okay";
-+};
-+
-+&usb_0_dwc3 {
-+	/* TODO: Define USB-C connector properly */
-+	dr_mode = "peripheral";
-+};
-+
-+&usb_0_hsphy {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7a>;
-+	vdda33-supply = <&vreg_l13a>;
-+};
-+
-+&usb_0_qmpphy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+};
-+
-+&usb_1 {
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	/* TODO: Define USB-C connector properly */
-+	dr_mode = "host";
-+};
-+
-+&usb_1_hsphy {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l1c>;
-+	vdda18-supply = <&vreg_l7c>;
-+	vdda33-supply = <&vreg_l2c>;
-+};
-+
-+&usb_1_qmpphy {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l4c>;
-+	vdda-pll-supply = <&vreg_l1c>;
-+};
-+
-+&usb_2 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb2_en_state>, <&usb3_en_state>, <&usb4_en_state>, <&usb5_en_state>;
-+};
-+
-+&usb_2_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_2_hsphy0 {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+};
-+
-+&usb_2_hsphy1 {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+};
-+
-+&usb_2_hsphy2 {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+};
-+
-+&usb_2_hsphy3 {
-+	status = "okay";
-+
-+	vdda-pll-supply = <&vreg_l5a>;
-+	vdda18-supply = <&vreg_l7g>;
-+	vdda33-supply = <&vreg_l13a>;
-+};
-+
-+&usb_2_qmpphy0 {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+};
-+
-+&usb_2_qmpphy1 {
-+	status = "okay";
-+
-+	vdda-phy-supply = <&vreg_l3a>;
-+	vdda-pll-supply = <&vreg_l5a>;
-+};
-+
-+/* PINCTRL */
-+&pm8450c_gpios {
-+	usb2_en_state: usb2-en-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-+
-+&pm8450e_gpios {
-+	usb3_en_state: usb3-en-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-+
-+&pm8450g_gpios {
-+	usb4_en_state: usb4-en-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+
-+	usb5_en_state: usb5-en-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		output-high;
-+		power-source = <0>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p.dtsi b/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-new file mode 100644
-index 000000000000..8ea2886fbab2
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8540p.dtsi
-@@ -0,0 +1,133 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ */
-+
-+#include "sc8280xp.dtsi"
-+
-+/delete-node/ &cpu0_opp_table;
-+/delete-node/ &cpu4_opp_table;
-+
-+/ {
-+	cpu0_opp_table: cpu0-opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-403200000 {
-+			opp-hz = /bits/ 64 <403200000>;
-+		};
-+		opp-499200000 {
-+			opp-hz = /bits/ 64 <499200000>;
-+		};
-+		opp-595200000 {
-+			opp-hz = /bits/ 64 <595200000>;
-+		};
-+		opp-710400000 {
-+			opp-hz = /bits/ 64 <710400000>;
-+		};
-+		opp-806400000 {
-+			opp-hz = /bits/ 64 <806400000>;
-+		};
-+		opp-902400000 {
-+			opp-hz = /bits/ 64 <902400000>;
-+		};
-+		opp-1017600000 {
-+			opp-hz = /bits/ 64 <1017600000>;
-+		};
-+		opp-1113600000 {
-+			opp-hz = /bits/ 64 <1113600000>;
-+		};
-+		opp-1209600000 {
-+			opp-hz = /bits/ 64 <1209600000>;
-+		};
-+		opp-1324800000 {
-+			opp-hz = /bits/ 64 <1324800000>;
-+		};
-+		opp-1440000000 {
-+			opp-hz = /bits/ 64 <1440000000>;
-+		};
-+		opp-1555200000 {
-+			opp-hz = /bits/ 64 <1555200000>;
-+		};
-+		opp-1670400000 {
-+			opp-hz = /bits/ 64 <1670400000>;
-+		};
-+		opp-1785600000 {
-+			opp-hz = /bits/ 64 <1785600000>;
-+		};
-+		opp-1881600000 {
-+			opp-hz = /bits/ 64 <1881600000>;
-+		};
-+		opp-2016000000 {
-+			opp-hz = /bits/ 64 <2016000000>;
-+		};
-+		opp-2131200000 {
-+			opp-hz = /bits/ 64 <2131200000>;
-+		};
-+		opp-2246400000 {
-+			opp-hz = /bits/ 64 <2246400000>;
-+		};
-+	};
-+
-+	cpu4_opp_table: cpu4-opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-825600000 {
-+			opp-hz = /bits/ 64 <825600000>;
-+		};
-+		opp-940800000 {
-+			opp-hz = /bits/ 64 <940800000>;
-+		};
-+		opp-1056000000 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+		};
-+		opp-1171200000 {
-+			opp-hz = /bits/ 64 <1171200000>;
-+		};
-+		opp-1286400000 {
-+			opp-hz = /bits/ 64 <1286400000>;
-+		};
-+		opp-1401600000 {
-+			opp-hz = /bits/ 64 <1401600000>;
-+		};
-+		opp-1516800000 {
-+			opp-hz = /bits/ 64 <1516800000>;
-+		};
-+		opp-1632000000 {
-+			opp-hz = /bits/ 64 <1632000000>;
-+		};
-+		opp-1747200000 {
-+			opp-hz = /bits/ 64 <1747200000>;
-+		};
-+		opp-1862400000 {
-+			opp-hz = /bits/ 64 <1862400000>;
-+		};
-+		opp-1977600000 {
-+			opp-hz = /bits/ 64 <1977600000>;
-+		};
-+		opp-2073600000 {
-+			opp-hz = /bits/ 64 <2073600000>;
-+		};
-+		opp-2169600000 {
-+			opp-hz = /bits/ 64 <2169600000>;
-+		};
-+		opp-2284800000 {
-+			opp-hz = /bits/ 64 <2284800000>;
-+		};
-+		opp-2380800000 {
-+			opp-hz = /bits/ 64 <2380800000>;
-+		};
-+		opp-2496000000 {
-+			opp-hz = /bits/ 64 <2496000000>;
-+		};
-+		opp-2592000000 {
-+			opp-hz = /bits/ 64 <2592000000>;
-+		};
-+	};
-+};
-+
-+&rpmhpd {
-+	compatible = "qcom,sa8540p-rpmhpd";
-+};
--- 
-2.35.1
-
+thanks,
+-- Shuah

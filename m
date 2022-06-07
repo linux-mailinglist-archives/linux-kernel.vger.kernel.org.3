@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EF554139D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4096B540932
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358132AbiFGUDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S1350687AbiFGSGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353759AbiFGTDF (ORCPT
+        with ESMTP id S1348493AbiFGRp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:03:05 -0400
+        Tue, 7 Jun 2022 13:45:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCB1158F23;
-        Tue,  7 Jun 2022 11:05:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A8E131F2E;
+        Tue,  7 Jun 2022 10:35:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C211617A5;
-        Tue,  7 Jun 2022 18:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16AF7C385A5;
-        Tue,  7 Jun 2022 18:05:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C16F61529;
+        Tue,  7 Jun 2022 17:35:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A81EC385A5;
+        Tue,  7 Jun 2022 17:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625117;
-        bh=yj/Ml6jb/VyjxhYDwDi7OwOl8HHnQ0Jn+d0s9xCWTnA=;
+        s=korg; t=1654623332;
+        bh=XAGJ6U13VmkrVh5Zc7zRwbkmBQUzO0nmuegqfoYHRKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aUYTGXQKPZZB/HgxgoXaJFre4yG3BrKufPGU6SVAQ5h8H13JBZ9ECDjusAGcESyTg
-         VIsoS8wTl0IpgtC+xnHMZMTo2tUqn4YlgQ529W1P+/1XEBYDsy8k1pJzYIBuF/s+iE
-         z7+iVM6hS5Cyq0qSlEPhtm8KjUY7/krx+urLWyp8=
+        b=JfYwCZDtEfM0jM8C6KMywolLhbrjdi+30hQb1cOhr1SBgc5snIcD1duU5tvsvTmqF
+         aa4OfzCpYH7JoQbkD0iftJRxtocDMmimPu68RamB7DEvCz/O2V5RszpqqWeqwhwr9K
+         /G7GRDq0UJX5EozZl0dPq0muQx/8X/BP8Hzw9wpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 531/667] bfq: Avoid false marking of bic as stably merged
+        stable@vger.kernel.org, Tyrone Ting <kfting@nuvoton.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 339/452] i2c: npcm: Correct register access width
 Date:   Tue,  7 Jun 2022 19:03:16 +0200
-Message-Id: <20220607164950.628242842@linuxfoundation.org>
+Message-Id: <20220607164918.658664342@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Tyrone Ting <kfting@nuvoton.com>
 
-commit 70456e5210f40ffdb8f6d905acfdcec5bd5fad9e upstream.
+[ Upstream commit ea9f8426d17620214ee345ffb77ee6cc196ff14f ]
 
-bfq_setup_cooperator() can mark bic as stably merged even though it
-decides to not merge its bfqqs (when bfq_setup_merge() returns NULL).
-Make sure to mark bic as stably merged only if we are really going to
-merge bfqqs.
+The SMBnCTL3 register is 8-bit wide and the 32-bit access was always
+incorrect, but simply didn't cause a visible error on the 32-bit machine.
 
-CC: stable@vger.kernel.org
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Fixes: 430a67f9d616 ("block, bfq: merge bursts of newly-created queues")
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-1-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On the 64-bit machine, the kernel message reports that ESR value is
+0x96000021. Checking Arm Architecture Reference Manual Armv8 suggests that
+it's the alignment fault.
+
+SMBnCTL3's address is 0xE.
+
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+Reviewed-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2773,9 +2773,12 @@ bfq_setup_cooperator(struct bfq_data *bf
- 				struct bfq_queue *new_bfqq =
- 					bfq_setup_merge(bfqq, stable_merge_bfqq);
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index 92fd88a3f415..cdea7f440a9e 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -359,14 +359,14 @@ static int npcm_i2c_get_SCL(struct i2c_adapter *_adap)
+ {
+ 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
  
--				bic->stably_merged = true;
--				if (new_bfqq && new_bfqq->bic)
--					new_bfqq->bic->stably_merged = true;
-+				if (new_bfqq) {
-+					bic->stably_merged = true;
-+					if (new_bfqq->bic)
-+						new_bfqq->bic->stably_merged =
-+									true;
-+				}
- 				return new_bfqq;
- 			} else
- 				return NULL;
+-	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
++	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+ }
+ 
+ static int npcm_i2c_get_SDA(struct i2c_adapter *_adap)
+ {
+ 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
+ 
+-	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
++	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
+ }
+ 
+ static inline u16 npcm_i2c_get_index(struct npcm_i2c *bus)
+-- 
+2.35.1
+
 
 

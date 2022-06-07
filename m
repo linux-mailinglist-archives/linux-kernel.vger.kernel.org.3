@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90F85410F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B7854111A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356639AbiFGTbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S1355539AbiFGTdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353399AbiFGSlF (ORCPT
+        with ESMTP id S1353465AbiFGSlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:41:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6051862B9;
+        Tue, 7 Jun 2022 14:41:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21651862BB;
         Tue,  7 Jun 2022 10:58:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3344EB81F38;
-        Tue,  7 Jun 2022 17:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED04C385A5;
-        Tue,  7 Jun 2022 17:58:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E00617A7;
+        Tue,  7 Jun 2022 17:58:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EACDC385A5;
+        Tue,  7 Jun 2022 17:58:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624720;
-        bh=Kw55ogd+UksAEvHHk1V0dss2Rjc0d6qyG+RxuJsUNVQ=;
+        s=korg; t=1654624722;
+        bh=x0W6N9VmPJ+8e2PWz/8GEgmYtClvv+lyTohLYHBGjKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PYwXj1zdN5Qslp+CfJbsYqBIeu2h2e3hOSXT+DeBNRj0sanKMexVVjFCvyTRxWy+9
-         gHLHtGBymWfQT8FyK0Uivv/5pSnsNpzINZryEIi+3k+NKwsUUod1vXtCkEs/l30gMl
-         QgMDspmrYuETxb6iDGzjGvTzyA3T6ypE5b4XSLdI=
+        b=pPfLk3/r/hYt7SEERLNTFFQghOkiOawAzSibKNKbeVRwvKjOuAcrq+DkOJ3gaTUj5
+         QDYzBML60zfNRVoxg+/HEcpweG9cuhuDNQ2y0F8GVJgb60rdsuz7e9JOFqlrVlnVOX
+         RtS81C/eXY6WScuYn93z9JYdAgiBGVh06v6o/1cQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+        stable@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 428/667] firmware: arm_scmi: Fix list protocols enumeration in the base protocol
-Date:   Tue,  7 Jun 2022 19:01:33 +0200
-Message-Id: <20220607164947.564383373@linuxfoundation.org>
+Subject: [PATCH 5.15 429/667] nvdimm: Fix firmware activation deadlock scenarios
+Date:   Tue,  7 Jun 2022 19:01:34 +0200
+Message-Id: <20220607164947.593329154@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
 References: <20220607164934.766888869@linuxfoundation.org>
@@ -56,41 +55,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+From: Dan Williams <dan.j.williams@intel.com>
 
-[ Upstream commit 8009120e0354a67068e920eb10dce532391361d0 ]
+[ Upstream commit e6829d1bd3c4b58296ee9e412f7ed4d6cb390192 ]
 
-While enumerating protocols implemented by the SCMI platform using
-BASE_DISCOVER_LIST_PROTOCOLS, the number of returned protocols is
-currently validated in an improper way since the check employs a sum
-between unsigned integers that could overflow and cause the check itself
-to be silently bypassed if the returned value 'loop_num_ret' is big
-enough.
+Lockdep reports the following deadlock scenarios for CXL root device
+power-management, device_prepare(), operations, and device_shutdown()
+operations for 'nd_region' devices:
 
-Fix the validation avoiding the addition.
+ Chain exists of:
+   &nvdimm_region_key --> &nvdimm_bus->reconfig_mutex --> system_transition_mutex
 
-Link: https://lore.kernel.org/r/20220330150551.2573938-4-cristian.marussi@arm.com
-Fixes: b6f20ff8bd94 ("firmware: arm_scmi: add common infrastructure and support for base protocol")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(system_transition_mutex);
+                                lock(&nvdimm_bus->reconfig_mutex);
+                                lock(system_transition_mutex);
+   lock(&nvdimm_region_key);
+
+ Chain exists of:
+   &cxl_nvdimm_bridge_key --> acpi_scan_lock --> &cxl_root_key
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&cxl_root_key);
+                                lock(acpi_scan_lock);
+                                lock(&cxl_root_key);
+   lock(&cxl_nvdimm_bridge_key);
+
+These stem from holding nvdimm_bus_lock() over hibernate_quiet_exec()
+which walks the entire system device topology taking device_lock() along
+the way. The nvdimm_bus_lock() is protecting against unregistration,
+multiple simultaneous ops callers, and preventing activate_show() from
+racing activate_store(). For the first 2, the lock is redundant.
+Unregistration already flushes all ops users, and sysfs already prevents
+multiple threads to be active in an ops handler at the same time. For
+the last userspace should already be waiting for its last
+activate_store() to complete, and does not need activate_show() to flush
+the write side, so this lock usage can be deleted in these attributes.
+
+Fixes: 48001ea50d17 ("PM, libnvdimm: Add runtime firmware activation support")
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Link: https://lore.kernel.org/r/165074883800.4116052.10737040861825806582.stgit@dwillia2-desk3.amr.corp.intel.com
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/arm_scmi/base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvdimm/core.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/base.c b/drivers/firmware/arm_scmi/base.c
-index f5219334fd3a..3fe172c03c24 100644
---- a/drivers/firmware/arm_scmi/base.c
-+++ b/drivers/firmware/arm_scmi/base.c
-@@ -197,7 +197,7 @@ scmi_base_implementation_list_get(const struct scmi_protocol_handle *ph,
- 			break;
+diff --git a/drivers/nvdimm/core.c b/drivers/nvdimm/core.c
+index 7de592d7eff4..47625fe4276e 100644
+--- a/drivers/nvdimm/core.c
++++ b/drivers/nvdimm/core.c
+@@ -399,9 +399,7 @@ static ssize_t capability_show(struct device *dev,
+ 	if (!nd_desc->fw_ops)
+ 		return -EOPNOTSUPP;
  
- 		loop_num_ret = le32_to_cpu(*num_ret);
--		if (tot_num_ret + loop_num_ret > MAX_PROTOCOLS_IMP) {
-+		if (loop_num_ret > MAX_PROTOCOLS_IMP - tot_num_ret) {
- 			dev_err(dev, "No. of Protocol > MAX_PROTOCOLS_IMP");
- 			break;
- 		}
+-	nvdimm_bus_lock(dev);
+ 	cap = nd_desc->fw_ops->capability(nd_desc);
+-	nvdimm_bus_unlock(dev);
+ 
+ 	switch (cap) {
+ 	case NVDIMM_FWA_CAP_QUIESCE:
+@@ -426,10 +424,8 @@ static ssize_t activate_show(struct device *dev,
+ 	if (!nd_desc->fw_ops)
+ 		return -EOPNOTSUPP;
+ 
+-	nvdimm_bus_lock(dev);
+ 	cap = nd_desc->fw_ops->capability(nd_desc);
+ 	state = nd_desc->fw_ops->activate_state(nd_desc);
+-	nvdimm_bus_unlock(dev);
+ 
+ 	if (cap < NVDIMM_FWA_CAP_QUIESCE)
+ 		return -EOPNOTSUPP;
+@@ -474,7 +470,6 @@ static ssize_t activate_store(struct device *dev,
+ 	else
+ 		return -EINVAL;
+ 
+-	nvdimm_bus_lock(dev);
+ 	state = nd_desc->fw_ops->activate_state(nd_desc);
+ 
+ 	switch (state) {
+@@ -492,7 +487,6 @@ static ssize_t activate_store(struct device *dev,
+ 	default:
+ 		rc = -ENXIO;
+ 	}
+-	nvdimm_bus_unlock(dev);
+ 
+ 	if (rc == 0)
+ 		rc = len;
+@@ -515,10 +509,7 @@ static umode_t nvdimm_bus_firmware_visible(struct kobject *kobj, struct attribut
+ 	if (!nd_desc->fw_ops)
+ 		return 0;
+ 
+-	nvdimm_bus_lock(dev);
+ 	cap = nd_desc->fw_ops->capability(nd_desc);
+-	nvdimm_bus_unlock(dev);
+-
+ 	if (cap < NVDIMM_FWA_CAP_QUIESCE)
+ 		return 0;
+ 
 -- 
 2.35.1
 

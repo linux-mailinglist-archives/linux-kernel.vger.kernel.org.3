@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C245425DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13453542190
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391152AbiFHBwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S1382713AbiFHBaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383311AbiFGVxC (ORCPT
+        with ESMTP id S1383537AbiFGVxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB237243B82;
-        Tue,  7 Jun 2022 12:11:23 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEBF24538D;
+        Tue,  7 Jun 2022 12:11:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7D3DB8220B;
-        Tue,  7 Jun 2022 19:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A855C385A2;
-        Tue,  7 Jun 2022 19:11:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D3A2B81F6D;
+        Tue,  7 Jun 2022 19:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F06C385A2;
+        Tue,  7 Jun 2022 19:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629080;
-        bh=/jRDmFSFPhC1E2+WCUaB7eecRJmaXUV3udXOeKe+JVw=;
+        s=korg; t=1654629111;
+        bh=2jA/GTMKTJHBY2Oc4pOOiy4bZGaqPB82S9nyCCUHw2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q93KIY4NXiwjra4Lkv1FK5NeSb6gayuZ35XxSQW86QAnsmLoBvlQGqxsde1jS4RIT
-         4+NmTl2jMqGO3rUREjmTOW4B9gcDnR+HcauPceQpP/kz3UQbwnM6e0Pq/z7o49VQ4P
-         aycDHxeBlrMncZQw+vUBdt9a5XiC8FUhqgQwNluY=
+        b=N687B+zBO2byor9J28k6YGWFTgFnNS5heM0XlevgJJajU3FKlMNBYxHjsHJTOPLx4
+         YNuNyUlIdiZQLGwxqtiBI+l8M0ShOAJ/MLWNYatfMJa9JliMHUBrjI15JlOSCR5lF4
+         1bmUslaOyXBW2WsDDlxm1nb152iGMh/xWaKVLIrY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianrong Zhang <zhangjianrong5@huawei.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 545/879] PCI: dwc: Fix setting error return on MSI DMA mapping failure
-Date:   Tue,  7 Jun 2022 19:01:03 +0200
-Message-Id: <20220607165018.687969949@linuxfoundation.org>
+        stable@vger.kernel.org, Thorsten Scherer <t.scherer@eckelmann.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 546/879] ARM: dts: ci4x10: Adapt to changes in imx6qdl.dtsi regarding fec clocks
+Date:   Tue,  7 Jun 2022 19:01:04 +0200
+Message-Id: <20220607165018.716632578@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,38 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiantao Zhang <water.zhangjiantao@huawei.com>
+From: Thorsten Scherer <t.scherer@eckelmann.de>
 
-[ Upstream commit 88557685cd72cf0db686a4ebff3fad4365cb6071 ]
+[ Upstream commit 3d397a1277853498e8b7b305f2610881357c033f ]
 
-When dma_mapping_error() returns error because of no enough memory,
-but dw_pcie_host_init() returns success, which will mislead the callers.
+Commit f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk
+support") added another item to the list of clocks for the fec
+device. As imx6dl-eckelmann-ci4x10.dts only overwrites clocks,
+but not clock-names this resulted in an inconsistency with
+clocks having one item more than clock-names.
 
-Link: https://lore.kernel.org/r/30170911-0e2f-98ce-9266-70465b9073e5@huawei.com
-Fixes: 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume")
-Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
-Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Also overwrite clock-names with the same value as in
+imx6qdl.dtsi. This is a no-op today, but prevents similar
+inconsistencies if the soc file will be changed in a similar way
+in the future.
+
+Signed-off-by: Thorsten Scherer <t.scherer@eckelmann.de>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Fixes: f3e7dae323ab ("ARM: dts: imx6qdl: add enet_out clk support")
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/dwc/pcie-designware-host.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 2fa86f32d964..9979302532b7 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -396,7 +396,8 @@ int dw_pcie_host_init(struct pcie_port *pp)
- 						      sizeof(pp->msi_msg),
- 						      DMA_FROM_DEVICE,
- 						      DMA_ATTR_SKIP_CPU_SYNC);
--			if (dma_mapping_error(pci->dev, pp->msi_data)) {
-+			ret = dma_mapping_error(pci->dev, pp->msi_data);
-+			if (ret) {
- 				dev_err(pci->dev, "Failed to map MSI data\n");
- 				pp->msi_data = 0;
- 				goto err_free_msi;
+diff --git a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
+index b4a9523e325b..864dc5018451 100644
+--- a/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
++++ b/arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts
+@@ -297,7 +297,11 @@
+ 	phy-mode = "rmii";
+ 	phy-reset-gpios = <&gpio1 18 GPIO_ACTIVE_LOW>;
+ 	phy-handle = <&phy>;
+-	clocks = <&clks IMX6QDL_CLK_ENET>, <&clks IMX6QDL_CLK_ENET>, <&rmii_clk>;
++	clocks = <&clks IMX6QDL_CLK_ENET>,
++		 <&clks IMX6QDL_CLK_ENET>,
++		 <&rmii_clk>,
++		 <&clks IMX6QDL_CLK_ENET_REF>;
++	clock-names = "ipg", "ahb", "ptp", "enet_out";
+ 	status = "okay";
+ 
+ 	mdio {
 -- 
 2.35.1
 

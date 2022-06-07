@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA74654191A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD38541009
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378287AbiFGVTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S1355861AbiFGTRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358793AbiFGUWf (ORCPT
+        with ESMTP id S1351218AbiFGS3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:22:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529317B860;
-        Tue,  7 Jun 2022 11:31:41 -0700 (PDT)
+        Tue, 7 Jun 2022 14:29:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F39917A880;
+        Tue,  7 Jun 2022 10:55:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6436B82188;
-        Tue,  7 Jun 2022 18:31:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B87C385A2;
-        Tue,  7 Jun 2022 18:31:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9056617A8;
+        Tue,  7 Jun 2022 17:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C4CC34119;
+        Tue,  7 Jun 2022 17:55:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626698;
-        bh=Mytd2SzCLUOya9ZKdQUO8kOUQglohpjh14lZeClQtVg=;
+        s=korg; t=1654624526;
+        bh=oTUD0gfXlCXXBTlNhj7YdtZdcBIDAMIgu5/THuULMSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=keyaQt8s+ryIf4jfrdLkNcGCurxxgjJTUd0dqnP0vGVbWPECQqTn+Dd3mWUHsZ/7o
-         ctQfdc/52NsQ5S6UdRYOFdK+/d061fYx5hNs3vQeOWJngKpgJ8W9BbSwNGQExUTdrs
-         V6AcsSPsuIJrjUtPIn2lCHrycZyZBmhnialVBF4E=
+        b=YbBzIZwfUBTy9WxiVYKWyPGzXG+a91lfowiF++zDbkjMkbX+LeSwnN32elAFodhNh
+         Z+iYxX8xsIomFeGQHmeJzgtH1BwXjJ1JqRLofzHVLyUTvZ8GcGq8tTVj/C2rVQUqGX
+         mIKKlnKM2M6tGl4h8rM5p7cknypWbCjK0VdfGCk8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 432/772] net: stmmac: fix out-of-bounds access in a selftest
-Date:   Tue,  7 Jun 2022 19:00:24 +0200
-Message-Id: <20220607165001.732605384@linuxfoundation.org>
+Subject: [PATCH 5.15 360/667] PM: domains: Fix initialization of genpds next_wakeup
+Date:   Tue,  7 Jun 2022 19:00:25 +0200
+Message-Id: <20220607164945.552195634@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit fe5c5fc145edcf98a759b895f52b646730eeb7be ]
+[ Upstream commit 622d9b5577f19a6472db21df042fea8f5fefe244 ]
 
-GCC 12 points out that struct tc_action is smaller than
-struct tcf_action:
+In the genpd governor we walk the list of child-domains to take into
+account their next_wakeup. If the child-domain itself, doesn't have a
+governor assigned to it, we can end up using the next_wakeup value before
+it has been properly initialized. To prevent a possible incorrect behaviour
+in the governor, let's initialize next_wakeup to KTIME_MAX.
 
-drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c: In function ‘stmmac_test_rxp’:
-drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c:1132:21: warning: array subscript ‘struct tcf_gact[0]’ is partly outside array bounds of ‘unsigned char[272]’ [-Warray-bounds]
- 1132 |                 gact->tcf_action = TC_ACT_SHOT;
-      |                     ^~
-
-Fixes: ccfc639a94f2 ("net: stmmac: selftests: Add a selftest for Flexible RX Parser")
-Link: https://lore.kernel.org/r/20220519004305.2109708-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: c79aa080fb0f ("PM: domains: use device's next wakeup to determine domain idle state")
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_selftests.c  | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/base/power/domain.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
-index be3cb63675a5..133c5bd2ef45 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
-@@ -1084,8 +1084,9 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 	unsigned char addr[ETH_ALEN] = {0xde, 0xad, 0xbe, 0xef, 0x00, 0x00};
- 	struct tc_cls_u32_offload cls_u32 = { };
- 	struct stmmac_packet_attrs attr = { };
--	struct tc_action **actions, *act;
-+	struct tc_action **actions;
- 	struct tc_u32_sel *sel;
-+	struct tcf_gact *gact;
- 	struct tcf_exts *exts;
- 	int ret, i, nk = 1;
- 
-@@ -1110,8 +1111,8 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 		goto cleanup_exts;
- 	}
- 
--	act = kcalloc(nk, sizeof(*act), GFP_KERNEL);
--	if (!act) {
-+	gact = kcalloc(nk, sizeof(*gact), GFP_KERNEL);
-+	if (!gact) {
- 		ret = -ENOMEM;
- 		goto cleanup_actions;
- 	}
-@@ -1126,9 +1127,7 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 	exts->nr_actions = nk;
- 	exts->actions = actions;
- 	for (i = 0; i < nk; i++) {
--		struct tcf_gact *gact = to_gact(&act[i]);
--
--		actions[i] = &act[i];
-+		actions[i] = (struct tc_action *)&gact[i];
- 		gact->tcf_action = TC_ACT_SHOT;
- 	}
- 
-@@ -1152,7 +1151,7 @@ static int stmmac_test_rxp(struct stmmac_priv *priv)
- 	stmmac_tc_setup_cls_u32(priv, priv, &cls_u32);
- 
- cleanup_act:
--	kfree(act);
-+	kfree(gact);
- cleanup_actions:
- 	kfree(actions);
- cleanup_exts:
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 7e8039d1884c..0f2e42f36851 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -1978,6 +1978,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 	genpd->device_count = 0;
+ 	genpd->max_off_time_ns = -1;
+ 	genpd->max_off_time_changed = true;
++	genpd->next_wakeup = KTIME_MAX;
+ 	genpd->provider = NULL;
+ 	genpd->has_provider = false;
+ 	genpd->accounting_time = ktime_get();
 -- 
 2.35.1
 

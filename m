@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2DB54242E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F08542579
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389910AbiFHB25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S1386768AbiFHBhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383292AbiFGVxB (ORCPT
+        with ESMTP id S1383296AbiFGVxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970C42432DD;
-        Tue,  7 Jun 2022 12:11:06 -0700 (PDT)
+        Tue, 7 Jun 2022 17:53:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C022432CC;
+        Tue,  7 Jun 2022 12:11:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45858B8220B;
-        Tue,  7 Jun 2022 19:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58F4C34115;
-        Tue,  7 Jun 2022 19:11:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5743D612EC;
+        Tue,  7 Jun 2022 19:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0BDC385A2;
+        Tue,  7 Jun 2022 19:11:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629064;
-        bh=ZZWF/Lct7Kly7eSjM6A574A1ZQpS2iQCvjZmIC7gaCg=;
+        s=korg; t=1654629066;
+        bh=THnhl6EqQFhS3geuRLyG54hpkwuwb34QL3RX6SGZLlM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FYYCU280zg82+7v6/hNupeU6AxuF2w7z1O/GpSevzR/DZ0h6cjYuHQnh6ZkJoiYAF
-         IK//aMq5+kU0OT87Y7VaZntCFbqqVp+4rFR7VtQUol+3Sc5jZFV2Zxi4uCgfxGSzk7
-         q0ipyWptdUxrIan5BQYiWhq8VwYWI6S7ljYHYQ6c=
+        b=B0K632xHXkEqqZuFuvJq6dD/BEBphIc4i+7Th2OsCBQCUz/uIbw9vAX7d8rBT7MUH
+         j7eLbousgbcopVW5RfJvolQQatX79wVIoshPloW5DAoJeE5lHW5nI1/gBM8J//syJM
+         pCXRoojG3rPLXPXSmMA3XLlWYcJJ0YixeJ5lj5SM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Prashant Malani <pmalani@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
+        stable@vger.kernel.org,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 557/879] platform/chrome: cros_ec: fix error handling in cros_ec_register()
-Date:   Tue,  7 Jun 2022 19:01:15 +0200
-Message-Id: <20220607165019.032065158@linuxfoundation.org>
+Subject: [PATCH 5.18 558/879] ARM: dts: imx6dl-colibri: Fix I2C pinmuxing
+Date:   Tue,  7 Jun 2022 19:01:16 +0200
+Message-Id: <20220607165019.060174621@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,79 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tzung-Bi Shih <tzungbi@kernel.org>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-[ Upstream commit 2cd01bd6b117df07b1bc2852f08694fdd29e40ed ]
+[ Upstream commit 5f5c579a34a87117c20b411df583ae816c1ec84f ]
 
-Fix cros_ec_register() to unregister platform devices if
-blocking_notifier_chain_register() fails.
+Fix names of extra pingroup node and property for gpio bus recovery.
+Without the change i2c2 is not functional.
 
-Also use the single exit path to handle the platform device
-unregistration.
-
-Fixes: 42cd0ab476e2 ("platform/chrome: cros_ec: Query EC protocol version if EC transitions between RO/RW")
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Fixes: 56f0df6b6b58 ("ARM: dts: imx*(colibri|apalis): add missing recovery modes to i2c")
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/chrome/cros_ec.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index d49a4efe46c8..a5cc8f24299e 100644
---- a/drivers/platform/chrome/cros_ec.c
-+++ b/drivers/platform/chrome/cros_ec.c
-@@ -189,6 +189,8 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 	ec_dev->max_request = sizeof(struct ec_params_hello);
- 	ec_dev->max_response = sizeof(struct ec_response_get_protocol_info);
- 	ec_dev->max_passthru = 0;
-+	ec_dev->ec = NULL;
-+	ec_dev->pd = NULL;
+diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+index 4e2a309c93fa..1e86b3814708 100644
+--- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+ OR MIT
+ /*
+- * Copyright 2014-2020 Toradex
++ * Copyright 2014-2022 Toradex
+  * Copyright 2012 Freescale Semiconductor, Inc.
+  * Copyright 2011 Linaro Ltd.
+  */
+@@ -132,7 +132,7 @@
+ 	clock-frequency = <100000>;
+ 	pinctrl-names = "default", "gpio";
+ 	pinctrl-0 = <&pinctrl_i2c2>;
+-	pinctrl-0 = <&pinctrl_i2c2_gpio>;
++	pinctrl-1 = <&pinctrl_i2c2_gpio>;
+ 	scl-gpios = <&gpio2 30 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	sda-gpios = <&gpio3 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
+@@ -488,7 +488,7 @@
+ 		>;
+ 	};
  
- 	ec_dev->din = devm_kzalloc(dev, ec_dev->din_size, GFP_KERNEL);
- 	if (!ec_dev->din)
-@@ -245,18 +247,16 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 		if (IS_ERR(ec_dev->pd)) {
- 			dev_err(ec_dev->dev,
- 				"Failed to create CrOS PD platform device\n");
--			platform_device_unregister(ec_dev->ec);
--			return PTR_ERR(ec_dev->pd);
-+			err = PTR_ERR(ec_dev->pd);
-+			goto exit;
- 		}
- 	}
- 
- 	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
- 		err = devm_of_platform_populate(dev);
- 		if (err) {
--			platform_device_unregister(ec_dev->pd);
--			platform_device_unregister(ec_dev->ec);
- 			dev_err(dev, "Failed to register sub-devices\n");
--			return err;
-+			goto exit;
- 		}
- 	}
- 
-@@ -278,7 +278,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 		err = blocking_notifier_chain_register(&ec_dev->event_notifier,
- 						      &ec_dev->notifier_ready);
- 		if (err)
--			return err;
-+			goto exit;
- 	}
- 
- 	dev_info(dev, "Chrome EC device registered\n");
-@@ -291,6 +291,10 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 		cros_ec_irq_thread(0, ec_dev);
- 
- 	return 0;
-+exit:
-+	platform_device_unregister(ec_dev->ec);
-+	platform_device_unregister(ec_dev->pd);
-+	return err;
- }
- EXPORT_SYMBOL(cros_ec_register);
- 
+-	pinctrl_i2c2_gpio: i2c2grp {
++	pinctrl_i2c2_gpio: i2c2gpiogrp {
+ 		fsl,pins = <
+ 			MX6QDL_PAD_EIM_EB2__GPIO2_IO30 0x4001b8b1
+ 			MX6QDL_PAD_EIM_D16__GPIO3_IO16 0x4001b8b1
 -- 
 2.35.1
 

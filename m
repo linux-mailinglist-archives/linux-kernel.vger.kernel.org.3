@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8B1542266
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D57542261
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386330AbiFHA3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S1444088AbiFHCJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385312AbiFGWVa (ORCPT
+        with ESMTP id S1442480AbiFHAye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:21:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A458C19A726;
-        Tue,  7 Jun 2022 12:21:29 -0700 (PDT)
+        Tue, 7 Jun 2022 20:54:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A6F19BC01;
+        Tue,  7 Jun 2022 12:21:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A01F60A1D;
-        Tue,  7 Jun 2022 19:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F7C3C385A5;
-        Tue,  7 Jun 2022 19:21:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC25FB82182;
+        Tue,  7 Jun 2022 19:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3174BC385A2;
+        Tue,  7 Jun 2022 19:21:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629688;
-        bh=5or48Sd0+2qQPDKl+woFHQA/id1AA8D8c0YmSyWFprU=;
+        s=korg; t=1654629691;
+        bh=YdTQ0DxyDqXgO4kk5oAbF39iZyrEOqj+FEmQCwUfOSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UpoZWbTIvLuWoxcMu2sLHJp4ZbqnWhOYe30uiveNxPPf67VgDvj3KpJnpvn07yQmw
-         jZ0Dy3h1xciyIajAFAp1JM1TEpfpmIuLRHgDGntbcx7OXybwSIRpKUI7qgBF490G0R
-         6sbdQL4yla24hv8MS6zBK5RlYW15ddhNkWB2qvzs=
+        b=YQwtSsgtPmjoJ50GsG/GGudQ4su4vijfUrwkpHmPf58EtaFc57YQNVsApviaAsiz7
+         NlxoJsUfajSluxU+GWBpjxc2PNgWz4Grn3InrrIvP8FEH8lvwfxeWHjjVNuqt4oePb
+         ymJ161Jf/4t70/keo+Jcm6CoE1M0EZqfZFiBHsck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-Subject: [PATCH 5.18 781/879] selftests/landlock: Extend access right tests to directories
-Date:   Tue,  7 Jun 2022 19:04:59 +0200
-Message-Id: <20220607165025.541305893@linuxfoundation.org>
+Subject: [PATCH 5.18 782/879] selftests/landlock: Fully test file rename with "remove" access
+Date:   Tue,  7 Jun 2022 19:05:00 +0200
+Message-Id: <20220607165025.569347256@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,78 +56,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mickaël Salaün <mic@digikod.net>
 
-commit d18955d094d09a220cf8f533f5e896a2fe31575a upstream.
+commit 6a1bdd4a0bfc30fa4fa2b3a979e6525f28996db9 upstream.
 
-Make sure that all filesystem access rights can be tied to directories.
+These tests were missing to check the check_access_path() call with all
+combinations of maybe_remove(old_dentry) and maybe_remove(new_dentry).
 
-Rename layout1.file_access_rights to layout1.file_and_dir_access_rights
-to reflect this change.
+Extend layout1.link with a new complementary test and check that
+REMOVE_FILE is not required to link a file.
 
 Cc: Shuah Khan <shuah@kernel.org>
-Link: https://lore.kernel.org/r/20220506160820.524344-6-mic@digikod.net
+Link: https://lore.kernel.org/r/20220506160820.524344-7-mic@digikod.net
 Cc: stable@vger.kernel.org
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/landlock/fs_test.c |   30 +++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ tools/testing/selftests/landlock/fs_test.c |   41 ++++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 4 deletions(-)
 
 --- a/tools/testing/selftests/landlock/fs_test.c
 +++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -418,11 +418,12 @@ TEST_F_FORK(layout1, inval)
+@@ -1659,15 +1659,21 @@ TEST_F_FORK(layout1, execute)
  
- /* clang-format on */
- 
--TEST_F_FORK(layout1, file_access_rights)
-+TEST_F_FORK(layout1, file_and_dir_access_rights)
+ TEST_F_FORK(layout1, link)
  {
- 	__u64 access;
- 	int err;
--	struct landlock_path_beneath_attr path_beneath = {};
-+	struct landlock_path_beneath_attr path_beneath_file = {},
-+					  path_beneath_dir = {};
- 	struct landlock_ruleset_attr ruleset_attr = {
- 		.handled_access_fs = ACCESS_ALL,
+-	const struct rule rules[] = {
++	const struct rule layer1[] = {
+ 		{
+ 			.path = dir_s1d2,
+ 			.access = LANDLOCK_ACCESS_FS_MAKE_REG,
+ 		},
+ 		{},
  	};
-@@ -432,20 +433,33 @@ TEST_F_FORK(layout1, file_access_rights)
+-	const int ruleset_fd =
+-		create_ruleset(_metadata, rules[0].access, rules);
++	const struct rule layer2[] = {
++		{
++			.path = dir_s1d3,
++			.access = LANDLOCK_ACCESS_FS_REMOVE_FILE,
++		},
++		{},
++	};
++	int ruleset_fd = create_ruleset(_metadata, layer1[0].access, layer1);
+ 
  	ASSERT_LE(0, ruleset_fd);
  
- 	/* Tests access rights for files. */
--	path_beneath.parent_fd = open(file1_s1d2, O_PATH | O_CLOEXEC);
--	ASSERT_LE(0, path_beneath.parent_fd);
-+	path_beneath_file.parent_fd = open(file1_s1d2, O_PATH | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath_file.parent_fd);
+@@ -1680,14 +1686,30 @@ TEST_F_FORK(layout1, link)
+ 
+ 	ASSERT_EQ(-1, link(file2_s1d1, file1_s1d1));
+ 	ASSERT_EQ(EACCES, errno);
 +
-+	/* Tests access rights for directories. */
-+	path_beneath_dir.parent_fd =
-+		open(dir_s1d2, O_PATH | O_DIRECTORY | O_CLOEXEC);
-+	ASSERT_LE(0, path_beneath_dir.parent_fd);
+ 	/* Denies linking because of reparenting. */
+ 	ASSERT_EQ(-1, link(file1_s2d1, file1_s1d2));
+ 	ASSERT_EQ(EXDEV, errno);
+ 	ASSERT_EQ(-1, link(file2_s1d2, file1_s1d3));
+ 	ASSERT_EQ(EXDEV, errno);
++	ASSERT_EQ(-1, link(file2_s1d3, file1_s1d2));
++	ASSERT_EQ(EXDEV, errno);
+ 
+ 	ASSERT_EQ(0, link(file2_s1d2, file1_s1d2));
+ 	ASSERT_EQ(0, link(file2_s1d3, file1_s1d3));
 +
- 	for (access = 1; access <= ACCESS_LAST; access <<= 1) {
--		path_beneath.allowed_access = access;
-+		path_beneath_dir.allowed_access = access;
-+		ASSERT_EQ(0, landlock_add_rule(ruleset_fd,
-+					       LANDLOCK_RULE_PATH_BENEATH,
-+					       &path_beneath_dir, 0));
++	/* Prepares for next unlinks. */
++	ASSERT_EQ(0, unlink(file2_s1d2));
++	ASSERT_EQ(0, unlink(file2_s1d3));
 +
-+		path_beneath_file.allowed_access = access;
- 		err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
--					&path_beneath, 0);
--		if ((access | ACCESS_FILE) == ACCESS_FILE) {
-+					&path_beneath_file, 0);
-+		if (access & ACCESS_FILE) {
- 			ASSERT_EQ(0, err);
- 		} else {
- 			ASSERT_EQ(-1, err);
- 			ASSERT_EQ(EINVAL, errno);
- 		}
- 	}
--	ASSERT_EQ(0, close(path_beneath.parent_fd));
-+	ASSERT_EQ(0, close(path_beneath_file.parent_fd));
-+	ASSERT_EQ(0, close(path_beneath_dir.parent_fd));
++	ruleset_fd = create_ruleset(_metadata, layer2[0].access, layer2);
++	ASSERT_LE(0, ruleset_fd);
++	enforce_ruleset(_metadata, ruleset_fd);
 +	ASSERT_EQ(0, close(ruleset_fd));
++
++	/* Checks that linkind doesn't require the ability to delete a file. */
++	ASSERT_EQ(0, link(file1_s1d2, file2_s1d2));
++	ASSERT_EQ(0, link(file1_s1d3, file2_s1d3));
  }
  
- TEST_F_FORK(layout1, unknown_access_rights)
+ TEST_F_FORK(layout1, rename_file)
+@@ -1708,7 +1730,6 @@ TEST_F_FORK(layout1, rename_file)
+ 
+ 	ASSERT_LE(0, ruleset_fd);
+ 
+-	ASSERT_EQ(0, unlink(file1_s1d1));
+ 	ASSERT_EQ(0, unlink(file1_s1d2));
+ 
+ 	enforce_ruleset(_metadata, ruleset_fd);
+@@ -1744,9 +1765,15 @@ TEST_F_FORK(layout1, rename_file)
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s2d2, AT_FDCWD, file1_s2d1,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that file1_s2d1 cannot be removed (instead of ENOTDIR). */
++	ASSERT_EQ(-1, rename(dir_s2d2, file1_s2d1));
++	ASSERT_EQ(EACCES, errno);
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s2d1, AT_FDCWD, dir_s2d2,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that file1_s1d1 cannot be removed (instead of EISDIR). */
++	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
++	ASSERT_EQ(EACCES, errno);
+ 
+ 	/* Renames files with different parents. */
+ 	ASSERT_EQ(-1, rename(file1_s2d2, file1_s1d2));
+@@ -1809,9 +1836,15 @@ TEST_F_FORK(layout1, rename_dir)
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, dir_s1d1, AT_FDCWD, dir_s2d1,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that dir_s1d2 cannot be removed (instead of ENOTDIR). */
++	ASSERT_EQ(-1, rename(dir_s1d2, file1_s1d1));
++	ASSERT_EQ(EACCES, errno);
+ 	ASSERT_EQ(-1, renameat2(AT_FDCWD, file1_s1d1, AT_FDCWD, dir_s1d2,
+ 				RENAME_EXCHANGE));
+ 	ASSERT_EQ(EACCES, errno);
++	/* Checks that dir_s1d2 cannot be removed (instead of EISDIR). */
++	ASSERT_EQ(-1, rename(file1_s1d1, dir_s1d2));
++	ASSERT_EQ(EACCES, errno);
+ 
+ 	/*
+ 	 * Exchanges and renames directory to the same parent, which allows
 
 

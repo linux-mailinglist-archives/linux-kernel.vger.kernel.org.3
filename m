@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E633541A42
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF1D54080F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380236AbiFGVaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S1348780AbiFGRy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377889AbiFGUei (ORCPT
+        with ESMTP id S1348409AbiFGRgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:34:38 -0400
+        Tue, 7 Jun 2022 13:36:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487EE17F836;
-        Tue,  7 Jun 2022 11:36:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4C41C11C;
+        Tue,  7 Jun 2022 10:32:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C766156D;
-        Tue,  7 Jun 2022 18:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D8AC385A2;
-        Tue,  7 Jun 2022 18:36:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C029661534;
+        Tue,  7 Jun 2022 17:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2504C385A5;
+        Tue,  7 Jun 2022 17:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626992;
-        bh=M6FS/lCEmvw7N1uBROVZHZ6Aqu6ichPOYpC36essZ+Q=;
+        s=korg; t=1654623150;
+        bh=1QLzhrmPaBDasbV1MuyL7akoWZqN/JmMdcgAMgH4qjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U6+MVgeq2bXJRC4sliwl/B4qMoITq3mkQbFXigYONcRPsbpHyNd8UHuLeZNxnSk/X
-         wg+uygFGKnCpP4wLo7i70l7EqqXPsJZtZtRl6Mo96Kms9dMcE4JcZtLLVWAMQsrNUV
-         Sq2XI060NYfLpQYRhW1F3SaHg0WT8GYJ6iPqtqzQ=
+        b=IL/bBZ9lo1u/HGNvVpzvWDd8el/wP6ngKAPHx5oB1h1iOJLfFjgUVvlUWhU1ApuyI
+         SY5JFGOtfqcNBLVy7M270ee2E+khHUJz7Y2cFT8MY7uWWeJbtdayitvnFqYVEKU8+8
+         EIE3izxVuLVBtXId5YctvMh/AMreIZMHjzANT1co=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 578/772] i2c: at91: Initialize dma_buf in at91_twi_xfer()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 313/452] powerpc/fsl_rio: Fix refcount leak in fsl_rio_setup
 Date:   Tue,  7 Jun 2022 19:02:50 +0200
-Message-Id: <20220607165005.982225958@linuxfoundation.org>
+Message-Id: <20220607164917.887571378@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 6977262c2eee111645668fe9e235ef2f5694abf7 ]
+[ Upstream commit fcee96924ba1596ca80a6770b2567ca546f9a482 ]
 
-Clang warns:
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-  drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-          if (dev->use_dma) {
-              ^~~~~~~~~~~~
-  drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
-          i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
-                                   ^~~~~~~
-
-Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
-when the first argument is NULL, which will work for the !dev->use_dma
-case.
-
-Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1629
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: abc3aeae3aaa ("fsl-rio: Add two ports and rapidio message units support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220512123724.62931-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-at91-master.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/sysdev/fsl_rio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
-index 5eca3b3bb609..c0c35785a0dc 100644
---- a/drivers/i2c/busses/i2c-at91-master.c
-+++ b/drivers/i2c/busses/i2c-at91-master.c
-@@ -656,7 +656,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
- 	unsigned int_addr_flag = 0;
- 	struct i2c_msg *m_start = msg;
- 	bool is_read;
--	u8 *dma_buf;
-+	u8 *dma_buf = NULL;
- 
- 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
- 
+diff --git a/arch/powerpc/sysdev/fsl_rio.c b/arch/powerpc/sysdev/fsl_rio.c
+index 07c164f7f8cf..3f9f78621cf3 100644
+--- a/arch/powerpc/sysdev/fsl_rio.c
++++ b/arch/powerpc/sysdev/fsl_rio.c
+@@ -505,8 +505,10 @@ int fsl_rio_setup(struct platform_device *dev)
+ 	if (rc) {
+ 		dev_err(&dev->dev, "Can't get %pOF property 'reg'\n",
+ 				rmu_node);
++		of_node_put(rmu_node);
+ 		goto err_rmu;
+ 	}
++	of_node_put(rmu_node);
+ 	rmu_regs_win = ioremap(rmu_regs.start, resource_size(&rmu_regs));
+ 	if (!rmu_regs_win) {
+ 		dev_err(&dev->dev, "Unable to map rmu register window\n");
 -- 
 2.35.1
 

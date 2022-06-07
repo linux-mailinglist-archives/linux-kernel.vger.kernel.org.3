@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75D8541E85
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0DC540B08
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381824AbiFGW35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S1351684AbiFGSYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380830AbiFGVRB (ORCPT
+        with ESMTP id S1350473AbiFGSBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:17:01 -0400
+        Tue, 7 Jun 2022 14:01:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6919A443C9;
-        Tue,  7 Jun 2022 11:57:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB4E14AF79;
+        Tue,  7 Jun 2022 10:43:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CABC46156D;
-        Tue,  7 Jun 2022 18:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4DB8C385A2;
-        Tue,  7 Jun 2022 18:57:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E048E616A3;
+        Tue,  7 Jun 2022 17:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEABC34115;
+        Tue,  7 Jun 2022 17:43:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628270;
-        bh=8MKqyuteXsOfc+Xa4/v5pSDbjAuCsg3+b35G++XMffs=;
+        s=korg; t=1654623794;
+        bh=4XChG8Mn9Ckp+o5xpIAJPICimju0Ixs9wovnr8tIqy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GZVE6IiSMYajTvbSLIQtCRInnCeqSaq+zZpkjpFA/8v7SX1rAl7/Z8516NnZEW78P
-         2doP8bcCEzA29i2mKgZwgJw5otmJqRQRVU3pgHuyWWTAudPeWsZhWPvx06m13ZLQkZ
-         /e6cqHi4rGXyeeFxOZBfYLvqzY7irucPbT4+OSas=
+        b=elSwv3ao9CNPx3fVOB//XSY7ZS03I5Y3Zn5UDGntjwBCJ37ZU+hi+5M9Z8l1vQlmg
+         yZN3sCZzXhYBM8Opd9fnPNpmCT1NTFrDmd0vvjUtHWii7pE0RICacSfjclDPxyMCAj
+         6/9oCym0BqRxYPbDSgCY7OPUq0nlBzsh+7D9yokQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasily Averin <vvs@openvz.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Maksym Yaremchuk <maksymy@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 241/879] tracing: incorrect isolate_mote_t cast in mm_vmscan_lru_isolate
-Date:   Tue,  7 Jun 2022 18:55:59 +0200
-Message-Id: <20220607165009.848671864@linuxfoundation.org>
+Subject: [PATCH 5.15 095/667] mlxsw: spectrum_dcb: Do not warn about priority changes
+Date:   Tue,  7 Jun 2022 18:56:00 +0200
+Message-Id: <20220607164937.670007869@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Averin <vvs@openvz.org>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit 2b132903de7124dd9a758be0c27562e91a510848 ]
+[ Upstream commit b6b584562cbe7dc357083459d6dd5b171e12cadb ]
 
-Fixes following sparse warnings:
+The idea behind the warnings is that the user would get warned in case when
+more than one priority is configured for a given DSCP value on a netdevice.
 
-  CHECK   mm/vmscan.c
-mm/vmscan.c: note: in included file (through
-include/trace/trace_events.h, include/trace/define_trace.h,
-include/trace/events/vmscan.h):
-./include/trace/events/vmscan.h:281:1: sparse: warning:
- cast to restricted isolate_mode_t
-./include/trace/events/vmscan.h:281:1: sparse: warning:
- restricted isolate_mode_t degrades to integer
+The warning is currently wrong, because dcb_ieee_getapp_mask() returns
+the first matching entry, not all of them, and the warning will then claim
+that some priority is "current", when in fact it is not.
 
-Link: https://lkml.kernel.org/r/e85d7ff2-fd10-53f8-c24e-ba0458439c1b@openvz.org
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+But more importantly, the warning is misleading in general. Consider the
+following commands:
+
+ # dcb app flush dev swp19 dscp-prio
+ # dcb app add dev swp19 dscp-prio 24:3
+ # dcb app replace dev swp19 dscp-prio 24:2
+
+The last command will issue the following warning:
+
+ mlxsw_spectrum3 0000:07:00.0 swp19: Ignoring new priority 2 for DSCP 24 in favor of current value of 3
+
+The reason is that the "replace" command works by first adding the new
+value, and then removing all old values. This is the only way to make the
+replacement without causing the traffic to be prioritized to whatever the
+chip defaults to. The warning is issued in response to adding the new
+priority, and then no warning is shown when the old priority is removed.
+The upshot is that the canonical way to change traffic prioritization
+always produces a warning about ignoring the new priority, but what gets
+configured is in fact what the user intended.
+
+An option to just emit warning every time that the prioritization changes
+just to make it clear that it happened is obviously unsatisfactory.
+
+Therefore, in this patch, remove the warnings.
+
+Reported-by: Maksym Yaremchuk <maksymy@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/trace/events/vmscan.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
-index de136dbd623a..e7d28dc549da 100644
---- a/include/trace/events/vmscan.h
-+++ b/include/trace/events/vmscan.h
-@@ -297,7 +297,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 		__field(unsigned long, nr_scanned)
- 		__field(unsigned long, nr_skipped)
- 		__field(unsigned long, nr_taken)
--		__field(isolate_mode_t, isolate_mode)
-+		__field(unsigned int, isolate_mode)
- 		__field(int, lru)
- 	),
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+index 5f92b1691360..aff6d4f35cd2 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_dcb.c
+@@ -168,8 +168,6 @@ static int mlxsw_sp_dcbnl_ieee_setets(struct net_device *dev,
+ static int mlxsw_sp_dcbnl_app_validate(struct net_device *dev,
+ 				       struct dcb_app *app)
+ {
+-	int prio;
+-
+ 	if (app->priority >= IEEE_8021QAZ_MAX_TCS) {
+ 		netdev_err(dev, "APP entry with priority value %u is invalid\n",
+ 			   app->priority);
+@@ -183,17 +181,6 @@ static int mlxsw_sp_dcbnl_app_validate(struct net_device *dev,
+ 				   app->protocol);
+ 			return -EINVAL;
+ 		}
+-
+-		/* Warn about any DSCP APP entries with the same PID. */
+-		prio = fls(dcb_ieee_getapp_mask(dev, app));
+-		if (prio--) {
+-			if (prio < app->priority)
+-				netdev_warn(dev, "Choosing priority %d for DSCP %d in favor of previously-active value of %d\n",
+-					    app->priority, app->protocol, prio);
+-			else if (prio > app->priority)
+-				netdev_warn(dev, "Ignoring new priority %d for DSCP %d in favor of current value of %d\n",
+-					    app->priority, app->protocol, prio);
+-		}
+ 		break;
  
-@@ -308,7 +308,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 		__entry->nr_scanned = nr_scanned;
- 		__entry->nr_skipped = nr_skipped;
- 		__entry->nr_taken = nr_taken;
--		__entry->isolate_mode = isolate_mode;
-+		__entry->isolate_mode = (__force unsigned int)isolate_mode;
- 		__entry->lru = lru;
- 	),
- 
+ 	case IEEE_8021QAZ_APP_SEL_ETHERTYPE:
 -- 
 2.35.1
 

@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284C154245D
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1DF54245F
 	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379335AbiFHAtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S1389870AbiFHAgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383432AbiFGWFZ (ORCPT
+        with ESMTP id S1384079AbiFGWKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:05:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F93195950;
-        Tue,  7 Jun 2022 12:16:34 -0700 (PDT)
+        Tue, 7 Jun 2022 18:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB52259101;
+        Tue,  7 Jun 2022 12:18:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 121E2B8233E;
-        Tue,  7 Jun 2022 19:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D40AC385A2;
-        Tue,  7 Jun 2022 19:16:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D09561935;
+        Tue,  7 Jun 2022 19:18:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56057C385A5;
+        Tue,  7 Jun 2022 19:18:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629391;
-        bh=M+wO0gucsAXwhXB5py56e2MHX9Zk2IutE7e7PbRevos=;
+        s=korg; t=1654629529;
+        bh=4laUaQabkQ7pJPoBMFlsRtjOH+Ym2V0Y7rbIwgiFvH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OV/O2Oyl526Ei60u+EqzxYKPenqYsNKg3xXA1Hltw4qQddIKThQQUm7pE/9NZlgnF
-         PGSU4tZaUEkbdq7/kFrEvn1sq92KImKpw4JKh9IMLpRklKxkCv0/A0vyiTfpZebvg3
-         ZYNMvqpW4P1OUM2FcLjrtN65i11xzGGsUJVkJ9Mo=
+        b=xY/8p6b5tv7qgbxiPuhzqXk0xr1Guli01RVkrx033lNqPAspeTRj4tMETndzmJc+u
+         TWQCkXhglkQlOFr4xGju5ytwkollu75wKEano+Mtv7guzi1shjW/90K+khRbChj9P1
+         YIEmqzskcVDeKkKwV7jasVC6PyhdcRyVoBb2qwK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhi Li <lizhi01@loongson.cn>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 672/879] MIPS: Loongson: Use hwmon_device_register_with_groups() to register hwmon
-Date:   Tue,  7 Jun 2022 19:03:10 +0200
-Message-Id: <20220607165022.355887807@linuxfoundation.org>
+        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        kernel test robot <lkp@intel.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 673/879] iommu/mediatek: Fix NULL pointer dereference when printing dev_name
+Date:   Tue,  7 Jun 2022 19:03:11 +0200
+Message-Id: <20220607165022.384872924@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,210 +59,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Miles Chen <miles.chen@mediatek.com>
 
-[ Upstream commit abae018a03821be2b65c01ebe2bef06fd7d85a4c ]
+[ Upstream commit de78657e16f41417da9332f09c2d67d100096939 ]
 
-Calling hwmon_device_register_with_info() with NULL dev and/or chip
-information parameters is an ABI abuse and not a real conversion to
-the new API. Also, the code creates sysfs attributes _after_ creating
-the hwmon device, which is racy and unsupported to start with. On top
-of that, the removal code tries to remove the name attribute which is
-owned by the hwmon core.
+When larbdev is NULL (in the case I hit, the node is incorrectly set
+iommus = <&iommu NUM>), it will cause device_link_add() fail and
+kernel crashes when we try to print dev_name(larbdev).
 
-Use hwmon_device_register_with_groups() to register the hwmon device
-instead.
+Let's fail the probe if a larbdev is NULL to avoid invalid inputs from
+dts.
 
-In the future, the hwmon subsystem will reject calls to
-hwmon_device_register_with_info with NULL dev or chip/info parameters.
-Without this patch, the hwmon device will fail to register.
+It should work for normal correct setting and avoid the crash caused
+by my incorrect setting.
 
-Fixes: f59dc5119192 ("MIPS: Loongson: Fix boot warning about hwmon_device_register()")
-Cc: Zhi Li <lizhi01@loongson.cn>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Error log:
+[   18.189042][  T301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
+...
+[   18.344519][  T301] pstate: a0400005 (NzCv daif +PAN -UAO)
+[   18.345213][  T301] pc : mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
+[   18.346050][  T301] lr : mtk_iommu_probe_device+0xd0/0x118 [mtk_iommu]
+[   18.346884][  T301] sp : ffffffc00a5635e0
+[   18.347392][  T301] x29: ffffffc00a5635e0 x28: ffffffd44a46c1d8
+[   18.348156][  T301] x27: ffffff80c39a8000 x26: ffffffd44a80cc38
+[   18.348917][  T301] x25: 0000000000000000 x24: ffffffd44a80cc38
+[   18.349677][  T301] x23: ffffffd44e4da4c6 x22: ffffffd44a80cc38
+[   18.350438][  T301] x21: ffffff80cecd1880 x20: 0000000000000000
+[   18.351198][  T301] x19: ffffff80c439f010 x18: ffffffc00a50d0c0
+[   18.351959][  T301] x17: ffffffffffffffff x16: 0000000000000004
+[   18.352719][  T301] x15: 0000000000000004 x14: ffffffd44eb5d420
+[   18.353480][  T301] x13: 0000000000000ad2 x12: 0000000000000003
+[   18.354241][  T301] x11: 00000000fffffad2 x10: c0000000fffffad2
+[   18.355003][  T301] x9 : a0d288d8d7142d00 x8 : a0d288d8d7142d00
+[   18.355763][  T301] x7 : ffffffd44c2bc640 x6 : 0000000000000000
+[   18.356524][  T301] x5 : 0000000000000080 x4 : 0000000000000001
+[   18.357284][  T301] x3 : 0000000000000000 x2 : 0000000000000005
+[   18.358045][  T301] x1 : 0000000000000000 x0 : 0000000000000000
+[   18.360208][  T301] Hardware name: MT6873 (DT)
+[   18.360771][  T301] Call trace:
+[   18.361168][  T301]  dump_backtrace+0xf8/0x1f0
+[   18.361737][  T301]  dump_stack_lvl+0xa8/0x11c
+[   18.362305][  T301]  dump_stack+0x1c/0x2c
+[   18.362816][  T301]  mrdump_common_die+0x184/0x40c [mrdump]
+[   18.363575][  T301]  ipanic_die+0x24/0x38 [mrdump]
+[   18.364230][  T301]  atomic_notifier_call_chain+0x128/0x2b8
+[   18.364937][  T301]  die+0x16c/0x568
+[   18.365394][  T301]  __do_kernel_fault+0x1e8/0x214
+[   18.365402][  T301]  do_page_fault+0xb8/0x678
+[   18.366934][  T301]  do_translation_fault+0x48/0x64
+[   18.368645][  T301]  do_mem_abort+0x68/0x148
+[   18.368652][  T301]  el1_abort+0x40/0x64
+[   18.368660][  T301]  el1h_64_sync_handler+0x54/0x88
+[   18.368668][  T301]  el1h_64_sync+0x68/0x6c
+[   18.368673][  T301]  mtk_iommu_probe_device+0xf8/0x118 [mtk_iommu]
+...
+
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Yong Wu <yong.wu@mediatek.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 635319a4a744 ("media: iommu/mediatek: Add device_link between the consumer and the larb devices")
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+Reviewed-by: Yong Wu <yong.wu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220505132731.21628-1-miles.chen@mediatek.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/mips/cpu_hwmon.c | 127 ++++++++++--------------------
- 1 file changed, 41 insertions(+), 86 deletions(-)
+ drivers/iommu/mtk_iommu.c    | 6 ++++++
+ drivers/iommu/mtk_iommu_v1.c | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
-index 386389ffec41..d8c5f9195f85 100644
---- a/drivers/platform/mips/cpu_hwmon.c
-+++ b/drivers/platform/mips/cpu_hwmon.c
-@@ -55,55 +55,6 @@ int loongson3_cpu_temp(int cpu)
- static int nr_packages;
- static struct device *cpu_hwmon_dev;
- 
--static SENSOR_DEVICE_ATTR(name, 0444, NULL, NULL, 0);
--
--static struct attribute *cpu_hwmon_attributes[] = {
--	&sensor_dev_attr_name.dev_attr.attr,
--	NULL
--};
--
--/* Hwmon device attribute group */
--static struct attribute_group cpu_hwmon_attribute_group = {
--	.attrs = cpu_hwmon_attributes,
--};
--
--static ssize_t get_cpu_temp(struct device *dev,
--			struct device_attribute *attr, char *buf);
--static ssize_t cpu_temp_label(struct device *dev,
--			struct device_attribute *attr, char *buf);
--
--static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
--static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
--static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
--static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
--static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
--static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
--static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
--static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
--
--static const struct attribute *hwmon_cputemp[4][3] = {
--	{
--		&sensor_dev_attr_temp1_input.dev_attr.attr,
--		&sensor_dev_attr_temp1_label.dev_attr.attr,
--		NULL
--	},
--	{
--		&sensor_dev_attr_temp2_input.dev_attr.attr,
--		&sensor_dev_attr_temp2_label.dev_attr.attr,
--		NULL
--	},
--	{
--		&sensor_dev_attr_temp3_input.dev_attr.attr,
--		&sensor_dev_attr_temp3_label.dev_attr.attr,
--		NULL
--	},
--	{
--		&sensor_dev_attr_temp4_input.dev_attr.attr,
--		&sensor_dev_attr_temp4_label.dev_attr.attr,
--		NULL
--	}
--};
--
- static ssize_t cpu_temp_label(struct device *dev,
- 			struct device_attribute *attr, char *buf)
- {
-@@ -121,24 +72,47 @@ static ssize_t get_cpu_temp(struct device *dev,
- 	return sprintf(buf, "%d\n", value);
- }
- 
--static int create_sysfs_cputemp_files(struct kobject *kobj)
--{
--	int i, ret = 0;
--
--	for (i = 0; i < nr_packages; i++)
--		ret = sysfs_create_files(kobj, hwmon_cputemp[i]);
-+static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
-+static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
-+static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
-+static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
-+static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
-+static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
- 
--	return ret;
--}
-+static struct attribute *cpu_hwmon_attributes[] = {
-+	&sensor_dev_attr_temp1_input.dev_attr.attr,
-+	&sensor_dev_attr_temp1_label.dev_attr.attr,
-+	&sensor_dev_attr_temp2_input.dev_attr.attr,
-+	&sensor_dev_attr_temp2_label.dev_attr.attr,
-+	&sensor_dev_attr_temp3_input.dev_attr.attr,
-+	&sensor_dev_attr_temp3_label.dev_attr.attr,
-+	&sensor_dev_attr_temp4_input.dev_attr.attr,
-+	&sensor_dev_attr_temp4_label.dev_attr.attr,
-+	NULL
-+};
- 
--static void remove_sysfs_cputemp_files(struct kobject *kobj)
-+static umode_t cpu_hwmon_is_visible(struct kobject *kobj,
-+				    struct attribute *attr, int i)
- {
--	int i;
-+	int id = i / 2;
- 
--	for (i = 0; i < nr_packages; i++)
--		sysfs_remove_files(kobj, hwmon_cputemp[i]);
-+	if (id < nr_packages)
-+		return attr->mode;
-+	return 0;
- }
- 
-+static struct attribute_group cpu_hwmon_group = {
-+	.attrs = cpu_hwmon_attributes,
-+	.is_visible = cpu_hwmon_is_visible,
-+};
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 3413cc98e57e..1a31f4707222 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -581,6 +581,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+ 	 * All the ports in each a device should be in the same larbs.
+ 	 */
+ 	larbid = MTK_M4U_TO_LARB(fwspec->ids[0]);
++	if (larbid >= MTK_LARB_NR_MAX)
++		return ERR_PTR(-EINVAL);
 +
-+static const struct attribute_group *cpu_hwmon_groups[] = {
-+	&cpu_hwmon_group,
-+	NULL
-+};
+ 	for (i = 1; i < fwspec->num_ids; i++) {
+ 		larbidx = MTK_M4U_TO_LARB(fwspec->ids[i]);
+ 		if (larbid != larbidx) {
+@@ -590,6 +593,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
+ 		}
+ 	}
+ 	larbdev = data->larb_imu[larbid].dev;
++	if (!larbdev)
++		return ERR_PTR(-EINVAL);
 +
- #define CPU_THERMAL_THRESHOLD 90000
- static struct delayed_work thermal_work;
+ 	link = device_link_add(dev, larbdev,
+ 			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+ 	if (!link)
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index ecff800656e6..74563f689fbd 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -80,6 +80,7 @@
+ /* MTK generation one iommu HW only support 4K size mapping */
+ #define MT2701_IOMMU_PAGE_SHIFT			12
+ #define MT2701_IOMMU_PAGE_SIZE			(1UL << MT2701_IOMMU_PAGE_SHIFT)
++#define MT2701_LARB_NR_MAX			3
  
-@@ -159,50 +133,31 @@ static void do_thermal_timer(struct work_struct *work)
+ /*
+  * MTK m4u support 4GB iova address space, and only support 4K page
+@@ -457,6 +458,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
  
- static int __init loongson_hwmon_init(void)
- {
--	int ret;
--
- 	pr_info("Loongson Hwmon Enter...\n");
- 
- 	if (cpu_has_csr())
- 		csr_temp_enable = csr_readl(LOONGSON_CSR_FEATURES) &
- 				  LOONGSON_CSRF_TEMP;
- 
--	cpu_hwmon_dev = hwmon_device_register_with_info(NULL, "cpu_hwmon", NULL, NULL, NULL);
--	if (IS_ERR(cpu_hwmon_dev)) {
--		ret = PTR_ERR(cpu_hwmon_dev);
--		pr_err("hwmon_device_register fail!\n");
--		goto fail_hwmon_device_register;
--	}
--
- 	nr_packages = loongson_sysconf.nr_cpus /
- 		loongson_sysconf.cores_per_package;
- 
--	ret = create_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
--	if (ret) {
--		pr_err("fail to create cpu temperature interface!\n");
--		goto fail_create_sysfs_cputemp_files;
-+	cpu_hwmon_dev = hwmon_device_register_with_groups(NULL, "cpu_hwmon",
-+							  NULL, cpu_hwmon_groups);
-+	if (IS_ERR(cpu_hwmon_dev)) {
-+		pr_err("hwmon_device_register fail!\n");
-+		return PTR_ERR(cpu_hwmon_dev);
+ 	/* Link the consumer device with the smi-larb device(supplier) */
+ 	larbid = mt2701_m4u_to_larb(fwspec->ids[0]);
++	if (larbid >= MT2701_LARB_NR_MAX)
++		return ERR_PTR(-EINVAL);
++
+ 	for (idx = 1; idx < fwspec->num_ids; idx++) {
+ 		larbidx = mt2701_m4u_to_larb(fwspec->ids[idx]);
+ 		if (larbid != larbidx) {
+@@ -467,6 +471,9 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
  	}
  
- 	INIT_DEFERRABLE_WORK(&thermal_work, do_thermal_timer);
- 	schedule_delayed_work(&thermal_work, msecs_to_jiffies(20000));
- 
--	return ret;
--
--fail_create_sysfs_cputemp_files:
--	sysfs_remove_group(&cpu_hwmon_dev->kobj,
--				&cpu_hwmon_attribute_group);
--	hwmon_device_unregister(cpu_hwmon_dev);
--
--fail_hwmon_device_register:
--	return ret;
-+	return 0;
- }
- 
- static void __exit loongson_hwmon_exit(void)
- {
- 	cancel_delayed_work_sync(&thermal_work);
--	remove_sysfs_cputemp_files(&cpu_hwmon_dev->kobj);
--	sysfs_remove_group(&cpu_hwmon_dev->kobj,
--				&cpu_hwmon_attribute_group);
- 	hwmon_device_unregister(cpu_hwmon_dev);
- }
- 
+ 	larbdev = data->larb_imu[larbid].dev;
++	if (!larbdev)
++		return ERR_PTR(-EINVAL);
++
+ 	link = device_link_add(dev, larbdev,
+ 			       DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
+ 	if (!link)
 -- 
 2.35.1
 

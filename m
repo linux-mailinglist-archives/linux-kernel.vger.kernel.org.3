@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A193C5419DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD755407C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380441AbiFGV0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S231300AbiFGRwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377459AbiFGUdZ (ORCPT
+        with ESMTP id S1347648AbiFGRfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940CB1E4532;
-        Tue,  7 Jun 2022 11:35:10 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B2671D95;
+        Tue,  7 Jun 2022 10:31:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01960B8237D;
-        Tue,  7 Jun 2022 18:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE25C385A2;
-        Tue,  7 Jun 2022 18:35:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D2F0614D2;
+        Tue,  7 Jun 2022 17:31:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32228C385A5;
+        Tue,  7 Jun 2022 17:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626906;
-        bh=90hcqqTDbuainC8u75Jns7z4qyyeclpWRSFDaglmv18=;
+        s=korg; t=1654623063;
+        bh=ulQTVT6ZnXZ+m8mLeQxMtSc5sv6EYb6RAVOJ2jq00pE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cQ6mfpqSozfCD25AbpECvMePuw/ly3AriwtN/WfXHBVQDRUXG+UUX+USUh2jXsQgV
-         sMwFdIUeBXdd4J27CZEm59YbgGR7buvHNUC1KvrjgLZne/NUEUumodv5pkRK1eUXib
-         nC3vBG7rcjCpGc3GYckRzcvi3778UdMTlFiT6x5I=
+        b=lKVCP3P6K+wQ3w6aJtpY07QAoX2Ngdat9m/QBToFUaNj1AtJiNF4ssDENgn7paGCQ
+         /M1dMqxOi8wlVyiBCVw3OkI77K1QZT0Qac3Aemh3w6KHwF/BhhzS6J7DK8vaGNvqOr
+         bUa4Lr+/azOdfANrH/eeVDy0Q4kuixaS8jNUwcWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Russell Currey <ruscur@russell.cc>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 546/772] powerpc/powernv: Get L1D flush requirements from device-tree
+Subject: [PATCH 5.10 281/452] gpiolib: of: Introduce hook for missing gpio-ranges
 Date:   Tue,  7 Jun 2022 19:02:18 +0200
-Message-Id: <20220607165005.052761549@linuxfoundation.org>
+Message-Id: <20220607164916.923774152@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell Currey <ruscur@russell.cc>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 2efee6adb56159288bce9d1ab51fc9056d7007d4 ]
+[ Upstream commit 3550bba25d5587a701e6edf20e20984d2ee72c78 ]
 
-The device-tree properties no-need-l1d-flush-msr-pr-1-to-0 and
-no-need-l1d-flush-kernel-on-user-access are the equivalents of
-H_CPU_BEHAV_NO_L1D_FLUSH_ENTRY and H_CPU_BEHAV_NO_L1D_FLUSH_UACCESS
-from the H_GET_CPU_CHARACTERISTICS hcall on pseries respectively.
+Since commit 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
+the device tree nodes of GPIO controller need the gpio-ranges property to
+handle gpio-hogs. Unfortunately it's impossible to guarantee that every new
+kernel is shipped with an updated device tree binary.
 
-In commit d02fa40d759f ("powerpc/powernv: Remove POWER9 PVR version
-check for entry and uaccess flushes") the condition for disabling the
-L1D flush on kernel entry and user access was changed from any non-P9
-CPU to only checking P7 and P8.  Without the appropriate device-tree
-checks for newer processors on powernv, these flushes are unnecessarily
-enabled on those systems.  This patch corrects this.
+In order to provide backward compatibility with those older DTB, we need a
+callback within of_gpiochip_add_pin_range() so the relevant platform driver
+can handle this case.
 
-Fixes: d02fa40d759f ("powerpc/powernv: Remove POWER9 PVR version check for entry and uaccess flushes")
-Reported-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Russell Currey <ruscur@russell.cc>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220404101536.104794-1-ruscur@russell.cc
+Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Link: https://lore.kernel.org/r/20220409095129.45786-2-stefan.wahren@i2se.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powernv/setup.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpio/gpiolib-of.c   |  5 +++++
+ include/linux/gpio/driver.h | 12 ++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/arch/powerpc/platforms/powernv/setup.c b/arch/powerpc/platforms/powernv/setup.c
-index 105d889abd51..378f7e5f18d2 100644
---- a/arch/powerpc/platforms/powernv/setup.c
-+++ b/arch/powerpc/platforms/powernv/setup.c
-@@ -96,6 +96,12 @@ static void __init init_fw_feat_flags(struct device_node *np)
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 921a99578ff0..01424af654db 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -933,6 +933,11 @@ static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
+ 	if (!np)
+ 		return 0;
  
- 	if (fw_feature_is("disabled", "needs-spec-barrier-for-bound-checks", np))
- 		security_ftr_clear(SEC_FTR_BNDS_CHK_SPEC_BAR);
++	if (!of_property_read_bool(np, "gpio-ranges") &&
++	    chip->of_gpio_ranges_fallback) {
++		return chip->of_gpio_ranges_fallback(chip, np);
++	}
 +
-+	if (fw_feature_is("enabled", "no-need-l1d-flush-msr-pr-1-to-0", np))
-+		security_ftr_clear(SEC_FTR_L1D_FLUSH_ENTRY);
-+
-+	if (fw_feature_is("enabled", "no-need-l1d-flush-kernel-on-user-access", np))
-+		security_ftr_clear(SEC_FTR_L1D_FLUSH_UACCESS);
- }
+ 	group_names = of_find_property(np, group_names_propname, NULL);
  
- static void __init pnv_setup_security_mitigations(void)
+ 	for (;; index++) {
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index b216899b4745..0552a9859a01 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -477,6 +477,18 @@ struct gpio_chip {
+ 	 */
+ 	int (*of_xlate)(struct gpio_chip *gc,
+ 			const struct of_phandle_args *gpiospec, u32 *flags);
++
++	/**
++	 * @of_gpio_ranges_fallback:
++	 *
++	 * Optional hook for the case that no gpio-ranges property is defined
++	 * within the device tree node "np" (usually DT before introduction
++	 * of gpio-ranges). So this callback is helpful to provide the
++	 * necessary backward compatibility for the pin ranges.
++	 */
++	int (*of_gpio_ranges_fallback)(struct gpio_chip *gc,
++				       struct device_node *np);
++
+ #endif /* CONFIG_OF_GPIO */
+ };
+ 
 -- 
 2.35.1
 

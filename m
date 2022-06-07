@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852B654099F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17044541B59
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350270AbiFGSKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S1382003AbiFGVqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349891AbiFGRvl (ORCPT
+        with ESMTP id S1378682AbiFGUwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:51:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B702013F402;
-        Tue,  7 Jun 2022 10:39:09 -0700 (PDT)
+        Tue, 7 Jun 2022 16:52:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E33F15A17;
+        Tue,  7 Jun 2022 11:42:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB096615B9;
-        Tue,  7 Jun 2022 17:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095E7C385A5;
-        Tue,  7 Jun 2022 17:38:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8C14B82018;
+        Tue,  7 Jun 2022 18:42:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D12BC385A2;
+        Tue,  7 Jun 2022 18:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623519;
-        bh=4y7Ck14Sih/73YdOVk/1vvtwXXSAQU9vHJEbfiUYQ5Y=;
+        s=korg; t=1654627364;
+        bh=ky2CKWepQbNbVV7XwcZQYn/5gAFmeJhM5i3r1Xbv73o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nCmLhlx36+O/kiKxIUCmU4b0ZBE3bH+5paHnsRv67XlzCcQ3nk6iDKdkpqw5qx/Ce
-         PzzIUrHJHZK17dbIGEPGNkgGjxqVx8SK8/t9EQBEL3Dia7vyBr8LEXFVIFHb4y8bz9
-         8BpUt/C7D+pSxzfrIXIJWDXothYimEG64Ub18Xb0=
+        b=B7v0cn0wjLsQ+N3QdUM8Cft+bu4Qtyh2COzB4Xc02OVP68ICwFtqSoEpUuLe3aCZl
+         M9UxtgL7za6pfeX3p3M/DNmj0S9ydMB+XCocCxppCAgPOUk3tlMgEEK5uj2zsR8Uuz
+         KRzeMqGDkcMKlJAP7SMb5tNcgthKoczh90N/yLYw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 447/452] Revert "random: use static branch for crng_ready()"
-Date:   Tue,  7 Jun 2022 19:05:04 +0200
-Message-Id: <20220607164921.891640546@linuxfoundation.org>
+        stable@vger.kernel.org, Catrinel Catrinescu <cc@80211.de>,
+        Felix Fietkau <nbd@nbd.name>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 5.17 713/772] mac80211: upgrade passive scan to active scan on DFS channels after beacon rx
+Date:   Tue,  7 Jun 2022 19:05:05 +0200
+Message-Id: <20220607165010.055746370@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,65 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Felix Fietkau <nbd@nbd.name>
 
-This reverts upstream commit f5bda35fba615ace70a656d4700423fa6c9bebee
-from stable. It's not essential and will take some time during 5.19 to
-work out properly.
+commit b041b7b9de6e1d4362de855ab90f9d03ef323edd upstream.
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+In client mode, we can't connect to hidden SSID APs or SSIDs not advertised
+in beacons on DFS channels, since we're forced to passive scan. Fix this by
+sending out a probe request immediately after the first beacon, if active
+scan was requested by the user.
+
+Cc: stable@vger.kernel.org
+Reported-by: Catrinel Catrinescu <cc@80211.de>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Link: https://lore.kernel.org/r/20220420104907.36275-1-nbd@nbd.name
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ net/mac80211/ieee80211_i.h |    5 +++++
+ net/mac80211/scan.c        |   20 ++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -79,8 +79,7 @@ static enum {
- 	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
- 	CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
- } crng_init __read_mostly = CRNG_EMPTY;
--static DEFINE_STATIC_KEY_FALSE(crng_is_ready);
--#define crng_ready() (static_branch_likely(&crng_is_ready) || crng_init >= CRNG_READY)
-+#define crng_ready() (likely(crng_init >= CRNG_READY))
- /* Various types of waiters for crng_init->CRNG_READY transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
-@@ -110,11 +109,6 @@ bool rng_is_initialized(void)
- }
- EXPORT_SYMBOL(rng_is_initialized);
+--- a/net/mac80211/ieee80211_i.h
++++ b/net/mac80211/ieee80211_i.h
+@@ -1128,6 +1128,9 @@ struct tpt_led_trigger {
+  *	a scan complete for an aborted scan.
+  * @SCAN_HW_CANCELLED: Set for our scan work function when the scan is being
+  *	cancelled.
++ * @SCAN_BEACON_WAIT: Set whenever we're passive scanning because of radar/no-IR
++ *	and could send a probe request after receiving a beacon.
++ * @SCAN_BEACON_DONE: Beacon received, we can now send a probe request
+  */
+ enum {
+ 	SCAN_SW_SCANNING,
+@@ -1136,6 +1139,8 @@ enum {
+ 	SCAN_COMPLETED,
+ 	SCAN_ABORTED,
+ 	SCAN_HW_CANCELLED,
++	SCAN_BEACON_WAIT,
++	SCAN_BEACON_DONE,
+ };
  
--static void __cold crng_set_ready(struct work_struct *work)
--{
--	static_branch_enable(&crng_is_ready);
--}
--
- /* Used by wait_for_random_bytes(), and considered an entropy collector, below. */
- static void try_to_generate_entropy(void);
+ /**
+--- a/net/mac80211/scan.c
++++ b/net/mac80211/scan.c
+@@ -281,6 +281,16 @@ void ieee80211_scan_rx(struct ieee80211_
+ 	if (likely(!sdata1 && !sdata2))
+ 		return;
  
-@@ -268,7 +262,7 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (!static_branch_likely(&crng_is_ready))
-+	if (!crng_ready())
- 		crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
- 	memzero_explicit(key, sizeof(key));
-@@ -711,7 +705,6 @@ static void extract_entropy(void *buf, s
++	if (test_and_clear_bit(SCAN_BEACON_WAIT, &local->scanning)) {
++		/*
++		 * we were passive scanning because of radar/no-IR, but
++		 * the beacon/proberesp rx gives us an opportunity to upgrade
++		 * to active scan
++		 */
++		 set_bit(SCAN_BEACON_DONE, &local->scanning);
++		 ieee80211_queue_delayed_work(&local->hw, &local->scan_work, 0);
++	}
++
+ 	if (ieee80211_is_probe_resp(mgmt->frame_control)) {
+ 		struct cfg80211_scan_request *scan_req;
+ 		struct cfg80211_sched_scan_request *sched_scan_req;
+@@ -787,6 +797,8 @@ static int __ieee80211_start_scan(struct
+ 						IEEE80211_CHAN_RADAR)) ||
+ 		    !req->n_ssids) {
+ 			next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
++			if (req->n_ssids)
++				set_bit(SCAN_BEACON_WAIT, &local->scanning);
+ 		} else {
+ 			ieee80211_scan_state_send_probe(local, &next_delay);
+ 			next_delay = IEEE80211_CHANNEL_TIME;
+@@ -998,6 +1010,8 @@ set_channel:
+ 	    !scan_req->n_ssids) {
+ 		*next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
+ 		local->next_scan_state = SCAN_DECISION;
++		if (scan_req->n_ssids)
++			set_bit(SCAN_BEACON_WAIT, &local->scanning);
+ 		return;
+ 	}
  
- static void __cold _credit_init_bits(size_t bits)
- {
--	static struct execute_work set_ready;
- 	unsigned int new, orig, add;
- 	unsigned long flags;
+@@ -1090,6 +1104,8 @@ void ieee80211_scan_work(struct work_str
+ 			goto out;
+ 	}
  
-@@ -727,7 +720,6 @@ static void __cold _credit_init_bits(siz
++	clear_bit(SCAN_BEACON_WAIT, &local->scanning);
++
+ 	/*
+ 	 * as long as no delay is required advance immediately
+ 	 * without scheduling a new work
+@@ -1100,6 +1116,10 @@ void ieee80211_scan_work(struct work_str
+ 			goto out_complete;
+ 		}
  
- 	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
- 		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
--		execute_in_process_context(crng_set_ready, &set_ready);
- 		process_random_ready_list();
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
++		if (test_and_clear_bit(SCAN_BEACON_DONE, &local->scanning) &&
++		    local->next_scan_state == SCAN_DECISION)
++			local->next_scan_state = SCAN_SEND_PROBE;
++
+ 		switch (local->next_scan_state) {
+ 		case SCAN_DECISION:
+ 			/* if no more bands/channels left, complete scan */
 
 

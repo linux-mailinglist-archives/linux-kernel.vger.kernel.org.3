@@ -2,77 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F47540293
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C197A540295
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344149AbiFGPfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
+        id S1344205AbiFGPgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbiFGPfi (ORCPT
+        with ESMTP id S240126AbiFGPgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:35:38 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A3F68B0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:35:37 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id q15so6393205wmj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=UzAFOh0dSi5b7YcRWFXZow4QCyM7X3zyC4kDiKLs6oA=;
-        b=T5kR40O4jIf93Fzt2vVjHZsWJdRsDbXUsWf+mvn1wIXbxiVgaP5IefQAlFt7hUxPLw
-         rUHJnaENpHIaQQ5LD5GYbGFLr/ivNwinMXUz3J/LMQc0uSeEv5klV5kQgxojKKCrqT6K
-         z8O5hGcPPFVeRibn0sn6StjcyJugXjVuKtNDos/NoE4mFB64LDwtgd4zef/99rLnWwm4
-         vQIC98SKhKJePLMpRBVse3kuDKRKqQvLkTE3ABXMs6kjiVEwmUQzkVohuwLxerT1z9sa
-         0mFV7MhEypGwD8gH/3TNX6QqtchzS5h+UoteVBwLpPaJlUYlXl00HMEKhepD5Y/Nbv7U
-         0HvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UzAFOh0dSi5b7YcRWFXZow4QCyM7X3zyC4kDiKLs6oA=;
-        b=KoOPofzppR8d9uNdWmKWPECihdYxS5wHZlzE+xqMsNXzg9bT8+AmKNKtZQQKEzTu7D
-         4rLmPlDpoUY7UsM7ackeMG6efIv6Sqq/+1LuICPi4eBstr3Ux/0c0Xgj4ET50PuhzFjQ
-         e4Es5XY39ui9/31DEkDo6kpzdUXmnKwSLxVtzq+Pf99z4n0J4p+ltrCg1RWBnjxo+75X
-         hjv9iHk4d5P3BQatMVp3/kIIjWvtcEBUpKHSKOUtDPbKMay0FwXjeSqeTLQL2ZPb8fxi
-         yyomucloD62uOzdtkw0kpx1sB3AykZA0ZSaTUlrSJbAkcOHRBWAYu+/PqDe0XHBiOJ57
-         EfdA==
-X-Gm-Message-State: AOAM531Mq4gYJYfEoV0OT6r/GMswypySUnLvckKBf7DMWkeqzRbHHjO3
-        rDgafE6ao+jz5ySPT1ZcpItR/Q==
-X-Google-Smtp-Source: ABdhPJy6bavYQeyfic2q5zoBbUISR1gSP0m3TPaWhyrDKXYy9SywIwfxjCPR6erasubUzeaAz8h6gQ==
-X-Received: by 2002:a05:600c:2054:b0:39c:3f73:3552 with SMTP id p20-20020a05600c205400b0039c3f733552mr23997611wmg.15.1654616135853;
-        Tue, 07 Jun 2022 08:35:35 -0700 (PDT)
-Received: from [192.168.187.211] ([86.12.200.143])
-        by smtp.gmail.com with ESMTPSA id s13-20020a5d6a8d000000b0020c5253d8f7sm18217141wru.67.2022.06.07.08.35.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 08:35:35 -0700 (PDT)
-Message-ID: <25c1a57e-af67-ebc8-ab13-6532bf6e6e75@raspberrypi.com>
-Date:   Tue, 7 Jun 2022 16:35:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9o6R2RRdwzB9f+464xH+Aw-9wx2dm=ZsQYFbTk_-66yJw@mail.gmail.com>
- <8c3fe744-0181-043a-3af9-dd00165a6356@raspberrypi.com>
- <Yp9rc1G6xfTSSUjF@zx2c4.com>
-From:   Phil Elwell <phil@raspberrypi.com>
-In-Reply-To: <Yp9rc1G6xfTSSUjF@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Tue, 7 Jun 2022 11:36:43 -0400
+Received: from smtp.ruc.edu.cn (m177126.mail.qiye.163.com [123.58.177.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1540EF68B2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:36:43 -0700 (PDT)
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp.ruc.edu.cn (Hmail) with ESMTPSA id E67CF8009E;
+        Tue,  7 Jun 2022 23:36:38 +0800 (CST)
+From:   Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] drm/radeon: integer overflow in radeon_mode_dumb_create()
+Date:   Tue,  7 Jun 2022 23:36:31 +0800
+Message-Id: <20220607153631.7885-1-xiaohuizhang@ruc.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUMdSk5WH0IdSUhJSxlLHh
+        9KVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ojo6Ljo4TT01CxdCSjAMDTJP
+        Ay8KFDJVSlVKTU5PTUpNSkJCTkxNVTMWGhIXVQMSGhQTDhIBExoVHDsJDhhVHh8OVRgVRVlXWRIL
+        WUFZSUtJVUpKSVVKSkhVSUpJWVdZCAFZQUlKTkw3Bg++
+X-HM-Tid: 0a813ecf904c2c20kusne67cf8009e
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,38 +45,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
+Similar to the handling of amdgpu_mode_dumb_create in commit 54ef0b5461c0
+("drm/amdgpu: integer overflow in amdgpu_mode_dumb_create()"),
+we thought a patch might be needed here as well.
 
-On 07/06/2022 16:14, Jason A. Donenfeld wrote:
-> Hey again,
-> 
-> On Tue, Jun 07, 2022 at 10:15:27AM +0100, Phil Elwell wrote:
->> On 07/06/2022 09:43, Jason A. Donenfeld wrote:
->>> Hi Phil,
->>>
->>> On Tue, Jun 7, 2022 at 10:29 AM Phil Elwell <phil@raspberrypi.com> wrote:
->>>>
->>>> This patch is fatal for me in the downstream Raspberry Pi kernel - it locks up
->>>> on boot even before the earlycon output is available. Hacking jump_label_init to
->>>> skip the jump_entry for "crng_is_ready" allows it to boot, but is likely to have
->>>> consequences further down the line.
->>>
->>> Also, reading this a few times, I'm not 100% sure I understand what
->>> you did to hack around this and why that works. Think you could paste
->>> your hackpatch just out of interest to the discussion (but obviously
->>> not to be applied)?
->>
->> This is the minimal version of my workaround patch that at least allows the
->> board to boot. Bear in mind that it was written with no previous knowledge of
->> jump labels and was arrived at by iteratively bisecting the list of jump_labels
->> until the first dangerous one was found, then later working out that there was
->> only one.
-> 
-> Looks like this patch fails due to CONFIG_STRICT_KERNEL_RWX.
-> Investigating deeper now, but that for starters seems to be the
-> differentiating factor between my prior test rig and one that reproduces
-> the error. I assume your raspi also sets CONFIG_STRICT_KERNEL_RWX.
+args->size is a u64.  arg->pitch and args->height are u32.  The
+multiplication will overflow instead of using the high 32 bits as
+intended.
 
-Yes, it does, as does multi_v7_defconfig.
+Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+---
+ drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Phil
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index 8c01a7f0e027..84843b3b3aef 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -833,7 +833,7 @@ int radeon_mode_dumb_create(struct drm_file *file_priv,
+ 
+ 	args->pitch = radeon_align_pitch(rdev, args->width,
+ 					 DIV_ROUND_UP(args->bpp, 8), 0);
+-	args->size = args->pitch * args->height;
++	args->size = (u64)args->pitch * args->height;
+ 	args->size = ALIGN(args->size, PAGE_SIZE);
+ 
+ 	r = radeon_gem_object_create(rdev, args->size, 0,
+-- 
+2.17.1
+

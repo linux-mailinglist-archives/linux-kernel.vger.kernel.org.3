@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04DD541662
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02834541EC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378118AbiFGUv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S1380538AbiFGWdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358460AbiFGTwb (ORCPT
+        with ESMTP id S1379116AbiFGVUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:31 -0400
+        Tue, 7 Jun 2022 17:20:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF16313C379;
-        Tue,  7 Jun 2022 11:20:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC5169DCB;
+        Tue,  7 Jun 2022 11:59:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7014460C1C;
-        Tue,  7 Jun 2022 18:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CD1C385A2;
-        Tue,  7 Jun 2022 18:20:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94710612F2;
+        Tue,  7 Jun 2022 18:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C246C385A2;
+        Tue,  7 Jun 2022 18:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626035;
-        bh=H0eiMGV5exGeCtYUmKb4h3NCR4TTqbXzzA85284RBE0=;
+        s=korg; t=1654628380;
+        bh=enDk63P51EW+pA7YZE3qadFlH+8bEQ6EbgSaATVfMHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uSXnQBgm6LbQLhIv8R7pqpL/aHm7OvVDSeI9I6A/pCkX09BkO0OHzqIdxlAGGey3p
-         qJSiD0Tas+B0p42O9DCkgE8ZPKpyiUZxvzfGe95eSdlwACrA5EGz+meLVShLrcSKz2
-         eBpvHwwfiPboyKBoy5r9ZvBj+kceN5W3dAIJTUzQ=
+        b=ZDDhnC4yijarkzbkFEx8Z9nSCl6EsePjdpi51V6RRfm57nSbq0VOEucs4ISuT1xQZ
+         eLgHvPYA+Zu5uQOVfzgVST7xkRt7r6peWS65W0jXTF9ONfZ7EKa26NtzR7pKfvp1cO
+         ETEJCNEqXNEd4YKH6kGMn37eDo3kmLjmNKwEaRrk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 234/772] drm/bridge: adv7511: clean up CEC adapter when probe fails
+Subject: [PATCH 5.18 308/879] ixp4xx_eth: fix error check return value of platform_get_irq()
 Date:   Tue,  7 Jun 2022 18:57:06 +0200
-Message-Id: <20220607164955.928375778@linuxfoundation.org>
+Message-Id: <20220607165011.788341254@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit 7ed2b0dabf7a22874cb30f8878df239ef638eb53 ]
+[ Upstream commit f45ba67eb74ab4b775616af731bdf8944afce3f1 ]
 
-When the probe routine fails we also need to clean up the
-CEC adapter registered in adv7511_cec_init().
+platform_get_irq() return negative value on failure, so null check of
+return value is incorrect. Fix it by comparing whether it is less than
+zero.
 
-Fixes: 3b1b975003e4 ("drm: adv7511/33: add HDMI CEC support")
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220321104705.2804423-1-l.stach@pengutronix.de
+Fixes: 9055a2f59162 ("ixp4xx_eth: make ptp support a platform driver")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220412085126.2532924-1-lv.ruyi@zte.com.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/xscale/ptp_ixp46x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 77118c3395bf..320cbd5d90b8 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -1313,6 +1313,7 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
- 	adv7511_audio_exit(adv7511);
- 	drm_bridge_remove(&adv7511->bridge);
- err_unregister_cec:
-+	cec_unregister_adapter(adv7511->cec_adap);
- 	i2c_unregister_device(adv7511->i2c_cec);
- 	clk_disable_unprepare(adv7511->cec_clk);
- err_i2c_unregister_packet:
+diff --git a/drivers/net/ethernet/xscale/ptp_ixp46x.c b/drivers/net/ethernet/xscale/ptp_ixp46x.c
+index 1f382777aa5a..9abbdb71e629 100644
+--- a/drivers/net/ethernet/xscale/ptp_ixp46x.c
++++ b/drivers/net/ethernet/xscale/ptp_ixp46x.c
+@@ -271,7 +271,7 @@ static int ptp_ixp_probe(struct platform_device *pdev)
+ 	ixp_clock.master_irq = platform_get_irq(pdev, 0);
+ 	ixp_clock.slave_irq = platform_get_irq(pdev, 1);
+ 	if (IS_ERR(ixp_clock.regs) ||
+-	    !ixp_clock.master_irq || !ixp_clock.slave_irq)
++	    ixp_clock.master_irq < 0 || ixp_clock.slave_irq < 0)
+ 		return -ENXIO;
+ 
+ 	ixp_clock.caps = ptp_ixp_caps;
 -- 
 2.35.1
 

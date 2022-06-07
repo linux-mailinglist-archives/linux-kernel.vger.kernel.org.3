@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B93540EAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86875405C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355007AbiFGS5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S1346694AbiFGR2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352351AbiFGSRD (ORCPT
+        with ESMTP id S1346279AbiFGRXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:17:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12338BD39;
-        Tue,  7 Jun 2022 10:51:26 -0700 (PDT)
+        Tue, 7 Jun 2022 13:23:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D6C10A612;
+        Tue,  7 Jun 2022 10:21:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D2006172E;
-        Tue,  7 Jun 2022 17:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69730C34115;
-        Tue,  7 Jun 2022 17:51:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAD536077B;
+        Tue,  7 Jun 2022 17:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5D9C385A5;
+        Tue,  7 Jun 2022 17:21:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624285;
-        bh=qlmXHUGCFcDHqwqkCcIi4THSIp4NWofFcLYLYb3H83g=;
+        s=korg; t=1654622500;
+        bh=UMy7WkdOANGsNd0OvoRXIa3HyHp58+lil8VtMJFr4eM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OXADQ14kYNs7BnlWDHz6w2UKhxc3uKyQeuTHwJlkzoq2XgYmvoV0mfPu6NfRCk8Xr
-         BcxVqJh6zMcO59jRsiTKrKty8DdYtN9nxLi3Lx7KTFO/DSRkiKtr4TBLKiI/Fmr+ki
-         dVJsTmHQSPXRk3V2Huw2KlEs+f4bOLJ26bfH6OFs=
+        b=YFSaAM6+nM1HWYhiOo6vvWWL2rmAHP7r0aKF2iKG0AK5+KKIWlZqmBwhuteaqOaNs
+         frHyWQpBjuFHSXdgyYYefVsCnDwC+5oroC9InBojZAgTsZJxHURfTrcATXiAeURyAD
+         zD3yd6lH1E/1T6w0FMcvjmUlhkP9i2r/JNlrlp0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Kyle Smith <kyles@hpe.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 273/667] drm/msm: add missing include to msm_drv.c
-Date:   Tue,  7 Jun 2022 18:58:58 +0200
-Message-Id: <20220607164942.973798310@linuxfoundation.org>
+Subject: [PATCH 5.10 082/452] nvme-pci: fix a NULL pointer dereference in nvme_alloc_admin_tags
+Date:   Tue,  7 Jun 2022 18:58:59 +0200
+Message-Id: <20220607164910.997254107@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Smith, Kyle Miller (Nimble Kernel) <kyles@hpe.com>
 
-[ Upstream commit 8123fe83c3a3448bbfa5b5b1cacfdfe7d076fca6 ]
+[ Upstream commit da42761181627e9bdc37d18368b827948a583929 ]
 
-Add explicit include of drm_bridge.h to the msm_drv.c to fix the
-following warning:
+In nvme_alloc_admin_tags, the admin_q can be set to an error (typically
+-ENOMEM) if the blk_mq_init_queue call fails to set up the queue, which
+is checked immediately after the call. However, when we return the error
+message up the stack, to nvme_reset_work the error takes us to
+nvme_remove_dead_ctrl()
+  nvme_dev_disable()
+   nvme_suspend_queue(&dev->queues[0]).
 
-drivers/gpu/drm/msm/msm_drv.c:236:17: error: implicit declaration of function 'drm_bridge_remove'; did you mean 'drm_bridge_detach'? [-Werror=implicit-function-declaration]
+Here, we only check that the admin_q is non-NULL, rather than not
+an error or NULL, and begin quiescing a queue that never existed, leading
+to bad / NULL pointer dereference.
 
-Fixes: d28ea556267c ("drm/msm: properly add and remove internal bridges")
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/484310/
-Link: https://lore.kernel.org/r/20220430180917.3819294-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Kyle Smith <kyles@hpe.com>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_drv.c | 1 +
+ drivers/nvme/host/pci.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index bbf999c66517..28524ea8601f 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -11,6 +11,7 @@
- #include <linux/uaccess.h>
- #include <uapi/linux/sched/types.h>
- 
-+#include <drm/drm_bridge.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_file.h>
- #include <drm/drm_ioctl.h>
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index a36db0701d17..7de24a10dd92 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -1666,6 +1666,7 @@ static int nvme_alloc_admin_tags(struct nvme_dev *dev)
+ 		dev->ctrl.admin_q = blk_mq_init_queue(&dev->admin_tagset);
+ 		if (IS_ERR(dev->ctrl.admin_q)) {
+ 			blk_mq_free_tag_set(&dev->admin_tagset);
++			dev->ctrl.admin_q = NULL;
+ 			return -ENOMEM;
+ 		}
+ 		if (!blk_get_queue(dev->ctrl.admin_q)) {
 -- 
 2.35.1
 

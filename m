@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB23F540715
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F455418EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348075AbiFGRmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S1353196AbiFGVSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347545AbiFGRau (ORCPT
+        with ESMTP id S1356895AbiFGUVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A941D0DB;
-        Tue,  7 Jun 2022 10:27:15 -0700 (PDT)
+        Tue, 7 Jun 2022 16:21:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A501451C0;
+        Tue,  7 Jun 2022 11:31:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47AECB822B8;
-        Tue,  7 Jun 2022 17:27:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D74C36B0C;
-        Tue,  7 Jun 2022 17:27:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B663561295;
+        Tue,  7 Jun 2022 18:31:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA084C385A2;
+        Tue,  7 Jun 2022 18:31:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622833;
-        bh=h52zxNpYYU8WCZXmj5zjTKIXV+j+MQqMSEZmLGWkZrc=;
+        s=korg; t=1654626674;
+        bh=qyEorKugdSDrYM446SI/sSvrMFs3g4trsGrHJkoRY5Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1gaU6SbO/M+vb6KsgP4fl7dZ9PbsVC3Hb96ZIVfWxBS3FRWC5FyrwEaZhYLaOdXsu
-         o2Ql1cd9MbEwvT2nkp8pEvVOBHmPbZBuEZIccx9V3tnassWXpl2pWiPIYl8PAb40/X
-         1zq66/JRiPjF1yqOiLLGVPp2/qFZgTUQRD/st5XA=
+        b=NI4XM1Tgvh2UbdTzc0mrXySHWTJNNm17nUnqGr7lQ115Xwnx9geoFphyHZuQesNJq
+         e9YAWFZRXVgwVbpRwz0Rw0vgIoLDFh19vYJ+iltdo8Png09Hb5pcOpkAA4tnPHmKax
+         EG7LztP3IkZWOcQNrXoorQAmC24dXCH6Gz4QJSsM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 197/452] spi: spi-fsl-qspi: check return value after calling platform_get_resource_byname()
+        stable@vger.kernel.org, Jianrong Zhang <zhangjianrong5@huawei.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 462/772] PCI: dwc: Fix setting error return on MSI DMA mapping failure
 Date:   Tue,  7 Jun 2022 19:00:54 +0200
-Message-Id: <20220607164914.435376679@linuxfoundation.org>
+Message-Id: <20220607165002.614777042@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Jiantao Zhang <water.zhangjiantao@huawei.com>
 
-[ Upstream commit a2b331ac11e1cac56f5b7d367e9f3c5796deaaed ]
+[ Upstream commit 88557685cd72cf0db686a4ebff3fad4365cb6071 ]
 
-It will cause null-ptr-deref if platform_get_resource_byname() returns NULL,
-we need check the return value.
+When dma_mapping_error() returns error because of no enough memory,
+but dw_pcie_host_init() returns success, which will mislead the callers.
 
-Fixes: 858e26a515c2 ("spi: spi-fsl-qspi: Reduce devm_ioremap size to 4 times AHB buffer size")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220505093954.1285615-1-yangyingliang@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/30170911-0e2f-98ce-9266-70465b9073e5@huawei.com
+Fixes: 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume")
+Signed-off-by: Jianrong Zhang <zhangjianrong5@huawei.com>
+Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-fsl-qspi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pci/controller/dwc/pcie-designware-host.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-index 9851551ebbe0..46ae46a944c5 100644
---- a/drivers/spi/spi-fsl-qspi.c
-+++ b/drivers/spi/spi-fsl-qspi.c
-@@ -876,6 +876,10 @@ static int fsl_qspi_probe(struct platform_device *pdev)
- 
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 					"QuadSPI-memory");
-+	if (!res) {
-+		ret = -EINVAL;
-+		goto err_put_ctrl;
-+	}
- 	q->memmap_phy = res->start;
- 	/* Since there are 4 cs, map size required is 4 times ahb_buf_size */
- 	q->ahb_addr = devm_ioremap(dev, q->memmap_phy,
+diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+index f4755f3a03be..9dcb51728dd1 100644
+--- a/drivers/pci/controller/dwc/pcie-designware-host.c
++++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+@@ -390,7 +390,8 @@ int dw_pcie_host_init(struct pcie_port *pp)
+ 						      sizeof(pp->msi_msg),
+ 						      DMA_FROM_DEVICE,
+ 						      DMA_ATTR_SKIP_CPU_SYNC);
+-			if (dma_mapping_error(pci->dev, pp->msi_data)) {
++			ret = dma_mapping_error(pci->dev, pp->msi_data);
++			if (ret) {
+ 				dev_err(pci->dev, "Failed to map MSI data\n");
+ 				pp->msi_data = 0;
+ 				goto err_free_msi;
 -- 
 2.35.1
 

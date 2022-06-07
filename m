@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E295405CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80823540657
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346829AbiFGR3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S1347140AbiFGRek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346888AbiFGRZd (ORCPT
+        with ESMTP id S1346904AbiFGRZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:33 -0400
+        Tue, 7 Jun 2022 13:25:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A989110AC6;
-        Tue,  7 Jun 2022 10:23:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048E6110AE0;
+        Tue,  7 Jun 2022 10:23:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAF4D60DBA;
-        Tue,  7 Jun 2022 17:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9983C385A5;
-        Tue,  7 Jun 2022 17:23:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C76D60DDF;
+        Tue,  7 Jun 2022 17:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9B2C385A5;
+        Tue,  7 Jun 2022 17:23:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622611;
-        bh=0W2U+U9TrnGFvN5vWdzDj81w5VtmT57fNeeoKVQJu6g=;
+        s=korg; t=1654622614;
+        bh=NnXQHT5P4J/X8Kbs05INx5ZZMNbLDhdSV/Bsk9NGxg8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mehz/povVLXlqkGT4Ek/XFa+XNoMIQdFtszYPPwXCreaqErMDn4taPZlJlRhigD0i
-         iFZ1rjDG6q0KVIh/SWKGxdBu/3JjZAKb2NoJdb8o/IYEkQx+BTTHQhZiua93Q/4Jdg
-         jbq/FmqFovWvbFqFJ/TkF+MmpVTVQ9bnYD2+fZHw=
+        b=Il9P+3ry1wSi5f9wdOZ8QfJGRjPEu9WT6krpyeJjqrbQHN+RbG/tcFYNUtczBhP9v
+         AVibQIy5JeU+haekSWU7+Mjd5ZIZqiL0YAojqU8IJhgY+Hy7mTFFfUm43hlYFfJLzx
+         47XM/FHgu5PkbKF0S0hZhbgK1OR2iuajrHJAryxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        stable@vger.kernel.org, Wenli Looi <wlooi@ucalgary.ca>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
         Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 122/452] ath11k: acquire ab->base_lock in unassign when finding the peer by addr
-Date:   Tue,  7 Jun 2022 18:59:39 +0200
-Message-Id: <20220607164912.195471591@linuxfoundation.org>
+Subject: [PATCH 5.10 123/452] ath9k: fix ar9003_get_eepmisc
+Date:   Tue,  7 Jun 2022 18:59:40 +0200
+Message-Id: <20220607164912.223933181@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -55,61 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niels Dossche <dossche.niels@gmail.com>
+From: Wenli Looi <wlooi@ucalgary.ca>
 
-[ Upstream commit 2db80f93869d491be57cbc2b36f30d0d3a0e5bde ]
+[ Upstream commit 9aaff3864b603408c02c629957ae8d8ff5d5a4f2 ]
 
-ath11k_peer_find_by_addr states via lockdep that ab->base_lock must be
-held when calling that function in order to protect the list. All
-callers except ath11k_mac_op_unassign_vif_chanctx have that lock
-acquired when calling ath11k_peer_find_by_addr. That lock is also not
-transitively held by a path towards ath11k_mac_op_unassign_vif_chanctx.
-The solution is to acquire the lock when calling
-ath11k_peer_find_by_addr inside ath11k_mac_op_unassign_vif_chanctx.
+The current implementation is reading the wrong eeprom type.
 
-I am currently working on a static analyser to detect missing locks and
-this was a reported case. I manually verified the report by looking at
-the code, but I do not have real hardware so this is compile tested
-only.
-
-Fixes: 701e48a43e15 ("ath11k: add packet log support for QCA6390")
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Fixes: d8ec2e2a63e8 ("ath9k: Add an eeprom_ops callback for retrieving the eepmisc value")
+Signed-off-by: Wenli Looi <wlooi@ucalgary.ca>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
 Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220314215253.92658-1-dossche.niels@gmail.com
+Link: https://lore.kernel.org/r/20220320233010.123106-5-wlooi@ucalgary.ca
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/ath9k/ar9003_eeprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index cc9122f42024..b2928a5cf72e 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -5325,6 +5325,7 @@ ath11k_mac_op_unassign_vif_chanctx(struct ieee80211_hw *hw,
- 	struct ath11k *ar = hw->priv;
- 	struct ath11k_base *ab = ar->ab;
- 	struct ath11k_vif *arvif = (void *)vif->drv_priv;
-+	struct ath11k_peer *peer;
- 	int ret;
+diff --git a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
+index b0a4ca3559fd..abed1effd95c 100644
+--- a/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
++++ b/drivers/net/wireless/ath/ath9k/ar9003_eeprom.c
+@@ -5615,7 +5615,7 @@ unsigned int ar9003_get_paprd_scale_factor(struct ath_hw *ah,
  
- 	mutex_lock(&ar->conf_mutex);
-@@ -5336,9 +5337,13 @@ ath11k_mac_op_unassign_vif_chanctx(struct ieee80211_hw *hw,
- 	WARN_ON(!arvif->is_started);
+ static u8 ar9003_get_eepmisc(struct ath_hw *ah)
+ {
+-	return ah->eeprom.map4k.baseEepHeader.eepMisc;
++	return ah->eeprom.ar9300_eep.baseEepHeader.opCapFlags.eepMisc;
+ }
  
- 	if (ab->hw_params.vdev_start_delay &&
--	    arvif->vdev_type == WMI_VDEV_TYPE_MONITOR &&
--	    ath11k_peer_find_by_addr(ab, ar->mac_addr))
--		ath11k_peer_delete(ar, arvif->vdev_id, ar->mac_addr);
-+	    arvif->vdev_type == WMI_VDEV_TYPE_MONITOR) {
-+		spin_lock_bh(&ab->base_lock);
-+		peer = ath11k_peer_find_by_addr(ab, ar->mac_addr);
-+		spin_unlock_bh(&ab->base_lock);
-+		if (peer)
-+			ath11k_peer_delete(ar, arvif->vdev_id, ar->mac_addr);
-+	}
- 
- 	ret = ath11k_mac_vdev_stop(arvif);
- 	if (ret)
+ const struct eeprom_ops eep_ar9300_ops = {
 -- 
 2.35.1
 

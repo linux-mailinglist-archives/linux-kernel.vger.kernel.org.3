@@ -2,262 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDE753F582
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2894453F588
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiFGF2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 01:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S236780AbiFGFa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 01:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiFGF2l (ORCPT
+        with ESMTP id S229724AbiFGFax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 01:28:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F42A98A5;
-        Mon,  6 Jun 2022 22:28:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 80EDA1F9F4;
-        Tue,  7 Jun 2022 05:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654579719; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=rg81TiujhMLmUuZodoAmrrDcPk8e0ct7YAcUKxC6kzc=;
-        b=Z7rLus0YlSrBnGMwMQ0XumBby6FqnYi8nm9bhLlLXM4x3CvCuFFI2cj/u1I5dUQBoD23aG
-        DVFBJjvnF84ECn8Oa9vDqqm59uUO4TQeaZhLvYedPjFwHaYfusHCadcSBi0/bHB+OiC8HM
-        B+akrWVTi/SbbwMHrckYBZg1BV9Rj8A=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2D8EA13A5F;
-        Tue,  7 Jun 2022 05:28:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nZW5CQfinmJmVQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 07 Jun 2022 05:28:39 +0000
-Message-ID: <6507870c-1c32-ebf6-f85f-4bf2ede41367@suse.com>
-Date:   Tue, 7 Jun 2022 07:28:38 +0200
+        Tue, 7 Jun 2022 01:30:53 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472CDAE25F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 22:30:51 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id r82so29245174ybc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 22:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GWV3sxfyMJZEBiziDcowHuulDeFvGW2+tTyg46kJqN8=;
+        b=HGAZXsUHGHGUFGC+p/XmuXoymjVndwcplbPn1j9X7tlSJKdvY3nmRyRq0B1c5/IVK6
+         vMQMf12MObSzMUSJsVQqTZER2e0TGfjq7/CjKrAK0/f0AinrhUZfHgh5dzdrbWkxYfbr
+         Xa4rUGXOtiCjWgHgsMcSDxu6XfVwzXqXXNrSw3GE+HwVcMhI/KJmUz2OuBSePLcFOKsV
+         AcNEpWkOiH7/fGMvzFSV03pg737oKLrs+qnm38jwKSltebl9NVKxkkDSAtIOaQJn0q6h
+         lh7fINFNNsuiWbUjKynYt3kZn8lMZWsrji7DMs9zq6is09K4/QeCHQBC3PXQPDLo1GdI
+         gn4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GWV3sxfyMJZEBiziDcowHuulDeFvGW2+tTyg46kJqN8=;
+        b=ej137aaXMRJ/FkvfKJovAkkrS2y+Cx/XHIHPfxRCE1T+mZUAnLMlD2eTALYyRGVbkk
+         X561tkrqQV/mqkXdNSXEutmGheLekHDVz6oKW+qD9p+i+EzLcLrPvCwYP4doxOeos+M1
+         kRk6I4otkJjnqj8nE06q1gKzyIixZm46if2owMlPSseCG6xoyVOd/aLzuKeTuyZG0koW
+         CGH/tR+5uashcLdP0dq/K5NtnTAHHsDxN9uxMz0iGupWsTa5PKejQUEiLrgb3m0zzAb/
+         X9fUT+q5MF5WFNrCI1r59nlYlkgW0MN6ullHg5dkFSme5QPR1Px3rdnhzquH/WZ8KoFk
+         OzbQ==
+X-Gm-Message-State: AOAM5315300d0KZsCRebKboWOjmDw2ZXhLREtilhCWLqtBY0HJCYaaRj
+        q+AJbKll833OTGBYrx/vcd6rxyxLQ2zyfhgmQr+ydA==
+X-Google-Smtp-Source: ABdhPJzECyyoFWVfJwoEwggMZ1+8i0plJckDQVpk9KXZOC2PZNp/x8vDFpOEP9V6LQBk3eOr+M+PdNhBr7P1QzZimn8=
+X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
+ u5-20020a254705000000b0065d43f85652mr27668502yba.389.1654579850250; Mon, 06
+ Jun 2022 22:30:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Juergen Gross <jgross@suse.com>
-Subject: [PATCH Resend] xen/netback: do some code cleanup
-To:     xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------TQgRmYuvpfQLUkEYt03SVZJm"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Jun 2022 11:00:39 +0530
+Message-ID: <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
+Subject: Re: [next] arm64: boot failed - next-20220606
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mm <linux-mm@kvack.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vasily Averin <vvs@openvz.org>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------TQgRmYuvpfQLUkEYt03SVZJm
-Content-Type: multipart/mixed; boundary="------------WD09QCmLozusZfCQ3ECpvsB6";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Juergen Gross <jgross@suse.com>, Wei Liu <wei.liu@kernel.org>,
- Paul Durrant <paul@xen.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-Message-ID: <6507870c-1c32-ebf6-f85f-4bf2ede41367@suse.com>
-Subject: [PATCH Resend] xen/netback: do some code cleanup
+On Mon, 6 Jun 2022 at 17:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Linux next-20220606 arm64 boot failed. The kernel boot log is empty.
+> I am bisecting this problem.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> The initial investigation show that,
+>
+> GOOD: next-20220603
+> BAD:  next-20220606
+>
+> Boot log:
+> Starting kernel ...
 
---------------WD09QCmLozusZfCQ3ECpvsB6
-Content-Type: multipart/mixed; boundary="------------u0JUY0dZL7ULrQJw0tfsC1fF"
+Linux next-20220606 and next-20220607 arm64 boot failed.
+The kernel panic log showing after earlycon.
 
---------------u0JUY0dZL7ULrQJw0tfsC1fF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-UmVtb3ZlIHNvbWUgdW51c2VkIG1hY3JvcyBhbmQgZnVuY3Rpb25zLCBtYWtlIGxvY2FsIGZ1
-bmN0aW9ucyBzdGF0aWMuDQoNClNpZ25lZC1vZmYtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9z
-c0BzdXNlLmNvbT4NCkFja2VkLWJ5OiBXZWkgTGl1IDx3ZWkubGl1QGtlcm5lbC5vcmc+DQot
-LS0NCiAgZHJpdmVycy9uZXQveGVuLW5ldGJhY2svY29tbW9uLmggICAgfCAxMiAtLS0tLS0t
-LS0tLS0NCiAgZHJpdmVycy9uZXQveGVuLW5ldGJhY2svaW50ZXJmYWNlLmMgfCAxNiArLS0t
-LS0tLS0tLS0tLS0tDQogIGRyaXZlcnMvbmV0L3hlbi1uZXRiYWNrL25ldGJhY2suYyAgIHwg
-IDQgKysrLQ0KICBkcml2ZXJzL25ldC94ZW4tbmV0YmFjay9yeC5jICAgICAgICB8ICAyICst
-DQogIDQgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAyOSBkZWxldGlvbnMoLSkN
-Cg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3hlbi1uZXRiYWNrL2NvbW1vbi5oIGIvZHJp
-dmVycy9uZXQveGVuLW5ldGJhY2svY29tbW9uLmgNCmluZGV4IGQ5ZGVhNDgyOWM4Ni4uODE3
-NGQ3YjI5NjZjIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9uZXQveGVuLW5ldGJhY2svY29tbW9u
-LmgNCisrKyBiL2RyaXZlcnMvbmV0L3hlbi1uZXRiYWNrL2NvbW1vbi5oDQpAQCAtNDgsNyAr
-NDgsNiBAQA0KICAjaW5jbHVkZSA8bGludXgvZGVidWdmcy5oPg0KICAgdHlwZWRlZiB1bnNp
-Z25lZCBpbnQgcGVuZGluZ19yaW5nX2lkeF90Ow0KLSNkZWZpbmUgSU5WQUxJRF9QRU5ESU5H
-X1JJTkdfSURYICh+MFUpDQogICBzdHJ1Y3QgcGVuZGluZ190eF9pbmZvIHsNCiAgCXN0cnVj
-dCB4ZW5fbmV0aWZfdHhfcmVxdWVzdCByZXE7IC8qIHR4IHJlcXVlc3QgKi8NCkBAIC04Miw4
-ICs4MSw2IEBAIHN0cnVjdCB4ZW52aWZfcnhfbWV0YSB7DQogIC8qIERpc2NyaW1pbmF0ZSBm
-cm9tIGFueSB2YWxpZCBwZW5kaW5nX2lkeCB2YWx1ZS4gKi8NCiAgI2RlZmluZSBJTlZBTElE
-X1BFTkRJTkdfSURYIDB4RkZGRg0KICAtI2RlZmluZSBNQVhfQlVGRkVSX09GRlNFVCBYRU5f
-UEFHRV9TSVpFDQotDQogICNkZWZpbmUgTUFYX1BFTkRJTkdfUkVRUyBYRU5fTkVUSUZfVFhf
-UklOR19TSVpFDQogICAvKiBUaGUgbWF4aW11bSBudW1iZXIgb2YgZnJhZ3MgaXMgZGVyaXZl
-ZCBmcm9tIHRoZSBzaXplIG9mIGEgZ3JhbnQgKHNhbWUNCkBAIC0zNjcsMTEgKzM2NCw2IEBA
-IHZvaWQgeGVudmlmX2ZyZWUoc3RydWN0IHhlbnZpZiAqdmlmKTsNCiAgaW50IHhlbnZpZl94
-ZW5idXNfaW5pdCh2b2lkKTsNCiAgdm9pZCB4ZW52aWZfeGVuYnVzX2Zpbmkodm9pZCk7DQog
-IC1pbnQgeGVudmlmX3NjaGVkdWxhYmxlKHN0cnVjdCB4ZW52aWYgKnZpZik7DQotDQotaW50
-IHhlbnZpZl9xdWV1ZV9zdG9wcGVkKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKTsNCi12
-b2lkIHhlbnZpZl93YWtlX3F1ZXVlKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKTsNCi0N
-CiAgLyogKFVuKU1hcCBjb21tdW5pY2F0aW9uIHJpbmdzLiAqLw0KICB2b2lkIHhlbnZpZl91
-bm1hcF9mcm9udGVuZF9kYXRhX3JpbmdzKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKTsN
-CiAgaW50IHhlbnZpZl9tYXBfZnJvbnRlbmRfZGF0YV9yaW5ncyhzdHJ1Y3QgeGVudmlmX3F1
-ZXVlICpxdWV1ZSwNCkBAIC0zOTQsNyArMzg2LDYgQEAgaW50IHhlbnZpZl9kZWFsbG9jX2t0
-aHJlYWQodm9pZCAqZGF0YSk7DQogIGlycXJldHVybl90IHhlbnZpZl9jdHJsX2lycV9mbihp
-bnQgaXJxLCB2b2lkICpkYXRhKTsNCiAgIGJvb2wgeGVudmlmX2hhdmVfcnhfd29yayhzdHJ1
-Y3QgeGVudmlmX3F1ZXVlICpxdWV1ZSwgYm9vbCB0ZXN0X2t0aHJlYWQpOw0KLXZvaWQgeGVu
-dmlmX3J4X2FjdGlvbihzdHJ1Y3QgeGVudmlmX3F1ZXVlICpxdWV1ZSk7DQogIHZvaWQgeGVu
-dmlmX3J4X3F1ZXVlX3RhaWwoc3RydWN0IHhlbnZpZl9xdWV1ZSAqcXVldWUsIHN0cnVjdCBz
-a19idWZmICpza2IpOw0KICAgdm9pZCB4ZW52aWZfY2Fycmllcl9vbihzdHJ1Y3QgeGVudmlm
-ICp2aWYpOw0KQEAgLTQwMyw5ICszOTQsNiBAQCB2b2lkIHhlbnZpZl9jYXJyaWVyX29uKHN0
-cnVjdCB4ZW52aWYgKnZpZik7DQogIHZvaWQgeGVudmlmX3plcm9jb3B5X2NhbGxiYWNrKHN0
-cnVjdCBza19idWZmICpza2IsIHN0cnVjdCB1YnVmX2luZm8gKnVidWYsDQogIAkJCSAgICAg
-IGJvb2wgemVyb2NvcHlfc3VjY2Vzcyk7DQogIC0vKiBVbm1hcCBhIHBlbmRpbmcgcGFnZSBh
-bmQgcmVsZWFzZSBpdCBiYWNrIHRvIHRoZSBndWVzdCAqLw0KLXZvaWQgeGVudmlmX2lkeF91
-bm1hcChzdHJ1Y3QgeGVudmlmX3F1ZXVlICpxdWV1ZSwgdTE2IHBlbmRpbmdfaWR4KTsNCi0N
-CiAgc3RhdGljIGlubGluZSBwZW5kaW5nX3JpbmdfaWR4X3QgbnJfcGVuZGluZ19yZXFzKHN0
-cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKQ0KICB7DQogIAlyZXR1cm4gTUFYX1BFTkRJTkdf
-UkVRUyAtDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQveGVuLW5ldGJhY2svaW50ZXJmYWNl
-LmMgDQpiL2RyaXZlcnMvbmV0L3hlbi1uZXRiYWNrL2ludGVyZmFjZS5jDQppbmRleCA4ZTAz
-NTM3NGEzNzAuLmZiMzJhZTgyZDliMCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbmV0L3hlbi1u
-ZXRiYWNrL2ludGVyZmFjZS5jDQorKysgYi9kcml2ZXJzL25ldC94ZW4tbmV0YmFjay9pbnRl
-cmZhY2UuYw0KQEAgLTY5LDcgKzY5LDcgQEAgdm9pZCB4ZW52aWZfc2tiX3plcm9jb3B5X2Nv
-bXBsZXRlKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKQ0KICAJd2FrZV91cCgmcXVldWUt
-PmRlYWxsb2Nfd3EpOw0KICB9DQogIC1pbnQgeGVudmlmX3NjaGVkdWxhYmxlKHN0cnVjdCB4
-ZW52aWYgKnZpZikNCitzdGF0aWMgaW50IHhlbnZpZl9zY2hlZHVsYWJsZShzdHJ1Y3QgeGVu
-dmlmICp2aWYpDQogIHsNCiAgCXJldHVybiBuZXRpZl9ydW5uaW5nKHZpZi0+ZGV2KSAmJg0K
-ICAJCXRlc3RfYml0KFZJRl9TVEFUVVNfQ09OTkVDVEVELCAmdmlmLT5zdGF0dXMpICYmDQpA
-QCAtMTc3LDIwICsxNzcsNiBAQCBpcnFyZXR1cm5fdCB4ZW52aWZfaW50ZXJydXB0KGludCBp
-cnEsIHZvaWQgKmRldl9pZCkNCiAgCXJldHVybiBJUlFfSEFORExFRDsNCiAgfQ0KICAtaW50
-IHhlbnZpZl9xdWV1ZV9zdG9wcGVkKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKQ0KLXsN
-Ci0Jc3RydWN0IG5ldF9kZXZpY2UgKmRldiA9IHF1ZXVlLT52aWYtPmRldjsNCi0JdW5zaWdu
-ZWQgaW50IGlkID0gcXVldWUtPmlkOw0KLQlyZXR1cm4gbmV0aWZfdHhfcXVldWVfc3RvcHBl
-ZChuZXRkZXZfZ2V0X3R4X3F1ZXVlKGRldiwgaWQpKTsNCi19DQotDQotdm9pZCB4ZW52aWZf
-d2FrZV9xdWV1ZShzdHJ1Y3QgeGVudmlmX3F1ZXVlICpxdWV1ZSkNCi17DQotCXN0cnVjdCBu
-ZXRfZGV2aWNlICpkZXYgPSBxdWV1ZS0+dmlmLT5kZXY7DQotCXVuc2lnbmVkIGludCBpZCA9
-IHF1ZXVlLT5pZDsNCi0JbmV0aWZfdHhfd2FrZV9xdWV1ZShuZXRkZXZfZ2V0X3R4X3F1ZXVl
-KGRldiwgaWQpKTsNCi19DQotDQogIHN0YXRpYyB1MTYgeGVudmlmX3NlbGVjdF9xdWV1ZShz
-dHJ1Y3QgbmV0X2RldmljZSAqZGV2LCBzdHJ1Y3Qgc2tfYnVmZiAqc2tiLA0KICAJCQkgICAg
-ICAgc3RydWN0IG5ldF9kZXZpY2UgKnNiX2RldikNCiAgew0KZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbmV0L3hlbi1uZXRiYWNrL25ldGJhY2suYyBiL2RyaXZlcnMvbmV0L3hlbi1uZXRiYWNr
-L25ldGJhY2suYw0KaW5kZXggZDkzODE0YzE0YTIzLi5mYzYxYTQ0MTg3MzcgMTAwNjQ0DQot
-LS0gYS9kcml2ZXJzL25ldC94ZW4tbmV0YmFjay9uZXRiYWNrLmMNCisrKyBiL2RyaXZlcnMv
-bmV0L3hlbi1uZXRiYWNrL25ldGJhY2suYw0KQEAgLTExMiw2ICsxMTIsOCBAQCBzdGF0aWMg
-dm9pZCBtYWtlX3R4X3Jlc3BvbnNlKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlLA0KICAJ
-CQkgICAgIHM4ICAgICAgIHN0KTsNCiAgc3RhdGljIHZvaWQgcHVzaF90eF9yZXNwb25zZXMo
-c3RydWN0IHhlbnZpZl9xdWV1ZSAqcXVldWUpOw0KICArc3RhdGljIHZvaWQgeGVudmlmX2lk
-eF91bm1hcChzdHJ1Y3QgeGVudmlmX3F1ZXVlICpxdWV1ZSwgdTE2IHBlbmRpbmdfaWR4KTsN
-CisNCiAgc3RhdGljIGlubGluZSBpbnQgdHhfd29ya190b2RvKHN0cnVjdCB4ZW52aWZfcXVl
-dWUgKnF1ZXVlKTsNCiAgIHN0YXRpYyBpbmxpbmUgdW5zaWduZWQgbG9uZyBpZHhfdG9fcGZu
-KHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlLA0KQEAgLTE0MTgsNyArMTQyMCw3IEBAIHN0
-YXRpYyB2b2lkIHB1c2hfdHhfcmVzcG9uc2VzKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVl
-KQ0KICAJCW5vdGlmeV9yZW1vdGVfdmlhX2lycShxdWV1ZS0+dHhfaXJxKTsNCiAgfQ0KICAt
-dm9pZCB4ZW52aWZfaWR4X3VubWFwKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlLCB1MTYg
-cGVuZGluZ19pZHgpDQorc3RhdGljIHZvaWQgeGVudmlmX2lkeF91bm1hcChzdHJ1Y3QgeGVu
-dmlmX3F1ZXVlICpxdWV1ZSwgdTE2IHBlbmRpbmdfaWR4KQ0KICB7DQogIAlpbnQgcmV0Ow0K
-ICAJc3RydWN0IGdudHRhYl91bm1hcF9ncmFudF9yZWYgdHhfdW5tYXBfb3A7DQpkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9uZXQveGVuLW5ldGJhY2svcnguYyBiL2RyaXZlcnMvbmV0L3hlbi1u
-ZXRiYWNrL3J4LmMNCmluZGV4IGRiYWM0YzAzZDIxYS4uOGRmMmM3MzZmZDIzIDEwMDY0NA0K
-LS0tIGEvZHJpdmVycy9uZXQveGVuLW5ldGJhY2svcnguYw0KKysrIGIvZHJpdmVycy9uZXQv
-eGVuLW5ldGJhY2svcnguYw0KQEAgLTQ4Niw3ICs0ODYsNyBAQCBzdGF0aWMgdm9pZCB4ZW52
-aWZfcnhfc2tiKHN0cnVjdCB4ZW52aWZfcXVldWUgKnF1ZXVlKQ0KICAgI2RlZmluZSBSWF9C
-QVRDSF9TSVpFIDY0DQogIC12b2lkIHhlbnZpZl9yeF9hY3Rpb24oc3RydWN0IHhlbnZpZl9x
-dWV1ZSAqcXVldWUpDQorc3RhdGljIHZvaWQgeGVudmlmX3J4X2FjdGlvbihzdHJ1Y3QgeGVu
-dmlmX3F1ZXVlICpxdWV1ZSkNCiAgew0KICAJc3RydWN0IHNrX2J1ZmZfaGVhZCBjb21wbGV0
-ZWRfc2ticzsNCiAgCXVuc2lnbmVkIGludCB3b3JrX2RvbmUgPSAwOw0KLS0gDQoyLjM1LjMN
-Cg0K
---------------u0JUY0dZL7ULrQJw0tfsC1fF
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+[    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd033]
+[    0.000000] Linux version 5.19.0-rc1-next-20220606
+(tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU
+ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT @1654490846
+[    0.000000] Machine model: ARM Juno development board (r2)
+[    0.000000] earlycon: pl11 at MMIO 0x000000007ff80000 (options '')
+[    0.000000] printk: bootconsole [pl11] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] earlycon: pl11 at MMIO 0x000000007ff80000 (options '115200n8')
+[    0.000000] ------------[ cut here ]------------
+[    0.000000] console 'pl11' already registered
+[    0.000000] WARNING: CPU: 0 PID: 0 at kernel/printk/printk.c:3327
+register_console+0x64/0x2ec
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted
+5.19.0-rc1-next-20220606 #1
+[    0.000000] Hardware name: ARM Juno development board (r2) (DT)
+[    0.000000] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.000000] pc : register_console+0x64/0x2ec
+[    0.000000] lr : register_console+0x64/0x2ec
+[    0.000000] sp : ffff80000a963c80
+[    0.000000] x29: ffff80000a963c80 x28: 00000000820a0018 x27: 0000000000000000
+[    0.000000] x26: 00000000fef770dc x25: 0000000000000000 x24: ffff80000acbc000
+[    0.000000] x23: 0000000000000000 x22: ffff80000a0b1a30 x21: ffff80000ae39250
+[    0.000000] x20: 00000000000050cc x19: ffff80000acbc5e0 x18: ffffffffffffffff
+[    0.000000] x17: 0000000000ffa000 x16: 00000009ff006000 x15: ffff80008a963957
+[    0.000000] x14: 0000000000000000 x13: 6465726574736967 x12: 6572207964616572
+[    0.000000] x11: 6c61202731316c70 x10: ffff80000a9ea6a8 x9 : ffff80000a9926a8
+[    0.000000] x8 : 00000000ffffefff x7 : ffff80000a9ea6a8 x6 : 0000000000000000
+[    0.000000] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+[    0.000000] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff80000a979e00
+[    0.000000] Call trace:
+[    0.000000]  register_console+0x64/0x2ec
+[    0.000000]  of_setup_earlycon+0x254/0x278
+[    0.000000]  early_init_dt_scan_chosen_stdout+0x164/0x1a4
+[    0.000000]  acpi_boot_table_init+0x1d8/0x218
+[    0.000000]  setup_arch+0x28c/0x5f0
+[    0.000000]  start_kernel+0xa4/0x748
+[    0.000000]  __primary_switched+0xc0/0xc8
+[    0.000000] ---[ end trace 0000000000000000 ]---
+[    0.000000] NUMA: No NUMA configuration found
+login-action: exception
+#
+[    0.000000] NUMA: Faking a #
+[login-action] Waiting for messages, (timeout 00:12:59)
+node at [mem 0x0000000080000000-0x00000009ffffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0x9fefd5b40-0x9fefd7fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x00000009ffffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000feffffff]
+[    0.000000]   node   0: [mem 0x0000000880000000-0x00000009ffffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000009ffffffff]
+[    0.000000] On node 0, zone Normal: 4096 pages in unavailable ranges
+[    0.000000] cma: Reserved 32 MiB at 0x00000000fd000000
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: Trusted OS migration not required
+[    0.000000] psci: SMC Calling Convention v1.0
+[    0.000000] percpu: Embedded 30 pages/cpu s82792 r8192 d31896 u122880
+[    0.000000] Detected VIPT I-cache on CPU0
+[    0.000000] CPU features: detected: ARM erratum 843419
+[    0.000000] CPU features: detected: ARM erratum 845719
+[    0.000000] Fallback order for Node 0: 0
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 2060288
+[    0.000000] Policy zone: Normal
+[    0.000000] Kernel command line: console=ttyAMA0,115200n8
+root=/dev/nfs rw
+nfsroot=10.66.16.125:/var/lib/lava/dispatcher/tmp/5143101/extract-nfsrootfs-i9fmnadt,tcp,hard,vers=3,wsize=65536
+earlycon=pl011,0x7ff80000 console_msg_format=syslog earlycon
+default_hugepagesz=2M hugepages=256
+sky2.mac_address=0x00,0x02,0xF7,0x00,0x67,0x17 ip=dhcp
+<6>[    0.000000] HugeTLB: can optimize 7 vmemmap pages for hugepages-2048kB
+<6>[    0.000000] Dentry cache hash table entries: 1048576 (order: 11,
+8388608 bytes, linear)
+<6>[    0.000000] Inode-cache hash table entries: 524288 (order: 10,
+4194304 bytes, linear)
+<6>[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+<6>[    0.000000] software IO TLB: mapped [mem
+0x00000000f9000000-0x00000000fd000000] (64MB)
+<6>[    0.000000] Memory: 8062180K/8372224K available (20032K kernel
+code, 4884K rwdata, 11148K rodata, 11008K init, 951K bss, 277276K
+reserved, 32768K cma-reserved)
+<6>[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=6, Nodes=1
+<6>[    0.000000] ftrace: allocating 65019 entries in 254 pages
+<6>[    0.000000] ftrace: allocated 254 pages with 7 groups
+<6>[    0.000000] trace event string verifier disabled
+<6>[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+<6>[    0.000000] rcu: RCU event tracing is enabled.
+<6>[    0.000000] rcu: RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=6.
+<6>[    0.000000] Trampoline variant of Tasks RCU enabled.
+<6>[    0.000000] Rude variant of Tasks RCU enabled.
+<6>[    0.000000] Tracing variant of Tasks RCU enabled.
+<6>[    0.000000] rcu: RCU calculated value of scheduler-enlistment
+delay is 25 jiffies.
+<6>[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=6
+<6>[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+<6>[    0.000000] Root IRQ handler: gic_handle_irq
+<6>[    0.000000] GIC: Using split EOI/Deactivate mode
+<6>[    0.000000] GICv2m: range[mem 0x2c1c0000-0x2c1cffff], SPI[224:255]
+<6>[    0.000000] GICv2m: range[mem 0x2c1d0000-0x2c1dffff], SPI[256:287]
+<6>[    0.000000] GICv2m: range[mem 0x2c1e0000-0x2c1effff], SPI[288:319]
+<6>[    0.000000] GICv2m: range[mem 0x2c1f0000-0x2c1fffff], SPI[320:351]
+<6>[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+<6>[    0.000000] kfence: initialized - using 2097152 bytes for 255
+objects at 0x(____ptrval____)-0x(____ptrval____)
+<3>[    0.000000] timer_sp804: timer clock not found: -517
+<3>[    0.000000] timer_sp804: arm,sp804 clock not found: -2
+<3>[    0.000000] Failed to initialize
+'/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@110000':
+-22
+<3>[    0.000000] timer_sp804: timer clock not found: -517
+<3>[    0.000000] timer_sp804: arm,sp804 clock not found: -2
+<3>[    0.000000] Failed to initialize
+'/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000':
+-22
+<6>[    0.000000] arch_timer: cp15 and mmio timer(s) running at
+50.00MHz (phys/phys).
+<6>[    0.000000] clocksource: arch_sys_counter: mask:
+0xffffffffffffff max_cycles: 0xb8812736b, max_idle_ns: 440795202655 ns
+<6>[    0.000000] sched_clock: 56 bits at 50MHz, resolution 20ns,
+wraps every 4398046511100ns
+<6>[    0.009801] Console: colour dummy device 80x25
+<6>[    0.014654] Calibrating delay loop (skipped), value calculated
+using timer frequency.. 100.00 BogoMIPS (lpj=200000)
+<6>[    0.025413] pid_max: default: 32768 minimum: 301
+<6>[    0.030453] LSM: Security Framework initializing
+<1>[    0.035435] Unable to handle kernel paging request at virtual
+address fffffe00002bc248
+<1>[    0.043654] Mem abort info:
+<1>[    0.046719]   ESR = 0x0000000096000004
+<1>[    0.050752]   EC = 0x25: DABT (current EL), IL = 32 bits
+<1>[    0.056355]   SET = 0, FnV = 0
+<1>[    0.059683]   EA = 0, S1PTW = 0
+<1>[    0.063105]   FSC = 0x04: level 0 translation fault
+<1>[    0.068270] Data abort info:
+<1>[    0.071421]   ISV = 0, ISS = 0x00000004
+<1>[    0.075539]   CM = 0, WnR = 0
+<1>[    0.078780] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000082090000
+<1>[    0.085778] [fffffe00002bc248] pgd=0000000000000000, p4d=0000000000000000
+<0>[    0.092881] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+<4>[    0.098730] Modules linked in:
+<4>[    0.102054] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
+     5.19.0-rc1-next-20220606 #1
+<4>[    0.111214] Hardware name: ARM Juno development board (r2) (DT)
+<4>[    0.117407] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT
+-SSBS BTYPE=--)
+<4>[    0.124652] pc : mem_cgroup_from_obj+0x2c/0x120
+<4>[    0.129462] lr : register_pernet_operations+0xf0/0x59c
+<4>[    0.134878] sp : ffff80000a963d70
+<4>[    0.138458] x29: ffff80000a963d70 x28: 00000000820a0018 x27:
+0000000000000000
+<4>[    0.145886] x26: ffff80000a0c7688 x25: ffff80000a0c7688 x24:
+ffff80000ad5e680
+<4>[    0.153313] x23: ffff80000a963dd8 x22: ffff80000ad5e818 x21:
+ffff80000a979e00
+<4>[    0.160739] x20: ffff80000af09740 x19: ffff80000ad5e720 x18:
+0000000000000014
+<4>[    0.168166] x17: 00000000beabf81a x16: 00000000d8e898a9 x15:
+000000005b20ff98
+<4>[    0.175594] x14: 00000000032b2301 x13: 00000000c9e39f56 x12:
+0000000014288186
+<4>[    0.183021] x11: 00000000bcf02680 x10: 000000008d09a8d9 x9 :
+ffff800009146254
+<4>[    0.190446] x8 : ffff80000a963d48 x7 : 0000000000000000 x6 :
+0000000000000002
+<4>[    0.197872] x5 : ffff80000a96f000 x4 : fffffc0000000000 x3 :
+ffff80000ad5e680
+<4>[    0.205299] x2 : fffffe00002bc240 x1 : 00000200002bc240 x0 :
+ffff80000af09740
+<4>[    0.212726] Call trace:
+<4>[    0.215435]  mem_cgroup_from_obj+0x2c/0x120
+<4>[    0.219894]  register_pernet_subsys+0x3c/0x60
+<4>[    0.224523]  net_ns_init+0xe4/0x13c
+<4>[    0.228285]  start_kernel+0x6d4/0x748
+<4>[    0.232222]  __primary_switched+0xc0/0xc8
+<0>[    0.236513] Code: b25657e4 d34cfc21 d37ae421 8b040022 (f9400443)
+<4>[    0.242886] ---[ end trace 0000000000000000 ]---
+<0>[    0.247788] Kernel panic - not syncing: Attempted to kill the idle task!
+<0>[    0.254772] ---[ end Kernel panic - not syncing: Attempted to
+kill the idle task! ]---
 
------BEGIN PGP PUBLIC KEY BLOCK-----
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
 
---------------u0JUY0dZL7ULrQJw0tfsC1fF--
 
---------------WD09QCmLozusZfCQ3ECpvsB6--
 
---------------TQgRmYuvpfQLUkEYt03SVZJm
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+>
+> The recent changes show,
+>
+> # git log --oneline  next-20220603..next-20220606  -- arch/arm64/
+> 202693ac55e0 (origin/akpm-base, origin/akpm) Merge branch
+> 'mm-everything' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> a83bdd6800e3 Merge branch 'rust-next' of
+> https://github.com/Rust-for-Linux/linux.git
+> 9daba6cb8145 Merge branch 'for-next' of git://github.com/Xilinx/linux-xlnx.git
+> 582d5ed4caf7 Merge branch 'master' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+> 1ec6574a3c0a Merge tag 'kthread-cleanups-for-v5.19' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/ebiederm/user-namespace
+> 21873bd66b6e Merge tag 'arm64-fixes' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
+> a8fc46f5a417 mm: avoid unnecessary page fault retires on shared memory types
+> 3c59c47d1a6d arm64: Change elfcore for_each_mte_vma() to use VMA iterator
+> 1c826fa748d5 arm64: remove mmap linked list from vdso
+> 54c2cc79194c Merge tag 'usb-5.19-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+> 09a018176ba2 Merge tag 'arm-late-5.19' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> 96479c09803b Merge tag 'arm-multiplatform-5.19-2' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+>
+>
+> Test job link,
+> https://lkft.validation.linaro.org/scheduler/job/5136989#L560
+>
+>
+> metadata:
+>   git_ref: master
+>   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git_sha: 40b58e42584bf5bd9230481dc8946f714fb387de
+>   git_describe: next-20220606
+>   kernel_version: 5.19.0-rc1
+>   kernel-config: https://builds.tuxbuild.com/2ABl8X9kHAAU5MlL3E3xExHFrNy/config
+>   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/556237413
+>   artifact-location: https://builds.tuxbuild.com/2ABl8X9kHAAU5MlL3E3xExHFrNy
+>
+>
 
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKe4gYFAwAAAAAACgkQsN6d1ii/Ey+3
-mQgAic6FDHDgalJuzvf5gui7i7fCdePLfBzZJH6JE8qIckVEUk0q3d0ws4RJPkXpW7uI+ZSQWvYQ
-11o7nd1TlU0vfBl8zw2eokh2OrosVEl+jpJ9XmCNFo0wrTPYZRHVvEKybR4gNsFhax0xpd70AcdG
-RBKdbe1GpDv5FGNa503zSIvx98QdojIFmhQfWiXLPwzim2PeoG/5u27vrnIZ3RbPQP9lVKIkaCa6
-dbg0Wwq/rx+MTOhsujOqbsK67idQC2/e9Xenic6OdoI4/FrN9oSmLFyqXZy8yTK4d+N25tfkPFzJ
-+ZIVPUehziEq6suIoxLgMdbIiAPdQsBdFatm2XscFQ==
-=emxx
------END PGP SIGNATURE-----
-
---------------TQgRmYuvpfQLUkEYt03SVZJm--
+ --
+ Linaro LKFT
+ https://lkft.linaro.org

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E9A540AC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1897A541DC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiFGSXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S1385454AbiFGWVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349914AbiFGSAg (ORCPT
+        with ESMTP id S1380625AbiFGVQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:00:36 -0400
+        Tue, 7 Jun 2022 17:16:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268D12DBF2;
-        Tue,  7 Jun 2022 10:42:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC99821E32D;
+        Tue,  7 Jun 2022 11:55:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01F6DB81F38;
-        Tue,  7 Jun 2022 17:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A07C385A5;
-        Tue,  7 Jun 2022 17:42:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66958B81F6D;
+        Tue,  7 Jun 2022 18:55:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA99EC385A2;
+        Tue,  7 Jun 2022 18:55:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623736;
-        bh=z4wDMbAV2RS1G7aP/5ULZccvzCp/6WBnP3rMRzqLcME=;
+        s=korg; t=1654628138;
+        bh=85vm1vrtGgzFH8G8lTONTiZh58r6Wicm/naQSPQ/3OI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=myN/mnAEGpdareJ5gU8HXbLF7iGte/wjelPZ8vANZ06f4ezCd5AwwyiETY3fz6mFd
-         c/TtRoXgVA3Tvd3pHoMVJThcqRBZVBFmYwyiNKPJnuWwE0bYxTZD25IvVCm6y0HKpw
-         wGkQvjKmi3ye7PezXs+ltufftSjSRqW7v9SNXBCI=
+        b=p3OfFsOAT82Ju5wR/4ATJojAR6NEYDy0q6c03He3kwh3td53y92cVaaxpNlz7FiI6
+         7OCNNOvjDzBPNIiGDNqeh636ZdwPhPRmZBqNGPHyNkki6ogeMwR7OY47SearRHGWOs
+         hzWcoaTmSHL+jNAxV/gxomEy5N9CQHaGxfwDZKuc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 072/667] ASoC: rsnd: care return value from rsnd_node_fixed_index()
-Date:   Tue,  7 Jun 2022 18:55:37 +0200
-Message-Id: <20220607164936.977537803@linuxfoundation.org>
+        stable@vger.kernel.org, QintaoShen <unSimple1993@163.com>,
+        Nishanth Menon <nm@ti.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 220/879] soc: ti: ti_sci_pm_domains: Check for null return of devm_kcalloc
+Date:   Tue,  7 Jun 2022 18:55:38 +0200
+Message-Id: <20220607165009.239976171@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,209 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+From: QintaoShen <unSimple1993@163.com>
 
-[ Upstream commit d09a7db431c65aaa8303eb456439d1831ca2e6b4 ]
+[ Upstream commit ba56291e297d28aa6eb82c5c1964fae2d7594746 ]
 
-Renesas Sound is very complex, and thus it needs to use
-rsnd_node_fixed_index() to know enabled pin index.
+The allocation funciton devm_kcalloc may fail and return a null pointer,
+which would cause a null-pointer dereference later.
+It might be better to check it and directly return -ENOMEM just like the
+usage of devm_kcalloc in previous code.
 
-It returns error if strange pin was selected,
-but some codes didn't check it.
-
-This patch 1) indicates error message, 2) check return
-value.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Link: https://lore.kernel.org/r/87pmlbgn5t.wl-kuninori.morimoto.gx@renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: QintaoShen <unSimple1993@163.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Link: https://lore.kernel.org/r/1648107843-29077-1-git-send-email-unSimple1993@163.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/sh/rcar/core.c | 15 ++++++++++-----
- sound/soc/sh/rcar/dma.c  |  9 ++++++++-
- sound/soc/sh/rcar/rsnd.h |  2 +-
- sound/soc/sh/rcar/src.c  |  7 ++++++-
- sound/soc/sh/rcar/ssi.c  | 14 ++++++++++++--
- sound/soc/sh/rcar/ssiu.c |  7 ++++++-
- 6 files changed, 43 insertions(+), 11 deletions(-)
+ drivers/soc/ti/ti_sci_pm_domains.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/sh/rcar/core.c b/sound/soc/sh/rcar/core.c
-index 6a8fe0da7670..af8ef2a27d34 100644
---- a/sound/soc/sh/rcar/core.c
-+++ b/sound/soc/sh/rcar/core.c
-@@ -1159,6 +1159,7 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
- 		struct device_node *capture)
- {
- 	struct rsnd_priv *priv = rsnd_rdai_to_priv(rdai);
-+	struct device *dev = rsnd_priv_to_dev(priv);
- 	struct device_node *np;
- 	int i;
+diff --git a/drivers/soc/ti/ti_sci_pm_domains.c b/drivers/soc/ti/ti_sci_pm_domains.c
+index 8afb3f45d263..a33ec7eaf23d 100644
+--- a/drivers/soc/ti/ti_sci_pm_domains.c
++++ b/drivers/soc/ti/ti_sci_pm_domains.c
+@@ -183,6 +183,8 @@ static int ti_sci_pm_domain_probe(struct platform_device *pdev)
+ 		devm_kcalloc(dev, max_id + 1,
+ 			     sizeof(*pd_provider->data.domains),
+ 			     GFP_KERNEL);
++	if (!pd_provider->data.domains)
++		return -ENOMEM;
  
-@@ -1169,7 +1170,11 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
- 	for_each_child_of_node(node, np) {
- 		struct rsnd_mod *mod;
- 
--		i = rsnd_node_fixed_index(np, name, i);
-+		i = rsnd_node_fixed_index(dev, np, name, i);
-+		if (i < 0) {
-+			of_node_put(np);
-+			break;
-+		}
- 
- 		mod = mod_get(priv, i);
- 
-@@ -1183,7 +1188,7 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
- 	of_node_put(node);
- }
- 
--int rsnd_node_fixed_index(struct device_node *node, char *name, int idx)
-+int rsnd_node_fixed_index(struct device *dev, struct device_node *node, char *name, int idx)
- {
- 	char node_name[16];
- 
-@@ -1210,6 +1215,8 @@ int rsnd_node_fixed_index(struct device_node *node, char *name, int idx)
- 			return idx;
- 	}
- 
-+	dev_err(dev, "strange node numbering (%s)",
-+		of_node_full_name(node));
- 	return -EINVAL;
- }
- 
-@@ -1221,10 +1228,8 @@ int rsnd_node_count(struct rsnd_priv *priv, struct device_node *node, char *name
- 
- 	i = 0;
- 	for_each_child_of_node(node, np) {
--		i = rsnd_node_fixed_index(np, name, i);
-+		i = rsnd_node_fixed_index(dev, np, name, i);
- 		if (i < 0) {
--			dev_err(dev, "strange node numbering (%s)",
--				of_node_full_name(node));
- 			of_node_put(np);
- 			return 0;
- 		}
-diff --git a/sound/soc/sh/rcar/dma.c b/sound/soc/sh/rcar/dma.c
-index 03e0d4eca781..463ab237d7bd 100644
---- a/sound/soc/sh/rcar/dma.c
-+++ b/sound/soc/sh/rcar/dma.c
-@@ -240,12 +240,19 @@ static int rsnd_dmaen_start(struct rsnd_mod *mod,
- struct dma_chan *rsnd_dma_request_channel(struct device_node *of_node, char *name,
- 					  struct rsnd_mod *mod, char *x)
- {
-+	struct rsnd_priv *priv = rsnd_mod_to_priv(mod);
-+	struct device *dev = rsnd_priv_to_dev(priv);
- 	struct dma_chan *chan = NULL;
- 	struct device_node *np;
- 	int i = 0;
- 
- 	for_each_child_of_node(of_node, np) {
--		i = rsnd_node_fixed_index(np, name, i);
-+		i = rsnd_node_fixed_index(dev, np, name, i);
-+		if (i < 0) {
-+			chan = NULL;
-+			of_node_put(np);
-+			break;
-+		}
- 
- 		if (i == rsnd_mod_id_raw(mod) && (!chan))
- 			chan = of_dma_request_slave_channel(np, x);
-diff --git a/sound/soc/sh/rcar/rsnd.h b/sound/soc/sh/rcar/rsnd.h
-index 6580bab0e229..d9cd190d7e19 100644
---- a/sound/soc/sh/rcar/rsnd.h
-+++ b/sound/soc/sh/rcar/rsnd.h
-@@ -460,7 +460,7 @@ void rsnd_parse_connect_common(struct rsnd_dai *rdai, char *name,
- 		struct device_node *playback,
- 		struct device_node *capture);
- int rsnd_node_count(struct rsnd_priv *priv, struct device_node *node, char *name);
--int rsnd_node_fixed_index(struct device_node *node, char *name, int idx);
-+int rsnd_node_fixed_index(struct device *dev, struct device_node *node, char *name, int idx);
- 
- int rsnd_channel_normalization(int chan);
- #define rsnd_runtime_channel_original(io) \
-diff --git a/sound/soc/sh/rcar/src.c b/sound/soc/sh/rcar/src.c
-index 42a100c6303d..0ea84ae57c6a 100644
---- a/sound/soc/sh/rcar/src.c
-+++ b/sound/soc/sh/rcar/src.c
-@@ -676,7 +676,12 @@ int rsnd_src_probe(struct rsnd_priv *priv)
- 		if (!of_device_is_available(np))
- 			goto skip;
- 
--		i = rsnd_node_fixed_index(np, SRC_NAME, i);
-+		i = rsnd_node_fixed_index(dev, np, SRC_NAME, i);
-+		if (i < 0) {
-+			ret = -EINVAL;
-+			of_node_put(np);
-+			goto rsnd_src_probe_done;
-+		}
- 
- 		src = rsnd_src_get(priv, i);
- 
-diff --git a/sound/soc/sh/rcar/ssi.c b/sound/soc/sh/rcar/ssi.c
-index 87e606f688d3..43c5e27dc5c8 100644
---- a/sound/soc/sh/rcar/ssi.c
-+++ b/sound/soc/sh/rcar/ssi.c
-@@ -1105,6 +1105,7 @@ void rsnd_parse_connect_ssi(struct rsnd_dai *rdai,
- 			    struct device_node *capture)
- {
- 	struct rsnd_priv *priv = rsnd_rdai_to_priv(rdai);
-+	struct device *dev = rsnd_priv_to_dev(priv);
- 	struct device_node *node;
- 	struct device_node *np;
- 	int i;
-@@ -1117,7 +1118,11 @@ void rsnd_parse_connect_ssi(struct rsnd_dai *rdai,
- 	for_each_child_of_node(node, np) {
- 		struct rsnd_mod *mod;
- 
--		i = rsnd_node_fixed_index(np, SSI_NAME, i);
-+		i = rsnd_node_fixed_index(dev, np, SSI_NAME, i);
-+		if (i < 0) {
-+			of_node_put(np);
-+			break;
-+		}
- 
- 		mod = rsnd_ssi_mod_get(priv, i);
- 
-@@ -1182,7 +1187,12 @@ int rsnd_ssi_probe(struct rsnd_priv *priv)
- 		if (!of_device_is_available(np))
- 			goto skip;
- 
--		i = rsnd_node_fixed_index(np, SSI_NAME, i);
-+		i = rsnd_node_fixed_index(dev, np, SSI_NAME, i);
-+		if (i < 0) {
-+			ret = -EINVAL;
-+			of_node_put(np);
-+			goto rsnd_ssi_probe_done;
-+		}
- 
- 		ssi = rsnd_ssi_get(priv, i);
- 
-diff --git a/sound/soc/sh/rcar/ssiu.c b/sound/soc/sh/rcar/ssiu.c
-index 138f95dd9f4a..4b8a63e336c7 100644
---- a/sound/soc/sh/rcar/ssiu.c
-+++ b/sound/soc/sh/rcar/ssiu.c
-@@ -462,6 +462,7 @@ void rsnd_parse_connect_ssiu(struct rsnd_dai *rdai,
- 			     struct device_node *capture)
- {
- 	struct rsnd_priv *priv = rsnd_rdai_to_priv(rdai);
-+	struct device *dev = rsnd_priv_to_dev(priv);
- 	struct device_node *node = rsnd_ssiu_of_node(priv);
- 	struct rsnd_dai_stream *io_p = &rdai->playback;
- 	struct rsnd_dai_stream *io_c = &rdai->capture;
-@@ -474,7 +475,11 @@ void rsnd_parse_connect_ssiu(struct rsnd_dai *rdai,
- 		for_each_child_of_node(node, np) {
- 			struct rsnd_mod *mod;
- 
--			i = rsnd_node_fixed_index(np, SSIU_NAME, i);
-+			i = rsnd_node_fixed_index(dev, np, SSIU_NAME, i);
-+			if (i < 0) {
-+				of_node_put(np);
-+				break;
-+			}
- 
- 			mod = rsnd_ssiu_mod_get(priv, i);
- 
+ 	pd_provider->data.num_domains = max_id + 1;
+ 	pd_provider->data.xlate = ti_sci_pd_xlate;
 -- 
 2.35.1
 

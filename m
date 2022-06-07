@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF08C5425F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB382542589
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390987AbiFHAgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S1378736AbiFHBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382847AbiFGVwA (ORCPT
+        with ESMTP id S1382883AbiFGVwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:52:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B2223F210;
-        Tue,  7 Jun 2022 12:09:50 -0700 (PDT)
+        Tue, 7 Jun 2022 17:52:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E95C23F234;
+        Tue,  7 Jun 2022 12:09:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41813B823AF;
-        Tue,  7 Jun 2022 19:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818B9C385A2;
-        Tue,  7 Jun 2022 19:09:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58017617DA;
+        Tue,  7 Jun 2022 19:09:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62AD8C385A2;
+        Tue,  7 Jun 2022 19:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628987;
-        bh=Cx5pCWFJuQHqiRJtmJve7topnEAglLRhBEONejVS2AY=;
+        s=korg; t=1654628992;
+        bh=6+X3r+SmwZkR8Bjt3sCvukd/lbvONYbu3LJTaLIiXWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fILzc6lAD2/sH1KJEYW1GFOdG4naxi5rJLhnLk/t8JPbQns4bDyxEP9kwGRTSZQb/
-         ca+IM8QaXQkwiV7ov5CJhsl+EknQ6H6K+W7URSZBzm9CbyhXBvrWC9nM3qfvjXMtxs
-         Uo700CEbyxnxsApFllF3vtP7n8jYVPRZS3KjJdR0=
+        b=rGgvXs7YFnGKyHolotee7YLspmwcWqp5s41EV7yHgSOZW2uTZPmQs20a5nj0W37Tf
+         bFOb7V2UUWOGUL3lT1tVzcQOIs+NiyF3gTz6iOpWwQAyMLGNGHr0X1X2kSXIuOFXTj
+         bgh3S/Y76JqJ8m5hSKaObjkY+0OjWtnJaua58OiM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        David Rientjes <rientjes@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 528/879] net/smc: fix listen processing for SMC-Rv2
-Date:   Tue,  7 Jun 2022 19:00:46 +0200
-Message-Id: <20220607165018.201928914@linuxfoundation.org>
+Subject: [PATCH 5.18 529/879] dma-direct: dont over-decrypt memory
+Date:   Tue,  7 Jun 2022 19:00:47 +0200
+Message-Id: <20220607165018.230271846@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,124 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: liuyacan <liuyacan@corp.netease.com>
+From: Robin Murphy <robin.murphy@arm.com>
 
-[ Upstream commit 8c3b8dc5cc9bf6d273ebe18b16e2d6882bcfb36d ]
+[ Upstream commit 4a37f3dd9a83186cb88d44808ab35b78375082c9 ]
 
-In the process of checking whether RDMAv2 is available, the current
-implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
-smc buf desc, but the latter may fail. Unfortunately, the caller
-will only check the former. In this case, a NULL pointer reference
-will occur in smc_clc_send_confirm_accept() when accessing
-conn->rmb_desc.
+The original x86 sev_alloc() only called set_memory_decrypted() on
+memory returned by alloc_pages_node(), so the page order calculation
+fell out of that logic. However, the common dma-direct code has several
+potential allocators, not all of which are guaranteed to round up the
+underlying allocation to a power-of-two size, so carrying over that
+calculation for the encryption/decryption size was a mistake. Fix it by
+rounding to a *number* of pages, rather than an order.
 
-This patch does two things:
-1. Use the return code to determine whether V2 is available.
-2. If the return code is NODEV, continue to check whether V1 is
-available.
+Until recently there was an even worse interaction with DMA_DIRECT_REMAP
+where we could have ended up decrypting part of the next adjacent
+vmalloc area, only averted by no architecture actually supporting both
+configs at once. Don't ask how I found that one out...
 
-Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
-Signed-off-by: liuyacan <liuyacan@corp.netease.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: c10f07aa27da ("dma/direct: Handle force decryption for DMA coherent buffers in common code")
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Acked-by: David Rientjes <rientjes@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/af_smc.c | 44 +++++++++++++++++++++++++++-----------------
- 1 file changed, 27 insertions(+), 17 deletions(-)
+ kernel/dma/direct.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 45a24d24210f..d3de54b70c05 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -2093,13 +2093,13 @@ static int smc_listen_rdma_reg(struct smc_sock *new_smc, bool local_first)
- 	return 0;
- }
- 
--static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
--					 struct smc_clc_msg_proposal *pclc,
--					 struct smc_init_info *ini)
-+static int smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
-+					struct smc_clc_msg_proposal *pclc,
-+					struct smc_init_info *ini)
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 3e7f4aab740e..e978f36e6be8 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -79,7 +79,7 @@ static int dma_set_decrypted(struct device *dev, void *vaddr, size_t size)
  {
- 	struct smc_clc_v2_extension *smc_v2_ext;
- 	u8 smcr_version;
--	int rc;
-+	int rc = 0;
- 
- 	if (!(ini->smcr_version & SMC_V2) || !smcr_indicated(ini->smc_type_v2))
- 		goto not_found;
-@@ -2117,26 +2117,31 @@ static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
- 	ini->smcrv2.saddr = new_smc->clcsock->sk->sk_rcv_saddr;
- 	ini->smcrv2.daddr = smc_ib_gid_to_ipv4(smc_v2_ext->roce);
- 	rc = smc_find_rdma_device(new_smc, ini);
--	if (rc) {
--		smc_find_ism_store_rc(rc, ini);
-+	if (rc)
- 		goto not_found;
--	}
-+
- 	if (!ini->smcrv2.uses_gateway)
- 		memcpy(ini->smcrv2.nexthop_mac, pclc->lcl.mac, ETH_ALEN);
- 
- 	smcr_version = ini->smcr_version;
- 	ini->smcr_version = SMC_V2;
- 	rc = smc_listen_rdma_init(new_smc, ini);
--	if (!rc)
--		rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
--	if (!rc)
--		return;
--	ini->smcr_version = smcr_version;
--	smc_find_ism_store_rc(rc, ini);
-+	if (rc) {
-+		ini->smcr_version = smcr_version;
-+		goto not_found;
-+	}
-+	rc = smc_listen_rdma_reg(new_smc, ini->first_contact_local);
-+	if (rc) {
-+		ini->smcr_version = smcr_version;
-+		goto not_found;
-+	}
-+	return 0;
- 
- not_found:
-+	rc = rc ?: SMC_CLC_DECL_NOSMCDEV;
- 	ini->smcr_version &= ~SMC_V2;
- 	ini->check_smcrv2 = false;
-+	return rc;
- }
- 
- static int smc_find_rdma_v1_device_serv(struct smc_sock *new_smc,
-@@ -2169,6 +2174,7 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
- 				  struct smc_init_info *ini)
- {
- 	int prfx_rc;
-+	int rc;
- 
- 	/* check for ISM device matching V2 proposed device */
- 	smc_find_ism_v2_device_serv(new_smc, pclc, ini);
-@@ -2196,14 +2202,18 @@ static int smc_listen_find_device(struct smc_sock *new_smc,
- 		return ini->rc ?: SMC_CLC_DECL_NOSMCDDEV;
- 
- 	/* check if RDMA V2 is available */
--	smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
--	if (ini->smcrv2.ib_dev_v2)
-+	rc = smc_find_rdma_v2_device_serv(new_smc, pclc, ini);
-+	if (!rc)
+ 	if (!force_dma_unencrypted(dev))
  		return 0;
+-	return set_memory_decrypted((unsigned long)vaddr, 1 << get_order(size));
++	return set_memory_decrypted((unsigned long)vaddr, PFN_UP(size));
+ }
  
-+	/* skip V1 check if V2 is unavailable for non-Device reason */
-+	if (rc != SMC_CLC_DECL_NOSMCDEV &&
-+	    rc != SMC_CLC_DECL_NOSMCRDEV &&
-+	    rc != SMC_CLC_DECL_NOSMCDDEV)
-+		return rc;
-+
- 	/* check if RDMA V1 is available */
- 	if (!prfx_rc) {
--		int rc;
--
- 		rc = smc_find_rdma_v1_device_serv(new_smc, pclc, ini);
- 		smc_find_ism_store_rc(rc, ini);
- 		return (!rc) ? 0 : ini->rc;
+ static int dma_set_encrypted(struct device *dev, void *vaddr, size_t size)
+@@ -88,7 +88,7 @@ static int dma_set_encrypted(struct device *dev, void *vaddr, size_t size)
+ 
+ 	if (!force_dma_unencrypted(dev))
+ 		return 0;
+-	ret = set_memory_encrypted((unsigned long)vaddr, 1 << get_order(size));
++	ret = set_memory_encrypted((unsigned long)vaddr, PFN_UP(size));
+ 	if (ret)
+ 		pr_warn_ratelimited("leaking DMA memory that can't be re-encrypted\n");
+ 	return ret;
 -- 
 2.35.1
 

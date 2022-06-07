@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6190542402
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF1F5426D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241420AbiFHC16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 22:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
+        id S1389719AbiFHAgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446938AbiFHC1A (ORCPT
+        with ESMTP id S1384899AbiFGWUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 22:27:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72DB262ADB;
-        Tue,  7 Jun 2022 12:20:33 -0700 (PDT)
+        Tue, 7 Jun 2022 18:20:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C08263289;
+        Tue,  7 Jun 2022 12:20:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24221B823CA;
-        Tue,  7 Jun 2022 19:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B394C385A2;
-        Tue,  7 Jun 2022 19:20:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D41B600E1;
+        Tue,  7 Jun 2022 19:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45728C385A2;
+        Tue,  7 Jun 2022 19:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629629;
-        bh=ZDnKYPmPQjxcm4FY6FcGynN3YmPDyHlU/dvI+MVgxa8=;
+        s=korg; t=1654629632;
+        bh=Rf2BtKigmj85vqHrqvMHp6RrUnAF/AVzeXa9HlfYhMA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=znMTv+aEldDwRuBF8lEna0JBeuWnt0vJ5MSKDD60ZEUtPspqnv26ub13jooCCSd/g
-         wfgQmYbFt+Mof7Q3tLUMDVrcgI7ZY2UZfmQI6RSlNQP+5MIG8EpnMjvKSl3FD4YbDq
-         v7G/DNjz1z7EBM5iLocs4XUKFHOpuO4n5E6hUi1Q=
+        b=nwwPregZygrhB0sws5UDJ0+FPTVv6btwxsKiOlZw0upx63W7yXTSw3iwM3AiZH0B8
+         KgFL5l+FpqbRrcAmLQlHk+u+RN9WwMfdtOgwjwg1GVcw9KSXqEd432TvUz+N/+QzPP
+         17CcVGuVPR2d0eFYEdsBFP0BhXqWw8d5CBuR0ki8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Denis Efremov <denis.e.efremov@oracle.com>
-Subject: [PATCH 5.18 758/879] staging: r8188eu: prevent ->Ssid overflow in rtw_wx_set_scan()
-Date:   Tue,  7 Jun 2022 19:04:36 +0200
-Message-Id: <20220607165024.865883010@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.18 759/879] block: Fix potential deadlock in blk_ia_range_sysfs_show()
+Date:   Tue,  7 Jun 2022 19:04:37 +0200
+Message-Id: <20220607165024.895162554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -53,37 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Denis Efremov <denis.e.efremov@oracle.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit bc10916e890948d8927a5c8c40fb5dc44be5e1b8 upstream.
+commit 41e46b3c2aa24f755b2ae9ec4ce931ba5f0d8532 upstream.
 
-This code has a check to prevent read overflow but it needs another
-check to prevent writing beyond the end of the ->Ssid[] array.
+When being read, a sysfs attribute is already protected against removal
+with the kobject node active reference counter. As a result, in
+blk_ia_range_sysfs_show(), there is no need to take the queue sysfs
+lock when reading the value of a range attribute. Using the queue sysfs
+lock in this function creates a potential deadlock situation with the
+disk removal, something that a lockdep signals with a splat when the
+device is removed:
 
-Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Denis Efremov <denis.e.efremov@oracle.com>
-Link: https://lore.kernel.org/r/20220518070052.108287-1-denis.e.efremov@oracle.com
+[  760.703551]  Possible unsafe locking scenario:
+[  760.703551]
+[  760.703554]        CPU0                    CPU1
+[  760.703556]        ----                    ----
+[  760.703558]   lock(&q->sysfs_lock);
+[  760.703565]                                lock(kn->active#385);
+[  760.703573]                                lock(&q->sysfs_lock);
+[  760.703579]   lock(kn->active#385);
+[  760.703587]
+[  760.703587]  *** DEADLOCK ***
+
+Solve this by removing the mutex_lock()/mutex_unlock() calls from
+blk_ia_range_sysfs_show().
+
+Fixes: a2247f19ee1c ("block: Add independent access ranges support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Link: https://lore.kernel.org/r/20220603021905.1441419-1-damien.lemoal@opensource.wdc.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/r8188eu/os_dep/ioctl_linux.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ block/blk-ia-ranges.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -1131,9 +1131,11 @@ static int rtw_wx_set_scan(struct net_de
- 						break;
- 					}
- 					sec_len = *(pos++); len -= 1;
--					if (sec_len > 0 && sec_len <= len) {
-+					if (sec_len > 0 &&
-+					    sec_len <= len &&
-+					    sec_len <= 32) {
- 						ssid[ssid_index].SsidLength = sec_len;
--						memcpy(ssid[ssid_index].Ssid, pos, ssid[ssid_index].SsidLength);
-+						memcpy(ssid[ssid_index].Ssid, pos, sec_len);
- 						ssid_index++;
- 					}
- 					pos += sec_len;
+--- a/block/blk-ia-ranges.c
++++ b/block/blk-ia-ranges.c
+@@ -54,13 +54,8 @@ static ssize_t blk_ia_range_sysfs_show(s
+ 		container_of(attr, struct blk_ia_range_sysfs_entry, attr);
+ 	struct blk_independent_access_range *iar =
+ 		container_of(kobj, struct blk_independent_access_range, kobj);
+-	ssize_t ret;
+ 
+-	mutex_lock(&iar->queue->sysfs_lock);
+-	ret = entry->show(iar, buf);
+-	mutex_unlock(&iar->queue->sysfs_lock);
+-
+-	return ret;
++	return entry->show(iar, buf);
+ }
+ 
+ static const struct sysfs_ops blk_ia_range_sysfs_ops = {
 
 

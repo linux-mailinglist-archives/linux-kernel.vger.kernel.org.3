@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D081540D19
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099EA5418C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353628AbiFGSps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S1379969AbiFGVO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351750AbiFGSQj (ORCPT
+        with ESMTP id S1376473AbiFGUQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:16:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AB9169E1F;
-        Tue,  7 Jun 2022 10:49:55 -0700 (PDT)
+        Tue, 7 Jun 2022 16:16:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0551CE7B6;
+        Tue,  7 Jun 2022 11:29:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1042B82354;
-        Tue,  7 Jun 2022 17:49:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12662C385A5;
-        Tue,  7 Jun 2022 17:49:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 59282CE2452;
+        Tue,  7 Jun 2022 18:24:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676CCC385A2;
+        Tue,  7 Jun 2022 18:24:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624192;
-        bh=LtD2sJe2boOYtX6cow/+32eJTyD0CxUW8sSQ2go5Sdw=;
+        s=korg; t=1654626248;
+        bh=IZMxjjab0MeqFDPuBR/inMNlodIgWB0ahUKVDgWxLpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KPua9Uv7TOOiYOxX9i83hMftMQEpmMjYF/Tp+x0WEkH9xBrTkLUOFAj8kLgRI5xzX
-         ydaFU+jeYVDfzUF/YokDZmidolI/R08WUUp6tpKMYpRLkj9RsDFaoTejsvBMK71oVc
-         PnJ9i5y80ZqQCeJSjYZlWLbOE59zxyUMN+WtPAaM=
+        b=g3F0FPIbrJPvDVgndqB1EPlJrRBzTDOObzM2q4Da7CWhyRwndUKBYQeJwxaRoYrbV
+         2tjlICaTOCvhFq5kojKwtyH8pvhVxYrzb063K60I9vm8x+/75Hg89SWYICUsjmJGDd
+         GpHS2diTeDxFdLLiddi9G9jmjFT8pIeoCihUdVd0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 238/667] media: hantro: Empty encoder capture buffers by default
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 311/772] x86/speculation: Add missing prototype for unpriv_ebpf_notify()
 Date:   Tue,  7 Jun 2022 18:58:23 +0200
-Message-Id: <20220607164941.922864144@linuxfoundation.org>
+Message-Id: <20220607164958.191727742@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Josh Poimboeuf <jpoimboe@redhat.com>
 
-[ Upstream commit 309373a3571ef7175bd9da0c9b13476a718e8478 ]
+[ Upstream commit 2147c438fde135d6c145a96e373d9348e7076f7f ]
 
-The payload size for encoder capture buffers is set by the driver upon
-finishing encoding each frame, based on the encoded length returned from
-hardware, and whatever header and padding length used. Setting a
-non-zero default serves no real purpose, and also causes issues if the
-capture buffer is returned to userspace unused, confusing the
-application.
+Fix the following warnings seen with "make W=1":
 
-Instead, always set the payload size to 0 for encoder capture buffers
-when preparing them.
+  kernel/sysctl.c:183:13: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
+    183 | void __weak unpriv_ebpf_notify(int new_state)
+        |             ^~~~~~~~~~~~~~~~~~
 
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-Fixes: 082aaecff35f ("media: hantro: Fix .buf_prepare")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+  arch/x86/kernel/cpu/bugs.c:659:6: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
+    659 | void unpriv_ebpf_notify(int new_state)
+        |      ^~~~~~~~~~~~~~~~~~
+
+Fixes: 44a3918c8245 ("x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/5689d065f739602ececaee1e05e68b8644009608.1650930000.git.jpoimboe@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_v4l2.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ include/linux/bpf.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index bcb0bdff4a9a..629bf40a5e5c 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -647,8 +647,12 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
- 	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
- 	 * it to buffer length).
- 	 */
--	if (V4L2_TYPE_IS_CAPTURE(vq->type))
--		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	if (V4L2_TYPE_IS_CAPTURE(vq->type)) {
-+		if (ctx->is_encoder)
-+			vb2_set_plane_payload(vb, 0, 0);
-+		else
-+			vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	}
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2f7e00e7af37..e78113f25b71 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2064,6 +2064,8 @@ void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
+ 				       struct net_device *netdev);
+ bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
  
- 	return 0;
- }
++void unpriv_ebpf_notify(int new_state);
++
+ #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
+ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
+ 
 -- 
 2.35.1
 

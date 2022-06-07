@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078FE53FAEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5EF53FAED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 12:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240662AbiFGKLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 06:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        id S240670AbiFGKL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 06:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiFGKL2 (ORCPT
+        with ESMTP id S233342AbiFGKLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 06:11:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C9AA30AE;
-        Tue,  7 Jun 2022 03:11:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0B035CE1FFC;
-        Tue,  7 Jun 2022 10:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40607C34115;
-        Tue,  7 Jun 2022 10:11:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X2K0Ykj+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654596680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1uLp6S7qDm+prOZPlj1/i8axFvtvjD7FOsjnFuZBDPg=;
-        b=X2K0Ykj+oOpHR3dcG5mP2wE0U/B0IWXZSN2cK6HP/+Z47nOzBdxQe/OTHEAUhC2fHzSOmj
-        jIPDtNllmaacdUUfHN2mDFVOK6uPL/GPUeuIT0uRqMSrNlkRWeR5jz3KgsarDoP6l96LeH
-        h9K8wirp3B1eHUKd32vhgbIkA9q9XMM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d13f70d9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 7 Jun 2022 10:11:19 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 12:11:14 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] ARM: initialize jump labels before setup_machine_fdt()
-Message-ID: <Yp8kQrBgE3WVqqC5@zx2c4.com>
-References: <8cc7ebe4-442b-a24b-9bb0-fce6e0425ee6@raspberrypi.com>
- <CAHmME9pL=g7Gz9-QOHnTosLHAL9YSPsW+CnE=9=u3iTQaFzomg@mail.gmail.com>
- <0f6458d7-037a-fa4d-8387-7de833288fb9@raspberrypi.com>
- <CAHmME9rJif3ydZuFJcSjPxkGMofZkbu2PXcHBF23OWVgGQ4c+A@mail.gmail.com>
- <Yp8jQG30OWOG9C4j@arm.com>
+        Tue, 7 Jun 2022 06:11:54 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B1E8B94
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 03:11:52 -0700 (PDT)
+Received: from fsav311.sakura.ne.jp (fsav311.sakura.ne.jp [153.120.85.142])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 257ABV1r073398;
+        Tue, 7 Jun 2022 19:11:31 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav311.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp);
+ Tue, 07 Jun 2022 19:11:31 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav311.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 257ABVSk073394
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 7 Jun 2022 19:11:31 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <bc424a36-24f6-3f52-5fdd-5d24cc209a6f@I-love.SAKURA.ne.jp>
+Date:   Tue, 7 Jun 2022 19:11:31 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yp8jQG30OWOG9C4j@arm.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] kbuild: fix build failure by
+ scripts/check-local-export
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <62ba96a2-0a0c-ab8e-351d-398f31a880ae@I-love.SAKURA.ne.jp>
+ <ce0b0a88-f8cb-ba9c-8a0e-1a818f8c50e0@I-love.SAKURA.ne.jp>
+ <8af7aebf-61ae-f126-57fa-8ff358c1841e@I-love.SAKURA.ne.jp>
+ <CAK7LNAREqTb=Y08R-jX8mNZoTmEYt_6WrUrP+U2oZQk2tT9kBg@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <CAK7LNAREqTb=Y08R-jX8mNZoTmEYt_6WrUrP+U2oZQk2tT9kBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
-
-On Tue, Jun 07, 2022 at 11:06:56AM +0100, Catalin Marinas wrote:
-> Hi Jason,
+On 2022/06/07 17:34, Masahiro Yamada wrote:
+> This patch does not work because you did not avoid
+> running the while-loop in a subshell.
 > 
-> On Tue, Jun 07, 2022 at 10:51:41AM +0200, Jason A. Donenfeld wrote:
-> > On Tue, Jun 7, 2022 at 10:47 AM Phil Elwell <phil@raspberrypi.com> wrote:
-> > > Thanks for the quick response, but that doesn't work for me either. Let me say
-> > > again that I'm on a downstream kernel (rpi-5.15.y) so this may not be a
-> > > universal problem, but merging either of these fixing patches would be fatal for us.
-> > 
-> > Alright, thanks. And I'm guessing you don't currently have a problem
-> > *without* either of the fixing patches, because your device tree
-> > doesn't use rng-seed. Is that right?
-> > 
-> > In anycase, I sent in a revert to get all the static branch stuff out
-> > of stable -- https://lore.kernel.org/stable/20220607084005.666059-1-Jason@zx2c4.com/
-> > -- so the "urgency" of this should decrease and we can fix this as
-> > normal during the 5.19 cycle.
+> It is well described in  this page:
+> https://riptutorial.com/bash/example/26955/to-avoid-usage-of-a-sub-shell
 > 
-> Since the above revert got queued in -stable, I assume you don't need
-> commit 73e2d827a501 ("arm64: Initialize jump labels before
-> setup_machine_fdt()") in stable either.
 
-I made the point here:
-https://lore.kernel.org/stable/Yp8i9DH57dRGfTNf@kroah.com/T/#m8f33bc14b677980abe690e5c7a4909b5902010cc
+I didn't know that. Then, adding below diff will work.
 
-> Do you plan to fix the crng_ready() static branch differently? If you
-> do, I'd like to revert the corresponding arm64 commit as well. It seems
-> to be harmless but I'd rather not keep it if no longer needed. So please
-> keep me updated whatever you decide.
+@@ -24,7 +24,7 @@ exit_code=0
+ # symbol_types is fine because export_symbols will remain empty.
+ result=$(${NM} ${1} 2>&1) || die "${result}"
 
-I sent a "backup commit" for that here: https://lore.kernel.org/all/20220607100210.683136-1-Jason@zx2c4.com/
-But I would like a few days to see if there's some trivial way of not
-needing that on arm32. If it turns out to be easy, then I'd prefer the
-direct fix akin to the arm64 one. If it turns out to be not easy, then
-I'll merge the backup commit. I'll keep you posted (and I assume anyway
-you'll see the arm32 attempts progress or fail here, also).
+-echo "${result}" | while read value type name
++while read value type name
+ do
+        # Skip the line if the number of fields is less than 3.
+        #
+@@ -48,7 +48,9 @@ do
+        if [[ ${name} == __ksymtab_* ]]; then
+                export_symbols+=(${name#__ksymtab_})
+        fi
+-done
++done <<EOF
++"${result}"
++EOF
 
-Jason
+ for name in "${export_symbols[@]}"
+ do
+
+> 
+> 
+> I will send a working patch with a proper commit log.
+
+OK. "[PATCH] scripts/check-local-export: avoid 'wait $!' for process substitution" works.
+
+Thank you.

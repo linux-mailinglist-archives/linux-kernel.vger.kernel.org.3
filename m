@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A47A541F9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0272A541FAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386179AbiFGWsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S1386539AbiFGWtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381319AbiFGVk1 (ORCPT
+        with ESMTP id S1381329AbiFGVk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:40:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51AD18FA73;
-        Tue,  7 Jun 2022 12:06:44 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9761318FF18;
+        Tue,  7 Jun 2022 12:06:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F37BB81F6D;
-        Tue,  7 Jun 2022 19:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1FDC385A2;
-        Tue,  7 Jun 2022 19:06:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFF5D61846;
+        Tue,  7 Jun 2022 19:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E73C341D3;
+        Tue,  7 Jun 2022 19:06:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628802;
-        bh=Wv8LqfiVahQyHFgoG9Vecq8fraqBk8Ym4cTjhUqnw5A=;
+        s=korg; t=1654628805;
+        bh=o2wbFfEQvs2eiY4N0Y272HxREAh16iSWwNULUjZBAAI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dJohvddY23ijjM2B7zc/9kZ4T5kP89JzAKdoTFifnd08YIFcgnvclVAYcD1chCSsj
-         YxlXtxrJZw2Bh4HAOP6k+4aJUtXrNDhI9JBGt6N9LvyuIEDPAP4FEiRM3jUZUwT04y
-         ZUXtGpBU1L/Oy+eir8z10iyyEXXIN27aeYdBVXD0=
+        b=Ut2oZ1PyvOy77mRkIebEpifkzaHXJQQai0720S7jQBo3Rl3D3OWlIPKLBPwL0szC4
+         R0NE0j5fgBxek64XsYs0pAPk4MB55qsyGSpedqdPA4UPaJwLaV25pHkRssIJeODH83
+         j5qpqTOMYp+DC9xr98qzgFH/M4GG6uTkCKyB1Kjw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 420/879] regulator: pfuze100: Fix refcount leak in pfuze_parse_regulators_dt
-Date:   Tue,  7 Jun 2022 18:58:58 +0200
-Message-Id: <20220607165015.054490266@linuxfoundation.org>
+Subject: [PATCH 5.18 421/879] PM: EM: Decrement policy counter
+Date:   Tue,  7 Jun 2022 18:58:59 +0200
+Message-Id: <20220607165015.084278018@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,42 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Pierre Gondois <Pierre.Gondois@arm.com>
 
-[ Upstream commit afaa7b933ef00a2d3262f4d1252087613fb5c06d ]
+[ Upstream commit c9d8923bfbcb63f15ea6cb2b5c8426fc3d96f643 ]
 
-of_node_get() returns a node with refcount incremented.
-Calling of_node_put() to drop the reference when not needed anymore.
+In commit e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq"),
+cpufreq_cpu_get() is called without a cpufreq_cpu_put(), permanently
+increasing the reference counts of the policy struct.
 
-Fixes: 3784b6d64dc5 ("regulator: pfuze100: add pfuze100 regulator driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511113506.45185-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Decrement the reference count once the policy struct is not used
+anymore.
+
+Fixes: e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq")
+Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Reviewed-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/pfuze100-regulator.c | 2 ++
+ kernel/power/energy_model.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
-index d60d7d1b7fa2..aa55cfca9e40 100644
---- a/drivers/regulator/pfuze100-regulator.c
-+++ b/drivers/regulator/pfuze100-regulator.c
-@@ -521,6 +521,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
- 	parent = of_get_child_by_name(np, "regulators");
- 	if (!parent) {
- 		dev_err(dev, "regulators node not found\n");
-+		of_node_put(np);
- 		return -EINVAL;
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 0153b0ca7b23..6219aaa454b5 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -259,6 +259,8 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
+ 			found++;
  	}
  
-@@ -550,6 +551,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
- 	}
++	cpufreq_cpu_put(policy);
++
+ 	if (!found)
+ 		return;
  
- 	of_node_put(parent);
-+	of_node_put(np);
- 	if (ret < 0) {
- 		dev_err(dev, "Error parsing regulator init data: %d\n",
- 			ret);
 -- 
 2.35.1
 

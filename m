@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0715D5415CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C839540A46
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359738AbiFGUnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S1349842AbiFGSTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357913AbiFGTmc (ORCPT
+        with ESMTP id S1348900AbiFGR6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:32 -0400
+        Tue, 7 Jun 2022 13:58:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E76E28D;
-        Tue,  7 Jun 2022 11:17:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DCA6620F;
+        Tue,  7 Jun 2022 10:41:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A00E60C7F;
-        Tue,  7 Jun 2022 18:17:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DECEC385A2;
-        Tue,  7 Jun 2022 18:17:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA37661529;
+        Tue,  7 Jun 2022 17:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057D4C385A5;
+        Tue,  7 Jun 2022 17:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625835;
-        bh=90wQ+pzk/44KhTJkQSqcP7YrHUoP6Hv+ceVeixHLAHc=;
+        s=korg; t=1654623676;
+        bh=LPSSCwqGaNrNkqp/n9QTqw04SGRP8OwOqgtrF6QVz+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aEnN+tbpljTyn5/uEgISMXq3iionVhhTf0ja8V/uquPsS0ywx5OMdtH2dtHCb98im
-         fpDNQZ6p+AL1cwym0SBxyFAgA7nDwmxOR74R//WmxJI/J3SgN3I6qbC6AJwetcsiIY
-         PThB+hrGzRWB4JhvDL5/zRZPqGhQ/gEeIW03m/pY=
+        b=IeW29NSGp7+qZhaWuJb16kLKTVLANS4jmbK5hsyA7q0VDCIXNaS4xxzosWKQwbNM9
+         /l7aktagnwOzQGUUOCB5OFcf1KcxEM/uj0l3VHghqtf0BRuannacM9OSeAn3FCXlPQ
+         0V1aSY/AcZQDQeSfaY7T8cI6IlRKsVA9OadrxsGY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Niels Dossche <dossche.niels@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 124/772] scsi: lpfc: Alter FPIN stat accounting logic
-Date:   Tue,  7 Jun 2022 18:55:16 +0200
-Message-Id: <20220607164952.700073624@linuxfoundation.org>
+Subject: [PATCH 5.15 052/667] ipv6: fix locking issues with loops over idev->addr_list
+Date:   Tue,  7 Jun 2022 18:55:17 +0200
+Message-Id: <20220607164936.369585786@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,172 +56,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit e6f51041450282a8668af3a8fc5c7744e81a447c ]
+[ Upstream commit 51454ea42c1ab4e0c2828bb0d4d53957976980de ]
 
-When configuring CMF management based on signals instead of FPINs, FPIN
-alarm and warning statistics are not tracked.
+idev->addr_list needs to be protected by idev->lock. However, it is not
+always possible to do so while iterating and performing actions on
+inet6_ifaddr instances. For example, multiple functions (like
+addrconf_{join,leave}_anycast) eventually call down to other functions
+that acquire the idev->lock. The current code temporarily unlocked the
+idev->lock during the loops, which can cause race conditions. Moving the
+locks up is also not an appropriate solution as the ordering of lock
+acquisition will be inconsistent with for example mc_lock.
 
-Change the behavior so that FPIN alarms and warnings are always tracked
-regardless of the configured mode.
+This solution adds an additional field to inet6_ifaddr that is used
+to temporarily add the instances to a temporary list while holding
+idev->lock. The temporary list can then be traversed without holding
+idev->lock. This change was done in two places. In addrconf_ifdown, the
+list_for_each_entry_safe variant of the list loop is also no longer
+necessary as there is no deletion within that specific loop.
 
-Similar changes are made in the CMF signal stat accounting logic.  Upon
-receipt of a signal, only track signaled alarms and warnings. FPIN stats
-should not be incremented upon receipt of a signal.
-
-Link: https://lore.kernel.org/r/20220506035519.50908-11-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Suggested-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/r/20220403231523.45843-1-dossche.niels@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_els.c  | 49 +++++++++++------------------------
- drivers/scsi/lpfc/lpfc_init.c | 22 ++--------------
- 2 files changed, 17 insertions(+), 54 deletions(-)
+ include/net/if_inet6.h |  8 ++++++++
+ net/ipv6/addrconf.c    | 30 ++++++++++++++++++++++++------
+ 2 files changed, 32 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index f936833c9909..8d416019f59f 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -3784,9 +3784,6 @@ lpfc_least_capable_settings(struct lpfc_hba *phba,
- {
- 	u32 rsp_sig_cap = 0, drv_sig_cap = 0;
- 	u32 rsp_sig_freq_cyc = 0, rsp_sig_freq_scale = 0;
--	struct lpfc_cgn_info *cp;
--	u32 crc;
--	u16 sig_freq;
+diff --git a/include/net/if_inet6.h b/include/net/if_inet6.h
+index 653e7d0f65cb..8ec0878a90a7 100644
+--- a/include/net/if_inet6.h
++++ b/include/net/if_inet6.h
+@@ -64,6 +64,14 @@ struct inet6_ifaddr {
  
- 	/* Get rsp signal and frequency capabilities.  */
- 	rsp_sig_cap = be32_to_cpu(pcgd->xmt_signal_capability);
-@@ -3842,25 +3839,7 @@ lpfc_least_capable_settings(struct lpfc_hba *phba,
+ 	struct hlist_node	addr_lst;
+ 	struct list_head	if_list;
++	/*
++	 * Used to safely traverse idev->addr_list in process context
++	 * if the idev->lock needed to protect idev->addr_list cannot be held.
++	 * In that case, add the items to this list temporarily and iterate
++	 * without holding idev->lock.
++	 * See addrconf_ifdown and dev_forward_change.
++	 */
++	struct list_head	if_list_aux;
+ 
+ 	struct list_head	tmp_list;
+ 	struct inet6_ifaddr	*ifpub;
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 3a8838b79bb6..1ba5ff21412c 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -798,6 +798,7 @@ static void dev_forward_change(struct inet6_dev *idev)
+ {
+ 	struct net_device *dev;
+ 	struct inet6_ifaddr *ifa;
++	LIST_HEAD(tmp_addr_list);
+ 
+ 	if (!idev)
+ 		return;
+@@ -816,14 +817,24 @@ static void dev_forward_change(struct inet6_dev *idev)
  		}
  	}
  
--	if (!phba->cgn_i)
--		return;
--
--	/* Update signal frequency in congestion info buffer */
--	cp = (struct lpfc_cgn_info *)phba->cgn_i->virt;
--
--	/* Frequency (in ms) Signal Warning/Signal Congestion Notifications
--	 * are received by the HBA
--	 */
--	sig_freq = phba->cgn_sig_freq;
--
--	if (phba->cgn_reg_signal == EDC_CG_SIG_WARN_ONLY)
--		cp->cgn_warn_freq = cpu_to_le16(sig_freq);
--	if (phba->cgn_reg_signal == EDC_CG_SIG_WARN_ALARM) {
--		cp->cgn_alarm_freq = cpu_to_le16(sig_freq);
--		cp->cgn_warn_freq = cpu_to_le16(sig_freq);
--	}
--	crc = lpfc_cgn_calc_crc32(cp, LPFC_CGN_INFO_SZ, LPFC_CGN_CRC32_SEED);
--	cp->cgn_info_crc = cpu_to_le32(crc);
-+	/* We are NOT recording signal frequency in congestion info buffer */
- 	return;
++	read_lock_bh(&idev->lock);
+ 	list_for_each_entry(ifa, &idev->addr_list, if_list) {
+ 		if (ifa->flags&IFA_F_TENTATIVE)
+ 			continue;
++		list_add_tail(&ifa->if_list_aux, &tmp_addr_list);
++	}
++	read_unlock_bh(&idev->lock);
++
++	while (!list_empty(&tmp_addr_list)) {
++		ifa = list_first_entry(&tmp_addr_list,
++				       struct inet6_ifaddr, if_list_aux);
++		list_del(&ifa->if_list_aux);
+ 		if (idev->cnf.forwarding)
+ 			addrconf_join_anycast(ifa);
+ 		else
+ 			addrconf_leave_anycast(ifa);
+ 	}
++
+ 	inet6_netconf_notify_devconf(dev_net(dev), RTM_NEWNETCONF,
+ 				     NETCONFA_FORWARDING,
+ 				     dev->ifindex, &idev->cnf);
+@@ -3728,7 +3739,8 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+ 	unsigned long event = unregister ? NETDEV_UNREGISTER : NETDEV_DOWN;
+ 	struct net *net = dev_net(dev);
+ 	struct inet6_dev *idev;
+-	struct inet6_ifaddr *ifa, *tmp;
++	struct inet6_ifaddr *ifa;
++	LIST_HEAD(tmp_addr_list);
+ 	bool keep_addr = false;
+ 	bool was_ready;
+ 	int state, i;
+@@ -3820,16 +3832,23 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+ 		write_lock_bh(&idev->lock);
+ 	}
  
- out_no_support:
-@@ -9606,11 +9585,14 @@ lpfc_els_rcv_fpin_cgn(struct lpfc_hba *phba, struct fc_tlv_desc *tlv)
- 			/* Take action here for an Alarm event */
- 			if (phba->cmf_active_mode != LPFC_CFG_OFF) {
- 				if (phba->cgn_reg_fpin & LPFC_CGN_FPIN_ALARM) {
--					/* Track of alarm cnt for cgn_info */
--					atomic_inc(&phba->cgn_fabric_alarm_cnt);
- 					/* Track of alarm cnt for SYNC_WQE */
- 					atomic_inc(&phba->cgn_sync_alarm_cnt);
- 				}
-+				/* Track alarm cnt for cgn_info regardless
-+				 * of whether CMF is configured for Signals
-+				 * or FPINs.
-+				 */
-+				atomic_inc(&phba->cgn_fabric_alarm_cnt);
- 				goto cleanup;
- 			}
- 			break;
-@@ -9618,11 +9600,14 @@ lpfc_els_rcv_fpin_cgn(struct lpfc_hba *phba, struct fc_tlv_desc *tlv)
- 			/* Take action here for a Warning event */
- 			if (phba->cmf_active_mode != LPFC_CFG_OFF) {
- 				if (phba->cgn_reg_fpin & LPFC_CGN_FPIN_WARN) {
--					/* Track of warning cnt for cgn_info */
--					atomic_inc(&phba->cgn_fabric_warn_cnt);
- 					/* Track of warning cnt for SYNC_WQE */
- 					atomic_inc(&phba->cgn_sync_warn_cnt);
- 				}
-+				/* Track warning cnt and freq for cgn_info
-+				 * regardless of whether CMF is configured for
-+				 * Signals or FPINs.
-+				 */
-+				atomic_inc(&phba->cgn_fabric_warn_cnt);
- cleanup:
- 				/* Save frequency in ms */
- 				phba->cgn_fpin_frequency =
-@@ -9631,14 +9616,10 @@ lpfc_els_rcv_fpin_cgn(struct lpfc_hba *phba, struct fc_tlv_desc *tlv)
- 				if (phba->cgn_i) {
- 					cp = (struct lpfc_cgn_info *)
- 						phba->cgn_i->virt;
--					if (phba->cgn_reg_fpin &
--						LPFC_CGN_FPIN_ALARM)
--						cp->cgn_alarm_freq =
--							cpu_to_le16(value);
--					if (phba->cgn_reg_fpin &
--						LPFC_CGN_FPIN_WARN)
--						cp->cgn_warn_freq =
--							cpu_to_le16(value);
-+					cp->cgn_alarm_freq =
-+						cpu_to_le16(value);
-+					cp->cgn_warn_freq =
-+						cpu_to_le16(value);
- 					crc = lpfc_cgn_calc_crc32
- 						(cp,
- 						LPFC_CGN_INFO_SZ,
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 6739bdd8195d..7e4a8848a12c 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -5877,21 +5877,8 @@ lpfc_cgn_save_evt_cnt(struct lpfc_hba *phba)
+-	list_for_each_entry_safe(ifa, tmp, &idev->addr_list, if_list) {
++	list_for_each_entry(ifa, &idev->addr_list, if_list)
++		list_add_tail(&ifa->if_list_aux, &tmp_addr_list);
++	write_unlock_bh(&idev->lock);
++
++	while (!list_empty(&tmp_addr_list)) {
+ 		struct fib6_info *rt = NULL;
+ 		bool keep;
  
- 	/* Use the frequency found in the last rcv'ed FPIN */
- 	value = phba->cgn_fpin_frequency;
--	if (phba->cgn_reg_fpin & LPFC_CGN_FPIN_WARN)
--		cp->cgn_warn_freq = cpu_to_le16(value);
--	if (phba->cgn_reg_fpin & LPFC_CGN_FPIN_ALARM)
--		cp->cgn_alarm_freq = cpu_to_le16(value);
--
--	/* Frequency (in ms) Signal Warning/Signal Congestion Notifications
--	 * are received by the HBA
--	 */
--	value = phba->cgn_sig_freq;
--
--	if (phba->cgn_reg_signal == EDC_CG_SIG_WARN_ONLY ||
--	    phba->cgn_reg_signal == EDC_CG_SIG_WARN_ALARM)
--		cp->cgn_warn_freq = cpu_to_le16(value);
--	if (phba->cgn_reg_signal == EDC_CG_SIG_WARN_ALARM)
--		cp->cgn_alarm_freq = cpu_to_le16(value);
-+	cp->cgn_warn_freq = cpu_to_le16(value);
-+	cp->cgn_alarm_freq = cpu_to_le16(value);
++		ifa = list_first_entry(&tmp_addr_list,
++				       struct inet6_ifaddr, if_list_aux);
++		list_del(&ifa->if_list_aux);
++
+ 		addrconf_del_dad_work(ifa);
  
- 	lvalue = lpfc_cgn_calc_crc32(cp, LPFC_CGN_INFO_SZ,
- 				     LPFC_CGN_CRC32_SEED);
-@@ -6606,9 +6593,6 @@ lpfc_sli4_async_sli_evt(struct lpfc_hba *phba, struct lpfc_acqe_sli *acqe_sli)
- 		/* Alarm overrides warning, so check that first */
- 		if (cgn_signal->alarm_cnt) {
- 			if (phba->cgn_reg_signal == EDC_CG_SIG_WARN_ALARM) {
--				/* Keep track of alarm cnt for cgn_info */
--				atomic_add(cgn_signal->alarm_cnt,
--					   &phba->cgn_fabric_alarm_cnt);
- 				/* Keep track of alarm cnt for CMF_SYNC_WQE */
- 				atomic_add(cgn_signal->alarm_cnt,
- 					   &phba->cgn_sync_alarm_cnt);
-@@ -6617,8 +6601,6 @@ lpfc_sli4_async_sli_evt(struct lpfc_hba *phba, struct lpfc_acqe_sli *acqe_sli)
- 			/* signal action needs to be taken */
- 			if (phba->cgn_reg_signal == EDC_CG_SIG_WARN_ONLY ||
- 			    phba->cgn_reg_signal == EDC_CG_SIG_WARN_ALARM) {
--				/* Keep track of warning cnt for cgn_info */
--				atomic_add(cnt, &phba->cgn_fabric_warn_cnt);
- 				/* Keep track of warning cnt for CMF_SYNC_WQE */
- 				atomic_add(cnt, &phba->cgn_sync_warn_cnt);
- 			}
+ 		keep = keep_addr && (ifa->flags & IFA_F_PERMANENT) &&
+ 			!addr_is_local(&ifa->addr);
+ 
+-		write_unlock_bh(&idev->lock);
+ 		spin_lock_bh(&ifa->lock);
+ 
+ 		if (keep) {
+@@ -3860,15 +3879,14 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+ 			addrconf_leave_solict(ifa->idev, &ifa->addr);
+ 		}
+ 
+-		write_lock_bh(&idev->lock);
+ 		if (!keep) {
++			write_lock_bh(&idev->lock);
+ 			list_del_rcu(&ifa->if_list);
++			write_unlock_bh(&idev->lock);
+ 			in6_ifa_put(ifa);
+ 		}
+ 	}
+ 
+-	write_unlock_bh(&idev->lock);
+-
+ 	/* Step 5: Discard anycast and multicast list */
+ 	if (unregister) {
+ 		ipv6_ac_destroy_dev(idev);
 -- 
 2.35.1
 

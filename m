@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1EB54167E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F1E540D02
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358575AbiFGUxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S1353505AbiFGSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358638AbiFGTws (ORCPT
+        with ESMTP id S1349930AbiFGSNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8C136173;
-        Tue,  7 Jun 2022 11:21:45 -0700 (PDT)
+        Tue, 7 Jun 2022 14:13:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5478A159070;
+        Tue,  7 Jun 2022 10:49:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2540560DDA;
-        Tue,  7 Jun 2022 18:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3613FC385A2;
-        Tue,  7 Jun 2022 18:21:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4033C61782;
+        Tue,  7 Jun 2022 17:49:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF40C385A5;
+        Tue,  7 Jun 2022 17:49:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626104;
-        bh=OfpDucA+meciRfZXXHe2/e6CRQkH5VCUTVwXmkHiZOA=;
+        s=korg; t=1654624142;
+        bh=8D15uPtE3xzFTL7RFxE6DtiM+zTsnzoGBO5Q+B9naE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oOug5rrZHE69fyncveyoQGx2yOZygdCl3Yk6B3gLx69M9ecPXMqodBzfdeRdKTMzm
-         092oKVS4HA4WU8z5IQLBhhSkT5fMBTjfBbJ3UQCAwJBD1oNewqcehgwWiXLcq3rhTU
-         NFAGFuv3njcbzQ8fPq/TiG8l3YwNdtqzYzj6CGUw=
+        b=a3e3TCpDFOpil8lMxTaPVw8PE/lqiHkSBq0u0dux812irw1Qxvx7eMO+Vh3NEPWrH
+         FKmDYdiks3Z9CtYD/KvU8JTlG9tmMkt3ID1WRpW6xG0ytKOo9fi8dlmxp62YdCgwLZ
+         OvDyWxIvH5eSO+WVy0g00GYXJMnpuvBr+Bs0W9JI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 252/772] x86/PCI: Fix ALi M1487 (IBC) PIRQ router link value interpretation
+Subject: [PATCH 5.15 179/667] smb3: check for null tcon
 Date:   Tue,  7 Jun 2022 18:57:24 +0200
-Message-Id: <20220607164956.451603819@linuxfoundation.org>
+Message-Id: <20220607164940.177772538@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Steve French <stfrench@microsoft.com>
 
-[ Upstream commit 4969e223b109754c2340a26bba9b1cf44f0cba9b ]
+[ Upstream commit bbdf6cf56c88845fb0b713cbf5c6623c53fe40d8 ]
 
-Fix an issue with commit 1ce849c75534 ("x86/PCI: Add support for the ALi
-M1487 (IBC) PIRQ router") and correct ALi M1487 (IBC) PIRQ router link
-value (`pirq' cookie) interpretation according to findings in the BIOS.
+Although unlikely to be null, it is confusing to use a pointer
+before checking for it to be null so move the use down after
+null check.
 
-Credit to Nikolai Zhubr for the detective work as to the bit layout.
-
-Fixes: 1ce849c75534 ("x86/PCI: Add support for the ALi M1487 (IBC) PIRQ router")
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203310013270.44113@angie.orcam.me.uk
+Addresses-Coverity: 1517586 ("Null pointer dereferences  (REVERSE_INULL)")
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/pci/irq.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ fs/cifs/smb2ops.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index 97b63e35e152..21c4bc41741f 100644
---- a/arch/x86/pci/irq.c
-+++ b/arch/x86/pci/irq.c
-@@ -253,6 +253,15 @@ static void write_pc_conf_nybble(u8 base, u8 index, u8 val)
- 	pc_conf_set(reg, x);
- }
- 
-+/*
-+ * FinALi pirq rules are as follows:
-+ *
-+ * - bit 0 selects between INTx Routing Table Mapping Registers,
-+ *
-+ * - bit 3 selects the nibble within the INTx Routing Table Mapping Register,
-+ *
-+ * - bits 7:4 map to bits 3:0 of the PCI INTx Sensitivity Register.
-+ */
- static int pirq_finali_get(struct pci_dev *router, struct pci_dev *dev,
- 			   int pirq)
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index df9ba3729d1f..775296e4d3c8 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -745,8 +745,8 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 		struct cifs_sb_info *cifs_sb,
+ 		struct cached_fid **cfid)
  {
-@@ -260,11 +269,13 @@ static int pirq_finali_get(struct pci_dev *router, struct pci_dev *dev,
- 		0, 9, 3, 10, 4, 5, 7, 6, 0, 11, 0, 12, 0, 14, 0, 15
- 	};
- 	unsigned long flags;
-+	u8 index;
- 	u8 x;
+-	struct cifs_ses *ses = tcon->ses;
+-	struct TCP_Server_Info *server = ses->server;
++	struct cifs_ses *ses;
++	struct TCP_Server_Info *server;
+ 	struct cifs_open_parms oparms;
+ 	struct smb2_create_rsp *o_rsp = NULL;
+ 	struct smb2_query_info_rsp *qi_rsp = NULL;
+@@ -764,6 +764,9 @@ int open_cached_dir(unsigned int xid, struct cifs_tcon *tcon,
+ 	if (tcon->nohandlecache)
+ 		return -ENOTSUPP;
  
-+	index = (pirq & 1) << 1 | (pirq & 8) >> 3;
- 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
--	x = irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1)];
-+	x = irqmap[read_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index)];
- 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
- 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
- 	return x;
-@@ -278,13 +289,15 @@ static int pirq_finali_set(struct pci_dev *router, struct pci_dev *dev,
- 	};
- 	u8 val = irqmap[irq];
- 	unsigned long flags;
-+	u8 index;
- 
- 	if (!val)
- 		return 0;
- 
-+	index = (pirq & 1) << 1 | (pirq & 8) >> 3;
- 	raw_spin_lock_irqsave(&pc_conf_lock, flags);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, PC_CONF_FINALI_LOCK_KEY);
--	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, pirq - 1, val);
-+	write_pc_conf_nybble(PC_CONF_FINALI_PCI_INTX_RT1, index, val);
- 	pc_conf_set(PC_CONF_FINALI_LOCK, 0);
- 	raw_spin_unlock_irqrestore(&pc_conf_lock, flags);
- 	return 1;
-@@ -293,7 +306,7 @@ static int pirq_finali_set(struct pci_dev *router, struct pci_dev *dev,
- static int pirq_finali_lvl(struct pci_dev *router, struct pci_dev *dev,
- 			   int pirq, int irq)
- {
--	u8 mask = ~(1u << (pirq - 1));
-+	u8 mask = ~((pirq & 0xf0u) >> 4);
- 	unsigned long flags;
- 	u8 trig;
++	ses = tcon->ses;
++	server = ses->server;
++
+ 	if (cifs_sb->root == NULL)
+ 		return -ENOENT;
  
 -- 
 2.35.1

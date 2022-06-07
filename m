@@ -2,88 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D0E53FF7A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309C253FF74
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 14:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244270AbiFGMzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 08:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S244242AbiFGMyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 08:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244264AbiFGMzE (ORCPT
+        with ESMTP id S244279AbiFGMy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4E8C7891F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654606501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PikFI8IuFGilq0ztM72f7JxwavOO8rV8L+cu0/Iu4x8=;
-        b=EtyB1LWhWNfL63MlIGdNjX7xkKZh6WdCCsqcT1FhR6nbBrzqwI7jA/wQ061S55QEmUqJlM
-        ME6XiAPavt1U6eQjEnVpklA1DWoy/tSmKkiFA89EsdtrPhPvhpcE4GaFt1QynKfhlENZA/
-        /vLDx8E8zee/wo7xHV8+De7ZrsLyAsU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-eC6JHXFYOyezfyOzDqmr_g-1; Tue, 07 Jun 2022 08:54:21 -0400
-X-MC-Unique: eC6JHXFYOyezfyOzDqmr_g-1
-Received: by mail-wm1-f70.google.com with SMTP id n18-20020a05600c3b9200b00397335edc7dso12730224wms.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 05:54:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PikFI8IuFGilq0ztM72f7JxwavOO8rV8L+cu0/Iu4x8=;
-        b=FtklVp74+x7iBVZkyUiBzu+7y3ucHsiWQOhjyemnWuuU80k0sEC6B7mPgLXs5lZyUF
-         WMt4L4tgXEpZ+k9V9P31noUCyM8ngwEaLH6XC5z3TFEBZioR/ZkAyQRyGvWvjdSuhSyu
-         SLGlUpR/CQVLaPdfrgAFCiQlfVzlT3QoHS+HHQReM8GRtBCPo2q/pBSYkyeESeWZmwh+
-         2QbYmxVGlBmxicIzzc799gZ3LxnD9PlxqPzBcvLh7XusTw57guSuC3ofj8bWWYP71ZNe
-         jn7Fys6SFADadJy77Cj+yJeYmQIJuE1ypoqVGl96LaeTJg7ihsiw1DShsDlX/kfUCkiC
-         dLRg==
-X-Gm-Message-State: AOAM532MoY06ntSGMNdEomNk6dsx99ci6b+MT4mtpSKh7x3Hip14dMaT
-        77o7LX4fNKOcZSXAVLOSQnnaBgwdZr8GTBbeWa5B8n/aoKhvFhDijzzxqAHXdQWh7zuzFXcAAEK
-        RN+l6dOlseSldqZDx0xEfJjIz
-X-Received: by 2002:a7b:c401:0:b0:397:26fb:ebf7 with SMTP id k1-20020a7bc401000000b0039726fbebf7mr29011209wmi.90.1654606459915;
-        Tue, 07 Jun 2022 05:54:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJa9Ztgs/feNXwUUZcblGX2ZWB3NuTx5Hif1QltOBA4EuHQl1hdGlGjZxUtoDL/Nv8LMki0A==
-X-Received: by 2002:a7b:c401:0:b0:397:26fb:ebf7 with SMTP id k1-20020a7bc401000000b0039726fbebf7mr29011177wmi.90.1654606459567;
-        Tue, 07 Jun 2022 05:54:19 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id g6-20020a056000118600b002183fabc53csm5233442wrx.17.2022.06.07.05.54.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 05:54:18 -0700 (PDT)
-Message-ID: <9d336622-6964-454a-605f-1ca90b902836@redhat.com>
-Date:   Tue, 7 Jun 2022 14:54:14 +0200
+        Tue, 7 Jun 2022 08:54:29 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1C7B9C2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 05:54:27 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LHVd15yNFz1KGJs;
+        Tue,  7 Jun 2022 20:52:37 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 20:54:24 +0800
+Subject: Re: [PATCH v1 3/5] mm, hwpoison: make __page_handle_poison returns
+ int
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220602050631.771414-1-naoya.horiguchi@linux.dev>
+ <20220602050631.771414-4-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <9d423acb-b671-1cf0-0432-76eb648de95b@huawei.com>
+Date:   Tue, 7 Jun 2022 20:54:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
+In-Reply-To: <20220602050631.771414-4-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-References: <20220301201344.18191-1-sashal@kernel.org>
- <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
- <YppVupW+IWsm7Osr@xz-m1.local>
- <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
- <Yp5xSi6P3q187+A+@xz-m1.local>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yp5xSi6P3q187+A+@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,39 +59,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 23:27, Peter Xu wrote:
-> On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
->>> However there seems to be something missing at least to me, on why it'll
->>> fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
->>> In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
->>> patch, but 0x0 if with it.
->>
->> What CPU model are you using for the VM?
+On 2022/6/2 13:06, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 > 
-> I didn't specify it, assuming it's qemu64 with no extra parameters.
-
-Ok, so indeed it lacks AVX and this patch can have an effect.
-
->> For example, if the source lacks this patch but the destination has it,
->> the source will transmit YMM registers, but the destination will fail to
->> set them if they are not available for the selected CPU model.
->>
->> See the commit message: "As a bonus, it will also fail if userspace tries to
->> set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
->> the guest configuration.  Such features will never be returned by
->> KVM_GET_XSAVE or KVM_GET_XSAVE2."
+> __page_handle_poison() returns bool that shows whether
+> take_page_off_buddy() has passed or not now.  But we will want to
+> distinguish another case of "dissolve has passed but taking off failed"
+> by its return value. So change the type of the return value.
+> No functional change.
 > 
-> IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
-> (probably by failing validate_user_xstate_header when checking against the
-> user_xfeatures on dest host). But that's probably not my case, because here
-> KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
-> the precopy migration completes (or for postcopy when the switchover is
-> done).
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  mm/memory-failure.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index fe6a7961dc66..f149a7864c81 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -68,7 +68,13 @@ int sysctl_memory_failure_recovery __read_mostly = 1;
+>  
+>  atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+> -static bool __page_handle_poison(struct page *page)
+> +/*
+> + * Return values:
+> + *   1:   the page is dissolved (if needed) and taken off from buddy,
+> + *   0:   the page is dissolved (if needed) and not taken off from buddy,
+> + *   < 0: failed to dissolve.
+> + */
+> +static int __page_handle_poison(struct page *page)
+>  {
+>  	int ret;
+>  
+> @@ -78,7 +84,7 @@ static bool __page_handle_poison(struct page *page)
+>  		ret = take_page_off_buddy(page);
+>  	zone_pcp_enable(page_zone(page));
+>  
+> -	return ret > 0;
+> +	return ret;
+>  }
+>  
+>  static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, bool release)
+> @@ -88,7 +94,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
+>  		 * Doing this check for free pages is also fine since dissolve_free_huge_page
+>  		 * returns 0 for non-hugetlb pages as well.
+>  		 */
+> -		if (!__page_handle_poison(page))
+> +		if (__page_handle_poison(page) <= 0)
+>  			/*
+>  			 * We could fail to take off the target page from buddy
+>  			 * for example due to racy page allocation, but that's
+> @@ -1045,7 +1051,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		 * save healthy subpages.
+>  		 */
+>  		put_page(hpage);
+> -		if (__page_handle_poison(p)) {
+> +		if (__page_handle_poison(p) > 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+>  		}
+> @@ -1595,8 +1601,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  	 */
+>  	if (res == 0) {
+>  		unlock_page(head);
+> -		res = MF_FAILED;
 
-Difficult to say what's happening without seeing at least the guest code 
-around the double fault (above you said "fail a migration" and I thought 
-that was a different scenario than the double fault), and possibly which 
-was the first exception that contributed to the double fault.
+This looks like an unexpected change. res will be 0 instead of MF_FAILED if __page_handle_poison failed to
+dissolve or not taken off from buddy. But this is fixed in later patch in this series. So it should be fine.
 
-Paolo
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks!
+
+> -		if (__page_handle_poison(p)) {
+> +		if (__page_handle_poison(p) > 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+>  		}
+> 
 

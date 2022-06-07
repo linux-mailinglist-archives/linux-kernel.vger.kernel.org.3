@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8855854098A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDDB5413E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349381AbiFGSJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
+        id S1359125AbiFGUIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349229AbiFGRuk (ORCPT
+        with ESMTP id S1355251AbiFGTOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:50:40 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011776FA23;
-        Tue,  7 Jun 2022 10:38:02 -0700 (PDT)
+        Tue, 7 Jun 2022 15:14:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD06194BFC;
+        Tue,  7 Jun 2022 11:07:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 74F78CE21CD;
-        Tue,  7 Jun 2022 17:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C7AC385A5;
-        Tue,  7 Jun 2022 17:37:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45315617A5;
+        Tue,  7 Jun 2022 18:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55353C34115;
+        Tue,  7 Jun 2022 18:07:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623458;
-        bh=RZgDdum0msf2g8pnmfSjWw5PkHFRPMvuZw+fPrm/v+8=;
+        s=korg; t=1654625244;
+        bh=jAfyJdtY7AW8Hezy+hcbPYqE7q7fX2MgEkIpU715TEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B1HvYTBCVvU3n9tT7tzYFB2keUpK1qa/MD0vSKTv7wiw+l+WZi8+9IE6NVCb5Vn1V
-         YhZ9q4M5UHLu2zVMqhoQlB4z96RZWyt4aLz9TDsjdf8ScjaVO05DbT7bxmXCV2pfKU
-         viOlnOTOIh1Q04fQu80PRv1gLpVIDrIh+IuQRxzQ=
+        b=W2gfXERaUQ9MQQadlHhOCIXZfzo5GTOnK+ohyLjcXktbfuGbREoXYSGrmh1AMzMHd
+         c6Gf5fRmde08kd8FHc/ijjKhkL4V+7gvo90S08MG9fTl5R+2tvt/3b2bBxIj/5p7+9
+         3ZdkY2S2Hj6xpGwhhoYJ8yOwpKlxwxSGVLhQ4Ln8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>
-Subject: [PATCH 5.10 374/452] dlm: fix missing lkb refcount handling
-Date:   Tue,  7 Jun 2022 19:03:51 +0200
-Message-Id: <20220607164919.710013820@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Subject: [PATCH 5.15 567/667] landlock: Add clang-format exceptions
+Date:   Tue,  7 Jun 2022 19:03:52 +0200
+Message-Id: <20220607164951.699114218@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Mickaël Salaün <mic@digikod.net>
 
-commit 1689c169134f4b5a39156122d799b7dca76d8ddb upstream.
+commit 6cc2df8e3a3967e7c13a424f87f6efb1d4a62d80 upstream.
 
-We always call hold_lkb(lkb) if we increment lkb->lkb_wait_count.
-So, we always need to call unhold_lkb(lkb) if we decrement
-lkb->lkb_wait_count. This patch will add missing unhold_lkb(lkb) if we
-decrement lkb->lkb_wait_count. In case of setting lkb->lkb_wait_count to
-zero we need to countdown until reaching zero and call unhold_lkb(lkb).
-The waiters list unhold_lkb(lkb) can be removed because it's done for
-the last lkb_wait_count decrement iteration as it's done in
-_remove_from_waiters().
+In preparation to a following commit, add clang-format on and
+clang-format off stanzas around constant definitions.  This enables to
+keep aligned values, which is much more readable than packed
+definitions.
 
-This issue was discovered by a dlm gfs2 test case which use excessively
-dlm_unlock(LKF_CANCEL) feature. Probably the lkb->lkb_wait_count value
-never reached above 1 if this feature isn't used and so it was not
-discovered before.
-
-The testcase ended in a rsb on the rsb keep data structure with a
-refcount of 1 but no lkb was associated with it, which is itself
-an invalid behaviour. A side effect of that was a condition in which
-the dlm was sending remove messages in a looping behaviour. With this
-patch that has not been reproduced.
-
+Link: https://lore.kernel.org/r/20220506160513.523257-2-mic@digikod.net
 Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David Teigland <teigland@redhat.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/dlm/lock.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ include/uapi/linux/landlock.h |    4 ++++
+ security/landlock/fs.c        |    2 ++
+ security/landlock/limits.h    |    4 ++++
+ 3 files changed, 10 insertions(+)
 
---- a/fs/dlm/lock.c
-+++ b/fs/dlm/lock.c
-@@ -1551,6 +1551,7 @@ static int _remove_from_waiters(struct d
- 		lkb->lkb_wait_type = 0;
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
- 		lkb->lkb_wait_count--;
-+		unhold_lkb(lkb);
- 		goto out_del;
- 	}
+--- a/include/uapi/linux/landlock.h
++++ b/include/uapi/linux/landlock.h
+@@ -33,7 +33,9 @@ struct landlock_ruleset_attr {
+  * - %LANDLOCK_CREATE_RULESET_VERSION: Get the highest supported Landlock ABI
+  *   version.
+  */
++/* clang-format off */
+ #define LANDLOCK_CREATE_RULESET_VERSION			(1U << 0)
++/* clang-format on */
  
-@@ -1577,6 +1578,7 @@ static int _remove_from_waiters(struct d
- 		log_error(ls, "remwait error %x reply %d wait_type %d overlap",
- 			  lkb->lkb_id, mstype, lkb->lkb_wait_type);
- 		lkb->lkb_wait_count--;
-+		unhold_lkb(lkb);
- 		lkb->lkb_wait_type = 0;
- 	}
+ /**
+  * enum landlock_rule_type - Landlock rule type
+@@ -120,6 +122,7 @@ struct landlock_path_beneath_attr {
+  *   :manpage:`access(2)`.
+  *   Future Landlock evolutions will enable to restrict them.
+  */
++/* clang-format off */
+ #define LANDLOCK_ACCESS_FS_EXECUTE			(1ULL << 0)
+ #define LANDLOCK_ACCESS_FS_WRITE_FILE			(1ULL << 1)
+ #define LANDLOCK_ACCESS_FS_READ_FILE			(1ULL << 2)
+@@ -133,5 +136,6 @@ struct landlock_path_beneath_attr {
+ #define LANDLOCK_ACCESS_FS_MAKE_FIFO			(1ULL << 10)
+ #define LANDLOCK_ACCESS_FS_MAKE_BLOCK			(1ULL << 11)
+ #define LANDLOCK_ACCESS_FS_MAKE_SYM			(1ULL << 12)
++/* clang-format on */
  
-@@ -5312,11 +5314,16 @@ int dlm_recover_waiters_post(struct dlm_
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_UNLOCK;
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
- 		lkb->lkb_wait_type = 0;
--		lkb->lkb_wait_count = 0;
-+		/* drop all wait_count references we still
-+		 * hold a reference for this iteration.
-+		 */
-+		while (lkb->lkb_wait_count) {
-+			lkb->lkb_wait_count--;
-+			unhold_lkb(lkb);
-+		}
- 		mutex_lock(&ls->ls_waiters_mutex);
- 		list_del_init(&lkb->lkb_wait_reply);
- 		mutex_unlock(&ls->ls_waiters_mutex);
--		unhold_lkb(lkb); /* for waiters list */
+ #endif /* _UAPI_LINUX_LANDLOCK_H */
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -141,10 +141,12 @@ retry:
+ }
  
- 		if (oc || ou) {
- 			/* do an unlock or cancel instead of resending */
+ /* All access rights that can be tied to files. */
++/* clang-format off */
+ #define ACCESS_FILE ( \
+ 	LANDLOCK_ACCESS_FS_EXECUTE | \
+ 	LANDLOCK_ACCESS_FS_WRITE_FILE | \
+ 	LANDLOCK_ACCESS_FS_READ_FILE)
++/* clang-format on */
+ 
+ /*
+  * @path: Should have been checked by get_path_from_fd().
+--- a/security/landlock/limits.h
++++ b/security/landlock/limits.h
+@@ -12,10 +12,14 @@
+ #include <linux/limits.h>
+ #include <uapi/linux/landlock.h>
+ 
++/* clang-format off */
++
+ #define LANDLOCK_MAX_NUM_LAYERS		64
+ #define LANDLOCK_MAX_NUM_RULES		U32_MAX
+ 
+ #define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_MAKE_SYM
+ #define LANDLOCK_MASK_ACCESS_FS		((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
+ 
++/* clang-format on */
++
+ #endif /* _SECURITY_LANDLOCK_LIMITS_H */
 
 

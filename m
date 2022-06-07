@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4363541AA1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DCA540726
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380915AbiFGVgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S1347494AbiFGRnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376390AbiFGU0i (ORCPT
+        with ESMTP id S1347859AbiFGRbU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:26:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6D41D8089;
-        Tue,  7 Jun 2022 11:32:37 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:20 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9703B1059CB;
+        Tue,  7 Jun 2022 10:28:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0134AB82340;
-        Tue,  7 Jun 2022 18:32:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46522C385A5;
-        Tue,  7 Jun 2022 18:32:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BC931CE2396;
+        Tue,  7 Jun 2022 17:28:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8030C385A5;
+        Tue,  7 Jun 2022 17:28:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626754;
-        bh=eQUZ+ey7/BLiW6pckJTv8Wved40zL6Bggxfybl1hKZc=;
+        s=korg; t=1654622914;
+        bh=hKaaFKKJkTwL/NOcTKoKRquAfxInXdQEATkMxPCLz1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=im0KpbnXxCo6NqRU9qSe3rXrwjNYXWvUE8tyedoEjVnEJs+BEIFbCzri7VWVs9++W
-         xCmspGyLG/UDR+TfsopIhmdtKCzjixsYBjPPX9tceJ8pKvhOCI/XSbzxpCjv7O8l2H
-         esRLjqwjLbPuGNnfSeTAl7CEXWVUyl/Le/PD8zRw=
+        b=euZ1V3lF2vYOho1A7FOeMBiaq5VSfaiLCRZsxr6UpHSySd2o7BGheEiGRC/Ga4Iml
+         7PqgM+Km1z4YLfcrSYQ02yvS7NbVVcaX2q5Fz5gu7E8YB3CcNLYgzMFimtnED2Vn+F
+         9VbaCJ3ru9UvvWVZpRqTzz3G50iEpl9OMLjyKGEQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 492/772] Drivers: hv: vmbus: Fix handling of messages with transaction ID of zero
-Date:   Tue,  7 Jun 2022 19:01:24 +0200
-Message-Id: <20220607165003.481988539@linuxfoundation.org>
+        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 228/452] media: ov7670: remove ov7670_power_off from ov7670_remove
+Date:   Tue,  7 Jun 2022 19:01:25 +0200
+Message-Id: <20220607164915.356419505@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 82cd4bacff88a11e36f143e2cb950174b09c86c3 ]
+[ Upstream commit 5bf19572e31375368f19edd2dbb2e0789518bb99 ]
 
-vmbus_request_addr() returns 0 (zero) if the transaction ID passed
-to as argument is 0.  This is unfortunate for two reasons: first,
-netvsc_send_completion() does not check for a NULL cmd_rqst (before
-dereferencing the corresponding NVSP message); second, 0 is a *valid*
-value of cmd_rqst in netvsc_send_tx_complete(), cf. the call of
-vmbus_sendpacket() in netvsc_send_pkt().
+In ov7670_probe, it always invokes ov7670_power_off() no matter
+the execution is successful or failed. So we cannot invoke it
+agiain in ov7670_remove().
 
-vmbus_request_addr() has included the code in question since its
-introduction with commit e8b7db38449ac ("Drivers: hv: vmbus: Add
-vmbus_requestor data structure for VMBus hardening"); such code was
-motivated by the early use of vmbus_requestor by hv_storvsc.  Since
-hv_storvsc moved to a tag-based mechanism to generate and retrieve
-transaction IDs with commit bf5fd8cae3c8f ("scsi: storvsc: Use
-blk_mq_unique_tag() to generate requestIDs"), vmbus_request_addr()
-can be modified to return VMBUS_RQST_ERROR if the ID is 0.  This
-change solves the issues in hv_netvsc (and makes the handling of
-messages with transaction ID of 0 consistent with the semantics
-"the ID is not contained in the requestor/invalid ID").
+Fix this by removing ov7670_power_off from ov7670_remove.
 
-vmbus_next_request_id(), vmbus_request_addr() should still reserve
-the ID of 0 for Hyper-V, because Hyper-V will "ignore" (not respond
-to) VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED packets/requests with
-transaction ID of 0 from the guest.
-
-Fixes: bf5fd8cae3c8f ("scsi: storvsc: Use blk_mq_unique_tag() to generate requestIDs")
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20220419122325.10078-2-parri.andrea@gmail.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Fixes: 030f9f682e66 ("media: ov7670: control clock along with power")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/channel.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov7670.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
-index dc5c35210c16..20fc8d50a039 100644
---- a/drivers/hv/channel.c
-+++ b/drivers/hv/channel.c
-@@ -1245,7 +1245,9 @@ u64 vmbus_next_request_id(struct vmbus_channel *channel, u64 rqst_addr)
- 
- 	/*
- 	 * Cannot return an ID of 0, which is reserved for an unsolicited
--	 * message from Hyper-V.
-+	 * message from Hyper-V; Hyper-V does not acknowledge (respond to)
-+	 * VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED requests with ID of
-+	 * 0 sent by the guest.
- 	 */
- 	return current_id + 1;
+diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
+index b42b289faaef..154776d0069e 100644
+--- a/drivers/media/i2c/ov7670.c
++++ b/drivers/media/i2c/ov7670.c
+@@ -2000,7 +2000,6 @@ static int ov7670_remove(struct i2c_client *client)
+ 	v4l2_async_unregister_subdev(sd);
+ 	v4l2_ctrl_handler_free(&info->hdl);
+ 	media_entity_cleanup(&info->sd.entity);
+-	ov7670_power_off(sd);
+ 	return 0;
  }
-@@ -1270,7 +1272,7 @@ u64 vmbus_request_addr(struct vmbus_channel *channel, u64 trans_id)
- 
- 	/* Hyper-V can send an unsolicited message with ID of 0 */
- 	if (!trans_id)
--		return trans_id;
-+		return VMBUS_RQST_ERROR;
- 
- 	spin_lock_irqsave(&rqstor->req_lock, flags);
  
 -- 
 2.35.1

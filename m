@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364A653F55D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 06:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE15653F561
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 06:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236688AbiFGE5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 00:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S236704AbiFGE5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 00:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236664AbiFGE5H (ORCPT
+        with ESMTP id S236657AbiFGE5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 00:57:07 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8077D4A17;
-        Mon,  6 Jun 2022 21:57:04 -0700 (PDT)
+        Tue, 7 Jun 2022 00:57:10 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB43BD412F;
+        Mon,  6 Jun 2022 21:57:07 -0700 (PDT)
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2574urq5026447;
-        Mon, 6 Jun 2022 23:56:53 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2574utJU049032;
+        Mon, 6 Jun 2022 23:56:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654577813;
-        bh=9vJgbNjL4gRLemPxOIvLcNcWlAjcet2En4x3IBbxTQg=;
-        h=From:To:CC:Subject:Date;
-        b=q5CE0eLfR8+1ZKWo9wHfnCbBvKMCPPT/nIocUcPxdi6s2cPR6EBH82NLV+aI0c9AG
-         kmRcG6D8PENJx6unsEJWAbIWelARm8r3OZOr5gwNcrVULhhxOM4gzjgFe8xFZ474Ub
-         UOVu3Jxyrx4zXVdffzDcENHxsKY7FWPDZbBFxicM=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2574urrV029089
+        s=ti-com-17Q1; t=1654577815;
+        bh=/smt5g8VpP/JbPFqhGzIfK065+3XwXj9sdLK0ZSAQL0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=I4KAYou4osCHRbIV2TFzDlWsQaXGvhfGOtBBs2tJafukqa+RuZJXsivD0gotc1Htp
+         4RjnuKJDzXAoyk/AMPg6VAKW1MNpLUcqSGMht+J4FP1arHXwCFf1boTKm7uFNjLUbZ
+         WIJXchr6xpPsf7nsbXiejAgzMUNLx4rfJW9+3c0E=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2574utpR029103
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Jun 2022 23:56:53 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 6 Jun 2022 23:56:55 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
- Jun 2022 23:56:52 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 23:56:55 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 6 Jun 2022 23:56:52 -0500
+ Frontend Transport; Mon, 6 Jun 2022 23:56:55 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2574upsF111528;
-        Mon, 6 Jun 2022 23:56:52 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2574ur25111555;
+        Mon, 6 Jun 2022 23:56:55 -0500
 From:   Puranjay Mohan <p-mohan@ti.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
@@ -49,10 +49,12 @@ CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
         <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
         <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
         <kishon@ti.com>, <robh@kernel.org>
-Subject: [PATCH v5 0/6] Introduce PRU remoteproc consumer API
-Date:   Tue, 7 Jun 2022 10:26:44 +0530
-Message-ID: <20220607045650.4999-1-p-mohan@ti.com>
+Subject: [PATCH v5 1/6] dt-bindings: remoteproc: Add PRU consumer bindings
+Date:   Tue, 7 Jun 2022 10:26:45 +0530
+Message-ID: <20220607045650.4999-2-p-mohan@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220607045650.4999-1-p-mohan@ti.com>
+References: <20220607045650.4999-1-p-mohan@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -66,64 +68,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the v5 of the patch series [1]. The 6th patch in the series was
-added in v4 and it had some checkpatch.pl errors which are removed here.
+From: Suman Anna <s-anna@ti.com>
 
-I have posted two more patch series that depend on this series, one to
-the soc tree and another to the networking tree. I had sent all the 3
-series, including this one as RFC [2] to get comments and to explain the
-dependencies.
+Add a YAML binding document for PRU consumers. The binding includes
+all the common properties that can be used by different PRU consumer
+or application nodes and supported by the PRU remoteproc driver.
+These are used to configure the PRU hardware for specific user
+applications.
 
-The Programmable Real-Time Unit and Industrial Communication Subsystem
-(PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
-RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
+The application nodes themselves should define their own bindings.
 
-There are 3 foundation components for PRUSS subsystem: the PRUSS platform
-driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
-already merged and can be found under:
-1) drivers/soc/ti/pruss.c
-   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-2) drivers/irqchip/irq-pruss-intc.c
-   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
-3) drivers/remoteproc/pru_rproc.c
-   Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
-
-The programmable nature of the PRUs provide flexibility to implement custom
-peripheral interfaces, fast real-time responses, or specialized data handling.
-Example of a PRU consumer drivers will be:
-  - Software UART over PRUSS
-  - PRU-ICSS Ethernet EMAC
-
-In order to make usage of common PRU resources and allow the consumer drivers to
-configure the PRU hardware for specific usage the PRU API is introduced.
-
-[1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220603121520.13730-1-p-mohan@ti.com/
-[2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
-
-Thanks and Regards,
-Puranjay Mohan
-
-Roger Quadros (1):
-  remoteproc: pru: Add pru_rproc_set_ctable() function
-
-Suman Anna (2):
-  dt-bindings: remoteproc: Add PRU consumer bindings
-  remoteproc: pru: Make sysfs entries read-only for PRU client driven
-    boots
-
-Tero Kristo (3):
-  remoteproc: pru: Add APIs to get and put the PRU cores
-  remoteproc: pru: Configure firmware based on client setup
-  remoteproc: pru: add support for configuring GPMUX based on client
-    setup
-
- .../bindings/remoteproc/ti,pru-consumer.yaml  |  69 +++++
- drivers/remoteproc/pru_rproc.c                | 254 +++++++++++++++++-
- include/linux/pruss.h                         |  78 ++++++
- 3 files changed, 396 insertions(+), 5 deletions(-)
+Co-developed-by: Tero Kristo <t-kristo@ti.com>
+Signed-off-by: Tero Kristo <t-kristo@ti.com>
+Signed-off-by: Suman Anna <s-anna@ti.com>
+Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+V3->V4:
+* Addressed Rob's comments regarding max and min Items.
+* removed the dependencies tag as it was redundant.
+---
+ .../bindings/remoteproc/ti,pru-consumer.yaml  | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
- create mode 100644 include/linux/pruss.h
 
+diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+new file mode 100644
+index 000000000000..df384b44259b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Common TI PRU Consumer Binding
++
++maintainers:
++  - Suman Anna <s-anna@ti.com>
++
++description: |
++  A PRU application/consumer/user node typically uses one or more PRU device
++  nodes to implement a PRU application/functionality. Each application/client
++  node would need a reference to at least a PRU node, and optionally define
++  some properties needed for hardware/firmware configuration. The below
++  properties are a list of common properties supported by the PRU remoteproc
++  infrastructure.
++
++  The application nodes shall define their own bindings like regular platform
++  devices, so below are in addition to each node's bindings.
++
++properties:
++  ti,prus:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: phandles to the PRU, RTU or Tx_PRU nodes used
++    minItems: 1
++    maxItems: 6
++    items:
++      maxItems: 1
++
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string-array
++    minItems: 1
++    maxItems: 6
++    description: |
++      firmwares for the PRU cores, the default firmware for the core from
++      the PRU node will be used if not provided. The firmware names should
++      correspond to the PRU cores listed in the 'ti,prus' property
++
++  ti,pruss-gp-mux-sel:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 1
++    maxItems: 6
++    items:
++      enum: [0, 1, 2, 3, 4]
++    description: |
++      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
++      This selects the internal muxing scheme for the PRU instance. Values
++      should correspond to the PRU cores listed in the 'ti,prus' property. The
++      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
++      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
++      same slice in the associative array. If the array size is smaller than
++      the size of 'ti,prus' property, the default out-of-reset value (0) for the
++      PRU core is used.
++
++required:
++  - ti,prus
++
++additionalProperties: true
++
++examples:
++  - |
++    /* PRU application node example */
++    pru-app {
++        ti,prus = <&pru0>, <&pru1>;
++        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
++        ti,pruss-gp-mux-sel = <2>, <1>;
++    };
 -- 
 2.17.1
 

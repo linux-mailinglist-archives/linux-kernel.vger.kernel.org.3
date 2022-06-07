@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425AB54104C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AB15406DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355162AbiFGTWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S1347489AbiFGRj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352462AbiFGSbB (ORCPT
+        with ESMTP id S1347367AbiFGRal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:31:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C175717B86F;
-        Tue,  7 Jun 2022 10:56:09 -0700 (PDT)
+        Tue, 7 Jun 2022 13:30:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1AF110998;
+        Tue,  7 Jun 2022 10:26:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 510DB617A6;
-        Tue,  7 Jun 2022 17:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5679AC385A5;
-        Tue,  7 Jun 2022 17:56:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAC396127C;
+        Tue,  7 Jun 2022 17:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CD6C34115;
+        Tue,  7 Jun 2022 17:26:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624568;
-        bh=iasyDf3C8+XgFrEDFoVVMOvzOcKHCYOqMTpYsSEiVDM=;
+        s=korg; t=1654622788;
+        bh=dR/THZNtWL+NiVqBxd1fBR0kBiqITc3LcBx/INTW/dI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gTyJ93EkvB6gNlsKth4sq7Ka1C27wV/yVU1NPsgeV+wXU9YTnYXdX0dARwPsMmA2I
-         aGZfLHkMXV1Ot7v6zHExss284iLL08uMwL8hNLD8aCUAIBaPuZk/OIbCsmb7UINHWW
-         mHRopDzyq33T2PiaLCjKaMeG0yrNWPuBh5xhOq7s=
+        b=rjMY/2dVLIqPI7seJS3hcW7TUaKnzZQAP25WLAJcVMP0AKXdzOZdmK3QB1+dhFLgj
+         c4ti72yNfCe/Hgu1wFoxHQjs7GQr9yyYp+ux95UylLH/UQBz/E1J1taw1MlTeUjidV
+         McOZU7o/iMyMqnGcZC/4BqMpqjlOvBKKxOf0OIfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 374/667] hinic: Avoid some over memory allocation
-Date:   Tue,  7 Jun 2022 19:00:39 +0200
-Message-Id: <20220607164945.966755906@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 183/452] virtio_blk: fix the discard_granularity and discard_alignment queue limits
+Date:   Tue,  7 Jun 2022 19:00:40 +0200
+Message-Id: <20220607164914.013469070@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 15d221d0c345b76947911a3ac91897ffe2f1cc4e ]
+[ Upstream commit 62952cc5bccd89b76d710de1d0b43244af0f2903 ]
 
-'prod_idx' (atomic_t) is larger than 'shadow_idx' (u16), so some memory is
-over-allocated.
+The discard_alignment queue limit is named a bit misleading means the
+offset into the block device at which the discard granularity starts.
 
-Fixes: b15a9f37be2b ("net-next/hinic: Add wq")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+On the other hand the discard_sector_alignment from the virtio 1.1 looks
+similar to what Linux uses as discard granularity (even if not very well
+described):
+
+  "discard_sector_alignment can be used by OS when splitting a request
+   based on alignment. "
+
+And at least qemu does set it to the discard granularity.
+
+So stop setting the discard_alignment and use the virtio
+discard_sector_alignment to set the discard granularity.
+
+Fixes: 1f23816b8eb8 ("virtio_blk: add discard and write zeroes support")
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+Link: https://lore.kernel.org/r/20220418045314.360785-5-hch@lst.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/block/virtio_blk.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-index f7dc7d825f63..4daf6bf291ec 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wq.c
-@@ -386,7 +386,7 @@ static int alloc_wqes_shadow(struct hinic_wq *wq)
- 		return -ENOMEM;
+diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+index 02e2056780ad..9b54eec9b17e 100644
+--- a/drivers/block/virtio_blk.c
++++ b/drivers/block/virtio_blk.c
+@@ -865,11 +865,12 @@ static int virtblk_probe(struct virtio_device *vdev)
+ 		blk_queue_io_opt(q, blk_size * opt_io_size);
  
- 	wq->shadow_idx = devm_kcalloc(&pdev->dev, wq->num_q_pages,
--				      sizeof(wq->prod_idx), GFP_KERNEL);
-+				      sizeof(*wq->shadow_idx), GFP_KERNEL);
- 	if (!wq->shadow_idx)
- 		goto err_shadow_idx;
+ 	if (virtio_has_feature(vdev, VIRTIO_BLK_F_DISCARD)) {
+-		q->limits.discard_granularity = blk_size;
+-
+ 		virtio_cread(vdev, struct virtio_blk_config,
+ 			     discard_sector_alignment, &v);
+-		q->limits.discard_alignment = v ? v << SECTOR_SHIFT : 0;
++		if (v)
++			q->limits.discard_granularity = v << SECTOR_SHIFT;
++		else
++			q->limits.discard_granularity = blk_size;
  
+ 		virtio_cread(vdev, struct virtio_blk_config,
+ 			     max_discard_sectors, &v);
 -- 
 2.35.1
 

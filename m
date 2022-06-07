@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563E4541FA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31368541FC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385853AbiFGWrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S1385960AbiFGWrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380124AbiFGViN (ORCPT
+        with ESMTP id S1380521AbiFGViO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:38:13 -0400
+        Tue, 7 Jun 2022 17:38:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E6223144F;
-        Tue,  7 Jun 2022 12:05:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2DE23146E;
+        Tue,  7 Jun 2022 12:05:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26118B8220B;
-        Tue,  7 Jun 2022 19:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F138C385A2;
-        Tue,  7 Jun 2022 19:05:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9BD0B822C0;
+        Tue,  7 Jun 2022 19:05:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454E1C385A2;
+        Tue,  7 Jun 2022 19:05:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628711;
-        bh=enkXLlOMaVEcu6u+aCpOHVMFbZ5zMyBAllMcpO7dxzg=;
+        s=korg; t=1654628714;
+        bh=Ia8YhthTXwo6lCDBIdkcLlJtmZlqWo/5RO+MA5OekTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d0r0vgYiYlZhsvc9jJ6R+Iyn+X1YR9fRk49A4u4/ZxKbRge/MK2ikCyHoXnnH4tZq
-         y7lcs15PG/yITIm1tBjEcQMKS1Q/eypvcm9wWvx5ST2cWFpFG2cgaJYTfVwsttOB30
-         EApQXeArKW47d7A5sj0gcyeNlRLdpkkn5ucqzJ84=
+        b=VHbetf2SgL18cj1HMeyEr2V+WMW80yVoRLdODGYPb00yLwLYz8rrAh2w0ogBc5Hk5
+         rYCG9+EehQVZMG6JALNwZ1rKbJw3D1m9tew/xCdGUjQO18BxchfMkIoIOnU49i9uG/
+         LxLi2rT591qZV9Utuk4j0U0jaNaWp+WHXqJCH5h8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 429/879] mt76: mt7915: fix DBDC default band selection on MT7915D
-Date:   Tue,  7 Jun 2022 18:59:07 +0200
-Message-Id: <20220607165015.320549965@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 430/879] mt76: mt7921: honor pm user configuration in mt7921_sniffer_interface_iter
+Date:   Tue,  7 Jun 2022 18:59:08 +0200
+Message-Id: <20220607165015.350066658@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,32 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 96c777708bcac53f73a1c079e416495647f69553 ]
+[ Upstream commit 47eea8ad62a1203ce20b365f7feba23fef62a487 ]
 
-This code was accidentally dropped while adding 6 GHz support
+Honor runtime-pm user configuration in mt7921_sniffer_interface_iter
+routine if we do not have a monitor interface.
 
-Fixes: b4d093e321bd ("mt76: mt7915: add 6 GHz support")
+Fixes: 1f12fa34e5dc5 ("mt76: mt7921: don't enable beacon filter when IEEE80211_CONF_CHANGE_MONITOR is set")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/eeprom.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/wireless/mediatek/mt76/mt7921/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/eeprom.c b/drivers/net/wireless/mediatek/mt76/mt7915/eeprom.c
-index 5b133bcdab17..4b1a9811646f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/eeprom.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/eeprom.c
-@@ -152,6 +152,8 @@ static void mt7915_eeprom_parse_band_config(struct mt7915_phy *phy)
- 			phy->mt76->cap.has_2ghz = true;
- 			return;
- 		}
-+	} else if (val == MT_EE_BAND_SEL_DEFAULT && dev->dbdc_support) {
-+		val = phy->band_idx ? MT_EE_BAND_SEL_5GHZ : MT_EE_BAND_SEL_2GHZ;
- 	}
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/main.c b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+index fdaf2451bc1d..11472aaf1440 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
+@@ -489,8 +489,8 @@ mt7921_sniffer_interface_iter(void *priv, u8 *mac, struct ieee80211_vif *vif)
+ 	bool monitor = !!(hw->conf.flags & IEEE80211_CONF_MONITOR);
  
- 	switch (val) {
+ 	mt7921_mcu_set_sniffer(dev, vif, monitor);
+-	pm->enable = !monitor;
+-	pm->ds_enable = !monitor;
++	pm->enable = pm->enable_user && !monitor;
++	pm->ds_enable = pm->ds_enable_user && !monitor;
+ 
+ 	mt76_connac_mcu_set_deep_sleep(&dev->mt76, pm->ds_enable);
+ 
 -- 
 2.35.1
 

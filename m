@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007B154253D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A4B542596
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443509AbiFHA6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S1388603AbiFHApr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384352AbiFGWZZ (ORCPT
+        with ESMTP id S1385235AbiFGW0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:25:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1227040A;
-        Tue,  7 Jun 2022 12:23:03 -0700 (PDT)
+        Tue, 7 Jun 2022 18:26:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C40270420;
+        Tue,  7 Jun 2022 12:23:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B176DB823D5;
-        Tue,  7 Jun 2022 19:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FE7C385A2;
-        Tue,  7 Jun 2022 19:22:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D503B823CE;
+        Tue,  7 Jun 2022 19:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7ACC385A5;
+        Tue,  7 Jun 2022 19:23:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629780;
-        bh=Cg3ArwRd1oLn1Qcn5mD0py4uevjjvn1SuGSAybqOjzM=;
+        s=korg; t=1654629783;
+        bh=5W7m88KiTZvHvoWjyOt0GpGQuUxzdpHJkRGENQfNYDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QXIqRFvhjg25lLT3KYnqxeqC9pssAxrCWrV1DzK4AooZsjgw3kM5uNMtZombpdL4Y
-         4JN2hQ4m5Bv+f2YzBC2vnNfUmGU1C+tWUfUuJUe/OXm5Xk/Br4HxBcTyahhQSbfI7x
-         YoYNvttfy1aIbbCExRDoB9XcaS4mHNZhYSmxDXp0=
+        b=zNQtHpAr8KmEAjbZbq5JxN2s6Oe/6N01j7Zie8vBAIcnfonqGlazhhXvgpXtjuGFW
+         OnJAzdm6V2kq6W6I4L4aO3si75HrstoMUpW5uf0C7TF1XqLY7VlbdMzX9tCFGyLU1E
+         IYLouH/v34mL9qJ8cqql7DiByl9pEip1HbF2RWoU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Catrinel Catrinescu <cc@80211.de>,
-        Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 5.18 815/879] mac80211: upgrade passive scan to active scan on DFS channels after beacon rx
-Date:   Tue,  7 Jun 2022 19:05:33 +0200
-Message-Id: <20220607165026.513040981@linuxfoundation.org>
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.18 816/879] um: virtio_uml: Fix broken device handling in time-travel
+Date:   Tue,  7 Jun 2022 19:05:34 +0200
+Message-Id: <20220607165026.541253242@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,103 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit b041b7b9de6e1d4362de855ab90f9d03ef323edd upstream.
+commit af9fb41ed315ce95f659f0b10b4d59a71975381d upstream.
 
-In client mode, we can't connect to hidden SSID APs or SSIDs not advertised
-in beacons on DFS channels, since we're forced to passive scan. Fix this by
-sending out a probe request immediately after the first beacon, if active
-scan was requested by the user.
+If a device implementation crashes, virtio_uml will mark it
+as dead by calling virtio_break_device() and scheduling the
+work that will remove it.
 
+This still seems like the right thing to do, but it's done
+directly while reading the message, and if time-travel is
+used, this is in the time-travel handler, outside of the
+normal Linux machinery. Therefore, we cannot acquire locks
+or do normal "linux-y" things because e.g. lockdep will be
+confused about the context.
+
+Move handling this situation out of the read function and
+into the actual IRQ handler and response handling instead,
+so that in the case of time-travel we don't call it in the
+wrong context.
+
+Chances are the system will still crash immediately, since
+the device implementation crashing may also cause the time-
+travel controller to go down, but at least all of that now
+happens without strange warnings from lockdep.
+
+Fixes: c8177aba37ca ("um: time-travel: rework interrupt handling in ext mode")
 Cc: stable@vger.kernel.org
-Reported-by: Catrinel Catrinescu <cc@80211.de>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Link: https://lore.kernel.org/r/20220420104907.36275-1-nbd@nbd.name
 Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/ieee80211_i.h |    5 +++++
- net/mac80211/scan.c        |   20 ++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ arch/um/drivers/virtio_uml.c |   33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
---- a/net/mac80211/ieee80211_i.h
-+++ b/net/mac80211/ieee80211_i.h
-@@ -1148,6 +1148,9 @@ struct tpt_led_trigger {
-  *	a scan complete for an aborted scan.
-  * @SCAN_HW_CANCELLED: Set for our scan work function when the scan is being
-  *	cancelled.
-+ * @SCAN_BEACON_WAIT: Set whenever we're passive scanning because of radar/no-IR
-+ *	and could send a probe request after receiving a beacon.
-+ * @SCAN_BEACON_DONE: Beacon received, we can now send a probe request
-  */
- enum {
- 	SCAN_SW_SCANNING,
-@@ -1156,6 +1159,8 @@ enum {
- 	SCAN_COMPLETED,
- 	SCAN_ABORTED,
- 	SCAN_HW_CANCELLED,
-+	SCAN_BEACON_WAIT,
-+	SCAN_BEACON_DONE,
+--- a/arch/um/drivers/virtio_uml.c
++++ b/arch/um/drivers/virtio_uml.c
+@@ -63,6 +63,7 @@ struct virtio_uml_device {
+ 
+ 	u8 config_changed_irq:1;
+ 	uint64_t vq_irq_vq_map;
++	int recv_rc;
  };
  
- /**
---- a/net/mac80211/scan.c
-+++ b/net/mac80211/scan.c
-@@ -281,6 +281,16 @@ void ieee80211_scan_rx(struct ieee80211_
- 	if (likely(!sdata1 && !sdata2))
- 		return;
+ struct virtio_uml_vq_info {
+@@ -148,14 +149,6 @@ static int vhost_user_recv(struct virtio
  
-+	if (test_and_clear_bit(SCAN_BEACON_WAIT, &local->scanning)) {
-+		/*
-+		 * we were passive scanning because of radar/no-IR, but
-+		 * the beacon/proberesp rx gives us an opportunity to upgrade
-+		 * to active scan
-+		 */
-+		 set_bit(SCAN_BEACON_DONE, &local->scanning);
-+		 ieee80211_queue_delayed_work(&local->hw, &local->scan_work, 0);
+ 	rc = vhost_user_recv_header(fd, msg);
+ 
+-	if (rc == -ECONNRESET && vu_dev->registered) {
+-		struct virtio_uml_platform_data *pdata;
+-
+-		pdata = vu_dev->pdata;
+-
+-		virtio_break_device(&vu_dev->vdev);
+-		schedule_work(&pdata->conn_broken_wk);
+-	}
+ 	if (rc)
+ 		return rc;
+ 	size = msg->header.size;
+@@ -164,6 +157,21 @@ static int vhost_user_recv(struct virtio
+ 	return full_read(fd, &msg->payload, size, false);
+ }
+ 
++static void vhost_user_check_reset(struct virtio_uml_device *vu_dev,
++				   int rc)
++{
++	struct virtio_uml_platform_data *pdata = vu_dev->pdata;
++
++	if (rc != -ECONNRESET)
++		return;
++
++	if (!vu_dev->registered)
++		return;
++
++	virtio_break_device(&vu_dev->vdev);
++	schedule_work(&pdata->conn_broken_wk);
++}
++
+ static int vhost_user_recv_resp(struct virtio_uml_device *vu_dev,
+ 				struct vhost_user_msg *msg,
+ 				size_t max_payload_size)
+@@ -171,8 +179,10 @@ static int vhost_user_recv_resp(struct v
+ 	int rc = vhost_user_recv(vu_dev, vu_dev->sock, msg,
+ 				 max_payload_size, true);
+ 
+-	if (rc)
++	if (rc) {
++		vhost_user_check_reset(vu_dev, rc);
+ 		return rc;
 +	}
-+
- 	if (ieee80211_is_probe_resp(mgmt->frame_control)) {
- 		struct cfg80211_scan_request *scan_req;
- 		struct cfg80211_sched_scan_request *sched_scan_req;
-@@ -787,6 +797,8 @@ static int __ieee80211_start_scan(struct
- 						IEEE80211_CHAN_RADAR)) ||
- 		    !req->n_ssids) {
- 			next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
-+			if (req->n_ssids)
-+				set_bit(SCAN_BEACON_WAIT, &local->scanning);
- 		} else {
- 			ieee80211_scan_state_send_probe(local, &next_delay);
- 			next_delay = IEEE80211_CHANNEL_TIME;
-@@ -998,6 +1010,8 @@ set_channel:
- 	    !scan_req->n_ssids) {
- 		*next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
- 		local->next_scan_state = SCAN_DECISION;
-+		if (scan_req->n_ssids)
-+			set_bit(SCAN_BEACON_WAIT, &local->scanning);
- 		return;
- 	}
  
-@@ -1090,6 +1104,8 @@ void ieee80211_scan_work(struct work_str
- 			goto out;
- 	}
+ 	if (msg->header.flags != (VHOST_USER_FLAG_REPLY | VHOST_USER_VERSION))
+ 		return -EPROTO;
+@@ -369,6 +379,7 @@ static irqreturn_t vu_req_read_message(s
+ 				 sizeof(msg.msg.payload) +
+ 				 sizeof(msg.extra_payload));
  
-+	clear_bit(SCAN_BEACON_WAIT, &local->scanning);
-+
- 	/*
- 	 * as long as no delay is required advance immediately
- 	 * without scheduling a new work
-@@ -1100,6 +1116,10 @@ void ieee80211_scan_work(struct work_str
- 			goto out_complete;
- 		}
++	vu_dev->recv_rc = rc;
+ 	if (rc)
+ 		return IRQ_NONE;
  
-+		if (test_and_clear_bit(SCAN_BEACON_DONE, &local->scanning) &&
-+		    local->next_scan_state == SCAN_DECISION)
-+			local->next_scan_state = SCAN_SEND_PROBE;
-+
- 		switch (local->next_scan_state) {
- 		case SCAN_DECISION:
- 			/* if no more bands/channels left, complete scan */
+@@ -412,7 +423,9 @@ static irqreturn_t vu_req_interrupt(int
+ 	if (!um_irq_timetravel_handler_used())
+ 		ret = vu_req_read_message(vu_dev, NULL);
+ 
+-	if (vu_dev->vq_irq_vq_map) {
++	if (vu_dev->recv_rc) {
++		vhost_user_check_reset(vu_dev, vu_dev->recv_rc);
++	} else if (vu_dev->vq_irq_vq_map) {
+ 		struct virtqueue *vq;
+ 
+ 		virtio_device_for_each_vq((&vu_dev->vdev), vq) {
 
 

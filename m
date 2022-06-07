@@ -2,81 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C8E5403F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D83540401
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345126AbiFGQk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S1345157AbiFGQnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245131AbiFGQky (ORCPT
+        with ESMTP id S1345153AbiFGQnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:40:54 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA40C9644
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:40:53 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id u2so16004350pfc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 09:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W8rwN3Jx6kG6W0OrIJ1jYETqFXWQxvnr8RKgWWTrkqM=;
-        b=XMHL4/Jkz5kuNpGJNXQ/Bo9VoJybfxuND8WBmMI71IqhCvC7buvP65oeqaka6UadH9
-         5UqxLIR28QxB/gb5tpJ2llJeXyrNvOeT44QmE31thANjqX/QoVR5cnjd3xsId4TERasE
-         iPXSvqb8WxlFGHgLqVvERupW83X2FEpTTGyuH2ZxPA7MO1uTRmmn1Bqj36ufVYuoRPn5
-         ZLvNIwuEBcm9X+rOovVNraALF/yN03+I7A/VkjMnHvD1Aj2t4Kg//FZGzQZKB2Nss2Oc
-         bV74X/eDXR2ZbuvmkpfHaZC90iU2l6teCb1Js+KcbJQOAjeyHu0xq6HUZXFXmQoktJcU
-         lBVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W8rwN3Jx6kG6W0OrIJ1jYETqFXWQxvnr8RKgWWTrkqM=;
-        b=Gz9WxLLNekrz5fYATAdgamZyDmsqygpkmECAPpwgl6+9qICPNzTyivT8HrRszQ/Zf0
-         XRBjIQLAhU/gien0h3+t1uwLJN65BmQ8aybp7ilNoDR292ZZjSr6imUB7Dv8LqrkTauD
-         Xk4ToGFQyHaElK3xIlRxJs4i7p2ZAL01yglWb0PgLQl7xZ7q6xmAAfC97kXQAommJFp6
-         ftXs9jjgQTrIvROMk00/z9hw/3lX8o1EmMs25vSjTWH7+6xwXNhB2RL6GzZr0S4aoHvc
-         XWJtGopCNYxJNAoioBeqBqgBh9epldIoTok3LuVRXMtvvclkUu8ZTTrgttdXJr1MNB0Y
-         iLGQ==
-X-Gm-Message-State: AOAM533YVqNmf0fSHgCsBz/u/WnttBRCvc/LUa43G/ovscqVZ99Dx5zN
-        INgqbZSCQNTLTk1xoeOy26A=
-X-Google-Smtp-Source: ABdhPJyccfA+r17Q/AS9I4VBKNAtHMpjPjAethjyWPjji/o+/dd2tRPjIEWVlBmmMSWdhKxzby/1cQ==
-X-Received: by 2002:a63:84c3:0:b0:3fc:87ff:cdfa with SMTP id k186-20020a6384c3000000b003fc87ffcdfamr25671860pgd.460.1654620052837;
-        Tue, 07 Jun 2022 09:40:52 -0700 (PDT)
-Received: from fedora ([2601:1c1:4202:28a0::ec2b])
-        by smtp.gmail.com with ESMTPSA id y9-20020a1709027c8900b0016782c55790sm3877042pll.232.2022.06.07.09.40.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 09:40:52 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 09:40:50 -0700
-From:   Jared Kangas <kangas.jd@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     vaibhav.sr@gmail.com, mgreer@animalcreek.com, elder@kernel.org,
-        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] staging: greybus: audio: fix loop cursor use after
- iteration
-Message-ID: <Yp9/kqBUzpArfPdn@fedora>
-References: <20220605231806.720085-1-kangas.jd@gmail.com>
- <20220606130626.GX2146@kadam>
+        Tue, 7 Jun 2022 12:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62714C0387
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:43:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D526184D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 16:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCC4C34114;
+        Tue,  7 Jun 2022 16:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654620223;
+        bh=AWJP2oAGEitQC69PvwECJKzR+6cnXlUREglZ4Qx8Ifg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=d1RwynjVuONbEEHTvojFe2kyP9je5FI+nnjFyo5zCiGwz3za79i2BBrEBBUz08FCP
+         +e6A9SP5Mho27xeFNs2/ae1KFA6+nCuOzAH1VtMubzhyx+leJmjfsUz3VKm6aoGIRQ
+         f/APfmHD64CkbTOcGfCWBkqS+pyRBUSlXJh9IwCuelUl4BIXKvy6BSnTzTE8gzAdra
+         H3kfimzO2BPqUvkhxp4K6q59s3yDPoY+45be/GFu+5Sfdw+O+2ldLbc/aUKSha1c4f
+         Nd4Eq3Sjvkbiq3OIxXBC3havGt6+vTPO1PaoMIOtlnXYseG2Tr880IlOGcn6gJ5z75
+         GQzCBFHt9tiPw==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-kernel@vger.kenrel.org
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Anup Patel <anup@brainfault.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Christian Brauner <brauner@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mailmap: add alias for jarkko@profian.com
+Date:   Tue,  7 Jun 2022 19:41:39 +0300
+Message-Id: <20220607164140.1230876-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606130626.GX2146@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for catching that! Is there anything I need to do to add the
-'Fixes:' tag to the patch? From my understanding, adding tags is done by
-a maintainer later on, but I'm new to the patch submission process so I
-want to make sure I'm not missing anything.
+Add alias for patches that I contribute on behalf of Profian
+(my current employer).
 
-Jared
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/.mailmap b/.mailmap
+index 825fae8e6b7b..b2967aab5359 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -165,6 +165,7 @@ Jan Glauber <jan.glauber@gmail.com> <jang@de.ibm.com>
+ Jan Glauber <jan.glauber@gmail.com> <jang@linux.vnet.ibm.com>
+ Jan Glauber <jan.glauber@gmail.com> <jglauber@cavium.com>
+ Jarkko Sakkinen <jarkko@kernel.org> <jarkko.sakkinen@linux.intel.com>
++Jarkko Sakkinen <jarkko@kernel.org> <jarkko@profian.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@mellanox.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgg@nvidia.com>
+ Jason Gunthorpe <jgg@ziepe.ca> <jgunthorpe@obsidianresearch.com>
+-- 
+2.36.1
+

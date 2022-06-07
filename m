@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7166542404
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DEA5426C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351145AbiFHBYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S232854AbiFHB3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381245AbiFGVmo (ORCPT
+        with ESMTP id S1381594AbiFGVoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:42:44 -0400
+        Tue, 7 Jun 2022 17:44:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B5F50043;
-        Tue,  7 Jun 2022 12:07:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F4823468D;
+        Tue,  7 Jun 2022 12:07:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7AEAB81F6D;
-        Tue,  7 Jun 2022 19:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB4EC34115;
-        Tue,  7 Jun 2022 19:07:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B2B0B823B7;
+        Tue,  7 Jun 2022 19:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F6EC385A2;
+        Tue,  7 Jun 2022 19:07:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628827;
-        bh=HIQk/uw7vS5y7k9V6eMIFVegpbu+WXgZ8oYpaSKok5U=;
+        s=korg; t=1654628833;
+        bh=dZo32vMLwnivpeCJQPWIqQe7S1bIJwFO/ruK0sfCIyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X1pPBkLijY12NnTsDfQeEULz1hhL//S5Dd3ruO6M0OdgsN/OkmuVST3pig7ymT+Fl
-         0lHU0fkJr3h95lCpi7TE5BKsf3WpkUtw1nZR1gDFAN/5crNRSa3X7+LXlS7gdfhbBB
-         Q+/02/uQfg8/kE0d0v58UWnHPdSTBzc4j31nklBw=
+        b=BU4gRstkkpuPB/x7JhdB5wSpPX9wr7UswZNa5e62Ddr2wYukT44Mld1Dw7Hrfqu+w
+         KiAkZtIyQWQokZcVsFhhEz42qkh6viN2BRWNP1BasI+z7q2gAmzEiT2NmDvKp5R65u
+         5m5+fWP9ZGmQ6RCFW6Zvmyf/D/uoF0x39HeZb80o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org, Mike Pagano <mpagano@gentoo.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 471/879] kselftest/arm64: bti: force static linking
-Date:   Tue,  7 Jun 2022 18:59:49 +0200
-Message-Id: <20220607165016.550577017@linuxfoundation.org>
+Subject: [PATCH 5.18 473/879] media: i2c: ov2640: Depend on V4L2_ASYNC
+Date:   Tue,  7 Jun 2022 18:59:51 +0200
+Message-Id: <20220607165016.609189998@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,64 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Mike Pagano <mpagano@gentoo.org>
 
-[ Upstream commit d7a49291d786b4400996afe3afcc3ef5eeb6f0ef ]
+[ Upstream commit 8429b358975f11574f747ca8ef20d524d8247682 ]
 
-The "bti" selftests are built with -nostdlib, which apparently
-automatically creates a statically linked binary, which is what we want
-and need for BTI (to avoid interactions with the dynamic linker).
+Add V4L2_ASYNC as a dependency to match other drivers and prevent failures
+when compile testing.
 
-However this is not true when building a PIE binary, which some
-toolchains (Ubuntu) configure as the default.
-When compiling btitest with such a toolchain, it will create a
-dynamically linked binary, which will probably fail some tests, as the
-dynamic linker might not support BTI:
-===================
-TAP version 13
-1..18
-not ok 1 nohint_func/call_using_br_x0
-not ok 2 nohint_func/call_using_br_x16
-not ok 3 nohint_func/call_using_blr
-....
-===================
-
-To make sure we create static binaries, add an explicit -static on the
-linker command line. This forces static linking even if the toolchain
-defaults to PIE builds, and fixes btitest runs on BTI enabled machines.
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
-Fixes: 314bcbf09f14 ("kselftest: arm64: Add BTI tests")
-Link: https://lore.kernel.org/r/20220511172129.2078337-1-andre.przywara@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: ff3cc65cadb5 ("media: v4l: async, fwnode: Improve module organisation")
+Signed-off-by: Mike Pagano <mpagano@gentoo.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/bti/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/arm64/bti/Makefile b/tools/testing/selftests/arm64/bti/Makefile
-index 73e013c082a6..dafa1c2aa5c4 100644
---- a/tools/testing/selftests/arm64/bti/Makefile
-+++ b/tools/testing/selftests/arm64/bti/Makefile
-@@ -39,7 +39,7 @@ BTI_OBJS =                                      \
- 	teststubs-bti.o                         \
- 	trampoline-bti.o
- gen/btitest: $(BTI_OBJS)
--	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -o $@ $^
-+	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -static -o $@ $^
- 
- NOBTI_OBJS =                                    \
- 	test-nobti.o                         \
-@@ -50,7 +50,7 @@ NOBTI_OBJS =                                    \
- 	teststubs-nobti.o                       \
- 	trampoline-nobti.o
- gen/nobtitest: $(NOBTI_OBJS)
--	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -o $@ $^
-+	$(CC) $(CFLAGS_BTI) $(CFLAGS_COMMON) -nostdlib -static -o $@ $^
- 
- # Including KSFT lib.mk here will also mangle the TEST_GEN_PROGS list
- # to account for any OUTPUT target-dirs optionally provided by
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index fae2baabb773..2b20aa6c37b1 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -372,6 +372,7 @@ config VIDEO_OV13B10
+ config VIDEO_OV2640
+ 	tristate "OmniVision OV2640 sensor support"
+ 	depends on VIDEO_DEV && I2C
++	select V4L2_ASYNC
+ 	help
+ 	  This is a Video4Linux2 sensor driver for the OmniVision
+ 	  OV2640 camera.
 -- 
 2.35.1
 

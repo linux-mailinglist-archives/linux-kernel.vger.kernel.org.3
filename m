@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54203540B86
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197A9541E4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350104AbiFGS3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S1381959AbiFGW2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351854AbiFGSCY (ORCPT
+        with ESMTP id S1378479AbiFGVTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:02:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5958810EA46;
-        Tue,  7 Jun 2022 10:45:54 -0700 (PDT)
+        Tue, 7 Jun 2022 17:19:02 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818322445B;
+        Tue,  7 Jun 2022 11:59:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BE95B80B66;
-        Tue,  7 Jun 2022 17:45:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F3CC385A5;
-        Tue,  7 Jun 2022 17:45:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6552CCE247C;
+        Tue,  7 Jun 2022 18:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B74AC34115;
+        Tue,  7 Jun 2022 18:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623951;
-        bh=dDQBw/jW4HnJXnRCLxGt4OkKA7zSd9joddnpvBMiXL0=;
+        s=korg; t=1654628349;
+        bh=xTzq9ap8H1ICIVQA5jMVvngsvaOqHvDOplS/ac4gl0k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OInkDvJ+9KJJIgwiIDFgzI2qCyv54geV8CvW8dIWG4RFbuslgkwITYDOZ+3npnOT7
-         9fyCzq5P+edZ53kamRgCNZrJ8CMbSaG66HOqmCpeuDOdZ/IgNxUuy02cYC2L0k7qjl
-         hdTbqlCgyPwKM2wLb+ZubgBCbv6tUG6bfh/2wNkU=
+        b=WIM32K0rdFBwyTgb5Il7mZYdtZemxx93fo0MSthl6NB9n4IkvI4pf5kTSfbtzEgIJ
+         86XUgObFJALV+I2/nDmyNyN6sNfxHEjmopO/bxSLululXf6f7VAwiSysAnQTDYHkq0
+         X3qfCfhTo3t+qN04NcmoXB5+efQk/1yZ3XSWCIcM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Davide Caratti <dcaratti@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 151/667] ARM: dts: s5pv210: align DMA channels with dtschema
+Subject: [PATCH 5.18 298/879] mptcp: reset the packet scheduler on incoming MP_PRIO
 Date:   Tue,  7 Jun 2022 18:56:56 +0200
-Message-Id: <20220607164939.347042688@linuxfoundation.org>
+Message-Id: <20220607165011.497008039@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzk@kernel.org>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit 9e916fb9bc3d16066286f19fc9c51d26a6aec6bd ]
+[ Upstream commit 43f5b111d1ff16161ce60e19aeddb999cb6f0b01 ]
 
-dtschema expects DMA channels in specific order (tx, rx and tx-sec).
-The order actually should not matter because dma-names is used however
-let's make it aligned with dtschema to suppress warnings like:
+When an incoming MP_PRIO option changes the backup
+status of any subflow, we need to reset the packet
+scheduler status, or the next send could keep using
+the previously selected subflow, without taking in account
+the new priorities.
 
-  i2s@eee30000: dma-names: ['rx', 'tx', 'tx-sec'] is not valid under any of the given schemas
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Co-developed-by: Jonathan Bakker <xc-racer2@live.ca>
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-Link: https://lore.kernel.org/r/CY4PR04MB056779A9C50DC95987C5272ACB1C9@CY4PR04MB0567.namprd04.prod.outlook.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reported-by: Davide Caratti <dcaratti@redhat.com>
+Fixes: 40453a5c61f4 ("mptcp: add the incoming MP_PRIO support")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/s5pv210-aries.dtsi |  2 +-
- arch/arm/boot/dts/s5pv210.dtsi       | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ net/mptcp/pm.c       | 19 +++++++++++++++----
+ net/mptcp/protocol.c |  2 ++
+ net/mptcp/protocol.h |  1 +
+ 3 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/s5pv210-aries.dtsi b/arch/arm/boot/dts/s5pv210-aries.dtsi
-index 2f57100a011a..9b7da2bc3a06 100644
---- a/arch/arm/boot/dts/s5pv210-aries.dtsi
-+++ b/arch/arm/boot/dts/s5pv210-aries.dtsi
-@@ -636,7 +636,7 @@
- };
+diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
+index aa51b100e033..4d6a61acc487 100644
+--- a/net/mptcp/pm.c
++++ b/net/mptcp/pm.c
+@@ -261,14 +261,25 @@ void mptcp_pm_rm_addr_received(struct mptcp_sock *msk,
+ 	spin_unlock_bh(&pm->lock);
+ }
  
- &i2s0 {
--	dmas = <&pdma0 9>, <&pdma0 10>, <&pdma0 11>;
-+	dmas = <&pdma0 10>, <&pdma0 9>, <&pdma0 11>;
- 	status = "okay";
- };
+-void mptcp_pm_mp_prio_received(struct sock *sk, u8 bkup)
++void mptcp_pm_mp_prio_received(struct sock *ssk, u8 bkup)
+ {
+-	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(sk);
++	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
++	struct sock *sk = subflow->conn;
++	struct mptcp_sock *msk;
  
-diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
-index 353ba7b09a0c..c5265f3ae31d 100644
---- a/arch/arm/boot/dts/s5pv210.dtsi
-+++ b/arch/arm/boot/dts/s5pv210.dtsi
-@@ -239,8 +239,8 @@
- 			reg = <0xeee30000 0x1000>;
- 			interrupt-parent = <&vic2>;
- 			interrupts = <16>;
--			dma-names = "rx", "tx", "tx-sec";
--			dmas = <&pdma1 9>, <&pdma1 10>, <&pdma1 11>;
-+			dma-names = "tx", "rx", "tx-sec";
-+			dmas = <&pdma1 10>, <&pdma1 9>, <&pdma1 11>;
- 			clock-names = "iis",
- 				      "i2s_opclk0",
- 				      "i2s_opclk1";
-@@ -259,8 +259,8 @@
- 			reg = <0xe2100000 0x1000>;
- 			interrupt-parent = <&vic2>;
- 			interrupts = <17>;
--			dma-names = "rx", "tx";
--			dmas = <&pdma1 12>, <&pdma1 13>;
-+			dma-names = "tx", "rx";
-+			dmas = <&pdma1 13>, <&pdma1 12>;
- 			clock-names = "iis", "i2s_opclk0";
- 			clocks = <&clocks CLK_I2S1>, <&clocks SCLK_AUDIO1>;
- 			pinctrl-names = "default";
-@@ -274,8 +274,8 @@
- 			reg = <0xe2a00000 0x1000>;
- 			interrupt-parent = <&vic2>;
- 			interrupts = <18>;
--			dma-names = "rx", "tx";
--			dmas = <&pdma1 14>, <&pdma1 15>;
-+			dma-names = "tx", "rx";
-+			dmas = <&pdma1 15>, <&pdma1 14>;
- 			clock-names = "iis", "i2s_opclk0";
- 			clocks = <&clocks CLK_I2S2>, <&clocks SCLK_AUDIO2>;
- 			pinctrl-names = "default";
+ 	pr_debug("subflow->backup=%d, bkup=%d\n", subflow->backup, bkup);
+-	subflow->backup = bkup;
++	msk = mptcp_sk(sk);
++	if (subflow->backup != bkup) {
++		subflow->backup = bkup;
++		mptcp_data_lock(sk);
++		if (!sock_owned_by_user(sk))
++			msk->last_snd = NULL;
++		else
++			__set_bit(MPTCP_RESET_SCHEDULER,  &msk->cb_flags);
++		mptcp_data_unlock(sk);
++	}
+ 
+-	mptcp_event(MPTCP_EVENT_SUB_PRIORITY, mptcp_sk(subflow->conn), sk, GFP_ATOMIC);
++	mptcp_event(MPTCP_EVENT_SUB_PRIORITY, msk, ssk, GFP_ATOMIC);
+ }
+ 
+ void mptcp_pm_mp_fail_received(struct sock *sk, u64 fail_seq)
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 2a9335ce5df1..8f54293c1d88 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -3102,6 +3102,8 @@ static void mptcp_release_cb(struct sock *sk)
+ 			__mptcp_set_connected(sk);
+ 		if (__test_and_clear_bit(MPTCP_ERROR_REPORT, &msk->cb_flags))
+ 			__mptcp_error_report(sk);
++		if (__test_and_clear_bit(MPTCP_RESET_SCHEDULER, &msk->cb_flags))
++			msk->last_snd = NULL;
+ 	}
+ 
+ 	__mptcp_update_rmem(sk);
+diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+index 5655a63aa6a8..9ac63fa4866e 100644
+--- a/net/mptcp/protocol.h
++++ b/net/mptcp/protocol.h
+@@ -124,6 +124,7 @@
+ #define MPTCP_RETRANSMIT	4
+ #define MPTCP_FLUSH_JOIN_LIST	5
+ #define MPTCP_CONNECTED		6
++#define MPTCP_RESET_SCHEDULER	7
+ 
+ static inline bool before64(__u64 seq1, __u64 seq2)
+ {
 -- 
 2.35.1
 

@@ -2,219 +2,800 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E0F53F899
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855D353F8A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 10:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238642AbiFGItu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 04:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S236575AbiFGIu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 04:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238718AbiFGIsr (ORCPT
+        with ESMTP id S238872AbiFGIuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 04:48:47 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on20626.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::626])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6252B6253;
-        Tue,  7 Jun 2022 01:48:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M0pCU4Ep9vbUTzmuls+RHIlSYZU4pYhrHxxwrdX1bN68LkjR9GHTloLlGTgzTULwv5MX6XkhxpKISk7xPYwhdJ/ugCcB2XSZChtetQ/mbP+B2zZE0kS5Rj47GztiGmAHhB/g5qw1PRIOUhRNaJp2wB7mHQW6UPcQLhprkTbVS2XaKXzl+FV81bb12h9Wojj8/RjH0NoZhByfUvbbV0AG1E+uPcNQswVW7pvMvFBOY4O9GvBKipLtkhAaG4uVU5p7VFkqaSGLkzbsxGYIJeJGJLdsTE0yCoXdt89FANiIl1FNhYRxjWnQ+bduKp5ntgNqXufB0ldQL5lZrX4uLnvj+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZSPf6nKt3W66t5w16Nz2mMOzyWYqhnIxZpZBFk2DysY=;
- b=Fl5RWumCFKfwPJu+zAy1XfF157k/y9T/9wIfbBKx7hUe+Ur8BvGP9N2Jluw/gkIFNd1ON/PZZZyV7jpRLba16fKb44xdTYgWsozoWDAcD4fGCQD8POKyuTjhblU/G82+Wl00r41WCx4dynL0MqG1YyPDXbu5bbVBSS+egAE2+/r+Xcxs+z83CQtgLIDH5oc0y7mteatZxo+HJxwnOGTLpTzmV6RgXu5lq8Y0uCVKc5gNtnVf83xjO3EgGq4OINtcj4Pb+Q+6U8b2ir8McmnRvm5mq0iKqCtKHxkKcrg+yhqJRI/INLzUz/PkMPFR0V5p5bvl6gLC/bmmfw/7wrjxnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZSPf6nKt3W66t5w16Nz2mMOzyWYqhnIxZpZBFk2DysY=;
- b=N7dhoXCgdxF976LQb3mYM8uvkdnuhmStjsw7RR/xX/z96JXQH/Mr0gXdekjA37oPCpLmL+Pm+KkEpGEp9yjihg9Yufox9v1Efprlxys4PrR9Dx/LbvdgEMygBq+aqXUwOG3p/K32s4opxfRtIny+BiiGsbGV31VRwt/1ZNv6IGU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AS4PR04MB9244.eurprd04.prod.outlook.com (2603:10a6:20b:4e3::9)
- by AM0PR04MB6609.eurprd04.prod.outlook.com (2603:10a6:208:16c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 08:48:40 +0000
-Received: from AS4PR04MB9244.eurprd04.prod.outlook.com
- ([fe80::60ed:7367:9545:512f]) by AS4PR04MB9244.eurprd04.prod.outlook.com
- ([fe80::60ed:7367:9545:512f%8]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 08:48:40 +0000
-Message-ID: <fb477fa0-2272-9bd8-de09-91984dd5a0dd@oss.nxp.com>
-Date:   Tue, 7 Jun 2022 11:48:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] media: imx-jpeg: Disable slot interrupt when frame done
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220607072315.23209-1-ming.qian@nxp.com>
-From:   "mirela.rabulea@oss.nxp.com" <mirela.rabulea@oss.nxp.com>
-In-Reply-To: <20220607072315.23209-1-ming.qian@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR05CA0073.eurprd05.prod.outlook.com
- (2603:10a6:208:136::13) To AS4PR04MB9244.eurprd04.prod.outlook.com
- (2603:10a6:20b:4e3::9)
+        Tue, 7 Jun 2022 04:50:23 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D58B4BB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 01:50:19 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2578YnEj023332;
+        Tue, 7 Jun 2022 16:34:49 +0800 (GMT-8)
+        (envelope-from kuohsiang_chou@aspeedtech.com)
+Received: from localhost.localdomain.com (192.168.2.180) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 7 Jun
+ 2022 16:49:37 +0800
+From:   KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
+To:     <tzimmermann@suse.de>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <airlied@redhat.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <kuohsiang_chou@aspeedtech.com>, <arc_sung@aspeedtech.com>,
+        <tommy_huang@aspeedtech.com>, <hungju_huang@aspeedtech.com>,
+        <luke_chen@aspeedtech.com>, kernel test robot <lkp@intel.com>
+Subject: [PATCH v5] drm/ast: Create the driver for ASPEED proprietory Display-Port
+Date:   Tue, 7 Jun 2022 16:49:27 +0800
+Message-ID: <20220607084927.38432-1-kuohsiang_chou@aspeedtech.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <202206071218.LWKSPm1P-lkp@intel.com>
+References: <202206071218.LWKSPm1P-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3388e905-154d-4dd5-a6c8-08da48628516
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6609:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB66091A081383311D965F4D98CEA59@AM0PR04MB6609.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zMmszxa/uQPGkPIvBHs8KGT5xvCC7rzg4nvi2z9dZFhvExbpq8CYmqrMmE1UM2SXvu5ee2+dkugmv2Sn8GrrkZrJs6iiI4VctiMMcmjDvoiSSfoeXGBB/6k/qh83Vo2E51wFBIBKuGU9LX6PjdZho5V2VrHQnCFnlwM0ZYQA1uU9GYeG6BVAZoeCZDtFQ5xHfYN9Aw51h/azb/N+Qe5OqbnX8Vd4oyHQNKb0VQp4lxSB1MUbMXLUeBjkxj+xf8343KJ8KEwDj2CJCnU3LImlVwMdxz8gujQrfOieRRO/soFS8F/lH/zihOT5p7qa7Y6r1R3Zrq4kvMZ50g+JE1ubwgBv/s9+ScfpMRhZ6oKKxzr7b0HWhU2au7DTycPpjzqrFq5sndXf6NCkbbynGTMHd8B35tQPwgQFFNXWGe7SygRQtYlkADzfmENTBre627ZwK+qceI/f581c8VYpgFdPOVOSf6aMeAsFRwRmhLbAkUvgbxkdNaSD3cwODkZwENIGIQyAH7clpOSTL9m0rr6/exiktW3YJMgBF8AwIMRqffZ3JTtI6bhF6dNxysFeVttFw1rpjkRavZwKiLN1KoBw42UJVHlK9Cv4/B/hxbG0Lsj9Ya4S3mk/xd960zMHu5groqoyEsdPIfAslMgKacy0AMEga7JjNtEG0FxxpdJkG2dgHQlG62kXfrCtssnjKZrSzDQYAMrQzisurDh4be4tkzEhArvu/Bh/ODr9gMZofY/bWh3bxm9TM/nTecj/mLZez1DqlE0hIAY9XS3Jz40IDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9244.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(66476007)(38350700002)(186003)(66556008)(53546011)(52116002)(66946007)(38100700002)(2616005)(4326008)(8936002)(8676002)(6506007)(26005)(6512007)(31686004)(83380400001)(6486002)(2906002)(316002)(5660300002)(31696002)(7416002)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDNxWmxQMG5Fb0VWLzZibzZNajkrUDdIdThzaEVOWUx2cFNrZXlGamdkYm5S?=
- =?utf-8?B?THJGWUR1bGlxb3hhejNiOU1VT1RvNVBQNEttZWVQc2xRMEtiNEtweUk1d2Zm?=
- =?utf-8?B?RUU0QncvMSswWDBNaDhkMWwvL2YveGVsdzJnVEhEY0pzdGhUaS9BTmJ3VHhy?=
- =?utf-8?B?MWZZK1o4ZjZralZOT0o4WFh6ZE1pN1ZGK1ZhTnE3alE4STZyVnRRZUx1MzRR?=
- =?utf-8?B?Y1hvQ0FwOHNGTGJQQk9RK0hDM1gybTZQZmtFVHRjYUtyVEliSmZTNkVLYXdr?=
- =?utf-8?B?STNTM0x5L0E5TnRWWjlub2dOZW5Xc0xlN29nUjRGa3pTR3paeXZubU1yWUtv?=
- =?utf-8?B?czBRU1BXZVEzUXVkejc4Y3RUbkpHUUpzMEQxWWozMEdPS0F6RThqUEZjcThQ?=
- =?utf-8?B?bnZmQzdPWXRZZSs5dkdqdHU4Z0x3S0NWeVRwdHA0VExyekRNMmgrQXFsc1Yr?=
- =?utf-8?B?Q2JDR1p1Z0xyWUwwU3pRNlR1Q3BjdHpHK1E0OU84eHFvLzd0THhhaG5MMjZm?=
- =?utf-8?B?YnYvVGd1K0pUNkRISjI3QnN1dlJIZmtUUExja25KZytrU0hsTDd1Q2V3bUlY?=
- =?utf-8?B?bm96d1JLaW05ZW1ZbHdjNHI0ZmkvR0w0dGFOZUhSNldBanYrdW1BazdmQVR6?=
- =?utf-8?B?eXczUC9HQkhXdjhWK01ab3dYSUc2blovVVY2enJWYjZxSGdmaXQ3SktTTEps?=
- =?utf-8?B?b2lSVWh5Ny8rdzYvZFZKOWpWWWxIdHJ5dFYzbmRNYlo2NW1lT2srU3BQVEww?=
- =?utf-8?B?eUErQS9uOXdLZkZBQkUvVFZFTENoQ1RvcFRNV0tVMGU5blV3MGxPYjAva2N4?=
- =?utf-8?B?LzVwRldEeGJBMU5rbHdTbnJweGtKdmh3eWx3YVdzcHo2OHRPRDZsc2JTQXd5?=
- =?utf-8?B?SW5BM0xIQUI5U2xUZG8rbHloOGJCcWYwY3o3T1lPVUFlTHc2NjRoNEdQVlRm?=
- =?utf-8?B?Vm1MS09GMmhsUm9zMEt3RGZEalJzMzdGZjhDaS9MNkw3V2dPSjZuSTRlV01u?=
- =?utf-8?B?eHRiNVhUTjVCVHFuTytnUXJDVHUxMGdTOXRvMG42enNKeHVBUDJZSEVIdFVp?=
- =?utf-8?B?SGlYdHNJdXJyNVFHUVRhcElqMFRLWjR6ckhWQkFFZ3A3YXMxOE0xSUMvWlJH?=
- =?utf-8?B?SXdBaGFKRyt1VVdBWE4wSDBOVngvV3BsdHNYUktod3NaOHlObEprYmdjZWRx?=
- =?utf-8?B?a0o1dk5XWmg4ajE0eXF5Q1FPMFBLNzVydjRLVFlXU2g4ek1PU0NsV0UxMzN4?=
- =?utf-8?B?TmtQVkgxSVZ3UlRnVkJzVCtiZ2xSc2tpd1B5d0lZbC9zV3pyY3JqNmlWejNP?=
- =?utf-8?B?RG9FVXdueTQwSlR2RHdtTkwxbkdqc0FCUmZJR2dKS2xuZWcreHAvdWtOWThM?=
- =?utf-8?B?SXltN0VURUI1Y0V6QkM2QldTQkZ5TVZRLzg1OUR4M1piTFc3R0VaV0NOTDRE?=
- =?utf-8?B?VG1TVDhXTG9aM0x6Q2FGZStwamFkRGlFNUJkeURtVWRXLzVvdFRRdUJZWlJH?=
- =?utf-8?B?YWNJSTdmcVdDaEhhSVQ4UHdsem1nYjJvdytWcXliUW02YlMzcXlGZEVUWE9B?=
- =?utf-8?B?TnBYb3FXd2Z5RFFOcXJjUHJuMGxkSm9Ja2cvYXY1YnZQTzZldnNiMi9mR3lI?=
- =?utf-8?B?MTJWZkpwaWxQNXVEUS9iLy95NWZYL3pSUlZSTFNJenN0cStEYzArVXBhTHhF?=
- =?utf-8?B?TXQ3bWRRdW1ZekZsVTl2UUMvV2pUTDQwcUROcDZ1SUxlUUJUVnVMSjNWeUd4?=
- =?utf-8?B?YU5IRnphL2JNWkI3R3A3MXFNaFErZFJtR3RPRHp3bUpSOFk4Z09jU0J5U2pj?=
- =?utf-8?B?VkVnYmk0dzNRcG9BK3Jpa1pRTFp1NTJvUCtpMVlSTXlZaFNaUDkrcVl6VVVm?=
- =?utf-8?B?c1RjTkZ1dGxVRW90amV1OXoxWG92b0pnaUlybXBTY3RuMGxhY0NTNnFJTjBV?=
- =?utf-8?B?QzR5MDN6YlhWWTVTR0FMYWh3Y1ZvbGltRlZmZi84VkZDRVF1QUdldC9QZ0ZI?=
- =?utf-8?B?SFNSaFZRTUxBQnZYYmg5NW1hTHk4TW4xTDBJUnNEOHlRMzVvSlIxM2t3OG1x?=
- =?utf-8?B?RXJSbFNmOGhDdkFOV1FFazZoa3RrNXlxSlpJdGs3ajdwcDFxNjZvaVZxaUly?=
- =?utf-8?B?MjVNSEI2b1RLbXEzZjIwb2hpWXc1b3VWa2dpZS9pc1pCSUlRWGNZMnNtSHNV?=
- =?utf-8?B?MWtPQ09Ic2poQkVqeDUyUTB1bkNWTGJVM2tIS2c4QUlCdnBSSWp3aHlSU3FF?=
- =?utf-8?B?Z1ZPZ1dKaUZNT2E2QjdEUFMzMHVUSXNxVFVDS1B5MVZkelFXcDJNT0JzMTgr?=
- =?utf-8?B?aTF6V3Nad0hGRGQrZW90WnBwVUlFa3VKY0JkOTRnS3dEakt6RVQvNXBTS2lr?=
- =?utf-8?Q?5dcoM+8BDi4j5KH0=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3388e905-154d-4dd5-a6c8-08da48628516
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9244.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 08:48:40.4755
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yfutCoVajtieohePMS5GoQY6cvfFvBRpewOS08RIHghE3tJPguuWMuxoWc7AMK4jaSSUxQTHc2930aeKQrZj8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6609
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.180]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2578YnEj023332
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+V1:
+1. The MCU FW controling ASPEED DP is loaded by BMC boot loader.
+2. Driver starts after CR[3:1] == 111b that indicates Tx is ASTDP,
+   and CRD1[5] has been asserted by BMVC boot loader.
+3. EDID is prioritized by DP monitor.
+4. DP's EDID has high priority to decide resolution supporting.
 
+V2:
+Modules description:
+1. ASTDP (ASPEED DisplayPort) is controlled by dedicated
+   AST-MCU (ASPEED propriatary MCU).
+2. MCU is looping in charged of HPD, Read EDID, Link Training with
+   DP sink.
+3. ASTDP and AST-MUC reside in BMC (Baseboard Management controller)
+   addressing-space.
+4. ASPEED DRM driver requests MCU to get HPD and EDID by CR-scratched
+   register.
 
-On 07.06.2022 10:23, Ming Qian wrote:
-> The interrupt STMBUF_HALF may be triggered after frame done.
-> It may led to system hang if driver try to access the register after
-> power off.
-> 
-> Disable the slot interrupt when frame done.
-> 
-> Fixes: 2db16c6ed72ce ("media: imx-jpeg: Add V4L2 driver for i.MX8 JPEG Encoder/Decoder")
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+Booting sequence:
+1. Check if TX is ASTDP					// ast_dp_launch()
+2. Check if DP-MCU FW has loaded					// ast_dp_launch()
+3. Read EDID					// ast_dp_read_edid()
+4. Resolution switch					// ast_dp_SetOutput()
 
-Thanks Ming,
+V3:
+1. Remove unneeded semicolon.
+2. Apply to git://anongit.freedesktop.org/drm/drm, instead of
+   git://anongit.freedesktop.org/drm/drm-misc
+3. Resolve auto build test WARNINGs on V1 patch.
 
-Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-Tested-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+V4:
+1. Sync code-base with kernel 5.17_rc6
+2. Remove the define of DPControlPower, because DP chips need to be
+   powered on to be used.
+3. Remove the switches of PHY and Display from EDID procedure.
+4. Revise increaing delay to fixed delay, because this version kernel
+   doesn't detect minitor consistenntly.
+5. Create clean-up code used for reset of power state on errors with
+   -EIO manner.
+6. Revise the DP detection by TX type and its DP-FW status during
+   booting and resume.
+7. Correct the CamelCase Style.
+8. Use register reading while needing, and remove to hold full
+   register.
+9. Instead of 'u8', revise to 'bool' on swwitch of PHY and video.
+10.Correct typo
+11.Remove the duplicated copy of TX definition.
+12.Use EDID_LENGTH as the constant of 128.
 
-Regards,
-Mirela
+V5:
+1.Fixed sparse:cast truncates bits form constant value ()cast
+  truncates bits from constant value (ffffffffffffff00 becomes 0)
 
-> ---
->   drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c |  5 +++++
->   drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |  1 +
->   drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 11 ++---------
->   3 files changed, 8 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
-> index c482228262a3..9418fcf740a8 100644
-> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
-> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
-> @@ -79,6 +79,11 @@ void mxc_jpeg_enable_irq(void __iomem *reg, int slot)
->   	writel(0xFFFFFFFF, reg + MXC_SLOT_OFFSET(slot, SLOT_IRQ_EN));
->   }
->   
-> +void mxc_jpeg_disable_irq(void __iomem *reg, int slot)
-> +{
-> +	writel(0x0, reg + MXC_SLOT_OFFSET(slot, SLOT_IRQ_EN));
-> +}
-> +
->   void mxc_jpeg_sw_reset(void __iomem *reg)
->   {
->   	/*
-> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
-> index 07655502f4bd..ecf3b6562ba2 100644
-> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
-> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
-> @@ -126,6 +126,7 @@ u32 mxc_jpeg_get_offset(void __iomem *reg, int slot);
->   void mxc_jpeg_enable_slot(void __iomem *reg, int slot);
->   void mxc_jpeg_set_l_endian(void __iomem *reg, int le);
->   void mxc_jpeg_enable_irq(void __iomem *reg, int slot);
-> +void mxc_jpeg_disable_irq(void __iomem *reg, int slot);
->   int mxc_jpeg_set_input(void __iomem *reg, u32 in_buf, u32 bufsize);
->   int mxc_jpeg_set_output(void __iomem *reg, u16 out_pitch, u32 out_buf,
->   			u16 w, u16 h);
-> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> index 965021d3c7ef..b1f48835398e 100644
-> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> @@ -592,15 +592,7 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
->   	dev_dbg(dev, "Irq %d on slot %d.\n", irq, slot);
->   
->   	ctx = v4l2_m2m_get_curr_priv(jpeg->m2m_dev);
-> -	if (!ctx) {
-> -		dev_err(dev,
-> -			"Instance released before the end of transaction.\n");
-> -		/* soft reset only resets internal state, not registers */
-> -		mxc_jpeg_sw_reset(reg);
-> -		/* clear all interrupts */
-> -		writel(0xFFFFFFFF, reg + MXC_SLOT_OFFSET(slot, SLOT_STATUS));
-> -		goto job_unlock;
-> -	}
-> +	WARN_ON(!ctx);
->   
->   	if (slot != ctx->slot) {
->   		/* TODO investigate when adding multi-instance support */
-> @@ -673,6 +665,7 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
->   	buf_state = VB2_BUF_STATE_DONE;
->   
->   buffers_done:
-> +	mxc_jpeg_disable_irq(reg, ctx->slot);
->   	jpeg->slot_data[slot].used = false; /* unused, but don't free */
->   	mxc_jpeg_check_and_set_last_buffer(ctx, src_buf, dst_buf);
->   	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+Signed-off-by: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+ drivers/gpu/drm/ast/Makefile   |   2 +-
+ drivers/gpu/drm/ast/ast_dp.c   | 282 +++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/ast/ast_drv.h  | 115 ++++++++++++++
+ drivers/gpu/drm/ast/ast_main.c |   5 +-
+ drivers/gpu/drm/ast/ast_mode.c | 124 ++++++++++++++-
+ drivers/gpu/drm/ast/ast_post.c |   4 +-
+ 6 files changed, 524 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/gpu/drm/ast/ast_dp.c
+
+diff --git a/drivers/gpu/drm/ast/Makefile b/drivers/gpu/drm/ast/Makefile
+index 21f71160b..5a53ce51f 100644
+--- a/drivers/gpu/drm/ast/Makefile
++++ b/drivers/gpu/drm/ast/Makefile
+@@ -3,6 +3,6 @@
+ # Makefile for the drm device driver.  This driver provides support for the
+ # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
+
+-ast-y := ast_drv.o ast_i2c.o ast_main.o ast_mm.o ast_mode.o ast_post.o ast_dp501.o
++ast-y := ast_drv.o ast_i2c.o ast_main.o ast_mm.o ast_mode.o ast_post.o ast_dp501.o ast_dp.o
+
+ obj-$(CONFIG_DRM_AST) := ast.o
+diff --git a/drivers/gpu/drm/ast/ast_dp.c b/drivers/gpu/drm/ast/ast_dp.c
+new file mode 100644
+index 000000000..1ae12c407
+--- /dev/null
++++ b/drivers/gpu/drm/ast/ast_dp.c
+@@ -0,0 +1,282 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2021, ASPEED Technology Inc.
++// Authors: KuoHsiang Chou <kuohsiang_chou@aspeedtech.com>
++
++#include <linux/firmware.h>
++#include <linux/delay.h>
++#include <drm/drm_print.h>
++#include "ast_drv.h"
++
++int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata)
++{
++	struct ast_private *ast = to_ast_private(dev);
++	u8 i = 0, j = 0;
++
++	/*
++	 * CRD1[b5]: DP MCU FW is executing
++	 * CRDC[b0]: DP link success
++	 * CRDF[b0]: DP HPD
++	 * CRE5[b0]: Host reading EDID process is done
++	 */
++	if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING) &&
++		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS) &&
++		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD) &&
++		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
++								ASTDP_HOST_EDID_READ_DONE_MASK))) {
++		goto err_astdp_edid_not_ready;
++	}
++
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
++							0x00);
++
++	for (i = 0; i < 32; i++) {
++		/*
++		 * CRE4[7:0]: Read-Pointer for EDID (Unit: 4bytes); valid range: 0~64
++		 */
++		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE4,
++					ASTDP_AND_CLEAR_MASK, (u8) i);
++		j = 0;
++
++		/*
++		 * CRD7[b0]: valid flag for EDID
++		 * CRD6[b0]: mirror read pointer for EDID
++		 */
++		while ((ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD7,
++				ASTDP_EDID_VALID_FLAG_MASK) != 0x01) ||
++			(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD6,
++						ASTDP_EDID_READ_POINTER_MASK) != i)) {
++			/*
++			 * Delay are getting longer with each retry.
++			 * 1. The Delays are often 2 loops when users request "Display Settings"
++			 *	  of right-click of mouse.
++			 * 2. The Delays are often longer a lot when system resume from S3/S4.
++			 */
++			mdelay(j+1);
++
++			if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1,
++							ASTDP_MCU_FW_EXECUTING) &&
++				ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC,
++							ASTDP_LINK_SUCCESS) &&
++				ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD))) {
++				goto err_astdp_jump_out_loop_of_edid;
++			}
++
++			j++;
++			if (j > 200)
++				goto err_astdp_jump_out_loop_of_edid;
++		}
++
++		*(ediddata) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT,
++							0xD8, ASTDP_EDID_READ_DATA_MASK);
++		*(ediddata + 1) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD9,
++								ASTDP_EDID_READ_DATA_MASK);
++		*(ediddata + 2) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDA,
++								ASTDP_EDID_READ_DATA_MASK);
++		*(ediddata + 3) = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDB,
++								ASTDP_EDID_READ_DATA_MASK);
++
++		if (i == 31) {
++			/*
++			 * For 128-bytes EDID_1.3,
++			 * 1. Add the value of Bytes-126 to Bytes-127.
++			 *		The Bytes-127 is Checksum. Sum of all 128bytes should
++			 *		equal 0	(mod 256).
++			 * 2. Modify Bytes-126 to be 0.
++			 *		The Bytes-126 indicates the Number of extensions to
++			 *		follow. 0 represents noextensions.
++			 */
++			*(ediddata + 3) = *(ediddata + 3) + *(ediddata + 2);
++			*(ediddata + 2) = 0;
++		}
++
++		ediddata += 4;
++	}
++
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, (u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
++							ASTDP_HOST_EDID_READ_DONE);
++
++	return 0;
++
++err_astdp_jump_out_loop_of_edid:
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
++							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
++							ASTDP_HOST_EDID_READ_DONE);
++	return (~(j+256) + 1);
++
++err_astdp_edid_not_ready:
++	if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, ASTDP_MCU_FW_EXECUTING)))
++		return (~0xD1 + 1);
++	if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS)))
++		return (~0xDC + 1);
++	if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD)))
++		return (~0xDF + 1);
++	if (!(ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5, ASTDP_HOST_EDID_READ_DONE_MASK)))
++		return (~0xE5 + 1);
++
++	return	0;
++}
++
++/*
++ * Launch Aspeed DP
++ */
++void ast_dp_launch(struct drm_device *dev, u8 bPower)
++{
++	u32 i = 0, j = 0, WaitCount = 1;
++	u8 bDPTX = 0;
++	u8 bDPExecute = 1;
++
++	struct ast_private *ast = to_ast_private(dev);
++	// S3 come back, need more time to wait BMC ready.
++	if (bPower)
++		WaitCount = 300;
++
++
++	// Wait total count by different condition.
++	for (j = 0; j < WaitCount; j++) {
++		bDPTX = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, TX_TYPE_MASK);
++
++		if (bDPTX)
++			break;
++
++		msleep(100);
++	}
++
++	// 0xE : ASTDP with DPMCU FW handling
++	if (bDPTX == ASTDP_DPMCU_TX) {
++		// Wait one second then timeout.
++		i = 0;
++
++		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xD1, COPROCESSOR_LAUNCH) !=
++			COPROCESSOR_LAUNCH) {
++			i++;
++			// wait 100 ms
++			msleep(100);
++
++			if (i >= 10) {
++				// DP would not be ready.
++				bDPExecute = 0;
++				break;
++			}
++		}
++
++		if (bDPExecute)
++			ast->tx_chip_type = AST_TX_ASTDP;
++
++		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE5,
++							(u8) ~ASTDP_HOST_EDID_READ_DONE_MASK,
++							ASTDP_HOST_EDID_READ_DONE);
++	} else
++		ast->tx_chip_type = AST_TX_NONE;
++}
++
++
++
++void ast_dp_power_on_off(struct drm_device *dev, bool on)
++{
++	struct ast_private *ast = to_ast_private(dev);
++	// Read and Turn off DP PHY sleep
++	u8 bE3 = ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE3, AST_DP_VIDEO_ENABLE);
++
++	// Turn on DP PHY sleep
++	if (!on)
++		bE3 |= AST_DP_PHY_SLEEP;
++
++	// DP Power on/off
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE3, (u8) ~AST_DP_PHY_SLEEP, bE3);
++}
++
++
++
++void ast_dp_set_on_off(struct drm_device *dev, bool on)
++{
++	struct ast_private *ast = to_ast_private(dev);
++	u8 video_on_off = on;
++
++	// Video On/Off
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE3, (u8) ~AST_DP_VIDEO_ENABLE, on);
++
++	// If DP plug in and link successful then check video on / off status
++	if (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDC, ASTDP_LINK_SUCCESS) &&
++		ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF, ASTDP_HPD)) {
++		video_on_off <<= 4;
++		while (ast_get_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xDF,
++						ASTDP_MIRROR_VIDEO_ENABLE) != video_on_off) {
++			// wait 1 ms
++			mdelay(1);
++		}
++	}
++}
++
++void ast_dp_set_mode(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode)
++{
++	struct ast_private *ast = to_ast_private(crtc->dev);
++
++	u32 ulRefreshRateIndex;
++	u8 ModeIdx;
++
++	ulRefreshRateIndex = vbios_mode->enh_table->refresh_rate_index - 1;
++
++	switch (crtc->mode.crtc_hdisplay) {
++	case 320:
++		ModeIdx = ASTDP_320x240_60;
++		break;
++	case 400:
++		ModeIdx = ASTDP_400x300_60;
++		break;
++	case 512:
++		ModeIdx = ASTDP_512x384_60;
++		break;
++	case 640:
++		ModeIdx = (ASTDP_640x480_60 + (u8) ulRefreshRateIndex);
++		break;
++	case 800:
++		ModeIdx = (ASTDP_800x600_56 + (u8) ulRefreshRateIndex);
++		break;
++	case 1024:
++		ModeIdx = (ASTDP_1024x768_60 + (u8) ulRefreshRateIndex);
++		break;
++	case 1152:
++		ModeIdx = ASTDP_1152x864_75;
++		break;
++	case 1280:
++		if (crtc->mode.crtc_vdisplay == 800)
++			ModeIdx = (ASTDP_1280x800_60_RB - (u8) ulRefreshRateIndex);
++		else		// 1024
++			ModeIdx = (ASTDP_1280x1024_60 + (u8) ulRefreshRateIndex);
++		break;
++	case 1360:
++	case 1366:
++		ModeIdx = ASTDP_1366x768_60;
++		break;
++	case 1440:
++		ModeIdx = (ASTDP_1440x900_60_RB - (u8) ulRefreshRateIndex);
++		break;
++	case 1600:
++		if (crtc->mode.crtc_vdisplay == 900)
++			ModeIdx = (ASTDP_1600x900_60_RB - (u8) ulRefreshRateIndex);
++		else		//1200
++			ModeIdx = ASTDP_1600x1200_60;
++		break;
++	case 1680:
++		ModeIdx = (ASTDP_1680x1050_60_RB - (u8) ulRefreshRateIndex);
++		break;
++	case 1920:
++		if (crtc->mode.crtc_vdisplay == 1080)
++			ModeIdx = ASTDP_1920x1080_60;
++		else		//1200
++			ModeIdx = ASTDP_1920x1200_60;
++		break;
++	default:
++		return;
++	}
++
++	/*
++	 * CRE0[7:0]: MISC0 ((0x00: 18-bpp) or (0x20: 24-bpp)
++	 * CRE1[7:0]: MISC1 (default: 0x00)
++	 * CRE2[7:0]: video format index (0x00 ~ 0x20 or 0x40 ~ 0x50)
++	 */
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE0, ASTDP_AND_CLEAR_MASK,
++				ASTDP_MISC0_24bpp);
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE1, ASTDP_AND_CLEAR_MASK, ASTDP_MISC1);
++	ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xE2, ASTDP_AND_CLEAR_MASK, ModeIdx);
++}
+diff --git a/drivers/gpu/drm/ast/ast_drv.h b/drivers/gpu/drm/ast/ast_drv.h
+index a19315b2f..79451130c 100644
+--- a/drivers/gpu/drm/ast/ast_drv.h
++++ b/drivers/gpu/drm/ast/ast_drv.h
+@@ -70,6 +70,7 @@ enum ast_tx_chip {
+ 	AST_TX_NONE,
+ 	AST_TX_SIL164,
+ 	AST_TX_DP501,
++	AST_TX_ASTDP,
+ };
+
+ #define AST_DRAM_512Mx16 0
+@@ -184,6 +185,10 @@ struct ast_private {
+ 			struct drm_encoder encoder;
+ 			struct drm_connector connector;
+ 		} dp501;
++		struct {
++			struct drm_encoder encoder;
++			struct drm_connector connector;
++		} astdp;
+ 	} output;
+
+ 	bool support_wide_screen;
+@@ -357,10 +362,113 @@ int ast_mode_config_init(struct ast_private *ast);
+ #define AST_DP501_EDID_DATA	0xf020
+
+ /* Define for Soc scratched reg */
++#define COPROCESSOR_LAUNCH			BIT(5)
++
++/*
++ * Display Transmitter Type:
++ */
++#define TX_TYPE_MASK				GENMASK(3, 1)
++#define NO_TX						(0 << 1)
++#define ITE66121_VBIOS_TX			(1 << 1)
++#define SI164_VBIOS_TX				(2 << 1)
++#define CH7003_VBIOS_TX			(3 << 1)
++#define DP501_VBIOS_TX				(4 << 1)
++#define ANX9807_VBIOS_TX			(5 << 1)
++#define TX_FW_EMBEDDED_FW_TX		(6 << 1)
++#define ASTDP_DPMCU_TX				(7 << 1)
++
+ #define AST_VRAM_INIT_STATUS_MASK	GENMASK(7, 6)
+ //#define AST_VRAM_INIT_BY_BMC		BIT(7)
+ //#define AST_VRAM_INIT_READY		BIT(6)
+
++/* Define for Soc scratched reg used on ASTDP */
++#define AST_DP_PHY_SLEEP			BIT(4)
++#define AST_DP_VIDEO_ENABLE		BIT(0)
++
++#define AST_DP_POWER_ON			true
++#define AST_DP_POWER_OFF			false
++
++/*
++ * CRD1[b5]: DP MCU FW is executing
++ * CRDC[b0]: DP link success
++ * CRDF[b0]: DP HPD
++ * CRE5[b0]: Host reading EDID process is done
++ */
++#define ASTDP_MCU_FW_EXECUTING			BIT(5)
++#define ASTDP_LINK_SUCCESS				BIT(0)
++#define ASTDP_HPD						BIT(0)
++#define ASTDP_HOST_EDID_READ_DONE		BIT(0)
++#define ASTDP_HOST_EDID_READ_DONE_MASK	GENMASK(0, 0)
++
++/*
++ * CRB8[b1]: Enable VSYNC off
++ * CRB8[b0]: Enable HSYNC off
++ */
++#define AST_DPMS_VSYNC_OFF				BIT(1)
++#define AST_DPMS_HSYNC_OFF				BIT(0)
++
++/*
++ * CRDF[b4]: Mirror of AST_DP_VIDEO_ENABLE
++ * Precondition:	A. ~AST_DP_PHY_SLEEP  &&
++ *			B. DP_HPD &&
++ *			C. DP_LINK_SUCCESS
++ */
++#define ASTDP_MIRROR_VIDEO_ENABLE		BIT(4)
++
++#define ASTDP_EDID_READ_POINTER_MASK	GENMASK(7, 0)
++#define ASTDP_EDID_VALID_FLAG_MASK		GENMASK(0, 0)
++#define ASTDP_EDID_READ_DATA_MASK		GENMASK(7, 0)
++
++/*
++ * ASTDP setmode registers:
++ * CRE0[7:0]: MISC0 ((0x00: 18-bpp) or (0x20: 24-bpp)
++ * CRE1[7:0]: MISC1 (default: 0x00)
++ * CRE2[7:0]: video format index (0x00 ~ 0x20 or 0x40 ~ 0x50)
++ */
++#define ASTDP_MISC0_24bpp			BIT(5)
++#define ASTDP_MISC1				0
++#define ASTDP_AND_CLEAR_MASK		0x00
++
++/*
++ * ASTDP resoultion table:
++ * EX:	ASTDP_A_B_C:
++ *		A: Resolution
++ *		B: Refresh Rate
++ *		C: Misc information, such as CVT, Reduce Blanked
++ */
++#define ASTDP_640x480_60		0x00
++#define ASTDP_640x480_72		0x01
++#define ASTDP_640x480_75		0x02
++#define ASTDP_640x480_85		0x03
++#define ASTDP_800x600_56		0x04
++#define ASTDP_800x600_60		0x05
++#define ASTDP_800x600_72		0x06
++#define ASTDP_800x600_75		0x07
++#define ASTDP_800x600_85		0x08
++#define ASTDP_1024x768_60		0x09
++#define ASTDP_1024x768_70		0x0A
++#define ASTDP_1024x768_75		0x0B
++#define ASTDP_1024x768_85		0x0C
++#define ASTDP_1280x1024_60		0x0D
++#define ASTDP_1280x1024_75		0x0E
++#define ASTDP_1280x1024_85		0x0F
++#define ASTDP_1600x1200_60		0x10
++#define ASTDP_320x240_60		0x11
++#define ASTDP_400x300_60		0x12
++#define ASTDP_512x384_60		0x13
++#define ASTDP_1920x1200_60		0x14
++#define ASTDP_1920x1080_60		0x15
++#define ASTDP_1280x800_60		0x16
++#define ASTDP_1280x800_60_RB	0x17
++#define ASTDP_1440x900_60		0x18
++#define ASTDP_1440x900_60_RB	0x19
++#define ASTDP_1680x1050_60		0x1A
++#define ASTDP_1680x1050_60_RB	0x1B
++#define ASTDP_1600x900_60		0x1C
++#define ASTDP_1600x900_60_RB	0x1D
++#define ASTDP_1366x768_60		0x1E
++#define ASTDP_1152x864_75		0x1F
++
+ int ast_mm_init(struct ast_private *ast);
+
+ /* ast post */
+@@ -381,4 +489,11 @@ void ast_init_3rdtx(struct drm_device *dev);
+ /* ast_i2c.c */
+ struct ast_i2c_chan *ast_i2c_create(struct drm_device *dev);
+
++/* aspeed DP */
++int ast_astdp_read_edid(struct drm_device *dev, u8 *ediddata);
++void ast_dp_launch(struct drm_device *dev, u8 bPower);
++void ast_dp_power_on_off(struct drm_device *dev, bool no);
++void ast_dp_set_on_off(struct drm_device *dev, bool no);
++void ast_dp_set_mode(struct drm_crtc *crtc, struct ast_vbios_mode_info *vbios_mode);
++
+ #endif
+diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
+index 22e9e2d3c..1113ee1cb 100644
+--- a/drivers/gpu/drm/ast/ast_main.c
++++ b/drivers/gpu/drm/ast/ast_main.c
+@@ -232,7 +232,7 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
+ 			ast->tx_chip_type = AST_TX_SIL164;
+ 	}
+
+-	if ((ast->chip == AST2300) || (ast->chip == AST2400)) {
++	if ((ast->chip == AST2300) || (ast->chip == AST2400) || (ast->chip == AST2500)) {
+ 		/*
+ 		 * On AST2300 and 2400, look the configuration set by the SoC in
+ 		 * the SOC scratch register #1 bits 11:8 (interestingly marked
+@@ -256,7 +256,8 @@ static int ast_detect_chip(struct drm_device *dev, bool *need_post)
+ 		case 0x0c:
+ 			ast->tx_chip_type = AST_TX_DP501;
+ 		}
+-	}
++	} else if (ast->chip == AST2600)
++		ast_dp_launch(&ast->base, 0);
+
+ 	/* Print stuff for diagnostic purposes */
+ 	switch(ast->tx_chip_type) {
+diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
+index 45b56b39a..4728825b7 100644
+--- a/drivers/gpu/drm/ast/ast_mode.c
++++ b/drivers/gpu/drm/ast/ast_mode.c
+@@ -988,21 +988,41 @@ static int ast_cursor_plane_init(struct ast_private *ast)
+ static void ast_crtc_dpms(struct drm_crtc *crtc, int mode)
+ {
+ 	struct ast_private *ast = to_ast_private(crtc->dev);
++	u8 ch = AST_DPMS_VSYNC_OFF | AST_DPMS_HSYNC_OFF;
+
+ 	/* TODO: Maybe control display signal generation with
+ 	 *       Sync Enable (bit CR17.7).
+ 	 */
+ 	switch (mode) {
+ 	case DRM_MODE_DPMS_ON:
+-	case DRM_MODE_DPMS_STANDBY:
+-	case DRM_MODE_DPMS_SUSPEND:
++		ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT,  0x01, 0xdf, 0);
++		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xb6, 0xfc, 0);
+ 		if (ast->tx_chip_type == AST_TX_DP501)
+ 			ast_set_dp501_video_output(crtc->dev, 1);
++
++		if (ast->tx_chip_type == AST_TX_ASTDP) {
++			ast_dp_power_on_off(crtc->dev, AST_DP_POWER_ON);
++			ast_wait_for_vretrace(ast);
++			ast_dp_set_on_off(crtc->dev, 1);
++		}
++
++		ast_crtc_load_lut(ast, crtc);
+ 		break;
++	case DRM_MODE_DPMS_STANDBY:
++	case DRM_MODE_DPMS_SUSPEND:
+ 	case DRM_MODE_DPMS_OFF:
++		ch = mode;
+ 		if (ast->tx_chip_type == AST_TX_DP501)
+ 			ast_set_dp501_video_output(crtc->dev, 0);
+ 		break;
++
++		if (ast->tx_chip_type == AST_TX_ASTDP) {
++			ast_dp_set_on_off(crtc->dev, 0);
++			ast_dp_power_on_off(crtc->dev, AST_DP_POWER_OFF);
++		}
++
++		ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT,  0x01, 0xdf, 0x20);
++		ast_set_index_reg_mask(ast, AST_IO_CRTC_PORT, 0xb6, 0xfc, ch);
+ 	}
+ }
+
+@@ -1027,7 +1047,7 @@ ast_crtc_helper_mode_valid(struct drm_crtc *crtc, const struct drm_display_mode
+
+ 		if ((ast->chip == AST2100) || (ast->chip == AST2200) ||
+ 		    (ast->chip == AST2300) || (ast->chip == AST2400) ||
+-		    (ast->chip == AST2500)) {
++		    (ast->chip == AST2500) || (ast->chip == AST2600)) {
+ 			if ((mode->hdisplay == 1920) && (mode->vdisplay == 1080))
+ 				return MODE_OK;
+
+@@ -1110,6 +1130,7 @@ ast_crtc_helper_atomic_flush(struct drm_crtc *crtc,
+ 	struct ast_private *ast = to_ast_private(crtc->dev);
+ 	struct ast_crtc_state *ast_crtc_state = to_ast_crtc_state(crtc_state);
+ 	struct ast_crtc_state *old_ast_crtc_state = to_ast_crtc_state(old_crtc_state);
++	struct ast_vbios_mode_info *vbios_mode_info = &ast_crtc_state->vbios_mode_info;
+
+ 	/*
+ 	 * The gamma LUT has to be reloaded after changing the primary
+@@ -1117,6 +1138,10 @@ ast_crtc_helper_atomic_flush(struct drm_crtc *crtc,
+ 	 */
+ 	if (old_ast_crtc_state->format != ast_crtc_state->format)
+ 		ast_crtc_load_lut(ast, crtc);
++
++	//Set Aspeed Display-Port
++	if (ast->tx_chip_type == AST_TX_ASTDP)
++		ast_dp_set_mode(crtc, vbios_mode_info);
+ }
+
+ static void
+@@ -1527,6 +1552,93 @@ static int ast_dp501_output_init(struct ast_private *ast)
+ 	return 0;
+ }
+
++/*
++ * ASPEED Display-Port Connector
++ */
++
++static int ast_astdp_connector_helper_get_modes(struct drm_connector *connector)
++{
++	void *edid;
++
++	int succ;
++	int count;
++
++	edid = kmalloc(EDID_LENGTH, GFP_KERNEL);
++	if (!edid)
++		goto err_drm_connector_update_edid_property;
++
++	succ = ast_astdp_read_edid(connector->dev, edid);
++	if (succ < 0)
++		goto err_kfree;
++
++	drm_connector_update_edid_property(connector, edid);
++	count = drm_add_edid_modes(connector, edid);
++	kfree(edid);
++
++	return count;
++
++err_kfree:
++	kfree(edid);
++err_drm_connector_update_edid_property:
++	drm_connector_update_edid_property(connector, NULL);
++	return 0;
++}
++
++static const struct drm_connector_helper_funcs ast_astdp_connector_helper_funcs = {
++	.get_modes = ast_astdp_connector_helper_get_modes,
++};
++
++static const struct drm_connector_funcs ast_astdp_connector_funcs = {
++	.reset = drm_atomic_helper_connector_reset,
++	.fill_modes = drm_helper_probe_single_connector_modes,
++	.destroy = drm_connector_cleanup,
++	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
++};
++
++static int ast_astdp_connector_init(struct drm_device *dev, struct drm_connector *connector)
++{
++	int ret;
++
++	ret = drm_connector_init(dev, connector, &ast_astdp_connector_funcs,
++				 DRM_MODE_CONNECTOR_DisplayPort);
++	if (ret)
++		return ret;
++
++	drm_connector_helper_add(connector, &ast_astdp_connector_helper_funcs);
++
++	connector->interlace_allowed = 0;
++	connector->doublescan_allowed = 0;
++
++	connector->polled = DRM_CONNECTOR_POLL_CONNECT;
++
++	return 0;
++}
++
++static int ast_astdp_output_init(struct ast_private *ast)
++{
++	struct drm_device *dev = &ast->base;
++	struct drm_crtc *crtc = &ast->crtc;
++	struct drm_encoder *encoder = &ast->output.astdp.encoder;
++	struct drm_connector *connector = &ast->output.astdp.connector;
++	int ret;
++
++	ret = drm_simple_encoder_init(dev, encoder, DRM_MODE_ENCODER_TMDS);
++	if (ret)
++		return ret;
++	encoder->possible_crtcs = drm_crtc_mask(crtc);
++
++	ret = ast_astdp_connector_init(dev, connector);
++	if (ret)
++		return ret;
++
++	ret = drm_connector_attach_encoder(connector, encoder);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
+ /*
+  * Mode config
+  */
+@@ -1563,7 +1675,8 @@ int ast_mode_config_init(struct ast_private *ast)
+ 	    ast->chip == AST2200 ||
+ 	    ast->chip == AST2300 ||
+ 	    ast->chip == AST2400 ||
+-	    ast->chip == AST2500) {
++	    ast->chip == AST2500 ||
++	    ast->chip == AST2600) {
+ 		dev->mode_config.max_width = 1920;
+ 		dev->mode_config.max_height = 2048;
+ 	} else {
+@@ -1594,6 +1707,9 @@ int ast_mode_config_init(struct ast_private *ast)
+ 	case AST_TX_DP501:
+ 		ret = ast_dp501_output_init(ast);
+ 		break;
++	case AST_TX_ASTDP:
++		ret = ast_astdp_output_init(ast);
++		break;
+ 	}
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/gpu/drm/ast/ast_post.c b/drivers/gpu/drm/ast/ast_post.c
+index b5d92f652..0aa9cf0fb 100644
+--- a/drivers/gpu/drm/ast/ast_post.c
++++ b/drivers/gpu/drm/ast/ast_post.c
+@@ -379,7 +379,9 @@ void ast_post_gpu(struct drm_device *dev)
+ 	ast_enable_mmio(dev);
+ 	ast_set_def_ext_reg(dev);
+
+-	if (ast->config_mode == ast_use_p2a) {
++	if (ast->chip == AST2600) {
++		ast_dp_launch(dev, 1);
++	} else if (ast->config_mode == ast_use_p2a) {
+ 		if (ast->chip == AST2500)
+ 			ast_post_chip_2500(dev);
+ 		else if (ast->chip == AST2300 || ast->chip == AST2400)
+
+base-commit: c54b39a565227538c52ead2349eb17d54aadd6f7
+--
+2.27.0
+

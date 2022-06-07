@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D9A5406B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF75C541944
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347110AbiFGRhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S1379091AbiFGVUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347115AbiFGRaE (ORCPT
+        with ESMTP id S1359241AbiFGUWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:30:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE41104CA1;
-        Tue,  7 Jun 2022 10:25:47 -0700 (PDT)
+        Tue, 7 Jun 2022 16:22:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF5617C6AA;
+        Tue,  7 Jun 2022 11:31:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFAD760DD7;
-        Tue,  7 Jun 2022 17:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC6DC34119;
-        Tue,  7 Jun 2022 17:25:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BABDB82188;
+        Tue,  7 Jun 2022 18:31:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E89C385A2;
+        Tue,  7 Jun 2022 18:31:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622746;
-        bh=Dpdm++xgQQtnKOJ7PWDRP9mEMKETdjOyBpIHvoMFAjE=;
+        s=korg; t=1654626707;
+        bh=kHhAYoGsPhV9+EArSetHwxqqBlxp/Pw5NoliB/+7KMQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vA221cZtcIC/SMsbW6WXSHDe0OGPSxok4s5jATxCQEx8vQA68p8fxts1UibxXovM1
-         Pumqj6xuKqd/btGMH7APdbk81WT9KaEOWg2gDwCX2Oo2hB7YmcQlGaozvdrcBkj0qH
-         G8kRYWyDU7f5UdAvQ9HSm3ADYckIqMi+FCgDglBk=
+        b=gw4mitRRJCeCK3iaWD4I5vq2rq7fREJsuCyWUunl6J3lWtG6mEYuMWNGY1b3IbMEm
+         /0cL1tQmXKSYgGgYD4xrxMHMY0xHgqIlKXz1BppeEHTTVmexKXM78FF3rlCqb2odcy
+         YpJXQwPCchsYa5v/uawaydxGh6iHHxn30D/+5S28=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 169/452] mtd: rawnand: cadence: fix possible null-ptr-deref in cadence_nand_dt_probe()
-Date:   Tue,  7 Jun 2022 19:00:26 +0200
-Message-Id: <20220607164913.599805875@linuxfoundation.org>
+Subject: [PATCH 5.17 435/772] hv_netvsc: Fix potential dereference of NULL pointer
+Date:   Tue,  7 Jun 2022 19:00:27 +0200
+Message-Id: <20220607165001.821144219@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Yongzhi Liu <lyz_cs@pku.edu.cn>
 
-[ Upstream commit a28ed09dafee20da51eb26452950839633afd824 ]
+[ Upstream commit eb4c0788964730d12e8dd520bd8f5217ca48321c ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+The return value of netvsc_devinfo_get()
+needs to be checked to avoid use of NULL
+pointer in case of an allocation failure.
 
-Fixes: ec4ba01e894d ("mtd: rawnand: Add new Cadence NAND driver to MTD subsystem")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220426084913.4021868-1-yangyingliang@huawei.com
+Fixes: 0efeea5fb153 ("hv_netvsc: Add the support of hibernation")
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+Link: https://lore.kernel.org/r/1652962188-129281-1-git-send-email-lyz_cs@pku.edu.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/cadence-nand-controller.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/hyperv/netvsc_drv.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/raw/cadence-nand-controller.c b/drivers/mtd/nand/raw/cadence-nand-controller.c
-index b46786cd53e0..4fdb39214a12 100644
---- a/drivers/mtd/nand/raw/cadence-nand-controller.c
-+++ b/drivers/mtd/nand/raw/cadence-nand-controller.c
-@@ -2983,11 +2983,10 @@ static int cadence_nand_dt_probe(struct platform_device *ofdev)
- 	if (IS_ERR(cdns_ctrl->reg))
- 		return PTR_ERR(cdns_ctrl->reg);
+diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+index fde1c492ca02..b1dece6b9698 100644
+--- a/drivers/net/hyperv/netvsc_drv.c
++++ b/drivers/net/hyperv/netvsc_drv.c
+@@ -2671,7 +2671,10 @@ static int netvsc_suspend(struct hv_device *dev)
  
--	res = platform_get_resource(ofdev, IORESOURCE_MEM, 1);
--	cdns_ctrl->io.dma = res->start;
--	cdns_ctrl->io.virt = devm_ioremap_resource(&ofdev->dev, res);
-+	cdns_ctrl->io.virt = devm_platform_get_and_ioremap_resource(ofdev, 1, &res);
- 	if (IS_ERR(cdns_ctrl->io.virt))
- 		return PTR_ERR(cdns_ctrl->io.virt);
-+	cdns_ctrl->io.dma = res->start;
- 
- 	dt->clk = devm_clk_get(cdns_ctrl->dev, "nf_clk");
- 	if (IS_ERR(dt->clk))
+ 	/* Save the current config info */
+ 	ndev_ctx->saved_netvsc_dev_info = netvsc_devinfo_get(nvdev);
+-
++	if (!ndev_ctx->saved_netvsc_dev_info) {
++		ret = -ENOMEM;
++		goto out;
++	}
+ 	ret = netvsc_detach(net, nvdev);
+ out:
+ 	rtnl_unlock();
 -- 
 2.35.1
 

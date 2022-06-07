@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1309254040F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38B4540430
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345185AbiFGQr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        id S1345282AbiFGQ5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345174AbiFGQrz (ORCPT
+        with ESMTP id S1344320AbiFGQ5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:47:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718671D0F8;
-        Tue,  7 Jun 2022 09:47:54 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 18:47:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1654620473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=lSDsywJB6k683pdbQfJxNfS1KPID3mBqEa5Vp/AoDIo=;
-        b=gWEdLbsAZVKjwpgZjroM0UejhNMN1fzFdMInH76EPGB31BBw8H88bkzk1NUqwGekEkrGcY
-        dY4EKc0DWHVI8W+BBz/lDyyjKcqA6bo61ikjKPdpaaV9CETAv4MWUuoUGiV0wHUpjWOC2P
-        ksQs6+CZApMQdGX5boy/psrG8ktcPjqe7jdjIWCLdXI/GvEnUnrs+aRhCWtcR08SeqW3xu
-        bLN5DIGJPfHRwJyVYWzF6jYRrF6rpDQpFs59GaoGxJPhxszDdGjMJvMks3WScjlzp9qi+N
-        TYF8byAqPqSLVWIhdHFC+ohY1sgV//EatJ3Rqxzn87tFgtMHt/s73n1+QAhv5Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1654620473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=lSDsywJB6k683pdbQfJxNfS1KPID3mBqEa5Vp/AoDIo=;
-        b=MAH7c61VNSM9hWtcREbn31d1jdc2hKL+ffeAazKqIS4C28xkvGOVkyBgDl5AT6wedS3inS
-        oxOa7mIQ17lDriAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [ANNOUNCE] v5.19-rc1-rt1
-Message-ID: <Yp+BNyvZjQPMBDXA@linutronix.de>
+        Tue, 7 Jun 2022 12:57:43 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45EA27FE3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 09:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654621062; x=1686157062;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ByfqHSUyr5zD+LfMcI0HbBfFVGYb2wsqtAn5SPC4XIA=;
+  b=ST4ZrW9kC14ElDA8bJ/yKxuU3LHZxz8YsKNUs1qAV3Gs3VvNimqyNEtV
+   o7Ie87FQ2iU/BXVDtk25lcbUPYxVEfZtDle+jsGV+T4cEUdjko5uznxBz
+   imaipei+FlR2zVKlZrOTds8ucmpQ7v6V2yFsxoAwHW/psbeIskfMC/nYN
+   hAJWctwaJWV/9/MBa+qcFsfpn8WGPRNM/hO+NfB6iwtThtystsKSLh0/X
+   D0H8ITQE2oOb5BmiPZJVEwDEeFuXctL4VtyT1xeiGsENs3ofrwNCZf+a8
+   Y/kE15lUb4Db91T0AKzUcGO/azxfSJx02pOoXPuS5+rc3c9LyJOodHrPq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="259613232"
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="259613232"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 09:49:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
+   d="scan'208";a="565504289"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2022 09:49:35 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D4D65109; Tue,  7 Jun 2022 19:49:38 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v1 1/1] nvdimm/namespace: drop nested variable in create_namespace_pmem()
+Date:   Tue,  7 Jun 2022 19:49:37 +0300
+Message-Id: <20220607164937.33967-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RT folks!
+Kernel build bot reported:
 
-I'm pleased to announce the v5.19-rc1-rt1 patch set. 
+  namespace_devs.c:1991:10: warning: Local variable 'uuid' shadows outer variable [shadowVariable]
 
-Changes since v5.18-rt11:
-  - Rebase to v5.19-rc1.
+Refactor create_namespace_pmem() by dropping a nested version of
+the same variable.
 
-Known issues
-     - Valentin Schneider reported a few splats on ARM64, see
-          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+Fixes: d1c6e08e7503 ("libnvdimm/labels: Add uuid helpers")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/nvdimm/namespace_devs.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-You can get this release via the git tree at:
+diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+index 0f863fda56e6..dfade66bab73 100644
+--- a/drivers/nvdimm/namespace_devs.c
++++ b/drivers/nvdimm/namespace_devs.c
+@@ -1704,8 +1704,6 @@ static struct device *create_namespace_pmem(struct nd_region *nd_region,
+ 	res->flags = IORESOURCE_MEM;
+ 
+ 	for (i = 0; i < nd_region->ndr_mappings; i++) {
+-		uuid_t uuid;
+-
+ 		nsl_get_uuid(ndd, nd_label, &uuid);
+ 		if (has_uuid_at_pos(nd_region, &uuid, cookie, i))
+ 			continue;
+-- 
+2.35.1
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.19-rc1-rt1
-
-The RT patch against v5.19-rc1 can be found here:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/older/patch-5.19-rc1-rt1.patch.xz
-
-The split quilt queue is available at:
-
-    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/older/patches-5.19-rc1-rt1.tar.xz
-
-Sebastian

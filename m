@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DD1541B20
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C761C541B68
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381651AbiFGVl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S1377298AbiFGVrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378100AbiFGUv0 (ORCPT
+        with ESMTP id S1378127AbiFGUv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:51:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918411FDEB9;
-        Tue,  7 Jun 2022 11:41:42 -0700 (PDT)
+        Tue, 7 Jun 2022 16:51:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147251FE39B;
+        Tue,  7 Jun 2022 11:41:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C73CD60AD9;
-        Tue,  7 Jun 2022 18:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCB54C385A2;
-        Tue,  7 Jun 2022 18:41:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30A28B82182;
+        Tue,  7 Jun 2022 18:41:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C7A0C385A2;
+        Tue,  7 Jun 2022 18:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627301;
-        bh=2WUZ9csMZY9sWw0RqK8v8u5bxhmQ1tvqlevsvNOvsgc=;
+        s=korg; t=1654627304;
+        bh=PFB7LMWW2PhVhGHlYnGEb+7WfOIbTaZ+ZxhAhllowaA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XN8FxxkDizqW39moU9dy/Vx2cY0dezlAcZOEvPrq1c4wqsjxp6cWBDpnm9EhpTH8f
-         bVsy4KoW3F3N4I6VcxMvwgESpXr1rI+Dngz7t0Pawu0ki92PXj0kiLnkJcBOL47+eD
-         3gWmUJCU9+KL0VHoBsH/P4Kba8lwYzeMFzs1Hk/w=
+        b=gtzJuhqWn0RI1K6kSLMSVzXlZCM25fQsQaMKwA3xDj0IjVEE0g5/9HG+eX63bLv8B
+         cDqEmCPu38ovlPOibOTEQKuZBc4sVEUh/jGjmVPNdogCiBAcLFsNsaW06Qvf32JO83
+         e1vI/43gccWHxixUAdHRosinKoVV81x5QjJVsdzg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
+        stable@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Baik Song An <bsahn@etri.re.kr>,
+        Hong Yeon Kim <kimhy@etri.re.kr>,
+        Taeung Song <taeung@reallinux.co.kr>, linuxgeek@linuxgeek.io,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.17 649/772] tracing: Fix potential double free in create_var_ref()
-Date:   Tue,  7 Jun 2022 19:04:01 +0200
-Message-Id: <20220607165008.188962871@linuxfoundation.org>
+Subject: [PATCH 5.17 650/772] tracing: Fix return value of trace_pid_write()
+Date:   Tue,  7 Jun 2022 19:04:02 +0200
+Message-Id: <20220607165008.218851412@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,48 +58,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+From: Wonhyuk Yang <vvghjk1234@gmail.com>
 
-commit 99696a2592bca641eb88cc9a80c90e591afebd0f upstream.
+commit b27f266f74fbda4ee36c2b2b04d15992860cf23b upstream.
 
-In create_var_ref(), init_var_ref() is called to initialize the fields
-of variable ref_field, which is allocated in the previous function call
-to create_hist_field(). Function init_var_ref() allocates the
-corresponding fields such as ref_field->system, but frees these fields
-when the function encounters an error. The caller later calls
-destroy_hist_field() to conduct error handling, which frees the fields
-and the variable itself. This results in double free of the fields which
-are already freed in the previous function.
+Setting set_event_pid with trailing whitespace lead to endless write
+system calls like below.
 
-Fix this by storing NULL to the corresponding fields when they are freed
-in init_var_ref().
+    $ strace echo "123 " > /sys/kernel/debug/tracing/set_event_pid
+    execve("/usr/bin/echo", ["echo", "123 "], ...) = 0
+    ...
+    write(1, "123 \n", 5)                   = 4
+    write(1, "\n", 1)                       = 0
+    write(1, "\n", 1)                       = 0
+    write(1, "\n", 1)                       = 0
+    write(1, "\n", 1)                       = 0
+    write(1, "\n", 1)                       = 0
+    ....
 
-Link: https://lkml.kernel.org/r/20220425063739.3859998-1-keitasuzuki.park@sslab.ics.keio.ac.jp
+This is because, the result of trace_get_user's are not returned when it
+read at least one pid. To fix it, update read variable even if
+parser->idx == 0.
 
-Fixes: 067fe038e70f ("tracing: Add variable reference handling to hist triggers")
-CC: stable@vger.kernel.org
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+The result of applied patch is below.
+
+    $ strace echo "123 " > /sys/kernel/debug/tracing/set_event_pid
+    execve("/usr/bin/echo", ["echo", "123 "], ...) = 0
+    ...
+    write(1, "123 \n", 5)                   = 5
+    close(1)                                = 0
+
+Link: https://lkml.kernel.org/r/20220503050546.288911-1-vvghjk1234@gmail.com
+
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Baik Song An <bsahn@etri.re.kr>
+Cc: Hong Yeon Kim <kimhy@etri.re.kr>
+Cc: Taeung Song <taeung@reallinux.co.kr>
+Cc: linuxgeek@linuxgeek.io
+Cc: stable@vger.kernel.org
+Fixes: 4909010788640 ("tracing: Add set_event_pid directory for future use")
+Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_events_hist.c |    3 +++
- 1 file changed, 3 insertions(+)
+ kernel/trace/trace.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -2074,8 +2074,11 @@ static int init_var_ref(struct hist_fiel
- 	return err;
-  free:
- 	kfree(ref_field->system);
-+	ref_field->system = NULL;
- 	kfree(ref_field->event_name);
-+	ref_field->event_name = NULL;
- 	kfree(ref_field->name);
-+	ref_field->name = NULL;
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -711,13 +711,16 @@ int trace_pid_write(struct trace_pid_lis
+ 		pos = 0;
  
- 	goto out;
- }
+ 		ret = trace_get_user(&parser, ubuf, cnt, &pos);
+-		if (ret < 0 || !trace_parser_loaded(&parser))
++		if (ret < 0)
+ 			break;
+ 
+ 		read += ret;
+ 		ubuf += ret;
+ 		cnt -= ret;
+ 
++		if (!trace_parser_loaded(&parser))
++			break;
++
+ 		ret = -EINVAL;
+ 		if (kstrtoul(parser.buffer, 0, &val))
+ 			break;
+@@ -743,7 +746,6 @@ int trace_pid_write(struct trace_pid_lis
+ 	if (!nr_pids) {
+ 		/* Cleared the list of pids */
+ 		trace_pid_list_free(pid_list);
+-		read = ret;
+ 		pid_list = NULL;
+ 	}
+ 
 
 

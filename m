@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A749654177F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E525405B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350011AbiFGVDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S1346492AbiFGR3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358652AbiFGUBp (ORCPT
+        with ESMTP id S1346868AbiFGRZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:01:45 -0400
+        Tue, 7 Jun 2022 13:25:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37971C0CB3;
-        Tue,  7 Jun 2022 11:25:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B556D1109B4;
+        Tue,  7 Jun 2022 10:23:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82931B82384;
-        Tue,  7 Jun 2022 18:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A10C385A2;
-        Tue,  7 Jun 2022 18:25:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69611B81F38;
+        Tue,  7 Jun 2022 17:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A2AC385A5;
+        Tue,  7 Jun 2022 17:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626312;
-        bh=wKp8HDsungbWvC983amotRgL7FLHO8cc43t/Whwxl/o=;
+        s=korg; t=1654622603;
+        bh=4lNzNS2p7KxnpndFtuhi60Ak7ru+mfW1yQXaFo4Cags=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0kmzHlstIQBxhcQC/1fn12l5Yrdm5okREo9ihoQEpOie7W91aKJCcoA3xlDLx4pff
-         8eic0P42Hv3H3+gxFQHRBYKYp4R9g0AiGIBJCyFFRuK3NqR9abbAq/Ox/ZVW2C3kiU
-         f7Hbi3xcoWISCqcjmFPCN2NYwUwLTdGk4LqrBfK8=
+        b=a+nu8dYRQjSh7qHlbmFZNzsQLVYGZvOW5oVTtus8/ihjmm9JDWwQ6u3Q5+HM5pxZg
+         uY/FzPeEvNVcbE0hEHX2DnGfMHZNvxyX2qiK9xCN3G0/VFVTXUM/DIeV/k7vRDyLXS
+         dhk2EmIR6fHWe7Y98a5Ztl9b4pMhGUe/ulGTBtFk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 332/772] irqchip/aspeed-i2c-ic: Fix irq_of_parse_and_map() return value
-Date:   Tue,  7 Jun 2022 18:58:44 +0200
-Message-Id: <20220607164958.806852664@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 068/452] net: remove two BUG() from skb_checksum_help()
+Date:   Tue,  7 Jun 2022 18:58:45 +0200
+Message-Id: <20220607164910.577153212@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 50f0f26e7c8665763d0d7d3372dbcf191f94d077 ]
+[ Upstream commit d7ea0d9df2a6265b2b180d17ebc64b38105968fc ]
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+I have a syzbot report that managed to get a crash in skb_checksum_help()
 
-Fixes: f48e699ddf70 ("irqchip/aspeed-i2c-ic: Add I2C IRQ controller for Aspeed")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220423094227.33148-1-krzysztof.kozlowski@linaro.org
+If syzbot can trigger these BUG(), it makes sense to replace
+them with more friendly WARN_ON_ONCE() since skb_checksum_help()
+can instead return an error code.
+
+Note that syzbot will still crash there, until real bug is fixed.
+
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-aspeed-i2c-ic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/core/dev.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-aspeed-i2c-ic.c b/drivers/irqchip/irq-aspeed-i2c-ic.c
-index a47db16ff960..9c9fc3e2967e 100644
---- a/drivers/irqchip/irq-aspeed-i2c-ic.c
-+++ b/drivers/irqchip/irq-aspeed-i2c-ic.c
-@@ -77,8 +77,8 @@ static int __init aspeed_i2c_ic_of_init(struct device_node *node,
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 0bab2aca07fd..af52050b0f38 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3241,11 +3241,15 @@ int skb_checksum_help(struct sk_buff *skb)
  	}
  
- 	i2c_ic->parent_irq = irq_of_parse_and_map(node, 0);
--	if (i2c_ic->parent_irq < 0) {
--		ret = i2c_ic->parent_irq;
-+	if (!i2c_ic->parent_irq) {
-+		ret = -EINVAL;
- 		goto err_iounmap;
- 	}
+ 	offset = skb_checksum_start_offset(skb);
+-	BUG_ON(offset >= skb_headlen(skb));
++	ret = -EINVAL;
++	if (WARN_ON_ONCE(offset >= skb_headlen(skb)))
++		goto out;
++
+ 	csum = skb_checksum(skb, offset, skb->len - offset, 0);
  
+ 	offset += skb->csum_offset;
+-	BUG_ON(offset + sizeof(__sum16) > skb_headlen(skb));
++	if (WARN_ON_ONCE(offset + sizeof(__sum16) > skb_headlen(skb)))
++		goto out;
+ 
+ 	ret = skb_ensure_writable(skb, offset + sizeof(__sum16));
+ 	if (ret)
 -- 
 2.35.1
 

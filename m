@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9075412B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE7A540844
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358064AbiFGTvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S1348911AbiFGR5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354322AbiFGSqy (ORCPT
+        with ESMTP id S1347741AbiFGRfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:46:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB1834663;
-        Tue,  7 Jun 2022 11:00:46 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C940E1078A1;
+        Tue,  7 Jun 2022 10:31:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D926A617AE;
-        Tue,  7 Jun 2022 18:00:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1EF2C34115;
-        Tue,  7 Jun 2022 18:00:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B132CE23CF;
+        Tue,  7 Jun 2022 17:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B67C385A5;
+        Tue,  7 Jun 2022 17:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624845;
-        bh=kEmGo7t2daCBSG2zdvMnZrbXfia1pM6bSCOpiyyNHU8=;
+        s=korg; t=1654623066;
+        bh=Ut+bZrRoeLbuyeDLyw/oRKMIW9n1SnNA9eXj6UzrNTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pXolH22qpSKci+v1ii+RMXvPRroxoKPMpb2rKOdzTpRfr/8Yc4Gv+feB2DcglN897
-         CN0SARUjmXV9n7pTnL3nB5iVzoZAxNDORJHmDYkQh3YLbtXbDBX3Phipr4kiP0qPvW
-         zuBclvadPtAj/uTxyyIqUCakWWGJsMoJuKhRmo38=
+        b=rNEPhAw2UO9o8PVW/G4Wk2fwykygn3hmdUfWbQ/nFONRGG9CbEt8Jv03L6LN1VdOz
+         QZ9OT9tXCJjf2YheHJJ8wUiKNuvBrwXZ9eh0khkRoR/wvK318XZ3uWT6tykQpvA8Rd
+         Hlts6bcMrqoqsaL/NVYtkXkwUvBzkt5v8hj1zPFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 473/667] RDMA/hfi1: Prevent use of lock before it is initialized
-Date:   Tue,  7 Jun 2022 19:02:18 +0200
-Message-Id: <20220607164948.891344653@linuxfoundation.org>
+Subject: [PATCH 5.10 282/452] pinctrl: bcm2835: implement hook for missing gpio-ranges
+Date:   Tue,  7 Jun 2022 19:02:19 +0200
+Message-Id: <20220607164916.953420462@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 05c03dfd09c069c4ffd783b47b2da5dcc9421f2c ]
+[ Upstream commit d2b67744fd99b06555b7e4d67302ede6c7c6a638 ]
 
-If there is a failure during probe of hfi1 before the sdma_map_lock is
-initialized, the call to hfi1_free_devdata() will attempt to use a lock
-that has not been initialized. If the locking correctness validator is on
-then an INFO message and stack trace resembling the following may be seen:
+The commit c8013355ead6 ("ARM: dts: gpio-ranges property is now required")
+fixed the GPIO probing issues caused by "pinctrl: bcm2835: Change init
+order for gpio hogs". This changed only the kernel DTS files. Unfortunately
+it isn't guaranteed that these files are shipped to all users.
 
-  INFO: trying to register non-static key.
-  The code is fine but needs lockdep annotation, or maybe
-  you didn't initialize this object before use?
-  turning off the locking correctness validator.
-  Call Trace:
-  register_lock_class+0x11b/0x880
-  __lock_acquire+0xf3/0x7930
-  lock_acquire+0xff/0x2d0
-  _raw_spin_lock_irq+0x46/0x60
-  sdma_clean+0x42a/0x660 [hfi1]
-  hfi1_free_devdata+0x3a7/0x420 [hfi1]
-  init_one+0x867/0x11a0 [hfi1]
-  pci_device_probe+0x40e/0x8d0
+So implement the necessary backward compatibility for BCM2835 and
+BCM2711 platform.
 
-The use of sdma_map_lock in sdma_clean() is for freeing the sdma_map
-memory, and sdma_map is not allocated/initialized until after
-sdma_map_lock has been initialized. This code only needs to be run if
-sdma_map is not NULL, and so checking for that condition will avoid trying
-to use the lock before it is initialized.
-
-Fixes: 473291b3ea0e ("IB/hfi1: Fix for early release of sdma context")
-Fixes: 7724105686e7 ("IB/hfi1: add driver files")
-Link: https://lore.kernel.org/r/20220520183701.48973.72434.stgit@awfm-01.cornelisnetworks.com
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220409095129.45786-3-stefan.wahren@i2se.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/hfi1/sdma.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
-index f07d328689d3..a95b654f5254 100644
---- a/drivers/infiniband/hw/hfi1/sdma.c
-+++ b/drivers/infiniband/hw/hfi1/sdma.c
-@@ -1288,11 +1288,13 @@ void sdma_clean(struct hfi1_devdata *dd, size_t num_engines)
- 		kvfree(sde->tx_ring);
- 		sde->tx_ring = NULL;
- 	}
--	spin_lock_irq(&dd->sde_map_lock);
--	sdma_map_free(rcu_access_pointer(dd->sdma_map));
--	RCU_INIT_POINTER(dd->sdma_map, NULL);
--	spin_unlock_irq(&dd->sde_map_lock);
--	synchronize_rcu();
-+	if (rcu_access_pointer(dd->sdma_map)) {
-+		spin_lock_irq(&dd->sde_map_lock);
-+		sdma_map_free(rcu_access_pointer(dd->sdma_map));
-+		RCU_INIT_POINTER(dd->sdma_map, NULL);
-+		spin_unlock_irq(&dd->sde_map_lock);
-+		synchronize_rcu();
-+	}
- 	kfree(dd->per_sdma);
- 	dd->per_sdma = NULL;
+diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+index 6768b2f03d68..39d2024dc2ee 100644
+--- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
++++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
+@@ -351,6 +351,22 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
+ 	return pinctrl_gpio_direction_output(chip->base + offset);
+ }
  
++static int bcm2835_of_gpio_ranges_fallback(struct gpio_chip *gc,
++					   struct device_node *np)
++{
++	struct pinctrl_dev *pctldev = of_pinctrl_get(np);
++
++	of_node_put(np);
++
++	if (!pctldev)
++		return 0;
++
++	gpiochip_add_pin_range(gc, pinctrl_dev_get_devname(pctldev), 0, 0,
++			       gc->ngpio);
++
++	return 0;
++}
++
+ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.label = MODULE_NAME,
+ 	.owner = THIS_MODULE,
+@@ -365,6 +381,7 @@ static const struct gpio_chip bcm2835_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2835_NUM_GPIOS,
+ 	.can_sleep = false,
++	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
+ };
+ 
+ static const struct gpio_chip bcm2711_gpio_chip = {
+@@ -381,6 +398,7 @@ static const struct gpio_chip bcm2711_gpio_chip = {
+ 	.base = -1,
+ 	.ngpio = BCM2711_NUM_GPIOS,
+ 	.can_sleep = false,
++	.of_gpio_ranges_fallback = bcm2835_of_gpio_ranges_fallback,
+ };
+ 
+ static void bcm2835_gpio_irq_handle_bank(struct bcm2835_pinctrl *pc,
 -- 
 2.35.1
 

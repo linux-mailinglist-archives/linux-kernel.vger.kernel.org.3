@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC7D541EC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2549B541EE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384817AbiFGWgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S1381604AbiFGWhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378647AbiFGVX4 (ORCPT
+        with ESMTP id S1378209AbiFGVX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 17:23:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211C6227CC0;
-        Tue,  7 Jun 2022 12:00:53 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FE42271B1;
+        Tue,  7 Jun 2022 12:00:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BADAB8220B;
-        Tue,  7 Jun 2022 19:00:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2B5C385A5;
-        Tue,  7 Jun 2022 19:00:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7F98B823A0;
+        Tue,  7 Jun 2022 19:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55743C385A2;
+        Tue,  7 Jun 2022 19:00:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628451;
-        bh=owJ9BugnB1NO6H2htMXN/OwXTT9AtJOgxw4uMNv8eg8=;
+        s=korg; t=1654628453;
+        bh=WOGbrWxzyZjlwEgeZMiKrO6Yp8c0OJ/aqaNZJ65xRjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RVIeWXH51Ec0BoHHuxPGp2EdRlTzAtVwbsvwGtVMYD+D6XJ1YfmAH706u+TZHUQK5
-         5/rj6kRtREPK5pfPAY+q1lNUzSW45lK//tYJwT3aQHNs29QHvwQfqQ2bqMVowwatws
-         Y826bmzx/RNMvY2fTLgAQ6bibfZvibj1TZNYDSvs=
+        b=Rw7vUjNfbsODbKOI5E6aW8i8a3mOUipAVrM5zZVjRMA0ZA/yWHceuj9CBpBxAyC4Y
+         z0D0j8pXgYVYHSAOvJWl/lg1clrlNv9QlohLMQvg+gi1UvML2BjJfMSgGVOdJzF3Io
+         UIVybriGGfP3dW/a8FaK2eOFPuzZtzo0r1Q9GSM8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 335/879] cpufreq: Fix possible race in cpufreq online error path
-Date:   Tue,  7 Jun 2022 18:57:33 +0200
-Message-Id: <20220607165012.581142596@linuxfoundation.org>
+        stable@vger.kernel.org, John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 336/879] printk: add missing memory barrier to wake_up_klogd()
+Date:   Tue,  7 Jun 2022 18:57:34 +0200
+Message-Id: <20220607165012.610008844@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,89 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit f346e96267cd76175d6c201b40f770c0116a8a04 ]
+[ Upstream commit 1f5d783094cf28b4905f51cad846eb5d1db6673e ]
 
-When cpufreq online fails, the policy->cpus mask is not cleared and
-policy->rwsem is released too early, so the driver can be invoked
-via the cpuinfo_cur_freq sysfs attribute while its ->offline() or
-->exit() callbacks are being run.
+It is important that any new records are visible to preparing
+waiters before the waker checks if the wait queue is empty.
+Otherwise it is possible that:
 
-Take policy->clk as an example:
+- there are new records available
+- the waker sees an empty wait queue and does not wake
+- the preparing waiter sees no new records and begins to wait
 
-static int cpufreq_online(unsigned int cpu)
-{
-  ...
-  // policy->cpus != 0 at this time
-  down_write(&policy->rwsem);
-  ret = cpufreq_add_dev_interface(policy);
-  up_write(&policy->rwsem);
+This is exactly the problem that the function description of
+waitqueue_active() warns about.
 
-  return 0;
+Use wq_has_sleeper() instead of waitqueue_active() because it
+includes the necessary full memory barrier.
 
-out_destroy_policy:
-	for_each_cpu(j, policy->real_cpus)
-		remove_cpu_dev_symlink(policy, get_cpu_device(j));
-    up_write(&policy->rwsem);
-...
-out_exit_policy:
-  if (cpufreq_driver->exit)
-    cpufreq_driver->exit(policy);
-      clk_put(policy->clk);
-      // policy->clk is a wild pointer
-...
-                                    ^
-                                    |
-                            Another process access
-                            __cpufreq_get
-                              cpufreq_verify_current_freq
-                                cpufreq_generic_get
-                                  // acces wild pointer of policy->clk;
-                                    |
-                                    |
-out_offline_policy:                 |
-  cpufreq_policy_free(policy);      |
-    // deleted here, and will wait for no body reference
-    cpufreq_policy_put_kobj(policy);
-}
-
-Address this by modifying cpufreq_online() to release policy->rwsem
-in the error path after the driver callbacks have run and to clear
-policy->cpus before releasing the semaphore.
-
-Fixes: 7106e02baed4 ("cpufreq: release policy->rwsem on error")
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-[ rjw: Subject and changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220421212250.565456-4-john.ogness@linutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/cpufreq.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/printk/printk.c | 39 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index fbaa8e6c7d23..233e8af48848 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1534,8 +1534,6 @@ static int cpufreq_online(unsigned int cpu)
- 	for_each_cpu(j, policy->real_cpus)
- 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index da03c15ecc89..ed6f20992915 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -746,8 +746,19 @@ static ssize_t devkmsg_read(struct file *file, char __user *buf,
+ 			goto out;
+ 		}
  
--	up_write(&policy->rwsem);
--
- out_offline_policy:
- 	if (cpufreq_driver->offline)
- 		cpufreq_driver->offline(policy);
-@@ -1544,6 +1542,9 @@ static int cpufreq_online(unsigned int cpu)
- 	if (cpufreq_driver->exit)
- 		cpufreq_driver->exit(policy);
++		/*
++		 * Guarantee this task is visible on the waitqueue before
++		 * checking the wake condition.
++		 *
++		 * The full memory barrier within set_current_state() of
++		 * prepare_to_wait_event() pairs with the full memory barrier
++		 * within wq_has_sleeper().
++		 *
++		 * This pairs with wake_up_klogd:A.
++		 */
+ 		ret = wait_event_interruptible(log_wait,
+-				prb_read_valid(prb, atomic64_read(&user->seq), r));
++				prb_read_valid(prb,
++					atomic64_read(&user->seq), r)); /* LMM(devkmsg_read:A) */
+ 		if (ret)
+ 			goto out;
+ 	}
+@@ -1513,7 +1524,18 @@ static int syslog_print(char __user *buf, int size)
+ 		seq = syslog_seq;
  
-+	cpumask_clear(policy->cpus);
-+	up_write(&policy->rwsem);
-+
- out_free_policy:
- 	cpufreq_policy_free(policy);
- 	return ret;
+ 		mutex_unlock(&syslog_lock);
+-		len = wait_event_interruptible(log_wait, prb_read_valid(prb, seq, NULL));
++		/*
++		 * Guarantee this task is visible on the waitqueue before
++		 * checking the wake condition.
++		 *
++		 * The full memory barrier within set_current_state() of
++		 * prepare_to_wait_event() pairs with the full memory barrier
++		 * within wq_has_sleeper().
++		 *
++		 * This pairs with wake_up_klogd:A.
++		 */
++		len = wait_event_interruptible(log_wait,
++				prb_read_valid(prb, seq, NULL)); /* LMM(syslog_print:A) */
+ 		mutex_lock(&syslog_lock);
+ 
+ 		if (len)
+@@ -3316,7 +3338,18 @@ void wake_up_klogd(void)
+ 		return;
+ 
+ 	preempt_disable();
+-	if (waitqueue_active(&log_wait)) {
++	/*
++	 * Guarantee any new records can be seen by tasks preparing to wait
++	 * before this context checks if the wait queue is empty.
++	 *
++	 * The full memory barrier within wq_has_sleeper() pairs with the full
++	 * memory barrier within set_current_state() of
++	 * prepare_to_wait_event(), which is called after ___wait_event() adds
++	 * the waiter but before it has checked the wait condition.
++	 *
++	 * This pairs with devkmsg_read:A and syslog_print:A.
++	 */
++	if (wq_has_sleeper(&log_wait)) { /* LMM(wake_up_klogd:A) */
+ 		this_cpu_or(printk_pending, PRINTK_PENDING_WAKEUP);
+ 		irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+ 	}
 -- 
 2.35.1
 

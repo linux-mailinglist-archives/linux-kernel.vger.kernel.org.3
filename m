@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A69540532
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF9A540F5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346207AbiFGRXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S1353598AbiFGTHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237273AbiFGRUh (ORCPT
+        with ESMTP id S1352086AbiFGSQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:20:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6C21053DA;
-        Tue,  7 Jun 2022 10:20:36 -0700 (PDT)
+        Tue, 7 Jun 2022 14:16:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DE9133932;
+        Tue,  7 Jun 2022 10:50:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 404AAB8220C;
-        Tue,  7 Jun 2022 17:20:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19B7C385A5;
-        Tue,  7 Jun 2022 17:20:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 46D51CE21CD;
+        Tue,  7 Jun 2022 17:50:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212E1C385A5;
+        Tue,  7 Jun 2022 17:50:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622434;
-        bh=1vh6uLlXuKPeXSt+PFMmKOp5dM+g4UIJejgmIJewkbU=;
+        s=korg; t=1654624222;
+        bh=2R1mQvAJ3EHxKA7Z2wDfWH5G/0RmduuCe6zF8RkqES4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cfHVAN2CP30J5Ku4xww0LCYF6GuKoxHeY0eWimRxzhDMq2lhkTaLsge2x+uzJpBpc
-         tPW3YGsUnDD786sNoAKjcqe03ntn510oegfxTkRJV9DiQ3fmyXj2YJnkZn3LQRhORi
-         eXw+tlnyykQmImGEq58zyOc56AGpSfvc6ilRiOE8=
+        b=i9An50rywmhPLOZj7QfmKbYAumG8ZdKsxVSkYxkOSsYw5yr34VdZHBJK5tZ493BNV
+         eMwr6RI/f/iufdue05K1qKpf+6Jw3GmjWf7OqdKvc52qnRnRn0w1nrr1SUmCzEysY1
+         Dt9Z4G2dixHk00RH0jxdoCvrzHrEZj5lc0noiD1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Evan Quan <evan.quan@amd.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 056/452] drm/amd/pm: fix the compile warning
+        stable@vger.kernel.org, SeongJae Park <sj@kernel.org>,
+        Yuanchu Xie <yuanchu@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 248/667] selftests/damon: add damon to selftests root Makefile
 Date:   Tue,  7 Jun 2022 18:58:33 +0200
-Message-Id: <20220607164910.217125268@linuxfoundation.org>
+Message-Id: <20220607164942.223235036@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Quan <evan.quan@amd.com>
+From: Yuanchu Xie <yuanchu@google.com>
 
-[ Upstream commit 555238d92ac32dbad2d77ad2bafc48d17391990c ]
+[ Upstream commit 678f0cdc572c5fda940cb038d70eebb8d818adc8 ]
 
-Fix the compile warning below:
-drivers/gpu/drm/amd/amdgpu/../pm/legacy-dpm/kv_dpm.c:1641
-kv_get_acp_boot_level() warn: always true condition '(table->entries[i]->clk >= 0) => (0-u32max >= 0)'
+Currently the damon selftests are not built with the rest of the
+selftests. We add damon to the list of targets.
 
-Reported-by: kernel test robot <lkp@intel.com>
-CC: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Evan Quan <evan.quan@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+Reviewed-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+Acked-by: David Rientjes <rientjes@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ tools/testing/selftests/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c b/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c
-index 4b3faaccecb9..c8a5a5698edd 100644
---- a/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c
-+++ b/drivers/gpu/drm/amd/pm/powerplay/kv_dpm.c
-@@ -1609,19 +1609,7 @@ static int kv_update_samu_dpm(struct amdgpu_device *adev, bool gate)
- 
- static u8 kv_get_acp_boot_level(struct amdgpu_device *adev)
- {
--	u8 i;
--	struct amdgpu_clock_voltage_dependency_table *table =
--		&adev->pm.dpm.dyn_state.acp_clock_voltage_dependency_table;
--
--	for (i = 0; i < table->count; i++) {
--		if (table->entries[i].clk >= 0) /* XXX */
--			break;
--	}
--
--	if (i >= table->count)
--		i = table->count - 1;
--
--	return i;
-+	return 0;
- }
- 
- static void kv_update_acp_boot_level(struct amdgpu_device *adev)
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c852eb40c4f7..14206d1d1efe 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -8,6 +8,7 @@ TARGETS += clone3
+ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
++TARGETS += damon
+ TARGETS += drivers/dma-buf
+ TARGETS += efivarfs
+ TARGETS += exec
 -- 
 2.35.1
 

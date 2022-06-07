@@ -2,127 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8D353F66F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7336C53F673
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 08:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237166AbiFGGod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 02:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S237186AbiFGGop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 02:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiFGGo0 (ORCPT
+        with ESMTP id S232554AbiFGGok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 02:44:26 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8195253C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 23:44:25 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id w13-20020a17090a780d00b001e8961b355dso2760055pjk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 23:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GzEm5jqlekQS2E69TLpvZ6DXTFb1mHUyOolgBivv5/c=;
-        b=KvJDycZnUMrvh8JswpwAudxPqdgqMKXeNkRKM6/ll5Sbpo3gVxMfPTteKcUV+K0ODe
-         wV2/k4Pqve82ruqgqp5WA5ayFmvdn66gJIXFOzxJHHD1zZq4dFovK75YWMJGnPqOr+5U
-         uxll4W0fCcbEcMql6qhrx7UlOIyfTOLrqMPlnyPmF/z0aLFUJnxOja5iRhzmkFMWM9Uo
-         OOi6J1HBmxbA6whXfvlZoKZs0WCF4fP31wQpk6SY0rmO/6epmzMaeBI1kBenj8fRYkej
-         j9RM4qz6QNrnNpM1SXPaG3yucpNMCUPK8QCH/Cb9fMXzfrqo/o7yzOTnbqKneyXJZWxb
-         KzRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GzEm5jqlekQS2E69TLpvZ6DXTFb1mHUyOolgBivv5/c=;
-        b=H5YQJWV0O2td+y84npYgFty/px1Yn0ae9LfSPRZivUJXcBdvwObOYgMxvZF3kOe2E+
-         i+SavRtLosKc3RbUFiu2wa2j2ZxWdpjIMgfJRIfvKiKmoYARqg8nMSn/k/aoC9o6AmeP
-         xFzR9OMm0j+tZgQm7alR2BArDQJE/bAKcvwdhgj0iGqLBIAOIdbdG1MOHyjW1uiJVIzJ
-         r3FbMWAR+7jYUi+wHa3yHybDFdBZZ6AcarORXpOqmDf5gb8wAdXxTxC/hEGc4K4E1BOw
-         14dCu5xQ22HvvI33TYklO4g2yqbfaMdhSha3KvUUiTRC8dJi65Cm3TPvKQ6J5B8STW7p
-         +C+Q==
-X-Gm-Message-State: AOAM5303Nvk3jyagEs6PaA2D75iTO422/IP7e+qXVWLoLiWUgo/6yUXK
-        nFzN5uWsW5qRgkYvN5pKCNA9gUey6lUbmipqscenIQ==
-X-Google-Smtp-Source: ABdhPJyiJ1kgXF3d95mk6ZoiyKqVYZuzzYbnd0ek3tLxWUwtNIRKftrWoMNME7yKuVGl6/jJoQTBLqzz/oYipJAixq0=
-X-Received: by 2002:a17:902:ab8c:b0:167:4d5c:3542 with SMTP id
- f12-20020a170902ab8c00b001674d5c3542mr19708637plr.6.1654584264279; Mon, 06
- Jun 2022 23:44:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYv7fESqpGoeKmHoJsst6wfRNMi2wQLGm+PsjbLDuDjdMQ@mail.gmail.com>
- <CA+G9fYsJThWFAxXTbAcJmjshx+oYxVVd+gMM680hS0X1z37+FQ@mail.gmail.com>
- <20220607162504.7fd5a92a@canb.auug.org.au> <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
-In-Reply-To: <CALvZod5XBjw7MZfYSNv-UnE7pHMKTquUNomqyC5T05Qu_ef6Zw@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 6 Jun 2022 23:44:13 -0700
-Message-ID: <CALvZod4DhM00LXsPty=cnYyv3Ci5YS5otasu_tr9o7ujQekKLw@mail.gmail.com>
-Subject: Re: [next] arm64: boot failed - next-20220606
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Raghuram Thammiraju <raghuram.thammiraju@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vasily Averin <vvs@openvz.org>,
-        Qian Cai <quic_qiancai@quicinc.com>
+        Tue, 7 Jun 2022 02:44:40 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560B7B0A76;
+        Mon,  6 Jun 2022 23:44:38 -0700 (PDT)
+X-UUID: f2ff2b99b3a6428b81381a0435a5737a-20220607
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:bd6e63f1-6500-4bea-bd3e-52a63a9384c9,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:bde48d21-199a-43f9-af93-057fe480bdd5,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: f2ff2b99b3a6428b81381a0435a5737a-20220607
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 528559842; Tue, 07 Jun 2022 14:44:33 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 7 Jun 2022 14:44:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 7 Jun 2022 14:44:32 +0800
+Message-ID: <b8aef76cef2fa434401b6a016de291eb24198faa.camel@mediatek.com>
+Subject: Re: [PATCH v10 18/21] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Kishon Vijay Abraham I" <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, "Helge Deller" <deller@gmx.de>,
+        Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 7 Jun 2022 14:44:32 +0800
+In-Reply-To: <20220523104758.29531-19-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-19-granquet@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 11:36 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Mon, Jun 6, 2022 at 11:25 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi Naresh,
-> >
-> > On Tue, 7 Jun 2022 11:00:39 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > On Mon, 6 Jun 2022 at 17:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > > >
-> > > > Linux next-20220606 arm64 boot failed. The kernel boot log is empty.
-> > > > I am bisecting this problem.
-> > > >
-> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > >
-> > > > The initial investigation show that,
-> > > >
-> > > > GOOD: next-20220603
-> > > > BAD:  next-20220606
-> > > >
-> > > > Boot log:
-> > > > Starting kernel ...
-> > >
-> > > Linux next-20220606 and next-20220607 arm64 boot failed.
-> > > The kernel panic log showing after earlycon.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Can you test v5.19-rc1, please?  If that does not fail, then you could
-> > bisect between that and next-20220606 ...
-> >
->
-> This is already reported at
-> https://lore.kernel.org/all/Yp4F6n2Ie32re7Ed@qian/ and I think we know
-> the underlying issue (which is calling virt_to_page() on a vmalloc
-> address).
+Hi, Rex:
 
-Sorry, I might be wrong. Just checked the stacktrace again and it
-seems like the failure is happening in early boot in this report.
-Though the error "Unable to handle kernel paging request at virtual
-address" is happening in the function mem_cgroup_from_obj().
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> This patch adds a DisplayPort driver for the Mediatek mt8195 SoC.
+> 
+> It supports the mt8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
 
-Naresh, can you repro the issue if you revert the patch "net: set
-proper memcg for net_init hooks allocations"?
+[snip]
+
+> +
+> +static int mtk_dp_train_handler(struct mtk_dp *mtk_dp)
+> +{
+> +	bool training_done = false;
+> +	short max_retry = 50;
+> +	int ret = 0;
+> +
+> +	do {
+> +		switch (mtk_dp->train_state) {
+> +		case MTK_DP_TRAIN_STATE_STARTUP:
+
+mtk_dp->train_state is initialized as MTK_DP_TRAIN_STATE_STARTUP even
+though HPD ISR does not exist. Does this mean HPD ISR is redundant? If
+HPD ISR is not redundant, create a new state MTK_DP_TRAIN_STATE_NONE
+for init state.
+
+> +			mtk_dp_state_handler(mtk_dp);
+> +			mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_CHECKCAP;
+> +			break;
+> +
+> +		case MTK_DP_TRAIN_STATE_CHECKCAP:
+> +			if (mtk_dp_parse_capabilities(mtk_dp)) {
+> +				mtk_dp->train_info.check_cap_count = 0;
+> +				mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_CHECKEDID;
+> +			} else {
+> +				mtk_dp->train_info.check_cap_count++;
+> +
+> +				if (mtk_dp->train_info.check_cap_count
+> >
+> +				    MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT
+> ) {
+> +					mtk_dp-
+> >train_info.check_cap_count = 0;
+> +					mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_DPIDLE;
+> +					ret = -ETIMEDOUT;
+> +				}
+> +			}
+> +			break;
+> +
+> +		case MTK_DP_TRAIN_STATE_CHECKEDID:
+> +			mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_TRAINING_PRE;
+
+MTK_DP_TRAIN_STATE_CHECKEDID is a redundant state, drop it.
+
+> +			break;
+> +
+> +		case MTK_DP_TRAIN_STATE_TRAINING_PRE:
+> +			mtk_dp_state_handler(mtk_dp);
+> +			mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_TRAINING;
+> +			break;
+> +
+> +		case MTK_DP_TRAIN_STATE_TRAINING:
+> +			ret = mtk_dp_train_start(mtk_dp);
+> +			if (ret == 0) {
+> +				mtk_dp_video_mute(mtk_dp, true);
+> +				mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_NORMAL;
+> +				mtk_dp_fec_enable(mtk_dp, mtk_dp-
+> >has_fec);
+> +			} else if (ret != -EAGAIN) {
+> +				mtk_dp->train_state =
+> MTK_DP_TRAIN_STATE_DPIDLE;
+> +			}
+> +			break;
+> +		case MTK_DP_TRAIN_STATE_NORMAL:
+> +			mtk_dp_state_handler(mtk_dp);
+> +			training_done = true;
+> +			break;
+> +		case MTK_DP_TRAIN_STATE_DPIDLE:
+
+When would this case happen?
+
+Regards,
+CK
+
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		if (ret) {
+> +			if (ret == -EAGAIN)
+> +				continue;
+> +			/*
+> +			 * If we get any other error number, it doesn't
+> +			 * make any sense to keep iterating.
+> +			 */
+> +			break;
+> +		}
+> +	} while (!training_done || --max_retry);
+> +
+> +	return ret;
+> +}
+

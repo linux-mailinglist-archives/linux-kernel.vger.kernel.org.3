@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45374541524
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7ACA5409B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359577AbiFGU3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S239810AbiFGSME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 14:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356148AbiFGTiM (ORCPT
+        with ESMTP id S1350098AbiFGRvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:38:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A4E3AA72;
-        Tue,  7 Jun 2022 11:13:48 -0700 (PDT)
+        Tue, 7 Jun 2022 13:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F8A1406D6;
+        Tue,  7 Jun 2022 10:39:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D309B8236B;
-        Tue,  7 Jun 2022 18:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A75C385A2;
-        Tue,  7 Jun 2022 18:13:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E20160BC6;
+        Tue,  7 Jun 2022 17:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33216C385A5;
+        Tue,  7 Jun 2022 17:39:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625625;
-        bh=6GPI7gYf07+zFN1Ol/tp6iH7PZSLrK3qLnRFMdReihY=;
+        s=korg; t=1654623568;
+        bh=diPTJAlAYIKdCCWA3zqqCctkFNXEeBxcidPHNv1YQRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xCO/ttDJ5/OlnH0d6mz4rcRsEahQjDmXkifZUl6fepBRuww3q9mH1mWFhlpdKdyya
-         NURHN8MCjQW86EDicr2Z2U0ytDrug5jOEgi1GW9tgfXpmyVRfCSSHURlurIAgQkey/
-         4TU+fMzEYJQRYkdGz46PXEJntroIxVnclQJwTy74=
+        b=BeCICZ4ED7hMZ3wGSlrq7uMMQ4uvR8mSjXn5h8sFYXZLZL+gRvqyyU53n0YZFmpfh
+         c4DbLNexJwytxGCMnfWjQMGueS2Yw5w4guww746Ir4LVSC+rK6RLlU4/PQovpEOkt2
+         9T2URmUlU2FltrASVMbtxx9XKr1O+EqL8a67cozI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks+kernel@slashdirt.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 086/772] ath9k: fix QCA9561 PA bias level
+        syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 013/667] ALSA: usb-audio: Cancel pending work at closing a MIDI substream
 Date:   Tue,  7 Jun 2022 18:54:38 +0200
-Message-Id: <20220607164951.578019565@linuxfoundation.org>
+Message-Id: <20220607164935.187446946@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,51 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit e999a5da28a0e0f7de242d841ef7d5e48f4646ae ]
+commit 0125de38122f0f66bf61336158d12a1aabfe6425 upstream.
 
-This patch fixes an invalid TX PA DC bias level on QCA9561, which
-results in a very low output power and very low throughput as devices
-are further away from the AP (compared to other 2.4GHz APs).
+At closing a USB MIDI output substream, there might be still a pending
+work, which would eventually access the rawmidi runtime object that is
+being released.  For fixing the race, make sure to cancel the pending
+work at closing.
 
-This patch was suggested by Felix Fietkau, who noted[1]:
-"The value written to that register is wrong, because while the mask
-definition AR_CH0_TOP2_XPABIASLVL uses a different value for 9561, the
-shift definition AR_CH0_TOP2_XPABIASLVL_S is hardcoded to 12, which is
-wrong for 9561."
-
-In real life testing, without this patch the 2.4GHz throughput on
-Yuncore XD3200 is around 10Mbps sitting next to the AP, and closer to
-practical maximum with the patch applied.
-
-[1] https://lore.kernel.org/all/91c58969-c60e-2f41-00ac-737786d435ae@nbd.name
-
-Signed-off-by: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
-Acked-by: Felix Fietkau <nbd@nbd.name>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220417145145.1847-1-hacks+kernel@slashdirt.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/000000000000e7e75005dfd07cf6@google.com
+Link: https://lore.kernel.org/r/20220525131203.11299-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/ath9k/ar9003_phy.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/usb/midi.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_phy.h b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
-index a171dbb29fbb..ad949eb02f3d 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_phy.h
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
-@@ -720,7 +720,7 @@
- #define AR_CH0_TOP2		(AR_SREV_9300(ah) ? 0x1628c : \
- 					(AR_SREV_9462(ah) ? 0x16290 : 0x16284))
- #define AR_CH0_TOP2_XPABIASLVL		(AR_SREV_9561(ah) ? 0x1e00 : 0xf000)
--#define AR_CH0_TOP2_XPABIASLVL_S	12
-+#define AR_CH0_TOP2_XPABIASLVL_S	(AR_SREV_9561(ah) ? 9 : 12)
+--- a/sound/usb/midi.c
++++ b/sound/usb/midi.c
+@@ -1145,6 +1145,9 @@ static int snd_usbmidi_output_open(struc
  
- #define AR_CH0_XTAL		(AR_SREV_9300(ah) ? 0x16294 : \
- 				 ((AR_SREV_9462(ah) || AR_SREV_9565(ah)) ? 0x16298 : \
--- 
-2.35.1
-
+ static int snd_usbmidi_output_close(struct snd_rawmidi_substream *substream)
+ {
++	struct usbmidi_out_port *port = substream->runtime->private_data;
++
++	cancel_work_sync(&port->ep->work);
+ 	return substream_open(substream, 0, 0);
+ }
+ 
 
 

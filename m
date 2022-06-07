@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023B35414FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8363A541D6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377136AbiFGU2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S1350967AbiFGWOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356412AbiFGTiY (ORCPT
+        with ESMTP id S1380035AbiFGVLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:38:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656AA52533;
-        Tue,  7 Jun 2022 11:13:56 -0700 (PDT)
+        Tue, 7 Jun 2022 17:11:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963F61498DD;
+        Tue,  7 Jun 2022 11:52:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3B9B8233E;
-        Tue,  7 Jun 2022 18:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8FFFC36B0B;
-        Tue,  7 Jun 2022 18:13:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CECC7616A9;
+        Tue,  7 Jun 2022 18:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1ABAC385A2;
+        Tue,  7 Jun 2022 18:52:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625634;
-        bh=MoPv6OhQx7EiRN060osT8VM3jcVMoppKxNbkWMOY8cI=;
+        s=korg; t=1654627978;
+        bh=XCIo5oBjPhUPMtJO6VtGpo5T64/wBIlRjbYu4ZudoSw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bRe5hQMIIDh8QkBZhnGrcSWt0DLDxU7cvFWI0UD9+CAcl2D3j3mWalpsk0IuBjP5a
-         e2VdVkr4VM+IEfKuUIV68EzHnUGj2zWXlEXbrmx+DqeYw7y9S8Ik0CZNynnCAtZhR5
-         6lGcGsr4r82R4XTUK+m4n01zll5vWq04e2H/A4+c=
+        b=aLIb1vKwsMeO9EE7eR5BeWy5qq2UGFDDAaRVHGGXmm/KUznJYJh0JwA449aIUxGaN
+         53tVK5T1RaKb3qPnAsD1bJcrZ0XqJDUJFgmyIX1fxETQCzZlo3zGprXwljOVwLNAls
+         gfuhFflHl1wgOpIaSrIpvxmGGetop+mY1bMd+4po=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 089/772] media: venus: do not queue internal buffers from previous sequence
+Subject: [PATCH 5.18 163/879] media: coda: limit frame interval enumeration to supported encoder frame sizes
 Date:   Tue,  7 Jun 2022 18:54:41 +0200
-Message-Id: <20220607164951.668432150@linuxfoundation.org>
+Message-Id: <20220607165007.437688168@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,89 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vikash Garodia <quic_vgarodia@quicinc.com>
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-[ Upstream commit 73664f107c0fafb59cd91e576b81c986adb74610 ]
+[ Upstream commit 67e33dd957880879e785cfea83a3aa24bd5c5577 ]
 
-During reconfig (DRC) event from firmware, it is not guaranteed that
-all the DPB(internal) buffers would be released by the firmware. Some
-buffers might be released gradually while processing frames from the
-new sequence. These buffers now stay idle in the dpblist.
-In subsequent call to queue the DPBs to firmware, these idle buffers
-should not be queued. The fix identifies those buffers and free them.
+Let VIDIOC_ENUM_FRAMEINTERVALS return -EINVAL if userspace queries
+frame intervals for frame sizes unsupported by the encoder. Fixes the
+following v4l2-compliance failure:
 
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Tested-by: Fritz Koenig <frkoenig@chromium.org>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+		fail: v4l2-test-formats.cpp(123): found frame intervals for invalid size 47x16
+		fail: v4l2-test-formats.cpp(282): node->codec_mask & STATEFUL_ENCODER
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: FAIL
+
+[hverkuil: drop incorrect 'For decoder devices, return -ENOTTY.' in the commit log]
+
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/helpers.c | 34 +++++++++++++++------
- 1 file changed, 25 insertions(+), 9 deletions(-)
+ .../media/platform/chips-media/coda-common.c  | 20 +++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index 0bca95d01650..fa01edd54c03 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -90,12 +90,28 @@ bool venus_helper_check_codec(struct venus_inst *inst, u32 v4l2_pixfmt)
- }
- EXPORT_SYMBOL_GPL(venus_helper_check_codec);
- 
-+static void free_dpb_buf(struct venus_inst *inst, struct intbuf *buf)
-+{
-+	ida_free(&inst->dpb_ids, buf->dpb_out_tag);
-+
-+	list_del_init(&buf->list);
-+	dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
-+		       buf->attrs);
-+	kfree(buf);
-+}
-+
- int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
+diff --git a/drivers/media/platform/chips-media/coda-common.c b/drivers/media/platform/chips-media/coda-common.c
+index a57822b05070..a2cad1830318 100644
+--- a/drivers/media/platform/chips-media/coda-common.c
++++ b/drivers/media/platform/chips-media/coda-common.c
+@@ -1324,7 +1324,8 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
+ 				    struct v4l2_frmivalenum *f)
  {
--	struct intbuf *buf;
-+	struct intbuf *buf, *next;
-+	unsigned int dpb_size = 0;
- 	int ret = 0;
+ 	struct coda_ctx *ctx = fh_to_ctx(fh);
+-	int i;
++	struct coda_q_data *q_data;
++	const struct coda_codec *codec;
  
--	list_for_each_entry(buf, &inst->dpbbufs, list) {
-+	if (inst->dpb_buftype == HFI_BUFFER_OUTPUT)
-+		dpb_size = inst->output_buf_size;
-+	else if (inst->dpb_buftype == HFI_BUFFER_OUTPUT2)
-+		dpb_size = inst->output2_buf_size;
-+
-+	list_for_each_entry_safe(buf, next, &inst->dpbbufs, list) {
- 		struct hfi_frame_data fdata;
+ 	if (f->index)
+ 		return -EINVAL;
+@@ -1333,12 +1334,19 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
+ 	if (!ctx->vdoa && f->pixel_format == V4L2_PIX_FMT_YUYV)
+ 		return -EINVAL;
  
- 		memset(&fdata, 0, sizeof(fdata));
-@@ -106,6 +122,12 @@ int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
- 		if (buf->owned_by == FIRMWARE)
- 			continue;
- 
-+		/* free buffer from previous sequence which was released later */
-+		if (dpb_size > buf->size) {
-+			free_dpb_buf(inst, buf);
-+			continue;
-+		}
-+
- 		fdata.clnt_data = buf->dpb_out_tag;
- 
- 		ret = hfi_session_process_buf(inst, &fdata);
-@@ -127,13 +149,7 @@ int venus_helper_free_dpb_bufs(struct venus_inst *inst)
- 	list_for_each_entry_safe(buf, n, &inst->dpbbufs, list) {
- 		if (buf->owned_by == FIRMWARE)
- 			continue;
--
--		ida_free(&inst->dpb_ids, buf->dpb_out_tag);
--
--		list_del_init(&buf->list);
--		dma_free_attrs(inst->core->dev, buf->size, buf->va, buf->da,
--			       buf->attrs);
--		kfree(buf);
-+		free_dpb_buf(inst, buf);
+-	for (i = 0; i < CODA_MAX_FORMATS; i++) {
+-		if (f->pixel_format == ctx->cvd->src_formats[i] ||
+-		    f->pixel_format == ctx->cvd->dst_formats[i])
+-			break;
++	if (coda_format_normalize_yuv(f->pixel_format) == V4L2_PIX_FMT_YUV420) {
++		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
++		codec = coda_find_codec(ctx->dev, f->pixel_format,
++					q_data->fourcc);
++	} else {
++		codec = coda_find_codec(ctx->dev, V4L2_PIX_FMT_YUV420,
++					f->pixel_format);
  	}
+-	if (i == CODA_MAX_FORMATS)
++	if (!codec)
++		return -EINVAL;
++
++	if (f->width < MIN_W || f->width > codec->max_w ||
++	    f->height < MIN_H || f->height > codec->max_h)
+ 		return -EINVAL;
  
- 	if (list_empty(&inst->dpbbufs))
+ 	f->type = V4L2_FRMIVAL_TYPE_CONTINUOUS;
 -- 
 2.35.1
 

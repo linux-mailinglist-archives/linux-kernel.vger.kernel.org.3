@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E6541E84
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04DD541662
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382396AbiFGWaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
+        id S1378118AbiFGUv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378410AbiFGVTO (ORCPT
+        with ESMTP id S1358460AbiFGTwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:19:14 -0400
+        Tue, 7 Jun 2022 15:52:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DCC224D04;
-        Tue,  7 Jun 2022 11:59:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF16313C379;
+        Tue,  7 Jun 2022 11:20:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BE561787;
-        Tue,  7 Jun 2022 18:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2056C385A2;
-        Tue,  7 Jun 2022 18:59:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7014460C1C;
+        Tue,  7 Jun 2022 18:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CD1C385A2;
+        Tue,  7 Jun 2022 18:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628377;
-        bh=NLXJC2Os2ZFAlOQSsSpisO6mc7cXoVRqnXwEzHTGVf8=;
+        s=korg; t=1654626035;
+        bh=H0eiMGV5exGeCtYUmKb4h3NCR4TTqbXzzA85284RBE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCJqGKuoMT9m+/3Jgg/qK/gBn66jBpPByrwCFh/IIbVmZ4qGlOXXzXhYTyOqaXwNP
-         IhCMCerkXONuZ7XApKZzfK9OFf/GZ++i2XcHzVbwnVXzo3qyVkQ48vhsI/hHGjbn8j
-         jTXfOvTzgUOwyCd42YDtIJRSPOIZ75srxEiPYbyk=
+        b=uSXnQBgm6LbQLhIv8R7pqpL/aHm7OvVDSeI9I6A/pCkX09BkO0OHzqIdxlAGGey3p
+         qJSiD0Tas+B0p42O9DCkgE8ZPKpyiUZxvzfGe95eSdlwACrA5EGz+meLVShLrcSKz2
+         eBpvHwwfiPboyKBoy5r9ZvBj+kceN5W3dAIJTUzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 307/879] net: dsa: mt7530: 1G can also support 1000BASE-X link mode
-Date:   Tue,  7 Jun 2022 18:57:05 +0200
-Message-Id: <20220607165011.759684294@linuxfoundation.org>
+Subject: [PATCH 5.17 234/772] drm/bridge: adv7511: clean up CEC adapter when probe fails
+Date:   Tue,  7 Jun 2022 18:57:06 +0200
+Message-Id: <20220607164955.928375778@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
-References: <20220607165002.659942637@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,67 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-[ Upstream commit 66f862563ed68717dfd84e808ca12705ed275ced ]
+[ Upstream commit 7ed2b0dabf7a22874cb30f8878df239ef638eb53 ]
 
-When using an external PHY connected using RGMII to mt7531 port 5, the
-PHY can be used to used support 1000BASE-X connections. Moreover, if
-1000BASE-T is supported, then we should allow 1000BASE-X as well, since
-which are supported is a property of the PHY.
+When the probe routine fails we also need to clean up the
+CEC adapter registered in adv7511_cec_init().
 
-Therefore, it makes no sense to exclude this from the linkmodes when
-1000BASE-T is supported.
-
-Fixes: c288575f7810 ("net: dsa: mt7530: Add the support of MT7531 switch")
-Tested-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 3b1b975003e4 ("drm: adv7511/33: add HDMI CEC support")
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220321104705.2804423-1-l.stach@pengutronix.de
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mt7530.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index fe3cb26f4287..831ccbecb0c2 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -2540,13 +2540,7 @@ static void mt7531_sgmii_validate(struct mt7530_priv *priv, int port,
- 	/* Port5 supports ethier RGMII or SGMII.
- 	 * Port6 supports SGMII only.
- 	 */
--	switch (port) {
--	case 5:
--		if (mt7531_is_rgmii_port(priv, port))
--			break;
--		fallthrough;
--	case 6:
--		phylink_set(supported, 1000baseX_Full);
-+	if (port == 6) {
- 		phylink_set(supported, 2500baseX_Full);
- 		phylink_set(supported, 2500baseT_Full);
- 	}
-@@ -2914,8 +2908,6 @@ static void
- mt7530_mac_port_validate(struct dsa_switch *ds, int port,
- 			 unsigned long *supported)
- {
--	if (port == 5)
--		phylink_set(supported, 1000baseX_Full);
- }
- 
- static void mt7531_mac_port_validate(struct dsa_switch *ds, int port,
-@@ -2952,8 +2944,10 @@ mt753x_phylink_validate(struct dsa_switch *ds, int port,
- 	}
- 
- 	/* This switch only supports 1G full-duplex. */
--	if (state->interface != PHY_INTERFACE_MODE_MII)
-+	if (state->interface != PHY_INTERFACE_MODE_MII) {
- 		phylink_set(mask, 1000baseT_Full);
-+		phylink_set(mask, 1000baseX_Full);
-+	}
- 
- 	priv->info->mac_port_validate(ds, port, mask);
- 
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 77118c3395bf..320cbd5d90b8 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -1313,6 +1313,7 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+ 	adv7511_audio_exit(adv7511);
+ 	drm_bridge_remove(&adv7511->bridge);
+ err_unregister_cec:
++	cec_unregister_adapter(adv7511->cec_adap);
+ 	i2c_unregister_device(adv7511->i2c_cec);
+ 	clk_disable_unprepare(adv7511->cec_clk);
+ err_i2c_unregister_packet:
 -- 
 2.35.1
 

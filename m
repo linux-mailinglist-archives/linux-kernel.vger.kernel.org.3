@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EA2540CB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508B6541EF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346253AbiFGSjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S1380518AbiFGWih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347428AbiFGSIw (ORCPT
+        with ESMTP id S1378941AbiFGVZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:08:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0BF6B035;
-        Tue,  7 Jun 2022 10:48:04 -0700 (PDT)
+        Tue, 7 Jun 2022 17:25:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DF0227CEE;
+        Tue,  7 Jun 2022 12:01:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F3886171A;
-        Tue,  7 Jun 2022 17:48:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7B7C385A5;
-        Tue,  7 Jun 2022 17:48:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E978E61787;
+        Tue,  7 Jun 2022 19:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4091C385A2;
+        Tue,  7 Jun 2022 19:01:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624082;
-        bh=r7jRCbeD7ibDVQb0i+qLhsqpb8a+4ZpDIGUZQA4nKpA=;
+        s=korg; t=1654628484;
+        bh=+hczqrVV9QRUroM1CK7I7IRBPGHFmeEUds3FThURv7A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=adrAcfhRA6VE7o8qa33YbsoStWwj1KCuqznYoeJKZ3AdSblif42nfB1A6fPYghV+Z
-         x/ugooDDUlplXkszc8sgv3tesT4iOQ1HLcjrC3dyfDYMD7U3Qz40npimlF1BqtBWq+
-         G2o9I5xKNKXd9SFiIKxN2qGvQBDXPlP7EMAiDDzo=
+        b=FBT/phw+i57k7PnKxod6J7JDPPHmpM2LkhZ0hGwt3sV7snAfWuNrEFmOQKjqdkCAV
+         d35Qc4X5LawFk4ALHnvVqMz17FkT3h54th7FuW6ovSYJx4BJYd2wnBG8ciDq+AAqD3
+         lN2ofmbQAI3iwJfVXTy7qC2QJoazLlUMfP1ihdoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 198/667] drm/vc4: hvs: Fix frame count register readout
-Date:   Tue,  7 Jun 2022 18:57:43 +0200
-Message-Id: <20220607164940.738693291@linuxfoundation.org>
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 346/879] ALSA: pcm: Check for null pointer of pointer substream before dereferencing it
+Date:   Tue,  7 Jun 2022 18:57:44 +0200
+Message-Id: <20220607165012.904143979@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,130 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-[ Upstream commit b51cd7ad143d2eb31a6df81c2183128920e47c2b ]
+[ Upstream commit 011b559be832194f992f73d6c0d5485f5925a10b ]
 
-In order to get the field currently being output, the driver has been
-using the display FIFO frame count in the HVS, reading a 6-bit field at
-the offset 12 in the DISPSTATx register.
+Pointer substream is being dereferenced on the assignment of pointer card
+before substream is being null checked with the macro PCM_RUNTIME_CHECK.
+Although PCM_RUNTIME_CHECK calls BUG_ON, it still is useful to perform the
+the pointer check before card is assigned.
 
-While that field is indeed at that location for the FIFO 1 and 2, the
-one for the FIFO0 is actually in the DISPSTAT1 register, at the offset
-18.
-
-Fixes: e538092cb15c ("drm/vc4: Enable precise vblank timestamping for interlaced modes.")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220331143744.777652-3-maxime@cerno.tech
+Fixes: d4cfb30fce03 ("ALSA: pcm: Set per-card upper limit of PCM buffer allocations")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Link: https://lore.kernel.org/r/20220424205945.1372247-1-colin.i.king@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_crtc.c |  2 +-
- drivers/gpu/drm/vc4/vc4_drv.h  |  1 +
- drivers/gpu/drm/vc4/vc4_hvs.c  | 23 +++++++++++++++++++++++
- drivers/gpu/drm/vc4/vc4_regs.h | 12 ++++++++++--
- 4 files changed, 35 insertions(+), 3 deletions(-)
+ sound/core/pcm_memory.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
-index 3e61184e194c..88dbb282d15c 100644
---- a/drivers/gpu/drm/vc4/vc4_crtc.c
-+++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-@@ -123,7 +123,7 @@ static bool vc4_crtc_get_scanout_position(struct drm_crtc *crtc,
- 		*vpos /= 2;
- 
- 		/* Use hpos to correct for field offset in interlaced mode. */
--		if (VC4_GET_FIELD(val, SCALER_DISPSTATX_FRAME_COUNT) % 2)
-+		if (vc4_hvs_get_fifo_frame_count(dev, vc4_crtc_state->assigned_channel) % 2)
- 			*hpos += mode->crtc_htotal / 2;
- 	}
- 
-diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
-index 4b550ebd9572..94c178738fc1 100644
---- a/drivers/gpu/drm/vc4/vc4_drv.h
-+++ b/drivers/gpu/drm/vc4/vc4_drv.h
-@@ -933,6 +933,7 @@ void vc4_irq_reset(struct drm_device *dev);
- extern struct platform_driver vc4_hvs_driver;
- void vc4_hvs_stop_channel(struct drm_device *dev, unsigned int output);
- int vc4_hvs_get_fifo_from_output(struct drm_device *dev, unsigned int output);
-+u8 vc4_hvs_get_fifo_frame_count(struct drm_device *dev, unsigned int fifo);
- int vc4_hvs_atomic_check(struct drm_crtc *crtc, struct drm_atomic_state *state);
- void vc4_hvs_atomic_begin(struct drm_crtc *crtc, struct drm_atomic_state *state);
- void vc4_hvs_atomic_enable(struct drm_crtc *crtc, struct drm_atomic_state *state);
-diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
-index 604933e20e6a..c8cae10500b9 100644
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -197,6 +197,29 @@ static void vc4_hvs_update_gamma_lut(struct drm_crtc *crtc)
- 	vc4_hvs_lut_load(crtc);
- }
- 
-+u8 vc4_hvs_get_fifo_frame_count(struct drm_device *dev, unsigned int fifo)
-+{
-+	struct vc4_dev *vc4 = to_vc4_dev(dev);
-+	u8 field = 0;
-+
-+	switch (fifo) {
-+	case 0:
-+		field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT1),
-+				      SCALER_DISPSTAT1_FRCNT0);
-+		break;
-+	case 1:
-+		field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT1),
-+				      SCALER_DISPSTAT1_FRCNT1);
-+		break;
-+	case 2:
-+		field = VC4_GET_FIELD(HVS_READ(SCALER_DISPSTAT2),
-+				      SCALER_DISPSTAT2_FRCNT2);
-+		break;
-+	}
-+
-+	return field;
-+}
-+
- int vc4_hvs_get_fifo_from_output(struct drm_device *dev, unsigned int output)
+diff --git a/sound/core/pcm_memory.c b/sound/core/pcm_memory.c
+index 8848d2f3160d..b8296b6eb2c1 100644
+--- a/sound/core/pcm_memory.c
++++ b/sound/core/pcm_memory.c
+@@ -453,7 +453,6 @@ EXPORT_SYMBOL(snd_pcm_lib_malloc_pages);
+  */
+ int snd_pcm_lib_free_pages(struct snd_pcm_substream *substream)
  {
- 	struct vc4_dev *vc4 = to_vc4_dev(dev);
-diff --git a/drivers/gpu/drm/vc4/vc4_regs.h b/drivers/gpu/drm/vc4/vc4_regs.h
-index 489f921ef44d..8ac2f088106a 100644
---- a/drivers/gpu/drm/vc4/vc4_regs.h
-+++ b/drivers/gpu/drm/vc4/vc4_regs.h
-@@ -379,8 +379,6 @@
- # define SCALER_DISPSTATX_MODE_EOF		3
- # define SCALER_DISPSTATX_FULL			BIT(29)
- # define SCALER_DISPSTATX_EMPTY			BIT(28)
--# define SCALER_DISPSTATX_FRAME_COUNT_MASK	VC4_MASK(17, 12)
--# define SCALER_DISPSTATX_FRAME_COUNT_SHIFT	12
- # define SCALER_DISPSTATX_LINE_MASK		VC4_MASK(11, 0)
- # define SCALER_DISPSTATX_LINE_SHIFT		0
+-	struct snd_card *card = substream->pcm->card;
+ 	struct snd_pcm_runtime *runtime;
  
-@@ -403,9 +401,15 @@
- 						 (x) * (SCALER_DISPBKGND1 - \
- 							SCALER_DISPBKGND0))
- #define SCALER_DISPSTAT1                        0x00000058
-+# define SCALER_DISPSTAT1_FRCNT0_MASK		VC4_MASK(23, 18)
-+# define SCALER_DISPSTAT1_FRCNT0_SHIFT		18
-+# define SCALER_DISPSTAT1_FRCNT1_MASK		VC4_MASK(17, 12)
-+# define SCALER_DISPSTAT1_FRCNT1_SHIFT		12
+ 	if (PCM_RUNTIME_CHECK(substream))
+@@ -462,6 +461,8 @@ int snd_pcm_lib_free_pages(struct snd_pcm_substream *substream)
+ 	if (runtime->dma_area == NULL)
+ 		return 0;
+ 	if (runtime->dma_buffer_p != &substream->dma_buffer) {
++		struct snd_card *card = substream->pcm->card;
 +
- #define SCALER_DISPSTATX(x)			(SCALER_DISPSTAT0 +        \
- 						 (x) * (SCALER_DISPSTAT1 - \
- 							SCALER_DISPSTAT0))
-+
- #define SCALER_DISPBASE1                        0x0000005c
- #define SCALER_DISPBASEX(x)			(SCALER_DISPBASE0 +        \
- 						 (x) * (SCALER_DISPBASE1 - \
-@@ -415,7 +419,11 @@
- 						 (x) * (SCALER_DISPCTRL1 - \
- 							SCALER_DISPCTRL0))
- #define SCALER_DISPBKGND2                       0x00000064
-+
- #define SCALER_DISPSTAT2                        0x00000068
-+# define SCALER_DISPSTAT2_FRCNT2_MASK		VC4_MASK(17, 12)
-+# define SCALER_DISPSTAT2_FRCNT2_SHIFT		12
-+
- #define SCALER_DISPBASE2                        0x0000006c
- #define SCALER_DISPALPHA2                       0x00000070
- #define SCALER_GAMADDR                          0x00000078
+ 		/* it's a newly allocated buffer.  release it now. */
+ 		do_free_pages(card, runtime->dma_buffer_p);
+ 		kfree(runtime->dma_buffer_p);
 -- 
 2.35.1
 

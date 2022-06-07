@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8248B5422D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE4C542584
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386764AbiFHB0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S1359552AbiFHBY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382676AbiFGXjF (ORCPT
+        with ESMTP id S1382930AbiFGXjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Jun 2022 19:39:05 -0400
 Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68CA16F34A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:33 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id g3-20020a170902868300b00163cd75c014so10004148plo.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BE722E683
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:36:35 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id y8-20020a17090322c800b0016777c34c83so3498482plg.19
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:36:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=b2y6HIM0yFuupb/Asz+ocPiupQ2BH2KLPsPF8kzjrkw=;
-        b=m9SlpsGTqZNrbbB28kCBcURN1oC2as0iS1/ePdYn+z9eVKChoC0y5YYloYFRM6viLn
-         MwdmyILQveyGVDpO50TdB8AnQZapzqw9WtsZ9c6tol2WHl2eOmthABe6MA9jd0KVU++E
-         uPc51dyF0P2g9keIN2hwDykX7XCJI5GZg1SfKPjrscBSw/U1/4swV3Tnn8MxFbdbocYw
-         ifJr35+TuoVkg2KGklLjtR3nccuVqd2rieEm7huqqv6g82byL4uL2QqnZBFjmUr2Sh/8
-         pioxGoHE/ToGuY4gzekI9l/Llte/+S1BNToib5RDZOD1haOfL7gcI/jvzaqTcHFgIcog
-         /iTw==
+        bh=WZpB3yHrMHQls3IHqVi5lPdjdnlbxe8rlI8VYkmKcTg=;
+        b=qgrHcXETJXkpmlZPmQS/NOZ+KytYM0pxovZrSQu80fEFQAeT1XKVcSb9kzkmZup4eE
+         5Wlr/4msmFRYT9gS5ET8AIj5cPDazkEpx2qKO7C2NUUnVjeri8WGTVZCJU6yjeH38DuL
+         /Ei3bG7FuhJVV1lcd7w3GEuVXCx45srEvSrlYsdeDjz63sMPqNcUDzgzgKBvae9f6TvS
+         +XxUBg67gMqW++6V+yGem7WOz27qunQPbP1PPfEXM9AcmMycnB0WPxTVH5MrTNeCTBEa
+         q+jZL1ixhaqja25GsCBXcaHv2fWCOR8f4wl57m0b1tsIHPfsx10T72usJJum5N7k3cJD
+         OlCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=b2y6HIM0yFuupb/Asz+ocPiupQ2BH2KLPsPF8kzjrkw=;
-        b=cDib4hvp7z9PkiST3lQAq9CSxDpWGMJy+4LiJjZiox2Fm2W4ipl//E7nOTQ/7MqbiE
-         1WCMnMS4pvH44nMTNOyW9OKdHFo9ClcHI2c/N03iKoiSqjdiDa3Rj4H8C6Kb90I8D1M0
-         OKs/OS+IpoVEZpmJmCIPHZ1q9DIcBczBGfoTz0EcOWIVqUhlMc/QgGSU5M1SUPwXCSfT
-         avZ2SfsoZqDq8xuHjeD5yecSIRh/K1oge8vIoZpDihlJf+fd4qst7oxXRnAbuCl33vi0
-         /XC/K6b/vRkucM2DJpjjTIY/v0mszDOH7YIH7uN5Gf02aM0/ISJpgkhczjbDHT9iNf3g
-         TjkA==
-X-Gm-Message-State: AOAM532v/D4GepJ4Fk/jZQxCqSg9WiozJqjg18EDreR8fvHktzuTYaKQ
-        8/oN7Wj2dgMD/hsSoJGYyg9rQsgQGEo=
-X-Google-Smtp-Source: ABdhPJwgtT75q6YVsktniY/VHzibvVaHAIcTz9UivR7D0BpOChyXwBs/01A9v7fwrZCt9bFCGn2ylPNciYw=
+        bh=WZpB3yHrMHQls3IHqVi5lPdjdnlbxe8rlI8VYkmKcTg=;
+        b=ol+jau6RgvBT783k9F1CguFJ4tdTbfPs0fXYvOC6a+6jJIMsk12a9PTIVo7p7rZATb
+         K2TlivVWiMRshHemgsgPhx+DBlvC3enYFAlZm2HOhBa3LbxIdGBOQTG/T0ryaqGl5tSd
+         +tvlQArPbXMY60eM3B49Pvas8jwr+xyqZY7FYxBMP3p6GgUYSPElbdQSCiU0v96cy7eW
+         cXozv8cLIVnSt6gz60cO2npDkdrSvQ9Oy8SCDNCq2kuS9fKyswCDfOctbQ5uOttSOhur
+         HXdzvT/dLnSvGgdzBbKsWraG79MfehkNLhomsjDp9mzxZCmMxo/51CXGY0CJbuEZBftV
+         MJJg==
+X-Gm-Message-State: AOAM5322rY9Oni4ah0Dpi8ADroBEOMLWckmviYFVsLCOg0j7fR4bKoAx
+        T/Vttz6NAwmgALTXSSRv0w4sEYINyfI=
+X-Google-Smtp-Source: ABdhPJycgDWrLZOXZYxn7zpkwQ3Ufqj9H70i8GawTN7PJv9ONWWssntAX0LWLtrHHvzpYelwHn301CR9IPM=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:aa7:8890:0:b0:51c:454f:c93f with SMTP id
- z16-20020aa78890000000b0051c454fc93fmr3586124pfe.35.1654637793364; Tue, 07
- Jun 2022 14:36:33 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a62:d045:0:b0:51b:fcf6:3add with SMTP id
+ p66-20020a62d045000000b0051bfcf63addmr17692776pfg.68.1654637795122; Tue, 07
+ Jun 2022 14:36:35 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  7 Jun 2022 21:35:58 +0000
+Date:   Tue,  7 Jun 2022 21:35:59 +0000
 In-Reply-To: <20220607213604.3346000-1-seanjc@google.com>
-Message-Id: <20220607213604.3346000-10-seanjc@google.com>
+Message-Id: <20220607213604.3346000-11-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220607213604.3346000-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v5 09/15] KVM: nVMX: Drop nested_vmx_pmu_refresh()
+Subject: [PATCH v5 10/15] KVM: nVMX: Add a quirk for KVM tweaks to VMX MSRs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -77,81 +77,119 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Oliver Upton <oupton@google.com>
 
-nested_vmx_pmu_refresh() is now unneeded, as the call to
-nested_vmx_entry_exit_ctls_update() in vmx_vcpu_after_set_cpuid()
-guarantees that the VM-{Entry,Exit} control MSR changes are applied
-after setting CPUID. Drop all vestiges of nested_vmx_pmu_refresh().
+Quirk KVM's misguided behavior of manipulating VMX MSRs based on guest
+CPUID state.  There is no requirement, at all, that a CPU support
+virtualizing a feature if said feature is supported in bare metal.  I.e.
+the VMX MSRs exist independent of CPUID for a reason.
 
-No functional change intended.
+One could argue that disabling features, as KVM does for the entry/exit
+controls for the IA32_PERF_GLOBAL_CTRL and IA32_BNDCFGS MSRs, is correct
+as such a configuration is contradictory, but KVM's policy is to let
+userspace have full control of the guest vCPU model so long as the host
+kernel is not at risk.  Furthermore, mucking with the VMX MSRs creates a
+subtle, difficult to maintain ABI as KVM must ensure that any internal
+changes, e.g. to how KVM handles _any_ guest CPUID changes, yield the
+same functional result.
 
+Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Oliver Upton <oupton@google.com>
+Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/nested.c    | 22 ----------------------
- arch/x86/kvm/vmx/nested.h    |  2 --
- arch/x86/kvm/vmx/pmu_intel.c |  3 ---
- 3 files changed, 27 deletions(-)
+ Documentation/virt/kvm/api.rst  | 21 +++++++++++++++++++++
+ arch/x86/include/asm/kvm_host.h |  3 ++-
+ arch/x86/include/uapi/asm/kvm.h |  1 +
+ arch/x86/kvm/vmx/nested.c       |  5 +++--
+ arch/x86/kvm/vmx/vmx.c          |  3 ++-
+ 5 files changed, 29 insertions(+), 4 deletions(-)
 
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 42a1984fafc8..1095692ddab7 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -7374,6 +7374,27 @@ The valid bits in cap.args[0] are:
+                                     hypercall instructions. Executing the
+                                     incorrect hypercall instruction will
+                                     generate a #UD within the guest.
++
++ KVM_X86_QUIRK_TWEAK_VMX_MSRS       By default, during a guest CPUID update,
++                                    KVM adjusts the values of select VMX MSRs
++                                    (usually based on guest CPUID):
++
++                                    - If CPUID.07H:EBX[bit 14] (MPX) is set, KVM
++                                      sets IA32_VMX_TRUE_ENTRY_CTLS[bit 48]
++                                      ('load IA32_BNDCFGS') and
++                                      IA32_VMX_TRUE_EXIT_CTLS[bit 55]
++                                      ('clear IA32_BNDCFGS'). Otherwise, these
++                                      corresponding MSR bits are cleared.
++                                    - If CPUID.0AH:EAX[bits 7:0] > 1, KVM sets
++                                      IA32_VMX_TRUE_ENTRY_CTLS[bit 45]
++                                      ('load IA32_PERF_GLOBAL_CTRL') and
++                                      IA32_VMX_TRUE_EXIT_CTLS[bit 44]
++                                      ('load IA32_PERF_GLOBAL_CTRL'). Otherwise,
++                                      these corresponding MSR bits are cleared.
++
++                                    When this quirk is disabled, KVM will not
++                                    change the values of the aformentioned VMX
++                                    MSRs during guest CPUID updates.
+ =================================== ============================================
+ 
+ 7.32 KVM_CAP_MAX_VCPU_ID
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 6cf5d77d7896..a783c82fb902 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -2011,6 +2011,7 @@ int memslot_rmap_alloc(struct kvm_memory_slot *slot, unsigned long npages);
+ 	 KVM_X86_QUIRK_LAPIC_MMIO_HOLE |	\
+ 	 KVM_X86_QUIRK_OUT_7E_INC_RIP |		\
+ 	 KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT |	\
+-	 KVM_X86_QUIRK_FIX_HYPERCALL_INSN)
++	 KVM_X86_QUIRK_FIX_HYPERCALL_INSN |	\
++	 KVM_X86_QUIRK_TWEAK_VMX_MSRS)
+ 
+ #endif /* _ASM_X86_KVM_HOST_H */
+diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+index 24c807c8d5f7..0705178bd93d 100644
+--- a/arch/x86/include/uapi/asm/kvm.h
++++ b/arch/x86/include/uapi/asm/kvm.h
+@@ -438,6 +438,7 @@ struct kvm_sync_regs {
+ #define KVM_X86_QUIRK_OUT_7E_INC_RIP		(1 << 3)
+ #define KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT	(1 << 4)
+ #define KVM_X86_QUIRK_FIX_HYPERCALL_INSN	(1 << 5)
++#define KVM_X86_QUIRK_TWEAK_VMX_MSRS		(1 << 6)
+ 
+ #define KVM_STATE_NESTED_FORMAT_VMX	0
+ #define KVM_STATE_NESTED_FORMAT_SVM	1
 diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index d1c21d387716..4ba0e5540908 100644
+index 4ba0e5540908..dc2f9b06b99a 100644
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -4847,28 +4847,6 @@ int get_vmx_mem_address(struct kvm_vcpu *vcpu, unsigned long exit_qualification,
+@@ -1301,8 +1301,9 @@ vmx_restore_control_msr(struct vcpu_vmx *vmx, u32 msr_index, u64 data)
+ 	 * To preserve an old, kludgy ABI, ensure KVM fiddling with the "true"
+ 	 * entry/exit controls MSRs is preserved after userspace modifications.
+ 	 */
+-	if (msr_index == MSR_IA32_VMX_TRUE_ENTRY_CTLS ||
+-	    msr_index == MSR_IA32_VMX_TRUE_EXIT_CTLS)
++	if ((msr_index == MSR_IA32_VMX_TRUE_ENTRY_CTLS ||
++	     msr_index == MSR_IA32_VMX_TRUE_EXIT_CTLS) &&
++	    kvm_check_has_quirk(vmx->vcpu.kvm, KVM_X86_QUIRK_TWEAK_VMX_MSRS))
+ 		nested_vmx_entry_exit_ctls_update(&vmx->vcpu);
+ 
  	return 0;
- }
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 73ec4746a4e6..4c31c8f24329 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7522,7 +7522,8 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
  
--void nested_vmx_pmu_refresh(struct kvm_vcpu *vcpu,
--			    bool vcpu_has_perf_global_ctrl)
--{
--	struct vcpu_vmx *vmx;
--
--	if (!nested_vmx_allowed(vcpu))
--		return;
--
--	vmx = to_vmx(vcpu);
--	if (vcpu_has_perf_global_ctrl) {
--		vmx->nested.msrs.entry_ctls_high |=
--				VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
--		vmx->nested.msrs.exit_ctls_high |=
--				VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
--	} else {
--		vmx->nested.msrs.entry_ctls_high &=
--				~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
--		vmx->nested.msrs.exit_ctls_high &=
--				~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
--	}
--}
--
- static int nested_vmx_get_vmptr(struct kvm_vcpu *vcpu, gpa_t *vmpointer,
- 				int *ret)
- {
-diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
-index 129ae4e01f7c..88b00a7359e4 100644
---- a/arch/x86/kvm/vmx/nested.h
-+++ b/arch/x86/kvm/vmx/nested.h
-@@ -32,8 +32,6 @@ int vmx_set_vmx_msr(struct kvm_vcpu *vcpu, u32 msr_index, u64 data);
- int vmx_get_vmx_msr(struct nested_vmx_msrs *msrs, u32 msr_index, u64 *pdata);
- int get_vmx_mem_address(struct kvm_vcpu *vcpu, unsigned long exit_qualification,
- 			u32 vmx_instruction_info, bool wr, int len, gva_t *ret);
--void nested_vmx_pmu_refresh(struct kvm_vcpu *vcpu,
--			    bool vcpu_has_perf_global_ctrl);
- void nested_mark_vmcs12_pages_dirty(struct kvm_vcpu *vcpu);
- bool nested_vmx_check_io_bitmaps(struct kvm_vcpu *vcpu, unsigned int port,
- 				 int size);
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 6ce3b066f7d9..515ab6594333 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -597,9 +597,6 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	bitmap_set(pmu->all_valid_pmc_idx,
- 		INTEL_PMC_MAX_GENERIC, pmu->nr_arch_fixed_counters);
+ 	if (nested_vmx_allowed(vcpu)) {
+ 		nested_vmx_cr_fixed1_bits_update(vcpu);
+-		nested_vmx_entry_exit_ctls_update(vcpu);
++		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_TWEAK_VMX_MSRS))
++			nested_vmx_entry_exit_ctls_update(vcpu);
+ 	}
  
--	nested_vmx_pmu_refresh(vcpu,
--			       intel_is_valid_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL, false));
--
- 	if (cpuid_model_is_consistent(vcpu))
- 		x86_perf_get_lbr(&lbr_desc->records);
- 	else
+ 	if (boot_cpu_has(X86_FEATURE_INTEL_PT) &&
 -- 
 2.36.1.255.ge46751e96f-goog
 

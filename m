@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30B3542037
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89A8542064
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384032AbiFHATa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S1383555AbiFHAY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383997AbiFGVx5 (ORCPT
+        with ESMTP id S1384331AbiFGVy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DC3248508;
-        Tue,  7 Jun 2022 12:12:48 -0700 (PDT)
+        Tue, 7 Jun 2022 17:54:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134B424AEE1;
+        Tue,  7 Jun 2022 12:13:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FC9DB823B2;
-        Tue,  7 Jun 2022 19:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E73C385A2;
-        Tue,  7 Jun 2022 19:12:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB8CB618E1;
+        Tue,  7 Jun 2022 19:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCF1C385A5;
+        Tue,  7 Jun 2022 19:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629150;
-        bh=uGOW+8+MHh3rmVPSMEwKqXlHKgl6LqpDJPKFDcluQmg=;
+        s=korg; t=1654629169;
+        bh=/atc0+gFpH0rsZcqQNrfsag5GHjaKYkPOJ5HwXSCjX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xw+yTyOryKZ54Qy3syorxxhuU62e/x5sRmuVGBYwqiRhXfZnJGShN5GEcp4TVv+mR
-         8VUCnrRwsP8G8D5ogIoAKfugzIKYdp3AmePpRp0cAlFMLQXV4iG+KIIejoQuyQqcPL
-         JYoob1uVVENiEYzckD2Q2WnClkuIwmpYuLaEvSzQ=
+        b=FE0/aY98Er5LvEKg4AMeU7+0xD2I5oGEyMOiwxuduvaqUm2ljrhOvvTVi8Ucohm+n
+         dGsYXVODkbiqqLG6IoH8B41oNzKcBKVcp0lWiqIUp8NXN3pwPp5YHpBhoVdIGctMjK
+         5DciXl/5zYpx2MnBF/q2TuI99O1HUElFD8aDlX00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 585/879] scsi: fcoe: Fix Wstringop-overflow warnings in fcoe_wwn_from_mac()
-Date:   Tue,  7 Jun 2022 19:01:43 +0200
-Message-Id: <20220607165019.833339032@linuxfoundation.org>
+Subject: [PATCH 5.18 587/879] arm64: dts: ti: k3-am64-mcu: remove incorrect UART base clock rates
+Date:   Tue,  7 Jun 2022 19:01:45 +0200
+Message-Id: <20220607165019.890475391@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -55,125 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gustavo A. R. Silva <gustavoars@kernel.org>
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-[ Upstream commit 54db804d5d7d36709d1ce70bde3b9a6c61b290b6 ]
+[ Upstream commit 439677d416b17dd39964d5f7d64b742a2e51da5b ]
 
-Fix the following Wstringop-overflow warnings when building with GCC-11:
+We found that (at least some versions of) the sci-fw set the base clock
+rate for UARTs in the MCU domain to 96 MHz instead of the expected 48 MHz,
+leading to incorrect baud rates when used from Linux.
 
-drivers/scsi/fcoe/fcoe.c: In function ‘fcoe_netdev_config’:
-drivers/scsi/fcoe/fcoe.c:744:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-  744 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr, 1, 0);
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/fcoe/fcoe.c:744:32: note: referencing argument 1 of type ‘unsigned char *’
-In file included from drivers/scsi/fcoe/fcoe.c:36:
-./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
-  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-      |     ^~~~~~~~~~~~~~~~~
-drivers/scsi/fcoe/fcoe.c:747:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-  747 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  748 |                                                  2, 0);
-      |                                                  ~~~~~
-drivers/scsi/fcoe/fcoe.c:747:32: note: referencing argument 1 of type ‘unsigned char *’
-In file included from drivers/scsi/fcoe/fcoe.c:36:
-./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
-  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-      |     ^~~~~~~~~~~~~~~~~
-  CC      drivers/scsi/bnx2fc/bnx2fc_io.o
-In function ‘bnx2fc_net_config’,
-    inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-  833 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  834 |                                                  1, 0);
-      |                                                  ~~~~~
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: note: referencing argument 1 of type ‘unsigned char *’
-In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
-                 from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
-./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
-  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-      |     ^~~~~~~~~~~~~~~~~
-In function ‘bnx2fc_net_config’,
-    inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-  839 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  840 |                                                  2, 0);
-      |                                                  ~~~~~
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: note: referencing argument 1 of type ‘unsigned char *’
-In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
-                 from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
-./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
-  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-      |     ^~~~~~~~~~~~~~~~~
-drivers/scsi/qedf/qedf_main.c: In function ‘__qedf_probe’:
-drivers/scsi/qedf/qedf_main.c:3520:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
- 3520 |                 qedf->wwnn = fcoe_wwn_from_mac(qedf->mac, 1, 0);
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qedf/qedf_main.c:3520:30: note: referencing argument 1 of type ‘unsigned char *’
-In file included from drivers/scsi/qedf/qedf.h:9,
-                 from drivers/scsi/qedf/qedf_main.c:23:
-./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
-  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-      |     ^~~~~~~~~~~~~~~~~
-drivers/scsi/qedf/qedf_main.c:3521:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
- 3521 |                 qedf->wwpn = fcoe_wwn_from_mac(qedf->mac, 2, 0);
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qedf/qedf_main.c:3521:30: note: referencing argument 1 of type ‘unsigned char *’
-In file included from drivers/scsi/qedf/qedf.h:9,
-                 from drivers/scsi/qedf/qedf_main.c:23:
-./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
-  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-      |     ^~~~~~~~~~~~~~~~~
+As the 8250_omap driver will query the actual clock rate from the clk
+driver when clock-frequency is unset, removing the incorrect property is
+sufficient to fix the baud rate.
 
-by changing the array size to the correct value of ETH_ALEN in the
-argument declaration.
-
-Also, fix a couple of checkpatch warnings:
-WARNING: function definition argument 'unsigned int' should also have an identifier name
-
-This helps with the ongoing efforts to globally enable
--Wstringop-overflow.
-
-Link: https://github.com/KSPP/linux/issues/181
-Fixes: 85b4aa4926a5 ("[SCSI] fcoe: Fibre Channel over Ethernet")
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+Link: https://lore.kernel.org/r/20220419075157.189347-1-matthias.schiffer@ew.tq-group.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
- include/scsi/libfcoe.h        | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
-index 1756a0ac6f08..558f3f4e1859 100644
---- a/drivers/scsi/fcoe/fcoe_ctlr.c
-+++ b/drivers/scsi/fcoe/fcoe_ctlr.c
-@@ -1969,7 +1969,7 @@ EXPORT_SYMBOL(fcoe_ctlr_recv_flogi);
-  *
-  * Returns: u64 fc world wide name
-  */
--u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN],
-+u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN],
- 		      unsigned int scheme, unsigned int port)
- {
- 	u64 wwn;
-diff --git a/include/scsi/libfcoe.h b/include/scsi/libfcoe.h
-index fac8e89aed81..310e0dbffda9 100644
---- a/include/scsi/libfcoe.h
-+++ b/include/scsi/libfcoe.h
-@@ -249,7 +249,8 @@ int fcoe_ctlr_recv_flogi(struct fcoe_ctlr *, struct fc_lport *,
- 			 struct fc_frame *);
- 
- /* libfcoe funcs */
--u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
-+u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN], unsigned int scheme,
-+		      unsigned int port);
- int fcoe_libfc_config(struct fc_lport *, struct fcoe_ctlr *,
- 		      const struct libfc_function_template *, int init_fcp);
- u32 fcoe_fc_crc(struct fc_frame *fp);
+diff --git a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+index 2bb5c9ff172c..02d4285acbb8 100644
+--- a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
+@@ -10,7 +10,6 @@
+ 		compatible = "ti,am64-uart", "ti,am654-uart";
+ 		reg = <0x00 0x04a00000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 185 IRQ_TYPE_LEVEL_HIGH>;
+-		clock-frequency = <48000000>;
+ 		current-speed = <115200>;
+ 		power-domains = <&k3_pds 149 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 149 0>;
+@@ -21,7 +20,6 @@
+ 		compatible = "ti,am64-uart", "ti,am654-uart";
+ 		reg = <0x00 0x04a10000 0x00 0x100>;
+ 		interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
+-		clock-frequency = <48000000>;
+ 		current-speed = <115200>;
+ 		power-domains = <&k3_pds 160 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 160 0>;
 -- 
 2.35.1
 

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B81541BB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2BA541BB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382888AbiFGVwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S1383225AbiFGVwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377605AbiFGU6p (ORCPT
+        with ESMTP id S1377656AbiFGU6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:58:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5310208D4D;
-        Tue,  7 Jun 2022 11:44:37 -0700 (PDT)
+        Tue, 7 Jun 2022 16:58:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9338F209041;
+        Tue,  7 Jun 2022 11:44:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 247AEB8220B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFE9BB8239A;
+        Tue,  7 Jun 2022 18:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20960C385A2;
         Tue,  7 Jun 2022 18:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD51C385A2;
-        Tue,  7 Jun 2022 18:44:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627474;
-        bh=yuf6SWhWS/sMDh8rY4efQMgGvK9sSH5Gqeiij2RoHc8=;
+        s=korg; t=1654627477;
+        bh=5OBm9dt0dopWHUdAfMbIrlGBjhk5o7UD1IJ3NEMLvN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=trZ91/cno3T727oYR0Xqr1Akl9viC4EOLxquZw0503KcCwT0RJLFsi+0pUlhWH39J
-         JWPDUX9A6R10qDbfHvzIKeEKp8TZmqhXaOv4DuNrXKaClE36OiWYidO+3u89kshJU/
-         E8T60v30wnRfMkr/1QG9B4vyvadPdIDMCYPb+6DU=
+        b=NWghgRRHVpds1kGkZLTm3yXBUYlT7bL65//7m5QZspGQ4Vwte71BwqhO86GSmQVd+
+         eTKfaiNaLaEZuRuqpRYP3k0hVayvDip2yvCCwV9gvYOHT+al9RkS53c8l+NkBpEYiX
+         JKFEqKsX4A0586afuaZ8tSOPvYt9VWRaDDUI8PaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.17 753/772] phy: qcom-qmp: fix reset-controller leak on probe errors
-Date:   Tue,  7 Jun 2022 19:05:45 +0200
-Message-Id: <20220607165011.215039908@linuxfoundation.org>
+        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.17 754/772] net: ipa: fix page free in ipa_endpoint_trans_release()
+Date:   Tue,  7 Jun 2022 19:05:46 +0200
+Message-Id: <20220607165011.245179357@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -57,54 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Alex Elder <elder@linaro.org>
 
-commit 4d2900f20edfe541f75756a00deeb2ffe7c66bc1 upstream.
+commit 155c0c90bca918de6e4327275dfc1d97fd604115 upstream.
 
-Make sure to release the lane reset controller in case of a late probe
-error (e.g. probe deferral).
+Currently the (possibly compound) page used for receive buffers are
+freed using __free_pages().  But according to this comment above the
+definition of that function, that's wrong:
+    If you want to use the page's reference count to decide when
+    to free the allocation, you should allocate a compound page,
+    and use put_page() instead of __free_pages().
 
-Note that due to the reset controller being defined in devicetree in
-"lane" child nodes, devm_reset_control_get_exclusive() cannot be used
-directly.
+Convert the call to __free_pages() in ipa_endpoint_trans_release()
+to use put_page() instead.
 
-Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220427063243.32576-3-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: ed23f02680caa ("net: ipa: define per-endpoint receive buffer size")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/ipa/ipa_endpoint.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -5818,6 +5818,11 @@ static const struct phy_ops qcom_qmp_pci
- 	.owner		= THIS_MODULE,
- };
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -1402,7 +1402,7 @@ void ipa_endpoint_trans_release(struct i
+ 		struct page *page = trans->data;
  
-+static void qcom_qmp_reset_control_put(void *data)
-+{
-+	reset_control_put(data);
-+}
-+
- static
- int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id,
- 			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
-@@ -5912,6 +5917,10 @@ int qcom_qmp_phy_create(struct device *d
- 			dev_err(dev, "failed to get lane%d reset\n", id);
- 			return PTR_ERR(qphy->lane_rst);
- 		}
-+		ret = devm_add_action_or_reset(dev, qcom_qmp_reset_control_put,
-+					       qphy->lane_rst);
-+		if (ret)
-+			return ret;
+ 		if (page)
+-			__free_pages(page, get_order(IPA_RX_BUFFER_SIZE));
++			put_page(page);
  	}
+ }
  
- 	if (cfg->type == PHY_TYPE_UFS || cfg->type == PHY_TYPE_PCIE)
 
 

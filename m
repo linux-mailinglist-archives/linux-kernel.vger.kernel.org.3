@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE26C541430
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1150D541B3B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359559AbiFGUPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S1381395AbiFGVnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354192AbiFGTWr (ORCPT
+        with ESMTP id S1378931AbiFGUwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:22:47 -0400
+        Tue, 7 Jun 2022 16:52:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FAA2DC3;
-        Tue,  7 Jun 2022 11:09:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E775006B;
+        Tue,  7 Jun 2022 11:43:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A13E26191F;
-        Tue,  7 Jun 2022 18:09:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC936C385A5;
-        Tue,  7 Jun 2022 18:09:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B75D61696;
+        Tue,  7 Jun 2022 18:43:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC1FC385A2;
+        Tue,  7 Jun 2022 18:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625347;
-        bh=1CltcFnzp83Lp3shBByI0qoMgoRiBqUKG72OG4ryCK8=;
+        s=korg; t=1654627403;
+        bh=wLmzhkyFLTF4SLTynNJJPImdVmUAqGk44Uje4g5WhwM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UYw6uwSgwEt9NdOs0Bo1hqlGbFzkVWJ7JJ2w2zU14OcUzrkcSTBMD6Pmq+0QIwi08
-         i2K4i5AWZbSITjyyp39fdIZpdUpKpmVeAQqpmkJC+5+wMlv5zxR65cY+HpbSr+8C4d
-         hBZ6hVhcmRKSuQJ78XGLIMhsoKLIuVogmWwbAs3o=
+        b=E+a04s8RQIAtXqNGkZ0cIv/iLymj456FgS76/XLLMVE0jTozjApD0qxOL2J57IAX5
+         xEnvfWdX0iTpBK3gdNsBiiabcIQDz5ofT389cR49EcXxVuK2e9Kq/YDnPkvtN/ZwFb
+         lqPkxIcTFm4PSqT+yq8D8NtKYEYEvC6/MtGJKIbE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 5.15 652/667] list: test: Add a test for list_is_head()
-Date:   Tue,  7 Jun 2022 19:05:17 +0200
-Message-Id: <20220607164954.205666782@linuxfoundation.org>
+        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.17 726/772] hugetlb: fix huge_pmd_unshare address update
+Date:   Tue,  7 Jun 2022 19:05:18 +0200
+Message-Id: <20220607165010.436632011@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,60 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+From: Mike Kravetz <mike.kravetz@oracle.com>
 
-commit 37dc573c0a547e1aed0c9abb480fab797bd3833f upstream.
+commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
 
-list_is_head() was added recently[1], and didn't have a KUnit test. The
-implementation is trivial, so it's not a particularly exciting test, but
-it'd be nice to get back to full coverage of the list functions.
+The routine huge_pmd_unshare() is passed a pointer to an address
+associated with an area which may be unshared.  If unshare is successful
+this address is updated to 'optimize' callers iterating over huge page
+addresses.  For the optimization to work correctly, address should be
+updated to the last huge page in the unmapped/unshared area.  However, in
+the common case where the passed address is PUD_SIZE aligned, the address
+is incorrectly updated to the address of the preceding huge page.  That
+wastes CPU cycles as the unmapped/unshared range is scanned twice.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/list.h?id=0425473037db40d9e322631f2d4dc6ef51f97e88
-
-Signed-off-by: David Gow <davidgow@google.com>
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
+Fixes: 39dde65c9940 ("shared page table for hugetlb page")
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/list-test.c |   19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ mm/hugetlb.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -234,6 +234,24 @@ static void list_test_list_bulk_move_tai
- 	KUNIT_EXPECT_EQ(test, i, 2);
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6557,7 +6557,14 @@ int huge_pmd_unshare(struct mm_struct *m
+ 	pud_clear(pud);
+ 	put_page(virt_to_page(ptep));
+ 	mm_dec_nr_pmds(mm);
+-	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
++	/*
++	 * This update of passed address optimizes loops sequentially
++	 * processing addresses in increments of huge page size (PMD_SIZE
++	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
++	 * Update address to the 'last page' in the cleared area so that
++	 * calling loop can move to first page past this area.
++	 */
++	*addr |= PUD_SIZE - PMD_SIZE;
+ 	return 1;
  }
  
-+static void list_test_list_is_head(struct kunit *test)
-+{
-+	struct list_head a, b, c;
-+
-+	/* Two lists: [a] -> b, [c] */
-+	INIT_LIST_HEAD(&a);
-+	INIT_LIST_HEAD(&c);
-+	list_add_tail(&b, &a);
-+
-+	KUNIT_EXPECT_TRUE_MSG(test, list_is_head(&a, &a),
-+		"Head element of same list");
-+	KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &b),
-+		"Non-head element of same list");
-+	KUNIT_EXPECT_FALSE_MSG(test, list_is_head(&a, &c),
-+		"Head element of different list");
-+}
-+
-+
- static void list_test_list_is_first(struct kunit *test)
- {
- 	struct list_head a, b;
-@@ -710,6 +728,7 @@ static struct kunit_case list_test_cases
- 	KUNIT_CASE(list_test_list_move),
- 	KUNIT_CASE(list_test_list_move_tail),
- 	KUNIT_CASE(list_test_list_bulk_move_tail),
-+	KUNIT_CASE(list_test_list_is_head),
- 	KUNIT_CASE(list_test_list_is_first),
- 	KUNIT_CASE(list_test_list_is_last),
- 	KUNIT_CASE(list_test_list_empty),
 
 

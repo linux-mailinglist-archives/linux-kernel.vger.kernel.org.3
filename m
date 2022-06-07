@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BAA5408AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB77541AB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350210AbiFGSAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S1380015AbiFGVhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348586AbiFGRlL (ORCPT
+        with ESMTP id S1357691AbiFGUnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:41:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3926212089F;
-        Tue,  7 Jun 2022 10:34:24 -0700 (PDT)
+        Tue, 7 Jun 2022 16:43:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDE61F2329;
+        Tue,  7 Jun 2022 11:38:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 149D661579;
-        Tue,  7 Jun 2022 17:34:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24711C385A5;
-        Tue,  7 Jun 2022 17:34:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E15D7B82395;
+        Tue,  7 Jun 2022 18:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434EAC385A5;
+        Tue,  7 Jun 2022 18:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623263;
-        bh=SV0IECVPnc9/xR8YY8B9n2LFgv4bXGrudOLScsdWmN0=;
+        s=korg; t=1654627102;
+        bh=3TG3itixh7NWTFK2FgObI3xmM6oohVm5wjgoSYCYlZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=11Wj4nI7tZAiWsNEFD0/G3xyOYgBojWVaBLu9LhhiYAsnMDyjuVMzkQ+Y2QPQl55a
-         n4bvNzUiocY/KLmiwPKeorlJbaTTQuYMI4PWGwQh3mlX74MUyI8zfWPEydYsHZHf80
-         euSuI7fJo9oU6cXNoFtYBKahj7dwanFpxgUhPd6g=
+        b=Xl/PmUsKwPUNcEV+lx4yYKZn2pI3fKhLnJeD5g/7F8Q0/v/y1VpUAHm8FZaX4yAQb
+         E1wegPWVwEybuLgfplz2wIZhE8OUge8WOhFlXkjhOZAUrB20+cYBdAFRiKk4FiOhvn
+         M+oXSOaT9g/SEsmLQMSayjAY7lxrDZJQk56IUrgw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: =?UTF-8?q?=5BPATCH=205=2E10=20354/452=5D=20fs-writeback=3A=20writeback=5Fsb=5Finodes=EF=BC=9ARecalculate=20wrote=20according=20skipped=20pages?=
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH 5.17 619/772] objtool: Fix symbol creation
 Date:   Tue,  7 Jun 2022 19:03:31 +0200
-Message-Id: <20220607164919.109947445@linuxfoundation.org>
+Message-Id: <20220607165007.176569427@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,151 +56,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-commit 68f4c6eba70df70a720188bce95c85570ddfcc87 upstream.
+commit ead165fa1042247b033afad7be4be9b815d04ade upstream.
 
-Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
-writeback_inodes_wb()") has us holding a plug during wb_writeback, which
-may cause a potential ABBA dead lock:
+Nathan reported objtool failing with the following messages:
 
-    wb_writeback		fat_file_fsync
-blk_start_plug(&plug)
-for (;;) {
-  iter i-1: some reqs have been added into plug->mq_list  // LOCK A
-  iter i:
-    progress = __writeback_inodes_wb(wb, work)
-    . writeback_sb_inodes // fat's bdev
-    .   __writeback_single_inode
-    .   . generic_writepages
-    .   .   __block_write_full_page
-    .   .   . . 	    __generic_file_fsync
-    .   .   . . 	      sync_inode_metadata
-    .   .   . . 	        writeback_single_inode
-    .   .   . . 		  __writeback_single_inode
-    .   .   . . 		    fat_write_inode
-    .   .   . . 		      __fat_write_inode
-    .   .   . . 		        sync_dirty_buffer	// fat's bdev
-    .   .   . . 			  lock_buffer(bh)	// LOCK B
-    .   .   . . 			    submit_bh
-    .   .   . . 			      blk_mq_get_tag	// LOCK A
-    .   .   . trylock_buffer(bh)  // LOCK B
-    .   .   .   redirty_page_for_writepage
-    .   .   .     wbc->pages_skipped++
-    .   .   --wbc->nr_to_write
-    .   wrote += write_chunk - wbc.nr_to_write  // wrote > 0
-    .   requeue_inode
-    .     redirty_tail_locked
-    if (progress)    // progress > 0
-      continue;
-  iter i+1:
-      queue_io
-      // similar process with iter i, infinite for-loop !
-}
-blk_finish_plug(&plug)   // flush plug won't be called
+  warning: objtool: no non-local symbols !?
+  warning: objtool: gelf_update_symshndx: invalid section index
 
-Above process triggers a hungtask like:
-[  399.044861] INFO: task bb:2607 blocked for more than 30 seconds.
-[  399.046824]       Not tainted 5.18.0-rc1-00005-gefae4d9eb6a2-dirty
-[  399.051539] task:bb              state:D stack:    0 pid: 2607 ppid:
-2426 flags:0x00004000
-[  399.051556] Call Trace:
-[  399.051570]  __schedule+0x480/0x1050
-[  399.051592]  schedule+0x92/0x1a0
-[  399.051602]  io_schedule+0x22/0x50
-[  399.051613]  blk_mq_get_tag+0x1d3/0x3c0
-[  399.051640]  __blk_mq_alloc_requests+0x21d/0x3f0
-[  399.051657]  blk_mq_submit_bio+0x68d/0xca0
-[  399.051674]  __submit_bio+0x1b5/0x2d0
-[  399.051708]  submit_bio_noacct+0x34e/0x720
-[  399.051718]  submit_bio+0x3b/0x150
-[  399.051725]  submit_bh_wbc+0x161/0x230
-[  399.051734]  __sync_dirty_buffer+0xd1/0x420
-[  399.051744]  sync_dirty_buffer+0x17/0x20
-[  399.051750]  __fat_write_inode+0x289/0x310
-[  399.051766]  fat_write_inode+0x2a/0xa0
-[  399.051783]  __writeback_single_inode+0x53c/0x6f0
-[  399.051795]  writeback_single_inode+0x145/0x200
-[  399.051803]  sync_inode_metadata+0x45/0x70
-[  399.051856]  __generic_file_fsync+0xa3/0x150
-[  399.051880]  fat_file_fsync+0x1d/0x80
-[  399.051895]  vfs_fsync_range+0x40/0xb0
-[  399.051929]  __x64_sys_fsync+0x18/0x30
+The problem is due to commit 4abff6d48dbc ("objtool: Fix code relocs
+vs weak symbols") failing to consider the case where an object would
+have no non-local symbols.
 
-In my test, 'need_resched()' (which is imported by 590dca3a71 "fs-writeback:
-unplug before cond_resched in writeback_sb_inodes") in function
-'writeback_sb_inodes()' seldom comes true, unless cond_resched() is deleted
-from write_cache_pages().
+The problem that commit tries to address is adding a STB_LOCAL symbol
+to the symbol table in light of the ELF spec's requirement that:
 
-Fix it by correcting wrote number according number of skipped pages
-in writeback_sb_inodes().
+  In each symbol table, all symbols with STB_LOCAL binding preced the
+  weak and global symbols.  As ``Sections'' above describes, a symbol
+  table section's sh_info section header member holds the symbol table
+  index for the first non-local symbol.
 
-Goto Link to find a reproducer.
+The approach taken is to find this first non-local symbol, move that
+to the end and then re-use the freed spot to insert a new local symbol
+and increment sh_info.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215837
-Cc: stable@vger.kernel.org # v4.3
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220510133805.1988292-1-chengzhihao1@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Except it never considered the case of object files without global
+symbols and got a whole bunch of details wrong -- so many in fact that
+it is a wonder it ever worked :/
+
+Specifically:
+
+ - It failed to re-hash the symbol on the new index, so a subsequent
+   find_symbol_by_index() would not find it at the new location and a
+   query for the old location would now return a non-deterministic
+   choice between the old and new symbol.
+
+ - It failed to appreciate that the GElf wrappers are not a valid disk
+   format (it works because GElf is basically Elf64 and we only
+   support x86_64 atm.)
+
+ - It failed to fully appreciate how horrible the libelf API really is
+   and got the gelf_update_symshndx() call pretty much completely
+   wrong; with the direct consequence that if inserting a second
+   STB_LOCAL symbol would require moving the same STB_GLOBAL symbol
+   again it would completely come unstuck.
+
+Write a new elf_update_symbol() function that wraps all the magic
+required to update or create a new symbol at a given index.
+
+Specifically, gelf_update_sym*() require an @ndx argument that is
+relative to the @data argument; this means you have to manually
+iterate the section data descriptor list and update @ndx.
+
+Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fs-writeback.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ tools/objtool/elf.c |  198 +++++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 129 insertions(+), 69 deletions(-)
 
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1650,11 +1650,12 @@ static long writeback_sb_inodes(struct s
- 	};
- 	unsigned long start_time = jiffies;
- 	long write_chunk;
--	long wrote = 0;  /* count both pages and inodes */
-+	long total_wrote = 0;  /* count both pages and inodes */
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -314,6 +314,9 @@ static void elf_add_symbol(struct elf *e
+ 	struct list_head *entry;
+ 	struct rb_node *pnode;
  
- 	while (!list_empty(&wb->b_io)) {
- 		struct inode *inode = wb_inode(wb->b_io.prev);
- 		struct bdi_writeback *tmp_wb;
-+		long wrote;
++	INIT_LIST_HEAD(&sym->pv_target);
++	sym->alias = sym;
++
+ 	sym->type = GELF_ST_TYPE(sym->sym.st_info);
+ 	sym->bind = GELF_ST_BIND(sym->sym.st_info);
  
- 		if (inode->i_sb != sb) {
- 			if (work->sb) {
-@@ -1730,7 +1731,9 @@ static long writeback_sb_inodes(struct s
- 
- 		wbc_detach_inode(&wbc);
- 		work->nr_pages -= write_chunk - wbc.nr_to_write;
--		wrote += write_chunk - wbc.nr_to_write;
-+		wrote = write_chunk - wbc.nr_to_write - wbc.pages_skipped;
-+		wrote = wrote < 0 ? 0 : wrote;
-+		total_wrote += wrote;
- 
- 		if (need_resched()) {
- 			/*
-@@ -1752,7 +1755,7 @@ static long writeback_sb_inodes(struct s
- 		tmp_wb = inode_to_wb_and_lock_list(inode);
- 		spin_lock(&inode->i_lock);
- 		if (!(inode->i_state & I_DIRTY_ALL))
--			wrote++;
-+			total_wrote++;
- 		requeue_inode(inode, tmp_wb, &wbc);
- 		inode_sync_complete(inode);
- 		spin_unlock(&inode->i_lock);
-@@ -1766,14 +1769,14 @@ static long writeback_sb_inodes(struct s
- 		 * bail out to wb_writeback() often enough to check
- 		 * background threshold and other termination conditions.
- 		 */
--		if (wrote) {
-+		if (total_wrote) {
- 			if (time_is_before_jiffies(start_time + HZ / 10UL))
- 				break;
- 			if (work->nr_pages <= 0)
- 				break;
+@@ -375,8 +378,6 @@ static int read_symbols(struct elf *elf)
+ 			return -1;
  		}
- 	}
--	return wrote;
-+	return total_wrote;
+ 		memset(sym, 0, sizeof(*sym));
+-		INIT_LIST_HEAD(&sym->pv_target);
+-		sym->alias = sym;
+ 
+ 		sym->idx = i;
+ 
+@@ -540,24 +541,21 @@ static void elf_dirty_reloc_sym(struct e
  }
  
- static long __writeback_inodes_wb(struct bdi_writeback *wb,
+ /*
+- * Move the first global symbol, as per sh_info, into a new, higher symbol
+- * index. This fees up the shndx for a new local symbol.
++ * The libelf API is terrible; gelf_update_sym*() takes a data block relative
++ * index value, *NOT* the symbol index. As such, iterate the data blocks and
++ * adjust index until it fits.
++ *
++ * If no data block is found, allow adding a new data block provided the index
++ * is only one past the end.
+  */
+-static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+-				  struct section *symtab_shndx)
++static int elf_update_symbol(struct elf *elf, struct section *symtab,
++			     struct section *symtab_shndx, struct symbol *sym)
+ {
+-	Elf_Data *data, *shndx_data = NULL;
+-	Elf32_Word first_non_local;
+-	struct symbol *sym;
+-	Elf_Scn *s;
+-
+-	first_non_local = symtab->sh.sh_info;
+-
+-	sym = find_symbol_by_index(elf, first_non_local);
+-	if (!sym) {
+-		WARN("no non-local symbols !?");
+-		return first_non_local;
+-	}
++	Elf32_Word shndx = sym->sec ? sym->sec->idx : SHN_UNDEF;
++	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
++	Elf64_Xword entsize = symtab->sh.sh_entsize;
++	int max_idx, idx = sym->idx;
++	Elf_Scn *s, *t = NULL;
+ 
+ 	s = elf_getscn(elf->elf, symtab->idx);
+ 	if (!s) {
+@@ -565,79 +563,124 @@ static int elf_move_global_symbol(struct
+ 		return -1;
+ 	}
+ 
+-	data = elf_newdata(s);
+-	if (!data) {
+-		WARN_ELF("elf_newdata");
+-		return -1;
++	if (symtab_shndx) {
++		t = elf_getscn(elf->elf, symtab_shndx->idx);
++		if (!t) {
++			WARN_ELF("elf_getscn");
++			return -1;
++		}
+ 	}
+ 
+-	data->d_buf = &sym->sym;
+-	data->d_size = sizeof(sym->sym);
+-	data->d_align = 1;
+-	data->d_type = ELF_T_SYM;
++	for (;;) {
++		/* get next data descriptor for the relevant sections */
++		symtab_data = elf_getdata(s, symtab_data);
++		if (t)
++			shndx_data = elf_getdata(t, shndx_data);
++
++		/* end-of-list */
++		if (!symtab_data) {
++			void *buf;
++
++			if (idx) {
++				/* we don't do holes in symbol tables */
++				WARN("index out of range");
++				return -1;
++			}
+ 
+-	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
+-	elf_dirty_reloc_sym(elf, sym);
++			/* if @idx == 0, it's the next contiguous entry, create it */
++			symtab_data = elf_newdata(s);
++			if (t)
++				shndx_data = elf_newdata(t);
++
++			buf = calloc(1, entsize);
++			if (!buf) {
++				WARN("malloc");
++				return -1;
++			}
+ 
+-	symtab->sh.sh_info += 1;
+-	symtab->sh.sh_size += data->d_size;
+-	symtab->changed = true;
++			symtab_data->d_buf = buf;
++			symtab_data->d_size = entsize;
++			symtab_data->d_align = 1;
++			symtab_data->d_type = ELF_T_SYM;
++
++			symtab->sh.sh_size += entsize;
++			symtab->changed = true;
++
++			if (t) {
++				shndx_data->d_buf = &sym->sec->idx;
++				shndx_data->d_size = sizeof(Elf32_Word);
++				shndx_data->d_align = sizeof(Elf32_Word);
++				shndx_data->d_type = ELF_T_WORD;
+ 
+-	if (symtab_shndx) {
+-		s = elf_getscn(elf->elf, symtab_shndx->idx);
+-		if (!s) {
+-			WARN_ELF("elf_getscn");
++				symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
++				symtab_shndx->changed = true;
++			}
++
++			break;
++		}
++
++		/* empty blocks should not happen */
++		if (!symtab_data->d_size) {
++			WARN("zero size data");
+ 			return -1;
+ 		}
+ 
+-		shndx_data = elf_newdata(s);
++		/* is this the right block? */
++		max_idx = symtab_data->d_size / entsize;
++		if (idx < max_idx)
++			break;
++
++		/* adjust index and try again */
++		idx -= max_idx;
++	}
++
++	/* something went side-ways */
++	if (idx < 0) {
++		WARN("negative index");
++		return -1;
++	}
++
++	/* setup extended section index magic and write the symbol */
++	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
++		sym->sym.st_shndx = shndx;
++		if (!shndx_data)
++			shndx = 0;
++	} else {
++		sym->sym.st_shndx = SHN_XINDEX;
+ 		if (!shndx_data) {
+-			WARN_ELF("elf_newshndx_data");
++			WARN("no .symtab_shndx");
+ 			return -1;
+ 		}
++	}
+ 
+-		shndx_data->d_buf = &sym->sec->idx;
+-		shndx_data->d_size = sizeof(Elf32_Word);
+-		shndx_data->d_align = 4;
+-		shndx_data->d_type = ELF_T_WORD;
+-
+-		symtab_shndx->sh.sh_size += 4;
+-		symtab_shndx->changed = true;
++	if (!gelf_update_symshndx(symtab_data, shndx_data, idx, &sym->sym, shndx)) {
++		WARN_ELF("gelf_update_symshndx");
++		return -1;
+ 	}
+ 
+-	return first_non_local;
++	return 0;
+ }
+ 
+ static struct symbol *
+ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ {
+ 	struct section *symtab, *symtab_shndx;
+-	Elf_Data *shndx_data = NULL;
+-	struct symbol *sym;
+-	Elf32_Word shndx;
++	Elf32_Word first_non_local, new_idx;
++	struct symbol *sym, *old;
+ 
+ 	symtab = find_section_by_name(elf, ".symtab");
+ 	if (symtab) {
+ 		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
+-		if (symtab_shndx)
+-			shndx_data = symtab_shndx->data;
+ 	} else {
+ 		WARN("no .symtab");
+ 		return NULL;
+ 	}
+ 
+-	sym = malloc(sizeof(*sym));
++	sym = calloc(1, sizeof(*sym));
+ 	if (!sym) {
+ 		perror("malloc");
+ 		return NULL;
+ 	}
+-	memset(sym, 0, sizeof(*sym));
+-
+-	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
+-	if (sym->idx < 0) {
+-		WARN("elf_move_global_symbol");
+-		return NULL;
+-	}
+ 
+ 	sym->name = sec->name;
+ 	sym->sec = sec;
+@@ -647,24 +690,41 @@ elf_create_section_symbol(struct elf *el
+ 	// st_other 0
+ 	// st_value 0
+ 	// st_size 0
+-	shndx = sec->idx;
+-	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
+-		sym->sym.st_shndx = shndx;
+-		if (!shndx_data)
+-			shndx = 0;
+-	} else {
+-		sym->sym.st_shndx = SHN_XINDEX;
+-		if (!shndx_data) {
+-			WARN("no .symtab_shndx");
++
++	/*
++	 * Move the first global symbol, as per sh_info, into a new, higher
++	 * symbol index. This fees up a spot for a new local symbol.
++	 */
++	first_non_local = symtab->sh.sh_info;
++	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
++	old = find_symbol_by_index(elf, first_non_local);
++	if (old) {
++		old->idx = new_idx;
++
++		hlist_del(&old->hash);
++		elf_hash_add(symbol, &old->hash, old->idx);
++
++		elf_dirty_reloc_sym(elf, old);
++
++		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
++			WARN("elf_update_symbol move");
+ 			return NULL;
+ 		}
++
++		new_idx = first_non_local;
+ 	}
+ 
+-	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
+-		WARN_ELF("gelf_update_symshndx");
++	sym->idx = new_idx;
++	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
++		WARN("elf_update_symbol");
+ 		return NULL;
+ 	}
+ 
++	/*
++	 * Either way, we added a LOCAL symbol.
++	 */
++	symtab->sh.sh_info += 1;
++
+ 	elf_add_symbol(elf, sym);
+ 
+ 	return sym;
 
 

@@ -2,66 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6732540321
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BCD540311
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 17:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344663AbiFGPyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 11:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S1344563AbiFGPx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 11:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344566AbiFGPxI (ORCPT
+        with ESMTP id S1344442AbiFGPwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 11:53:08 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96435255A6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:52:56 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fu3so34592823ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 08:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pufS40r/uX2ZtSB9s8FIZ6SlwwrSkU1jYicxPJP0Dvk=;
-        b=EI/3FnfDm7xULUdj70TuQ6pbIIND9Ooo8uGbWhUrAbDTViCBtm4wpTdixdKFNo4aCK
-         f1yE8jNnKNNOTXbuS4EI/9GbcqVUEVRKTQAMSj3vIvvF7eKo91aVzAsh+nLIzVm54tDG
-         z01TQWwsfS6Mcq+/5BW/nW49mcHHd4TAfDhm5S3Bd3Ge5bxjx8cLjrLZ2URBEjFD9ZrX
-         ZQ+oyGHvCBvbSRIasswi2yzcD8CmeiaKpp1BdunZwyBJmGWKE5c8hKDc4LWDi+6Wy66h
-         urZhDietLh4l7fsCWLfQixf/BNyrrizYPXwqKUq0kF6CmoqighGAY+ed/Cz//ADdglzR
-         FC/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pufS40r/uX2ZtSB9s8FIZ6SlwwrSkU1jYicxPJP0Dvk=;
-        b=Hl1fHvfOywAf3j8cNa4V3qt/FqBOpJXTal6be26O5nlLIptu5Re/bnTROVA5gMCJ8+
-         uRK1CeE6k48jtDlwWy8Mv4I8XaREzgvgDzJ3bckNF6H5hXbI5S3vt5mkgndI+OuaKRiB
-         LUVXP+gRA41oXutKid1WaD6u1sspi4d7U1VHfiHwM+o35z1Q6lkQgUWH9WUSPZ3qcE4V
-         Q+GtVj5zSBB+pzXaNeBwzMdgdQbrdG3T4xmz7CCEnG4lbfp8yhrk7IrrgiysDCJcFHBQ
-         Q+NC3YOdRZJSyaMPKik4jcsVdKs0BgRVG/mdEltKdQz2Pf3aWpm/XzHJiNPilxMW6y8H
-         KGAQ==
-X-Gm-Message-State: AOAM531Lnf2nEix9hr0aX+J+vgn/H1LmybGwXqKDDY5ajqVXCvMv4Bu/
-        xokahcIGDjBH71FmXqHSv34ftLW7y6yS7amtW4jMug==
-X-Google-Smtp-Source: ABdhPJzJd85uN4waRQ5S7rEJKLXqx9BZbE/tIhMePQ2Jb2RkKVtxHLi3crqOpmq8r60CdWOGHPfuTeN5wRlBGvmHDeo=
-X-Received: by 2002:a17:907:90c8:b0:711:c8e1:7109 with SMTP id
- gk8-20020a17090790c800b00711c8e17109mr12331055ejb.492.1654617176082; Tue, 07
- Jun 2022 08:52:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
- <20220527025535.3953665-2-pasha.tatashin@soleen.com> <Yp1qO70pdxLx4h1H@MiWiFi-R3L-srv>
-In-Reply-To: <Yp1qO70pdxLx4h1H@MiWiFi-R3L-srv>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Tue, 7 Jun 2022 11:52:18 -0400
-Message-ID: <CA+CK2bACmbW9saepkMy6G5FtssBhCv2NsoLGeFdF0XosKg5A-g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] fs/kernel_read_file: Allow to read files up-to ssize_t
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, rburanyi@google.com,
-        Greg Thelen <gthelen@google.com>, viro@zeniv.linux.org.uk,
-        kexec mailing list <kexec@lists.infradead.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Tue, 7 Jun 2022 11:52:47 -0400
+Received: from smtp.ruc.edu.cn (m177126.mail.qiye.163.com [123.58.177.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E976248
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 08:52:41 -0700 (PDT)
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp.ruc.edu.cn (Hmail) with ESMTPSA id 9F862800A3;
+        Tue,  7 Jun 2022 23:52:38 +0800 (CST)
+From:   Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] spi: fix use after free in of_spi_notify
+Date:   Tue,  7 Jun 2022 23:52:33 +0800
+Message-Id: <20220607155233.27235-1-xiaohuizhang@ruc.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWUJLThlWSUxJShlPT09CTU
+        5JVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NxQ6Nhw5FT00FxccMzcTDTwN
+        MVEwCQFVSlVKTU5PTUpMSk5CT05PVTMWGhIXVQMSGhQTDhIBExoVHDsJDhhVHh8OVRgVRVlXWRIL
+        WUFZSUtJVUpKSVVKSkhVSUpJWVdZCAFZQUpOT0I3Bg++
+X-HM-Tid: 0a813ede34902c20kusn9f862800a3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,175 +42,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 10:45 PM Baoquan He <bhe@redhat.com> wrote:
->
-> On 05/27/22 at 02:55am, Pasha Tatashin wrote:
-> > Currently, the maximum file size that is supported is 2G. This may be
-> > too small in some cases. For example, kexec_file_load() system call
-> > loads initramfs. In some netboot cases initramfs can be rather large.
-> >
-> > Allow to use up-to ssize_t bytes. The callers still can limit the
-> > maximum file size via buf_size.
->
-> If we really met initramfs bigger than 2G, it's reasonable to increase
-> the limit. While wondering why we should take sszie_t, but not size_t.
+We can't use "ctlr->dev" after it has been freed.
 
-ssize_t instead of size_t so we can return errors as negative values.
+Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
+---
+ drivers/spi/spi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Pasha
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index b9e2c7e7c580..dadfcdc6c38f 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -4198,14 +4198,15 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+ 		}
+ 
+ 		spi = of_register_spi_device(ctlr, rd->dn);
+-		put_device(&ctlr->dev);
+ 
+ 		if (IS_ERR(spi)) {
+ 			pr_err("%s: failed to create for '%pOF'\n",
+ 					__func__, rd->dn);
++			put_device(&ctlr->dev);
+ 			of_node_clear_flag(rd->dn, OF_POPULATED);
+ 			return notifier_from_errno(PTR_ERR(spi));
+ 		}
++		put_device(&ctlr->dev);
+ 		break;
+ 
+ 	case OF_RECONFIG_CHANGE_REMOVE:
+-- 
+2.17.1
 
->
-> >
-> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> >  fs/kernel_read_file.c            | 38 ++++++++++++++++----------------
-> >  include/linux/kernel_read_file.h | 32 +++++++++++++--------------
-> >  include/linux/limits.h           |  1 +
-> >  3 files changed, 36 insertions(+), 35 deletions(-)
-> >
-> > diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-> > index 1b07550485b9..5d826274570c 100644
-> > --- a/fs/kernel_read_file.c
-> > +++ b/fs/kernel_read_file.c
-> > @@ -29,15 +29,15 @@
-> >   * change between calls to kernel_read_file().
-> >   *
-> >   * Returns number of bytes read (no single read will be bigger
-> > - * than INT_MAX), or negative on error.
-> > + * than SSIZE_MAX), or negative on error.
-> >   *
-> >   */
-> > -int kernel_read_file(struct file *file, loff_t offset, void **buf,
-> > -                  size_t buf_size, size_t *file_size,
-> > -                  enum kernel_read_file_id id)
-> > +ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
-> > +                      size_t buf_size, size_t *file_size,
-> > +                      enum kernel_read_file_id id)
-> >  {
-> >       loff_t i_size, pos;
-> > -     size_t copied;
-> > +     ssize_t copied;
-> >       void *allocated = NULL;
-> >       bool whole_file;
-> >       int ret;
-> > @@ -58,7 +58,7 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
-> >               goto out;
-> >       }
-> >       /* The file is too big for sane activities. */
-> > -     if (i_size > INT_MAX) {
-> > +     if (i_size > SSIZE_MAX) {
-> >               ret = -EFBIG;
-> >               goto out;
-> >       }
-> > @@ -124,12 +124,12 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
-> >  }
-> >  EXPORT_SYMBOL_GPL(kernel_read_file);
-> >
-> > -int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
-> > -                            size_t buf_size, size_t *file_size,
-> > -                            enum kernel_read_file_id id)
-> > +ssize_t kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
-> > +                                size_t buf_size, size_t *file_size,
-> > +                                enum kernel_read_file_id id)
-> >  {
-> >       struct file *file;
-> > -     int ret;
-> > +     ssize_t ret;
-> >
-> >       if (!path || !*path)
-> >               return -EINVAL;
-> > @@ -144,14 +144,14 @@ int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
-> >  }
-> >  EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
-> >
-> > -int kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> > -                                   void **buf, size_t buf_size,
-> > -                                   size_t *file_size,
-> > -                                   enum kernel_read_file_id id)
-> > +ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> > +                                       void **buf, size_t buf_size,
-> > +                                       size_t *file_size,
-> > +                                       enum kernel_read_file_id id)
-> >  {
-> >       struct file *file;
-> >       struct path root;
-> > -     int ret;
-> > +     ssize_t ret;
-> >
-> >       if (!path || !*path)
-> >               return -EINVAL;
-> > @@ -171,12 +171,12 @@ int kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> >  }
-> >  EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
-> >
-> > -int kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
-> > -                          size_t buf_size, size_t *file_size,
-> > -                          enum kernel_read_file_id id)
-> > +ssize_t kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
-> > +                              size_t buf_size, size_t *file_size,
-> > +                              enum kernel_read_file_id id)
-> >  {
-> >       struct fd f = fdget(fd);
-> > -     int ret = -EBADF;
-> > +     ssize_t ret = -EBADF;
-> >
-> >       if (!f.file || !(f.file->f_mode & FMODE_READ))
-> >               goto out;
-> > diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
-> > index 575ffa1031d3..90451e2e12bd 100644
-> > --- a/include/linux/kernel_read_file.h
-> > +++ b/include/linux/kernel_read_file.h
-> > @@ -35,21 +35,21 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
-> >       return kernel_read_file_str[id];
-> >  }
-> >
-> > -int kernel_read_file(struct file *file, loff_t offset,
-> > -                  void **buf, size_t buf_size,
-> > -                  size_t *file_size,
-> > -                  enum kernel_read_file_id id);
-> > -int kernel_read_file_from_path(const char *path, loff_t offset,
-> > -                            void **buf, size_t buf_size,
-> > -                            size_t *file_size,
-> > -                            enum kernel_read_file_id id);
-> > -int kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> > -                                   void **buf, size_t buf_size,
-> > -                                   size_t *file_size,
-> > -                                   enum kernel_read_file_id id);
-> > -int kernel_read_file_from_fd(int fd, loff_t offset,
-> > -                          void **buf, size_t buf_size,
-> > -                          size_t *file_size,
-> > -                          enum kernel_read_file_id id);
-> > +ssize_t kernel_read_file(struct file *file, loff_t offset,
-> > +                      void **buf, size_t buf_size,
-> > +                      size_t *file_size,
-> > +                      enum kernel_read_file_id id);
-> > +ssize_t kernel_read_file_from_path(const char *path, loff_t offset,
-> > +                                void **buf, size_t buf_size,
-> > +                                size_t *file_size,
-> > +                                enum kernel_read_file_id id);
-> > +ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
-> > +                                       void **buf, size_t buf_size,
-> > +                                       size_t *file_size,
-> > +                                       enum kernel_read_file_id id);
-> > +ssize_t kernel_read_file_from_fd(int fd, loff_t offset,
-> > +                              void **buf, size_t buf_size,
-> > +                              size_t *file_size,
-> > +                              enum kernel_read_file_id id);
-> >
-> >  #endif /* _LINUX_KERNEL_READ_FILE_H */
-> > diff --git a/include/linux/limits.h b/include/linux/limits.h
-> > index b568b9c30bbf..f6bcc9369010 100644
-> > --- a/include/linux/limits.h
-> > +++ b/include/linux/limits.h
-> > @@ -7,6 +7,7 @@
-> >  #include <vdso/limits.h>
-> >
-> >  #define SIZE_MAX     (~(size_t)0)
-> > +#define SSIZE_MAX    ((ssize_t)(SIZE_MAX >> 1))
-> >  #define PHYS_ADDR_MAX        (~(phys_addr_t)0)
-> >
-> >  #define U8_MAX               ((u8)~0U)
-> > --
-> > 2.36.1.124.g0e6072fb45-goog
-> >
->

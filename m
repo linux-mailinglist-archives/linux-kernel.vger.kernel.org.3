@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6569B540897
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 20:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357DD541383
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351425AbiFGSCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 14:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S1357990AbiFGUCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347903AbiFGRnJ (ORCPT
+        with ESMTP id S1353067AbiFGTB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:43:09 -0400
+        Tue, 7 Jun 2022 15:01:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7FB12E31B;
-        Tue,  7 Jun 2022 10:35:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2A915350B;
+        Tue,  7 Jun 2022 11:04:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CDC9B822B3;
-        Tue,  7 Jun 2022 17:34:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AE5C36B00;
-        Tue,  7 Jun 2022 17:34:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAE5DB82340;
+        Tue,  7 Jun 2022 18:04:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47256C341C4;
+        Tue,  7 Jun 2022 18:04:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623283;
-        bh=TfGOvyIwaEoLDHC69Z6PPXCHD8kR3jJhdj6r89QSPQ0=;
+        s=korg; t=1654625094;
+        bh=tXA80zgeHvd3RQs/l+A4Go4Qc+Cp8g/84RUiCzl4Tm8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R/16cZ3v9oE6plmsFVD0EFyzGOBm28lbWfhiKETB0coVcydTLBB57FrC1cNgg+15J
-         uVq5DCRiajC3YumDc+FD2Il95uEXj8sTRJj/RNUy3ouRJxg3uQry4PHGb/BQ891e4G
-         kqNmeUJ9l2c5K22yhYBPbY/KO6gXZ6+bgBf4dVdc=
+        b=XQY9lnpvPLU9t1v89S4UdeswNsfAzl9Lkl0si1SNZU3SaXCC+4vBJo0wJv+pMl7hT
+         M+vkDS1U3PgfQ+IVeZMXGTvC2AsuSNUeft7VfNzFfH0p8Haev1hSUlyla2bBcut6Ug
+         BhhyT+PsPtF3RcqG0fv7Tke35NGFAtIcJBDdrXw4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 334/452] dmaengine: stm32-mdma: remove GISR1 register
-Date:   Tue,  7 Jun 2022 19:03:11 +0200
-Message-Id: <20220607164918.512235259@linuxfoundation.org>
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.15 527/667] wifi: mac80211: fix use-after-free in chanctx code
+Date:   Tue,  7 Jun 2022 19:03:12 +0200
+Message-Id: <20220607164950.509956260@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,73 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 9d6a2d92e450926c483e45eaf426080a19219f4e ]
+commit 2965c4cdf7ad9ce0796fac5e57debb9519ea721e upstream.
 
-GISR1 was described in a not up-to-date documentation when the stm32-mdma
-driver has been developed. This register has not been added in reference
-manual of STM32 SoC with MDMA, which have only 32 MDMA channels.
-So remove it from stm32-mdma driver.
+In ieee80211_vif_use_reserved_context(), when we have an
+old context and the new context's replace_state is set to
+IEEE80211_CHANCTX_REPLACE_NONE, we free the old context
+in ieee80211_vif_use_reserved_reassign(). Therefore, we
+cannot check the old_ctx anymore, so we should set it to
+NULL after this point.
 
-Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20220504155322.121431-2-amelie.delaunay@foss.st.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+However, since the new_ctx replace state is clearly not
+IEEE80211_CHANCTX_REPLACES_OTHER, we're not going to do
+anything else in this function and can just return to
+avoid accessing the freed old_ctx.
+
+Cc: stable@vger.kernel.org
+Fixes: 5bcae31d9cb1 ("mac80211: implement multi-vif in-place reservations")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220601091926.df419d91b165.I17a9b3894ff0b8323ce2afdb153b101124c821e5@changeid
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/stm32-mdma.c | 21 +++++----------------
- 1 file changed, 5 insertions(+), 16 deletions(-)
+ net/mac80211/chan.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index fe36738f2dd7..cd394624085a 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -40,7 +40,6 @@
- 					 STM32_MDMA_SHIFT(mask))
+--- a/net/mac80211/chan.c
++++ b/net/mac80211/chan.c
+@@ -1746,12 +1746,9 @@ int ieee80211_vif_use_reserved_context(s
  
- #define STM32_MDMA_GISR0		0x0000 /* MDMA Int Status Reg 1 */
--#define STM32_MDMA_GISR1		0x0004 /* MDMA Int Status Reg 2 */
+ 	if (new_ctx->replace_state == IEEE80211_CHANCTX_REPLACE_NONE) {
+ 		if (old_ctx)
+-			err = ieee80211_vif_use_reserved_reassign(sdata);
+-		else
+-			err = ieee80211_vif_use_reserved_assign(sdata);
++			return ieee80211_vif_use_reserved_reassign(sdata);
  
- /* MDMA Channel x interrupt/status register */
- #define STM32_MDMA_CISR(x)		(0x40 + 0x40 * (x)) /* x = 0..62 */
-@@ -196,7 +195,7 @@
- 
- #define STM32_MDMA_MAX_BUF_LEN		128
- #define STM32_MDMA_MAX_BLOCK_LEN	65536
--#define STM32_MDMA_MAX_CHANNELS		63
-+#define STM32_MDMA_MAX_CHANNELS		32
- #define STM32_MDMA_MAX_REQUESTS		256
- #define STM32_MDMA_MAX_BURST		128
- #define STM32_MDMA_VERY_HIGH_PRIORITY	0x11
-@@ -1350,21 +1349,11 @@ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
- 
- 	/* Find out which channel generates the interrupt */
- 	status = readl_relaxed(dmadev->base + STM32_MDMA_GISR0);
--	if (status) {
--		id = __ffs(status);
--	} else {
--		status = readl_relaxed(dmadev->base + STM32_MDMA_GISR1);
--		if (!status) {
--			dev_dbg(mdma2dev(dmadev), "spurious it\n");
--			return IRQ_NONE;
--		}
--		id = __ffs(status);
--		/*
--		 * As GISR0 provides status for channel id from 0 to 31,
--		 * so GISR1 provides status for channel id from 32 to 62
--		 */
--		id += 32;
-+	if (!status) {
-+		dev_dbg(mdma2dev(dmadev), "spurious it\n");
-+		return IRQ_NONE;
+-		if (err)
+-			return err;
++		return ieee80211_vif_use_reserved_assign(sdata);
  	}
-+	id = __ffs(status);
  
- 	chan = &dmadev->chan[id];
- 	if (!chan) {
--- 
-2.35.1
-
+ 	/*
 
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1DA5415DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC05541E8C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348367AbiFGUnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
+        id S1385540AbiFGWbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357912AbiFGTmc (ORCPT
+        with ESMTP id S1380697AbiFGVQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CAA9FE6;
-        Tue,  7 Jun 2022 11:17:13 -0700 (PDT)
+        Tue, 7 Jun 2022 17:16:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C921F9AA;
+        Tue,  7 Jun 2022 11:56:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FE460C7F;
-        Tue,  7 Jun 2022 18:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB45C385A2;
-        Tue,  7 Jun 2022 18:17:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04B39B82018;
+        Tue,  7 Jun 2022 18:56:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55EBBC385A2;
+        Tue,  7 Jun 2022 18:56:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625832;
-        bh=CTn9HCUjXYHSwA99rQmy+i5tCftAg7PvxJaOxRnYJjo=;
+        s=korg; t=1654628177;
+        bh=djdQ9S61mfxn5Qroahz8b0fLg9sK1orzkaSB+oH7BUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTRZXDr0HsYGuXqXMrCJLuAJGZik059rMbCjE41vy+GxR5hf33cKztxGppU1B+sEe
-         lf2zIQLGk4f3qTXkeJe6zJsScfgpSVjZq/kUBuZWXOgsw4SRuhWX86ujRbUF8tHGmB
-         6K7h+OwDL9PryR0jwoXjK5YHF9z4ffSRPXMd1OaI=
+        b=sMgnU8JSd9ee/5s0365axmLgAGiv7iCslud19PIYwhhcp2r78xtq5JbS+iGOe2wqY
+         lA5lHn4Uj5FRyvmJ/qWAhMC/W1YYH4iut8UX+ls0IDJEXAaBGhMGNA55gv1Rdc3nC2
+         y4XddK2dVBY/i1nhHnEfJFgZORvxL6cpuRPnW9EI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Kwanghoon Son <k.son@samsung.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 159/772] media: exynos4-is: Fix compile warning
+        stable@vger.kernel.org, Peng Wu <wupeng58@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 233/879] ARM: hisi: Add missing of_node_put after of_find_compatible_node
 Date:   Tue,  7 Jun 2022 18:55:51 +0200
-Message-Id: <20220607164953.727790731@linuxfoundation.org>
+Message-Id: <20220607165009.618117963@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kwanghoon Son <k.son@samsung.com>
+From: Peng Wu <wupeng58@huawei.com>
 
-[ Upstream commit e080f5c1f2b6d02c02ee5d674e0e392ccf63bbaf ]
+[ Upstream commit 9bc72e47d4630d58a840a66a869c56b29554cfe4 ]
 
-Declare static on function 'fimc_isp_video_device_unregister'.
+of_find_compatible_node  will increment the refcount of the returned
+device_node. Calling of_node_put() to avoid the refcount leak
 
-When VIDEO_EXYNOS4_ISP_DMA_CAPTURE=n, compiler warns about
-warning: no previous prototype for function [-Wmissing-prototypes]
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Kwanghoon Son <k.son@samsung.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+Signed-off-by: Wei Xu <xuwei5@hisilicon.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/fimc-isp-video.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-hisi/platsmp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-index edcb3a5e3cb9..2dd4ddbc748a 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp-video.h
-+++ b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-@@ -32,7 +32,7 @@ static inline int fimc_isp_video_device_register(struct fimc_isp *isp,
- 	return 0;
+diff --git a/arch/arm/mach-hisi/platsmp.c b/arch/arm/mach-hisi/platsmp.c
+index a56cc64deeb8..9ce93e0b6cdc 100644
+--- a/arch/arm/mach-hisi/platsmp.c
++++ b/arch/arm/mach-hisi/platsmp.c
+@@ -67,14 +67,17 @@ static void __init hi3xxx_smp_prepare_cpus(unsigned int max_cpus)
+ 		}
+ 		ctrl_base = of_iomap(np, 0);
+ 		if (!ctrl_base) {
++			of_node_put(np);
+ 			pr_err("failed to map address\n");
+ 			return;
+ 		}
+ 		if (of_property_read_u32(np, "smp-offset", &offset) < 0) {
++			of_node_put(np);
+ 			pr_err("failed to find smp-offset property\n");
+ 			return;
+ 		}
+ 		ctrl_base += offset;
++		of_node_put(np);
+ 	}
  }
  
--void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-+static inline void fimc_isp_video_device_unregister(struct fimc_isp *isp,
- 				enum v4l2_buf_type type)
- {
- }
+@@ -160,6 +163,7 @@ static int hip01_boot_secondary(unsigned int cpu, struct task_struct *idle)
+ 	if (WARN_ON(!node))
+ 		return -1;
+ 	ctrl_base = of_iomap(node, 0);
++	of_node_put(node);
+ 
+ 	/* set the secondary core boot from DDR */
+ 	remap_reg_value = readl_relaxed(ctrl_base + REG_SC_CTRL);
 -- 
 2.35.1
 

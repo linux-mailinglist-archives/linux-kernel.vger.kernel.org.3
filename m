@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39E4541B84
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DBF5413FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243000AbiFGVsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S1359152AbiFGUJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377221AbiFGUxo (ORCPT
+        with ESMTP id S1355983AbiFGTRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:53:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6441211CA3F;
-        Tue,  7 Jun 2022 11:43:48 -0700 (PDT)
+        Tue, 7 Jun 2022 15:17:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A512987214;
+        Tue,  7 Jun 2022 11:07:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EC18B82018;
-        Tue,  7 Jun 2022 18:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D26C3411C;
-        Tue,  7 Jun 2022 18:43:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D1FB7CE2409;
+        Tue,  7 Jun 2022 18:07:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A484CC385A5;
+        Tue,  7 Jun 2022 18:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627425;
-        bh=HplrpNmY7M+tguF3+6EkcKSnhuhXimBvQS/rGeEEEww=;
+        s=korg; t=1654625256;
+        bh=6t31hPtMi89639cmptUFVhkVesP5SdlNMy5GTolPYdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LpI4ivdO/YszIZKdSMG+PeweCpYnrjDdhtvJLKOFclYEYlyZWyZAFPglnErHhoz5c
-         F+UErf9PXLj1ck6bVNPszxsXVw21IIlp0eU6qicEbDTj8XAUMXYGcPg6Wr6up/0fea
-         QdeRbEIPrz67w0ksK72Ta6VIBoVUYxlnCi1JShlk=
+        b=K42FTDupCwt9qe0iZbqziLCxlXIchggWPHy/k9ph4QF2hZA+Zcclg3HtjjPnXOtIH
+         WrEsa/z6AVwf1fL8+Y+YaZks80I6YJd/cpTcSJRRX0XFWtQN+Sesl3KzifuU6BLyg2
+         sy4K7wdIs69JnkFL8sghn6LvuEhZ/3pz3eTPdVAE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH 5.17 694/772] drm/bridge: analogix_dp: Grab runtime PM reference for DP-AUX
-Date:   Tue,  7 Jun 2022 19:04:46 +0200
-Message-Id: <20220607165009.502303900@linuxfoundation.org>
+        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.15 622/667] hugetlb: fix huge_pmd_unshare address update
+Date:   Tue,  7 Jun 2022 19:04:47 +0200
+Message-Id: <20220607164953.325343717@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Mike Kravetz <mike.kravetz@oracle.com>
 
-commit 8fb6c44fe8468f92ac7b8bbfcca4404a4e88645f upstream.
+commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
 
-If the display is not enable()d, then we aren't holding a runtime PM
-reference here. Thus, it's easy to accidentally cause a hang, if user
-space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
+The routine huge_pmd_unshare() is passed a pointer to an address
+associated with an area which may be unshared.  If unshare is successful
+this address is updated to 'optimize' callers iterating over huge page
+addresses.  For the optimization to work correctly, address should be
+updated to the last huge page in the unmapped/unshared area.  However, in
+the common case where the passed address is PUD_SIZE aligned, the address
+is incorrectly updated to the address of the preceding huge page.  That
+wastes CPU cycles as the unmapped/unshared range is scanned twice.
 
-Let's get a runtime PM reference, and check that we "see" the panel.
-Don't force any panel power-up, etc., because that can be intrusive, and
-that's not what other drivers do (see
-drivers/gpu/drm/bridge/ti-sn65dsi86.c and
-drivers/gpu/drm/bridge/parade-ps8640.c.)
-
-Fixes: 0d97ad03f422 ("drm/bridge: analogix_dp: Remove duplicated code")
+Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
+Fixes: 39dde65c9940 ("shared page table for hugetlb page")
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 Cc: <stable@vger.kernel.org>
-Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220301181107.v4.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ mm/hugetlb.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-@@ -1632,8 +1632,19 @@ static ssize_t analogix_dpaux_transfer(s
- 				       struct drm_dp_aux_msg *msg)
- {
- 	struct analogix_dp_device *dp = to_dp(aux);
-+	int ret;
- 
--	return analogix_dp_transfer(dp, msg);
-+	pm_runtime_get_sync(dp->dev);
-+
-+	ret = analogix_dp_detect_hpd(dp);
-+	if (ret)
-+		goto out;
-+
-+	ret = analogix_dp_transfer(dp, msg);
-+out:
-+	pm_runtime_put(dp->dev);
-+
-+	return ret;
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6060,7 +6060,14 @@ int huge_pmd_unshare(struct mm_struct *m
+ 	pud_clear(pud);
+ 	put_page(virt_to_page(ptep));
+ 	mm_dec_nr_pmds(mm);
+-	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
++	/*
++	 * This update of passed address optimizes loops sequentially
++	 * processing addresses in increments of huge page size (PMD_SIZE
++	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
++	 * Update address to the 'last page' in the cleared area so that
++	 * calling loop can move to first page past this area.
++	 */
++	*addr |= PUD_SIZE - PMD_SIZE;
+ 	return 1;
  }
  
- struct analogix_dp_device *
 
 

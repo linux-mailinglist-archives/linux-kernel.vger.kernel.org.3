@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB5D54124D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B418B541A30
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357706AbiFGTqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S1380994AbiFGVbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353476AbiFGSrj (ORCPT
+        with ESMTP id S1378041AbiFGUer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:47:39 -0400
+        Tue, 7 Jun 2022 16:34:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFDEEB6;
-        Tue,  7 Jun 2022 11:02:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623D31D9;
+        Tue,  7 Jun 2022 11:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B25F2B82375;
-        Tue,  7 Jun 2022 18:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD22BC341CF;
-        Tue,  7 Jun 2022 18:02:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E6BBB8237B;
+        Tue,  7 Jun 2022 18:37:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E25C36AFF;
+        Tue,  7 Jun 2022 18:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624975;
-        bh=YsbqfK4bDhrH0z3BIe/ryhtT8bg72/Iiz12ahGehA0s=;
+        s=korg; t=1654627032;
+        bh=XAGJ6U13VmkrVh5Zc7zRwbkmBQUzO0nmuegqfoYHRKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H/RojdmLaxGdSdzAgxd9gm/e+2McS8G/2l6R+AKdFyYnhO9PkiERf1WO8tWgiiGh7
-         MfckLtNAgZ02cUplk+QJo6U3gv1rjCy9d6VBAuBVVsTKrgW2R5TS1bhok/ywPQpUER
-         xjt+RIKwKHNwJe3nbHmaUDOGQFK+645MpLrCA0fY=
+        b=pESRJ0RI13a61rYmbyHa5f1g/NGUbaDNdOPAuao+DW+4CC8TV1L2jZuxk+2abGhll
+         tbsPWK+sfcWhSHvH2dcXyK8kOO2Bgm+djo57d8fmIwVKqXOfqqna2h6FzmQdBUflOD
+         sF4r9If42zmFxqBejDMVkE9M0cpXVage5h9ipGSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Yan <yanming@tju.edu.cn>,
-        Chao Yu <chao.yu@oppo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.15 519/667] f2fs: fix deadloop in foreground GC
+        stable@vger.kernel.org, Tyrone Ting <kfting@nuvoton.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 592/772] i2c: npcm: Correct register access width
 Date:   Tue,  7 Jun 2022 19:03:04 +0200
-Message-Id: <20220607164950.269772700@linuxfoundation.org>
+Message-Id: <20220607165006.389262353@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,92 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Tyrone Ting <kfting@nuvoton.com>
 
-commit cfd66bb715fd11fde3338d0660cffa1396adc27d upstream.
+[ Upstream commit ea9f8426d17620214ee345ffb77ee6cc196ff14f ]
 
-As Yanming reported in bugzilla:
+The SMBnCTL3 register is 8-bit wide and the 32-bit access was always
+incorrect, but simply didn't cause a visible error on the 32-bit machine.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215914
+On the 64-bit machine, the kernel message reports that ESR value is
+0x96000021. Checking Arm Architecture Reference Manual Armv8 suggests that
+it's the alignment fault.
 
-The root cause is: in a very small sized image, it's very easy to
-exceed threshold of foreground GC, if we calculate free space and
-dirty data based on section granularity, in corner case,
-has_not_enough_free_secs() will always return true, result in
-deadloop in f2fs_gc().
+SMBnCTL3's address is 0xE.
 
-So this patch refactors has_not_enough_free_secs() as below to fix
-this issue:
-1. calculate needed space based on block granularity, and separate
-all blocks to two parts, section part, and block part, comparing
-section part to free section, and comparing block part to free space
-in openned log.
-2. account F2FS_DIRTY_NODES, F2FS_DIRTY_IMETA and F2FS_DIRTY_DENTS
-as node block consumer;
-3. account F2FS_DIRTY_DENTS as data block consumer;
-
-Cc: stable@vger.kernel.org
-Reported-by: Ming Yan <yanming@tju.edu.cn>
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
+Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+Reviewed-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/segment.h |   32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ drivers/i2c/busses/i2c-npcm7xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -571,11 +571,10 @@ static inline int reserved_sections(stru
- 	return GET_SEC_FROM_SEG(sbi, reserved_segments(sbi));
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index 92fd88a3f415..cdea7f440a9e 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -359,14 +359,14 @@ static int npcm_i2c_get_SCL(struct i2c_adapter *_adap)
+ {
+ 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
+ 
+-	return !!(I2CCTL3_SCL_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
++	return !!(I2CCTL3_SCL_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
  }
  
--static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi)
-+static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
-+			unsigned int node_blocks, unsigned int dent_blocks)
+ static int npcm_i2c_get_SDA(struct i2c_adapter *_adap)
  {
--	unsigned int node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
--					get_pages(sbi, F2FS_DIRTY_DENTS);
--	unsigned int dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-+
- 	unsigned int segno, left_blocks;
- 	int i;
+ 	struct npcm_i2c *bus = container_of(_adap, struct npcm_i2c, adap);
  
-@@ -601,19 +600,28 @@ static inline bool has_curseg_enough_spa
- static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
- 					int freed, int needed)
- {
--	int node_secs = get_blocktype_secs(sbi, F2FS_DIRTY_NODES);
--	int dent_secs = get_blocktype_secs(sbi, F2FS_DIRTY_DENTS);
--	int imeta_secs = get_blocktype_secs(sbi, F2FS_DIRTY_IMETA);
-+	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
-+					get_pages(sbi, F2FS_DIRTY_DENTS) +
-+					get_pages(sbi, F2FS_DIRTY_IMETA);
-+	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
-+	unsigned int node_secs = total_node_blocks / BLKS_PER_SEC(sbi);
-+	unsigned int dent_secs = total_dent_blocks / BLKS_PER_SEC(sbi);
-+	unsigned int node_blocks = total_node_blocks % BLKS_PER_SEC(sbi);
-+	unsigned int dent_blocks = total_dent_blocks % BLKS_PER_SEC(sbi);
-+	unsigned int free, need_lower, need_upper;
- 
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
- 		return false;
- 
--	if (free_sections(sbi) + freed == reserved_sections(sbi) + needed &&
--			has_curseg_enough_space(sbi))
-+	free = free_sections(sbi) + freed;
-+	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
-+	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
-+
-+	if (free > need_upper)
- 		return false;
--	return (free_sections(sbi) + freed) <=
--		(node_secs + 2 * dent_secs + imeta_secs +
--		reserved_sections(sbi) + needed);
-+	else if (free <= need_lower)
-+		return true;
-+	return !has_curseg_enough_space(sbi, node_blocks, dent_blocks);
+-	return !!(I2CCTL3_SDA_LVL & ioread32(bus->reg + NPCM_I2CCTL3));
++	return !!(I2CCTL3_SDA_LVL & ioread8(bus->reg + NPCM_I2CCTL3));
  }
  
- static inline bool f2fs_is_checkpoint_ready(struct f2fs_sb_info *sbi)
+ static inline u16 npcm_i2c_get_index(struct npcm_i2c *bus)
+-- 
+2.35.1
+
 
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAF9542247
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945DE542471
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387106AbiFHBFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
+        id S1392304AbiFHAwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383363AbiFGWBv (ORCPT
+        with ESMTP id S1383064AbiFGWAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:01:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733F21BE86;
-        Tue,  7 Jun 2022 12:14:31 -0700 (PDT)
+        Tue, 7 Jun 2022 18:00:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04EA24E1D0;
+        Tue,  7 Jun 2022 12:14:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E9F4B823AE;
-        Tue,  7 Jun 2022 19:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E102C385A5;
-        Tue,  7 Jun 2022 19:14:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22160B81F6D;
+        Tue,  7 Jun 2022 19:14:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73996C385A2;
+        Tue,  7 Jun 2022 19:14:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629258;
-        bh=/ntqIvYDdF2s30nMF1oZWhYOlujzI0rSlTDP7s02PiQ=;
+        s=korg; t=1654629263;
+        bh=WGrOh8oTneCh4yZsr/62ESP2wLPNAlO/thr+y7vDFk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g17p92NAUX9LA5FxqNlFRgik/HsuRYyPc5mWjCqoiWuLlRzM/BkvTsvVN/PJIZcRl
-         qdUHI7SwCeskBcbfM9OU0AyNUi3ceukOHwXKHcdBwEv2x1R3gpK5Cpqv8BkZQwQZ/D
-         5bD6ciskTnvRGZG2KVMPflYaMj5U24OOwScdBcn8=
+        b=s8C/adt6ly/ntqq4ab73acaNDJbKPLR52DUJjLmEjjkcrtAg2Opae1qOoHp0PLrPP
+         Rzy++JvrpbZ/ArjznCyYAD4uh8c8C/DdY84ZwoICSw+n3p4nCHggih9DtXSkeX0KqL
+         hLRir4jiSMYj8NTj8qUPmv05N+oXXFI6W9n7eJaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        stable@vger.kernel.org, Mina Almasry <almasrymina@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 625/879] ARM: dts: lan966x: swap dma channels for crypto node
-Date:   Tue,  7 Jun 2022 19:02:23 +0200
-Message-Id: <20220607165020.990852785@linuxfoundation.org>
+Subject: [PATCH 5.18 626/879] hugetlbfs: fix hugetlbfs_statfs() locking
+Date:   Tue,  7 Jun 2022 19:02:24 +0200
+Message-Id: <20220607165021.019494554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,42 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Mina Almasry <almasrymina@google.com>
 
-[ Upstream commit 8b4092fd0c1a0aaa985413c43b027f87dd457207 ]
+[ Upstream commit 4b25f030ae69ba710eff587cabb4c57cb7e7a8a1 ]
 
-The YAML binding (crypto/atmel,at91sam9g46-aes.yaml) mandates the order
-of the channels. Swap them to pass devicetree validation.
+After commit db71ef79b59b ("hugetlb: make free_huge_page irq safe"), the
+subpool lock should be locked with spin_lock_irq() and all call sites was
+modified as such, except for the ones in hugetlbfs_statfs().
 
-Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board pcb8291")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Tested-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220502224127.2604333-2-michael@walle.cc
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Link: https://lkml.kernel.org/r/20220429202207.3045-1-almasrymina@google.com
+Fixes: db71ef79b59b ("hugetlb: make free_huge_page irq safe")
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/lan966x.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/hugetlbfs/inode.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index 7d2869648050..5e9cbc8cdcbc 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -114,9 +114,9 @@
- 			compatible = "atmel,at91sam9g46-aes";
- 			reg = <0xe004c000 0x100>;
- 			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
--			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
--			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
--			dma-names = "rx", "tx";
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(12)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(13)>;
-+			dma-names = "tx", "rx";
- 			clocks = <&nic_clk>;
- 			clock-names = "aes_clk";
- 		};
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index dd3a088db11d..591599829e2a 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -1048,12 +1048,12 @@ static int hugetlbfs_statfs(struct dentry *dentry, struct kstatfs *buf)
+ 		if (sbinfo->spool) {
+ 			long free_pages;
+ 
+-			spin_lock(&sbinfo->spool->lock);
++			spin_lock_irq(&sbinfo->spool->lock);
+ 			buf->f_blocks = sbinfo->spool->max_hpages;
+ 			free_pages = sbinfo->spool->max_hpages
+ 				- sbinfo->spool->used_hpages;
+ 			buf->f_bavail = buf->f_bfree = free_pages;
+-			spin_unlock(&sbinfo->spool->lock);
++			spin_unlock_irq(&sbinfo->spool->lock);
+ 			buf->f_files = sbinfo->max_inodes;
+ 			buf->f_ffree = sbinfo->free_inodes;
+ 		}
 -- 
 2.35.1
 

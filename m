@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C94541A81
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50ADE540832
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379343AbiFGVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
+        id S1348794AbiFGRyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377460AbiFGUdZ (ORCPT
+        with ESMTP id S1347701AbiFGRfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:33:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C041E4534;
-        Tue,  7 Jun 2022 11:35:10 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D860F5061;
+        Tue,  7 Jun 2022 10:31:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B6C1B8237C;
-        Tue,  7 Jun 2022 18:35:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE1EC385A2;
-        Tue,  7 Jun 2022 18:35:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A76614AE;
+        Tue,  7 Jun 2022 17:31:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8566FC385A5;
+        Tue,  7 Jun 2022 17:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626904;
-        bh=2clv+eIChWCU75Deg8PZdCXvoxeLsnNaYAdk+/FkBa4=;
+        s=korg; t=1654623060;
+        bh=UXT6frlTpLfQse3nCoBzL5EmELwi+AfmgLZ/R0K0RmU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oeI7QY/YceDwp4v/kBvBQQwHpRCdjQtEkZfvrQ88RxD8IDDBhr+IGyoh1kJpydXnI
-         7Fkx6sFm28+/oRz0U4OhO8YRVgeipc9o0qNe242tVZRIcrkn/9ZoSpsQhxXshaT7Pj
-         JRUpzwf8NCadh6LhFAwGVYGZIeBJQ9kV+ZMqzldU=
+        b=yLKvSrbK8aU8JYNiyDT1LdUKQSgwGcq5t5K9YQcDUKYTzP+ykM0yOUDENlSyhdyYR
+         zNJDwx0uFA/wmtGLL6I2i0v7eWNRxojbcKOkCIcIYAgcVQXC4UaJfxGCXCfFRUL7yp
+         h3SkIcQdDPAS5Wy4Hr0csUKWQC7xkwjAIAaOoknM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 545/772] powerpc/64: Only WARN if __pa()/__va() called with bad addresses
+Subject: [PATCH 5.10 280/452] crypto: marvell/cesa - ECB does not IV
 Date:   Tue,  7 Jun 2022 19:02:17 +0200
-Message-Id: <20220607165005.023104946@linuxfoundation.org>
+Message-Id: <20220607164916.893543938@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit c4bce84d0bd3f396f702d69be2e92bbd8af97583 ]
+[ Upstream commit 4ffa1763622ae5752961499588f3f8874315f974 ]
 
-We added checks to __pa() / __va() to ensure they're only called with
-appropriate addresses. But using BUG_ON() is too strong, it means
-virt_addr_valid() will BUG when DEBUG_VIRTUAL is enabled.
+The DES3 ECB has an IV size set but ECB does not need one.
 
-Instead switch them to warnings, arm64 does the same.
-
-Fixes: 4dd7554a6456 ("powerpc/64: Add VIRTUAL_BUG_ON checks for __va and __pa addresses")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220406145802.538416-5-mpe@ellerman.id.au
+Fixes: 4ada483978237 ("crypto: marvell/cesa - add Triple-DES support")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/page.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/crypto/marvell/cesa/cipher.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
-index f2c5c26869f1..03ae544eb6cc 100644
---- a/arch/powerpc/include/asm/page.h
-+++ b/arch/powerpc/include/asm/page.h
-@@ -216,6 +216,9 @@ static inline bool pfn_valid(unsigned long pfn)
- #define __pa(x) ((phys_addr_t)(unsigned long)(x) - VIRT_PHYS_OFFSET)
- #else
- #ifdef CONFIG_PPC64
-+
-+#define VIRTUAL_WARN_ON(x)	WARN_ON(IS_ENABLED(CONFIG_DEBUG_VIRTUAL) && (x))
-+
- /*
-  * gcc miscompiles (unsigned long)(&static_var) - PAGE_OFFSET
-  * with -mcmodel=medium, so we use & and | instead of - and + on 64-bit.
-@@ -223,13 +226,13 @@ static inline bool pfn_valid(unsigned long pfn)
-  */
- #define __va(x)								\
- ({									\
--	VIRTUAL_BUG_ON((unsigned long)(x) >= PAGE_OFFSET);		\
-+	VIRTUAL_WARN_ON((unsigned long)(x) >= PAGE_OFFSET);		\
- 	(void *)(unsigned long)((phys_addr_t)(x) | PAGE_OFFSET);	\
- })
- 
- #define __pa(x)								\
- ({									\
--	VIRTUAL_BUG_ON((unsigned long)(x) < PAGE_OFFSET);		\
-+	VIRTUAL_WARN_ON((unsigned long)(x) < PAGE_OFFSET);		\
- 	(unsigned long)(x) & 0x0fffffffffffffffUL;			\
- })
- 
+diff --git a/drivers/crypto/marvell/cesa/cipher.c b/drivers/crypto/marvell/cesa/cipher.c
+index b4a6ff9dd6d5..596a8c74e40a 100644
+--- a/drivers/crypto/marvell/cesa/cipher.c
++++ b/drivers/crypto/marvell/cesa/cipher.c
+@@ -614,7 +614,6 @@ struct skcipher_alg mv_cesa_ecb_des3_ede_alg = {
+ 	.decrypt = mv_cesa_ecb_des3_ede_decrypt,
+ 	.min_keysize = DES3_EDE_KEY_SIZE,
+ 	.max_keysize = DES3_EDE_KEY_SIZE,
+-	.ivsize = DES3_EDE_BLOCK_SIZE,
+ 	.base = {
+ 		.cra_name = "ecb(des3_ede)",
+ 		.cra_driver_name = "mv-ecb-des3-ede",
 -- 
 2.35.1
 

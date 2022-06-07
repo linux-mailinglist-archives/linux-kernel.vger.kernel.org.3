@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B5F541E1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1649541E21
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385327AbiFGW05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S1385218AbiFGW0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381428AbiFGVRn (ORCPT
+        with ESMTP id S1381459AbiFGVRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:17:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BB0222A51;
-        Tue,  7 Jun 2022 11:58:57 -0700 (PDT)
+        Tue, 7 Jun 2022 17:17:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E7222A7C;
+        Tue,  7 Jun 2022 11:59:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C711C6159D;
-        Tue,  7 Jun 2022 18:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF814C385A5;
-        Tue,  7 Jun 2022 18:58:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39C44B82399;
+        Tue,  7 Jun 2022 18:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A37AC385A2;
+        Tue,  7 Jun 2022 18:58:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628336;
-        bh=h6OqCUeDOUqyQBLL56rhlWhklL1em65k+Cw8UX3FKp4=;
+        s=korg; t=1654628339;
+        bh=Aq7vSxKcjetfj93aKlRfrOrn3yESDQPRup+E2ckv/ac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AF/vRRsZgW0Koo0XmYlWo51j9tWtlJzGIpwbg9OREI2gKEUF6egltAfTHR9Wa5PJ8
-         cSFzkjGI2GpzxHrFf5z6/tg4K/YQj5+QXGeSAXPMta7wL8Ktha4fvgZao9pPKiCixE
-         5A67SuczA8ndd9XPgSF4zXGY5cyCZ8V3jP5f4KOA=
+        b=lYwUiv3exzTdxUR0MKIEY+Utb8plV2BL39iOVjh+OzTI+7zzLwIScflpOw/mH9Grw
+         wsS2c0GGv99pkYg0rihliXGU4CZPiaQNcM7hjGUJ61f+qL2H/Gx0eRf6ZGwvgrAO7t
+         3NmtFuOsrKjb2rsPCbsZWKJxSgY9OEqA2aOp5Tu8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 293/879] drm/vc4: txp: Dont set TXP_VSTART_AT_EOF
-Date:   Tue,  7 Jun 2022 18:56:51 +0200
-Message-Id: <20220607165011.352932984@linuxfoundation.org>
+Subject: [PATCH 5.18 294/879] drm/vc4: txp: Force alpha to be 0xff if its disabled
+Date:   Tue,  7 Jun 2022 18:56:52 +0200
+Message-Id: <20220607165011.382011372@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,39 +57,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 234998df929f14d00cbf2f1e81a7facb69fd9266 ]
+[ Upstream commit 5453343a88ede8b12812fced81ecd24cb888ccc3 ]
 
-The TXP_VSTART_AT_EOF will generate a second VSTART signal to the HVS.
-However, the HVS waits for VSTART to enable the FIFO and will thus start
-filling the FIFO before the start of the frame.
+If we use a format that has padding instead of the alpha component (such
+as XRGB8888), it appears that the Transposer will fill the padding to 0,
+disregarding what was stored in the input buffer padding.
 
-This leads to corruption at the beginning of the first frame, and
-content from the previous frame at the beginning of the next frames.
-
-Since one VSTART is enough, let's get rid of it.
+This leads to issues with IGT, since it will set the padding to 0xff,
+but will then compare the CRC of the two frames which will thus fail.
+Another nice side effect is that it is now possible to just use the
+buffer as ARGB.
 
 Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220328153659.2382206-3-maxime@cerno.tech
+Link: https://lore.kernel.org/r/20220328153659.2382206-4-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_txp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/vc4/vc4_txp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
-index 9809ca3e2945..ace2d03649ba 100644
+index ace2d03649ba..82beb8c159f2 100644
 --- a/drivers/gpu/drm/vc4/vc4_txp.c
 +++ b/drivers/gpu/drm/vc4/vc4_txp.c
-@@ -298,7 +298,7 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
- 	if (WARN_ON(i == ARRAY_SIZE(drm_fmts)))
- 		return;
+@@ -304,6 +304,12 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
  
--	ctrl = TXP_GO | TXP_VSTART_AT_EOF | TXP_EI |
-+	ctrl = TXP_GO | TXP_EI |
- 	       VC4_SET_FIELD(0xf, TXP_BYTE_ENABLE) |
- 	       VC4_SET_FIELD(txp_fmts[i], TXP_FORMAT);
+ 	if (fb->format->has_alpha)
+ 		ctrl |= TXP_ALPHA_ENABLE;
++	else
++		/*
++		 * If TXP_ALPHA_ENABLE isn't set and TXP_ALPHA_INVERT is, the
++		 * hardware will force the output padding to be 0xff.
++		 */
++		ctrl |= TXP_ALPHA_INVERT;
  
+ 	gem = drm_fb_cma_get_gem_obj(fb, 0);
+ 	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
 -- 
 2.35.1
 

@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A09D541993
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCEE5419BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378286AbiFGVWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1379771AbiFGV0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376809AbiFGU2L (ORCPT
+        with ESMTP id S1376822AbiFGU2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:28:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB861D92D3;
-        Tue,  7 Jun 2022 11:33:15 -0700 (PDT)
+        Tue, 7 Jun 2022 16:28:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBAD1D92E7;
+        Tue,  7 Jun 2022 11:33:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10CB6B82188;
-        Tue,  7 Jun 2022 18:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EC0C385A2;
-        Tue,  7 Jun 2022 18:33:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4188E612F2;
+        Tue,  7 Jun 2022 18:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D63C385A2;
+        Tue,  7 Jun 2022 18:33:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626793;
-        bh=aSoKgQo3dMDBuDYbjgDk2sOaJdxoVF0R36S6qlw9zqE=;
+        s=korg; t=1654626796;
+        bh=qV2DruYLPwyZRDN9vck8Ib0tA9uqVGuc67Tk42gUhNY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DLSbSs2JRN/P5Xxv1Fnmgoj0eiIRRb06o0xQmYxL9F8yn+hmqhtzPJCr4D5mYkJK9
-         zQUZ5Y9FoRzc5Php6Do53JTGXw9NfgutHe7OCrEDKcBz3d9yLQOfxaq82ovxbdOe0K
-         jhQp1zGgdEwE7ZXoezRmcKhVEn/mVK2HVydFy1mM=
+        b=fl8g7sEGGtOG/u/ftXW9ipOoqA8vTi5cHfxxEXLQfWP3kKbxUhDEZNxi5NUlzXj1G
+         M/k9fbGe+PmfrxSnfVJGD2divbTJ6nzp4TMU7K2rE5dCdrR7OSYwhA0o5OqdC8WBZY
+         yucfGVnPEn0BUvhwvXTyz+DMfzJ0l2Db6jJp4a/M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mel Gorman <mel@csn.ul.ie>,
-        Minchan Kim <minchan.kim@gmail.com>,
-        KAMEZAWA Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ross Zwisler <zwisler@kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Yang Shi <shy828301@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 505/772] drivers/base/node.c: fix compaction sysfs file leak
-Date:   Tue,  7 Jun 2022 19:01:37 +0200
-Message-Id: <20220607165003.859966201@linuxfoundation.org>
+Subject: [PATCH 5.17 506/772] dax: fix cache flush on PMD-mapped pages
+Date:   Tue,  7 Jun 2022 19:01:38 +0200
+Message-Id: <20220607165003.889379506@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -60,42 +67,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+From: Muchun Song <songmuchun@bytedance.com>
 
-[ Upstream commit da63dc84befaa9e6079a0bc363ff0eaa975f9073 ]
+[ Upstream commit e583b5c472bd23d450e06f148dc1f37be74f7666 ]
 
-Compaction sysfs file is created via compaction_register_node in
-register_node.  But we forgot to remove it in unregister_node.  Thus
-compaction sysfs file is leaked.  Using compaction_unregister_node to fix
-this issue.
+The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+However, it does not cover the full pages in a THP except a head page.
+Replace it with flush_cache_range() to fix this issue.  This is just a
+documentation issue with the respect to properly documenting the expected
+usage of cache flushing before modifying the pmd.  However, in practice
+this is not a problem due to the fact that DAX is not available on
+architectures with virtually indexed caches per:
 
-Link: https://lkml.kernel.org/r/20220401070905.43679-1-linmiaohe@huawei.com
-Fixes: ed4a6d7f0676 ("mm: compaction: add /sys trigger for per-node memory compaction")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Mel Gorman <mel@csn.ul.ie>
-Cc: Minchan Kim <minchan.kim@gmail.com>
-Cc: KAMEZAWA Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>
-Cc: KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
+  commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
+
+Link: https://lkml.kernel.org/r/20220403053957.10770-3-songmuchun@bytedance.com
+Fixes: f729c8c9b24f ("dax: wrprotect pmd_t in dax_mapping_entry_mkclean")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Ralph Campbell <rcampbell@nvidia.com>
+Cc: Ross Zwisler <zwisler@kernel.org>
+Cc: Xiongchun Duan <duanxiongchun@bytedance.com>
+Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Cc: Yang Shi <shy828301@gmail.com>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/node.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/dax.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 87acc47e8951..7b8368bc2000 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -682,6 +682,7 @@ static int register_node(struct node *node, int num)
-  */
- void unregister_node(struct node *node)
- {
-+	compaction_unregister_node(node);
- 	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
- 	node_remove_accesses(node);
- 	node_remove_caches(node);
+diff --git a/fs/dax.c b/fs/dax.c
+index cd03485867a7..411ea6a0fe57 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -846,7 +846,8 @@ static void dax_entry_mkclean(struct address_space *mapping, pgoff_t index,
+ 			if (!pmd_dirty(*pmdp) && !pmd_write(*pmdp))
+ 				goto unlock_pmd;
+ 
+-			flush_cache_page(vma, address, pfn);
++			flush_cache_range(vma, address,
++					  address + HPAGE_PMD_SIZE);
+ 			pmd = pmdp_invalidate(vma, address, pmdp);
+ 			pmd = pmd_wrprotect(pmd);
+ 			pmd = pmd_mkclean(pmd);
 -- 
 2.35.1
 

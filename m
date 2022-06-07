@@ -2,56 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801B65417AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCDE540435
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378728AbiFGVEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S1345291AbiFGQ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358022AbiFGUCr (ORCPT
+        with ESMTP id S1345285AbiFGQ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:02:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02E31C2047;
-        Tue,  7 Jun 2022 11:25:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE9F360906;
-        Tue,  7 Jun 2022 18:24:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC21C385A2;
-        Tue,  7 Jun 2022 18:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626298;
-        bh=aB0jQ82KR7b5RA+Hf2rVDim5Fk3zehrz+vsYPysga2s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nuh0riqKaeQggDIGcqZyKHwP2E0zKHu6A3o4bdU2Bb04fLzWm4eBGnqI2GOEumc35
-         haTCwD9Ehq54M7ACHbsxuxMD/kJPcYw4oqfCfWb6OT/NRkx3huTza0wGjBZewinvbq
-         pJBaPrl4bt4+zjkAF9c006Gm8sCZRQ3FIaySoFOE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 327/772] perf tools: Use Python devtools for version autodetection rather than runtime
-Date:   Tue,  7 Jun 2022 18:58:39 +0200
-Message-Id: <20220607164958.657064424@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 7 Jun 2022 12:58:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6EA7F338C;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0C851480;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+Received: from ampere-altra-2-1.usa.Arm.com (ampere-altra-2-1.usa.arm.com [10.118.91.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 731EB3F66F;
+        Tue,  7 Jun 2022 09:58:53 -0700 (PDT)
+From:   Yoan Picchi <yoan.picchi@arm.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 1/2] crypto: qat: replace get_current_node() with numa_node_id()
+Date:   Tue,  7 Jun 2022 16:58:39 +0000
+Message-Id: <20220607165840.66931-2-yoan.picchi@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220607165840.66931-1-yoan.picchi@arm.com>
+References: <20220607165840.66931-1-yoan.picchi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,100 +45,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Clark <james.clark@arm.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 630af16eee495f583db5202c3613d1b191f10694 ]
+Currently the QAT driver code uses a self-defined wrapper function
+called get_current_node() when it wants to learn the current NUMA node.
+This implementation references the topology_physical_package_id[] array,
+which more or less coincidentally contains the NUMA node id, at least
+on x86.
 
-This fixes the issue where the build will fail if only the Python2
-runtime is installed but the Python3 devtools are installed. Currently
-the workaround is 'make PYTHON=python3'.
+Because this is not universal, and Linux offers a direct function to
+learn the NUMA node ID, replace that function with a call to
+numa_node_id(), which would work everywhere.
 
-Fix it by autodetecting Python based on whether python[x]-config exists
-rather than just python[x] because both are needed for the build. Then
--config is stripped to find the Python runtime.
+This fixes the QAT driver operation on arm64 machines.
 
-Testing
-=======
-
- * Auto detect links with Python3 when the v3 devtools are installed
-   and only Python 2 runtime is installed
- * Auto detect links with Python2 when both devtools are installed
- * Sensible warning is printed if no Python devtools are installed
- * 'make PYTHON=x' still automatically sets PYTHON_CONFIG=x-config
- * 'make PYTHON=x' fails if x-config doesn't exist
- * 'make PYTHON=python3' overrides Python2 devtools
- * 'make PYTHON=python2' overrides Python3 devtools
- * 'make PYTHON_CONFIG=x-config' works
- * 'make PYTHON=x PYTHON_CONFIG=x' works
- * 'make PYTHON=missing' reports an error
- * 'make PYTHON_CONFIG=missing' reports an error
-
-Fixes: 79373082fa9de8be ("perf python: Autodetect python3 binary")
-Signed-off-by: James Clark <james.clark@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: James Clark <james.clark@arm.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/r/20220309194313.3350126-2-james.clark@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Yoan Picchi <Yoan.Picchi@arm.com>
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Signed-off-by: Yoan Picchi <yoan.picchi@arm.com>
 ---
- tools/perf/Makefile.config | 39 ++++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 12 deletions(-)
+ drivers/crypto/qat/qat_common/adf_common_drv.h | 5 -----
+ drivers/crypto/qat/qat_common/qat_algs.c       | 4 ++--
+ drivers/crypto/qat/qat_common/qat_asym_algs.c  | 4 ++--
+ 3 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 1bd64e7404b9..c38423807d01 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -239,18 +239,33 @@ ifdef PARSER_DEBUG
- endif
+diff --git a/drivers/crypto/qat/qat_common/adf_common_drv.h b/drivers/crypto/qat/qat_common/adf_common_drv.h
+index e8c9b77c0d66..b582107db67b 100644
+--- a/drivers/crypto/qat/qat_common/adf_common_drv.h
++++ b/drivers/crypto/qat/qat_common/adf_common_drv.h
+@@ -49,11 +49,6 @@ struct service_hndl {
+ 	struct list_head list;
+ };
  
- # Try different combinations to accommodate systems that only have
--# python[2][-config] in weird combinations but always preferring
--# python2 and python2-config as per pep-0394. If python2 or python
--# aren't found, then python3 is used.
--PYTHON_AUTO := python
--PYTHON_AUTO := $(if $(call get-executable,python3),python3,$(PYTHON_AUTO))
--PYTHON_AUTO := $(if $(call get-executable,python),python,$(PYTHON_AUTO))
--PYTHON_AUTO := $(if $(call get-executable,python2),python2,$(PYTHON_AUTO))
--override PYTHON := $(call get-executable-or-default,PYTHON,$(PYTHON_AUTO))
--PYTHON_AUTO_CONFIG := \
--  $(if $(call get-executable,$(PYTHON)-config),$(PYTHON)-config,python-config)
--override PYTHON_CONFIG := \
--  $(call get-executable-or-default,PYTHON_CONFIG,$(PYTHON_AUTO_CONFIG))
-+# python[2][3]-config in weird combinations in the following order of
-+# priority from lowest to highest:
-+#   * python3-config
-+#   * python-config
-+#   * python2-config as per pep-0394.
-+#   * $(PYTHON)-config (If PYTHON is user supplied but PYTHON_CONFIG isn't)
-+#
-+PYTHON_AUTO := python-config
-+PYTHON_AUTO := $(if $(call get-executable,python3-config),python3-config,$(PYTHON_AUTO))
-+PYTHON_AUTO := $(if $(call get-executable,python-config),python-config,$(PYTHON_AUTO))
-+PYTHON_AUTO := $(if $(call get-executable,python2-config),python2-config,$(PYTHON_AUTO))
-+
-+# If PYTHON is defined but PYTHON_CONFIG isn't, then take $(PYTHON)-config as if it was the user
-+# supplied value for PYTHON_CONFIG. Because it's "user supplied", error out if it doesn't exist.
-+ifdef PYTHON
-+  ifndef PYTHON_CONFIG
-+    PYTHON_CONFIG_AUTO := $(call get-executable,$(PYTHON)-config)
-+    PYTHON_CONFIG := $(if $(PYTHON_CONFIG_AUTO),$(PYTHON_CONFIG_AUTO),\
-+                          $(call $(error $(PYTHON)-config not found)))
-+  endif
-+endif
-+
-+# Select either auto detected python and python-config or use user supplied values if they are
-+# defined. get-executable-or-default fails with an error if the first argument is supplied but
-+# doesn't exist.
-+override PYTHON_CONFIG := $(call get-executable-or-default,PYTHON_CONFIG,$(PYTHON_AUTO))
-+override PYTHON := $(call get-executable-or-default,PYTHON,$(subst -config,,$(PYTHON_AUTO)))
+-static inline int get_current_node(void)
+-{
+-	return topology_physical_package_id(raw_smp_processor_id());
+-}
+-
+ int adf_service_register(struct service_hndl *service);
+ int adf_service_unregister(struct service_hndl *service);
  
- grep-libs  = $(filter -l%,$(1))
- strip-libs  = $(filter-out -l%,$(1))
+diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
+index f998ed58457c..c0ffaebcc8b8 100644
+--- a/drivers/crypto/qat/qat_common/qat_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_algs.c
+@@ -618,7 +618,7 @@ static int qat_alg_aead_newkey(struct crypto_aead *tfm, const u8 *key,
+ {
+ 	struct qat_alg_aead_ctx *ctx = crypto_aead_ctx(tfm);
+ 	struct qat_crypto_instance *inst = NULL;
+-	int node = get_current_node();
++	int node = numa_node_id();
+ 	struct device *dev;
+ 	int ret;
+ 
+@@ -1042,7 +1042,7 @@ static int qat_alg_skcipher_newkey(struct qat_alg_skcipher_ctx *ctx,
+ {
+ 	struct qat_crypto_instance *inst = NULL;
+ 	struct device *dev;
+-	int node = get_current_node();
++	int node = numa_node_id();
+ 	int ret;
+ 
+ 	inst = qat_crypto_get_instance_node(node);
+diff --git a/drivers/crypto/qat/qat_common/qat_asym_algs.c b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+index b0b78445418b..3701eac10bce 100644
+--- a/drivers/crypto/qat/qat_common/qat_asym_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_asym_algs.c
+@@ -480,7 +480,7 @@ static int qat_dh_init_tfm(struct crypto_kpp *tfm)
+ {
+ 	struct qat_dh_ctx *ctx = kpp_tfm_ctx(tfm);
+ 	struct qat_crypto_instance *inst =
+-			qat_crypto_get_instance_node(get_current_node());
++			qat_crypto_get_instance_node(numa_node_id());
+ 
+ 	if (!inst)
+ 		return -EINVAL;
+@@ -1218,7 +1218,7 @@ static int qat_rsa_init_tfm(struct crypto_akcipher *tfm)
+ {
+ 	struct qat_rsa_ctx *ctx = akcipher_tfm_ctx(tfm);
+ 	struct qat_crypto_instance *inst =
+-			qat_crypto_get_instance_node(get_current_node());
++			qat_crypto_get_instance_node(numa_node_id());
+ 
+ 	if (!inst)
+ 		return -EINVAL;
 -- 
-2.35.1
-
-
+2.25.1
 

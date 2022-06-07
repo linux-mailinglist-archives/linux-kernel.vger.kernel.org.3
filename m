@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695135425C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AECC54264C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244655AbiFHBXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S1387295AbiFHB1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384018AbiFGVx7 (ORCPT
+        with ESMTP id S1382485AbiFGWEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:53:59 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF1F248517
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:12:50 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id c2so24209284edf.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:12:49 -0700 (PDT)
+        Tue, 7 Jun 2022 18:04:31 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E82195908
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 12:16:05 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id e18-20020a170902ef5200b0016153d857a6so9848146plx.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 12:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7kb1j+lCYcgNJfFRtU39ymeKe9zS4sLF08OKHSZXXsk=;
-        b=adPlAQ+Bou+4Tln1nEnCl84skioMttrUky89A5FguxVn/QEfz2lsfXdaCoPuhegnEx
-         pS2Mf4tzCXPnX6a8rBGJKlMDM4JWozBITUs7OtqwUZXEauNgL5wFDann1NuPVQ84R2/F
-         SiKHKY/gcUNMiz6keZBbt5ej+HUZZW5D+bWpceuKEd21chp/ec4OWlKCOgWNh1ocs1XD
-         ETkKWwHNDT9V6uFbdvIvo0/d8cHwH5vy4OFxVGp9kdPjouw0Eq3beVkPpg8w3PZMIO0j
-         xNO2/Pob0Fhg/JiNAyl3k26tOS79XwzGqBJJsCCYQ34+SEOad5CzgNlrl/gb7rCYYC4d
-         pG6g==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kIErM4k6WhLC0n6Ns2bjZKjlflhoJThht73EacMy2qk=;
+        b=Zg5C6wO5vUcCUbuYsPt4beKzGiXy+rxA2PKUAbTNLJ1rLtk/XsZt+lYpgRva4Oe10/
+         5nQlQYM/MhvdUkY8nb+q2tuwUYIhPpfmXFvcRLvF/SqbVk4wbJsASqg7A/OL8NddBONn
+         HjMxCakD8IPiuOWS5hvjzDMkEbwnXK3CJmtCJd4hzVc+BanqXedUNyvu1BXHuXgN0Fnw
+         AScgVGcbFjMhluFiR++2wL759Xqy+6ps85bnotbc5hAa+KlDhRfPBIojz5cXSkIijTzt
+         oFHQLgzeeLN/nTRvxxWogky8oHFQkinuBn/pzl16wkJaRoIKpB2Uhw3MNsrjPiOLBJGM
+         BZ7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7kb1j+lCYcgNJfFRtU39ymeKe9zS4sLF08OKHSZXXsk=;
-        b=c1dM7/vTDKoWZKTxxfqMNxcpGRVXIlYzJ17OUTt06RCTl/+2jgvCfiIsF2ny7gUxLn
-         GJKmZP+aY3bhT2jU7oG8gf+7eDzuPlZgKgU75rbNP/ZQYwqGXhVmIxLIVtZVY11ZmBC+
-         VGCB3w4fe93BWMU9icMOgHBcS523m/eJftEAmuUMFbmeKnX3eGGV3cEGOWugLpXGR5Jw
-         tYtGpVzARuqtomS41dZnDkF36ivvflZImbmKLR9xR1JYwCA9X11DzRD7ZsY4jLg/x9xD
-         tVB/LAjRLjB+2fPbssFSRMZADlz3VtY/2+y0nYqzzR8vhsxeZF0lCEqTn3eLQXE82tKl
-         ZMfA==
-X-Gm-Message-State: AOAM530PA+8y+vcTzwXf9sPiSGQt0NvVuMsmVBq4qOk28kQM8Z4XJaca
-        P/tOHyf8S+df3ldwX4cPhkeoF5s7Bp7SwRMupeO2+Q==
-X-Google-Smtp-Source: ABdhPJzDz+gUGeg7JrjZDYQJqx4ADRcQHPr104EcjqIGmFojpTe85n7p+Y2kwYAcqviPln3kX1gG0YoHp2ksvNLfBkA=
-X-Received: by 2002:a05:6402:2687:b0:430:328f:e46b with SMTP id
- w7-20020a056402268700b00430328fe46bmr22886699edd.33.1654629156511; Tue, 07
- Jun 2022 12:12:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220607145639.2362750-1-tzungbi@kernel.org> <20220607145639.2362750-16-tzungbi@kernel.org>
-In-Reply-To: <20220607145639.2362750-16-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Tue, 7 Jun 2022 12:12:25 -0700
-Message-ID: <CABXOdTcYD6L6vnfNJwYROo1ynGqkabdbpm8JjvvosjtYGV1xow@mail.gmail.com>
-Subject: Re: [PATCH v2 15/15] platform/chrome: cros_ec_proto: return 0 on
- getting wake mask success
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kIErM4k6WhLC0n6Ns2bjZKjlflhoJThht73EacMy2qk=;
+        b=sogrt/8GSu3CkGrdczwrTTl7aIF9FGaP2KNT5yFXL+dPXqgqCkB8ZnLa3FTeCoBBaG
+         qQdj0LMZyzo7RZLbY5ZQAww0HrUyHSrxpJ51IuAGPJS9J2w0j+KUsRr+Ro2PV+cYrr6H
+         9GeHoE9IiCKe4z0C8FG8qLTeQVJMudewzDptp5VTa30FYXmRFAY/bfscm6HfRdJyBHQ3
+         6/dfnWVhgaerNmuroJYSjhbhaAsqJJsTWyLGqk0hmF3Gt8PAb5Gmi40KFhSPzjlTUTAz
+         XF3Y+fQlIxEx9p4sL2hHae3K5Y3cl4poj/gDy1U5GDfSIE7bkjUV1UQA4+M/vCBYP0it
+         WddQ==
+X-Gm-Message-State: AOAM533lJngsECdCUB/66pY6JfvaWctHZStRdNJ5fMBDeppipYLGyS5U
+        p0H+oesA9DlpZVKLjGBgFfNN+Eh9G7f0OPPq
+X-Google-Smtp-Source: ABdhPJxrSlVvA4MyvWzvWiYXFr65wiAwy6FMhxpeLr/ttpdkEgkeM6++R+P8PeqwXtfBXjHFsgVv6CfX8cSC6EyB
+X-Received: from blakejones.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:411c])
+ (user=blakejones job=sendgmr) by 2002:a17:902:e34b:b0:166:342f:82c6 with SMTP
+ id p11-20020a170902e34b00b00166342f82c6mr29823442plc.29.1654629364408; Tue,
+ 07 Jun 2022 12:16:04 -0700 (PDT)
+Date:   Tue,  7 Jun 2022 12:15:50 -0700
+Message-Id: <20220607191550.4141024-1-blakejones@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH RESEND] Add a "-m" option to "perf buildid-list".
+From:   Blake Jones <blakejones@google.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Blake Jones <blakejones@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,217 +71,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 7:57 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> cros_ec_get_host_event_wake_mask() used to return value from
-> send_command() which is number of bytes for input payload on success
-> (i.e. sizeof(struct ec_response_host_event_mask)).
->
-> However, the callers don't need to know how many bytes are available.
->
-> - Fix cros_ec_get_host_event_wake_mask() to return 0 on success;
->   negative integers on error.
->
-> - Add a Kunit test for guarding if send_command() returns 0 in
->   get_host_event_wake_mask().
->
-Please split into two patches.
+This new option displays all of the information needed to do external
+BuildID-based symbolization of kernel stack traces, such as those collected
+by bpf_get_stackid(). For each kernel module plus the main kernel, it
+displays the BuildID, the start and end virtual addresses of that module's
+text range (rounded out to page boundaries), and the pathname of the
+module.
 
-Thanks,
-Guenter
+When run as a non-privileged user, the actual addresses of the modules'
+text ranges are not available, so the tools displays "0, <text length>" for
+kernel modules and "0, ffffffffffffffff" for the kernel itself.
 
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
-> Changes from v1:
-> - Return 0 on success; otherwise, negative intergers.
->
->  drivers/platform/chrome/cros_ec_proto.c      |  23 ++--
->  drivers/platform/chrome/cros_ec_proto_test.c | 128 +++++++++++++++++++
->  2 files changed, 142 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 9d96ed16244f..04c852aa790b 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -256,18 +256,23 @@ static int cros_ec_get_host_event_wake_mask(struct cros_ec_device *ec_dev, uint3
->         msg->insize = sizeof(*r);
->
->         ret = send_command(ec_dev, msg);
-> -       if (ret >= 0) {
-> -               mapped = cros_ec_map_error(msg->result);
-> -               if (mapped) {
-> -                       ret = mapped;
-> -                       goto exit;
-> -               }
-> +       if (ret < 0)
-> +               goto exit;
-> +
-> +       mapped = cros_ec_map_error(msg->result);
-> +       if (mapped) {
-> +               ret = mapped;
-> +               goto exit;
->         }
-> -       if (ret > 0) {
-> -               r = (struct ec_response_host_event_mask *)msg->data;
-> -               *mask = r->mask;
-> +
-> +       if (ret == 0) {
-> +               ret = -EPROTO;
-> +               goto exit;
->         }
->
-> +       r = (struct ec_response_host_event_mask *)msg->data;
-> +       *mask = r->mask;
-> +       ret = 0;
->  exit:
->         kfree(msg);
->         return ret;
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index af69410f2978..3ee0de337d53 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -1406,6 +1406,133 @@ static void cros_ec_proto_test_query_all_default_wake_mask_return_error(struct k
->         }
->  }
->
-> +static void cros_ec_proto_test_query_all_default_wake_mask_return0(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct ec_xfer_mock *mock;
-> +       int ret;
-> +
-> +       /* Set some garbage bytes. */
-> +       ec_dev->host_event_wake_mask = U32_MAX;
-> +
-> +       /* For cros_ec_get_proto_info() without passthru. */
-> +       {
-> +               struct ec_response_get_protocol_info *data;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +
-> +               /*
-> +                * Although it doesn't check the value, provides valid sizes so that
-> +                * cros_ec_query_all() allocates din and dout correctly.
-> +                */
-> +               data = (struct ec_response_get_protocol_info *)mock->o_data;
-> +               data->max_request_packet_size = 0xbe;
-> +               data->max_response_packet_size = 0xef;
-> +       }
-> +
-> +       /* For cros_ec_get_proto_info() with passthru. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_addx(test, 0, EC_RES_INVALID_COMMAND, 0);
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       /* For get_host_event_wake_mask(). */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
-> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-> +       }
-> +
-> +       cros_ec_proto_test_query_all_pretest(test);
-> +       ret = cros_ec_query_all(ec_dev);
-> +       KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +       /* For cros_ec_get_proto_info() without passthru. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_protocol_info));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-> +       }
-> +
-> +       /* For cros_ec_get_proto_info() with passthru. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command,
-> +                               EC_CMD_PASSTHRU_OFFSET(CROS_EC_DEV_PD_INDEX) |
-> +                               EC_CMD_GET_PROTOCOL_INFO);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_protocol_info));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-> +       }
-> +
-> +       /* For cros_ec_get_host_command_version_mask() for MKBP. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_CMD_VERSIONS);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_cmd_versions));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
-> +       }
-> +
-> +       /* For cros_ec_get_host_command_version_mask() for host sleep v1. */
-> +       {
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_CMD_VERSIONS);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
-> +                               sizeof(struct ec_response_get_cmd_versions));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(struct ec_params_get_cmd_versions));
-> +       }
-> +
-> +       /* For get_host_event_wake_mask(). */
-> +       {
-> +               u32 mask;
-> +
-> +               mock = cros_kunit_ec_xfer_mock_next();
-> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-> +
-> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_HOST_EVENT_GET_WAKE_MASK);
-> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_host_event_mask));
-> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
-> +
-> +               mask = ec_dev->host_event_wake_mask;
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_LID_CLOSED), 0);
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_AC_DISCONNECTED), 0);
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_BATTERY_LOW), 0);
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_BATTERY_CRITICAL), 0);
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_BATTERY), 0);
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_PD_MCU), 0);
-> +               KUNIT_EXPECT_EQ(test, mask & EC_HOST_EVENT_MASK(EC_HOST_EVENT_BATTERY_STATUS), 0);
-> +       }
-> +}
-> +
->  static void cros_ec_proto_test_release(struct device *dev)
->  {
->  }
-> @@ -1471,6 +1598,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
->         KUNIT_CASE(cros_ec_proto_test_query_all_no_host_sleep),
->         KUNIT_CASE(cros_ec_proto_test_query_all_no_host_sleep_return0),
->         KUNIT_CASE(cros_ec_proto_test_query_all_default_wake_mask_return_error),
-> +       KUNIT_CASE(cros_ec_proto_test_query_all_default_wake_mask_return0),
->         {}
->  };
->
-> --
-> 2.36.1.255.ge46751e96f-goog
->
+This patch has been rebased as of this afternoon, but is otherwise
+identical to the version I sent out last month.
+
+Sample output:
+
+root# perf buildid-list -m
+cf6df852fd4da122d616153353cc8f560fd12fe0 ffffffffa5400000 ffffffffa6001e27 [kernel.kallsyms]
+1aa7209aa2acb067d66ed6cf7676d65066384d61 ffffffffc0087000 ffffffffc008b000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/sha512_generic.ko
+3857815b5bf0183697b68f8fe0ea06121644041e ffffffffc008c000 ffffffffc0098000 /lib/modules/5.15.15-1rodete2-amd64/kernel/arch/x86/crypto/sha512-ssse3.ko
+4081fde0bca2bc097cb3e9d1efcb836047d485f1 ffffffffc0099000 ffffffffc009f000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/acpi/button.ko
+1ef81ba4890552ea6b0314f9635fc43fc8cef568 ffffffffc00a4000 ffffffffc00aa000 /lib/modules/5.15.15-1rodete2-amd64/kernel/crypto/cryptd.ko
+cc5c985506cb240d7d082b55ed260cbb851f983e ffffffffc00af000 ffffffffc00b6000 /lib/modules/5.15.15-1rodete2-amd64/kernel/drivers/i2c/busses/i2c-piix4.ko
+[...]
+
+Signed-off-by: Blake Jones <blakejones@google.com>
+---
+ .../perf/Documentation/perf-buildid-list.txt  |  3 ++
+ tools/perf/builtin-buildid-list.c             | 33 ++++++++++++++++++-
+ tools/perf/util/dso.c                         | 23 +++++++++++++
+ tools/perf/util/dso.h                         |  2 ++
+ tools/perf/util/machine.c                     | 13 ++++++++
+ tools/perf/util/machine.h                     |  5 +++
+ 6 files changed, 78 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/Documentation/perf-buildid-list.txt b/tools/perf/Documentation/perf-buildid-list.txt
+index 25c52efcc7f0..a82e92c2667d 100644
+--- a/tools/perf/Documentation/perf-buildid-list.txt
++++ b/tools/perf/Documentation/perf-buildid-list.txt
+@@ -33,6 +33,9 @@ OPTIONS
+ -k::
+ --kernel::
+ 	Show running kernel build id.
++-m::
++--modules::
++	Show buildid, start/end text address, and path of kernel and modules.
+ -v::
+ --verbose::
+ 	Be more verbose.
+diff --git a/tools/perf/builtin-buildid-list.c b/tools/perf/builtin-buildid-list.c
+index cebadd632234..9a5587de8fd0 100644
+--- a/tools/perf/builtin-buildid-list.c
++++ b/tools/perf/builtin-buildid-list.c
+@@ -12,6 +12,7 @@
+ #include "util/build-id.h"
+ #include "util/debug.h"
+ #include "util/dso.h"
++#include "util/map.h"
+ #include <subcmd/pager.h>
+ #include <subcmd/parse-options.h>
+ #include "util/session.h"
+@@ -20,6 +21,29 @@
+ #include <errno.h>
+ #include <linux/err.h>
+ 
++static int buildid__map_cb(struct map *map, void *arg __maybe_unused)
++{
++	struct build_id build_id;
++	char bid_buf[SBUILD_ID_SIZE];
++	char modpath[255];
++
++	dso__get_build_id(map->dso, &build_id);
++	build_id__sprintf(&build_id, bid_buf);
++	dso__get_long_name(map->dso, modpath, sizeof(modpath));
++	printf("%s %16lx %16lx %s\n", bid_buf, map->start, map->end, modpath);
++
++	return 0;
++}
++
++static void buildid__show_kernel_modules(void)
++{
++	struct machine *machine;
++
++	machine = machine__new_host();
++	machine__for_each_kernel_map(machine, buildid__map_cb, NULL);
++	machine__delete(machine);
++}
++
+ static int sysfs__fprintf_build_id(FILE *fp)
+ {
+ 	char sbuild_id[SBUILD_ID_SIZE];
+@@ -99,6 +123,7 @@ static int perf_session__list_build_ids(bool force, bool with_hits)
+ int cmd_buildid_list(int argc, const char **argv)
+ {
+ 	bool show_kernel = false;
++	bool show_modules = false;
+ 	bool with_hits = false;
+ 	bool force = false;
+ 	const struct option options[] = {
+@@ -106,6 +131,8 @@ int cmd_buildid_list(int argc, const char **argv)
+ 	OPT_STRING('i', "input", &input_name, "file", "input file name"),
+ 	OPT_BOOLEAN('f', "force", &force, "don't complain, do it"),
+ 	OPT_BOOLEAN('k', "kernel", &show_kernel, "Show current kernel build id"),
++	OPT_BOOLEAN('m', "modules", &show_modules,
++	    "Show build id of current kernel + modules"),
+ 	OPT_INCR('v', "verbose", &verbose, "be more verbose"),
+ 	OPT_END()
+ 	};
+@@ -117,8 +144,12 @@ int cmd_buildid_list(int argc, const char **argv)
+ 	argc = parse_options(argc, argv, options, buildid_list_usage, 0);
+ 	setup_pager();
+ 
+-	if (show_kernel)
++	if (show_kernel) {
+ 		return !(sysfs__fprintf_build_id(stdout) > 0);
++	} else if (show_modules) {
++		buildid__show_kernel_modules();
++		return 0;
++	}
+ 
+ 	return perf_session__list_build_ids(force, with_hits);
+ }
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index 5ac13958d1bd..7c490b5ce449 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -1227,6 +1227,19 @@ void dso__set_long_name(struct dso *dso, const char *name, bool name_allocated)
+ 	dso__set_long_name_id(dso, name, NULL, name_allocated);
+ }
+ 
++void dso__get_long_name(const struct dso *dso, char *name, size_t len)
++{
++	if (len == 0)
++		return;
++	if (dso->long_name == NULL) {
++		name[0] = '\0';
++		return;
++	}
++
++	strncpy(name, dso->long_name, len);
++	name[len - 1] = '\0';
++}
++
+ void dso__set_short_name(struct dso *dso, const char *name, bool name_allocated)
+ {
+ 	if (name == NULL)
+@@ -1359,6 +1372,16 @@ void dso__set_build_id(struct dso *dso, struct build_id *bid)
+ 	dso->has_build_id = 1;
+ }
+ 
++void dso__get_build_id(struct dso *dso, struct build_id *bid)
++{
++	if (dso->has_build_id) {
++		*bid = dso->bid;
++	} else {
++		bid->size = 0;
++		memset(bid->data, 0, sizeof(*bid->data));
++	}
++}
++
+ bool dso__build_id_equal(const struct dso *dso, struct build_id *bid)
+ {
+ 	if (dso->bid.size > bid->size && dso->bid.size == BUILD_ID_SIZE) {
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 97047a11282b..e531f9d0818d 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -239,6 +239,7 @@ void dso__delete(struct dso *dso);
+ int dso__cmp_id(struct dso *a, struct dso *b);
+ void dso__set_short_name(struct dso *dso, const char *name, bool name_allocated);
+ void dso__set_long_name(struct dso *dso, const char *name, bool name_allocated);
++void dso__get_long_name(const struct dso *dso, char *name, size_t len);
+ 
+ int dso__name_len(const struct dso *dso);
+ 
+@@ -265,6 +266,7 @@ void dso__set_sorted_by_name(struct dso *dso);
+ void dso__sort_by_name(struct dso *dso);
+ 
+ void dso__set_build_id(struct dso *dso, struct build_id *bid);
++void dso__get_build_id(struct dso *dso, struct build_id *bid);
+ bool dso__build_id_equal(const struct dso *dso, struct build_id *bid);
+ void dso__read_running_kernel_build_id(struct dso *dso,
+ 				       struct machine *machine);
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 009061852808..28fff9a02ab0 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -3327,3 +3327,16 @@ int machine__for_each_dso(struct machine *machine, machine__dso_t fn, void *priv
+ 	}
+ 	return err;
+ }
++
++int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn, void *priv)
++{
++	struct maps *maps = machine__kernel_maps(machine);
++	struct map *map;
++	int err = 0;
++
++	for (map = maps__first(maps); map != NULL; map = map__next(map)) {
++		if (fn(map, priv))
++			err = -1;
++	}
++	return err;
++}
+diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
+index 5d7daf7cb7bc..e1476343cbb2 100644
+--- a/tools/perf/util/machine.h
++++ b/tools/perf/util/machine.h
+@@ -262,6 +262,11 @@ typedef int (*machine__dso_t)(struct dso *dso, struct machine *machine, void *pr
+ 
+ int machine__for_each_dso(struct machine *machine, machine__dso_t fn,
+ 			  void *priv);
++
++typedef int (*machine__map_t)(struct map *map, void *priv);
++int machine__for_each_kernel_map(struct machine *machine, machine__map_t fn,
++				 void *priv);
++
+ int machine__for_each_thread(struct machine *machine,
+ 			     int (*fn)(struct thread *thread, void *p),
+ 			     void *priv);
+
+base-commit: 1bcca2b1bd67f3c0e5c3a88ed16c6389f01a5b31
+-- 
+2.36.1.476.g0c4daa206d-goog
+

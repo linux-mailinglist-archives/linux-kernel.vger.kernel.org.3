@@ -2,184 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B304453F3DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 04:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E429F53F3E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 04:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbiFGCSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Jun 2022 22:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S233277AbiFGCUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Jun 2022 22:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiFGCSn (ORCPT
+        with ESMTP id S231319AbiFGCUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Jun 2022 22:18:43 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F1ACE07
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 19:18:41 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g186so5618894pgc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Jun 2022 19:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8sGOsf30AB4emDfiLKO1IlUk0AJkLgR+c81RM9kvUeg=;
-        b=23/xn5mUfnbRHw/7rzRolDNvBoA3vJ8Zvi5YH/mMPizfXZRAqEGf1K2xd6h65uCw4B
-         X336gShgxmAzPAqaJyWEXrCo8MaNXGdWVSlPDYLLYyHiCe6iRJBF8jRYyqzCCfWoqqmj
-         Skc6vJCfA/ocFu2mF/RGBfAzkGNiEW/theV44cARZCzxymjqugvtHvvl6bh11PrGg2JD
-         Gy7+kggYxEVh7g28/P5Pjwbeo++DZR6ZYx6g9f8hpIKjN8YRsiM5vMiInKE3rYSewx9A
-         ha22E+aJwCOyd1KWeuki+SPV96uIJXHmXszYv96vQ57TqakvebXz/0msJW5VEt7ai04y
-         k1CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8sGOsf30AB4emDfiLKO1IlUk0AJkLgR+c81RM9kvUeg=;
-        b=dIXFPBULQ12wCMg5kCwNTlDSWQ80OMzkYLHfn1Rti0pcT6dHvE9meSc1OrR5/S5ADd
-         ljHbDMcQD22NtlmsFLwjgFtsfZdI6CvYWTHnMtAtqRDknwCv5jgy0h/5gyRM/SM90FWp
-         C7L5hDsZTcQpTdg++3rutVRz+rUjIEfDQ6oYDD87axeq8qlFgzGy59KE1RtZcuZzAZPQ
-         K9NfPMSOqIcZSq9mpL+uFurKSWIbc1Fkq3aOu2jWAbpW+SwzbwkcGDRYPLfNn04nANik
-         xOwsJ5ubz/d07NtJggd7WlPV0jx4n+dICivUzHW7FaG1ldKmGI6VmJXaJsljtYvvNPfg
-         cmSQ==
-X-Gm-Message-State: AOAM532JpFH3WfqjCbnWrjt7AJrE1HBaXZGmIjyWA4kIzyH/q19kZWd/
-        6XiS3/qXgNQ9QIscohStvcY1RQ==
-X-Google-Smtp-Source: ABdhPJzd5ZXvpWQ60IJGhalL0hOrDsUY1cmxQggKtjiWvLvBXtomKJRxIhxHb/4bKYIiG3S3A79cLg==
-X-Received: by 2002:a63:8941:0:b0:3fc:7efa:119d with SMTP id v62-20020a638941000000b003fc7efa119dmr23916764pgd.340.1654568320532;
-        Mon, 06 Jun 2022 19:18:40 -0700 (PDT)
-Received: from [10.254.91.102] ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id ju10-20020a17090b20ca00b001df264610c4sm13930080pjb.0.2022.06.06.19.18.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 19:18:40 -0700 (PDT)
-Message-ID: <64d93544-294b-6149-524d-f7ce227d7e33@bytedance.com>
-Date:   Tue, 7 Jun 2022 10:18:33 +0800
+        Mon, 6 Jun 2022 22:20:48 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE83811A0D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Jun 2022 19:20:46 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LHDbb59dDzpW2r;
+        Tue,  7 Jun 2022 10:20:27 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 10:20:44 +0800
+Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
+ PageMovable check
+To:     David Hildenbrand <david@redhat.com>
+CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>,
+        Minchan Kim <minchan@kernel.org>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-3-linmiaohe@huawei.com>
+ <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
+ <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+ <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
+ <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
+ <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
+ <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
+ <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+ <6ba7e2bd-28c1-53ff-a6b7-072c79714dee@huawei.com>
+ <0724b4c4-15f6-e429-f945-f57c619c7270@redhat.com>
+ <7ca676a9-1f51-47f7-0245-d041d075a440@huawei.com>
+ <f6eb98ae-965b-d705-6f7d-c2ee69ce5141@redhat.com>
+ <a96fab6c-f986-797f-aeb1-5fb8a1b5a4b8@huawei.com>
+ <059fe8fe-bd89-477f-2430-277bb738525b@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <4b13e16e-1b66-d49a-da0b-7b29c0be8ace@huawei.com>
+Date:   Tue, 7 Jun 2022 10:20:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [PATCH v3] mm: memcontrol: add {pgscan,pgsteal}_{kswapd,direct}
- items in memory.stat of cgroup v2
+In-Reply-To: <059fe8fe-bd89-477f-2430-277bb738525b@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     roman.gushchin@linux.dev, shakeelb@google.com,
-        songmuchun@bytedance.com, mhocko@kernel.org,
-        akpm@linux-foundation.org, corbet@lwn.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-References: <20220606154028.55030-1-zhengqi.arch@bytedance.com>
- <Yp46w4op9JeX9+g9@cmpxchg.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <Yp46w4op9JeX9+g9@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/7 1:34 AM, Johannes Weiner wrote:
-> On Mon, Jun 06, 2022 at 11:40:28PM +0800, Qi Zheng wrote:
->> There are already statistics of {pgscan,pgsteal}_kswapd and
->> {pgscan,pgsteal}_direct of memcg event here, but now only the
->> sum of the two is displayed in memory.stat of cgroup v2.
+On 2022/6/2 16:47, David Hildenbrand wrote:
+> On 02.06.22 09:40, Miaohe Lin wrote:
+>> On 2022/6/1 18:31, David Hildenbrand wrote:
+>>> On 31.05.22 14:37, Miaohe Lin wrote:
+>>>> On 2022/5/31 19:59, David Hildenbrand wrote:
+>>>>> Sorry for the late reply, was on vacation.
+>>>>
+>>>> That's all right. Hope you have a great time. ;)
+>>>>
+>>>>>
+>>>>>>>>
+>>>>>>>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
+>>>>>>>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
+>>>>>>>> this code block works. Or am I miss something again?
+>>>>>>>
+>>>>>>> Let's assume the following: page as freed by the owner and we enter
+>>>>>>> unmap_and_move().
+>>>>>>>
+>>>>>>>
+>>>>>>> #1: enter unmap_and_move() // page_count is 1
+>>>>>>> #2: enter isolate_movable_page() // page_count is 1
+>>>>>>> #2: get_page_unless_zero() // page_count is now 2
+>>>>>>> #1: if (page_count(page) == 1) { // does not trigger
+>>>>>>> #2: put_page(page); // page_count is now 1
+>>>>>>> #1: put_page(page); // page_count is now 0 -> freed
+>>>>>>>
+>>>>>>>
+>>>>>>> #1 will trigger __put_page() -> __put_single_page() ->
+>>>>>>> __page_cache_release() will not clear the flags because it's not an LRU
+>>>>>>> page at that point in time, right (-> isolated)?
+>>>>>>
+>>>>>> Sorry, you're right. I thought the old page will be freed via putback_lru_page which will
+>>>>>> set PageLRU back instead of put_page directly. So if the above race occurs, PG_active and
+>>>>>> PG_unevictable will remain set while page goes to the buddy and check_free_page will complain
+>>>>>> about it. But it seems this is never witnessed?
+>>>>>
+>>>>> Maybe
+>>>>>
+>>>>> a) we were lucky so far and didn't trigger it
+>>>>> b) the whole code block is dead code because we are missing something
+>>>>> c) we are missing something else :)
+>>>>
+>>>> I think I found the things we missed in another email [1].
+>>>> [1]: https://lore.kernel.org/all/948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com/
+>>>>
+>>>> Paste the main content of [1] here:
+>>>>
+>>>> "
+>>>> There are 3 cases in unmap_and_move:
+>>>>
+>>>> 1.page is freed through "if (page_count(page) == 1)" code block. This works
+>>>> as PG_active and PG_unevictable are cleared here.
+>>>>
+>>>> 2. Failed to migrate the page. The page won't be release so we don't care about it.
+>>>
+>>> Right, page is un-isolated.
+>>>
+>>>>
+>>>> 3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
+>>>> via folio_migrate_flags():
+>>>>
+>>>> 	if (folio_test_clear_active(folio)) {
+>>>> 		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
+>>>> 		folio_set_active(newfolio);
+>>>> 	} else if (folio_test_clear_unevictable(folio))
+>>>> 		folio_set_unevictable(newfolio);
+>>>
+>>> Right.
+>>>
+>>>>
+>>>> For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
+>>>> It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
+>>>> and PG_unevictable.
+>>>> "
+>>>> Or Am I miss something again? :)
+>>>
+>>> For #1, I'm still not sure what would happen on a speculative reference.
+>>>
+>>> It's worth summarizing that
+>>>
+>>> a) free_pages_prepare() will clear both flags via page->flags &=
+>>> ~PAGE_FLAGS_CHECK_AT_PREP;
+>>>
+>>> b) free_pages_prepare() will bail out if any flag is set in
+>>> check_free_page().
+>>>
+>>> As we've never seen b) in the wild, this certainly has low priority, and
+>>> maybe it really cannot happen right now.
+>>>
+>>> However, maybe really allowing these flags to be set when freeing the
+>>> page and removing the "page_count(page) == 1" case from migration code
+>>> would be the clean thing to do.
 >>
->> In order to obtain more accurate information during monitoring
->> and debugging, and to align with the display in /proc/vmstat,
->> it better to display {pgscan,pgsteal}_kswapd and
->> {pgscan,pgsteal}_direct separately.
+>> IMHO, check_free_page is used to catch possible problem. There's the comment of PAGE_FLAGS_CHECK_AT_FREE:
 >>
->> Also, for forward compatibility, we still display pgscan and
->> pgsteal items so that it won't break existing applications.
+>> /*
+>>  * Flags checked when a page is freed.  Pages being freed should not have
+>>  * these flags set.  If they are, there is a problem.
+>>  */
+>> #define PAGE_FLAGS_CHECK_AT_FREE
 >>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
->> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
->> Acked-by: Muchun Song <songmuchun@bytedance.com>
->> Acked-by: Shakeel Butt <shakeelb@google.com>
->> Acked-by: Michal Hocko <mhocko@suse.com>
+>> There might be an assumption: when page is freed, it shouldn't be an active or unevictable page. It should be
+>> inactive and evictable. So allowing these flags to be set when freeing the page might not be a good idea?
 > 
-> No objection to keeping pgscan and pgsteal, but can you please fix the
-> doc to present the items in the same order as memory.stat has them?
+> Yeah, and we'd be lifting that restriction because there is good reason
+> to do so.
+> 
+> Maybe we *could* special case for isolated pages; however, that adds
+> runtime overhead. Of course, we could perform different checks for e.g.,
+> DEBUG_VM vs !DEBUG_VM.
 
-Sure, will fix.
+I found there is one assumption about PG_active and PG_unevictable, i.e. in __folio_clear_lru_flags:
 
-Thanks,
-Qi
+	/* this shouldn't happen, so leave the flags to bad_page() */
+	if (folio_test_active(folio) && folio_test_unevictable(folio))
+		return;
+
+If PG_active and PG_unevictable are both set, this case will be caught in the bad_page() via check_free_page().
+There might be some other assumptions about PG_active and PG_unevictable. So I think it's not safe to lift that
+restriction.
+
+But maybe we could limit this check within DEBUG_VM as you suggested. Am I supposed to do it?
+
+Thanks!
 
 > 
->> @@ -1445,9 +1445,21 @@ PAGE_SIZE multiple when read back.
->>   	  pgscan (npn)
->>   		Amount of scanned pages (in an inactive LRU list)
->>   
->> +	  pgscan_kswapd (npn)
->> +		Amount of scanned pages by kswapd (in an inactive LRU list)
->> +
->> +	  pgscan_direct (npn)
->> +		Amount of scanned pages directly  (in an inactive LRU list)
->> +
->>   	  pgsteal (npn)
->>   		Amount of reclaimed pages
->>   
->> +	  pgsteal_kswapd (npn)
->> +		Amount of reclaimed pages by kswapd
->> +
->> +	  pgsteal_direct (npn)
->> +		Amount of reclaimed pages directly
->> +
->>   	  pgactivate (npn)
->>   		Amount of pages moved to the active LRU list
-> 
-> vs:
-> 
->> @@ -1495,41 +1518,17 @@ static char *memory_stat_format(struct mem_cgroup *memcg)
->>   	}
->>   
->>   	/* Accumulated memory events */
->> -
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGFAULT),
->> -		       memcg_events(memcg, PGFAULT));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGMAJFAULT),
->> -		       memcg_events(memcg, PGMAJFAULT));
->> -	seq_buf_printf(&s, "%s %lu\n",  vm_event_name(PGREFILL),
->> -		       memcg_events(memcg, PGREFILL));
->>   	seq_buf_printf(&s, "pgscan %lu\n",
->>   		       memcg_events(memcg, PGSCAN_KSWAPD) +
->>   		       memcg_events(memcg, PGSCAN_DIRECT));
->>   	seq_buf_printf(&s, "pgsteal %lu\n",
->>   		       memcg_events(memcg, PGSTEAL_KSWAPD) +
->>   		       memcg_events(memcg, PGSTEAL_DIRECT));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGACTIVATE),
->> -		       memcg_events(memcg, PGACTIVATE));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGDEACTIVATE),
->> -		       memcg_events(memcg, PGDEACTIVATE));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREE),
->> -		       memcg_events(memcg, PGLAZYFREE));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(PGLAZYFREED),
->> -		       memcg_events(memcg, PGLAZYFREED));
->> -
->> -#if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPIN),
->> -		       memcg_events(memcg, ZSWPIN));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(ZSWPOUT),
->> -		       memcg_events(memcg, ZSWPOUT));
->> -#endif
->>   
->> -#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_FAULT_ALLOC),
->> -		       memcg_events(memcg, THP_FAULT_ALLOC));
->> -	seq_buf_printf(&s, "%s %lu\n", vm_event_name(THP_COLLAPSE_ALLOC),
->> -		       memcg_events(memcg, THP_COLLAPSE_ALLOC));
->> -#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
->> +	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++)
->> +		seq_buf_printf(&s, "%s %lu\n",
->> +			       vm_event_name(memcg_vm_event_stat[i]),
->> +			       memcg_events(memcg, memcg_vm_event_stat[i]));
-> 
-> Thanks
 
--- 
-Thanks,
-Qi

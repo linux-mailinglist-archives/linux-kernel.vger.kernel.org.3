@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66E2540729
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F1E5410EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347664AbiFGRnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S1355720AbiFGTak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347825AbiFGRbS (ORCPT
+        with ESMTP id S1344407AbiFGSiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:18 -0400
+        Tue, 7 Jun 2022 14:38:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C2B10A630;
-        Tue,  7 Jun 2022 10:28:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820AA3B3E7;
+        Tue,  7 Jun 2022 10:58:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E89456145D;
-        Tue,  7 Jun 2022 17:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2635C34115;
-        Tue,  7 Jun 2022 17:28:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29533618D2;
+        Tue,  7 Jun 2022 17:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A1B8C36B00;
+        Tue,  7 Jun 2022 17:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622911;
-        bh=wgil/TspLU/IoPr0ptWLutstO43Ee6qM15+0zCrW37E=;
+        s=korg; t=1654624692;
+        bh=f+U1OkGMCasbcTsAbpK24GfUNZ9VX0StZI8RsX++zvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K0hgBuPRFTDXAoyLtL8N1PrFWbba80mn7boFEFChYZvMxjuhMk5+Co27wGkbTIou5
-         kjOiHjuxDk2pRn9we8V0ueOOh5nn5rmXln1ucZlU2OWYc2m3AErzmDcNYP8ODwTm8N
-         KbGC01H6wRky3vp2/QpbdRRwJEu5eu743O+ufQJI=
+        b=YJjbRUSVO5JJrqt6fS7Vqnv17OG1gpqNOK5FJdReqOxBu5WOlBeY60n3kVgzALDmh
+         QwbGA6o0aGQrEsM6Ljtb2oSBYyYILABGknvaxkKYqV6TndjxcBMA5+08VJ0NMWOmJC
+         SO0kCvoHyR746L3h/YN5Jis3pb4DLKQKcZTVO8Ps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 227/452] ASoC: ti: j721e-evm: Fix refcount leak in j721e_soc_probe_*
+        stable@vger.kernel.org,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 419/667] Drivers: hv: vmbus: Fix handling of messages with transaction ID of zero
 Date:   Tue,  7 Jun 2022 19:01:24 +0200
-Message-Id: <20220607164915.327688477@linuxfoundation.org>
+Message-Id: <20220607164947.301937816@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,134 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
 
-[ Upstream commit a34840c4eb3278a7c29c9c57a65ce7541c66f9f2 ]
+[ Upstream commit 82cd4bacff88a11e36f143e2cb950174b09c86c3 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not needed anymore.
-Add missing of_node_put() to avoid refcount leak.
+vmbus_request_addr() returns 0 (zero) if the transaction ID passed
+to as argument is 0.  This is unfortunate for two reasons: first,
+netvsc_send_completion() does not check for a NULL cmd_rqst (before
+dereferencing the corresponding NVSP message); second, 0 is a *valid*
+value of cmd_rqst in netvsc_send_tx_complete(), cf. the call of
+vmbus_sendpacket() in netvsc_send_pkt().
 
-Fixes: 6748d0559059 ("ASoC: ti: Add custom machine driver for j721e EVM (CPB and IVI)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220512111331.44774-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+vmbus_request_addr() has included the code in question since its
+introduction with commit e8b7db38449ac ("Drivers: hv: vmbus: Add
+vmbus_requestor data structure for VMBus hardening"); such code was
+motivated by the early use of vmbus_requestor by hv_storvsc.  Since
+hv_storvsc moved to a tag-based mechanism to generate and retrieve
+transaction IDs with commit bf5fd8cae3c8f ("scsi: storvsc: Use
+blk_mq_unique_tag() to generate requestIDs"), vmbus_request_addr()
+can be modified to return VMBUS_RQST_ERROR if the ID is 0.  This
+change solves the issues in hv_netvsc (and makes the handling of
+messages with transaction ID of 0 consistent with the semantics
+"the ID is not contained in the requestor/invalid ID").
+
+vmbus_next_request_id(), vmbus_request_addr() should still reserve
+the ID of 0 for Hyper-V, because Hyper-V will "ignore" (not respond
+to) VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED packets/requests with
+transaction ID of 0 from the guest.
+
+Fixes: bf5fd8cae3c8f ("scsi: storvsc: Use blk_mq_unique_tag() to generate requestIDs")
+Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/20220419122325.10078-2-parri.andrea@gmail.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/ti/j721e-evm.c | 44 ++++++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 11 deletions(-)
+ drivers/hv/channel.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/ti/j721e-evm.c b/sound/soc/ti/j721e-evm.c
-index 265bbc5a2f96..756cd9694cbe 100644
---- a/sound/soc/ti/j721e-evm.c
-+++ b/sound/soc/ti/j721e-evm.c
-@@ -631,17 +631,18 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
- 	codec_node = of_parse_phandle(node, "ti,cpb-codec", 0);
- 	if (!codec_node) {
- 		dev_err(priv->dev, "CPB codec node is not provided\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_dai_node;
- 	}
- 
- 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_CPB];
- 	ret = j721e_get_clocks(priv->dev, &domain->codec, "cpb-codec-scki");
- 	if (ret)
--		return ret;
-+		goto put_codec_node;
- 
- 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "cpb-mcasp-auxclk");
- 	if (ret)
--		return ret;
-+		goto put_codec_node;
+diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
+index f3761c73b074..6b967bb38690 100644
+--- a/drivers/hv/channel.c
++++ b/drivers/hv/channel.c
+@@ -1221,7 +1221,9 @@ u64 vmbus_next_request_id(struct vmbus_channel *channel, u64 rqst_addr)
  
  	/*
- 	 * Common Processor Board, two links
-@@ -651,8 +652,10 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
- 	comp_count = 6;
- 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
- 				GFP_KERNEL);
--	if (!compnent)
--		return -ENOMEM;
-+	if (!compnent) {
-+		ret = -ENOMEM;
-+		goto put_codec_node;
-+	}
- 
- 	comp_idx = 0;
- 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
-@@ -703,6 +706,12 @@ static int j721e_soc_probe_cpb(struct j721e_priv *priv, int *link_idx,
- 	(*conf_idx)++;
- 
- 	return 0;
-+
-+put_codec_node:
-+	of_node_put(codec_node);
-+put_dai_node:
-+	of_node_put(dai_node);
-+	return ret;
+ 	 * Cannot return an ID of 0, which is reserved for an unsolicited
+-	 * message from Hyper-V.
++	 * message from Hyper-V; Hyper-V does not acknowledge (respond to)
++	 * VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED requests with ID of
++	 * 0 sent by the guest.
+ 	 */
+ 	return current_id + 1;
  }
+@@ -1246,7 +1248,7 @@ u64 vmbus_request_addr(struct vmbus_channel *channel, u64 trans_id)
  
- static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
-@@ -727,23 +736,25 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
- 	codeca_node = of_parse_phandle(node, "ti,ivi-codec-a", 0);
- 	if (!codeca_node) {
- 		dev_err(priv->dev, "IVI codec-a node is not provided\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_dai_node;
- 	}
+ 	/* Hyper-V can send an unsolicited message with ID of 0 */
+ 	if (!trans_id)
+-		return trans_id;
++		return VMBUS_RQST_ERROR;
  
- 	codecb_node = of_parse_phandle(node, "ti,ivi-codec-b", 0);
- 	if (!codecb_node) {
- 		dev_warn(priv->dev, "IVI codec-b node is not provided\n");
--		return 0;
-+		ret = 0;
-+		goto put_codeca_node;
- 	}
+ 	spin_lock_irqsave(&rqstor->req_lock, flags);
  
- 	domain = &priv->audio_domains[J721E_AUDIO_DOMAIN_IVI];
- 	ret = j721e_get_clocks(priv->dev, &domain->codec, "ivi-codec-scki");
- 	if (ret)
--		return ret;
-+		goto put_codecb_node;
- 
- 	ret = j721e_get_clocks(priv->dev, &domain->mcasp, "ivi-mcasp-auxclk");
- 	if (ret)
--		return ret;
-+		goto put_codecb_node;
- 
- 	/*
- 	 * IVI extension, two links
-@@ -755,8 +766,10 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
- 	comp_count = 8;
- 	compnent = devm_kzalloc(priv->dev, comp_count * sizeof(*compnent),
- 				GFP_KERNEL);
--	if (!compnent)
--		return -ENOMEM;
-+	if (!compnent) {
-+		ret = -ENOMEM;
-+		goto put_codecb_node;
-+	}
- 
- 	comp_idx = 0;
- 	priv->dai_links[*link_idx].cpus = &compnent[comp_idx++];
-@@ -817,6 +830,15 @@ static int j721e_soc_probe_ivi(struct j721e_priv *priv, int *link_idx,
- 	(*conf_idx)++;
- 
- 	return 0;
-+
-+
-+put_codecb_node:
-+	of_node_put(codecb_node);
-+put_codeca_node:
-+	of_node_put(codeca_node);
-+put_dai_node:
-+	of_node_put(dai_node);
-+	return ret;
- }
- 
- static int j721e_soc_probe(struct platform_device *pdev)
 -- 
 2.35.1
 

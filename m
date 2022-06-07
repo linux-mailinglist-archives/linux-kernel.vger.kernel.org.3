@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B9454224C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DA154249F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378112AbiFHB3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S1386663AbiFHBpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379270AbiFGWC1 (ORCPT
+        with ESMTP id S1382437AbiFGWCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:02:27 -0400
+        Tue, 7 Jun 2022 18:02:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E0724E1F3;
-        Tue,  7 Jun 2022 12:14:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8B924F799;
+        Tue,  7 Jun 2022 12:14:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0C1E618DE;
-        Tue,  7 Jun 2022 19:14:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E967FC385A5;
-        Tue,  7 Jun 2022 19:14:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95180617DA;
+        Tue,  7 Jun 2022 19:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D59C34115;
+        Tue,  7 Jun 2022 19:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629269;
-        bh=wtRpv9QwfoalmL4GN3rNYbstJt18keKOX4M31pundK4=;
+        s=korg; t=1654629272;
+        bh=F+Ejk3TJqvM9iJL5X57Am9LXrVwli2Qkgi0+4c09buY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H5/KNcfbL8T05x52i7bzVdVOPqTdgZCyPYVvJbP8wEG7OYiyycHIAexnyBSJ0b7pM
-         2rWa9qEV+6SqJ4siLzotThUS8bl9rt29gd3l+CVWplCXQg0fZ9jBn6wTSB4mgmDzY6
-         Tf8sZ5sv0D7mSUKG81XYTsm/UhV55ES5z0+BwCXM=
+        b=emSbu9NKAwLEWGI8kU9fBYnhVb5SGKSYdjzBJXxxXKX/qaHfsRCN35JH+ZVALTgnk
+         3LAO9cO/l66GiplBom+sVCtsMK0TCL2PyBp4flcGiaMCHBTRY2mN/fbCtG1JQzucQT
+         hkZ5qF4LvguxVfC/K4Xy2NIk42F2DFWwBPapn2mA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jane Chu <jane.chu@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 628/879] mce: fix set_mce_nospec to always unmap the whole page
-Date:   Tue,  7 Jun 2022 19:02:26 +0200
-Message-Id: <20220607165021.077610687@linuxfoundation.org>
+Subject: [PATCH 5.18 629/879] Input: sparcspkr - fix refcount leak in bbc_beep_probe
+Date:   Tue,  7 Jun 2022 19:02:27 +0200
+Message-Id: <20220607165021.107265229@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,190 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jane Chu <jane.chu@oracle.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 5898b43af954b83c4a4ee4ab85c4dbafa395822a ]
+[ Upstream commit c8994b30d71d64d5dcc9bc0edbfdf367171aa96f ]
 
-The set_memory_uc() approach doesn't work well in all cases.
-As Dan pointed out when "The VMM unmapped the bad page from
-guest physical space and passed the machine check to the guest."
-"The guest gets virtual #MC on an access to that page. When
-the guest tries to do set_memory_uc() and instructs cpa_flush()
-to do clean caches that results in taking another fault / exception
-perhaps because the VMM unmapped the page from the guest."
+of_find_node_by_path() calls of_find_node_opts_by_path(),
+which returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Since the driver has special knowledge to handle NP or UC,
-mark the poisoned page with NP and let driver handle it when
-it comes down to repair.
-
-Please refer to discussions here for more details.
-https://lore.kernel.org/all/CAPcyv4hrXPb1tASBZUg-GgdVs0OOFKXMXLiHmktg_kFi7YBMyQ@mail.gmail.com/
-
-Now since poisoned page is marked as not-present, in order to
-avoid writing to a not-present page and trigger kernel Oops,
-also fix pmem_do_write().
-
-Fixes: 284ce4011ba6 ("x86/memory_failure: Introduce {set, clear}_mce_nospec()")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Jane Chu <jane.chu@oracle.com>
-Acked-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/165272615484.103830.2563950688772226611.stgit@dwillia2-desk3.amr.corp.intel.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 9c1a5077fdca ("input: Rewrite sparcspkr device probing.")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220516081018.42728-1-linmq006@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/core.c |  6 +++---
- arch/x86/mm/pat/set_memory.c   | 23 +++++++++++------------
- drivers/nvdimm/pmem.c          | 30 +++++++-----------------------
- include/linux/set_memory.h     |  4 ++--
- 4 files changed, 23 insertions(+), 40 deletions(-)
+ drivers/input/misc/sparcspkr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 981496e6bc0e..fa67bb9d1afe 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -579,7 +579,7 @@ static int uc_decode_notifier(struct notifier_block *nb, unsigned long val,
+diff --git a/drivers/input/misc/sparcspkr.c b/drivers/input/misc/sparcspkr.c
+index fe43e5557ed7..cdcb7737c46a 100644
+--- a/drivers/input/misc/sparcspkr.c
++++ b/drivers/input/misc/sparcspkr.c
+@@ -205,6 +205,7 @@ static int bbc_beep_probe(struct platform_device *op)
  
- 	pfn = mce->addr >> PAGE_SHIFT;
- 	if (!memory_failure(pfn, 0)) {
--		set_mce_nospec(pfn, whole_page(mce));
-+		set_mce_nospec(pfn);
- 		mce->kflags |= MCE_HANDLED_UC;
- 	}
+ 	info = &state->u.bbc;
+ 	info->clock_freq = of_getintprop_default(dp, "clock-frequency", 0);
++	of_node_put(dp);
+ 	if (!info->clock_freq)
+ 		goto out_free;
  
-@@ -1316,7 +1316,7 @@ static void kill_me_maybe(struct callback_head *cb)
- 
- 	ret = memory_failure(p->mce_addr >> PAGE_SHIFT, flags);
- 	if (!ret) {
--		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-+		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
- 		sync_core();
- 		return;
- 	}
-@@ -1342,7 +1342,7 @@ static void kill_me_never(struct callback_head *cb)
- 	p->mce_count = 0;
- 	pr_err("Kernel accessed poison in user space at %llx\n", p->mce_addr);
- 	if (!memory_failure(p->mce_addr >> PAGE_SHIFT, 0))
--		set_mce_nospec(p->mce_addr >> PAGE_SHIFT, p->mce_whole_page);
-+		set_mce_nospec(p->mce_addr >> PAGE_SHIFT);
- }
- 
- static void queue_task_work(struct mce *m, char *msg, void (*func)(struct callback_head *))
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 417440c6bf80..1abd5438f126 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -1914,14 +1914,9 @@ int set_memory_wb(unsigned long addr, int numpages)
- }
- EXPORT_SYMBOL(set_memory_wb);
- 
--/*
-- * Prevent speculative access to the page by either unmapping
-- * it (if we do not require access to any part of the page) or
-- * marking it uncacheable (if we want to try to retrieve data
-- * from non-poisoned lines in the page).
-- */
-+/* Prevent speculative access to a page by marking it not-present */
- #ifdef CONFIG_X86_64
--int set_mce_nospec(unsigned long pfn, bool unmap)
-+int set_mce_nospec(unsigned long pfn)
- {
- 	unsigned long decoy_addr;
- 	int rc;
-@@ -1943,19 +1938,23 @@ int set_mce_nospec(unsigned long pfn, bool unmap)
- 	 */
- 	decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
- 
--	if (unmap)
--		rc = set_memory_np(decoy_addr, 1);
--	else
--		rc = set_memory_uc(decoy_addr, 1);
-+	rc = set_memory_np(decoy_addr, 1);
- 	if (rc)
- 		pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
- 	return rc;
- }
- 
-+static int set_memory_present(unsigned long *addr, int numpages)
-+{
-+	return change_page_attr_set(addr, numpages, __pgprot(_PAGE_PRESENT), 0);
-+}
-+
- /* Restore full speculative operation to the pfn. */
- int clear_mce_nospec(unsigned long pfn)
- {
--	return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
-+	unsigned long addr = (unsigned long) pfn_to_kaddr(pfn);
-+
-+	return set_memory_present(&addr, 1);
- }
- EXPORT_SYMBOL_GPL(clear_mce_nospec);
- #endif /* CONFIG_X86_64 */
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index 58d95242a836..4aa17132a557 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -158,36 +158,20 @@ static blk_status_t pmem_do_write(struct pmem_device *pmem,
- 			struct page *page, unsigned int page_off,
- 			sector_t sector, unsigned int len)
- {
--	blk_status_t rc = BLK_STS_OK;
--	bool bad_pmem = false;
- 	phys_addr_t pmem_off = sector * 512 + pmem->data_offset;
- 	void *pmem_addr = pmem->virt_addr + pmem_off;
- 
--	if (unlikely(is_bad_pmem(&pmem->bb, sector, len)))
--		bad_pmem = true;
-+	if (unlikely(is_bad_pmem(&pmem->bb, sector, len))) {
-+		blk_status_t rc = pmem_clear_poison(pmem, pmem_off, len);
-+
-+		if (rc != BLK_STS_OK)
-+			return rc;
-+	}
- 
--	/*
--	 * Note that we write the data both before and after
--	 * clearing poison.  The write before clear poison
--	 * handles situations where the latest written data is
--	 * preserved and the clear poison operation simply marks
--	 * the address range as valid without changing the data.
--	 * In this case application software can assume that an
--	 * interrupted write will either return the new good
--	 * data or an error.
--	 *
--	 * However, if pmem_clear_poison() leaves the data in an
--	 * indeterminate state we need to perform the write
--	 * after clear poison.
--	 */
- 	flush_dcache_page(page);
- 	write_pmem(pmem_addr, page, page_off, len);
--	if (unlikely(bad_pmem)) {
--		rc = pmem_clear_poison(pmem, pmem_off, len);
--		write_pmem(pmem_addr, page, page_off, len);
--	}
- 
--	return rc;
-+	return BLK_STS_OK;
- }
- 
- static void pmem_submit_bio(struct bio *bio)
-diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
-index 683a6c3f7179..369769ce7399 100644
---- a/include/linux/set_memory.h
-+++ b/include/linux/set_memory.h
-@@ -43,10 +43,10 @@ static inline bool can_set_direct_map(void)
- #endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
- 
- #ifdef CONFIG_X86_64
--int set_mce_nospec(unsigned long pfn, bool unmap);
-+int set_mce_nospec(unsigned long pfn);
- int clear_mce_nospec(unsigned long pfn);
- #else
--static inline int set_mce_nospec(unsigned long pfn, bool unmap)
-+static inline int set_mce_nospec(unsigned long pfn)
- {
- 	return 0;
- }
 -- 
 2.35.1
 

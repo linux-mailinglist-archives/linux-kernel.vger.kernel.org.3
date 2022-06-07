@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8686254249C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9FC542643
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiFHAnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S1389915AbiFHBqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382798AbiFGWEh (ORCPT
+        with ESMTP id S1379188AbiFGWG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:04:37 -0400
+        Tue, 7 Jun 2022 18:06:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F6125069A;
-        Tue,  7 Jun 2022 12:15:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9B7252C39;
+        Tue,  7 Jun 2022 12:15:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 124D361846;
-        Tue,  7 Jun 2022 19:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20081C385A2;
-        Tue,  7 Jun 2022 19:15:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DFFE6192F;
+        Tue,  7 Jun 2022 19:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E99C385A2;
+        Tue,  7 Jun 2022 19:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629345;
-        bh=bZ/gkPK6FV5YKNITi2OCbXEZcm6VBFXIXhsjV92dqrc=;
+        s=korg; t=1654629353;
+        bh=4YDOMqXx4RcoErZe6jqiuMfx+Sf4E1czh/gF3x97jlY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i1PfjqkW6xsWtYxrPD7QKvuQI1nrwjvbw06D2cjCx1lcJikW0PUFK2asuIumAjcAE
-         w2hTo6i779pp8S4j8EFVTAQ3AgJB9zlDFU2SeAdvOVzi+7btIsM7YUOAKa6mPUotBh
-         Hq36nroxxK9OB2/nJGrpNjFuJCZSoobXOhi4eHQc=
+        b=XUDucJMhcbMuN3bxjprPrkgwsijJF5tUYiCgHw2KteGb/fPtoJxp6JFhMokXOvxTA
+         JPVHLiYnlLGAoudeEp4m92urOJk/mr/1895bd+yYGoK90qTUPDvRUWQZEeM82WCbuT
+         1+CBn5P0LR4ye84jGi+Vq1IbB5mojbfwac5PWb5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jayesh Choudhary <j-choudhary@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 658/879] dmaengine: ti: k3-psil-am62: Update PSIL thread for saul.
-Date:   Tue,  7 Jun 2022 19:02:56 +0200
-Message-Id: <20220607165021.944736373@linuxfoundation.org>
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 660/879] f2fs: fix dereference of stale list iterator after loop body
+Date:   Tue,  7 Jun 2022 19:02:58 +0200
+Message-Id: <20220607165022.005037060@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -54,40 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jayesh Choudhary <j-choudhary@ti.com>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit b21fe492a3a9831c315eb456cf5480c9490eaeef ]
+[ Upstream commit 2aaf51dd39afb6d01d13f1e6fe20b684733b37d5 ]
 
-Correct the RX PSIL thread for sa3ul.
+The list iterator variable will be a bogus pointer if no break was hit.
+Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
+value making it unsafe to use that in the comparision to determine if the
+specific element was found.
 
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-Fixes: 5ac6bfb587772 ("dmaengine: ti: k3-psil: Add AM62x PSIL and PDMA data")
-Link: https://lore.kernel.org/r/20220421065323.16378-1-j-choudhary@ti.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
+by chance (or intention of an attacker) it matches the value of 'page'
+even though the correct element was not found.
+
+This is fixed by using a separate list iterator variable for the loop
+and only setting the original variable if a suitable element was found.
+Then determing if the element was found is simply checking if the
+variable is set.
+
+Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/ti/k3-psil-am62.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/f2fs/segment.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/dma/ti/k3-psil-am62.c b/drivers/dma/ti/k3-psil-am62.c
-index d431e2033237..2b6fd6e37c61 100644
---- a/drivers/dma/ti/k3-psil-am62.c
-+++ b/drivers/dma/ti/k3-psil-am62.c
-@@ -70,10 +70,10 @@
- /* PSI-L source thread IDs, used for RX (DMA_DEV_TO_MEM) */
- static struct psil_ep am62_src_ep_map[] = {
- 	/* SAUL */
--	PSIL_SAUL(0x7500, 20, 35, 8, 35, 0),
--	PSIL_SAUL(0x7501, 21, 35, 8, 36, 0),
--	PSIL_SAUL(0x7502, 22, 43, 8, 43, 0),
--	PSIL_SAUL(0x7503, 23, 43, 8, 44, 0),
-+	PSIL_SAUL(0x7504, 20, 35, 8, 35, 0),
-+	PSIL_SAUL(0x7505, 21, 35, 8, 36, 0),
-+	PSIL_SAUL(0x7506, 22, 43, 8, 43, 0),
-+	PSIL_SAUL(0x7507, 23, 43, 8, 44, 0),
- 	/* PDMA_MAIN0 - SPI0-3 */
- 	PSIL_PDMA_XY_PKT(0x4302),
- 	PSIL_PDMA_XY_PKT(0x4303),
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index bd9731cdec56..9dd9f88b75e9 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -355,16 +355,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct list_head *head = &fi->inmem_pages;
+ 	struct inmem_pages *cur = NULL;
++	struct inmem_pages *tmp;
+ 
+ 	f2fs_bug_on(sbi, !page_private_atomic(page));
+ 
+ 	mutex_lock(&fi->inmem_lock);
+-	list_for_each_entry(cur, head, list) {
+-		if (cur->page == page)
++	list_for_each_entry(tmp, head, list) {
++		if (tmp->page == page) {
++			cur = tmp;
+ 			break;
++		}
+ 	}
+ 
+-	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
++	f2fs_bug_on(sbi, !cur);
+ 	list_del(&cur->list);
+ 	mutex_unlock(&fi->inmem_lock);
+ 
 -- 
 2.35.1
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904FC541FDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64F3541FA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385547AbiFGWp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S1385573AbiFGWqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380023AbiFGVdt (ORCPT
+        with ESMTP id S1377850AbiFGVeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:33:49 -0400
+        Tue, 7 Jun 2022 17:34:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43EE172C09;
-        Tue,  7 Jun 2022 12:04:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1922A1737C3;
+        Tue,  7 Jun 2022 12:04:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA9B8B823B1;
-        Tue,  7 Jun 2022 19:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A47DC385A5;
-        Tue,  7 Jun 2022 19:04:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CACCB82182;
+        Tue,  7 Jun 2022 19:04:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB244C34115;
+        Tue,  7 Jun 2022 19:04:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628664;
-        bh=m8Sd4aYGwsiu1xHVnWzSw6BMofJn741hGJ0Xt/ZJ+tI=;
+        s=korg; t=1654628667;
+        bh=4FWVvpGIVHGySV3NM6oA2OJC61WladjaOASJ3N08TN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2bGxB5DHz+dE5Ix8nR36MEatYShbOUKVjdXUUaS7yWBMKSkpg86t+28Mon8Hjh4wu
-         iMmReyD/8lIRsxsy7Hha1S8fqQGv9njHN3IZcPK0KHH13onF3W7qqBkwFB7h3mm++Y
-         2clmwA0N3BP6E99sh8uvlZ8Pq+oVU+cY8PI+qVhY=
+        b=Tx27bJy5uduz6WK809FYJe32YJuNbNzPOTIFNo59y+Z/cMDtrK9O8gRsBtY/Ffp5x
+         s0QDxqtRKeh1ZvPqycIZjlKsWsos2gn4sPuBY0Q5kVEUG1Bt1kVHwPQ9CLSri7kn0/
+         YKezIJel+ZwPF5hcLwwMCDSL4Vd6l50Qf5Vk9xJ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, CKI Project <cki-project@redhat.com>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org,
+        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 409/879] samples: bpf: Dont fail for a missing VMLINUX_BTF when VMLINUX_H is provided
-Date:   Tue,  7 Jun 2022 18:58:47 +0200
-Message-Id: <20220607165014.733939008@linuxfoundation.org>
+Subject: [PATCH 5.18 410/879] perf/amd/ibs: Use interrupt regs ip for stack unwinding
+Date:   Tue,  7 Jun 2022 18:58:48 +0200
+Message-Id: <20220607165014.763007405@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -57,51 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerome Marchand <jmarchan@redhat.com>
+From: Ravi Bangoria <ravi.bangoria@amd.com>
 
-[ Upstream commit ec24704492d8791a52a75a39e3ad762b6e017bc6 ]
+[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
 
-samples/bpf build currently always fails if it can't generate
-vmlinux.h from vmlinux, even when vmlinux.h is directly provided by
-VMLINUX_H variable, which makes VMLINUX_H pointless.
-Only fails when neither method works.
+IbsOpRip is recorded when IBS interrupt is triggered. But there is
+a skid from the time IBS interrupt gets triggered to the time the
+interrupt is presented to the core. Meanwhile processor would have
+moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
+recorded as part of the interrupt regs. This causes issues while
+unwinding stack using the ORC unwinder as it needs consistent rip,
+rsp and rbp. Fix this by using rip from interrupt regs instead of
+IbsOpRip for stack unwinding.
 
-Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
-Reported-by: CKI Project <cki-project@redhat.com>
-Reported-by: Veronika Kabatova <vkabatov@redhat.com>
-Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220507161635.2219052-1-jmarchan@redhat.com
+Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
+Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/Makefile | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 38638845db9d..72bb85c18804 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -368,16 +368,15 @@ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 367ca899e6e8..2704ec1e42a3 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -304,6 +304,16 @@ static int perf_ibs_init(struct perf_event *event)
+ 	hwc->config_base = perf_ibs->msr;
+ 	hwc->config = config;
  
- $(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
- ifeq ($(VMLINUX_H),)
-+ifeq ($(VMLINUX_BTF),)
-+	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
-+		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
-+endif
- 	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
- else
- 	$(Q)cp "$(VMLINUX_H)" $@
- endif
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack. Setting _EARLY flag
++	 * makes sure we unwind call-stack before perf sample rip is set to
++	 * IbsOpRip.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
++
+ 	return 0;
+ }
  
--ifeq ($(VMLINUX_BTF),)
--	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
--		build the kernel or set VMLINUX_BTF variable)
--endif
--
- clean-files += vmlinux.h
+@@ -687,6 +697,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+ 		data.raw = &raw;
+ 	}
  
- # Get Clang's default includes on this system, as opposed to those seen by
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		data.callchain = perf_callchain(event, iregs);
++
+ 	throttle = perf_event_overflow(event, &data, &regs);
+ out:
+ 	if (throttle) {
 -- 
 2.35.1
 

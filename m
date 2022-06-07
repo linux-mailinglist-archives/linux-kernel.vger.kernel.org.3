@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7781B541FDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E468541FD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 02:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386473AbiFGWs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 18:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S1386335AbiFGWsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381212AbiFGVkR (ORCPT
+        with ESMTP id S1381234AbiFGVkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6EF719D7;
-        Tue,  7 Jun 2022 12:05:58 -0700 (PDT)
+        Tue, 7 Jun 2022 17:40:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2E5152DA7;
+        Tue,  7 Jun 2022 12:06:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0960DB822C0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C16BBB823AF;
+        Tue,  7 Jun 2022 19:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F3BC385A2;
         Tue,  7 Jun 2022 19:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA0AC385A2;
-        Tue,  7 Jun 2022 19:05:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628755;
-        bh=kTTiIZpJ2ysOrS1uGjg/TY4Npyhe4hfUh2qruWkuNL4=;
+        s=korg; t=1654628758;
+        bh=l+0I0SbIqtb+A2f2/RYmBLgaBp3aFf+0oUxXgNg1N6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sSaaq9a/TvCD8t4+dO1o13PkzXgfeFqvZm0EE+MEQoI42L2RojVB5P/te/IOjheTc
-         zKCctDMu6oUZ6hpardNP/w28H06kvxbOCFeA+gwuT6Og8u9ySjcgEkvqDaRbPbGuw9
-         /5sOfeViPvYfunGt1n1UNWZNSnnhnFoCZk3+w9S8=
+        b=rvCHNBvSPsGsGIwRzcXTsoehpmxLn8QURMCdNdVAMQdiexUzZ/XUfeuyMXnbUJgQj
+         32LwdnypIy8KiUq5IPhwJyC2lWkCBgLaq278IfrolGYoHvHTgA7Nj/zAyhadfOGzb/
+         I0UuFd1Z/lCtKUeRQRoPhNsTx4GSWSJI9eQ34nnw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 443/879] media: atmel: atmel-isc: Fix PM disable depth imbalance in atmel_isc_probe
-Date:   Tue,  7 Jun 2022 18:59:21 +0200
-Message-Id: <20220607165015.730476467@linuxfoundation.org>
+Subject: [PATCH 5.18 444/879] media: i2c: rdacm2x: properly set subdev entity function
+Date:   Tue,  7 Jun 2022 18:59:22 +0200
+Message-Id: <20220607165015.760039300@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -56,46 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
 
-[ Upstream commit 395829c61a196a0821a703a49c4db3ac51daff73 ]
+[ Upstream commit d2facee67b4883bb3e7461a0a93fd70d0c7b7261 ]
 
-The pm_runtime_enable will decrease power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+The subdevice entity function was left unset, which produces a warning
+when probing the device:
 
-Fixes: 0a0e265515db ("media: atmel: atmel-isc: split driver into driver base and isc")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+mxc-md bus@58000000:camera: Entity type for entity rdacm20 19-0051 was
+not initialized!
+
+This patch will set entity function to MEDIA_ENT_F_CAM_SENSOR and leave
+flags unset.
+
+Fixes: 34009bffc1c6 ("media: i2c: Add RDACM20 driver")
+Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
+Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-sama5d2-isc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/i2c/rdacm20.c | 2 +-
+ drivers/media/i2c/rdacm21.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-index c5b9563e36cb..e9415495e738 100644
---- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama5d2-isc.c
-@@ -562,7 +562,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(isc->ispck);
- 	if (ret) {
- 		dev_err(dev, "failed to enable ispck: %d\n", ret);
--		goto cleanup_subdev;
-+		goto disable_pm;
- 	}
+diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
+index 025a610de893..9c6f66cab564 100644
+--- a/drivers/media/i2c/rdacm20.c
++++ b/drivers/media/i2c/rdacm20.c
+@@ -611,7 +611,7 @@ static int rdacm20_probe(struct i2c_client *client)
+ 		goto error_free_ctrls;
  
- 	/* ispck should be greater or equal to hclock */
-@@ -580,6 +580,9 @@ static int atmel_isc_probe(struct platform_device *pdev)
- unprepare_clk:
- 	clk_disable_unprepare(isc->ispck);
+ 	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
+-	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
++	dev->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
+ 	if (ret < 0)
+ 		goto error_free_ctrls;
+diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
+index 12ec5467ed1e..ef31cf5f23ca 100644
+--- a/drivers/media/i2c/rdacm21.c
++++ b/drivers/media/i2c/rdacm21.c
+@@ -583,7 +583,7 @@ static int rdacm21_probe(struct i2c_client *client)
+ 		goto error_free_ctrls;
  
-+disable_pm:
-+	pm_runtime_disable(dev);
-+
- cleanup_subdev:
- 	isc_subdev_cleanup(isc);
- 
+ 	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
+-	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
++	dev->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
+ 	if (ret < 0)
+ 		goto error_free_ctrls;
 -- 
 2.35.1
 

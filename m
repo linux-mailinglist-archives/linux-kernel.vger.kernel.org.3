@@ -2,153 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA8F541BE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE2B541C30
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379106AbiFGVzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
+        id S1379220AbiFGV4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379233AbiFGVCN (ORCPT
+        with ESMTP id S1379333AbiFGVCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:02:13 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F50634663
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:47:02 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so21675286pju.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:47:02 -0700 (PDT)
+        Tue, 7 Jun 2022 17:02:21 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDF644F0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:47:46 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id f9so5098963plg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=ClvLn1v0KW5jcy2W1CElCvPJ8/3zjMIv2rSPG5d3wcg=;
-        b=tc1I+sdA0FwDJ/gsRcalhTdWIHb3oeBmUEKkK8g4OZEMjXtAlRTZvaNhHDSk/3+9Zf
-         ZCnTm71Ikwc9fj78Z6tJ+r+s3NKyZPGXQUM5GKc63uB2wcSoTM+yHLH1Ir/Fm51e9ot0
-         iPOjiMnofGcQT1I4z3zOljtH0zbFxSybwkGC8Uh8OTfQAgLL0VB/fu8yQm7VfTWTj1iK
-         ViabI4/ZPV3krTjB9RtlTrwxbRjkqxfKSGqc7GY05gqlqamDH4sYLLUCxRq+Tg2RE6e2
-         AQwMtPhyN/4yV7ZESuVPupvYQ3xLbWu98R4sqW9Vc3joiZka92axUvzIDfM/7JpyJlSZ
-         AErQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bq3CtL8r5GfIJRMEMuTZRaNrH6+E6V3L1A1y/G7x4zc=;
+        b=sDU6k8EIeE4SYgNY6ZlLksQCk0G6UMR2ghuXPDr+ezKXYMLOJy1JV6bqlaYICD6A+f
+         szfP31/juK1NYkXSgNCUF3MVDOBERVY7OFSo5FGzrJJlFXN3QtrwVpPrQuheoGPrgJ2n
+         8oMOx3z/d/tA/M2cwPP+6RbIDju8wuuUXjaMPRxO5hH4D4sKETHImRROElbe//aaOtpO
+         OogLtnIuwKN+DcCAPGyJlFax0yhmAoZ+rpZadMYHcKoPtZu+IxTNJ5IzBobLLH7anQe5
+         BJyo82k0NfaW8Na1TZ9yPTtPgjrfAAq8oZFwBN6K9DQIZ2j1A5DMsvm5naVtimv1XKxj
+         9K4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=ClvLn1v0KW5jcy2W1CElCvPJ8/3zjMIv2rSPG5d3wcg=;
-        b=VAuEQBXlz+iPxXloxC6vckhhAqn+895dhlMV+LpRax6tFXWb2Ib/qh+BszUZWCYfUs
-         dt9CP/CQ145JhSL31DRG9Jj9ukR7ZkdPKE4iV/E/4UZ5fu/uV4Bc6SzGVXdifjNcbSov
-         gaRFr4HKA22k1+4Wa2A+DKTJZHgT4NI4Paiy6ujrB9ycwjV1/zl3MrYuL0gtZ/dN2yG9
-         e3vDyAz326IAjzzdTVXvCmYtiJ5Y6VH76N0gGqFkIDyJ1JPHHCJSHMBM7tvJZ/D9hCuB
-         hkAx0jByWNi2YAGuNcbR9jQIv0EbFRRxkxE4M2uEm6YNtYs3OSLveXnVXreNXqBUMi8S
-         upjA==
-X-Gm-Message-State: AOAM531phgQu+e7UnEJdCUPaOtpSw1Sq8blTpSgV7ZVQZiwbUcNJimBo
-        UGNUSWRdqhSUrsrDPkIs0+Nh5g==
-X-Google-Smtp-Source: ABdhPJzC+jPXqON9HpNHUt08r2bqtxWHt/ITCvwKc/1nQ9S2LBfu4fKx7HHimoSJfCLrrW0kyL4vcg==
-X-Received: by 2002:a17:902:ec92:b0:166:3502:ecb1 with SMTP id x18-20020a170902ec9200b001663502ecb1mr30357875plg.62.1654627621789;
-        Tue, 07 Jun 2022 11:47:01 -0700 (PDT)
-Received: from [192.168.254.36] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170902710200b0016141e6c5acsm13036791pll.296.2022.06.07.11.47.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 11:47:01 -0700 (PDT)
-Message-ID: <d079b7d4-c538-8a50-3375-fab0d3a0f0e6@linaro.org>
-Date:   Tue, 7 Jun 2022 11:47:00 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bq3CtL8r5GfIJRMEMuTZRaNrH6+E6V3L1A1y/G7x4zc=;
+        b=78A0WLlSRX2QODeHJIp+J5cPZeM89xgTfn0hMMd+/HtfYRvMkSHgSSuPGq6aAMrABU
+         4hCa3NXdoLmSr2zK33E70IuhFiBu9LfNrjRYqu5he/e+WzjtsYryGo3Rt6vVnE421yW4
+         QhWJPZJz6PJs1dXGhfdGUbgHYdsMyOpI/s/erQksZKvORYVQpGDMlD+fip6vTio4Ac/Y
+         mkrKJu6iRfd4sKwoXSVHe+/FVaLICrDrvCIW3z49CDBZoAaHH7ECpf8Zuc6c5jRSlxlo
+         VW+RQNepPwoxpp0CzUuLpg9S2h3YdQpmLECULR8XZaWyAXaHe/c0UcY1+t5laz5BT1Lq
+         T9FA==
+X-Gm-Message-State: AOAM530rwh9rGh23KZBuCVy0C6fSxOUyu7Loy6Kfc7X/jMeiBRaQvZ0J
+        KkOZAakp34sKOmkNflxxikdGlQ==
+X-Google-Smtp-Source: ABdhPJw2TQiN59DdW/xnGa/aGBjV90W4P/iGe+cof3kKAjRB7iSLHq2N5nUHqvDvem8J6DBDZYGOGg==
+X-Received: by 2002:a17:903:3296:b0:164:13db:509 with SMTP id jh22-20020a170903329600b0016413db0509mr30245225plb.128.1654627665924;
+        Tue, 07 Jun 2022 11:47:45 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k130-20020a628488000000b0051c03229a2bsm6037107pfd.21.2022.06.07.11.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 11:47:45 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 18:47:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
+ user_xfeatures to supported bits of XCR0
+Message-ID: <Yp+dTU4NOaIELJh8@google.com>
+References: <20220301201344.18191-1-sashal@kernel.org>
+ <20220301201344.18191-7-sashal@kernel.org>
+ <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
+ <YppVupW+IWsm7Osr@xz-m1.local>
+ <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
+ <Yp5xSi6P3q187+A+@xz-m1.local>
+ <9d336622-6964-454a-605f-1ca90b902836@redhat.com>
+ <Yp9o+y0NcRW/0puA@google.com>
+ <Yp+WUoA+6x7ZpsaM@xz-m1.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, cgroups@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
-References: <20220603173455.441537-1-tadeusz.struk@linaro.org>
- <20220603181321.443716-1-tadeusz.struk@linaro.org>
- <20220606123910.GF6928@blackbody.suse.cz>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH v2] cgroup: serialize css kill and release paths
-In-Reply-To: <20220606123910.GF6928@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yp+WUoA+6x7ZpsaM@xz-m1.local>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/22 05:39, Michal Koutný wrote:
-> On Fri, Jun 03, 2022 at 11:13:21AM -0700, Tadeusz Struk<tadeusz.struk@linaro.org>  wrote:
->> In such scenario the css_killed_work_fn will be en-queued via
->> cgroup_apply_control_disable(cgrp)->kill_css(css), and bail out to
->> cgroup_kn_unlock(). Then cgroup_kn_unlock() will call:
->> cgroup_put(cgrp)->css_put(&cgrp->self), which will try to enqueue
->> css_release_work_fn for the same css instance, causing a list_add
->> corruption bug, as can be seen in the syzkaller report [1].
-> This hypothesis doesn't add up to me (I am sorry).
+On Tue, Jun 07, 2022, Peter Xu wrote:
+> On Tue, Jun 07, 2022 at 03:04:27PM +0000, Sean Christopherson wrote:
+> > On Tue, Jun 07, 2022, Paolo Bonzini wrote:
+> > > On 6/6/22 23:27, Peter Xu wrote:
+> > > > On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
+> > > > > > However there seems to be something missing at least to me, on why it'll
+> > > > > > fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
+> > > > > > In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
+> > > > > > patch, but 0x0 if with it.
+> > > > > 
+> > > > > What CPU model are you using for the VM?
+> > > > 
+> > > > I didn't specify it, assuming it's qemu64 with no extra parameters.
+> > > 
+> > > Ok, so indeed it lacks AVX and this patch can have an effect.
+> > > 
+> > > > > For example, if the source lacks this patch but the destination has it,
+> > > > > the source will transmit YMM registers, but the destination will fail to
+> > > > > set them if they are not available for the selected CPU model.
+> > > > > 
+> > > > > See the commit message: "As a bonus, it will also fail if userspace tries to
+> > > > > set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
+> > > > > the guest configuration.  Such features will never be returned by
+> > > > > KVM_GET_XSAVE or KVM_GET_XSAVE2."
+> > > > 
+> > > > IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
+> > > > (probably by failing validate_user_xstate_header when checking against the
+> > > > user_xfeatures on dest host). But that's probably not my case, because here
+> > > > KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
+> > > > the precopy migration completes (or for postcopy when the switchover is
+> > > > done).
+> > > 
+> > > Difficult to say what's happening without seeing at least the guest code
+> > > around the double fault (above you said "fail a migration" and I thought
+> > > that was a different scenario than the double fault), and possibly which was
+> > > the first exception that contributed to the double fault.
+> > 
+> > Regardless of why the guest explodes in the way it does, is someone planning on
+> > bisecting this (if necessary?) and sending a backport to v5.15?  There's another
+> > bug report that is more than likely hitting the same bug.
 > 
-> The kill_css(css) would be a css associated with a subsys (css.ss !=
-> NULL) whereas css_put(&cgrp->self) is a different css just for the
-> cgroup (css.ss == NULL).
+> What's the bisection you mentioned?  I actually did a bisection and I also
+> checked reverting Leo's change can also fix this issue.  Or do you mean
+> something else?
 
-Yes, you are right. I couldn't figure it out where the extra css_put()
-is called from, and the only place that fitted into my theory was from
-the cgroup_kn_unlock() in cgroup_apply_control_disable().
-After some more debugging I can see that, as you said, the cgrp->self
-is a different css. The offending _put() is actually called by the
-percpu_ref_kill_and_confirm(), as it not only calls the passed confirm_kill
-percpu_ref_func_t, but also it puts the refcnt iself.
-Because the cgroup_apply_control_disable() will loop for_each_live_descendant,
-and call css_kill() on all css'es, and css_killed_work_fn() will also loop
-and call css_put() on all parents, the css_release() will be called on the
-first parent prematurely, causing the BUG(). What I think should be done
-to balance put/get is to call css_get() for all the parents in kill_css():
+Oooooh, sorry!  I got completely turned around.  You ran into a bug with the
+fix.  I thought that you were hitting the same issues as Mike where migrating
+between hosts with different capabilities is broken in v5.15, but works in v5.18.
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index c1e1a5c34e77..3ca61325bc4e 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -5527,6 +5527,8 @@ static void css_killed_ref_fn(struct percpu_ref *ref)
-   */
-  static void kill_css(struct cgroup_subsys_state *css)
-  {
-+       struct cgroup_subsys_state *_css = css;
+> > https://lore.kernel.org/all/48353e0d-e771-8a97-21d4-c65ff3bc4192@sentex.net
+> 
+> That is kvm64, and I agree it could be the same problem since both qemu64
+> and kvm64 models do not have any xsave feature bit declared in cpuid 0xd,
+> so potentially we could be migrating some fpu states to it even with
+> user_xfeatures==0 on dest host.
+> 
+> So today I continued the investigation, and I think what's really missing
+> is qemu seems to be ignoring the user_xfeatures check for KVM_SET_XSAVE and
+> continues even if it returns -EINVAL.  IOW, I'm wondering whether we should
+> fail properly and start to check kvm_arch_put_registers() retcode.  But
+> that'll be a QEMU fix, and it'll at least not causing random faults
+> (e.g. double faults) in guest but we should fail the migration gracefully.
+> 
+> Sean: a side note is that I can also easily trigger one WARN_ON_ONCE() in
+> your commit 98c25ead5eda5 in kvm_arch_vcpu_ioctl_run():
+> 
+> 	WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
+> 
+> It'll be great if you'd like to check that up.
+
+Ugh, userspace can force KVM_MP_STATE_UNINITIALIZED via KVM_SET_MP_STATE.  Looks
+like QEMU does that when emulating RESET.
+
+Logically, a full RESET of the xAPIC seems like the right thing to do.  I think
+we can get away with that without breaking ABI?  And kvm_lapic_reset() has a
+related bug where it stops the HR timer but not doesn't handle the HV timer :-/
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index e69b83708f05..948aba894245 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2395,7 +2395,7 @@ void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+                return;
+
+        /* Stop the timer in case it's a reset to an active apic */
+-       hrtimer_cancel(&apic->lapic_timer.timer);
++       cancel_apic_timer(&apic->lapic_timer.timer);
+
+        /* The xAPIC ID is set at RESET even if the APIC was already enabled. */
+        if (!init_event)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 540651cd28d7..ed2c7cb1642d 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10912,6 +10912,9 @@ int kvm_arch_vcpu_ioctl_set_mpstate(struct kvm_vcpu *vcpu,
+             mp_state->mp_state == KVM_MP_STATE_INIT_RECEIVED))
+                goto out;
+
++       if (mp_state->mp_state == KVM_MP_STATE_UNINITIALIZED)
++               kvm_lapic_reset(vcpu, false);
 +
-         lockdep_assert_held(&cgroup_mutex);
-  
-         if (css->flags & CSS_DYING)
-@@ -5541,10 +5543,13 @@ static void kill_css(struct cgroup_subsys_state *css)
-         css_clear_dir(css);
-  
-         /*
--        * Killing would put the base ref, but we need to keep it alive
--        * until after ->css_offline().
-+        * Killing would put the base ref, but we need to keep it alive,
-+        * and all its parents, until after ->css_offline().
-          */
--       css_get(css);
-+       do {
-+               css_get(_css);
-+               _css = _css->parent;
-+       } while (_css && atomic_read(&_css->online_cnt));
-  
-         /*
-          * cgroup core guarantees that, by the time ->css_offline() is
-
-This will be then "reverted" in css_killed_work_fn()
-Please let me know if it makes sense to you.
-I'm still testing it, but syzbot is very slow today.
-
--- 
-Thanks,
-Tadeusz
+        if (mp_state->mp_state == KVM_MP_STATE_SIPI_RECEIVED) {
+                vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
+                set_bit(KVM_APIC_SIPI, &vcpu->arch.apic->pending_events);

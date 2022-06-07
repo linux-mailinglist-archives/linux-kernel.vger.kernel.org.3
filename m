@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57A35405F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1825054180A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347005AbiFGRci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S1378593AbiFGVIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346578AbiFGRZO (ORCPT
+        with ESMTP id S1359206AbiFGUJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:14 -0400
+        Tue, 7 Jun 2022 16:09:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DCC10EA4D;
-        Tue,  7 Jun 2022 10:22:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F6916ABC9;
+        Tue,  7 Jun 2022 11:27:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1495FB822B0;
-        Tue,  7 Jun 2022 17:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75BFCC385A5;
-        Tue,  7 Jun 2022 17:22:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EDE8B82367;
+        Tue,  7 Jun 2022 18:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD3DC385A5;
+        Tue,  7 Jun 2022 18:27:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622572;
-        bh=8YTBb/y06p9bUmkDTqdpbZdm6d31m4hJrQ5IhM3kZbs=;
+        s=korg; t=1654626421;
+        bh=kxJo4mL558H5JGkgGUuEbvjo9SuUGP3ePttDj3kdMFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i9/MEUTx78ZyfhL5kMFEty9J5ofWz6sl3+gPxb2ll3JPxQSs9r22rcVkTXdqN3gkn
-         nrtnNgON9G5IvGew+f7O0L0jl6hcZ0CauY+OwfVqipbNoczDIWFyMVgU5B/JSI42EL
-         NUHdn52BWfja9xTLjLVTkEljdkD3/5agQaj1gqbE=
+        b=lizKcrJY8Jp9gFZHAYhAmRLCzXImUOR3olo0obyVF9TcTvGCTK2wt1mJ5aOsnPB09
+         g1nyixDF5cIg5BIOR1ed0eHYZRNUi8e1SeSEVhx7l0w270NRpTbf62mZi64Uu3p6Wo
+         zLn7fNo+8hztzDzxTUphhpbiM61qD1BiX3odHJBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hari Bathini <hbathini@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 106/452] powerpc/fadump: Fix fadump to work with a different endian capture kernel
+        stable@vger.kernel.org, ThinerLogoer <logoerthiner1@163.com>,
+        Deren Wu <deren.wu@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 371/772] mt76: mt7921: fix kernel crash at mt7921_pci_remove
 Date:   Tue,  7 Jun 2022 18:59:23 +0200
-Message-Id: <20220607164911.716215565@linuxfoundation.org>
+Message-Id: <20220607164959.946984989@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,315 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hari Bathini <hbathini@linux.ibm.com>
+From: Sean Wang <sean.wang@mediatek.com>
 
-[ Upstream commit b74196af372f7cb4902179009265fe63ac81824f ]
+[ Upstream commit ad483ed9dd5193a54293269c852a29051813b7bd ]
 
-Dump capture would fail if capture kernel is not of the endianess as the
-production kernel, because the in-memory data structure (struct
-opal_fadump_mem_struct) shared across production kernel and capture
-kernel assumes the same endianess for both the kernels, which doesn't
-have to be true always. Fix it by having a well-defined endianess for
-struct opal_fadump_mem_struct.
+The crash log shown it is possible that mt7921_irq_handler is called while
+devm_free_irq is being handled so mt76_free_device need to be postponed
+until devm_free_irq is completed to solve the crash we free the mt76 device
+too early.
 
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/161902744901.86147.14719228311655123526.stgit@hbathini
+[ 9299.339655] BUG: kernel NULL pointer dereference, address: 0000000000000008
+[ 9299.339705] #PF: supervisor read access in kernel mode
+[ 9299.339735] #PF: error_code(0x0000) - not-present page
+[ 9299.339768] PGD 0 P4D 0
+[ 9299.339786] Oops: 0000 [#1] SMP PTI
+[ 9299.339812] CPU: 1 PID: 1624 Comm: prepare-suspend Not tainted 5.15.14-1.fc32.qubes.x86_64 #1
+[ 9299.339863] Hardware name: Xen HVM domU, BIOS 4.14.3 01/20/2022
+[ 9299.339901] RIP: 0010:mt7921_irq_handler+0x1e/0x70 [mt7921e]
+[ 9299.340048] RSP: 0018:ffffa81b80c27cb0 EFLAGS: 00010082
+[ 9299.340081] RAX: 0000000000000000 RBX: ffff98a4cb752020 RCX: ffffffffa96211c5
+[ 9299.340123] RDX: 0000000000000000 RSI: 00000000000d4204 RDI: ffff98a4cb752020
+[ 9299.340165] RBP: ffff98a4c28a62a4 R08: ffff98a4c37a96c0 R09: 0000000080150011
+[ 9299.340207] R10: 0000000040000000 R11: 0000000000000000 R12: ffff98a4c4eaa080
+[ 9299.340249] R13: ffff98a4c28a6360 R14: ffff98a4cb752020 R15: ffff98a4c28a6228
+[ 9299.340297] FS: 00007260840d3740(0000) GS:ffff98a4ef700000(0000) knlGS:0000000000000000
+[ 9299.340345] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 9299.340383] CR2: 0000000000000008 CR3: 0000000004c56001 CR4: 0000000000770ee0
+[ 9299.340432] PKRU: 55555554
+[ 9299.340449] Call Trace:
+[ 9299.340467] <TASK>
+[ 9299.340485] __free_irq+0x221/0x350
+[ 9299.340527] free_irq+0x30/0x70
+[ 9299.340553] devm_free_irq+0x55/0x80
+[ 9299.340579] mt7921_pci_remove+0x2f/0x40 [mt7921e]
+[ 9299.340616] pci_device_remove+0x3b/0xa0
+[ 9299.340651] __device_release_driver+0x17a/0x240
+[ 9299.340686] device_driver_detach+0x3c/0xa0
+[ 9299.340714] unbind_store+0x113/0x130
+[ 9299.340740] kernfs_fop_write_iter+0x124/0x1b0
+[ 9299.340775] new_sync_write+0x15c/0x1f0
+[ 9299.340806] vfs_write+0x1d2/0x270
+[ 9299.340831] ksys_write+0x67/0xe0
+[ 9299.340857] do_syscall_64+0x3b/0x90
+[ 9299.340887] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Fixes: 5c14a5f944b9 ("mt76: mt7921: introduce mt7921e support")
+Reported-by: ThinerLogoer <logoerthiner1@163.com>
+Signed-off-by: Deren Wu <deren.wu@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/powernv/opal-fadump.c | 94 +++++++++++---------
- arch/powerpc/platforms/powernv/opal-fadump.h | 10 +--
- 2 files changed, 57 insertions(+), 47 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7921/pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/powernv/opal-fadump.c b/arch/powerpc/platforms/powernv/opal-fadump.c
-index 9a360ced663b..e23a51a05f99 100644
---- a/arch/powerpc/platforms/powernv/opal-fadump.c
-+++ b/arch/powerpc/platforms/powernv/opal-fadump.c
-@@ -60,7 +60,7 @@ void __init opal_fadump_dt_scan(struct fw_dump *fadump_conf, u64 node)
- 	addr = be64_to_cpu(addr);
- 	pr_debug("Kernel metadata addr: %llx\n", addr);
- 	opal_fdm_active = (void *)addr;
--	if (opal_fdm_active->registered_regions == 0)
-+	if (be16_to_cpu(opal_fdm_active->registered_regions) == 0)
- 		return;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
+index 18c8f5cbd96c..2dec9750c6aa 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/pci.c
+@@ -118,7 +118,6 @@ static void mt7921e_unregister_device(struct mt7921_dev *dev)
+ 	mt7921_mcu_exit(dev);
  
- 	ret = opal_mpipl_query_tag(OPAL_MPIPL_TAG_BOOT_MEM, &addr);
-@@ -95,17 +95,17 @@ static int opal_fadump_unregister(struct fw_dump *fadump_conf);
- static void opal_fadump_update_config(struct fw_dump *fadump_conf,
- 				      const struct opal_fadump_mem_struct *fdm)
- {
--	pr_debug("Boot memory regions count: %d\n", fdm->region_cnt);
-+	pr_debug("Boot memory regions count: %d\n", be16_to_cpu(fdm->region_cnt));
- 
- 	/*
- 	 * The destination address of the first boot memory region is the
- 	 * destination address of boot memory regions.
- 	 */
--	fadump_conf->boot_mem_dest_addr = fdm->rgn[0].dest;
-+	fadump_conf->boot_mem_dest_addr = be64_to_cpu(fdm->rgn[0].dest);
- 	pr_debug("Destination address of boot memory regions: %#016llx\n",
- 		 fadump_conf->boot_mem_dest_addr);
- 
--	fadump_conf->fadumphdr_addr = fdm->fadumphdr_addr;
-+	fadump_conf->fadumphdr_addr = be64_to_cpu(fdm->fadumphdr_addr);
+ 	tasklet_disable(&dev->irq_tasklet);
+-	mt76_free_device(&dev->mt76);
  }
  
- /*
-@@ -126,9 +126,9 @@ static void opal_fadump_get_config(struct fw_dump *fadump_conf,
- 	fadump_conf->boot_memory_size = 0;
+ static u32 __mt7921_reg_addr(struct mt7921_dev *dev, u32 addr)
+@@ -354,6 +353,7 @@ static void mt7921_pci_remove(struct pci_dev *pdev)
  
- 	pr_debug("Boot memory regions:\n");
--	for (i = 0; i < fdm->region_cnt; i++) {
--		base = fdm->rgn[i].src;
--		size = fdm->rgn[i].size;
-+	for (i = 0; i < be16_to_cpu(fdm->region_cnt); i++) {
-+		base = be64_to_cpu(fdm->rgn[i].src);
-+		size = be64_to_cpu(fdm->rgn[i].size);
- 		pr_debug("\t[%03d] base: 0x%lx, size: 0x%lx\n", i, base, size);
- 
- 		fadump_conf->boot_mem_addr[i] = base;
-@@ -143,7 +143,7 @@ static void opal_fadump_get_config(struct fw_dump *fadump_conf,
- 	 * Start address of reserve dump area (permanent reservation) for
- 	 * re-registering FADump after dump capture.
- 	 */
--	fadump_conf->reserve_dump_area_start = fdm->rgn[0].dest;
-+	fadump_conf->reserve_dump_area_start = be64_to_cpu(fdm->rgn[0].dest);
- 
- 	/*
- 	 * Rarely, but it can so happen that system crashes before all
-@@ -155,13 +155,14 @@ static void opal_fadump_get_config(struct fw_dump *fadump_conf,
- 	 * Hope the memory that could not be preserved only has pages
- 	 * that are usually filtered out while saving the vmcore.
- 	 */
--	if (fdm->region_cnt > fdm->registered_regions) {
-+	if (be16_to_cpu(fdm->region_cnt) > be16_to_cpu(fdm->registered_regions)) {
- 		pr_warn("Not all memory regions were saved!!!\n");
- 		pr_warn("  Unsaved memory regions:\n");
--		i = fdm->registered_regions;
--		while (i < fdm->region_cnt) {
-+		i = be16_to_cpu(fdm->registered_regions);
-+		while (i < be16_to_cpu(fdm->region_cnt)) {
- 			pr_warn("\t[%03d] base: 0x%llx, size: 0x%llx\n",
--				i, fdm->rgn[i].src, fdm->rgn[i].size);
-+				i, be64_to_cpu(fdm->rgn[i].src),
-+				be64_to_cpu(fdm->rgn[i].size));
- 			i++;
- 		}
- 
-@@ -170,7 +171,7 @@ static void opal_fadump_get_config(struct fw_dump *fadump_conf,
- 	}
- 
- 	fadump_conf->boot_mem_top = (fadump_conf->boot_memory_size + hole_size);
--	fadump_conf->boot_mem_regs_cnt = fdm->region_cnt;
-+	fadump_conf->boot_mem_regs_cnt = be16_to_cpu(fdm->region_cnt);
- 	opal_fadump_update_config(fadump_conf, fdm);
+ 	mt7921e_unregister_device(dev);
+ 	devm_free_irq(&pdev->dev, pdev->irq, dev);
++	mt76_free_device(&dev->mt76);
+ 	pci_free_irq_vectors(pdev);
  }
  
-@@ -178,35 +179,38 @@ static void opal_fadump_get_config(struct fw_dump *fadump_conf,
- static void opal_fadump_init_metadata(struct opal_fadump_mem_struct *fdm)
- {
- 	fdm->version = OPAL_FADUMP_VERSION;
--	fdm->region_cnt = 0;
--	fdm->registered_regions = 0;
--	fdm->fadumphdr_addr = 0;
-+	fdm->region_cnt = cpu_to_be16(0);
-+	fdm->registered_regions = cpu_to_be16(0);
-+	fdm->fadumphdr_addr = cpu_to_be64(0);
- }
- 
- static u64 opal_fadump_init_mem_struct(struct fw_dump *fadump_conf)
- {
- 	u64 addr = fadump_conf->reserve_dump_area_start;
-+	u16 reg_cnt;
- 	int i;
- 
- 	opal_fdm = __va(fadump_conf->kernel_metadata);
- 	opal_fadump_init_metadata(opal_fdm);
- 
- 	/* Boot memory regions */
-+	reg_cnt = be16_to_cpu(opal_fdm->region_cnt);
- 	for (i = 0; i < fadump_conf->boot_mem_regs_cnt; i++) {
--		opal_fdm->rgn[i].src	= fadump_conf->boot_mem_addr[i];
--		opal_fdm->rgn[i].dest	= addr;
--		opal_fdm->rgn[i].size	= fadump_conf->boot_mem_sz[i];
-+		opal_fdm->rgn[i].src	= cpu_to_be64(fadump_conf->boot_mem_addr[i]);
-+		opal_fdm->rgn[i].dest	= cpu_to_be64(addr);
-+		opal_fdm->rgn[i].size	= cpu_to_be64(fadump_conf->boot_mem_sz[i]);
- 
--		opal_fdm->region_cnt++;
-+		reg_cnt++;
- 		addr += fadump_conf->boot_mem_sz[i];
- 	}
-+	opal_fdm->region_cnt = cpu_to_be16(reg_cnt);
- 
- 	/*
- 	 * Kernel metadata is passed to f/w and retrieved in capture kerenl.
- 	 * So, use it to save fadump header address instead of calculating it.
- 	 */
--	opal_fdm->fadumphdr_addr = (opal_fdm->rgn[0].dest +
--				    fadump_conf->boot_memory_size);
-+	opal_fdm->fadumphdr_addr = cpu_to_be64(be64_to_cpu(opal_fdm->rgn[0].dest) +
-+					       fadump_conf->boot_memory_size);
- 
- 	opal_fadump_update_config(fadump_conf, opal_fdm);
- 
-@@ -269,18 +273,21 @@ static u64 opal_fadump_get_bootmem_min(void)
- static int opal_fadump_register(struct fw_dump *fadump_conf)
- {
- 	s64 rc = OPAL_PARAMETER;
-+	u16 registered_regs;
- 	int i, err = -EIO;
- 
--	for (i = 0; i < opal_fdm->region_cnt; i++) {
-+	registered_regs = be16_to_cpu(opal_fdm->registered_regions);
-+	for (i = 0; i < be16_to_cpu(opal_fdm->region_cnt); i++) {
- 		rc = opal_mpipl_update(OPAL_MPIPL_ADD_RANGE,
--				       opal_fdm->rgn[i].src,
--				       opal_fdm->rgn[i].dest,
--				       opal_fdm->rgn[i].size);
-+				       be64_to_cpu(opal_fdm->rgn[i].src),
-+				       be64_to_cpu(opal_fdm->rgn[i].dest),
-+				       be64_to_cpu(opal_fdm->rgn[i].size));
- 		if (rc != OPAL_SUCCESS)
- 			break;
- 
--		opal_fdm->registered_regions++;
-+		registered_regs++;
- 	}
-+	opal_fdm->registered_regions = cpu_to_be16(registered_regs);
- 
- 	switch (rc) {
- 	case OPAL_SUCCESS:
-@@ -291,7 +298,8 @@ static int opal_fadump_register(struct fw_dump *fadump_conf)
- 	case OPAL_RESOURCE:
- 		/* If MAX regions limit in f/w is hit, warn and proceed. */
- 		pr_warn("%d regions could not be registered for MPIPL as MAX limit is reached!\n",
--			(opal_fdm->region_cnt - opal_fdm->registered_regions));
-+			(be16_to_cpu(opal_fdm->region_cnt) -
-+			 be16_to_cpu(opal_fdm->registered_regions)));
- 		fadump_conf->dump_registered = 1;
- 		err = 0;
- 		break;
-@@ -312,7 +320,7 @@ static int opal_fadump_register(struct fw_dump *fadump_conf)
- 	 * If some regions were registered before OPAL_MPIPL_ADD_RANGE
- 	 * OPAL call failed, unregister all regions.
- 	 */
--	if ((err < 0) && (opal_fdm->registered_regions > 0))
-+	if ((err < 0) && (be16_to_cpu(opal_fdm->registered_regions) > 0))
- 		opal_fadump_unregister(fadump_conf);
- 
- 	return err;
-@@ -328,7 +336,7 @@ static int opal_fadump_unregister(struct fw_dump *fadump_conf)
- 		return -EIO;
- 	}
- 
--	opal_fdm->registered_regions = 0;
-+	opal_fdm->registered_regions = cpu_to_be16(0);
- 	fadump_conf->dump_registered = 0;
- 	return 0;
- }
-@@ -563,19 +571,20 @@ static void opal_fadump_region_show(struct fw_dump *fadump_conf,
- 	else
- 		fdm_ptr = opal_fdm;
- 
--	for (i = 0; i < fdm_ptr->region_cnt; i++) {
-+	for (i = 0; i < be16_to_cpu(fdm_ptr->region_cnt); i++) {
- 		/*
- 		 * Only regions that are registered for MPIPL
- 		 * would have dump data.
- 		 */
- 		if ((fadump_conf->dump_active) &&
--		    (i < fdm_ptr->registered_regions))
--			dumped_bytes = fdm_ptr->rgn[i].size;
-+		    (i < be16_to_cpu(fdm_ptr->registered_regions)))
-+			dumped_bytes = be64_to_cpu(fdm_ptr->rgn[i].size);
- 
- 		seq_printf(m, "DUMP: Src: %#016llx, Dest: %#016llx, ",
--			   fdm_ptr->rgn[i].src, fdm_ptr->rgn[i].dest);
-+			   be64_to_cpu(fdm_ptr->rgn[i].src),
-+			   be64_to_cpu(fdm_ptr->rgn[i].dest));
- 		seq_printf(m, "Size: %#llx, Dumped: %#llx bytes\n",
--			   fdm_ptr->rgn[i].size, dumped_bytes);
-+			   be64_to_cpu(fdm_ptr->rgn[i].size), dumped_bytes);
- 	}
- 
- 	/* Dump is active. Show reserved area start address. */
-@@ -624,6 +633,7 @@ void __init opal_fadump_dt_scan(struct fw_dump *fadump_conf, u64 node)
- {
- 	const __be32 *prop;
- 	unsigned long dn;
-+	__be64 be_addr;
- 	u64 addr = 0;
- 	int i, len;
- 	s64 ret;
-@@ -680,13 +690,13 @@ void __init opal_fadump_dt_scan(struct fw_dump *fadump_conf, u64 node)
- 	if (!prop)
- 		return;
- 
--	ret = opal_mpipl_query_tag(OPAL_MPIPL_TAG_KERNEL, &addr);
--	if ((ret != OPAL_SUCCESS) || !addr) {
-+	ret = opal_mpipl_query_tag(OPAL_MPIPL_TAG_KERNEL, &be_addr);
-+	if ((ret != OPAL_SUCCESS) || !be_addr) {
- 		pr_err("Failed to get Kernel metadata (%lld)\n", ret);
- 		return;
- 	}
- 
--	addr = be64_to_cpu(addr);
-+	addr = be64_to_cpu(be_addr);
- 	pr_debug("Kernel metadata addr: %llx\n", addr);
- 
- 	opal_fdm_active = __va(addr);
-@@ -697,14 +707,14 @@ void __init opal_fadump_dt_scan(struct fw_dump *fadump_conf, u64 node)
- 	}
- 
- 	/* Kernel regions not registered with f/w for MPIPL */
--	if (opal_fdm_active->registered_regions == 0) {
-+	if (be16_to_cpu(opal_fdm_active->registered_regions) == 0) {
- 		opal_fdm_active = NULL;
- 		return;
- 	}
- 
--	ret = opal_mpipl_query_tag(OPAL_MPIPL_TAG_CPU, &addr);
--	if (addr) {
--		addr = be64_to_cpu(addr);
-+	ret = opal_mpipl_query_tag(OPAL_MPIPL_TAG_CPU, &be_addr);
-+	if (be_addr) {
-+		addr = be64_to_cpu(be_addr);
- 		pr_debug("CPU metadata addr: %llx\n", addr);
- 		opal_cpu_metadata = __va(addr);
- 	}
-diff --git a/arch/powerpc/platforms/powernv/opal-fadump.h b/arch/powerpc/platforms/powernv/opal-fadump.h
-index f1e9ecf548c5..3f715efb0aa6 100644
---- a/arch/powerpc/platforms/powernv/opal-fadump.h
-+++ b/arch/powerpc/platforms/powernv/opal-fadump.h
-@@ -31,14 +31,14 @@
-  * OPAL FADump kernel metadata
-  *
-  * The address of this structure will be registered with f/w for retrieving
-- * and processing during crash dump.
-+ * in the capture kernel to process the crash dump.
-  */
- struct opal_fadump_mem_struct {
- 	u8	version;
- 	u8	reserved[3];
--	u16	region_cnt;		/* number of regions */
--	u16	registered_regions;	/* Regions registered for MPIPL */
--	u64	fadumphdr_addr;
-+	__be16	region_cnt;		/* number of regions */
-+	__be16	registered_regions;	/* Regions registered for MPIPL */
-+	__be64	fadumphdr_addr;
- 	struct opal_mpipl_region	rgn[FADUMP_MAX_MEM_REGS];
- } __packed;
- 
-@@ -135,7 +135,7 @@ static inline void opal_fadump_read_regs(char *bufp, unsigned int regs_cnt,
- 	for (i = 0; i < regs_cnt; i++, bufp += reg_entry_size) {
- 		reg_entry = (struct hdat_fadump_reg_entry *)bufp;
- 		val = (cpu_endian ? be64_to_cpu(reg_entry->reg_val) :
--		       reg_entry->reg_val);
-+		       (u64)(reg_entry->reg_val));
- 		opal_fadump_set_regval_regnum(regs,
- 					      be32_to_cpu(reg_entry->reg_type),
- 					      be32_to_cpu(reg_entry->reg_num),
 -- 
 2.35.1
 

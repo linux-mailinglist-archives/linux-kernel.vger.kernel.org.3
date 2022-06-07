@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9625407FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33866540823
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348745AbiFGRxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
+        id S1349243AbiFGRzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347842AbiFGRfu (ORCPT
+        with ESMTP id S1347855AbiFGRfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:35:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB301109AB;
-        Tue,  7 Jun 2022 10:31:57 -0700 (PDT)
+        Tue, 7 Jun 2022 13:35:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD46110AFB;
+        Tue,  7 Jun 2022 10:32:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EAE8614AE;
-        Tue,  7 Jun 2022 17:31:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649B5C385A5;
-        Tue,  7 Jun 2022 17:31:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D66DAB82285;
+        Tue,  7 Jun 2022 17:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E567C34115;
+        Tue,  7 Jun 2022 17:31:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654623116;
-        bh=lnVIzLS/8oXyQGTC7yZ6FB72o8AH3PFI3K2kcM4Kszk=;
+        s=korg; t=1654623119;
+        bh=J02nl6Ui6S+fUv+ciFESFN1uxKgtE4G+2YRjWVxKPcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vn8kahqCLkbPgRmgbmJq8yT4iAznZxksNVfsE135P/ugovFw6F+7iPXs/8SSwokZ2
-         yiXzyVyXObNGRwxFt4rM7CNWkK7bKHGouswN01VgLhS/CoQAdYikqPhXyBNr3VsxT2
-         diDkeiuvTGF0V5Z80YKndcNu3R6A3GY2h8e6Iz+s=
+        b=mYLjIUw60bJg5+rbSfQ6MD93t1VYUmtSPefEffu2qKUwVnhXkYa8uAa5fAi7i0BO7
+         Te4o38xyalKX5cBy/B4+hEd2vuW41LRLB7kfpEGhgvNDqBV4Ob+xjs7cejwY5KX8O9
+         W4k2BYCdHXQnAn2Qru6MHfw5Onw7mBHlOWy7u0M8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
+        stable@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 302/452] PCI: imx6: Fix PERST# start-up sequence
-Date:   Tue,  7 Jun 2022 19:02:39 +0200
-Message-Id: <20220607164917.558475881@linuxfoundation.org>
+Subject: [PATCH 5.10 303/452] tty: fix deadlock caused by calling printk() under tty_port->lock
+Date:   Tue,  7 Jun 2022 19:02:40 +0200
+Message-Id: <20220607164917.588080431@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
 References: <20220607164908.521895282@linuxfoundation.org>
@@ -58,96 +59,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Francesco Dolcini <francesco.dolcini@toradex.com>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
 
-[ Upstream commit a6809941c1f17f455db2cf4ca19c6d8c8746ec25 ]
+[ Upstream commit 6b9dbedbe3499fef862c4dff5217cf91f34e43b3 ]
 
-According to the PCIe standard the PERST# signal (reset-gpio in
-fsl,imx* compatible dts) should be kept asserted for at least 100 usec
-before the PCIe refclock is stable, should be kept asserted for at
-least 100 msec after the power rails are stable and the host should wait
-at least 100 msec after it is de-asserted before accessing the
-configuration space of any attached device.
+pty_write() invokes kmalloc() which may invoke a normal printk() to print
+failure message.  This can cause a deadlock in the scenario reported by
+syz-bot below:
 
->From PCIe CEM r2.0, sec 2.6.2
+       CPU0              CPU1                    CPU2
+       ----              ----                    ----
+                         lock(console_owner);
+                                                 lock(&port_lock_key);
+  lock(&port->lock);
+                         lock(&port_lock_key);
+                                                 lock(&port->lock);
+  lock(console_owner);
 
-  T-PVPERL: Power stable to PERST# inactive - 100 msec
-  T-PERST-CLK: REFCLK stable before PERST# inactive - 100 usec.
+As commit dbdda842fe96 ("printk: Add console owner and waiter logic to
+load balance console writes") said, such deadlock can be prevented by
+using printk_deferred() in kmalloc() (which is invoked in the section
+guarded by the port->lock).  But there are too many printk() on the
+kmalloc() path, and kmalloc() can be called from anywhere, so changing
+printk() to printk_deferred() is too complicated and inelegant.
 
->From PCIe r5.0, sec 6.6.1
+Therefore, this patch chooses to specify __GFP_NOWARN to kmalloc(), so
+that printk() will not be called, and this deadlock problem can be
+avoided.
 
-  With a Downstream Port that does not support Link speeds greater than
-  5.0 GT/s, software must wait a minimum of 100 ms before sending a
-  Configuration Request to the device immediately below that Port.
+Syzbot reported the following lockdep error:
 
-Failure to do so could prevent PCIe devices to be working correctly,
-and this was experienced with real devices.
+======================================================
+WARNING: possible circular locking dependency detected
+5.4.143-00237-g08ccc19a-dirty #10 Not tainted
+------------------------------------------------------
+syz-executor.4/29420 is trying to acquire lock:
+ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: console_trylock_spinning kernel/printk/printk.c:1752 [inline]
+ffffffff8aedb2a0 (console_owner){....}-{0:0}, at: vprintk_emit+0x2ca/0x470 kernel/printk/printk.c:2023
 
-Move reset assert to imx6_pcie_assert_core_reset(), this way we ensure
-that PERST# is asserted before enabling any clock, move de-assert to the
-end of imx6_pcie_deassert_core_reset() after the clock is enabled and
-deemed stable and add a new delay of 100 msec just afterward.
+but task is already holding lock:
+ffff8880119c9158 (&port->lock){-.-.}-{2:2}, at: pty_write+0xf4/0x1f0 drivers/tty/pty.c:120
 
-Link: https://lore.kernel.org/all/20220211152550.286821-1-francesco.dolcini@toradex.com
-Link: https://lore.kernel.org/r/20220404081509.94356-1-francesco.dolcini@toradex.com
-Fixes: bb38919ec56e ("PCI: imx6: Add support for i.MX6 PCIe controller")
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-Acked-by: Richard Zhu <hongxing.zhu@nxp.com>
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&port->lock){-.-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
+       tty_port_tty_get drivers/tty/tty_port.c:288 [inline]          		<-- lock(&port->lock);
+       tty_port_default_wakeup+0x1d/0xb0 drivers/tty/tty_port.c:47
+       serial8250_tx_chars+0x530/0xa80 drivers/tty/serial/8250/8250_port.c:1767
+       serial8250_handle_irq.part.0+0x31f/0x3d0 drivers/tty/serial/8250/8250_port.c:1854
+       serial8250_handle_irq drivers/tty/serial/8250/8250_port.c:1827 [inline] 	<-- lock(&port_lock_key);
+       serial8250_default_handle_irq+0xb2/0x220 drivers/tty/serial/8250/8250_port.c:1870
+       serial8250_interrupt+0xfd/0x200 drivers/tty/serial/8250/8250_core.c:126
+       __handle_irq_event_percpu+0x109/0xa50 kernel/irq/handle.c:156
+       [...]
+
+-> #1 (&port_lock_key){-.-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
+       serial8250_console_write+0x184/0xa40 drivers/tty/serial/8250/8250_port.c:3198
+										<-- lock(&port_lock_key);
+       call_console_drivers kernel/printk/printk.c:1819 [inline]
+       console_unlock+0x8cb/0xd00 kernel/printk/printk.c:2504
+       vprintk_emit+0x1b5/0x470 kernel/printk/printk.c:2024			<-- lock(console_owner);
+       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
+       printk+0xba/0xed kernel/printk/printk.c:2084
+       register_console+0x8b3/0xc10 kernel/printk/printk.c:2829
+       univ8250_console_init+0x3a/0x46 drivers/tty/serial/8250/8250_core.c:681
+       console_init+0x49d/0x6d3 kernel/printk/printk.c:2915
+       start_kernel+0x5e9/0x879 init/main.c:713
+       secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:241
+
+-> #0 (console_owner){....}-{0:0}:
+       [...]
+       lock_acquire+0x127/0x340 kernel/locking/lockdep.c:4734
+       console_trylock_spinning kernel/printk/printk.c:1773 [inline]		<-- lock(console_owner);
+       vprintk_emit+0x307/0x470 kernel/printk/printk.c:2023
+       vprintk_func+0x8d/0x250 kernel/printk/printk_safe.c:394
+       printk+0xba/0xed kernel/printk/printk.c:2084
+       fail_dump lib/fault-inject.c:45 [inline]
+       should_fail+0x67b/0x7c0 lib/fault-inject.c:144
+       __should_failslab+0x152/0x1c0 mm/failslab.c:33
+       should_failslab+0x5/0x10 mm/slab_common.c:1224
+       slab_pre_alloc_hook mm/slab.h:468 [inline]
+       slab_alloc_node mm/slub.c:2723 [inline]
+       slab_alloc mm/slub.c:2807 [inline]
+       __kmalloc+0x72/0x300 mm/slub.c:3871
+       kmalloc include/linux/slab.h:582 [inline]
+       tty_buffer_alloc+0x23f/0x2a0 drivers/tty/tty_buffer.c:175
+       __tty_buffer_request_room+0x156/0x2a0 drivers/tty/tty_buffer.c:273
+       tty_insert_flip_string_fixed_flag+0x93/0x250 drivers/tty/tty_buffer.c:318
+       tty_insert_flip_string include/linux/tty_flip.h:37 [inline]
+       pty_write+0x126/0x1f0 drivers/tty/pty.c:122				<-- lock(&port->lock);
+       n_tty_write+0xa7a/0xfc0 drivers/tty/n_tty.c:2356
+       do_tty_write drivers/tty/tty_io.c:961 [inline]
+       tty_write+0x512/0x930 drivers/tty/tty_io.c:1045
+       __vfs_write+0x76/0x100 fs/read_write.c:494
+       [...]
+
+other info that might help us debug this:
+
+Chain exists of:
+  console_owner --> &port_lock_key --> &port->lock
+
+Link: https://lkml.kernel.org/r/20220511061951.1114-2-zhengqi.arch@bytedance.com
+Link: https://lkml.kernel.org/r/20220510113809.80626-2-zhengqi.arch@bytedance.com
+Fixes: b6da31b2c07c ("tty: Fix data race in tty_insert_flip_string_fixed_flag")
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+Acked-by: Jiri Slaby <jirislaby@kernel.org>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/dwc/pci-imx6.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/tty/tty_buffer.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 5cf1ef12fb9b..ceb4815379cd 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -401,6 +401,11 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- 			dev_err(dev, "failed to disable vpcie regulator: %d\n",
- 				ret);
- 	}
-+
-+	/* Some boards don't have PCIe reset GPIO. */
-+	if (gpio_is_valid(imx6_pcie->reset_gpio))
-+		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
-+					imx6_pcie->gpio_active_high);
- }
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 0fc473321d3e..6c4a50addadd 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -172,7 +172,8 @@ static struct tty_buffer *tty_buffer_alloc(struct tty_port *port, size_t size)
+ 	   have queued and recycle that ? */
+ 	if (atomic_read(&port->buf.mem_used) > port->buf.mem_limit)
+ 		return NULL;
+-	p = kmalloc(sizeof(struct tty_buffer) + 2 * size, GFP_ATOMIC);
++	p = kmalloc(sizeof(struct tty_buffer) + 2 * size,
++		    GFP_ATOMIC | __GFP_NOWARN);
+ 	if (p == NULL)
+ 		return NULL;
  
- static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie *imx6_pcie)
-@@ -523,15 +528,6 @@ static void imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- 	/* allow the clocks to stabilize */
- 	usleep_range(200, 500);
- 
--	/* Some boards don't have PCIe reset GPIO. */
--	if (gpio_is_valid(imx6_pcie->reset_gpio)) {
--		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
--					imx6_pcie->gpio_active_high);
--		msleep(100);
--		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
--					!imx6_pcie->gpio_active_high);
--	}
--
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MQ:
- 		reset_control_deassert(imx6_pcie->pciephy_reset);
-@@ -574,6 +570,15 @@ static void imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- 		break;
- 	}
- 
-+	/* Some boards don't have PCIe reset GPIO. */
-+	if (gpio_is_valid(imx6_pcie->reset_gpio)) {
-+		msleep(100);
-+		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
-+					!imx6_pcie->gpio_active_high);
-+		/* Wait for 100ms after PERST# deassertion (PCIe r5.0, 6.6.1) */
-+		msleep(100);
-+	}
-+
- 	return;
- 
- err_ref_clk:
 -- 
 2.35.1
 

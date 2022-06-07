@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E136454108A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A802D541927
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356102AbiFGT0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S1376503AbiFGVSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352019AbiFGSdJ (ORCPT
+        with ESMTP id S1359203AbiFGUWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:33:09 -0400
+        Tue, 7 Jun 2022 16:22:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F622DF3;
-        Tue,  7 Jun 2022 10:57:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091AD1451FD;
+        Tue,  7 Jun 2022 11:31:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C591617A8;
-        Tue,  7 Jun 2022 17:57:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D29DC385A5;
-        Tue,  7 Jun 2022 17:57:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97FC461295;
+        Tue,  7 Jun 2022 18:31:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4232C385A5;
+        Tue,  7 Jun 2022 18:31:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624632;
-        bh=bV924xHDvYXj0TBQhpB/6GrV/r97XENKruel7CiVDTk=;
+        s=korg; t=1654626685;
+        bh=dJUCVa4nIa8YINdSoor1J/gc2l6XzUX9TFZT4NQvPgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F4nB+Lk02Rg2uFQ105fEPKZTwtCnyuO12XnUm8us2sgTQiNyECfLMBdXkIqEQO7yc
-         D0nJFPgXiKYEwDSVVKNJ/eybB5WEZcsq9AQTORVwz22nb/tXk7w9SmslSUB6nTvLVw
-         4KcdunZUDkIomqmz/JMgix5x7hlpmfqc1Qd0iyFE=
+        b=gGBcaAcT52IwaiFpdplmUD7TZPpWKAk3cG7lQtl4qcJ4NkqQq3bqaB5W3r8rvoPzv
+         MHQRNqMwz3jmCNISdT8scqtrRNj6XB6hq1u9+p//p6MUyxrU8eQxEV21iGZ/EjUcA4
+         r5U667Xv3skpMKnWKoraK855RWJLijqkn+181UGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 357/667] bfq: Relax waker detection for shared queues
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 430/772] ASoC: max98090: Move check for invalid values before casting in max98090_put_enab_tlv()
 Date:   Tue,  7 Jun 2022 19:00:22 +0200
-Message-Id: <20220607164945.462356134@linuxfoundation.org>
+Message-Id: <20220607165001.673831982@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,91 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-[ Upstream commit f950667356ce90a41b446b726d4595a10cb65415 ]
+[ Upstream commit f7a344468105ef8c54086dfdc800e6f5a8417d3e ]
 
-Currently we look for waker only if current queue has no requests. This
-makes sense for bfq queues with a single process however for shared
-queues when there is a larger number of processes the condition that
-queue has no requests is difficult to meet because often at least one
-process has some request in flight although all the others are waiting
-for the waker to do the work and this harms throughput. Relax the "no
-queued request for bfq queue" condition to "the current task has no
-queued requests yet". For this, we also need to start tracking number of
-requests in flight for each task.
+Validation of signed input should be done before casting to unsigned int.
 
-This patch (together with the following one) restores the performance
-for dbench with 128 clients that regressed with commit c65e6fd460b4
-("bfq: Do not let waker requests skip proper accounting") because
-this commit makes requests of wakers properly enter BFQ queues and thus
-these queues become ineligible for the old waker detection logic.
-Dbench results:
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-         Vanilla 5.18-rc3        5.18-rc3 + revert      5.18-rc3 patched
-Mean     1237.36 (   0.00%)      950.16 *  23.21%*      988.35 *  20.12%*
-
-Numbers are time to complete workload so lower is better.
-
-Fixes: c65e6fd460b4 ("bfq: Do not let waker requests skip proper accounting")
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220519105235.31397-1-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Suggested-by: Mark Brown <broonie@kernel.org>
+Fixes: 2fbe467bcbfc ("ASoC: max98090: Reject invalid values in custom control put()")
+Link: https://lore.kernel.org/r/1652999486-29653-1-git-send-email-khoroshilov@ispras.ru
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c | 5 +++--
- block/bfq-iosched.h | 1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ sound/soc/codecs/max98090.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 63d2d66dece5..a2aefb4a1e2e 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2022,7 +2022,6 @@ static void bfq_check_waker(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 	if (!bfqd->last_completed_rq_bfqq ||
- 	    bfqd->last_completed_rq_bfqq == bfqq ||
- 	    bfq_bfqq_has_short_ttime(bfqq) ||
--	    bfqq->dispatched > 0 ||
- 	    now_ns - bfqd->last_completion >= 4 * NSEC_PER_MSEC ||
- 	    bfqd->last_completed_rq_bfqq == bfqq->waker_bfqq)
- 		return;
-@@ -2084,7 +2083,7 @@ static void bfq_add_request(struct request *rq)
- 	bfqq->queued[rq_is_sync(rq)]++;
- 	bfqd->queued++;
+diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
+index 62b41ca050a2..5513acd360b8 100644
+--- a/sound/soc/codecs/max98090.c
++++ b/sound/soc/codecs/max98090.c
+@@ -393,7 +393,8 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
+ 	struct soc_mixer_control *mc =
+ 		(struct soc_mixer_control *)kcontrol->private_value;
+ 	unsigned int mask = (1 << fls(mc->max)) - 1;
+-	unsigned int sel = ucontrol->value.integer.value[0];
++	int sel_unchecked = ucontrol->value.integer.value[0];
++	unsigned int sel;
+ 	unsigned int val = snd_soc_component_read(component, mc->reg);
+ 	unsigned int *select;
  
--	if (RB_EMPTY_ROOT(&bfqq->sort_list) && bfq_bfqq_sync(bfqq)) {
-+	if (bfq_bfqq_sync(bfqq) && RQ_BIC(rq)->requests <= 1) {
- 		bfq_check_waker(bfqd, bfqq, now_ns);
+@@ -413,8 +414,9 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
  
- 		/*
-@@ -6422,6 +6421,7 @@ static void bfq_finish_requeue_request(struct request *rq)
- 		bfq_completed_request(bfqq, bfqd);
- 	}
- 	bfq_finish_requeue_request_body(bfqq);
-+	RQ_BIC(rq)->requests--;
- 	spin_unlock_irqrestore(&bfqd->lock, flags);
+ 	val = (val >> mc->shift) & mask;
  
- 	/*
-@@ -6643,6 +6643,7 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+-	if (sel < 0 || sel > mc->max)
++	if (sel_unchecked < 0 || sel_unchecked > mc->max)
+ 		return -EINVAL;
++	sel = sel_unchecked;
  
- 	bfqq->allocated++;
- 	bfqq->ref++;
-+	bic->requests++;
- 	bfq_log_bfqq(bfqd, bfqq, "get_request %p: bfqq %p, %d",
- 		     rq, bfqq, bfqq->ref);
+ 	*select = sel;
  
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index a73488eec8a4..9dc87d3c40c3 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -466,6 +466,7 @@ struct bfq_io_cq {
- 	struct bfq_queue *stable_merge_bfqq;
- 
- 	bool stably_merged;	/* non splittable if true */
-+	unsigned int requests;	/* Number of requests this process has in flight */
- };
- 
- /**
 -- 
 2.35.1
 

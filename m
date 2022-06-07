@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABF2542414
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF845426BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442519AbiFHAyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 20:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S233079AbiFHCOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 22:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455449AbiFGXSl (ORCPT
+        with ESMTP id S1390063AbiFHBGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:18:41 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68CB21C612
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 14:15:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n8so15908499plh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 14:15:48 -0700 (PDT)
+        Tue, 7 Jun 2022 21:06:01 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929D914AC98;
+        Tue,  7 Jun 2022 14:16:12 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id n8so15909274plh.1;
+        Tue, 07 Jun 2022 14:16:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jT8DLfbyhUAC8YupnNkx7/WPeiPnBTRo6q4n9p3S9IY=;
-        b=VlUgXcU9owX1EBIje6hBA2fwQ9kjFpI9bPxIwfz3BBF+P0QwC14EOuzXoFF8wDys4m
-         LvFexAAmIgm9t44ySB3iZn4tl5NRcrd+xFuGu0qVyxf3w/br+VLAlQmjgGoWKBREO2gT
-         mBi4xnNl9LeVoaIH1Mm5CLnk7Jt6LFoQ9GNFo=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=4ynvHOuA0UQNC2oRu92nWz6l84967KcpkXtkWQovvGY=;
+        b=mTIl9CfWrG+VkaAtrQuOjn2IDncZ/sAU+K6Sv0WHMpCrbrYuncJcRW5kG7Q9uhy2ak
+         Plj5CfsWLG8GtAEv/XmPHw1NJUt/xzg5SaM7RKSCTWvc+1Crks/VDgv8z5dwSyXZ3qGd
+         jXRPIjjth0TPhlImr12DV4mUzetCL1Q1tOU54OQa/hACA9RWdZje4LiD9O+CLYK98li+
+         g3XtL8TAET8eLeSSn9o9AMBa9x/y3ybbx7fwY6zRce/7dytYPUa5VRU4PyxG5WCWFvEw
+         VsHPwTJshGJhU1wB1NCM3FJN9jiL233OXzoYAhRyvImWN5XHtZQMOCSf+UGf92TpoFtg
+         qjCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jT8DLfbyhUAC8YupnNkx7/WPeiPnBTRo6q4n9p3S9IY=;
-        b=yBXlPYXrPXOPXfsJpjeu7NA7wVZv1l7nAt0GoFfNKUtpZIKtD1RpL/qTbXKANu5l9w
-         0HygvSEhGTbng7awSI596Fmbk23hk22pcPx8WigQYWI/lWO/E8F+9ip77z6Z260dyMmU
-         DqYZBRYRpJIMtyoLgYhhyt5ylOIr6LNdljKPFQO7DvZ3FNb9+4io1EGKVv1Uiu125phV
-         x/nb4ogXqj6a0fWHqtOuJREZh1wPPcah1ZxZoDjLX9Wf/AZ5JLVHNTJR2NoL3CVRIWLM
-         8tsWqGN3mqOYRDBYnETBmDk8I5JmSGvgKK2+mEALzbkhy5oxYwozM4hsWOI/LDP4F+A5
-         bBEg==
-X-Gm-Message-State: AOAM5301IVm5SAA2JCdKl5cdUYVww3xtHl/fb09OB2rVWkOXcZxueNBc
-        iU2AQOF6mI3ceesDjzahX4Xoaw==
-X-Google-Smtp-Source: ABdhPJxhFzWqzH75FBiSKGcGqopAKv26dB/QVu2+AEpLNrGFVc0gxO7a4bpodDrd1FVbJmDNPWR2Tg==
-X-Received: by 2002:a17:903:110e:b0:167:8847:5d9d with SMTP id n14-20020a170903110e00b0016788475d9dmr8945619plh.3.1654636548284;
-        Tue, 07 Jun 2022 14:15:48 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:b689:cc5b:e6ad:930e])
-        by smtp.gmail.com with UTF8SMTPSA id g7-20020a636b07000000b003fd3a3db089sm8589907pgc.11.2022.06.07.14.15.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 14:15:47 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Brian Norris <briannorris@chromium.org>, stable@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: Assign RK3399 VDU clock rate
-Date:   Tue,  7 Jun 2022 14:15:36 -0700
-Message-Id: <20220607141535.1.Idafe043ffc94756a69426ec68872db0645c5d6e2@changeid>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=4ynvHOuA0UQNC2oRu92nWz6l84967KcpkXtkWQovvGY=;
+        b=C/Z9Ixat/y+Ip1BpklCwYJSDy7COdXNJiUcVMpzsj/Gq4DQRAVdDlVdE5MXHR9zOh2
+         i+k+SfYrdp5sWEjN/04oDRLxAWENgmEYfNObisBYc0CJ4Xh/FX7YdmPVeJ1mz0yE4N2D
+         NUsvfUrKuSpeszIsb0dJ7UoDgr88vOOWRhLN3UzU63aO8kMvf6Tlr3IOJj+kDLwIMH3n
+         /6b1U1FJRZ+oFur4mzpPh3MYr/Rqkqid5XtTR6Ns7ScY7vVb5SzPzlK2pXX7Y+EKsI4w
+         3bbkajV0kUUo4yAffjN1eLT9xq4V0aoG+du3RpRrIOkXG4ea+gi7GK0VB7OJkNCCvec/
+         7eiA==
+X-Gm-Message-State: AOAM533zHwaLZ9KBJo9VTRn6h8hfvENPx3J1IKD1fECPbgXxcQ66oLlH
+        63DTPzHbDIR+XpG6J2wLmPM=
+X-Google-Smtp-Source: ABdhPJwmjbCHibWwnEg/qIGFL8LWHE1mijj1VoqSthY2/03Kk5agVP1W9zKbb4ON/+xsIQKayZGAmA==
+X-Received: by 2002:a17:903:110c:b0:15f:f15:30ec with SMTP id n12-20020a170903110c00b0015f0f1530ecmr30960450plh.162.1654636571800;
+        Tue, 07 Jun 2022 14:16:11 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:1ce8:21b3:ff45:f42c])
+        by smtp.gmail.com with ESMTPSA id cp14-20020a170902e78e00b00165103c9903sm12904952plb.113.2022.06.07.14.16.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 14:16:10 -0700 (PDT)
+Date:   Tue, 7 Jun 2022 14:16:08 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [git pull] Input updates for v5.19-rc1
+Message-ID: <Yp/AGMpXXnx9lW6j@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before commit 9998943f6dfc ("media: rkvdec: Stop overclocking the
-decoder"), the rkvdec driver was forcing the VDU clock rate. After that
-commit, we rely on the default clock rate. That rate works OK on many
-boards, with the default PLL settings (CPLL is 800MHz, VDU dividers
-leave it at 400MHz); but some boards change PLL settings.
+Hi Linus,
 
-Assign the expected default clock rate explicitly, so that the rate is
-consistent, regardless of PLL configuration.
+Please pull from:
 
-This was particularly broken on RK3399 Gru Scarlet systems, where the
-rk3399-gru-scarlet.dtsi assigns PLL_CPLL to 1.6 GHz, and so the VDU
-clock ends up at 800 MHz (twice the expected rate), and causes video
-artifacts and other issues.
+	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v5.19-rc1
 
-Note: I assign the clock rate in the clock controller instead of the
-vdec node, because there are multiple nodes that use this clock, and per
-the clock.yaml specification:
+to receive updates for the input subsystem. You will get:
 
-  Configuring a clock's parent and rate through the device node that
-  consumes the clock can be done only for clocks that have a single
-  user. Specifying conflicting parent or rate configuration in multiple
-  consumer nodes for a shared clock is forbidden.
+- proper annotation of USB buffers in bcm5974 touchpad dirver
 
-  Configuration of common clocks, which affect multiple consumer devices
-  can be similarly specified in the clock provider node.
+- a quirk in SOC button driver to handle Lenovo Yoga Tablet2 1051F
 
-Fixes: 9998943f6dfc ("media: rkvdec: Stop overclocking the decoder")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-This is a candidate for 5.19 IMO, since commit 9998943f6dfc landed in
-5.19-rc1 and is being queued up for -stable as we speak.
+- a fix for missing dependency in raspberrypi-ts driver to avoid
+  compile breakages with random configs.
 
- arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi | 4 +++-
- arch/arm64/boot/dts/rockchip/rk3399.dtsi             | 6 ++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Changelog:
+---------
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-index 913d845eb51a..1977103a5ef4 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-@@ -376,7 +376,8 @@ &cru {
- 		<&cru ACLK_VIO>,
- 		<&cru ACLK_GIC_PRE>,
- 		<&cru PCLK_DDR>,
--		<&cru ACLK_HDCP>;
-+		<&cru ACLK_HDCP>,
-+		<&cru ACLK_VDU>;
- 	assigned-clock-rates =
- 		<600000000>, <1600000000>,
- 		<1000000000>,
-@@ -388,6 +389,7 @@ &cru {
- 		<400000000>,
- 		<200000000>,
- 		<200000000>,
-+		<400000000>,
- 		<400000000>;
- };
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index fbd0346624e6..9d5b0e8c9cca 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1462,7 +1462,8 @@ cru: clock-controller@ff760000 {
- 			<&cru HCLK_PERILP1>, <&cru PCLK_PERILP1>,
- 			<&cru ACLK_VIO>, <&cru ACLK_HDCP>,
- 			<&cru ACLK_GIC_PRE>,
--			<&cru PCLK_DDR>;
-+			<&cru PCLK_DDR>,
-+			<&cru ACLK_VDU>;
- 		assigned-clock-rates =
- 			 <594000000>,  <800000000>,
- 			<1000000000>,
-@@ -1473,7 +1474,8 @@ cru: clock-controller@ff760000 {
- 			 <100000000>,   <50000000>,
- 			 <400000000>, <400000000>,
- 			 <200000000>,
--			 <200000000>;
-+			 <200000000>,
-+			 <400000000>;
- 	};
- 
- 	grf: syscon@ff770000 {
+Marius Hoch (1):
+      Input: soc_button_array - also add Lenovo Yoga Tablet2 1051F to dmi_use_low_level_irq
+
+Mathias Nyman (1):
+      Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
+
+Randy Dunlap (1):
+      Input: raspberrypi-ts - add missing HAS_IOMEM dependency
+
+Diffstat:
+--------
+
+ drivers/input/joystick/Kconfig        | 1 +
+ drivers/input/misc/soc_button_array.c | 4 ++--
+ drivers/input/mouse/bcm5974.c         | 7 ++++++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+Thanks.
+
+
 -- 
-2.36.1.255.ge46751e96f-goog
-
+Dmitry

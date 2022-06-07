@@ -2,122 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6AA53F9EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3631053F9F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 11:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239780AbiFGJgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 05:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S239734AbiFGJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 05:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239250AbiFGJfj (ORCPT
+        with ESMTP id S239781AbiFGJgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 05:35:39 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CBEDE64D7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:35:38 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx707oG59igiYeAA--.40558S2;
-        Tue, 07 Jun 2022 17:35:36 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-kernel@vger.kernel.org
-Subject: [PATCH] samples: Use KSYM_NAME_LEN for fprobe and kprobes
-Date:   Tue,  7 Jun 2022 17:35:36 +0800
-Message-Id: <1654594536-2915-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx707oG59igiYeAA--.40558S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1DJr4fAr1DWFyxJFyDtrb_yoW5XF1DpF
-        1q9ayagr45AF1UJ39xJw1rW34Iq34kur47GF4rGw18t3W29r1kAFWxta1UKaykZF9Yq3W3
-        Gr42gryrJryxJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUUPl13UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 7 Jun 2022 05:36:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AF96E7303
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 02:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654594604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TMMeeMzg716+0kOPZ1kJNvGjEZ2CaNLxMnft4GZfeHg=;
+        b=LyTGbruzfIMPJ0Wr8bsONkXhgYqIZjKrEOCT6p4+xHn+PvkigTff440SSf4m520DZhQvSX
+        PMKLLf8WiVtfcw9WBdK3jHYssCH+4a3eyfk8yzPdFnm6QQFLA+sulvSjq0Wm9eO6TdZpiM
+        PNkaZ3eANqi7tcz5OSwW1zncMG0FF/E=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-_eitluRsNH2XWF-hbyOrzg-1; Tue, 07 Jun 2022 05:36:43 -0400
+X-MC-Unique: _eitluRsNH2XWF-hbyOrzg-1
+Received: by mail-qt1-f199.google.com with SMTP id s7-20020ac85cc7000000b00304e11cb41fso8553110qta.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 02:36:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=TMMeeMzg716+0kOPZ1kJNvGjEZ2CaNLxMnft4GZfeHg=;
+        b=z0V6++8dCCYquPkaozlhpY2Abe9UEp08RHnSCCtDhjTagCFuNKVlASXiM0tCryYtlc
+         7ck/JMVyo+/3my3fcjyW93xBBhqJX/HXc94O3iYt8YJyG+uuG4sJO9HcFtYDgMIJ9S2G
+         ro3Tto9Q7cz45ymbN9geDJ9HZlU2Rv+wjHg60TX3P4pl9gAwLWon0p1V7z1XKca3pYoF
+         vB6UzqbbCa2qsYhgSAIH4xGfQRdS56FMGmxePx1dxZBQ2XKHy24izXTMbLMOisnndBKF
+         3IoztgbBxp4XVg1J4Bx9eS/9YSc7iX2n7okjTDiHMGOrYXGvT1nW5bw4tax4nauhcKl/
+         seDA==
+X-Gm-Message-State: AOAM532f2mf3PQ80NrZFEsu8f+vKmh3fcDOlwLBODC4Nzsu0KnCcclVu
+        W+bm9LJdenUB3oPXFy1rSA1425fUNEWrGIJjPlBIDjlRECmAgWZEFqUR7CLLrInHgDijEet9J/S
+        azU8uX5YF7PMRVM5yks0xs1RA
+X-Received: by 2002:a05:6214:27cc:b0:46b:bc28:7d4f with SMTP id ge12-20020a05621427cc00b0046bbc287d4fmr846708qvb.80.1654594603148;
+        Tue, 07 Jun 2022 02:36:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyxCcLZX3ofJobo0dvjnhTkv9nwj9+XltzUdXK0HEeglyTnAe0VqZK4gyQ2MmA2ovb/JOXvEg==
+X-Received: by 2002:a05:6214:27cc:b0:46b:bc28:7d4f with SMTP id ge12-20020a05621427cc00b0046bbc287d4fmr846702qvb.80.1654594602958;
+        Tue, 07 Jun 2022 02:36:42 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id bm13-20020a05620a198d00b006a6d83fc9efsm1031130qkb.21.2022.06.07.02.36.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 02:36:42 -0700 (PDT)
+Message-ID: <c89186f11fa1eb3563b791ba68cca4a533aa537f.camel@redhat.com>
+Subject: Re: [PATCH v6 14/38] KVM: nSVM: Keep track of Hyper-V
+ hv_vm_id/hv_vp_id
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Jun 2022 12:36:38 +0300
+In-Reply-To: <20220606083655.2014609-15-vkuznets@redhat.com>
+References: <20220606083655.2014609-1-vkuznets@redhat.com>
+         <20220606083655.2014609-15-vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is better and enough to use KSYM_NAME_LEN for fprobe and kprobes
-in samples, no need to define and use the other values.
+On Mon, 2022-06-06 at 10:36 +0200, Vitaly Kuznetsov wrote:
+> Similar to nSVM, KVM needs to know L2's VM_ID/VP_ID and Partition
+> assist page address to handle L2 TLB flush requests.
+> 
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/svm/hyperv.h | 16 ++++++++++++++++
+>  arch/x86/kvm/svm/nested.c |  2 ++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
+> index 7d6d97968fb9..8cf702fed7e5 100644
+> --- a/arch/x86/kvm/svm/hyperv.h
+> +++ b/arch/x86/kvm/svm/hyperv.h
+> @@ -9,6 +9,7 @@
+>  #include <asm/mshyperv.h>
+>  
+>  #include "../hyperv.h"
+> +#include "svm.h"
+>  
+>  /*
+>   * Hyper-V uses the software reserved 32 bytes in VMCB
+> @@ -32,4 +33,19 @@ struct hv_enlightenments {
+>   */
+>  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
+>  
+> +static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
+> +{
+> +       struct vcpu_svm *svm = to_svm(vcpu);
+> +       struct hv_enlightenments *hve =
+> +               (struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
+> +       struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> +
+> +       if (!hv_vcpu)
+> +               return;
+> +
+> +       hv_vcpu->nested.pa_page_gpa = hve->partition_assist_page;
+> +       hv_vcpu->nested.vm_id = hve->hv_vm_id;
+> +       hv_vcpu->nested.vp_id = hve->hv_vp_id;
+> +}
+> +
+>  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 88da8edbe1e1..e8908cc56e22 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -811,6 +811,8 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
+>         if (kvm_vcpu_apicv_active(vcpu))
+>                 kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
+>  
+> +       nested_svm_hv_update_vm_vp_ids(vcpu);
+> +
+>         return 0;
+>  }
+>  
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- samples/fprobe/fprobe_example.c     | 9 ++++-----
- samples/kprobes/kprobe_example.c    | 5 ++---
- samples/kprobes/kretprobe_example.c | 5 ++---
- 3 files changed, 8 insertions(+), 11 deletions(-)
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-diff --git a/samples/fprobe/fprobe_example.c b/samples/fprobe/fprobe_example.c
-index 24d3cf1..1ed1a69 100644
---- a/samples/fprobe/fprobe_example.c
-+++ b/samples/fprobe/fprobe_example.c
-@@ -19,13 +19,12 @@
- #include <linux/slab.h>
- 
- #define BACKTRACE_DEPTH 16
--#define MAX_SYMBOL_LEN 4096
- struct fprobe sample_probe;
- 
--static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
--module_param_string(symbol, symbol, sizeof(symbol), 0644);
--static char nosymbol[MAX_SYMBOL_LEN] = "";
--module_param_string(nosymbol, nosymbol, sizeof(nosymbol), 0644);
-+static char symbol[KSYM_NAME_LEN] = "kernel_clone";
-+module_param_string(symbol, symbol, KSYM_NAME_LEN, 0644);
-+static char nosymbol[KSYM_NAME_LEN] = "";
-+module_param_string(nosymbol, nosymbol, KSYM_NAME_LEN, 0644);
- static bool stackdump = true;
- module_param(stackdump, bool, 0644);
- 
-diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
-index f991a66..fd346f5 100644
---- a/samples/kprobes/kprobe_example.c
-+++ b/samples/kprobes/kprobe_example.c
-@@ -16,9 +16,8 @@
- #include <linux/module.h>
- #include <linux/kprobes.h>
- 
--#define MAX_SYMBOL_LEN	64
--static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
--module_param_string(symbol, symbol, sizeof(symbol), 0644);
-+static char symbol[KSYM_NAME_LEN] = "kernel_clone";
-+module_param_string(symbol, symbol, KSYM_NAME_LEN, 0644);
- 
- /* For each probe you need to allocate a kprobe structure */
- static struct kprobe kp = {
-diff --git a/samples/kprobes/kretprobe_example.c b/samples/kprobes/kretprobe_example.c
-index 228321e..cbf1654 100644
---- a/samples/kprobes/kretprobe_example.c
-+++ b/samples/kprobes/kretprobe_example.c
-@@ -23,11 +23,10 @@
- #include <linux/module.h>
- #include <linux/kprobes.h>
- #include <linux/ktime.h>
--#include <linux/limits.h>
- #include <linux/sched.h>
- 
--static char func_name[NAME_MAX] = "kernel_clone";
--module_param_string(func, func_name, NAME_MAX, S_IRUGO);
-+static char func_name[KSYM_NAME_LEN] = "kernel_clone";
-+module_param_string(func, func_name, KSYM_NAME_LEN, 0644);
- MODULE_PARM_DESC(func, "Function to kretprobe; this module will report the"
- 			" function's execution time");
- 
--- 
-2.1.0
+Best regards,
+	Maxim Levitsky
 

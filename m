@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3D95415D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF78541568
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377583AbiFGUma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S1359533AbiFGUfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 16:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357696AbiFGTmQ (ORCPT
+        with ESMTP id S1357712AbiFGTmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120231B6FD2;
-        Tue,  7 Jun 2022 11:15:53 -0700 (PDT)
+        Tue, 7 Jun 2022 15:42:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17581B6FD6;
+        Tue,  7 Jun 2022 11:15:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 148AD60B25;
-        Tue,  7 Jun 2022 18:15:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22029C385A5;
-        Tue,  7 Jun 2022 18:15:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76AF5B82368;
+        Tue,  7 Jun 2022 18:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9536C385A5;
+        Tue,  7 Jun 2022 18:15:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625752;
-        bh=7sCeoZZwV5ejs/MqSjcIaa9b6s3lSn4F1fmw+Hfrqx0=;
+        s=korg; t=1654625755;
+        bh=N8UbqJnFB6zL7Fltg5vHOaYoZGdWHnypTXLxuzrfcyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pU0ddyczvMHrnEUhG6LLw7GeSsVMgNEvcjihYZC9Sm6R8dLIdxLC6DajAhkphWLUy
-         Z1oqAevXUdQZlf4nSDIfnHsqT/nYCUBQBVpJ6BkYR51VEKunv3mxcuqyDldnvdQqD1
-         l9vwaTX4BFce+913ZTO9p2iWy4p8JDrKz2/8u/ig=
+        b=a9n8f8FnyYkh2arIa+t90QPbHrj4uE21rZldQr4S5DQhWuZbs3B4W+6lEh3vOVE/E
+         cnZPtouN0qZAI4jtR1qczgOk6XXdTtjgTEOCaLRT6Udtzk90a0vm83iN+WP8EMOhGT
+         WV+b5A5LZFf3hIshloL6V+e11ItiXxe7j9kgIwow=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jian-Hong Pan <jhp@endlessos.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Corey Minyard <cminyard@mvista.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 132/772] ACPI: PM: Block ASUS B1400CEAE from suspend to idle by default
-Date:   Tue,  7 Jun 2022 18:55:24 +0200
-Message-Id: <20220607164952.932947872@linuxfoundation.org>
+Subject: [PATCH 5.17 133/772] ipmi:ssif: Check for NULL msg when handling events and messages
+Date:   Tue,  7 Jun 2022 18:55:25 +0200
+Message-Id: <20220607164952.962507398@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -56,55 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Corey Minyard <cminyard@mvista.com>
 
-[ Upstream commit d52848620de00cde4a3a5df908e231b8c8868250 ]
+[ Upstream commit 7602b957e2404e5f98d9a40b68f1fd27f0028712 ]
 
-ASUS B1400CEAE fails to resume from suspend to idle by default.  This was
-bisected back to commit df4f9bc4fb9c ("nvme-pci: add support for ACPI
-StorageD3Enable property") but this is a red herring to the problem.
+Even though it's not possible to get into the SSIF_GETTING_MESSAGES and
+SSIF_GETTING_EVENTS states without a valid message in the msg field,
+it's probably best to be defensive here and check and print a log, since
+that means something else went wrong.
 
-Before this commit the system wasn't getting into deepest sleep state.
-Presumably this commit is allowing entry into deepest sleep state as
-advertised by firmware, but there are some other problems related to
-the wakeup.
+Also add a default clause to that switch statement to release the lock
+and print a log, in case the state variable gets messed up somehow.
 
-As it is confirmed the system works properly with S3, set the default for
-this system to S3.
-
-Reported-by: Jian-Hong Pan <jhp@endlessos.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215742
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Jian-Hong Pan <jhp@endlessos.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reported-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/sleep.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/char/ipmi/ipmi_ssif.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index d4fbea91ab6b..8a5cb115fea8 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -373,6 +373,18 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
- 		DMI_MATCH(DMI_PRODUCT_NAME, "20GGA00L00"),
- 		},
- 	},
-+	/*
-+	 * ASUS B1400CEAE hangs on resume from suspend (see
-+	 * https://bugzilla.kernel.org/show_bug.cgi?id=215742).
-+	 */
-+	{
-+	.callback = init_default_s3,
-+	.ident = "ASUS B1400CEAE",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+		DMI_MATCH(DMI_PRODUCT_NAME, "ASUS EXPERTBOOK B1400CEAE"),
-+		},
-+	},
- 	{},
- };
+diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+index 48aab77abebf..588610236de1 100644
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -814,6 +814,14 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+ 		break;
  
+ 	case SSIF_GETTING_EVENTS:
++		if (!msg) {
++			/* Should never happen, but just in case. */
++			dev_warn(&ssif_info->client->dev,
++				 "No message set while getting events\n");
++			ipmi_ssif_unlock_cond(ssif_info, flags);
++			break;
++		}
++
+ 		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
+ 			/* Error getting event, probably done. */
+ 			msg->done(msg);
+@@ -838,6 +846,14 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+ 		break;
+ 
+ 	case SSIF_GETTING_MESSAGES:
++		if (!msg) {
++			/* Should never happen, but just in case. */
++			dev_warn(&ssif_info->client->dev,
++				 "No message set while getting messages\n");
++			ipmi_ssif_unlock_cond(ssif_info, flags);
++			break;
++		}
++
+ 		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
+ 			/* Error getting event, probably done. */
+ 			msg->done(msg);
+@@ -861,6 +877,13 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+ 			deliver_recv_msg(ssif_info, msg);
+ 		}
+ 		break;
++
++	default:
++		/* Should never happen, but just in case. */
++		dev_warn(&ssif_info->client->dev,
++			 "Invalid state in message done handling: %d\n",
++			 ssif_info->ssif_state);
++		ipmi_ssif_unlock_cond(ssif_info, flags);
+ 	}
+ 
+ 	flags = ipmi_ssif_lock_cond(ssif_info, &oflags);
 -- 
 2.35.1
 

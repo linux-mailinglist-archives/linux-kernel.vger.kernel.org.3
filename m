@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50228541642
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98AC541E5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349357AbiFGUsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S1380396AbiFGW3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356974AbiFGTq2 (ORCPT
+        with ESMTP id S1380859AbiFGVRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:46:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B6B689BB;
-        Tue,  7 Jun 2022 11:18:54 -0700 (PDT)
+        Tue, 7 Jun 2022 17:17:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840D1101913;
+        Tue,  7 Jun 2022 11:57:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C06D660DE2;
-        Tue,  7 Jun 2022 18:18:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0827C3411F;
-        Tue,  7 Jun 2022 18:18:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2CCAB82399;
+        Tue,  7 Jun 2022 18:57:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E65C341C5;
+        Tue,  7 Jun 2022 18:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625931;
-        bh=FfPhJu8v9WFm9WF85DjB2S/mhUA3fz0JzrI1FkCPw8E=;
+        s=korg; t=1654628275;
+        bh=F6MgLi6wyMW1BjgCMFvbNnQ3ABKgZyDAaLloeVX9YKs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UoHLJMmbAyvCtQEKbVOjiV+hiTFhqZESwJWSq9TYJLa9aclveSsXzncR22ZlyTl4A
-         T1Puvw31mQxS5f8N3ztnoMV3yKRp6FGv1TVB36/b81+GpDmN3P1bt9r7EZIxtkZvDS
-         ajOsZjRa0nwWZrc2ujwZS3xNnW3G4mgmlut2Zp04=
+        b=yosgPeekt2IzbAta5eMKAErHNRRjgbxnWIB1/zNj09dTQtW6lVVlL/CKH218pezB2
+         D/4uuJtqR7uOcv9tclSy4B/TTHd8AXXG+j57fcbouSXfqJ64fxCZPUKWF8sgQt5yl2
+         5IGReUQQK8mvZyWXqHQvDz5p+ykKd32nVHIV/vVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Selvaraj <jo@jsfamily.in>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Nicolas Belin <nbelin@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 195/772] arm64: dts: qcom: sdm845-xiaomi-beryllium: fix typo in panels vddio-supply property
+Subject: [PATCH 5.18 269/879] drm: bridge: it66121: Fix the register page length
 Date:   Tue,  7 Jun 2022 18:56:27 +0200
-Message-Id: <20220607164954.780534251@linuxfoundation.org>
+Message-Id: <20220607165010.658226635@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Selvaraj <jo@jsfamily.in>
+From: Nicolas Belin <nbelin@baylibre.com>
 
-[ Upstream commit 1f1c494082a1f10d03ce4ee1485ee96d212e22ff ]
+[ Upstream commit 003a1bd6a2a55c16cb2451153533dbedb12bebec ]
 
-vddio is misspelled with a "0" instead of "o". Fix it.
+Set the register page length or window length to
+0x100 according to the documentation.
 
-Signed-off-by: Joel Selvaraj <jo@jsfamily.in>
-Reviewed-by: Caleb Connolly <caleb@connolly.tech>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/BY5PR02MB7009901651E6A8D5ACB0425ED91F9@BY5PR02MB7009.namprd02.prod.outlook.com
+Fixes: 988156dc2fc9 ("drm: bridge: add it66121 driver")
+Signed-off-by: Nicolas Belin <nbelin@baylibre.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220316135733.173950-3-nbelin@baylibre.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts | 2 +-
+ drivers/gpu/drm/bridge/ite-it66121.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-index 367389526b41..a97f5e89e1d0 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dts
-@@ -218,7 +218,7 @@
- 	panel@0 {
- 		compatible = "tianma,fhd-video";
- 		reg = <0>;
--		vddi0-supply = <&vreg_l14a_1p8>;
-+		vddio-supply = <&vreg_l14a_1p8>;
- 		vddpos-supply = <&lab>;
- 		vddneg-supply = <&ibb>;
+diff --git a/drivers/gpu/drm/bridge/ite-it66121.c b/drivers/gpu/drm/bridge/ite-it66121.c
+index 69288cf894b9..e81c106e2c2b 100644
+--- a/drivers/gpu/drm/bridge/ite-it66121.c
++++ b/drivers/gpu/drm/bridge/ite-it66121.c
+@@ -227,7 +227,7 @@ static const struct regmap_range_cfg it66121_regmap_banks[] = {
+ 		.selector_mask = 0x1,
+ 		.selector_shift = 0,
+ 		.window_start = 0x00,
+-		.window_len = 0x130,
++		.window_len = 0x100,
+ 	},
+ };
  
 -- 
 2.35.1

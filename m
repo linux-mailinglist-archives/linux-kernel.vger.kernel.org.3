@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0865415D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FF6541E8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 00:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377716AbiFGUnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
+        id S1385265AbiFGWbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 18:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357919AbiFGTmd (ORCPT
+        with ESMTP id S1380700AbiFGVQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:42:33 -0400
+        Tue, 7 Jun 2022 17:16:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CAA2712;
-        Tue,  7 Jun 2022 11:17:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0CE21F9AD;
+        Tue,  7 Jun 2022 11:56:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0B8B60DD7;
-        Tue,  7 Jun 2022 18:17:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCF5DC385A5;
-        Tue,  7 Jun 2022 18:17:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 711B26159D;
+        Tue,  7 Jun 2022 18:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B02C385A2;
+        Tue,  7 Jun 2022 18:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625838;
-        bh=lyG/J14veE4PPv7P93S7wmHZ8PtfDwL4ePf9On8nxYM=;
+        s=korg; t=1654628185;
+        bh=Q2EBRsgfT+PTS/7GnCfPNIMf+eKY8QMFmv+If5+/aew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rqUCkf/W0BsIchl4QhoV9GITPzNUhICsofr3gSuCQUTfsSOcxCiJKQSgfT8ZoGJES
-         +pnSpkS3CcwgELluuzerJNygEHQAlAv0S5thr6m/cL/tbVgHFPeCOskyTaCvPOIcrs
-         UA7nTpIPUeP6S4FcPNd5AuiAFjOMLfZT264f4iOk=
+        b=YqBIyGSWlL+0I6wj7UiZw3zVH+DIeZK7fDFq26sI+UuQczmmBE3hlkOW+IQ3RerF/
+         JODK7hR+M6YJTrDRYJwZ+5A4OloPoHVqlrgz1EnsMnNLYcPByO6WuiCJQodFNYXraQ
+         /inoSoaQ7k4396od8vYub/UkjAhv6eSZ55QS1xH8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 160/772] media: hantro: Stop using H.264 parameter pic_num
-Date:   Tue,  7 Jun 2022 18:55:52 +0200
-Message-Id: <20220607164953.756167625@linuxfoundation.org>
+Subject: [PATCH 5.18 235/879] PCI: microchip: Add missing chained_irq_enter()/exit() calls
+Date:   Tue,  7 Jun 2022 18:55:53 +0200
+Message-Id: <20220607165009.674819127@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
+References: <20220607165002.659942637@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,40 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Conor Dooley <conor.dooley@microchip.com>
 
-[ Upstream commit 831410700909f4e29d5af1ef26b8c59fc2d1988e ]
+[ Upstream commit 30097efa334a706f9021b9aee6efcddcfa44a78a ]
 
-The hardware expects FrameNumWrap or long_term_frame_idx. Picture
-numbers are per field, and are mostly used during the memory
-management process, which is done in userland. This fixes two
-ITU conformance tests:
+Two of the chained IRQ handlers miss their
+chained_irq_enter()/chained_irq_exit() calls, so add them in to avoid
+potentially lost interrupts.
 
-  - MR6_BT_B
-  - MR8_BT_B
-
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reported by: Bjorn Helgaas <bhelgaas@google.com>
+Link: https://lore.kernel.org/linux-pci/87h76b8nxc.wl-maz@kernel.org
+Link: https://lore.kernel.org/r/20220511095504.2273799-1-conor.dooley@microchip.com
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/hantro/hantro_h264.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/pci/controller/pcie-microchip-host.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_h264.c b/drivers/staging/media/hantro/hantro_h264.c
-index 0b4d2491be3b..228629fb3cdf 100644
---- a/drivers/staging/media/hantro/hantro_h264.c
-+++ b/drivers/staging/media/hantro/hantro_h264.c
-@@ -354,8 +354,6 @@ u16 hantro_h264_get_ref_nbr(struct hantro_ctx *ctx, unsigned int dpb_idx)
+diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/controller/pcie-microchip-host.c
+index 29d8e81e4181..8175abed0f05 100644
+--- a/drivers/pci/controller/pcie-microchip-host.c
++++ b/drivers/pci/controller/pcie-microchip-host.c
+@@ -406,6 +406,7 @@ static void mc_pcie_enable_msi(struct mc_pcie *port, void __iomem *base)
+ static void mc_handle_msi(struct irq_desc *desc)
+ {
+ 	struct mc_pcie *port = irq_desc_get_handler_data(desc);
++	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct device *dev = port->dev;
+ 	struct mc_msi *msi = &port->msi;
+ 	void __iomem *bridge_base_addr =
+@@ -414,6 +415,8 @@ static void mc_handle_msi(struct irq_desc *desc)
+ 	u32 bit;
+ 	int ret;
  
- 	if (!(dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_ACTIVE))
- 		return 0;
--	if (dpb->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
--		return dpb->pic_num;
- 	return dpb->frame_num;
++	chained_irq_enter(chip, desc);
++
+ 	status = readl_relaxed(bridge_base_addr + ISTATUS_LOCAL);
+ 	if (status & PM_MSI_INT_MSI_MASK) {
+ 		status = readl_relaxed(bridge_base_addr + ISTATUS_MSI);
+@@ -424,6 +427,8 @@ static void mc_handle_msi(struct irq_desc *desc)
+ 						    bit);
+ 		}
+ 	}
++
++	chained_irq_exit(chip, desc);
  }
  
+ static void mc_msi_bottom_irq_ack(struct irq_data *data)
+@@ -563,6 +568,7 @@ static int mc_allocate_msi_domains(struct mc_pcie *port)
+ static void mc_handle_intx(struct irq_desc *desc)
+ {
+ 	struct mc_pcie *port = irq_desc_get_handler_data(desc);
++	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct device *dev = port->dev;
+ 	void __iomem *bridge_base_addr =
+ 		port->axi_base_addr + MC_PCIE_BRIDGE_ADDR;
+@@ -570,6 +576,8 @@ static void mc_handle_intx(struct irq_desc *desc)
+ 	u32 bit;
+ 	int ret;
+ 
++	chained_irq_enter(chip, desc);
++
+ 	status = readl_relaxed(bridge_base_addr + ISTATUS_LOCAL);
+ 	if (status & PM_MSI_INT_INTX_MASK) {
+ 		status &= PM_MSI_INT_INTX_MASK;
+@@ -581,6 +589,8 @@ static void mc_handle_intx(struct irq_desc *desc)
+ 						    bit);
+ 		}
+ 	}
++
++	chained_irq_exit(chip, desc);
+ }
+ 
+ static void mc_ack_intx_irq(struct irq_data *data)
 -- 
 2.35.1
 

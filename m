@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24442541710
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C999540530
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377349AbiFGU6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S1346057AbiFGRVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358703AbiFGTxF (ORCPT
+        with ESMTP id S1345748AbiFGRTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 15:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFED26554;
-        Tue,  7 Jun 2022 11:22:10 -0700 (PDT)
+        Tue, 7 Jun 2022 13:19:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DD11059D8;
+        Tue,  7 Jun 2022 10:19:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE72A60DDF;
-        Tue,  7 Jun 2022 18:22:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA59C385A2;
-        Tue,  7 Jun 2022 18:22:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD9A8B82239;
+        Tue,  7 Jun 2022 17:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 201B5C34115;
+        Tue,  7 Jun 2022 17:19:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654626129;
-        bh=7QQ5grX8R7fbK834V+H9zWsoK0HdlbCrvTqdcW37FDI=;
+        s=korg; t=1654622346;
+        bh=sN1Kk7yA6tgJ56jtZ7RfRBdgp59iuwFaAZOanZaTchg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NCNYoc1A6dH/JTx8AS0Y4W+qLj5XGMrFzV0csTqRTQKA936HFpD+Vyd5QX0ptSsb6
-         1qyXbiXigVegEM3p6f4Z8vAPBuNLBq9kY1fkV7xAHi3VGPNUPNI+mNYX+mwDPE9Wag
-         3tJtzc8bioYoDMkxf11+bwsniy9vFft6h/0uZgkY=
+        b=lsTKQAD4ph0U5mGKx7//4MpuDy2zISm/xcYVt+YdlkBRNYpvIUUjR5VkwMTvt3QBG
+         hr224BwMKaomasD4slaSIs07lWQDqWhLkV1XI0SWUz1SXA9AOJ2Lhrfm8bArXqdY61
+         CtuNrGpVhtfrCWiYC6TwPftJRms5YApJlPRAbtxI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sinan Kaya <okaya@kernel.org>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 269/772] EDAC/dmc520: Dont print an error for each unconfigured interrupt line
-Date:   Tue,  7 Jun 2022 18:57:41 +0200
-Message-Id: <20220607164956.951769630@linuxfoundation.org>
+        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.10 005/452] riscv: Fix irq_work when SMP is disabled
+Date:   Tue,  7 Jun 2022 18:57:42 +0200
+Message-Id: <20220607164908.693223778@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-References: <20220607164948.980838585@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyler Hicks <tyhicks@linux.microsoft.com>
+From: Samuel Holland <samuel@sholland.org>
 
-[ Upstream commit ad2df24732e8956a45a00894d2163c4ee8fb0e1f ]
+commit 2273272823db6f67d57761df8116ae32e7f05bed upstream.
 
-The dmc520 driver requires that at least one interrupt line, out of the
-ten possible, is configured. The driver prints an error and returns
--EINVAL from its .probe function if there are no interrupt lines
-configured.
+irq_work is triggered via an IPI, but the IPI infrastructure is not
+included in uniprocessor kernels. As a result, irq_work never runs.
+Fall back to the tick-based irq_work implementation on uniprocessor
+configurations.
 
-Don't print a KERN_ERR level message for each interrupt line that's
-unconfigured as that can confuse users into thinking that there is an
-error condition.
-
-Before this change, the following KERN_ERR level messages would be
-reported if only dram_ecc_errc and dram_ecc_errd were configured in the
-device tree:
-
-  dmc520 68000000.dmc: IRQ ram_ecc_errc not found
-  dmc520 68000000.dmc: IRQ ram_ecc_errd not found
-  dmc520 68000000.dmc: IRQ failed_access not found
-  dmc520 68000000.dmc: IRQ failed_prog not found
-  dmc520 68000000.dmc: IRQ link_err not
-  dmc520 68000000.dmc: IRQ temperature_event not found
-  dmc520 68000000.dmc: IRQ arch_fsm not found
-  dmc520 68000000.dmc: IRQ phy_request not found
-
-Fixes: 1088750d7839 ("EDAC: Add EDAC driver for DMC520")
-Reported-by: Sinan Kaya <okaya@kernel.org>
-Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220111163800.22362-1-tyhicks@linux.microsoft.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 298447928bb1 ("riscv: Support irq_work via self IPIs")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://lore.kernel.org/r/20220430030025.58405-1-samuel@sholland.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/edac/dmc520_edac.c | 2 +-
+ arch/riscv/include/asm/irq_work.h |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/edac/dmc520_edac.c b/drivers/edac/dmc520_edac.c
-index b8a7d9594afd..1fa5ca57e9ec 100644
---- a/drivers/edac/dmc520_edac.c
-+++ b/drivers/edac/dmc520_edac.c
-@@ -489,7 +489,7 @@ static int dmc520_edac_probe(struct platform_device *pdev)
- 	dev = &pdev->dev;
+--- a/arch/riscv/include/asm/irq_work.h
++++ b/arch/riscv/include/asm/irq_work.h
+@@ -4,7 +4,7 @@
  
- 	for (idx = 0; idx < NUMBER_OF_IRQS; idx++) {
--		irq = platform_get_irq_byname(pdev, dmc520_irq_configs[idx].name);
-+		irq = platform_get_irq_byname_optional(pdev, dmc520_irq_configs[idx].name);
- 		irqs[idx] = irq;
- 		masks[idx] = dmc520_irq_configs[idx].mask;
- 		if (irq >= 0) {
--- 
-2.35.1
-
+ static inline bool arch_irq_work_has_interrupt(void)
+ {
+-	return true;
++	return IS_ENABLED(CONFIG_SMP);
+ }
+ extern void arch_irq_work_raise(void);
+ #endif /* _ASM_RISCV_IRQ_WORK_H */
 
 

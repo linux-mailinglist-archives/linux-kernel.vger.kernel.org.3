@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55A2540FDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC79540792
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354871AbiFGTOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
+        id S1348935AbiFGRuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352023AbiFGSZ2 (ORCPT
+        with ESMTP id S1346892AbiFGR3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:25:28 -0400
+        Tue, 7 Jun 2022 13:29:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B9FED8FC;
-        Tue,  7 Jun 2022 10:54:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025FA118D3D;
+        Tue,  7 Jun 2022 10:24:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E641B82371;
-        Tue,  7 Jun 2022 17:54:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8733C34115;
-        Tue,  7 Jun 2022 17:54:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95107B8220C;
+        Tue,  7 Jun 2022 17:24:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E302EC385A5;
+        Tue,  7 Jun 2022 17:24:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624479;
-        bh=4DAPFtv3WaLzM423SKo7Ac2jaansawZoDDsutoLjTnk=;
+        s=korg; t=1654622692;
+        bh=JsZE5AxHTbW00VZnJgu/U+JfgGO6KlUPjLQsTZoemWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H/irm63DsqYJHXkFWGPTeu23okalvZj5BcIpfIJIqo5dQAuQNeMwQoCmnKxrq4mPn
-         NmA1cxySESqLzBTuPjGuKLMMz4P58Ex1HoZsZ45tIdcVsDfJuxCHie0sS5bx5ddeNT
-         IJ8tpz31lvdPJSX/O1L7/gtKzMWNIYI73+cmJaaQ=
+        b=yN0HuFAU7bLNeme7ug1M/fdHkso8SVACgFjdiA/A7TdtpeRDU9lnODsYYD5LotHm9
+         mxRgQnGMx6eA52aF/UNNZVaIcd4WS/wWy8wQgFbqWg/rK/Gfn6sioQ6TsGS0H0o6A3
+         OMngP71xgLaBWOVDjkDUOwLmhNTmNc2nUjK6GZys=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Sebastian Fricke <sebastian.fricke@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 341/667] media: rkvdec: Stop overclocking the decoder
+        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 149/452] HID: hid-led: fix maximum brightness for Dream Cheeky
 Date:   Tue,  7 Jun 2022 19:00:06 +0200
-Message-Id: <20220607164944.989658102@linuxfoundation.org>
+Message-Id: <20220607164912.997486351@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
+References: <20220607164908.521895282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,52 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Jonathan Teh <jonathan.teh@outlook.com>
 
-[ Upstream commit 9998943f6dfc5d5472bfab2e38527fb6ba5e9da7 ]
+[ Upstream commit 116c3f4a78ebe478d5ad5a038baf931e93e7d748 ]
 
-While this overclock hack seems to work on some implementations
-(some ChromeBooks, RockPi4) it also causes instability on other
-implementations (notably LibreComputer Renegade, but there were more
-reports in the LibreELEC project, where this has been removed). While
-performance is indeed affected (tested with GStreamer), 4K playback
-still works as long as you don't operate in lock step and keep at
-least 1 frame ahead of time in the decode queue.
+Increase maximum brightness for Dream Cheeky to 63. Emperically
+determined based on testing in kernel 4.4 on this device:
 
-After discussion with ChromeOS members, it would seem that their
-implementation indeed used to synchronously decode each frame, so
-this hack was simply compensating for their code being less
-efficient. In my opinion, this hack should not have been included
-upstream.
+Bus 003 Device 002: ID 1d34:0004 Dream Cheeky Webmail Notifier
 
-Fixes: cd33c830448ba ("media: rkvdec: Add the rkvdec driver")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 6c7ad07e9e05 ("HID: migrate USB LED driver from usb misc to hid")
+Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/rkvdec/rkvdec.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/hid/hid-led.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
-index 4fd4a2907da7..8d700081509e 100644
---- a/drivers/staging/media/rkvdec/rkvdec.c
-+++ b/drivers/staging/media/rkvdec/rkvdec.c
-@@ -992,12 +992,6 @@ static int rkvdec_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	/*
--	 * Bump ACLK to max. possible freq. (500 MHz) to improve performance
--	 * When 4k video playback.
--	 */
--	clk_set_rate(rkvdec->clocks[0].clk, 500 * 1000 * 1000);
--
- 	rkvdec->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rkvdec->regs))
- 		return PTR_ERR(rkvdec->regs);
+diff --git a/drivers/hid/hid-led.c b/drivers/hid/hid-led.c
+index c2c66ceca132..7d82f8d426bb 100644
+--- a/drivers/hid/hid-led.c
++++ b/drivers/hid/hid-led.c
+@@ -366,7 +366,7 @@ static const struct hidled_config hidled_configs[] = {
+ 		.type = DREAM_CHEEKY,
+ 		.name = "Dream Cheeky Webmail Notifier",
+ 		.short_name = "dream_cheeky",
+-		.max_brightness = 31,
++		.max_brightness = 63,
+ 		.num_leds = 1,
+ 		.report_size = 9,
+ 		.report_type = RAW_REQUEST,
 -- 
 2.35.1
 

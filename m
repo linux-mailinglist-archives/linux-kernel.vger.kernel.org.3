@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E35553F59B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C5453F5AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 07:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236804AbiFGFmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 01:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        id S236817AbiFGFwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 01:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiFGFm2 (ORCPT
+        with ESMTP id S230090AbiFGFwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 01:42:28 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E22033E39;
-        Mon,  6 Jun 2022 22:42:24 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id m20so32875686ejj.10;
-        Mon, 06 Jun 2022 22:42:23 -0700 (PDT)
+        Tue, 7 Jun 2022 01:52:51 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE88C60D7;
+        Mon,  6 Jun 2022 22:52:49 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso19839182pjl.3;
+        Mon, 06 Jun 2022 22:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=ogw5CSsvpaaXGZURlAkQnHXVkK1HBWHlB5QWz//Ik9Q=;
+        b=LSHDyPHNWYiPhd9aFhvXZeMZ7l4rvIUdgZGJc95z/p8IVMUsEMgDxxt4bYKW86cDH7
+         pcaKtpWuNM3QPl9spSZO0VuAtwE1hPOoL0ZRKRm6SfhpSeckvXmno0/S12AuAwEnMeXX
+         HMgN8aIf17IYruMqiEnz0a3vVNwTEhexIjHWZQc0mdVZleZ4CbvLFHEbPLwSd1jY0VdV
+         jj/2nGkeXFCwAONnjy1p/AwQVId4s/LieY7MXoXeiw9UdBQ+UfKIpNpk2QS9uGl7N/Vm
+         PSsvW/ghQcfYvRMvDqTTTeFpOLMQBs33vb7OTDnB3yQwpN14w+Gfld4Nj0Wexkp3PlYc
+         bbxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jG5R0zb9PynKCeHbyahXy5XvhO7UDwbT1uGHecSuYDM=;
-        b=VwJZXtgjbVR7y96yPTdRFEvDP+LErWOBvYUW8CkY7tV/64yo1dqe5YckNhGU0U0+4m
-         IokucpmsOhx2hAJwgupLzRvZRquxyASzlgUZkoOu8PC51/X7TV5WcZ0fYOFAf1+GzSNl
-         DGjM3+8WSM+QhSzLLT2WFcgURouoA8ji5SA2MympMjaAPiVLsSHOyJAAm1Wuo7BR7lhr
-         72SYXlFIK8HR4mTUtRPGBKAVJph+jGwaMseUnZcxi9tH7tmFPPt+3BnIwArrlDr2CeYA
-         8887kRXoMLID5eY52DW96wyYM/N5Jv4AcjjyzmGplhoru/N1RMZla3CZS54Wx2hNO47u
-         JoPQ==
-X-Gm-Message-State: AOAM533ep7rCLU+Tb5JXIrA3etIK+TN90VE7k52qJs5AYg4D0TmAjINx
-        RtVHt/fT+jUQpEqvHBhMOE+na/I4+5w=
-X-Google-Smtp-Source: ABdhPJy5ogW8XnqElq0MJ4+csXjtuj6bo+OfXlM8WKgh1aJYJhrSOdGrMCWgL8a/7ihPyHouzrBI4A==
-X-Received: by 2002:a17:907:971f:b0:6ff:2d30:4b37 with SMTP id jg31-20020a170907971f00b006ff2d304b37mr24700997ejc.7.1654580542441;
-        Mon, 06 Jun 2022 22:42:22 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id x11-20020a056402414b00b0043158c608e4sm2976559eda.27.2022.06.06.22.42.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 22:42:21 -0700 (PDT)
-Message-ID: <4d4549ef-f8f8-d0cb-6d27-e6200aa14048@kernel.org>
-Date:   Tue, 7 Jun 2022 07:42:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] tty/vt: Makefile, add --unicode for loadkeys
- invocation
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220602083128.22540-1-jslaby@suse.cz>
- <20220602083128.22540-2-jslaby@suse.cz>
- <CAHp75VfsR6sVwO9iF6RA0bhVjMF1jC1_JEkv106TubPgL_m8YA@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAHp75VfsR6sVwO9iF6RA0bhVjMF1jC1_JEkv106TubPgL_m8YA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ogw5CSsvpaaXGZURlAkQnHXVkK1HBWHlB5QWz//Ik9Q=;
+        b=TGF0QH6+fBuvNdwzV4LPZAkhhumW2Zq3oPqdzKQlxhKrhCgnQSoVoymOCs3aIX5r3F
+         rM0SL0F79XLiC1L6EN9PUrqeDsP/gcSFMB9lN0OSFwjxi7MturoL1YOPd6yN42eyZChR
+         6h8HiNssTVWYdIdRJLqeUXXgp43/x3Tzib6XyPCVP9lFSN7/S27URh/SFCpS2jhuO4HH
+         HE+Ix1oUqCVhsQW3E65AD8t/cDiggIVX+nSyYeiZL2Za82PeBUHBZ7nUrOebVo88Z8Sp
+         zyFL2MoRyLXqMiQFsy9nKoylUa5K5oF2B/A+/+WiKgJqRgrnq9XgrMEKDYYtTFDSQVdp
+         lq8Q==
+X-Gm-Message-State: AOAM531c95CGnN3vJiwCoUmlOfS6XiDSeJpSLAGQhQrlajkPrBQaA2Xa
+        0tByBCeXB7Tfi+OO/bgk+RQ=
+X-Google-Smtp-Source: ABdhPJwKUJYnuFYDpS4HuEOMFjXq0u5VQn/ocFajz0YPO8VaBCHRtuFbVrX+4/4LfQ7g14HfCAgObw==
+X-Received: by 2002:a17:902:7449:b0:167:9520:d063 with SMTP id e9-20020a170902744900b001679520d063mr1592807plt.146.1654581169285;
+        Mon, 06 Jun 2022 22:52:49 -0700 (PDT)
+Received: from localhost.localdomain ([49.216.54.77])
+        by smtp.gmail.com with ESMTPSA id z41-20020a056a001da900b0051b62689ec2sm9203520pfw.129.2022.06.06.22.52.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 Jun 2022 22:52:48 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, broonie@kernel.org, dmitry.torokhov@gmail.com
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: [PATCH 0/4] Add Richtek RT5120 PMIC support
+Date:   Tue,  7 Jun 2022 13:52:37 +0800
+Message-Id: <1654581161-12349-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06. 06. 22, 16:35, Andy Shevchenko wrote:
-> On Thu, Jun 2, 2022 at 12:30 PM Jiri Slaby <jslaby@suse.cz> wrote:
->>
->> For a long time, we generate unicode tables using loadkeys. So fix
->> Makefile to use that flag too.
-> 
-> generated
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-We still do, but I didn't even know there is even a rule for that ;).
+This patch series is to add Richtek RT5120 PMIC support.
+In RT5120, it integrates four channels of buck converter, one channel of LDO,
+and one external enable channel to control the external power source.
 
-> Does it make sense to add the Fixes tag?
+ChiYuan Huang (4):
+  dt-binding: mfd: Add Richtek RT5120 PMIC support
+  mfd: rt5120: Add Richtek PMIC support
+  regulator: rt5120: Add PMIC regulator support
+  input: misc: rt5120: Add power key support
 
-I don't think so -- I don't think anyone ran the rule in the past decade 
-:P. I.e. it'd be pre-git anyway.
+ .../devicetree/bindings/mfd/richtek,rt5120.yaml    | 180 +++++++++
+ drivers/input/misc/Kconfig                         |   9 +
+ drivers/input/misc/Makefile                        |   1 +
+ drivers/input/misc/rt5120-pwrkey.c                 | 115 ++++++
+ drivers/mfd/Kconfig                                |  12 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/rt5120.c                               | 125 ++++++
+ drivers/regulator/Kconfig                          |  10 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/rt5120-regulator.c               | 417 +++++++++++++++++++++
+ 10 files changed, 871 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5120.yaml
+ create mode 100644 drivers/input/misc/rt5120-pwrkey.c
+ create mode 100644 drivers/mfd/rt5120.c
+ create mode 100644 drivers/regulator/rt5120-regulator.c
 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
->> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->> ---
->>   drivers/tty/vt/Makefile | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
->> index fe30ce512819..b3dfe9d5717e 100644
->> --- a/drivers/tty/vt/Makefile
->> +++ b/drivers/tty/vt/Makefile
->> @@ -30,6 +30,6 @@ $(obj)/defkeymap.o:  $(obj)/defkeymap.c
->>   ifdef GENERATE_KEYMAP
->>
->>   $(obj)/defkeymap.c: $(obj)/%.c: $(src)/%.map
->> -       loadkeys --mktable $< > $@
->> +       loadkeys --mktable --unicode $< > $@
->>
->>   endif
->> --
->> 2.36.1
->>
-> 
-> 
-
-thanks,
 -- 
-js
-suse labs
+2.7.4
+

@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36815403A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D4454039F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 18:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345035AbiFGQU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 12:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S1344938AbiFGQTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 12:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344968AbiFGQUK (ORCPT
+        with ESMTP id S1343714AbiFGQTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 12:20:10 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9708B100516;
-        Tue,  7 Jun 2022 09:20:08 -0700 (PDT)
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 257GJoBO025330;
-        Wed, 8 Jun 2022 01:19:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 257GJoBO025330
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1654618791;
-        bh=6jn4g0bEm4pnbqpqYo5valb6ctHlAIo3Yj8rwsQtilo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=U/Obnu8qP3eDyfPEa2ueMu5okOo9mz3I4EcmjOnQIFg+NfCPrXR/Hgd+jbCy8r4TM
-         9p1ROeAQ/56dphxgCypDD+pHDkVU8LIJLkPlJgjNba9//HrvwbxI0zLNo4lHP93QI/
-         9g+UwvUjRmdQ9XBNL12/Aphcf/Rtsy7yzy7Js2ichMEEjAqw+I2ksHY6ZAn8xPMpw4
-         jXVGsYhjnvouUdqyDoP0rSZHVTCcTTzCjJsGSWq/0Pbzdi3o89NwTDpG53wHLms2L+
-         4zno6JlEvdFy+wtjIvoXJG9K1JlX2BlW65gPB0fs8tm3zyQakERR+uprcvrrAbFa7d
-         OuiWz6wjNdecw==
-X-Nifty-SrcIP: [209.85.210.182]
-Received: by mail-pf1-f182.google.com with SMTP id j6so15909329pfe.13;
-        Tue, 07 Jun 2022 09:19:51 -0700 (PDT)
-X-Gm-Message-State: AOAM533cIR/QsRjrSlVXpd7+woCeptCpRdIdGpRNbtxB9D2bo9i9y05Q
-        uKml8FULNHnlKz86EyBwHh/eNOF0khesLQs994w=
-X-Google-Smtp-Source: ABdhPJz5DeWEk7jFaz5r/SLeE6TLHxM5/3UGC85lnyTqC7mkSeVa3DqNqn5kbJoQ1Ag0SxD1MwqgQ2YERlTO5QBkWLk=
-X-Received: by 2002:a05:6a00:2349:b0:51c:29c0:82f6 with SMTP id
- j9-20020a056a00234900b0051c29c082f6mr8191041pfj.32.1654618790202; Tue, 07 Jun
- 2022 09:19:50 -0700 (PDT)
+        Tue, 7 Jun 2022 12:19:38 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AE9101715;
+        Tue,  7 Jun 2022 09:19:37 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id 134so9724077iou.12;
+        Tue, 07 Jun 2022 09:19:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T8bDFzFxvGKBXIa1I0lB1TI0RNvCh77l2ZFzrHICquA=;
+        b=toHO4jjq+9pb1EcDTWh377j/Z4lEvzFmh/24XMX4DqcMlDYfIoVhnTRRWvY9vak4pk
+         pk8RpzDcz22HZ+taEPuFbIBjBu7lNTgHzGTlz6fwnjt3bQASKGwiWN9VgC7iqlW08jhn
+         1KW+oMf+cu1GaQz78PW0bgUewIr8dqW5yA8Cvh9fy97FlG/v+se2wZ1sgmxRLJjwxhEi
+         DWVW0JXeqSQfRwgxGzQT6wxNrzT/FqlStnc/6XiyTy/322uveZZP/PLm6Fu83bDXbouy
+         9fu0A2GQbHuEo2yrgpddgBrSaz+qvRjBQYNII2Bd3P4vFvVLZOJhhjLzpuX9N+7L6YoW
+         Qz8A==
+X-Gm-Message-State: AOAM533d81of+n23h68OkSOtb8/kLx55/cCbvn4siCFn1JVUq1Do5Zj2
+        DT3TIlNYwJpWSyjGEjkr6Q==
+X-Google-Smtp-Source: ABdhPJznA3tBEmTJuk9dMlI0xK1ImseC7RMKP1A1Ss/doNhS2WbvIuDdne9RTEmT/Vyt1gLcxzNPog==
+X-Received: by 2002:a05:6602:14cc:b0:669:7561:ee0d with SMTP id b12-20020a05660214cc00b006697561ee0dmr2260716iow.156.1654618776943;
+        Tue, 07 Jun 2022 09:19:36 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id x19-20020a056602211300b0065a47e16f49sm1945360iox.27.2022.06.07.09.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 09:19:36 -0700 (PDT)
+Received: (nullmailer pid 3370017 invoked by uid 1000);
+        Tue, 07 Jun 2022 16:19:34 -0000
+Date:   Tue, 7 Jun 2022 10:19:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-can@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next 1/2] dt-bindings: can: mpfs: document the mpfs
+ can controller
+Message-ID: <20220607161934.GA3369934-robh@kernel.org>
+References: <20220607065459.2035746-1-conor.dooley@microchip.com>
+ <20220607065459.2035746-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-References: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
-In-Reply-To: <368129160298161a9eb40ad4f489458be6be3b6f.1654569774.git.kevin@kevinlocke.name>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 8 Jun 2022 01:19:12 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQZqpXw4UVzFtg55ewgCrgGu3BGHNj3mB0YNfiswAT12Q@mail.gmail.com>
-Message-ID: <CAK7LNAQZqpXw4UVzFtg55ewgCrgGu3BGHNj3mB0YNfiswAT12Q@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: avoid regex RS for POSIX awk
-To:     Kevin Locke <kevin@kevinlocke.name>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220607065459.2035746-2-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 11:43 AM Kevin Locke <kevin@kevinlocke.name> wrote:
->
-> In 22f26f21774f8 awk was added to deduplicate *.mod files.  The awk
-> invocation passes -v RS='( |\n)' to match a space or newline character
-> as the record separator.  Unfortunately, POSIX states[1]
->
-> > If RS contains more than one character, the results are unspecified.
->
-> Some implementations (such as the One True Awk[2] used by the BSDs) do
-> not treat RS as a regular expression.  When awk does not support regex
-> RS, build failures such as the following are produced (first error using
-> allmodconfig):
->
->       CC [M]  arch/x86/events/intel/uncore.o
->       CC [M]  arch/x86/events/intel/uncore_nhmex.o
->       CC [M]  arch/x86/events/intel/uncore_snb.o
->       CC [M]  arch/x86/events/intel/uncore_snbep.o
->       CC [M]  arch/x86/events/intel/uncore_discovery.o
->       LD [M]  arch/x86/events/intel/intel-uncore.o
->     ld: cannot find uncore_nhmex.o: No such file or directory
->     ld: cannot find uncore_snb.o: No such file or directory
->     ld: cannot find uncore_snbep.o: No such file or directory
->     ld: cannot find uncore_discovery.o: No such file or directory
->     make[3]: *** [scripts/Makefile.build:422: arch/x86/events/intel/intel-uncore.o] Error 1
->     make[2]: *** [scripts/Makefile.build:487: arch/x86/events/intel] Error 2
->     make[1]: *** [scripts/Makefile.build:487: arch/x86/events] Error 2
->     make: *** [Makefile:1839: arch/x86] Error 2
->
-> To avoid this, use printf(1) to produce a newline between each object
-> path, instead of the space produced by echo(1), so that the default RS
-> can be used by awk.
->
-> [1]: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/awk.html
-> [2]: https://github.com/onetrueawk/awk
->
-> Fixes: 22f26f21774f ("kbuild: get rid of duplication in *.mod files")
-> Signed-off-by: Kevin Locke <kevin@kevinlocke.name>
+On Tue, 07 Jun 2022 07:54:59 +0100, Conor Dooley wrote:
+> Add a binding for the can controller on PolarFire SoC (MPFS).
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
+>  .../bindings/net/can/microchip,mpfs-can.yaml  | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
+> 
 
-Portable and clean solution!
-
-Applied to linux-kbuild/fixes. Thanks.
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Reviewed-by: Rob Herring <robh@kernel.org>

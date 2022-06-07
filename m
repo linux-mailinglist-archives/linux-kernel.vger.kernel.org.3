@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2CA5407A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1347954072C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348253AbiFGRti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S1347938AbiFGRnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 13:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347875AbiFGRbU (ORCPT
+        with ESMTP id S1347929AbiFGRbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:31:20 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B95A11469E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:28:40 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31332df12a6so35579037b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:28:40 -0700 (PDT)
+        Tue, 7 Jun 2022 13:31:23 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBAD11CA39
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 10:28:50 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id a30so13527487ybj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 10:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7rYLYDe80leH68JeXvH0gMR/2Fmm2d87F6uzTt2pDIM=;
-        b=HYlFKKTCVa93BZYhT6TxJ+x/USTpqJ/7Br94kTb9fWRan1dSpVoztuo1fRWt1T2KCH
-         1nU2eNJzrBr2D5nnRP28LbTPlSCUw9H6nzMwsDGoQALupB1swupdNFxFltBegYWSVQrC
-         qlOJ+aUvtGgyT7oz2n+nfdLhkcbWCfI0X7G4ib83LbaRm+figmlx8wymkW1JkBDFSxMJ
-         4afp6SCGn/O69V2UEoPnZoh98FXuOhYb658C/8ZWF4HMnO2aOt0YvDW4flgHbW3m2vyR
-         Zzyf8lCPIof03dKksgOZadwpduhXQWXQ1gcLQkHofbMIrkFytzc7+/mjhel3KMJdnds3
-         ZexA==
+        bh=l5Ny4vgpruxYpshg53Ln1+iWeupUNnsukjnUC5UYdOM=;
+        b=BBJq9HytOh8xqxG1MIN1sKtwK93Z7XU0MrDJECq3md+sm3yv1Xd5ltQXskFQhI9cME
+         iqcZ9LmhLZmyYaUghSjx79Y3A9LnqA8BoWAQaDvZPU2hEkMar5IWHpM6xzZg/BYj/SOO
+         pKQokFSBBVEHE1fF81pZ9o0aayaFRGoalN4PoaGghXIx66v8ke+Qu8TkXYoVgIg1Whi6
+         Y41JGO1oBbH2l//UapjVIss2VHKyFlwqVipz08haTjCsWor+ebXOuLOQN1ZFmGxHwTzk
+         8Ls8CmFF+wACLiX04kX8dUmr+Drp1mnOCz/GLvyFC6jMMGeARI1pnpk6sT2ZJ5OBPKPU
+         4Sxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7rYLYDe80leH68JeXvH0gMR/2Fmm2d87F6uzTt2pDIM=;
-        b=jeulMvdOlEp6eaYkxvXJxRCRHkfGUJT+zY3UhhQhFdpGbSYVYcZETBkJ2GMEOTF26R
-         8Vl0JJQeW+Hjj/n1kwBxLTnOUSRlhBDhmGsP8zAewKO+SYnXBzrkONIqlNw9l5B3fDyX
-         6y1X6HHWWGdxssZdMSe+xKE73oB8brSN5BqSH+quWn2qhUXGND0MCFTZyckjdxwFn2Ec
-         Wvp4ZOjYt+SFz+JezIDBBsWOLVMi/VRsmwD+gW7G6L2UprJNSKuzQLpOZ5jvTN3pVQla
-         l6AxIEgxVTn6Ue7bfS7+7GC4iKrCknhq7ZzvPlxVaBEDbHKZJMUuwuo6RKLLhHrjAgFj
-         7J2Q==
-X-Gm-Message-State: AOAM532mDpLRxVB3jLj7ZQsGSRe6bKJhYAoBr7DrnN8cS7vO19Dni9oY
-        E3y+irI6hyv55cJe64GtXaIEvG2+C/Cx4ZVssYPpYg==
-X-Google-Smtp-Source: ABdhPJwhe6eTXmsaYuozzlw5/bcPNSakjdg8PilLKL1XuLwlc3FBrHJdRi2+PAGvz5p/+mSNyQPuI/0hQmwPHWTyxiY=
-X-Received: by 2002:a81:b401:0:b0:300:2e86:e7e5 with SMTP id
- h1-20020a81b401000000b003002e86e7e5mr31623346ywi.467.1654622919171; Tue, 07
- Jun 2022 10:28:39 -0700 (PDT)
+        bh=l5Ny4vgpruxYpshg53Ln1+iWeupUNnsukjnUC5UYdOM=;
+        b=pzc8sGNvKh+QQg9KzzJBBlXPr36VAz/f6w59Xf/Fb9WKi2/ppxrfm5yqbNWg1O/kSv
+         EP3Qm7upYXmskwmdtLT+27yHZGJIdBBDXIDZB70TE6tmBftpB5tYglcFV4ZkFN/Q95Hz
+         vrP2ouEMKb5V7C8tz0rk8s684CFuOeTgqJ1UgU6tiRkx2Q2+fJn+KZdklYBbFDyhKycs
+         8CXV0aorbzl+esNf3St+JfGccvkSxCRnAadlwpev/+IPqwt0GlpuypniuAyf8cCvmkRM
+         GD0Edfm0oPq5t6lk6EmhGzUKEdtMfjtzcVDJBODAyND7CkHJRVVBf+VW9be+Hoho0/nW
+         C/QQ==
+X-Gm-Message-State: AOAM531IE2sCLmaZhZzz6zWdxgqw4LNo2bY1pI8EH6YnMRI62YD9/ztN
+        PQ8OADMU1zPY+kWtfTNzGCjvvFLZDzq1U/8O0qB+9w==
+X-Google-Smtp-Source: ABdhPJyCEAFCNtMQmhR5UYxtFrfEzTiCy9SVm2wDE9nWaR1to3z/P80hc9CgpRNlzwlULqatodrIZhEznz2u+MaX8VE=
+X-Received: by 2002:a05:6902:2d1:b0:64d:de34:b776 with SMTP id
+ w17-20020a05690202d100b0064dde34b776mr30363589ybh.215.1654622929315; Tue, 07
+ Jun 2022 10:28:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220607161627.25035-1-xiaohuizhang@ruc.edu.cn>
-In-Reply-To: <20220607161627.25035-1-xiaohuizhang@ruc.edu.cn>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 7 Jun 2022 10:28:27 -0700
-Message-ID: <CANn89iLwEFrb7q2ifqRxc2nvi_-YOwQpdFf0X1N5AH_wSSZ48Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] l2tp: fix possible use-after-free
-To:     Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Xin Xiong <xiongx18@fudan.edu.cn>,
-        Tom Parkin <tparkin@katalix.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com> <YnE4ZzzVrxUnr3Uv@zn.tnic>
+ <20220506153013.e6v4q2qhuhqumfiu@box.shutemov.name> <YnpGnMoviGoK4Ucq@zn.tnic>
+ <CAAH4kHYRxgUNnGRUO473q02q3akLzgiTvbA2qKEP5jq6jFV-uA@mail.gmail.com>
+ <Yn4ed1gupKmNz2jn@zn.tnic> <20220513144515.fx2cvo3rjued3vy5@black.fi.intel.com>
+ <PH0PR11MB5064B561086BE6350CC1DCDCC5CF9@PH0PR11MB5064.namprd11.prod.outlook.com>
+ <CAAH4kHbU4FJ=veYQxncdpYD837M90vq2o2saVaUCJ6=pfuNRpA@mail.gmail.com>
+ <0c545c5f-3540-1441-7a7d-359b6795f43a@amd.com> <CAAH4kHYj9WOKngeXYL=KnNb1fXa-MaFGTBGZcBX726Od858Q3A@mail.gmail.com>
+ <19ac7bbc-82f1-8350-8638-163303d682b1@amd.com> <CAAH4kHbPyCAxwQgqPpgDQ3bEioHZ+WboUMGTHazxC9f9jEEwWg@mail.gmail.com>
+In-Reply-To: <CAAH4kHbPyCAxwQgqPpgDQ3bEioHZ+WboUMGTHazxC9f9jEEwWg@mail.gmail.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 7 Jun 2022 10:28:37 -0700
+Message-ID: <CAAH4kHYn=pyFC8ZZ08hY0rBDL9g4XBnxbMVXtwdju4qCLMetuA@mail.gmail.com>
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     "Xu, Min M" <min.m.xu@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Gao, Jiaqi" <jiaqi.gao@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rodel, Jorg" <jroedel@suse.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 7, 2022 at 9:16 AM Xiaohui Zhang <xiaohuizhang@ruc.edu.cn> wrote:
->
-> We detected a suspected bug with our code clone detection tool.
->
-> Similar to the handling of l2tp_tunnel_get in commit a622b40035d1
-> ("l2ip: fix possible use-after-free"), we thought a patch might
-> be needed here as well.
->
-> Before taking a refcount on a rcu protected structure,
-> we need to make sure the refcount is not zero.
->
-> Signed-off-by: Xiaohui Zhang <xiaohuizhang@ruc.edu.cn>
-> ---
->  net/l2tp/l2tp_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/l2tp/l2tp_core.c b/net/l2tp/l2tp_core.c
-> index b759fbd09b65..c5de6d4e0818 100644
-> --- a/net/l2tp/l2tp_core.c
-> +++ b/net/l2tp/l2tp_core.c
-> @@ -273,8 +273,8 @@ struct l2tp_session *l2tp_session_get(const struct net *net, u32 session_id)
->
->         rcu_read_lock_bh();
->         hlist_for_each_entry_rcu(session, session_list, global_hlist)
-> -               if (session->session_id == session_id) {
-> -                       l2tp_session_inc_refcount(session);
-> +               if (session->session_id == session_id &&
-> +                   refcount_inc_not_zero(&session->ref_count)) {
->                         rcu_read_unlock_bh();
->
->                         return session;
-> --
-> 2.17.1
+> free -k parses /proc/meminfo for MemFree and SwapFree in
+> /proc/meminfo, so it sounds like it should also add in UnacceptedMem.
+> We'll try that. Thanks.
 >
 
-Please fix all bugs in a single patch.
+Testing error on my part. Was using an adaptation of an old patch set.
+With Brijesh's SEV-SNP support adapted to this version on top of
+SEV-SNP guest patch series v12, I have no trouble with passing our
+memtouch test.
 
-net/l2tp/l2tp_core.c contains four suspect calls to l2tp_session_inc_refcount()
+Reference: https://github.com/deeglaze/amdese-linux/tree/v12unaccepted-v5
+
+-- 
+-Dionna Glaze, PhD (she/her)

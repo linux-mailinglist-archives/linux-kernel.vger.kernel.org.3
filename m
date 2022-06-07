@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9D354241F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115FC54218D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382947AbiFHBtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S234418AbiFHBaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 21:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381045AbiFGVri (ORCPT
+        with ESMTP id S1380635AbiFGVrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:47:38 -0400
+        Tue, 7 Jun 2022 17:47:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFEF2383E9;
-        Tue,  7 Jun 2022 12:08:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792C11900E5;
+        Tue,  7 Jun 2022 12:08:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E03AC61846;
-        Tue,  7 Jun 2022 19:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED435C34115;
-        Tue,  7 Jun 2022 19:08:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B418D61768;
+        Tue,  7 Jun 2022 19:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFFA0C385A2;
+        Tue,  7 Jun 2022 19:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654628885;
-        bh=RyRsPx/V8rOFqBtsBmni5IwGrXX4dyf00pLYARTaC0w=;
+        s=korg; t=1654628888;
+        bh=InK2P2719+ucxNiXUq5akHXves7w4RjNdOe6zfMyDME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XZL1iX5dJ/WN1V/4lM2dvjvFZZDi4l/MC92VxuPgBKlFZ/JZ/dCDTbQ0mL2QoCLMl
-         tbXnNbqn0887nDqLEly/tOi831MR6/iNbJrzWhYZjw/iB7OcA0CKPxrYzNH99GIk5h
-         jAlt4/bS54iuSeh/gYhbvG4GhKPfd5LN2fgYvjrQ=
+        b=caDUBd4xVwOT2DeimpyvL9ri4My1VfIbzB7qZo4fk8a/nr+TrJg+9mq/13YOQTqdb
+         iIdIs3zTdtHN3Nsy8udAsnruWAxBPWIbhr4DScElhuvAFofF/tpGlNyIeTFjZIC1xc
+         ZIl9jEr/7FtAvT09WrhnWvuG+shoebEk8C2DFEzg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 490/879] drm/i915: Fix CFI violation with show_dynamic_id()
-Date:   Tue,  7 Jun 2022 19:00:08 +0200
-Message-Id: <20220607165017.094433480@linuxfoundation.org>
+Subject: [PATCH 5.18 491/879] thermal/drivers/bcm2711: Dont clamp temperature at zero
+Date:   Tue,  7 Jun 2022 19:00:09 +0200
+Message-Id: <20220607165017.123408598@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -58,70 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 58606220a2f1407a7516c547f09a1ba7b4350a73 ]
+[ Upstream commit 106e0121e243de4da7d634338089a68a8da2abe9 ]
 
-When an attribute group is created with sysfs_create_group(), the
-->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-callback to kobj_attr_show(). kobj_attr_show() uses container_of() to
-get the ->show() callback from the attribute it was passed, meaning the
-->show() callback needs to be the same type as the ->show() callback in
-'struct kobj_attribute'.
+The thermal sensor on BCM2711 is capable of negative temperatures, so don't
+clamp the measurements at zero. Since this was the only use for variable t,
+drop it.
 
-However, show_dynamic_id() has the type of the ->show() callback in
-'struct device_attribute', which causes a CFI violation when opening the
-'id' sysfs node under drm/card0/metrics. This happens to work because
-the layout of 'struct kobj_attribute' and 'struct device_attribute' are
-the same, so the container_of() cast happens to allow the ->show()
-callback to still work.
+This change based on a patch by Dom Cobley, who also tested the fix.
 
-Change the type of show_dynamic_id() to match the ->show() callback in
-'struct kobj_attributes' and update the type of sysfs_metric_id to
-match, which resolves the CFI violation.
-
-Fixes: f89823c21224 ("drm/i915/perf: Implement I915_PERF_ADD/REMOVE_CONFIG interface")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220513075136.1027007-1-tvrtko.ursulin@linux.intel.com
-(cherry picked from commit 18fb42db05a0b93ab5dd5eab5315e50eaa3ca620)
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Fixes: 59b781352dc4 ("thermal: Add BCM2711 thermal driver")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220412195423.104511-1-stefan.wahren@i2se.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/i915_perf.c       | 4 ++--
- drivers/gpu/drm/i915/i915_perf_types.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/thermal/broadcom/bcm2711_thermal.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
-index 0a9c3fcc09b1..1577ab6754db 100644
---- a/drivers/gpu/drm/i915/i915_perf.c
-+++ b/drivers/gpu/drm/i915/i915_perf.c
-@@ -4050,8 +4050,8 @@ static struct i915_oa_reg *alloc_oa_regs(struct i915_perf *perf,
- 	return ERR_PTR(err);
+diff --git a/drivers/thermal/broadcom/bcm2711_thermal.c b/drivers/thermal/broadcom/bcm2711_thermal.c
+index 1ec57d9ecf53..e9bef5c3414b 100644
+--- a/drivers/thermal/broadcom/bcm2711_thermal.c
++++ b/drivers/thermal/broadcom/bcm2711_thermal.c
+@@ -38,7 +38,6 @@ static int bcm2711_get_temp(void *data, int *temp)
+ 	int offset = thermal_zone_get_offset(priv->thermal);
+ 	u32 val;
+ 	int ret;
+-	long t;
+ 
+ 	ret = regmap_read(priv->regmap, AVS_RO_TEMP_STATUS, &val);
+ 	if (ret)
+@@ -50,9 +49,7 @@ static int bcm2711_get_temp(void *data, int *temp)
+ 	val &= AVS_RO_TEMP_STATUS_DATA_MSK;
+ 
+ 	/* Convert a HW code to a temperature reading (millidegree celsius) */
+-	t = slope * val + offset;
+-
+-	*temp = t < 0 ? 0 : t;
++	*temp = slope * val + offset;
+ 
+ 	return 0;
  }
- 
--static ssize_t show_dynamic_id(struct device *dev,
--			       struct device_attribute *attr,
-+static ssize_t show_dynamic_id(struct kobject *kobj,
-+			       struct kobj_attribute *attr,
- 			       char *buf)
- {
- 	struct i915_oa_config *oa_config =
-diff --git a/drivers/gpu/drm/i915/i915_perf_types.h b/drivers/gpu/drm/i915/i915_perf_types.h
-index 473a3c0544bb..05cb9a335a97 100644
---- a/drivers/gpu/drm/i915/i915_perf_types.h
-+++ b/drivers/gpu/drm/i915/i915_perf_types.h
-@@ -55,7 +55,7 @@ struct i915_oa_config {
- 
- 	struct attribute_group sysfs_metric;
- 	struct attribute *attrs[2];
--	struct device_attribute sysfs_metric_id;
-+	struct kobj_attribute sysfs_metric_id;
- 
- 	struct kref ref;
- 	struct rcu_head rcu;
 -- 
 2.35.1
 

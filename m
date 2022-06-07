@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF9554138B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 22:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEAB541AC1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358656AbiFGUBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 16:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S1380711AbiFGVh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353426AbiFGS64 (ORCPT
+        with ESMTP id S1376275AbiFGUnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:58:56 -0400
+        Tue, 7 Jun 2022 16:43:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF7814E2F9;
-        Tue,  7 Jun 2022 11:04:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BF31F1BEA;
+        Tue,  7 Jun 2022 11:38:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63C2EB82366;
-        Tue,  7 Jun 2022 18:04:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA9FC34115;
-        Tue,  7 Jun 2022 18:04:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A0B7B82182;
+        Tue,  7 Jun 2022 18:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A5BC385A2;
+        Tue,  7 Jun 2022 18:38:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654625058;
-        bh=ddrABa1CAG7VK/j2mIc4gY58nBIesJnH2/qJL6G1kco=;
+        s=korg; t=1654627119;
+        bh=wgKRNI73T2zZGmaV8LU9D8Jm69k2YDtN51rVD4phD80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i8U6xQGLCM+4FPznnqPbTSQCKr47WXHQswprXh70tgRvBtmAGNdN7Rjj1AuaCbl2z
-         40bDeWii6kLhE/Z1qPVAVNY1kqtpf9vOGSoTFD41qbhVOR1PYI7T9+c4s21WRvmh1E
-         fU+ZPlsam571UlpyMgGj18C6vA+W6ANfI7IrGmz8=
+        b=eJ43Y8DizaRUh9SXNdRbZwokRNJ5b/tVF4on/sVQcxdBIEdYQcUArC+hVPLZaMBbH
+         3Ab4INGmV9PnEduPhxdh7O4xoi+tVDktcqvv9IcPgWs6xO6W9v36j0naUDLQLaowb3
+         laLeIIKdJVCBriVlXz7iE6pcntCtmf864dYmknlk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.15 551/667] tracing: Fix potential double free in create_var_ref()
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>
+Subject: [PATCH 5.17 624/772] iwlwifi: mei: fix potential NULL-ptr deref
 Date:   Tue,  7 Jun 2022 19:03:36 +0200
-Message-Id: <20220607164951.225881821@linuxfoundation.org>
+Message-Id: <20220607165007.323818841@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
+From: Johannes Berg <johannes.berg@intel.com>
 
-commit 99696a2592bca641eb88cc9a80c90e591afebd0f upstream.
+commit 78488a64aea94a3336ee97f345c1496e9bc5ebdf upstream.
 
-In create_var_ref(), init_var_ref() is called to initialize the fields
-of variable ref_field, which is allocated in the previous function call
-to create_hist_field(). Function init_var_ref() allocates the
-corresponding fields such as ref_field->system, but frees these fields
-when the function encounters an error. The caller later calls
-destroy_hist_field() to conduct error handling, which frees the fields
-and the variable itself. This results in double free of the fields which
-are already freed in the previous function.
+If SKB allocation fails, continue rather than using the NULL
+pointer.
 
-Fix this by storing NULL to the corresponding fields when they are freed
-in init_var_ref().
+Coverity CID: 1497650
 
-Link: https://lkml.kernel.org/r/20220425063739.3859998-1-keitasuzuki.park@sslab.ics.keio.ac.jp
-
-Fixes: 067fe038e70f ("tracing: Add variable reference handling to hist triggers")
-CC: stable@vger.kernel.org
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Cc: stable@vger.kernel.org
+Fixes: 2da4366f9e2c ("iwlwifi: mei: add the driver to allow cooperation with CSME")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20220517120045.90c1b1fd534e.Ibb42463e74d0ec7d36ec81df22e171ae1f6268b0@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_events_hist.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/intel/iwlwifi/mei/main.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -1838,8 +1838,11 @@ static int init_var_ref(struct hist_fiel
- 	return err;
-  free:
- 	kfree(ref_field->system);
-+	ref_field->system = NULL;
- 	kfree(ref_field->event_name);
-+	ref_field->event_name = NULL;
- 	kfree(ref_field->name);
-+	ref_field->name = NULL;
+--- a/drivers/net/wireless/intel/iwlwifi/mei/main.c
++++ b/drivers/net/wireless/intel/iwlwifi/mei/main.c
+@@ -1020,6 +1020,8 @@ static void iwl_mei_handle_sap_data(stru
  
- 	goto out;
- }
+ 		/* We need enough room for the WiFi header + SNAP + IV */
+ 		skb = netdev_alloc_skb(netdev, len + QOS_HDR_IV_SNAP_LEN);
++		if (!skb)
++			continue;
+ 
+ 		skb_reserve(skb, QOS_HDR_IV_SNAP_LEN);
+ 		ethhdr = skb_push(skb, sizeof(*ethhdr));
 
 

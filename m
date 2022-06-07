@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3088540076
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DAF540077
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 15:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243926AbiFGNvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 09:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S244951AbiFGNvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 09:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235503AbiFGNvN (ORCPT
+        with ESMTP id S244902AbiFGNvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 09:51:13 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ADA80228;
-        Tue,  7 Jun 2022 06:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654609872; x=1686145872;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=aTQVJGHukZ+DXGo1nAWZtVgF8dVNyTuGQVmEw5cyJMo=;
-  b=PHavkbjYf0KL/42UL6fYGMYQAL7dyMVhr6/rERLPxboD7QZucike/eJ5
-   pnoP/knXZgUvghvw2d1Mu+RXm/IOWKGPt+W0x3A+rj6uwaEEwJBuNN3vg
-   Gi4npM+xjyKhyq/E2lM0WgVw2Qk5Le0JsICB40JCXfO95GkmaZTd9soA7
-   mG3ygV1l3VjZ+ZKyMTL9o8beDUad99sjdkeYLMtIlXDqzE2acYKoPJNlc
-   lFTbrkdeLCJOo1/2lN4/fmnsHkF5wBxzqgeVjwggRpLJi8JRnXybDj4B4
-   gJFldw+CJ5eXujS9jferbGS9W5Gs+J8eXthgaKkmzYlLxIf2BRobttv5h
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="340484807"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="340484807"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:51:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="636133043"
-Received: from akmessan-mobl1.amr.corp.intel.com ([10.251.214.146])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 06:51:10 -0700
-Date:   Tue, 7 Jun 2022 16:51:08 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/36] tty/vt: consolemap: zero uni_pgdir using
- kcalloc()
-In-Reply-To: <20220607104946.18710-11-jslaby@suse.cz>
-Message-ID: <73266f16-ccd2-19fa-f83c-9b43dc8ca054@linux.intel.com>
-References: <20220607104946.18710-1-jslaby@suse.cz> <20220607104946.18710-11-jslaby@suse.cz>
+        Tue, 7 Jun 2022 09:51:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FBBF887
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 06:51:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC383B81FD1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53953C341C0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 13:51:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZNUeRYOt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654609898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q4QsDWD9gMZnGSWO1AiZLllbLhjU6L2F/1RZHeLHa/4=;
+        b=ZNUeRYOtdoBlzz0goMYB2W74f8gRPb4uH+lfDJxCDf9lG2DyoltjejNPTmxifeQPVeOMiD
+        CDLVUdV+cJvFgpNSd5Kf3gSBJx5nA5MGEyqY+wQeTZYzyl3GY3h5RnJ+S7ceK+bIrt9t2a
+        +27e8M8IZKLjqwCpR1Fky0bi1HpsLu8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bc359a60 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 7 Jun 2022 13:51:38 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id a30so12501450ybj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 06:51:38 -0700 (PDT)
+X-Gm-Message-State: AOAM533qT+s6m/C4XkC+6AZiHrIcxnXvb/0CEDt/VmueGQDGDZwRnJJ/
+        H4kEXeTgjvP0yf54eOWF4uNGA/yNFKP1la8aNqU=
+X-Google-Smtp-Source: ABdhPJzzA3fKlaZoi0aZQgbzbc6gFSECRxk3zq4zcVhMMtu2BmDjV9qgDilSBdllfi8EmpdoSivjZ2FWKFUKpL3Neys=
+X-Received: by 2002:a25:8d92:0:b0:656:a73e:a7f with SMTP id
+ o18-20020a258d92000000b00656a73e0a7fmr28961179ybl.382.1654609896215; Tue, 07
+ Jun 2022 06:51:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1047197857-1654609871=:1622"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7110:6407:b0:181:6914:78f6 with HTTP; Tue, 7 Jun 2022
+ 06:51:35 -0700 (PDT)
+In-Reply-To: <9a5d23ee-06d2-82e3-1e32-00367125990d@raspberrypi.com>
+References: <Yp9DWT3RttJGZhvu@zx2c4.com> <20220607124450.794347-1-Jason@zx2c4.com>
+ <9a5d23ee-06d2-82e3-1e32-00367125990d@raspberrypi.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 7 Jun 2022 15:51:35 +0200
+X-Gmail-Original-Message-ID: <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
+Message-ID: <CAHmME9owv1Cj8=XVV+i-4uC9Tc1TsKDUMeFcO-ziGv88GRk8Ow@mail.gmail.com>
+Subject: Re: [PATCH v3] random: defer crediting bootloader randomness to random_init()
+To:     Phil Elwell <phil@raspberrypi.com>
+Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Phil,
 
---8323329-1047197857-1654609871=:1622
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+And this one also works, I assume?
 
-On Tue, 7 Jun 2022, Jiri Slaby wrote:
+https://lore.kernel.org/lkml/20220607100210.683136-1-Jason@zx2c4.com/
 
-> The newly allocated p->uni_pgdir[n] is initialized to NULLs right after
-> a kmalloc_array() allocation. Combine these two using kcalloc().
-> 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
--- 
- i.
-
---8323329-1047197857-1654609871=:1622--
+Jason

@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D4B5426EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CAD5423DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Jun 2022 08:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390672AbiFHBvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 21:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S1386297AbiFHA7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 20:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383129AbiFGWTU (ORCPT
+        with ESMTP id S1385098AbiFGWU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:19:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9FD19762D;
-        Tue,  7 Jun 2022 12:20:46 -0700 (PDT)
+        Tue, 7 Jun 2022 18:20:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25E6263DFF;
+        Tue,  7 Jun 2022 12:20:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2204F60906;
-        Tue,  7 Jun 2022 19:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1B6C341C0;
-        Tue,  7 Jun 2022 19:20:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 081D2B8237B;
+        Tue,  7 Jun 2022 19:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73378C385A2;
+        Tue,  7 Jun 2022 19:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654629635;
-        bh=EO8JBHw8FJVtlQsdM5QRvdHxzQHvifwHotLYtOSjkqw=;
+        s=korg; t=1654629654;
+        bh=hmOnrUcH7670N2tE92uyQ8lRAcXD4hwB3zS1oR7mbno=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fGm1j5HzJUfR/BJAjzpGSwR4UaOFxfCrR0hgcR7F18XKmk4q7sfMaikdh3LyNZR47
-         wgyCpCEpItQSyqYBrRzvzvdQV28mZo374VYiIsqH4MxT9vHHG0hGxvC/3ZJDESa7mF
-         HYPqwyVmgFROOvliTJOD8ja8X3ElCeRZihjL7cSk=
+        b=SCV0chrCyrjb5WV7CPJEK4uGp7kah22FnuDzdayKqXW21Gu/EtoHg22foeCMdwqtU
+         eOFIGJEy2BN9bQEq6m6i/L3MYDt35jruIN2rR8LIm7E+DJXVDstkMM/2070mu3hhpP
+         QXVSgf7JGZdnmQpDJFOYCcEW0J8aqihTPpW9eM5c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Don Dutile <ddutile@redhat.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.18 760/879] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
-Date:   Tue,  7 Jun 2022 19:04:38 +0200
-Message-Id: <20220607165024.924465598@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: [PATCH 5.18 762/879] s390/stp: clock_delta should be signed
+Date:   Tue,  7 Jun 2022 19:04:40 +0200
+Message-Id: <20220607165024.982490421@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607165002.659942637@linuxfoundation.org>
 References: <20220607165002.659942637@linuxfoundation.org>
@@ -59,49 +54,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+From: Sven Schnelle <svens@linux.ibm.com>
 
-commit bbe832b9db2e1ad21522f8f0bf02775fff8a0e0e upstream.
+commit 5ace65ebb5ce9fe1cc8fdbdd97079fb566ef0ea4 upstream.
 
-At present, pages not in the target zone are added to cc->migratepages
-list in isolate_migratepages_block().  As a result, pages may migrate
-between nodes unintentionally.
+clock_delta is declared as unsigned long in various places. However,
+the clock sync delta can be negative. This would add a huge positive
+offset in clock_sync_global where clock_delta is added to clk.eitod
+which is a 72 bit integer. Declare it as signed long to fix this.
 
-This would be a serious problem for older kernels without commit
-a984226f457f849e ("mm: memcontrol: remove the pgdata parameter of
-mem_cgroup_page_lruvec"), because it can corrupt the lru list by
-handling pages in list without holding proper lru_lock.
-
-Avoid returning a pfn outside the target zone in the case that it is
-not aligned with a pageblock boundary.  Otherwise
-isolate_migratepages_block() will handle pages not in the target zone.
-
-Link: https://lkml.kernel.org/r/20220511044300.4069-1-yamamoto.rei@jp.fujitsu.com
-Fixes: 70b44595eafe ("mm, compaction: use free lists to quickly locate a migration source")
-Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Cc: Don Dutile <ddutile@redhat.com>
-Cc: Wonhyuk Yang <vvghjk1234@gmail.com>
-Cc: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/compaction.c |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/s390/include/asm/cio.h |    2 +-
+ arch/s390/kernel/time.c     |    8 ++++----
+ drivers/s390/cio/chsc.c     |    4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1858,6 +1858,8 @@ static unsigned long fast_find_migratebl
+--- a/arch/s390/include/asm/cio.h
++++ b/arch/s390/include/asm/cio.h
+@@ -369,7 +369,7 @@ void cio_gp_dma_destroy(struct gen_pool
+ struct gen_pool *cio_gp_dma_create(struct device *dma_dev, int nr_pages);
  
- 				update_fast_start_pfn(cc, free_pfn);
- 				pfn = pageblock_start_pfn(free_pfn);
-+				if (pfn < cc->zone->zone_start_pfn)
-+					pfn = cc->zone->zone_start_pfn;
- 				cc->fast_search_fail = 0;
- 				found_block = true;
- 				set_pageblock_skip(freepage);
+ /* Function from drivers/s390/cio/chsc.c */
+-int chsc_sstpc(void *page, unsigned int op, u16 ctrl, u64 *clock_delta);
++int chsc_sstpc(void *page, unsigned int op, u16 ctrl, long *clock_delta);
+ int chsc_sstpi(void *page, void *result, size_t size);
+ int chsc_stzi(void *page, void *result, size_t size);
+ int chsc_sgib(u32 origin);
+--- a/arch/s390/kernel/time.c
++++ b/arch/s390/kernel/time.c
+@@ -364,7 +364,7 @@ static inline int check_sync_clock(void)
+  * Apply clock delta to the global data structures.
+  * This is called once on the CPU that performed the clock sync.
+  */
+-static void clock_sync_global(unsigned long delta)
++static void clock_sync_global(long delta)
+ {
+ 	unsigned long now, adj;
+ 	struct ptff_qto qto;
+@@ -400,7 +400,7 @@ static void clock_sync_global(unsigned l
+  * Apply clock delta to the per-CPU data structures of this CPU.
+  * This is called for each online CPU after the call to clock_sync_global.
+  */
+-static void clock_sync_local(unsigned long delta)
++static void clock_sync_local(long delta)
+ {
+ 	/* Add the delta to the clock comparator. */
+ 	if (S390_lowcore.clock_comparator != clock_comparator_max) {
+@@ -424,7 +424,7 @@ static void __init time_init_wq(void)
+ struct clock_sync_data {
+ 	atomic_t cpus;
+ 	int in_sync;
+-	unsigned long clock_delta;
++	long clock_delta;
+ };
+ 
+ /*
+@@ -544,7 +544,7 @@ static int stpinfo_valid(void)
+ static int stp_sync_clock(void *data)
+ {
+ 	struct clock_sync_data *sync = data;
+-	u64 clock_delta, flags;
++	long clock_delta, flags;
+ 	static int first;
+ 	int rc;
+ 
+--- a/drivers/s390/cio/chsc.c
++++ b/drivers/s390/cio/chsc.c
+@@ -1255,7 +1255,7 @@ exit:
+ EXPORT_SYMBOL_GPL(css_general_characteristics);
+ EXPORT_SYMBOL_GPL(css_chsc_characteristics);
+ 
+-int chsc_sstpc(void *page, unsigned int op, u16 ctrl, u64 *clock_delta)
++int chsc_sstpc(void *page, unsigned int op, u16 ctrl, long *clock_delta)
+ {
+ 	struct {
+ 		struct chsc_header request;
+@@ -1266,7 +1266,7 @@ int chsc_sstpc(void *page, unsigned int
+ 		unsigned int rsvd2[5];
+ 		struct chsc_header response;
+ 		unsigned int rsvd3[3];
+-		u64 clock_delta;
++		s64 clock_delta;
+ 		unsigned int rsvd4[2];
+ 	} *rr;
+ 	int rc;
 
 

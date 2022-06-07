@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA23541BBA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCAF541BBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383284AbiFGVxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
+        id S1383544AbiFGVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377001AbiFGU7e (ORCPT
+        with ESMTP id S1377347AbiFGU7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 16:59:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4699020B7FB;
-        Tue,  7 Jun 2022 11:44:55 -0700 (PDT)
+        Tue, 7 Jun 2022 16:59:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CE120C244;
+        Tue,  7 Jun 2022 11:44:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CADB6160D;
-        Tue,  7 Jun 2022 18:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50EFC385A2;
-        Tue,  7 Jun 2022 18:44:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A94B6156D;
+        Tue,  7 Jun 2022 18:44:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C7BC385A2;
+        Tue,  7 Jun 2022 18:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654627494;
-        bh=8Pa+ZWBuSKK55sy8yAH+Q70dUf42Cy8AMIJLEUeRCBU=;
+        s=korg; t=1654627496;
+        bh=VzIYh8uMw90ZzLYYXvN2eQpucUz4avgULW2zNsHmNhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KfDho5ES8WVVa/lIWxrUlLv6ikOcy3phttJVk/zIbGYTDjUwgjB5QpQZYsfxGkZhv
-         iWHrwywsXhZsKf/4uyoPNcnzaIXvNnEzzqccrjZx5gJ3W95PvzPvxQjPEKV4kBp0zj
-         wQoxgRD8s2EkhL3fCDS85OvyO6orZbO1Et+Xuf8U=
+        b=vF1nHa/1KYTTR63qrxYmEtDqC/9vWYfghRdKx+8ZNrkUv8E+/Y3P0zcHTHgFTFhsz
+         QifDOglf4WQGSuI9XdA4fePNT3yZ5GueRziVk+PHs6O6ZVLO6UdV1xMPlafghaNKuE
+         5qNNTtDOkUjLGc3p2xJgZ9ZhSBosvovunPjdMVy4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 5.17 760/772] staging: r8188eu: delete rtw_wx_read/write32()
-Date:   Tue,  7 Jun 2022 19:05:52 +0200
-Message-Id: <20220607165011.419067993@linuxfoundation.org>
+        stable@vger.kernel.org, Yixing Liu <liuyixing1@huawei.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 5.17 761/772] RDMA/hns: Remove the num_cqc_timer variable
+Date:   Tue,  7 Jun 2022 19:05:53 +0200
+Message-Id: <20220607165011.448208869@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
 References: <20220607164948.980838585@linuxfoundation.org>
@@ -53,136 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Yixing Liu <liuyixing1@huawei.com>
 
-commit 4d0cc9e0e53e9946d7b8dc58279c62dfa7a2191b upstream.
+commit db5dfbf5b201df65c1f5332c4d9d5e7c2f42396b upstream.
 
-These debugging tools let you call:
+The bt number of cqc_timer of HIP09 increases compared with that of HIP08.
+Therefore, cqc_timer_bt_num and num_cqc_timer do not match. As a result,
+the driver may fail to allocate cqc_timer. So the driver needs to uniquely
+uses cqc_timer_bt_num to represent the bt number of cqc_timer.
 
-	status = usb_control_msg_recv/send(udev, 0, REALTEK_USB_VENQT_CMD_REQ,
-				      REALTEK_USB_VENQT_READ/WRITE, value,
-				      REALTEK_USB_VENQT_CMD_IDX, io_buf,
-				      size, RTW_USB_CONTROL_MSG_TIMEOUT,
-				      GFP_KERNEL);
-
-with a user controlled "value" in the 0-0xffff range.  It's not a valid
-API.
-
-Fixes: 2b42bd58b321 ("staging: r8188eu: introduce new os_dep dir for RTL8188eu driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YoXS4OaD1oauPvmj@kili
+Fixes: 0e40dc2f70cd ("RDMA/hns: Add timer allocation support for hip08")
+Link: https://lore.kernel.org/r/20220429093545.58070-1-liangwenpeng@huawei.com
+Signed-off-by: Yixing Liu <liuyixing1@huawei.com>
+Signed-off-by: Wenpeng Liang <liangwenpeng@huawei.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/r8188eu/os_dep/ioctl_linux.c |   92 ---------------------------
- 1 file changed, 2 insertions(+), 90 deletions(-)
+ drivers/infiniband/hw/hns/hns_roce_device.h |    1 -
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c  |    3 +--
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.h  |    2 +-
+ drivers/infiniband/hw/hns/hns_roce_main.c   |    2 +-
+ 4 files changed, 3 insertions(+), 5 deletions(-)
 
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -1969,94 +1969,6 @@ static int rtw_wx_get_nick(struct net_de
- 	return 0;
- }
+--- a/drivers/infiniband/hw/hns/hns_roce_device.h
++++ b/drivers/infiniband/hw/hns/hns_roce_device.h
+@@ -721,7 +721,6 @@ struct hns_roce_caps {
+ 	u32		num_pi_qps;
+ 	u32		reserved_qps;
+ 	int		num_qpc_timer;
+-	int		num_cqc_timer;
+ 	u32		num_srqs;
+ 	u32		max_wqes;
+ 	u32		max_srq_wrs;
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
+@@ -1965,7 +1965,7 @@ static void set_default_caps(struct hns_
+ 	caps->num_mtpts		= HNS_ROCE_V2_MAX_MTPT_NUM;
+ 	caps->num_pds		= HNS_ROCE_V2_MAX_PD_NUM;
+ 	caps->num_qpc_timer	= HNS_ROCE_V2_MAX_QPC_TIMER_NUM;
+-	caps->num_cqc_timer	= HNS_ROCE_V2_MAX_CQC_TIMER_NUM;
++	caps->cqc_timer_bt_num	= HNS_ROCE_V2_MAX_CQC_TIMER_BT_NUM;
  
--static int rtw_wx_read32(struct net_device *dev,
--			    struct iw_request_info *info,
--			    union iwreq_data *wrqu, char *extra)
--{
--	struct adapter *padapter;
--	struct iw_point *p;
--	u16 len;
--	u32 addr;
--	u32 data32;
--	u32 bytes;
--	u8 *ptmp;
--	int ret;
--
--	padapter = (struct adapter *)rtw_netdev_priv(dev);
--	p = &wrqu->data;
--	len = p->length;
--	ptmp = memdup_user(p->pointer, len);
--	if (IS_ERR(ptmp))
--		return PTR_ERR(ptmp);
--
--	bytes = 0;
--	addr = 0;
--	sscanf(ptmp, "%d,%x", &bytes, &addr);
--
--	switch (bytes) {
--	case 1:
--		data32 = rtw_read8(padapter, addr);
--		sprintf(extra, "0x%02X", data32);
--		break;
--	case 2:
--		data32 = rtw_read16(padapter, addr);
--		sprintf(extra, "0x%04X", data32);
--		break;
--	case 4:
--		data32 = rtw_read32(padapter, addr);
--		sprintf(extra, "0x%08X", data32);
--		break;
--	default:
--		DBG_88E(KERN_INFO "%s: usage> read [bytes],[address(hex)]\n", __func__);
--		ret = -EINVAL;
--		goto err_free_ptmp;
--	}
--	DBG_88E(KERN_INFO "%s: addr = 0x%08X data =%s\n", __func__, addr, extra);
--
--	kfree(ptmp);
--	return 0;
--
--err_free_ptmp:
--	kfree(ptmp);
--	return ret;
--}
--
--static int rtw_wx_write32(struct net_device *dev,
--			    struct iw_request_info *info,
--			    union iwreq_data *wrqu, char *extra)
--{
--	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
--
--	u32 addr;
--	u32 data32;
--	u32 bytes;
--
--	bytes = 0;
--	addr = 0;
--	data32 = 0;
--	sscanf(extra, "%d,%x,%x", &bytes, &addr, &data32);
--
--	switch (bytes) {
--	case 1:
--		rtw_write8(padapter, addr, (u8)data32);
--		DBG_88E(KERN_INFO "%s: addr = 0x%08X data = 0x%02X\n", __func__, addr, (u8)data32);
--		break;
--	case 2:
--		rtw_write16(padapter, addr, (u16)data32);
--		DBG_88E(KERN_INFO "%s: addr = 0x%08X data = 0x%04X\n", __func__, addr, (u16)data32);
--		break;
--	case 4:
--		rtw_write32(padapter, addr, data32);
--		DBG_88E(KERN_INFO "%s: addr = 0x%08X data = 0x%08X\n", __func__, addr, data32);
--		break;
--	default:
--		DBG_88E(KERN_INFO "%s: usage> write [bytes],[address(hex)],[data(hex)]\n", __func__);
--		return -EINVAL;
--	}
--
--	return 0;
--}
--
- static int rtw_wx_read_rf(struct net_device *dev,
- 			    struct iw_request_info *info,
- 			    union iwreq_data *wrqu, char *extra)
-@@ -4267,8 +4179,8 @@ static const struct iw_priv_args rtw_pri
- };
- 
- static iw_handler rtw_private_handler[] = {
--rtw_wx_write32,				/* 0x00 */
--rtw_wx_read32,				/* 0x01 */
-+	NULL,				/* 0x00 */
-+	NULL,				/* 0x01 */
- 	NULL,				/* 0x02 */
- NULL,					/* 0x03 */
- /*  for MM DTV platform */
+ 	caps->max_qp_init_rdma	= HNS_ROCE_V2_MAX_QP_INIT_RDMA;
+ 	caps->max_qp_dest_rdma	= HNS_ROCE_V2_MAX_QP_DEST_RDMA;
+@@ -2261,7 +2261,6 @@ static int hns_roce_query_pf_caps(struct
+ 	caps->max_rq_sg = roundup_pow_of_two(caps->max_rq_sg);
+ 	caps->max_extend_sg	     = le32_to_cpu(resp_a->max_extend_sg);
+ 	caps->num_qpc_timer	     = le16_to_cpu(resp_a->num_qpc_timer);
+-	caps->num_cqc_timer	     = le16_to_cpu(resp_a->num_cqc_timer);
+ 	caps->max_srq_sges	     = le16_to_cpu(resp_a->max_srq_sges);
+ 	caps->max_srq_sges = roundup_pow_of_two(caps->max_srq_sges);
+ 	caps->num_aeq_vectors	     = resp_a->num_aeq_vectors;
+--- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
++++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.h
+@@ -41,7 +41,7 @@
+ #define HNS_ROCE_V2_MAX_SRQ_WR			0x8000
+ #define HNS_ROCE_V2_MAX_SRQ_SGE			64
+ #define HNS_ROCE_V2_MAX_CQ_NUM			0x100000
+-#define HNS_ROCE_V2_MAX_CQC_TIMER_NUM		0x100
++#define HNS_ROCE_V2_MAX_CQC_TIMER_BT_NUM	0x100
+ #define HNS_ROCE_V2_MAX_SRQ_NUM			0x100000
+ #define HNS_ROCE_V2_MAX_CQE_NUM			0x400000
+ #define HNS_ROCE_V2_MAX_RQ_SGE_NUM		64
+--- a/drivers/infiniband/hw/hns/hns_roce_main.c
++++ b/drivers/infiniband/hw/hns/hns_roce_main.c
+@@ -737,7 +737,7 @@ static int hns_roce_init_hem(struct hns_
+ 		ret = hns_roce_init_hem_table(hr_dev, &hr_dev->cqc_timer_table,
+ 					      HEM_TYPE_CQC_TIMER,
+ 					      hr_dev->caps.cqc_timer_entry_sz,
+-					      hr_dev->caps.num_cqc_timer, 1);
++					      hr_dev->caps.cqc_timer_bt_num, 1);
+ 		if (ret) {
+ 			dev_err(dev,
+ 				"Failed to init CQC timer memory, aborting.\n");
 
 

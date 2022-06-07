@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037A2540F6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856A2541844
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353950AbiFGTIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 15:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S1379679AbiFGVKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352709AbiFGSVR (ORCPT
+        with ESMTP id S1359467AbiFGUNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 14:21:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A076CAB4;
-        Tue,  7 Jun 2022 10:54:00 -0700 (PDT)
+        Tue, 7 Jun 2022 16:13:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A521C7EE3;
+        Tue,  7 Jun 2022 11:28:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6C1AECE2422;
-        Tue,  7 Jun 2022 17:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76705C34119;
-        Tue,  7 Jun 2022 17:53:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F2EDCE2439;
+        Tue,  7 Jun 2022 18:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AED4C385A2;
+        Tue,  7 Jun 2022 18:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654624423;
-        bh=l+0I0SbIqtb+A2f2/RYmBLgaBp3aFf+0oUxXgNg1N6s=;
+        s=korg; t=1654626484;
+        bh=kJImaIrTdnGNJWNnXYrajPYnP1GG0dHB5UOP8/EZ9G4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bQgoT4Q7ZyC1qupB5fjF0dx2H8dKXoUr2gkodG6XNyhjUFmHjaU5JTsAAFbh8Lhav
-         q50gk9U/dZTFiqScX8jahiWphZd2LqvXJJ9uBl9T174mPFszBo6Hp6kp3Jik0OItCX
-         +argsGk2erVDAn6MxolVgvZZxLq3BbIgWINac7hk=
+        b=1WVvSGRTJK/6qfQ8GDresksAeu9JJ9BGAntzrNVoijJOiPxewBbhE478e/Lz3TDDW
+         iHelC+nqXINAGb6v213kRzQsYpLrm5MXq5o7RGJ82oHH9hGSdoNXysVkvWzjEx5pJ1
+         Yr8A0TFeFwkZxD3Vvvj1Qx3ulBGLvlPtkTmCtA8I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 323/667] media: i2c: rdacm2x: properly set subdev entity function
+        stable@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 396/772] nvme: set dma alignment to dword
 Date:   Tue,  7 Jun 2022 18:59:48 +0200
-Message-Id: <20220607164944.457188582@linuxfoundation.org>
+Message-Id: <20220607165000.680924542@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
-References: <20220607164934.766888869@linuxfoundation.org>
+In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
+References: <20220607164948.980838585@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,58 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+From: Keith Busch <kbusch@kernel.org>
 
-[ Upstream commit d2facee67b4883bb3e7461a0a93fd70d0c7b7261 ]
+[ Upstream commit 52fde2c07da606f3f120af4f734eadcfb52b04be ]
 
-The subdevice entity function was left unset, which produces a warning
-when probing the device:
+The nvme specification only requires qword alignment for segment
+descriptors, and the driver already guarantees that. The spec has always
+allowed user data to be dword aligned, which is what the queue's
+attribute is for, so relax the alignment requirement to that value.
 
-mxc-md bus@58000000:camera: Entity type for entity rdacm20 19-0051 was
-not initialized!
+While we could allow byte alignment for some controllers when using
+SGLs, we still need to support PRP, and that only allows dword.
 
-This patch will set entity function to MEDIA_ENT_F_CAM_SENSOR and leave
-flags unset.
-
-Fixes: 34009bffc1c6 ("media: i2c: Add RDACM20 driver")
-Fixes: a59f853b3b4b ("media: i2c: Add driver for RDACM21 camera module")
-Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 3b2a1ebceba3 ("nvme: set dma alignment to qword")
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/rdacm20.c | 2 +-
- drivers/media/i2c/rdacm21.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/nvme/host/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/rdacm20.c b/drivers/media/i2c/rdacm20.c
-index 025a610de893..9c6f66cab564 100644
---- a/drivers/media/i2c/rdacm20.c
-+++ b/drivers/media/i2c/rdacm20.c
-@@ -611,7 +611,7 @@ static int rdacm20_probe(struct i2c_client *client)
- 		goto error_free_ctrls;
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 79ef46356d40..e086440a2042 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1796,7 +1796,7 @@ static void nvme_set_queue_limits(struct nvme_ctrl *ctrl,
+ 		blk_queue_max_segments(q, min_t(u32, max_segments, USHRT_MAX));
+ 	}
+ 	blk_queue_virt_boundary(q, NVME_CTRL_PAGE_SIZE - 1);
+-	blk_queue_dma_alignment(q, 7);
++	blk_queue_dma_alignment(q, 3);
+ 	blk_queue_write_cache(q, vwc, vwc);
+ }
  
- 	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
--	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
-+	dev->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
- 	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
- 	if (ret < 0)
- 		goto error_free_ctrls;
-diff --git a/drivers/media/i2c/rdacm21.c b/drivers/media/i2c/rdacm21.c
-index 12ec5467ed1e..ef31cf5f23ca 100644
---- a/drivers/media/i2c/rdacm21.c
-+++ b/drivers/media/i2c/rdacm21.c
-@@ -583,7 +583,7 @@ static int rdacm21_probe(struct i2c_client *client)
- 		goto error_free_ctrls;
- 
- 	dev->pad.flags = MEDIA_PAD_FL_SOURCE;
--	dev->sd.entity.flags |= MEDIA_ENT_F_CAM_SENSOR;
-+	dev->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
- 	ret = media_entity_pads_init(&dev->sd.entity, 1, &dev->pad);
- 	if (ret < 0)
- 		goto error_free_ctrls;
 -- 
 2.35.1
 

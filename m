@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89F75405C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 19:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B7A540F43
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 21:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346740AbiFGR3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 13:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S1354376AbiFGTFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 15:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346881AbiFGRZd (ORCPT
+        with ESMTP id S1349148AbiFGSTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 13:25:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8512D106A70;
-        Tue,  7 Jun 2022 10:23:29 -0700 (PDT)
+        Tue, 7 Jun 2022 14:19:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66665B36C0;
+        Tue,  7 Jun 2022 10:53:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2270060DDE;
-        Tue,  7 Jun 2022 17:23:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3344AC34115;
-        Tue,  7 Jun 2022 17:23:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E39AB82366;
+        Tue,  7 Jun 2022 17:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61C4C34119;
+        Tue,  7 Jun 2022 17:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654622608;
-        bh=XJ50Jb/dd9venn1pdAoNrEN6xPogM9j8x9SREus6Qzo=;
+        s=korg; t=1654624399;
+        bh=M8Pp6pza3e588Ahg60DnN2QhEs1nBBAuhap4x/rPUHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WDP66qHBTDtGV3NDEdN6nF2TTFmNASSWng0Nv0EMAwxphFhaU8vTSB3IwTfxqnRwE
-         ZVx8zsxVFMEsc0vC+NYGckfPdxONE3KB6gXU7tCB7c+8q5agk/Suu99OBw4Johazaz
-         wFlHQP+3hWgrFu3IsGkKKIiLjES4L4zcD4SwgwgM=
+        b=1/rpBg75bWlPLK21qxp98DHVZqOn4cidH+/CliRgYsqQ/cj0pklAb/aS0b48rSCBS
+         lHuQK2iukolPvvmSkCLk0g2bbWFclc7rWFqQub0NJpyfAER5UD0exl+Qvh+kASKPMH
+         SOhfDKzZ3neGDD+kMHt4u1aE1EIHbYNIVsfr2/n4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        David Lechner <david@lechnology.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 121/452] dt-bindings: display: sitronix, st7735r: Fix backlight in example
-Date:   Tue,  7 Jun 2022 18:59:38 +0200
-Message-Id: <20220607164912.165107218@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 314/667] block: Fix the bio.bi_opf comment
+Date:   Tue,  7 Jun 2022 18:59:39 +0200
+Message-Id: <20220607164944.189598565@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220607164908.521895282@linuxfoundation.org>
-References: <20220607164908.521895282@linuxfoundation.org>
+In-Reply-To: <20220607164934.766888869@linuxfoundation.org>
+References: <20220607164934.766888869@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,37 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Noralf Trønnes <noralf@tronnes.org>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit 471e201f543559e2cb19b182b680ebf04d80ee31 ]
+[ Upstream commit 5d2ae14276e698c76fa0c8ce870103f343b38263 ]
 
-The backlight property was lost during conversion to yaml in commit
-abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema").
-Put it back.
+Commit ef295ecf090d modified the Linux kernel such that the bottom bits
+of the bi_opf member contain the operation instead of the topmost bits.
+That commit did not update the comment next to bi_opf. Hence this patch.
 
-Fixes: abdd9e3705c8 ("dt-bindings: display: sitronix,st7735r: Convert to DT schema")
-Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: David Lechner <david@lechnology.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211124150757.17929-2-noralf@tronnes.org
+>From commit ef295ecf090d:
+-#define bio_op(bio)    ((bio)->bi_opf >> BIO_OP_SHIFT)
++#define bio_op(bio)    ((bio)->bi_opf & REQ_OP_MASK)
+
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Ming Lei <ming.lei@redhat.com>
+Fixes: ef295ecf090d ("block: better op and flags encoding")
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220511235152.1082246-1-bvanassche@acm.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/display/sitronix,st7735r.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/blk_types.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
-index 0cebaaefda03..419c3b2ac5a6 100644
---- a/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
-+++ b/Documentation/devicetree/bindings/display/sitronix,st7735r.yaml
-@@ -72,6 +72,7 @@ examples:
-                     dc-gpios = <&gpio 43 GPIO_ACTIVE_HIGH>;
-                     reset-gpios = <&gpio 80 GPIO_ACTIVE_HIGH>;
-                     rotation = <270>;
-+                    backlight = <&backlight>;
-             };
-     };
- 
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index be622b5a21ed..17c92c0f15b2 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -215,9 +215,8 @@ static inline void bio_issue_init(struct bio_issue *issue,
+ struct bio {
+ 	struct bio		*bi_next;	/* request queue link */
+ 	struct block_device	*bi_bdev;
+-	unsigned int		bi_opf;		/* bottom bits req flags,
+-						 * top bits REQ_OP. Use
+-						 * accessors.
++	unsigned int		bi_opf;		/* bottom bits REQ_OP, top bits
++						 * req_flags.
+ 						 */
+ 	unsigned short		bi_flags;	/* BIO_* below */
+ 	unsigned short		bi_ioprio;
 -- 
 2.35.1
 

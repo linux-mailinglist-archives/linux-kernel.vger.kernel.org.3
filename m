@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE2B541C30
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2A5541C54
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Jun 2022 23:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379220AbiFGV4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Jun 2022 17:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S1382376AbiFGV6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Jun 2022 17:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379333AbiFGVCV (ORCPT
+        with ESMTP id S1379455AbiFGVC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Jun 2022 17:02:21 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDF644F0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:47:46 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id f9so5098963plg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:47:46 -0700 (PDT)
+        Tue, 7 Jun 2022 17:02:29 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380A5121CDF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Jun 2022 11:48:09 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id v19so24141287edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Jun 2022 11:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Bq3CtL8r5GfIJRMEMuTZRaNrH6+E6V3L1A1y/G7x4zc=;
-        b=sDU6k8EIeE4SYgNY6ZlLksQCk0G6UMR2ghuXPDr+ezKXYMLOJy1JV6bqlaYICD6A+f
-         szfP31/juK1NYkXSgNCUF3MVDOBERVY7OFSo5FGzrJJlFXN3QtrwVpPrQuheoGPrgJ2n
-         8oMOx3z/d/tA/M2cwPP+6RbIDju8wuuUXjaMPRxO5hH4D4sKETHImRROElbe//aaOtpO
-         OogLtnIuwKN+DcCAPGyJlFax0yhmAoZ+rpZadMYHcKoPtZu+IxTNJ5IzBobLLH7anQe5
-         BJyo82k0NfaW8Na1TZ9yPTtPgjrfAAq8oZFwBN6K9DQIZ2j1A5DMsvm5naVtimv1XKxj
-         9K4A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ifDxMatAlmHG6+QO/cX43ydwB+XCFucrKlR7RLoJRyk=;
+        b=YwqKVRgDSYc7lhb5EOoK6KWe1n5ItyjnVVXQbxtboJkPu8qknjzCCMP5zI8o6wtucr
+         O8oWZgd7TU+bt1TCM4PqWEfgUdm+mh5jPmqqhHyolyQOZ/aXsknjWebnd2MAVlcITrNC
+         GgdK6YYEsFHFxNGQQjzoPMTWGYcAukmaKm82stLPel+yei+sLZ6CmwoT2uIFPwbZJGQm
+         NBzOlIX5gZlg7Ctb8HBAzEh8w+NiH2SS5qle1ugL6jAsUBMX1mdyt2Owjt2s9wNB3t39
+         izM6HDsttK01IyYzDfonGQ/Zjea48Twd5ku42IdNO/dbD1axrT7c7/jhsyVCmcDMPdmk
+         BPbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Bq3CtL8r5GfIJRMEMuTZRaNrH6+E6V3L1A1y/G7x4zc=;
-        b=78A0WLlSRX2QODeHJIp+J5cPZeM89xgTfn0hMMd+/HtfYRvMkSHgSSuPGq6aAMrABU
-         4hCa3NXdoLmSr2zK33E70IuhFiBu9LfNrjRYqu5he/e+WzjtsYryGo3Rt6vVnE421yW4
-         QhWJPZJz6PJs1dXGhfdGUbgHYdsMyOpI/s/erQksZKvORYVQpGDMlD+fip6vTio4Ac/Y
-         mkrKJu6iRfd4sKwoXSVHe+/FVaLICrDrvCIW3z49CDBZoAaHH7ECpf8Zuc6c5jRSlxlo
-         VW+RQNepPwoxpp0CzUuLpg9S2h3YdQpmLECULR8XZaWyAXaHe/c0UcY1+t5laz5BT1Lq
-         T9FA==
-X-Gm-Message-State: AOAM530rwh9rGh23KZBuCVy0C6fSxOUyu7Loy6Kfc7X/jMeiBRaQvZ0J
-        KkOZAakp34sKOmkNflxxikdGlQ==
-X-Google-Smtp-Source: ABdhPJw2TQiN59DdW/xnGa/aGBjV90W4P/iGe+cof3kKAjRB7iSLHq2N5nUHqvDvem8J6DBDZYGOGg==
-X-Received: by 2002:a17:903:3296:b0:164:13db:509 with SMTP id jh22-20020a170903329600b0016413db0509mr30245225plb.128.1654627665924;
-        Tue, 07 Jun 2022 11:47:45 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k130-20020a628488000000b0051c03229a2bsm6037107pfd.21.2022.06.07.11.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 11:47:45 -0700 (PDT)
-Date:   Tue, 7 Jun 2022 18:47:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Leonardo Bras <leobras@redhat.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        chang.seok.bae@intel.com, luto@kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.16 07/28] x86/kvm/fpu: Limit guest
- user_xfeatures to supported bits of XCR0
-Message-ID: <Yp+dTU4NOaIELJh8@google.com>
-References: <20220301201344.18191-1-sashal@kernel.org>
- <20220301201344.18191-7-sashal@kernel.org>
- <5f2b7b93-d4c9-1d59-14df-6e8b2366ca8a@redhat.com>
- <YppVupW+IWsm7Osr@xz-m1.local>
- <2d9ba70b-ac18-a461-7a57-22df2c0165c6@redhat.com>
- <Yp5xSi6P3q187+A+@xz-m1.local>
- <9d336622-6964-454a-605f-1ca90b902836@redhat.com>
- <Yp9o+y0NcRW/0puA@google.com>
- <Yp+WUoA+6x7ZpsaM@xz-m1.local>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ifDxMatAlmHG6+QO/cX43ydwB+XCFucrKlR7RLoJRyk=;
+        b=MzOXTMBjGjFqC3CyAuEElN83pbwHxIa8YItvsZArfdXGLZV7Qyx7Wcl+Kqj/SWIEkT
+         1FDgvIEsr8aFJVRhCF+ihIWBJQFAvo22TS07DaDNPtxOzcg6ekpzizpEsJc+V/Ik7+hq
+         qVsRvngoE7lHbB5CbLdrKKafQc61uMIsuczvnT+scXD88bZo+PMe4gNNpnmK7LsIuQED
+         LiL65WAA6j8RS6UVcCwT5SGZp4SlK7wepZgEpl/WkMtdk3okIrnBO9HW981s/lquQDJx
+         IXr0VGBPYvzpiCbYIj9n+j38cGpwL8WmxmkbECSuqp6JzRqIHPKlJSel9psUzAtT/h0Z
+         OWLg==
+X-Gm-Message-State: AOAM532L8YifjDGB3Afn4QSBjkWr13W4LDcFbHKb99tjsROg2Hv7Rkcx
+        k3alBw6Xw0GcGAiKsTJlyA6eEMN+9QXNxRhjbtGnBw==
+X-Google-Smtp-Source: ABdhPJwG2tPtWu/ZYuhkA19R4quxtR+arcKJxUhS+mfI+LlDrHLpHONsROS5zTRZFP0xm1JWOiTP9BpRUkqW++dYki8=
+X-Received: by 2002:a05:6402:3688:b0:42d:d3ba:4725 with SMTP id
+ ej8-20020a056402368800b0042dd3ba4725mr35557327edb.212.1654627687938; Tue, 07
+ Jun 2022 11:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yp+WUoA+6x7ZpsaM@xz-m1.local>
+References: <20220607145639.2362750-1-tzungbi@kernel.org> <20220607145639.2362750-9-tzungbi@kernel.org>
+In-Reply-To: <20220607145639.2362750-9-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 7 Jun 2022 11:47:56 -0700
+Message-ID: <CABXOdTdx7jKLbHa3X7aOz3wUMpwWWHkncfKuRyGzonkA92Rg=w@mail.gmail.com>
+Subject: Re: [PATCH v2 08/15] platform/chrome: cros_ec_proto: handle empty
+ payload in getting proto info
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     bleung@chromium.org, groeck@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -84,107 +68,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022, Peter Xu wrote:
-> On Tue, Jun 07, 2022 at 03:04:27PM +0000, Sean Christopherson wrote:
-> > On Tue, Jun 07, 2022, Paolo Bonzini wrote:
-> > > On 6/6/22 23:27, Peter Xu wrote:
-> > > > On Mon, Jun 06, 2022 at 06:18:12PM +0200, Paolo Bonzini wrote:
-> > > > > > However there seems to be something missing at least to me, on why it'll
-> > > > > > fail a migration from 5.15 (without this patch) to 5.18 (with this patch).
-> > > > > > In my test case, user_xfeatures will be 0x7 (FP|SSE|YMM) if without this
-> > > > > > patch, but 0x0 if with it.
-> > > > > 
-> > > > > What CPU model are you using for the VM?
-> > > > 
-> > > > I didn't specify it, assuming it's qemu64 with no extra parameters.
-> > > 
-> > > Ok, so indeed it lacks AVX and this patch can have an effect.
-> > > 
-> > > > > For example, if the source lacks this patch but the destination has it,
-> > > > > the source will transmit YMM registers, but the destination will fail to
-> > > > > set them if they are not available for the selected CPU model.
-> > > > > 
-> > > > > See the commit message: "As a bonus, it will also fail if userspace tries to
-> > > > > set fpu features (with the KVM_SET_XSAVE ioctl) that are not compatible to
-> > > > > the guest configuration.  Such features will never be returned by
-> > > > > KVM_GET_XSAVE or KVM_GET_XSAVE2."
-> > > > 
-> > > > IIUC you meant we should have failed KVM_SET_XSAVE when they're not aligned
-> > > > (probably by failing validate_user_xstate_header when checking against the
-> > > > user_xfeatures on dest host). But that's probably not my case, because here
-> > > > KVM_SET_XSAVE succeeded, it's just that the guest gets a double fault after
-> > > > the precopy migration completes (or for postcopy when the switchover is
-> > > > done).
-> > > 
-> > > Difficult to say what's happening without seeing at least the guest code
-> > > around the double fault (above you said "fail a migration" and I thought
-> > > that was a different scenario than the double fault), and possibly which was
-> > > the first exception that contributed to the double fault.
-> > 
-> > Regardless of why the guest explodes in the way it does, is someone planning on
-> > bisecting this (if necessary?) and sending a backport to v5.15?  There's another
-> > bug report that is more than likely hitting the same bug.
-> 
-> What's the bisection you mentioned?  I actually did a bisection and I also
-> checked reverting Leo's change can also fix this issue.  Or do you mean
-> something else?
+On Tue, Jun 7, 2022 at 7:57 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_get_proto_info() expects to receive
+> sizeof(struct ec_response_get_protocol_info) from send_command().  The
+> payload is valid only if the return value is positive.
+>
+> Add Kunit tests for returning 0 in send_command() and handle the case in
+> cros_ec_get_proto_info().
+>
+That should be two separate patches.
 
-Oooooh, sorry!  I got completely turned around.  You ran into a bug with the
-fix.  I thought that you were hitting the same issues as Mike where migrating
-between hosts with different capabilities is broken in v5.15, but works in v5.18.
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+> No v1.  New in the series.
+>
+>  drivers/platform/chrome/cros_ec_proto.c      |   5 +
+>  drivers/platform/chrome/cros_ec_proto_test.c | 132 +++++++++++++++++++
+>  2 files changed, 137 insertions(+)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 893b76703da6..6f5be9e5ede4 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -314,6 +314,11 @@ static int cros_ec_get_proto_info(struct cros_ec_device *ec_dev, int devidx)
+>                 goto exit;
+>         }
+>
+> +       if (ret == 0) {
+> +               ret = -EPROTO;
+> +               goto exit;
+> +       }
+> +
 
-> > https://lore.kernel.org/all/48353e0d-e771-8a97-21d4-c65ff3bc4192@sentex.net
-> 
-> That is kvm64, and I agree it could be the same problem since both qemu64
-> and kvm64 models do not have any xsave feature bit declared in cpuid 0xd,
-> so potentially we could be migrating some fpu states to it even with
-> user_xfeatures==0 on dest host.
-> 
-> So today I continued the investigation, and I think what's really missing
-> is qemu seems to be ignoring the user_xfeatures check for KVM_SET_XSAVE and
-> continues even if it returns -EINVAL.  IOW, I'm wondering whether we should
-> fail properly and start to check kvm_arch_put_registers() retcode.  But
-> that'll be a QEMU fix, and it'll at least not causing random faults
-> (e.g. double faults) in guest but we should fail the migration gracefully.
-> 
-> Sean: a side note is that I can also easily trigger one WARN_ON_ONCE() in
-> your commit 98c25ead5eda5 in kvm_arch_vcpu_ioctl_run():
-> 
-> 	WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
-> 
-> It'll be great if you'd like to check that up.
+I think you can move that into the if() statement above (which already
+checks for ret >=0),
+making it a special case of that situation.
 
-Ugh, userspace can force KVM_MP_STATE_UNINITIALIZED via KVM_SET_MP_STATE.  Looks
-like QEMU does that when emulating RESET.
+Thanks,
+Guenter
 
-Logically, a full RESET of the xAPIC seems like the right thing to do.  I think
-we can get away with that without breaking ABI?  And kvm_lapic_reset() has a
-related bug where it stops the HR timer but not doesn't handle the HV timer :-/
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index e69b83708f05..948aba894245 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2395,7 +2395,7 @@ void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
-                return;
-
-        /* Stop the timer in case it's a reset to an active apic */
--       hrtimer_cancel(&apic->lapic_timer.timer);
-+       cancel_apic_timer(&apic->lapic_timer.timer);
-
-        /* The xAPIC ID is set at RESET even if the APIC was already enabled. */
-        if (!init_event)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 540651cd28d7..ed2c7cb1642d 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10912,6 +10912,9 @@ int kvm_arch_vcpu_ioctl_set_mpstate(struct kvm_vcpu *vcpu,
-             mp_state->mp_state == KVM_MP_STATE_INIT_RECEIVED))
-                goto out;
-
-+       if (mp_state->mp_state == KVM_MP_STATE_UNINITIALIZED)
-+               kvm_lapic_reset(vcpu, false);
-+
-        if (mp_state->mp_state == KVM_MP_STATE_SIPI_RECEIVED) {
-                vcpu->arch.mp_state = KVM_MP_STATE_INIT_RECEIVED;
-                set_bit(KVM_APIC_SIPI, &vcpu->arch.apic->pending_events);
+>         info = (struct ec_response_get_protocol_info *)msg->data;
+>
+>         switch (devidx) {
+> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
+> index 14a4441a39fc..473714964cf2 100644
+> --- a/drivers/platform/chrome/cros_ec_proto_test.c
+> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
+> @@ -406,6 +406,71 @@ static void cros_ec_proto_test_query_all_no_pd_return_error(struct kunit *test)
+>         }
+>  }
+>
+> +static void cros_ec_proto_test_query_all_no_pd_return0(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +
+> +       /* Set some garbage bytes. */
+> +       ec_dev->max_passthru = 0xbf;
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               struct ec_response_get_protocol_info *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +
+> +               /*
+> +                * Although it doesn't check the value, provides valid sizes so that
+> +                * cros_ec_query_all() allocates din and dout correctly.
+> +                */
+> +               data = (struct ec_response_get_protocol_info *)mock->o_data;
+> +               data->max_request_packet_size = 0xbe;
+> +               data->max_response_packet_size = 0xef;
+> +       }
+> +
+> +       /* For cros_ec_get_proto_info() with passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       cros_ec_proto_test_query_all_pretest(test);
+> +       ret = cros_ec_query_all(ec_dev);
+> +       KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +       }
+> +
+> +       /* For cros_ec_get_proto_info() with passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command,
+> +                               EC_CMD_PASSTHRU_OFFSET(CROS_EC_DEV_PD_INDEX) |
+> +                               EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_passthru, 0);
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_query_all_legacy_normal_v3_return_error(struct kunit *test)
+>  {
+>         struct cros_ec_proto_test_priv *priv = test->priv;
+> @@ -471,6 +536,71 @@ static void cros_ec_proto_test_query_all_legacy_normal_v3_return_error(struct ku
+>         }
+>  }
+>
+> +static void cros_ec_proto_test_query_all_legacy_normal_v3_return0(struct kunit *test)
+> +{
+> +       struct cros_ec_proto_test_priv *priv = test->priv;
+> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
+> +       struct ec_xfer_mock *mock;
+> +       int ret;
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_add(test, 0);
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +       }
+> +
+> +       /* For cros_ec_host_command_proto_query_v2(). */
+> +       {
+> +               struct ec_response_hello *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_add(test, sizeof(*data));
+> +               KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+> +
+> +               data = (struct ec_response_hello *)mock->o_data;
+> +               data->out_data = 0xa1b2c3d4;
+> +       }
+> +
+> +       cros_ec_proto_test_query_all_pretest(test);
+> +       ret = cros_ec_query_all(ec_dev);
+> +       KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +       /* For cros_ec_get_proto_info() without passthru. */
+> +       {
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_GET_PROTOCOL_INFO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize,
+> +                               sizeof(struct ec_response_get_protocol_info));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, 0);
+> +       }
+> +
+> +       /* For cros_ec_host_command_proto_query_v2(). */
+> +       {
+> +               struct ec_params_hello *data;
+> +
+> +               mock = cros_kunit_ec_xfer_mock_next();
+> +               KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+> +
+> +               KUNIT_EXPECT_EQ(test, mock->msg.version, 0);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_HELLO);
+> +               KUNIT_EXPECT_EQ(test, mock->msg.insize, sizeof(struct ec_response_hello));
+> +               KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
+> +
+> +               data = (struct ec_params_hello *)mock->i_data;
+> +               KUNIT_EXPECT_EQ(test, data->in_data, 0xa0b0c0d0);
+> +
+> +               KUNIT_EXPECT_EQ(test, ec_dev->proto_version, 2);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_request, EC_PROTO2_MAX_PARAM_SIZE);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_response, EC_PROTO2_MAX_PARAM_SIZE);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->max_passthru, 0);
+> +               KUNIT_EXPECT_PTR_EQ(test, ec_dev->pkt_xfer, NULL);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->din_size, EC_PROTO2_MSG_BYTES);
+> +               KUNIT_EXPECT_EQ(test, ec_dev->dout_size, EC_PROTO2_MSG_BYTES);
+> +       }
+> +}
+> +
+>  static void cros_ec_proto_test_query_all_legacy_xfer_error(struct kunit *test)
+>  {
+>         struct cros_ec_proto_test_priv *priv = test->priv;
+> @@ -998,7 +1128,9 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
+>         KUNIT_CASE(cros_ec_proto_test_check_result),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_normal),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_no_pd_return_error),
+> +       KUNIT_CASE(cros_ec_proto_test_query_all_no_pd_return0),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_normal_v3_return_error),
+> +       KUNIT_CASE(cros_ec_proto_test_query_all_legacy_normal_v3_return0),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_xfer_error),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_return_error),
+>         KUNIT_CASE(cros_ec_proto_test_query_all_legacy_data_error),
+> --
+> 2.36.1.255.ge46751e96f-goog
+>
